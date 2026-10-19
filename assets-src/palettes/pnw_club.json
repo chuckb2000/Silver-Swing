@@ -1,0 +1,39 @@
+{
+  "name": "Pacific Northwest club (manicured)",
+  "note": "Course theme palette (<= 32 colours), same keys as pnw.json. pnw with the mown turf (G5-G9) slightly cleaner and brighter and whiter bunker sand (S0-S2); rough, woods, water and trees as pnw (developer, 2026-10-19, Waverley: 'like pnw but a touch nicer: the sand just a smidge whiter'). Tree sprites use the pnw painters. Shadows are a 35% black overlay on top of these.",
+  "colors": {
+    "G0": "#1b3a26",
+    "G1": "#245033",
+    "G2": "#2d6837",
+    "G3": "#387d3a",
+    "G4": "#45913f",
+    "G5": "#50a941",
+    "G6": "#5fba48",
+    "G7": "#6eca51",
+    "G8": "#7fd75e",
+    "G9": "#a4e77c",
+    "L0": "#557b3b",
+    "L1": "#668f40",
+    "L2": "#79a24a",
+    "S0": "#d3c6a2",
+    "S1": "#eee7d1",
+    "S2": "#faf7ec",
+    "W0": "#2e5884",
+    "W1": "#3e6d9a",
+    "W2": "#6c99c3",
+    "K0": "#26272d",
+    "K1": "#53545c",
+    "K2": "#7a7b83",
+    "K3": "#b3aa97",
+    "K4": "#d9d1bf",
+    "B0": "#46301f",
+    "B1": "#6d4a31",
+    "B2": "#8c5a40",
+    "R0": "#4b586a",
+    "WH": "#f6f6f2"
+  },
+  "trees": {
+    "conifer": "conifer",
+    "deciduous": "deciduous"
+  }
+}

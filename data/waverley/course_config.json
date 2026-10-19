@@ -4,12 +4,23 @@
   "location": "Milwaukie, Clackamas County, Oregon",
   "state": "OR",
   "architects": "Jack Moffat routing (1898); H. Chandler Egan (1912-1924, current routing, bunkers and greens); restoration by Gil Hanse (c. 2012)",
-  "theme": "pnw",
+  "theme": "pnw_club",
   "epsg": 32610,
-  "osm_sources": ["raw/overpass.geojson"],
+  "osm_sources": [
+    "raw/overpass.geojson"
+  ],
   "boundary_name": "Waverly Country Club",
-  "dtm": {"path": "raw/dogami_dtm_ft.tif", "units": "ft", "source": "PENDING: DOGAMI DIGITAL_TERRAIN_MODEL_MOSAIC exportImage, 1 m, EPSG:32610, box x 526404-527884 / y 5032228-5034220 (DATA_REQUEST.md)"},
-  "chm": {"path": "raw/dogami_chm_ft.tif", "units": "ft", "source": "PENDING: DOGAMI CANOPY_HEIGHT_MODEL_MOSAIC exportImage, same box", "label": "DOGAMI canopy height model"},
+  "dtm": {
+    "path": "raw/dogami_dtm_ft.tif",
+    "units": "ft",
+    "source": "DOGAMI lidar DIGITAL_TERRAIN_MODEL_MOSAIC (bare earth), exportImage at 1 m in EPSG:32610, box x 526404-527884 / y 5032228-5034220, downloaded by the developer 2026-10-19 (GitHub release waverley-data, exportImage.10.tiff)"
+  },
+  "chm": {
+    "path": "raw/dogami_chm_ft.tif",
+    "units": "ft",
+    "source": "DOGAMI lidar CANOPY_HEIGHT_MODEL_MOSAIC (highest hit minus bare earth), exportImage at 1 m in EPSG:32610, same box, downloaded by the developer 2026-10-19 (GitHub release waverley-data, exportImage.11.tiff)",
+    "label": "DOGAMI canopy height model"
+  },
   "world": {
     "x0": 526504,
     "y0": 5032328,
@@ -18,20 +29,41 @@
     "note": "OSM course boundary (way 96457214) bbox 1020 x 1389 m in UTM 10N, centred in 1280 x 1792 m (whole 256 m chunks): 130 m of scenery east and west, ~200 m north and south"
   },
   "tee_sets": [
-    {"name": "Blue", "playable": true, "rating": 71.2, "slope": 130, "total_yd": 6338},
-    {"name": "Black", "playable": false, "rating": 72.8, "slope": 135, "total_yd": 6668},
-    {"name": "White", "playable": false, "rating": 69.1, "slope": 128, "total_yd": 5913}
+    {
+      "name": "Blue",
+      "playable": true,
+      "rating": 71.2,
+      "slope": 130,
+      "total_yd": 6338
+    },
+    {
+      "name": "Black",
+      "playable": false,
+      "rating": 72.8,
+      "slope": 135,
+      "total_yd": 6668
+    },
+    {
+      "name": "White",
+      "playable": false,
+      "rating": 69.1,
+      "slope": 128,
+      "total_yd": 5913
+    }
   ],
   "default_tee": "Blue",
-  "scorecard_source": "Club website scorecard page (screenshot from the developer, GitHub release waverley-data, Screenshot 2026-10-19 165314; copy in reference/club_scorecard_page.png). Every row adds up to its printed totals. Black plays hole 5 as a par 4 (par 71); Blue and White are par 72. Provisional: Blue only until tees are measured",
+  "scorecard_source": "Club website scorecard page (screenshot from the developer, GitHub release waverley-data, Screenshot 2026-10-19 165314; copy in reference/club_scorecard_page.png). Every row adds up to its printed totals. Black plays hole 5 as a par 4 (par 71); Blue and White are par 72. Built from the Blue tees only (developer, 2026-10-19); Black and White are listed, not playable",
   "penalty_default": "red",
   "driving_range_is_ob": true,
-  "wind_mph": {"minMph": 1, "maxMph": 7},
+  "wind_mph": {
+    "minMph": 1,
+    "maxMph": 7
+  },
   "attribution": [
     "Map data © OpenStreetMap contributors (ODbL)",
     "Elevation and canopy: Oregon Department of Geology and Mineral Industries (DOGAMI) lidar",
     "Imagery: Oregon Statewide Imagery Program (OSIP) 2024",
     "Scorecard: Waverley Country Club (club website)"
   ],
-  "notes": "Intake 2026-10-19, provisional. OSM has the boundary, 18 fairways, one pond and the clubhouse only: hole lines, greens, tees, bunkers and pins are to be traced (Indian Island procedure). OSM spells the club 'Waverly'; the club and the logo id use 'Waverley'."
+  "notes": "Developer decisions 2026-10-19: Blue tees only; every penalty area red; the Willamette is a red penalty area (not out of bounds); the driving range is away from the course and not modelled; theme like pnw with slightly nicer turf and whiter sand. OSM has the boundary, 18 fairways, one pond and the clubhouse only: hole lines, greens, tees, bunkers and pins are traced (Indian Island procedure); hole identity from the club's course layout map (reference/club_course_layout.png). OSM spells the club 'Waverly'; the club and the logo id use 'Waverley'."
 }
