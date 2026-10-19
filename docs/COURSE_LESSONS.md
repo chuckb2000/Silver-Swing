@@ -243,6 +243,20 @@ notes live in DECISIONS.md.
   --sheet`, pick greens that show what makes the course special (cherries
   here), confirm with the developer, delete the contact sheets.
 
+- **The pipeline's tee-shot check can pass by centimetres where the game
+  fails.** Stone Creek 15: s06b cleared the hole by 0.1 m under a 43 m fir's
+  crown, but the game test's ball (launched from the game's own tee height)
+  clipped it. Run the game test for every hole after s06b; where it disagrees,
+  set `tee_shot_margin_m` (0.5 m did it) rather than dropping trees by hand.
+- **Read the build arrays the right way up.** `height_base.npy` (and the other
+  s04/s05 grids) run south to north (row 0 = south); `surface.npy` and the
+  exported PNGs run north to south. A hillshade drawn with the wrong origin
+  looks plausible and puts the creek on the wrong side of the course.
+- **Rebasing in the shallow clone fails.** With `--depth 1` there is no merge
+  base, so `git rebase origin/main` sees every file as added on both sides.
+  When `main` moves before anything is shared, recreate the branch from the new
+  `main` and copy the course's own files back in.
+
 ## 7. Hand-off
 
 - Branch `course/<id>`, merge `main`, all tests green, push, PR through

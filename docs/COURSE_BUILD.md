@@ -233,7 +233,9 @@ Known Oswego-specific code, with the fix:
   "keep_tee_trees": [],                 // optional: holes ("10", or "blue 7" with layouts) that keep trees in front of the tee
                                         // (a deliberate tree-lined dogleg). Every other tee shot at the middle of the fairway
                                         // is cleared: s06 moves the tee within its box, s06b drops trees (COURSE_LESSONS.md 3)
-  "ob_highways": ["trunk"]              // optional: roads of these OSM highway values inside the boundary are out of bounds (Indian Island's Route 105)
+  "ob_highways": ["trunk"],             // optional: roads of these OSM highway values inside the boundary are out of bounds (Indian Island's Route 105)
+  "tee_shot_margin_m": 0                // optional: extra vertical clearance (m) the tee-shot tree check keeps from each crown,
+                                        // when the game test still finds a crown the pipeline check passed by centimetres
 }
 ```
 

@@ -35,7 +35,7 @@ def main():
     g = gpd.read_file(bdir / "course_local.geojson")
     trees = json.loads((bdir / "trees_all.json").read_text())
     zgrid = np.load(bdir / "height_base.npy")
-    idx = TreeIndex(trees, zgrid)
+    idx = TreeIndex(trees, zgrid, cfg.get("tee_shot_margin_m", 0.0))
     fairways = list(g[g.kind == "fairway"].geometry)
     lays = {l_["id"]: l_ for l_ in layouts(cfg)}
     names = {k: (l_.get("short") or k) for k, l_ in lays.items()}
