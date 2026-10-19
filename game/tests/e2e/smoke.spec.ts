@@ -156,3 +156,25 @@ test('course data is exact when the browser adds noise to canvas reads (Safari 2
   expect(r.unknown).toBe(0);
   expect(r.obInside).toBeLessThan(10); // only a few pixels along the boundary line itself
 });
+
+test('the menu button quits a round for good', async ({ page }) => {
+  test.setTimeout(300_000);
+  await page.goto('/');
+  await page.waitForFunction(() => window.__game?.scene.isActive('title'), null, { timeout: 60_000 });
+  await tap(page, 'title', { button: 'play' }, sceneActive, 'courses');
+  await tap(page, 'courses', { text: 'oregon' }, locate, ['courses', null, 'oswego lake country club'] as [string, string | null, string | null]);
+  await tap(page, 'courses', { text: 'oswego lake country club' }, sceneActive, 'setup');
+  await tap(page, 'setup', { button: 'tee off' }, () => window.__game.scene.isActive('play') && window.__game.scene.getScene('play').state === 'intro');
+  await page.keyboard.press('Space');
+  await page.waitForFunction(() => window.__game.scene.getScene('play').state === 'aim', null, { polling: 100 });
+  // one shot, so there is a round in progress to continue
+  await page.evaluate(() => window.__autoplay.shot(0));
+  await page.waitForFunction(() => window.__game.scene.getScene('play').state === 'aim', null, { polling: 100, timeout: 120_000 });
+  expect(await page.evaluate(() => localStorage.getItem('local-golf:round-in-progress'))).not.toBeNull();
+  await tap(page, 'hud', { button: 'menu' }, locate, ['hud', 'save & exit', null] as [string, string | null, string | null]);
+  await tap(page, 'hud', { button: 'quit round' }, locate, ['hud', 'keep playing', null] as [string, string | null, string | null]);
+  await tap(page, 'hud', { button: 'quit round' }, sceneActive, 'title');
+  await page.waitForTimeout(500);
+  expect(await page.evaluate(() => localStorage.getItem('local-golf:round-in-progress'))).toBeNull();
+  expect(await page.evaluate(locate, ['title', 'play', null] as [string, string | null, string | null])).not.toBeNull(); // not "continue round"
+});
