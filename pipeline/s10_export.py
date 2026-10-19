@@ -277,6 +277,21 @@ def main():
         geom = r.geometry
         poly = max(geom.geoms, key=lambda p: p.area) if isinstance(geom, MultiPolygon) else geom
         water.append({"id": r.osm, "penalty": kind, "poly": [[rnd(x), rnd(y)] for x, y in poly.exterior.coords]})
+    # water features named in cfg red_water_osm (a river along the course) are red
+    # penalty areas, also where they lie outside the boundary (s08 paints them)
+    for _, r in g[g.osm.isin(cfg.get("red_water_osm") or [])].iterrows():
+        from shapely.geometry import box as _box
+        geom = r.geometry.intersection(_box(0, 0, cfg["world"]["width"], cfg["world"]["height"]))
+        if geom.is_empty:
+            continue
+        if geom.geom_type == "GeometryCollection":
+            geom = MultiPolygon([p for p in geom.geoms if p.geom_type == "Polygon"])
+        parts = list(geom.geoms) if isinstance(geom, MultiPolygon) else [geom]
+        for k, poly in enumerate(sorted(parts, key=lambda p: -p.area)):
+            if poly.area < 50:
+                continue
+            water.append({"id": r.osm if k == 0 else f"{r.osm}:{k}", "penalty": "red",
+                          "poly": [[rnd(x), rnd(y)] for x, y in poly.exterior.coords]})
     meta = json.load(open(bdir / "art" / "render_meta.json"))
     bh_by_osm = {b["osm"]: b["h"] for b in meta["buildings"]}
     buildings = []

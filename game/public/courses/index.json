@@ -124,6 +124,20 @@
    ]
   },
   {
+   "id": "tualatin",
+   "name": "Tualatin Country Club",
+   "location": "Tualatin, Washington County, Oregon",
+   "state": "OR",
+   "theme": "pnw",
+   "holes": 18,
+   "par": 72,
+   "defaultTee": "Blue",
+   "totalYd": 6370,
+   "teeSets": [
+    "Blue"
+   ]
+  },
+  {
    "id": "eastmoreland",
    "name": "Eastmoreland Golf Course",
    "location": "Portland, Multnomah County, Oregon",
