@@ -555,6 +555,23 @@ def bridge(c: dict) -> np.ndarray:
     return outlined_outside(img, c["edge"])
 
 
+def colour_disc(fn, fill, rim):
+    """A logo drawn over a disc in a course's colour: one course of several at a
+    place (East Potomac Blue / White / Red)."""
+    def draw(c: dict) -> np.ndarray:
+        X, Y = grid()
+        img = np.zeros((S, S, 4), np.uint8)
+        d = np.hypot(X - 16, Y - 16)
+        paint(img, d <= 15.5, c["edge"])
+        paint(img, d <= 14.5, fill)
+        paint(img, (d <= 14.5) & (d > 13.0), rim)
+        top = fn(c)
+        solid = top[..., 3] > 0
+        img[solid] = top[solid]
+        return img
+    return draw
+
+
 EDGE = rgba("#0d1620", 220)
 
 LOGOS = {
@@ -620,6 +637,10 @@ LOGOS = {
         "grass": rgba("#4f9447"), "grass_light": rgba("#74b860"), "edge": EDGE,
     }),
 }
+
+# the East Potomac courses: the memorial on a disc in the course's colour
+for _layout, _fill, _rim in (("blue", "#2f6fd1", "#5d97ee"), ("white", "#f6f6f2", "#cfd3d8"), ("red", "#d23a2e", "#ef6a5a")):
+    LOGOS[f"east_potomac_{_layout}"] = (colour_disc(memorial, rgba(_fill), rgba(_rim)), LOGOS["east_potomac"][1])
 
 
 def main():

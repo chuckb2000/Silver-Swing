@@ -18,6 +18,7 @@ from font import build_font  # noqa: E402
 from sprites import all_sprites  # noqa: E402
 from trees import TREE_HEIGHTS, TREE_WIDTHS, tree_frames  # noqa: E402
 import title_art  # noqa: E402
+import blossom  # noqa: E402
 
 OUT = HERE.parent / "game" / "public" / "sprites"
 
@@ -52,6 +53,7 @@ def main():
         (OUT / f"trees_{theme}_meta.json").write_text(
             '{"widths":%s,"heights":%s}' % (TREE_WIDTHS, TREE_HEIGHTS))
         print(f"[assets] trees_{theme} {len(frames)} frames ({tw}x{th})")
+    blossom.main()  # flowering trees (trees.json c: 2), any theme
 
 
 if __name__ == "__main__":

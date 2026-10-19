@@ -36,7 +36,7 @@ from rasterio.features import rasterize
 from scipy import ndimage
 from shapely.geometry import MultiPolygon, Point, Polygon
 
-from common import PX_PER_M, ROOT, SURF, World, build_dir, course_name_from_argv, load_config, write_json
+from common import build_dir, course_name_from_argv, layout_dir, layouts, load_config, play_boundary, PX_PER_M, ROOT, SURF, World, write_json
 from s08_surface import course_layers, road_geoms
 from terrain import tier_offset
 from s09_render import draw_lighthouse, LIGHTHOUSE_DRAW_SCALE  # noqa: E402
@@ -175,7 +175,7 @@ def stripe_field(g, holes, grid: Grid, tee: str) -> np.ndarray:
     stripe = np.zeros((grid.H, grid.W), np.int8)
     from shapely.geometry import LineString, box
     win = box(grid.x0, grid.y1 - grid.H / grid.ppm, grid.x0 + grid.W / grid.ppm, grid.y1)
-    centerlines = [LineString(h["tees"][tee]["centerline"]) for h in holes]
+    centerlines = [LineString(h["tees"][h.get("stripe_tee", tee)]["centerline"]) for h in holes]
     X, Y = np.meshgrid(grid.xs, grid.ys)
     for kind, band in (("fairway", 4.0), ("tee", 2.0)):
         for geom in g[g.kind == kind].geometry:
@@ -366,8 +366,6 @@ def main():
     cfg = load_config(name)
     world = World(cfg)
     bdir = build_dir(name)
-    outd = bdir / "greens"
-    outd.mkdir(exist_ok=True)
     P = load_palette(cfg["theme"])
     lut = build_lut(P, load_theme(cfg["theme"]).get("lut"))
     blut = band_lut(P, load_theme(cfg["theme"]))
@@ -378,7 +376,7 @@ def main():
     holes = json.load(open(bdir / "holes.json"))
     trees_all = json.load(open(bdir / "trees.json"))
     g = gpd.read_file(bdir / "course_local.geojson")
-    boundary = g[g.kind == "boundary"].geometry.iloc[0]
+    boundary = play_boundary(g, cfg)
     if isinstance(boundary, MultiPolygon):
         boundary = max(boundary.geoms, key=lambda p_: p_.area)
     meta = json.load(open(bdir / "art" / "render_meta.json"))
@@ -398,8 +396,23 @@ def main():
                 building_polys.append((poly, float(bh_by_osm.get(r.osm, 6.0)), r.osm))
     LIGHTHOUSES.update(o for o, k in kind_by_osm.items() if k == "lighthouse")
     green_by_osm = {gm["id"]: gm for gm in greens}
-    views = []
+    make_c, make_d = conifer, deciduous  # the theme's tree painters (trees.theme_painters)
+    # with blossoms (s05) the sprite variant follows the tree's index in trees.json,
+    # exactly as the course view draws it, so cherries stay cherries up close
+    gidx = {id(t): k for k, t in enumerate(trees_all)} if cfg.get("blossom") else None
     only = {int(v) for v in os.environ.get("HOLES", "").split(",") if v.strip()}
+    for lay in layouts(cfg):
+        render_layout(lay, name, cfg, world, layout_dir(name, lay), holes, green_by_osm, only, LAYERS, g, surf05, base, greens,
+                      trees_all, building_polys, boundary, P, lut, make_c, make_d, gidx, blut)
+
+
+def render_layout(lay, name, cfg, world, ldir, all_holes, green_by_osm, only, LAYERS, g, surf05, base, greens,
+                  trees_all, building_polys, boundary, P, lut, make_c, make_d, gidx, blut):
+    """Putting views for one layout's holes (written to <layout build dir>/greens/)."""
+    outd = ldir / "greens"
+    outd.mkdir(exist_ok=True)
+    holes = json.load(open(ldir / "holes.json")) if lay["shared"] else all_holes
+    views = []
     for h in holes:
         n = h["number"]
         if only and n not in only:
@@ -420,7 +433,7 @@ def main():
             box = Polygon([(x0 - 30, y0 - 30), (x1 + 30, y0 - 30), (x1 + 30, y1 + 30), (x0 - 30, y1 + 30)])
             blds = [(p, hb, o) for p, hb, o in building_polys if p.intersects(box)]
             rng = np.random.default_rng(20261018 + n + 1000 * ppm)
-            rgb = render_art(surf, z, grid, g, holes, near, blds, boundary, P, lut, rng, cfg["default_tee"], max_h=L["max_h"], cfg=cfg, blut=blut)
+            rgb = render_art(surf, z, grid, g, all_holes, near, blds, boundary, P, lut, rng, lay["default_tee"], max_h=L["max_h"], cfg=cfg, blut=blut)
             base_name = f"g{n:02d}{L['suffix']}"
             Image.fromarray(rgb).save(outd / f"{base_name}.png", optimize=True)
             # tree sprites
@@ -428,10 +441,10 @@ def main():
             made = {}
             places = []
             for i, t in enumerate(near):
-                kind, w, hh, v = tree_sprite_key(t, i, L)
+                kind, w, hh, v = tree_sprite_key(t, i if gidx is None else gidx[id(t)], L)
                 key = f"{kind}_{w}_{hh}_{v}"
                 if key not in made:
-                    made[key] = (conifer if kind == "c" else deciduous)(w, hh, v)  # the theme's tree painters
+                    made[key] = (make_c if kind == "c" else make_d)(w, hh, v)  # the theme's tree painters
                     atlas.add(key, made[key])
                 places.append({"f": key, "x": round(t["x"], 2), "y": round(t["y"], 2)})
             aw, ah = atlas.write(outd)
@@ -440,7 +453,7 @@ def main():
             (outd / f"{base_name}_trees.json").write_text(json.dumps(js, separators=(",", ":")))
             entry[L["name"]] = {"file": f"greens/{base_name}.png", "trees": f"greens/{base_name}_trees.json",
                                 "treesImage": f"greens/{base_name}_trees.png", "x0": x0, "y1": y1, "w": WIN, "h": WIN, "ppm": ppm}
-            print(f"[s09b] hole {n:2d} {L['name']:4s}: window {x0:.0f},{y0:.0f}-{x1:.0f},{y1:.0f} at {ppm} px/m, {len(near)} trees ({len(made)} sprites, atlas {aw}x{ah})")
+            print(f"[s09b] {'' if not lay['shared'] else lay['id'] + ' '}hole {n:2d} {L['name']:4s}: window {x0:.0f},{y0:.0f}-{x1:.0f},{y1:.0f} at {ppm} px/m, {len(near)} trees ({len(made)} sprites, atlas {aw}x{ah})")
         views.append(entry)
     write_json(outd / "green_views.json", views, indent=1)
 

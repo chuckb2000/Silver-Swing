@@ -11,6 +11,46 @@ export interface CourseInfo {
   totalYd: number;
   teeSets: string[];
   state?: string;     // postal code (MA, OR); optional - read from the location otherwise
+  /** several courses at one place (East Potomac Blue / White / Red): the place's id, name and this course's name in it */
+  group?: string;
+  groupName?: string;
+  layout?: string;
+}
+
+/** A course on the course screen, or a place with several courses (chosen in a second step). */
+export type CourseEntry =
+  | { kind: 'course'; course: CourseInfo }
+  | { kind: 'group'; id: string; name: string; courses: CourseInfo[] };
+
+/** The entries for a list of courses: courses sharing a `group` become one entry, at the first one's place. */
+export function courseEntries(courses: CourseInfo[]): CourseEntry[] {
+  const out: CourseEntry[] = [];
+  const groups = new Map<string, { kind: 'group'; id: string; name: string; courses: CourseInfo[] }>();
+  for (const c of courses) {
+    if (!c.group) { out.push({ kind: 'course', course: c }); continue; }
+    let g = groups.get(c.group);
+    if (!g) {
+      g = { kind: 'group', id: c.group, name: c.groupName || c.group, courses: [] };
+      groups.set(c.group, g);
+      out.push(g);
+    }
+    g.courses.push(c);
+  }
+  // a group of one is just a course
+  return out.map((e) => (e.kind === 'group' && e.courses.length === 1 ? { kind: 'course', course: e.courses[0] } : e));
+}
+
+/** The tee set to play: the one last chosen for this course if it still has it, else the course's default. */
+export function teeFor(c: { id: string; defaultTee: string; teeSets: (string | { name: string })[] }, saved: Record<string, string> | undefined): string {
+  const names = c.teeSets.map((t) => (typeof t === 'string' ? t : t.name));
+  const want = saved?.[c.id];
+  if (want && names.includes(want)) return want;
+  return names.includes(c.defaultTee) ? c.defaultTee : names[0] ?? c.defaultTee;
+}
+
+/** "71.4 / 133", or "not rated" for tees without a course rating (a par-3 course). */
+export function ratingText(t: { rating: number; slope: number }): string {
+  return t.rating > 0 && t.slope > 0 ? `${t.rating} / ${t.slope}` : 'not rated';
 }
 
 /** Tree sprite sheet for a course theme (the Pacific Northwest set is the original one). */
