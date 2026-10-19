@@ -109,7 +109,7 @@ The pipeline's last step (`pipeline/s10_export.py`) writes
 | `greens/gNNc.png`, `gNNc_trees.png/json` | close-up putting view per hole (24 px/m, 48 m window) |
 | `maps/overview_2m.png`, `maps/holeNN.png` | overview and per-hole minimaps |
 
-`course.json` holds: id, name, location, architects, theme, attribution[],
+`course.json` holds: id, name, location, state, architects, theme, attribution[],
 world {width, height, pxPerM 2, utmOrigin, epsg}, teeSets[] {name, rating,
 slope, totalYd}, defaultTee, par, holes[] {number, par, handicap,
 tees{<set>: {x, y, yd, adjYd, realYd, cardYd, centerline}}, greenId,
@@ -136,7 +136,7 @@ these assumptions must go. Check each one; it may already have been fixed.
 ### 3.1 Game side (done by the design chat, session 2)
 
 - [x] Course list `game/public/courses/index.json` (`{courses: [{id, name,
-      location, theme, holes, par, defaultTee, totalYd, teeSets}]}`) and a
+      location, state, theme, holes, par, defaultTee, totalYd, teeSets}]}`) and a
       course choice on the new-round screen.
 - [x] Course data loaded when a course is chosen (`src/data/courses.ts`;
       one course in memory at a time).
@@ -181,6 +181,7 @@ Known Oswego-specific code, with the fix:
   "id": "snake_case_id",               // folder name under data/ and courses/
   "name": "Full Course Name",
   "location": "Town, County, State",
+  "state": "MD",                        // two-letter state code; s10 copies it into course.json and the registry entry
   "architects": "Name (year); later work by ...",   // "unknown" if not sourced
   "theme": "pnw",                       // palette + tree theme (assets-src/palettes/<theme>.json)
   "epsg": 32618,                        // UTM zone from longitude, see 4.2
