@@ -6,6 +6,7 @@ Changes from the starting values in CLAUDE.md, and choices the spec left open. N
 ## Third playtest (developer, 2026-10-19)
 
 - **Quitting a round** (developer, 2026-10-19): a "menu" button beside the wind panel opens the pause menu (before only Esc did, so a phone couldn't): resume, settings, save & exit (the round is kept and continues from the title screen) and quit round (after a confirm: the round is discarded, not saved, not on the leaderboard).
+- **Settings during a round** (developer, 2026-10-19): opened from the pause menu, settings show only units, input latency, volume, sound and pixel size. Hand, difficulty, the OB rule (E-5) and the casual rules are fixed when the round starts (`Round.cfg.settings`) and are hidden, with a note to change them from the title screen. The golfer sprite and the miss words now read the round's hand, not the live setting, so they always match the ball.
 - **Bunker label:** a greenside bunker lie reads "bunker" (it overflowed the info panel).
 - **Swing meter:** no white mark at the zone centre. Taps are counted 30 ms early (`DISPLAY_LAG_MS`, on top of the latency setting): the cursor on screen trails the real one by about a frame plus input delay, so the perfect spot sat about 2 % of the bar right of the green box at Normal speed.
 - **Aiming keeps the view:** after dragging the view, aiming no longer snaps the camera back to the golfer; it only follows if the landing marker would leave the screen.

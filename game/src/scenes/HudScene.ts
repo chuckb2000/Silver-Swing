@@ -414,7 +414,7 @@ export class HudScene extends Phaser.Scene {
   }
 
   strikeFeedback(st: Strike) {
-    const lefty = app.settings.lefty;
+    const lefty = this.play.round.cfg.settings.lefty;
     let label = 'perfect!';
     let color: number = COLORS.green;
     if (st.quality === 'good') { label = `slight ${missWord(st.side, false, lefty)}`; color = COLORS.yellow; }
@@ -424,7 +424,7 @@ export class HudScene extends Phaser.Scene {
   }
 
   puttFeedback(ps: PuttStrike, power: number) {
-    const word = (ps.side > 0) !== app.settings.lefty ? 'push' : 'pull'; // a right-hander pushes it right
+    const word = (ps.side > 0) !== this.play.round.cfg.settings.lefty ? 'push' : 'pull'; // a right-hander pushes it right
     const label = ps.quality === 'perfect' ? 'good stroke' : ps.quality === 'good' ? `slight ${word}` : word;
     const color = ps.quality === 'perfect' ? COLORS.green : ps.quality === 'good' ? COLORS.yellow : COLORS.red;
     this.flash(label, color, `${Math.round(power * 100)}% of ${puttScaleLabel(this.play.puttScale)}`, 900);

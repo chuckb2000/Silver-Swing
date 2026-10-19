@@ -172,6 +172,14 @@ test('the menu button quits a round for good', async ({ page }) => {
   await page.waitForFunction(() => window.__game.scene.getScene('play').state === 'aim', null, { polling: 100, timeout: 120_000 });
   expect(await page.evaluate(() => localStorage.getItem('local-golf:round-in-progress'))).not.toBeNull();
   await tap(page, 'hud', { button: 'menu' }, locate, ['hud', 'save & exit', null] as [string, string | null, string | null]);
+  // settings during a round: presentation only, the round's hand, difficulty and rules are locked
+  await tap(page, 'hud', { button: 'settings' }, locate, ['settings', 'back', null] as [string, string | null, string | null]);
+  expect(await page.evaluate(locate, ['settings', null, 'hand'] as [string, string | null, string | null])).toBeNull();
+  expect(await page.evaluate(locate, ['settings', null, 'difficulty'] as [string, string | null, string | null])).toBeNull();
+  expect(await page.evaluate(locate, ['settings', 'local e-5', null] as [string, string | null, string | null])).toBeNull();
+  expect(await page.evaluate(locate, ['settings', null, 'volume'] as [string, string | null, string | null])).not.toBeNull();
+  await tap(page, 'settings', { button: 'back' }, locate, ['hud', 'menu', null] as [string, string | null, string | null]);
+  await tap(page, 'hud', { button: 'menu' }, locate, ['hud', 'save & exit', null] as [string, string | null, string | null]);
   await tap(page, 'hud', { button: 'quit round' }, locate, ['hud', 'keep playing', null] as [string, string | null, string | null]);
   await tap(page, 'hud', { button: 'quit round' }, sceneActive, 'title');
   await page.waitForTimeout(500);
