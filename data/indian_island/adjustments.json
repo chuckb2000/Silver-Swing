@@ -1,0 +1,164 @@
+[
+ {
+  "hole": 1,
+  "tee_set": "Blue",
+  "step": 2,
+  "type": "tee_position",
+  "from": [
+   978.88,
+   578.01
+  ],
+  "to": [
+   974.22,
+   569.36
+  ],
+  "real_yd": 433.2,
+  "adjusted_yd": 441.8,
+  "card_yd": 454.0,
+  "reason": "measured 433 yd from the tee-box centre vs 454 on the card (-4.6%); moved the virtual tee within the real tee polygon w991790827"
+ },
+ {
+  "hole": 2,
+  "tee_set": "Blue",
+  "step": 2,
+  "type": "tee_position",
+  "from": [
+   1281.17,
+   731.12
+  ],
+  "to": [
+   1298.68,
+   730.94
+  ],
+  "real_yd": 483.9,
+  "adjusted_yd": 502.9,
+  "card_yd": 504.0,
+  "reason": "measured 484 yd from the tee-box centre vs 504 on the card (-4.0%); moved the virtual tee within the real tee polygon w991795707"
+ },
+ {
+  "hole": 3,
+  "tee_set": "Blue",
+  "step": 2,
+  "type": "tee_position",
+  "from": [
+   845.64,
+   595.52
+  ],
+  "to": [
+   835.44,
+   574.59
+  ],
+  "real_yd": 344.9,
+  "adjusted_yd": 370.0,
+  "card_yd": 370.0,
+  "reason": "measured 345 yd from the tee-box centre vs 370 on the card (-6.8%); moved the virtual tee within the real tee polygon w991795716"
+ },
+ {
+  "hole": 4,
+  "tee_set": "Blue",
+  "step": 2,
+  "type": "tee_position",
+  "from": [
+   1155.85,
+   786.67
+  ],
+  "to": [
+   1134.22,
+   790.42
+  ],
+  "real_yd": 360.0,
+  "adjusted_yd": 384.0,
+  "card_yd": 384.0,
+  "reason": "measured 360 yd from the tee-box centre vs 384 on the card (-6.2%); moved the virtual tee within the real tee polygon w991795722"
+ },
+ {
+  "hole": 7,
+  "tee_set": "Blue",
+  "step": 2,
+  "type": "tee_position",
+  "from": [
+   1215.33,
+   382.73
+  ],
+  "to": [
+   1211.85,
+   378.69
+  ],
+  "real_yd": 409.3,
+  "adjusted_yd": 415.1,
+  "card_yd": 429.0,
+  "reason": "measured 409 yd from the tee-box centre vs 429 on the card (-4.6%); moved the virtual tee within the real tee polygon w991800898"
+ },
+ {
+  "hole": 10,
+  "tee_set": "Blue",
+  "step": 2,
+  "type": "tee_position",
+  "from": [
+   1026.42,
+   398.25
+  ],
+  "to": [
+   1047.25,
+   413.67
+  ],
+  "real_yd": 431.5,
+  "adjusted_yd": 459.8,
+  "card_yd": 461.0,
+  "reason": "measured 432 yd from the tee-box centre vs 461 on the card (-6.4%); moved the virtual tee within the real tee polygon w991790825"
+ },
+ {
+  "hole": 12,
+  "tee_set": "Blue",
+  "step": 2,
+  "type": "tee_position",
+  "from": [
+   378.06,
+   473.96
+  ],
+  "to": [
+   383.76,
+   462.96
+  ],
+  "real_yd": 319.4,
+  "adjusted_yd": 332.9,
+  "card_yd": 347.0,
+  "reason": "measured 319 yd from the tee-box centre vs 347 on the card (-8.0%); moved the virtual tee within the real tee polygon desk_12_tee_0"
+ },
+ {
+  "hole": 16,
+  "tee_set": "Blue",
+  "step": 2,
+  "type": "tee_position",
+  "from": [
+   352.62,
+   703.97
+  ],
+  "to": [
+   335.85,
+   719.56
+  ],
+  "real_yd": 315.2,
+  "adjusted_yd": 340.0,
+  "card_yd": 340.0,
+  "reason": "measured 315 yd from the tee-box centre vs 340 on the card (-7.3%); moved the virtual tee within the real tee polygon desk_16_tee_0"
+ },
+ {
+  "hole": 18,
+  "tee_set": "Blue",
+  "step": 2,
+  "type": "tee_position",
+  "from": [
+   689.5,
+   288.5
+  ],
+  "to": [
+   684.66,
+   286.16
+  ],
+  "real_yd": 375.6,
+  "adjusted_yd": 381.3,
+  "card_yd": 395.0,
+  "reason": "measured 376 yd from the tee-box centre vs 395 on the card (-4.9%); moved the virtual tee within the real tee polygon desk_18_tee_0"
+ }
+]

@@ -30,6 +30,13 @@
       "rating": 71.5,
       "slope": 126,
       "total_yd": 6516
+    },
+    {
+      "name": "White",
+      "playable": false,
+      "rating": 69.4,
+      "slope": 122,
+      "total_yd": 6077
     }
   ],
   "default_tee": "Blue",
