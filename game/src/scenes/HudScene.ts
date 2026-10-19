@@ -334,7 +334,6 @@ export class HudScene extends Phaser.Scene {
     g.fillStyle(0xd23b2b, 1).fillRect(X(-ZONE_REACH), y0, X(ZONE_REACH) - X(-ZONE_REACH), h);
     g.fillStyle(0xf2c23a, 1).fillRect(X(-good), y0, Math.max(1, X(good) - X(-good)), h);
     g.fillStyle(0x4cd25c, 1).fillRect(X(-half), y0, Math.max(1, X(half) - X(-half)), h);
-    g.fillStyle(0xffffff, 0.9).fillRect(X(0), y0 - 1, 1, h + 2);
     // ticks
     g.fillStyle(0x0b0f13, 1);
     for (const v of [25, 50, 75, 100]) g.fillRect(X(v), y0 + h - 3, 1, 3);

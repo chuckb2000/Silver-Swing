@@ -7,6 +7,7 @@ import { saveSettings } from '../save/store';
 import { Button, COLORS, Panel, txt } from '../ui/widgets';
 import { lengthLabel, lengthsFor, RoundLength, startRound } from './flow';
 import { MenuScene } from './menu';
+import { askName } from '../ui/nameInput';
 
 let length: RoundLength = '18';
 
@@ -86,27 +87,9 @@ export class SetupScene extends MenuScene {
   }
 
   private editName() {
-    const canvas = this.game.canvas;
-    const r = canvas.getBoundingClientRect();
-    const input = document.createElement('input');
-    input.type = 'text';
-    input.maxLength = 16;
-    input.value = app.settings.playerName;
-    Object.assign(input.style, {
-      position: 'fixed', left: `${r.left + r.width / 2 - 110}px`, top: `${r.top + r.height / 2 - 20}px`, width: '220px',
-      font: '20px monospace', padding: '8px', border: '3px solid #e8681e', background: '#121a20', color: '#f6f6f2', zIndex: '10', borderRadius: '4px',
-    } as CSSStyleDeclaration);
-    document.body.appendChild(input);
-    input.focus();
-    input.select();
-    const done = () => {
-      const v = input.value.trim().toLowerCase().replace(/[^a-z0-9 .'-]/g, '').slice(0, 16);
-      if (v) app.settings.playerName = v;
-      void saveSettings(app.settings);
-      input.remove();
-      this.rebuild();
-    };
-    input.addEventListener('keydown', (e) => { e.stopPropagation(); if (e.key === 'Enter') done(); if (e.key === 'Escape') { input.remove(); } });
-    input.addEventListener('blur', done, { once: true });
+    askName(this, app.settings.playerName, (name) => {
+      if (name) { app.settings.playerName = name; void saveSettings(app.settings); }
+      if (this.sys.isActive()) this.rebuild();
+    });
   }
 }
