@@ -1,0 +1,458 @@
+{
+ "note": "Inputs for pipeline/propose_trace.py (course chat, 2026-10-19). Waverley: OSM has the fairways, the pond and the boundary only. Green seeds were picked by eye on the OSIP 2024 orthophoto (raw/osip2024_032m.tif); hole identity comes from the club's course layout map (reference/club_course_layout.png), fitted onto the lidar and imagery to tell which green and fairway is which hole (look only, nothing traced from it). Each hole's provisional tee point lies the Blue card distance back from the green towards the map's tee; tee seeds are the nearest raised DEM pad. The developer sets the Blue tees in the tracing desk. Coordinates are local metres (world origin 526504, 5032328, EPSG:32610). Hole 15 plays north (tees by the 14 green, green at the north end beside the 16 tees), as on the club map; 14's green is the one ringed by bunkers. Hole 17 has no tee pad in the lidar: its line starts at a provisional point at the north end of its fairway. Holes 9 and 10 start from the same tee area by the clubhouse.",
+ "source": "traced (course chat) from the OSIP 2024 orthoimagery and the DOGAMI lidar DEM",
+ "ortho": "raw/osip2024_032m.tif",
+ "greens": {
+  "1": {
+   "seed": [
+    657,
+    901
+   ],
+   "ellipse": [
+    657,
+    901,
+    12,
+    13,
+    0
+   ],
+   "why": "green partly in tree shadow on the orthophoto, which the texture trace cannot follow"
+  },
+  "2": {
+   "seed": [
+    1058,
+    1040
+   ],
+   "t": 6
+  },
+  "3": {
+   "seed": [
+    728,
+    1108
+   ],
+   "t": 4.5
+  },
+  "4": {
+   "seed": [
+    1082,
+    1203
+   ],
+   "t": 4.5
+  },
+  "5": {
+   "seed": [
+    690,
+    1238
+   ],
+   "t": 6
+  },
+  "6": {
+   "seed": [
+    712,
+    1010
+   ],
+   "t": 4.5
+  },
+  "7": {
+   "seed": [
+    628,
+    1280
+   ],
+   "t": 4.5
+  },
+  "8": {
+   "seed": [
+    611,
+    771
+   ],
+   "t": 6
+  },
+  "9": {
+   "seed": [
+    652,
+    620
+   ],
+   "t": 4.5
+  },
+  "10": {
+   "seed": [
+    483,
+    1062
+   ],
+   "t": 4.5
+  },
+  "11": {
+   "seed": [
+    546,
+    1170
+   ],
+   "t": 8
+  },
+  "12": {
+   "seed": [
+    552,
+    1567
+   ],
+   "t": 6
+  },
+  "13": {
+   "seed": [
+    418,
+    1141
+   ],
+   "t": 4.5
+  },
+  "14": {
+   "seed": [
+    392,
+    1242
+   ],
+   "ellipse": [
+    391,
+    1242,
+    13,
+    17,
+    10
+   ],
+   "why": "green partly in tree shadow on the orthophoto, which the texture trace cannot follow; ringed by bunkers, which are cut out of it"
+  },
+  "15": {
+   "seed": [
+    417,
+    1516
+   ],
+   "t": 6
+  },
+  "16": {
+   "seed": [
+    203,
+    1484
+   ],
+   "ellipse": [
+    203,
+    1484,
+    12,
+    14,
+    -20
+   ],
+   "why": "green partly in tree shadow on the orthophoto, which the texture trace cannot follow"
+  },
+  "17": {
+   "seed": [
+    360,
+    1112
+   ],
+   "t": 6
+  },
+  "18": {
+   "seed": [
+    591,
+    610
+   ],
+   "t": 4.5
+  }
+ },
+ "tees": [
+  {
+   "hole": "1",
+   "seed": [
+    713,
+    615
+   ]
+  },
+  {
+   "hole": "2",
+   "seed": [
+    708,
+    975
+   ]
+  },
+  {
+   "hole": "3",
+   "seed": [
+    1077,
+    1127
+   ]
+  },
+  {
+   "hole": "4",
+   "seed": [
+    725,
+    1169
+   ]
+  },
+  {
+   "hole": "5",
+   "seed": [
+    1106,
+    1289
+   ]
+  },
+  {
+   "hole": "6",
+   "seed": [
+    682,
+    1149
+   ]
+  },
+  {
+   "hole": "7",
+   "seed": [
+    665,
+    947
+   ]
+  },
+  {
+   "hole": "8",
+   "seed": [
+    598,
+    1286
+   ]
+  },
+  {
+   "hole": "9",
+   "seed": [
+    605,
+    720
+   ]
+  },
+  {
+   "hole": "11",
+   "seed": [
+    432,
+    1096
+   ]
+  },
+  {
+   "hole": "12",
+   "seed": [
+    523,
+    1200
+   ]
+  },
+  {
+   "hole": "13",
+   "seed": [
+    495,
+    1606
+   ]
+  },
+  {
+   "hole": "14",
+   "seed": [
+    345,
+    1119
+   ]
+  },
+  {
+   "hole": "15",
+   "seed": [
+    418,
+    1222
+   ]
+  },
+  {
+   "hole": "16",
+   "seed": [
+    386,
+    1542
+   ]
+  },
+  {
+   "hole": "18",
+   "seed": [
+    368,
+    1043
+   ]
+  }
+ ],
+ "holes": {
+  "1": {
+   "par": 4,
+   "handicap": 11,
+   "tee": [
+    713,
+    615
+   ],
+   "bends": []
+  },
+  "2": {
+   "par": 4,
+   "handicap": 13,
+   "tee": [
+    708,
+    975
+   ],
+   "bends": []
+  },
+  "3": {
+   "par": 4,
+   "handicap": 7,
+   "tee": [
+    1077,
+    1127
+   ],
+   "bends": []
+  },
+  "4": {
+   "par": 4,
+   "handicap": 9,
+   "tee": [
+    725,
+    1169
+   ],
+   "bends": []
+  },
+  "5": {
+   "par": 5,
+   "handicap": 3,
+   "tee": [
+    1106,
+    1289
+   ],
+   "bends": []
+  },
+  "6": {
+   "par": 3,
+   "handicap": 15,
+   "tee": [
+    682,
+    1149
+   ],
+   "bends": []
+  },
+  "7": {
+   "par": 4,
+   "handicap": 5,
+   "tee": [
+    665,
+    947
+   ],
+   "bends": []
+  },
+  "8": {
+   "par": 5,
+   "handicap": 1,
+   "tee": [
+    598,
+    1286
+   ],
+   "bends": []
+  },
+  "9": {
+   "par": 3,
+   "handicap": 17,
+   "tee": [
+    605,
+    720
+   ],
+   "bends": []
+  },
+  "10": {
+   "par": 4,
+   "handicap": 12,
+   "tee": [
+    600,
+    725
+   ],
+   "bends": []
+  },
+  "11": {
+   "par": 3,
+   "handicap": 14,
+   "tee": [
+    432,
+    1096
+   ],
+   "bends": []
+  },
+  "12": {
+   "par": 4,
+   "handicap": 6,
+   "tee": [
+    523,
+    1200
+   ],
+   "bends": []
+  },
+  "13": {
+   "par": 5,
+   "handicap": 4,
+   "tee": [
+    495,
+    1606
+   ],
+   "bends": []
+  },
+  "14": {
+   "par": 3,
+   "handicap": 16,
+   "tee": [
+    345,
+    1119
+   ],
+   "bends": []
+  },
+  "15": {
+   "par": 4,
+   "handicap": 2,
+   "tee": [
+    418,
+    1222
+   ],
+   "bends": []
+  },
+  "16": {
+   "par": 3,
+   "handicap": 18,
+   "tee": [
+    386,
+    1542
+   ],
+   "bends": []
+  },
+  "17": {
+   "par": 5,
+   "handicap": 8,
+   "tee": [
+    190,
+    1455
+   ],
+   "bends": []
+  },
+  "18": {
+   "par": 5,
+   "handicap": 10,
+   "tee": [
+    368,
+    1043
+   ],
+   "bends": []
+  }
+ },
+ "fairways": {
+  "holes": [],
+  "corridor_m": 40,
+  "prob": 0.5,
+  "min_area_m2": 250
+ },
+ "bunkers": {
+  "near_m": 45,
+  "min_area_m2": 12,
+  "max_area_m2": 700,
+  "min_z_m": 6.0,
+  "min_brightness": 150,
+  "max_exg": 28,
+  "min_compactness": 0.3
+ },
+ "water": {
+  "name": "Willamette River",
+  "max_z_m": 2.5,
+  "flat_m": 0.004,
+  "min_area_m2": 5000,
+  "edge_z_m": 2.45,
+  "hazard_strip_m": 60,
+  "boundary_close_m": 10,
+  "hazard_why": "developer 2026-10-19: the Willamette is a red penalty area"
+ },
+ "bend_note": "No bend points yet: added after the developer marks the Blue tees (centre of the fairway where it lies farthest from the tee-green chord, as at Indian Island)."
+}

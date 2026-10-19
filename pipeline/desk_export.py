@@ -44,6 +44,10 @@ def main():
     ap.add_argument("course")
     ap.add_argument("out")
     ap.add_argument("--edit", default="", help="holes whose shapes are editable, e.g. 9-18 or 9,11,12")
+    ap.add_argument("--traced", action="store_true",
+                    help="start from proposed/traced.geojson: its hole lines and greens where the layout has none, and its "
+                         "greens, tees and bunkers (each bunker to its nearest hole line) as the editable shapes of --edit holes "
+                         "not yet saved in the desk (Waverley, where OSM maps no holes)")
     a = ap.parse_args()
     name, out = a.course, Path(a.out)
     cfg = load_config(name)
@@ -70,6 +74,26 @@ def main():
     ring = lambda geom: [[round(x, 1), round(y, 1)] for x, y in list(geom.exterior.coords)[:-1]]  # noqa: E731
     lines = {str(r.tg.get("ref")): r.geometry for _, r in g[g.kind == "hole"].iterrows()}
     greens = g[g.kind == "green"]
+    traced = {}
+    if a.traced:
+        import pandas as pd
+        t = gpd.read_file(cdir / "proposed" / "traced.geojson").to_crs(cfg["epsg"])
+        t["geometry"] = t.geometry.translate(-world.x0, -world.y0)
+        t = t.set_crs(g.crs, allow_override=True)  # local metres, labelled like course_local.geojson
+        t["tg"] = [x if isinstance(x, dict) else json.loads(x) for x in t["tags"]]
+        for _, r in t[t.kind == "hole"].iterrows():
+            lines.setdefault(str(r.tg.get("ref")), r.geometry)
+        greens = pd.concat([greens, t[t.kind == "green"]])
+        for _, r in t.iterrows():
+            if r.kind == "green":
+                k = str(r.tg.get("hole"))
+            elif r.kind == "tee":
+                k = str(r.osm).split("_")[2]           # tr_tee_<hole>_<i>
+            elif r.kind == "bunker":
+                k = min(lines, key=lambda h: lines[h].distance(r.geometry))
+            else:
+                continue
+            traced.setdefault(k, []).append({"id": r.osm, "kind": r.kind, "poly": ring(r.geometry)})
     bnd = g[g.kind == "boundary"].geometry.iloc[0]
     (out / "img").mkdir(parents=True, exist_ok=True)
     holes = []
@@ -95,6 +119,8 @@ def main():
         elif k in edit:
             feats = [{"id": r.osm, "kind": r.kind, "poly": ring(r.geometry)} for _, r in g.iterrows()
                      if own(r) and r.kind in ("green", "fairway", "bunker", "tee")]
+            if not feats and a.traced:
+                feats = traced.get(k, [])
         else:
             feats = []
         clip = sbox(*bx0)

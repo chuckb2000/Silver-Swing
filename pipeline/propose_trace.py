@@ -208,6 +208,15 @@ def main():
     # greens and pins --------------------------------------------------------------
     greens = {}
     for k, s in spec["greens"].items():
+        if "ellipse" in s:  # optional: a green the texture trace can't see (tree shadow), placed by eye
+            from shapely.affinity import rotate as srotate
+            cx, cy, rx, ry, ang = s["ellipse"]
+            p = srotate(sscale(Point(cx, cy).buffer(1.0, 32), rx, ry), ang, origin=(cx, cy))
+            greens[k] = p
+            add(f"tr_green_{k}", "green", p, {"golf": "green", "hole": k},
+                f"ellipse placed by eye on the orthophoto ({s.get('why', 'not traceable')})")
+            add(f"tr_pin_{k}", "pin", Point(cx, cy), {"golf": "pin", "hole": k}, "green centre (proposal)")
+            continue
         p = trace_green(o, s["seed"], s["t"])
         if p is None:
             print(f"[trace] green {k}: nothing at the seed")
@@ -285,7 +294,7 @@ def main():
     bs = spec["bunkers"]
     near = unary_union([lines[k].buffer(bs["near_m"]) for k in spec["holes"]] + [p.buffer(bs["near_m"]) for p in greens.values()])
     near = near.intersection(g[g.kind == "boundary"].geometry.iloc[0])  # not the sewage plant's tanks
-    sand = (o.br > bs["min_brightness"]) & (o.exg < 8)
+    sand = (o.br > bs["min_brightness"]) & (o.exg < bs.get("max_exg", 8))
     sand = ndimage.binary_opening(ndimage.binary_closing(sand, iterations=2), iterations=2)
     sand = ndimage.binary_fill_holes(sand) & o.mask([near])
     old = unary_union(list(g[g.kind == "bunker"].geometry)).buffer(1)
