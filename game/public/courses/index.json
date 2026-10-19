@@ -79,6 +79,20 @@
    "teeSets": [
     "Blue"
    ]
+  },
+  {
+   "id": "indian_island",
+   "name": "Indian Island Golf Course",
+   "location": "Riverhead, Suffolk County, New York",
+   "state": "NY",
+   "theme": "bayside",
+   "holes": 18,
+   "par": 72,
+   "defaultTee": "Blue",
+   "totalYd": 6516,
+   "teeSets": [
+    "Blue"
+   ]
   }
  ]
 }
