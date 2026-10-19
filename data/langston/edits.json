@@ -1,5 +1,5 @@
 {
- "note": "Edits to the OSM layout for Langston, built into edited/course.geojson by pipeline/merge_edits.py (run by make course). The lidar tees are proposals from pipeline/propose_tees.py (run as: python3 propose_tees.py langston --wide=5,6,10; the ids depend on that command), added by the course chat on 2026-10-19 for the developer to confirm in the pull request; to drop one, delete its id here and rebuild.",
+ "note": "Edits to the OSM layout for Langston, built into edited/course.geojson by pipeline/merge_edits.py (run by make course). The lidar tees are proposals from pipeline/propose_tees.py (run as: python3 propose_tees.py langston --wide=5,6,10; the ids depend on that command), added by the course chat on 2026-10-19 and approved by the developer the same day ('i trust you finding the tee boxes from the lidar'); to drop one, delete its id here and rebuild.",
  "add": [
   {
    "from": "proposed/tees_lidar.geojson",
@@ -10,7 +10,8 @@
     "proposed": "lidar",
     "hole": "10",
     "tee_set": "Royal",
-    "assigned_by": "the course chat at the developer's request (lidar pad, edits.json)"
+    "assigned_by": "the course chat at the developer's request (lidar pad, edits.json)",
+    "approved": "developer 2026-10-19"
    },
    "reason": "Hole 10 Royal (back) tee across Kingman Lake on the front-nine side, which the developer asked for (2026-10-19: 'a teebox on the other side of the lake from the driving range, same side as the front nine'). The lidar shows a raised levelled pad on the west bank of the lake channel; from it the hole measures 527 yd against 538 on the card (-2.1%). Tagged hole=10 tee_set=Royal because it is 95 m off the OSM hole line."
   },
@@ -26,7 +27,8 @@
     "lidar_tee_81"
    ],
    "tags": {
-    "proposed": "lidar"
+    "proposed": "lidar",
+    "approved": "developer 2026-10-19"
    },
    "reason": "Tee boxes missing from OSM (OSM maps one tee per hole, mostly the White tees), found in the DC lidar DEM as raised levelled pads on the tee-shot axis and within 8% of the card for a tee set without a matching OSM box: lidar_tee_1: 3 Royal 508/508 (0.0%) | lidar_tee_12: 5 Royal and White 351/350 (+0.3%) | lidar_tee_56: 10 White 454/438 (+3.6%) | lidar_tee_70: 11 White 389/383 (+1.6%) | lidar_tee_72: 12 Royal 446/444 (+0.5%) | lidar_tee_77: 15 White 168/170 (-0.9%) | lidar_tee_81: 18 Royal 386/383 (+0.8%)"
   },
@@ -39,7 +41,8 @@
     "proposed": "lidar",
     "hole": "17",
     "tee_set": "Royal",
-    "assigned_by": "the course chat (lidar pad, edits.json; to confirm)"
+    "assigned_by": "the course chat (lidar pad, edits.json; approved by the developer)",
+    "approved": "developer 2026-10-19"
    },
    "reason": "Hole 17 Royal tee: a raised pad 79 m behind the OSM (White) tee on the line of play; 398 yd against 396 on the card (+0.5%). Without it the Royal 17 plays 346 yd (-12.6%). Tagged hole/tee_set because it is more than 40 m from the line start."
   },
@@ -52,7 +55,8 @@
     "proposed": "lidar",
     "hole": "13",
     "tee_set": "White",
-    "assigned_by": "the course chat (lidar pad, edits.json; to confirm)"
+    "assigned_by": "the course chat (lidar pad, edits.json; approved by the developer)",
+    "approved": "developer 2026-10-19"
    },
    "reason": "Hole 13 White tee: the only forward pad on the island tip (157 m2, the Gold tee by distance: 140 yd vs 142). White plays it at 140 yd against 152 (-7.9%); the OSM tee (the Royal tee) would be 178 yd (+17%)."
   },

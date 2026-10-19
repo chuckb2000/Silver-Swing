@@ -19,7 +19,7 @@ class AlwaysHit extends Rng { next(): number { return 0; } }
 const ID = 'langston';
 // holes accepted outside 3% until the developer decides (data/langston/validation_report.md)
 const YARDAGE_EXCEPTIONS = ['1 Royal', '6 Royal', '7 Royal', '16 Royal'];
-// over 8% and waiting for the developer's decision (pull request): the Royal 6 tee box is not mapped
+// over 8%, accepted by the developer (2026-10-19): Royal 6 plays from the White box (no Royal box mapped)
 const OVER_8 = ['6 Royal'];
 
 const course = loadCourseFiles(ID);

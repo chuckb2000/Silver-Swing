@@ -1717,10 +1717,11 @@ such a short course otherwise").
 **11.10.4 Known open items** (details and recommendations in
 data/langston/validation_report.md)
 
-1.  Royal 6 plays 351 yd vs 398 (-11.9 %): no Royal tee box in OSM or
-    the lidar. Waiting on the developer.
+1.  Royal 6 plays 351 yd vs 398 (-11.9 %) from the White box: no Royal
+    tee box in OSM or the lidar; accepted for play by the developer.
 2.  Hole 10 Royal tee and nine other tee boxes come from lidar pads
-    (`edits.json`); the creek on 3 is a lidar channel. To be confirmed.
+    (`edits.json`), approved by the developer; the creek on 3 is a lidar
+    channel.
 3.  Royal 1, 7 and 16 are flags (-3.5 to -4.3 %).
 4.  Four lidar trees stand inside fairways (holes 2, 3, 16).
 5.  Ratings unverified; lidar year not recorded.
