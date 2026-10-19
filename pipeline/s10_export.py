@@ -25,6 +25,9 @@ from common import PX_PER_M, ROOT, SURF, World, build_dir, course_dir, course_na
 warnings.filterwarnings("ignore")
 
 CHUNK = 512
+# optional per-theme minimap colours (palettes/<theme>.json "minimap" / "minimap_trees"), set in main()
+MINIMAP: dict = {}
+MINIMAP_TREES: dict = {}
 
 
 def to_palette_png(arr: np.ndarray, path):
@@ -41,13 +44,20 @@ def to_palette_png(arr: np.ndarray, path):
     img.save(path, optimize=True)
 
 
+def hex_rgb(h: str):
+    h = h.lstrip("#")
+    return [int(h[i:i + 2], 16) for i in (0, 2, 4)]
+
+
 def schematic(surf_blocks_mode, P):
     col = {
         SURF["ob"]: "#5f8a45", SURF["rough"]: "#3f8a3c", SURF["fairway"]: "#62b64c", SURF["fringe"]: "#6cc052",
         SURF["green"]: "#86d667", SURF["tee"]: "#79c95c", SURF["bunker"]: "#eadcb3", SURF["water"]: "#3e72a3",
         SURF["cartpath"]: "#a79f8e", SURF["woods"]: "#2c5a33", SURF["ob_road"]: "#6a6b72", SURF["ob_water"]: "#3e72a3",
         SURF["ob_woods"]: "#294c2f", SURF["ob_building"]: "#8a6a58", SURF["building"]: "#9a5a48", SURF["range"]: "#73b15a",
+        SURF["ob_sand"]: "#eadcb3",
     }
+    col.update({SURF[k]: v for k, v in MINIMAP.items()})
     lut = np.zeros((32, 3), np.uint8)
     for k, v in col.items():
         v = v.lstrip("#")
@@ -59,7 +69,7 @@ def block_mode(surf, f):
     H, W = surf.shape
     Hb, Wb = H // f, W // f
     blocks = surf[:Hb * f, :Wb * f].reshape(Hb, f, Wb, f).transpose(0, 2, 1, 3).reshape(Hb, Wb, f * f)
-    counts = np.stack([(blocks == c).sum(-1) for c in range(16)], -1)
+    counts = np.stack([(blocks == c).sum(-1) for c in range(32)], -1)
     # prefer small but important features (bunker, water, green) when present in >= 30% of the block
     for c, wgt in ((SURF["bunker"], 1.8), (SURF["water"], 1.6), (SURF["green"], 1.6), (SURF["cartpath"], 0.8)):
         counts[..., c] = counts[..., c] * wgt
@@ -91,8 +101,11 @@ def render_map(surf, z_px, trees, world, f, region=None):
         yy, xx = np.mgrid[max(0, y0):min(Hm, y1), max(0, x0):min(Wm, x1)]
         d = np.hypot(xx + 0.5 - cx, yy + 0.5 - cy)
         inside = d <= r
-        dark = np.array([31, 74, 50] if t["type"] == "conifer" else [47, 96, 44])
-        lite = np.array([58, 112, 74] if t["type"] == "conifer" else [80, 140, 66])
+        if MINIMAP_TREES:
+            dark, lite = (np.array(hex_rgb(c)) for c in MINIMAP_TREES[t["type"]])
+        else:
+            dark = np.array([31, 74, 50] if t["type"] == "conifer" else [47, 96, 44])
+            lite = np.array([58, 112, 74] if t["type"] == "conifer" else [80, 140, 66])
         hl = (xx + 0.5 - cx + yy + 0.5 - cy) < -r * 0.35
         sub = img[yy, xx]
         sub[inside] = dark
@@ -107,12 +120,16 @@ def update_registry(course: dict):
     reg = json.load(open(path)) if path.exists() else {"courses": []}
     default = next(t for t in course["teeSets"] if t["name"] == course["defaultTee"])
     entry = {
-        "id": course["id"], "name": course["name"], "location": course["location"], "theme": course["theme"],
-        "holes": len(course["holes"]), "par": course["par"], "defaultTee": course["defaultTee"],
+        "id": course["id"], "name": course["name"], "location": course["location"], "state": course["state"],
+        "theme": course["theme"], "holes": len(course["holes"]), "par": course["par"], "defaultTee": course["defaultTee"],
         "totalYd": default["totalYd"], "teeSets": [t["name"] for t in course["teeSets"]],
     }
-    reg["courses"] = [c for c in reg["courses"] if c["id"] != entry["id"]] + [entry]
-    reg["courses"].sort(key=lambda c: c["name"].lower())
+    # update in place, new courses at the end: the first course stays the default for new players
+    ids = [c["id"] for c in reg["courses"]]
+    if entry["id"] in ids:
+        reg["courses"][ids.index(entry["id"])] = entry
+    else:
+        reg["courses"].append(entry)
     write_json(path, reg, indent=1)
 
 
@@ -123,6 +140,9 @@ def main():
     cdir = course_dir(name)
     bdir = build_dir(name)
     out = out_dir(name)
+    theme = json.load(open(ROOT / "assets-src" / "palettes" / f"{cfg['theme']}.json"))
+    MINIMAP.update(theme.get("minimap", {}))
+    MINIMAP_TREES.update(theme.get("minimap_trees", {}))
     if (out / "terrain").exists():
         shutil.rmtree(out / "terrain")
     (out / "terrain").mkdir(parents=True)
@@ -166,7 +186,8 @@ def main():
     Image.fromarray(rgb, "RGB").save(out / "height.png", optimize=True)
     write_json(out / "height.json", {"cols": int(q.shape[1]), "rows": int(q.shape[0]), "res": 1.0,
                                       "min": round(zmin, 4), "max": round(zmax, 4), "encoding": "R*256+G, row0=north",
-                                      "samples": [[i, j, round(float(hb[j, i]), 4)] for i, j in ((100, 100), (700, 500), (1200, 800))]})
+                                      "samples": [[i, j, round(float(hb[j, i]), 4)] for i, j in
+                                                  ((round(f * (hb.shape[1] - 1)), round(f * (hb.shape[0] - 1))) for f in (0.1, 0.5, 0.9))]})
     shutil.copy(bdir / "heightmap.png", out / "height16.png") if False else None
 
     # trees -------------------------------------------------------------------
@@ -243,6 +264,14 @@ def main():
     buildings = []
     for _, r in g[g.kind == "building"].iterrows():
         geom = r.geometry
+        parts = [o for o in bh_by_osm if o.startswith(f"{r.osm}:")]
+        if parts:  # OSM building parts (s09): each collides at its own height, e.g. a lighthouse tower
+            for o in parts:
+                poly = g[g.osm == o.split(":", 1)[1]].geometry.iloc[0]
+                if boundary.buffer(40).intersects(poly):
+                    buildings.append({"id": o, "h": bh_by_osm[o], "inside": bool(boundary.intersects(poly)),
+                                      "poly": [[rnd(x, 1), rnd(y, 1)] for x, y in poly.simplify(0.3).exterior.coords]})
+            continue
         polys = list(geom.geoms) if isinstance(geom, MultiPolygon) else [geom]
         for poly in polys:
             if poly.area < 4:
@@ -262,13 +291,10 @@ def main():
             "greenId": h["green_osm"], "greenCenter": h["green_center"], "pin": h["pin"],
         })
     course = {
-        "id": cfg["id"], "name": cfg["name"], "location": cfg["location"], "architects": cfg["architects"],
+        "id": cfg["id"], "name": cfg["name"], "location": cfg["location"], "state": cfg["state"],
+        "architects": cfg["architects"],
         "theme": cfg["theme"],
-        "attribution": [
-            "Map data © OpenStreetMap contributors (ODbL)",
-            "Elevation and canopy height: Oregon Department of Geology and Mineral Industries (DOGAMI) lidar",
-            "Scorecard: GolfPass (third-party listing)",
-        ],
+        "attribution": list(cfg["attribution"]),
         "world": {"width": world.width, "height": world.height, "pxPerM": PX_PER_M, "utmOrigin": [world.x0, world.y0], "epsg": world.epsg},
         "teeSets": [{"name": t["name"], "rating": t["rating"], "slope": t["slope"], "totalYd": t["total_yd"]} for t in cfg["tee_sets"] if t.get("playable")],
         "defaultTee": cfg["default_tee"],
@@ -296,27 +322,22 @@ def main():
     trees_rep = json.load(open(bdir / "trees_report.json"))
     greens_rep = (bdir / "greens_report.md").read_text()
     adjustments = json.load(open(cdir / "adjustments.json"))
-    spec_items = [
-        "", "## Other open items (spec 11.4)", "",
-        "1. **Scorecard not verified against the club's printed card.** Yardages, pars and stroke indexes come from GolfPass. golfingrecord.com lists a different stroke-index order (e.g. hole 5 = 1, hole 6 = 9) and Blue 70.4/132; OSM tags hole 18 with handicap 5. The game uses GolfPass.",
-        "2. **Red tee par** (73 vs 71 on GolfPass) - not relevant yet: only the Blue tees are built.",
-        "3. **OSM coverage** - complete: all 18 holes have a hole line, green, pin and fairway; 46 tee boxes, 65 bunkers, 4 water hazards and 32 cart paths are mapped (see the audit below). Two extra greens are practice greens and count as wrong greens.",
-        "4. **Water** - the four ponds are mapped as `golf=lateral_water_hazard` and play as red penalty areas. Oswego Lake lies outside the course boundary (out of bounds); no hole plays along it.",
-        "5. **Imagery** - the NAIP download did not come through, so tree species are inferred from lidar crown shape only.",
-    ]
+    # course-specific open items and notes, written by hand (optional)
+    notes_path = cdir / "report_notes.md"
+    spec_items = ["", notes_path.read_text().strip()] if notes_path.exists() else []
     lines = [table.strip(), *spec_items, "", "## Playability adjustments", ""]
     if adjustments:
         for a in adjustments:
             lines.append(f"- Hole {a['hole']} ({a['tee_set']}): {a['reason']} -> {a['adjusted_yd']} yd (real {a['real_yd']} yd).")
     else:
         lines.append("- none")
-    lines += ["", "## Tree detection (DOGAMI canopy height model)", "",
+    lines += ["", f"## Tree detection ({trees_rep['source']})", "",
               f"- {trees_rep['detected']} trees detected in the world extent ({trees_rep['inside_course']} inside the course), "
               f"{trees_rep['conifer']} conifers / {trees_rep['deciduous']} deciduous; median height {trees_rep['height_p50_m']:.1f} m, max {trees_rep['height_max_m']:.1f} m.",
               f"- Dropped: {trees_rep['dropped']['building']} tops on building footprints, {trees_rep['dropped']['lake']} over the lake, {trees_rep['dropped']['tiny']} tiny crowns.",
               f"- Dropped on playing surfaces (spec 5.4): {len(trees_rep['dropped_on_playing_surfaces'])} -> " + ", ".join(f"{d['on']} {d['osm']} ({d['h']} m)" for d in trees_rep['dropped_on_playing_surfaces']),
               f"- OSM natural=tree points matched by a detected tree within 4 m: {trees_rep['osm_tree_points_matched_within_4m']} of {trees_rep['osm_tree_points']}.",
-              "- Conifer vs deciduous is inferred from crown shape only (no leaf-off imagery); see build/trees_preview.png.",
+              f"- {trees_rep['type_method']}",
               "", greens_rep.strip(), "", audit.strip(), ""]
     (cdir / "validation_report.md").write_text("\n".join(lines) + "\n")
     sizes = sum(p.stat().st_size for p in out.rglob("*") if p.is_file())

@@ -2,6 +2,7 @@
   "id": "oswego_lake",
   "name": "Oswego Lake Country Club",
   "location": "Lake Oswego, Clackamas County, Oregon",
+  "state": "OR",
   "architects": "H. Chandler Egan (1924); later John Harbottle III; Bill & John F. Robinson (1992)",
   "theme": "pnw",
   "epsg": 32610,
@@ -18,7 +19,8 @@
   "chm": {
     "path": "raw/dogami_chm_ft.tif",
     "units": "ft",
-    "source": "DOGAMI lidar CANOPY_HEIGHT_MODEL_MOSAIC (highest hit minus bare earth), exported 2026-10-18 at 1 m in EPSG:32610"
+    "source": "DOGAMI lidar CANOPY_HEIGHT_MODEL_MOSAIC (highest hit minus bare earth), exported 2026-10-18 at 1 m in EPSG:32610",
+    "label": "DOGAMI canopy height model"
   },
   "world": {
     "x0": 523746,
@@ -44,5 +46,10 @@
   "wind_mph": {
     "minMph": 1,
     "maxMph": 7
-  }
+  },
+  "attribution": [
+    "Map data © OpenStreetMap contributors (ODbL)",
+    "Elevation and canopy height: Oregon Department of Geology and Mineral Industries (DOGAMI) lidar",
+    "Scorecard: GolfPass (third-party listing)"
+  ]
 }

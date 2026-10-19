@@ -9,7 +9,9 @@ from __future__ import annotations
 import geopandas as gpd
 from shapely.geometry import Point
 
-from common import build_dir, course_name_from_argv
+import csv
+
+from common import build_dir, course_dir, course_name_from_argv
 
 
 def main():
@@ -23,9 +25,11 @@ def main():
     water = g[g.kind.isin(["lateral_water_hazard", "water_hazard"])]
     pins = g[g.kind == "pin"]
     rows, issues = [], []
+    with open(course_dir(name) / "scorecard.csv") as f:
+        n_holes = len(list(csv.DictReader(f)))
     refs = sorted(holes.ref.tolist())
-    if refs != list(range(1, 19)):
-        issues.append(f"hole refs are {refs}, expected 1-18")
+    if refs != list(range(1, n_holes + 1)):
+        issues.append(f"hole refs are {refs}, expected 1-{n_holes} (scorecard.csv)")
     used_greens = set()
     for _, h in holes.iterrows():
         L = h.geometry

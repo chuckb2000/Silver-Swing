@@ -15,7 +15,6 @@ from __future__ import annotations
 import csv
 import json
 import warnings
-from datetime import date
 
 import geopandas as gpd
 import numpy as np
@@ -62,6 +61,26 @@ def best_point_in(poly, line, green_c, target_m, inset=0.75):
     return best
 
 
+def end_point_in(poly, line, green_c, back=True, inset=0.75):
+    """The point of the tee polygon (inset) farthest from (back) or nearest to
+    (front) the green, measured along the hole."""
+    inner = poly.buffer(-inset)
+    if inner.is_empty:
+        inner = poly
+    minx, miny, maxx, maxy = inner.bounds
+    best = None
+    for x in np.arange(minx, maxx + 0.01, 0.5):
+        for y in np.arange(miny, maxy + 0.01, 0.5):
+            p = Point(x, y)
+            if not inner.contains(p):
+                continue
+            m, _ = path_from(p, line, green_c)
+            key = m if back else -m
+            if best is None or key > best[0]:
+                best = (key, p, m)
+    return best[1], best[2]
+
+
 def main():
     name = course_name_from_argv()
     cfg = load_config(name)
@@ -74,6 +93,9 @@ def main():
     holes = g[g.kind == "hole"].copy()
     holes["ref"] = holes.tags.apply(lambda t: int(t.get("ref", 0)))
     holes = holes.sort_values("ref")
+    refs = holes.ref.tolist()
+    if refs != sorted(card):  # the scorecard sets the hole count (9 or 18)
+        raise SystemExit(f"[s06] OSM hole lines {refs} do not match the scorecard holes {sorted(card)}; fix edited/course.geojson")
     greens = g[g.kind == "green"]
     tees = g[g.kind == "tee"]
     pins = g[g.kind == "pin"]
@@ -90,16 +112,29 @@ def main():
 
     # Tee assignment per tee set: one tee polygon per hole, solved jointly so a
     # box that clearly belongs to one hole is not reused for its neighbour.
+    # A tee polygon tagged hole=<n> and tee_set=<name> in edited/course.geojson
+    # is that hole's tee for that set (the developer's call), whatever its distance.
     from scipy.optimize import linear_sum_assignment
     tee_idx = list(tees.index)
     assign = {}
+    forced = {}
+    for ti in tee_idx:
+        tg = tees.loc[ti].tags
+        if tg.get("hole") and tg.get("tee_set"):
+            forced[(int(tg["hole"]), tg["tee_set"])] = ti
     for ts in tee_sets:
         cost = np.full((len(hole_list), len(tee_idx)), 1e6)
+        taken = {ti for (n_, ts_), ti in forced.items() if ts_ == ts}
         for a, h in enumerate(hole_list):
             n = int(h.ref)
+            if (n, ts) in forced:
+                assign[(n, ts)] = forced[(n, ts)]
+                continue
             L, start, gi, gc = geo[n]
             target = float(card[n][ts.lower()]) * YD
             for b, ti in enumerate(tee_idx):
+                if ti in taken:
+                    continue
                 c = tees.loc[ti].geometry.centroid
                 s = L.project(c)
                 if not ((L.distance(c) < 25 and s < 0.45 * L.length) or c.distance(start) < 40):
@@ -147,7 +182,18 @@ def main():
             card_yd = float(card[n][ts.lower()])
             diff = (real_yd - card_yd) / card_yd * 100
             adj_pt, adj_m = tee_pt, m
-            if status(diff) != "pass" and tpoly is not None:
+            pos = tees.loc[ti].tags.get("tee_pos") if ti is not None else None
+            if pos in ("back", "front") and tpoly is not None:
+                # the developer's placement inside the box (tag tee_pos=back|front)
+                p_, m_ = end_point_in(tpoly, L, gc, back=(pos == "back"))
+                adj_pt, adj_m = p_, m_
+                adjustments.append({
+                    "hole": n, "tee_set": ts, "step": 2, "type": "tee_position",
+                    "from": [rnd(tee_pt.x), rnd(tee_pt.y)], "to": [rnd(adj_pt.x), rnd(adj_pt.y)],
+                    "real_yd": rnd(real_yd, 1), "adjusted_yd": rnd(adj_m / YD, 1), "card_yd": card_yd,
+                    "reason": f"developer: tee at the {pos} of the tee box {tee_osm} (tag tee_pos={pos})",
+                })
+            elif status(diff) != "pass" and tpoly is not None:
                 best = best_point_in(tpoly, L, gc, target)
                 if best and abs(best[2] - target) < abs(m - target) - 0.5:
                     adj_pt, adj_m = best[1], best[2]
@@ -164,7 +210,9 @@ def main():
                 open_items.append(f"Hole {n} ({ts}): measured {adj_yd:.0f} yd vs card {card_yd:.0f} ({adiff:+.1f}%) - FAIL, needs a decision.")
             elif status(adiff) == "flag":
                 open_items.append(f"Hole {n} ({ts}): measured {adj_yd:.0f} yd vs card {card_yd:.0f} ({adiff:+.1f}%) even with the virtual tee at the best spot in its box; accepted for play.")
-            if tee_osm and start.distance(tee_pt) > 50:
+            if (n, ts) in forced:
+                open_items.append(f"Hole {n} ({ts}): tee box {tee_osm} assigned by the developer (tagged hole={n}, tee_set={ts} in edited/course.geojson).")
+            elif tee_osm and start.distance(tee_pt) > 50:
                 open_items.append(
                     f"Hole {n}: the OSM hole line starts {start.distance(tee_pt):.0f} m from the {ts} tee box ({tee_osm}), "
                     f"and only that box matches the card; the line was probably drawn from another tee. Measured from the {ts} box through the line's bend points.")
@@ -193,7 +241,7 @@ def main():
     total_adj = sum(r[5] for r in rows)
     lines = [
         f"# Validation report - {cfg['name']}", "",
-        f"Generated {date.today().isoformat()} by pipeline/s06_holes.py. Scorecard source: {cfg['scorecard_source']}.", "",
+        f"Generated by pipeline/s06_holes.py. Scorecard source: {cfg['scorecard_source']}.", "",
         "Measured from the centre of the assigned tee polygon, through the golf=hole line's bend points ahead of the tee, to the green centre (horizontal distance).", "",
         "| hole | par | tee set | card yd | measured yd | diff yd | diff % | status | adjusted yd | adj. diff % | adj. status |",
         "|---|---|---|---|---|---|---|---|---|---|---|",

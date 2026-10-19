@@ -8,3 +8,4 @@ scipy>=1.11
 scikit-image>=0.22
 Pillow>=10
 matplotlib>=3.8
+laspy[lazrs]>=2.5
