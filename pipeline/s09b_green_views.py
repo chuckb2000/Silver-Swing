@@ -38,11 +38,13 @@ from shapely.geometry import MultiPolygon, Point, Polygon
 
 from common import PX_PER_M, ROOT, SURF, World, build_dir, course_name_from_argv, load_config, write_json
 from s08_surface import course_layers, road_geoms
-from s09_render import BAYER4, PRIO, SHADOW_DIR, SHADOW_MULT, build_lut, load_palette, wave_mask
+from terrain import tier_offset
+from s09_render import draw_lighthouse, LIGHTHOUSE_DRAW_SCALE  # noqa: E402
+from s09_render import BAYER4, PRIO, SHADOW_DIR, SHADOW_MULT, band_lut, build_lut, load_palette, load_theme, rough_band_mask, wave_mask
 
 sys.path.insert(0, str(ROOT / "assets-src"))
 from atlas import Atlas  # noqa: E402
-from trees import conifer, deciduous  # noqa: E402
+from trees import theme_painters  # noqa: E402
 
 warnings.filterwarnings("ignore")
 
@@ -131,6 +133,8 @@ def terrain_z_grid(base: np.ndarray, greens: list, grid: Grid) -> np.ndarray:
         zm = gm["z0"] + gm["gx"] * (Xs - gm["cx"]) + gm["gy"] * (Ys - gm["cy"])
         for b in gm["bumps"]:
             zm = zm + b["a"] * np.exp(-((Xs - b["x"]) ** 2 + (Ys - b["y"]) ** 2) / (2 * b["s"] ** 2))
+        if gm.get("tiers"):
+            zm = zm + tier_offset(Xs, Ys, gm["tiers"])
         pf = gm.get("pinFlat")
         if pf:
             dd = np.hypot(Xs - pf["px"], Ys - pf["py"])
@@ -166,12 +170,12 @@ def hillshade_tone(z, surf, ppm):
     return tone
 
 
-def stripe_field(g, holes, grid: Grid) -> np.ndarray:
+def stripe_field(g, holes, grid: Grid, tee: str) -> np.ndarray:
     """+1 tone on alternate 4 m (fairway) / 2 m (tee) bands parallel to the nearest hole line."""
     stripe = np.zeros((grid.H, grid.W), np.int8)
     from shapely.geometry import LineString, box
     win = box(grid.x0, grid.y1 - grid.H / grid.ppm, grid.x0 + grid.W / grid.ppm, grid.y1)
-    centerlines = [LineString(h["tees"]["Blue"]["centerline"]) for h in holes]
+    centerlines = [LineString(h["tees"][tee]["centerline"]) for h in holes]
     X, Y = np.meshgrid(grid.xs, grid.ys)
     for kind, band in (("fairway", 4.0), ("tee", 2.0)):
         for geom in g[g.kind == kind].geometry:
@@ -199,11 +203,11 @@ def stripe_field(g, holes, grid: Grid) -> np.ndarray:
     return stripe
 
 
-def render_art(surf, z, grid: Grid, g, holes, trees, buildings, boundary, P, lut, rng, max_h=TREE_MAX_H):
+def render_art(surf, z, grid: Grid, g, holes, trees, buildings, boundary, P, lut, rng, tee, max_h=TREE_MAX_H, cfg=None, blut=None):
     H, W = surf.shape
     ppm = grid.ppm
     tone = hillshade_tone(z, surf, ppm)
-    stripe = stripe_field(g, holes, grid)
+    stripe = stripe_field(g, holes, grid, tee)
     t = tone.astype(np.int16)
     blk = max(1, round(ppm / 6))  # texture grain: the same size on screen at 6 and 12 px/m
     n1 = np.kron(rng.random((H // blk + 1, W // blk + 1)), np.ones((blk, blk)))[:H, :W]
@@ -218,6 +222,10 @@ def render_art(surf, z, grid: Grid, g, holes, trees, buildings, boundary, P, lut
     t = np.where(gm_, np.clip(t, 0, 2), t)
     t = np.clip(t, 0, 3)
     rgb = lut[surf, t]
+    Xg, Yg = np.meshgrid(grid.xs, grid.ys)
+    mown = rough_band_mask(cfg or {}, g, surf, grid.mask, Xg, Yg, ppm)
+    if blut is not None:
+        rgb[mown] = blut[t[mown]]
     # green: diagonal mowing stripes, 1.5 m wide, as a subtle two-colour weave
     X, Y = np.meshgrid(grid.xs, grid.ys)
     band = (np.floor((X + Y) / (1.5 * math.sqrt(2))).astype(np.int64) % 2) == 1
@@ -234,12 +242,12 @@ def render_art(surf, z, grid: Grid, g, holes, trees, buildings, boundary, P, lut
     put((surf == S["ob_road"]) & (n1 < 0.025), "K2")
     put((surf == S["cartpath"]) & (n1 < 0.03), "K2")
     rough = surf == S["rough"]
-    tuft = rough & (n1 > 0.994)
+    tuft = rough & ~mown & (n1 > 0.994)
     tuft2 = np.zeros_like(tuft)
     tuft2[:-1] = tuft[1:]
     tuft3 = np.zeros_like(tuft)
     tuft3[:-2] = tuft[2:]
-    put(tuft | tuft2 | tuft3, "G5")
+    put(tuft | tuft2 | tuft3, "TUFT" if "TUFT" in P else "G5")
     # outlines
     pr = PRIO[surf]
     edge = np.zeros((H, W), bool)
@@ -249,6 +257,8 @@ def render_art(surf, z, grid: Grid, g, holes, trees, buildings, boundary, P, lut
         own_edge |= np.roll(np.roll(surf, dy, 0), dx, 1) != surf
     soft = edge & np.isin(surf, [S["rough"], S["fairway"], S["fringe"], S["tee"], S["ob"], S["woods"], S["range"], S["cartpath"]])
     rgb[soft] = lut[surf[soft], 0]
+    if blut is not None:
+        rgb[soft & mown] = blut[0]
     put(own_edge & (surf == S["bunker"]), "S0")
     put(own_edge & np.isin(surf, [S["water"], S["ob_water"]]), "W0")
     put(own_edge & (surf == S["green"]), "G6")
@@ -279,7 +289,7 @@ def render_art(surf, z, grid: Grid, g, holes, trees, buildings, boundary, P, lut
             pts.append((ex + px_ * math.cos(ang) - py_ * math.sin(ang), ey + px_ * math.sin(ang) + py_ * math.cos(ang)))
         d.polygon(pts, fill=255)
     for poly, hb, _osm in buildings:
-        wall = hb * hk
+        wall = hb * hk * (LIGHTHOUSE_DRAW_SCALE if _osm in LIGHTHOUSES else 1.0)
         L = wall * 0.9
         pp = [grid.px(x, y) for x, y in poly.exterior.coords]
         for tt in np.linspace(0, 1, 9):
@@ -294,6 +304,10 @@ def render_art(surf, z, grid: Grid, g, holes, trees, buildings, boundary, P, lut
     draw = ImageDraw.Draw(img)
     for poly, hb, osm in sorted(buildings, key=lambda b: -b[0].centroid.y):
         wall = max(2, int(round(hb * hk)))
+        if osm in LIGHTHOUSES:
+            cx, cy = grid.px(poly.centroid.x, poly.centroid.y)
+            draw_lighthouse(draw, P, cx, cy, math.sqrt(poly.area / math.pi) * ppm, wall * LIGHTHOUSE_DRAW_SCALE)
+            continue
         pp = [grid.px(x, y) for x, y in poly.exterior.coords]
         roof = [(x, y - wall) for x, y in pp]
         ccw = Polygon(pp).exterior.is_ccw
@@ -329,6 +343,9 @@ def render_art(surf, z, grid: Grid, g, holes, trees, buildings, boundary, P, lut
     return rgb
 
 
+LIGHTHOUSES: set = set()  # building ids drawn as lighthouses (render_meta kind), set in main()
+
+
 def tree_sprite_key(tr_, i, L):
     ppm = L["ppm"]
     hk = ppm * HEIGHT_K
@@ -351,8 +368,10 @@ def main():
     bdir = build_dir(name)
     outd = bdir / "greens"
     outd.mkdir(exist_ok=True)
-    P = load_palette()
-    lut = build_lut(P)
+    P = load_palette(cfg["theme"])
+    lut = build_lut(P, load_theme(cfg["theme"]).get("lut"))
+    blut = band_lut(P, load_theme(cfg["theme"]))
+    conifer, deciduous = theme_painters(cfg["theme"])
     surf05 = np.load(bdir / "surface.npy")
     base = np.load(bdir / "height_base.npy").astype(np.float64)
     greens = json.load(open(bdir / "greens.json"))
@@ -365,11 +384,19 @@ def main():
     meta = json.load(open(bdir / "art" / "render_meta.json"))
     bh_by_osm = {b["osm"]: b["h"] for b in meta["buildings"]}
     building_polys = []
+    kind_by_osm = {b["osm"]: b.get("kind", "house") for b in meta["buildings"]}
     for _, r in g[g.kind == "building"].iterrows():
         geom = r.geometry
+        parts = [o for o in bh_by_osm if o.startswith(f"{r.osm}:")]
+        if parts:  # split into OSM building parts by s09 (e.g. a lighthouse tower)
+            for o in parts:
+                part = g[g.osm == o.split(":", 1)[1]].geometry.iloc[0]
+                building_polys.append((part, float(bh_by_osm[o]), o))
+            continue
         for poly in (list(geom.geoms) if isinstance(geom, MultiPolygon) else [geom]):
             if poly.area >= 4:
                 building_polys.append((poly, float(bh_by_osm.get(r.osm, 6.0)), r.osm))
+    LIGHTHOUSES.update(o for o, k in kind_by_osm.items() if k == "lighthouse")
     green_by_osm = {gm["id"]: gm for gm in greens}
     views = []
     only = {int(v) for v in os.environ.get("HOLES", "").split(",") if v.strip()}
@@ -393,7 +420,7 @@ def main():
             box = Polygon([(x0 - 30, y0 - 30), (x1 + 30, y0 - 30), (x1 + 30, y1 + 30), (x0 - 30, y1 + 30)])
             blds = [(p, hb, o) for p, hb, o in building_polys if p.intersects(box)]
             rng = np.random.default_rng(20261018 + n + 1000 * ppm)
-            rgb = render_art(surf, z, grid, g, holes, near, blds, boundary, P, lut, rng, max_h=L["max_h"])
+            rgb = render_art(surf, z, grid, g, holes, near, blds, boundary, P, lut, rng, cfg["default_tee"], max_h=L["max_h"], cfg=cfg, blut=blut)
             base_name = f"g{n:02d}{L['suffix']}"
             Image.fromarray(rgb).save(outd / f"{base_name}.png", optimize=True)
             # tree sprites
@@ -404,7 +431,7 @@ def main():
                 kind, w, hh, v = tree_sprite_key(t, i, L)
                 key = f"{kind}_{w}_{hh}_{v}"
                 if key not in made:
-                    made[key] = (conifer if kind == "c" else deciduous)(w, hh, v)
+                    made[key] = (conifer if kind == "c" else deciduous)(w, hh, v)  # the theme's tree painters
                     atlas.add(key, made[key])
                 places.append({"f": key, "x": round(t["x"], 2), "y": round(t["y"], 2)})
             aw, ah = atlas.write(outd)

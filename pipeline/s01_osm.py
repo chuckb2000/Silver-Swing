@@ -1,10 +1,13 @@
 """Step 1-2: load the OSM extract(s), keep the features the game needs, and
 write data/<course>/raw/osm.geojson (WGS84) with normalised properties.
 
-The developer supplied GDAL-style OSM GeoPackages (points / lines /
-multipolygons layers with an hstore `other_tags` column) because Overpass is
-not reachable from Claude's sandbox. Overpass output can be dropped in as
-raw/osm.geojson instead; this script is then skipped.
+Sources (cfg["osm_sources"], merged in order; a feature already loaded from
+an earlier source is skipped):
+  *.gpkg     GDAL-style OSM GeoPackages (points / lines / multipolygons layers
+             with an hstore `other_tags` column), as used for Oswego Lake
+  *.geojson  Overpass Turbo exports (osmtogeojson: tags as properties, ids
+             like "way/123"), as used for Highland Links
+Both go through the same classify(), so every later step sees {osm, kind, tags}.
 """
 from __future__ import annotations
 
@@ -12,6 +15,7 @@ import re
 
 import geopandas as gpd
 import pandas as pd
+from shapely.geometry import Polygon
 
 from common import course_dir, course_name_from_argv, load_config
 
@@ -45,10 +49,14 @@ def classify(tags: dict, geom_type: str) -> str | None:
         return "golf_other"
     if "building" in tags:
         return "building"
+    if "building:part" in tags:
+        return "building_part"  # e.g. the tower of a lighthouse (drawn and collided per part)
     if tags.get("natural") in ("water", "wetland"):
         return "water"
     if tags.get("leisure") == "swimming_pool":
         return "pool"
+    if tags.get("natural") in ("beach", "sand"):
+        return "sand"  # off-course sand (golf bunkers are caught above)
     if tags.get("natural") in ("wood",) or tags.get("landuse") == "forest":
         return "wood"
     if tags.get("natural") == "tree":
@@ -92,10 +100,37 @@ def load_gpkg(path):
             kind = classify(tags, r.geometry.geom_type)
             if kind is None:
                 continue
-            rows.append({"osm": oid, "kind": kind, "tags": tags, "geometry": r.geometry})
+            geom = r.geometry
+            if kind == "building_part" and geom.geom_type == "LineString" and geom.is_closed:
+                geom = Polygon(geom.coords)  # GDAL leaves closed building:part ways as lines
+            rows.append({"osm": oid, "kind": kind, "tags": tags, "geometry": geom})
         if rows:
             frames.append(gpd.GeoDataFrame(rows, crs=4326))
     return pd.concat(frames, ignore_index=True) if frames else None
+
+
+def load_overpass(path):
+    """Overpass Turbo / osmtogeojson GeoJSON -> rows like load_gpkg's."""
+    import json
+    from shapely.geometry import shape
+    d = json.load(open(path))
+    rows = []
+    for f in d.get("features", []):
+        props = f.get("properties") or {}
+        raw = props["tags"] if isinstance(props.get("tags"), dict) else props
+        tags = {k: str(v) for k, v in raw.items()
+                if not k.startswith("@") and k not in ("id", "tags", "meta", "relations") and not isinstance(v, (dict, list))}
+        fid = str(f.get("id") or props.get("@id") or props.get("id") or "")
+        typ, _, num = fid.partition("/")
+        oid = {"node": "n", "way": "w", "relation": "r"}.get(typ, "x") + num
+        if f.get("geometry") is None:
+            continue
+        geom = shape(f["geometry"])
+        kind = classify(tags, geom.geom_type)
+        if kind is None:
+            continue
+        rows.append({"osm": oid, "kind": kind, "tags": tags, "geometry": geom})
+    return gpd.GeoDataFrame(rows, crs=4326) if rows else None
 
 
 def main():
@@ -104,7 +139,7 @@ def main():
     cdir = course_dir(name)
     merged = None
     for src in cfg["osm_sources"]:
-        g = load_gpkg(cdir / src)
+        g = load_overpass(cdir / src) if str(src).endswith(".geojson") else load_gpkg(cdir / src)
         if g is None:
             continue
         if merged is None:

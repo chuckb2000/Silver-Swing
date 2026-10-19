@@ -107,6 +107,27 @@ def main():
     lake = np.load(bdir / "lake_mask.npy")  # 1 m vertex grid rows south->north
     lake_px = np.kron(np.flipud(lake[:-1, :-1]), np.ones((PX_PER_M, PX_PER_M), bool))[:H, :W]
     surf[lake_px & ~inside] = SURF["ob_water"]
+    # beaches, dunes and sand cliffs outside the boundary (OSM natural=beach/sand)
+    sand = mask(list(g[g.kind == "sand"].geometry)) & ~inside & (surf != SURF["ob_water"])
+    cliff_pct, beach_max = cfg.get("cliff_sand_slope_pct"), cfg.get("beach_max_m")
+    if (cliff_pct or beach_max is not None) and sand.any():
+        # The mapped beach polygon stops short of the water line and of the cliff. Extend the
+        # sand over lidar ground outside the boundary that is connected to it and either low
+        # (below beach_max_m: the rest of the beach) or steep (over cliff_sand_slope_pct %:
+        # the bare cliff face).
+        zb = np.load(bdir / "height_base.npy")
+        up = lambda a: np.kron(np.flipud(a)[:-1, :-1], np.ones((PX_PER_M, PX_PER_M), bool))[:H, :W]  # noqa: E731
+        gy, gx = np.gradient(zb)
+        cand = np.zeros((H, W), bool)
+        if cliff_pct:
+            cand |= ndimage.binary_closing(up(np.hypot(gx, gy) * 100 > cliff_pct), iterations=2)
+        if beach_max is not None:
+            cand |= up(zb < beach_max)
+        cand &= ~inside & (surf != SURF["ob_water"])
+        lab, n = ndimage.label(cand | sand)
+        keep = np.unique(lab[sand])
+        sand |= np.isin(lab, keep[keep > 0]) & cand
+    surf[sand] = SURF["ob_sand"]
     roads = road_geoms(g)
     major = [geom for geom, hw in roads if ROAD_HALF_WIDTH[hw] >= 2]
     minor = [geom for geom, hw in roads if ROAD_HALF_WIDTH[hw] < 2]

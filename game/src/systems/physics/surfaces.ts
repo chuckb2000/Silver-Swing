@@ -18,6 +18,7 @@ export const SURF = {
   obBuilding: 13,
   building: 14,
   range: 15,
+  obSand: 16, // beach / dune sand outside the boundary (Highland Links)
 } as const;
 
 export type SurfaceId = (typeof SURF)[keyof typeof SURF];
@@ -63,13 +64,14 @@ TABLE[SURF.obWoods] = WOODS;
 TABLE[SURF.obBuilding] = PATH;
 TABLE[SURF.building] = PATH;
 TABLE[SURF.range] = FAIRWAY;
+TABLE[SURF.obSand] = BUNKER;
 
 export function material(id: number): Material {
   return TABLE[id] ?? ROUGH;
 }
 
 export function isOB(id: number): boolean {
-  return id === SURF.ob || id === SURF.range || (id >= 10 && id <= 13);
+  return id === SURF.ob || id === SURF.range || (id >= 10 && id <= 13) || id === SURF.obSand;
 }
 
 export function isWater(id: number): boolean {
@@ -93,4 +95,5 @@ export const SURFACE_LABEL: Record<number, string> = {
   [SURF.obBuilding]: 'out of bounds',
   [SURF.building]: 'building',
   [SURF.range]: 'driving range (ob)',
+  [SURF.obSand]: 'out of bounds',
 };

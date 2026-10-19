@@ -37,6 +37,20 @@ def main():
     (OUT / "trees_meta.json").write_text(
         '{"widths":%s,"heights":%s}' % (TREE_WIDTHS, TREE_HEIGHTS))
     print(f"[assets] trees {len(frames)} frames ({tw}x{th}), sprites ({sw}x{sh}), font {n} glyphs -> {OUT}")
+    # tree sets of the other course themes (palettes/<theme>.json with a "trees" entry)
+    import json
+    for pal in sorted((HERE / "palettes").glob("*.json")):
+        theme = pal.stem
+        if theme == "pnw" or "trees" not in json.load(open(pal)):
+            continue
+        t = Atlas(f"trees_{theme}", max_w=1024)
+        frames = tree_frames(theme)
+        for key, img in frames:
+            t.add(key, img)
+        tw, th = t.write(OUT)
+        (OUT / f"trees_{theme}_meta.json").write_text(
+            '{"widths":%s,"heights":%s}' % (TREE_WIDTHS, TREE_HEIGHTS))
+        print(f"[assets] trees_{theme} {len(frames)} frames ({tw}x{th})")
     blossom.main()  # flowering trees (trees.json c: 2), any theme
 
 
