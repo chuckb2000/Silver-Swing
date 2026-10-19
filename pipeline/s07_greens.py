@@ -26,18 +26,50 @@ BLEND = 3.0
 PIN_R0, PIN_R1 = 3.0, 9.0
 MAX_BUMP_SLOPE = 0.015
 MAX_TILT = 0.025
+UPPER = {"left": "on the right", "right": "on the left", "front": "at the back", "back": "at the front"}
 
 
-def tier_for(spec, hole, green_c, tee):
-    """A tier line through the green centre along the line of play (config `green_tiers`):
-    `low_side` left/right as seen from the tee; `drop_m` between the tiers; `width_m` of the step."""
+def tier_for(spec, hole, green_c, tee, poly=None):
+    """A tier line on a green (config `green_tiers`). `low_side` left/right (as seen
+    from the tee): the line runs along the line of play through the green centre
+    (Highland Links 9). `low_side` front/back: the line runs across the line of play;
+    with `line_frac` (and the green polygon) it sits that fraction of the green's
+    depth from the low edge (Langston 13: a small front tier), else through the
+    centre. `drop_m` between the tiers; `width_m` of the step."""
     pts = hole["tees"][tee]["centerline"]
     (ax, ay), (bx, by) = pts[-2], pts[-1]
     L = math.hypot(bx - ax, by - ay)
     ux, uy = (bx - ax) / L, (by - ay) / L
-    nx, ny = (uy, -ux) if spec.get("low_side", "left") == "left" else (-uy, ux)  # normal points to the upper tier
-    return {"x": rnd(green_c.x, 3), "y": rnd(green_c.y, 3), "nx": rnd(nx, 5), "ny": rnd(ny, 5),
+    side = spec.get("low_side", "left")
+    px, py = green_c.x, green_c.y
+    if side in ("front", "back"):
+        nx, ny = (ux, uy) if side == "front" else (-ux, -uy)  # normal points to the upper tier
+        if spec.get("line_frac") is not None and poly is not None:
+            s = [(x - green_c.x) * ux + (y - green_c.y) * uy for x, y in poly.exterior.coords]
+            f = float(spec["line_frac"])
+            s0 = min(s) + f * (max(s) - min(s)) if side == "front" else max(s) - f * (max(s) - min(s))
+            px, py = green_c.x + ux * s0, green_c.y + uy * s0
+    else:
+        nx, ny = (uy, -ux) if side == "left" else (-uy, ux)  # normal points to the upper tier
+    return {"x": rnd(px, 3), "y": rnd(py, 3), "nx": rnd(nx, 5), "ny": rnd(ny, 5),
             "w": float(spec.get("width_m", 4.0)), "h": float(spec["drop_m"])}
+
+
+def upper_tier_pin(tier, poly, margin):
+    """The centre of the green's part on the upper tier, at least `margin` m past the
+    middle of the step (config green_tiers `pin: upper_tier`)."""
+    from shapely.geometry import Polygon as P_
+    nx, ny, x0, y0 = tier["nx"], tier["ny"], tier["x"], tier["y"]
+    tx, ty = -ny, nx
+    R = 500.0
+    a = (x0 + nx * margin, y0 + ny * margin)
+    half = P_([(a[0] - tx * R, a[1] - ty * R), (a[0] + tx * R, a[1] + ty * R),
+               (a[0] + tx * R + nx * R, a[1] + ty * R + ny * R), (a[0] - tx * R + nx * R, a[1] - ty * R + ny * R)])
+    part = poly.intersection(half)
+    if part.is_empty:
+        return None
+    c = part.centroid
+    return c if part.contains(c) else part.representative_point()
 
 
 def main():
@@ -82,7 +114,7 @@ def main():
         bumps = []
         inner = poly.buffer(-2.0)
         nb = 1 + int(rng.random() < 0.6)
-        tiers = [tier_for(tiers_cfg[hole_no], hole_by_no[hole_no], c, cfg["default_tee"])] if hole_no in tiers_cfg else []
+        tiers = [tier_for(tiers_cfg[hole_no], hole_by_no[hole_no], c, cfg["default_tee"], poly)] if hole_no in tiers_cfg else []
         if tiers:
             nb = 0  # the tier is this green's feature; no random undulations on top of it
         tries = 0
@@ -126,10 +158,11 @@ def main():
         report.append(f"| {row.osm} | {label.get(row.osm, hole_no) or 'practice'} | {tilt * 100:.1f} | {used * 100:.1f} | {len(bumps)} | {s_all * 100:.1f} | {s_pin * 100:.1f} |")
         if tiers:
             tr = tiers[0]
-            hi = gm.shaped(c.x + 4 * tr["nx"], c.y + 4 * tr["ny"]) - gm.shaped(c.x - 4 * tr["nx"], c.y - 4 * tr["ny"])
+            mx, my = (c.x, c.y) if tiers_cfg[hole_no].get("low_side", "left") in ("left", "right") else (tr["x"], tr["y"])
+            hi = gm.shaped(mx + 4 * tr["nx"], my + 4 * tr["ny"]) - gm.shaped(mx - 4 * tr["nx"], my - 4 * tr["ny"])
             notes.append(f"- Hole {hole_no}: two-tiered green ({tiers_cfg[hole_no].get('note', 'config green_tiers')}): "
-                         f"step {tr['h']:.2f} m over {tr['w']:.1f} m along the line of play, upper tier on the "
-                         f"{'right' if tiers_cfg[hole_no].get('low_side', 'left') == 'left' else 'left'}; measured {hi:.2f} m between points 4 m either side. "
+                         f"step {tr['h']:.2f} m over {tr['w']:.1f} m{' along the line of play' if tiers_cfg[hole_no].get('low_side', 'left') in ('left', 'right') else ' across the line of play'}, upper tier "
+                         f"{UPPER[tiers_cfg[hole_no].get('low_side', 'left')]}; measured {hi:.2f} m between points 4 m either side. "
                          f"The max slope above is the step itself, by design.")
     write_json(bdir / "greens.json", models)
     if notes:

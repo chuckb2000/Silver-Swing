@@ -8,7 +8,11 @@ MIN_AREA-MAX_AREA m2. Patches on mapped greens or tees are ignored (greens are
 raised pads too). Each remaining pad near a hole line (as s06 looks for tees)
 is measured to that hole's green and compared with every tee set on the card.
 
-    python3 propose_tees.py <course>     (after s00-s02)
+    python3 propose_tees.py <course> [--wide=10,13]     (after s00-s02)
+
+--wide=<refs>: for these holes also search every cell within WIDE_R m of the
+line start (not only the corridor along the tee shot), for a back tee that is
+off the line, e.g. across water (Langston 10, developer 2026-10-19).
 
 Writes data/<course>/proposed/tees_lidar.geojson (WGS84, golf=tee,
 source=..., proposed=yes, plus the hole and card match of each pad) and
@@ -43,10 +47,16 @@ MIN_RECT = 0.5     # pad area / its minimum rotated rectangle
 CORRIDOR = 12.0    # m either side of the tee-shot axis
 MAX_STD = 0.14     # m: a levelled top
 MIN_STEP = 0.15    # m: the pad stands this much above a ring 1.5-4 m around it
+WIDE_R = 250.0     # m: search radius around the line start for --wide holes
 
 
 def main():
+    import sys
     name = course_name_from_argv()
+    wide = set()
+    for a in sys.argv[2:]:
+        if a.startswith("--wide="):
+            wide = {int(v) for v in a.split("=", 1)[1].split(",") if v}
     cfg = load_config(name)
     world = World(cfg)
     bdir, cdir = build_dir(name), course_dir(name)
@@ -84,6 +94,8 @@ def main():
             leg = min(ln, 0.45 * L.length)
             axis = LineString([(ax - ux * 140, ay - uy * 140), (ax + ux * leg, ay + uy * leg)])
             corr = translate(axis.buffer(CORRIDOR, cap_style=2), world.x0, world.y0)
+            if int(h.ref) in wide:
+                corr = corr.union(translate(Point(ax, ay).buffer(WIDE_R), world.x0, world.y0))
             cm = rasterize([(corr, 1)], out_shape=dtm.shape, transform=t, fill=0, dtype="uint8").astype(bool)
             mm = ndimage.binary_opening(flat & cm, iterations=1)
             lab, n = ndimage.label(mm)
@@ -128,7 +140,8 @@ def main():
             for p in pads:
                 c = p["poly"].centroid
                 s_ = L.project(c)
-                near = (L.distance(c) < 25 and s_ < 0.45 * L.length) or c.distance(start) < 150
+                near = (L.distance(c) < 25 and s_ < 0.45 * L.length) or c.distance(start) < 150 \
+                    or (nref in wide and c.distance(start) < WIDE_R)
                 if not near:
                     continue
                 meas, _ = path_from(c, L, gc)

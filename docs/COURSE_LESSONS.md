@@ -5,9 +5,10 @@ new course. Each lesson is something that cost time on an earlier course,
 with what to do instead. Add to it at the end of every course build.
 
 Sources so far: East Potomac Golf Links (2026-10-19, three courses on one
-island), Tualatin Country Club (2026-10-19, section 8), Oregon Golf Club
-(2026-10-19, section 9). Oswego Lake and
-Highland Links notes live in DECISIONS.md.
+island), Langston (2026-10-19, section 8, a course in two parts across a lake), Indian
+Island (2026-10-19, half the course traced), Tualatin Country Club
+(2026-10-19, section 9) and Oregon Golf Club (2026-10-19, section 10). Oswego
+Lake and Highland Links notes live in DECISIONS.md.
 
 ---
 
@@ -144,6 +145,40 @@ Highland Links notes live in DECISIONS.md.
   (often just the default) and list the rest. The game only plays the
   default tee anyway (until the design chat adds a tee choice).
 
+- **When OSM lacks whole holes, trace them yourself and let the developer
+  correct them in a tracing desk** (Indian Island, 2026-10-19: OSM had 8 of
+  18 holes). `propose_trace.py` gets a first pass from the state
+  orthophoto and the DEM: the green as the patch of smooth turf at a seed,
+  fairways from a classifier trained on the course's own OSM fairways,
+  bunkers as bright sand, tee pads from the DEM, water from the
+  hydro-flattened DEM. Then publish the tracing desk (`desk_export.py` +
+  `pipeline/desk/index.html`). The developer drags outlines into place and
+  marks tees there instead of in QGIS, and you read the saves back. What
+  mattered:
+  - Show the shapes smooth. Raw traced outlines looked jagged and lost the
+    developer's trust; greens are smooth, mostly convex blobs.
+  - Give the desk a live yardage readout against the card for each tee
+    box. The first traced tees measured like the White card (-0.6 % total)
+    while seven holes failed Blue by more than 8 %. Back tees at ground
+    level show in neither the photo nor the lidar, and only the developer
+    could place them.
+  - Put dogleg bend points at the centre of the developer's fairway where
+    it lies farthest from the tee-green chord. A bend picked by eye cut
+    corners and cost 3-5 % on three holes.
+  - Store the developer's saves in the repo (`data/<id>/desk/`) so the
+    build stays reproducible without the page.
+- **Prefer state orthoimagery to the developer's Google screenshots.** At
+  Indian Island the Google screenshots were only used to identify holes;
+  every shape was traced from the NYS orthoimagery, which is open data,
+  georeferenced and sharper. Google screenshots may now be traced when the
+  developer supplies them (CLAUDE.md 5.1 note, `source=google`); keep them
+  for features the open imagery can't show.
+- **Big lidar uploads:** LAS files of 180-330 MB failed in the browser's
+  release upload, though GitHub allows 2 GB per asset. Ask for one zip (or
+  LAZ). A state project may have no vegetation class: take class 1
+  (unclassified) and let s05 drop trees on OSM buildings. The points' GPS
+  times give the flight date, which tells you whether it was leaf-off.
+
 ## 4. World and pipeline
 
 - **The 2,048 m limit can bind.** The island is 1.93 km long; the world became
@@ -161,6 +196,10 @@ Highland Links notes live in DECISIONS.md.
   and compare after every pipeline change (Oswego: 211 files).
 - **Don't change pipeline files while a build is running from them.** Use a
   worktree for the baseline build.
+- **Run the regression check only after changing code in `pipeline/`**
+  (developer, 2026-10-19). Changes to `data/<id>/` files, the course config
+  or a scorecard can't touch other courses; skip it for them. Run it once
+  more before asking the developer to merge.
 - **`pkill -f` patterns can match your own shell** (`pkill -f "s0[0-9]"`
   killed the session's shell). Kill by PID. Likewise a `pgrep -f <name>`
   wait loop matches its own command line and never ends.
@@ -215,7 +254,40 @@ Highland Links notes live in DECISIONS.md.
   push, the local branch just lacks tracking in the shallow clone: set
   `branch.<name>.remote/merge` and a fetch refspec.
 
-## 8. Tualatin Country Club (2026-10-19)
+## 8. Langston (2026-10-19)
+
+- **Check whether the OSM boundary is one polygon.** Langston's
+  `leisure=golf_course` is a multipolygon in two parts (mainland and island)
+  with a lake between them, and the game's out-of-bounds line is a single
+  polygon: s10 kept the bigger part, so four holes would have been out of
+  bounds. Look at the part count in Phase 1. `join_boundary` joins parts
+  across named water (which becomes a penalty area).
+- **Read the scorecard's tee names.** The developer said "Blue"; the card
+  says Royal, White, Gold, Wake-Robin. Use the card's names and say so.
+  Add up every row: the Wake-Robin back nine is misprinted.
+- **One OSM tee per hole usually means one tee set.** Measure every OSM box
+  against every column of the card before choosing what to build: Langston's
+  boxes were mostly White, with a few back tees. The lidar pads filled the rest.
+- **A back tee can be off the hole line.** The hole 10 back tee is across the
+  lake, 95 m from the OSM line start, where the corridor search never looks.
+  `propose_tees.py --wide=<holes>` searches a 250 m circle; then tag the pad
+  `hole=<n>`, `tee_set=<name>` (s06 only considers boxes near the line start).
+  A wide search finds many non-tees (green complexes, mounds, road shoulders):
+  pick by position and look at the picture.
+- **Check that a proposed pad is not another feature.** The best pad for Royal
+  6 overlapped an OSM bunker (bunkers paint over tees), which the
+  "every tee is on a tee box" test caught. Drop it rather than keep it.
+- **Streams mapped only as lines** can be made into penalty areas from the
+  DEM channel (`propose_channels.py`). A stream falls along its length: tag it
+  `flatten=no`, or s04 flattens it to its 10th percentile and cuts a trench.
+- **Trees inside a lake polygon** may stand on its islands. Filling a lake
+  over its islands to make one penalty area dropped 440 trees until s05 kept
+  trees in the joined areas.
+- **The developer may send corrections mid-build** (Langston's two-tier 13th
+  green came after the first export). Keep every step rebuildable so such a
+  change is one config entry and a rerun from s06.
+
+## 9. Tualatin Country Club (2026-10-19)
 
 - **OSM may map every tee, fairway and green but no hole lines or pins.**
   Don't guess the routing. Plot the greens with letters and the tee boxes
@@ -269,7 +341,7 @@ Highland Links notes live in DECISIONS.md.
 - `npm install` may rewrite `game/package-lock.json`; revert it unless the
   course needs a new package.
 
-## 9. Oregon Golf Club (2026-10-19)
+## 10. Oregon Golf Club (2026-10-19)
 
 - **Check the boundary's size against 2,048 m before anything else.** The
   course was 2,120 m north-south, so the limit couldn't hold even with no
