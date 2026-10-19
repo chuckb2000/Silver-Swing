@@ -493,8 +493,10 @@ DECISIONS.md with the reason.
     lidar, Blue default, every hazard red (lake, pond, creek traced from
     lidar), the Crystal Springs Rhododendron Garden painted in flower
     (`garden`), the two-part boundary joined across SE Bybee Blvd
-    (`join_boundary_parts`). Section 11.12; open items: data/eastmoreland/report_notes.md;
-    request: docs/requests/eastmoreland_design_requests.md.
+    (`join_boundary_parts`). Other courses rebuild unchanged. 259 unit tests
+    and 4 Playwright tests pass. Section 11.12; open items:
+    data/eastmoreland/report_notes.md; request:
+    docs/requests/eastmoreland_design_requests.md.
 
 -   **Next task:** the third playtest (putting, yellow misses), the club's
     printed scorecard and the hole 3 Blue tee box. New courses: a separate
