@@ -1,0 +1,56 @@
+{
+  "id": "stone_creek",
+  "name": "Stone Creek Golf Club",
+  "location": "Oregon City, Clackamas County, Oregon",
+  "state": "OR",
+  "architects": "Peter Jacobsen and Jim Hardy (opened 2002; OGA lists 2003)",
+  "theme": "pnw",
+  "epsg": 32610,
+  "osm_sources": [
+    "raw/overpass.geojson"
+  ],
+  "boundary_name": "Stone Creek Golf Club",
+  "dtm": {
+    "path": "raw/dogami_dtm_ft.tif",
+    "units": "ft",
+    "source": "DOGAMI lidar DIGITAL_TERRAIN_MODEL_MOSAIC (bare earth), exportImage at 1 m in EPSG:32610, box x 533024-534504 / y 5015560-5017040, downloaded by the developer 2026-10-19 (GitHub release stone-creek-data, exportImage.8.tiff)"
+  },
+  "chm": {
+    "path": "raw/dogami_chm_ft.tif",
+    "units": "ft",
+    "source": "DOGAMI lidar CANOPY_HEIGHT_MODEL_MOSAIC (highest hit minus bare earth), exportImage at 1 m in EPSG:32610, same box, downloaded by the developer 2026-10-19 (GitHub release stone-creek-data, exportImage.9.tiff)",
+    "label": "DOGAMI canopy height model"
+  },
+  "world": {
+    "x0": 533124,
+    "y0": 5015660,
+    "width": 1280,
+    "height": 1280,
+    "note": "OSM boundary way/188382554 bbox (1,011 x 967 m) + ~120 m scenery, rounded out to whole 256 m chunks and centred: 134 m of scenery west and east, 157 m south, 156 m north"
+  },
+  "tee_sets": [
+    {
+      "name": "Blue",
+      "playable": true,
+      "rating": 71.7,
+      "slope": 135,
+      "total_yd": 6456
+    }
+  ],
+  "default_tee": "Blue",
+  "scorecard_source": "Club scorecard image supplied by the developer (release stone-creek-data, Screenshot.2026-10-18.232154.png, copy in reference/stone_creek/scorecard.png), 2026-10-19. Hole sums match the printed Out/In/Total for all four tee sets. Full card in scorecard_full.csv",
+  "penalty_default": "red",
+  "driving_range_is_ob": false,
+  "wind_mph": {
+    "minMph": 1,
+    "maxMph": 7
+  },
+  "attribution": [
+    "Map data © OpenStreetMap contributors (ODbL)",
+    "Elevation and canopy height: Oregon Department of Geology and Mineral Industries (DOGAMI) lidar",
+    "Scorecard: Stone Creek Golf Club"
+  ],
+  "notes": "Phase 1 decisions (developer, 2026-10-19): Blue tees; every water hazard red; out of bounds = the OSM course boundary; the driving range (south-east of hole 9, not mapped in OSM) is not out of bounds.",
+  "tee_shot_margin_m": 0.5,
+  "tee_shot_note": "tee_shot_margin_m: the tee-shot tree check (pipeline/tee_shots.py) keeps the ball 0.5 m clear of each crown; without it the check passed hole 15 by 0.1 m while the game's ball clipped a 43 m fir 49 m out (course chat, 2026-10-19)"
+}
