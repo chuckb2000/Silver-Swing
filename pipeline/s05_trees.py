@@ -371,6 +371,11 @@ def main():
     if leaf is not None:
         type_method = leaf
     species_note = None
+    if cfg.get("clear_tee_shots"):
+        # s06 places the tees against these trees and s06b drops the ones still in the
+        # way of a tee shot, then orders the list again (cherry slots)
+        write_json(build_dir(name) / "trees_all.json", [dict(t_) for t_ in trees])
+        np.save(build_dir(name) / "water_cells.npy", water_cells)
     if cfg.get("blossom"):
         trees, species_note = assign_blossoms(trees, cfg["blossom"], boundary, water_cells, bmask)
 

@@ -118,6 +118,7 @@
   "paint_range_outside": true,
   "connect_fairways": true,
   "trees_off_fairways_m": 2.0,
+  "clear_tee_shots": true,
   "wind_mph": {
     "minMph": 2,
     "maxMph": 10
