@@ -90,7 +90,7 @@ textarea{width:100%;box-sizing:border-box;min-height:70px;resize:vertical;border
       <svg id="svg" aria-label="Aerial photo with traced outlines"></svg>
       <div class="scale" id="scale">20 m<b id="scalebar"></b></div>
       <div class="zoom"><button id="zin" aria-label="Zoom in">+</button><button id="zout" aria-label="Zoom out">−</button><button id="zfit" aria-label="Fit hole">⤢</button></div>
-      <div class="legend"><span><i style="background:var(--green)"></i>green</span><span><i style="background:var(--fairway)"></i>fairway</span><span><i style="background:var(--bunker)"></i>bunker</span><span><i style="background:var(--tee)"></i>tee</span><span><i style="background:var(--bluetee)"></i>Blue tee</span><span><i style="background:var(--hole)"></i>line of play → green</span><span><i style="background:transparent;border:1px dashed #fff"></i>other holes / raised lidar pad</span><span><i style="background:var(--ob)"></i>out of bounds</span></div>
+      <div class="legend"><span><i style="background:var(--green)"></i>green</span><span><i style="background:var(--fairway)"></i>fairway</span><span><i style="background:var(--bunker)"></i>bunker</span><span><i style="background:var(--tee)"></i>tee</span><span><i style="background:var(--bluetee)"></i><b id="legTee" style="font-weight:inherit">Blue tee</b></span><span><i style="background:var(--hole)"></i>line of play → green</span><span><i style="background:transparent;border:1px dashed #fff"></i>other holes / raised lidar pad</span><span><i style="background:var(--ob)"></i>out of bounds</span></div>
       <div class="drawbar" id="drawbar" hidden><span id="drawmsg">Click to place points</span><button class="btn" id="drawUndo">Undo point</button><button class="btn primary" id="drawDone">Finish</button><button class="btn" id="drawCancel">Cancel</button></div>
     </div>
     <aside>
@@ -136,6 +136,8 @@ textarea{width:100%;box-sizing:border-box;min-height:70px;resize:vertical;border
 const NS = "http://www.w3.org/2000/svg";
 const COLORS = {green:"var(--green)", fairway:"var(--fairway)", bunker:"var(--bunker)", tee:"var(--tee)", bluetee:"var(--bluetee)", pad:"var(--tee)"};
 const LABEL = {green:"Green", fairway:"Fairway", bunker:"Bunker", tee:"Tee box", bluetee:"Blue tee"};
+const TN = () => (HOLES[0] && HOLES[0].teeName) || "Blue";   // the tee set being marked (holes.json; Indian Island: Blue)
+const RN = () => (HOLES[0] && HOLES[0].refName) || "White";  // the second card column shown
 const YD = 0.9144;
 const svg = document.getElementById("svg");
 const $ = id => document.getElementById(id);
@@ -191,7 +193,7 @@ function renderChips() {
     const w = work[h.hole];
     if ((w && w.dirty) || saved[h.hole]) { const d = document.createElement("span"); d.className = "dot " + (w && w.dirty ? "dirty" : "saved"); b.appendChild(d); }
     const bi = blueInfo(h, w ? w.features : (saved[h.hole] ? saved[h.hole].features : h.features));
-    if (bi) { const r = document.createElement("span"); r.className = "bar " + bi.st; b.appendChild(r); b.title = `Blue tee ${Math.round(bi.c.yd)} yd vs card ${h.blue}`; }
+    if (bi) { const r = document.createElement("span"); r.className = "bar " + bi.st; b.appendChild(r); b.title = `${TN()} tee ${Math.round(bi.c.yd)} yd vs card ${h.blue}`; }
     b.onclick = () => openHole(h);
     nav.appendChild(b);
   }
@@ -203,7 +205,7 @@ function openHole(h) {
   const g = W().features.find(f => f.kind === "bluetee") || W().features.find(f => f.kind === "green"); sel = g ? g.id : null;
   fit(); renderChips(); render(); renderPanel();
   $("note").value = W().note;
-  status(saved[h.hole] ? "Showing your saved version of hole " + h.hole + "." : (h.editShapes ? "Showing the approved shapes for hole " + h.hole + "." : "Hole " + h.hole + " comes from OpenStreetMap (dashed). Mark its Blue tee."));
+  status(saved[h.hole] ? "Showing your saved version of hole " + h.hole + "." : (h.editShapes ? "Showing the approved shapes for hole " + h.hole + "." : "Hole " + h.hole + " comes from OpenStreetMap (dashed). Mark its " + TN() + " tee."));
 }
 
 function fit() { vb = [0, 0, cur.w, cur.h]; applyVB(); }
@@ -393,10 +395,10 @@ function renderYard() {
   $("yardTitle").textContent = `Hole ${cur.hole} · par ${cur.par}`;
   const dl = $("yard"); dl.textContent = "";
   const row = (k, v, pill) => { const dt = document.createElement("dt"); dt.textContent = k; const dd = document.createElement("dd"); dd.textContent = v; if (pill) { const p = document.createElement("span"); p.className = "pill " + pill; p.textContent = pill; dd.appendChild(p); } dl.append(dt, dd); };
-  row("Blue card", cur.blue + " yd"); row("White card", cur.white + " yd");
+  row(TN() + " card", cur.blue + " yd"); row(RN() + " card", cur.white + " yd");
   const bi = blueInfo(cur, W().features);
-  if (bi) { row("Your Blue tee", `${Math.round(bi.c.yd)} yd  ${bi.pct >= 0 ? "+" : ""}${bi.pct.toFixed(1)}%`, bi.st); row("Back of box", Math.round(bi.back) + " yd"); $("newBlue").textContent = "Redraw Blue tee"; }
-  else { row("Your Blue tee", "not marked yet"); $("newBlue").textContent = "Mark Blue tee"; }
+  if (bi) { row("Your " + TN() + " tee", `${Math.round(bi.c.yd)} yd  ${bi.pct >= 0 ? "+" : ""}${bi.pct.toFixed(1)}%`, bi.st); row("Back of box", Math.round(bi.back) + " yd"); $("newBlue").textContent = "Redraw " + TN() + " tee"; }
+  else { row("Your " + TN() + " tee", "not marked yet"); $("newBlue").textContent = "Mark " + TN() + " tee"; }
 }
 function focusOn(f) {
   const pts = f.poly.map(toPx); const xs = pts.map(p => p[0]), ys = pts.map(p => p[1]);
@@ -410,7 +412,7 @@ function focusOn(f) {
 $("save").onclick = async () => {
   if (!db) { status("Saving isn't available in this view. Open the page from your Claude gallery while signed in.", true); return; }
   const w = W(); $("save").disabled = true; status("Saving hole " + cur.hole + "…");
-  const body = {hole: cur.hole, features: w.features.map(f => ({id: f.id, kind: f.kind, poly: f.poly})), note: w.note, savedAt: new Date().toISOString(), by: uid || null, units: "local metres, origin 698261 E 4532163 N, EPSG:32618"};
+  const body = {hole: cur.hole, features: w.features.map(f => ({id: f.id, kind: f.kind, poly: f.poly})), note: w.note, savedAt: new Date().toISOString(), by: uid || null, units: (HOLES[0] && HOLES[0].units) || "local metres, origin 698261 E 4532163 N, EPSG:32618"};
   try { await db.doc("holes/" + cur.hole).set(body); saved[cur.hole] = clone(body); w.dirty = false; renderChips(); status("Saved hole " + cur.hole + " at " + new Date().toLocaleTimeString([], {hour: "numeric", minute: "2-digit"}) + ". Claude can read it now."); }
   catch (e) { const code = e && e.code; if (code === "invalid_argument") { canSave = false; status("Your access to this page is view-only, so changes can't be saved.", true); } else status("Couldn't save (" + (code || "error") + "). Try again in a moment.", true); }
   finally { renderPanel(); }
@@ -419,6 +421,11 @@ $("save").onclick = async () => {
 async function boot() {
   try { HOLES = await (await fetch("holes.json")).json(); }
   catch (e) { status("Couldn't load the hole data. Reload the page.", true); return; }
+  if (HOLES[0] && HOLES[0].teeName) {   // a course other than Indian Island: name its tee set in the labels
+    LABEL.bluetee = TN() + " tee"; $("legTee").textContent = TN() + " tee";
+    $("yardHint").textContent = "Click around the " + TN() + " tee box on the photo, then Finish. The yardage is measured from its centre along the line of play to the middle of the green, the way the card is.";
+  }
+  if (HOLES[0] && HOLES[0].course) { const h1 = document.querySelector("header h1"); h1.firstChild.textContent = HOLES[0].course + " Tracing Desk"; h1.querySelector("small").textContent = "All " + HOLES.length + " holes · " + (HOLES[0].photo || "orthophoto") + " · mark each " + TN() + " tee and watch the yardage against the card"; }
   openHole(HOLES[0]);
   try {
     if (window.claude && window.claude.use) {

@@ -478,6 +478,10 @@ def main():
 
     # buildings in 3/4 view ----------------------------------------------------
     roof_sets = [("R0", "K1"), ("B1", "B0"), ("B2", "B1"), ("K2", "K1"), ("R0", "K0")]
+    # optional (config "building_colours": {osm id: "#rrggbb"}): a building painted in its own
+    # colour, walls and roof, outside the theme palette (Langdon Farms' red barns, developer 2026-10-19)
+    bcol = {k: hex2rgb(v) for k, v in cfg.get("building_colours", {}).items()}
+    shade = lambda c, f: tuple(int(round(v * f)) for v in c)  # noqa: E731
     img = Image.fromarray(rgb)
     draw = ImageDraw.Draw(img)
     buildings.sort(key=lambda b: -b[0].centroid.y)  # north first
@@ -500,9 +504,15 @@ def main():
             if ny_ <= 0:
                 continue
             col = P["K4"] if nx_ < -0.3 * abs(ny_) else (P["K3"] if nx_ <= 0.6 * abs(ny_) else P["K2"])
+            if osm.split(":")[0] in bcol:
+                bc = bcol[osm.split(":")[0]]
+                col = bc if nx_ < -0.3 * abs(ny_) else (shade(bc, 0.82) if nx_ <= 0.6 * abs(ny_) else shade(bc, 0.66))
             draw.polygon([(ax, ay), (bx, by), (bx, by - wall), (ax, ay - wall)], fill=col)
         lit, dark = roof_sets[sum(map(ord, osm)) % len(roof_sets)]
-        draw.polygon(roof, fill=P[lit])
+        lit_c, dark_c = P[lit], P[dark]
+        if osm.split(":")[0] in bcol:
+            lit_c, dark_c = shade(bcol[osm.split(":")[0]], 0.92), shade(bcol[osm.split(":")[0]], 0.72)
+        draw.polygon(roof, fill=lit_c)
         # ridge split: lower-right half of the roof is darker
         rp = Polygon(roof)
         mrr = rp.minimum_rotated_rectangle
@@ -521,7 +531,7 @@ def main():
         dh = rp.intersection(half)
         for part in getattr(dh, "geoms", [dh]):
             if part.geom_type == "Polygon" and part.area > 1:
-                draw.polygon(list(part.exterior.coords), fill=P[dark])
+                draw.polygon(list(part.exterior.coords), fill=dark_c)
         # outline
         sil = unary_union([rp, Polygon(pp).buffer(0)] + [Polygon([(ax, ay), (bx, by), (bx, by - wall), (ax, ay - wall)]).buffer(0) for (ax, ay), (bx, by) in zip(pp[:-1], pp[1:])])
         for part in getattr(sil, "geoms", [sil]):
@@ -550,6 +560,27 @@ def main():
             rgb[row + 1, col + 1] = (rgb[row + 1, col + 1] * 0.6).astype(np.uint8)
             rgb[row - 2:row + 1, col] = P["WH"]
             rgb[row - 2, col] = P["K2"]
+
+    # OB stakes along out-of-bounds land inside the boundary (config join_boundary_ob, s02), on the course side
+    for _, r_ in g[g.kind == "ob_area"].iterrows():
+        edge = r_.geometry.exterior.intersection(boundary.buffer(-1.0))
+        for ln_ in getattr(edge, "geoms", [edge]):
+            if ln_.geom_type != "LineString":
+                continue
+            for s_ in np.arange(0, ln_.length, 9.0):
+                p = ln_.interpolate(s_)
+                q = ln_.interpolate(min(ln_.length, s_ + 0.5))
+                dx, dy = q.x - p.x, q.y - p.y
+                ln = math.hypot(dx, dy) or 1
+                cand = Point(p.x + dy / ln * 0.8, p.y - dx / ln * 0.8)
+                if r_.geometry.contains(cand):
+                    cand = Point(p.x - dy / ln * 0.8, p.y + dx / ln * 0.8)
+                col = int(cand.x * PX_PER_M)
+                row = int((world.height - cand.y) * PX_PER_M)
+                if 2 <= row < H - 1 and 0 <= col < W - 1:
+                    rgb[row + 1, col + 1] = (rgb[row + 1, col + 1] * 0.6).astype(np.uint8)
+                    rgb[row - 2:row + 1, col] = P["WH"]
+                    rgb[row - 2, col] = P["K2"]
 
     Image.fromarray(rgb).save(art / "terrain.png")
     meta = {"buildings": [{"osm": o, "h": round(h, 1), **({"kind": kinds[o]} if kinds.get(o) != "house" else {})} for _, h, o in buildings]}

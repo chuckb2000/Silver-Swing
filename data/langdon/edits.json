@@ -1,5 +1,14 @@
 {
- "add": [],
+ "add": [
+  {
+   "from": "proposed/barn.geojson",
+   "ids": [
+    "pr_barn_8"
+   ],
+   "tags": {},
+   "reason": "the barn on hole 8 (club card local rule; developer: free relief, drawn red), not in OSM; footprint traced from the 2024 state orthophoto, to be confirmed by the developer"
+  }
+ ],
  "tags": [],
  "drop": [
   {

@@ -75,6 +75,53 @@ def join_boundary(g: gpd.GeoDataFrame, jb: dict):
                f"({sum(p.area for p in hz) / 1e4:.1f} ha) from {', '.join(jb['water_osm'])}; boundary {joined.area / 1e4:.1f} ha")
 
 
+def join_boundary_ob(g: gpd.GeoDataFrame, jo: dict):
+    """Optional (cfg["join_boundary_ob"]): join a course mapped as several separate
+    boundary features, with land between them that is out of bounds, into the one
+    polygon the game uses as its out-of-bounds line.
+
+    Langdon Farms is mapped as two leisure=golf_course ways on either side of
+    OR 551 (34 m apart); no hole plays across the highway, a cart path runs
+    under it (developer, 2026-10-19). The gaps between the parts no wider than
+    `max_gap_m` (found by closing the union with a mitred buffer, keeping only
+    the added pieces that touch at least two parts) are added to the boundary
+    and written as `ob_area` features, which s08 paints as off-course ground
+    (the highway stays a road), so a ball there is out of bounds.
+    """
+    import pandas as pd
+    from shapely.geometry import Polygon
+    from shapely.ops import unary_union
+
+    bi = list(g.index[g["kind"] == "boundary"])
+    if len(bi) < 2:
+        raise SystemExit(f"[s02] join_boundary_ob: expected several boundary features, found {len(bi)}")
+    parts = []
+    for i in bi:
+        geom = g.at[i, "geometry"]
+        parts += list(geom.geoms) if geom.geom_type == "MultiPolygon" else [geom]
+    U = unary_union(parts)
+    d = jo.get("max_gap_m", 40.0) / 2 + 1.0
+    closed = U.buffer(d, join_style=2, mitre_limit=5.0).buffer(-d, join_style=2, mitre_limit=5.0)
+    add = closed.difference(U)
+    pieces = [p for p in getattr(add, "geoms", [add]) if p.geom_type == "Polygon" and p.area > 1.0
+              and sum(p.distance(q) < 0.5 for q in parts) >= 2]
+    joined = unary_union(parts + pieces)
+    if joined.geom_type != "Polygon":
+        raise SystemExit(f"[s02] join_boundary_ob: the joined boundary is a {joined.geom_type}, not one polygon")
+    joined = Polygon(joined.exterior, [r for r in joined.interiors if Polygon(r).area > 1.0])
+    keep = bi[0]
+    g.at[keep, "geometry"] = joined
+    g.at[keep, "tags"] = {**g.at[keep, "tags"], "joined_with": ",".join(str(g.at[i, "osm"]) for i in bi[1:])}
+    g = g.drop(index=bi[1:])
+    rows = [{"osm": f"join_ob_{i + 1}", "kind": "ob_area",
+             "tags": {"ob": "yes", "source": "join_boundary_ob: " + jo.get("reason", "")}, "geometry": p}
+            for i, p in enumerate(pieces)]
+    g = pd.concat([g, gpd.GeoDataFrame(rows, geometry="geometry")], ignore_index=True)
+    g = gpd.GeoDataFrame(g, geometry="geometry")
+    return g, (f"join_boundary_ob: {len(bi)} boundary features joined across {len(pieces)} out-of-bounds strip(s) "
+               f"({sum(p.area for p in pieces) / 1e4:.2f} ha); boundary {joined.area / 1e4:.1f} ha")
+
+
 def main():
     name = course_name_from_argv()
     cfg = load_config(name)
@@ -99,6 +146,8 @@ def main():
     note = ""
     if cfg.get("join_boundary"):
         g, note = join_boundary(g, cfg["join_boundary"])
+    if cfg.get("join_boundary_ob"):
+        g, note = join_boundary_ob(g, cfg["join_boundary_ob"])
     out = build_dir(name) / "course_local.geojson"
     g.to_file(out, driver="GeoJSON")
     if note:

@@ -58,7 +58,7 @@ def main():
             kind = "tee" if f["kind"] == "bluetee" else f["kind"]
             tags = {"golf": kind, "hole": k, "source": "tracing desk (developer)", "approved": f"developer {when}"}
             if f["kind"] == "bluetee":  # the developer's Blue tee for this hole (s06: tagged hole + tee_set wins)
-                tags["tee_set"] = "Blue"
+                tags["tee_set"] = spec.get("desk", {}).get("tee", "Blue")  # trace_spec "desk": the tee set marked (default Blue)
             if f.get("id", "").startswith("tr_"):
                 tags["traced_from"] = f["id"]
             prefix = f"desk_{k}_{f['kind']}_"
