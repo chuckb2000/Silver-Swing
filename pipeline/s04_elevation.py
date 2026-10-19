@@ -85,6 +85,9 @@ def main():
     water = g[g.kind.isin(["lateral_water_hazard", "water_hazard", "water", "pool"])]
     if not cfg.get("flatten_wetlands", True):  # vegetated wetlands (marsh, swamp) keep their lidar ground
         water = water[water.tags.apply(lambda t: t.get("natural") != "wetland")]
+    # a stream channel (tag flatten=no, e.g. Langston's creek) falls along its length: keep its lidar bed
+    if len(water):
+        water = water[water.tags.apply(lambda t: t.get("flatten") != "no")]
     for geom in water.geometry:
         m = mask_from([geom], world)
         if m.sum() < 3:

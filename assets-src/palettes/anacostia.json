@@ -1,0 +1,26 @@
+{
+  "name": "Anacostia (Kingman Lake, Washington DC)",
+  "note": "Course theme palette (<= 32 colours), same keys as pnw.json. Late-summer Mid-Atlantic parkland turf (as potomac), sandy bunkers, and murky olive-brown water: the Anacostia and Kingman Lake are not blue (developer, 2026-10-19; reference/langston/lg02_kingman_lake.jpg). Trees: loblolly pine, oak, sycamore and willow, no blossoms (assets-src/trees_anacostia.py). Shadows are a 35% black overlay on top of these.",
+  "colors": {
+    "G0": "#1d3a22", "G1": "#27502b", "G2": "#326833", "G3": "#3f7d38",
+    "G4": "#4c913e", "G5": "#5aa345", "G6": "#69b44d", "G7": "#79c357",
+    "G8": "#8ad064", "G9": "#aede84",
+    "L0": "#5b7d3d", "L1": "#6c9143", "L2": "#7fa44d",
+    "S0": "#c9b48a", "S1": "#e6d6ad", "S2": "#f4ebd2",
+    "W0": "#2e4436", "W1": "#435b46", "W2": "#7f9378",
+    "K0": "#26272d", "K1": "#55565e", "K2": "#7c7d85", "K3": "#bbb29e", "K4": "#ded7c5",
+    "B0": "#4a3322", "B1": "#704d34", "B2": "#8f5d43",
+    "R0": "#5d6470", "WH": "#f6f6f2"
+  },
+  "minimap": {
+    "water": "#4c6450", "ob_water": "#4c6450"
+  },
+  "minimap_trees": {
+    "conifer": ["#1b3b31", "#33624a"],
+    "deciduous": ["#22501f", "#438237"]
+  },
+  "trees": {
+    "conifer": "trees_anacostia:conifer",
+    "deciduous": "trees_anacostia:deciduous"
+  }
+}

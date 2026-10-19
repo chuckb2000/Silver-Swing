@@ -221,6 +221,15 @@ Known Oswego-specific code, with the fix:
   "connect_fairways": false,            // optional, only where OSM is wrong: s02b runs the fairway up to the green
                                         // (true = every hole, or a list of holes); see COURSE_LESSONS.md 3
   "trees_off_fairways_m": null,         // optional: drop trees whose top is this far (m) inside a fairway (check the course first)
+  "join_boundary": {"water_osm": ["r123"], "penalty": "red"},
+                                        // optional: a boundary mapped in several parts with water between them
+                                        // (Langston): that water, inside the parts' convex hull, becomes penalty
+                                        // areas and joins the parts into the one polygon the game needs (s02)
+  "green_tiers": [{"hole": 9, "drop_m": 0.91, "width_m": 4.0, "low_side": "left"}],
+                                        // optional: two-tier greens. low_side left|right (step along the line of
+                                        // play, through the centre) or front|back (step across it; "line_frac"
+                                        // places it as a share of the green's depth from the low edge);
+                                        // "pin": "upper_tier" moves the pin to the middle of the upper tier
   "keep_tee_trees": [],                 // optional: holes ("10", or "blue 7" with layouts) that keep trees in front of the tee
                                         // (a deliberate tree-lined dogleg). Every other tee shot at the middle of the fairway
                                         // is cleared: s06 moves the tee within its box, s06b drops trees (COURSE_LESSONS.md 3)
@@ -247,7 +256,9 @@ Write changes to the OSM layout as `data/<id>/edits.json` (add features from a
 `proposed/` file, retag, drop; each with a reason); `merge_edits.py` (run by
 `make course` after s01) turns them into `edited/course.geojson`. `extend_start` moves a hole line's start (a tee without a mapped box) back
 along the line. Tools that make proposals: `propose_tees.py` (raised tee pads in the DEM near each hole's
-tee-shot axis). `propose_trace.py` (greens, fairways, bunkers, tee pads, hole lines and
+tee-shot axis; `--wide=<holes>` also searches 250 m around the line start, for a back tee off the
+line), `propose_channels.py` (a penalty area along an OSM stream line, from the channel in the
+DEM; tag it `flatten=no` so s04 keeps its falling bed). `propose_trace.py` (greens, fairways, bunkers, tee pads, hole lines and
 water traced from a georeferenced orthophoto and the DEM, from seeds in
 `data/<id>/trace_spec.json`, for holes OSM lacks). The tracing desk: `desk_export.py`
 writes the data for `pipeline/desk/index.html` (publish it as a claude.ai page

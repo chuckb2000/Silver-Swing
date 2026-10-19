@@ -81,6 +81,21 @@
    ]
   },
   {
+   "id": "langston",
+   "name": "Langston Golf Course",
+   "location": "Kingman Lake, Washington, District of Columbia",
+   "state": "DC",
+   "theme": "anacostia",
+   "holes": 18,
+   "par": 72,
+   "defaultTee": "Royal",
+   "totalYd": 6652,
+   "teeSets": [
+    "Royal",
+    "White"
+   ]
+  },
+  {
    "id": "indian_island",
    "name": "Indian Island Golf Course",
    "location": "Riverhead, Suffolk County, New York",
