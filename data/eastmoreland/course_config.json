@@ -1,0 +1,87 @@
+{
+  "id": "eastmoreland",
+  "name": "Eastmoreland Golf Course",
+  "location": "Portland, Multnomah County, Oregon",
+  "state": "OR",
+  "architects": "H. Chandler Egan (1918)",
+  "theme": "pnw",
+  "epsg": 32610,
+  "osm_sources": [
+    "raw/overpass.geojson"
+  ],
+  "boundary_name": "Eastmoreland Golf Course",
+  "dtm": {
+    "path": "raw/dogami_dtm_ft.tif",
+    "units": "ft",
+    "source": "DOGAMI lidar DIGITAL_TERRAIN_MODEL_MOSAIC (bare earth), exportImage at 1 m in EPSG:32610, box x 527771-529251 / y 5034421-5036669, downloaded by the developer 2026-10-19 (GitHub release data-eastmoreland, exportImage.4.tiff)"
+  },
+  "chm": {
+    "path": "raw/dogami_chm_ft.tif",
+    "units": "ft",
+    "source": "DOGAMI lidar CANOPY_HEIGHT_MODEL_MOSAIC (highest hit minus bare earth), exportImage at 1 m in EPSG:32610, same box, downloaded by the developer 2026-10-19 (GitHub release data-eastmoreland, exportImage.5.tiff)",
+    "label": "DOGAMI canopy height model"
+  },
+  "world": {
+    "x0": 527871,
+    "y0": 5034521,
+    "width": 1280,
+    "height": 2048,
+    "note": "OSM course boundary (relation 11095178) bbox 920 x 1942 m in UTM 10N, centred in 1280 x 2048 m (whole 256 m chunks): 180 m of scenery east and west, 53 m north and south (the 2,048 m limit binds, as at East Potomac)"
+  },
+  "tee_sets": [
+    {
+      "name": "Blue",
+      "playable": true,
+      "rating": 71.0,
+      "slope": 124,
+      "total_yd": 6529
+    },
+    {
+      "name": "White",
+      "playable": true,
+      "rating": 69.3,
+      "slope": 115,
+      "total_yd": 6106
+    }
+  ],
+  "default_tee": "Blue",
+  "scorecard_source": "Club scorecard PDF (Golf ScoreCards, Inc., 7/2007), from the developer (GitHub release data-eastmoreland); hole sums match the printed totals; the developer's card of record (2026-10-19). GolfPass lists a later card (other handicaps; hole 13 447/435; Yellow and Orange tees): open item. Red tees (women's par 74, own handicaps) in scorecard_full.csv, not built",
+  "penalty_default": "red",
+  "driving_range_is_ob": true,
+  "wind_mph": {
+    "minMph": 1,
+    "maxMph": 7
+  },
+  "attribution": [
+    "Map data © OpenStreetMap contributors (ODbL)",
+    "Elevation and canopy height: Oregon Department of Geology and Mineral Industries (DOGAMI) lidar",
+    "Scorecard: Eastmoreland Golf Course (club scorecard)"
+  ],
+  "notes": "Developer, 2026-10-19: Blue is the default tee; every hazard is red (the lake, the pond by 16, the creek); the release scorecard (2007 card) is the card; pnw theme with the rhododendron garden painted as flower beds (garden key). Wind 1-7 mph as Oswego Lake (course chat)",
+  "garden": {
+    "osm": [
+      "w133795912"
+    ],
+    "note": "Crystal Springs Rhododendron Garden (OSM way 133795912), outside the golf boundary and out of bounds: flowering rhododendron and azalea bushes where the lidar canopy height model shows the shrub layer (0.6-7 m), and at half density under the taller canopy (pipeline/garden.py). Exported as trees.json c: 3 and drawn from sprites/shrubs.png (design chat, 2026-10-19); each bush's colour is drawn from `colours` (weights, from the developer's garden photos) and set by its place in trees.json (index % 8). Species and colours are flair, not surveyed. Developer 2026-10-19: 'pretty and have flowers'",
+    "shrub_min_m": 0.6,
+    "shrub_max_m": 7.0,
+    "spacing_m": 2.6,
+    "r_min_m": 1.1,
+    "r_max_m": 1.9,
+    "understory_density": 0.5,
+    "colours": {
+      "pink": 3,
+      "magenta": 3,
+      "purple": 2.5,
+      "white": 1.5,
+      "red": 1.2,
+      "coral": 1,
+      "pale pink": 2,
+      "leaves": 1
+    }
+  },
+  "join_boundary_parts": {
+    "max_gap_m": 16,
+    "note": "The OSM course boundary (relation 11095178) has two parts, the front nine south and the back nine north of SE Bybee Blvd (13.7 m apart). Both are in play: the game's single OB polygon joins them across the road (common.game_boundary); the road strip stays out of bounds on the surface map."
+  }
+}
