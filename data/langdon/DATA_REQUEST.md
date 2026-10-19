@@ -88,6 +88,22 @@ https://imagery.oregonexplorer.info/arcgis/rest/services/OSIP_2024/OSIP_2024_WM/
 
 If a link shows a JSON error instead of downloading, send the error text.
 
+Fallback (2026-10-19: the developer got errors on the two halves): three smaller strips,
+same service, 1,224 x 750 m each.
+
+North (`osip2024_n.tif`):
+```
+https://imagery.oregonexplorer.info/arcgis/rest/services/OSIP_2024/OSIP_2024_WM/ImageServer/exportImage?bbox=517470,5013891,518694,5014639&bboxSR=32610&imageSR=32610&size=4016,2454&format=tiff&f=image
+```
+Middle (`osip2024_m.tif`):
+```
+https://imagery.oregonexplorer.info/arcgis/rest/services/OSIP_2024/OSIP_2024_WM/ImageServer/exportImage?bbox=517470,5013141,518694,5013891&bboxSR=32610&imageSR=32610&size=4016,2461&format=tiff&f=image
+```
+South (`osip2024_s.tif`):
+```
+https://imagery.oregonexplorer.info/arcgis/rest/services/OSIP_2024/OSIP_2024_WM/ImageServer/exportImage?bbox=517470,5012391,518694,5013141&bboxSR=32610&imageSR=32610&size=4016,2461&format=tiff&f=image
+```
+
 ### 6. Club scorecard (two images)
 
 The club's own card, which the sandbox couldn't fetch. It settles the tee names,

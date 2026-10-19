@@ -196,6 +196,15 @@ Changes from the starting values in CLAUDE.md, and choices the spec left open. N
 - **Approved** (developer, 2026-10-19): the hole lines and pins, the course card, keeping the two crowns at the back of hole 11's green, the GolfPass scorecard until a club card turns up; the optional conifer-crown request to the design chat is deferred; Highland Links' drift against main's tee-shot check was fixed on main by its own rebuild.
 - **Data:** OSM from the developer's Overpass Turbo export (release `data-tualatin`; the GeoPackage has the same features and is not used); DOGAMI bare-earth DTM and canopy height model exported at 1 m in EPSG:32610 by the developer from the same image services as Oswego Lake (also in the release, and in `raw/`, 11 MB each).
 
+## Langdon Farms Golf Club (developer and course chat, 2026-10-19)
+
+- **Course id `langdon`** (the existing logo), name "Langdon Farms Golf Club" (23 characters), state OR, UTM 10N, theme `pnw`. John Fought and Bob Cupp, 1995 (OGA, GolfPass).
+- **Tee #7** (developer): 6,522 yd, 71.9/132 on GolfPass, whose tees are numbered #8-#1 without names; the name comes from the club card when it arrives. Hole 7 from GolfPass (558/512/...); the club's flyover page repeats hole 1's yardages there.
+- **OR 551 splits the boundary in two** (OSM ways w30516492 and w30516571, 34 m apart). No hole plays across the highway; a cart path runs under it (developer). The game needs one boundary polygon, so the parts are to be joined with the highway strip out of bounds (pipeline change behind a config key, when the data arrives).
+- **All water red** (developer).
+- **Driving range in bounds** (developer: too hard to map otherwise): `driving_range_is_ob: false`, so it plays as rough.
+- **Every hole traced:** OSM has the boundary, 12 bunkers, cart paths and two ponds, but no hole lines, tees, fairways, greens or pins (docs/COURSE_TRACING.md).
+
 ## Data and pipeline
 
 - **`ob_highways`** (s08, course config; Indian Island `["trunk", "trunk_link"]`): roads of these OSM highway values inside the course boundary are painted `ob_road` (out of bounds) instead of rough or cart path, except over water. For a course whose boundary contains a public road that is out of bounds. Without the key nothing changes: Oswego Lake, Highland Links and the three East Potomac courses rebuild byte-identical (all 735 exported files).

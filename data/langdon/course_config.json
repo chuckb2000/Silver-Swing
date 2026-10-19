@@ -18,15 +18,24 @@
     "note": "provisional (intake 2026-10-19): OSM boundary bbox (two parts, 801 x 1804 m) + scenery, rounded out to whole 256 m chunks and centred (111 m west/east, 122 m south/north); 2048 m north-south is the size limit"
   },
   "tee_sets": [
-    {"name": "T7", "playable": true, "rating": 71.9, "slope": 132, "total_yd": 6522}
+    {
+      "name": "T7",
+      "playable": true,
+      "rating": 71.9,
+      "slope": 132,
+      "total_yd": 6522
+    }
   ],
   "default_tee": "T7",
   "scorecard_source": "GolfPass (golfpass.com/courses/1347), retrieved 2026-10-19, unverified; tees listed as #8-#1 without names. The club's flyover page has the same numbers except hole 7 (copies hole 1). Every column adds up to its total. To be checked against the club card (sc-front.jpg / sc-back.jpg). Tee names and the default tee are provisional until then.",
   "penalty_default": "red",
-  "driving_range_is_ob": true,
-  "wind_mph": {"minMph": 1, "maxMph": 7},
+  "driving_range_is_ob": false,
+  "wind_mph": {
+    "minMph": 1,
+    "maxMph": 7
+  },
   "attribution": [
     "Map data © OpenStreetMap contributors (ODbL)"
   ],
-  "notes": "Intake 2026-10-19. OSM has the boundary (two ways, w30516492 west of OR 551 and w30516571 east of it), 12 bunkers, cart paths and two ponds; no holes, tees, fairways, greens or pins. The whole layout is to be traced (docs/COURSE_TRACING.md). dtm/chm and the orthophoto are added when the data arrives."
+  "notes": "Intake 2026-10-19. OSM has the boundary (two ways, w30516492 west of OR 551 and w30516571 east of it), 12 bunkers, cart paths and two ponds; no holes, tees, fairways, greens or pins. The whole layout is to be traced (docs/COURSE_TRACING.md). Developer 2026-10-19: build tee #7 (name from the club card); no hole plays across OR 551 (a cart path runs under it), so the two parts are joined with the highway strip out of bounds; all water red; driving range in bounds (plays as rough). dtm/chm and the orthophoto are added when the data arrives."
 }
