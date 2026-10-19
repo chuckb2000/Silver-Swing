@@ -2,6 +2,7 @@
 // banners and the modal dialogs (scorecard, relief, overview, pause).
 
 import Phaser from 'phaser';
+import { clearSnapshot } from '../save/snapshot';
 import { app, fmtDist, PX_PER_M, unitLabel, YD } from '../app';
 import { sfx } from '../audio/sfx';
 import { FULL_MAX, PART_MAX, ZONE_REACH } from '../systems/swing/meter';
@@ -40,6 +41,7 @@ export class HudScene extends Phaser.Scene {
   private mini!: Phaser.GameObjects.Image;
   private miniG!: Phaser.GameObjects.Graphics;
   private mapBtn!: Button;
+  private menuBtn!: Button;
   // bottom
   private aimL!: Button;
   private aimR!: Button;
@@ -117,6 +119,8 @@ export class HudScene extends Phaser.Scene {
     this.miniG = this.add.graphics();
     this.miniPanel.add([this.mini, this.miniG]);
     this.mapBtn = new Button(this, 0, 0, 26, 13, 'map', () => this.toggleOverview(), { color: 'grey' });
+    // the pause menu (also Esc): resume, settings, save and exit, quit the round
+    this.menuBtn = new Button(this, 0, 0, 30, 14, 'menu', () => this.togglePause(), { color: 'grey' });
 
     // aim: a tap nudges the target a little; holding moves it, faster the longer it is held
     this.aimL = new Button(this, 0, 0, 16, 15, '', () => undefined, { icon: 'arrow_left', sound: null });
@@ -149,7 +153,7 @@ export class HudScene extends Phaser.Scene {
     this.offArrow = this.add.image(0, 0, 'ui', 'wind_0').setVisible(false).setTint(0xfff2a0);
     this.banner = txt(this, 0, 0, '', { origin: [0.5, 0.5], scale: 2 }).setDepth(50);
     this.sub = txt(this, 0, 0, '', { origin: [0.5, 0.5] }).setDepth(50);
-    this.root.add([this.cardBtn, this.holeBox, this.info, this.windPanel, this.miniPanel, this.mapBtn, this.aimL, this.aimR, this.aimLabel,
+    this.root.add([this.menuBtn, this.cardBtn, this.holeBox, this.info, this.windPanel, this.miniPanel, this.mapBtn, this.aimL, this.aimR, this.aimLabel,
       this.clubPanel, this.clubUp, this.clubDown, this.spinBtn, this.scaleBtn, this.unplayBtn, this.mulliganBtn, this.meterPanel, this.meterRead, this.swingBtn, this.offArrow]);
   }
 
@@ -182,6 +186,7 @@ export class HudScene extends Phaser.Scene {
     this.holeBox.setPosition(37, 4);
     this.info.setPosition(4, 21);
     this.windPanel.setPosition(W - 48, 4);
+    this.menuBtn.setPosition(W - 48 - 34, 4);
     // mini-map under the wind panel
     this.miniPanel.setPosition(W - 4 - this.miniPanel.pw, 54);
     this.mapBtn.setPosition(W - 4 - 26, 54 + this.miniPanel.ph + 3);
@@ -409,7 +414,7 @@ export class HudScene extends Phaser.Scene {
   }
 
   strikeFeedback(st: Strike) {
-    const lefty = app.settings.lefty;
+    const lefty = this.play.round.cfg.settings.lefty;
     let label = 'perfect!';
     let color: number = COLORS.green;
     if (st.quality === 'good') { label = `slight ${missWord(st.side, false, lefty)}`; color = COLORS.yellow; }
@@ -419,7 +424,7 @@ export class HudScene extends Phaser.Scene {
   }
 
   puttFeedback(ps: PuttStrike, power: number) {
-    const word = (ps.side > 0) !== app.settings.lefty ? 'push' : 'pull'; // a right-hander pushes it right
+    const word = (ps.side > 0) !== this.play.round.cfg.settings.lefty ? 'push' : 'pull'; // a right-hander pushes it right
     const label = ps.quality === 'perfect' ? 'good stroke' : ps.quality === 'good' ? `slight ${word}` : word;
     const color = ps.quality === 'perfect' ? COLORS.green : ps.quality === 'good' ? COLORS.yellow : COLORS.red;
     this.flash(label, color, `${Math.round(power * 100)}% of ${puttScaleLabel(this.play.puttScale)}`, 900);
@@ -580,18 +585,40 @@ export class HudScene extends Phaser.Scene {
     this.openModal('pause');
     const dim = dimmer(this, 0.6);
     this.modalLayer.add(dim);
-    const w = 140, h = 96;
+    const w = 150, h = 128;
     const x = Math.round((this.W - w) / 2), y = Math.round((this.H - h) / 2);
     const pnl = new Panel(this, x, y, w, h, 0.92);
     const t = txt(this, x + w / 2, y + 6, 'paused', { origin: [0.5, 0], scale: 2 });
-    const b1 = new Button(this, x + 20, y + 30, w - 40, 16, 'resume', () => this.closeModal());
-    const b2 = new Button(this, x + 20, y + 50, w - 40, 16, 'settings', () => { this.closeModal(); this.scene.launch('settings', { from: 'hud' }); this.scene.pause('play'); this.scene.pause('hud'); }, { color: 'grey' });
-    const b3 = new Button(this, x + 20, y + 70, w - 40, 16, 'quit to title', () => {
+    const b1 = new Button(this, x + 15, y + 30, w - 30, 16, 'resume', () => this.closeModal());
+    const b2 = new Button(this, x + 15, y + 50, w - 30, 16, 'settings', () => { this.closeModal(); this.scene.launch('settings', { from: 'hud' }); this.scene.pause('play'); this.scene.pause('hud'); }, { color: 'grey' });
+    // the round is saved after every shot: this leaves it to continue from the title screen
+    const b3 = new Button(this, x + 15, y + 70, w - 30, 16, 'save & exit', () => {
       this.closeModal();
       this.scene.stop('play');
       this.scene.start('title');
     }, { color: 'grey' });
-    this.modalLayer.add([pnl, t, b1, b2, b3]);
+    const b4 = new Button(this, x + 15, y + 90, w - 30, 16, 'quit round', () => { this.closeModal(); this.confirmQuit(); }, { color: 'grey' });
+    const note = txt(this, x + w / 2, y + 110, 'save & exit: continue it later', { origin: [0.5, 0], color: COLORS.dim });
+    this.modalLayer.add([pnl, t, b1, b2, b3, b4, note]);
+  }
+
+  /** Quit the round for good: not saved, not on the leaderboard, can't be continued. */
+  private confirmQuit() {
+    this.openModal('pause');
+    this.modalLayer.add(dimmer(this, 0.6));
+    const w = 170, h = 74;
+    const x = Math.round((this.W - w) / 2), y = Math.round((this.H - h) / 2);
+    const pnl = new Panel(this, x, y, w, h, 0.92);
+    const t1 = txt(this, x + w / 2, y + 7, 'quit this round?', { origin: [0.5, 0], scale: 2 });
+    const t2 = txt(this, x + w / 2, y + 29, "it won't be saved or go on the leaderboard", { origin: [0.5, 0], color: COLORS.dim, maxWidth: w - 10 });
+    const back = new Button(this, x + 8, y + h - 24, 70, 16, 'keep playing', () => this.closeModal(), { color: 'grey' });
+    const quit = new Button(this, x + w - 78, y + h - 24, 70, 16, 'quit round', () => {
+      this.closeModal();
+      void clearSnapshot();
+      this.scene.stop('play');
+      this.scene.start('title');
+    });
+    this.modalLayer.add([pnl, t1, t2, back, quit]);
   }
 
   openUnplayable() {

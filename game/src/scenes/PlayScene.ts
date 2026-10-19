@@ -1255,7 +1255,7 @@ export class PlayScene extends Phaser.Scene {
 
   updateGolfer() {
     const r = this.round;
-    const lefty = app.settings.lefty;
+    const lefty = r.cfg.settings.lefty;   // the round's hand, not the live setting
     // facing = aim rotated -90deg (right-hander) or +90deg (left-hander)
     const f = this.aim + (lefty ? Math.PI / 2 : -Math.PI / 2);
     const fx = Math.cos(f), fy = Math.sin(f);
