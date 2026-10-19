@@ -51,6 +51,53 @@ def canopy_label(cfg) -> str:
     return "OSM fallback"
 
 
+def leaf_off_shares(name, cfg, world, trees, min_returns=20):
+    """Tree type from leaf-off lidar (s00 veg_returns / veg_last rasters).
+
+    Per crown (disk of the crown radius): the share of vegetation returns that were the
+    last return of their pulse. Leaf-off, bare deciduous branches let nearly every pulse
+    through to the ground (share ~0), while pitch pine needles stop many of them. The split
+    is Otsu's threshold over crowns with >= min_returns returns; smaller crowns keep the
+    crown-shape type. Returns the method text, or None when the data isn't there."""
+    bdir = build_dir(name)
+    if not (cfg.get("laz", {}).get("leaf_off") and (bdir / "veg_returns_1m.tif").exists()):
+        return None
+    from skimage.filters import threshold_otsu
+    W, H = int(world.width), int(world.height)
+
+    def crop(path):
+        with rasterio.open(path) as r:
+            a, t = r.read(1).astype(np.float64), r.transform
+        c0 = int(round((world.x0 - t.c) / t.a))
+        r0 = int(round((t.f - (world.y0 + world.height)) / -t.e))
+        return np.flipud(a[r0:r0 + H, c0:c0 + W])
+
+    n_all, n_last = crop(bdir / "veg_returns_1m.tif"), crop(bdir / "veg_last_1m.tif")
+    share = np.full(len(trees), np.nan)
+    count = np.zeros(len(trees))
+    for k, t_ in enumerate(trees):
+        x, y, r = t_["x"], t_["y"], t_["r"]
+        i0, i1 = int(max(0, x - r)), int(min(W, x + r + 1))
+        j0, j1 = int(max(0, y - r)), int(min(H, y + r + 1))
+        yy, xx = np.mgrid[j0:j1, i0:i1]
+        inside = (xx + 0.5 - x) ** 2 + (yy + 0.5 - y) ** 2 <= r * r
+        n = n_all[j0:j1, i0:i1][inside].sum()
+        count[k] = n
+        if n > 0:
+            share[k] = n_last[j0:j1, i0:i1][inside].sum() / n
+    ok = count >= min_returns
+    th = float(threshold_otsu(share[ok]))
+    for t_, s_, o in zip(trees, share, ok):
+        if o:
+            t_["type"] = "conifer" if s_ >= th else "deciduous"
+    n_ok = int(ok.sum())
+    n_con = int(sum(1 for t_, o in zip(trees, ok) if o and t_["type"] == "conifer"))
+    return (f"Conifer (pitch pine) vs deciduous (oak) from the leaf-off lidar: share of a crown's vegetation returns "
+            f"that were the last return of their pulse, split at Otsu's threshold {th:.3f} "
+            f"({n_con} of {n_ok} crowns with >= {min_returns} returns are conifers); the other "
+            f"{len(trees) - n_ok} small crowns keep the crown-shape rule. See build/trees_preview.png.")
+
+
 def poisson_disk(poly, spacing, rng, tries=30):
     """Bridson-style Poisson-disk points inside a polygon (local metres), seeded."""
     from shapely.prepared import prep
@@ -319,6 +366,10 @@ def main():
             "in": bool(boundary.contains(p)),
         })
 
+    type_method = "Conifer vs deciduous is inferred from crown shape only (no leaf-off imagery); see build/trees_preview.png."
+    leaf = leaf_off_shares(name, cfg, world, trees)
+    if leaf is not None:
+        type_method = leaf
     species_note = None
     if cfg.get("blossom"):
         trees, species_note = assign_blossoms(trees, cfg["blossom"], boundary, water_cells, bmask)
@@ -342,8 +393,7 @@ def main():
         "osm_tree_points": int(len(osm_trees)),
         "osm_tree_points_matched_within_4m": int(matched),
         "source": canopy_label(cfg),
-        "type_method": "Conifer vs deciduous is inferred from crown shape only (no leaf-off imagery); see build/trees_preview.png."
-                       + (f" {species_note['text']}" if species_note else ""),
+        "type_method": type_method + (f" {species_note['text']}" if species_note else ""),
     }
     if species_note:
         stats["cherry"] = int(sum(t_["type"] == "cherry" for t_ in trees))

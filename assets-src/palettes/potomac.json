@@ -11,5 +11,9 @@
     "K0": "#26272d", "K1": "#55565e", "K2": "#7c7d85", "K3": "#bbb29e", "K4": "#ded7c5",
     "B0": "#4a3322", "B1": "#704d34", "B2": "#8f5d43",
     "R0": "#5d6470", "WH": "#f6f6f2"
+  },
+  "trees": {
+    "conifer": "trees_potomac:conifer",
+    "deciduous": "trees_potomac:deciduous"
   }
 }

@@ -84,15 +84,19 @@ dots on the aim line mark 25 / 50 / 75 / 100 % of the putter scale
 ## Rebuild a course or the art
 
 ```
-make course NAME=oswego_lake   # pipeline/s01..s10: raw/ -> game/public/courses/oswego_lake (+ index.json)
-make assets                    # sprites, trees, icons, bitmap font (assets-src/)
+make course NAME=oswego_lake     # pipeline/s00..s10: raw/ (+ edited/) -> game/public/courses/oswego_lake (+ index.json)
+make course NAME=highland_links  # needs the release downloads first (below)
+make assets                      # sprites, trees of every theme, icons, bitmap font (assets-src/)
 ```
 
 Python needs geopandas, shapely, pyproj, rasterio, pyogrio, scipy,
-scikit-image and Pillow (`pip install -r pipeline/requirements.txt`).
-Inputs live in `data/oswego_lake/raw/` (OSM GeoPackages, DOGAMI DTM and
-canopy-height GeoTIFFs). The yardage check and open items are in
-`data/oswego_lake/validation_report.md`.
+scikit-image, Pillow and laspy with lazrs (`pip install -r pipeline/requirements.txt`).
+Inputs live in `data/<course>/raw/`: Oswego Lake has OSM GeoPackages and
+DOGAMI DTM / canopy-height GeoTIFFs in git. Highland Links' DEM tile and lidar
+zip are too big for git; download them from the GitHub release
+`data-highland-links` into `data/highland_links/raw/` (unzip the lidar into
+`raw/laz_dav/`), as listed in `data/highland_links/DATA_REQUEST.md`. The yardage
+check and open items are in `data/<course>/validation_report.md`.
 
 ## Tests
 

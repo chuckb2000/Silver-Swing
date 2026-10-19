@@ -165,15 +165,140 @@ def conifer(W: int, H: int, variant: int) -> np.ndarray:
     return img
 
 
-def tree_frames():
-    """All (key, image) pairs for the tree atlas."""
+# --- coastal theme (Cape Cod): pitch pine and scrub oak --------------------------------
+PINE = [hex2rgba(c) for c in ("#14261a", "#20402a", "#2c5532", "#3a6a3a", "#4f8345")]
+PINE_TRUNK = [hex2rgba(c) for c in ("#2a170f", "#5a3420", "#7d4b2e")]
+OAK = [hex2rgba(c) for c in ("#1c2a14", "#33491f", "#465f28", "#5a7631", "#76913f")]
+OAK_TRUNK = [hex2rgba(c) for c in ("#2b2420", "#4e443c", "#6b5f54")]
+
+
+def _clump_crown(rng, Wc, H, cx, cy, rx, ry, n, r_lo, r_hi, ring_lo, ring_hi, crown_bot, pal, speckle, base_fill):
+    """Lumpy crown of round clumps lit from the upper-left; returns (rgba, mask)."""
+    img = np.zeros((H, Wc, 4), np.uint8)
+    yy, xx = np.mgrid[0:H, 0:Wc]
+    clumps = []
+    for k in range(n):
+        a = 2 * math.pi * k / n + rng.uniform(-0.45, 0.45)
+        rr = rng.uniform(ring_lo, ring_hi)
+        clumps.append((cx + math.cos(a) * rx * rr, cy + math.sin(a) * ry * rr,
+                       max(1.8, min(rx, ry) * rng.uniform(r_lo, r_hi))))
+    clumps.append((cx - rx * 0.1, cy - ry * 0.2, min(rx, ry) * 0.55))
+    mask = (((xx + 0.5 - cx) / rx) ** 2 + ((yy + 0.5 - cy) / ry) ** 2 <= base_fill) if base_fill > 0 else np.zeros((H, Wc), bool)
+    own = np.full((H, Wc), -1)
+    cys = np.array([c[1] for c in clumps] + [1e9])
+    for k, (ccx, ccy, cr) in enumerate(clumps):
+        m = ((xx + 0.5 - ccx) ** 2 + (yy + 0.5 - ccy) ** 2 <= cr * cr) & (yy < crown_bot)
+        mask |= m
+        own = np.where(m & ((own < 0) | (ccy < cys[own])), k, own)
+    mask[:, 0] = False
+    mask[:, -1] = False
+    mask[0, :] = False
+    tone = np.full((H, Wc), 2)
+    L = np.array([-0.62, -0.78])
+    for k, (ccx, ccy, cr) in enumerate(clumps):
+        m = (own == k) & mask
+        lam = (xx + 0.5 - ccx) / cr * L[0] + (yy + 0.5 - ccy) / cr * L[1]
+        tone = np.where(m, np.where(lam > 0.3, 3, np.where(lam > -0.4, 2, 1)), tone)
+    glam = (xx + 0.5 - cx) / rx * L[0] + (yy + 0.5 - cy) / ry * L[1]
+    tone = np.where(mask & (glam < -0.6), np.minimum(tone, 1), tone)
+    tone = np.where(mask & (glam > 0.55) & (tone == 3), 4, tone)
+    sp = rng.random((H, Wc))
+    tone = np.where(mask & (sp < speckle) & (tone > 1), tone - 1, tone)
+    for t in range(1, 5):
+        img[mask & (tone == t)] = pal[t]
+    return img, mask
+
+
+def pitch_pine(W: int, H: int, variant: int) -> np.ndarray:
+    """Pitch pine: bare, slightly leaning reddish trunk; broad, ragged, flat-topped
+    crown of needle tufts with gaps; dark yellow-green. Frames are H >= 1.15 W."""
+    rng = np.random.default_rng(31000 * W + 53 * H + variant)
+    Wc = W + 2
+    trunk_len = int(np.clip(round(0.38 * H), 4, 30))
+    crown_bot = H - trunk_len + 2
+    crown_h = crown_bot
+    cx = Wc / 2 + (variant - 1) * 0.6           # lean: crown off the trunk base
+    rx = W / 2 - 0.5
+    ry = max(2.5, crown_h / 2 - 1.0)
+    cy = crown_h / 2 + 1.2                      # flattish top
+    n = 6 + int(W / 6)
+    img, mask = _clump_crown(rng, Wc, H, cx, cy, rx, ry, n, 0.26, 0.38, 0.45, 0.86, crown_bot, PINE, 0.14, 0.0)
+    yy, xx = np.mgrid[0:H, 0:Wc]
+    tw = max(2, int(round(W / 9)))
+    base_x = Wc / 2 - tw / 2
+    trunk = np.zeros((H, Wc), bool)
+    for y in range(int(cy), H - 1):
+        f = (H - 1 - y) / max(1, H - 1 - cy)    # 0 at the ground, 1 at the crown centre
+        x0 = int(round(base_x + (cx - Wc / 2) * f))
+        trunk[y, max(0, x0):min(Wc, x0 + tw)] = True
+    trunk &= ~mask
+    img[trunk] = PINE_TRUNK[2]
+    img[trunk & (np.roll(trunk, -1, 1) == False)] = PINE_TRUNK[1]  # noqa: E712  right edge in shade
+    img[H - 2, max(0, int(base_x) - 1)] = PINE_TRUNK[1]
+    img[H - 2, min(Wc - 1, int(base_x) + tw)] = PINE_TRUNK[1]
+    solid = img[..., 3] > 0
+    img[_outline(solid)] = PINE[0]
+    return img
+
+
+def scrub_oak(W: int, H: int, variant: int) -> np.ndarray:
+    """Scrub / black oak: short trunk, broad lumpy olive crown."""
+    rng = np.random.default_rng(47000 * W + 29 * H + variant)
+    Wc = W + 2
+    trunk_len = int(np.clip(round(0.22 * H), 3, 10))
+    crown_bot = H - trunk_len + 2
+    cx = Wc / 2
+    rx = W / 2 - 0.5
+    ry = crown_bot / 2 - 1
+    cy = crown_bot / 2 + 0.5
+    n = 6 + int(W / 7)
+    img, mask = _clump_crown(rng, Wc, H, cx, cy, rx, ry, n, 0.36, 0.5, 0.55, 0.78, crown_bot, OAK, 0.08, 0.72)
+    yy, xx = np.mgrid[0:H, 0:Wc]
+    tw = max(2, int(round(W / 7)))
+    tx0 = int(round(cx - tw / 2))
+    trunk = np.zeros((H, Wc), bool)
+    trunk[crown_bot - 3:H - 1, tx0:tx0 + tw] = True
+    trunk &= ~mask
+    img[trunk] = OAK_TRUNK[2]
+    img[trunk & (xx >= tx0 + tw - max(1, tw // 2))] = OAK_TRUNK[1]
+    img[H - 2, max(0, tx0 - 1)] = OAK_TRUNK[1]
+    img[H - 2, min(Wc - 1, tx0 + tw)] = OAK_TRUNK[1]
+    solid = img[..., 3] > 0
+    img[_outline(solid)] = OAK[0]
+    return img
+
+
+PAINTERS = {"conifer": conifer, "deciduous": deciduous, "pitch_pine": pitch_pine, "scrub_oak": scrub_oak}
+
+
+def theme_painters(theme: str = "pnw"):
+    """(conifer, deciduous) drawing functions of a theme (palettes/<theme>.json "trees")."""
+    import json
+    from pathlib import Path
+    d = json.load(open(Path(__file__).resolve().parent / "palettes" / f"{theme}.json"))
+    t = d.get("trees", {})
+    return _painter(t.get("conifer", "conifer")), _painter(t.get("deciduous", "deciduous"))
+
+
+def _painter(name: str):
+    """A name in PAINTERS, or "module:function" for a theme's own module (trees_potomac:cherry...)."""
+    if ":" in name:
+        import importlib
+        mod, fn = name.split(":", 1)
+        return getattr(importlib.import_module(mod), fn)
+    return PAINTERS[name]
+
+
+def tree_frames(theme: str = "pnw"):
+    """All (key, image) pairs for the tree atlas of a theme."""
+    con, dec = theme_painters(theme)
     out = []
     for W in TREE_WIDTHS:
         for H in TREE_HEIGHTS:
             if H >= 1.15 * W:
                 for v in range(3):
-                    out.append((f"c_{W}_{H}_{v}", conifer(W, H, v)))
+                    out.append((f"c_{W}_{H}_{v}", con(W, H, v)))
             if 0.9 * W <= H <= 2.6 * W + 6:
                 for v in range(3):
-                    out.append((f"d_{W}_{H}_{v}", deciduous(W, H, v)))
+                    out.append((f"d_{W}_{H}_{v}", dec(W, H, v)))
     return out

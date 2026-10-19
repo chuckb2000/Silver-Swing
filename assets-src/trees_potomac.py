@@ -12,7 +12,9 @@ Mid-Atlantic riverside park:
 
 The game draws tree i with variant i % 3, and pipeline s05 orders the trees
 so that the cherries sit at those indices (DECISIONS.md, East Potomac).
-The trees.py (pnw) output is not changed by this module.
+palettes/potomac.json names these painters ("trees": "trees_potomac:conifer",
+"trees_potomac:deciduous"), so `make assets` builds sprites/trees_potomac.*
+and pipeline s09b draws the same trees in the putting views.
 """
 from __future__ import annotations
 
@@ -20,7 +22,6 @@ import numpy as np
 
 import trees as pnw
 from atlas import hex2rgba
-from trees import TREE_HEIGHTS, TREE_WIDTHS
 
 PINE = [hex2rgba(c) for c in ("#0f2621", "#1c3f36", "#255244", "#30654f", "#457d5f")]
 OAK = [hex2rgba(c) for c in ("#132c17", "#24521f", "#336b29", "#468536", "#64a147")]
@@ -73,16 +74,3 @@ def deciduous(W: int, H: int, variant: int) -> np.ndarray:
     img = _recolor(img, pnw.DEC, OAK if variant == 0 else SYC)
     return _recolor(img, pnw.TRUNK, TRUNK)
 
-
-def tree_frames():
-    """All (key, image) pairs for the potomac tree atlas (same keys as trees.tree_frames)."""
-    out = []
-    for W in TREE_WIDTHS:
-        for H in TREE_HEIGHTS:
-            if H >= 1.15 * W:
-                for v in range(3):
-                    out.append((f"c_{W}_{H}_{v}", conifer(W, H, v)))
-            if 0.9 * W <= H <= 2.6 * W + 6:
-                for v in range(3):
-                    out.append((f"d_{W}_{H}_{v}", deciduous(W, H, v)))
-    return out

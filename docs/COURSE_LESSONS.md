@@ -153,11 +153,14 @@ island). Oswego Lake and Highland Links notes live in DECISIONS.md.
   within 45 m of water and 100 m of the boundary), flagged `c: 2`, and
   described as flair, not surveyed species. Ask the design chat for a proper
   tree kind (request in `docs/requests/east_potomac_design_requests.md`).
-- **New theme = palette with the same keys + a tree module.**
-  `assets-src/palettes/<theme>.json`, `assets-src/trees_<theme>.py` with
-  `tree_frames()` (recolour the pnw shapes; new shapes only where needed),
-  `make theme-trees THEME=<theme>`; check `trees.png` (pnw) is unchanged.
-  s09b uses the theme's tree module for the putting views automatically.
+- **New theme = palette with the same keys + tree painters.**
+  `assets-src/palettes/<theme>.json` with a `"trees"` entry naming the
+  conifer and deciduous painters: a name in `trees.py` `PAINTERS` (coastal)
+  or `"module:function"` for a theme module (`"trees_potomac:deciduous"`;
+  recolour the pnw shapes, new shapes only where needed). `make assets`
+  builds `sprites/trees_<theme>.*`; check that `trees.png` (pnw) and the
+  other themes' sheets are unchanged. s09b uses the same painters for the
+  putting views.
 - **Look at the sprites at 5x on grass before rendering the course.**
 
 ## 6. Checking the build

@@ -96,6 +96,8 @@ def laz_highest(paths, classes, grid: Grid) -> tuple[np.ndarray, dict]:
     import laspy
     from pyproj import Transformer
     zmax = np.full(grid.H * grid.W, -np.inf)
+    n_all = np.zeros(grid.H * grid.W, np.float64)   # returns of these classes per cell
+    n_last = np.zeros(grid.H * grid.W, np.float64)  # ... that were the last return of their pulse
     info = {"files": [], "points_used": 0, "points_read": 0, "classes_present": {}}
     for p in paths:
         with laspy.open(p) as f:
@@ -114,16 +116,20 @@ def laz_highest(paths, classes, grid: Grid) -> tuple[np.ndarray, dict]:
                 if not keep.any():
                     continue
                 x, y, z = np.asarray(chunk.x)[keep], np.asarray(chunk.y)[keep], np.asarray(chunk.z)[keep]
+                is_last = (np.asarray(chunk.return_number) == np.asarray(chunk.number_of_returns))[keep]
                 if tf is not None:
                     x, y = tf.transform(x, y)
                 col = np.floor(x - grid.x0).astype(np.int64)
                 row = np.floor(grid.y1 - y).astype(np.int64)
                 ok = (col >= 0) & (col < grid.W) & (row >= 0) & (row < grid.H)
                 np.maximum.at(zmax, row[ok] * grid.W + col[ok], z[ok])
+                cell = row[ok] * grid.W + col[ok]
+                n_all += np.bincount(cell, minlength=grid.H * grid.W)
+                n_last += np.bincount(cell, weights=is_last[ok].astype(np.float64), minlength=grid.H * grid.W)
                 info["points_used"] += int(ok.sum())
     zmax = zmax.reshape(grid.H, grid.W)
     zmax[~np.isfinite(zmax)] = np.nan
-    return zmax, info
+    return zmax, (n_all.reshape(grid.H, grid.W), n_last.reshape(grid.H, grid.W)), info
 
 
 def write(path, a: np.ndarray, grid: Grid, desc: str):
@@ -161,7 +167,13 @@ def main():
         if not paths:
             raise SystemExit(f"[s00] no LAZ files match {cfg['laz']['paths']}")
         classes = tuple(cfg["laz"].get("classes", VEG_CLASSES))
-        top, info = laz_highest(paths, classes, grid)
+        top, (n_all, n_last), info = laz_highest(paths, classes, grid)
+        # Vegetation returns per cell and how many ended their pulse. With leaf-off lidar a
+        # needle-leaved crown stops many pulses (the crown holds their last return), while bare
+        # deciduous branches let nearly all of them through to the ground. s05 uses the share.
+        write(bdir / "veg_returns_1m.tif", n_all, grid, "vegetation returns per 1 m cell")
+        write(bdir / "veg_last_1m.tif", n_last, grid, "vegetation returns that were the last of their pulse, per 1 m cell")
+        info["leaf_off"] = bool(cfg["laz"].get("leaf_off", False))
         if cfg["laz"].get("units", "m") == "ft":
             top *= FT
         chm = np.where(np.isnan(top), 0.0, top - dtm)

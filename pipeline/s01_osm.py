@@ -15,6 +15,7 @@ import re
 
 import geopandas as gpd
 import pandas as pd
+from shapely.geometry import Polygon
 
 from common import course_dir, course_name_from_argv, load_config
 
@@ -48,10 +49,14 @@ def classify(tags: dict, geom_type: str) -> str | None:
         return "golf_other"
     if "building" in tags:
         return "building"
+    if "building:part" in tags:
+        return "building_part"  # e.g. the tower of a lighthouse (drawn and collided per part)
     if tags.get("natural") in ("water", "wetland"):
         return "water"
     if tags.get("leisure") == "swimming_pool":
         return "pool"
+    if tags.get("natural") in ("beach", "sand"):
+        return "sand"  # off-course sand (golf bunkers are caught above)
     if tags.get("natural") in ("wood",) or tags.get("landuse") == "forest":
         return "wood"
     if tags.get("natural") == "tree":
@@ -95,7 +100,10 @@ def load_gpkg(path):
             kind = classify(tags, r.geometry.geom_type)
             if kind is None:
                 continue
-            rows.append({"osm": oid, "kind": kind, "tags": tags, "geometry": r.geometry})
+            geom = r.geometry
+            if kind == "building_part" and geom.geom_type == "LineString" and geom.is_closed:
+                geom = Polygon(geom.coords)  # GDAL leaves closed building:part ways as lines
+            rows.append({"osm": oid, "kind": kind, "tags": tags, "geometry": geom})
         if rows:
             frames.append(gpd.GeoDataFrame(rows, crs=4326))
     return pd.concat(frames, ignore_index=True) if frames else None

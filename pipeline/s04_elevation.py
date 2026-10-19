@@ -83,6 +83,8 @@ def main():
         z[lake] = float(np.percentile(raw[lake], 5))
     # Ponds / pools: flatten to the 10th percentile of their footprint
     water = g[g.kind.isin(["lateral_water_hazard", "water_hazard", "water", "pool"])]
+    if not cfg.get("flatten_wetlands", True):  # vegetated wetlands (marsh, swamp) keep their lidar ground
+        water = water[water.tags.apply(lambda t: t.get("natural") != "wetland")]
     for geom in water.geometry:
         m = mask_from([geom], world)
         if m.sum() < 3:

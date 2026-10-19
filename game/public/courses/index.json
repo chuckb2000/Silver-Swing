@@ -65,6 +65,20 @@
    "teeSets": [
     "Blue"
    ]
+  },
+  {
+   "id": "highland_links",
+   "name": "Highland Links",
+   "location": "Truro, Barnstable County, Massachusetts",
+   "state": "MA",
+   "theme": "coastal",
+   "holes": 9,
+   "par": 35,
+   "defaultTee": "Blue",
+   "totalYd": 2753,
+   "teeSets": [
+    "Blue"
+   ]
   }
  ]
 }

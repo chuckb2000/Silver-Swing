@@ -18,6 +18,22 @@ def smoothstep(t):
     return t * t * (3 - 2 * t)
 
 
+def tier_offset(x, y, tiers):
+    """Height added by tier lines (two-tiered greens); scalars or numpy arrays.
+
+    Each tier {x, y, nx, ny, w, h} is a smooth step of height h across the line
+    through (x, y) with unit normal (nx, ny) pointing to the upper tier, w metres
+    wide, centred so the green's mean height is unchanged:
+        h * (smoothstep(d / w + 0.5) - 0.5),  d = (p - (x, y)) . n
+    Mirrors tierOffset() in game/src/systems/physics/terrain.ts.
+    """
+    z = 0.0
+    for t in tiers:
+        u = np.clip(((x - t["x"]) * t["nx"] + (y - t["y"]) * t["ny"]) / t["w"] + 0.5, 0.0, 1.0)
+        z = z + t["h"] * (u * u * (3 - 2 * u) - 0.5)
+    return z
+
+
 class GreenModel:
     def __init__(self, d: dict):
         self.d = d
@@ -30,6 +46,8 @@ class GreenModel:
         for b in d["bumps"]:
             dx, dy = x - b["x"], y - b["y"]
             z += b["a"] * math.exp(-(dx * dx + dy * dy) / (2 * b["s"] * b["s"]))
+        if d.get("tiers"):
+            z += float(tier_offset(x, y, d["tiers"]))
         return z
 
     def shaped(self, x, y):
