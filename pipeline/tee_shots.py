@@ -1,4 +1,4 @@
-"""Tee shots that clear the trees (course_config.json "clear_tee_shots").
+"""Tee shots that clear the trees (every course; course_config.json "keep_tee_trees" lists exceptions).
 
 Used by s06 (where to put the virtual tee inside its box) and s06b (which
 trees to take out where no spot in the box is clear).

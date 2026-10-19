@@ -1584,8 +1584,8 @@ data/highland_links/validation_report.md.
 -   **Trees:** 4,171 from lidar; about 1,000 drawn as flowering cherries
     along Ohio Drive and the seawall (theme flair, species not measured).
     A perfect drive at the middle of the fairway clears the trees near
-    every tee (`clear_tee_shots`: 7 tees moved within their boxes, 6
-    trees removed on Blue 9 and 13).
+    every tee (every course build checks this: 7 tees moved within their
+    boxes, 6 trees removed on Blue 9 and 13).
 
 **11.9.2 Scorecards** (club PDFs supplied by the developer, 2026-10-19)
 

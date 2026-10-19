@@ -10,11 +10,12 @@ Playability step 2 (5.6): when a hole is flagged, the virtual tee may move
 anywhere inside the real tee polygon; the move is logged in
 adjustments.json and both real and adjusted yardages are reported.
 
-With course_config.json "clear_tee_shots" (pipeline/tee_shots.py), a virtual
+Tee shots clear the trees (pipeline/tee_shots.py, every course): a virtual
 tee from which a perfect drive at the middle of the fairway would clip a tree
 near the tee moves to the nearest clear spot in the same box whose yardage
 status (pass / flag / fail) is no worse; s06b takes out the trees still in the
-way where no spot in the box is clear.
+way where no spot in the box is clear. Holes listed in "keep_tee_trees" are
+left as they are.
 """
 from __future__ import annotations
 
@@ -26,7 +27,7 @@ import geopandas as gpd
 import numpy as np
 from shapely.geometry import LineString, Point
 
-from common import YD, build_dir, course_dir, course_name_from_argv, layout_dir, layout_holes, layouts, load_config, read_card, rnd, write_json
+from common import YD, build_dir, course_dir, course_name_from_argv, keeps_tee_trees, layout_dir, layout_holes, layouts, load_config, read_card, rnd, write_json
 
 warnings.filterwarnings("ignore")
 
@@ -115,9 +116,7 @@ def clear_point_in(poly, line, green_c, target_m, current, cur_rank, is_clear, i
 
 
 def tee_shot_checker(name, cfg, g):
-    """(is_clear(tee, centerline, pin) -> bool) for "clear_tee_shots", else None."""
-    if not cfg.get("clear_tee_shots"):
-        return None
+    """is_clear(tee, centerline, pin) -> bool: no tree in the way of the tee shot."""
     from tee_shots import TreeIndex, target_point
     bdir = build_dir(name)
     trees = json.loads((bdir / "trees_all.json").read_text())
@@ -248,7 +247,7 @@ def build_layout(name, cfg, lay, g):
                         "real_yd": rnd(real_yd, 1), "adjusted_yd": rnd(adj_m / YD, 1), "card_yd": card_yd,
                         "reason": f"measured {real_yd:.0f} yd from the tee-box centre vs {card_yd:.0f} on the card ({diff:+.1f}%); moved the virtual tee within the real tee polygon {tee_osm}",
                     })
-            if tee_clear is not None and tpoly is not None and pos not in ("back", "front"):
+            if tpoly is not None and pos not in ("back", "front") and not keeps_tee_trees(cfg, lay, n):
                 _, cl = path_from(adj_pt, L, gc)
                 if not tee_clear(adj_pt, cl, pin):
                     cur = RANK[status((adj_m - target) / target * 100)]
@@ -258,7 +257,7 @@ def build_layout(name, cfg, lay, g):
                             "hole": n, "tee_set": ts, "step": 2, "type": "tee_position",
                             "from": [rnd(adj_pt.x), rnd(adj_pt.y)], "to": [rnd(best[1].x), rnd(best[1].y)],
                             "real_yd": rnd(real_yd, 1), "adjusted_yd": rnd(best[2] / YD, 1), "card_yd": card_yd,
-                            "reason": f"clear_tee_shots: a perfect drive at the middle of the fairway clipped a tree near the tee; "
+                            "reason": f"tee shot: a perfect drive at the middle of the fairway clipped a tree near the tee; "
                                       f"moved {best[0]:.1f} m within the real tee polygon {tee_osm} to the nearest clear spot",
                         })
                         adj_pt, adj_m = best[1], best[2]
