@@ -437,6 +437,13 @@ DECISIONS.md with the reason.
     and Brave add noise to (a friend saw out of bounds mid-course and
     fairway reading as rough). The practice range stays out of bounds. The
     D1 database is bound. 116 unit tests and 3 Playwright tests pass.
+    Later the same day: East Potomac's design requests (courses grouped by
+    place, a tee choice, "not rated", per-course logos, a flowering-tree
+    sprite type) and the third playtest's fixes (end-of-round name entry,
+    banned words on leaderboard names, swing-meter display lag, wedge and
+    chip release, Highland Links tee boxes, aiming keeps the dragged view),
+    and a title screen with a silver trophy logo over a rotating set of
+    course views. 196 unit tests and 3 Playwright tests pass.
 
 -   **Course chat (2026-10-18/19):** second course **Highland Links**
     (Truro, MA; 9 holes, par 35, coastal theme), section 11.5. Phase 0 of
