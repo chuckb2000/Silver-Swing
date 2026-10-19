@@ -94,6 +94,20 @@
     "Royal",
     "White"
    ]
+  },
+  {
+   "id": "stone_creek",
+   "name": "Stone Creek Golf Club",
+   "location": "Oregon City, Clackamas County, Oregon",
+   "state": "OR",
+   "theme": "pnw",
+   "holes": 18,
+   "par": 72,
+   "defaultTee": "Blue",
+   "totalYd": 6456,
+   "teeSets": [
+    "Blue"
+   ]
   }
  ]
 }

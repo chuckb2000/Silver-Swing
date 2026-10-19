@@ -481,6 +481,14 @@ DECISIONS.md with the reason.
     data/langston/validation_report.md; requests in
     docs/requests/langston_design_requests.md.
 
+-   **Stone Creek (course chat, 2026-10-19):** Stone Creek Golf Club,
+    Oregon City, OR, branch `course/stone_creek` from main: 18 holes, Blue
+    tees, `pnw` theme, DOGAMI DTM and canopy model, three red ponds, OB =
+    the OSM boundary. Every hole within 3 % except hole 6 (-3.1 %). New
+    optional config key `tee_shot_margin_m` (tee-shot tree check);
+    existing courses rebuild byte-identical. Section 11.11; open items in
+    data/stone_creek/validation_report.md.
+
 -   **Next task:** the third playtest (putting, yellow misses), the club's
     printed scorecard and the hole 3 Blue tee box. New courses: a separate
     chat following docs/COURSE_BUILD.md; after each one lands, make its
@@ -1725,6 +1733,55 @@ data/langston/validation_report.md)
 3.  Royal 1, 7 and 16 are flags (-3.5 to -4.3 %).
 4.  Four lidar trees stand inside fairways (holes 2, 3, 16).
 5.  Ratings unverified; lidar year not recorded.
+
+**11.11 Stone Creek Golf Club, Oregon City, Oregon**
+
+**11.11.1 Facts**
+
+-   **Location:** 14603 S Stoneridge Drive, Oregon City, Clackamas County,
+    Oregon. Course id `stone_creek` (logo already made), `state` OR.
+-   **Design:** Peter Jacobsen and Jim Hardy; opened 2002 (golfn; the OGA
+    lists 2003). About 120 acres among old-growth Douglas firs, with ponds
+    and wetlands (OGA).
+-   **Built as:** one world 1,280 x 1,280 m (UTM 10N, EPSG:32610), theme
+    `pnw`. Out of bounds = the OSM course boundary (developer).
+-   **Data:** OSM (Overpass Turbo export, 2026-10-19), DOGAMI 1 m bare-earth
+    DTM and canopy height model (exportImage, feet), club scorecard image;
+    all in release `stone-creek-data`, the DOGAMI files also in
+    `data/stone_creek/raw/` (9 MB each).
+-   **Terrain:** 90-166 m; fairway slopes p50 5.7 %. Beaver Creek's wooded
+    ravine and a reed-bed wetland lie just north of the boundary.
+-   **Water:** three ponds, all red (developer): between 3 and 4, in front
+    of the 6th green, and by the 17th green / 15th and 18th tees.
+-   **Trees:** 5,661 from the DOGAMI canopy model (1,210 inside the
+    boundary), up to 57 m; type from crown shape.
+
+**11.11.2 Scorecard** (club scorecard image, supplied by the developer
+2026-10-19; every tee set adds up to the printed totals)
+
+  -------------------------------------------------------------------------------------------
+  Hole         1   2   3   4   5   6   7   8   9   Out   10  11  12  13  14  15  16  17  18  In    Total
+  ------------ --- --- --- --- --- --- --- --- --- ----- --- --- --- --- --- --- --- --- --- ----- -----
+  Par          4   3   4   5   4   3   4   5   4   36    4   5   4   4   3   4   3   4   5   36    72
+  Men's HCP    8   18  10  2   12  16  6   4   14        9   1   11  3   15  7   17  13  5
+  Blue         373 156 374 475 409 149 349 508 358 3151  408 513 396 422 134 376 144 408 504 3305  6456
+  Built Blue   373 156 368 467 403 144 346 510 363       413 512 392 412 137 367 144 404 517       6428
+  -------------------------------------------------------------------------------------------
+
+Jacobsen 6,840 (73.8/140), White 5,925 (69.1/127) and Gold 5,123
+(70.3/121) are on the card, not built; ladies' handicaps in
+`data/stone_creek/scorecard_full.csv`. Blue rating/slope 71.7/135 (card).
+
+**11.11.3 Default tee**
+
+Blue (developer, 2026-10-19), the only set built.
+
+**11.11.4 Known open items** (details in data/stone_creek/validation_report.md)
+
+1.  Hole 6 plays 144 yd vs 149 (-3.1 %, flag); every other hole passes.
+2.  Hole 16's tee is the OSM line start, inside the large back tee polygon.
+3.  The wetland north of 12/13 plays as woods, not a penalty area.
+4.  Tree types from crown shape only.
 
 **12. Repository layout**
 

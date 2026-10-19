@@ -229,9 +229,11 @@ Known Oswego-specific code, with the fix:
                                         // play, through the centre) or front|back (step across it; "line_frac"
                                         // places it as a share of the green's depth from the low edge);
                                         // "pin": "upper_tier" moves the pin to the middle of the upper tier
-  "keep_tee_trees": []                  // optional: holes ("10", or "blue 7" with layouts) that keep trees in front of the tee
+  "keep_tee_trees": [],                 // optional: holes ("10", or "blue 7" with layouts) that keep trees in front of the tee
                                         // (a deliberate tree-lined dogleg). Every other tee shot at the middle of the fairway
                                         // is cleared: s06 moves the tee within its box, s06b drops trees (COURSE_LESSONS.md 3)
+  "tee_shot_margin_m": 0                // optional: extra vertical clearance (m) the tee-shot tree check keeps from each crown,
+                                        // when the game test still finds a crown the pipeline check passed by centimetres
 }
 ```
 

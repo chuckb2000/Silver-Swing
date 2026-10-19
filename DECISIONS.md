@@ -155,7 +155,19 @@ Changes from the starting values in CLAUDE.md, and choices the spec left open. N
 - **Data:** OSM from the developer's Overpass Turbo export; DC GIS / OCTO 1 m lidar DEM and normalized surface model (release `data-washington-dc`), clipped to the world + 100 m (`pipeline/clip_raster.py`) so the 550 MB files stay out of git; scorecards from the club PDFs.
 - **World 1,280 x 2,048 m** (the 2,048 m limit): the island is 1.9 km long, so only 45 m of scenery south and 74 m north; east-west it is mostly river.
 
+## Stone Creek Golf Club (developer and course chat, 2026-10-19)
+
+- **Blue tees only** (6,456 yd, 71.7/135; developer). Jacobsen, White and Gold are kept in `data/stone_creek/scorecard_full.csv`, not built.
+- **Every water hazard red** (developer: "all hazards are red"): the three OSM ponds are tagged `golf=water_hazard` (yellow), so `edits.json` sets `penalty=red` on each; `penalty_default` is red.
+- **Out of bounds = the OSM course boundary** (developer). The driving range south-east of hole 9 is not mapped in OSM and stays in play as rough (developer: "doesn't need to be made OB"); `driving_range_is_ob` is false.
+- **The reed-bed wetland north of 12/13** (OSM `natural=wetland`, mostly outside the boundary) is flattened like Oswego's ponds (0.3 m from its median) and plays as woods inside the boundary, not as a penalty area (course chat; listed in the PR).
+- **Hole 6 tee** (course chat): s06 uses the small box in front of the long back box (144 yd, -3.1 %). Assigning the long box as Blue gives 150 yd (+0.9 %) from its front edge, 6 m away; left as is and listed for the developer.
+- **World 1,280 x 1,280 m** (x0 533124, y0 5015660): the boundary box plus 134-157 m of scenery on each side.
+- **Data:** OSM from the developer's Overpass Turbo export; DOGAMI DTM and CHM exportImage GeoTIFFs (1 m, EPSG:32610, feet), box x 533024-534504 / y 5015560-5017040; club scorecard image. Release `stone-creek-data`.
+
 ## Data and pipeline
+
+- **`tee_shot_margin_m`** (optional config key, default 0; Stone Creek 0.5): the tee-shot tree check in `pipeline/tee_shots.py` (s06 tee placement, s06b tree removal) keeps the ball that many metres above or below each crown and trunk top. At Stone Creek the check passed hole 15 by 0.1 m while the game's own physics clipped a 43 m fir 49 m out (the game's launch height differs from the pipeline's ground sample by a few centimetres). With 0.5 m, s06 moved hole 15's tee 1.1 m within its box. Courses without the key are unchanged (Oswego Lake, Highland Links, East Potomac and Langston rebuilt byte-identical).
 
 - **Langston pipeline additions** (course chat, 2026-10-19), each behind a key or tag that no other course has, so Oswego Lake, Highland Links and East Potomac rebuild byte-identical: `join_boundary` (s02; s05 keeps trees in the joined penalty areas), tag `flatten=no` on a water feature (s04 keeps its lidar bed), `green_tiers` `low_side: front|back`, `line_frac` and `pin: upper_tier` (s07, s06), `propose_tees.py --wide=<holes>`, new tool `propose_channels.py`.
 
