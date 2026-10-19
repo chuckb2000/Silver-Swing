@@ -612,6 +612,51 @@ def heron(c: dict) -> np.ndarray:
     return outlined_outside(img, c["edge"])
 
 
+# --------------------------------------------------------------------- skate
+def skate(c: dict) -> np.ndarray:
+    """A hockey skate in profile, toe to the right: black boot, white laces, holder and steel blade (Wannamoisett)."""
+    X, Y = grid()
+    img = np.zeros((S, S, 4), np.uint8)
+    # steel blade with a slight rocker, longer than the boot at both ends
+    rock = 27.6 + 0.010 * (X - 16.5) ** 2
+    blade = (X >= 3.5) & (X <= 29.5) & (Y >= rock - 1.6) & (Y <= rock)
+    paint(img, blade, c["steel"])
+    paint(img, blade & (Y < rock - 0.8), c["steel_light"])
+    # the holder: a white bridge from heel to toe, open between its two posts
+    holder = poly(X, Y, [(6.6, 21.0), (27.2, 21.0), (26.6, 23.2), (25.4, 26.4), (21.4, 26.4), (20.4, 23.6),
+                         (13.2, 23.6), (12.2, 26.4), (8.2, 26.4), (6.8, 23.2)])
+    paint(img, holder, c["holder"])
+    paint(img, holder & (Y >= 24.6), c["holder_dark"])
+    # the boot: tall ankle cuff at the heel, tongue at the top, laced front sloping to a rounded toe
+    boot = poly(X, Y, [(5.6, 4.0), (12.6, 3.4), (13.2, 6.0), (16.0, 10.2), (21.0, 13.0), (25.6, 14.6),
+                       (28.4, 16.8), (28.8, 19.6), (27.6, 21.2), (6.0, 21.2), (5.0, 17.6), (5.4, 9.0)])
+    tongue = poly(X, Y, [(12.0, 1.8), (16.0, 1.4), (16.6, 4.4), (14.0, 6.4), (12.6, 5.0)])
+    paint(img, tongue, c["tongue"])
+    paint(img, tongue & (Y < 3.0), c["tongue_light"])
+    paint(img, boot, c["boot"])
+    paint(img, boot & (X < 9.5) & (Y < 18), c["boot_light"])            # lit heel and cuff, upper left
+    paint(img, boot & (Y > 19.6), c["boot_dark"])                         # the sole edge
+    stripe = boot & (np.abs((Y - 13.0) - 0.42 * (X - 8.0)) < 0.9) & (X < 21.5)
+    paint(img, stripe, c["trim"])                                         # a coloured stripe along the quarter
+    paint(img, boot & (np.abs(X - 7.0) < 0.6) & (Y > 5.0) & (Y < 19.5), c["boot_dark"])  # heel seam
+    # laces: white crossings packed down the front, just inside its edge
+    path = [(12.9, 6.6), (15.0, 10.0), (19.8, 12.9), (24.0, 14.6)]
+    segs = [(path[k], path[k + 1]) for k in range(len(path) - 1)]
+    total = sum(math.hypot(b[0] - a[0], b[1] - a[1]) for a, b in segs)
+    for k in range(8):
+        d = (k + 0.4) / 8 * total
+        for (ax, ay), (bx, by) in segs:
+            L_ = math.hypot(bx - ax, by - ay)
+            if d <= L_:
+                ux, uy = (bx - ax) / L_, (by - ay) / L_
+                lx, ly = ax + ux * d, ay + uy * d
+                break
+            d -= L_
+        nx, ny = -uy, ux                                                  # across the front edge
+        paint(img, seg(X, Y, lx - nx * 1.1, ly - ny * 1.1, lx + nx * 1.3, ly + ny * 1.3, 0.5) & boot, c["lace"])
+    return outlined_outside(img, c["edge"])
+
+
 def colour_disc(fn, fill, rim):
     """A logo drawn over a disc in a course's colour: one course of several at a
     place (East Potomac Blue / White / Red)."""
@@ -700,6 +745,12 @@ LOGOS = {
         "bill": rgba("#eab43a"), "bill_dark": rgba("#b98422"), "thigh": rgba("#9a5b3a"), "leg": rgba("#4f4c3e"),
         "grass": rgba("#e0b43c"), "grass_light": rgba("#f4d36a"), "grass_dark": rgba("#b08424"), "seed": rgba("#fbe9a6"),
         "edge": EDGE,
+    }),
+    "wannamoisett": (skate, {
+        "boot": rgba("#23262e"), "boot_light": rgba("#3d434f"), "boot_dark": rgba("#14161b"),
+        "tongue": rgba("#c23b2e"), "tongue_light": rgba("#e0573f"), "trim": rgba("#c23b2e"),
+        "lace": rgba("#f4f2ea"), "holder": rgba("#eef0f3"), "holder_dark": rgba("#b9bec7"),
+        "steel": rgba("#8e98a5"), "steel_light": rgba("#d6dde6"), "edge": EDGE,
     }),
 }
 
