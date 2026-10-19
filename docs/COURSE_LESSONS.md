@@ -123,10 +123,12 @@ island), Langston (2026-10-19, a course in two parts across a lake). Oswego Lake
   under trees at the box edge, and tees with no mapped box (a moved line
   start) can sit in a stand of trees. Run the check for every hole and tee
   set (the test in `east_potomac.test.ts`: perfect auto-club shot, every
-  canopy a hit). Where the developer wants it fixed, `"clear_tee_shots": true`
-  first moves the tee within its box, then drops the trees still in the way.
-  Some blocked tee shots are on purpose: Oswego Lake hole 10 is a dogleg the
-  developer keeps as it is. Ask before switching it on.
+  canopy a hit). Every course build clears them (the developer: "it should
+  just be the case"): s06 first moves the tee within its box, then s06b drops
+  the trees still in the way. A blocked tee shot can be on purpose: Oswego
+  Lake hole 10 is a dogleg the developer keeps, listed in `keep_tee_trees`.
+  Read the s06b line of the build log and ask about any hole where it drops
+  trees on a new course.
 - **Several courses on one site:** list them as `layouts` in
   `course_config.json` (COURSE_BUILD.md 3.5). Holes go to the layout whose
   `leisure=golf_course` polygon contains them; all greens are shaped once so

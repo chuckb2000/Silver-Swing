@@ -43,6 +43,7 @@
   "scorecard_source": "GolfPass (golfpass.com course 11330), retrieved 2026-10-18 via the developer's spec; not yet verified against the club's printed card",
   "penalty_default": "red",
   "driving_range_is_ob": true,
+  "keep_tee_trees": ["10"],
   "wind_mph": {
     "minMph": 1,
     "maxMph": 7
