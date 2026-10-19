@@ -2,6 +2,14 @@
 
 Changes from the starting values in CLAUDE.md, and choices the spec left open. Newest first within each area. Date: 2026-10-18 (first build session, then the first and second playtests).
 
+## East Potomac requests (developer, 2026-10-19)
+
+- **Places with several courses:** courses sharing a `group` in courses/index.json show as one card for the place (its logo, "N courses"); tapping it shows the place's courses as cards. Chosen over a course row on the new-round screen because each course has its own holes, par, tees and card art, and it matches the state → course step.
+- **Logos:** the place's logo (`east_potomac`, the memorial) on its card; each course on a disc in its colour (`east_potomac_blue`, `_white`, `_red`; the developer preferred the disc to a coloured outline). A course without its own logo falls back to its place's.
+- **Tees:** a tee row on the new-round screen when a course has more than one tee set; the choice is remembered per course (settings `tees`) and the leaderboard gets a tee tab for such courses. The developer wants East Potomac Blue to play the Blue tees by default: its `defaultTee` in the course data (East Potomac chat).
+- **Unrated tees** (rating 0, the par-3 Red course) show "not rated".
+- **Flowering trees:** trees.json `c: 2` trees are drawn from their own sprite sheet (`sprites/blossom.png`, `assets-src/blossom.py`, run by `make assets`): an umbrella crown of blossom clusters with branches showing, three varieties (Yoshino, Kwanzan, Akebono) by tree index. Same size grid and choice as deciduous trees, which they fall back to; physics treats them as deciduous. Course cards draw them too. Theme tree sheets are unchanged.
+
 ## Course data read without a canvas (2026-10-19, a friend's report)
 
 - **Report:** out of bounds in the middle of hole 6 and fairway lies reading as rough (hole 1 and others) on Oswego Lake.

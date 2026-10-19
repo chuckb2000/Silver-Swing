@@ -12,6 +12,8 @@ export interface Tree {
   h: number;      // height above ground, m
   r: number;      // crown radius, m
   conifer: boolean;
+  /** trees.json `c`: 0 deciduous, 1 conifer, 2 flowering (drawn in blossom; deciduous for physics) */
+  kind?: number;
   base: number;   // ground elevation at the trunk
 }
 
@@ -108,7 +110,7 @@ export class Obstacles {
   static fromArrays(a: TreeArrays, groundZ: (x: number, y: number) => number): Tree[] {
     const out: Tree[] = [];
     for (let i = 0; i < a.x.length; i++) {
-      out.push({ i, x: a.x[i], y: a.y[i], h: a.h[i], r: a.r[i], conifer: a.c[i] === 1, base: groundZ(a.x[i], a.y[i]) });
+      out.push({ i, x: a.x[i], y: a.y[i], h: a.h[i], r: a.r[i], conifer: a.c[i] === 1, kind: a.c[i], base: groundZ(a.x[i], a.y[i]) });
     }
     return out;
   }

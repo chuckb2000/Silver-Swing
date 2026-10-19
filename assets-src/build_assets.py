@@ -17,6 +17,7 @@ from atlas import Atlas  # noqa: E402
 from font import build_font  # noqa: E402
 from sprites import all_sprites  # noqa: E402
 from trees import TREE_HEIGHTS, TREE_WIDTHS, tree_frames  # noqa: E402
+import blossom  # noqa: E402
 
 OUT = HERE.parent / "game" / "public" / "sprites"
 
@@ -36,6 +37,7 @@ def main():
     (OUT / "trees_meta.json").write_text(
         '{"widths":%s,"heights":%s}' % (TREE_WIDTHS, TREE_HEIGHTS))
     print(f"[assets] trees {len(frames)} frames ({tw}x{th}), sprites ({sw}x{sh}), font {n} glyphs -> {OUT}")
+    blossom.main()  # flowering trees (trees.json c: 2), any theme
 
 
 if __name__ == "__main__":
