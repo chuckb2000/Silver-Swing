@@ -2,6 +2,12 @@
 
 Changes from the starting values in CLAUDE.md, and choices the spec left open. Newest first within each area. Date: 2026-10-18 (first build session, then the first and second playtests).
 
+## Course data read without a canvas (2026-10-19, a friend's report)
+
+- **Report:** out of bounds in the middle of hole 6 and fairway lies reading as rough (hole 1 and others) on Oswego Lake.
+- **Cause:** the surface map (surface.png, one id per pixel) and the heightmap (height.png) were read back through a canvas. Safari 26 (in all browsing modes), Brave and Firefox with resistFingerprinting add small random changes to canvas reads as anti-fingerprinting. A change of 1 turns fairway (2) into rough (1) and rough (1) into out of bounds (0), and adds bumps to the heights. Simulating that noise in Chromium gave about 11,000 out-of-bounds pixels inside the course; desktop Chrome has no noise, which is why the playtests didn't show it. The course data itself was checked and is fine: no out of bounds inside the boundary except the practice range (by design, `driving_range_is_ob`), and hole 1's drawn fairway matches its physics map.
+- **Fix:** `src/data/png.ts` decodes the PNG bytes directly (DecompressionStream plus the PNG row filters), so the values are exact in every browser; the canvas is kept only as a fallback for browsers without DecompressionStream. The loader also warns if the surface map has an id it doesn't know. Tests: the decoder against pngjs for every filter and colour type and on every course's images; a browser test that injects canvas noise and checks there is no out of bounds inside the course.
+
 ## Phase 0 decisions (developer, 2026-10-18)
 
 - **Name:** the game is called **Silver Swings Golf**.
