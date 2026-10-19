@@ -83,20 +83,29 @@ describe(ID, () => {
     for (const x of [340, 380, 420]) expect(isOB(course.terrain.surface(x, 1187)), `x ${x}`).toBe(true);
   });
 
-  it('the rhododendron garden is out of bounds and painted in flower', () => {
+  it('the rhododendron garden is out of bounds and full of flowering shrubs (c: 3) in its chosen colours', () => {
     expect(course.boundary.contains(GARDEN.x, GARDEN.y)).toBe(false);
     expect(isOB(course.terrain.surface(GARDEN.x, GARDEN.y))).toBe(true);
-    // count blossom-coloured pixels (strong pinks / purples / reds) in the terrain chunk holding the garden
-    const T = json.terrain;
-    const px = GARDEN.x * 2, py = (json.world.height - GARDEN.y) * 2;
-    const i = Math.floor(px / T.chunk), j = Math.floor(py / T.chunk);
-    const art = PNG.sync.read(readFileSync(resolve(COURSES_DIR, ID, T.pattern.replace('{i}', String(i)).replace('{j}', String(j)))));
-    let bloom = 0;
-    for (let k = 0; k < art.data.length; k += 4) {
-      const r = art.data[k], g = art.data[k + 1], b = art.data[k + 2];
-      if (r > g + 50 && b > g + 20) bloom++; // magenta / pink / purple: no grass or water tone does this
+    const t = JSON.parse(readFileSync(resolve(COURSES_DIR, ID, 'trees.json'), 'utf8')) as { x: number[]; y: number[]; c: number[] };
+    const shrubs = t.c.map((c, i) => [c, i]).filter(([c]) => c === 3).map(([, i]) => i);
+    expect(shrubs.length).toBeGreaterThan(1000);
+    // all outside the course, around the garden's peninsula east of the lake
+    for (const i of shrubs) {
+      expect(course.boundary.contains(t.x[i], t.y[i]), `shrub ${i}`).toBe(false);
+      expect(t.x[i]).toBeGreaterThan(470); expect(t.x[i]).toBeLessThan(680);
+      expect(t.y[i]).toBeGreaterThan(1440); expect(t.y[i]).toBeLessThan(1900);
     }
-    expect(bloom).toBeGreaterThan(2000);
+    // colour = index % 8 (0 pink, 1 magenta, 2 purple, 3 white, 4 red, 5 coral, 6 pale pink, 7 leaves):
+    // every colour shows, pinks and magentas lead, bushes in leaf only are a minority
+    const n = Array(8).fill(0);
+    for (const i of shrubs) n[i % 8]++;
+    for (let v = 0; v < 8; v++) expect(n[v], `colour ${v}`).toBeGreaterThan(0);
+    expect(n[0] + n[1]).toBeGreaterThan(n[3] + n[4] + n[5]);
+    expect(n[7] / shrubs.length).toBeLessThan(0.15);
+    // the putting views beside the garden draw the same bushes
+    const views = json.greenViews!.find((g) => g.hole === 12)!;
+    const atlas = JSON.parse(readFileSync(resolve(COURSES_DIR, ID, views.far.trees), 'utf8'));
+    expect(atlas.trees.some((x: { f: string }) => x.f.startsWith('s_'))).toBe(true);
   });
 
   it('a robot golfer completes every hole with legal, finite scores', () => {

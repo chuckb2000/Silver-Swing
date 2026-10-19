@@ -435,14 +435,6 @@ def main():
     wm = wave_mask(H, W, 0) & wat & ~own_edge
     put(wm, "W2")
 
-    # flowering shrub beds of a garden beside the course (course_config "garden"; art only) --
-    if cfg.get("garden"):
-        from garden import paint_garden
-        Xw, Yw = np.meshgrid((np.arange(W) + 0.5) / PX_PER_M, world.height - (np.arange(H) + 0.5) / PX_PER_M)
-        nb = paint_garden(rgb, cfg, g, surf, Xw, Yw, PX_PER_M)
-        del Xw, Yw
-        print(f"[s09] garden beds: {nb.sum() / PX_PER_M ** 2:.0f} m2 of flowering shrubs")
-
     # road centre lines --------------------------------------------------------
     tr = Affine(1 / PX_PER_M, 0, 0, 0, -1 / PX_PER_M, world.height)
     major = [r.geometry for _, r in g[g.kind == "highway"].iterrows() if r.tags.get("highway") in ("primary", "secondary", "tertiary")]

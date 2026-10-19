@@ -30,7 +30,8 @@ MINIMAP: dict = {}
 MINIMAP_TREES: dict = {}
 # minimap tree colours (dark, lit) when the theme doesn't set them; cherries are the potomac blossoms
 MAP_TREE_COLOURS = {"conifer": ([31, 74, 50], [58, 112, 74]), "deciduous": ([47, 96, 44], [80, 140, 66]),
-                    "cherry": ([196, 96, 140], [244, 178, 206])}
+                    "cherry": ([196, 96, 140], [244, 178, 206]),
+                    "shrub": ([140, 60, 110], [226, 120, 170])}  # garden shrubs (garden.sprites)
 
 
 def to_palette_png(arr: np.ndarray, path):
@@ -250,11 +251,11 @@ def main():
                                                   ((round(f * (hb.shape[1] - 1)), round(f * (hb.shape[0] - 1))) for f in (0.1, 0.5, 0.9))]})
 
     # trees -------------------------------------------------------------------
-    # c: 1 = conifer, 2 = flowering cherry (potomac theme; the game reads anything but 1 as deciduous)
+    # c: 1 = conifer, 2 = flowering cherry (potomac theme), 3 = flowering shrub (garden.sprites; sprites/shrubs.png)
     trees = json.load(open(bdir / "trees.json"))
     write_json(out / "trees.json", {
         "x": [t["x"] for t in trees], "y": [t["y"] for t in trees], "h": [t["h"] for t in trees],
-        "r": [t["r"] for t in trees], "c": [{"conifer": 1, "cherry": 2}.get(t["type"], 0) for t in trees],
+        "r": [t["r"] for t in trees], "c": [{"conifer": 1, "cherry": 2, "shrub": 3}.get(t["type"], 0) for t in trees],
     })
 
     # maps --------------------------------------------------------------------
@@ -387,6 +388,7 @@ def main():
               f"- {trees_rep['detected']} trees detected in the world extent ({trees_rep['inside_course']} inside the course), "
               f"{trees_rep['conifer']} conifers / {trees_rep['deciduous']} deciduous"
               + (f" / {trees_rep['cherry']} flowering cherries" if "cherry" in trees_rep else "")
+              + (f" (plus {trees_rep['shrub']} flowering shrubs in the garden, c: 3)" if "shrub" in trees_rep else "")
               + f"; median height {trees_rep['height_p50_m']:.1f} m, max {trees_rep['height_max_m']:.1f} m.",
               f"- Dropped: {trees_rep['dropped']['building']} tops on building footprints, {trees_rep['dropped']['lake']} over the lake, {trees_rep['dropped']['tiny']} tiny crowns.",
               f"- Dropped on playing surfaces (spec 5.4): {len(trees_rep['dropped_on_playing_surfaces'])} -> " + ", ".join(f"{d['on']} {d['osm']} ({d['h']} m)" for d in trees_rep['dropped_on_playing_surfaces']),

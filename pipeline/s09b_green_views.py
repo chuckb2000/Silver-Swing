@@ -45,6 +45,7 @@ from s09_render import BAYER4, PRIO, SHADOW_DIR, SHADOW_MULT, band_lut, build_lu
 sys.path.insert(0, str(ROOT / "assets-src"))
 from atlas import Atlas  # noqa: E402
 from trees import theme_painters  # noqa: E402
+from shrubs import VARIANTS as SHRUB_VARIANTS, shrub as shrub_painter  # noqa: E402  (flowering shrubs, c: 3)
 
 warnings.filterwarnings("ignore")
 
@@ -268,9 +269,6 @@ def render_art(surf, z, grid: Grid, g, holes, trees, buildings, boundary, P, lut
     put(nw & ~own_edge, "S0")
     wat = np.isin(surf, [S["water"], S["ob_water"]])
     put(wave_mask(H, W, 0) & wat & ~own_edge, "W2")
-    if cfg and cfg.get("garden"):  # flowering shrub beds beside the course (art only, s09 / garden.py)
-        from garden import paint_garden
-        paint_garden(rgb, cfg, g, surf, Xg, Yg, ppm)
 
     # shadows: trees and buildings (sun from the upper left)
     sh_img = Image.new("L", (W, H), 0)
@@ -353,6 +351,10 @@ LIGHTHOUSES: set = set()  # building ids drawn as lighthouses (render_meta kind)
 def tree_sprite_key(tr_, i, L):
     ppm = L["ppm"]
     hk = ppm * HEIGHT_K
+    if tr_["type"] == "shrub":  # flowering shrub (trees.json c: 3): colour = index % 8, as in the game
+        w = int(np.clip(round(tr_["r"] * 2 * ppm / 2) * 2, 6, L["max_w"]))
+        h = int(np.clip(round((0.6 * w + tr_["h"] * hk) / 2) * 2, max(4, int(0.5 * w)), w + 2))
+        return "s", w, h, i % SHRUB_VARIANTS
     conif = tr_["type"] == "conifer"
     w = int(np.clip(round(tr_["r"] * 2 * ppm / L["qw"]) * L["qw"], 18, L["max_w"]))
     h = int(np.clip(round(tr_["h"] * hk / L["qh"]) * L["qh"], 24, L["max_h"]))
@@ -403,7 +405,7 @@ def main():
     make_c, make_d = conifer, deciduous  # the theme's tree painters (trees.theme_painters)
     # with blossoms (s05) the sprite variant follows the tree's index in trees.json,
     # exactly as the course view draws it, so cherries stay cherries up close
-    gidx = {id(t): k for k, t in enumerate(trees_all)} if cfg.get("blossom") else None
+    gidx = {id(t): k for k, t in enumerate(trees_all)} if (cfg.get("blossom") or cfg.get("garden")) else None
     only = {int(v) for v in os.environ.get("HOLES", "").split(",") if v.strip()}
     for lay in layouts(cfg):
         render_layout(lay, name, cfg, world, layout_dir(name, lay), holes, green_by_osm, only, LAYERS, g, surf05, base, greens,
@@ -448,7 +450,7 @@ def render_layout(lay, name, cfg, world, ldir, all_holes, green_by_osm, only, LA
                 kind, w, hh, v = tree_sprite_key(t, i if gidx is None else gidx[id(t)], L)
                 key = f"{kind}_{w}_{hh}_{v}"
                 if key not in made:
-                    made[key] = (make_c if kind == "c" else make_d)(w, hh, v)  # the theme's tree painters
+                    made[key] = (shrub_painter if kind == "s" else make_c if kind == "c" else make_d)(w, hh, v)  # the theme's tree painters
                     atlas.add(key, made[key])
                 places.append({"f": key, "x": round(t["x"], 2), "y": round(t["y"], 2)})
             aw, ah = atlas.write(outd)

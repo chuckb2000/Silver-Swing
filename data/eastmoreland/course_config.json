@@ -62,77 +62,23 @@
     "osm": [
       "w133795912"
     ],
-    "note": "Crystal Springs Rhododendron Garden (OSM way 133795912), outside the golf boundary: flowering rhododendron and azalea beds painted where the lidar canopy height model shows the shrub layer (0.6-7 m), and at half density under the taller canopy (pipeline/garden.py; art only, out of bounds). Colours from the developer's garden photos (release data-eastmoreland); species and bloom colour per bush are flair, not surveyed. Developer 2026-10-19: 'pretty and have flowers'",
+    "note": "Crystal Springs Rhododendron Garden (OSM way 133795912), outside the golf boundary and out of bounds: flowering rhododendron and azalea bushes where the lidar canopy height model shows the shrub layer (0.6-7 m), and at half density under the taller canopy (pipeline/garden.py). Exported as trees.json c: 3 and drawn from sprites/shrubs.png (design chat, 2026-10-19); each bush's colour is drawn from `colours` (weights, from the developer's garden photos) and set by its place in trees.json (index % 8). Species and colours are flair, not surveyed. Developer 2026-10-19: 'pretty and have flowers'",
     "shrub_min_m": 0.6,
     "shrub_max_m": 7.0,
     "spacing_m": 2.6,
     "r_min_m": 1.1,
     "r_max_m": 1.9,
-    "leaf": [
-      "#1f4a26",
-      "#2f6a33",
-      "#44873f"
-    ],
-    "outline": "#0f2414",
-    "flowers": [
-      [
-        "#8a1f5c",
-        "#c8338a",
-        "#ee6fb4"
-      ],
-      [
-        "#b04a77",
-        "#e47aa8",
-        "#f8b3cf"
-      ],
-      [
-        "#c7869f",
-        "#f2bfd2",
-        "#fde6ef"
-      ],
-      [
-        "#5b2e8a",
-        "#8a4fc4",
-        "#b98ae6"
-      ],
-      [
-        "#b8b8b0",
-        "#ecebe4",
-        "#ffffff"
-      ],
-      [
-        "#7d1520",
-        "#c42a33",
-        "#ef5b5f"
-      ],
-      [
-        "#b5523a",
-        "#ec7f5f",
-        "#ffb08f"
-      ],
-      null
-    ],
-    "flower_names": [
-      "magenta",
-      "pink",
-      "pale pink",
-      "purple",
-      "white",
-      "red",
-      "coral (azalea)",
-      "not in flower"
-    ],
-    "weights": [
-      3,
-      3,
-      2,
-      2.5,
-      1.5,
-      1.2,
-      1,
-      1
-    ],
-    "understory_density": 0.5
+    "understory_density": 0.5,
+    "colours": {
+      "pink": 3,
+      "magenta": 3,
+      "purple": 2.5,
+      "white": 1.5,
+      "red": 1.2,
+      "coral": 1,
+      "pale pink": 2,
+      "leaves": 1
+    }
   },
   "join_boundary_parts": {
     "max_gap_m": 16,
