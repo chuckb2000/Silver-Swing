@@ -71,11 +71,19 @@ after the merge, so two chats never overwrite each other's builds.
 
 1. **Never invent course geometry.** A feature missing from the data is an open
    item, not a guess. You may *propose* geometry derived from permitted sources
-   (lidar, NAIP, a developer-supplied georeferenced image) in
+   (lidar, NAIP, a developer-supplied georeferenced image, including Google or
+   Bing screenshots under rule 2) in
    `data/<course>/proposed/`; it goes into `edited/` only after the developer
    approves it.
-2. **No tracing or extracting geometry from Google or Bing imagery**, or from any
-   source whose terms forbid it. They may be used to look, not to measure.
+2. **Google or Bing imagery: only screenshots the developer supplies.** The
+   developer decided on 2026-10-19 to accept the terms-of-service risk of
+   tracing them (CLAUDE.md 5.1 note). Don't fetch Google or Bing imagery
+   yourself. Georeference each screenshot from ≥ 3 control points (4+
+   preferred) and report the fit error in metres; tag every feature traced
+   from it `source=google` (or `bing`), list those features in
+   validation_report.md, and never contribute them to OpenStreetMap. Prefer
+   open imagery where it is good enough. Other sources whose terms forbid
+   tracing still may not be traced.
 3. **Rebuildable:** `make course NAME=<id>` regenerates everything from `raw/` +
    `edited/` + `course_config.json` + `scorecard.csv`. No hand-edited build
    outputs.
@@ -350,8 +358,11 @@ them.
 ### 5.4 Imagery (optional)
 
 NAIP (public domain) helps check trees and trace gaps; NIR band lets you
-compute NDVI to confirm canopy. A developer screenshot of Google/Bing is for
-looking only (rule 1.2).
+compute NDVI to confirm canopy. A developer screenshot of Google/Bing may be
+traced under rule 1.2 when the open imagery is too poor (as at Indian Island).
+Another route: the developer traces Bing or Esri imagery in an OSM editor
+(iD), contributes it to OSM (permitted by Microsoft and Esri), and the course
+is re-exported from Overpass.
 
 ### 5.5 Checks on arrival (before anything else)
 
