@@ -220,9 +220,12 @@ Known Oswego-specific code, with the fix:
   "connect_fairways": false,            // optional, only where OSM is wrong: s02b runs the fairway up to the green
                                         // (true = every hole, or a list of holes); see COURSE_LESSONS.md 3
   "trees_off_fairways_m": null,         // optional: drop trees whose top is this far (m) inside a fairway (check the course first)
-  "keep_tee_trees": []                  // optional: holes ("10", or "blue 7" with layouts) that keep trees in front of the tee
+  "keep_tee_trees": [],                 // optional: holes ("10", or "blue 7" with layouts) that keep trees in front of the tee
                                         // (a deliberate tree-lined dogleg). Every other tee shot at the middle of the fairway
                                         // is cleared: s06 moves the tee within its box, s06b drops trees (COURSE_LESSONS.md 3)
+  "red_water_osm": ["r123"],            // optional: OSM water features that are red penalty areas wherever they lie,
+                                        // also outside the boundary (a river along the course; Tualatin)
+  "drop_trees": [{"x": 0, "y": 0, "reason": "..."}]  // optional: single trees (local metres) the developer asked to remove
 }
 ```
 
