@@ -1512,7 +1512,9 @@ data/highland_links/validation_report.md.
     `data-highland-links`.
 
 -   **Theme:** `coastal` (golden fescue rough, pitch pine and scrub oak,
-    beach, ocean). Surface 16 `ob_sand` for the beach and sand cliffs.
+    beach, ocean), a mown-rough band (about 2.3 m, drifting in width) around
+    each fairway, and Highland Light (OSM building parts, drawn 2x tall).
+    Surface 16 `ob_sand` for the beach and sand cliffs.
     Wind 3-14 mph. Hole 9 has a two-tier green (green model `tiers`).
 
 -   **Scorecard** (club scorecard PDF, Feb 2020, identical to the
@@ -1535,7 +1537,7 @@ data/highland_links/validation_report.md.
 
 -   **Known open items:** data/highland_links/report_notes.md (hole 1
     plays +3.8 % from the developer's tee; the hole 9 tier line is
-    modelled; tree types from leaf-off lidar; no mown-rough band).
+    modelled; tree types from leaf-off lidar; mown band and fescue play alike).
 
 **12. Repository layout**
 

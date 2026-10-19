@@ -36,6 +36,7 @@ BAYER4 = (np.array([[0, 8, 2, 10], [12, 4, 14, 6], [3, 11, 1, 9], [15, 7, 13, 5]
 SHADOW_MULT = 0.64           # ~35% black overlay
 SHADOW_DIR = np.array([0.8, 0.6])  # screen px direction (right, down)
 HEIGHT_PX_PER_M = PX_PER_M * 0.7   # vertical objects: 1.4 px per metre of height
+LIGHTHOUSE_DRAW_SCALE = 2.0        # landmark towers are drawn (and cast shadows) at 2x their height; physics keeps the real height
 
 
 def hex2rgb(h):
@@ -81,7 +82,8 @@ def build_lut(P, overrides=None):
         S["ob_sand"]: ["S0", "S1", "S2", "S2"],
     }
     for name, keys in (overrides or {}).items():
-        t[S[name]] = keys
+        if name in S:  # "rough_band" is an art role, not a surface (see rough_band_mask)
+            t[S[name]] = keys
     lut = np.zeros((32, 4, 3), np.uint8)
     for sid, names in t.items():
         for i, n in enumerate(names):
@@ -203,6 +205,129 @@ def stripe_field(world, g, holes, surf, H, W, tee):
     return stripe
 
 
+def band_width(cfg, X, Y):
+    """Width (m) of the mown-rough band at world points: cfg["rough_band_m"] on average,
+    drifting gently along the fairways (three seeded waves 14-50 m long, about +-35 %,
+    independent of the image resolution so the course art and the putting views agree)."""
+    import zlib
+    bm = float(cfg["rough_band_m"])
+    rng = np.random.default_rng(zlib.crc32(("band:" + cfg["id"]).encode()))
+    f = np.zeros_like(X, dtype=np.float64)
+    for wl, amp in ((50.0, 0.18), (29.0, 0.12), (14.0, 0.05)):
+        a = rng.uniform(0, 2 * np.pi)
+        ph = rng.uniform(0, 2 * np.pi)
+        f += amp * np.sin(2 * np.pi * (X * np.cos(a) + Y * np.sin(a)) / wl + ph)
+    return np.clip(bm * (1.0 + f), 0.6 * bm, 1.6 * bm)
+
+
+def rough_band_mask(cfg, g, surf, rasterise, X, Y, ppm):
+    """Mown rough: rough pixels within a wandering distance (band_width) of a fairway.
+    Art only; physics treats it as rough like the rest. `rasterise(geoms)` -> bool mask,
+    X / Y the world coordinates of the pixel centres, ppm pixels per metre."""
+    bm = cfg.get("rough_band_m")
+    fw = [geom for geom in g[g.kind == "fairway"].geometry if geom is not None]
+    if not bm or not fw:
+        return np.zeros(surf.shape, bool)
+    union = unary_union(fw)
+    near = rasterise([union.buffer(2.7 * bm)]) & (surf == S["rough"])
+    if not near.any():
+        return near
+    dist = ndimage.distance_transform_edt(~rasterise([union])) / ppm
+    return near & (dist <= band_width(cfg, X, Y))
+
+
+def band_lut(P, theme: dict) -> np.ndarray:
+    """4 tones for the mown-rough band (theme lut "rough_band", default the G2-G4 rough greens)."""
+    keys = (theme.get("lut") or {}).get("rough_band", ["G2", "G3", "G4", "G4"])
+    return np.array([P[k] for k in keys], np.uint8)
+
+
+def _height(tags, default=None):
+    if "height" in tags:
+        try:
+            return float(str(tags["height"]).split()[0])
+        except ValueError:
+            pass
+    if "building:levels" in tags:
+        try:
+            return 3.2 * float(tags["building:levels"]) + 2.0  # storeys plus the roof
+        except ValueError:
+            pass
+    return default
+
+
+def building_pieces(g, chm):
+    """Buildings as drawn and collided: [(poly, height m, id, kind)] in the order of g.
+
+    A building with OSM building:part features inside it is split into its parts, each
+    with its own height (height / building:levels). The tall part of a man_made=lighthouse
+    (>= 12 m) is kind "lighthouse"; everything else is "house". Heights of whole buildings
+    are as before: the height tag, else the canopy model's median over the footprint,
+    clamped to 3-14 m; parts keep their tagged height (a lighthouse tower is 20 m)."""
+    parts = g[g.kind == "building_part"]
+    out = []
+    for _, r in g[g.kind == "building"].iterrows():
+        geom = r.geometry
+        mine = [pr for _, pr in parts.iterrows() if geom.buffer(0.5).contains(pr.geometry.centroid)] if len(parts) else []
+        if mine:
+            light = r.tags.get("man_made") == "lighthouse" or r.tags.get("building") == "lighthouse"
+            for pr in mine:
+                h = _height(pr.tags, 6.0)
+                kind = "lighthouse" if light and h >= 12 else "house"
+                out.append((pr.geometry, float(np.clip(h, 3.0, 30.0)), f"{r.osm}:{pr.osm}", kind))
+            continue
+        polys = list(geom.geoms) if isinstance(geom, MultiPolygon) else [geom]
+        for poly in polys:
+            if poly.area < 4:
+                continue
+            hb = _height({k: v for k, v in r.tags.items() if k == "height"})
+            if hb is None:
+                m = rasterize([(poly, 1)], out_shape=chm.shape, transform=Affine(1, 0, 0, 0, 1, 0), fill=0, dtype="uint8").astype(bool)
+                vals = chm[m]
+                hb = float(np.median(vals)) if vals.size else 6.0
+            out.append((poly, float(np.clip(hb, 3.0, 14.0)), r.osm, "house"))
+    return out
+
+
+def draw_lighthouse(draw, P, cx, cy, rpx, hpx):
+    """A white tapered tower with a black gallery, lantern and cap (3/4 view). (cx, cy) is
+    the footprint centre in image px, rpx its radius, hpx the total height; lit from the left."""
+    rb = max(3.0, rpx)
+    rt = rb * 0.7
+    base = cy + rb * 0.55                      # the wall meets the ground on the near side
+    # the footprint itself is wall-coloured (seen from above, inside the tower)
+    draw.ellipse([cx - rb, cy - rb * 0.6, cx + rb, cy + rb * 0.6], fill=P["K3"])
+    gh = max(1.0, hpx * 0.03)
+    lh = max(4.0, hpx * 0.12)
+    cap = max(3.0, hpx * 0.06)
+    body = max(4.0, hpx - gh - lh - cap)      # hpx is the whole tower, cap included
+    ytop = base - body
+    for x in range(int(math.floor(cx - rb)), int(math.ceil(cx + rb)) + 1):
+        for y in range(int(ytop), int(base) + 1):
+            t = (base - y) / max(1.0, body)
+            r_here = rb + (rt - rb) * t
+            uu = (x + 0.5 - cx) / r_here
+            if abs(uu) <= 1:
+                draw.point((x, y), fill=P["WH"] if uu < -0.1 else (P["K4"] if uu < 0.5 else P["K3"]))
+    draw.line([(cx - rb, base), (cx - rt, ytop)], fill=P["K0"])
+    draw.line([(cx + rb, base), (cx + rt, ytop)], fill=P["K0"])
+    draw.arc([cx - rb, base - rb * 0.5, cx + rb, base + rb * 0.5], 0, 180, fill=P["K0"])
+    # gallery: a black walkway wider than the top of the tower, with a railing line
+    gw = rt + max(1.5, rb * 0.35)
+    draw.rectangle([cx - gw, ytop - gh, cx + gw, ytop], fill=P["K0"])
+    # lantern room: black frame, glass panes catching the light on the left
+    lw = max(2.0, rt * 0.8)
+    ly1 = ytop - gh
+    ly0 = ly1 - lh
+    draw.rectangle([cx - lw, ly0, cx + lw, ly1], fill=P["K0"])
+    draw.rectangle([cx - lw + 1, ly0 + 1, cx + lw - 1, ly1 - 1], fill=P["W1"])
+    draw.rectangle([cx - lw + 1, ly0 + 1, cx - 0.5, ly1 - 1], fill=P["W2"])
+    draw.line([(cx, ly0), (cx, ly1)], fill=P["K0"])
+    # cap and vent
+    draw.polygon([(cx - lw - 1, ly0), (cx + lw + 1, ly0), (cx, ly0 - cap)], fill=P["K0"])
+    draw.rectangle([cx - 0.5, ly0 - cap - 2, cx + 0.5, ly0 - cap], fill=P["K0"])
+
+
 def wave_mask(H, W, phase):
     rows = np.arange(H)[:, None]
     cols = np.arange(W)[None, :]
@@ -254,6 +379,12 @@ def main():
     t = np.where(gm_, np.clip(t, 0, 2) + np.where(checker == 1, 0, 0), t)
     t = np.clip(t, 0, 3)
     rgb = lut[surf, t]
+    tr_px = Affine(1 / PX_PER_M, 0, 0, 0, -1 / PX_PER_M, world.height)
+    Xw, Yw = np.meshgrid((np.arange(W) + 0.5) / PX_PER_M, world.height - (np.arange(H) + 0.5) / PX_PER_M)
+    mown = rough_band_mask(cfg, g, surf, lambda geoms: rasterize([(gg, 1) for gg in geoms], out_shape=(H, W), transform=tr_px, fill=0, dtype="uint8").astype(bool), Xw, Yw, PX_PER_M)
+    del Xw, Yw
+    blut = band_lut(P, load_theme(cfg["theme"]))
+    rgb[mown] = blut[t[mown]]
     # green checker as a subtle 2-colour weave
     G7b = np.array(P["G7"], np.int16) + np.array([6, 5, 4])
     sel = gm_ & (checker == 1) & (tone == 1)
@@ -270,7 +401,7 @@ def main():
     put((surf == S["cartpath"]) & (n1 < 0.04), "K2")
     rough = surf == S["rough"]
     # rough tufts: small vertical 2-px marks in the lit tone
-    tuft = rough & (n1 > 0.992)
+    tuft = rough & ~mown & (n1 > 0.992)
     tuft2 = np.zeros_like(tuft)
     tuft2[:-1] = tuft[1:]
     put(tuft | tuft2, "TUFT" if "TUFT" in P else "G5")
@@ -289,6 +420,7 @@ def main():
         own_edge |= sh != surf
     soft = edge & np.isin(surf, [S["rough"], S["fairway"], S["fringe"], S["tee"], S["ob"], S["woods"], S["range"], S["cartpath"]])
     rgb[soft] = lut[surf[soft], 0]
+    rgb[soft & mown] = blut[0]
     put(own_edge & (surf == S["bunker"]), "S0")
     put(own_edge & np.isin(surf, [S["water"], S["ob_water"]]), "W0")
     put(own_edge & (surf == S["green"]), "G6")
@@ -329,27 +461,11 @@ def main():
             pts.append((ex + px_ * math.cos(ang) - py_ * math.sin(ang), ey + px_ * math.sin(ang) + py_ * math.cos(ang)))
         d.polygon(pts, fill=255)
     chm = np.load(bdir / "chm_local.npy")
-    buildings = []
-    for _, r in g[g.kind == "building"].iterrows():
-        geom = r.geometry
-        polys = list(geom.geoms) if isinstance(geom, MultiPolygon) else [geom]
-        for poly in polys:
-            if poly.area < 4:
-                continue
-            hb = None
-            if "height" in r.tags:
-                try:
-                    hb = float(str(r.tags["height"]).split()[0])
-                except ValueError:
-                    hb = None
-            if hb is None:
-                m = rasterize([(poly, 1)], out_shape=chm.shape, transform=Affine(1, 0, 0, 0, 1, 0), fill=0, dtype="uint8").astype(bool)
-                vals = chm[m]
-                hb = float(np.median(vals)) if vals.size else 6.0
-            hb = float(np.clip(hb, 3.0, 14.0))
-            buildings.append((poly, hb, r.osm))
-    for poly, hb, _ in buildings:
-        wall = hb * HEIGHT_PX_PER_M
+    pieces = building_pieces(g, chm)
+    kinds = {o: k for _, _, o, k in pieces}
+    buildings = [(poly, hb, o) for poly, hb, o, _ in pieces]
+    for poly, hb, o in buildings:
+        wall = hb * HEIGHT_PX_PER_M * (LIGHTHOUSE_DRAW_SCALE if kinds.get(o) == "lighthouse" else 1.0)
         L = wall * 0.9
         pp = [(x * PX_PER_M, (world.height - y) * PX_PER_M) for x, y in poly.exterior.coords]
         for tt in np.linspace(0, 1, 7):
@@ -366,6 +482,10 @@ def main():
     buildings.sort(key=lambda b: -b[0].centroid.y)  # north first
     for poly, hb, osm in buildings:
         wall = max(2, int(round(hb * HEIGHT_PX_PER_M)))
+        if kinds.get(osm) == "lighthouse":
+            c = poly.centroid
+            draw_lighthouse(draw, P, c.x * PX_PER_M, (world.height - c.y) * PX_PER_M, math.sqrt(poly.area / math.pi) * PX_PER_M, wall * LIGHTHOUSE_DRAW_SCALE)
+            continue
         pp = [(x * PX_PER_M, (world.height - y) * PX_PER_M) for x, y in poly.exterior.coords]
         roof = [(x, y - wall) for x, y in pp]
         # walls: one quad per footprint edge that faces the viewer (down)
@@ -431,7 +551,7 @@ def main():
             rgb[row - 2, col] = P["K2"]
 
     Image.fromarray(rgb).save(art / "terrain.png")
-    meta = {"buildings": [{"osm": o, "h": round(h, 1)} for _, h, o in buildings]}
+    meta = {"buildings": [{"osm": o, "h": round(h, 1), **({"kind": kinds[o]} if kinds.get(o) != "house" else {})} for _, h, o in buildings]}
     write_json(art / "render_meta.json", meta)
     print(f"[s09] terrain {W}x{H}, {len(np.unique(rgb.reshape(-1, 3), axis=0))} colours, {len(buildings)} buildings")
 

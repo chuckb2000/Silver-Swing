@@ -7,7 +7,8 @@
   "theme": "coastal",
   "epsg": 32619,
   "osm_sources": [
-    "raw/overpass.geojson"
+    "raw/overpass.geojson",
+    "raw/Highland_Links.gpkg"
   ],
   "boundary_name": "Highland Links",
   "dtm": {
@@ -40,6 +41,7 @@
   "flatten_wetlands": false,
   "cliff_sand_slope_pct": 45,
   "beach_max_m": 4.0,
+  "rough_band_m": 2.3,
   "tee_sets": [
     {
       "name": "Blue",

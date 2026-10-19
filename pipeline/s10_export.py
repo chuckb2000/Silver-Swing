@@ -264,6 +264,14 @@ def main():
     buildings = []
     for _, r in g[g.kind == "building"].iterrows():
         geom = r.geometry
+        parts = [o for o in bh_by_osm if o.startswith(f"{r.osm}:")]
+        if parts:  # OSM building parts (s09): each collides at its own height, e.g. a lighthouse tower
+            for o in parts:
+                poly = g[g.osm == o.split(":", 1)[1]].geometry.iloc[0]
+                if boundary.buffer(40).intersects(poly):
+                    buildings.append({"id": o, "h": bh_by_osm[o], "inside": bool(boundary.intersects(poly)),
+                                      "poly": [[rnd(x, 1), rnd(y, 1)] for x, y in poly.simplify(0.3).exterior.coords]})
+            continue
         polys = list(geom.geoms) if isinstance(geom, MultiPolygon) else [geom]
         for poly in polys:
             if poly.area < 4:
