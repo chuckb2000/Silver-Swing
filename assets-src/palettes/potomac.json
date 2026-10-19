@@ -1,0 +1,19 @@
+{
+  "name": "Potomac (Washington DC riverside park)",
+  "note": "Course theme palette (<= 32 colours), same keys as pnw.json. Warmer late-summer turf, sandy-white bunkers, grey-green river water. Cherry-blossom pinks live in the tree sprites (assets-src/trees_potomac.py). Shadows are a 35% black overlay on top of these.",
+  "colors": {
+    "G0": "#1d3a22", "G1": "#27502b", "G2": "#326833", "G3": "#3f7d38",
+    "G4": "#4c913e", "G5": "#5aa345", "G6": "#69b44d", "G7": "#79c357",
+    "G8": "#8ad064", "G9": "#aede84",
+    "L0": "#5b7d3d", "L1": "#6c9143", "L2": "#7fa44d",
+    "S0": "#c9b48a", "S1": "#e9dbb4", "S2": "#f7efd8",
+    "W0": "#365d6b", "W1": "#467384", "W2": "#78a0ab",
+    "K0": "#26272d", "K1": "#55565e", "K2": "#7c7d85", "K3": "#bbb29e", "K4": "#ded7c5",
+    "B0": "#4a3322", "B1": "#704d34", "B2": "#8f5d43",
+    "R0": "#5d6470", "WH": "#f6f6f2"
+  },
+  "trees": {
+    "conifer": "trees_potomac:conifer",
+    "deciduous": "trees_potomac:deciduous"
+  }
+}

@@ -9,28 +9,19 @@ from __future__ import annotations
 import geopandas as gpd
 from shapely.geometry import Point
 
-import csv
-
-from common import build_dir, course_dir, course_name_from_argv
+from common import build_dir, course_name_from_argv, layout_holes, layouts, load_config, read_card
 
 
-def main():
-    name = course_name_from_argv()
-    g = gpd.read_file(build_dir(name) / "course_local.geojson")
-    holes = g[g.kind == "hole"].copy()
-    holes["ref"] = holes.tags.apply(lambda t: int(t.get("ref", 0)))
-    holes = holes.sort_values("ref")
+def audit_layout(g, holes, n_holes, used_greens):
+    """Rows and issues for one layout's holes (adds the greens it uses to used_greens)."""
     greens, tees, fairways = g[g.kind == "green"], g[g.kind == "tee"], g[g.kind == "fairway"]
     bunkers = g[g.kind == "bunker"]
     water = g[g.kind.isin(["lateral_water_hazard", "water_hazard"])]
     pins = g[g.kind == "pin"]
     rows, issues = [], []
-    with open(course_dir(name) / "scorecard.csv") as f:
-        n_holes = len(list(csv.DictReader(f)))
     refs = sorted(holes.ref.tolist())
     if refs != list(range(1, n_holes + 1)):
         issues.append(f"hole refs are {refs}, expected 1-{n_holes} (scorecard.csv)")
-    used_greens = set()
     for _, h in holes.iterrows():
         L = h.geometry
         start, end = Point(L.coords[0]), Point(L.coords[-1])
@@ -57,12 +48,46 @@ def main():
             issues.append(f"hole {h.ref}: hole line has no par tag")
         if "handicap" in h.tags:
             issues.append(f"hole {h.ref}: hole line carries handicap={h.tags['handicap']} (compare with scorecard)")
+    return rows, issues
+
+
+HEAD = ["| hole | par (OSM) | hole line | tee at line start | fairway | green | pin | bunkers <40 m | water <40 m |",
+        "|---|---|---|---|---|---|---|---|---|"]
+
+
+def main():
+    name = course_name_from_argv()
+    cfg = load_config(name)
+    g = gpd.read_file(build_dir(name) / "course_local.geojson")
+    greens, tees, fairways = g[g.kind == "green"], g[g.kind == "tee"], g[g.kind == "fairway"]
+    bunkers = g[g.kind == "bunker"]
+    water = g[g.kind.isin(["lateral_water_hazard", "water_hazard"])]
+    pins = g[g.kind == "pin"]
+    used_greens = set()
+    md = ["# OSM coverage audit", ""]
+    issues = []
+    lays = layouts(cfg)
+    for lay in lays:
+        holes = layout_holes(g, lay)
+        n_holes = len(read_card(name, lay))
+        rows, iss = audit_layout(g, holes, n_holes, used_greens)
+        if lay["shared"]:
+            md += [f"## {lay['name']}", "", *HEAD, *rows, ""]
+            issues += [f"{lay['short'] or lay['id']}: {s}" for s in iss]
+        else:
+            md += [*HEAD, *rows]
+            issues += iss
+    if lays[0]["shared"]:
+        assigned = set()
+        for lay in lays:
+            assigned |= set(layout_holes(g, lay).index)
+        for i, h in g[(g.kind == "hole") & ~g.index.isin(assigned)].iterrows():
+            issues.append(f"hole line {h.osm} (ref {h.tags.get('ref', '-')}) belongs to no layout (not inside any layout boundary) -> not played")
     extra = [i for i in greens.index if i not in used_greens]
     for i in extra:
         c = greens.loc[i].geometry.centroid
         issues.append(f"green {greens.loc[i].osm} at ({c.x:.0f}, {c.y:.0f}) is not the end of any hole line (practice green?) -> treated as a wrong green")
-    md = ["# OSM coverage audit", "", "| hole | par (OSM) | hole line | tee at line start | fairway | green | pin | bunkers <40 m | water <40 m |",
-          "|---|---|---|---|---|---|---|---|---|", *rows, "", "## Missing or suspect features", ""]
+    md += ["", "## Missing or suspect features", ""]
     md += [f"- {s}" for s in issues] or ["- none"]
     md += ["", f"Totals: {len(tees)} tees, {len(greens)} greens, {len(fairways)} fairways, {len(bunkers)} bunkers, "
            f"{len(water)} water hazards, {len(pins)} pins, {int((g.kind == 'cartpath').sum())} cart paths, "

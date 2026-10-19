@@ -20,7 +20,7 @@ import numpy as np
 from PIL import Image
 from shapely.geometry import MultiPolygon, Polygon
 
-from common import PX_PER_M, ROOT, SURF, World, build_dir, course_dir, course_name_from_argv, load_config, out_dir, rnd, write_json
+from common import build_dir, course_dir, course_name_from_argv, layout_dir, layouts, load_config, out_dir, play_boundary, PX_PER_M, rnd, ROOT, SURF, World, write_json
 
 warnings.filterwarnings("ignore")
 
@@ -28,6 +28,9 @@ CHUNK = 512
 # optional per-theme minimap colours (palettes/<theme>.json "minimap" / "minimap_trees"), set in main()
 MINIMAP: dict = {}
 MINIMAP_TREES: dict = {}
+# minimap tree colours (dark, lit) when the theme doesn't set them; cherries are the potomac blossoms
+MAP_TREE_COLOURS = {"conifer": ([31, 74, 50], [58, 112, 74]), "deciduous": ([47, 96, 44], [80, 140, 66]),
+                    "cherry": ([196, 96, 140], [244, 178, 206])}
 
 
 def to_palette_png(arr: np.ndarray, path):
@@ -101,11 +104,10 @@ def render_map(surf, z_px, trees, world, f, region=None):
         yy, xx = np.mgrid[max(0, y0):min(Hm, y1), max(0, x0):min(Wm, x1)]
         d = np.hypot(xx + 0.5 - cx, yy + 0.5 - cy)
         inside = d <= r
-        if MINIMAP_TREES:
+        if t["type"] in MINIMAP_TREES:
             dark, lite = (np.array(hex_rgb(c)) for c in MINIMAP_TREES[t["type"]])
         else:
-            dark = np.array([31, 74, 50] if t["type"] == "conifer" else [47, 96, 44])
-            lite = np.array([58, 112, 74] if t["type"] == "conifer" else [80, 140, 66])
+            dark, lite = (np.array(c) for c in MAP_TREE_COLOURS.get(t["type"], MAP_TREE_COLOURS["deciduous"]))
         hl = (xx + 0.5 - cx + yy + 0.5 - cy) < -r * 0.35
         sub = img[yy, xx]
         sub[inside] = dark
@@ -124,6 +126,9 @@ def update_registry(course: dict):
         "theme": course["theme"], "holes": len(course["holes"]), "par": course["par"], "defaultTee": course["defaultTee"],
         "totalYd": default["totalYd"], "teeSets": [t["name"] for t in course["teeSets"]],
     }
+    if course.get("group"):
+        # one of several courses on the same grounds (East Potomac's Blue / White / Red)
+        entry.update({k: course[k] for k in ("group", "groupName", "layout") if k in course})
     # update in place, new courses at the end: the first course stays the default for new players
     ids = [c["id"] for c in reg["courses"]]
     if entry["id"] in ids:
@@ -133,82 +138,29 @@ def update_registry(course: dict):
     write_json(path, reg, indent=1)
 
 
-def main():
-    name = course_name_from_argv()
-    cfg = load_config(name)
-    world = World(cfg)
-    cdir = course_dir(name)
-    bdir = build_dir(name)
-    out = out_dir(name)
-    theme = json.load(open(ROOT / "assets-src" / "palettes" / f"{cfg['theme']}.json"))
-    MINIMAP.update(theme.get("minimap", {}))
-    MINIMAP_TREES.update(theme.get("minimap_trees", {}))
-    if (out / "terrain").exists():
-        shutil.rmtree(out / "terrain")
-    (out / "terrain").mkdir(parents=True)
-    (out / "maps").mkdir(exist_ok=True)
-
-    # terrain chunks ----------------------------------------------------------
-    art = np.array(Image.open(bdir / "art" / "terrain.png").convert("RGB"))
-    H, W = art.shape[:2]
-    cols, rows = math.ceil(W / CHUNK), math.ceil(H / CHUNK)
-    for j in range(rows):
-        for i in range(cols):
-            to_palette_png(art[j * CHUNK:(j + 1) * CHUNK, i * CHUNK:(i + 1) * CHUNK], out / "terrain" / f"c_{i}_{j}.png")
-    # putting views (s09b): high-resolution green art and tree atlases
+def export_greens(src_dir, out):
+    """Copy one layout's putting views (s09b) into its course folder."""
     if (out / "greens").exists():
         shutil.rmtree(out / "greens")
-    (out / "greens").mkdir()
-    gv_path = bdir / "greens" / "green_views.json"
+    (out / "greens").mkdir(parents=True)
+    gv_path = src_dir / "greens" / "green_views.json"
     green_views = json.load(open(gv_path)) if gv_path.exists() else []
     for v in green_views:
         for layer in ("far", "near", "close"):
             for key in ("file", "trees", "treesImage"):
-                src = bdir / v[layer][key]
+                src = src_dir / v[layer][key]
                 if key == "file":
                     to_palette_png(np.array(Image.open(src).convert("RGB")), out / v[layer][key])
                 else:
                     shutil.copy(src, out / v[layer][key])
+    return green_views
 
-    # surface map -------------------------------------------------------------
-    surf = np.load(bdir / "surface.npy")
-    Image.fromarray(surf, "L").save(out / "surface.png", optimize=True)
-    shutil.copy(bdir / "surface_legend.json", out / "surface_legend.json")
 
-    # heightmap ------------------------------------------------------------------
-    hb = np.load(bdir / "height_base.npy").astype(np.float64)
-    zmin, zmax = float(hb.min()), float(hb.max())
-    q = np.round((hb - zmin) / (zmax - zmin) * 65535).astype(np.uint16)
-    q = np.flipud(q)  # row 0 = north
-    rgb = np.zeros(q.shape + (3,), np.uint8)
-    rgb[..., 0] = q >> 8
-    rgb[..., 1] = q & 255
-    Image.fromarray(rgb, "RGB").save(out / "height.png", optimize=True)
-    write_json(out / "height.json", {"cols": int(q.shape[1]), "rows": int(q.shape[0]), "res": 1.0,
-                                      "min": round(zmin, 4), "max": round(zmax, 4), "encoding": "R*256+G, row0=north",
-                                      "samples": [[i, j, round(float(hb[j, i]), 4)] for i, j in
-                                                  ((round(f * (hb.shape[1] - 1)), round(f * (hb.shape[0] - 1))) for f in (0.1, 0.5, 0.9))]})
-    shutil.copy(bdir / "heightmap.png", out / "height16.png") if False else None
-
-    # trees -------------------------------------------------------------------
-    trees = json.load(open(bdir / "trees.json"))
-    write_json(out / "trees.json", {
-        "x": [t["x"] for t in trees], "y": [t["y"] for t in trees], "h": [t["h"] for t in trees],
-        "r": [t["r"] for t in trees], "c": [1 if t["type"] == "conifer" else 0 for t in trees],
-    })
-
-    # maps --------------------------------------------------------------------
-    z_px = np.load(bdir / "z_px.npy")
-    overview = render_map(surf, z_px, trees, world, 4)
-    to_palette_png(overview, out / "maps" / "overview_2m.png") if False else Image.fromarray(overview).save(out / "maps" / "overview_2m.png", optimize=True)
-
-    g = gpd.read_file(bdir / "course_local.geojson")
-    holes = json.load(open(bdir / "holes.json"))
-    greens = json.load(open(bdir / "greens.json"))
-    green_by_osm = {gm["id"]: gm for gm in greens}
+def export_minimaps(holes, tee_of, surf, z_px, trees, world, green_by_osm, out):
+    (out / "maps").mkdir(parents=True, exist_ok=True)
     minimaps = []
     for h in holes:
-        t = h["tees"][cfg["default_tee"]]
+        t = h["tees"][tee_of]
         pts = np.array(t["centerline"] + [h["pin"]])
         gpoly = Polygon(green_by_osm[h["green_osm"]]["poly"])
         gb = gpoly.bounds
@@ -245,9 +197,77 @@ def main():
         Image.fromarray(img).save(out / "maps" / fname, optimize=True)
         minimaps.append({"hole": h["number"], "file": f"maps/{fname}", "x0": rnd(mx0, 3), "y1": rnd(my1, 3), "mPerPx": mpp,
                          "w": int(img.shape[1]), "h": int(img.shape[0])})
+    return minimaps
 
-    # course.json -------------------------------------------------------------
-    boundary = g[g.kind == "boundary"].geometry.iloc[0]
+
+def main():
+    name = course_name_from_argv()
+    cfg = load_config(name)
+    world = World(cfg)
+    cdir = course_dir(name)
+    bdir = build_dir(name)
+    lays = layouts(cfg)
+    shared = lays[0]["shared"]
+    out = out_dir(name)
+    theme = json.load(open(ROOT / "assets-src" / "palettes" / f"{cfg['theme']}.json"))
+    MINIMAP.update(theme.get("minimap", {}))
+    MINIMAP_TREES.update(theme.get("minimap_trees", {}))
+    if (out / "terrain").exists():
+        shutil.rmtree(out / "terrain")
+    (out / "terrain").mkdir(parents=True)
+    (out / "maps").mkdir(exist_ok=True)
+
+    # terrain chunks ----------------------------------------------------------
+    art = np.array(Image.open(bdir / "art" / "terrain.png").convert("RGB"))
+    H, W = art.shape[:2]
+    cols, rows = math.ceil(W / CHUNK), math.ceil(H / CHUNK)
+    for j in range(rows):
+        for i in range(cols):
+            to_palette_png(art[j * CHUNK:(j + 1) * CHUNK, i * CHUNK:(i + 1) * CHUNK], out / "terrain" / f"c_{i}_{j}.png")
+    # putting views (s09b): high-resolution green art and tree atlases
+    if not shared:
+        green_views = export_greens(bdir, out)
+    elif (out / "greens").exists():
+        shutil.rmtree(out / "greens")
+
+    # surface map -------------------------------------------------------------
+    surf = np.load(bdir / "surface.npy")
+    Image.fromarray(surf, "L").save(out / "surface.png", optimize=True)
+    shutil.copy(bdir / "surface_legend.json", out / "surface_legend.json")
+
+    # heightmap ------------------------------------------------------------------
+    hb = np.load(bdir / "height_base.npy").astype(np.float64)
+    zmin, zmax = float(hb.min()), float(hb.max())
+    q = np.round((hb - zmin) / (zmax - zmin) * 65535).astype(np.uint16)
+    q = np.flipud(q)  # row 0 = north
+    rgb = np.zeros(q.shape + (3,), np.uint8)
+    rgb[..., 0] = q >> 8
+    rgb[..., 1] = q & 255
+    Image.fromarray(rgb, "RGB").save(out / "height.png", optimize=True)
+    write_json(out / "height.json", {"cols": int(q.shape[1]), "rows": int(q.shape[0]), "res": 1.0,
+                                      "min": round(zmin, 4), "max": round(zmax, 4), "encoding": "R*256+G, row0=north",
+                                      "samples": [[i, j, round(float(hb[j, i]), 4)] for i, j in
+                                                  ((round(f * (hb.shape[1] - 1)), round(f * (hb.shape[0] - 1))) for f in (0.1, 0.5, 0.9))]})
+
+    # trees -------------------------------------------------------------------
+    # c: 1 = conifer, 2 = flowering cherry (potomac theme; the game reads anything but 1 as deciduous)
+    trees = json.load(open(bdir / "trees.json"))
+    write_json(out / "trees.json", {
+        "x": [t["x"] for t in trees], "y": [t["y"] for t in trees], "h": [t["h"] for t in trees],
+        "r": [t["r"] for t in trees], "c": [{"conifer": 1, "cherry": 2}.get(t["type"], 0) for t in trees],
+    })
+
+    # maps --------------------------------------------------------------------
+    z_px = np.load(bdir / "z_px.npy")
+    overview = render_map(surf, z_px, trees, world, 4)
+    Image.fromarray(overview).save(out / "maps" / "overview_2m.png", optimize=True)
+
+    g = gpd.read_file(bdir / "course_local.geojson")
+    greens = json.load(open(bdir / "greens.json"))
+    green_by_osm = {gm["id"]: gm for gm in greens}
+
+    # world-wide parts of course.json -------------------------------------------
+    boundary = play_boundary(g, cfg)
     if isinstance(boundary, MultiPolygon):
         boundary = max(boundary.geoms, key=lambda p: p.area)
     water = []
@@ -280,41 +300,57 @@ def main():
                 continue
             buildings.append({"id": r.osm, "h": bh_by_osm.get(r.osm, 6.0), "inside": bool(boundary.intersects(poly)),
                               "poly": [[rnd(x, 1), rnd(y, 1)] for x, y in poly.simplify(0.3).exterior.coords]})
-    hole_out = []
-    for h in holes:
-        t = h["tees"][cfg["default_tee"]]
-        gm = green_by_osm[h["green_osm"]]
-        hole_out.append({
-            "number": h["number"], "par": h["par"], "handicap": h["handicap"],
-            "tees": {ts: {"x": tv["x"], "y": tv["y"], "yd": round(tv["adjusted_yd"]), "adjYd": tv["adjusted_yd"], "realYd": tv["real_yd"], "cardYd": tv["card_yd"],
-                          "centerline": tv["centerline"]} for ts, tv in h["tees"].items()},
-            "greenId": h["green_osm"], "greenCenter": h["green_center"], "pin": h["pin"],
-        })
-    course = {
-        "id": cfg["id"], "name": cfg["name"], "location": cfg["location"], "state": cfg["state"],
-        "architects": cfg["architects"],
-        "theme": cfg["theme"],
-        "attribution": list(cfg["attribution"]),
-        "world": {"width": world.width, "height": world.height, "pxPerM": PX_PER_M, "utmOrigin": [world.x0, world.y0], "epsg": world.epsg},
-        "teeSets": [{"name": t["name"], "rating": t["rating"], "slope": t["slope"], "totalYd": t["total_yd"]} for t in cfg["tee_sets"] if t.get("playable")],
-        "defaultTee": cfg["default_tee"],
-        "par": sum(h["par"] for h in holes),
-        "holes": hole_out,
-        "greens": [{k: v for k, v in gm.items() if k != "check"} for gm in greens],
-        "water": water,
-        "boundary": [[rnd(x), rnd(y)] for x, y in boundary.exterior.coords],
-        "buildings": buildings,
-        "terrain": {"chunk": CHUNK, "cols": cols, "rows": rows, "pattern": "terrain/c_{i}_{j}.png"},
-        "waterFrames": [],  # water is drawn still (playtest: no animation needed)
-        "greenViews": green_views,
-        "wind": cfg.get("wind_mph", {"minMph": 1, "maxMph": 7}),
-        "height": {"file": "height.png", "meta": "height.json"},
-        "surface": {"file": "surface.png", "ids": SURF, "obIds": [v for k, v in SURF.items() if k.startswith("ob") or k == "range"]},
-        "trees": {"file": "trees.json"},
-        "maps": {"overview": "maps/overview_2m.png", "overviewMPerPx": 2, "holes": minimaps},
-    }
-    write_json(out / "course.json", course)
-    update_registry(course)
+
+    for lay in lays:
+        ldir = layout_dir(name, lay)
+        lout = out_dir(lay["id"]) if shared else out
+        holes = json.load(open(ldir / "holes.json"))
+        if shared:
+            for f in ("maps", "terrain"):
+                if (lout / f).exists():
+                    shutil.rmtree(lout / f)
+            green_views = export_greens(ldir, lout)
+            shutil.copy(out / "trees.json", lout / "trees.json")    # the game loads these two from the course folder
+            shutil.copy(out / "height.json", lout / "height.json")
+        minimaps = export_minimaps(holes, lay["default_tee"], surf, z_px, trees, world, green_by_osm, lout)
+        hole_out = []
+        for h in holes:
+            hole_out.append({
+                "number": h["number"], "par": h["par"], "handicap": h["handicap"],
+                "tees": {ts: {"x": tv["x"], "y": tv["y"], "yd": round(tv["adjusted_yd"]), "adjYd": tv["adjusted_yd"], "realYd": tv["real_yd"], "cardYd": tv["card_yd"],
+                              "centerline": tv["centerline"]} for ts, tv in h["tees"].items()},
+                "greenId": h["green_osm"], "greenCenter": h["green_center"], "pin": h["pin"],
+            })
+        # shared world files live in the data folder's own course folder (courses/<id>/)
+        pre = f"../{cfg['id']}/" if shared else ""
+        mine = {h["green_osm"]: h["number"] for h in holes}
+        course = {
+            "id": lay["id"], "name": lay["name"], "location": cfg["location"], "state": cfg["state"],
+            "architects": cfg["architects"],
+            "theme": cfg["theme"],
+            "attribution": list(cfg["attribution"]),
+            "world": {"width": world.width, "height": world.height, "pxPerM": PX_PER_M, "utmOrigin": [world.x0, world.y0], "epsg": world.epsg},
+            "teeSets": [{"name": t["name"], "rating": t["rating"], "slope": t["slope"], "totalYd": t["total_yd"]} for t in lay["tee_sets"] if t.get("playable")],
+            "defaultTee": lay["default_tee"],
+            "par": sum(h["par"] for h in holes),
+            "holes": hole_out,
+            "greens": [{k: (v if k != "hole" or not shared else mine.get(gm["id"])) for k, v in gm.items() if k != "check"} for gm in greens],
+            "water": water,
+            "boundary": [[rnd(x), rnd(y)] for x, y in boundary.exterior.coords],
+            "buildings": buildings,
+            "terrain": {"chunk": CHUNK, "cols": cols, "rows": rows, "pattern": pre + "terrain/c_{i}_{j}.png"},
+            "waterFrames": [],  # water is drawn still (playtest: no animation needed)
+            "greenViews": green_views,
+            "wind": cfg.get("wind_mph", {"minMph": 1, "maxMph": 7}),
+            "height": {"file": pre + "height.png", "meta": "height.json"},
+            "surface": {"file": pre + "surface.png", "ids": SURF, "obIds": [v for k, v in SURF.items() if k.startswith("ob") or k == "range"]},
+            "trees": {"file": "trees.json"},
+            "maps": {"overview": pre + "maps/overview_2m.png", "overviewMPerPx": 2, "holes": minimaps},
+        }
+        if shared:
+            course.update({"group": cfg["id"], "groupName": cfg["name"], "layout": lay.get("short") or lay["name"]})
+        write_json(lout / "course.json", course)
+        update_registry(course)
 
     # validation report -------------------------------------------------------
     table = (bdir / "validation_table.md").read_text()
@@ -322,6 +358,9 @@ def main():
     trees_rep = json.load(open(bdir / "trees_report.json"))
     greens_rep = (bdir / "greens_report.md").read_text()
     adjustments = json.load(open(cdir / "adjustments.json"))
+    if isinstance(adjustments, dict):  # several layouts: {layout id: [...]}
+        name_of = {l_["id"]: l_.get("short") or l_["id"] for l_ in lays}
+        adjustments = [dict(a, tee_set=f"{name_of[lid]} course, {a['tee_set']}") for lid, lst in adjustments.items() for a in lst]
     # course-specific open items and notes, written by hand (optional)
     notes_path = cdir / "report_notes.md"
     spec_items = ["", notes_path.read_text().strip()] if notes_path.exists() else []
@@ -333,15 +372,18 @@ def main():
         lines.append("- none")
     lines += ["", f"## Tree detection ({trees_rep['source']})", "",
               f"- {trees_rep['detected']} trees detected in the world extent ({trees_rep['inside_course']} inside the course), "
-              f"{trees_rep['conifer']} conifers / {trees_rep['deciduous']} deciduous; median height {trees_rep['height_p50_m']:.1f} m, max {trees_rep['height_max_m']:.1f} m.",
+              f"{trees_rep['conifer']} conifers / {trees_rep['deciduous']} deciduous"
+              + (f" / {trees_rep['cherry']} flowering cherries" if "cherry" in trees_rep else "")
+              + f"; median height {trees_rep['height_p50_m']:.1f} m, max {trees_rep['height_max_m']:.1f} m.",
               f"- Dropped: {trees_rep['dropped']['building']} tops on building footprints, {trees_rep['dropped']['lake']} over the lake, {trees_rep['dropped']['tiny']} tiny crowns.",
               f"- Dropped on playing surfaces (spec 5.4): {len(trees_rep['dropped_on_playing_surfaces'])} -> " + ", ".join(f"{d['on']} {d['osm']} ({d['h']} m)" for d in trees_rep['dropped_on_playing_surfaces']),
               f"- OSM natural=tree points matched by a detected tree within 4 m: {trees_rep['osm_tree_points_matched_within_4m']} of {trees_rep['osm_tree_points']}.",
               f"- {trees_rep['type_method']}",
               "", greens_rep.strip(), "", audit.strip(), ""]
     (cdir / "validation_report.md").write_text("\n".join(lines) + "\n")
-    sizes = sum(p.stat().st_size for p in out.rglob("*") if p.is_file())
-    print(f"[s10] exported to {out.relative_to(ROOT)}: {cols}x{rows} chunks, {len(trees)} trees, {len(buildings)} buildings, {sizes / 1e6:.1f} MB total")
+    outs = [out] + ([out_dir(l_["id"]) for l_ in lays] if shared else [])
+    sizes = sum(p.stat().st_size for o in outs for p in o.rglob("*") if p.is_file())
+    print(f"[s10] exported to {', '.join(str(o.relative_to(ROOT)) for o in outs)}: {cols}x{rows} chunks, {len(trees)} trees, {len(buildings)} buildings, {sizes / 1e6:.1f} MB total")
 
 
 if __name__ == "__main__":

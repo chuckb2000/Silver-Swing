@@ -5,6 +5,7 @@ import { app } from '../app';
 import { flushUploads } from '../save/online';
 import { addToBoard, LeaderboardEntry, saveSettings } from '../save/store';
 import { loadCourse } from '../data/courses';
+import { teeFor } from '../data/registry';
 import { clearSnapshot, peekSnapshot, restoreRound } from '../save/snapshot';
 import { isCasual, newSeed, Round, RoundConfig } from '../systems/game/round';
 import { totals } from '../systems/rules/scoring';
@@ -18,7 +19,7 @@ export function startRound(scene: Phaser.Scene, len: RoundLength) {
   const s = app.settings;
   const cfg: RoundConfig = {
     courseId: app.course!.json.id,
-    tee: app.course!.json.defaultTee,
+    tee: teeFor(app.course!.json, s.tees),
     holes: holesFor(len),
     playerName: s.playerName || 'player',
     seed: newSeed(),

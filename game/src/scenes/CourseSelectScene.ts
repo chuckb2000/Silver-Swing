@@ -2,21 +2,26 @@
 // then that state's courses as cards - a close crop of the course's own art
 // around a signature green (sprites/cards/<id>.png, assets-src/course_cards.py)
 // with the course's logo (sprites/logos/<id>.png, assets-src/logos.py).
+// Several courses at one place (index.json `group`, e.g. East Potomac Blue /
+// White / Red) show as one card for the place; it opens the place's courses.
 // Used before a new round (purpose 'play': loads the course, then the
 // new-round screen) and by the leaderboard (purpose 'board': just picks).
 
 import Phaser from 'phaser';
 import { app } from '../app';
-import { coursesByState, CourseInfo, stateOf } from '../data/registry';
+import { courseEntries, coursesByState, CourseInfo, stateOf } from '../data/registry';
 import { Button, COLORS, Panel, setTxt, txt } from '../ui/widgets';
 import { useCourse } from './flow';
 import { ensureBg, MenuScene } from './menu';
 
 type Purpose = 'play' | 'board';
+/** A card: a course, or a place with several courses. */
+interface Tile { art: string; logos: string[]; name: string; sub: string; on: boolean; tap: () => void }
 interface Data { purpose?: Purpose; from?: string; courseId?: string }
 
-let view: 'states' | 'courses' = 'states';
+let view: 'states' | 'courses' | 'group' = 'states';
 let stateSel = '';
+let groupSel = '';
 let page = 0;
 const tried = new Set<string>(); // card / logo textures already requested (missing files aren't retried)
 
@@ -39,6 +44,7 @@ export class CourseSelectScene extends MenuScene {
     const cur = app.courses.find((c) => c.id === this.current);
     // open on the current course's state, at the state buttons
     stateSel = cur ? stateOf(cur) : '';
+    groupSel = cur?.group ?? '';
     view = 'states';
     page = 0;
     this.busy = false;
@@ -46,6 +52,7 @@ export class CourseSelectScene extends MenuScene {
 
   protected back() {
     if (this.busy) return;
+    if (view === 'group') { view = 'courses'; page = 0; this.rebuild(); return; }
     if (view === 'courses') { view = 'states'; page = 0; this.rebuild(); return; }
     if (this.from === 'leaderboard') this.scene.start('leaderboard', { courseId: this.current });
     else this.scene.start(this.from);
@@ -58,9 +65,13 @@ export class CourseSelectScene extends MenuScene {
     const x0 = Math.round((W - pw) / 2), y0 = 4;
     this.root.add(new Panel(this, x0, y0, pw, ph, 0.9));
     const groups = coursesByState(app.courses);
-    if (view === 'courses' && !groups.some((g) => g.code === stateSel)) view = 'states';
+    if (view !== 'states' && !groups.some((g) => g.code === stateSel)) view = 'states';
+    const state = groups.find((g) => g.code === stateSel);
+    const group = view === 'group' && state ? courseEntries(state.courses).find((e) => e.kind === 'group' && e.id === groupSel) : undefined;
+    if (view === 'group' && (!group || group.kind !== 'group')) view = 'courses';
     if (view === 'states') this.buildStates(groups, x0, y0, pw, ph);
-    else this.buildCourses(groups.find((g) => g.code === stateSel)!, x0, y0, pw, ph);
+    else if (view === 'courses') this.buildCourses(state!, x0, y0, pw, ph);
+    else if (group && group.kind === 'group') this.buildGroup(group, x0, y0, pw, ph);
     if (this.busy) {
       this.root.add(this.add.rectangle(x0, y0, pw, ph, 0x081018, 0.7).setOrigin(0, 0));
       this.root.add(txt(this, W / 2, H / 2 - 4, 'loading course...', { origin: [0.5, 0], scale: 2, color: COLORS.yellow }));
@@ -94,7 +105,31 @@ export class CourseSelectScene extends MenuScene {
   // --------------------------------------------------------------- courses
   private buildCourses(g: ReturnType<typeof coursesByState>[number], x0: number, y0: number, pw: number, ph: number) {
     this.root.add(txt(this, x0 + pw / 2, y0 + 6, g.name, { origin: [0.5, 0], scale: 2 }));
-    this.requestArt(g.courses);
+    const tiles: Tile[] = courseEntries(g.courses).map((e) => {
+      if (e.kind === 'course') return this.courseTile(e.course, `${e.course.location.split(',')[0].trim()} · ${e.course.holes} holes · par ${e.course.par}`);
+      const first = e.courses[0];
+      return {
+        art: first.id, logos: [e.id, ...e.courses.map((c) => c.id)], name: e.name,
+        sub: `${first.location.split(',')[0].trim()} · ${e.courses.length} courses`,
+        on: e.courses.some((c) => c.id === this.current),
+        tap: () => { groupSel = e.id; view = 'group'; page = 0; this.rebuild(); },
+      };
+    });
+    this.grid(tiles, x0, y0, pw, ph);
+  }
+
+  /** The courses of one place (East Potomac: Blue, White, Red). */
+  private buildGroup(g: { id: string; name: string; courses: CourseInfo[] }, x0: number, y0: number, pw: number, ph: number) {
+    this.root.add(txt(this, x0 + pw / 2, y0 + 6, g.name, { origin: [0.5, 0], scale: 2, maxWidth: pw - 16 }));
+    this.grid(g.courses.map((c) => this.courseTile(c, `${c.holes} holes · par ${c.par} · ${c.totalYd} yd`)), x0, y0, pw, ph);
+  }
+
+  private courseTile(c: CourseInfo, sub: string): Tile {
+    return { art: c.id, logos: c.group ? [c.id, c.group] : [c.id], name: c.name, sub, on: c.id === this.current, tap: () => void this.choose(c.id) };
+  }
+
+  private grid(tiles: Tile[], x0: number, y0: number, pw: number, ph: number) {
+    this.requestArt(tiles);
     const gap = 8;
     const cols = pw >= 400 ? 3 : 2;
     const cw = Math.min(208, Math.floor((pw - 16 - (cols - 1) * gap) / cols));
@@ -102,25 +137,24 @@ export class CourseSelectScene extends MenuScene {
     const top = y0 + 30;
     const rows = Math.max(1, Math.floor((ph - 30 - 30 + gap) / (ch + gap)));
     const perPage = cols * rows;
-    const pages = Math.max(1, Math.ceil(g.courses.length / perPage));
+    const pages = Math.max(1, Math.ceil(tiles.length / perPage));
     page = Math.min(page, pages - 1);
-    const shown = g.courses.slice(page * perPage, (page + 1) * perPage);
+    const shown = tiles.slice(page * perPage, (page + 1) * perPage);
     const used = Math.min(cols, shown.length);
     const left = x0 + Math.round((pw - (used * cw + (used - 1) * gap)) / 2); // centre a short row
-    shown.forEach((c, k) => this.card(c, left + (k % cols) * (cw + gap), top + Math.floor(k / cols) * (ch + gap), cw, ch));
+    shown.forEach((t, k) => this.card(t, left + (k % cols) * (cw + gap), top + Math.floor(k / cols) * (ch + gap), cw, ch));
     this.footer(x0, y0, pw, ph, pages);
   }
 
-  private card(c: CourseInfo, x: number, y: number, w: number, h: number) {
+  private card(t: Tile, x: number, y: number, w: number, h: number) {
     const g = this.add.graphics();
-    const on = c.id === this.current;
     g.fillStyle(0x0b1116, 1).fillRect(x - 2, y - 2, w + 4, h + 4);
-    g.fillStyle(on ? COLORS.orange : 0x394049, 1).fillRect(x - 2, y - 2, w + 4, h + 4);
+    g.fillStyle(t.on ? COLORS.orange : 0x394049, 1).fillRect(x - 2, y - 2, w + 4, h + 4);
     g.fillStyle(0x1d2a22, 1).fillRect(x, y, w, h);
     this.root.add(g);
     // the card art goes in its own layer, filled now or when it has loaded: the
     // card is never rebuilt under the player's finger (a tap would be lost)
-    const ck = `card_${c.id}`;
+    const ck = `card_${t.art}`;
     const art = this.add.container(0, 0);
     this.root.add(art);
     const fillArt = () => {
@@ -135,40 +169,39 @@ export class CourseSelectScene extends MenuScene {
     const strip = 22;
     this.root.add(this.add.rectangle(x, y + h - strip, w, strip, 0x0b1116, 0.78).setOrigin(0, 0));
     // one line: the full name if it fits, else without "country club" / "golf course", else cut short
-    const name = txt(this, x + 4, y + h - strip + 2, c.name);
-    const fit = (t: string) => { setTxt(name, t); return name.width <= w - 8; };
-    if (!fit(c.name)) {
-      const short = c.name.replace(/\s+(country|golf|links)?\s*club$/i, '').replace(/\s+golf\s+(course|links)$/i, '');
+    const name = txt(this, x + 4, y + h - strip + 2, t.name);
+    const fit = (s: string) => { setTxt(name, s); return name.width <= w - 8; };
+    if (!fit(t.name)) {
+      const short = t.name.replace(/\s+(country|golf|links)?\s*club$/i, '').replace(/\s+golf\s+(course|links)$/i, '');
       if (!fit(short)) {
-        let t = short;
-        while (t.length > 3 && !fit(`${t}...`)) t = t.slice(0, -1).trimEnd();
-        fit(`${t}...`);
+        let s = short;
+        while (s.length > 3 && !fit(`${s}...`)) s = s.slice(0, -1).trimEnd();
+        fit(`${s}...`);
       }
     }
     this.root.add(name);
-    const town = c.location.split(',')[0].trim();
-    this.root.add(txt(this, x + 4, y + h - strip + 12, `${town} · ${c.holes} holes · par ${c.par}`, { color: COLORS.dim, maxWidth: w - 8 }));
-    // logo (or a lettered badge) in the top-left corner
-    const lk = `logo_${c.id}`;
+    this.root.add(txt(this, x + 4, y + h - strip + 12, t.sub, { color: COLORS.dim, maxWidth: w - 8 }));
+    // logo (the first of t.logos that exists, e.g. the course's own, else its place's), or a lettered badge
     const logo = this.add.container(0, 0);
     this.root.add(logo);
     const fillLogo = () => {
       if (!logo.active) return;
       logo.removeAll(true);
-      if (this.textures.exists(lk)) logo.add(this.add.image(x + 3, y + 3, lk).setOrigin(0, 0));
-      else this.badge(logo, c, x + 3, y + 3);
+      const k = t.logos.map((id) => `logo_${id}`).find((key) => this.textures.exists(key));
+      if (k) logo.add(this.add.image(x + 3, y + 3, k).setOrigin(0, 0));
+      else this.badge(logo, t.name, x + 3, y + 3);
     };
     fillLogo();
-    if (!this.textures.exists(lk)) this.waiting.push(fillLogo);
+    if (!this.textures.exists(`logo_${t.logos[0]}`)) this.waiting.push(fillLogo);
     // the whole card is the button
     const zone = this.add.zone(x, y, w, h).setOrigin(0, 0).setInteractive({ useHandCursor: true });
-    zone.on('pointerup', () => void this.choose(c.id));
+    zone.on('pointerup', t.tap);
     this.root.add(zone);
   }
 
   /** A lettered badge for a course without a logo yet. */
-  private badge(into: Phaser.GameObjects.Container, c: CourseInfo, x: number, y: number) {
-    const initials = c.name.split(/\s+/).filter((w) => /^[a-z]/i.test(w) && !/^(of|the|and|at)$/i.test(w)).slice(0, 2).map((w) => w[0]).join('');
+  private badge(into: Phaser.GameObjects.Container, name: string, x: number, y: number) {
+    const initials = name.split(/\s+/).filter((w) => /^[a-z]/i.test(w) && !/^(of|the|and|at)$/i.test(w)).slice(0, 2).map((w) => w[0]).join('');
     const g = this.add.graphics();
     g.fillStyle(0x0d1620, 0.85).fillCircle(x + 12, y + 12, 12);
     g.fillStyle(COLORS.white, 1).fillCircle(x + 12, y + 12, 10);
@@ -177,16 +210,19 @@ export class CourseSelectScene extends MenuScene {
     into.add(txt(this, x + 12, y + 8, initials, { origin: [0.5, 0] }));
   }
 
-  /** Load the cards and logos of these courses (once), then put them into the cards on screen. */
-  private requestArt(courses: CourseInfo[]) {
+  /** Load the cards and logos of these tiles (once), then put them into the cards on screen. */
+  private requestArt(tiles: Tile[]) {
     let n = 0;
-    for (const c of courses) {
-      for (const [key, file] of [[`card_${c.id}`, `sprites/cards/${c.id}.png`], [`logo_${c.id}`, `sprites/logos/${c.id}.png`]]) {
-        if (tried.has(key) || this.textures.exists(key)) continue;
-        tried.add(key);
-        this.load.image(key, file);
-        n++;
-      }
+    const want: [string, string][] = [];
+    for (const t of tiles) {
+      want.push([`card_${t.art}`, `sprites/cards/${t.art}.png`]);
+      for (const id of t.logos) want.push([`logo_${id}`, `sprites/logos/${id}.png`]);
+    }
+    for (const [key, file] of want) {
+      if (tried.has(key) || this.textures.exists(key)) continue;
+      tried.add(key);
+      this.load.image(key, file);
+      n++;
     }
     if (!n) return;
     this.load.once(Phaser.Loader.Events.COMPLETE, () => {

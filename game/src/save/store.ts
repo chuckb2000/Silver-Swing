@@ -24,11 +24,13 @@ export interface Settings {
   playerName: string;
   showTips: boolean;
   courseId: string;  // last course chosen on the new-round screen
+  tees: Record<string, string>; // tee set last chosen, per course id
 }
 
 export const DEFAULT_SETTINGS: Settings = {
   difficulty: 'normal', lefty: false, units: 'yd', latencyMs: 0, volume: 0.7, muted: false,
   e5: false, gimmes: false, maxDoublePar: false, mulligans: false, viewScale: 0, playerName: 'player', showTips: true, courseId: '',
+  tees: {},
 };
 
 const mem = new Map<string, unknown>();
@@ -81,7 +83,9 @@ async function remove(key: string): Promise<void> {
 
 export async function loadSettings(): Promise<Settings> {
   const s = await read<Partial<Settings>>('settings');
-  return { ...DEFAULT_SETTINGS, ...(s ?? {}) };
+  const out = { ...DEFAULT_SETTINGS, ...(s ?? {}) };
+  if (!out.tees || typeof out.tees !== 'object') out.tees = {};
+  return out;
 }
 
 export const saveSettings = (s: Settings) => write('settings', s);
