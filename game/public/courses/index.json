@@ -136,6 +136,20 @@
    "teeSets": [
     "Blue"
    ]
+  },
+  {
+   "id": "willamette_valley",
+   "name": "Willamette Valley CC",
+   "location": "Canby, Clackamas County, Oregon",
+   "state": "OR",
+   "theme": "pnw",
+   "holes": 18,
+   "par": 72,
+   "defaultTee": "Blue",
+   "totalYd": 6514,
+   "teeSets": [
+    "Blue"
+   ]
   }
  ]
 }

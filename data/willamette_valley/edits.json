@@ -1,0 +1,68 @@
+{
+  "add": [
+    {
+      "from": "proposed/cartpaths.geojson",
+      "ids": [
+        "cp_w1053634749",
+        "cp_w1053634750",
+        "cp_w1053634751",
+        "cp_w1053634752",
+        "cp_w1053634753",
+        "cp_w1053634754",
+        "cp_w1053634755",
+        "cp_w1053634756",
+        "cp_w1053634757",
+        "cp_w1053634758",
+        "cp_w1053634759"
+      ],
+      "tags": {},
+      "reason": "OSM tags the course's 11 cart paths golf=path + highway=path (the current OSM tag); the pipeline reads golf=cartpath, so these copies carry kind cartpath (paved 2.4 m, free relief: the card lists cart paths as immovable obstructions)"
+    }
+  ],
+  "drop": [
+    {
+      "osm": "w1053634749",
+      "reason": "replaced by its golf=cartpath copy (cp_w1053634749)"
+    },
+    {
+      "osm": "w1053634750",
+      "reason": "replaced by its golf=cartpath copy (cp_w1053634750)"
+    },
+    {
+      "osm": "w1053634751",
+      "reason": "replaced by its golf=cartpath copy (cp_w1053634751)"
+    },
+    {
+      "osm": "w1053634752",
+      "reason": "replaced by its golf=cartpath copy (cp_w1053634752)"
+    },
+    {
+      "osm": "w1053634753",
+      "reason": "replaced by its golf=cartpath copy (cp_w1053634753)"
+    },
+    {
+      "osm": "w1053634754",
+      "reason": "replaced by its golf=cartpath copy (cp_w1053634754)"
+    },
+    {
+      "osm": "w1053634755",
+      "reason": "replaced by its golf=cartpath copy (cp_w1053634755)"
+    },
+    {
+      "osm": "w1053634756",
+      "reason": "replaced by its golf=cartpath copy (cp_w1053634756)"
+    },
+    {
+      "osm": "w1053634757",
+      "reason": "replaced by its golf=cartpath copy (cp_w1053634757)"
+    },
+    {
+      "osm": "w1053634758",
+      "reason": "replaced by its golf=cartpath copy (cp_w1053634758)"
+    },
+    {
+      "osm": "w1053634759",
+      "reason": "replaced by its golf=cartpath copy (cp_w1053634759)"
+    }
+  ]
+}
