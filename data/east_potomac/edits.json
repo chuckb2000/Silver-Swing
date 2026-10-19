@@ -1,0 +1,36 @@
+{
+ "note": "Edits to the OSM layout for East Potomac. Built into edited/course.geojson by pipeline/merge_edits.py (run by make course). Every lidar tee below is a PROPOSAL (COURSE_BUILD.md 1.1): used in this build so every hole has a tee, pending the developer's approval; to reject one, delete its id here and rebuild.",
+ "add": [
+  {
+   "from": "proposed/tees_lidar.geojson",
+   "ids": [
+    "lidar_tee_1",
+    "lidar_tee_3",
+    "lidar_tee_4",
+    "lidar_tee_6",
+    "lidar_tee_7",
+    "lidar_tee_9",
+    "lidar_tee_10",
+    "lidar_tee_12",
+    "lidar_tee_16",
+    "lidar_tee_19",
+    "lidar_tee_22",
+    "lidar_tee_24",
+    "lidar_tee_26",
+    "lidar_tee_34",
+    "lidar_tee_36",
+    "lidar_tee_37",
+    "lidar_tee_38",
+    "lidar_tee_40",
+    "lidar_tee_41"
+   ],
+   "tags": {
+    "proposed": "yes",
+    "awaiting_approval": "yes"
+   },
+   "reason": "Tee boxes missing from OSM, found in the DC lidar DEM as raised levelled pads on the tee-shot axis (pipeline/propose_tees.py) and within 8% of a card yardage for a hole that has no matching OSM tee: lidar_tee_1: Blue 9 Blue 341/356 (-4.1%); Blue 9 White 341/336 (+1.6%) | lidar_tee_3: Blue 3 Blue 550/596 (-7.7%); Blue 3 White 550/564 (-2.5%) | lidar_tee_4: Blue 4 Blue 159/169 (-5.7%); Blue 4 White 159/154 (+3.5%); Blue 16 Blue 431/432 (-0.2%); Blue 16 White 431/419 (+2.8%) | lidar_tee_6: Blue 5 Blue 277/291 (-4.9%); Blue 5 White 277/286 (-3.2%) | lidar_tee_7: Blue 6 White 499/507 (-1.5%) | lidar_tee_9: Blue 2 Blue 424/418 (+1.3%) | lidar_tee_10: Blue 2 Blue 401/418 (-4.0%); Blue 2 White 401/377 (+6.4%) [OSM box also within 4.3%] | lidar_tee_12: Blue 10 Blue 289/311 (-7.0%); Blue 10 White 289/302 (-4.3%) | lidar_tee_16: Blue 14 Blue 399/410 (-2.6%); Blue 14 White 399/389 (+2.7%) | lidar_tee_19: Blue 15 White 158/162 (-2.5%) | lidar_tee_22: Blue 4 Blue 181/169 (+7.1%); Blue 16 Blue 412/432 (-4.6%); Blue 16 White 412/419 (-1.6%) | lidar_tee_24: Blue 10 White 282/302 (-6.7%) | lidar_tee_26: White 3 White 260/266 (-2.1%); White 3 Red 260/259 (+0.6%) | lidar_tee_34: Red 3 White 99/102 (-2.9%) | lidar_tee_36: Red 3 Red 65/65 (-0.4%) | lidar_tee_37: Red 3 Red 65/65 (+0.1%) | lidar_tee_38: Red 4 White 105/108 (-2.6%); Red 4 Red 105/98 (+7.4%) | lidar_tee_40: Red 7 White 171/176 (-2.7%) | lidar_tee_41: Red 7 Red 144/144 (+0.0%); Red 9 White 156/158 (-1.2%)"
+  }
+ ],
+ "tags": [],
+ "drop": []
+}

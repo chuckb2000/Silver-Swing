@@ -2,7 +2,7 @@
 NAME ?= oswego_lake
 PY   ?= python3
 
-.PHONY: dev build test e2e course assets all clean-course
+.PHONY: dev build test e2e course assets theme-trees all clean-course
 
 dev:            ## run the game locally (Vite dev server)
 	cd game && npm run dev
@@ -19,10 +19,14 @@ e2e:            ## Playwright smoke test (builds first)
 assets:         ## regenerate sprites, UI art and the bitmap font
 	$(PY) assets-src/build_assets.py
 
+theme-trees:    ## tree sprites for a course theme other than pnw (THEME=potomac)
+	$(PY) assets-src/build_theme_trees.py $(THEME)
+
 course:         ## rebuild one course from raw/ (+ edited/) -> game/public/courses/$(NAME)
 	cd pipeline && \
 	$(PY) s00_prepare_rasters.py $(NAME) && \
 	$(PY) s01_osm.py $(NAME) && \
+	$(PY) merge_edits.py $(NAME) && \
 	$(PY) s02_reproject.py $(NAME) && \
 	$(PY) s03_audit.py $(NAME) && \
 	$(PY) s04_elevation.py $(NAME) && \

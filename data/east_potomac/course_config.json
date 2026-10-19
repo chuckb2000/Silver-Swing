@@ -1,0 +1,129 @@
+{
+  "id": "east_potomac",
+  "name": "East Potomac Golf Links",
+  "location": "East Potomac Park, Washington, District of Columbia",
+  "state": "DC",
+  "architects": "Walter Travis (Blue course) and Robert White (White and Red courses); opened in stages 1921-1925",
+  "theme": "potomac",
+  "epsg": 32618,
+  "osm_sources": [
+    "raw/overpass.geojson"
+  ],
+  "boundary_name": "East Potomac Blue Course",
+  "dtm": {
+    "path": "raw/dc_dem_1m_clip.tif",
+    "units": "m",
+    "source": "District of Columbia (OCTO / DC GIS) lidar bare-earth DEM, 1 m, NAD83(HARN) / Maryland State Plane (EPSG:2804), metres; DC-wide file DC.TIF.2.tif from the developer (GitHub release data-washington-dc), clipped to the world + 100 m with pipeline/clip_raster.py"
+  },
+  "chm": {
+    "path": "raw/dc_ndsm_1m_clip.tif",
+    "units": "m",
+    "source": "District of Columbia (OCTO / DC GIS) lidar normalized digital surface model (height above ground), 1 m, EPSG:2804, metres, water = -5; DC-wide file DC.TIF.1.tif from the developer (GitHub release data-washington-dc), clipped with pipeline/clip_raster.py",
+    "label": "DC lidar normalized surface model"
+  },
+  "blossom": {
+    "max_h": 12.0,
+    "shore_m": 45.0,
+    "max_from_boundary_m": 100.0,
+    "note": "flowering cherries for the potomac theme: deciduous trees <= max_h m outside the golf boundary, within shore_m m of open water and max_from_boundary_m m of the boundary (the Ohio Drive / seawall ring of Yoshino and Kwanzan cherries); species is inferred from location, not measured"
+  },
+  "world": {
+    "x0": 323434,
+    "y0": 4303277,
+    "width": 1280,
+    "height": 2048,
+    "note": "bbox of the four OSM course boundaries (Blue, White, Red, Practice Holes: 965 x 1929 m) + scenery, rounded out to whole 256 m chunks: 1280 m east-west (~157 m each side, mostly river and channel), 2048 m north-south (45 m south, 74 m north) to stay within the 2,048 m limit (COURSE_BUILD.md 6.1)"
+  },
+  "layouts": [
+    {
+      "id": "east_potomac_blue",
+      "name": "East Potomac Golf Links - Blue Course",
+      "short": "Blue",
+      "boundary_osm": "w1126813986",
+      "scorecard": "scorecard_blue.csv",
+      "tee_sets": [
+        {
+          "name": "Blue",
+          "playable": true,
+          "rating": 70.5,
+          "slope": 115,
+          "total_yd": 6599
+        },
+        {
+          "name": "White",
+          "playable": true,
+          "rating": 68.7,
+          "slope": 111,
+          "total_yd": 6226
+        }
+      ],
+      "default_tee": "White",
+      "scorecard_source": "Club scorecard PDF 'EP-BLUE-Scorecard - INSIDE 3 Nov 2021' supplied by the developer 2026-10-19 (yardages, pars, stroke index). Ratings/slopes from GolfNow/TeeOff (course 8074), retrieved 2026-10-19, unverified: stymie.golf lists different values (Blue 70.0/112, White 68.2/107)"
+    },
+    {
+      "id": "east_potomac_white",
+      "name": "East Potomac Golf Links - White Course",
+      "short": "White",
+      "boundary_osm": "w51854279",
+      "scorecard": "scorecard_white.csv",
+      "tee_sets": [
+        {
+          "name": "White",
+          "playable": true,
+          "rating": 31.0,
+          "slope": 98,
+          "total_yd": 2493
+        },
+        {
+          "name": "Red",
+          "playable": false,
+          "rating": 32.5,
+          "slope": 104,
+          "total_yd": 2276,
+          "note": "not built: most forward (Red) tee boxes are not in OSM or the lidar pads; 3+ holes fail the 8% check from the White boxes"
+        }
+      ],
+      "default_tee": "White",
+      "scorecard_source": "Club scorecard PDF 'RedWhite-Scorecard' (playdcgolf.com) supplied by the developer 2026-10-19; nine-hole ratings/slopes printed on the card. The card's White total (2943) is a misprint: its nine holes add up to 2,493. Family tees (Blue, Gold) not built"
+    },
+    {
+      "id": "east_potomac_red",
+      "name": "East Potomac Golf Links - Red Course",
+      "short": "Red",
+      "boundary_osm": "w1126813985",
+      "scorecard": "scorecard_red.csv",
+      "tee_sets": [
+        {
+          "name": "White",
+          "playable": true,
+          "rating": 0,
+          "slope": 0,
+          "total_yd": 1314
+        },
+        {
+          "name": "Red",
+          "playable": false,
+          "rating": 0,
+          "slope": 0,
+          "total_yd": 1068,
+          "note": "not built: most forward (Red) tee boxes are not in OSM or the lidar pads; 3+ holes fail the 8% check from the White boxes"
+        }
+      ],
+      "default_tee": "White",
+      "scorecard_source": "Club scorecard PDF 'RedWhite-Scorecard' (playdcgolf.com) supplied by the developer 2026-10-19; par-3 course, no rating/slope on the card (0 = not rated)"
+    }
+  ],
+  "penalty_default": "red",
+  "driving_range_is_ob": true,
+  "paint_range_outside": true,
+  "wind_mph": {
+    "minMph": 2,
+    "maxMph": 10
+  },
+  "attribution": [
+    "Map data © OpenStreetMap contributors (ODbL)",
+    "Elevation and canopy: District of Columbia lidar 1 m DEM and normalized surface model, DC GIS / OCTO (CC BY 4.0)",
+    "Scorecards: East Potomac Golf Links (National Links Trust)"
+  ],
+  "notes": "Three courses on one island share one world: every layout is exported as its own course (courses/<layout id>/) whose terrain, surface, height and overview files live in courses/east_potomac/. Out of bounds = outside the union of the four OSM golf-course boundaries (Blue, White, Red, Practice Holes)."
+}

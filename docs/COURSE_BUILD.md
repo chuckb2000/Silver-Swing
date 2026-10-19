@@ -199,9 +199,38 @@ Known Oswego-specific code, with the fix:
   "penalty_default": "red",
   "driving_range_is_ob": true,
   "wind_mph": {"minMph": 1, "maxMph": 7},
-  "attribution": ["Map data © OpenStreetMap contributors (ODbL)", "..."]
+  "attribution": ["Map data © OpenStreetMap contributors (ODbL)", "..."],
+  // optional: several courses on one site (East Potomac). Replaces tee_sets /
+  // default_tee / scorecard.csv / scorecard_source per layout; see 3.5.
+  "layouts": [{"id": "x_blue", "name": "X - Blue Course", "short": "Blue",
+               "boundary_osm": "w123", "scorecard": "scorecard_blue.csv",
+               "tee_sets": [...], "default_tee": "White", "scorecard_source": "..."}],
+  "blossom": {"max_h": 12, "shore_m": 45, "max_from_boundary_m": 100},  // optional: flowering trees (potomac theme)
+  "paint_range_outside": false          // optional: draw a driving range outside the boundary as a range
 }
 ```
+
+### 3.5 Several courses on one site (`layouts`)
+
+When one property holds several courses (East Potomac: Blue 18, White 9, Red
+9), list them as `layouts` in one data folder. The world (terrain, surface,
+heights, trees, every green, art) is built once and exported to
+`courses/<data id>/`; each layout gets its holes, putting views, minimaps and
+`course.json` in `courses/<layout id>/`, pointing at the shared files with
+`../<data id>/` paths. A layout's holes are the `golf=hole` lines inside its
+`boundary_osm` polygon (or tagged `layout=<id>`); its card is its own
+`scorecard` file. The OB line is the union of all `leisure=golf_course`
+polygons. Each layout is a separate entry in the course list, with `group`,
+`groupName` and `layout` fields.
+
+### 3.6 Edits and proposals
+
+Write changes to the OSM layout as `data/<id>/edits.json` (add features from a
+`proposed/` file, retag, drop; each with a reason); `merge_edits.py` (run by
+`make course` after s01) turns them into `edited/course.geojson`. Tools that
+make proposals: `propose_tees.py` (raised tee pads in the DEM near each hole's
+tee-shot axis). Large state-wide rasters: `clip_raster.py` cuts them to the
+world before they go into `raw/`.
 
 ### 3.4 Regression check (required after any pipeline change)
 

@@ -19,7 +19,7 @@ from rasterio.features import rasterize
 from scipy import ndimage
 from shapely.ops import unary_union
 
-from common import PX_PER_M, SURF, World, build_dir, course_name_from_argv, load_config, write_json
+from common import build_dir, course_name_from_argv, load_config, play_boundary, PX_PER_M, SURF, World, write_json
 
 warnings.filterwarnings("ignore")
 
@@ -89,7 +89,7 @@ def main():
             return np.zeros((H, W), bool)
         return rasterize([(geom, 1) for geom in geoms], out_shape=(H, W), transform=tr, fill=0, dtype="uint8").astype(bool)
 
-    boundary = g[g.kind == "boundary"].geometry.iloc[0]
+    boundary = play_boundary(g, cfg)
     inside = mask([boundary])
     surf = np.full((H, W), SURF["ob"], np.uint8)
 
@@ -115,6 +115,9 @@ def main():
     paint(surf, list(g[g.kind == "pool"].geometry), SURF["ob_water"])
     paint(surf, list(g[(g.kind == "water") & g.tags.apply(lambda t: t.get("natural") == "water")].geometry), SURF["ob_water"])
     paint(surf, list(g[g.kind == "building"].geometry), SURF["ob_building"])
+    # a driving range outside the boundary is still drawn as a range (it is OB either way)
+    if cfg.get("paint_range_outside"):
+        surf[mask(list(g[g.kind == "driving_range"].geometry)) & ~inside] = SURF["range"]
     # minor paths outside the course are drawn as roads too (light grey)
     m_minor = mask(minor) & ~inside
     surf[m_minor & (surf != SURF["ob_building"])] = SURF["ob_road"]

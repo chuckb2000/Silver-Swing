@@ -35,7 +35,12 @@ def main():
     holes = json.load(open(bdir / "holes.json"))
     g = gpd.read_file(bdir / "course_local.geojson")
     greens = g[g.kind == "green"]
-    pin_for = {h["green_osm"]: (h["number"], h["pin"]) for h in holes}
+    # with several layouts (s06 writes them all into holes.json) a green's key is
+    # 1000 * (layout index + 1) + hole number, so seeds stay unique per green
+    lay_ids = list(dict.fromkeys(h["layout"] for h in holes if "layout" in h))
+    pin_for = {h["green_osm"]: ((1000 * (lay_ids.index(h["layout"]) + 1) + h["number"]) if "layout" in h else h["number"], h["pin"])
+               for h in holes}
+    label = {h["green_osm"]: f"{h['layout'].split('_')[-1]} {h['number']}" for h in holes if "layout" in h}
     t0 = Terrain(base, [])
     models, report = [], ["# Green shaping checks", "", "| green | hole | fitted tilt % | used tilt % | bumps | max slope % | max slope within 3 m of pin % |", "|---|---|---|---|---|---|---|"]
     for k, (_, row) in enumerate(greens.iterrows()):
@@ -95,7 +100,7 @@ def main():
         s_pin = max((slope_at(x, y) for x, y in pts if pin is not None and math.hypot(x - pin[0], y - pin[1]) <= 3.0), default=0)
         d["check"] = {"max_slope_pct": rnd(s_all * 100, 2), "max_pin_slope_pct": rnd(s_pin * 100, 2), "fitted_tilt_pct": rnd(tilt * 100, 2)}
         models.append(d)
-        report.append(f"| {row.osm} | {hole_no or 'practice'} | {tilt * 100:.1f} | {used * 100:.1f} | {len(bumps)} | {s_all * 100:.1f} | {s_pin * 100:.1f} |")
+        report.append(f"| {row.osm} | {label.get(row.osm, hole_no) or 'practice'} | {tilt * 100:.1f} | {used * 100:.1f} | {len(bumps)} | {s_all * 100:.1f} | {s_pin * 100:.1f} |")
     write_json(bdir / "greens.json", models)
     (bdir / "greens_report.md").write_text("\n".join(report) + "\n")
     print("\n".join(report))

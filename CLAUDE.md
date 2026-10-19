@@ -430,6 +430,16 @@ DECISIONS.md with the reason.
     95 unit tests and 2 Playwright tests pass; the function was also run
     under wrangler with a local D1.
 
+-   **East Potomac (course chat, 2026-10-19):** East Potomac Golf
+    Links, Washington DC, built on branch `course/east_potomac` (based on
+    `course/highland_links` for its Phase 0 pipeline): three courses on
+    one island sharing one world (Blue 18, White 9, Red 9), new `potomac`
+    theme with flowering cherries around the island. Pipeline gained
+    `layouts`, `merge_edits.py` and lidar tee proposals; Oswego rebuilds
+    byte-identical. Open items: section 11.9.4 and
+    data/east_potomac/validation_report.md; requests to the design chat
+    in docs/requests/east_potomac_design_requests.md.
+
 -   **Next task:** the developer binds a D1 database as `DB` to the
     Cloudflare Pages project; then the third playtest (putting, yellow
     misses), the club's printed scorecard and the hole 3 Blue tee box. New
@@ -1467,6 +1477,80 @@ Blue (6,279 yd) suits the club distances in 7.1.
 
 4.  **Water.** Confirm whether any holes play along Oswego Lake or have
     ponds or creeks, and whether each is red or yellow.
+
+**11.9 East Potomac Golf Links, Washington, DC (three courses)**
+
+**11.9.1 Facts**
+
+-   **Location:** East Potomac Park (Hains Point), an island between the
+    Potomac River and the Washington Channel; National Park Service land.
+-   **Courses:** Blue (18 holes, par 72, Walter Travis), White (9 holes,
+    par 34) and Red (9 holes, par 27, all par 3s), both by Robert White;
+    opened in stages 1921-1925.
+-   **Built as:** one data folder `data/east_potomac` and one world
+    (1,280 x 2,048 m, UTM 18N, EPSG:32618), exported as three courses
+    `east_potomac_blue`, `east_potomac_white`, `east_potomac_red`
+    (DECISIONS.md, East Potomac). Theme `potomac`.
+-   **Data:** OSM (Overpass Turbo export), DC GIS / OCTO 1 m lidar DEM
+    and normalized surface model (release `data-washington-dc`, clipped),
+    club scorecards (PDFs, 2021 Blue card and the current Red/White card).
+-   **Terrain:** flat fill land, 0-8 m above the river; raised tee pads,
+    built-up greens and grass mounds.
+-   **Trees:** 4,185 from lidar; about 1,000 drawn as flowering cherries
+    along Ohio Drive and the seawall (theme flair, species not measured).
+
+**11.9.2 Scorecards** (club PDFs supplied by the developer, 2026-10-19)
+
+  -----------------------------------------------------------------------------------------
+  Blue course   1   2   3   4   5   6   7   8   9   Out   10  11  12  13  14  15  16  17  18  In    Total
+  ------------- --- --- --- --- --- --- --- --- --- ----- --- --- --- --- --- --- --- --- --- ----- -----
+  Par           4   4   5   3   4   5   4   3   4   36    4   3   5   4   4   3   4   5   4   36    72
+  Stroke index  7   3   1   13  17  5   15  9   11        16  14  10  8   4   18  2   6   12
+  Blue          360 418 596 169 291 547 308 210 356 3255  311 191 499 371 410 174 432 563 393 3344  6599
+  White         343 377 564 154 286 507 297 196 336 3060  302 167 456 354 389 162 419 546 371 3166  6226
+  -----------------------------------------------------------------------------------------
+
+Gold (5,706), Red (5,203) and Green (4,638) tees are on the card, not built.
+Ratings (GolfNow/TeeOff, unverified): Blue 70.5/115, White 68.7/111.
+
+  ---------------------------------------------------------------------
+  White course  1   2   3   4   5   6   7   8   9   Total
+  ------------- --- --- --- --- --- --- --- --- --- -----
+  Par           3   4   4   4   4   3   4   4   4   34
+  Stroke index  9   1   8   4   5   6   2   3   7
+  White         156 381 266 285 247 190 355 286 327 2493 (card prints 2943)
+  Red           141 372 259 275 214 142 294 284 295 2276 (not built)
+  ---------------------------------------------------------------------
+
+White 31.0/98, Red 32.5/104 (card). Family tees not built.
+
+  ---------------------------------------------------------------------
+  Red course    1   2   3   4   5   6   7   8   9   Total
+  ------------- --- --- --- --- --- --- --- --- --- -----
+  Par           3   3   3   3   3   3   3   3   3   27
+  Stroke index  1   5   7   4   2   8   9   6   3
+  White         208 154 102 108 171 126 176 111 158 1314
+  Red           175 132 65  98  138 87  144 96  133 1068 (not built)
+  ---------------------------------------------------------------------
+
+**11.9.3 Default tees**
+
+White on all three courses (Blue course White = 6,226 yd, closest to
+6,300); the Blue course also has its Blue tees. Measured (adjusted)
+totals: Blue course White 6,097 yd, Blue 6,405; White course 2,470;
+Red course 1,292.
+
+**11.9.4 Known open items** (details and recommendations in
+data/east_potomac/validation_report.md)
+
+1.  Blue 13 plays 261 yd (card 371/354): the OSM line starts ~100 m in
+    front of the real tee. FAIL, needs a decision.
+2.  Blue 15 Blue tee (-8.7 %) and Red course 8 (+9.9 %) FAIL; Blue 6
+    Blue, Red 5 and Red 6 are flags.
+3.  19 tee boxes come from lidar pads (`edits.json`), awaiting approval.
+4.  Forward (Red) tees of the White and Red courses not built.
+5.  Blue course ratings unverified; Red course unrated.
+6.  Lidar year of the DC files not recorded.
 
 **12. Repository layout**
 
