@@ -23,7 +23,7 @@ Two chats work on this repository.
 | `game/tests/**` | design chat | add course-specific test cases (section 8.2) only |
 | `assets-src/sprites.py`, `font.py`, UI art | design chat | read only |
 | `assets-src/palettes/<new theme>.json`, new tree variants for a new theme | course chat | create; never change an existing theme |
-| `pipeline/**` | course chat | change, as long as every existing course rebuilds unchanged (section 3.4) |
+| `pipeline/**` | course chat | change, as long as every existing course rebuilds unchanged (section 3.4, checked once before merge) |
 | `data/<course>/**`, `game/public/courses/<course>/**` | course chat | own it fully |
 | `game/public/courses/index.json` (course registry) | course chat | add or update its own entry |
 | `CLAUDE.md` section 11.x for the course, section 0 status line | course chat | write it |
@@ -248,13 +248,24 @@ along the line. Tools that make proposals: `propose_tees.py` (raised tee pads in
 tee-shot axis). Large state-wide rasters: `clip_raster.py` cuts them to the
 world before they go into `raw/`.
 
-### 3.4 Regression check (required after any pipeline change)
+### 3.4 Regression check (only when pipeline code changed)
 
-1. Before changing anything: `make course NAME=oswego_lake`, then save
-   checksums of `game/public/courses/oswego_lake/**` and `data/oswego_lake/build/*.json`.
-2. After the change: rebuild Oswego and compare. Every file must be identical,
-   or each difference explained and accepted (for example, the height
-   `samples` moving). Look at changed images side by side.
+**When.** Only when you changed code in `pipeline/` (or a generator script
+the pipeline calls). Skip it for changes to your own course's
+`data/<course>/` files, `course_config.json`, scorecard, edits or proposals:
+those can't change another course. Run it **once, before asking the
+developer to merge**, not after every pipeline edit. Rebuilding every
+course is slow (East Potomac takes the longest), so don't make the
+developer wait on it mid-build.
+
+1. Rebuild every existing course: `make course NAME=<id>` for each one in
+   `game/public/courses/index.json` (multi-course sites like East Potomac
+   are one build).
+2. Compare with the committed files: `git status --short game/public/courses`
+   must show no change outside your own course, or each difference must be
+   explained and accepted (for example, the height `samples` moving). No
+   "before" rebuild is needed; the committed files are the baseline. Look at
+   changed images side by side.
 3. `cd game && npm test` and `npm run e2e` pass.
 4. Log the change in `DECISIONS.md` under "Data and pipeline".
 
@@ -559,8 +570,8 @@ paths (relief), not OB, unless the developer says otherwise.
    reason.
 4. `README.md`: add the course to the rebuild instructions if anything about
    the command changed.
-5. Tests: `npm test` and `npm run e2e` pass; the Oswego regression check
-   (3.4) passes.
+5. Tests: `npm test` and `npm run e2e` pass; if pipeline code changed, the
+   regression check (3.4) passes for every existing course.
 6. Hand off: branch + pull request (or the zip described in 0.1). The
    message to the developer has: what was built, open items needing their
    decision (numbered, each with a recommendation), anything requested from
@@ -585,8 +596,9 @@ paths (relief), not OB, unless the developer says otherwise.
 ## 11. Acceptance checklist (all true before handoff)
 
 - [ ] `make course NAME=<id>` rebuilds everything from raw/edited/config/scorecard.
-- [ ] Oswego (and every other existing course) rebuilds unchanged, or the
-      differences are explained and accepted.
+- [ ] If pipeline code changed: every existing course rebuilds unchanged
+      (3.4, run once before merge), or the differences are explained and
+      accepted.
 - [ ] Every hole: pass, or flag/fail explicitly accepted by the developer.
 - [ ] Every playable tee set has a tee position on every hole.
 - [ ] Every green has a pin and far, near and close-up putting views.
