@@ -26,7 +26,7 @@ from shapely.affinity import translate
 from shapely.geometry import LineString, MultiPolygon, Point, Polygon
 from shapely.ops import unary_union
 
-from common import PX_PER_M, ROOT, SURF, World, build_dir, course_name_from_argv, load_config, write_json
+from common import build_dir, course_name_from_argv, layouts, load_config, play_boundary, PX_PER_M, ROOT, SURF, World, write_json
 from terrain import tier_offset
 
 warnings.filterwarnings("ignore")
@@ -162,7 +162,8 @@ def stripe_field(world, g, holes, surf, H, W, tee):
     """+1 tone on alternate 4 m (fairway) / 2 m (tee) bands parallel to the hole line."""
     stripe = np.zeros((H, W), np.int8)
     tr = Affine(1 / PX_PER_M, 0, 0, 0, -1 / PX_PER_M, world.height)
-    centerlines = [(h["number"], LineString(h["tees"][tee]["centerline"])) for h in holes]
+    # each hole's stripes follow its own layout's default tee (s06 "stripe_tee"; one layout: `tee`)
+    centerlines = [(h["number"], LineString(h["tees"][h.get("stripe_tee", tee)]["centerline"])) for h in holes]
     for kind, band in (("fairway", 4.0), ("tee", 2.0), ("driving_range", 6.0)):
         for geom in g[g.kind == kind].geometry:
             c = geom.centroid
@@ -358,7 +359,7 @@ def main():
     z = terrain_z_px(world, base, greens, H, W)
     np.save(bdir / "z_px.npy", z.astype(np.float32))
     tone, shade = hillshade_tone(z, surf)
-    stripe = stripe_field(world, g, holes, surf, H, W, cfg["default_tee"])
+    stripe = stripe_field(world, g, holes, surf, H, W, layouts(cfg)[0]["default_tee"])
 
     t = tone.astype(np.int16)
     # textures -----------------------------------------------------------
@@ -530,7 +531,7 @@ def main():
     rgb = np.array(img)
 
     # OB stakes along the boundary ------------------------------------------
-    boundary = g[g.kind == "boundary"].geometry.iloc[0]
+    boundary = play_boundary(g, cfg)
     if boundary.geom_type == "MultiPolygon":
         boundary = max(boundary.geoms, key=lambda p_: p_.area)
     ring = boundary.exterior

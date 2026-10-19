@@ -1,6 +1,58 @@
 {
  "courses": [
   {
+   "id": "east_potomac_blue",
+   "name": "East Potomac Blue Course",
+   "location": "East Potomac Park, Washington, District of Columbia",
+   "state": "DC",
+   "theme": "potomac",
+   "holes": 18,
+   "par": 72,
+   "defaultTee": "Blue",
+   "totalYd": 6599,
+   "teeSets": [
+    "Blue",
+    "White"
+   ],
+   "group": "east_potomac",
+   "groupName": "East Potomac Golf Links",
+   "layout": "Blue"
+  },
+  {
+   "id": "east_potomac_red",
+   "name": "East Potomac Red Course",
+   "location": "East Potomac Park, Washington, District of Columbia",
+   "state": "DC",
+   "theme": "potomac",
+   "holes": 9,
+   "par": 27,
+   "defaultTee": "White",
+   "totalYd": 1314,
+   "teeSets": [
+    "White"
+   ],
+   "group": "east_potomac",
+   "groupName": "East Potomac Golf Links",
+   "layout": "Red"
+  },
+  {
+   "id": "east_potomac_white",
+   "name": "East Potomac White Course",
+   "location": "East Potomac Park, Washington, District of Columbia",
+   "state": "DC",
+   "theme": "potomac",
+   "holes": 9,
+   "par": 34,
+   "defaultTee": "White",
+   "totalYd": 2493,
+   "teeSets": [
+    "White"
+   ],
+   "group": "east_potomac",
+   "groupName": "East Potomac Golf Links",
+   "layout": "White"
+  },
+  {
    "id": "oswego_lake",
    "name": "Oswego Lake Country Club",
    "location": "Lake Oswego, Clackamas County, Oregon",

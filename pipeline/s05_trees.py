@@ -29,7 +29,7 @@ from scipy import ndimage
 from shapely.geometry import Point, Polygon
 from skimage.segmentation import watershed
 
-from common import World, build_dir, course_name_from_argv, load_config, write_json
+from common import build_dir, course_name_from_argv, load_config, play_boundary, World, write_json
 
 warnings.filterwarnings("ignore")
 
@@ -153,7 +153,7 @@ def osm_fallback(name, cfg, world):
     g = gpd.read_file(build_dir(name) / "course_local.geojson")
     extent = Polygon([(0, 0), (W, 0), (W, H), (0, H)])
     excl = g[g.kind.isin(["green", "tee", "bunker", "fairway", "lateral_water_hazard", "water_hazard", "pool", "building"])]
-    boundary = g[g.kind == "boundary"].geometry.iloc[0]
+    boundary = play_boundary(g, cfg)
     lake = np.load(build_dir(name) / "lake_mask.npy")
     spots = [(p.x, p.y, "osm_tree") for p in g[g.kind == "tree"].geometry if extent.contains(p)]
     for geom in g[g.kind == "wood"].geometry:
@@ -207,6 +207,75 @@ def osm_fallback(name, cfg, world):
     print(f"[s05] OSM fallback (no canopy raster): {json.dumps({k: v for k, v in stats.items() if k not in ('type_method', 'fallback')})}")
 
 
+def assign_blossoms(trees, rule, boundary, water_cells, bmask):
+    """Mark flowering cherries (theme flair, not measured species) and order the
+    list so the game's sprite variant (tree index mod 3) shows them.
+
+    Rule (course_config.json `blossom`): a deciduous tree no taller than
+    `max_h` m that stands outside the golf boundary, within `shore_m` m of open
+    water (the nDSM's water cells) and within `max_from_boundary_m` m of the
+    boundary (so the far bank does not count) is a cherry. At East Potomac that is the
+    ring of Yoshino and Kwanzan cherries along Ohio Drive and the seawall.
+
+    The game draws tree i with sprite variant i % 3; the theme's sheet draws
+    deciduous variant 2 as a cherry in bloom. So cherries are put at indices
+    with i % 3 == 2, the remaining slots of that kind take conifers (their
+    variant 2 is an ordinary conifer), and ordinary deciduous trees fill
+    indices 0 and 1. Cherries that do not fit show as ordinary trees, and
+    deciduous trees that land in a variant-2 slot become cherries (both counted).
+    """
+    from scipy import ndimage as ndi
+    dist = ndi.distance_transform_edt(~water_cells)  # metres to the nearest water cell
+    H, W = dist.shape
+    max_h, shore = float(rule.get("max_h", 12.0)), float(rule.get("shore_m", 45.0))
+    near_b = float(rule.get("max_from_boundary_m", 1e9))
+    for t_ in trees:
+        if t_["type"] != "deciduous" or t_["h"] > max_h or t_["in"]:
+            continue
+        j, i = min(H - 1, int(t_["y"])), min(W - 1, int(t_["x"]))
+        p_ = Point(t_["x"], t_["y"])
+        if dist[j, i] <= shore and not boundary.buffer(2.0).contains(p_) and boundary.distance(p_) <= near_b:
+            t_["type"] = "cherry"
+    want = sum(t_["type"] == "cherry" for t_ in trees)
+    cher = [t_ for t_ in trees if t_["type"] == "cherry"]
+    con = [t_ for t_ in trees if t_["type"] == "conifer"]
+    dec = [t_ for t_ in trees if t_["type"] == "deciduous"]
+    n = len(trees)
+    slot2 = [k for k in range(n) if k % 3 == 2]
+    slot01 = [k for k in range(n) if k % 3 != 2]
+    out = [None] * n
+    q2 = cher[:len(slot2)]
+    rest_c = cher[len(slot2):]
+    q2 += con[:len(slot2) - len(q2)]
+    rest_con = con[len(q2) - min(len(cher), len(slot2)):]
+    # slots left over go to the most cherry-like remaining trees: outside the
+    # course first, then nearest the water, then the shortest
+    def like(t_):
+        j, i = min(H - 1, int(t_["y"])), min(W - 1, int(t_["x"]))
+        return (t_["in"], float(dist[j, i]), t_["h"])
+    dec = sorted(dec, key=like)
+    forced = dec[:max(0, len(slot2) - len(q2))]
+    q2 += forced
+    q01 = dec[len(forced):] + rest_con + rest_c
+    for k, t_ in zip(slot2, q2):
+        out[k] = t_
+    for k, t_ in zip(slot01, q01):
+        out[k] = t_
+    for t_ in forced:
+        t_["type"] = "cherry"
+    for t_ in rest_c:
+        t_["type"] = "deciduous"
+    assert all(o is not None for o in out) and len({id(o) for o in out}) == n
+    note = {
+        "rule": {"max_h": max_h, "shore_m": shore, "max_from_boundary_m": near_b, "outside_boundary": True},
+        "matched_rule": int(want), "shown_plain_no_slot": len(rest_c), "filled_slot": len(forced),
+        "text": (f"Cherries (theme flair, species not measured): deciduous trees <= {max_h:g} m outside the golf boundary, "
+                 f"within {shore:g} m of open water and {near_b:g} m of the boundary ({want} trees); {len(forced)} more deciduous trees "
+                 f"(the most cherry-like by the same measures) are drawn as cherries to fill the sprite slots, {len(rest_c)} cherries are drawn plain."),
+    }
+    return out, note
+
+
 def main():
     name = course_name_from_argv()
     cfg = load_config(name)
@@ -223,6 +292,7 @@ def main():
     W, H = int(world.width), int(world.height)
     chm = a[r0:r0 + H, c0:c0 + W]
     chm = np.flipud(chm)  # rows south->north: row j = local y in [j, j+1]
+    water_cells = chm <= -4.0  # DC's normalized surface model marks open water -5
     chm[chm < 0] = 0
     sm = ndimage.gaussian_filter(chm, 0.6)
 
@@ -250,10 +320,17 @@ def main():
     bmask = rasterize([(geom.buffer(1.0), 1) for geom in bld], out_shape=(H, W), transform=tr, fill=0, dtype="uint8").astype(bool) if len(bld) else np.zeros((H, W), bool)
     lake = np.load(build_dir(name) / "lake_mask.npy")[:H, :W]
     excl = g[g.kind.isin(["green", "tee", "bunker", "lateral_water_hazard", "water_hazard", "pool"])]
-    boundary = g[g.kind == "boundary"].geometry.iloc[0]
+    boundary = play_boundary(g, cfg)
 
     trees, dropped = [], {"building": 0, "lake": 0, "tiny": 0}
     dropped_surface = []
+    # optional (course_config.json trees_off_fairways_m): no tree stands in a fairway,
+    # i.e. more than that many metres inside one (edge trees may overhang it)
+    fw_inset = None
+    if cfg.get("trees_off_fairways_m") is not None:
+        from shapely.ops import unary_union
+        from shapely.prepared import prep
+        fw_inset = prep(unary_union(list(g[g.kind == "fairway"].geometry)).buffer(-float(cfg["trees_off_fairways_m"])))
     for k, (cy, cx) in enumerate(cents, start=1):
         jy, ix = int(round(cy)), int(round(cx))
         h = float(chm[max(0, jy - 1):jy + 2, max(0, ix - 1):ix + 2].max())
@@ -273,6 +350,11 @@ def main():
         if len(hit):
             dropped_surface.append({"x": round(x, 1), "y": round(y, 1), "h": round(h, 1), "on": hit.kind.iloc[0], "osm": hit.osm.iloc[0]})
             continue
+        if fw_inset is not None and fw_inset.contains(p):
+            fw = g[(g.kind == "fairway") & g.contains(p)]
+            dropped_surface.append({"x": round(x, 1), "y": round(y, 1), "h": round(h, 1), "on": "fairway",
+                                    "osm": fw.osm.iloc[0] if len(fw) else "fairway"})
+            continue
         r = float(np.sqrt(area / np.pi))
         r = float(np.clip(r, 1.0, max(1.5, 0.5 * h)))
         profile = float(mean_h[k - 1]) / max(h, 1e-6)  # ~0.55 cone, ~0.8 dome
@@ -288,6 +370,9 @@ def main():
     leaf = leaf_off_shares(name, cfg, world, trees)
     if leaf is not None:
         type_method = leaf
+    species_note = None
+    if cfg.get("blossom"):
+        trees, species_note = assign_blossoms(trees, cfg["blossom"], boundary, water_cells, bmask)
 
     # OSM natural=tree cross-check
     osm_trees = g[g.kind == "tree"]
@@ -308,8 +393,11 @@ def main():
         "osm_tree_points": int(len(osm_trees)),
         "osm_tree_points_matched_within_4m": int(matched),
         "source": canopy_label(cfg),
-        "type_method": type_method,
+        "type_method": type_method + (f" {species_note['text']}" if species_note else ""),
     }
+    if species_note:
+        stats["cherry"] = int(sum(t_["type"] == "cherry" for t_ in trees))
+        stats["blossom"] = species_note
     bdir = build_dir(name)
     write_json(bdir / "trees.json", trees)
     write_json(bdir / "trees_report.json", stats, indent=1)
@@ -327,7 +415,7 @@ def main():
     for t_ in trees:
         cx_, cy_ = t_["x"] * 2, (H - t_["y"]) * 2
         rr = t_["r"] * 2
-        col = (20, 120, 40) if t_["type"] == "conifer" else (230, 160, 30)
+        col = {"conifer": (20, 120, 40), "cherry": (255, 120, 200)}.get(t_["type"], (230, 160, 30))
         d.ellipse([cx_ - rr, cy_ - rr, cx_ + rr, cy_ + rr], outline=col)
         d.point((cx_, cy_), fill=(255, 0, 0))
     img.save(bdir / "trees_preview.png")

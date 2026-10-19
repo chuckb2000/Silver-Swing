@@ -150,7 +150,10 @@ def main():
     merged = gpd.GeoDataFrame(merged, crs=4326)
     # Flatten tags into a JSON-friendly column
     out = merged.copy()
-    out["tags"] = out["tags"].apply(lambda t: {k: v for k, v in t.items()})
+    # A value with both quote characters (e.g. maxheight=13'9") makes the GeoJSON
+    # writer store the whole tag dict as a Python repr string; write the inch
+    # mark as a double prime instead.
+    out["tags"] = out["tags"].apply(lambda t: {k: (v.replace('"', "\u2033") if "'" in v and '"' in v else v) for k, v in t.items()})
     path = cdir / "raw" / "osm.geojson"
     out.to_file(path, driver="GeoJSON")
     counts = out["kind"].value_counts().to_dict()

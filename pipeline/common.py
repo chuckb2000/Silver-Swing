@@ -107,3 +107,81 @@ def rnd(v, n=2):
 
 def angle_deg(dx, dy):
     return math.degrees(math.atan2(dy, dx))
+
+
+# --- layouts: several playable courses sharing one world ---------------------
+#
+# A data folder normally builds one course. East Potomac has three (Blue 18,
+# White 9, Red 9) on one island, so its course_config.json lists `layouts`.
+# The physical world (terrain, surface map, trees, greens, art) is built once
+# in data/<id>/build/ and exported to game/public/courses/<id>/; every layout
+# gets its own holes, putting views, minimaps and course.json in
+# data/<id>/build/layouts/<layout id>/ and game/public/courses/<layout id>/.
+# Without `layouts` the single layout is the course itself and every path is
+# what it always was (Oswego Lake and Highland Links rebuild unchanged).
+
+def layouts(cfg: dict) -> list[dict]:
+    if not cfg.get("layouts"):
+        return [{
+            "id": cfg["id"], "name": cfg["name"], "short": None, "boundary_osm": None,
+            "scorecard": "scorecard.csv", "tee_sets": cfg["tee_sets"], "default_tee": cfg["default_tee"],
+            "scorecard_source": cfg.get("scorecard_source", ""), "shared": False,
+        }]
+    out = []
+    for L in cfg["layouts"]:
+        d = {"short": None, "boundary_osm": None, "scorecard": f"scorecard_{L['id']}.csv",
+             "scorecard_source": cfg.get("scorecard_source", "")}
+        d.update(L)
+        d["shared"] = True
+        out.append(d)
+    return out
+
+
+def layout_dir(name: str, layout: dict) -> Path:
+    """Build folder of one layout (the course's build/ folder for a single-layout course)."""
+    if not layout["shared"]:
+        return build_dir(name)
+    p = build_dir(name) / "layouts" / layout["id"]
+    p.mkdir(parents=True, exist_ok=True)
+    return p
+
+
+def read_card(name: str, layout: dict) -> dict:
+    import csv
+    with open(course_dir(name) / layout["scorecard"]) as f:
+        return {int(r["hole"]): r for r in csv.DictReader(f)}
+
+
+def layout_holes(g, layout: dict):
+    """The golf=hole lines of one layout, with an int `ref` column, sorted by ref.
+
+    A layout with `boundary_osm` keeps the hole lines that lie inside that
+    leisure=golf_course polygon (5 m tolerance); a hole line tagged
+    layout=<layout id> in edited/course.geojson is assigned explicitly.
+    """
+    holes = g[g.kind == "hole"].copy()
+    if layout.get("boundary_osm"):
+        b = g[g.osm == layout["boundary_osm"]]
+        if b.empty:
+            raise SystemExit(f"layout {layout['id']}: boundary {layout['boundary_osm']} not in the course data")
+        poly = b.geometry.iloc[0].buffer(5.0)
+
+        def mine(r):
+            tag = r.tags.get("layout")
+            return tag == layout["id"] if tag else bool(poly.contains(r.geometry))
+        holes = holes[holes.apply(mine, axis=1)]
+    holes["ref"] = holes.tags.apply(lambda t: int(t.get("ref", 0)))
+    return holes.sort_values("ref")
+
+
+def play_boundary(g, cfg: dict):
+    """The out-of-bounds line: the course boundary, or with layouts the union of
+    every leisure=golf_course polygon in the data (one property, one OB line)."""
+    b = g[g.kind == "boundary"]
+    if not cfg.get("layouts"):
+        return b.geometry.iloc[0]
+    from shapely.ops import unary_union
+    u = unary_union(list(b.geometry))
+    if u.geom_type == "MultiPolygon":
+        u = max(u.geoms, key=lambda p: p.area)
+    return u

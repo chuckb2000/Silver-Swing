@@ -277,7 +277,16 @@ def theme_painters(theme: str = "pnw"):
     from pathlib import Path
     d = json.load(open(Path(__file__).resolve().parent / "palettes" / f"{theme}.json"))
     t = d.get("trees", {})
-    return PAINTERS[t.get("conifer", "conifer")], PAINTERS[t.get("deciduous", "deciduous")]
+    return _painter(t.get("conifer", "conifer")), _painter(t.get("deciduous", "deciduous"))
+
+
+def _painter(name: str):
+    """A name in PAINTERS, or "module:function" for a theme's own module (trees_potomac:cherry...)."""
+    if ":" in name:
+        import importlib
+        mod, fn = name.split(":", 1)
+        return getattr(importlib.import_module(mod), fn)
+    return PAINTERS[name]
 
 
 def tree_frames(theme: str = "pnw"):
