@@ -1,0 +1,94 @@
+{
+  "id": "langston",
+  "name": "Langston Golf Course",
+  "location": "Kingman Lake, Washington, District of Columbia",
+  "state": "DC",
+  "architects": "George Parish (front nine, 1939, built by the CCC and WPA); back nine added 1955",
+  "theme": "anacostia",
+  "epsg": 32618,
+  "osm_sources": [
+    "raw/overpass.geojson"
+  ],
+  "boundary_name": "Langston Golf Course",
+  "dtm": {
+    "path": "raw/dc_dem_1m_clip.tif",
+    "units": "m",
+    "source": "District of Columbia (OCTO / DC GIS) lidar bare-earth DEM, 1 m, NAD83(HARN) / Maryland State Plane (EPSG:2804), metres; DC-wide file DC.TIF.2.tif from the developer (GitHub release data-washington-dc), clipped to the world + 100 m with pipeline/clip_raster.py"
+  },
+  "chm": {
+    "path": "raw/dc_ndsm_1m_clip.tif",
+    "units": "m",
+    "source": "District of Columbia (OCTO / DC GIS) lidar normalized digital surface model (height above ground), 1 m, EPSG:2804, metres, water = -5; DC-wide file DC.TIF.1.tif from the developer (GitHub release data-washington-dc), clipped with pipeline/clip_raster.py",
+    "label": "DC lidar normalized surface model"
+  },
+  "world": {
+    "x0": 328854,
+    "y0": 4307124,
+    "width": 1536,
+    "height": 1536,
+    "note": "bbox of the OSM course boundary (both parts: 1287 x 1323 m) + scenery, rounded out to whole 256 m chunks: 1536 x 1536 m (~124 m east and west, ~107 m south and north)"
+  },
+  "tee_sets": [
+    {
+      "name": "Royal",
+      "playable": true,
+      "rating": 70.9,
+      "slope": 121,
+      "total_yd": 6652
+    },
+    {
+      "name": "White",
+      "playable": true,
+      "rating": 68.6,
+      "slope": 115,
+      "total_yd": 6161
+    },
+    {
+      "name": "Gold",
+      "playable": false,
+      "rating": 65.6,
+      "slope": 108,
+      "total_yd": 5544
+    },
+    {
+      "name": "Wake-Robin",
+      "playable": false,
+      "rating": 69.6,
+      "slope": 111,
+      "total_yd": 5307
+    }
+  ],
+  "default_tee": "Royal",
+  "scorecard_source": "Club scorecard PDF (National Links Trust, 'langston.scorecard.pdf', GitHub release data-langston, supplied by the developer 2026-10-19; copy in reference/langston/): pars, handicaps and yardages for Royal, White, Gold and Wake-Robin. The card prints no ratings; ratings/slopes from GolfPass (course 4511), retrieved 2026-10-19, unverified (Wake-Robin 69.6/111 is the women's rating). Royal is the developer's 'Blue' tee and the default (2026-10-19).",
+  "penalty_default": "red",
+  "driving_range_is_ob": false,
+  "join_boundary": {
+    "water_osm": [
+      "r1870168"
+    ],
+    "penalty": "red",
+    "note": "OSM maps the course as two polygons (the mainland, holes 1-9 and 14-18, and Kingman Island, holes 10-13) with Kingman Lake between them. The game's out-of-bounds line is one polygon, so the lake between the two parts (the part of it inside their convex hull, marsh islands included) joins them and is a red penalty area (developer, 2026-10-19: option A, red for all water)."
+  },
+  "connect_fairways": true,
+  "green_tiers": [
+    {
+      "hole": 13,
+      "drop_m": 1.37,
+      "width_m": 5.0,
+      "low_side": "front",
+      "line_frac": 0.3,
+      "pin": "upper_tier",
+      "note": "developer 2026-10-19: tiered green, the front little bit about 4-5 ft below the back, the back portion bigger; modelled as a 1.37 m (4.5 ft) step across the line of play, 30% of the green's depth from its front edge, pin in the middle of the upper (back) tier"
+    }
+  ],
+  "wind_mph": {
+    "minMph": 2,
+    "maxMph": 10
+  },
+  "attribution": [
+    "Map data © OpenStreetMap contributors (ODbL)",
+    "Elevation and canopy: District of Columbia lidar 1 m DEM and normalized surface model, DC GIS / OCTO (CC BY 4.0)",
+    "Scorecard: Langston Golf Course (National Links Trust)"
+  ],
+  "notes": "Developer decisions 2026-10-19: Royal (Blue) tees default; hole 10 has a back tee across Kingman Lake on the front-nine side; boundary joined across the lake (option A); every water hazard red; fairways run up to the green on every hole except where water lies between; anacostia theme with murky river water, no blossoms; the driving range is not made out of bounds. Hole 13 has a two-tier green (small low front tier), developer 2026-10-19."
+}

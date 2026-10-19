@@ -5,7 +5,7 @@ new course. Each lesson is something that cost time on an earlier course,
 with what to do instead. Add to it at the end of every course build.
 
 Sources so far: East Potomac Golf Links (2026-10-19, three courses on one
-island). Oswego Lake and Highland Links notes live in DECISIONS.md.
+island), Langston (2026-10-19, a course in two parts across a lake). Oswego Lake and Highland Links notes live in DECISIONS.md.
 
 ---
 
@@ -212,3 +212,36 @@ island). Oswego Lake and Highland Links notes live in DECISIONS.md.
 - If a push hook says the branch has "no remote branch" after a successful
   push, the local branch just lacks tracking in the shallow clone: set
   `branch.<name>.remote/merge` and a fetch refspec.
+
+## 8. Langston (2026-10-19)
+
+- **Check whether the OSM boundary is one polygon.** Langston's
+  `leisure=golf_course` is a multipolygon in two parts (mainland and island)
+  with a lake between them, and the game's out-of-bounds line is a single
+  polygon: s10 kept the bigger part, so four holes would have been out of
+  bounds. Look at the part count in Phase 1. `join_boundary` joins parts
+  across named water (which becomes a penalty area).
+- **Read the scorecard's tee names.** The developer said "Blue"; the card
+  says Royal, White, Gold, Wake-Robin. Use the card's names and say so.
+  Add up every row: the Wake-Robin back nine is misprinted.
+- **One OSM tee per hole usually means one tee set.** Measure every OSM box
+  against every column of the card before choosing what to build: Langston's
+  boxes were mostly White, with a few back tees. The lidar pads filled the rest.
+- **A back tee can be off the hole line.** The hole 10 back tee is across the
+  lake, 95 m from the OSM line start, where the corridor search never looks.
+  `propose_tees.py --wide=<holes>` searches a 250 m circle; then tag the pad
+  `hole=<n>`, `tee_set=<name>` (s06 only considers boxes near the line start).
+  A wide search finds many non-tees (green complexes, mounds, road shoulders):
+  pick by position and look at the picture.
+- **Check that a proposed pad is not another feature.** The best pad for Royal
+  6 overlapped an OSM bunker (bunkers paint over tees), which the
+  "every tee is on a tee box" test caught. Drop it rather than keep it.
+- **Streams mapped only as lines** can be made into penalty areas from the
+  DEM channel (`propose_channels.py`). A stream falls along its length: tag it
+  `flatten=no`, or s04 flattens it to its 10th percentile and cuts a trench.
+- **Trees inside a lake polygon** may stand on its islands. Filling a lake
+  over its islands to make one penalty area dropped 440 trees until s05 kept
+  trees in the joined areas.
+- **The developer may send corrections mid-build** (Langston's two-tier 13th
+  green came after the first export). Keep every step rebuildable so such a
+  change is one config entry and a rerun from s06.
