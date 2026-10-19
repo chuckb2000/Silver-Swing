@@ -86,6 +86,32 @@ The files are too large to attach to the chat, and Claude's sandbox can't reach 
 
 The release stays as the archived copy of the raw downloads (the LAZ files are too large for git).
 
+## Status
+
+- **2026-10-18 21:33:** release `data-highland-links` has `overpass.geojson` and the DEM. The four LAZ tiles were too slow to download from USGS (about an hour); replaced by the clipped NOAA order below.
+
+## Lidar, take 2: NOAA Data Access Viewer (clipped, vegetation only)
+
+The same 2021 point cloud, cut to the course box on NOAA's side, so only a small file comes back.
+
+1. Open https://coast.noaa.gov/dataviewer/#/lidar/search/where:ID=9777/details/9777 ("2021 USGS Lidar: Central Eastern Massachusetts").
+2. Zoom to Highland Light, North Truro. With the draw/rectangle tool, draw a box over the course plus about 300 m on every side, including the beach on the east (about 1.4 km east-west by 1.2 km north-south; box: south 42.0325, west -70.0695, north 42.0432, east -70.0526). Larger is fine; smaller is not.
+3. Add "2021 USGS Lidar: Central Eastern Massachusetts" to the cart, open the cart, click Next.
+4. Options:
+   - Output product: **Point** (point cloud), format **LAZ**.
+   - Classes, if the page lets you choose: only **4 Medium Vegetation** and **5 High Vegetation**. If it doesn't, take all classes.
+   - Projection: **UTM**, zone **19**, horizontal datum **NAD83(2011)**, units **meters**; vertical datum **NAVD88**, units **meters**.
+   - Leave everything else at its default.
+5. Enter your email and submit. NOAA emails a download link when the job finishes (small jobs usually within about 30 minutes).
+6. Download the zip and add it to the existing release: open the release page, click the pencil (Edit), drop the zip into the "Attach binaries" box below the description, then **Update release**.
+
 ## Checks on arrival (runbook 5.5)
+
+Results 2026-10-18:
+
+- **DEM** `USGS_1M_19_x41y466_MA_CentralEastern_2021_B21.tif` (99,440,480 bytes, as listed by USGS): EPSG:26919 (NAD83 / UTM 19N), 1 m, float32, metres (NAVD88), nodata -999999. No nodata over the world extent + 50 m. Heights -2.13 to 49.33 m (median 25.5 m); the ocean is hydro-flattened at -2.13 m; the cliff drops from ~35 m to the beach within ~100 m east of the course. Grid origin is 0.0003 m off whole metres (s00 resamples to the world grid anyway).
+- **OSM** `overpass.geojson`: 215 features. Boundary `leisure=golf_course` "Highland Links" (way 295320130, same as the GeoPackage). 9 hole lines (OSM par: 4,4,3,4,4,4,3,4,3; holes 2 and 6 are par 5 on the card, card wins), 9 greens, 27 tees (all polygons), 9 fairways, 16 bunkers, 8 cart paths, 60 buildings (GeoPackage: 17), 53 highway ways, natural wood/sand/beach/cliff/coastline/3 wetlands (DEP marsh), 4 fences, FAA radar dome and Jenny Lind Tower. No pins, no water hazards, no rough polygons.
+
+Checks still to run when the lidar arrives: CRS, units, classes present, coverage of the world extent.
 
 For each raster: CRS, resolution, units, nodata and holes, coverage of the world extent; ocean and beach handling in the hydro-flattened DEM. For OSM: the `leisure=golf_course` boundary named "Highland Links", feature counts per kind, and a comparison with the GeoPackage.
