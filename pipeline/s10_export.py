@@ -25,6 +25,9 @@ from common import PX_PER_M, ROOT, SURF, World, build_dir, course_dir, course_na
 warnings.filterwarnings("ignore")
 
 CHUNK = 512
+# optional per-theme minimap colours (palettes/<theme>.json "minimap" / "minimap_trees"), set in main()
+MINIMAP: dict = {}
+MINIMAP_TREES: dict = {}
 
 
 def to_palette_png(arr: np.ndarray, path):
@@ -41,13 +44,20 @@ def to_palette_png(arr: np.ndarray, path):
     img.save(path, optimize=True)
 
 
+def hex_rgb(h: str):
+    h = h.lstrip("#")
+    return [int(h[i:i + 2], 16) for i in (0, 2, 4)]
+
+
 def schematic(surf_blocks_mode, P):
     col = {
         SURF["ob"]: "#5f8a45", SURF["rough"]: "#3f8a3c", SURF["fairway"]: "#62b64c", SURF["fringe"]: "#6cc052",
         SURF["green"]: "#86d667", SURF["tee"]: "#79c95c", SURF["bunker"]: "#eadcb3", SURF["water"]: "#3e72a3",
         SURF["cartpath"]: "#a79f8e", SURF["woods"]: "#2c5a33", SURF["ob_road"]: "#6a6b72", SURF["ob_water"]: "#3e72a3",
         SURF["ob_woods"]: "#294c2f", SURF["ob_building"]: "#8a6a58", SURF["building"]: "#9a5a48", SURF["range"]: "#73b15a",
+        SURF["ob_sand"]: "#eadcb3",
     }
+    col.update({SURF[k]: v for k, v in MINIMAP.items()})
     lut = np.zeros((32, 3), np.uint8)
     for k, v in col.items():
         v = v.lstrip("#")
@@ -59,7 +69,7 @@ def block_mode(surf, f):
     H, W = surf.shape
     Hb, Wb = H // f, W // f
     blocks = surf[:Hb * f, :Wb * f].reshape(Hb, f, Wb, f).transpose(0, 2, 1, 3).reshape(Hb, Wb, f * f)
-    counts = np.stack([(blocks == c).sum(-1) for c in range(16)], -1)
+    counts = np.stack([(blocks == c).sum(-1) for c in range(32)], -1)
     # prefer small but important features (bunker, water, green) when present in >= 30% of the block
     for c, wgt in ((SURF["bunker"], 1.8), (SURF["water"], 1.6), (SURF["green"], 1.6), (SURF["cartpath"], 0.8)):
         counts[..., c] = counts[..., c] * wgt
@@ -91,8 +101,11 @@ def render_map(surf, z_px, trees, world, f, region=None):
         yy, xx = np.mgrid[max(0, y0):min(Hm, y1), max(0, x0):min(Wm, x1)]
         d = np.hypot(xx + 0.5 - cx, yy + 0.5 - cy)
         inside = d <= r
-        dark = np.array([31, 74, 50] if t["type"] == "conifer" else [47, 96, 44])
-        lite = np.array([58, 112, 74] if t["type"] == "conifer" else [80, 140, 66])
+        if MINIMAP_TREES:
+            dark, lite = (np.array(hex_rgb(c)) for c in MINIMAP_TREES[t["type"]])
+        else:
+            dark = np.array([31, 74, 50] if t["type"] == "conifer" else [47, 96, 44])
+            lite = np.array([58, 112, 74] if t["type"] == "conifer" else [80, 140, 66])
         hl = (xx + 0.5 - cx + yy + 0.5 - cy) < -r * 0.35
         sub = img[yy, xx]
         sub[inside] = dark
@@ -123,6 +136,9 @@ def main():
     cdir = course_dir(name)
     bdir = build_dir(name)
     out = out_dir(name)
+    theme = json.load(open(ROOT / "assets-src" / "palettes" / f"{cfg['theme']}.json"))
+    MINIMAP.update(theme.get("minimap", {}))
+    MINIMAP_TREES.update(theme.get("minimap_trees", {}))
     if (out / "terrain").exists():
         shutil.rmtree(out / "terrain")
     (out / "terrain").mkdir(parents=True)

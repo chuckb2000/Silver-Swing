@@ -26,7 +26,8 @@
     ],
     "units": "m",
     "source": "2021 USGS Lidar: Central Eastern Massachusetts (NOAA Data Access Viewer dataset 9777, job J1471981), clipped to the course box, vegetation classes 4 and 5 only; NAD83(2011) UTM 19N US survey feet, NAVD88 metres; ordered by the developer 2026-10-18 (GitHub release data-highland-links)",
-    "label": "2021 USGS lidar, leaf-off"
+    "label": "2021 USGS lidar, leaf-off",
+    "leaf_off": true
   },
   "world": {
     "x0": 411668,
@@ -35,6 +36,10 @@
     "height": 768,
     "note": "course boundary bbox (780 x 558 m) + scenery, rounded out to whole 256 m chunks: 1024 m east-west (~120 m each side), 768 m north-south (114 m south, 96 m north) so the whole world lies inside the clipped lidar (y 4654018-4654899)"
   },
+  "lake_level_max_m": -1.5,
+  "flatten_wetlands": false,
+  "cliff_sand_slope_pct": 45,
+  "beach_max_m": 4.0,
   "tee_sets": [
     {
       "name": "Blue",
@@ -52,6 +57,15 @@
     "minMph": 3,
     "maxMph": 14
   },
+  "green_tiers": [
+    {
+      "hole": 9,
+      "drop_m": 0.91,
+      "width_m": 4.0,
+      "low_side": "left",
+      "note": "developer 2026-10-18: iconic two-tiered green, left side lower, right side higher, about a 3 ft drop"
+    }
+  ],
   "attribution": [
     "Map data © OpenStreetMap contributors (ODbL)",
     "Elevation and lidar: U.S. Geological Survey 3D Elevation Program (2021 Central Eastern Massachusetts lidar)",

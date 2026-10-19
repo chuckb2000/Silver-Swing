@@ -1,0 +1,56 @@
+[
+ {
+  "hole": 1,
+  "tee_set": "Blue",
+  "step": 2,
+  "type": "tee_position",
+  "from": [
+   279.57,
+   446.19
+  ],
+  "to": [
+   284.81,
+   441.85
+  ],
+  "real_yd": 266.9,
+  "adjusted_yd": 259.5,
+  "card_yd": 250.0,
+  "reason": "measured 267 yd from the tee-box centre vs 250 on the card (+6.7%); moved the virtual tee within the real tee polygon w709063013"
+ },
+ {
+  "hole": 3,
+  "tee_set": "Blue",
+  "step": 2,
+  "type": "tee_position",
+  "from": [
+   878.13,
+   207.24
+  ],
+  "to": [
+   876.34,
+   208.49
+  ],
+  "real_yd": 166.8,
+  "adjusted_yd": 164.4,
+  "card_yd": 160.0,
+  "reason": "measured 167 yd from the tee-box centre vs 160 on the card (+4.2%); moved the virtual tee within the real tee polygon w709143119"
+ },
+ {
+  "hole": 9,
+  "tee_set": "Blue",
+  "step": 2,
+  "type": "tee_position",
+  "from": [
+   186.0,
+   525.6
+  ],
+  "to": [
+   169.7,
+   525.79
+  ],
+  "real_yd": 115.4,
+  "adjusted_yd": 133.2,
+  "card_yd": 136.0,
+  "reason": "developer: tee at the back of the tee box w1023658086 (tag tee_pos=back)"
+ }
+]

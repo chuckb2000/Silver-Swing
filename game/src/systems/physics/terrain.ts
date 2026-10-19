@@ -5,6 +5,9 @@ import { SURF } from './surfaces';
 
 export interface Bump { x: number; y: number; a: number; s: number }
 export interface PinFlat { px: number; py: number; r0: number; r1: number; zp: number; fx: number; fy: number }
+/** A tier line on a green: a smooth step of height h across the line through (x, y)
+ *  whose unit normal (nx, ny) points to the upper tier, w metres wide. */
+export interface Tier { x: number; y: number; nx: number; ny: number; w: number; h: number }
 export interface GreenDef {
   id: string;
   hole: number | null;
@@ -13,11 +16,23 @@ export interface GreenDef {
   bumps: Bump[];
   blend: number;
   pinFlat?: PinFlat;
+  tiers?: Tier[];
 }
 
 function smoothstep(t: number): number {
   const c = t < 0 ? 0 : t > 1 ? 1 : t;
   return c * c * (3 - 2 * c);
+}
+
+/** Height added by a green's tier lines, centred so the green's mean height is unchanged.
+ *  Mirrors tier_offset() in pipeline/terrain.py. */
+export function tierOffset(x: number, y: number, tiers: Tier[]): number {
+  let z = 0;
+  for (const t of tiers) {
+    const d = (x - t.x) * t.nx + (y - t.y) * t.ny;
+    z += t.h * (smoothstep(d / t.w + 0.5) - 0.5);
+  }
+  return z;
 }
 
 export class Polygon {
@@ -120,6 +135,7 @@ export class GreenModel {
       const dx = x - b.x, dy = y - b.y;
       z += b.a * Math.exp(-(dx * dx + dy * dy) / (2 * b.s * b.s));
     }
+    if (d.tiers) z += tierOffset(x, y, d.tiers);
     return z;
   }
 

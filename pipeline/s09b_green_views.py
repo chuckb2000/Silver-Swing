@@ -38,11 +38,12 @@ from shapely.geometry import MultiPolygon, Point, Polygon
 
 from common import PX_PER_M, ROOT, SURF, World, build_dir, course_name_from_argv, load_config, write_json
 from s08_surface import course_layers, road_geoms
-from s09_render import BAYER4, PRIO, SHADOW_DIR, SHADOW_MULT, build_lut, load_palette, wave_mask
+from terrain import tier_offset
+from s09_render import BAYER4, PRIO, SHADOW_DIR, SHADOW_MULT, build_lut, load_palette, load_theme, wave_mask
 
 sys.path.insert(0, str(ROOT / "assets-src"))
 from atlas import Atlas  # noqa: E402
-from trees import conifer, deciduous  # noqa: E402
+from trees import theme_painters  # noqa: E402
 
 warnings.filterwarnings("ignore")
 
@@ -131,6 +132,8 @@ def terrain_z_grid(base: np.ndarray, greens: list, grid: Grid) -> np.ndarray:
         zm = gm["z0"] + gm["gx"] * (Xs - gm["cx"]) + gm["gy"] * (Ys - gm["cy"])
         for b in gm["bumps"]:
             zm = zm + b["a"] * np.exp(-((Xs - b["x"]) ** 2 + (Ys - b["y"]) ** 2) / (2 * b["s"] ** 2))
+        if gm.get("tiers"):
+            zm = zm + tier_offset(Xs, Ys, gm["tiers"])
         pf = gm.get("pinFlat")
         if pf:
             dd = np.hypot(Xs - pf["px"], Ys - pf["py"])
@@ -239,7 +242,7 @@ def render_art(surf, z, grid: Grid, g, holes, trees, buildings, boundary, P, lut
     tuft2[:-1] = tuft[1:]
     tuft3 = np.zeros_like(tuft)
     tuft3[:-2] = tuft[2:]
-    put(tuft | tuft2 | tuft3, "G5")
+    put(tuft | tuft2 | tuft3, "TUFT" if "TUFT" in P else "G5")
     # outlines
     pr = PRIO[surf]
     edge = np.zeros((H, W), bool)
@@ -352,7 +355,8 @@ def main():
     outd = bdir / "greens"
     outd.mkdir(exist_ok=True)
     P = load_palette(cfg["theme"])
-    lut = build_lut(P)
+    lut = build_lut(P, load_theme(cfg["theme"]).get("lut"))
+    conifer, deciduous = theme_painters(cfg["theme"])
     surf05 = np.load(bdir / "surface.npy")
     base = np.load(bdir / "height_base.npy").astype(np.float64)
     greens = json.load(open(bdir / "greens.json"))
@@ -404,7 +408,7 @@ def main():
                 kind, w, hh, v = tree_sprite_key(t, i, L)
                 key = f"{kind}_{w}_{hh}_{v}"
                 if key not in made:
-                    made[key] = (conifer if kind == "c" else deciduous)(w, hh, v)
+                    made[key] = (conifer if kind == "c" else deciduous)(w, hh, v)  # the theme's tree painters
                     atlas.add(key, made[key])
                 places.append({"f": key, "x": round(t["x"], 2), "y": round(t["y"], 2)})
             aw, ah = atlas.write(outd)

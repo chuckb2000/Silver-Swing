@@ -52,6 +52,8 @@ def classify(tags: dict, geom_type: str) -> str | None:
         return "water"
     if tags.get("leisure") == "swimming_pool":
         return "pool"
+    if tags.get("natural") in ("beach", "sand"):
+        return "sand"  # off-course sand (golf bunkers are caught above)
     if tags.get("natural") in ("wood",) or tags.get("landuse") == "forest":
         return "wood"
     if tags.get("natural") == "tree":

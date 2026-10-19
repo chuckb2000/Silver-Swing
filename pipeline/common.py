@@ -36,6 +36,7 @@ SURF = {
     "ob_building": 13,
     "building": 14,   # immovable obstruction inside the boundary
     "range": 15,      # driving range, treated as out of bounds
+    "ob_sand": 16,    # beach / dune / cliff sand outside the boundary
 }
 SURF_NAME = {v: k for k, v in SURF.items()}
 

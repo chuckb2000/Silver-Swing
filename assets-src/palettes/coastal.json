@@ -1,0 +1,34 @@
+{
+  "name": "Coastal (Cape Cod links)",
+  "note": "Course theme palette (<= 32 colours; same keys as pnw.json plus F0-F2). Outer-Cape links: golden-olive fescue rough, bright mown fairways and greens, pitch pine and scrub oak, pale sand, deep blue Atlantic. From the developer's photos in reference/highland_links/. Shadows are a 35% black overlay on top of these.",
+  "colors": {
+    "G0": "#1c3122", "G1": "#294428", "G2": "#365a2e", "G3": "#456f34",
+    "G4": "#4f8a3b", "G5": "#5c9d42", "G6": "#6bb04a", "G7": "#7cc153",
+    "G8": "#8fcf60", "G9": "#b2e086",
+    "L0": "#5d6236", "L1": "#6f7640", "L2": "#838a4b",
+    "S0": "#c8ad7f", "S1": "#e9dbb4", "S2": "#f6eed7",
+    "W0": "#173f6b", "W1": "#215486", "W2": "#4f86b8",
+    "K0": "#26272d", "K1": "#55565d", "K2": "#7d7e86", "K3": "#b5ad9a", "K4": "#dbd3c1",
+    "B0": "#4a3424", "B1": "#6f5038", "B2": "#93704f",
+    "R0": "#5b5e66", "WH": "#f6f6f2",
+    "F0": "#7a7442", "F1": "#968e50", "F2": "#b0a660"
+  },
+  "lut": {
+    "rough": ["F0", "F1", "F2", "F2"]
+  },
+  "aliases": {
+    "TUFT": "G3"
+  },
+  "minimap": {
+    "ob": "#727a42", "rough": "#968e50", "woods": "#365a2e", "ob_woods": "#2c4a2c",
+    "water": "#215486", "ob_water": "#215486", "bunker": "#e9dbb4", "ob_sand": "#e9dbb4"
+  },
+  "minimap_trees": {
+    "conifer": ["#22402a", "#3b6236"],
+    "deciduous": ["#3a4f22", "#5c7434"]
+  },
+  "trees": {
+    "conifer": "pitch_pine",
+    "deciduous": "scrub_oak"
+  }
+}

@@ -27,6 +27,7 @@ from shapely.geometry import LineString, MultiPolygon, Point, Polygon
 from shapely.ops import unary_union
 
 from common import PX_PER_M, ROOT, SURF, World, build_dir, course_name_from_argv, load_config, write_json
+from terrain import tier_offset
 
 warnings.filterwarnings("ignore")
 
@@ -42,14 +43,24 @@ def hex2rgb(h):
     return tuple(int(h[i:i + 2], 16) for i in (0, 2, 4))
 
 
+def load_theme(theme: str = "pnw") -> dict:
+    """The whole theme file (assets-src/palettes/<theme>.json)."""
+    return json.load(open(ROOT / "assets-src" / "palettes" / f"{theme}.json"))
+
+
 def load_palette(theme: str = "pnw"):
-    """Course theme palette (assets-src/palettes/<theme>.json)."""
-    d = json.load(open(ROOT / "assets-src" / "palettes" / f"{theme}.json"))
-    return {k: hex2rgb(v) for k, v in d["colors"].items()}
+    """Course theme palette: colour key -> RGB. Optional "aliases" name a role
+    after a colour key (e.g. "TUFT": "F2" for the rough's grass tufts)."""
+    d = load_theme(theme)
+    P = {k: hex2rgb(v) for k, v in d["colors"].items()}
+    for k, v in d.get("aliases", {}).items():
+        P[k] = P[v]
+    return P
 
 
-def build_lut(P):
-    """surface id -> 4 tones (shadow, base, lit, extra-lit)."""
+def build_lut(P, overrides=None):
+    """surface id -> 4 tones (shadow, base, lit, extra-lit). A theme may remap
+    surfaces to other colour keys with "lut": {"rough": ["F0", "F1", "F2", "F2"]}."""
     t = {
         S["ob"]: ["L0", "L1", "L2", "L2"],
         S["rough"]: ["G2", "G3", "G4", "G4"],
@@ -67,7 +78,10 @@ def build_lut(P):
         S["ob_building"]: ["L0", "L0", "L1", "L1"],
         S["building"]: ["G2", "G2", "G3", "G3"],
         S["range"]: ["G5", "G6", "G7", "G7"],
+        S["ob_sand"]: ["S0", "S1", "S2", "S2"],
     }
+    for name, keys in (overrides or {}).items():
+        t[S[name]] = keys
     lut = np.zeros((32, 4, 3), np.uint8)
     for sid, names in t.items():
         for i, n in enumerate(names):
@@ -79,7 +93,7 @@ def build_lut(P):
 PRIO = np.zeros(32, np.int16)
 for k, v in {"ob_woods": 1, "ob": 2, "ob_building": 2, "ob_road": 3, "ob_water": 4, "woods": 5, "rough": 6,
              "range": 7, "fairway": 8, "fringe": 9, "cartpath": 10, "tee": 11, "bunker": 12, "green": 13,
-             "water": 14, "building": 15}.items():
+             "water": 14, "building": 15, "ob_sand": 3}.items():
     PRIO[S[k]] = v
 
 
@@ -105,6 +119,8 @@ def terrain_z_px(world, base, greens, H, W):
         zm = gm["z0"] + gm["gx"] * (Xs - gm["cx"]) + gm["gy"] * (Ys - gm["cy"])
         for b in gm["bumps"]:
             zm = zm + b["a"] * np.exp(-((Xs - b["x"]) ** 2 + (Ys - b["y"]) ** 2) / (2 * b["s"] ** 2))
+        if gm.get("tiers"):
+            zm = zm + tier_offset(Xs, Ys, gm["tiers"])
         pf = gm.get("pinFlat")
         if pf:
             dd = np.hypot(Xs - pf["px"], Ys - pf["py"])
@@ -204,7 +220,7 @@ def main():
     art = bdir / "art"
     art.mkdir(exist_ok=True)
     P = load_palette(cfg["theme"])
-    lut = build_lut(P)
+    lut = build_lut(P, load_theme(cfg["theme"]).get("lut"))
     surf = np.load(bdir / "surface.npy")
     H, W = surf.shape
     base = np.load(bdir / "height_base.npy").astype(np.float64)
@@ -257,7 +273,7 @@ def main():
     tuft = rough & (n1 > 0.992)
     tuft2 = np.zeros_like(tuft)
     tuft2[:-1] = tuft[1:]
-    put(tuft | tuft2, "G5")
+    put(tuft | tuft2, "TUFT" if "TUFT" in P else "G5")
     # range balls
     put((surf == S["range"]) & (n1 > 0.9975), "WH")
 
