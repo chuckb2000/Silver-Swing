@@ -158,7 +158,7 @@ export class PlayScene extends Phaser.Scene {
     this.hud = this.scene.get('hud') as HudScene;
     this.hud.events.once('create', () => {
       cam.fadeIn(350, ...FADE_RGB);
-      void this.green.prepare(this.round.holeNumber);
+      void this.green.prepare(this.round.courseHole);
       if (data?.resume) this.beginShot(true, true); else this.startHoleIntro(false);
     });
     this.scene.launch('hud');
@@ -175,8 +175,8 @@ export class PlayScene extends Phaser.Scene {
     }
     this.state = 'intro';
     const r = this.round;
-    this.green.forget(r.holeNumber);
-    void this.green.prepare(r.holeNumber);
+    this.green.forget(r.courseHole);
+    void this.green.prepare(r.courseHole);
     this.applyView(null, COURSE);
     this.resetBallSprite();
     this.placePin();
@@ -225,7 +225,7 @@ export class PlayScene extends Phaser.Scene {
     this.updateLanding();
     this.slopeDirty = true;
     const green = this.wantGreenView();
-    const level = green ? this.green.level(r.holeNumber, green) : this.isPutting() ? DROP : COURSE;
+    const level = green ? this.green.level(r.courseHole, green) : this.isPutting() ? DROP : COURSE;
     const changes = green !== this.green.layer || level !== this.level;
     if (changes && green && this.green.layer && !jump) {
       // between the far and the close-up putting views: zoom rather than cut
@@ -274,7 +274,7 @@ export class PlayScene extends Phaser.Scene {
    */
   private wantGreenView(): GreenLayer | null {
     const r = this.round;
-    const h = r.holeNumber;
+    const h = r.courseHole;
     if (!this.isPutting() || !this.green.isReady(h) || !this.green.contains(h, 'far', r.ball.x, r.ball.y, 8)) return null;
     // the closest view in which the ball and the hole both fit on screen
     for (const l of ['close', 'near'] as GreenLayer[]) {
@@ -300,7 +300,7 @@ export class PlayScene extends Phaser.Scene {
   }
 
   private applyView(green: GreenLayer | null, level: number) {
-    const hole = this.round.holeNumber;
+    const hole = this.round.courseHole;
     if (green && this.green.show(hole, green)) {
       this.view.setTreesVisible(false);
       this.rig.bounds = this.green.rect(hole, green);
@@ -318,7 +318,7 @@ export class PlayScene extends Phaser.Scene {
 
   /** Zoom between the far and close-up putting views (no fade). */
   private zoomTo(layer: GreenLayer, level: number) {
-    const hole = this.round.holeNumber;
+    const hole = this.round.courseHole;
     const from = this.level;
     const c0 = this.rig.clamp(this.rig.x, this.rig.y);
     // where the camera ends up, framed for the new level
@@ -514,7 +514,7 @@ export class PlayScene extends Phaser.Scene {
       this.explore = false;
       this.slopeDirty = true;
       const green = this.wantGreenView();
-      const level = green ? this.green.level(this.round.holeNumber, green) : this.isPutting() ? DROP : COURSE;
+      const level = green ? this.green.level(this.round.courseHole, green) : this.isPutting() ? DROP : COURSE;
       this.cut(() => {
         this.applyView(green, level);
         this.resetBallSprite();

@@ -1,0 +1,17 @@
+{
+ "courses": [
+  {
+   "id": "oswego_lake",
+   "name": "Oswego Lake Country Club",
+   "location": "Lake Oswego, Clackamas County, Oregon",
+   "theme": "pnw",
+   "holes": 18,
+   "par": 71,
+   "defaultTee": "Blue",
+   "totalYd": 6279,
+   "teeSets": [
+    "Blue"
+   ]
+  }
+ ]
+}

@@ -35,9 +35,16 @@ design chat. Keep building everything that doesn't depend on it.
 
 ### 0.1 Sharing the code between chats
 
-Preferred: one private GitHub repository that both chats use. The course chat
-works on a branch named `course/<id>` and opens a pull request; the developer
-merges it. Before starting and before handing off, pull `main` and rebase.
+The repository is **`chuckb2000/silver-swing`** on GitHub (private; default
+branch `main`). Attach it to the session and clone it. Work on a branch named
+`course/<id>`, push it, and open a pull request into `main`; the developer
+merges it. Before starting and before handing off, fetch `main` and rebase on
+it. Never push to `main` yourself.
+
+Cloudflare Pages publishes `main` as the live site on every merge, and builds
+every other branch at its own preview address, so the developer can play the
+new course from the pull request before merging. A broken build on `main`
+breaks the live site: run `npm run build` and the tests before every push.
 
 Fallback without GitHub: the developer uploads the latest project zip. At the
 end, send back a zip that contains only the paths the course chat owns (table
@@ -126,26 +133,26 @@ surface type is a game change (section 0).
 The pipeline and game were written for Oswego Lake. Before the second course,
 these assumptions must go. Check each one; it may already have been fixed.
 
-### 3.1 Game side (design chat owns this; check it's done before Phase 5)
+### 3.1 Game side (done by the design chat, session 2)
 
-- [ ] `COURSE_ID` constant in `game/src/app.ts` replaced by a course registry
-      (`game/public/courses/index.json`: `[{id, name, location, theme, par,
-      holes, defaultTee, totalYd}]`) and a course choice in the setup screen.
-- [ ] Course data loaded when a course is chosen (not every course at boot).
-- [ ] Title, credits and leaderboard read the course from `course.json`
-      (location, architects, attribution). Today `TitleScene.ts` prints "lake
-      oswego, oregon" and `CreditsScene.ts` hard-codes the Oswego architects
-      and DOGAMI/GolfPass lines.
-- [ ] Resume (`save/snapshot.ts`) loads the snapshot's own course.
-- [ ] Tree sprites per theme (`sprites/trees_<theme>.png`) when a course's
-      theme isn't `pnw`.
-- [ ] Unit tests in `tests/unit/course.test.ts` run for every course in the
-      registry (today the path `public/courses/oswego_lake` and tee `Blue` are
-      hard-coded).
-- [ ] 9-hole courses, if one is ever built (`flow.ts` `holesFor` assumes 18).
-
-If any box is unchecked when you reach Phase 5, stop and send the developer
-the list.
+- [x] Course list `game/public/courses/index.json` (`{courses: [{id, name,
+      location, theme, holes, par, defaultTee, totalYd, teeSets}]}`) and a
+      course choice on the new-round screen.
+- [x] Course data loaded when a course is chosen (`src/data/courses.ts`;
+      one course in memory at a time).
+- [x] Title, credits and leaderboard read the course from the list and
+      `course.json` (`name`, `location`, `architects`, `attribution`).
+- [x] Resume loads the saved round's own course.
+- [x] Tree sprites per theme: the game loads `sprites/trees_<theme>.png/json`
+      and `sprites/trees_<theme>_meta.json` for a theme other than `pnw`, and
+      falls back to the `pnw` set (with a console warning) if they're missing.
+- [x] Tests run for every course in the list (`tests/unit/courses.test.ts`:
+      files present, list matches `course.json`, minimaps and the three
+      putting views per hole, a robot round). `course.test.ts` stays
+      Oswego-specific.
+- [x] 9-hole courses: rounds of 9 holes or 18 (twice around). The scorecard
+      numbers the second loop 10-18; `Round.courseHole` is the course's own
+      hole. A 9-hole course needs only holes 1-9 in `course.json`.
 
 ### 3.2 Pipeline side (course chat does this)
 
@@ -164,7 +171,7 @@ Known Oswego-specific code, with the fix:
 | `s04_elevation.py` lake handling | `lake_level_max_m` written for Oswego Lake | keep it optional; document it in the config (3.3) |
 | `s03_audit.py`, `s06_holes.py` | expect holes 1–18 | read the hole count from `scorecard.csv` |
 | `s08_surface.py` | spec's `ob=yes` lines inside the boundary are not implemented | only if the course needs them: an `ob=yes` **area** polygon painted `SURF["ob"]`, plus a test that a ball at rest there is OB. Lines need a game change (section 0). |
-| `s10_export.py` | doesn't write the registry | upsert this course's entry in `game/public/courses/index.json` |
+| `s10_export.py` | ~~doesn't write the registry~~ | done: `update_registry()` upserts the course in `game/public/courses/index.json` |
 | `Makefile` | step list | add `s00_prepare_rasters.py` first |
 
 ### 3.3 `course_config.json` (document every field you add)

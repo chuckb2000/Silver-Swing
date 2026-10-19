@@ -15,6 +15,7 @@ import { Button, COLORS, dimmer, Panel, setTxt, txt } from '../ui/widgets';
 import { uiCamera } from '../scale';
 import type { PlayScene } from './PlayScene';
 import { finishRound } from './flow';
+import { courseHoleFor } from '../systems/game/round';
 
 type Modal = 'relief' | 'drop' | 'card' | 'overview' | 'pause' | 'holed' | null;
 
@@ -250,8 +251,8 @@ export class HudScene extends Phaser.Scene {
     for (const o of [this.aimL, this.aimR, this.aimLabel, this.clubPanel, this.clubUp, this.clubDown, this.swingBtn, this.meterPanel]) o.setVisible(showCtl);
     if (!showCtl) { this.spinBtn.setVisible(false); this.scaleBtn.setVisible(false); this.unplayBtn.setVisible(false); this.mulliganBtn.setVisible(false); }
     // minimap
-    const mm = app.course!.json.maps.holes.find((m) => m.hole === r.holeNumber)!;
-    if (this.mini.texture.key !== `mini_${r.holeNumber}`) this.mini.setTexture(`mini_${r.holeNumber}`);
+    const mm = app.course!.json.maps.holes.find((m) => m.hole === r.courseHole)!;
+    if (this.mini.texture.key !== `mini_${r.courseHole}`) this.mini.setTexture(`mini_${r.courseHole}`);
     if (this.miniPanel.pw !== mm.w + 6 || this.miniPanel.ph !== mm.h + 6) {
       this.miniPanel.resize(mm.w + 6, mm.h + 6);
       this.layout();
@@ -262,7 +263,7 @@ export class HudScene extends Phaser.Scene {
   private drawMini() {
     const p = this.play;
     const r = p.round;
-    const mm = app.course!.json.maps.holes.find((m) => m.hole === r.holeNumber)!;
+    const mm = app.course!.json.maps.holes.find((m) => m.hole === r.courseHole)!;
     const g = this.miniG;
     g.clear();
     const toM = (x: number, y: number) => ({ x: 3 + Math.round((x - mm.x0) / mm.mPerPx), y: 3 + Math.round((mm.y1 - y) / mm.mPerPx) });
@@ -667,10 +668,14 @@ export class HudScene extends Phaser.Scene {
   }
 }
 
-/** Scorecard table (front and back nine). */
+/** Scorecard table: out and in (18-hole course, or a 9-hole course twice around), or one nine. */
 export function scorecard(scene: Phaser.Scene, r: import('../systems/game/round').Round, W: number, H: number): Phaser.GameObjects.Container {
   const c = scene.add.container(0, 0);
-  const holes = app.course!.json.holes;
+  const holes = r.course.json.holes;
+  const nCourse = holes.length;
+  const blocks: (readonly [number, number, string])[] = nCourse === 9 && r.cfg.holes.length <= 9
+    ? [[1, 9, 'tot']]
+    : [[1, 9, 'out'], [10, 18, 'in']];
   const cellW = W < 330 ? 17 : 21;
   const labelW = 34, sumW = 24;
   const tw = labelW + cellW * 9 + sumW + 2;
@@ -678,13 +683,12 @@ export function scorecard(scene: Phaser.Scene, r: import('../systems/game/round'
   const rowH = 11;
   const scoreH = 17; // tall enough for a circle / square around the number
   const blockH = rowH * 3 + scoreH + 4;
-  const th = blockH * 2 + 36;
+  const th = blockH * blocks.length + 36;
   const y0 = Math.max(4, Math.round((H - th) / 2) - 6);
   const pnl = new Panel(scene, x0 - 6, y0 - 4, tw + 12, th + 8, 0.94);
   c.add(pnl);
-  c.add(txt(scene, x0, y0, `${app.course!.json.name}  ·  ${r.cfg.tee.toLowerCase()} tees  ·  ${r.cfg.playerName}`, { color: COLORS.dim }));
+  c.add(txt(scene, x0, y0, `${r.course.json.name}  ·  ${r.cfg.tee.toLowerCase()} tees  ·  ${r.cfg.playerName}`, { color: COLORS.dim }));
   const byHole = new Map(r.scores.map((s) => [s.hole, s]));
-  const blocks = [[1, 9, 'out'], [10, 18, 'in']] as const;
   blocks.forEach(([a, b, lab], k) => {
     const yb = y0 + 14 + k * (blockH + 6);
     const g = scene.add.graphics();
@@ -696,7 +700,7 @@ export function scorecard(scene: Phaser.Scene, r: import('../systems/game/round'
     rows.forEach((rl, i) => c.add(txt(scene, x0 + 2, i === 3 ? sy : yb + i * rowH + 1, rl, { color: i === 3 ? COLORS.yellow : COLORS.dim })));
     let sumPar = 0, sumYd = 0, sumSc = 0, any = false;
     for (let h = a; h <= b; h++) {
-      const hj = holes[h - 1];
+      const hj = holes[courseHoleFor(h, nCourse) - 1];
       const cx = x0 + labelW + (h - a) * cellW + cellW / 2;
       const yd = hj.tees[r.cfg.tee]?.cardYd ?? 0;
       sumPar += hj.par;
@@ -729,7 +733,7 @@ export function scorecard(scene: Phaser.Scene, r: import('../systems/game/round'
   });
   const tot = totals(r.scores);
   const fw = tot.fairwayChances ? `${tot.fairways}/${tot.fairwayChances}` : '-';
-  c.add(txt(scene, x0, y0 + 14 + 2 * (blockH + 6) - 2,
+  c.add(txt(scene, x0, y0 + 14 + blocks.length * (blockH + 6) - 2,
     `total ${tot.strokes || '-'} (${tot.holes ? toPar(tot.toPar) : 'e'})  ·  putts ${tot.putts}  ·  fairways ${fw}  ·  gir ${tot.gir}/${tot.holes}  ·  penalties ${tot.penalties}`,
     { color: COLORS.dim, maxWidth: tw }));
   c.setData('bottom', y0 + th + 4);

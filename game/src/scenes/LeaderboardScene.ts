@@ -1,15 +1,21 @@
-// Leaderboard: one board per course x tee x round length, filterable by
-// difficulty, casual rounds on their own tab. Export / import as JSON.
+// Leaderboard: one board per course x round length, filterable by
+// difficulty, casual rounds on their own tab. "friends" is the shared online
+// board (when the site has one), "this device" the local one, which can be
+// exported / imported as text.
 
 import { app } from '../app';
 import { Difficulty } from '../data/difficulty';
-import { backupText, LeaderboardEntry, loadBoard } from '../save/store';
+import { backupText, LeaderboardEntry, loadBoard, RoundLength } from '../save/store';
+import { fetchBoard, flushUploads, onlineAvailable } from '../save/online';
+import { lengthLabel, lengthsFor } from './flow';
 import { askImport, showBackup } from '../ui/backup';
 import { compareRounds, toPar } from '../systems/rules/scoring';
 import { Button, COLORS, Panel, txt } from '../ui/widgets';
 import { MenuScene } from './menu';
 
-let len: '18' | 'front' | 'back' = '18';
+let len: RoundLength = '18';
+let courseId = '';
+let source: 'friends' | 'device' | null = null; // null: friends when the site has a shared board
 let diff: Difficulty | 'all' = 'all';
 let casual = false;
 let page = 0;
@@ -25,21 +31,45 @@ export class LeaderboardScene extends MenuScene {
     const x0 = Math.round((W - pw) / 2), y0 = 4;
     this.root.add(new Panel(this, x0, y0, pw, ph, 0.9));
     this.root.add(txt(this, x0 + pw / 2, y0 + 5, 'leaderboard', { origin: [0.5, 0], scale: 2 }));
-    this.root.add(txt(this, x0 + pw / 2, y0 + 24, `${app.course!.json.name}  ·  ${app.course!.json.defaultTee.toLowerCase()} tees`, { origin: [0.5, 0], color: COLORS.dim }));
-    let y = y0 + 36;
+    // course: the current one unless another was picked here
+    const courses = app.courses;
+    if (!courses.some((c) => c.id === courseId)) courseId = app.course!.json.id;
+    const ci = Math.max(0, courses.findIndex((c) => c.id === courseId));
+    const info = courses[ci];
+    this.root.add(txt(this, x0 + pw / 2, y0 + 24, `${info.name}  ·  ${info.defaultTee.toLowerCase()} tees`, { origin: [0.5, 0], color: COLORS.dim, maxWidth: pw - 50 }));
+    if (courses.length > 1) {
+      const go = (d: number) => { courseId = courses[(ci + d + courses.length) % courses.length].id; page = 0; this.rebuild(); };
+      this.root.add(new Button(this, x0 + 6, y0 + 21, 16, 14, '', () => go(-1), { icon: 'arrow_left', color: 'grey' }));
+      this.root.add(new Button(this, x0 + pw - 22, y0 + 21, 16, 14, '', () => go(1), { icon: 'arrow_right', color: 'grey' }));
+    }
+    const lens = lengthsFor(info.holes);
+    if (!lens.includes(len)) len = lens[0];
+    const online = await onlineAvailable();
+    if (!this.sys.isActive()) return;
+    const src = source ?? (online ? 'friends' : 'device');
+    let y = y0 + 38;
     const tab = (items: [string, string][], cur: string, set: (v: string) => void) => {
       const bw = Math.floor((pw - 16 - (items.length - 1) * 2) / items.length);
       items.forEach(([k, lab], i) => this.root.add(new Button(this, x0 + 8 + i * (bw + 2), y, bw, 14, lab, () => { set(k); page = 0; this.rebuild(); }, { color: cur === k ? 'orange' : 'grey' })));
       y += 17;
     };
-    tab([['18', '18 holes'], ['front', 'front 9'], ['back', 'back 9'], ['casual', 'casual']], casual ? 'casual' : len, (v) => {
-      if (v === 'casual') casual = !casual; else { len = v as typeof len; casual = false; }
+    if (online) tab([['friends', 'friends'], ['device', 'this device']], src, (v) => { source = v as 'friends' | 'device'; });
+    tab([...lens.map((k): [string, string] => [k, lengthLabel(k)]), ['casual', 'casual']], casual ? 'casual' : len, (v) => {
+      if (v === 'casual') casual = !casual; else { len = v as RoundLength; casual = false; }
     });
     tab([['all', 'all'], ['easy', 'easy'], ['normal', 'normal'], ['pro', 'pro']], diff, (v) => { diff = v as typeof diff; });
-    const all = await loadBoard();
+    const local = await loadBoard();
+    let all = local;
+    let note = '';
+    if (src === 'friends') {
+      const shared = await fetchBoard(info.id);
+      if (shared) all = shared;
+      else note = "can't reach the shared leaderboard - showing this device";
+    }
     if (!this.sys.isActive()) return;
-    const rows = all.filter((e) => e.course === app.course!.json.id && e.length === len && e.casual === casual && (diff === 'all' || e.difficulty === diff));
+    const rows = all.filter((e) => e.course === info.id && e.length === len && e.casual === casual && (diff === 'all' || e.difficulty === diff));
     rows.sort(compareRounds);
+    if (note) { this.root.add(txt(this, x0 + pw / 2, y, note, { origin: [0.5, 0], color: COLORS.yellow, maxWidth: pw - 16 })); y += 11; }
     const lineH = 11;
     const listTop = y + 2;
     const maxRows = Math.max(1, Math.floor((y0 + ph - 26 - listTop) / lineH) - 1);
@@ -65,10 +95,11 @@ export class LeaderboardScene extends MenuScene {
       this.root.add(txt(this, x0 + 84, by + 3, `${page + 1}/${pages}`, { origin: [0.5, 0] }));
       this.root.add(new Button(this, x0 + 96, by, 18, 15, '', () => { page = Math.min(pages - 1, page + 1); this.rebuild(); }, { icon: 'arrow_right', color: 'grey' }));
     }
-    this.root.add(new Button(this, x0 + pw - 114, by, 52, 15, 'export', () => void showBackup(backupText(all), all.length), { color: 'grey' }));
+    this.root.add(new Button(this, x0 + pw - 114, by, 52, 15, 'export', () => void showBackup(backupText(local), local.length), { color: 'grey' }));
     this.root.add(new Button(this, x0 + pw - 58, by, 52, 15, 'import', async () => {
       const n = await askImport();
       if (n === null || !this.scene.isActive()) return;
+      if (n > 0) await flushUploads();
       this.rebuild();
       this.root.add(txt(this, x0 + pw / 2, by - 12, n ? `imported ${n} ${n === 1 ? 'round' : 'rounds'}` : 'nothing new to import', { origin: [0.5, 0], color: COLORS.yellow }));
     }, { color: 'grey' }));

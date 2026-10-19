@@ -1,6 +1,6 @@
 // Title menu (runs above the BgScene fly-over).
 
-import { app } from '../app';
+import { app, GAME_NAME } from '../app';
 import { initAudio, setVolume } from '../audio/sfx';
 import { peekSnapshot } from '../save/snapshot';
 import { Button, COLORS, Panel, txt } from '../ui/widgets';
@@ -23,9 +23,22 @@ export class TitleScene extends MenuScene {
     const W = app.view.w, H = app.view.h;
     const cx = Math.round(W / 2);
     const top = Math.max(8, Math.round(H * 0.14));
-    this.root.add(txt(this, cx, top, 'local golf', { origin: [0.5, 0], scale: 4 }));
-    this.root.add(txt(this, cx, top + 42, app.course!.json.name, { origin: [0.5, 0], scale: W < 330 ? 1 : 2, color: COLORS.yellow }));
-    this.root.add(txt(this, cx, top + 62, `lake oswego, oregon  ·  par ${app.course!.json.par}  ·  ${app.course!.json.teeSets[0].totalYd} yd`, { origin: [0.5, 0], color: COLORS.dim }));
+    // the game name as large as fits (4x on a wide screen, two lines on a narrow one)
+    const name = GAME_NAME.toLowerCase();
+    const one = txt(this, cx, top, name, { origin: [0.5, 0], scale: 4 });
+    if (one.width <= W - 16) this.root.add(one);
+    else {
+      one.destroy();
+      const words = name.split(' ');
+      const l1 = txt(this, cx, top - 6, words.slice(0, 2).join(' '), { origin: [0.5, 0], scale: 3 });
+      const l2 = txt(this, cx, top + 22, words.slice(2).join(' '), { origin: [0.5, 0], scale: 3 });
+      if (l1.width > W - 16) { l1.setScale(2); l2.setScale(2); l2.y = top + 12; }
+      this.root.add([l1, l2]);
+    }
+    const n = app.courses.length;
+    const sub = n === 1 ? app.courses[0].name : `${n} courses`;
+    this.root.add(txt(this, cx, top + 46, sub, { origin: [0.5, 0], scale: W < 330 ? 1 : 2, color: COLORS.yellow }));
+    this.root.add(txt(this, cx, top + 66, 'real courses, rebuilt from map and lidar data', { origin: [0.5, 0], color: COLORS.dim }));
     const snap = await peekSnapshot();
     if (!this.sys.isActive()) return;
     const bw = 124, bh = 17, gap = 21;
@@ -47,6 +60,6 @@ export class TitleScene extends MenuScene {
     add('settings', () => this.scene.start('settings', { from: 'title' }), true);
     add('credits', () => this.scene.start('credits'), true);
     this.root.add(new Panel(this, 4, H - 16, W - 8, 12, 0.55));
-    this.root.add(txt(this, cx, H - 15, 'map data © openstreetmap contributors · lidar: dogami', { origin: [0.5, 0], color: COLORS.dim }));
+    this.root.add(txt(this, cx, H - 15, 'map data © openstreetmap contributors · more in credits', { origin: [0.5, 0], color: COLORS.dim }));
   }
 }

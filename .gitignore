@@ -9,6 +9,9 @@ __pycache__/
 # pipeline intermediates (rebuilt by `make course NAME=<id>` from raw/ + edited/)
 data/*/build/
 
+# local Cloudflare dev state (wrangler pages dev)
+.wrangler/
+
 # editor / OS clutter
 .DS_Store
 .vscode/

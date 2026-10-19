@@ -4,10 +4,11 @@ import { app } from '../app';
 import { Difficulty } from '../data/difficulty';
 import { saveSettings } from '../save/store';
 import { Button, COLORS, Panel, txt } from '../ui/widgets';
-import { RoundLength, startRound } from './flow';
-import { MenuScene } from './menu';
+import { lengthLabel, lengthsFor, RoundLength, startRound, useCourse } from './flow';
+import { ensureBg, MenuScene } from './menu';
 
 let length: RoundLength = '18';
+let switching = false;
 
 export class SetupScene extends MenuScene {
   constructor() {
@@ -27,13 +28,25 @@ export class SetupScene extends MenuScene {
     const lx = x0 + 8, vx = x0 + 78;
     const row = (label: string) => { this.root.add(txt(this, lx, y + 3, label, { color: COLORS.dim })); };
     row('course');
-    this.root.add(txt(this, vx, y + 3, c.name));
+    const courses = app.courses;
+    if (courses.length > 1) {
+      // < course name >  (switching loads the other course)
+      const i = Math.max(0, courses.findIndex((k) => k.id === c.id));
+      const go = (d: number) => void this.switchTo(courses[(i + d + courses.length) % courses.length].id);
+      this.root.add(new Button(this, vx, y, 16, 15, '', () => go(-1), { icon: 'arrow_left', color: 'grey' }));
+      this.root.add(txt(this, vx + 20, y + 3, switching ? 'loading course...' : c.name, { maxWidth: pw - 86 - 40, color: switching ? COLORS.dim : COLORS.white }));
+      this.root.add(new Button(this, x0 + pw - 24, y, 16, 15, '', () => go(1), { icon: 'arrow_right', color: 'grey' }));
+    } else {
+      this.root.add(txt(this, vx, y + 3, c.name));
+    }
     y += 16;
     row('tees');
     this.root.add(txt(this, vx, y + 3, `${tee.name.toLowerCase()}  ·  ${tee.totalYd} yd  ·  ${tee.rating} / ${tee.slope}`, { color: 0x8ec5ff }));
     y += 18;
     row('round');
-    const lens: [RoundLength, string][] = [['18', '18 holes'], ['front', 'front 9'], ['back', 'back 9']];
+    const options = lengthsFor(c.holes.length);
+    if (!options.includes(length)) length = options[0];
+    const lens: [RoundLength, string][] = options.map((k) => [k, lengthLabel(k)]);
     const bw = Math.floor((pw - 86) / 3);
     lens.forEach(([k, lab], i) => {
       this.root.add(new Button(this, vx + i * (bw + 2), y, bw, 15, lab, () => { length = k; this.rebuild(); }, { color: length === k ? 'orange' : 'grey' }));
@@ -61,7 +74,23 @@ export class SetupScene extends MenuScene {
     this.root.add(txt(this, x0 + pw / 2, y, desc, { origin: [0.5, 0], color: COLORS.dim, maxWidth: pw - 12 }));
     const by = y0 + ph - 22;
     this.root.add(new Button(this, x0 + 8, by, 56, 16, 'back', () => this.back(), { color: 'grey' }));
-    this.root.add(new Button(this, x0 + pw - 98, by, 90, 16, 'tee off', () => { this.scene.stop('bg'); startRound(this, length); }));
+    this.root.add(new Button(this, x0 + pw - 98, by, 90, 16, 'tee off', () => { if (switching) return; this.scene.stop('bg'); startRound(this, length); }));
+  }
+
+  private async switchTo(id: string) {
+    if (switching) return;
+    switching = true;
+    this.rebuild();
+    try {
+      await useCourse(this, id);
+    } catch (e) {
+      console.error(e);
+    } finally {
+      switching = false;
+    }
+    if (!this.sys.isActive()) return;
+    ensureBg(this);
+    this.rebuild();
   }
 
   private editName() {

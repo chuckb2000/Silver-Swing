@@ -371,7 +371,7 @@ real and adjusted yardage in the report.
     a scorecard that doesn\'t match the measured layout), list it in
     validation_report.md and ask. Do not fill gaps with guesses.
 
-**Local Golf Game --- Project Spec for Claude**
+**Silver Swings Golf --- Project Spec for Claude**
 
 Read this file at the start of every session. It is the source of truth
 for this project. Numbers marked **(tune)** are starting values. Change
@@ -382,8 +382,16 @@ DECISIONS.md with the reason.
 
 -   **Milestone:** M0-M5 implemented in the first session; two
     playtests done and their fixes are in (the developer shot 71 over 18
-    in the second); waiting on a third playtest of putting to sign off on
-    feel (M2) and on the open items below (M3 acceptance).
+    in the second); Phase 0 (multi-course support, shared leaderboard,
+    hosting) done in the second session; waiting on a third playtest of
+    putting to sign off on feel (M2) and on the open items below (M3
+    acceptance).
+
+-   **Code and hosting:** private GitHub repo `chuckb2000/silver-swing`
+    (default branch `main`). Cloudflare Pages builds and publishes `main`
+    on every push and gives other branches preview addresses. The design
+    chat works on branches and asks the developer to merge; the
+    course-building chat follows docs/COURSE_BUILD.md section 0.
 
 -   **Last session (2026-10-18):** Built the whole game in one pass:
     pipeline steps s01-s10 for Oswego Lake CC (OSM GeoPackages + DOGAMI
@@ -411,9 +419,21 @@ DECISIONS.md with the reason.
     a claude.ai artifact (page = game/dist/artifact.html, written by
     `npm run build`).
 
--   **Next task:** Third playtest, focused on putting (close-up view,
-    reading the hole) and on the slightly harder yellow misses. Then: verify the scorecard against the
-    club's printed card; trace the hole 3 Blue tee box.
+-   **Session 2 (2026-10-18):** Phase 0. The game is **Silver Swings
+    Golf**. Course list `game/public/courses/index.json` (written by
+    pipeline s10), course picker on the new-round screen, one course loaded
+    at a time (`src/data/courses.ts`), per-course credits / resume /
+    leaderboards / tree theme, 9-hole courses (9 holes or 18 twice around;
+    `Round.courseHole` vs the scorecard `holeNumber`), and a shared online
+    leaderboard (Cloudflare Pages Function + D1, `game/functions`,
+    `src/server/scores.ts`, `src/save/online.ts`) next to the local one.
+    95 unit tests and 2 Playwright tests pass; the function was also run
+    under wrangler with a local D1.
+
+-   **Next task:** the developer binds a D1 database as `DB` to the
+    Cloudflare Pages project; then the third playtest (putting, yellow
+    misses), the club's printed scorecard and the hole 3 Blue tee box. New
+    courses: a separate chat following docs/COURSE_BUILD.md.
 
 -   **Open items:** data/oswego_lake/validation_report.md (hole 3 tee
     not mapped; holes 7/11 OSM lines start on each other's tees;
@@ -494,9 +514,11 @@ DECISIONS.md with the reason.
   Saving        IndexedDB (via idb-keyval), with  Leaderboard and saves
                 localStorage fallback             persist locally
 
-  Hosting       npm run build, then open locally  Personal use
-                or serve the static dist/.        
-                Optionally a private host         
+  Hosting       **Cloudflare Pages** built from the Free plan, updates on
+                GitHub repo (root `game`, build   every push; D1 database
+                `npm run build`, output `dist`);  for the shared leaderboard
+                Pages Function + D1 for the
+                shared leaderboard
   ---------------------------------------------------------------------------
 
 Phaser config: pixelArt: true, roundPixels: true, antialias: false,
@@ -1267,8 +1289,9 @@ calm (≈60% of holes below half the max). It is seeded per round.
 
 1.  Title → **Play** / Leaderboard / Settings / Credits
 
-2.  Course select → tee select (default **Blue** for the first course) →
-    round length (18 / front 9 / back 9) → difficulty → player name(s)
+2.  New round: course (from courses/index.json) → tees (default
+    **Blue** for the first course) → round length (18 / front 9 / back 9;
+    a 9-hole course: 9 / 18 twice around) → difficulty → player name
 
 3.  **Hole intro:** hole number, par, yardage and handicap; golfer
     portrait; a skippable flyover from the tee to the green.
@@ -1305,7 +1328,10 @@ calm (≈60% of holes below half the max). It is seeded per round.
 
 **10.4 Saving and leaderboard**
 
-All stored locally in IndexedDB.
+Stored locally in IndexedDB. On the hosted site, finished rounds are also
+sent to a shared online leaderboard for everyone who plays there (the
+"friends" tab; no accounts or anti-cheat, by the developer's choice); the
+local leaderboard stays as the offline copy.
 
 -   **Leaderboard:** one board per course × tee set × round length,
     filterable by difficulty. Each entry has player name, date, gross
@@ -1449,6 +1475,10 @@ Blue (6,279 yd) suits the club distances in 7.1.
 /DECISIONS.md ← log of tuning and design changes, with reasons
 
 /docs/COURSE_BUILD.md ← runbook for building a new course
+
+/game/functions/api/scores.ts ← Cloudflare Pages Function: shared leaderboard
+
+/game/public/courses/index.json ← the course list (written by pipeline s10)
 
 /Makefile ← make dev \| make test \| make course NAME=x \| make assets
 

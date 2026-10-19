@@ -1,29 +1,23 @@
 // Round start / resume / finish helpers shared by the scenes.
 
 import Phaser from 'phaser';
-import { app, COURSE_ID } from '../app';
-import { addToBoard, LeaderboardEntry } from '../save/store';
-import { clearSnapshot, restoreRound } from '../save/snapshot';
+import { app } from '../app';
+import { flushUploads } from '../save/online';
+import { addToBoard, LeaderboardEntry, saveSettings } from '../save/store';
+import { loadCourse } from '../data/courses';
+import { clearSnapshot, peekSnapshot, restoreRound } from '../save/snapshot';
 import { isCasual, newSeed, Round, RoundConfig } from '../systems/game/round';
 import { totals } from '../systems/rules/scoring';
 
-export type RoundLength = '18' | 'front' | 'back';
-
-export function holesFor(len: RoundLength): number[] {
-  if (len === 'front') return [1, 2, 3, 4, 5, 6, 7, 8, 9];
-  if (len === 'back') return [10, 11, 12, 13, 14, 15, 16, 17, 18];
-  return Array.from({ length: 18 }, (_, i) => i + 1);
-}
-
-export function lengthOf(holes: number[]): RoundLength {
-  if (holes.length === 18) return '18';
-  return holes[0] === 1 ? 'front' : 'back';
-}
+export { holesFor, lengthLabel, lengthOf, lengthsFor } from '../systems/game/lengths';
+export type { RoundLength } from '../save/entry';
+import { holesFor, lengthOf } from '../systems/game/lengths';
+import type { RoundLength } from '../save/entry';
 
 export function startRound(scene: Phaser.Scene, len: RoundLength) {
   const s = app.settings;
   const cfg: RoundConfig = {
-    courseId: COURSE_ID,
+    courseId: app.course!.json.id,
     tee: app.course!.json.defaultTee,
     holes: holesFor(len),
     playerName: s.playerName || 'player',
@@ -37,7 +31,29 @@ export function startRound(scene: Phaser.Scene, len: RoundLength) {
   scene.scene.start('play', { resume: false });
 }
 
+/** Wait (up to ~1 s) until a scene has really stopped. */
+async function untilStopped(scene: Phaser.Scene, key: string) {
+  for (let i = 0; i < 60 && scene.scene.isActive(key); i++) await new Promise((r) => requestAnimationFrame(r));
+}
+
+/**
+ * Make `id` the current course (no-op if it already is). The menu background
+ * is stopped while the old course is unloaded; the caller relaunches it.
+ */
+export async function useCourse(scene: Phaser.Scene, id: string): Promise<void> {
+  if (app.course?.json.id === id) return;
+  scene.scene.stop('bg');
+  await untilStopped(scene, 'bg');
+  await loadCourse(scene, id);
+  app.settings.courseId = id;
+  void saveSettings(app.settings);
+}
+
 export async function resumeRound(scene: Phaser.Scene): Promise<boolean> {
+  const snap = await peekSnapshot();
+  if (!snap) return false;
+  if (!app.courses.some((c) => c.id === snap.cfg.courseId)) return false; // course no longer offered
+  await useCourse(scene, snap.cfg.courseId);
   const res = await restoreRound();
   if (!res) return false;
   app.round = res.round;
@@ -52,7 +68,7 @@ export async function finishRound(scene: Phaser.Scene) {
     id: `${r.cfg.startedAt}-${r.cfg.seed}`,
     course: r.cfg.courseId,
     tee: r.cfg.tee,
-    length: lengthOf(r.cfg.holes),
+    length: lengthOf(r.cfg.holes, r.course.json.holes.length),
     difficulty: r.cfg.settings.difficulty,
     casual: isCasual(r.cfg.settings),
     player: r.cfg.playerName,
@@ -65,6 +81,7 @@ export async function finishRound(scene: Phaser.Scene) {
   };
   await addToBoard(entry);
   await clearSnapshot();
+  void flushUploads(); // to the shared leaderboard (if this site has one)
   scene.scene.stop('hud');
   scene.scene.stop('play');
   scene.scene.start('summary', { entry });

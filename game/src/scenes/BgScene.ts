@@ -25,7 +25,7 @@ export class BgScene extends Phaser.Scene {
       this.path.push({ x: t.x * PX_PER_M, y: (H - t.y) * PX_PER_M });
       this.path.push({ x: h.pin[0] * PX_PER_M, y: (H - h.pin[1]) * PX_PER_M });
     }
-    this.t = Math.floor(Math.random() * 18) * 2;
+    this.t = Math.floor(Math.random() * course.json.holes.length) * 2;
     this.shade = this.add.rectangle(0, 0, 10, 10, 0x081018, 0.3).setOrigin(0, 0).setDepth(1e7);
     const onResize = () => worldCamera(this.cameras.main);
     this.scale.on('resize', onResize);

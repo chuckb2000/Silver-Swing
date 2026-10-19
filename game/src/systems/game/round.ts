@@ -112,8 +112,11 @@ export class Round {
     this.winds = roundWinds(cfg.seed, cfg.holes.length, course.json.wind ?? DEFAULT_WIND, this.preset);
   }
 
+  /** The hole's number on the scorecard (10-18 for the second time around a 9-hole course). */
   get holeNumber(): number { return this.cfg.holes[this.holeIndex]; }
-  get hole(): HoleJson { return this.course.json.holes[this.holeNumber - 1]; }
+  /** The course's own hole being played (a 9-hole course played twice repeats 1-9). */
+  get courseHole(): number { return courseHoleFor(this.holeNumber, this.course.json.holes.length); }
+  get hole(): HoleJson { return this.course.json.holes[this.courseHole - 1]; }
   get tee(): TeeJson { return this.hole.tees[this.cfg.tee] ?? Object.values(this.hole.tees)[0]; }
   get pin(): { x: number; y: number } { return { x: this.hole.pin[0], y: this.hole.pin[1] }; }
   get holeGreen(): Polygon { return this.course.greenPolys.get(this.hole.greenId)!; }
@@ -457,6 +460,11 @@ function lastInBounds(sim: SimResult, boundary: Polygon): { x: number; y: number
     if (boundary.contains(x, y)) last = { x, y };
   }
   return last;
+}
+
+/** Scorecard hole number -> the course's hole (9-hole courses played twice around). */
+export function courseHoleFor(slot: number, courseHoles: number): number {
+  return ((slot - 1) % courseHoles) + 1;
 }
 
 export function newSeed(): number {

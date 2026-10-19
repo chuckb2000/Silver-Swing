@@ -2,6 +2,25 @@
 
 Changes from the starting values in CLAUDE.md, and choices the spec left open. Newest first within each area. Date: 2026-10-18 (first build session, then the first and second playtests).
 
+## Phase 0 decisions (developer, 2026-10-18)
+
+- **Name:** the game is called **Silver Swings Golf**.
+- **Code:** one private GitHub repository shared by the design chat and the course-building chat (docs/COURSE_BUILD.md section 0.1).
+- **Hosting:** Cloudflare Pages, built from the GitHub repo on every push (root `game`, build `npm run build`, output `dist`, Node 22 from `game/.node-version`). Chosen over Netlify because Netlify's free plan is credit-based (15 credits per deploy out of 300 a month, sites pause when they run out), which frequent updates would exhaust; Cloudflare Pages' free plan has no bandwidth charge and 500 builds a month.
+- **Leaderboard:** shared between friends (an online leaderboard on the same Cloudflare account), keeping the local one as the offline copy.
+- **9-hole courses** will be added, so the game must support them.
+- **Title screen** shows the game name; the course is chosen on the new-round screen.
+- **No anti-cheat on the shared leaderboard** (developer, 2026-10-18): anyone who can open the site can post a round. The server only checks that a round is well-formed, caps request size, and ignores ids it already has.
+
+## Phase 0 implementation (session 2, 2026-10-18)
+
+- **Course list:** `game/public/courses/index.json`, upserted by pipeline s10 (`update_registry`). The game loads it at boot, starts with the last course played (`settings.courseId`) or the first, and loads other courses on demand from the new-round screen. Switching stops the menu background, removes the old course's textures (`chunk_*`, `mini_*`, `green_*`, `overview`) and data, then loads the new one.
+- **9-hole courses:** round lengths `9` and `9x2` (18 twice around). `cfg.holes` holds scorecard numbers (1-18); `Round.courseHole = ((n - 1) mod courseHoles) + 1` is used for everything that reads course data (tees, greens, putting views, minimaps). Front/back nine totals and the countback work unchanged.
+- **Shared leaderboard:** Cloudflare Pages Function `game/functions/api/scores.ts` (logic in `src/server/scores.ts`, shared shape check in `src/save/entry.ts`) storing one row per round in D1 (`rounds`, created on first use; full round JSON in `data`). `GET ?ping=1` / `GET ?course=<id>` / `POST` (one round or up to 50, `INSERT OR IGNORE` by id). The client (`src/save/online.ts`) sends every local round the server hasn't acknowledged (tracked in storage key `uploaded`) at boot, after each round and after an import, so offline rounds and imported backups reach the board too. Without the server (Vite dev, claude.ai preview, no `DB` binding) the game shows only this device's board.
+- **Storage keys unchanged** (`local-golf` IndexedDB store and `local-golf:` localStorage prefix), so rounds saved before the rename are kept.
+- **Credits** list the current course's designers and data sources from `course.json`.
+
+
 ## Putting and swing camera fixes (2026-10-18, after the second playtest)
 
 - **No driver off the deck.** The driver is only selectable for a tee shot (ball teed up on the tee box); from anywhere else, including the fairway, it's skipped by club selection.

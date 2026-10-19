@@ -101,6 +101,21 @@ def render_map(surf, z_px, trees, world, f, region=None):
     return img
 
 
+def update_registry(course: dict):
+    """Add or update this course in game/public/courses/index.json (the list the game offers)."""
+    path = ROOT / "game" / "public" / "courses" / "index.json"
+    reg = json.load(open(path)) if path.exists() else {"courses": []}
+    default = next(t for t in course["teeSets"] if t["name"] == course["defaultTee"])
+    entry = {
+        "id": course["id"], "name": course["name"], "location": course["location"], "theme": course["theme"],
+        "holes": len(course["holes"]), "par": course["par"], "defaultTee": course["defaultTee"],
+        "totalYd": default["totalYd"], "teeSets": [t["name"] for t in course["teeSets"]],
+    }
+    reg["courses"] = [c for c in reg["courses"] if c["id"] != entry["id"]] + [entry]
+    reg["courses"].sort(key=lambda c: c["name"].lower())
+    write_json(path, reg, indent=1)
+
+
 def main():
     name = course_name_from_argv()
     cfg = load_config(name)
@@ -273,6 +288,7 @@ def main():
         "maps": {"overview": "maps/overview_2m.png", "overviewMPerPx": 2, "holes": minimaps},
     }
     write_json(out / "course.json", course)
+    update_registry(course)
 
     # validation report -------------------------------------------------------
     table = (bdir / "validation_table.md").read_text()

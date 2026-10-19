@@ -4,7 +4,10 @@
 
 import { createStore, del, get, set, UseStore } from 'idb-keyval';
 import type { Difficulty } from '../data/difficulty';
-import type { HoleScore, RoundTotals } from '../systems/rules/scoring';
+import { isEntry, LeaderboardEntry } from './entry';
+
+export type { LeaderboardEntry, RoundLength } from './entry';
+export { isEntry } from './entry';
 
 export interface Settings {
   difficulty: Difficulty;
@@ -20,28 +23,13 @@ export interface Settings {
   viewScale: number; // -1 bigger pixels / 0 auto / +1 smaller pixels
   playerName: string;
   showTips: boolean;
+  courseId: string;  // last course chosen on the new-round screen
 }
 
 export const DEFAULT_SETTINGS: Settings = {
   difficulty: 'normal', lefty: false, units: 'yd', latencyMs: 0, volume: 0.7, muted: false,
-  e5: false, gimmes: false, maxDoublePar: false, mulligans: false, viewScale: 0, playerName: 'player', showTips: true,
+  e5: false, gimmes: false, maxDoublePar: false, mulligans: false, viewScale: 0, playerName: 'player', showTips: true, courseId: '',
 };
-
-export interface LeaderboardEntry {
-  id: string;
-  course: string;
-  tee: string;
-  length: '18' | 'front' | 'back';
-  difficulty: Difficulty;
-  casual: boolean;
-  player: string;
-  date: string;
-  gross: number;
-  toPar: number;
-  back: number | null;
-  scores: HoleScore[];
-  totals: RoundTotals;
-}
 
 const mem = new Map<string, unknown>();
 let idb: UseStore | null = null;
@@ -112,6 +100,13 @@ export async function replaceBoard(entries: LeaderboardEntry[]): Promise<void> {
   await write('leaderboard', entries);
 }
 
+/** Ids of rounds already sent to the shared leaderboard. */
+export async function loadUploaded(): Promise<Set<string>> {
+  return new Set((await read<string[]>('uploaded')) ?? []);
+}
+
+export const saveUploaded = (ids: Set<string>) => write('uploaded', [...ids]);
+
 export const loadRoundInProgress = <T>() => read<T>('round-in-progress');
 export const saveRoundInProgress = (snap: unknown) => write('round-in-progress', snap);
 export const clearRoundInProgress = () => remove('round-in-progress');
@@ -119,17 +114,6 @@ export const clearRoundInProgress = () => remove('round-in-progress');
 /** The leaderboard as backup text (JSON) for copying to another device. */
 export function backupText(entries: LeaderboardEntry[]): string {
   return JSON.stringify({ app: 'local-golf', version: 1, entries });
-}
-
-function isEntry(e: unknown): e is LeaderboardEntry {
-  const x = e as Partial<LeaderboardEntry> | null;
-  return !!x && typeof x === 'object'
-    && typeof x.id === 'string' && typeof x.course === 'string' && typeof x.tee === 'string'
-    && (x.length === '18' || x.length === 'front' || x.length === 'back')
-    && typeof x.difficulty === 'string' && typeof x.casual === 'boolean'
-    && typeof x.player === 'string' && typeof x.date === 'string'
-    && Number.isFinite(x.gross) && Number.isFinite(x.toPar)
-    && Array.isArray(x.scores) && !!x.totals && typeof x.totals === 'object';
 }
 
 /**
