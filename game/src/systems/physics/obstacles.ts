@@ -12,7 +12,7 @@ export interface Tree {
   h: number;      // height above ground, m
   r: number;      // crown radius, m
   conifer: boolean;
-  /** trees.json `c`: 0 deciduous, 1 conifer, 2 flowering (drawn in blossom; deciduous for physics) */
+  /** trees.json `c`: 0 deciduous, 1 conifer, 2 flowering tree (drawn in blossom), 3 flowering shrub (drawn in shrubs); 2 and 3 are deciduous for physics */
   kind?: number;
   base: number;   // ground elevation at the trunk
 }

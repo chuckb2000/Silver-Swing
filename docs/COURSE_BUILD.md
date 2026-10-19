@@ -113,7 +113,7 @@ The pipeline's last step (`pipeline/s10_export.py`) writes
 | `surface.png` | 8-bit greyscale, value = surface id, 0.5 m/px, row 0 = north. **The single map used for both physics and art.** |
 | `surface_legend.json` | ids, OB ids, area per surface |
 | `height.png` + `height.json` | bare-earth heights, 1 m grid vertices, R*256+G = uint16 between min and max, row 0 = north; `samples` lets the game check its decode |
-| `trees.json` | parallel arrays x, y, h (m), r (crown radius, m), c (1 = conifer) |
+| `trees.json` | parallel arrays x, y, h (m), r (crown radius, m), c (0 deciduous, 1 conifer, 2 flowering tree, 3 flowering shrub). A shrub's bloom colour is its index % 8 (0 pink, 1 magenta, 2 purple, 3 white, 4 red, 5 coral, 6 pale pink, 7 leaves only); the putting views can draw it with `assets-src/shrubs.py` `shrub(W, H, variant)` and `shrub_key()` |
 | `terrain/c_<i>_<j>.png` | 512 × 512 px terrain art chunks at 2 px/m |
 | `greens/gNN.png`, `gNN_trees.png/json` | far putting view per hole (6 px/m, 120 m window) |
 | `greens/gNNn.png`, `gNNn_trees.png/json` | near putting view per hole (12 px/m, 64 m window) |
@@ -233,7 +233,12 @@ Known Oswego-specific code, with the fix:
   "keep_tee_trees": [],                 // optional: holes ("10", or "blue 7" with layouts) that keep trees in front of the tee
                                         // (a deliberate tree-lined dogleg). Every other tee shot at the middle of the fairway
                                         // is cleared: s06 moves the tee within its box, s06b drops trees (COURSE_LESSONS.md 3)
-  "ob_highways": ["trunk"]              // optional: roads of these OSM highway values inside the boundary are out of bounds (Indian Island's Route 105)
+  "ob_highways": ["trunk"],             // optional: roads of these OSM highway values inside the boundary are out of bounds (Indian Island's Route 105)
+  "tee_shot_margin_m": 0,               // optional: extra vertical clearance (m) the tee-shot tree check keeps from each crown,
+                                        // when the game test still finds a crown the pipeline check passed by centimetres
+  "red_water_osm": ["r123"],            // optional: OSM water features that are red penalty areas wherever they lie,
+                                        // also outside the boundary (a river along the course; Tualatin)
+  "drop_trees": [{"x": 0, "y": 0, "reason": "..."}]  // optional: single trees (local metres) the developer asked to remove
 }
 ```
 
