@@ -6,7 +6,7 @@ import Phaser from 'phaser';
 import { app, HEIGHT_PX, PX_PER_M } from '../app';
 import type { CourseRuntime } from '../data/course';
 
-interface TreeInfo { key: string; px: number; py: number; w: number; h: number }
+interface TreeInfo { key: string; sheet: string; px: number; py: number; w: number; h: number }
 
 export const DEPTH = {
   terrain: -100000,
@@ -40,6 +40,7 @@ export class CourseView {
     }
     const meta = scene.cache.json.get('treesMeta') as { widths: number[]; heights: number[] };
     const tex = scene.textures.get('trees');
+    const bloom = scene.textures.exists('blossom') ? scene.textures.get('blossom') : null;
     const trees = course.obstacles.trees;
     this.cols = Math.ceil(j.world.width / this.cell);
     this.rows = Math.ceil(j.world.height / this.cell);
@@ -58,9 +59,11 @@ export class CourseView {
         while (h > 2.6 * w + 6 && meta.heights.indexOf(h) > 0) h = meta.heights[meta.heights.indexOf(h) - 1];
       }
       let key = `${type}_${w}_${h}_${t.i % 3}`;
-      if (!tex.has(key)) key = type === 'c' ? 'c_22_44_0' : 'd_22_32_0';
+      let sheet = 'trees';
+      if (t.kind === 2 && bloom?.has(`b_${w}_${h}_${t.i % 3}`)) { key = `b_${w}_${h}_${t.i % 3}`; sheet = 'blossom'; } // flowering: same size grid as deciduous
+      else if (!tex.has(key)) key = type === 'c' ? 'c_22_44_0' : 'd_22_32_0';
       const px = Math.round(t.x * PX_PER_M), py = Math.round((j.world.height - t.y) * PX_PER_M);
-      this.infos.push({ key, px, py, w: w + 2, h });
+      this.infos.push({ key, sheet, px, py, w: w + 2, h });
       const c = Math.min(this.cols - 1, Math.floor(t.x / this.cell)), r = Math.min(this.rows - 1, Math.floor(t.y / this.cell));
       this.cellTrees[r * this.cols + c].push(this.infos.length - 1);
     }
@@ -95,7 +98,7 @@ export class CourseView {
       if (this.active.has(k)) continue;
       const imgs = this.cellTrees[k].map((i) => {
         const t = this.infos[i];
-        return this.scene.add.image(t.px, t.py + 1, 'trees', t.key).setOrigin(0.5, 1).setDepth(t.py);
+        return this.scene.add.image(t.px, t.py + 1, t.sheet, t.key).setOrigin(0.5, 1).setDepth(t.py);
       });
       this.active.set(k, imgs);
     }

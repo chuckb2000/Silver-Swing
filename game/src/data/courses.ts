@@ -106,6 +106,7 @@ export async function loadCourse(scene: Phaser.Scene, id: string): Promise<Cours
     }
     l.image('overview', base + json.maps.overview);
     for (const m of json.maps.holes) l.image(`mini_${m.hole}`, base + m.file);
+    if (trees.c.includes(2) && !scene.textures.exists('blossom')) l.atlas('blossom', 'sprites/blossom.png', 'sprites/blossom.json'); // flowering trees
     if (wantTrees) {
       const sheet = treeSheet(theme);
       l.atlas('trees', `${sheet}.png`, `${sheet}.json`);

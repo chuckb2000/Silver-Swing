@@ -85,6 +85,8 @@ class Course:
         self.tree_atlas = Atlas(PUBLIC / "sprites" / f"{sheet}.png", PUBLIC / "sprites" / f"{sheet}.json")
         self.tree_meta = json.load(open(PUBLIC / "sprites" / f"{sheet}_meta.json"))
         self.ui = Atlas(PUBLIC / "sprites" / "sprites.png", PUBLIC / "sprites" / "sprites.json")
+        bl = PUBLIC / "sprites" / "blossom.png"
+        self.blossom = Atlas(bl, PUBLIC / "sprites" / "blossom.json") if bl.exists() else None  # flowering trees (c: 2)
         self.surface = np.array(Image.open(self.dir / self.json["surface"]["file"]))
         self._chunks: dict = {}
 
@@ -116,7 +118,11 @@ class Course:
             if tx < x0 - 30 or tx > x0 + w + 30 or ty < y0 or ty > y0 + h + 100:
                 continue
             key = tree_key(k, T["c"][k] == 1, T["r"][k], T["h"][k], self.tree_meta, self.tree_atlas)
-            spr = self.tree_atlas.get(key)
+            bkey = "b" + key[1:]
+            if T["c"][k] == 2 and self.blossom is not None and self.blossom.has(bkey) and key.startswith("d_"):
+                spr = self.blossom.get(bkey)     # same choice as the game (courseView.ts)
+            else:
+                spr = self.tree_atlas.get(key)
             objs.append((ty, tx - spr.width // 2, ty + 1 - spr.height, spr))
         cup = self.ui.get("cup")
         flag = self.ui.get("flag_0")

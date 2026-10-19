@@ -1,4 +1,4 @@
-// Leaderboard: one board per course x round length, filterable by
+// Leaderboard: one board per course x tee set x round length, filterable by
 // difficulty, casual rounds on their own tab. "friends" is the shared online
 // board (when the site has one), "this device" the local one, which can be
 // exported / imported as text.
@@ -10,11 +10,13 @@ import { fetchBoard, flushUploads, onlineAvailable } from '../save/online';
 import { lengthLabel, lengthsFor } from './flow';
 import { askImport, showBackup } from '../ui/backup';
 import { compareRounds, toPar } from '../systems/rules/scoring';
+import { teeFor } from '../data/registry';
 import { Button, COLORS, Panel, txt } from '../ui/widgets';
 import { MenuScene } from './menu';
 
 let len: RoundLength = '18';
 let courseId = '';
+let teeSel = ''; // '' = the tee last played on this course
 let source: 'friends' | 'device' | null = null; // null: friends when the site has a shared board
 let diff: Difficulty | 'all' = 'all';
 let casual = false;
@@ -26,7 +28,7 @@ export class LeaderboardScene extends MenuScene {
   }
 
   init(data: { courseId?: string }) {
-    if (data?.courseId) { courseId = data.courseId; page = 0; }
+    if (data?.courseId) { courseId = data.courseId; teeSel = ''; page = 0; }
   }
 
   async build() {
@@ -40,7 +42,9 @@ export class LeaderboardScene extends MenuScene {
     if (!courses.some((c) => c.id === courseId)) courseId = app.course!.json.id;
     const ci = Math.max(0, courses.findIndex((c) => c.id === courseId));
     const info = courses[ci];
-    this.root.add(txt(this, x0 + pw / 2, y0 + 24, `${info.name}  ·  ${info.defaultTee.toLowerCase()} tees`, { origin: [0.5, 0], color: COLORS.dim, maxWidth: pw - 120 }));
+    const tees = info.teeSets;
+    if (!tees.includes(teeSel)) teeSel = teeFor(info, app.settings.tees);
+    this.root.add(txt(this, x0 + pw / 2, y0 + 24, `${info.name}  ·  ${teeSel.toLowerCase()} tees`, { origin: [0.5, 0], color: COLORS.dim, maxWidth: pw - 120 }));
     if (courses.length > 1) {
       this.root.add(new Button(this, x0 + pw - 54, y0 + 21, 48, 14, 'change', () => this.scene.start('courses', { purpose: 'board', courseId: info.id }), { color: 'grey' }));
     }
@@ -59,6 +63,7 @@ export class LeaderboardScene extends MenuScene {
     tab([...lens.map((k): [string, string] => [k, lengthLabel(k)]), ['casual', 'casual']], casual ? 'casual' : len, (v) => {
       if (v === 'casual') casual = !casual; else { len = v as RoundLength; casual = false; }
     });
+    if (tees.length > 1) tab(tees.map((t): [string, string] => [t, `${t.toLowerCase()} tees`]), teeSel, (v) => { teeSel = v; });
     tab([['all', 'all'], ['easy', 'easy'], ['normal', 'normal'], ['pro', 'pro']], diff, (v) => { diff = v as typeof diff; });
     const local = await loadBoard();
     let all = local;
@@ -69,7 +74,7 @@ export class LeaderboardScene extends MenuScene {
       else note = "can't reach the shared leaderboard - showing this device";
     }
     if (!this.sys.isActive()) return;
-    const rows = all.filter((e) => e.course === info.id && e.length === len && e.casual === casual && (diff === 'all' || e.difficulty === diff));
+    const rows = all.filter((e) => e.course === info.id && (tees.length < 2 || e.tee === teeSel) && e.length === len && e.casual === casual && (diff === 'all' || e.difficulty === diff));
     rows.sort(compareRounds);
     if (note) { this.root.add(txt(this, x0 + pw / 2, y, note, { origin: [0.5, 0], color: COLORS.yellow, maxWidth: pw - 16 })); y += 11; }
     const lineH = 11;
