@@ -43,9 +43,11 @@ export class TitleScene extends MenuScene {
   private layoutBackdrop() {
     if (!this.pano || !this.sky) return;
     const W = app.view.w, H = app.view.h;
-    // one art pixel per texel, anchored at the bottom; plain sky above on a tall screen
-    this.pano.setPosition(0, H - 270).setSize(W, 270);
-    this.sky.setPosition(0, 0).setSize(W, Math.max(0, H - 270 + 1));
+    // anchored at the bottom, one art pixel per texel - or two on a tall screen (a phone
+    // held upright), which would otherwise be mostly empty sky; plain sky above it
+    const k = H >= 500 ? 2 : 1;
+    this.pano.setTileScale(k).setPosition(0, H - 270 * k).setSize(W, 270 * k);
+    this.sky.setPosition(0, 0).setSize(W, Math.max(0, H - 270 * k + 1));
   }
 
   update(_t: number, dt: number) {
@@ -64,6 +66,7 @@ export class TitleScene extends MenuScene {
     const one = txt(this, cx, top, name, { origin: [0.5, 0], scale: 4 });
     const tgap = 8;
     let placed = false;
+    let dy = 0;
     if (trophy && one.width + trophy.width + tgap <= W - 16) {
       const left = Math.round(cx - (one.width + trophy.width + tgap) / 2);
       this.root.add(this.add.image(left, Math.max(2, top - 16), 'trophy').setOrigin(0, 0));
@@ -80,20 +83,22 @@ export class TitleScene extends MenuScene {
     else {
       one.destroy();
       const words = name.split(' ');
-      const l1 = txt(this, cx, top - 6, words.slice(0, 2).join(' '), { origin: [0.5, 0], scale: 3 });
-      const l2 = txt(this, cx, top + 22, words.slice(2).join(' '), { origin: [0.5, 0], scale: 3 });
-      if (l1.width > W - 16) { l1.setScale(2); l2.setScale(2); l2.y = top + 12; }
+      // two lines: everything below moves down by the second line
+      const l1 = txt(this, cx, top, words.slice(0, 2).join(' '), { origin: [0.5, 0], scale: 3 });
+      const l2 = txt(this, cx, top + 30, words.slice(2).join(' '), { origin: [0.5, 0], scale: 3 });
+      dy = 30;
+      if (l1.width > W - 16) { l1.setScale(2); l2.setScale(2); l2.y = top + 20; dy = 20; }
       this.root.add([l1, l2]);
     }
     const n = app.courses.length;
     const states = coursesByState(app.courses).length;
     const sub = n === 1 ? app.courses[0].name : `${n} courses${states > 1 ? ` in ${states} states` : ''}`;
-    this.root.add(txt(this, cx, top + 46, sub, { origin: [0.5, 0], scale: W < 330 ? 1 : 2, color: COLORS.yellow }));
-    this.root.add(txt(this, cx, top + 66, 'real courses, rebuilt from map and lidar data', { origin: [0.5, 0], color: COLORS.dim }));
+    this.root.add(txt(this, cx, top + 46 + dy, sub, { origin: [0.5, 0], scale: W < 330 ? 1 : 2, color: COLORS.yellow }));
+    this.root.add(txt(this, cx, top + 66 + dy, 'real courses, rebuilt from map and lidar data', { origin: [0.5, 0], color: COLORS.dim }));
     const snap = await peekSnapshot();
     if (!this.sys.isActive()) return;
     const bw = 124, bh = 17, gap = 21;
-    let y = top + 84;
+    let y = top + 84 + dy;
     const add = (label: string, cb: () => void, grey = false) => {
       this.root.add(new Button(this, cx - bw / 2, y, bw, bh, label, cb, { color: grey ? 'grey' : 'orange' }));
       y += gap;
