@@ -194,7 +194,7 @@ Changes from the starting values in CLAUDE.md, and choices the spec left open. N
 - **Two-part boundary joined** (`join_boundary_parts`): OSM maps the course as two polygons either side of SE Bybee Blvd and the game takes one; without the join the whole front nine was out of bounds (the robot scored 16 with 8 penalties on every front-nine hole). See Data and pipeline.
 - **Rhododendron garden** (`garden`, `pipeline/garden.py`): flowering bushes painted into the terrain art and the putting views, out of bounds. See Data and pipeline.
 - **Course card:** hole 17, the par 3 over the lake (confirmed by the developer).
-- **Developer, 2026-10-19 (PR #7):** White 17 plays from the Blue box (+13.3 %, accepted); the hole 18 Blue lidar tee and the creek channel are approved; the two trees on hole 11's Blue tee shot stay removed; hole 17 is the course card. The scorecard version (2007 card vs GolfPass's later listing) stays open.
+- **Developer, 2026-10-19 (PR #7):** White 17 plays from the Blue box (+13.3 %, accepted); the hole 18 Blue lidar tee and the creek channel are approved; the two trees on hole 11's Blue tee shot stay removed; hole 17 is the course card. The build keeps the 2007 card (developer: "we'll stick with the build").
 
 ## Data and pipeline
 

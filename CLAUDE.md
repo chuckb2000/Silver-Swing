@@ -1892,10 +1892,10 @@ report_notes.md.
 -   **Accepted by the developer (2026-10-19):** hole 17 White plays from
     the Blue box (+13.3 %); the hole 18 Blue tee (lidar pad) and the creek
     channel (lidar); two trees removed on hole 11's Blue tee shot; course
-    card hole 17.
--   **Known open items:** scorecard version (2007 card vs GolfPass's later
-    listing); hole 13 Blue -3.0 % (flag); tree types from crown shape
-    (data/eastmoreland/report_notes.md).
+    card hole 17; the 2007 scorecard stays the card (GolfPass lists a later
+    one).
+-   **Known open items:** hole 13 Blue -3.0 % (flag); tree types from crown
+    shape (data/eastmoreland/report_notes.md).
 
 **12. Repository layout**
 
