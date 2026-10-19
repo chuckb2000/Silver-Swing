@@ -474,7 +474,7 @@ DECISIONS.md with the reason.
     developer gave the routing and the lines are drawn through the mapped
     fairways (`data/tualatin/make_holes.py`). Pipeline gained
     `red_water_osm` (the river is a red penalty area outside the
-    boundary) and `drop_trees` (two firs on hole 13); every other
+    boundary) and `drop_trees` (four trees, on holes 8 and 13); every other
     course rebuilds as committed (except Highland Links, whose committed
     files predate main's tee-shot check). 217 unit tests and 4
     Playwright tests pass (main merged 2026-10-19).
@@ -1685,9 +1685,9 @@ data/tualatin/validation_report.md.
 -   **Water:** two ponds (holes 9 and 18) and the Tualatin River (holes
     7, 9, 10), all red; the river is a penalty area although it lies
     outside the course boundary (`red_water_osm`).
--   **Trees:** 9,022 from lidar, 1,747 on the course (39 % conifers);
-    two firs in front of the hole 13 green removed (developer,
-    `drop_trees`). A drive down the centre of every par 4 and 5 is clear
+-   **Trees:** 9,020 from lidar, 1,745 on the course (39 % conifers);
+    two firs in front of the hole 13 green and two broadleaves before the
+    hole 8 green removed (developer, `drop_trees`). A drive down the centre of every par 4 and 5 is clear
     of trees (unit test).
 -   **Scorecard** (GolfPass, retrieved 2026-10-19, unverified; no printed
     card available). Blue 70.4/130.
@@ -1708,7 +1708,7 @@ scorecard.csv, not built.
     from the back tees (developer): +8.9 % and +7.0 % on the Blue card.
 -   **Known open items:** data/tualatin/report_notes.md (hole lines and
     pins are proposals from the developer's routing; scorecard
-    unverified; hole 8's approach clips a tree beside the green).
+    unverified).
 
 **12. Repository layout**
 
