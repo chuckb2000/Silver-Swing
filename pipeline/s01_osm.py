@@ -1,10 +1,13 @@
 """Step 1-2: load the OSM extract(s), keep the features the game needs, and
 write data/<course>/raw/osm.geojson (WGS84) with normalised properties.
 
-The developer supplied GDAL-style OSM GeoPackages (points / lines /
-multipolygons layers with an hstore `other_tags` column) because Overpass is
-not reachable from Claude's sandbox. Overpass output can be dropped in as
-raw/osm.geojson instead; this script is then skipped.
+Sources (cfg["osm_sources"], merged in order; a feature already loaded from
+an earlier source is skipped):
+  *.gpkg     GDAL-style OSM GeoPackages (points / lines / multipolygons layers
+             with an hstore `other_tags` column), as used for Oswego Lake
+  *.geojson  Overpass Turbo exports (osmtogeojson: tags as properties, ids
+             like "way/123"), as used for Highland Links
+Both go through the same classify(), so every later step sees {osm, kind, tags}.
 """
 from __future__ import annotations
 
@@ -98,13 +101,37 @@ def load_gpkg(path):
     return pd.concat(frames, ignore_index=True) if frames else None
 
 
+def load_overpass(path):
+    """Overpass Turbo / osmtogeojson GeoJSON -> rows like load_gpkg's."""
+    import json
+    from shapely.geometry import shape
+    d = json.load(open(path))
+    rows = []
+    for f in d.get("features", []):
+        props = f.get("properties") or {}
+        raw = props["tags"] if isinstance(props.get("tags"), dict) else props
+        tags = {k: str(v) for k, v in raw.items()
+                if not k.startswith("@") and k not in ("id", "tags", "meta", "relations") and not isinstance(v, (dict, list))}
+        fid = str(f.get("id") or props.get("@id") or props.get("id") or "")
+        typ, _, num = fid.partition("/")
+        oid = {"node": "n", "way": "w", "relation": "r"}.get(typ, "x") + num
+        if f.get("geometry") is None:
+            continue
+        geom = shape(f["geometry"])
+        kind = classify(tags, geom.geom_type)
+        if kind is None:
+            continue
+        rows.append({"osm": oid, "kind": kind, "tags": tags, "geometry": geom})
+    return gpd.GeoDataFrame(rows, crs=4326) if rows else None
+
+
 def main():
     name = course_name_from_argv()
     cfg = load_config(name)
     cdir = course_dir(name)
     merged = None
     for src in cfg["osm_sources"]:
-        g = load_gpkg(cdir / src)
+        g = load_overpass(cdir / src) if str(src).endswith(".geojson") else load_gpkg(cdir / src)
         if g is None:
             continue
         if merged is None:
