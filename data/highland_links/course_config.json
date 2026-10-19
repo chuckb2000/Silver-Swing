@@ -7,15 +7,33 @@
   "theme": "coastal",
   "epsg": 32619,
   "osm_sources": [
-    "raw/Highland_Links.gpkg"
+    "raw/overpass.geojson"
   ],
   "boundary_name": "Highland Links",
+  "dtm": {
+    "path": "raw/USGS_1M_19_x41y466_MA_CentralEastern_2021_B21.tif",
+    "units": "m",
+    "source": "USGS 3DEP 1 m DEM, project MA_CentralEastern_2021_B21 (lidar flown 20 Mar - 24 Apr 2021), tile x41y466; EPSG:26919 (NAD83 / UTM 19N), NAVD88 metres; downloaded by the developer 2026-10-18 (GitHub release data-highland-links)"
+  },
+  "laz": {
+    "paths": [
+      "raw/laz_dav/*.laz"
+    ],
+    "classes": [
+      3,
+      4,
+      5
+    ],
+    "units": "m",
+    "source": "2021 USGS Lidar: Central Eastern Massachusetts (NOAA Data Access Viewer dataset 9777, job J1471981), clipped to the course box, vegetation classes 4 and 5 only; NAD83(2011) UTM 19N US survey feet, NAVD88 metres; ordered by the developer 2026-10-18 (GitHub release data-highland-links)",
+    "label": "2021 USGS lidar, leaf-off"
+  },
   "world": {
     "x0": 411668,
-    "y0": 4654012,
+    "y0": 4654131,
     "width": 1024,
-    "height": 1024,
-    "note": "provisional: course boundary bbox (780 x 558 m) + ~120 m scenery, rounded out to whole 256 m chunks and centred; final choice in Phase 3 once the DEM shows the cliff and shoreline"
+    "height": 768,
+    "note": "course boundary bbox (780 x 558 m) + scenery, rounded out to whole 256 m chunks: 1024 m east-west (~120 m each side), 768 m north-south (114 m south, 96 m north) so the whole world lies inside the clipped lidar (y 4654018-4654899)"
   },
   "tee_sets": [
     {

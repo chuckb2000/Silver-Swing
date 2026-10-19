@@ -21,6 +21,7 @@ assets:         ## regenerate sprites, UI art and the bitmap font
 
 course:         ## rebuild one course from raw/ (+ edited/) -> game/public/courses/$(NAME)
 	cd pipeline && \
+	$(PY) s00_prepare_rasters.py $(NAME) && \
 	$(PY) s01_osm.py $(NAME) && \
 	$(PY) s02_reproject.py $(NAME) && \
 	$(PY) s03_audit.py $(NAME) && \

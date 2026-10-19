@@ -1,7 +1,8 @@
 """Steps 6-7: bare-earth heightmap.
 
-DOGAMI DTM (feet, 1 m, EPSG:32610) -> metres, light smoothing, sampled on
-the 1 m world grid (vertices at whole metres, (W+1) x (H+1)). Water bodies
+Bare-earth DTM on the world grid (build/dtm_1m.tif from s00, metres) ->
+light smoothing, sampled on the 1 m world grid (vertices at whole metres,
+(W+1) x (H+1)). Water bodies
 are flattened, tee boxes are levelled. Greens are NOT shaped here: their
 analytic model (s07) is blended in at runtime and when rendering, so the
 engine and the art always agree.
@@ -22,7 +23,7 @@ from PIL import Image
 from rasterio.features import rasterize
 from scipy import ndimage
 
-from common import FT, World, build_dir, course_dir, course_name_from_argv, load_config, write_json
+from common import FT, World, build_dir, course_name_from_argv, load_config, write_json
 
 warnings.filterwarnings("ignore")
 
@@ -60,8 +61,7 @@ def main():
     name = course_name_from_argv()
     cfg = load_config(name)
     world = World(cfg)
-    cdir = course_dir(name)
-    dtm, t = load_raster_m(cdir / cfg["dtm"]["path"], cfg["dtm"]["units"])
+    dtm, t = load_raster_m(build_dir(name) / "dtm_1m.tif", "m")  # s00: metres on the world grid
     dtm_s = ndimage.gaussian_filter(dtm, 1.0)
     W, H = int(world.width) + 1, int(world.height) + 1
     jj, ii = np.mgrid[0:H, 0:W]
@@ -117,7 +117,7 @@ def main():
         "min_elev_m": round(zmin, 3), "max_elev_m": round(zmax, 3),
         "encoding": "uint16 linear between min and max; heightmap.png row 0 is the north edge",
         "source": cfg["dtm"]["source"],
-        "processing": "feet->m, gaussian sigma 1 m, water flattened, tees levelled (2 m blend); greens shaped at runtime (s07)",
+        "processing": ("feet->m, " if cfg["dtm"]["units"] == "ft" else "") + "gaussian sigma 1 m, water flattened, tees levelled (2 m blend); greens shaped at runtime (s07)",
     }
     write_json(bdir / "heightmap.json", meta, indent=1)
     # quick slope report on playing surfaces

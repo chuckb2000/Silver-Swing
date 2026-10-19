@@ -166,12 +166,12 @@ def hillshade_tone(z, surf, ppm):
     return tone
 
 
-def stripe_field(g, holes, grid: Grid) -> np.ndarray:
+def stripe_field(g, holes, grid: Grid, tee: str) -> np.ndarray:
     """+1 tone on alternate 4 m (fairway) / 2 m (tee) bands parallel to the nearest hole line."""
     stripe = np.zeros((grid.H, grid.W), np.int8)
     from shapely.geometry import LineString, box
     win = box(grid.x0, grid.y1 - grid.H / grid.ppm, grid.x0 + grid.W / grid.ppm, grid.y1)
-    centerlines = [LineString(h["tees"]["Blue"]["centerline"]) for h in holes]
+    centerlines = [LineString(h["tees"][tee]["centerline"]) for h in holes]
     X, Y = np.meshgrid(grid.xs, grid.ys)
     for kind, band in (("fairway", 4.0), ("tee", 2.0)):
         for geom in g[g.kind == kind].geometry:
@@ -199,11 +199,11 @@ def stripe_field(g, holes, grid: Grid) -> np.ndarray:
     return stripe
 
 
-def render_art(surf, z, grid: Grid, g, holes, trees, buildings, boundary, P, lut, rng, max_h=TREE_MAX_H):
+def render_art(surf, z, grid: Grid, g, holes, trees, buildings, boundary, P, lut, rng, tee, max_h=TREE_MAX_H):
     H, W = surf.shape
     ppm = grid.ppm
     tone = hillshade_tone(z, surf, ppm)
-    stripe = stripe_field(g, holes, grid)
+    stripe = stripe_field(g, holes, grid, tee)
     t = tone.astype(np.int16)
     blk = max(1, round(ppm / 6))  # texture grain: the same size on screen at 6 and 12 px/m
     n1 = np.kron(rng.random((H // blk + 1, W // blk + 1)), np.ones((blk, blk)))[:H, :W]
@@ -351,7 +351,7 @@ def main():
     bdir = build_dir(name)
     outd = bdir / "greens"
     outd.mkdir(exist_ok=True)
-    P = load_palette()
+    P = load_palette(cfg["theme"])
     lut = build_lut(P)
     surf05 = np.load(bdir / "surface.npy")
     base = np.load(bdir / "height_base.npy").astype(np.float64)
@@ -393,7 +393,7 @@ def main():
             box = Polygon([(x0 - 30, y0 - 30), (x1 + 30, y0 - 30), (x1 + 30, y1 + 30), (x0 - 30, y1 + 30)])
             blds = [(p, hb, o) for p, hb, o in building_polys if p.intersects(box)]
             rng = np.random.default_rng(20261018 + n + 1000 * ppm)
-            rgb = render_art(surf, z, grid, g, holes, near, blds, boundary, P, lut, rng, max_h=L["max_h"])
+            rgb = render_art(surf, z, grid, g, holes, near, blds, boundary, P, lut, rng, cfg["default_tee"], max_h=L["max_h"])
             base_name = f"g{n:02d}{L['suffix']}"
             Image.fromarray(rgb).save(outd / f"{base_name}.png", optimize=True)
             # tree sprites

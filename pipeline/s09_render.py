@@ -1,6 +1,6 @@
 """Step 10b (5.7.2): bake the terrain art from the surface map.
 
-Per pixel (0.5 m): surface base colour from the PNW palette, a posterised
+Per pixel (0.5 m): surface base colour from the course theme's palette, a posterised
 hillshade (3 bands, ordered-dither transitions), mowing stripes on fairways
 and tees aligned with the hole line, a 1 px outline between surfaces, a
 per-surface noise texture, bunker lips and a wave pattern on water. Flat
@@ -42,8 +42,9 @@ def hex2rgb(h):
     return tuple(int(h[i:i + 2], 16) for i in (0, 2, 4))
 
 
-def load_palette():
-    d = json.load(open(ROOT / "assets-src" / "palettes" / "pnw.json"))
+def load_palette(theme: str = "pnw"):
+    """Course theme palette (assets-src/palettes/<theme>.json)."""
+    d = json.load(open(ROOT / "assets-src" / "palettes" / f"{theme}.json"))
     return {k: hex2rgb(v) for k, v in d["colors"].items()}
 
 
@@ -139,11 +140,11 @@ def hillshade_tone(z, surf):
     return tone, shade
 
 
-def stripe_field(world, g, holes, surf, H, W):
+def stripe_field(world, g, holes, surf, H, W, tee):
     """+1 tone on alternate 4 m (fairway) / 2 m (tee) bands parallel to the hole line."""
     stripe = np.zeros((H, W), np.int8)
     tr = Affine(1 / PX_PER_M, 0, 0, 0, -1 / PX_PER_M, world.height)
-    centerlines = [(h["number"], LineString(h["tees"]["Blue"]["centerline"])) for h in holes]
+    centerlines = [(h["number"], LineString(h["tees"][tee]["centerline"])) for h in holes]
     for kind, band in (("fairway", 4.0), ("tee", 2.0), ("driving_range", 6.0)):
         for geom in g[g.kind == kind].geometry:
             c = geom.centroid
@@ -202,7 +203,7 @@ def main():
     bdir = build_dir(name)
     art = bdir / "art"
     art.mkdir(exist_ok=True)
-    P = load_palette()
+    P = load_palette(cfg["theme"])
     lut = build_lut(P)
     surf = np.load(bdir / "surface.npy")
     H, W = surf.shape
@@ -216,7 +217,7 @@ def main():
     z = terrain_z_px(world, base, greens, H, W)
     np.save(bdir / "z_px.npy", z.astype(np.float32))
     tone, shade = hillshade_tone(z, surf)
-    stripe = stripe_field(world, g, holes, surf, H, W)
+    stripe = stripe_field(world, g, holes, surf, H, W, cfg["default_tee"])
 
     t = tone.astype(np.int16)
     # textures -----------------------------------------------------------

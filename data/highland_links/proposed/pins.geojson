@@ -1,0 +1,186 @@
+{
+ "type": "FeatureCollection",
+ "name": "highland_links_proposed_pins",
+ "features": [
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "pin",
+    "osm": "proposed_pin_1",
+    "tags": {
+     "golf": "pin",
+     "ref": "1",
+     "proposed": "yes",
+     "method": "centroid of the green polygon w709063017"
+    }
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -70.06171275058065,
+     42.036811870232015
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "pin",
+    "osm": "proposed_pin_2",
+    "tags": {
+     "golf": "pin",
+     "ref": "2",
+     "proposed": "yes",
+     "method": "centroid of the green polygon w709143118"
+    }
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -70.05694659922703,
+     42.0361559181313
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "pin",
+    "osm": "proposed_pin_3",
+    "tags": {
+     "golf": "pin",
+     "ref": "3",
+     "proposed": "yes",
+     "method": "centroid of the green polygon w709143121"
+    }
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -70.05797901994164,
+     42.03711420733338
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "pin",
+    "osm": "proposed_pin_4",
+    "tags": {
+     "golf": "pin",
+     "ref": "4",
+     "proposed": "yes",
+     "method": "centroid of the green polygon w719109474"
+    }
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -70.06269217171665,
+     42.03794814077643
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "pin",
+    "osm": "proposed_pin_5",
+    "tags": {
+     "golf": "pin",
+     "ref": "5",
+     "proposed": "yes",
+     "method": "centroid of the green polygon w709063940"
+    }
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -70.05852104178373,
+     42.03743637967631
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "pin",
+    "osm": "proposed_pin_6",
+    "tags": {
+     "golf": "pin",
+     "ref": "6",
+     "proposed": "yes",
+     "method": "centroid of the green polygon w709064714"
+    }
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -70.06204970937125,
+     42.03839888903627
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "pin",
+    "osm": "proposed_pin_7",
+    "tags": {
+     "golf": "pin",
+     "ref": "7",
+     "proposed": "yes",
+     "method": "centroid of the green polygon w719115832"
+    }
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -70.06099340422764,
+     42.039260685783034
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "pin",
+    "osm": "proposed_pin_8",
+    "tags": {
+     "golf": "pin",
+     "ref": "8",
+     "proposed": "yes",
+     "method": "centroid of the green polygon w709065567"
+    }
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -70.06537020983393,
+     42.039187205376656
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "kind": "pin",
+    "osm": "proposed_pin_9",
+    "tags": {
+     "golf": "pin",
+     "ref": "9",
+     "proposed": "yes",
+     "method": "centroid of the green polygon (inner polygon w719115835, see hole 9 note)"
+    }
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -70.06371017186599,
+     42.03907256941706
+    ]
+   }
+  }
+ ]
+}

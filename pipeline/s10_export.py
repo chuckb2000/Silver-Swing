@@ -166,7 +166,8 @@ def main():
     Image.fromarray(rgb, "RGB").save(out / "height.png", optimize=True)
     write_json(out / "height.json", {"cols": int(q.shape[1]), "rows": int(q.shape[0]), "res": 1.0,
                                       "min": round(zmin, 4), "max": round(zmax, 4), "encoding": "R*256+G, row0=north",
-                                      "samples": [[i, j, round(float(hb[j, i]), 4)] for i, j in ((100, 100), (700, 500), (1200, 800))]})
+                                      "samples": [[i, j, round(float(hb[j, i]), 4)] for i, j in
+                                                  ((round(f * (hb.shape[1] - 1)), round(f * (hb.shape[0] - 1))) for f in (0.1, 0.5, 0.9))]})
     shutil.copy(bdir / "heightmap.png", out / "height16.png") if False else None
 
     # trees -------------------------------------------------------------------
@@ -265,11 +266,7 @@ def main():
         "id": cfg["id"], "name": cfg["name"], "location": cfg["location"], "state": cfg["state"],
         "architects": cfg["architects"],
         "theme": cfg["theme"],
-        "attribution": [
-            "Map data © OpenStreetMap contributors (ODbL)",
-            "Elevation and canopy height: Oregon Department of Geology and Mineral Industries (DOGAMI) lidar",
-            "Scorecard: GolfPass (third-party listing)",
-        ],
+        "attribution": list(cfg["attribution"]),
         "world": {"width": world.width, "height": world.height, "pxPerM": PX_PER_M, "utmOrigin": [world.x0, world.y0], "epsg": world.epsg},
         "teeSets": [{"name": t["name"], "rating": t["rating"], "slope": t["slope"], "totalYd": t["total_yd"]} for t in cfg["tee_sets"] if t.get("playable")],
         "defaultTee": cfg["default_tee"],
@@ -297,27 +294,22 @@ def main():
     trees_rep = json.load(open(bdir / "trees_report.json"))
     greens_rep = (bdir / "greens_report.md").read_text()
     adjustments = json.load(open(cdir / "adjustments.json"))
-    spec_items = [
-        "", "## Other open items (spec 11.4)", "",
-        "1. **Scorecard not verified against the club's printed card.** Yardages, pars and stroke indexes come from GolfPass. golfingrecord.com lists a different stroke-index order (e.g. hole 5 = 1, hole 6 = 9) and Blue 70.4/132; OSM tags hole 18 with handicap 5. The game uses GolfPass.",
-        "2. **Red tee par** (73 vs 71 on GolfPass) - not relevant yet: only the Blue tees are built.",
-        "3. **OSM coverage** - complete: all 18 holes have a hole line, green, pin and fairway; 46 tee boxes, 65 bunkers, 4 water hazards and 32 cart paths are mapped (see the audit below). Two extra greens are practice greens and count as wrong greens.",
-        "4. **Water** - the four ponds are mapped as `golf=lateral_water_hazard` and play as red penalty areas. Oswego Lake lies outside the course boundary (out of bounds); no hole plays along it.",
-        "5. **Imagery** - the NAIP download did not come through, so tree species are inferred from lidar crown shape only.",
-    ]
+    # course-specific open items and notes, written by hand (optional)
+    notes_path = cdir / "report_notes.md"
+    spec_items = ["", notes_path.read_text().strip()] if notes_path.exists() else []
     lines = [table.strip(), *spec_items, "", "## Playability adjustments", ""]
     if adjustments:
         for a in adjustments:
             lines.append(f"- Hole {a['hole']} ({a['tee_set']}): {a['reason']} -> {a['adjusted_yd']} yd (real {a['real_yd']} yd).")
     else:
         lines.append("- none")
-    lines += ["", "## Tree detection (DOGAMI canopy height model)", "",
+    lines += ["", f"## Tree detection ({trees_rep['source']})", "",
               f"- {trees_rep['detected']} trees detected in the world extent ({trees_rep['inside_course']} inside the course), "
               f"{trees_rep['conifer']} conifers / {trees_rep['deciduous']} deciduous; median height {trees_rep['height_p50_m']:.1f} m, max {trees_rep['height_max_m']:.1f} m.",
               f"- Dropped: {trees_rep['dropped']['building']} tops on building footprints, {trees_rep['dropped']['lake']} over the lake, {trees_rep['dropped']['tiny']} tiny crowns.",
               f"- Dropped on playing surfaces (spec 5.4): {len(trees_rep['dropped_on_playing_surfaces'])} -> " + ", ".join(f"{d['on']} {d['osm']} ({d['h']} m)" for d in trees_rep['dropped_on_playing_surfaces']),
               f"- OSM natural=tree points matched by a detected tree within 4 m: {trees_rep['osm_tree_points_matched_within_4m']} of {trees_rep['osm_tree_points']}.",
-              "- Conifer vs deciduous is inferred from crown shape only (no leaf-off imagery); see build/trees_preview.png.",
+              f"- {trees_rep['type_method']}",
               "", greens_rep.strip(), "", audit.strip(), ""]
     (cdir / "validation_report.md").write_text("\n".join(lines) + "\n")
     sizes = sum(p.stat().st_size for p in out.rglob("*") if p.is_file())

@@ -74,6 +74,9 @@ def main():
     holes = g[g.kind == "hole"].copy()
     holes["ref"] = holes.tags.apply(lambda t: int(t.get("ref", 0)))
     holes = holes.sort_values("ref")
+    refs = holes.ref.tolist()
+    if refs != sorted(card):  # the scorecard sets the hole count (9 or 18)
+        raise SystemExit(f"[s06] OSM hole lines {refs} do not match the scorecard holes {sorted(card)}; fix edited/course.geojson")
     greens = g[g.kind == "green"]
     tees = g[g.kind == "tee"]
     pins = g[g.kind == "pin"]
@@ -90,16 +93,29 @@ def main():
 
     # Tee assignment per tee set: one tee polygon per hole, solved jointly so a
     # box that clearly belongs to one hole is not reused for its neighbour.
+    # A tee polygon tagged hole=<n> and tee_set=<name> in edited/course.geojson
+    # is that hole's tee for that set (the developer's call), whatever its distance.
     from scipy.optimize import linear_sum_assignment
     tee_idx = list(tees.index)
     assign = {}
+    forced = {}
+    for ti in tee_idx:
+        tg = tees.loc[ti].tags
+        if tg.get("hole") and tg.get("tee_set"):
+            forced[(int(tg["hole"]), tg["tee_set"])] = ti
     for ts in tee_sets:
         cost = np.full((len(hole_list), len(tee_idx)), 1e6)
+        taken = {ti for (n_, ts_), ti in forced.items() if ts_ == ts}
         for a, h in enumerate(hole_list):
             n = int(h.ref)
+            if (n, ts) in forced:
+                assign[(n, ts)] = forced[(n, ts)]
+                continue
             L, start, gi, gc = geo[n]
             target = float(card[n][ts.lower()]) * YD
             for b, ti in enumerate(tee_idx):
+                if ti in taken:
+                    continue
                 c = tees.loc[ti].geometry.centroid
                 s = L.project(c)
                 if not ((L.distance(c) < 25 and s < 0.45 * L.length) or c.distance(start) < 40):
@@ -164,7 +180,9 @@ def main():
                 open_items.append(f"Hole {n} ({ts}): measured {adj_yd:.0f} yd vs card {card_yd:.0f} ({adiff:+.1f}%) - FAIL, needs a decision.")
             elif status(adiff) == "flag":
                 open_items.append(f"Hole {n} ({ts}): measured {adj_yd:.0f} yd vs card {card_yd:.0f} ({adiff:+.1f}%) even with the virtual tee at the best spot in its box; accepted for play.")
-            if tee_osm and start.distance(tee_pt) > 50:
+            if (n, ts) in forced:
+                open_items.append(f"Hole {n} ({ts}): tee box {tee_osm} assigned by the developer (tagged hole={n}, tee_set={ts} in edited/course.geojson).")
+            elif tee_osm and start.distance(tee_pt) > 50:
                 open_items.append(
                     f"Hole {n}: the OSM hole line starts {start.distance(tee_pt):.0f} m from the {ts} tee box ({tee_osm}), "
                     f"and only that box matches the card; the line was probably drawn from another tee. Measured from the {ts} box through the line's bend points.")
