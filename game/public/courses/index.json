@@ -81,17 +81,18 @@
    ]
   },
   {
-   "id": "tualatin",
-   "name": "Tualatin Country Club",
-   "location": "Tualatin, Washington County, Oregon",
-   "state": "OR",
-   "theme": "pnw",
+   "id": "langston",
+   "name": "Langston Golf Course",
+   "location": "Kingman Lake, Washington, District of Columbia",
+   "state": "DC",
+   "theme": "anacostia",
    "holes": 18,
    "par": 72,
-   "defaultTee": "Blue",
-   "totalYd": 6370,
+   "defaultTee": "Royal",
+   "totalYd": 6652,
    "teeSets": [
-    "Blue"
+    "Royal",
+    "White"
    ]
   }
  ]
