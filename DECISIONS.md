@@ -61,6 +61,15 @@ Changes from the starting values in CLAUDE.md, and choices the spec left open. N
 - **Leaderboard backup is copy-and-paste text** (import also accepts a file) instead of a file download, because sandboxed frames such as the hosted artifact block downloads.
 - **Sharing.** The developer decided that sharing the game with friends is fine as long as it is not monetised; the spec's "personal use only" note is updated.
 
+## Highland Links (developer, 2026-10-18)
+
+- **9-hole course, Blue tees only** (par 35, 2,753 yd). The printed card's back nine (White tees, different yardages, pars on 11 and 13, handicaps) is not built; "18 (2 x 9)" replays the Blue nine. The full card is kept in `data/highland_links/scorecard_full.csv`.
+- **Rating/slope 67.2/116** from the club website (18-hole men's Blue/White); the printed card says 67.0/114.
+- **Pars from the card:** holes 2 and 6 are par 5 (OSM tags them par 4).
+- **Out of bounds = the course boundary only**; no internal OB posts are modelled. Roads inside the boundary give free relief (the card: "Free lift on all roads").
+- **New `coastal` theme** (pitch pine, scrub oak, golden fescue, sand, ocean), from the developer's photos in `reference/highland_links/`.
+- **Wind 3-14 mph** (`wind_mph`): the outer Cape is windier than Oswego's 1-7.
+
 ## Data and pipeline
 
 - **`state` field** (design chat request, 2026-10-18): `course_config.json` has a two-letter `state` ("OR" for Oswego Lake, "MA" for Highland Links); s10 copies it into `course.json` and the course's entry in `game/public/courses/index.json`. Oswego regression check: the rebuild is byte-identical except the new `"state": "OR"` line in those two files; 95 unit tests and 2 Playwright tests pass.

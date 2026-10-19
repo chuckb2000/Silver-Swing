@@ -80,7 +80,7 @@ The files are too large to attach to the chat, and Claude's sandbox can't reach 
 1. Open https://github.com/chuckb2000/silver-swing/releases/new
 2. **Choose a tag:** type `data-highland-links`, then click "Create new tag: data-highland-links on publish". Target: `main`.
 3. **Release title:** `Highland Links raw data`.
-4. Drag all six files (`overpass.geojson`, the `.tif`, the four `.laz`) into the "Attach binaries" box. Wait until each shows a size (no progress bar).
+4. Scroll **below** the description editor to the box that says "Attach binaries by dropping them here or selecting them", and drop all six files (`overpass.geojson`, the `.tif`, the four `.laz`) there. That box takes files up to 2 GB each. The description editor above it also accepts dropped files but rejects anything over 25 MB ("File size too big"); don't drop them there. Wait until each file shows its size.
 5. Tick **Set as a pre-release**, then **Publish release**.
 6. Tell the course chat it is done.
 

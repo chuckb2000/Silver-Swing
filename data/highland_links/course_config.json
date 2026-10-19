@@ -19,15 +19,15 @@
   },
   "tee_sets": [
     {
-      "name": "Blue/White",
+      "name": "Blue",
       "playable": true,
       "rating": 67.2,
       "slope": 116,
-      "total_yd": 5332
+      "total_yd": 2753
     }
   ],
-  "default_tee": "Blue/White",
-  "scorecard_source": "Club scorecard PDF (highlandlinkscapecod.com, HighlandLinks-Scorecard.pdf, Feb 2020), identical to the developer's image of the printed card; checked 2026-10-18. Rating/slope: club website 67.2/116, printed card 67.0/114 (open item)",
+  "default_tee": "Blue",
+  "scorecard_source": "Club scorecard PDF (highlandlinkscapecod.com, HighlandLinks-Scorecard.pdf, Feb 2020), identical to the developer's image of the printed card; checked 2026-10-18. Built as 9 holes from the Blue tees (front nine of the card); the card's back nine (White tees) is not used (developer, 2026-10-18). Full card in scorecard_full.csv. Rating/slope 67.2/116 = the club website's 18-hole men's Blue/White figure (developer's choice; the printed card says 67.0/114)",
   "penalty_default": "red",
   "driving_range_is_ob": true,
   "wind_mph": {
@@ -39,5 +39,5 @@
     "Elevation and lidar: U.S. Geological Survey 3D Elevation Program (2021 Central Eastern Massachusetts lidar)",
     "Scorecard: Highland Links (club scorecard)"
   ],
-  "notes": "Draft 2026-10-18 (Phase 1). Pending developer decisions: second-nine representation, tee sets, rating/slope, theme, wind (see DATA_REQUEST.md and the intake message). dtm / laz entries are added when the data arrives."
+  "notes": "Phase 1 decisions (developer, 2026-10-18): 9-hole course, Blue tees only, card pars win over OSM (holes 2 and 6 are par 5), out of bounds = course boundary only, new coastal theme, wind 3-14 mph. dtm / laz entries are added when the data arrives."
 }
