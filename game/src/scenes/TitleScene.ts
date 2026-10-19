@@ -1,59 +1,113 @@
-// Title menu over a slowly scrolling panorama of the courses' landmarks
-// (sprites/title_pano.png: Oregon, Cape Cod, DC; it loops), with the trophy logo.
+// Title menu over a rotating set of course views (sprites/title/<id>.png,
+// rendered from each course's own art by assets-src/course_cards.py): each
+// drifts slowly, then cross-fades to the next. The trophy logo sits beside
+// the game name. Falls back to the course fly-over (BgScene) without them.
 
+import Phaser from 'phaser';
 import { app, GAME_NAME } from '../app';
 import { coursesByState } from '../data/registry';
 import { initAudio, setVolume } from '../audio/sfx';
 import { peekSnapshot } from '../save/snapshot';
 import { Button, COLORS, Panel, txt } from '../ui/widgets';
 import { resumeRound } from './flow';
-import Phaser from 'phaser';
-import { MenuScene } from './menu';
+import { ensureBg, MenuScene } from './menu';
 
-const SCROLL_PX_PER_S = 10;
-const SKY_TOP = 0x5aa7e6; // the panorama's top sky colour, above it on tall screens
+const SHOW_MS = 9000;   // each course on screen
+const FADE_MS = 1400;   // cross-fade
+const SHADE = 0.32;     // darkened a little so the menu reads
+
+let order: string[] | null = null; // course views, shuffled once per visit to the site
+let at = 0;
+
+interface Shown { img: Phaser.GameObjects.Image; t: number; fromX: number; fromY: number; toX: number; toY: number }
 
 export class TitleScene extends MenuScene {
+  private shown: Shown[] = [];
+  private shade: Phaser.GameObjects.Rectangle | null = null;
+
   constructor() {
     super('title');
   }
 
-  private pano: Phaser.GameObjects.TileSprite | null = null;
-  private sky: Phaser.GameObjects.Rectangle | null = null;
-  private scrollX = Math.random() * 1440;
-
   create() {
     this.flyover = false;
-    if (this.scene.isActive('bg')) this.scene.stop('bg');
-    this.makeBackdrop();
-    this.scale.on('resize', this.layoutBackdrop, this);
-    this.events.once('shutdown', () => { this.scale.off('resize', this.layoutBackdrop, this); this.pano = null; this.sky = null; });
+    this.shown = [];
+    this.shade = this.add.rectangle(0, 0, 10, 10, 0x081018, SHADE).setOrigin(0, 0).setDepth(-1);
+    this.layoutShade();
+    this.scale.on('resize', this.layoutShade, this);
+    this.events.once('shutdown', () => { this.scale.off('resize', this.layoutShade, this); this.shade = null; this.shown = []; });
+    void this.startMaps();
     setVolume(app.settings.volume, app.settings.muted);
     this.input.once('pointerdown', () => { void initAudio(); });
     super.create();
   }
 
-  private makeBackdrop() {
-    if (!this.textures.exists('title_pano')) return;
-    this.sky = this.add.rectangle(0, 0, 10, 10, SKY_TOP, 1).setOrigin(0, 0).setDepth(-2);
-    this.pano = this.add.tileSprite(0, 0, 10, 270, 'title_pano').setOrigin(0, 0).setDepth(-1);
-    this.layoutBackdrop();
+  private layoutShade() {
+    this.shade?.setPosition(0, 0).setSize(app.view.w, app.view.h);
   }
 
-  private layoutBackdrop() {
-    if (!this.pano || !this.sky) return;
+  /** Load the course views (once) and start the rotation; without any, the fly-over. */
+  private async startMaps() {
+    if (!order) {
+      try {
+        const res = await fetch('sprites/title/index.json');
+        const j = (await res.json()) as { maps?: string[] };
+        order = (j.maps ?? []).filter((id) => app.courses.some((c) => c.id === id));
+      } catch {
+        order = [];
+      }
+      for (let i = order.length - 1; i > 0; i--) {
+        const k = Math.floor(Math.random() * (i + 1));
+        [order[i], order[k]] = [order[k], order[i]];
+      }
+    }
+    if (!this.sys.isActive()) return;
+    const want = order.filter((id) => !this.textures.exists(`tmap_${id}`));
+    if (want.length) {
+      await new Promise<void>((resolve) => {
+        for (const id of want) this.load.image(`tmap_${id}`, `sprites/title/${id}.png`);
+        this.load.once(Phaser.Loader.Events.COMPLETE, () => resolve());
+        this.load.start();
+      });
+    }
+    if (!this.sys.isActive()) return;
+    order = order.filter((id) => this.textures.exists(`tmap_${id}`));
+    if (!order.length) { ensureBg(this); return; }
+    if (this.scene.isActive('bg')) this.scene.stop('bg');
+    this.next();
+  }
+
+  /** Bring in the next course view; it drifts from one corner of itself toward the other. */
+  private next() {
+    if (!order || !order.length) return;
+    const id = order[at++ % order.length];
     const W = app.view.w, H = app.view.h;
-    // anchored at the bottom, one art pixel per texel - or two on a tall screen (a phone
-    // held upright), which would otherwise be mostly empty sky; plain sky above it
-    const k = H >= 500 ? 2 : 1;
-    this.pano.setTileScale(k).setPosition(0, H - 270 * k).setSize(W, 270 * k);
-    this.sky.setPosition(0, 0).setSize(W, Math.max(0, H - 270 * k + 1));
+    const img = this.add.image(0, 0, `tmap_${id}`).setOrigin(0, 0).setDepth(-2);
+    const k = img.height < H || img.width < W ? 2 : 1; // a tall phone screen: twice the size
+    img.setScale(k).setAlpha(this.shown.length ? 0 : 1);
+    const spareX = Math.max(0, img.width * k - W), spareY = Math.max(0, img.height * k - H);
+    const left = Math.random() < 0.5, up = Math.random() < 0.5;
+    const s: Shown = {
+      img, t: 0,
+      fromX: left ? 0 : -spareX, toX: left ? -spareX : 0,
+      fromY: up ? 0 : -spareY, toY: up ? -spareY * 0.6 : -spareY * 0.4,
+    };
+    img.setPosition(Math.round(s.fromX), Math.round(s.fromY));
+    this.shown.push(s);
   }
 
   update(_t: number, dt: number) {
-    if (!this.pano) return;
-    this.scrollX = (this.scrollX + (Math.min(dt, 100) / 1000) * SCROLL_PX_PER_S) % 1440;
-    this.pano.tilePositionX = Math.floor(this.scrollX); // whole texels: crisp, no shimmer
+    const d = Math.min(dt, 100);
+    const last = this.shown.length - 1;
+    this.shown.forEach((s, i) => {
+      s.t += d;
+      const f = Math.min(1, s.t / (SHOW_MS + 2 * FADE_MS));
+      s.img.setPosition(Math.round(s.fromX + (s.toX - s.fromX) * f), Math.round(s.fromY + (s.toY - s.fromY) * f)); // whole texels
+      if (i > 0) s.img.setAlpha(Math.min(1, s.t / FADE_MS));
+      if (i === last && s.t >= SHOW_MS) this.next();
+    });
+    // the old view goes once the new one is fully in
+    while (this.shown.length > 1 && this.shown[1].t >= FADE_MS) this.shown.shift()!.img.destroy();
   }
 
   async build() {

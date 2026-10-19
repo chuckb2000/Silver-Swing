@@ -6,6 +6,9 @@ drawn in the game at 2 px/m), written to game/public/sprites/cards/<id>.png.
     python3 assets-src/course_cards.py oswego_lake     # one course
     python3 assets-src/course_cards.py oswego_lake --sheet   # contact sheet of every green (to pick one)
 
+Each course also gets a 720 x 400 view around the same green for the title
+screen's rotating backdrop (sprites/title/<id>.png, listed in sprites/title/index.json).
+
 The green is set per course in assets-src/course_cards.json ({"<id>": {"hole": n}});
 without an entry the green with the most sand and water around it is used.
 Reads only the exported game files (game/public/...), so it works on any
@@ -173,6 +176,35 @@ def contact_sheet(c: Course) -> Path:
     return p
 
 
+TITLE_OUT = PUBLIC / "sprites" / "title"
+TITLE_W, TITLE_H = 720, 400   # a little larger than the 480 x 270 view: the title screen drifts across it
+
+
+def title_map(c: Course, hole: int) -> Path:
+    """A screen-sized view of the course (around its card green) for the title screen's rotation."""
+    TITLE_OUT.mkdir(parents=True, exist_ok=True)
+    p = TITLE_OUT / f"{c.id}.png"
+    c.render(hole, TITLE_W, TITLE_H).convert("RGB").save(p, optimize=True)
+    return p
+
+
+def write_title_index():
+    """sprites/title/index.json: every title map there, one per place (grouped courses share a world)."""
+    index = json.load(open(PUBLIC / "courses" / "index.json"))["courses"]
+    seen, maps = set(), []
+    for e in index:
+        key = e.get("group") or e["id"]
+        if key in seen or not (TITLE_OUT / f"{e['id']}.png").exists():
+            continue
+        seen.add(key)
+        maps.append(e["id"])
+    (TITLE_OUT / "index.json").write_text(json.dumps({"maps": maps}) + "\n")
+    for f in TITLE_OUT.glob("*.png"):          # the other courses of a place: not needed
+        if f.stem not in maps:
+            f.unlink()
+    return maps
+
+
 def main(argv: list[str]):
     OUT.mkdir(parents=True, exist_ok=True)
     ids = [a for a in argv if not a.startswith("--")]
@@ -187,6 +219,9 @@ def main(argv: list[str]):
         hole = card_hole(c, cfg)
         c.render(hole).convert("RGB").save(OUT / f"{cid}.png", optimize=True)
         print(f"[cards] {cid}: hole {hole} green -> sprites/cards/{cid}.png")
+        title_map(c, hole)
+    if "--sheet" not in argv:
+        print(f"[cards] title screen maps: {', '.join(write_title_index())} -> sprites/title/")
 
 
 if __name__ == "__main__":

@@ -603,4 +603,6 @@ paths (relief), not OB, unless the developer says otherwise.
   (`game/public/sprites/cards/_<id>_greens.png`, delete it afterwards), pick
   the most striking one with the developer, put it in
   `assets-src/course_cards.json`, then run `python3 assets-src/course_cards.py <id>`.
+  That also writes the course's view for the title screen's rotation
+  (`game/public/sprites/title/<id>.png` and `index.json`): commit them too.
 
