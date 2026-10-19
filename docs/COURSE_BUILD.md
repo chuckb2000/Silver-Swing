@@ -206,7 +206,9 @@ Known Oswego-specific code, with the fix:
                "boundary_osm": "w123", "scorecard": "scorecard_blue.csv",
                "tee_sets": [...], "default_tee": "White", "scorecard_source": "..."}],
   "blossom": {"max_h": 12, "shore_m": 45, "max_from_boundary_m": 100},  // optional: flowering trees (potomac theme)
-  "paint_range_outside": false          // optional: draw a driving range outside the boundary as a range
+  "paint_range_outside": false,         // optional: draw a driving range outside the boundary as a range
+  "connect_fairways": false,            // optional: s02b runs each hole's fairway up to its green
+  "trees_off_fairways_m": null          // optional: drop trees whose top is this far (m) inside a fairway
 }
 ```
 
@@ -227,8 +229,8 @@ polygons. Each layout is a separate entry in the course list, with `group`,
 
 Write changes to the OSM layout as `data/<id>/edits.json` (add features from a
 `proposed/` file, retag, drop; each with a reason); `merge_edits.py` (run by
-`make course` after s01) turns them into `edited/course.geojson`. Tools that
-make proposals: `propose_tees.py` (raised tee pads in the DEM near each hole's
+`make course` after s01) turns them into `edited/course.geojson`. `extend_start` moves a hole line's start (a tee without a mapped box) back
+along the line. Tools that make proposals: `propose_tees.py` (raised tee pads in the DEM near each hole's
 tee-shot axis). Large state-wide rasters: `clip_raster.py` cuts them to the
 world before they go into `raw/`.
 

@@ -28,6 +28,7 @@ course:         ## rebuild one course from raw/ (+ edited/) -> game/public/cours
 	$(PY) s01_osm.py $(NAME) && \
 	$(PY) merge_edits.py $(NAME) && \
 	$(PY) s02_reproject.py $(NAME) && \
+	$(PY) s02b_approaches.py $(NAME) && \
 	$(PY) s03_audit.py $(NAME) && \
 	$(PY) s04_elevation.py $(NAME) && \
 	$(PY) s05_trees.py $(NAME) && \

@@ -12,7 +12,7 @@ import { COURSES_DIR, loadCourseFiles, meterFor, registry, robotRound, roundCfg 
 const LAYOUTS = ['east_potomac_blue', 'east_potomac_white', 'east_potomac_red'];
 // holes accepted outside 3% until the developer decides (data/east_potomac/validation_report.md)
 const YARDAGE_EXCEPTIONS: Record<string, string[]> = {
-  east_potomac_blue: ['6 Blue', '13 Blue', '13 White', '15 Blue'],
+  east_potomac_blue: ['6 Blue', '13 White', '15 Blue'],
   east_potomac_white: [],
   east_potomac_red: ['5 White', '6 White', '8 White'],
 };
@@ -84,6 +84,29 @@ for (const id of LAYOUTS) {
         if (YARDAGE_EXCEPTIONS[id].includes(`${h.number} ${ts}`)) expect(off, `hole ${h.number} ${ts}`).toBeGreaterThan(0.03);
         else expect(off, `hole ${h.number} ${ts}`).toBeLessThanOrEqual(0.03);
       }
+    });
+
+    it('every fairway runs into its green (no rough between fairway and fringe)', () => {
+      const S = course.terrain;
+      for (const h of json.holes) {
+        const cl = h.tees[json.defaultTee].centerline;
+        const [gx, gy] = cl[cl.length - 1];
+        const [ax, ay] = cl[cl.length - 2];
+        const L = Math.hypot(ax - gx, ay - gy);
+        const ux = (ax - gx) / L, uy = (ay - gy) / L;
+        const seq: number[] = [];
+        for (let d = 0; d <= Math.min(60, L); d += 0.5) seq.push(S.surface(gx + ux * d, gy + uy * d));
+        if (!seq.includes(SURF.fairway)) continue; // no fairway near the green (some par 3s)
+        const first = seq.find((v) => v !== SURF.green && v !== SURF.fringe);
+        expect([SURF.fairway, SURF.bunker, SURF.cartpath], `hole ${h.number}`).toContain(first);
+      }
+    });
+
+    it('no tree stands inside a fairway', () => {
+      const t = course.obstacles.trees;
+      const S = course.terrain;
+      const deep = t.filter((x) => [[0, 0], [2.5, 0], [-2.5, 0], [0, 2.5], [0, -2.5]].every(([dx, dy]) => S.surface(x.x + dx, x.y + dy) === SURF.fairway));
+      expect(deep.map((x) => `${x.x.toFixed(0)},${x.y.toFixed(0)}`)).toEqual([]);
     });
 
     it('a robot golfer completes every hole with legal, finite scores', () => {

@@ -277,6 +277,13 @@ def main():
 
     trees, dropped = [], {"building": 0, "lake": 0, "tiny": 0}
     dropped_surface = []
+    # optional (course_config.json trees_off_fairways_m): no tree stands in a fairway,
+    # i.e. more than that many metres inside one (edge trees may overhang it)
+    fw_inset = None
+    if cfg.get("trees_off_fairways_m") is not None:
+        from shapely.ops import unary_union
+        from shapely.prepared import prep
+        fw_inset = prep(unary_union(list(g[g.kind == "fairway"].geometry)).buffer(-float(cfg["trees_off_fairways_m"])))
     for k, (cy, cx) in enumerate(cents, start=1):
         jy, ix = int(round(cy)), int(round(cx))
         h = float(chm[max(0, jy - 1):jy + 2, max(0, ix - 1):ix + 2].max())
@@ -295,6 +302,11 @@ def main():
         hit = excl[excl.contains(p)]
         if len(hit):
             dropped_surface.append({"x": round(x, 1), "y": round(y, 1), "h": round(h, 1), "on": hit.kind.iloc[0], "osm": hit.osm.iloc[0]})
+            continue
+        if fw_inset is not None and fw_inset.contains(p):
+            fw = g[(g.kind == "fairway") & g.contains(p)]
+            dropped_surface.append({"x": round(x, 1), "y": round(y, 1), "h": round(h, 1), "on": "fairway",
+                                    "osm": fw.osm.iloc[0] if len(fw) else "fairway"})
             continue
         r = float(np.sqrt(area / np.pi))
         r = float(np.clip(r, 1.0, max(1.5, 0.5 * h)))

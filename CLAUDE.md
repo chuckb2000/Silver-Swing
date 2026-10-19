@@ -1505,7 +1505,9 @@ Blue (6,279 yd) suits the club distances in 7.1.
     club scorecards (PDFs, 2021 Blue card and the current Red/White card).
 -   **Terrain:** flat fill land, 0-8 m above the river; raised tee pads,
     built-up greens and grass mounds.
--   **Trees:** 4,185 from lidar; about 1,000 drawn as flowering cherries
+-   **Fairways** run into every green (pipeline s02b; the OSM fairways
+    stopped short of 19 greens) and no tree stands inside a fairway.
+-   **Trees:** 4,177 from lidar; about 1,000 drawn as flowering cherries
     along Ohio Drive and the seawall (theme flair, species not measured).
 
 **11.9.2 Scorecards** (club PDFs supplied by the developer, 2026-10-19)
@@ -1546,17 +1548,17 @@ White 31.0/98, Red 32.5/104 (card). Family tees not built.
 
 White on all three courses (Blue course White = 6,226 yd, closest to
 6,300); the Blue course also has its Blue tees. Measured (adjusted)
-totals: Blue course White 6,097 yd, Blue 6,405; White course 2,470;
+totals: Blue course White 6,207 yd, Blue 6,514; White course 2,470;
 Red course 1,292.
 
 **11.9.4 Known open items** (details and recommendations in
 data/east_potomac/validation_report.md)
 
-1.  Blue 13 plays 261 yd (card 371/354): the OSM line starts ~100 m in
-    front of the real tee. FAIL, needs a decision.
-2.  Blue 15 Blue tee (-8.7 %) and Red course 8 (+9.9 %) FAIL; Blue 6
-    Blue, Red 5 and Red 6 are flags.
-3.  19 tee boxes come from lidar pads (`edits.json`), awaiting approval.
+1.  Blue 13 now plays from the back tee (developer, 2026-10-19).
+2.  Blue 15 Blue tee (-8.7 %) and Red course 8 (+9.9 %) are over 8 %,
+    accepted for play by the developer; Blue 6 Blue, Blue 13 White, Red 5
+    and Red 6 are flags.
+3.  19 tee boxes come from lidar pads (`edits.json`), approved.
 4.  Forward (Red) tees of the White and Red courses not built.
 5.  Blue course ratings unverified; Red course unrated.
 6.  Lidar year of the DC files not recorded.

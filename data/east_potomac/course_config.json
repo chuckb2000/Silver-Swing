@@ -116,6 +116,8 @@
   "penalty_default": "red",
   "driving_range_is_ob": true,
   "paint_range_outside": true,
+  "connect_fairways": true,
+  "trees_off_fairways_m": 2.0,
   "wind_mph": {
     "minMph": 2,
     "maxMph": 10
