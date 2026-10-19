@@ -5,7 +5,8 @@ new course. Each lesson is something that cost time on an earlier course,
 with what to do instead. Add to it at the end of every course build.
 
 Sources so far: East Potomac Golf Links (2026-10-19, three courses on one
-island). Oswego Lake and Highland Links notes live in DECISIONS.md.
+island), Eastmoreland (2026-10-19, Portland). Oswego Lake and Highland Links
+notes live in DECISIONS.md.
 
 ---
 
@@ -142,6 +143,18 @@ island). Oswego Lake and Highland Links notes live in DECISIONS.md.
   (often just the default) and list the rest. The game only plays the
   default tee anyway (until the design chat adds a tee choice).
 
+- **Count the boundary's parts.** The game takes one OB polygon and s10
+  used to keep only the largest part. Eastmoreland's OSM boundary is two
+  polygons either side of a road, so the whole front nine was out of bounds;
+  nothing failed until the robot round scored 16 on every front-nine hole. Look
+  at the boundary's geometry type in Phase 1 and run a robot round as soon as
+  the course exports. Fix: `join_boundary_parts`.
+- **natural=water inside the boundary is not in play.** s08 paints OSM
+  `natural=water` only outside the course; inside it becomes rough. A lake the
+  holes play over must be added as a `golf=lateral_water_hazard` (or
+  `water_hazard`) penalty area (Eastmoreland: `make_water.py` +
+  `edits.json`). Streams mapped only as lines need `propose_channels.py`.
+
 ## 4. World and pipeline
 
 - **The 2,048 m limit can bind.** The island is 1.93 km long; the world became
@@ -163,6 +176,10 @@ island). Oswego Lake and Highland Links notes live in DECISIONS.md.
   killed the session's shell). Kill by PID. Likewise a `pgrep -f <name>`
   wait loop matches its own command line and never ends.
 
+- **Bash calls stop at 10 minutes.** A Playwright pass over 18 holes takes
+  longer on software WebGL: start it with `nohup ... &` and poll, or split it
+  by hole (env vars in the spec).
+
 ## 5. Trees and theme
 
 - **A theme's flair can be data-driven without a game change.** The game draws
@@ -182,6 +199,16 @@ island). Oswego Lake and Highland Links notes live in DECISIONS.md.
   other themes' sheets are unchanged. s09b uses the same painters for the
   putting views.
 - **Look at the sprites at 5x on grass before rendering the course.**
+- **Flowers can be painted, not only sprited.** For a garden beside the
+  course (Eastmoreland's rhododendrons), `garden` paints flowering bushes into
+  the terrain art and putting views from the lidar shrub layer, out of
+  bounds, with no game change. Small clumps (under ~2 m across) read as dark
+  dots at 2 px/m: make them 2-4 m across, mostly blossom, with the outline only
+  on the outside. Highest-hit lidar can't see shrubs under trees; a lower
+  density there is flair and is written down as such.
+- **DOGAMI downloads arrive as `exportImage.N.tiff`.** Tell them apart by
+  their values (ground in the tens to hundreds of feet vs canopy from 0) and a
+  quick picture, as with the DC rasters.
 
 ## 6. Checking the build
 
