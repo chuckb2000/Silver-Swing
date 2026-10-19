@@ -158,6 +158,19 @@ def hillshade_tone(z, surf):
     return tone, shade
 
 
+def stake_lines(boundary, g, cfg):
+    """Lines of white OB stakes: (ring, polygon, ob_inside). Always the course
+    boundary, stakes on its outer (OB) side; with cfg range_art "rough" also the
+    edge of each driving range, stakes on its inner (OB) side, since a range drawn
+    as rough has no other edge in the art."""
+    out = [(boundary.exterior, boundary, False)]
+    if cfg.get("range_art") == "rough":
+        for geom in g[g.kind == "driving_range"].geometry:
+            for part in getattr(geom, "geoms", [geom]):
+                out.append((part.exterior, part, True))
+    return out
+
+
 def stripe_field(world, g, holes, surf, H, W, tee):
     """+1 tone on alternate 4 m (fairway) / 2 m (tee) bands parallel to the hole line."""
     stripe = np.zeros((H, W), np.int8)
@@ -349,6 +362,13 @@ def main():
     lut = build_lut(P, load_theme(cfg["theme"]).get("lut"))
     surf = np.load(bdir / "surface.npy")
     H, W = surf.shape
+    range_cells = surf == S["range"]
+    if cfg.get("range_art") == "rough":
+        # optional: a range that is rough on the ground (Oregon Golf Club) is drawn as
+        # rough, without mowing stripes; it stays out of bounds in the surface map and
+        # is marked by its range balls and a line of OB stakes along its edge
+        surf = surf.copy()
+        surf[range_cells] = S["rough"]
     base = np.load(bdir / "height_base.npy").astype(np.float64)
     greens = json.load(open(bdir / "greens.json"))
     holes = json.load(open(bdir / "holes.json"))
@@ -407,7 +427,7 @@ def main():
     tuft2[:-1] = tuft[1:]
     put(tuft | tuft2, "TUFT" if "TUFT" in P else "G5")
     # range balls
-    put((surf == S["range"]) & (n1 > 0.9975), "WH")
+    put(range_cells & (n1 > 0.9975), "WH")
 
     # outlines -----------------------------------------------------------
     pr = PRIO[surf]
@@ -534,22 +554,22 @@ def main():
     boundary = play_boundary(g, cfg)
     if boundary.geom_type == "MultiPolygon":
         boundary = max(boundary.geoms, key=lambda p_: p_.area)
-    ring = boundary.exterior
-    for s_ in np.arange(0, ring.length, 9.0):
-        p = ring.interpolate(s_)
-        q = ring.interpolate(min(ring.length, s_ + 0.5))
-        dx, dy = q.x - p.x, q.y - p.y
-        ln = math.hypot(dx, dy) or 1
-        nx_, ny_ = dy / ln, -dx / ln  # right-hand normal
-        cand = Point(p.x + nx_ * 0.8, p.y + ny_ * 0.8)
-        if boundary.contains(cand):
-            cand = Point(p.x - nx_ * 0.8, p.y - ny_ * 0.8)
-        col = int(cand.x * PX_PER_M)
-        row = int((world.height - cand.y) * PX_PER_M)
-        if 2 <= row < H - 1 and 0 <= col < W - 1:
-            rgb[row + 1, col + 1] = (rgb[row + 1, col + 1] * 0.6).astype(np.uint8)
-            rgb[row - 2:row + 1, col] = P["WH"]
-            rgb[row - 2, col] = P["K2"]
+    for ring, poly, ob_inside in stake_lines(boundary, g, cfg):
+        for s_ in np.arange(0, ring.length, 9.0):
+            p = ring.interpolate(s_)
+            q = ring.interpolate(min(ring.length, s_ + 0.5))
+            dx, dy = q.x - p.x, q.y - p.y
+            ln = math.hypot(dx, dy) or 1
+            nx_, ny_ = dy / ln, -dx / ln  # right-hand normal
+            cand = Point(p.x + nx_ * 0.8, p.y + ny_ * 0.8)
+            if poly.contains(cand) != ob_inside:
+                cand = Point(p.x - nx_ * 0.8, p.y - ny_ * 0.8)
+            col = int(cand.x * PX_PER_M)
+            row = int((world.height - cand.y) * PX_PER_M)
+            if 2 <= row < H - 1 and 0 <= col < W - 1:
+                rgb[row + 1, col + 1] = (rgb[row + 1, col + 1] * 0.6).astype(np.uint8)
+                rgb[row - 2:row + 1, col] = P["WH"]
+                rgb[row - 2, col] = P["K2"]
 
     Image.fromarray(rgb).save(art / "terrain.png")
     meta = {"buildings": [{"osm": o, "h": round(h, 1), **({"kind": kinds[o]} if kinds.get(o) != "house" else {})} for _, h, o in buildings]}

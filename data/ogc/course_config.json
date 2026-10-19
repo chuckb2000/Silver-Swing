@@ -1,0 +1,68 @@
+{
+  "id": "ogc",
+  "name": "Oregon Golf Club",
+  "location": "West Linn, Clackamas County, Oregon",
+  "state": "OR",
+  "architects": "Peter Jacobsen and Jim Hardy with Ken Kavanaugh (1992)",
+  "theme": "pnw",
+  "epsg": 32610,
+  "osm_sources": [
+    "raw/overpass.geojson"
+  ],
+  "boundary_name": "Oregon Golf Club",
+  "dtm": {
+    "path": "raw/dogami_dtm_ft.tif",
+    "units": "ft",
+    "source": "DOGAMI lidar DIGITAL_TERRAIN_MODEL_MOSAIC (bare earth), exportImage at 1 m in EPSG:32610, box x 525048-526528 / y 5018312-5020816, downloaded by the developer 2026-10-19 (GitHub release ogc-data, exportImage.6.tiff)"
+  },
+  "chm": {
+    "path": "raw/dogami_chm_ft.tif",
+    "units": "ft",
+    "source": "DOGAMI lidar CANOPY_HEIGHT_MODEL_MOSAIC (highest hit minus bare earth), exportImage at 1 m in EPSG:32610, same box, downloaded by the developer 2026-10-19 (GitHub release ogc-data, exportImage.7.tiff)",
+    "label": "DOGAMI canopy height model"
+  },
+  "world": {
+    "x0": 525148,
+    "y0": 5018412,
+    "width": 1280,
+    "height": 2304,
+    "note": "OSM course boundary bbox (1,100 x 2,120 m) + about 90 m of scenery on every side, rounded out to whole 256 m chunks and centred. Taller than the runbook's 2,048 m limit because the course itself is 2,120 m north-south; approved by the developer 2026-10-19"
+  },
+  "remove_wires": {
+    "min_len_m": 40,
+    "max_width_m": 3.0,
+    "rise_m": 3.0,
+    "note": "the canopy model holds the BPA transmission lines across the course and the Willamette, and distribution lines along the roads; s05 removes them before finding trees"
+  },
+  "tee_sets": [
+    {
+      "name": "Blue",
+      "playable": true,
+      "rating": 72.5,
+      "slope": 136,
+      "total_yd": 6629
+    },
+    {
+      "name": "White",
+      "playable": true,
+      "rating": 69.7,
+      "slope": 133,
+      "total_yd": 6080
+    }
+  ],
+  "default_tee": "Blue",
+  "scorecard_source": "GolfPass scorecard (golfpass.com/courses/1366-the-oregon-golf-club/scorecard-and-layout), retrieved 2026-10-19; unverified third-party listing, no printed card available (developer). Blue and White hole sums match the printed Out/In totals; the tee table says White 6,081 where the holes add to 6,080. Pars and men's stroke index agree with the OSM hole tags. Full card in scorecard_full.csv",
+  "penalty_default": "red",
+  "driving_range_is_ob": true,
+  "range_art": "rough",
+  "wind_mph": {
+    "minMph": 1,
+    "maxMph": 7
+  },
+  "attribution": [
+    "Map data © OpenStreetMap contributors (ODbL)",
+    "Elevation and canopy height: Oregon Department of Geology and Mineral Industries (DOGAMI) lidar",
+    "Scorecard: GolfPass (third-party listing)"
+  ],
+  "notes": "Developer, 2026-10-19: world may exceed 2,048 m; Blue and White tees, Blue default; all water hazards red; the driving range holds target greens P3-P9 of proposed/osm_labelled.png (range polygon proposed from the OSM path loop, proposed/range.png); no printed scorecard; pnw theme; wind as Oswego Lake and Tualatin."
+}

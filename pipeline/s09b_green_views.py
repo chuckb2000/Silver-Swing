@@ -40,7 +40,7 @@ from common import build_dir, course_name_from_argv, layout_dir, layouts, load_c
 from s08_surface import course_layers, road_geoms
 from terrain import tier_offset
 from s09_render import draw_lighthouse, LIGHTHOUSE_DRAW_SCALE  # noqa: E402
-from s09_render import BAYER4, PRIO, SHADOW_DIR, SHADOW_MULT, band_lut, build_lut, load_palette, load_theme, rough_band_mask, wave_mask
+from s09_render import BAYER4, PRIO, SHADOW_DIR, SHADOW_MULT, band_lut, build_lut, load_palette, load_theme, rough_band_mask, stake_lines, wave_mask
 
 sys.path.insert(0, str(ROOT / "assets-src"))
 from atlas import Atlas  # noqa: E402
@@ -206,6 +206,11 @@ def stripe_field(g, holes, grid: Grid, tee: str) -> np.ndarray:
 def render_art(surf, z, grid: Grid, g, holes, trees, buildings, boundary, P, lut, rng, tee, max_h=TREE_MAX_H, cfg=None, blut=None):
     H, W = surf.shape
     ppm = grid.ppm
+    range_rough = bool(cfg and cfg.get("range_art") == "rough")
+    if range_rough:  # drawn as rough, OB in physics (s09_render, range_art)
+        range_cells = surf == S["range"]
+        surf = surf.copy()
+        surf[range_cells] = S["rough"]
     tone = hillshade_tone(z, surf, ppm)
     stripe = stripe_field(g, holes, grid, tee)
     t = tone.astype(np.int16)
@@ -248,6 +253,8 @@ def render_art(surf, z, grid: Grid, g, holes, trees, buildings, boundary, P, lut
     tuft3 = np.zeros_like(tuft)
     tuft3[:-2] = tuft[2:]
     put(tuft | tuft2 | tuft3, "TUFT" if "TUFT" in P else "G5")
+    if range_rough:
+        put(range_cells & (n1 > 0.9975), "WH")  # range balls
     # outlines
     pr = PRIO[surf]
     edge = np.zeros((H, W), bool)
@@ -324,22 +331,22 @@ def render_art(surf, z, grid: Grid, g, holes, trees, buildings, boundary, P, lut
     rgb = np.array(img)
 
     # OB stakes along the boundary (every 9 m, just outside it)
-    ring = boundary.exterior
-    for s_ in np.arange(0, ring.length, 9.0):
-        p = ring.interpolate(s_)
-        q = ring.interpolate(min(ring.length, s_ + 0.5))
-        dx, dy = q.x - p.x, q.y - p.y
-        ln = math.hypot(dx, dy) or 1
-        nx_, ny_ = dy / ln, -dx / ln
-        cand = Point(p.x + nx_ * 0.8, p.y + ny_ * 0.8)
-        if boundary.contains(cand):
-            cand = Point(p.x - nx_ * 0.8, p.y - ny_ * 0.8)
-        col, row = (int(v) for v in grid.px(cand.x, cand.y))
-        hpx = int(round(ppm * 1.0))
-        if hpx + 1 <= row < H - 2 and 1 <= col < W - 2:
-            rgb[row + 1, col:col + 2] = (rgb[row + 1, col:col + 2] * 0.6).astype(np.uint8)
-            rgb[row - hpx:row + 1, col:col + 2] = P["WH"]
-            rgb[row - hpx, col:col + 2] = P["K2"]
+    for ring, poly, ob_inside in stake_lines(boundary, g, cfg or {}):
+        for s_ in np.arange(0, ring.length, 9.0):
+            p = ring.interpolate(s_)
+            q = ring.interpolate(min(ring.length, s_ + 0.5))
+            dx, dy = q.x - p.x, q.y - p.y
+            ln = math.hypot(dx, dy) or 1
+            nx_, ny_ = dy / ln, -dx / ln
+            cand = Point(p.x + nx_ * 0.8, p.y + ny_ * 0.8)
+            if poly.contains(cand) != ob_inside:
+                cand = Point(p.x - nx_ * 0.8, p.y - ny_ * 0.8)
+            col, row = (int(v) for v in grid.px(cand.x, cand.y))
+            hpx = int(round(ppm * 1.0))
+            if hpx + 1 <= row < H - 2 and 1 <= col < W - 2:
+                rgb[row + 1, col:col + 2] = (rgb[row + 1, col:col + 2] * 0.6).astype(np.uint8)
+                rgb[row - hpx:row + 1, col:col + 2] = P["WH"]
+                rgb[row - hpx, col:col + 2] = P["K2"]
     return rgb
 
 
