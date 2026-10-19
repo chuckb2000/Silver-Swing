@@ -474,7 +474,7 @@ DECISIONS.md with the reason.
     lidar and corrected by the developer in a tracing desk page, which
     also took every Blue tee. New `bayside` theme, `ob_highways` (Route 105
     out of bounds), trees from the 2024 NYS lidar. Other courses rebuild
-    unchanged. 209 unit tests and 3 Playwright tests pass. Open items:
+    unchanged. 216 unit tests and 4 Playwright tests pass (after merging main). Open items:
     section 11.10.4; request in docs/requests/indian_island_design_requests.md.
 
 -   **Next task:** the third playtest (putting, yellow misses), the club's

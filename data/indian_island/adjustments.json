@@ -144,6 +144,24 @@
   "reason": "measured 333 yd from the tee-box centre vs 353 on the card (-5.7%); moved the virtual tee within the real tee polygon desk_13_bluetee_0"
  },
  {
+  "hole": 13,
+  "tee_set": "Blue",
+  "step": 2,
+  "type": "tee_position",
+  "from": [
+   160.8,
+   789.31
+  ],
+  "to": [
+   160.8,
+   788.81
+  ],
+  "real_yd": 332.7,
+  "adjusted_yd": 339.0,
+  "card_yd": 353.0,
+  "reason": "tee shot: a perfect drive at the middle of the fairway clipped a tree near the tee; moved 0.5 m within the real tee polygon desk_13_bluetee_0 to the nearest clear spot"
+ },
+ {
   "hole": 14,
   "tee_set": "Blue",
   "step": 2,

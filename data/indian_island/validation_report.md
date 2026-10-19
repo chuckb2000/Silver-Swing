@@ -18,7 +18,7 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 | 10 | 5 | Blue | 461 | 451.1 | -9.9 | -2.2% | pass | 451.1 | -2.2% | pass |
 | 11 | 3 | Blue | 216 | 208.1 | -7.9 | -3.6% | flag | 213.3 | -1.3% | pass |
 | 12 | 4 | Blue | 347 | 334.4 | -12.6 | -3.6% | flag | 342.1 | -1.4% | pass |
-| 13 | 4 | Blue | 353 | 332.7 | -20.3 | -5.7% | flag | 339.1 | -3.9% | flag |
+| 13 | 4 | Blue | 353 | 332.7 | -20.3 | -5.7% | flag | 339.0 | -4.0% | flag |
 | 14 | 4 | Blue | 327 | 314.3 | -12.7 | -3.9% | flag | 320.4 | -2.0% | pass |
 | 15 | 5 | Blue | 485 | 451.0 | -34.0 | -7.0% | flag | 462.2 | -4.7% | flag |
 | 16 | 4 | Blue | 340 | 340.3 | +0.3 | +0.1% | pass | 340.3 | +0.1% | pass |
@@ -41,7 +41,7 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 11. Hole 10 (Blue): tee box desk_10_bluetee_0 assigned by the developer (tagged hole=10, tee_set=Blue in edited/course.geojson).
 12. Hole 11 (Blue): tee box desk_11_bluetee_0 assigned by the developer (tagged hole=11, tee_set=Blue in edited/course.geojson).
 13. Hole 12 (Blue): tee box desk_12_bluetee_0 assigned by the developer (tagged hole=12, tee_set=Blue in edited/course.geojson).
-14. Hole 13 (Blue): measured 339 yd vs card 353 (-3.9%) even with the virtual tee at the best spot in its box; accepted for play.
+14. Hole 13 (Blue): measured 339 yd vs card 353 (-4.0%) even with the virtual tee at the best spot in its box; accepted for play.
 15. Hole 13 (Blue): tee box desk_13_bluetee_0 assigned by the developer (tagged hole=13, tee_set=Blue in edited/course.geojson).
 16. Hole 14 (Blue): tee box desk_14_bluetee_0 assigned by the developer (tagged hole=14, tee_set=Blue in edited/course.geojson).
 17. Hole 15 (Blue): measured 462 yd vs card 485 (-4.7%) even with the virtual tee at the best spot in its box; accepted for play.
@@ -75,6 +75,7 @@ Decisions the developer made on 2026-10-19 are in DECISIONS.md ("Indian Island")
 - Hole 11 (Blue): measured 208 yd from the tee-box centre vs 216 on the card (-3.6%); moved the virtual tee within the real tee polygon desk_11_bluetee_0 -> 213.3 yd (real 208.1 yd).
 - Hole 12 (Blue): measured 334 yd from the tee-box centre vs 347 on the card (-3.6%); moved the virtual tee within the real tee polygon desk_12_bluetee_0 -> 342.1 yd (real 334.4 yd).
 - Hole 13 (Blue): measured 333 yd from the tee-box centre vs 353 on the card (-5.7%); moved the virtual tee within the real tee polygon desk_13_bluetee_0 -> 339.1 yd (real 332.7 yd).
+- Hole 13 (Blue): tee shot: a perfect drive at the middle of the fairway clipped a tree near the tee; moved 0.5 m within the real tee polygon desk_13_bluetee_0 to the nearest clear spot -> 339.0 yd (real 332.7 yd).
 - Hole 14 (Blue): measured 314 yd from the tee-box centre vs 327 on the card (-3.9%); moved the virtual tee within the real tee polygon desk_14_bluetee_0 -> 320.4 yd (real 314.3 yd).
 - Hole 15 (Blue): measured 451 yd from the tee-box centre vs 485 on the card (-7.0%); moved the virtual tee within the real tee polygon desk_15_bluetee_0 -> 462.2 yd (real 451.0 yd).
 - Hole 17 (Blue): measured 191 yd from the tee-box centre vs 200 on the card (-4.4%); moved the virtual tee within the real tee polygon desk_17_bluetee_0 -> 199.7 yd (real 191.2 yd).
