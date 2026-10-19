@@ -32,6 +32,29 @@ async function clickButton(page: Page, scene: string, label: string) {
   await page.mouse.click(pos!.x, pos!.y);
 }
 
+/** Click a piece of text (a state button or a course card) in a scene. */
+async function clickText(page: Page, scene: string, text: string) {
+  const pos = await page.evaluate(([scene, text]) => {
+    const g = window.__game;
+    const s = g.scene.getScene(scene);
+    const find = (list: any[]): any => {
+      for (const o of list) {
+        if (o.type === 'BitmapText' && o.text === text) return o;
+        if (o.list) { const f = find(o.list); if (f) return f; }
+      }
+      return null;
+    };
+    const t = find(s.children.list);
+    if (!t) return null;
+    const b = t.getBounds();
+    const canvas = g.canvas.getBoundingClientRect();
+    const k = s.cameras.main.zoom * (canvas.width / g.canvas.width);
+    return { x: canvas.left + b.centerX * k, y: canvas.top + b.centerY * k };
+  }, [scene, text]);
+  expect(pos, `text "${text}" in ${scene}`).not.toBeNull();
+  await page.mouse.click(pos!.x, pos!.y);
+}
+
 test('title -> new round -> play hole 1 to the cup', async ({ page }) => {
   const errors: string[] = [];
   page.on('pageerror', (e) => errors.push(e.message));
@@ -39,6 +62,12 @@ test('title -> new round -> play hole 1 to the cup', async ({ page }) => {
   await page.waitForFunction(() => window.__game?.scene.isActive('title'), null, { timeout: 60_000 });
   await page.waitForTimeout(500);
   await clickButton(page, 'title', 'play');
+  // choose a state, then the course
+  await page.waitForFunction(() => window.__game.scene.isActive('courses'), null, { polling: 100 });
+  await page.waitForTimeout(400);
+  await clickText(page, 'courses', 'oregon');
+  await page.waitForTimeout(600);
+  await clickText(page, 'courses', 'oswego lake country club');
   await page.waitForFunction(() => window.__game.scene.isActive('setup'), null, { polling: 100 });
   await page.waitForTimeout(300);
   await clickButton(page, 'setup', 'front 9');
