@@ -1833,9 +1833,12 @@ Blue (developer, 2026-10-19), the only set built.
 
 **11.12.4 Known open items** (details in data/stone_creek/validation_report.md)
 
-1.  Hole 6 plays 144 yd vs 149 (-3.1 %, flag); every other hole passes.
-2.  Hole 16's tee is the OSM line start, inside the large back tee polygon.
-3.  The wetland north of 12/13 plays as woods, not a penalty area.
+1.  Hole 6 plays 144 yd vs 149 (-3.1 %, flag), accepted by the developer;
+    every other hole passes.
+2.  Hole 16's tee is the OSM line start, inside the large back tee
+    polygon (accepted).
+3.  The wetland north of 12/13 plays as woods, not a penalty area
+    (accepted).
 4.  Tree types from crown shape only.
 
 **12. Repository layout**

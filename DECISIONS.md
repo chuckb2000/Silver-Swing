@@ -177,6 +177,7 @@ Changes from the starting values in CLAUDE.md, and choices the spec left open. N
 - **Out of bounds = the OSM course boundary** (developer). The driving range south-east of hole 9 is not mapped in OSM and stays in play as rough (developer: "doesn't need to be made OB"); `driving_range_is_ob` is false.
 - **The reed-bed wetland north of 12/13** (OSM `natural=wetland`, mostly outside the boundary) is flattened like Oswego's ponds (0.3 m from its median) and plays as woods inside the boundary, not as a penalty area (course chat; listed in the PR).
 - **Hole 6 tee** (course chat): s06 uses the small box in front of the long back box (144 yd, -3.1 %). Assigning the long box as Blue gives 150 yd (+0.9 %) from its front edge, 6 m away; left as is and listed for the developer.
+- **Developer, 2026-10-19 (PR #6): accepted** hole 6 at -3.1 %, the wetland playing as woods, hole 16's tee at the OSM line start, and the hole 17 course card.
 - **World 1,280 x 1,280 m** (x0 533124, y0 5015660): the boundary box plus 134-157 m of scenery on each side.
 - **Data:** OSM from the developer's Overpass Turbo export; DOGAMI DTM and CHM exportImage GeoTIFFs (1 m, EPSG:32610, feet), box x 533024-534504 / y 5015560-5017040; club scorecard image. Release `stone-creek-data`.
 
