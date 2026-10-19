@@ -1,0 +1,342 @@
+{
+  "note": "Inputs for pipeline/propose_trace.py: what the course chat picked by eye on the NYS orthoimagery and DEM for the parts of Indian Island that OSM lacks (hole 9, hole 10's green and fairway, holes 11-18, Blue tee pads, water). Hole identity comes from the Suffolk County scorecard map and yardages (Google imagery and the routing screenshot were only looked at, never measured). Coordinates are local metres (world origin 698261, 4532163, EPSG:32618). Everything written by the tool is a proposal for the developer (COURSE_BUILD.md 1.1).",
+  "ortho": "raw/nys_ortho_032m.tif",
+  "greens": {
+    "9": {
+      "seed": [
+        1088,
+        384
+      ],
+      "t": 3.6
+    },
+    "10": {
+      "seed": [
+        669,
+        238
+      ],
+      "t": 4.5
+    },
+    "11": {
+      "seed": [
+        460,
+        429
+      ],
+      "t": 4.5
+    },
+    "12": {
+      "seed": [
+        224,
+        732
+      ],
+      "t": 5.0
+    },
+    "13": {
+      "seed": [
+        464,
+        768
+      ],
+      "t": 3.6
+    },
+    "14": {
+      "seed": [
+        806,
+        693
+      ],
+      "t": 4.5
+    },
+    "15": {
+      "seed": [
+        386,
+        726
+      ],
+      "t": 4.0
+    },
+    "16": {
+      "seed": [
+        599,
+        540
+      ],
+      "t": 4.5
+    },
+    "17": {
+      "seed": [
+        589,
+        314
+      ],
+      "t": 4.5
+    },
+    "18": {
+      "seed": [
+        966,
+        519
+      ],
+      "t": 4.0
+    }
+  },
+  "tees": [
+    {
+      "hole": "9",
+      "seed": [
+        1385,
+        589
+      ],
+      "note": "back pad of three on 9's tee-shot axis (also 1368,581 and 1352,574)"
+    },
+    {
+      "hole": "9",
+      "seed": [
+        1368,
+        581
+      ]
+    },
+    {
+      "hole": "9",
+      "seed": [
+        1352,
+        574
+      ]
+    },
+    {
+      "hole": "11",
+      "seed": [
+        560,
+        261
+      ]
+    },
+    {
+      "hole": "12",
+      "seed": [
+        379,
+        474
+      ]
+    },
+    {
+      "hole": "13",
+      "seed": [
+        147.5,
+        795
+      ]
+    },
+    {
+      "hole": "13",
+      "seed": [
+        208,
+        784
+      ]
+    },
+    {
+      "hole": "13",
+      "seed": [
+        223,
+        793
+      ]
+    },
+    {
+      "hole": "14",
+      "seed": [
+        534,
+        765
+      ]
+    },
+    {
+      "hole": "15",
+      "seed": [
+        779,
+        655
+      ]
+    },
+    {
+      "hole": "15",
+      "seed": [
+        799,
+        659
+      ]
+    },
+    {
+      "hole": "16",
+      "seed": [
+        337,
+        718
+      ]
+    },
+    {
+      "hole": "16",
+      "seed": [
+        354,
+        702
+      ]
+    },
+    {
+      "hole": "16",
+      "seed": [
+        369,
+        686
+      ]
+    },
+    {
+      "hole": "17",
+      "seed": [
+        665,
+        463
+      ]
+    },
+    {
+      "hole": "18",
+      "seed": [
+        689,
+        288
+      ]
+    },
+    {
+      "hole": "18",
+      "seed": [
+        708,
+        322
+      ]
+    }
+  ],
+  "holes": {
+    "9": {
+      "par": 4,
+      "handicap": 7,
+      "tee": [
+        1385,
+        589
+      ],
+      "bends": []
+    },
+    "11": {
+      "par": 3,
+      "handicap": 6,
+      "tee": [
+        560,
+        261
+      ],
+      "bends": []
+    },
+    "12": {
+      "par": 4,
+      "handicap": 12,
+      "tee": [
+        386,
+        470
+      ],
+      "bends": [
+        [
+          328,
+          649
+        ]
+      ]
+    },
+    "13": {
+      "par": 4,
+      "handicap": 14,
+      "tee": [
+        147.5,
+        795
+      ],
+      "bends": []
+    },
+    "14": {
+      "par": 4,
+      "handicap": 18,
+      "tee": [
+        530,
+        766
+      ],
+      "bends": []
+    },
+    "15": {
+      "par": 5,
+      "handicap": 2,
+      "tee": [
+        789,
+        657
+      ],
+      "bends": [
+        [
+          610,
+          619
+        ]
+      ]
+    },
+    "16": {
+      "par": 4,
+      "handicap": 16,
+      "tee": [
+        337,
+        718
+      ],
+      "bends": []
+    },
+    "17": {
+      "par": 3,
+      "handicap": 10,
+      "tee": [
+        676,
+        478
+      ],
+      "bends": []
+    },
+    "18": {
+      "par": 4,
+      "handicap": 8,
+      "tee": [
+        689,
+        288
+      ],
+      "bends": [
+        [
+          811,
+          440
+        ]
+      ]
+    }
+  },
+  "fairways": {
+    "holes": [
+      "9",
+      "10",
+      "11",
+      "12",
+      "13",
+      "14",
+      "15",
+      "16",
+      "17",
+      "18"
+    ],
+    "corridor_m": 40,
+    "prob": 0.5,
+    "min_area_m2": 250
+  },
+  "bunkers": {
+    "near_m": 45,
+    "min_area_m2": 12,
+    "max_area_m2": 700,
+    "min_z_m": 1.0,
+    "min_brightness": 190,
+    "min_compactness": 0.35
+  },
+  "water": {
+    "max_z_m": 0.8,
+    "flat_m": 0.004,
+    "min_area_m2": 1500,
+    "edge_z_m": 0.47,
+    "hazard_strip_m": 100,
+    "pond_seed": [
+      1220,
+      415
+    ],
+    "pond_max_z_m": 0.35,
+    "pond_radius_m": 90,
+    "pond_parts": [
+      {
+        "penalty": "red",
+        "why": "developer 2026-10-19: no yellow penalty areas on this course (the card's yellow stakes on 5, 6, 7 are not used)"
+      }
+    ],
+    "boundary_close_m": 15
+  },
+  "bend_note": "Bend points (CLAUDE.md 5.5: the dogleg turn at the fairway centre): where the centre of the developer's fairway lies farthest from the tee-green chord, used on holes whose fairway bends more than 30 m off it (12: 36 m, 15: 64 m, 18: 37 m); holes 9, 11, 13, 14, 16, 17 play straight (13: 11 m)."
+}

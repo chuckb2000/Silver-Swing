@@ -5,8 +5,10 @@ new course. Each lesson is something that cost time on an earlier course,
 with what to do instead. Add to it at the end of every course build.
 
 Sources so far: East Potomac Golf Links (2026-10-19, three courses on one
-island), Langston (2026-10-19, a course in two parts across a lake, section 8),
-Tualatin Country Club (2026-10-19, section 9). Oswego Lake and Highland Links notes live in DECISIONS.md.
+island), Langston (2026-10-19, a course in two parts across a lake) , Indian
+Island (2026-10-19, half the course traced) and Tualatin Country Club
+(2026-10-19, section 9). Oswego Lake and Highland Links
+notes live in DECISIONS.md.
 
 ---
 
@@ -143,6 +145,40 @@ Tualatin Country Club (2026-10-19, section 9). Oswego Lake and Highland Links no
   (often just the default) and list the rest. The game only plays the
   default tee anyway (until the design chat adds a tee choice).
 
+- **When OSM lacks whole holes, trace them yourself and let the developer
+  correct them in a tracing desk** (Indian Island, 2026-10-19: OSM had 8 of
+  18 holes). `propose_trace.py` gets a first pass from the state
+  orthophoto and the DEM: the green as the patch of smooth turf at a seed,
+  fairways from a classifier trained on the course's own OSM fairways,
+  bunkers as bright sand, tee pads from the DEM, water from the
+  hydro-flattened DEM. Then publish the tracing desk (`desk_export.py` +
+  `pipeline/desk/index.html`). The developer drags outlines into place and
+  marks tees there instead of in QGIS, and you read the saves back. What
+  mattered:
+  - Show the shapes smooth. Raw traced outlines looked jagged and lost the
+    developer's trust; greens are smooth, mostly convex blobs.
+  - Give the desk a live yardage readout against the card for each tee
+    box. The first traced tees measured like the White card (-0.6 % total)
+    while seven holes failed Blue by more than 8 %. Back tees at ground
+    level show in neither the photo nor the lidar, and only the developer
+    could place them.
+  - Put dogleg bend points at the centre of the developer's fairway where
+    it lies farthest from the tee-green chord. A bend picked by eye cut
+    corners and cost 3-5 % on three holes.
+  - Store the developer's saves in the repo (`data/<id>/desk/`) so the
+    build stays reproducible without the page.
+- **Prefer state orthoimagery to the developer's Google screenshots.** At
+  Indian Island the Google screenshots were only used to identify holes;
+  every shape was traced from the NYS orthoimagery, which is open data,
+  georeferenced and sharper. Google screenshots may now be traced when the
+  developer supplies them (CLAUDE.md 5.1 note, `source=google`); keep them
+  for features the open imagery can't show.
+- **Big lidar uploads:** LAS files of 180-330 MB failed in the browser's
+  release upload, though GitHub allows 2 GB per asset. Ask for one zip (or
+  LAZ). A state project may have no vegetation class: take class 1
+  (unclassified) and let s05 drop trees on OSM buildings. The points' GPS
+  times give the flight date, which tells you whether it was leaf-off.
+
 ## 4. World and pipeline
 
 - **The 2,048 m limit can bind.** The island is 1.93 km long; the world became
@@ -160,6 +196,10 @@ Tualatin Country Club (2026-10-19, section 9). Oswego Lake and Highland Links no
   and compare after every pipeline change (Oswego: 211 files).
 - **Don't change pipeline files while a build is running from them.** Use a
   worktree for the baseline build.
+- **Run the regression check only after changing code in `pipeline/`**
+  (developer, 2026-10-19). Changes to `data/<id>/` files, the course config
+  or a scorecard can't touch other courses; skip it for them. Run it once
+  more before asking the developer to merge.
 - **`pkill -f` patterns can match your own shell** (`pkill -f "s0[0-9]"`
   killed the session's shell). Kill by PID. Likewise a `pgrep -f <name>`
   wait loop matches its own command line and never ends.

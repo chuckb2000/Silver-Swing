@@ -175,6 +175,12 @@ def main():
         # bridges and buildings over it stay as they are
         red_out = mask(red_water_geoms(g, cfg)) & ~inside & ~np.isin(surf, [SURF["ob_road"], SURF["ob_building"]])
         surf[red_out] = SURF["water"]
+    # roads inside the boundary that are out of bounds (config "ob_highways": highway values,
+    # e.g. Indian Island's Route 105 between the two halves of the course); other roads inside
+    # the boundary stay cart paths with free relief
+    if cfg.get("ob_highways"):
+        obr = mask([geom for geom, hw in roads if hw in cfg["ob_highways"]]) & inside
+        surf[obr & (surf != SURF["water"])] = SURF["ob_road"]
 
     np.save(bdir / "surface.npy", surf)
     counts = {k: int((surf == v).sum()) for k, v in SURF.items()}
