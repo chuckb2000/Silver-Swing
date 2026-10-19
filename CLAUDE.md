@@ -210,8 +210,8 @@ licensed data.
   choice)                                           databases
 
   Imagery for  USDA NAIP (\~60 cm) or  GeoTIFF /    Public domain / state
-  tracing gaps Maryland iMAP           WMS          open data. Do not trace
-               orthoimagery                         Google or Bing imagery
+  tracing gaps Maryland iMAP           WMS          open data. Google/Bing
+               orthoimagery                         screenshots: see 5.1
 
   Elevation    USGS 3DEP 1 m DEM, or   GeoTIFF      Public domain
                Maryland iMAP lidar                  
@@ -717,12 +717,12 @@ licensed data)**
                        Imagery Program)                          
 
   Developer-uploaded   Any **georeferenced**        GeoTIFF /    Google and Bing
-  imagery              GeoTIFF. A plain screenshot  PNG          imagery: visual
-                       is also OK if the developer               reference only.
-                       gives ≥ 3 control points                  Don\'t extract
-                       (pixel ↔ lat/lon) so Claude               geometry from it
-                       can georeference it                       (their terms prohibit
-                                                                 it)
+  imagery              GeoTIFF. A plain screenshot  PNG          screenshots may be
+                       is also OK if the developer               traced. Their terms
+                       gives ≥ 3 control points                  forbid it; the
+                       (pixel ↔ lat/lon) so Claude               developer accepts
+                       can georeference it                       that risk (5.1
+                                                                 note)
 
   Yardages, par,       The club\'s official         Manual entry Record the source and
   handicap,            scorecard (website or        → CSV        date
@@ -730,6 +730,19 @@ licensed data)**
                        sites (GolfPass, BlueGolf)                
                        are fallbacks                             
   ------------------------------------------------------------------------------------
+
+**Google/Bing tracing (developer, 2026-10-19):** the developer may supply
+Google or Bing screenshots for tracing course geometry and takes on the
+terms-of-service risk (both forbid using their imagery to make map data).
+Conditions: the developer supplies the screenshots (Claude doesn't fetch
+Google or Bing imagery itself); each is georeferenced from ≥ 3 control
+points (4+ preferred) and the fit error is reported in metres; every
+feature traced from it carries `source=google` or `source=bing` in
+edited/course.geojson and is listed in validation_report.md; open imagery
+is still preferred where it is good enough; and Google- or Bing-derived
+geometry never goes into OpenStreetMap (OSM forbids it). Tracing Bing or
+Esri imagery inside an OSM editor and contributing to OSM is permitted by
+Microsoft and Esri and stays an option.
 
 **Network note:** Claude\'s environment may block Overpass, USGS or
 DOGAMI downloads. If so, Claude writes the download script and the
