@@ -211,7 +211,10 @@ Known Oswego-specific code, with the fix:
   "paint_range_outside": false,         // optional: draw a driving range outside the boundary as a range
   "connect_fairways": false,            // optional, only where OSM is wrong: s02b runs the fairway up to the green
                                         // (true = every hole, or a list of holes); see COURSE_LESSONS.md 3
-  "trees_off_fairways_m": null          // optional: drop trees whose top is this far (m) inside a fairway (check the course first)
+  "trees_off_fairways_m": null,         // optional: drop trees whose top is this far (m) inside a fairway (check the course first)
+  "red_water_osm": ["r123"],            // optional: OSM water features that are red penalty areas wherever they lie,
+                                        // also outside the boundary (a river along the course; Tualatin)
+  "drop_trees": [{"x": 0, "y": 0, "reason": "..."}]  // optional: single trees (local metres) the developer asked to remove
 }
 ```
 

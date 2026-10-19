@@ -15,7 +15,23 @@ OSM contents: course boundary (way 146982317), 18 greens, 29 tee boxes, 21 fairw
 38 bunkers, 2 ponds tagged `lateral_water_hazard`, driving range, 3 cart-path lines,
 375 buildings, roads, the Tualatin River. **No `golf=hole` lines and no `golf=pin`.**
 
-## Still needed
+## Status (2026-10-19)
+
+All received. The developer uploaded both DOGAMI files to the release (named
+`dogami_dtm_ft.tif.tiff` / `dogami_chm_ft.tif.tiff` there; copied to `raw/`):
+
+| File | SHA-256 | Check |
+|---|---|---|
+| `raw/dogami_dtm_ft.tif` | 674075e3377113b2804600524a2f5d51f084f1c84407d354bba49d405eeac78c | EPSG:32610, 1 m, 1480 x 1736, feet, no gaps; 103.8-206.2 ft (river flat at 103.8) |
+| `raw/dogami_chm_ft.tif` | 0f7519436fb51bc3fd20eb9d698d354fcf3d22a35f65fe1c997735c96713d0d4 | same grid, feet, 0-187 ft |
+
+Routing: the developer confirmed greens A-R of `proposed/osm_labelled.png` are
+holes 1-18. No printed scorecard is available. Water: all red, including the
+Tualatin River (in play on holes 7, 9 and 10).
+
+The original request follows.
+
+## Requested
 
 ### 1. Elevation and canopy (DOGAMI, two files)
 

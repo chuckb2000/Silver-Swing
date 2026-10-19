@@ -5,7 +5,8 @@ new course. Each lesson is something that cost time on an earlier course,
 with what to do instead. Add to it at the end of every course build.
 
 Sources so far: East Potomac Golf Links (2026-10-19, three courses on one
-island). Oswego Lake and Highland Links notes live in DECISIONS.md.
+island), Tualatin Country Club (2026-10-19, section 8). Oswego Lake and
+Highland Links notes live in DECISIONS.md.
 
 ---
 
@@ -200,3 +201,58 @@ island). Oswego Lake and Highland Links notes live in DECISIONS.md.
 - If a push hook says the branch has "no remote branch" after a successful
   push, the local branch just lacks tracking in the shallow clone: set
   `branch.<name>.remote/merge` and a fetch refspec.
+
+## 8. Tualatin Country Club (2026-10-19)
+
+- **OSM may map every tee, fairway and green but no hole lines or pins.**
+  Don't guess the routing. Plot the greens with letters and the tee boxes
+  with numbers (`data/tualatin/proposed/osm_labelled.png`) and ask the
+  developer which green is which hole; that one picture settled all 18.
+  Then check it against the card: for each hole, the tee box beside the
+  previous green should sit at the card distance from the green
+  (straight-line distances were within 5 % on every hole).
+- **Draw hole lines from the mapped features, not by eye.**
+  `data/tualatin/make_holes.py`: tee box centroid -> fairway centre line
+  -> green centroid, pins at green centroids, added through `edits.json`.
+  The fairway centre line is the *longest path* through the medial axis
+  (skeleton) of the fairway polygon; the raw skeleton has spurs into every
+  corner and lobe, and a bend chosen on a spur was 69 m off line.
+- **Put a dogleg's bend in the landing zone** (250 yd from the tee, the
+  USGA's scratch landing area), not at the axis point farthest from the
+  straight line. Where the line bends decides where the game's default
+  aim points the drive: the farthest-point bend aimed hole 11's drive down
+  the right edge of a tree-lined chute, where a perfect drive clipped three
+  26-40 m trees; the landing-zone bend cleared it without touching a tree. Start the line at
+  the Blue box (run s06 once, then use the box it assigns).
+- **Check tee shots with the game's own flight model.** A drive aimed down
+  the centre line (`Round.lineAim`) with a perfect strike, through
+  `simulateShot` without obstacles, then test every sample against each
+  tree's trunk and canopy cylinder: that names the blocking trees, their
+  heights and the ball's height. Do the approach from where that drive
+  stops too. The test is in `game/tests/unit/tualatin.test.ts`.
+- **Look at the greens the way the game draws them.** Trees on the near
+  (south) side of a green are drawn over it in the 3/4 view, so a contact
+  sheet of greens (the course-card sheet) shows trees "blocking" a green
+  that a top-down plot doesn't. The developer spotted two on hole 13 and
+  had them removed (`drop_trees`, which also clears their canopy so no
+  woods patch is left on the ground).
+- **Water in play outside the boundary.** A river along the boundary is
+  out of bounds by default (everything outside is OB). If the developer
+  says it is a red penalty area, list it in `red_water_osm`; the game
+  checks water before OB and keeps drops inside the boundary.
+- **A swimming pool tagged `natural=water` inside the boundary** is drawn
+  as rough unless it is listed somewhere; check every water feature inside
+  the boundary, not only the ones tagged as hazards.
+- **DOGAMI image services** (Oregon) give a 1 m GeoTIFF in the course's
+  UTM zone in one browser click, already on the world grid (s00 copies it
+  cell for cell). The links are in `data/tualatin/DATA_REQUEST.md`.
+- **Regression checks catch small slips.** Inserting a block into s05 split
+  an existing `if` and dropped two keys from East Potomac's tree report;
+  comparing each step's outputs with a `main` worktree found it in a
+  minute. Re-check after every pipeline edit, not only the first.
+- **In-game screenshots take about a minute a hole** (5 views) in the
+  sandbox. Run them in the background in chunks and read the first
+  contact sheets while the rest render.
+- `npm install` may rewrite `game/package-lock.json`; revert it unless the
+  course needs a new package.
+

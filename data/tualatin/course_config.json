@@ -10,12 +10,35 @@
     "raw/overpass.geojson"
   ],
   "boundary_name": "Tualatin Country Club",
+  "dtm": {
+    "path": "raw/dogami_dtm_ft.tif",
+    "units": "ft",
+    "source": "DOGAMI lidar DIGITAL_TERRAIN_MODEL_MOSAIC (bare earth), exportImage at 1 m in EPSG:32610, box x 517110-518590 / y 5025674-5027410, downloaded by the developer 2026-10-19 (GitHub release data-tualatin)"
+  },
+  "chm": {
+    "path": "raw/dogami_chm_ft.tif",
+    "units": "ft",
+    "source": "DOGAMI lidar CANOPY_HEIGHT_MODEL_MOSAIC (highest hit minus bare earth), exportImage at 1 m in EPSG:32610, same box, downloaded by the developer 2026-10-19 (GitHub release data-tualatin)",
+    "label": "DOGAMI canopy height model"
+  },
+  "drop_trees": [
+    {
+      "x": 776.5,
+      "y": 588.5,
+      "reason": "developer 2026-10-19: hole 13, 41 m fir at the front right of the green, crown over the green; removed for playability"
+    },
+    {
+      "x": 753.5,
+      "y": 584.5,
+      "reason": "developer 2026-10-19: hole 13, 43 m fir at the front left of the green, crown over the green; removed for playability"
+    }
+  ],
   "world": {
     "x0": 517210,
     "y0": 5025774,
     "width": 1280,
     "height": 1536,
-    "note": "provisional: OSM course boundary bbox (990 x 1074 m) + ~120 m scenery, rounded out to whole 256 m chunks and centred (145 m west/east, 231 m south/north). Revisit once the boundary question (green north of the river) is settled."
+    "note": "OSM course boundary bbox (990 x 1074 m) + scenery, rounded out to whole 256 m chunks and centred (145 m west/east, 231 m south/north); approved by the developer 2026-10-19"
   },
   "tee_sets": [
     {
@@ -29,6 +52,10 @@
   "default_tee": "Blue",
   "scorecard_source": "GolfPass scorecard (golfpass.com/courses/52-tualatin-country-club/scorecard-and-layout), retrieved 2026-10-19; unverified third-party listing. Hole totals match the printed Out/In/Total for every tee set. GolfPass's tee table lists Member/Blue as 6,340 yd, 70.4/130, while its Blue column adds to 6,370.",
   "penalty_default": "red",
+  "red_water_osm": [
+    "r1079340",
+    "w820800003"
+  ],
   "driving_range_is_ob": true,
   "wind_mph": {
     "minMph": 1,
@@ -39,5 +66,5 @@
     "Elevation and canopy height: Oregon Department of Geology and Mineral Industries (DOGAMI) lidar",
     "Scorecard: GolfPass (third-party listing)"
   ],
-  "notes": "Intake 2026-10-19. dtm / chm entries are added when the DOGAMI files arrive. The OSM extract has no golf=hole lines and no pins: hole routing is an open item."
+  "notes": "Developer, 2026-10-19: routing = greens A-R of proposed/osm_labelled.png in order (OSM has no hole lines, see make_holes.py / edits.json); Blue tees; pnw theme; wind as Oswego Lake; all water red, including the Tualatin River (in play on holes 7, 9, 10), via red_water_osm (w820800003 is the clubhouse swimming pool, drawn as water); no printed scorecard available."
 }
