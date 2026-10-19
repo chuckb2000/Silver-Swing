@@ -462,7 +462,8 @@ DECISIONS.md with the reason.
     theme with flowering cherries around the island. Pipeline gained
     `layouts`, `merge_edits.py`, `s02b_approaches.py` and lidar tee
     proposals; Oswego Lake and Highland Links rebuild unchanged. The Blue
-    course plays the Blue tees (developer). 186 unit tests and 3 Playwright
+    course plays the Blue tees (developer); a fairway-centre tee shot clears
+    the trees on every hole. 189 unit tests and 3 Playwright
     tests pass. Open items: section 11.9.4 and
     data/east_potomac/validation_report.md; requests to the design chat
     in docs/requests/east_potomac_design_requests.md.
@@ -1580,8 +1581,11 @@ data/highland_links/validation_report.md.
     built-up greens and grass mounds.
 -   **Fairways** run into every green (pipeline s02b; the OSM fairways
     stopped short of 19 greens) and no tree stands inside a fairway.
--   **Trees:** 4,177 from lidar; about 1,000 drawn as flowering cherries
+-   **Trees:** 4,171 from lidar; about 1,000 drawn as flowering cherries
     along Ohio Drive and the seawall (theme flair, species not measured).
+    A perfect drive at the middle of the fairway clears the trees near
+    every tee (`clear_tee_shots`: 7 tees moved within their boxes, 6
+    trees removed on Blue 9 and 13).
 
 **11.9.2 Scorecards** (club PDFs supplied by the developer, 2026-10-19)
 
