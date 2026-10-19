@@ -20,7 +20,7 @@ import numpy as np
 from PIL import Image
 from shapely.geometry import MultiPolygon, Polygon
 
-from common import build_dir, course_dir, course_name_from_argv, layout_dir, layouts, load_config, out_dir, play_boundary, PX_PER_M, rnd, ROOT, SURF, World, write_json
+from common import build_dir, course_dir, course_name_from_argv, game_boundary, layout_dir, layouts, load_config, out_dir, play_boundary, PX_PER_M, rnd, ROOT, SURF, World, write_json
 
 warnings.filterwarnings("ignore")
 
@@ -267,9 +267,7 @@ def main():
     green_by_osm = {gm["id"]: gm for gm in greens}
 
     # world-wide parts of course.json -------------------------------------------
-    boundary = play_boundary(g, cfg)
-    if isinstance(boundary, MultiPolygon):
-        boundary = max(boundary.geoms, key=lambda p: p.area)
+    boundary = game_boundary(g, cfg)  # one polygon: the largest part, or the parts joined (join_boundary_parts)
     water = []
     for _, r in g[g.kind.isin(["lateral_water_hazard", "water_hazard"])].iterrows():
         kind = "red" if r.kind == "lateral_water_hazard" else "yellow"

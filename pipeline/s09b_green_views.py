@@ -36,7 +36,7 @@ from rasterio.features import rasterize
 from scipy import ndimage
 from shapely.geometry import MultiPolygon, Point, Polygon
 
-from common import build_dir, course_name_from_argv, layout_dir, layouts, load_config, play_boundary, PX_PER_M, ROOT, SURF, World, write_json
+from common import build_dir, course_name_from_argv, joins_parts, layout_dir, layouts, load_config, play_boundary, PX_PER_M, ROOT, SURF, World, write_json
 from s08_surface import course_layers, road_geoms
 from terrain import tier_offset
 from s09_render import draw_lighthouse, LIGHTHOUSE_DRAW_SCALE  # noqa: E402
@@ -268,6 +268,9 @@ def render_art(surf, z, grid: Grid, g, holes, trees, buildings, boundary, P, lut
     put(nw & ~own_edge, "S0")
     wat = np.isin(surf, [S["water"], S["ob_water"]])
     put(wave_mask(H, W, 0) & wat & ~own_edge, "W2")
+    if cfg and cfg.get("garden"):  # flowering shrub beds beside the course (art only, s09 / garden.py)
+        from garden import paint_garden
+        paint_garden(rgb, cfg, g, surf, Xg, Yg, ppm)
 
     # shadows: trees and buildings (sun from the upper left)
     sh_img = Image.new("L", (W, H), 0)
@@ -324,22 +327,23 @@ def render_art(surf, z, grid: Grid, g, holes, trees, buildings, boundary, P, lut
     rgb = np.array(img)
 
     # OB stakes along the boundary (every 9 m, just outside it)
-    ring = boundary.exterior
-    for s_ in np.arange(0, ring.length, 9.0):
-        p = ring.interpolate(s_)
-        q = ring.interpolate(min(ring.length, s_ + 0.5))
-        dx, dy = q.x - p.x, q.y - p.y
-        ln = math.hypot(dx, dy) or 1
-        nx_, ny_ = dy / ln, -dx / ln
-        cand = Point(p.x + nx_ * 0.8, p.y + ny_ * 0.8)
-        if boundary.contains(cand):
-            cand = Point(p.x - nx_ * 0.8, p.y - ny_ * 0.8)
-        col, row = (int(v) for v in grid.px(cand.x, cand.y))
-        hpx = int(round(ppm * 1.0))
-        if hpx + 1 <= row < H - 2 and 1 <= col < W - 2:
-            rgb[row + 1, col:col + 2] = (rgb[row + 1, col:col + 2] * 0.6).astype(np.uint8)
-            rgb[row - hpx:row + 1, col:col + 2] = P["WH"]
-            rgb[row - hpx, col:col + 2] = P["K2"]
+    for part in (boundary.geoms if boundary.geom_type == "MultiPolygon" else [boundary]):
+        ring = part.exterior
+        for s_ in np.arange(0, ring.length, 9.0):
+            p = ring.interpolate(s_)
+            q = ring.interpolate(min(ring.length, s_ + 0.5))
+            dx, dy = q.x - p.x, q.y - p.y
+            ln = math.hypot(dx, dy) or 1
+            nx_, ny_ = dy / ln, -dx / ln
+            cand = Point(p.x + nx_ * 0.8, p.y + ny_ * 0.8)
+            if part.contains(cand):
+                cand = Point(p.x - nx_ * 0.8, p.y - ny_ * 0.8)
+            col, row = (int(v) for v in grid.px(cand.x, cand.y))
+            hpx = int(round(ppm * 1.0))
+            if hpx + 1 <= row < H - 2 and 1 <= col < W - 2:
+                rgb[row + 1, col:col + 2] = (rgb[row + 1, col:col + 2] * 0.6).astype(np.uint8)
+                rgb[row - hpx:row + 1, col:col + 2] = P["WH"]
+                rgb[row - hpx, col:col + 2] = P["K2"]
     return rgb
 
 
@@ -377,7 +381,7 @@ def main():
     trees_all = json.load(open(bdir / "trees.json"))
     g = gpd.read_file(bdir / "course_local.geojson")
     boundary = play_boundary(g, cfg)
-    if isinstance(boundary, MultiPolygon):
+    if isinstance(boundary, MultiPolygon) and not joins_parts(cfg):  # several parts in play: keep them all
         boundary = max(boundary.geoms, key=lambda p_: p_.area)
     meta = json.load(open(bdir / "art" / "render_meta.json"))
     bh_by_osm = {b["osm"]: b["h"] for b in meta["buildings"]}
