@@ -118,6 +118,18 @@ Highland Links notes live in DECISIONS.md.
   tree in the fairway on purpose: check before switching it on. If
   `connect_fairways` is on too, the tree check also covers the new approaches
   (s02b runs before s05).
+- **Aim at the middle of the fairway from every tee.** At East Potomac ten
+  Blue tee shots clipped a crown within 40 m of the tee. Moving the virtual
+  tee to the back of a shared box (to reach the longer set's yardage) put it
+  under trees at the box edge, and tees with no mapped box (a moved line
+  start) can sit in a stand of trees. Run the check for every hole and tee
+  set (the test in `east_potomac.test.ts`: perfect auto-club shot, every
+  canopy a hit). Every course build clears them (the developer: "it should
+  just be the case"): s06 first moves the tee within its box, then s06b drops
+  the trees still in the way. A blocked tee shot can be on purpose: Oswego
+  Lake hole 10 is a dogleg the developer keeps, listed in `keep_tee_trees`.
+  Read the s06b line of the build log and ask about any hole where it drops
+  trees on a new course.
 - **Several courses on one site:** list them as `layouts` in
   `course_config.json` (COURSE_BUILD.md 3.5). Holes go to the layout whose
   `leisure=golf_course` polygon contains them; all greens are shaped once so

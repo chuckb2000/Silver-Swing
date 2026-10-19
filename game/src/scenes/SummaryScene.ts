@@ -2,11 +2,13 @@
 
 import { app } from '../app';
 import { sfx } from '../audio/sfx';
-import { LeaderboardEntry, loadBoard } from '../save/store';
+import { LeaderboardEntry, loadBoard, renameEntry, saveSettings } from '../save/store';
+import { DEFAULT_NAME } from '../save/names';
+import { askName } from '../ui/nameInput';
 import { compareRounds, toPar } from '../systems/rules/scoring';
 import { Button, COLORS, txt } from '../ui/widgets';
 import { scorecard } from './HudScene';
-import { fetchBoard } from '../save/online';
+import { fetchBoard, flushUploads } from '../save/online';
 import { lengthLabel } from './flow';
 import { MenuScene } from './menu';
 
@@ -42,9 +44,27 @@ export class SummaryScene extends MenuScene {
     if (pb) sfx('great');
     const note = `${e.casual ? 'casual round  ·  ' : ''}#${rank} of ${board.length} ${where} (${lengthLabel(e.length)})${pb ? '  ·  new personal best!' : ''}`;
     this.root.add(txt(this, W / 2, H - 38, note, { origin: [0.5, 0], color: pb ? COLORS.yellow : COLORS.dim }));
+    // the name on the leaderboard: easy to miss at the start, so it can be set here before the round is sent
+    const unnamed = e.player === DEFAULT_NAME;
+    const nw = 104;
+    const nx = W >= 400 ? W - nw - 6 : Math.round(W / 2 - nw / 2), ny = W >= 400 ? 4 : H - 56;
+    this.root.add(new Button(this, nx, ny, nw, 16, unnamed ? 'enter your name' : `name: ${e.player}`, () => this.rename(), { color: unnamed ? 'orange' : 'grey' }));
+    // leaving the summary sends the round to the shared leaderboard
+    const leave = (to: string) => { void flushUploads(); this.scene.start(to); };
     const bw = 84;
-    this.root.add(new Button(this, W / 2 - bw * 1.5 - 4, H - 24, bw, 16, 'title', () => this.scene.start('title'), { color: 'grey' }));
-    this.root.add(new Button(this, W / 2 - bw / 2, H - 24, bw, 16, 'leaderboard', () => this.scene.start('leaderboard'), { color: 'grey' }));
-    this.root.add(new Button(this, W / 2 + bw / 2 + 4, H - 24, bw, 16, 'play again', () => this.scene.start('setup')));
+    this.root.add(new Button(this, W / 2 - bw * 1.5 - 4, H - 24, bw, 16, 'title', () => leave('title'), { color: 'grey' }));
+    this.root.add(new Button(this, W / 2 - bw / 2, H - 24, bw, 16, 'leaderboard', () => leave('leaderboard'), { color: 'grey' }));
+    this.root.add(new Button(this, W / 2 + bw / 2 + 4, H - 24, bw, 16, 'play again', () => leave('setup')));
+  }
+
+  private rename() {
+    askName(this, this.entry.player, async (name) => {
+      if (!name || name === this.entry.player) return;
+      await renameEntry(this.entry.id, name);
+      this.entry = { ...this.entry, player: name };
+      app.settings.playerName = name; // and for the next rounds
+      void saveSettings(app.settings);
+      if (this.sys.isActive()) this.rebuild();
+    });
   }
 }

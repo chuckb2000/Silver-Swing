@@ -392,6 +392,9 @@ def main():
               + f"; median height {trees_rep['height_p50_m']:.1f} m, max {trees_rep['height_max_m']:.1f} m.",
               f"- Dropped: {trees_rep['dropped']['building']} tops on building footprints, {trees_rep['dropped']['lake']} over the lake, {trees_rep['dropped']['tiny']} tiny crowns.",
               f"- Dropped on playing surfaces (spec 5.4): {len(trees_rep['dropped_on_playing_surfaces'])} -> " + ", ".join(f"{d['on']} {d['osm']} ({d['h']} m)" for d in trees_rep['dropped_on_playing_surfaces']),
+              *([f"- Dropped from tee shots (s06b): {len(trees_rep['dropped_for_tee_shots'])} -> "
+                 + ", ".join(f"{'/'.join(d['tee_shots'])} ({d['h']} m tree, {d['from_tee_m']} m from the tee)" for d in trees_rep['dropped_for_tee_shots'])]
+                if trees_rep.get("dropped_for_tee_shots") else []),
               f"- OSM natural=tree points matched by a detected tree within 4 m: {trees_rep['osm_tree_points_matched_within_4m']} of {trees_rep['osm_tree_points']}.",
               f"- {trees_rep['type_method']}",
               "", greens_rep.strip(), "", audit.strip(), ""]

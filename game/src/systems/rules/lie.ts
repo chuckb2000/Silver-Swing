@@ -29,7 +29,7 @@ const BASE: Record<LieKind, { dist: number; win: number; name: string }> = {
   rough: { dist: 0.85, win: 0.7, name: 'rough' },
   trees: { dist: 0.8, win: 0.6, name: 'under trees' },
   fairway_bunker: { dist: 0.85, win: 0.55, name: 'fairway bunker' },
-  greenside_bunker: { dist: 0.5, win: 0.6, name: 'greenside bunker' },
+  greenside_bunker: { dist: 0.5, win: 0.6, name: 'bunker' },
   cartpath: { dist: 1, win: 0.9, name: 'cart path' },
   green: { dist: 1, win: 1, name: 'green' },
 };
@@ -59,7 +59,7 @@ export function makeLie(ctx: LieContext, rng: Rng): Lie {
   if (kind === 'trees' && ctx.canopyBase !== null) lie.apexCap = Math.max(2, ctx.canopyBase - 1);
   const pct = Math.round((dist - 1) * 100);
   lie.label = flyer ? `${b.name} flyer +5%` : pct === 0 ? b.name : `${b.name} ${pct > 0 ? '+' : '−'}${Math.abs(pct)}%`;
-  if (kind === 'greenside_bunker') lie.label = 'greenside bunker';
+  if (kind === 'greenside_bunker') lie.label = 'bunker'; // short: fits the info panel
   return lie;
 }
 

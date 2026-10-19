@@ -1,6 +1,7 @@
 // Club table (CLAUDE.md 7.1): a solid ~5 handicap amateur's 14-club bag.
 // Carry is calm air, level ground, 100% power, perfect strike. Roll-out was
-// raised ~40% after the first playtest ("the ball should roll out a little more").
+// raised ~40% after the first playtest ("the ball should roll out a little more"),
+// and the wedges' again after the third (an amateur's wedges release a little).
 
 export type ClubKind = 'driver' | 'wood' | 'hybrid' | 'iron' | 'wedge' | 'putter';
 
@@ -34,10 +35,10 @@ export const CLUBS: Club[] = [
   c('7i', '7 iron', 'iron', 158, 144.5, 25, 5.3, 8, 1.1, 1.00),
   c('8i', '8 iron', 'iron', 146, 133.5, 24, 5.2, 6, 1.0, 1.05),
   c('9i', '9 iron', 'iron', 134, 122.5, 24, 5.1, 5, 0.9, 1.10),
-  c('pw', 'pitching w', 'wedge', 122, 111.6, 23, 5.0, 4, 0.8, 1.15),
-  c('gw', 'gap wedge', 'wedge', 108, 98.8, 22, 4.8, 3, 0.7, 1.20),
-  c('sw', 'sand wedge', 'wedge', 92, 84.1, 20, 4.5, 2, 0.6, 1.25),
-  c('lw', 'lob wedge', 'wedge', 75, 68.6, 19, 4.2, 1, 0.6, 1.25),
+  c('pw', 'pitching w', 'wedge', 122, 111.6, 23, 5.0, 5, 0.8, 1.15),
+  c('gw', 'gap wedge', 'wedge', 108, 98.8, 22, 4.8, 4, 0.7, 1.20),
+  c('sw', 'sand wedge', 'wedge', 92, 84.1, 20, 4.5, 3, 0.6, 1.25),
+  c('lw', 'lob wedge', 'wedge', 75, 68.6, 19, 4.2, 2, 0.6, 1.25),
   c('pt', 'putter', 'putter', 0, 0, 0, 0, 0, 0, 1.4),
 ];
 

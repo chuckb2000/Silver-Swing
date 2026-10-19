@@ -16,7 +16,7 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 | 8 | 4 | Blue | 346 | 339.8 | -6.2 | -1.8% | pass | 339.8 | -1.8% | pass |
 | 9 | 5 | Blue | 498 | 484.1 | -13.9 | -2.8% | pass | 484.1 | -2.8% | pass |
 | 10 | 3 | Blue | 155 | 154.6 | -0.4 | -0.2% | pass | 154.6 | -0.2% | pass |
-| 11 | 5 | Blue | 482 | 495.5 | +13.5 | +2.8% | pass | 495.5 | +2.8% | pass |
+| 11 | 5 | Blue | 482 | 495.5 | +13.5 | +2.8% | pass | 495.7 | +2.8% | pass |
 | 12 | 4 | Blue | 380 | 374.4 | -5.6 | -1.5% | pass | 374.4 | -1.5% | pass |
 | 13 | 4 | Blue | 364 | 369.7 | +5.7 | +1.6% | pass | 369.7 | +1.6% | pass |
 | 14 | 4 | Blue | 341 | 343.9 | +2.9 | +0.9% | pass | 343.9 | +0.9% | pass |
@@ -48,6 +48,7 @@ Decisions the developer made on 2026-10-19 are in DECISIONS.md ("Tualatin Countr
 ## Playability adjustments
 
 - Hole 5 (Blue): measured 193 yd from the tee-box centre vs 200 on the card (-3.6%); moved the virtual tee within the real tee polygon w820825483 -> 200.0 yd (real 192.8 yd).
+- Hole 11 (Blue): tee shot: a perfect drive at the middle of the fairway clipped a tree near the tee; moved 0.6 m within the real tee polygon w821713865 to the nearest clear spot -> 495.7 yd (real 495.5 yd).
 - Hole 15 (Blue): measured 129 yd from the tee-box centre vs 135 on the card (-4.3%); moved the virtual tee within the real tee polygon w821134355 -> 134.9 yd (real 129.2 yd).
 
 ## Tree detection (DOGAMI canopy height model)

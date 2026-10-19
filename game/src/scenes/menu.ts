@@ -13,9 +13,11 @@ export function ensureBg(scene: Phaser.Scene) {
 
 export abstract class MenuScene extends Phaser.Scene {
   protected root!: Phaser.GameObjects.Container;
+  /** Draw over the course fly-over (BgScene)? The title screen has its own backdrop. */
+  protected flyover = true;
 
   create(_data?: unknown) {
-    ensureBg(this);
+    if (this.flyover) ensureBg(this);
     uiCamera(this.cameras.main);
     this.root = this.add.container(0, 0);
     void this.build();

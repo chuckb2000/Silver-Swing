@@ -96,6 +96,38 @@ describe('Tualatin Country Club course data', () => {
     expect([...new Set(blocked)]).toEqual([]);
   });
 
+  it('a perfect tee shot at the middle of the fairway clears the trees around the tee (the every-course rule)', () => {
+    class AlwaysHit extends Rng { next(): number { return 0; } }
+    const blocked: string[] = [];
+    for (const h of json.holes) {
+      const r = new Round(course, roundCfg(course, [h.number]));
+      r.startHole(0);
+      r.wind = { dir: 0, mph: 0, vx: 0, vy: 0 };
+      const club = r.autoClub();
+      const scale = r.autoSwingScale(club);
+      const base = r.lineAim(club, scale);
+      const b = r.ball;
+      let target = { x: r.pin.x, y: r.pin.y };
+      if (r.fullCarry(club) * scale < 0.92 * r.distToPin()) {
+        const carry = r.fullCarry(club) * scale;
+        const lx = b.x + Math.cos(base) * carry, ly = b.y + Math.sin(base) * carry;
+        const px = -Math.sin(base), py = Math.cos(base);
+        const fw: number[] = [];
+        for (let s = -45; s <= 45; s += 0.5) if (course.terrain.surface(lx + px * s, ly + py * s) === SURF.fairway) fw.push(s);
+        const runs: number[][] = [];
+        for (const s of fw) { const R = runs[runs.length - 1]; if (R && s - R[R.length - 1] <= 1) R.push(s); else runs.push([s]); }
+        runs.sort((a, c) => Math.min(...a.map(Math.abs)) - Math.min(...c.map(Math.abs)));
+        const mid = runs.length ? (runs[0][0] + runs[0][runs[0].length - 1]) / 2 : 0;
+        target = { x: lx + px * mid, y: ly + py * mid };
+      }
+      const plan = r.plan(club.id, Math.atan2(target.y - b.y, target.x - b.x), meterFor(1, 0, false), 0, scale);
+      const sim = simulateShot(course.terrain, course.obstacles, plan.spec, new AlwaysHit(1));
+      const ev = sim.events.find((e) => (e.type === 'trunk' || e.type === 'canopy') && Math.hypot(e.x - b.x, e.y - b.y) < 60);
+      if (ev) blocked.push(`${h.number} (${ev.type} ${Math.hypot(ev.x - b.x, ev.y - b.y).toFixed(0)} m out)`);
+    }
+    expect(blocked).toEqual([]);
+  });
+
   it('hole 13: no tree crown stands over the green (developer: the two firs in front are removed)', () => {
     const h = json.holes.find((x) => x.number === 13)!;
     const green = course.greenPolys.get(h.greenId)!;

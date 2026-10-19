@@ -9,6 +9,13 @@ Horizontal metres -> yards. <=3% pass, 3-8% flag, >8% fail.
 Playability step 2 (5.6): when a hole is flagged, the virtual tee may move
 anywhere inside the real tee polygon; the move is logged in
 adjustments.json and both real and adjusted yardages are reported.
+
+Tee shots clear the trees (pipeline/tee_shots.py, every course): a virtual
+tee from which a perfect drive at the middle of the fairway would clip a tree
+near the tee moves to the nearest clear spot in the same box whose yardage
+status (pass / flag / fail) is no worse; s06b takes out the trees still in the
+way where no spot in the box is clear. Holes listed in "keep_tee_trees" are
+left as they are.
 """
 from __future__ import annotations
 
@@ -20,7 +27,7 @@ import geopandas as gpd
 import numpy as np
 from shapely.geometry import LineString, Point
 
-from common import YD, build_dir, course_dir, course_name_from_argv, layout_dir, layout_holes, layouts, load_config, read_card, rnd, write_json
+from common import YD, build_dir, course_dir, course_name_from_argv, keeps_tee_trees, layout_dir, layout_holes, layouts, load_config, read_card, rnd, write_json
 
 warnings.filterwarnings("ignore")
 
@@ -81,9 +88,50 @@ def end_point_in(poly, line, green_c, back=True, inset=0.75):
     return best[1], best[2]
 
 
+RANK = {"pass": 0, "flag": 1, "FAIL": 2}
+
+
+def clear_point_in(poly, line, green_c, target_m, current, cur_rank, is_clear, inset=0.75):
+    """The clear point of the tee polygon (inset) nearest to `current` whose yardage
+    status is no worse than `cur_rank`; None if there is none."""
+    inner = poly.buffer(-inset)
+    if inner.is_empty:
+        inner = poly
+    minx, miny, maxx, maxy = inner.bounds
+    best = None
+    for x in np.arange(minx, maxx + 0.01, 0.5):
+        for y in np.arange(miny, maxy + 0.01, 0.5):
+            p = Point(x, y)
+            if not inner.contains(p):
+                continue
+            m, cl = path_from(p, line, green_c)
+            if RANK[status((m - target_m) / target_m * 100)] > cur_rank:
+                continue
+            d = p.distance(current)
+            if best is not None and d >= best[0]:
+                continue
+            if is_clear(p, cl):
+                best = (d, p, m)
+    return best
+
+
+def tee_shot_checker(name, cfg, g):
+    """is_clear(tee, centerline, pin) -> bool: no tree in the way of the tee shot."""
+    from tee_shots import TreeIndex, target_point
+    bdir = build_dir(name)
+    trees = json.loads((bdir / "trees_all.json").read_text())
+    idx = TreeIndex(trees, np.load(bdir / "height_base.npy"))
+    fairways = list(g[g.kind == "fairway"].geometry)
+
+    def is_clear(p, cl, pin):
+        return not idx.blocking(p, target_point(p, cl, pin, fairways))
+    return is_clear
+
+
 def build_layout(name, cfg, lay, g):
     """Hole records, report lines, adjustments and open items for one layout."""
     card = read_card(name, lay)
+    tee_clear = tee_shot_checker(name, cfg, g)
     tee_sets = [t["name"] for t in lay["tee_sets"] if t.get("playable")]
     holes = layout_holes(g, lay)
     refs = holes.ref.tolist()
@@ -190,7 +238,7 @@ def build_layout(name, cfg, lay, g):
                     "reason": f"developer: tee at the {pos} of the tee box {tee_osm} (tag tee_pos={pos})",
                 })
             elif status(diff) != "pass" and tpoly is not None:
-                best = best_point_in(tpoly, L, gc, target)
+                best = best_point_in(tpoly, L, gc, target, inset=float(cfg.get("tee_inset_m", 0.75)))  # keep the golfer on the box
                 if best and abs(best[2] - target) < abs(m - target) - 0.5:
                     adj_pt, adj_m = best[1], best[2]
                     adjustments.append({
@@ -199,6 +247,20 @@ def build_layout(name, cfg, lay, g):
                         "real_yd": rnd(real_yd, 1), "adjusted_yd": rnd(adj_m / YD, 1), "card_yd": card_yd,
                         "reason": f"measured {real_yd:.0f} yd from the tee-box centre vs {card_yd:.0f} on the card ({diff:+.1f}%); moved the virtual tee within the real tee polygon {tee_osm}",
                     })
+            if tpoly is not None and pos not in ("back", "front") and not keeps_tee_trees(cfg, lay, n):
+                _, cl = path_from(adj_pt, L, gc)
+                if not tee_clear(adj_pt, cl, pin):
+                    cur = RANK[status((adj_m - target) / target * 100)]
+                    best = clear_point_in(tpoly, L, gc, target, adj_pt, cur, lambda p, c: tee_clear(p, c, pin))
+                    if best is not None:
+                        adjustments.append({
+                            "hole": n, "tee_set": ts, "step": 2, "type": "tee_position",
+                            "from": [rnd(adj_pt.x), rnd(adj_pt.y)], "to": [rnd(best[1].x), rnd(best[1].y)],
+                            "real_yd": rnd(real_yd, 1), "adjusted_yd": rnd(best[2] / YD, 1), "card_yd": card_yd,
+                            "reason": f"tee shot: a perfect drive at the middle of the fairway clipped a tree near the tee; "
+                                      f"moved {best[0]:.1f} m within the real tee polygon {tee_osm} to the nearest clear spot",
+                        })
+                        adj_pt, adj_m = best[1], best[2]
             adj_yd = adj_m / YD
             adiff = (adj_yd - card_yd) / card_yd * 100
             _, cl = path_from(adj_pt, L, gc)
