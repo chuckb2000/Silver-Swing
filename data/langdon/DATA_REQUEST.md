@@ -104,6 +104,26 @@ South (`osip2024_s.tif`):
 https://imagery.oregonexplorer.info/arcgis/rest/services/OSIP_2024/OSIP_2024_WM/ImageServer/exportImage?bbox=517470,5012391,518694,5013141&bboxSR=32610&imageSR=32610&size=4016,2461&format=tiff&f=image
 ```
 
+2026-10-19: the WM service returned "Error: Error exporting image, Code: 500". OSIP 2024
+covers the whole state (GEO announcement, July 2025), so it is not a coverage gap.
+Alternatives, in order:
+
+a. The State Lambert mosaic of the same 2024 imagery (`OSIP_2024_SL`; name by analogy
+   with `OSIP_2018_SL`, not checked from here), same two halves:
+```
+https://imagery.oregonexplorer.info/arcgis/rest/services/OSIP_2024/OSIP_2024_SL/ImageServer/exportImage?bbox=517470,5013515,518694,5014639&bboxSR=32610&imageSR=32610&size=4016,3688&format=tiff&f=image
+https://imagery.oregonexplorer.info/arcgis/rest/services/OSIP_2024/OSIP_2024_SL/ImageServer/exportImage?bbox=517470,5012391,518694,5013515&bboxSR=32610&imageSR=32610&size=4016,3688&format=tiff&f=image
+```
+b. OSIP 2022 (also 1 ft, statewide):
+```
+https://imagery.oregonexplorer.info/arcgis/rest/services/OSIP_2022/OSIP_2022_WM/ImageServer/exportImage?bbox=517470,5013515,518694,5014639&bboxSR=32610&imageSR=32610&size=4016,3688&format=tiff&f=image
+https://imagery.oregonexplorer.info/arcgis/rest/services/OSIP_2022/OSIP_2022_WM/ImageServer/exportImage?bbox=517470,5012391,518694,5013515&bboxSR=32610&imageSR=32610&size=4016,3688&format=tiff&f=image
+```
+c. USDA NAIP (0.6 m, public domain; coarser but enough for greens and fairways), one file:
+```
+https://gis.apfo.usda.gov/arcgis/rest/services/NAIP/USDA_CONUS_PRIME/ImageServer/exportImage?bbox=517470,5012391,518694,5014639&bboxSR=32610&imageSR=32610&size=2040,3747&format=tiff&f=image
+```
+
 ### 6. Club scorecard (two images)
 
 The club's own card, which the sandbox couldn't fetch. It settles the tee names,
