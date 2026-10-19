@@ -1,0 +1,25 @@
+{
+"type": "FeatureCollection",
+"name": "pins",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+"features": [
+{ "type": "Feature", "properties": { "osm": "pin_01", "kind": "pin", "tags": { "golf": "pin", "ref": "1", "source": "proposal: centre of green w482558306" } }, "geometry": { "type": "Point", "coordinates": [ -71.362490312216963, 41.846886596536741 ] } },
+{ "type": "Feature", "properties": { "osm": "pin_02", "kind": "pin", "tags": { "golf": "pin", "ref": "2", "source": "proposal: centre of green w482565732" } }, "geometry": { "type": "Point", "coordinates": [ -71.359026692456652, 41.843861829052102 ] } },
+{ "type": "Feature", "properties": { "osm": "pin_03", "kind": "pin", "tags": { "golf": "pin", "ref": "3", "source": "proposal: centre of green w746432099" } }, "geometry": { "type": "Point", "coordinates": [ -71.359775197756775, 41.843218447508129 ] } },
+{ "type": "Feature", "properties": { "osm": "pin_04", "kind": "pin", "tags": { "golf": "pin", "ref": "4", "source": "proposal: centre of green w482561291" } }, "geometry": { "type": "Point", "coordinates": [ -71.362721879489143, 41.845781623230252 ] } },
+{ "type": "Feature", "properties": { "osm": "pin_05", "kind": "pin", "tags": { "golf": "pin", "ref": "5", "source": "proposal: centre of green w482561288" } }, "geometry": { "type": "Point", "coordinates": [ -71.363199102714901, 41.848418954004039 ] } },
+{ "type": "Feature", "properties": { "osm": "pin_06", "kind": "pin", "tags": { "golf": "pin", "ref": "6", "source": "proposal: centre of green w414804480" } }, "geometry": { "type": "Point", "coordinates": [ -71.360163526909972, 41.851025089684789 ] } },
+{ "type": "Feature", "properties": { "osm": "pin_07", "kind": "pin", "tags": { "golf": "pin", "ref": "7", "source": "proposal: centre of green w1516694152" } }, "geometry": { "type": "Point", "coordinates": [ -71.361724318276046, 41.848436232801888 ] } },
+{ "type": "Feature", "properties": { "osm": "pin_08", "kind": "pin", "tags": { "golf": "pin", "ref": "8", "source": "proposal: centre of green w482558312" } }, "geometry": { "type": "Point", "coordinates": [ -71.363095478227208, 41.847210903229794 ] } },
+{ "type": "Feature", "properties": { "osm": "pin_09", "kind": "pin", "tags": { "golf": "pin", "ref": "9", "source": "proposal: centre of green w482626789" } }, "geometry": { "type": "Point", "coordinates": [ -71.358405648653616, 41.84536771875424 ] } },
+{ "type": "Feature", "properties": { "osm": "pin_10", "kind": "pin", "tags": { "golf": "pin", "ref": "10", "source": "proposal: centre of green w482626831" } }, "geometry": { "type": "Point", "coordinates": [ -71.362190854177555, 41.847808251619007 ] } },
+{ "type": "Feature", "properties": { "osm": "pin_11", "kind": "pin", "tags": { "golf": "pin", "ref": "11", "source": "proposal: centre of green w482646567" } }, "geometry": { "type": "Point", "coordinates": [ -71.358143882540219, 41.847476417215255 ] } },
+{ "type": "Feature", "properties": { "osm": "pin_12", "kind": "pin", "tags": { "golf": "pin", "ref": "12", "source": "proposal: centre of green w482646571" } }, "geometry": { "type": "Point", "coordinates": [ -71.359989146643471, 41.848507637902621 ] } },
+{ "type": "Feature", "properties": { "osm": "pin_13", "kind": "pin", "tags": { "golf": "pin", "ref": "13", "source": "proposal: centre of green w482646574" } }, "geometry": { "type": "Point", "coordinates": [ -71.356265093803174, 41.84838159053443 ] } },
+{ "type": "Feature", "properties": { "osm": "pin_14", "kind": "pin", "tags": { "golf": "pin", "ref": "14", "source": "proposal: centre of green w482646575" } }, "geometry": { "type": "Point", "coordinates": [ -71.358898029945962, 41.850241670026357 ] } },
+{ "type": "Feature", "properties": { "osm": "pin_15", "kind": "pin", "tags": { "golf": "pin", "ref": "15", "source": "proposal: centre of green w482646573" } }, "geometry": { "type": "Point", "coordinates": [ -71.359849311884716, 41.849257367886629 ] } },
+{ "type": "Feature", "properties": { "osm": "pin_16", "kind": "pin", "tags": { "golf": "pin", "ref": "16", "source": "proposal: centre of green w414804462" } }, "geometry": { "type": "Point", "coordinates": [ -71.359354024885064, 41.852086710039067 ] } },
+{ "type": "Feature", "properties": { "osm": "pin_17", "kind": "pin", "tags": { "golf": "pin", "ref": "17", "source": "proposal: centre of green w482640387" } }, "geometry": { "type": "Point", "coordinates": [ -71.355498933160092, 41.84852738920528 ] } },
+{ "type": "Feature", "properties": { "osm": "pin_18", "kind": "pin", "tags": { "golf": "pin", "ref": "18", "source": "proposal: centre of green w482626791" } }, "geometry": { "type": "Point", "coordinates": [ -71.357976278181837, 41.845691708662535 ] } }
+]
+}

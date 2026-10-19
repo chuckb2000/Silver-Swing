@@ -86,6 +86,20 @@ def leaf_off_shares(name, cfg, world, trees, min_returns=20):
         if n > 0:
             share[k] = n_last[j0:j1, i0:i1][inside].sum() / n
     ok = count >= min_returns
+    roof_note = ""
+    roof = cfg.get("roof_last_share")
+    if roof is not None:
+        # optional (course_config roof_last_share; Wannamoisett): a crown whose returns are
+        # nearly all last returns is a solid surface, i.e. the roof of a house OSM doesn't map
+        # (the class-1 points hold structures too). Leaf-off, even dense pines let some pulses
+        # through. Those crowns are marked and dropped by main(); the conifer split runs on the rest.
+        is_roof = ok & (share >= float(roof))
+        for t_, r_ in zip(trees, is_roof):
+            if r_:
+                t_["roof"] = True
+        ok &= ~is_roof
+        roof_note = (f" Crowns with a share >= {float(roof):g} ({int(is_roof.sum())}) are solid surfaces, i.e. roofs of houses "
+                     f"OSM doesn't map, and are not trees (config roof_last_share).")
     th = float(threshold_otsu(share[ok]))
     for t_, s_, o in zip(trees, share, ok):
         if o:
@@ -95,7 +109,8 @@ def leaf_off_shares(name, cfg, world, trees, min_returns=20):
     return (f"Conifer (pitch pine) vs deciduous (oak) from the leaf-off lidar: share of a crown's vegetation returns "
             f"that were the last return of their pulse, split at Otsu's threshold {th:.3f} "
             f"({n_con} of {n_ok} crowns with >= {min_returns} returns are conifers); the other "
-            f"{len(trees) - n_ok} small crowns keep the crown-shape rule. See build/trees_preview.png.")
+            f"{len(trees) - n_ok - sum(1 for t_ in trees if t_.get('roof'))} small crowns keep the crown-shape rule."
+            f"{roof_note} See build/trees_preview.png.")
 
 
 def poisson_disk(poly, spacing, rng, tries=30):
@@ -379,6 +394,9 @@ def main():
     leaf = leaf_off_shares(name, cfg, world, trees)
     if leaf is not None:
         type_method = leaf
+    if any(t_.get("roof") for t_ in trees):
+        dropped["roof"] = sum(1 for t_ in trees if t_.get("roof"))
+        trees = [t_ for t_ in trees if not t_.get("roof")]
     species_note = None
     # s06 places the tees against these trees and s06b drops the ones still in the
     # way of a tee shot, then orders the list again (cherry slots)

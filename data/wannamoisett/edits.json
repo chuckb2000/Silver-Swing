@@ -1,0 +1,23 @@
+{
+ "note": "Edits to the OSM layout for Wannamoisett. Built into edited/course.geojson by pipeline/merge_edits.py (run by make course).",
+ "add": [
+  {
+   "from": "proposed/pins.geojson",
+   "ids": ["pin_01", "pin_02", "pin_03", "pin_04", "pin_05", "pin_06", "pin_07", "pin_08", "pin_09",
+           "pin_10", "pin_11", "pin_12", "pin_13", "pin_14", "pin_15", "pin_16", "pin_17", "pin_18"],
+   "reason": "OSM maps no golf=pin; one pin at the centre of each green (data/wannamoisett/propose_pins.py), as at Highland Links and Indian Island"
+  }
+ ],
+ "tags": [
+  {
+   "osm": "w680736432",
+   "set": {"penalty": "red"},
+   "reason": "pond beside hole 14: red penalty area (developer, 2026-10-19). OSM has it as an inner ring of the course relation; config join_boundary brings it inside the boundary"
+  },
+  {
+   "osm": "w886549379",
+   "set": {"penalty": "red"},
+   "reason": "pond crossed by the lines of holes 1 and 9: red penalty area (developer, 2026-10-19: all penalty areas red)"
+  }
+ ]
+}

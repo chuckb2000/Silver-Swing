@@ -63,16 +63,26 @@ def join_boundary(g: gpd.GeoDataFrame, jb: dict):
     joined = Polygon(joined.exterior, keep)
     hazard = joined.difference(B)
     hz = [p for p in (hazard.geoms if hazard.geom_type == "MultiPolygon" else [hazard]) if p.area > 1.0]
+    # A piece that is already a mapped penalty area (Wannamoisett: the pond by hole 14 is a
+    # golf=water_hazard cut out of the course relation as an inner ring) only joins the
+    # boundary; no second penalty polygon is added on top of it. Langston's lake is plain
+    # natural=water, so nothing is skipped there.
+    mapped = unary_union(list(g[g["kind"].isin(["water_hazard", "lateral_water_hazard"])].geometry)) \
+        if g["kind"].isin(["water_hazard", "lateral_water_hazard"]).any() else None
+    covered = [p for p in hz if mapped is not None and p.difference(mapped).area < 0.01 * p.area]
+    hz = [p for p in hz if not any(p is c for c in covered)]
     kind = "lateral_water_hazard" if jb.get("penalty", "red") == "red" else "water_hazard"
     g.at[bi, "geometry"] = joined
     g.at[bi, "tags"] = {**g.at[bi, "tags"], "joined_with": ",".join(jb["water_osm"])}
     rows = [{"osm": f"join_{i + 1}", "kind": kind,
              "tags": {"golf": kind, "penalty": jb.get("penalty", "red"), "source": "join_boundary: " + ",".join(jb["water_osm"])},
              "geometry": p} for i, p in enumerate(hz)]
-    g = pd.concat([g, gpd.GeoDataFrame(rows, geometry="geometry")], ignore_index=True)
+    if rows:
+        g = pd.concat([g, gpd.GeoDataFrame(rows, geometry="geometry")], ignore_index=True)
     g = gpd.GeoDataFrame(g, geometry="geometry")
+    extra = f", {len(covered)} already mapped as penalty areas" if covered else ""
     return g, (f"join_boundary: {len(parts)} boundary parts joined by {len(hz)} {jb.get('penalty', 'red')} penalty area(s) "
-               f"({sum(p.area for p in hz) / 1e4:.1f} ha) from {', '.join(jb['water_osm'])}; boundary {joined.area / 1e4:.1f} ha")
+               f"({sum(p.area for p in hz) / 1e4:.1f} ha){extra} from {', '.join(jb['water_osm'])}; boundary {joined.area / 1e4:.1f} ha")
 
 
 def main():

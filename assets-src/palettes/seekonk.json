@@ -1,0 +1,53 @@
+{
+  "name": "Seekonk (Rhode Island parkland, very early fall)",
+  "note": "Course theme palette (<= 32 colours), same keys as pnw.json. Wannamoisett, Rumford RI: a Donald Ross parkland by the Seekonk River in the first days of fall (developer, 2026-10-19: some light yellowing/oranging of leaves, not full fall). Turf still green, a hair warmer than bayside; Ross white sand; still grey-green ponds; rough F0-F2 olive with a first hint of tan. Trees in assets-src/trees_seekonk.py: eastern white pine, oaks, and maples starting to turn. Shadows are a 35% black overlay on top of these.",
+  "colors": {
+    "G0": "#1b3729",
+    "G1": "#254c33",
+    "G2": "#2f6337",
+    "G3": "#3a783b",
+    "G4": "#478c41",
+    "G5": "#549f48",
+    "G6": "#62b050",
+    "G7": "#73bf59",
+    "G8": "#85cc66",
+    "G9": "#a8db84",
+    "L0": "#647b3f",
+    "L1": "#758e45",
+    "L2": "#89a052",
+    "S0": "#cfc4a6",
+    "S1": "#efe9d6",
+    "S2": "#fbf8ee",
+    "W0": "#2d4b47",
+    "W1": "#3b625b",
+    "W2": "#78958c",
+    "K0": "#26272d",
+    "K1": "#53545c",
+    "K2": "#7a7b83",
+    "K3": "#b3aa97",
+    "K4": "#d9d1bf",
+    "B0": "#45311f",
+    "B1": "#6b4a31",
+    "B2": "#8a5b40",
+    "R0": "#4b586a",
+    "WH": "#f6f6f2",
+    "F0": "#4b663a",
+    "F1": "#5c7a3e",
+    "F2": "#6e8b47"
+  },
+  "trees": {
+    "conifer": "trees_seekonk:conifer",
+    "deciduous": "trees_seekonk:deciduous"
+  },
+  "lut": {
+    "rough": [
+      "F0",
+      "F1",
+      "F2",
+      "F2"
+    ]
+  },
+  "minimap": {
+    "rough": "#5c7a3e"
+  }
+}
