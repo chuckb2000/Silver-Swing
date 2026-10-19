@@ -415,15 +415,18 @@ def wine(c: dict) -> np.ndarray:
 
 # --------------------------------------------------------------- arrowhead
 def arrowhead(c: dict) -> np.ndarray:
-    """A knapped flint arrowhead, corner-notched, point up (Indian Island)."""
-    X, Y = grid()
+    """A knapped flint arrowhead, corner-notched, pointing right (Indian Island)."""
+    gx, gy = grid()
+    # drawn in its own frame - X across the blade, Y from the tip back to the base -
+    # turned so the tip points right; the upper face (X < 16) catches the light
+    X, Y = gy, 32.0 - gx
     img = np.zeros((S, S, 4), np.uint8)
-    head = poly(X, Y, [(16, 0.8), (20.4, 7.5), (24.4, 14.5), (27.4, 23.2),   # tip, right edge, right barb
-                       (21.6, 20.6), (20.2, 23.6), (22.2, 30.0),              # right notch, stem, base corner
+    head = poly(X, Y, [(16, 0.8), (20.4, 7.5), (24.4, 14.5), (27.4, 23.2),   # tip, lower edge, lower barb
+                       (21.6, 20.6), (20.2, 23.6), (22.2, 30.0),              # lower notch, stem, base corner
                        (16, 28.4),                                            # concave base
-                       (9.8, 30.0), (11.8, 23.6), (10.4, 20.6),               # left base corner, stem, notch
-                       (4.6, 23.2), (7.6, 14.5), (11.6, 7.5)])                # left barb, left edge
-    # flake scars: chevron bands down each face; the left face catches the light
+                       (9.8, 30.0), (11.8, 23.6), (10.4, 20.6),               # upper base corner, stem, notch
+                       (4.6, 23.2), (7.6, 14.5), (11.6, 7.5)])                # upper barb, upper edge
+    # flake scars: chevron bands down each face
     left = X < 16
     band = np.floor((Y - 0.62 * np.abs(X - 16)) / 3.6).astype(int) % 2 == 0
     paint(img, head & left & band, c["light"])
