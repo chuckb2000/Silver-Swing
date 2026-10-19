@@ -556,7 +556,8 @@ paths (relief), not OB, unless the developer says otherwise.
 
 - **Course id:** if the developer already has a logo for the course, use
   its id: `highland_links`, `langdon`, `east_potomac`, `langston`,
-  `stone_creek`, `waverley`, `eastmoreland`, `willamette_valley`
+  `stone_creek`, `waverley`, `eastmoreland`, `willamette_valley`,
+  `indian_island`
   (`assets-src/logos.py`). Otherwise ask the developer what the logo should
   show; the design chat draws it.
 - **State:** add `"state": "<postal code>"` to `course_config.json` and make

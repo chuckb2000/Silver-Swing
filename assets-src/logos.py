@@ -413,6 +413,35 @@ def wine(c: dict) -> np.ndarray:
     return outlined(img, c["edge"])
 
 
+# --------------------------------------------------------------- arrowhead
+def arrowhead(c: dict) -> np.ndarray:
+    """A knapped flint arrowhead, corner-notched, point up (Indian Island)."""
+    X, Y = grid()
+    img = np.zeros((S, S, 4), np.uint8)
+    head = poly(X, Y, [(16, 0.8), (20.4, 7.5), (24.4, 14.5), (27.4, 23.2),   # tip, right edge, right barb
+                       (21.6, 20.6), (20.2, 23.6), (22.2, 30.0),              # right notch, stem, base corner
+                       (16, 28.4),                                            # concave base
+                       (9.8, 30.0), (11.8, 23.6), (10.4, 20.6),               # left base corner, stem, notch
+                       (4.6, 23.2), (7.6, 14.5), (11.6, 7.5)])                # left barb, left edge
+    # flake scars: chevron bands down each face; the left face catches the light
+    left = X < 16
+    band = np.floor((Y - 0.62 * np.abs(X - 16)) / 3.6).astype(int) % 2 == 0
+    paint(img, head & left & band, c["light"])
+    paint(img, head & left & ~band, c["mid"])
+    paint(img, head & ~left & band, c["mid"])
+    paint(img, head & ~left & ~band, c["dark"])
+    paint(img, head & (np.abs(X - 16) <= 0.5) & (Y > 3) & (Y < 26), c["ridge"])  # the ridge down the middle
+    stem = head & (Y > 23.0)
+    paint(img, stem & left, c["mid"])
+    paint(img, stem & ~left, c["dark"])
+    # chipped edges: a darker nick every few pixels, light on the lit side
+    rim = head & ring_of(~head)
+    nicks = rim & ((np.round(Y).astype(int) % 3) == 0) & (Y > 4) & (Y < 21)
+    paint(img, nicks, c["deep"])
+    paint(img, rim & ~nicks & left & (Y < 22), c["glint"])
+    return outlined(img, c["edge"])
+
+
 EDGE = rgba("#0d1620", 220)
 
 LOGOS = {
@@ -461,6 +490,10 @@ LOGOS = {
         "glass": rgba("#dfeaf2", 120), "glass_edge": rgba("#e9f1f6"), "white": rgba("#ffffff"),
         "wine": rgba("#8c1a30"), "wine_light": rgba("#b8324a"), "wine_dark": rgba("#5e0f1f"),
         "glint_wine": rgba("#d9677a"), "edge": EDGE,
+    }),
+    "indian_island": (arrowhead, {
+        "glint": rgba("#e6eaf1"), "light": rgba("#b9c0cc"), "mid": rgba("#8c94a3"), "dark": rgba("#646b7a"),
+        "deep": rgba("#454b58"), "ridge": rgba("#d7dce5"), "edge": EDGE,
     }),
 }
 
