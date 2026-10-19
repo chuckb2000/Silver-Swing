@@ -36,7 +36,7 @@ Decisions the developer made on 2026-10-18 are in DECISIONS.md ("Highland Links"
 4. **Rating/slope 67.2 / 116** is the club's 18-hole men's Blue/White figure; the game shows it beside the 9-hole Blue tee set. Recommendation: keep it (it is what the club publishes).
 5. **Pins** are at the centre of each green (hole 9: the centre of the upper tier). One pin per green; nothing in the data gives daily pin sheets.
 6. **No mown-rough band.** OSM maps fairways, greens, tees and bunkers but no rough, so everything else inside the boundary is fescue rough. The photos show a strip of greener rough beside most fairways. Recommendation: leave it unless it plays too hard; the developer can trace rough polygons in QGIS and they will be used.
-7. **Course card** for the course-select screen (COURSE_BUILD.md section 12) waits for the design chat's `course-select` branch to be merged.
+7. **Course card** (COURSE_BUILD.md section 12): hole 9, the two-tier green in its collar, chosen by the course chat while the developer was away. To use another green, change `assets-src/course_cards.json` and run `python3 assets-src/course_cards.py highland_links`.
 8. **Water:** none on the course. Out of bounds is the course boundary; the beach, the cliff and the ocean beyond it are out of bounds. Roads and the buildings inside the boundary (the lighthouse and five others) give free relief.
 
 ## Playability adjustments

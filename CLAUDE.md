@@ -442,8 +442,9 @@ DECISIONS.md with the reason.
     (Truro, MA; 9 holes, par 35, coastal theme), section 11.5. Phase 0 of
     docs/COURSE_BUILD.md (pipeline generalised; Oswego Lake rebuilds
     unchanged apart from logged id lists), `state` in the course list,
-    surface 16 `ob_sand`, a `tiers` term in the green model. 115 unit
-    tests and 2 Playwright tests pass. Branch `course/highland_links`.
+    surface 16 `ob_sand`, a `tiers` term in the green model, course card
+    (hole 9). 137 unit tests and 3 Playwright tests pass (rebased on main
+    with course select). Branch `course/highland_links`.
 
 -   **Next task:** the third playtest (putting, yellow misses), the club's
     printed scorecard and the hole 3 Blue tee box. New courses: a separate
@@ -1534,8 +1535,7 @@ data/highland_links/validation_report.md.
 
 -   **Known open items:** data/highland_links/report_notes.md (hole 1
     plays +3.8 % from the developer's tee; the hole 9 tier line is
-    modelled; tree types from leaf-off lidar; no mown-rough band; course
-    card pending).
+    modelled; tree types from leaf-off lidar; no mown-rough band).
 
 **12. Repository layout**
 
