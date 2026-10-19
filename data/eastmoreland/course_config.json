@@ -1,0 +1,34 @@
+{
+  "id": "eastmoreland",
+  "name": "Eastmoreland Golf Course",
+  "location": "Portland, Multnomah County, Oregon",
+  "state": "OR",
+  "architects": "H. Chandler Egan (1918)",
+  "theme": "pnw",
+  "epsg": 32610,
+  "osm_sources": [
+    "raw/overpass.geojson"
+  ],
+  "boundary_name": "Eastmoreland Golf Course",
+  "world": {
+    "x0": 527871,
+    "y0": 5034521,
+    "width": 1280,
+    "height": 2048,
+    "note": "OSM course boundary (relation 11095178) bbox 920 x 1942 m in UTM 10N, centred in 1280 x 2048 m (whole 256 m chunks): 180 m of scenery east and west, 53 m north and south (the 2,048 m limit binds, as at East Potomac)"
+  },
+  "tee_sets": [
+    {"name": "Blue", "playable": true, "rating": 71.0, "slope": 124, "total_yd": 6529},
+    {"name": "White", "playable": true, "rating": 69.3, "slope": 115, "total_yd": 6106}
+  ],
+  "default_tee": "Blue",
+  "scorecard_source": "Club scorecard PDF (Golf ScoreCards, Inc., 7/2007), from the developer (GitHub release data-eastmoreland); hole sums match the printed totals. Not yet checked against a current card. Red tees (women's par 74, own handicaps) in scorecard_full.csv, not built",
+  "penalty_default": "red",
+  "driving_range_is_ob": true,
+  "wind_mph": {"minMph": 1, "maxMph": 7},
+  "attribution": [
+    "Map data © OpenStreetMap contributors (ODbL)",
+    "Scorecard: Eastmoreland Golf Course (club scorecard)"
+  ],
+  "notes": "Provisional (course chat, 2026-10-19, intake): default tee, theme, wind and elevation sources pending the developer's answers"
+}
