@@ -1,0 +1,15 @@
+# dependencies and build output (rebuilt by npm install / npm run build)
+node_modules/
+game/dist/
+game/test-results/
+game/playwright-report/
+__pycache__/
+*.pyc
+
+# pipeline intermediates (rebuilt by `make course NAME=<id>` from raw/ + edited/)
+data/*/build/
+
+# editor / OS clutter
+.DS_Store
+.vscode/
+*.swp

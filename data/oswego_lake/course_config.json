@@ -1,0 +1,48 @@
+{
+  "id": "oswego_lake",
+  "name": "Oswego Lake Country Club",
+  "location": "Lake Oswego, Clackamas County, Oregon",
+  "architects": "H. Chandler Egan (1924); later John Harbottle III; Bill & John F. Robinson (1992)",
+  "theme": "pnw",
+  "epsg": 32610,
+  "osm_sources": [
+    "raw/osm_b.gpkg",
+    "raw/osm_a.gpkg"
+  ],
+  "boundary_name": "Oswego Lake Country Club",
+  "dtm": {
+    "path": "raw/dogami_dtm_ft.tif",
+    "units": "ft",
+    "source": "DOGAMI lidar DIGITAL_TERRAIN_MODEL_MOSAIC (bare earth), exported 2026-10-18 at 1 m in EPSG:32610"
+  },
+  "chm": {
+    "path": "raw/dogami_chm_ft.tif",
+    "units": "ft",
+    "source": "DOGAMI lidar CANOPY_HEIGHT_MODEL_MOSAIC (highest hit minus bare earth), exported 2026-10-18 at 1 m in EPSG:32610"
+  },
+  "world": {
+    "x0": 523746,
+    "y0": 5029116,
+    "width": 1536,
+    "height": 1024,
+    "note": "course boundary bbox + ~120 m scenery buffer, sized to whole 512 px chunks at 2 px/m"
+  },
+  "lake_level_max_m": 31.0,
+  "tee_sets": [
+    {
+      "name": "Blue",
+      "playable": true,
+      "rating": 71.4,
+      "slope": 133,
+      "total_yd": 6279
+    }
+  ],
+  "default_tee": "Blue",
+  "scorecard_source": "GolfPass (golfpass.com course 11330), retrieved 2026-10-18 via the developer's spec; not yet verified against the club's printed card",
+  "penalty_default": "red",
+  "driving_range_is_ob": true,
+  "wind_mph": {
+    "minMph": 1,
+    "maxMph": 7
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "name": "Pacific Northwest",
+  "note": "Course theme palette (<= 32 colours). Shadows are a 35% black overlay on top of these.",
+  "colors": {
+    "G0": "#1b3a26", "G1": "#245033", "G2": "#2d6837", "G3": "#387d3a",
+    "G4": "#45913f", "G5": "#53a445", "G6": "#61b54c", "G7": "#70c455",
+    "G8": "#80d162", "G9": "#a3e07e",
+    "L0": "#557b3b", "L1": "#668f40", "L2": "#79a24a",
+    "S0": "#c4ae7e", "S1": "#e5d5a6", "S2": "#f4ebd0",
+    "W0": "#2e5884", "W1": "#3e6d9a", "W2": "#6c99c3",
+    "K0": "#26272d", "K1": "#53545c", "K2": "#7a7b83", "K3": "#b3aa97", "K4": "#d9d1bf",
+    "B0": "#46301f", "B1": "#6d4a31", "B2": "#8c5a40",
+    "R0": "#4b586a", "WH": "#f6f6f2"
+  }
+}

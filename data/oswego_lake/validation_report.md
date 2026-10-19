@@ -1,0 +1,117 @@
+# Validation report - Oswego Lake Country Club
+
+Generated 2026-10-18 by pipeline/s06_holes.py. Scorecard source: GolfPass (golfpass.com course 11330), retrieved 2026-10-18 via the developer's spec; not yet verified against the club's printed card.
+
+Measured from the centre of the assigned tee polygon, through the golf=hole line's bend points ahead of the tee, to the green centre (horizontal distance).
+
+| hole | par | tee set | card yd | measured yd | diff yd | diff % | status | adjusted yd | adj. diff % | adj. status |
+|---|---|---|---|---|---|---|---|---|---|---|
+| 1 | 5 | Blue | 533 | 528.9 | -4.1 | -0.8% | pass | 528.9 | -0.8% | pass |
+| 2 | 4 | Blue | 408 | 407.5 | -0.5 | -0.1% | pass | 407.5 | -0.1% | pass |
+| 3 | 3 | Blue | 166 | 170.7 | +4.7 | +2.8% | pass | 170.7 | +2.8% | pass |
+| 4 | 4 | Blue | 354 | 352.1 | -1.9 | -0.5% | pass | 352.1 | -0.5% | pass |
+| 5 | 5 | Blue | 471 | 474.5 | +3.5 | +0.7% | pass | 474.5 | +0.7% | pass |
+| 6 | 4 | Blue | 419 | 418.0 | -1.0 | -0.2% | pass | 418.0 | -0.2% | pass |
+| 7 | 4 | Blue | 338 | 329.4 | -8.6 | -2.6% | pass | 329.4 | -2.6% | pass |
+| 8 | 3 | Blue | 180 | 175.9 | -4.1 | -2.3% | pass | 175.9 | -2.3% | pass |
+| 9 | 4 | Blue | 382 | 377.8 | -4.2 | -1.1% | pass | 377.8 | -1.1% | pass |
+| 10 | 5 | Blue | 440 | 423.0 | -17.0 | -3.9% | flag | 439.7 | -0.1% | pass |
+| 11 | 3 | Blue | 190 | 187.2 | -2.8 | -1.5% | pass | 187.2 | -1.5% | pass |
+| 12 | 4 | Blue | 399 | 383.8 | -15.2 | -3.8% | flag | 396.4 | -0.6% | pass |
+| 13 | 4 | Blue | 342 | 332.7 | -9.3 | -2.7% | pass | 332.7 | -2.7% | pass |
+| 14 | 3 | Blue | 137 | 135.3 | -1.7 | -1.3% | pass | 135.3 | -1.3% | pass |
+| 15 | 4 | Blue | 425 | 421.2 | -3.8 | -0.9% | pass | 421.2 | -0.9% | pass |
+| 16 | 4 | Blue | 401 | 386.9 | -14.1 | -3.5% | flag | 400.5 | -0.1% | pass |
+| 17 | 3 | Blue | 175 | 167.9 | -7.1 | -4.1% | flag | 175.0 | -0.0% | pass |
+| 18 | 5 | Blue | 519 | 512.2 | -6.8 | -1.3% | pass | 512.2 | -1.3% | pass |
+| **total** | 71 | | **6279** | **6185** | -94 | -1.5% | | **6235** | -0.7% | |
+
+## Open items
+
+1. Hole 3 (Blue): no mapped tee box within 8% of the card; the tee is the start point of the OSM hole line (171 yd). The Blue tee box is not in OSM - trace it to confirm.
+2. Hole 7: the OSM hole line starts 81 m from the Blue tee box (w845867052), and only that box matches the card; the line was probably drawn from another tee. Measured from the Blue box through the line's bend points.
+3. Hole 11: the OSM hole line starts 59 m from the Blue tee box (w843607745), and only that box matches the card; the line was probably drawn from another tee. Measured from the Blue box through the line's bend points.
+4. Hole 18: OSM hole line has no par tag; using scorecard par 5.
+5. Hole 18: OSM handicap 5 differs from the GolfPass stroke index 12 (see spec 11.4 item 1); using GolfPass.
+
+## Other open items (spec 11.4)
+
+1. **Scorecard not verified against the club's printed card.** Yardages, pars and stroke indexes come from GolfPass. golfingrecord.com lists a different stroke-index order (e.g. hole 5 = 1, hole 6 = 9) and Blue 70.4/132; OSM tags hole 18 with handicap 5. The game uses GolfPass.
+2. **Red tee par** (73 vs 71 on GolfPass) - not relevant yet: only the Blue tees are built.
+3. **OSM coverage** - complete: all 18 holes have a hole line, green, pin and fairway; 46 tee boxes, 65 bunkers, 4 water hazards and 32 cart paths are mapped (see the audit below). Two extra greens are practice greens and count as wrong greens.
+4. **Water** - the four ponds are mapped as `golf=lateral_water_hazard` and play as red penalty areas. Oswego Lake lies outside the course boundary (out of bounds); no hole plays along it.
+5. **Imagery** - the NAIP download did not come through, so tree species are inferred from lidar crown shape only.
+
+## Playability adjustments
+
+- Hole 10 (Blue): measured 423 yd from the tee-box centre vs 440 on the card (-3.9%); moved the virtual tee within the real tee polygon w845911682 -> 439.7 yd (real 423.0 yd).
+- Hole 12 (Blue): measured 384 yd from the tee-box centre vs 399 on the card (-3.8%); moved the virtual tee within the real tee polygon w846262157 -> 396.4 yd (real 383.8 yd).
+- Hole 16 (Blue): measured 387 yd from the tee-box centre vs 401 on the card (-3.5%); moved the virtual tee within the real tee polygon w845867059 -> 400.5 yd (real 386.9 yd).
+- Hole 17 (Blue): measured 168 yd from the tee-box centre vs 175 on the card (-4.1%); moved the virtual tee within the real tee polygon w845584211 -> 175.0 yd (real 167.9 yd).
+
+## Tree detection (DOGAMI canopy height model)
+
+- 7547 trees detected in the world extent (1101 inside the course), 3350 conifers / 4197 deciduous; median height 19.7 m, max 55.2 m.
+- Dropped: 909 tops on building footprints, 50 over the lake, 15 tiny crowns.
+- Dropped on playing surfaces (spec 5.4): 7 -> lateral_water_hazard w845582525 (12.1 m), bunker w845210614 (13.8 m), lateral_water_hazard w845872291 (11.6 m), lateral_water_hazard w845872291 (11.7 m), lateral_water_hazard w845872291 (16.5 m), lateral_water_hazard w845872291 (12.5 m), lateral_water_hazard w845872291 (8.6 m)
+- OSM natural=tree points matched by a detected tree within 4 m: 214 of 250.
+- Conifer vs deciduous is inferred from crown shape only (no leaf-off imagery); see build/trees_preview.png.
+
+# Green shaping checks
+
+| green | hole | fitted tilt % | used tilt % | bumps | max slope % | max slope within 3 m of pin % |
+|---|---|---|---|---|---|---|
+| w843607738 | 11 | 1.8 | 1.8 | 1 | 2.8 | 1.5 |
+| w845210615 | 10 | 2.6 | 2.5 | 1 | 3.9 | 1.5 |
+| w845210617 | 18 | 2.5 | 2.5 | 2 | 5.1 | 1.5 |
+| w845211636 | 2 | 2.5 | 2.5 | 1 | 4.2 | 1.5 |
+| w845211640 | 3 | 2.6 | 2.5 | 2 | 3.7 | 1.5 |
+| w845580977 | practice | 1.9 | 1.9 | 1 | 3.1 | 0.0 |
+| w845580988 | 8 | 2.6 | 2.5 | 2 | 4.0 | 1.5 |
+| w845580993 | 7 | 3.1 | 2.5 | 2 | 4.7 | 1.5 |
+| w845581000 | 6 | 1.6 | 1.6 | 2 | 3.1 | 1.5 |
+| w845581006 | 12 | 4.2 | 2.5 | 1 | 3.8 | 1.5 |
+| w845582530 | 1 | 3.8 | 2.5 | 2 | 6.1 | 1.5 |
+| w845584208 | 17 | 2.4 | 2.4 | 1 | 3.7 | 1.5 |
+| w845867054 | 16 | 2.1 | 2.1 | 2 | 3.6 | 1.5 |
+| w845867061 | 15 | 2.2 | 2.2 | 1 | 3.9 | 1.5 |
+| w845867072 | 14 | 4.9 | 2.5 | 2 | 3.4 | 1.5 |
+| w845867984 | 13 | 2.4 | 2.4 | 1 | 3.5 | 1.5 |
+| w845872281 | 9 | 1.5 | 1.5 | 1 | 3.4 | 1.5 |
+| w845872284 | practice | 2.4 | 2.4 | 2 | 3.7 | 0.0 |
+| w845904817 | 5 | 2.1 | 2.1 | 1 | 3.9 | 1.5 |
+| w845904828 | 4 | 4.2 | 2.5 | 2 | 6.2 | 1.5 |
+
+# OSM coverage audit
+
+| hole | par (OSM) | hole line | tee at line start | fairway | green | pin | bunkers <40 m | water <40 m |
+|---|---|---|---|---|---|---|---|---|
+| 1 | 5 | yes | yes (3 near) | yes | yes | yes | 6 | 1 |
+| 2 | 4 | yes | yes (3 near) | yes | yes | yes | 6 | 0 |
+| 3 | 3 | yes | NO (1 near) | yes | yes | yes | 4 | 1 |
+| 4 | 4 | yes | yes (2 near) | yes | yes | yes | 8 | 1 |
+| 5 | 5 | yes | yes (5 near) | yes | yes | yes | 9 | 0 |
+| 6 | 4 | yes | yes (4 near) | yes | yes | yes | 6 | 0 |
+| 7 | 4 | yes | yes (3 near) | yes | yes | yes | 7 | 0 |
+| 8 | 3 | yes | yes (4 near) | yes | yes | yes | 4 | 0 |
+| 9 | 4 | yes | yes (4 near) | yes | yes | yes | 6 | 0 |
+| 10 | 5 | yes | yes (2 near) | yes | yes | yes | 5 | 2 |
+| 11 | 3 | yes | yes (3 near) | yes | yes | yes | 7 | 0 |
+| 12 | 4 | yes | yes (2 near) | yes | yes | yes | 4 | 0 |
+| 13 | 4 | yes | yes (2 near) | yes | yes | yes | 6 | 0 |
+| 14 | 3 | yes | yes (2 near) | yes | yes | yes | 3 | 0 |
+| 15 | 4 | yes | yes (2 near) | yes | yes | yes | 7 | 0 |
+| 16 | 4 | yes | yes (2 near) | yes | yes | yes | 5 | 0 |
+| 17 | 3 | yes | yes (5 near) | yes | yes | yes | 5 | 0 |
+| 18 | ? | yes | yes (2 near) | yes | yes | yes | 5 | 4 |
+
+## Missing or suspect features
+
+- hole 3: no tee polygon at the start of the hole line (nearest 58.5 m)
+- hole 18: hole line has no par tag
+- hole 18: hole line carries handicap=5 (compare with scorecard)
+- green w845580977 at (666, 534) is not the end of any hole line (practice green?) -> treated as a wrong green
+- green w845872284 at (876, 276) is not the end of any hole line (practice green?) -> treated as a wrong green
+
+Totals: 46 tees, 20 greens, 19 fairways, 65 bunkers, 4 water hazards, 18 pins, 32 cart paths, 250 OSM tree points.
+
