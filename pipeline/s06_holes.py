@@ -222,6 +222,19 @@ def build_layout(name, cfg, lay, g):
                 "note": note,
             }
             rows.append((n, par, ts, card_yd, real_yd, adj_yd, diff, adiff))
+        spec = {int(t["hole"]): t for t in cfg.get("green_tiers", [])}.get(n)
+        if spec and spec.get("pin") == "upper_tier" and not lay["shared"]:
+            # config green_tiers pin=upper_tier: the pin goes to the middle of the upper tier
+            from s07_greens import PIN_R0, tier_for, upper_tier_pin
+            gpoly = green.geometry if green.geometry.geom_type == "Polygon" else max(green.geometry.geoms, key=lambda q: q.area)
+            gpoly = gpoly.simplify(0.15)
+            tier = tier_for(spec, {"tees": {cfg["default_tee"]: {"centerline": tee_records[cfg["default_tee"]]["centerline"]}}},
+                            gpoly.centroid, cfg["default_tee"], gpoly)
+            p_new = upper_tier_pin(tier, gpoly, tier["w"] / 2 + PIN_R0 + 0.5)
+            if p_new is not None:
+                open_items.append(f"Hole {n}: two-tiered green; the pin is moved from the OSM pin ({pin.x:.1f}, {pin.y:.1f}), "
+                                  f"which is on or near the step, to the middle of the upper tier ({p_new.x:.1f}, {p_new.y:.1f}) (config green_tiers pin=upper_tier).")
+                pin = p_new
         records.append({
             "number": n, "par": par, "handicap": int(card[n]["handicap"]),
             "hole_line_osm": h.osm,
