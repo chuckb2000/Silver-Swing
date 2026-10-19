@@ -1,23 +1,5 @@
 [
  {
-  "hole": 13,
-  "tee_set": "Blue",
-  "step": 2,
-  "type": "tee_position",
-  "from": [
-   541.51,
-   154.48
-  ],
-  "to": [
-   542.2,
-   148.59
-  ],
-  "real_yd": 144.8,
-  "adjusted_yd": 151.0,
-  "card_yd": 151.0,
-  "reason": "measured 145 yd from the tee-box centre vs 151 on the card (-4.1%); moved the virtual tee within the real tee polygon w1053602273"
- },
- {
   "hole": 16,
   "tee_set": "Blue",
   "step": 2,

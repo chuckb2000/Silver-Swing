@@ -50,5 +50,6 @@
     "Elevation and canopy height: Oregon Department of Geology and Mineral Industries (DOGAMI) lidar",
     "Scorecard: Willamette Valley Country Club"
   ],
-  "notes": "Phase 1 decisions (developer, 2026-10-19): Blue tees; card name 'Willamette Valley CC'; hole 13 green proposed from the lidar for approval; the maintenance no-play zone (holes 14-16) is not modelled; practice greens play as wrong greens; out of bounds = the OSM course boundary."
+  "notes": "Phase 1 decisions (developer, 2026-10-19): Blue tees; card name 'Willamette Valley CC'; hole 13 green proposed from the lidar for approval; the maintenance no-play zone (holes 14-16) is not modelled; practice greens play as wrong greens; out of bounds = the OSM course boundary.",
+  "tee_shot_margin_m": 0.5
 }

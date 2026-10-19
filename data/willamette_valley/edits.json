@@ -17,6 +17,14 @@
       ],
       "tags": {},
       "reason": "OSM tags the course's 11 cart paths golf=path + highway=path (the current OSM tag); the pipeline reads golf=cartpath, so these copies carry kind cartpath (paved 2.4 m, free relief: the card lists cart paths as immovable obstructions)"
+    },
+    {
+      "from": "proposed/green13.geojson",
+      "ids": [
+        "tr_green13"
+      ],
+      "tags": {},
+      "reason": "developer 2026-10-19: hole 13's green is 'A', left of the pond where OSM's hole line and pin end; OSM maps no green there. Traced from the OSIP 2022 orthophoto by data/willamette_valley/trace_h13.py (385 m2)"
     }
   ],
   "drop": [
