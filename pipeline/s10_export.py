@@ -107,8 +107,8 @@ def update_registry(course: dict):
     reg = json.load(open(path)) if path.exists() else {"courses": []}
     default = next(t for t in course["teeSets"] if t["name"] == course["defaultTee"])
     entry = {
-        "id": course["id"], "name": course["name"], "location": course["location"], "theme": course["theme"],
-        "holes": len(course["holes"]), "par": course["par"], "defaultTee": course["defaultTee"],
+        "id": course["id"], "name": course["name"], "location": course["location"], "state": course["state"],
+        "theme": course["theme"], "holes": len(course["holes"]), "par": course["par"], "defaultTee": course["defaultTee"],
         "totalYd": default["totalYd"], "teeSets": [t["name"] for t in course["teeSets"]],
     }
     reg["courses"] = [c for c in reg["courses"] if c["id"] != entry["id"]] + [entry]
@@ -262,7 +262,8 @@ def main():
             "greenId": h["green_osm"], "greenCenter": h["green_center"], "pin": h["pin"],
         })
     course = {
-        "id": cfg["id"], "name": cfg["name"], "location": cfg["location"], "architects": cfg["architects"],
+        "id": cfg["id"], "name": cfg["name"], "location": cfg["location"], "state": cfg["state"],
+        "architects": cfg["architects"],
         "theme": cfg["theme"],
         "attribution": [
             "Map data © OpenStreetMap contributors (ODbL)",

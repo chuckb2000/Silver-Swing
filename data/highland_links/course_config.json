@@ -1,0 +1,43 @@
+{
+  "id": "highland_links",
+  "name": "Highland Links",
+  "location": "Truro, Barnstable County, Massachusetts",
+  "state": "MA",
+  "architects": "Willard Small (c. 1892); redesigned by J. Henry McKinley (1913)",
+  "theme": "coastal",
+  "epsg": 32619,
+  "osm_sources": [
+    "raw/Highland_Links.gpkg"
+  ],
+  "boundary_name": "Highland Links",
+  "world": {
+    "x0": 411668,
+    "y0": 4654012,
+    "width": 1024,
+    "height": 1024,
+    "note": "provisional: course boundary bbox (780 x 558 m) + ~120 m scenery, rounded out to whole 256 m chunks and centred; final choice in Phase 3 once the DEM shows the cliff and shoreline"
+  },
+  "tee_sets": [
+    {
+      "name": "Blue/White",
+      "playable": true,
+      "rating": 67.2,
+      "slope": 116,
+      "total_yd": 5332
+    }
+  ],
+  "default_tee": "Blue/White",
+  "scorecard_source": "Club scorecard PDF (highlandlinkscapecod.com, HighlandLinks-Scorecard.pdf, Feb 2020), identical to the developer's image of the printed card; checked 2026-10-18. Rating/slope: club website 67.2/116, printed card 67.0/114 (open item)",
+  "penalty_default": "red",
+  "driving_range_is_ob": true,
+  "wind_mph": {
+    "minMph": 3,
+    "maxMph": 14
+  },
+  "attribution": [
+    "Map data © OpenStreetMap contributors (ODbL)",
+    "Elevation and lidar: U.S. Geological Survey 3D Elevation Program (2021 Central Eastern Massachusetts lidar)",
+    "Scorecard: Highland Links (club scorecard)"
+  ],
+  "notes": "Draft 2026-10-18 (Phase 1). Pending developer decisions: second-nine representation, tee sets, rating/slope, theme, wind (see DATA_REQUEST.md and the intake message). dtm / laz entries are added when the data arrives."
+}
