@@ -25,6 +25,23 @@
       ],
       "tags": {},
       "reason": "developer 2026-10-19: hole 13's green is 'A', left of the pond where OSM's hole line and pin end; OSM maps no green there. Traced from the OSIP 2022 orthophoto by data/willamette_valley/trace_h13.py (385 m2)"
+    },
+    {
+      "from": "proposed/tee3.geojson",
+      "ids": [
+        "dev_tee3_blue"
+      ],
+      "tags": {},
+      "reason": "developer 2026-10-19: the hole 3 Blue tee is on the fairway from the 2nd green (no box in OSM, no pad in the lidar); a 6 x 4 m box at the card's 162 yd on the open north end of that fairway (OSIP 2022 image; the south part is under trees)"
+    },
+    {
+      "from": "proposed/fairways_from_tees.geojson",
+      "ids": [
+        "fw_w1053586147",
+        "fw_w1053602282"
+      ],
+      "tags": {},
+      "reason": "OSM tags hole 9's fairway (228 x 36 m, w1053586147) and hole 14's fairway (328 x 61 m, w1053602282) as golf=tee; both run along their hole lines and neither hole has another fairway mapped. Copies with golf=fairway (pending the developer's check against the south-half OSIP image)"
     }
   ],
   "drop": [
@@ -71,13 +88,14 @@
     {
       "osm": "w1053634759",
       "reason": "replaced by its golf=cartpath copy (cp_w1053634759)"
-    }
-  ],
-  "extend_start": [
+    },
     {
-      "osm": "w1053470733",
-      "extend_m": 25.6,
-      "reason": "developer 2026-10-19: the hole 3 Blue tee is on the fairway that runs from the 2nd green (w1053466775); no box is mapped there and the lidar shows no pad, so the line start moves 25.6 m back along the line to the card's 162 yd (lands inside that fairway)"
+      "osm": "w1053586147",
+      "reason": "replaced by its golf=fairway copy (fw_w1053586147)"
+    },
+    {
+      "osm": "w1053602282",
+      "reason": "replaced by its golf=fairway copy (fw_w1053602282)"
     }
   ]
 }

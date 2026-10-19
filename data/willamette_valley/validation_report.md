@@ -8,7 +8,7 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 |---|---|---|---|---|---|---|---|---|---|---|
 | 1 | 4 | Blue | 385 | 392.2 | +7.2 | +1.9% | pass | 392.2 | +1.9% | pass |
 | 2 | 5 | Blue | 535 | 534.3 | -0.7 | -0.1% | pass | 534.3 | -0.1% | pass |
-| 3 | 3 | Blue | 162 | 162.0 | -0.0 | -0.0% | pass | 162.0 | -0.0% | pass |
+| 3 | 3 | Blue | 162 | 161.9 | -0.1 | -0.0% | pass | 161.9 | -0.0% | pass |
 | 4 | 4 | Blue | 347 | 352.6 | +5.6 | +1.6% | pass | 352.6 | +1.6% | pass |
 | 5 | 4 | Blue | 369 | 364.9 | -4.1 | -1.1% | pass | 364.9 | -1.1% | pass |
 | 6 | 5 | Blue | 551 | 539.1 | -11.9 | -2.2% | pass | 539.1 | -2.2% | pass |
@@ -28,7 +28,7 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 
 ## Open items
 
-1. Hole 3 (Blue): no mapped tee box within 8% of the card; the tee is the start point of the OSM hole line (162 yd). The Blue tee box is not in OSM - trace it to confirm.
+1. Hole 3 (Blue): tee box dev_tee3_blue assigned by the developer (tagged hole=3, tee_set=Blue in edited/course.geojson).
 2. Hole 6: the OSM hole line starts 92 m from the Blue tee box (w1053470756), and only that box matches the card; the line was probably drawn from another tee. Measured from the Blue box through the line's bend points.
 3. Hole 7: the OSM hole line starts 63 m from the Blue tee box (w1053586132), and only that box matches the card; the line was probably drawn from another tee. Measured from the Blue box through the line's bend points.
 4. Hole 15: OSM hole line has no par tag; using scorecard par 3.
@@ -59,12 +59,12 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 | w1053470750 | 5 | 2.5 | 2.5 | 1 | 5.0 | 1.5 |
 | w1053586134 | 7 | 1.8 | 1.8 | 2 | 4.2 | 1.5 |
 | w1053586143 | 8 | 0.3 | 1.0 | 2 | 2.7 | 1.0 |
-| w1053586150 | 9 | 0.0 | 1.0 | 1 | 2.4 | 0.0 |
+| w1053586150 | 9 | 2.6 | 2.5 | 1 | 3.7 | 1.5 |
 | w1053594241 | practice | 1.2 | 1.2 | 1 | 2.3 | 0.0 |
 | w1053594248 | 10 | 1.3 | 1.3 | 1 | 2.2 | 1.3 |
 | w1053594261 | 11 | 2.4 | 2.4 | 1 | 3.6 | 1.5 |
 | w1053602271 | 12 | 1.4 | 1.4 | 1 | 2.4 | 1.4 |
-| w1053602285 | 14 | 0.0 | 1.0 | 2 | 3.1 | 0.0 |
+| w1053602285 | 14 | 2.6 | 2.5 | 2 | 3.8 | 1.5 |
 | w1053602293 | 15 | 2.5 | 2.5 | 1 | 4.1 | 1.5 |
 | w1053602300 | 16 | 4.6 | 2.5 | 2 | 5.3 | 1.5 |
 | w1053606384 | 17 | 2.1 | 2.1 | 1 | 3.8 | 1.5 |

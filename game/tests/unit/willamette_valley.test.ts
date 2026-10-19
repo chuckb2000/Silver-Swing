@@ -1,8 +1,8 @@
 // Willamette Valley Country Club (Canby, OR): course-specific checks of
 // COURSE_BUILD.md 8.2 for the Blue tees, plus the developer's calls of
 // 2026-10-19 (Blue tees; hole 13's green is the one left of the pond, traced
-// from the OSIP orthophoto; hole 3's Blue tee is on the fairway from the 2nd
-// green; practice greens are wrong greens; every pond red; out of bounds = the
+// from the OSIP orthophoto; hole 3's Blue tee is a box on the fairway from the
+// 2nd green; practice greens are wrong greens; every pond red; out of bounds = the
 // OSM course boundary).
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
@@ -20,8 +20,6 @@ class AlwaysHit extends Rng { next(): number { return 0; } }
 const ID = 'willamette_valley';
 // holes outside 3% (none: every hole passes)
 const YARDAGE_EXCEPTIONS: string[] = [];
-// tees not on a mapped tee box: hole 3 Blue is on the fairway from the 2nd green (developer)
-const TEE_ON_FAIRWAY = ['3 Blue'];
 
 const course = loadCourseFiles(ID);
 const json = course.json;
@@ -45,10 +43,7 @@ describe('Willamette Valley: course list and tees', () => {
 
   it('every tee is on a tee box and every pin on its green', () => {
     for (const h of json.holes) {
-      for (const ts of TEES) {
-        const want = TEE_ON_FAIRWAY.includes(`${h.number} ${ts}`) ? SURF.fairway : SURF.tee;
-        expect(course.terrain.surface(h.tees[ts].x, h.tees[ts].y), `hole ${h.number} ${ts}`).toBe(want);
-      }
+      for (const ts of TEES) expect(course.terrain.surface(h.tees[ts].x, h.tees[ts].y), `hole ${h.number} ${ts}`).toBe(SURF.tee);
       expect(course.greenPolys.get(h.greenId)!.contains(h.pin[0], h.pin[1]), `hole ${h.number} pin`).toBe(true);
     }
   });
