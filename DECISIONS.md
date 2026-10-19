@@ -2,6 +2,17 @@
 
 Changes from the starting values in CLAUDE.md, and choices the spec left open. Newest first within each area. Date: 2026-10-18 (first build session, then the first and second playtests).
 
+
+## Third playtest (developer, 2026-10-19)
+
+- **Bunker label:** a greenside bunker lie reads "bunker" (it overflowed the info panel).
+- **Swing meter:** no white mark at the zone centre. Taps are counted 30 ms early (`DISPLAY_LAG_MS`, on top of the latency setting): the cursor on screen trails the real one by about a frame plus input delay, so the perfect spot sat about 2 % of the bar right of the green box at Normal speed.
+- **Aiming keeps the view:** after dragging the view, aiming no longer snaps the camera back to the golfer; it only follows if the landing marker would leave the screen.
+- **Name at the end of the round:** the summary has a name button (orange "enter your name" while the name is still "player"); the round is sent to the shared leaderboard when the player leaves the summary, so a new name goes with it. The name is remembered for the next rounds.
+- **Banned words:** `src/save/names.ts` (shared by the game and the server): strong words refused anywhere in a name, mild words (ass, dick, ...) only as a whole word, after replacing look-alikes (1/!/| as i or l, 0 o, 3 e, 4/@ a, 5/$ s, 7 t ...), removing spaces and dots and collapsing repeated letters. The name box refuses such names; the server stores them as "player" and shows "player" for any already stored. Known false positive: names containing a strong word (Scunthorpe).
+- **Wedges release a little more:** full-shot roll-out PW 5 yd (was 4), GW 4 (3), SW 3 (2), LW 2 (1); short swings get extra release (`chipRelease`, x1.4 at a 10 % swing, fading to x1 at full), not from bunkers. A 10 m sand-wedge chip now rolls about 1.1 m on the green (was 0.4), a pitching-wedge chip 1.7 m (0.8).
+- **Highland Links tee boxes:** grown 1.5 m per side (`tee_grow_m`; the OSM boxes were 25-50 m2) and a moved virtual tee is kept 2 m inside its box (`tee_inset_m`; hole 1 sat on the front edge). Yardages unchanged in status (hole 1 259 yd vs card 250, +3.7 %, as before). Other courses are unaffected (the keys default off).
+
 ## Course data read without a canvas (2026-10-19, a friend's report)
 
 - **Report:** out of bounds in the middle of hole 6 and fairway lies reading as rough (hole 1 and others) on Oswego Lake.

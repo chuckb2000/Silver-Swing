@@ -194,7 +194,7 @@ def main():
                     "reason": f"developer: tee at the {pos} of the tee box {tee_osm} (tag tee_pos={pos})",
                 })
             elif status(diff) != "pass" and tpoly is not None:
-                best = best_point_in(tpoly, L, gc, target)
+                best = best_point_in(tpoly, L, gc, target, inset=float(cfg.get("tee_inset_m", 0.75)))  # keep the golfer on the box
                 if best and abs(best[2] - target) < abs(m - target) - 0.5:
                     adj_pt, adj_m = best[1], best[2]
                     adjustments.append({

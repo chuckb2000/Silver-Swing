@@ -6,20 +6,20 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 
 | hole | par | tee set | card yd | measured yd | diff yd | diff % | status | adjusted yd | adj. diff % | adj. status |
 |---|---|---|---|---|---|---|---|---|---|---|
-| 1 | 4 | Blue | 250 | 266.9 | +16.9 | +6.7% | flag | 259.5 | +3.8% | flag |
+| 1 | 4 | Blue | 250 | 266.9 | +16.9 | +6.7% | flag | 259.2 | +3.7% | flag |
 | 2 | 5 | Blue | 460 | 449.1 | -10.9 | -2.4% | pass | 449.1 | -2.4% | pass |
-| 3 | 3 | Blue | 160 | 166.8 | +6.8 | +4.2% | flag | 164.4 | +2.8% | pass |
+| 3 | 3 | Blue | 160 | 166.8 | +6.8 | +4.2% | flag | 164.0 | +2.5% | pass |
 | 4 | 4 | Blue | 379 | 375.9 | -3.1 | -0.8% | pass | 375.9 | -0.8% | pass |
 | 5 | 4 | Blue | 380 | 383.1 | +3.1 | +0.8% | pass | 383.1 | +0.8% | pass |
 | 6 | 5 | Blue | 464 | 460.0 | -4.0 | -0.9% | pass | 460.0 | -0.9% | pass |
 | 7 | 3 | Blue | 171 | 168.4 | -2.6 | -1.5% | pass | 168.4 | -1.5% | pass |
 | 8 | 4 | Blue | 353 | 351.4 | -1.6 | -0.5% | pass | 351.4 | -0.5% | pass |
-| 9 | 3 | Blue | 136 | 115.4 | -20.6 | -15.1% | FAIL | 133.2 | -2.0% | pass |
-| **total** | 35 | | **2753** | **2737** | -16 | -0.6% | | **2745** | -0.3% | |
+| 9 | 3 | Blue | 136 | 115.1 | -20.9 | -15.4% | FAIL | 135.1 | -0.6% | pass |
+| **total** | 35 | | **2753** | **2736** | -17 | -0.6% | | **2746** | -0.3% | |
 
 ## Open items
 
-1. Hole 1 (Blue): measured 260 yd vs card 250 (+3.8%) even with the virtual tee at the best spot in its box; accepted for play.
+1. Hole 1 (Blue): measured 259 yd vs card 250 (+3.7%) even with the virtual tee at the best spot in its box; accepted for play.
 2. Hole 1 (Blue): tee box w709063013 assigned by the developer (tagged hole=1, tee_set=Blue in edited/course.geojson).
 3. Hole 2 (Blue): tee box w1023655408 assigned by the developer (tagged hole=2, tee_set=Blue in edited/course.geojson).
 4. Hole 3 (Blue): tee box w709143119 assigned by the developer (tagged hole=3, tee_set=Blue in edited/course.geojson).
@@ -41,9 +41,9 @@ Decisions the developer made on 2026-10-18 are in DECISIONS.md ("Highland Links"
 
 ## Playability adjustments
 
-- Hole 1 (Blue): measured 267 yd from the tee-box centre vs 250 on the card (+6.7%); moved the virtual tee within the real tee polygon w709063013 -> 259.5 yd (real 266.9 yd).
-- Hole 3 (Blue): measured 167 yd from the tee-box centre vs 160 on the card (+4.2%); moved the virtual tee within the real tee polygon w709143119 -> 164.4 yd (real 166.8 yd).
-- Hole 9 (Blue): developer: tee at the back of the tee box w1023658086 (tag tee_pos=back) -> 133.2 yd (real 115.4 yd).
+- Hole 1 (Blue): measured 267 yd from the tee-box centre vs 250 on the card (+6.7%); moved the virtual tee within the real tee polygon w709063013 -> 259.2 yd (real 266.9 yd).
+- Hole 3 (Blue): measured 167 yd from the tee-box centre vs 160 on the card (+4.2%); moved the virtual tee within the real tee polygon w709143119 -> 164.0 yd (real 166.8 yd).
+- Hole 9 (Blue): developer: tee at the back of the tee box w1023658086 (tag tee_pos=back) -> 135.1 yd (real 115.1 yd).
 
 ## Tree detection (2021 USGS lidar, leaf-off)
 
