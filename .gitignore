@@ -19,3 +19,5 @@ data/*/build/
 
 # lidar point clouds are archived as GitHub release assets, not in git (data/<course>/DATA_REQUEST.md)
 data/*/raw/*.laz
+# USGS 1 m DEM tiles (~100 MB) are archived in the GitHub release named in data/<course>/DATA_REQUEST.md
+data/*/raw/USGS_1M_*.tif
