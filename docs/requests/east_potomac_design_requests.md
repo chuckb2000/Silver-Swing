@@ -38,8 +38,9 @@ frames (falling back to `d_`). The pipeline would then add `b_*` frames to
 ## 3. Tee choice on the new-round screen
 
 The Blue course has Blue (6,599 yd) and White (6,226 yd) tees in
-`course.json`; the setup screen always plays `defaultTee` (White). A tee row
-like the round-length row would expose the Blue tees.
+`course.json`; the setup screen always plays `defaultTee` (Blue, the
+developer's choice for the Blue course). A tee row like the round-length row
+would expose the White tees.
 
 ## 4. Unrated tees
 

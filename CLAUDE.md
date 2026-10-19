@@ -452,7 +452,9 @@ DECISIONS.md with the reason.
     one island sharing one world (Blue 18, White 9, Red 9), new `potomac`
     theme with flowering cherries around the island. Pipeline gained
     `layouts`, `merge_edits.py`, `s02b_approaches.py` and lidar tee
-    proposals; Oswego Lake and Highland Links rebuild unchanged. Open items: section 11.9.4 and
+    proposals; Oswego Lake and Highland Links rebuild unchanged. The Blue
+    course plays the Blue tees (developer). 186 unit tests and 3 Playwright
+    tests pass. Open items: section 11.9.4 and
     data/east_potomac/validation_report.md; requests to the design chat
     in docs/requests/east_potomac_design_requests.md.
 

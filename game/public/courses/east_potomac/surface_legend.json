@@ -19,7 +19,8 @@
   "ob_woods": 12,
   "ob_building": 13,
   "building": 14,
-  "range": 15
+  "range": 15,
+  "ob_sand": 16
  },
  "ob_ids": [
   0,
@@ -27,7 +28,8 @@
   11,
   12,
   13,
-  15
+  15,
+  16
  ],
  "area_m2": {
   "ob": 242467,
@@ -45,6 +47,7 @@
   "ob_woods": 55113,
   "ob_building": 60900,
   "building": 86,
-  "range": 37894
+  "range": 37894,
+  "ob_sand": 0
  }
 }

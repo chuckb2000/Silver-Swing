@@ -20,6 +20,14 @@ island). Oswego Lake and Highland Links notes live in DECISIONS.md.
   and a PNG-decoding fix during the East Potomac build. Fetch `main` before
   the hand-off, merge it, and run every test again; new screens (the course
   cards) can change what your course needs (a short name, a card).
+- **Merging `main` after another course landed.** Building on another
+  course's branch means `main` later holds a newer copy of the same pipeline
+  files, and nearly every file conflicts. Per file: take `main`'s version,
+  then re-apply only your own change (`git diff <your branch point> HEAD --
+  <file> | git apply --3way`) and fix the hunks that don't apply. Then
+  rebuild every existing course in the merged tree and in a `main` worktree
+  (fetch their release raw files into both) and compare checksums; install
+  anything their steps need (`laspy[lazrs]` for Highland Links).
 - **The developer may be asleep.** When told to work without asking, take the
   reasonable call, write it down (DECISIONS.md and the report's open items,
   each with a recommendation), and keep anything over 8 % or hard to undo as
