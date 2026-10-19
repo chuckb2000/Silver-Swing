@@ -1,6 +1,7 @@
 import Phaser from 'phaser';
 import { BgScene } from './scenes/BgScene';
 import { BootScene } from './scenes/BootScene';
+import { CourseSelectScene } from './scenes/CourseSelectScene';
 import { CreditsScene } from './scenes/CreditsScene';
 import { HudScene } from './scenes/HudScene';
 import { LeaderboardScene } from './scenes/LeaderboardScene';
@@ -26,7 +27,7 @@ const game = new Phaser.Game({
   scale: { mode: Phaser.Scale.NONE, width: layout.W, height: layout.H, zoom: layout.r / layout.dpr },
   input: { activePointers: 2 },
   fps: { target: 60 },
-  scene: [BootScene, BgScene, TitleScene, SetupScene, PlayScene, HudScene, SummaryScene, LeaderboardScene, SettingsScene, CreditsScene],
+  scene: [BootScene, BgScene, TitleScene, CourseSelectScene, SetupScene, PlayScene, HudScene, SummaryScene, LeaderboardScene, SettingsScene, CreditsScene],
 });
 
 let pending = 0;
