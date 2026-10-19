@@ -555,6 +555,63 @@ def bridge(c: dict) -> np.ndarray:
     return outlined_outside(img, c["edge"])
 
 
+# --------------------------------------------------------------------- heron
+def heron(c: dict) -> np.ndarray:
+    """A great blue heron standing in tall golden grass, facing left (Oregon Golf Club)."""
+    X, Y = grid()
+    img = np.zeros((S, S, 4), np.uint8)
+    # legs first (the grass covers their lower part), rusty thighs at the top
+    legs = seg(X, Y, 16.4, 19.0, 15.2, 30.0, 0.6) | seg(X, Y, 19.4, 19.0, 20.6, 30.0, 0.6)
+    paint(img, legs, c["leg"])
+    paint(img, legs & (Y < 21.2), c["thigh"])
+    # body: a tilted oval tapering to a short tail; chest plumes hang below the neck
+    a = math.radians(16)
+    U = (X - 18.6) * math.cos(a) + (Y - 15.4) * math.sin(a)
+    V = -(X - 18.6) * math.sin(a) + (Y - 15.4) * math.cos(a)
+    body = (U / 7.6) ** 2 + (V / 3.9) ** 2 <= 1
+    tail = poly(X, Y, [(23.0, 15.0), (29.2, 19.4), (24.6, 19.2)])
+    plumes = poly(X, Y, [(11.6, 13.0), (14.6, 14.0), (14.4, 18.4), (13.4, 17.2), (12.8, 18.8), (12.2, 16.6), (11.2, 17.4)])
+    neck = seg(X, Y, 11.8, 13.0, 13.8, 16.0, 1.6) | seg(X, Y, 10.4, 8.4, 11.8, 13.0, 1.3) | seg(X, Y, 9.6, 5.8, 10.4, 8.4, 1.15)
+    head = np.hypot(X - 9.6, Y - 5.0) <= 2.3
+    paint(img, body | tail, c["blue"])
+    paint(img, body & (V < -1.6) & (U < 3.0), c["blue_light"])          # lit back, upper left
+    paint(img, (body | tail) & (V > 1.6), c["blue_dark"])
+    paint(img, body & (U < -4.6) & (V < 0.6), c["shoulder"])            # dark shoulder patch
+    paint(img, plumes, c["neck_dark"])
+    paint(img, neck, c["neck"])
+    paint(img, neck & (X < 10.8) & (Y > 6.5), c["neck_light"])          # pale front of the neck
+    paint(img, head, c["face"])
+    crown = (head & (Y >= 3.4) & (Y < 4.5) & (X > 8.6)) | seg(X, Y, 10.6, 4.0, 15.0, 5.2, 0.5)  # black stripe over the eye, plume behind
+    paint(img, crown, c["plume"])
+    paint(img, (np.abs(X - 9.0) < 0.5) & (np.abs(Y - 5.0) < 0.5), c["eye"])
+    bill = poly(X, Y, [(8.4, 4.6), (8.4, 6.9), (1.0, 6.1)])             # a long yellow dagger
+    paint(img, bill, c["bill"])
+    paint(img, bill & (Y >= 5.9), c["bill_dark"])
+    # tall golden grass in front: one clump with a ragged top of blade tips,
+    # blade lines inside it, seed heads on the tallest stalks
+    rng = np.random.default_rng(31)
+    top = np.full(X.shape, 40.0)
+    tips = []
+    for x0 in np.arange(0.5, 32.0, 1.0):
+        h = 24.2 + rng.uniform(-1.6, 1.6)
+        tips.append((x0, h))
+    clump = np.zeros(X.shape, bool)
+    for x0, h in tips:
+        clump |= (np.abs(X - x0) <= 0.5) & (Y >= h)
+    spikes = np.zeros(X.shape, bool)
+    for x0, h, lean in ((1.5, 19.5, -1.0), (4.0, 17.5, 1.5), (7.0, 20.5, -1.2), (10.0, 16.5, -1.6), (12.5, 21.0, 1.0),
+                        (22.0, 18.5, 1.6), (24.5, 21.0, -0.8), (27.0, 16.8, 1.2), (30.0, 19.8, -1.4)):
+        spikes |= seg(X, Y, x0, 25.0, x0 + lean, h, 0.5)
+    grass = clump | spikes
+    paint(img, grass, c["grass"])
+    paint(img, grass & (X < 12) & (Y < 26), c["grass_light"])           # lit on the left
+    paint(img, clump & (Y > 28.5), c["grass_dark"])
+    for x0 in np.arange(1.5, 32.0, 3.1):                                 # blade lines inside the clump
+        paint(img, seg(X, Y, x0, 31.5, x0 + rng.uniform(-1.5, 1.5), 25.5, 0.4) & clump, c["grass_dark"])
+    paint(img, spikes & ~np.roll(spikes | clump, 1, axis=0), c["seed"])  # seed heads at the spike tips
+    return outlined_outside(img, c["edge"])
+
+
 def colour_disc(fn, fill, rim):
     """A logo drawn over a disc in a course's colour: one course of several at a
     place (East Potomac Blue / White / Red)."""
@@ -635,6 +692,14 @@ LOGOS = {
         "wood": rgba("#a8743f"), "wood_light": rgba("#d39b5e"), "wood_dark": rgba("#6b4423"),
         "water": rgba("#3f86c8"), "water_dark": rgba("#2c66a0"), "water_light": rgba("#86bdf0"),
         "grass": rgba("#4f9447"), "grass_light": rgba("#74b860"), "edge": EDGE,
+    }),
+    "ogc": (heron, {
+        "blue": rgba("#7d92ab"), "blue_light": rgba("#a8bbcf"), "blue_dark": rgba("#56697f"), "shoulder": rgba("#2c3442"),
+        "neck": rgba("#9aa3b4"), "neck_light": rgba("#d8dbe3"), "neck_dark": rgba("#6b7488"),
+        "face": rgba("#f4f4f0"), "plume": rgba("#1d2129"), "eye": rgba("#f0c23a"),
+        "bill": rgba("#eab43a"), "bill_dark": rgba("#b98422"), "thigh": rgba("#9a5b3a"), "leg": rgba("#4f4c3e"),
+        "grass": rgba("#e0b43c"), "grass_light": rgba("#f4d36a"), "grass_dark": rgba("#b08424"), "seed": rgba("#fbe9a6"),
+        "edge": EDGE,
     }),
 }
 
