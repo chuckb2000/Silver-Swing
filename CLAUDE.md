@@ -475,8 +475,11 @@ DECISIONS.md with the reason.
     willow; no blossoms). The two OSM boundary parts are joined across
     Kingman Lake as one red penalty area (`join_boundary`); hole 10 has a
     back tee across the lake; the creek on 3 is a red penalty area from the
-    lidar; ten tees from lidar pads; a two-tier green on 13. Section 11.10; open items in
-    data/langston/validation_report.md.
+    lidar; ten tees from lidar pads; a two-tier green on 13. Oswego Lake,
+    Highland Links and East Potomac rebuild byte-identical. 224 unit tests
+    and 4 Playwright tests pass. Section 11.10; open items in
+    data/langston/validation_report.md; requests in
+    docs/requests/langston_design_requests.md.
 
 -   **Next task:** the third playtest (putting, yellow misses), the club's
     printed scorecard and the hole 3 Blue tee box. New courses: a separate

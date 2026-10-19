@@ -9,8 +9,12 @@ import { PNG } from 'pngjs';
 import { describe, expect, it } from 'vitest';
 import type { HeightMeta } from '../../src/data/course';
 import { Round } from '../../src/systems/game/round';
+import { Rng } from '../../src/systems/physics/rng';
+import { simulateShot } from '../../src/systems/physics/sim';
 import { SURF } from '../../src/systems/physics/surfaces';
 import { COURSES_DIR, loadCourseFiles, meterFor, registry, robotRound, roundCfg } from './helpers';
+
+class AlwaysHit extends Rng { next(): number { return 0; } }
 
 const ID = 'langston';
 // holes accepted outside 3% until the developer decides (data/langston/validation_report.md)
@@ -158,6 +162,39 @@ describe('Langston: playing surfaces and trees', () => {
       const first = seq.find((v) => v !== SURF.green && v !== SURF.fringe);
       expect([SURF.fairway, SURF.bunker, SURF.cartpath, SURF.water], `hole ${h.number}`).toContain(first);
     }
+  });
+
+  it('a perfect tee shot at the middle of the fairway clears the trees around the tee (both tee sets)', () => {
+    const blocked: string[] = [];
+    for (const h of json.holes) for (const ts of TEES) {
+      const r = new Round(course, { ...roundCfg(course, [h.number]), tee: ts });
+      r.startHole(0);
+      r.wind = { dir: 0, mph: 0, vx: 0, vy: 0 };
+      const club = r.autoClub();
+      const scale = r.autoSwingScale(club);
+      const base = r.lineAim(club, scale);
+      const b = r.ball;
+      let target = { x: r.pin.x, y: r.pin.y };
+      if (club.kind !== 'putter' && r.fullCarry(club) * scale < 0.92 * r.distToPin()) {
+        // the middle of the fairway across the line where the drive lands
+        const carry = r.fullCarry(club) * scale;
+        const lx = b.x + Math.cos(base) * carry, ly = b.y + Math.sin(base) * carry;
+        const px = -Math.sin(base), py = Math.cos(base);
+        const fw: number[] = [];
+        for (let s = -45; s <= 45; s += 0.5) if (course.terrain.surface(lx + px * s, ly + py * s) === SURF.fairway) fw.push(s);
+        const runs: number[][] = [];
+        for (const s of fw) { const R = runs[runs.length - 1]; if (R && s - R[R.length - 1] <= 1) R.push(s); else runs.push([s]); }
+        runs.sort((a, c) => Math.min(...a.map(Math.abs)) - Math.min(...c.map(Math.abs)));
+        const mid = runs.length ? (runs[0][0] + runs[0][runs[0].length - 1]) / 2 : 0;
+        target = { x: lx + px * mid, y: ly + py * mid };
+      }
+      const aim = Math.atan2(target.y - b.y, target.x - b.x);
+      const plan = r.plan(club.id, aim, meterFor(1, 0, false), 0, scale);
+      const sim = simulateShot(course.terrain, course.obstacles, plan.spec, new AlwaysHit(1));
+      const ev = sim.events.find((e) => (e.type === 'trunk' || e.type === 'canopy') && Math.hypot(e.x - b.x, e.y - b.y) < 60);
+      if (ev) blocked.push(`${h.number} ${ts} (${ev.type} ${Math.hypot(ev.x - b.x, ev.y - b.y).toFixed(0)} m out)`);
+    }
+    expect(blocked).toEqual([]);
   });
 
   it('no flowering trees (anacostia theme)', () => {
