@@ -493,7 +493,7 @@ DECISIONS.md with the reason.
     lidar, Blue default, every hazard red (lake, pond, creek traced from
     lidar), the Crystal Springs Rhododendron Garden painted in flower
     (`garden`), the two-part boundary joined across SE Bybee Blvd
-    (`join_boundary_parts`). Other courses rebuild unchanged. 259 unit tests
+    (`join_boundary_parts`). Other courses rebuild unchanged. 278 unit tests
     and 4 Playwright tests pass. Section 11.13; open items:
     data/eastmoreland/report_notes.md; request:
     docs/requests/eastmoreland_design_requests.md.
