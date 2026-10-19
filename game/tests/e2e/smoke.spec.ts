@@ -120,3 +120,39 @@ test('portrait phone layout loads and shows the swing button', async ({ browser 
   expect(size.w).toBeGreaterThanOrEqual(240);
   await ctx.close();
 });
+
+test('course data is exact when the browser adds noise to canvas reads (Safari 26, Brave)', async ({ page }) => {
+  // Safari's anti-fingerprinting changes canvas readbacks slightly; course data
+  // read that way turned fairway into rough and rough into out of bounds
+  await page.addInitScript(() => {
+    const orig = CanvasRenderingContext2D.prototype.getImageData;
+    let seed = 12345;
+    const rnd = () => ((seed = (seed * 1103515245 + 12345) & 0x7fffffff) / 0x7fffffff);
+    CanvasRenderingContext2D.prototype.getImageData = function (this: CanvasRenderingContext2D, ...a: Parameters<typeof orig>) {
+      const img = orig.apply(this, a);
+      const d = img.data;
+      for (let i = 0; i < d.length; i += 4) if (rnd() < 0.05) d[i] = Math.max(0, d[i] - 1);
+      return img;
+    };
+  });
+  await page.goto('/');
+  await page.waitForFunction(() => window.__golf?.course, null, { timeout: 60_000 });
+  const r = await page.evaluate(() => {
+    const c = window.__golf.course;
+    const t = c.terrain;
+    const ob = new Set<number>(c.json.surface.obIds);
+    const known = new Set<number>(Object.values(c.json.surface.ids));
+    let inside = 0, obInside = 0, unknown = 0;
+    for (let y = 0.25; y < t.height; y += 1) for (let x = 0.25; x < t.width; x += 1) {
+      const s = t.surface(x, y);
+      if (!known.has(s)) unknown++;
+      if (!c.boundary.contains(x, y) || s === 15) continue; // 15: the practice range
+      inside++;
+      if (ob.has(s)) obInside++;
+    }
+    return { inside, obInside, unknown };
+  });
+  expect(r.inside).toBeGreaterThan(100_000);
+  expect(r.unknown).toBe(0);
+  expect(r.obInside).toBeLessThan(10); // only a few pixels along the boundary line itself
+});

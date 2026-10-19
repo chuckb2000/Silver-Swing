@@ -430,10 +430,18 @@ DECISIONS.md with the reason.
     95 unit tests and 2 Playwright tests pass; the function was also run
     under wrangler with a local D1.
 
--   **Next task:** the developer binds a D1 database as `DB` to the
-    Cloudflare Pages project; then the third playtest (putting, yellow
-    misses), the club's printed scorecard and the hole 3 Blue tee box. New
-    courses: a separate chat following docs/COURSE_BUILD.md.
+-   **Session 3 (2026-10-19):** course select by state with course
+    cards (a crop around a signature green) and original logos for the
+    planned courses (ids in DECISIONS.md); course data (surface map,
+    heights) decoded from the PNG bytes instead of a canvas, which Safari 26
+    and Brave add noise to (a friend saw out of bounds mid-course and
+    fairway reading as rough). The practice range stays out of bounds. The
+    D1 database is bound. 116 unit tests and 3 Playwright tests pass.
+
+-   **Next task:** the third playtest (putting, yellow misses), the club's
+    printed scorecard and the hole 3 Blue tee box. New courses: a separate
+    chat following docs/COURSE_BUILD.md; after each one lands, make its
+    course card (docs/COURSE_BUILD.md section 12).
 
 -   **Open items:** data/oswego_lake/validation_report.md (hole 3 tee
     not mapped; holes 7/11 OSM lines start on each other's tees;

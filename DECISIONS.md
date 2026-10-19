@@ -2,6 +2,13 @@
 
 Changes from the starting values in CLAUDE.md, and choices the spec left open. Newest first within each area. Date: 2026-10-18 (first build session, then the first and second playtests).
 
+## Course data read without a canvas (2026-10-19, a friend's report)
+
+- **Report:** out of bounds in the middle of hole 6 and fairway lies reading as rough (hole 1 and others) on Oswego Lake.
+- **Cause:** the surface map (surface.png, one id per pixel) and the heightmap (height.png) were read back through a canvas. Safari 26 (in all browsing modes), Brave and Firefox with resistFingerprinting add small random changes to canvas reads as anti-fingerprinting. A change of 1 turns fairway (2) into rough (1) and rough (1) into out of bounds (0), and adds bumps to the heights. Simulating that noise in Chromium gave about 11,000 out-of-bounds pixels inside the course; desktop Chrome has no noise, which is why the playtests didn't show it. The course data itself was checked and is fine: no out of bounds inside the boundary except the practice range (by design, `driving_range_is_ob`), and hole 1's drawn fairway matches its physics map.
+- **Fix:** `src/data/png.ts` decodes the PNG bytes directly (DecompressionStream plus the PNG row filters), so the values are exact in every browser; the canvas is kept only as a fallback for browsers without DecompressionStream. The loader also warns if the surface map has an id it doesn't know. Tests: the decoder against pngjs for every filter and colour type and on every course's images; a browser test that injects canvas noise and checks there is no out of bounds inside the course.
+- **Practice range:** stays out of bounds (developer, 2026-10-19). It is the only out-of-bounds area inside the Oswego Lake boundary; everything else inside the course is in play.
+
 ## Course select by state, cards and logos (developer, 2026-10-18)
 
 - **Play → choose a state → choose a course.** State buttons (A-Z, with a course count) lead to that state's courses as cards; a card loads its course and opens the new-round screen, which keeps a "change" button. The leaderboard uses the same two screens to switch courses (purpose "board": it only picks, nothing is loaded).
@@ -27,7 +34,6 @@ Changes from the starting values in CLAUDE.md, and choices the spec left open. N
 - **Shared leaderboard:** Cloudflare Pages Function `game/functions/api/scores.ts` (logic in `src/server/scores.ts`, shared shape check in `src/save/entry.ts`) storing one row per round in D1 (`rounds`, created on first use; full round JSON in `data`). `GET ?ping=1` / `GET ?course=<id>` / `POST` (one round or up to 50, `INSERT OR IGNORE` by id). The client (`src/save/online.ts`) sends every local round the server hasn't acknowledged (tracked in storage key `uploaded`) at boot, after each round and after an import, so offline rounds and imported backups reach the board too. Without the server (Vite dev, claude.ai preview, no `DB` binding) the game shows only this device's board.
 - **Storage keys unchanged** (`local-golf` IndexedDB store and `local-golf:` localStorage prefix), so rounds saved before the rename are kept.
 - **Credits** list the current course's designers and data sources from `course.json`.
-
 
 ## Putting and swing camera fixes (2026-10-18, after the second playtest)
 

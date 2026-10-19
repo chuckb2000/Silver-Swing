@@ -7,6 +7,7 @@ import { app } from '../app';
 import { buildRuntime, CourseJson, CourseRuntime, decodeHeights, decodeSurface, HeightMeta } from './course';
 import type { TreeArrays } from '../systems/physics/obstacles';
 import { treeSheet } from './registry';
+import { canDecodePng, decodePng } from './png';
 
 export type { CourseInfo } from './registry';
 export { initialCourseId, treeSheet } from './registry';
@@ -30,9 +31,20 @@ function runLoader(scene: Phaser.Scene, queue: (l: Phaser.Loader.LoaderPlugin) =
   });
 }
 
-async function imageData(url: string): Promise<{ data: Uint8ClampedArray; w: number; h: number }> {
+/**
+ * The exact pixel values of a data image (surface ids, packed heights). They
+ * are decoded from the PNG bytes: reading them back from a canvas is not exact
+ * in Safari 26, Brave or Firefox with resistFingerprinting (see png.ts). The
+ * canvas is only a fallback for browsers without DecompressionStream.
+ */
+async function imageData(url: string): Promise<{ data: Uint8Array | Uint8ClampedArray; w: number; h: number; channels: number }> {
   const res = await fetch(url);
   if (!res.ok) throw new Error(`${url}: ${res.status}`);
+  if (canDecodePng()) {
+    const img = await decodePng(await res.arrayBuffer());
+    return { data: img.data, w: img.width, h: img.height, channels: img.channels };
+  }
+  console.warn('no DecompressionStream: reading course data through a canvas');
   const blob = await res.blob();
   const bmp = await createImageBitmap(blob, { colorSpaceConversion: 'none', premultiplyAlpha: 'none' });
   const c = document.createElement('canvas');
@@ -42,7 +54,7 @@ async function imageData(url: string): Promise<{ data: Uint8ClampedArray; w: num
   ctx.drawImage(bmp, 0, 0);
   const d = ctx.getImageData(0, 0, bmp.width, bmp.height).data;
   bmp.close();
-  return { data: d, w: c.width, h: c.height };
+  return { data: d, w: c.width, h: c.height, channels: 4 };
 }
 
 /** The course list. Missing or broken list: an empty list (the caller reports it). */
@@ -112,13 +124,16 @@ export async function loadCourse(scene: Phaser.Scene, id: string): Promise<Cours
   }
   loadedTheme = theme;
   const [h, s] = await Promise.all([imageData(base + json.height.file), imageData(base + json.surface.file)]);
-  const heights = decodeHeights(h.data, hmeta);
+  const heights = decodeHeights(h.data, hmeta, h.channels);
   // sanity check the exact decode against samples written by the pipeline
   for (const [i, j, z] of hmeta.samples) {
     const got = heights[j * hmeta.cols + i];
     if (Math.abs(got - z) > 0.01) console.warn(`height decode mismatch at ${i},${j}: ${got} vs ${z}`);
   }
-  const surface = decodeSurface(s.data, s.w, s.h);
+  const surface = decodeSurface(s.data, s.w, s.h, s.channels);
+  const known = new Set(Object.values(json.surface.ids));
+  const bad = surface.find((v) => !known.has(v));
+  if (bad !== undefined) console.warn(`surface map has an unknown id ${bad}: the course data did not decode exactly`);
   app.course = buildRuntime(json, heights, hmeta, surface, trees, base);
   return app.course;
 }
