@@ -1,5 +1,5 @@
 {
- "note": "Edits to the OSM layout for Eastmoreland, built into edited/course.geojson by pipeline/merge_edits.py (run by make course). Developer, 2026-10-19: every hazard is red. Proposals from lidar (tee, creek) are listed in the validation report for approval.",
+ "note": "Edits to the OSM layout for Eastmoreland, built into edited/course.geojson by pipeline/merge_edits.py (run by make course). Developer, 2026-10-19: every hazard is red; the lidar tee for hole 18 and the creek channel are approved.",
  "add": [
   {
    "from": "proposed/water.geojson",
@@ -18,7 +18,8 @@
     "channel_w146979976"
    ],
    "tags": {
-    "flatten": "no"
+    "flatten": "no",
+    "approved": "developer 2026-10-19"
    },
    "reason": "Crystal Springs Creek is mapped only as stream lines (waterway=stream); its channel in the lidar DEM (pipeline/propose_channels.py: cells > 0.25 m below the 25 m running median within 5 m of the line) becomes a red penalty area (developer: all hazards red). Not flattened: the bed falls along its length. The 9 m stub w146979977 shows no channel and is left out"
   },
@@ -31,7 +32,8 @@
     "proposed": "lidar",
     "hole": "18",
     "tee_set": "Blue",
-    "assigned_by": "the course chat (lidar pad, edits.json; to confirm)"
+    "assigned_by": "the course chat (lidar pad, edits.json); approved by the developer 2026-10-19",
+    "approved": "developer 2026-10-19"
    },
    "reason": "Hole 18 Blue tee: OSM maps no tee behind the White tee (386 yd from the farthest mapped box against 457 on the card, -15.5%). A raised levelled pad (34 m2, 0.39 m step) 65 m behind the line start, between the pond and the lake, measures 457 yd (+0.1%) (pipeline/propose_tees.py)"
   }

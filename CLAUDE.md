@@ -1889,9 +1889,12 @@ report_notes.md.
 
 -   **Default tee:** Blue (developer). Measured (adjusted) totals: Blue
     6,507 yd (card 6,529), White 6,104 yd (card 6,106).
--   **Known open items:** hole 17 White +13.3 % (no White box mapped); hole 18
-    Blue tee is a lidar pad; creek channel traced from lidar; two trees removed
-    on hole 11's Blue tee shot; scorecard version; tree types from crown shape
+-   **Accepted by the developer (2026-10-19):** hole 17 White plays from
+    the Blue box (+13.3 %); the hole 18 Blue tee (lidar pad) and the creek
+    channel (lidar); two trees removed on hole 11's Blue tee shot; course
+    card hole 17.
+-   **Known open items:** scorecard version (2007 card vs GolfPass's later
+    listing); hole 13 Blue -3.0 % (flag); tree types from crown shape
     (data/eastmoreland/report_notes.md).
 
 **12. Repository layout**
