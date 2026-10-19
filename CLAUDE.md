@@ -494,8 +494,9 @@ DECISIONS.md with the reason.
     tees, `pnw` theme, DOGAMI DTM and canopy model, three red ponds, OB =
     the OSM boundary. Every hole within 3 % except hole 6 (-3.1 %). New
     optional config key `tee_shot_margin_m` (tee-shot tree check);
-    existing courses rebuild byte-identical. Section 11.12; open items in
-    data/stone_creek/validation_report.md.
+    Oswego Lake, Highland Links, East Potomac, Langston and Indian Island
+    rebuild byte-identical. 260 unit tests and 4 Playwright tests pass.
+    Section 11.12; open items in data/stone_creek/validation_report.md.
 
 -   **Next task:** the third playtest (putting, yellow misses), the club's
     printed scorecard and the hole 3 Blue tee box. New courses: a separate
