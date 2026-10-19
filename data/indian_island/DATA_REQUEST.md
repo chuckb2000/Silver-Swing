@@ -78,3 +78,31 @@ third-party (OpenGolfAPI, Blue tees only); see `scorecard.csv`.
 
 Upload everything to the existing release `data-indian-island`. I fetch it
 with `gh api` and record SHA-256 sums here.
+
+## Received (2026-10-19) and how each file is used
+
+All files are assets of the GitHub release `data-indian-island`. Fetch them with
+`gh api -H "Accept: application/octet-stream" repos/chuckb2000/Silver-Swing/releases/assets/<id>`.
+
+| File | SHA-256 | Used as |
+|---|---|---|
+| `Indian.Island.geojson` | `1d9eaa699ee41eec6089f9224dd68f9b4b07790012812fc482a166f431ffb1ff` | `raw/overpass.geojson` (unchanged copy) |
+| `indian_island_dem_2024.tif.tiff` | `68bf65eb61e9f251c8d07b2e871f45fa512c93529b44019312874f28a72c084c` | `raw/nys_dem_2024_1m_clip.tif` (`clip_raster.py`, world + 100 m) |
+| `ortho_west.png` | `fc08aa62b982f8431d85a828b986ef61eee267f2577648e9991487f86e82d9e0` | with `ortho_east.png`: `raw/nys_ortho_032m.tif` (bbox in this file's URLs, EPSG:26918 -> world grid EPSG:32618, 0.32 m, bilinear, JPEG GeoTIFF) |
+| `ortho_east.png` | `2fea6d3c9dc1817bdc284e4c7816a658ab99d082086187f180556f53d5d88327` | see above |
+| `indianisland-scorecard.pdf` | `753a2d5044eb841b05272888827d0ba359780afae66e0d0b19f188b4d03d8a10` | `scorecard.csv` (all four tee sets) and the ratings |
+| `Indian.Island.lidar.zip` | `aa01511a6037cf520c56f9b8a58aac2107d8c02bb6312784eb660ec1400f2c25` | the four LAS tiles; `raw/laz/*_c1.laz` = class 1 inside the world + 60 m (gitignored; regenerate from the zip with the snippet below) |
+
+The `NYS.*.service.txt` files are the services' descriptions. The Google screenshots and `Indian.Island.png` were only looked at (identifying holes), never traced.
+
+Regenerate `raw/laz/` from the zip (laspy with lazrs):
+
+```python
+import glob, laspy
+x0, y0, x1, y1 = 698201, 4532103, 700113, 4533247   # world + 60 m, EPSG:32618 (NAD83(2011) UTM 18N differs by ~1 m)
+for f in sorted(glob.glob("Indian Island lidar/*.las")):
+    las = laspy.read(f)
+    m = (las.classification == 1) & (las.x >= x0) & (las.x <= x1) & (las.y >= y0) & (las.y <= y1)
+    out = laspy.LasData(las.header); out.points = las.points[m]
+    out.write("data/indian_island/raw/laz/" + f.split("/")[-1].replace(".las", "_c1.laz"))
+```

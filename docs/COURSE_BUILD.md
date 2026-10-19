@@ -211,7 +211,8 @@ Known Oswego-specific code, with the fix:
   "paint_range_outside": false,         // optional: draw a driving range outside the boundary as a range
   "connect_fairways": false,            // optional, only where OSM is wrong: s02b runs the fairway up to the green
                                         // (true = every hole, or a list of holes); see COURSE_LESSONS.md 3
-  "trees_off_fairways_m": null          // optional: drop trees whose top is this far (m) inside a fairway (check the course first)
+  "trees_off_fairways_m": null          // optional: drop trees whose top is this far (m) inside a fairway (check the course first),
+  "ob_highways": ["trunk"]              // optional: roads of these OSM highway values inside the boundary are out of bounds (Indian Island's Route 105)
 }
 ```
 
@@ -234,7 +235,15 @@ Write changes to the OSM layout as `data/<id>/edits.json` (add features from a
 `proposed/` file, retag, drop; each with a reason); `merge_edits.py` (run by
 `make course` after s01) turns them into `edited/course.geojson`. `extend_start` moves a hole line's start (a tee without a mapped box) back
 along the line. Tools that make proposals: `propose_tees.py` (raised tee pads in the DEM near each hole's
-tee-shot axis). Large state-wide rasters: `clip_raster.py` cuts them to the
+tee-shot axis). `propose_trace.py` (greens, fairways, bunkers, tee pads, hole lines and
+water traced from a georeferenced orthophoto and the DEM, from seeds in
+`data/<id>/trace_spec.json`, for holes OSM lacks). The tracing desk: `desk_export.py`
+writes the data for `pipeline/desk/index.html` (publish it as a claude.ai page
+with `{db: {}, user: {}}`; change its `<title>` per course), where the developer
+drags traced outlines into place and marks each Blue tee against a live yardage
+readout; read the saved holes back into `data/<id>/desk/` and run
+`desk_to_proposed.py`, then add `proposed/approved.geojson` in `edits.json`
+(Indian Island, COURSE_LESSONS.md 3). Large state-wide rasters: `clip_raster.py` cuts them to the
 world before they go into `raw/`.
 
 ### 3.4 Regression check (required after any pipeline change)
