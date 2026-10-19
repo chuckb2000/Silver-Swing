@@ -47,9 +47,9 @@ ROUTING = {
     5: ("w820825485", "w820825483"),   # E, tee box 6 (21 beside it)
     6: ("w820825494", "w820825487"),   # F, tee box 7 (22 behind it)
     7: ("w820825501", "w820825496"),   # G, tee box 8
-    8: ("w820825505", "w820825502"),   # H, tee box 9 (24 behind it)
+    8: ("w820825505", "w821713863"),   # H, tee box 24, the back tee (developer); 9 in front
     9: ("w820825509", "w820825506"),   # I, tee box 10
-    10: ("w821134330", "w821134327"),  # J, tee box 11 (25 beside it)
+    10: ("w821134330", "w821713864"),  # J, tee box 25, the back tee (developer); 11 beside it
     11: ("w821134338", "w821713865"),  # K, tee box 26 (12 in front)
     12: ("w821134343", "w821713866"),  # L, tee box 27 (13 in front)
     13: ("w821134348", "w821134344"),  # M, tee box 14

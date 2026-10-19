@@ -1698,13 +1698,14 @@ data/tualatin/validation_report.md.
   Par     4   4   4   4   3   5   4   4   5   37    3   5   4   4   4   3   4   4   4   35    72
   HCP     11  17  5   3   15  9   1   7   13        14  16  4   12  8   18  6   10  2
   Blue    339 285 384 398 200 518 390 346 498 3358  155 482 380 364 341 135 375 380 400 3012  6370
-  Built   331 279 383 391 200 512 381 340 484 3301  155 496 374 370 344 135 379 385 398 3036  6337
+  Built   331 279 383 391 200 512 381 377 484 3338  166 496 374 370 344 135 379 385 398 3047  6385
   -------------------------------------------------------------------------------------
 
 Black (6,700), White (5,940), Red (5,450) and Gold (4,364) are in
 scorecard.csv, not built.
 
--   **Default tee:** Blue (the only set built).
+-   **Default tee:** Blue (the only set built). Holes 8 and 10 play
+    from the back tees (developer): +8.9 % and +7.0 % on the Blue card.
 -   **Known open items:** data/tualatin/report_notes.md (hole lines and
     pins are proposals from the developer's routing; scorecard
     unverified; hole 8's approach clips a tree beside the green).
