@@ -64,24 +64,28 @@ export interface CourseRuntime {
   baseUrl: string;
 }
 
-/** Decode the RG-encoded height image (row 0 = north) into rows south->north. */
-export function decodeHeights(rgba: Uint8ClampedArray, meta: HeightMeta): Float32Array {
+/**
+ * Decode the RG-encoded height image (row 0 = north) into rows south->north.
+ * `channels` is the bytes per pixel of `px` (3 from decodePng's RGB, 4 from RGBA).
+ */
+export function decodeHeights(px: ArrayLike<number>, meta: HeightMeta, channels = 4): Float32Array {
   const { cols, rows, min, max } = meta;
   const out = new Float32Array(cols * rows);
   const scale = (max - min) / 65535;
   for (let r = 0; r < rows; r++) {
     const j = rows - 1 - r; // image row r -> grid row j (south->north)
     for (let i = 0; i < cols; i++) {
-      const k = (r * cols + i) * 4;
-      out[j * cols + i] = min + (rgba[k] * 256 + rgba[k + 1]) * scale;
+      const k = (r * cols + i) * channels;
+      out[j * cols + i] = min + (px[k] * 256 + px[k + 1]) * scale;
     }
   }
   return out;
 }
 
-export function decodeSurface(rgba: Uint8ClampedArray, w: number, h: number): Uint8Array {
+/** Surface ids from the greyscale surface image (`channels` bytes per pixel, the id in the first). */
+export function decodeSurface(px: ArrayLike<number>, w: number, h: number, channels = 4): Uint8Array {
   const out = new Uint8Array(w * h);
-  for (let i = 0; i < w * h; i++) out[i] = rgba[i * 4];
+  for (let i = 0; i < w * h; i++) out[i] = px[i * channels];
   return out;
 }
 

@@ -25,6 +25,10 @@ export class LeaderboardScene extends MenuScene {
     super('leaderboard');
   }
 
+  init(data: { courseId?: string }) {
+    if (data?.courseId) { courseId = data.courseId; page = 0; }
+  }
+
   async build() {
     const W = app.view.w, H = app.view.h;
     const pw = Math.min(360, W - 8), ph = H - 8;
@@ -36,11 +40,9 @@ export class LeaderboardScene extends MenuScene {
     if (!courses.some((c) => c.id === courseId)) courseId = app.course!.json.id;
     const ci = Math.max(0, courses.findIndex((c) => c.id === courseId));
     const info = courses[ci];
-    this.root.add(txt(this, x0 + pw / 2, y0 + 24, `${info.name}  ·  ${info.defaultTee.toLowerCase()} tees`, { origin: [0.5, 0], color: COLORS.dim, maxWidth: pw - 50 }));
+    this.root.add(txt(this, x0 + pw / 2, y0 + 24, `${info.name}  ·  ${info.defaultTee.toLowerCase()} tees`, { origin: [0.5, 0], color: COLORS.dim, maxWidth: pw - 120 }));
     if (courses.length > 1) {
-      const go = (d: number) => { courseId = courses[(ci + d + courses.length) % courses.length].id; page = 0; this.rebuild(); };
-      this.root.add(new Button(this, x0 + 6, y0 + 21, 16, 14, '', () => go(-1), { icon: 'arrow_left', color: 'grey' }));
-      this.root.add(new Button(this, x0 + pw - 22, y0 + 21, 16, 14, '', () => go(1), { icon: 'arrow_right', color: 'grey' }));
+      this.root.add(new Button(this, x0 + pw - 54, y0 + 21, 48, 14, 'change', () => this.scene.start('courses', { purpose: 'board', courseId: info.id }), { color: 'grey' }));
     }
     const lens = lengthsFor(info.holes);
     if (!lens.includes(len)) len = lens[0];

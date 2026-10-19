@@ -2,7 +2,7 @@
 NAME ?= oswego_lake
 PY   ?= python3
 
-.PHONY: dev build test e2e course assets theme-trees all clean-course
+.PHONY: dev build test e2e course assets theme-trees cards all clean-course
 
 dev:            ## run the game locally (Vite dev server)
 	cd game && npm run dev
@@ -42,3 +42,7 @@ all: assets course build test
 
 clean-course:
 	rm -rf data/$(NAME)/build game/public/courses/$(NAME)
+
+cards:          ## course-select art: logos and a card per course (after `make course`)
+	$(PY) assets-src/logos.py
+	$(PY) assets-src/course_cards.py
