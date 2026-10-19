@@ -209,8 +209,9 @@ Known Oswego-specific code, with the fix:
                "tee_sets": [...], "default_tee": "White", "scorecard_source": "..."}],
   "blossom": {"max_h": 12, "shore_m": 45, "max_from_boundary_m": 100},  // optional: flowering trees (potomac theme)
   "paint_range_outside": false,         // optional: draw a driving range outside the boundary as a range
-  "connect_fairways": false,            // optional: s02b runs each hole's fairway up to its green
-  "trees_off_fairways_m": null          // optional: drop trees whose top is this far (m) inside a fairway
+  "connect_fairways": false,            // optional, only where OSM is wrong: s02b runs the fairway up to the green
+                                        // (true = every hole, or a list of holes); see COURSE_LESSONS.md 3
+  "trees_off_fairways_m": null          // optional: drop trees whose top is this far (m) inside a fairway (check the course first)
 }
 ```
 

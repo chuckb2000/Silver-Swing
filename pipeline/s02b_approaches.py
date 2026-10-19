@@ -1,12 +1,24 @@
-"""Step 5b (optional, course_config.json "connect_fairways": true): run every
-hole's fairway up to its green.
+"""Step 5b (optional, course_config.json "connect_fairways"): close gaps between
+a fairway and its green where the OSM drawing is wrong.
 
-OSM fairways are often drawn stopping a few metres short of the green, or
-meeting it with ragged corners; on the real course the fairway is mown right
-up to the collar. For each hole that has a fairway on its hole line, this step
-adds an approach: the convex hull of the fairway's last FAIRWAY_REACH metres
-before the green (within a corridor of 1.3 green radii, at least 12 m, either
-side of the hole line) and the front half of the green (the half facing the
+Use it only where OSM disagrees with the real course: the fairway is mown up
+to the collar on the ground (photos, imagery or the developer say so) but the
+OSM polygon stops a few metres short of the green or meets it with ragged
+corners. Many real holes have rough, a bunker, a ditch or a forced carry
+between fairway and green; those must stay as they are. So:
+
+  "connect_fairways": true             every hole with a fairway on its line
+                                       (only when that is true of the whole
+                                       course, as at East Potomac)
+  "connect_fairways": ["3", "blue 7"]  only these holes ("<hole>" for a
+                                       one-layout course, "<layout short
+                                       name> <hole>" with layouts)
+  absent / false                       nothing (the default)
+
+For each chosen hole that has a fairway on its hole line, this step adds an
+approach: the convex hull of the fairway's last FAIRWAY_REACH metres before
+the green (within a corridor of 1.3 green radii, at least 12 m, either side
+of the hole line) and the front half of the green (the half facing the
 fairway), minus the green itself, other greens, tees and anything outside the
 course boundary. Bunkers, the fringe and cart paths are still painted on top
 (s08 priority), so they keep their shapes.
@@ -50,9 +62,16 @@ def main():
     keep_out = unary_union(list(g[g.kind == "tee"].geometry))
     boundary = play_boundary(g, cfg)
     rows, report = [], []
+    want = cfg["connect_fairways"]
+    chosen = None if want is True else {str(x).strip().lower() for x in want}
+    seen = set()
     for lay in layouts(cfg):
         tag = lay.get("short") or lay["id"]
         for _, h in layout_holes(g, lay).iterrows():
+            key = f"{int(h.ref)}" if not lay["shared"] else f"{tag.lower()} {int(h.ref)}"
+            if chosen is not None and key not in chosen:
+                continue
+            seen.add(key)
             L = h.geometry
             gi = greens.distance(Point(L.coords[-1])).idxmin()
             green = greens.loc[gi].geometry
@@ -96,6 +115,9 @@ def main():
                          "tags": {"golf": "fairway", "derived": "approach", "fairway_osm": fw.loc[fi].osm, "green_osm": greens.loc[gi].osm},
                          "geometry": geom})
             report.append({"layout": lay["id"], "hole": int(h.ref), "gap_m": rnd(gap, 1), "status": "connected", "added_m2": rnd(geom.area, 1)})
+    if chosen is not None and chosen - seen:
+        print(f"[s02b] WARNING: connect_fairways lists holes that are not in this course: {sorted(chosen - seen)} "
+              f"(use \"<hole>\", or \"<layout short name> <hole>\" with layouts)")
     if rows:
         g = pd.concat([g, gpd.GeoDataFrame(rows)], ignore_index=True)
     g = gpd.GeoDataFrame(g, geometry="geometry")

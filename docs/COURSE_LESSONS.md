@@ -84,18 +84,31 @@ island). Oswego Lake and Highland Links notes live in DECISIONS.md.
   `merge_edits.py` (run by `make course` after s01) rebuilds
   `edited/course.geojson` from `raw/` plus `edits.json`, each edit with its
   reason, so a new OSM download doesn't wipe the edits.
-- **OSM fairways stop short of the greens.** At East Potomac 19 of 36 holes had
-  rough between the end of the fairway and the fringe, and others met the
-  green with ragged corners. The developer wants fairways to run into the
-  green on every hole: set `"connect_fairways": true` (step
-  `s02b_approaches.py`). Check `build/approaches.json` and look at each
-  approach; keep the hull inside a corridor along the hole line, or it fills
-  bays between fairway lobes (Red 8 grew 1,160 m2 before the corridor).
-- **No tree in the middle of a fairway.** Lidar finds real trees that stand in
-  a mapped fairway (or where OSM traced the fairway loosely). The developer
-  wants them gone: set `"trees_off_fairways_m": 2` (drops trees whose top
-  is more than 2 m inside a fairway; edge trees stay). Enable this together
-  with `connect_fairways`, since tree removal must see the new approaches.
+- **Check whether each fairway really meets its green, and fix only where
+  OSM is wrong.** On many real holes the fairway does *not* reach the green:
+  rough, a bunker, a ditch, a pond or a forced carry sits in between. Those
+  must stay exactly as mapped. At East Potomac the OSM fairways stopped short
+  of 19 of 36 greens (or met them with ragged corners) although on the
+  ground every fairway is mown up to the collar; the developer confirmed it,
+  so that course uses `"connect_fairways": true`.
+  - Decide per course and per hole, from the developer's photos, public
+    imagery (look only, COURSE_BUILD.md 1.2) or the developer's word. When
+    unsure, ask; don't connect by default.
+  - `"connect_fairways": true` connects every hole that has a fairway on its
+    line: use it only when that is true of the whole course. For a course
+    where only some holes are mis-mapped, list them:
+    `"connect_fairways": ["3", "11"]` (or `["blue 7"]` with layouts).
+  - Check `build/approaches.json` and look at every approach. Keep the hull
+    inside a corridor along the hole line, or it fills bays between fairway
+    lobes (Red 8 grew 1,160 m2 before the corridor).
+- **Trees standing in a fairway.** Lidar can put a tree inside a mapped
+  fairway, either a tree that is really there or one where OSM traced the
+  fairway loosely. At East Potomac the developer saw one mid-fairway and
+  asked for such trees to be removed, so `"trees_off_fairways_m": 2` drops trees whose top is more than 2 m inside a
+  fairway (edge trees, whose crowns overhang it, stay). Some courses do have a
+  tree in the fairway on purpose: check before switching it on. If
+  `connect_fairways` is on too, the tree check also covers the new approaches
+  (s02b runs before s05).
 - **Several courses on one site:** list them as `layouts` in
   `course_config.json` (COURSE_BUILD.md 3.5). Holes go to the layout whose
   `leisure=golf_course` polygon contains them; all greens are shaped once so
@@ -156,9 +169,10 @@ island). Oswego Lake and Highland Links notes live in DECISIONS.md.
   `startHoleIntro(false)`; move the ball with `round.ball = {...};
   round.refreshLie(); play.beginShot(false, true)`. `vite preview` serves
   `dist/`, so run `npm run build` after every export before looking.
-- **Write the developer's complaints as tests.** "Fairways must meet the
-  green" and "no tree inside a fairway" became checks in
-  `game/tests/unit/<course>.test.ts`; confirm a new test fails on the old
+- **Write the developer's complaints as tests.** At East Potomac "fairways
+  must meet the green" and "no tree inside a fairway" became checks in
+  `game/tests/unit/east_potomac.test.ts` (true for that course only, not a
+  general rule); confirm a new test fails on the old
   data before trusting it.
 - **Robot rounds find data problems.** Report the score, penalties per hole
   and any hole over par + 4 for several seeds.
