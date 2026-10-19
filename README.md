@@ -4,7 +4,8 @@ A top-down pixel-art golf game played on real courses rebuilt from open data
 (OpenStreetMap layout, lidar elevation and trees). First course: Oswego Lake
 Country Club. Personal, non-commercial project for friends; see `CLAUDE.md`
 for the full spec, `DECISIONS.md` for what changed and why, and
-`docs/COURSE_BUILD.md` for adding a course.
+`docs/COURSE_BUILD.md` for adding a course (`docs/COURSE_TRACING.md` when
+OpenStreetMap is missing holes).
 
 ## Play
 
