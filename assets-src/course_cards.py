@@ -29,6 +29,9 @@ PUBLIC = ROOT / "game" / "public"
 OUT = PUBLIC / "sprites" / "cards"
 CONFIG = HERE / "course_cards.json"
 
+sys.path.insert(0, str(HERE))
+from shrubs import shrub_key  # noqa: E402  (flowering shrubs, trees.json c: 3)
+
 PX_PER_M = 2
 HEIGHT_PX = PX_PER_M * 0.7
 CARD_W, CARD_H = 208, 128   # the card shows the middle of this (see CourseSelectScene)
@@ -90,6 +93,8 @@ class Course:
         self.ui = Atlas(PUBLIC / "sprites" / "sprites.png", PUBLIC / "sprites" / "sprites.json")
         bl = PUBLIC / "sprites" / "blossom.png"
         self.blossom = Atlas(bl, PUBLIC / "sprites" / "blossom.json") if bl.exists() else None  # flowering trees (c: 2)
+        sb = PUBLIC / "sprites" / "shrubs.png"
+        self.shrubs = Atlas(sb, PUBLIC / "sprites" / "shrubs.json") if sb.exists() else None   # flowering shrubs (c: 3)
         self.surface = np.array(Image.open(self.dir / self.json["surface"]["file"]))
         self._chunks: dict = {}
 
@@ -122,7 +127,10 @@ class Course:
                 continue
             key = tree_key(k, T["c"][k] == 1, T["r"][k], T["h"][k], self.tree_meta, self.tree_atlas)
             bkey = "b" + key[1:]
-            if T["c"][k] == 2 and self.blossom is not None and self.blossom.has(bkey) and key.startswith("d_"):
+            skey = shrub_key(k, T["r"][k], T["h"][k]) if T["c"][k] == 3 else ""
+            if skey and self.shrubs is not None and self.shrubs.has(skey):
+                spr = self.shrubs.get(skey)      # same choice as the game (ui/shrubs.ts)
+            elif T["c"][k] == 2 and self.blossom is not None and self.blossom.has(bkey) and key.startswith("d_"):
                 spr = self.blossom.get(bkey)     # same choice as the game (courseView.ts)
             else:
                 spr = self.tree_atlas.get(key)
