@@ -124,8 +124,12 @@ def update_registry(course: dict):
         "theme": course["theme"], "holes": len(course["holes"]), "par": course["par"], "defaultTee": course["defaultTee"],
         "totalYd": default["totalYd"], "teeSets": [t["name"] for t in course["teeSets"]],
     }
-    reg["courses"] = [c for c in reg["courses"] if c["id"] != entry["id"]] + [entry]
-    reg["courses"].sort(key=lambda c: c["name"].lower())
+    # update in place, new courses at the end: the first course stays the default for new players
+    ids = [c["id"] for c in reg["courses"]]
+    if entry["id"] in ids:
+        reg["courses"][ids.index(entry["id"])] = entry
+    else:
+        reg["courses"].append(entry)
     write_json(path, reg, indent=1)
 
 

@@ -96,6 +96,7 @@ Changes from the starting values in CLAUDE.md, and choices the spec left open. N
 
 ## Data and pipeline
 
+- **Course list order is kept** (s10 `update_registry`): an existing course is updated in place and a new one is appended, instead of sorting by name. The first course is the default for a new player; sorting put Highland Links (9 holes) first, which also broke the Playwright smoke test on main (it expects the 18-hole Oswego Lake's "front 9" button).
 - **Validation report has no build date** (s06): the "Generated <date>" line made a rebuild on another day differ from the committed report. Oswego's report changes in that one line.
 - **Phase 0: pipeline generalised for a second course** (course chat, 2026-10-18; COURSE_BUILD.md 3.2). Oswego Lake rebuilds byte-identical except `height.json`, whose three check samples moved to 10/50/90 % of the grid (the game test reads them from the file).
   - **s00_prepare_rasters.py** (new, first in `make course`): puts the DTM and the canopy on the world grid (1 m, course EPSG, pixel edges on whole metres, world + 32 m), as `build/dtm_1m.tif` / `build/chm_1m.tif` in metres. A raster already on that grid is copied cell for cell (Oswego), anything else is warped bilinearly (Highland Links: NAD83 UTM 19N -> WGS84 UTM 19N). Canopy sources in order: `chm` raster, `dsm` - DTM, `laz` points (highest return of the vegetation classes per 1 m cell - DTM; read with laspy + lazrs, no PDAL needed), else none.

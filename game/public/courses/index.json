@@ -1,20 +1,6 @@
 {
  "courses": [
   {
-   "id": "highland_links",
-   "name": "Highland Links",
-   "location": "Truro, Barnstable County, Massachusetts",
-   "state": "MA",
-   "theme": "coastal",
-   "holes": 9,
-   "par": 35,
-   "defaultTee": "Blue",
-   "totalYd": 2753,
-   "teeSets": [
-    "Blue"
-   ]
-  },
-  {
    "id": "oswego_lake",
    "name": "Oswego Lake Country Club",
    "location": "Lake Oswego, Clackamas County, Oregon",
@@ -24,6 +10,20 @@
    "par": 71,
    "defaultTee": "Blue",
    "totalYd": 6279,
+   "teeSets": [
+    "Blue"
+   ]
+  },
+  {
+   "id": "highland_links",
+   "name": "Highland Links",
+   "location": "Truro, Barnstable County, Massachusetts",
+   "state": "MA",
+   "theme": "coastal",
+   "holes": 9,
+   "par": 35,
+   "defaultTee": "Blue",
+   "totalYd": 2753,
    "teeSets": [
     "Blue"
    ]
