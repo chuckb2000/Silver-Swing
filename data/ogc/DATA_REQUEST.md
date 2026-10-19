@@ -28,6 +28,22 @@ UTM zone 10N (EPSG:32610), same as Oswego Lake and Tualatin.
 - Water W7 and W8 lie partly outside the boundary. The Willamette River is 200-400 m
   east of the boundary (out of bounds, scenery).
 
+## Status (2026-10-19)
+
+All received. The developer uploaded both DOGAMI exports to `ogc-data`
+(`exportImage.6.tiff`, `exportImage.7.tiff`); identified by their values and copied to `raw/`:
+
+| File | SHA-256 | Check |
+|---|---|---|
+| `raw/dogami_dtm_ft.tif` (exportImage.6) | e98bbf336c70111a084d746df6b2e1501a21a5e7453c117d457908503c24e00f | EPSG:32610, 1 m, 1480 x 2504, feet, no gaps; 56.7-730.4 ft (Willamette flat at 56.7) |
+| `raw/dogami_chm_ft.tif` (exportImage.7) | 9e6c48468a80e479d9a44d17882b22f92dd940119cd96e23ecefd20389570eab | same grid, feet, 0-277 ft (power lines included; removed by s05 `remove_wires`) |
+
+Developer's answers: world size over 2,048 m approved; Blue and White tees, Blue
+default; all water red; the range holds P3-P9 and is rough on the ground; no printed
+scorecard; PR #3 (Tualatin) merges first.
+
+The original request follows.
+
 ## Problem: the course is longer than the world limit
 
 The boundary is 2,120 m north-south; the playing features alone span 2,020 m. The

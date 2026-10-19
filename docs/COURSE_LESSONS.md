@@ -5,7 +5,8 @@ new course. Each lesson is something that cost time on an earlier course,
 with what to do instead. Add to it at the end of every course build.
 
 Sources so far: East Potomac Golf Links (2026-10-19, three courses on one
-island), Tualatin Country Club (2026-10-19, section 8). Oswego Lake and
+island), Tualatin Country Club (2026-10-19, section 8), Oregon Golf Club
+(2026-10-19, section 9). Oswego Lake and
 Highland Links notes live in DECISIONS.md.
 
 ---
@@ -268,3 +269,41 @@ Highland Links notes live in DECISIONS.md.
 - `npm install` may rewrite `game/package-lock.json`; revert it unless the
   course needs a new package.
 
+## 9. Oregon Golf Club (2026-10-19)
+
+- **Check the boundary's size against 2,048 m before anything else.** The
+  course was 2,120 m north-south, so the limit couldn't hold even with no
+  scenery; the developer approved 1,280 x 2,304 m in the first message. The
+  game loaded it without trouble (see the report for the timings).
+- **Release file names may say nothing** (`exportImage.6.tiff`). The values
+  tell: a bare-earth DTM has no zeros and the river flat at its minimum; a
+  canopy model is mostly 0-1 with tall tails.
+- **A canopy model contains power lines.** Look at the CHM picture for long
+  straight thin lines before running s05. Here they made 1,254 false trees
+  (rows of 20-30 m "trees" under the line, 70-82 m "conifers" at a river
+  crossing). `remove_wires` takes them out: grey opening (5 x 5 m), cells
+  more than 3 m above it, thin networks with a skeleton over 40 m and a mean
+  width under 3 m. A plain "long and thin" test on connected components
+  fails, because the two conductors of a line and the tree tips they touch
+  join into one wide component; measure width as cells / skeleton cells.
+  Quick check: the tallest tree (Pacific Northwest firs top out near 60 m).
+- **OSM may map the range's targets but not the range.** Build the edge from
+  mapped geometry (the path loop around the targets) and show it as a
+  proposal. Check what each feature inside is before cutting it out: a
+  735 m2 "fairway" I took for part of the short-game area was the mown
+  collar of a range target, and it left a hole in the range.
+- **Ask how the range looks on the ground.** A range drawn with fairway
+  stripes invites players to hit there. This one is rough, so it is drawn as
+  rough with range balls and OB stakes (`range_art`).
+- **Tee complexes that step sideways.** s06 looks for tee boxes within 25 m
+  of the hole line; on a hillside a forward box can be 30 m to the side.
+  Measure every box near the line start against the card; assign a clear
+  match by tag (`hole`, `tee_set` in `edits.json`) and say it was the course
+  chat's call (s06's report line says "developer").
+- **Hillside tees are cut, not raised**: `propose_tees.py` found no pads for
+  the three tee sets that share a box. Don't expect lidar to fill every gap.
+- **Look at the green contact sheet for trees drawn over a pin.** A tree
+  7 m south of a green still covers it in the 3/4 view.
+- **Two CPUs:** the regression rebuild and the in-game screenshots slow each
+  other down several times over. Run the regression first, or accept about
+  7 minutes a hole for screenshots while it runs.
