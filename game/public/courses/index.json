@@ -2,7 +2,7 @@
  "courses": [
   {
    "id": "east_potomac_blue",
-   "name": "East Potomac Golf Links - Blue Course",
+   "name": "East Potomac Blue Course",
    "location": "East Potomac Park, Washington, District of Columbia",
    "state": "DC",
    "theme": "potomac",
@@ -20,7 +20,7 @@
   },
   {
    "id": "east_potomac_red",
-   "name": "East Potomac Golf Links - Red Course",
+   "name": "East Potomac Red Course",
    "location": "East Potomac Park, Washington, District of Columbia",
    "state": "DC",
    "theme": "potomac",
@@ -37,7 +37,7 @@
   },
   {
    "id": "east_potomac_white",
-   "name": "East Potomac Golf Links - White Course",
+   "name": "East Potomac White Course",
    "location": "East Potomac Park, Washington, District of Columbia",
    "state": "DC",
    "theme": "potomac",

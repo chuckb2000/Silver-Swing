@@ -37,7 +37,7 @@
   "layouts": [
     {
       "id": "east_potomac_blue",
-      "name": "East Potomac Golf Links - Blue Course",
+      "name": "East Potomac Blue Course",
       "short": "Blue",
       "boundary_osm": "w1126813986",
       "scorecard": "scorecard_blue.csv",
@@ -62,7 +62,7 @@
     },
     {
       "id": "east_potomac_white",
-      "name": "East Potomac Golf Links - White Course",
+      "name": "East Potomac White Course",
       "short": "White",
       "boundary_osm": "w51854279",
       "scorecard": "scorecard_white.csv",
@@ -88,7 +88,7 @@
     },
     {
       "id": "east_potomac_red",
-      "name": "East Potomac Golf Links - Red Course",
+      "name": "East Potomac Red Course",
       "short": "Red",
       "boundary_osm": "w1126813985",
       "scorecard": "scorecard_red.csv",

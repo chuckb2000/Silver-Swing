@@ -1,6 +1,6 @@
 # Validation report - East Potomac Golf Links
 
-## East Potomac Golf Links - Blue Course
+## East Potomac Blue Course
 
 Generated 2026-10-19 by pipeline/s06_holes.py. Scorecard source: Club scorecard PDF 'EP-BLUE-Scorecard - INSIDE 3 Nov 2021' supplied by the developer 2026-10-19 (yardages, pars, stroke index). Ratings/slopes from GolfNow/TeeOff (course 8074), retrieved 2026-10-19, unverified: stymie.golf lists different values (Blue 70.0/112, White 68.2/107).
 
@@ -59,7 +59,7 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 9. Hole 15 (Blue): no mapped tee box within 8% of the card; the tee is the start point of the OSM hole line (159 yd). The Blue tee box is not in OSM - trace it to confirm.
 10. Hole 15 (Blue): measured 159 yd vs card 174 (-8.7%) - FAIL, needs a decision.
 
-## East Potomac Golf Links - White Course
+## East Potomac White Course
 
 Generated 2026-10-19 by pipeline/s06_holes.py. Scorecard source: Club scorecard PDF 'RedWhite-Scorecard' (playdcgolf.com) supplied by the developer 2026-10-19; nine-hole ratings/slopes printed on the card. The card's White total (2943) is a misprint: its nine holes add up to 2,493. Family tees (Blue, Gold) not built.
 
@@ -82,7 +82,7 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 
 1. Hole 5: OSM par 3 differs from scorecard par 4; using scorecard.
 
-## East Potomac Golf Links - Red Course
+## East Potomac Red Course
 
 Generated 2026-10-19 by pipeline/s06_holes.py. Scorecard source: Club scorecard PDF 'RedWhite-Scorecard' (playdcgolf.com) supplied by the developer 2026-10-19; par-3 course, no rating/slope on the card (0 = not rated).
 
@@ -209,7 +209,7 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 
 # OSM coverage audit
 
-## East Potomac Golf Links - Blue Course
+## East Potomac Blue Course
 
 | hole | par (OSM) | hole line | tee at line start | fairway | green | pin | bunkers <40 m | water <40 m |
 |---|---|---|---|---|---|---|---|---|
@@ -232,7 +232,7 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 | 17 | 5 | yes | yes (1 near) | yes | yes | yes | 3 | 0 |
 | 18 | 4 | yes | yes (1 near) | yes | yes | yes | 1 | 0 |
 
-## East Potomac Golf Links - White Course
+## East Potomac White Course
 
 | hole | par (OSM) | hole line | tee at line start | fairway | green | pin | bunkers <40 m | water <40 m |
 |---|---|---|---|---|---|---|---|---|
@@ -246,7 +246,7 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 | 8 | 4 | yes | yes (2 near) | yes | yes | yes | 1 | 0 |
 | 9 | 4 | yes | yes (3 near) | yes | yes | yes | 1 | 0 |
 
-## East Potomac Golf Links - Red Course
+## East Potomac Red Course
 
 | hole | par (OSM) | hole line | tee at line start | fairway | green | pin | bunkers <40 m | water <40 m |
 |---|---|---|---|---|---|---|---|---|

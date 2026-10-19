@@ -46,3 +46,12 @@ like the round-length row would expose the Blue tees.
 The Red course (par-3) has no rating; `course.json` carries `rating: 0,
 slope: 0` and the setup screen prints "0 / 0". Showing "not rated" when the
 rating is 0 would read better.
+
+## 5. Logo for grouped courses
+
+`sprites/logos/east_potomac.png` exists (the domed memorial), but the course
+cards look up `sprites/logos/<id>.png` and the three ids are
+`east_potomac_blue/_white/_red`, so the cards show the lettered "ep" badge.
+Smallest change: in `CourseSelectScene`, fall back to
+`sprites/logos/<group>.png` when the entry has a `group` (or have
+`logos.py` write the three ids too).
