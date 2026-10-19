@@ -127,6 +127,24 @@
  },
  {
   "hole": 10,
+  "tee_set": "Royal",
+  "step": 2,
+  "type": "tee_position",
+  "from": [
+   625.4,
+   165.46
+  ],
+  "to": [
+   624.78,
+   166.3
+  ],
+  "real_yd": 526.9,
+  "adjusted_yd": 526.5,
+  "card_yd": 538.0,
+  "reason": "tee shot: a perfect drive at the middle of the fairway clipped a tree near the tee; moved 1.0 m within the real tee polygon lidar_tee_59 to the nearest clear spot"
+ },
+ {
+  "hole": 10,
   "tee_set": "White",
   "step": 2,
   "type": "tee_position",

@@ -24,7 +24,7 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 | 8 | 3 | White | 194 | 197.5 | +3.5 | +1.8% | pass | 197.5 | +1.8% | pass |
 | 9 | 4 | Royal | 400 | 380.2 | -19.8 | -5.0% | flag | 391.4 | -2.2% | pass |
 | 9 | 4 | White | 388 | 380.2 | -7.8 | -2.0% | pass | 380.2 | -2.0% | pass |
-| 10 | 5 | Royal | 538 | 526.9 | -11.1 | -2.1% | pass | 526.9 | -2.1% | pass |
+| 10 | 5 | Royal | 538 | 526.9 | -11.1 | -2.1% | pass | 526.5 | -2.1% | pass |
 | 10 | 5 | White | 438 | 453.9 | +15.9 | +3.6% | flag | 447.8 | +2.2% | pass |
 | 11 | 4 | Royal | 406 | 408.0 | +2.0 | +0.5% | pass | 408.0 | +0.5% | pass |
 | 11 | 4 | White | 383 | 389.2 | +6.2 | +1.6% | pass | 389.2 | +1.6% | pass |
@@ -84,6 +84,7 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 - Hole 7 (Royal): measured 320 yd from the tee-box centre vs 341 on the card (-6.1%); moved the virtual tee within the real tee polygon w1536670390 -> 326.4 yd (real 320.1 yd).
 - Hole 8 (Royal): measured 197 yd from the tee-box centre vs 205 on the card (-3.7%); moved the virtual tee within the real tee polygon w118115993 -> 205.0 yd (real 197.5 yd).
 - Hole 9 (Royal): measured 380 yd from the tee-box centre vs 400 on the card (-5.0%); moved the virtual tee within the real tee polygon w118116086 -> 391.4 yd (real 380.2 yd).
+- Hole 10 (Royal): tee shot: a perfect drive at the middle of the fairway clipped a tree near the tee; moved 1.0 m within the real tee polygon lidar_tee_59 to the nearest clear spot -> 526.5 yd (real 526.9 yd).
 - Hole 10 (White): measured 454 yd from the tee-box centre vs 438 on the card (+3.6%); moved the virtual tee within the real tee polygon lidar_tee_56 -> 447.8 yd (real 453.9 yd).
 - Hole 13 (White): measured 140 yd from the tee-box centre vs 152 on the card (-7.8%); moved the virtual tee within the real tee polygon lidar_tee_74 -> 147.8 yd (real 140.1 yd).
 - Hole 14 (Royal): measured 326 yd from the tee-box centre vs 341 on the card (-4.4%); moved the virtual tee within the real tee polygon w118116674 -> 341.0 yd (real 326.1 yd).
