@@ -1,0 +1,39 @@
+{
+  "name": "Bayside (Long Island estuary)",
+  "note": "Course theme palette (<= 32 colours), same keys as pnw.json. Indian Island, Riverhead: cooler bent/bluegrass turf, white Long Island bunker sand, the grey-blue-green Peconic estuary, pitch pine and oak at the edge of the pine barrens (tree painters in assets-src/trees_bayside.py). Shadows are a 35% black overlay on top of these.",
+  "colors": {
+    "G0": "#19372a",
+    "G1": "#224c35",
+    "G2": "#2b6339",
+    "G3": "#36783d",
+    "G4": "#428c43",
+    "G5": "#4f9f4a",
+    "G6": "#5db052",
+    "G7": "#6dc05b",
+    "G8": "#7ecd68",
+    "G9": "#a2dd85",
+    "L0": "#5e7a40",
+    "L1": "#708d46",
+    "L2": "#839f52",
+    "S0": "#cbbd98",
+    "S1": "#ece3c6",
+    "S2": "#f8f4e4",
+    "W0": "#284e60",
+    "W1": "#356577",
+    "W2": "#6994a3",
+    "K0": "#26272d",
+    "K1": "#53545c",
+    "K2": "#7a7b83",
+    "K3": "#b3aa97",
+    "K4": "#d9d1bf",
+    "B0": "#45311f",
+    "B1": "#6b4a31",
+    "B2": "#8a5b40",
+    "R0": "#4b586a",
+    "WH": "#f6f6f2"
+  },
+  "trees": {
+    "conifer": "trees_bayside:conifer",
+    "deciduous": "trees_bayside:deciduous"
+  }
+}
