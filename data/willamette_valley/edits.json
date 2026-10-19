@@ -64,5 +64,12 @@
       "osm": "w1053634759",
       "reason": "replaced by its golf=cartpath copy (cp_w1053634759)"
     }
+  ],
+  "extend_start": [
+    {
+      "osm": "w1053470733",
+      "extend_m": 25.6,
+      "reason": "developer 2026-10-19: the hole 3 Blue tee is on the fairway that runs from the 2nd green (w1053466775); no box is mapped there and the lidar shows no pad, so the line start moves 25.6 m back along the line to the card's 162 yd (lands inside that fairway)"
+    }
   ]
 }
