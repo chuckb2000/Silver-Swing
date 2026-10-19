@@ -445,7 +445,7 @@ DECISIONS.md with the reason.
     and a title screen with a silver trophy logo over a rotating set of
     course views. A menu button in a round (resume, settings, save & exit,
     quit round); settings opened mid-round hide hand, difficulty and rules.
-    196 unit tests and 4 Playwright tests pass.
+    199 unit tests and 4 Playwright tests pass (with the East Potomac tee-shot fix merged).
 
 -   **Course chat (2026-10-18/19):** second course **Highland Links**
     (Truro, MA; 9 holes, par 35, coastal theme), section 11.5. Phase 0 of
