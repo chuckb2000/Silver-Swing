@@ -1,0 +1,98 @@
+{
+ "add": [
+  {
+   "from": "proposed/pins.geojson",
+   "ids": [
+    "x_pin_1",
+    "x_pin_2",
+    "x_pin_3",
+    "x_pin_4",
+    "x_pin_5",
+    "x_pin_6",
+    "x_pin_7",
+    "x_pin_8",
+    "x_pin_9",
+    "x_pin_10",
+    "x_pin_11",
+    "x_pin_12",
+    "x_pin_13",
+    "x_pin_14",
+    "x_pin_15",
+    "x_pin_16",
+    "x_pin_17",
+    "x_pin_18"
+   ],
+   "tags": {},
+   "reason": "OSM maps pins only on the practice range; pin at the centre of each hole's green (data/franklin/make_pins.py), a proposal as at Highland Links and Tualatin"
+  },
+  {
+   "from": "proposed/channels_lidar.geojson",
+   "ids": [
+    "channel_w942611225",
+    "channel_w942611227",
+    "channel_w942611229",
+    "channel_w942611231",
+    "channel_w942611233"
+   ],
+   "tags": {
+    "golf": "lateral_water_hazard",
+    "penalty": "red",
+    "flatten": "no",
+    "name": "Uncas Brook"
+   },
+   "reason": "developer 2026-10-19: model Uncas Brook (red; all water on the course is red). OSM maps it only as stream lines; penalty areas from the DEM channel along them (pipeline/propose_channels.py), culverts left out; flatten=no keeps the falling bed"
+  },
+  {
+   "from": "proposed/channels_lidar.geojson",
+   "ids": [
+    "channel_w1263089459",
+    "channel_w1263302044",
+    "channel_w1263302054",
+    "channel_w1263302049"
+   ],
+   "tags": {
+    "golf": "lateral_water_hazard",
+    "penalty": "red",
+    "flatten": "no"
+   },
+   "reason": "course chat 2026-10-19: the unnamed stream across holes 13, 16 and 7 (an Uncas Brook tributary in OSM terms) has a clear lidar channel 0.4-0.7 m deep; red like all water on the course (developer). Listed for review in the PR"
+  }
+ ],
+ "tags": [
+  {
+   "osm": "w89787404",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "developer 2026-10-19: all water hazards are red (an OSM golf=water_hazard exports as yellow without this)"
+  },
+  {
+   "osm": "w89787501",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "developer 2026-10-19: all water hazards are red (an OSM golf=water_hazard exports as yellow without this)"
+  },
+  {
+   "osm": "w89915703",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "developer 2026-10-19: all water hazards are red (an OSM golf=water_hazard exports as yellow without this)"
+  },
+  {
+   "osm": "w90967555",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "developer 2026-10-19: all water hazards are red (an OSM golf=water_hazard exports as yellow without this)"
+  },
+  {
+   "osm": "w91095218",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "developer 2026-10-19: all water hazards are red (an OSM golf=water_hazard exports as yellow without this)"
+  }
+ ]
+}
