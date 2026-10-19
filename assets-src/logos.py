@@ -144,6 +144,21 @@ def outlined(img, edge_col):
     return img
 
 
+def outlined_outside(img, edge_col):
+    """Dark 1 px outline around the outside only: gaps inside a drawing (between rails) stay open."""
+    solid = img[..., 3] > 0
+    out = np.zeros_like(solid)
+    out[0, :] = out[-1, :] = out[:, 0] = out[:, -1] = True
+    out &= ~solid
+    while True:
+        grown = out | ((np.roll(out, 1, 0) | np.roll(out, -1, 0) | np.roll(out, 1, 1) | np.roll(out, -1, 1)) & ~solid)
+        if (grown == out).all():
+            break
+        out = grown
+    paint(img, ring_of(solid) & out, edge_col)
+    return img
+
+
 def poly(X, Y, pts):
     """Inside test for a polygon given as [(x, y), ...] (even-odd rule)."""
     inside = np.zeros(X.shape, bool)
@@ -499,46 +514,45 @@ def shipwreck(c: dict) -> np.ndarray:
 
 # -------------------------------------------------------------------- bridge
 def bridge(c: dict) -> np.ndarray:
-    """A humpback stone arch bridge over a river, grassy banks (Tualatin)."""
+    """An arched wooden footbridge over a creek, grassy banks (Tualatin)."""
     X, Y = grid()
     img = np.zeros((S, S, 4), np.uint8)
     water = (Y >= 22.5) & (((X - 16) / 15.5) ** 2 + ((Y - 23.0) / 8.4) ** 2 <= 1)
     paint(img, water, c["water"])
     paint(img, water & (Y >= 27.5), c["water_dark"])
-    deck = 7.0 + 0.028 * (X - 16) ** 2            # top of the parapet, humped in the middle
-    body = (np.abs(X - 16) <= 14.5) & (Y >= deck) & (Y <= 24.5)
-    arch = (((X - 16) / 8.6) ** 2 + ((Y - 24.0) / 11.0) ** 2 <= 1)
-    ring = (((X - 16) / 11.0) ** 2 + ((Y - 24.0) / 13.4) ** 2 <= 1) & ~arch
-    stone = body & ~arch
-    paint(img, stone, c["stone"])
-    # courses of blocks, staggered
-    row = np.floor(Y / 2.5).astype(int)
-    paint(img, stone & ((Y % 2.5) < 0.55), c["mortar"])
-    paint(img, stone & (((X + (row % 2) * 2.5) % 5.0) < 0.55), c["mortar"])
-    # voussoirs round the arch: wedge stones radiating from the centre
-    ang = np.arctan2(Y - 24.0, (X - 16) * 1.25)
-    vou = stone & ring
-    paint(img, vou, c["stone_light"])
-    paint(img, vou & ((np.floor(ang / 0.22).astype(int) % 2) == 0), c["stone"])
-    paint(img, stone & ring_of(arch) & (Y < 24), c["stone_dark"])
-    # shaded right end, lit parapet coping
-    paint(img, stone & (X > 27.5), c["stone_dark"])
-    paint(img, body & (Y < deck + 1.3), c["stone_light"])
-    paint(img, body & (Y >= deck + 1.3) & (Y < deck + 2.4), c["stone_dark"])
-    # under the arch: shadow down to the water, the river beyond
-    paint(img, arch & (Y >= deck) & (Y < 21.5), c["shadow"])
-    paint(img, arch & (Y >= 21.5) & (Y < 22.5), c["water_dark"])
+    for wx, wy in ((16, 29.0), (10, 26.2), (22, 26.5)):
+        paint(img, water & (np.abs(Y - wy) < 0.5) & (np.abs(X - wx) < 1.8), c["water_light"])
     # banks: grass sloping down to the water at both ends
-    for bx, sgn in ((0.0, 1), (32.0, -1)):
-        bank = (Y >= 23.0 + 0.7 * np.abs(X - bx)) & (np.abs(X - bx) <= 7.0) & (Y <= 31.5)
+    for bx in (0.0, 32.0):
+        bank = (Y >= 21.5 + 0.7 * np.abs(X - bx)) & (np.abs(X - bx) <= 7.5) & (Y <= 31.5)
         paint(img, bank, c["grass"])
         paint(img, bank & ~np.roll(bank, 1, axis=0), c["grass_light"])
-    # the arch's reflection and a few ripples
-    refl = water & (((X - 16) / 8.6) ** 2 + ((Y - 24.0) / 5.0) ** 2 <= 1) & (((X - 16) / 6.0) ** 2 + ((Y - 24.0) / 3.2) ** 2 > 1) & (Y > 24)
-    paint(img, refl, c["water_dark"])
-    for wx, wy in ((16, 29.0), (11, 26.5), (21, 26.8)):
-        paint(img, water & (np.abs(Y - wy) < 0.5) & (np.abs(X - wx) < 1.8), c["water_light"])
-    return outlined(img, c["edge"])
+    span = np.abs(X - 16) <= 14.5
+    deck = 15.0 + 0.026 * (X - 16) ** 2          # top of the deck, arched
+    # the arch rib under the deck, springing from the banks, with struts up to the deck
+    rib_d = ((X - 16) / 12.5) ** 2 + ((Y - 26.0) / 10.0) ** 2
+    rib = (rib_d <= 1.0) & (rib_d >= 0.72) & (Y <= 24.5)
+    paint(img, rib, c["wood"])
+    paint(img, rib & (rib_d < 0.85), c["wood_dark"])
+    for sx in (8.0, 12.0, 20.0, 24.0):
+        paint(img, (np.abs(X - sx) <= 0.55) & (Y > deck + 2.0) & (rib_d >= 0.72) & ~rib, c["wood_dark"])
+    # deck: a thick curved beam, lit on top, plank ends along its side
+    beam = span & (Y >= deck) & (Y < deck + 2.7)
+    paint(img, beam, c["wood"])
+    paint(img, beam & (Y < deck + 0.9), c["wood_light"])
+    paint(img, beam & (Y >= deck + 1.9), c["wood_dark"])
+    # railing: posts, a top rail and a middle rail following the arch; the gaps stay open
+    posts = np.zeros(X.shape, bool)
+    for px in (2.0, 7.5, 13.0, 19.0, 24.5, 30.0):
+        posts |= (np.abs(X - px) <= 0.9) & (Y >= deck - 7.5) & (Y < deck)
+    paint(img, posts, c["wood"])
+    paint(img, posts & ~np.roll(posts, -1, axis=1), c["wood_dark"])
+    rail_mid = span & (Y >= deck - 4.0) & (Y < deck - 3.0)
+    paint(img, rail_mid, c["wood_dark"])
+    rail_top = span & (Y >= deck - 7.6) & (Y < deck - 6.0)
+    paint(img, rail_top, c["wood"])
+    paint(img, rail_top & (Y < deck - 6.8), c["wood_light"])
+    return outlined_outside(img, c["edge"])
 
 
 EDGE = rgba("#0d1620", 220)
@@ -601,8 +615,7 @@ LOGOS = {
         "edge": EDGE,
     }),
     "tualatin": (bridge, {
-        "stone": rgba("#b4a58c"), "stone_light": rgba("#d6cab2"), "stone_dark": rgba("#857760"), "mortar": rgba("#988a72"),
-        "shadow": rgba("#3c3a3a"),
+        "wood": rgba("#a8743f"), "wood_light": rgba("#d39b5e"), "wood_dark": rgba("#6b4423"),
         "water": rgba("#3f86c8"), "water_dark": rgba("#2c66a0"), "water_light": rgba("#86bdf0"),
         "grass": rgba("#4f9447"), "grass_light": rgba("#74b860"), "edge": EDGE,
     }),
