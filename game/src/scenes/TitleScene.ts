@@ -1,6 +1,7 @@
 // Title menu (runs above the BgScene fly-over).
 
 import { app, GAME_NAME } from '../app';
+import { coursesByState } from '../data/registry';
 import { initAudio, setVolume } from '../audio/sfx';
 import { peekSnapshot } from '../save/snapshot';
 import { Button, COLORS, Panel, txt } from '../ui/widgets';
@@ -36,7 +37,8 @@ export class TitleScene extends MenuScene {
       this.root.add([l1, l2]);
     }
     const n = app.courses.length;
-    const sub = n === 1 ? app.courses[0].name : `${n} courses`;
+    const states = coursesByState(app.courses).length;
+    const sub = n === 1 ? app.courses[0].name : `${n} courses${states > 1 ? ` in ${states} states` : ''}`;
     this.root.add(txt(this, cx, top + 46, sub, { origin: [0.5, 0], scale: W < 330 ? 1 : 2, color: COLORS.yellow }));
     this.root.add(txt(this, cx, top + 66, 'real courses, rebuilt from map and lidar data', { origin: [0.5, 0], color: COLORS.dim }));
     const snap = await peekSnapshot();
@@ -55,7 +57,7 @@ export class TitleScene extends MenuScene {
         else this.scene.stop('bg');
       });
     }
-    add(snap ? 'new round' : 'play', () => this.scene.start('setup'), !!snap);
+    add(snap ? 'new round' : 'play', () => this.scene.start('courses', { purpose: 'play', from: 'title' }), !!snap);
     add('leaderboard', () => this.scene.start('leaderboard'), true);
     add('settings', () => this.scene.start('settings', { from: 'title' }), true);
     add('credits', () => this.scene.start('credits'), true);

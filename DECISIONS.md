@@ -2,6 +2,14 @@
 
 Changes from the starting values in CLAUDE.md, and choices the spec left open. Newest first within each area. Date: 2026-10-18 (first build session, then the first and second playtests).
 
+## Course select by state, cards and logos (developer, 2026-10-18)
+
+- **Play → choose a state → choose a course.** State buttons (A-Z, with a course count) lead to that state's courses as cards; a card loads its course and opens the new-round screen, which keeps a "change" button. The leaderboard uses the same two screens to switch courses (purpose "board": it only picks, nothing is loaded).
+- **State:** a course's `state` field (postal code) in courses/index.json, or else the last part of its `location` ("..., Oregon" → OR). Course chats should add `state` to course_config.json and copy it through s10.
+- **Cards:** a close crop of the course's own art around a signature green, with its trees and flag, drawn exactly as in the game at 2 px/m (`assets-src/course_cards.py` → `sprites/cards/<id>.png`; the hole per course is in `assets-src/course_cards.json`, else the green with the most sand and water around it). Oswego Lake uses hole 3, the pond green.
+- **Logos:** original 32 x 32 pixel emblems from `assets-src/logos.py` → `sprites/logos/<id>.png`, chosen by the developer; never a club's real logo. Oswego Lake: blue anchor with a white outline. Prebuilt for courses not built yet (their course ids must match): highland_links (lighthouse with beam), langdon (red barn), east_potomac (domed columned memorial), langston (three-petalled orange wildflower), stone_creek (waterfall), waverley (green and white locomotive), eastmoreland (pink rhododendron), willamette_valley (glass of red wine), indian_island (flint arrowhead pointing right), gearhart (wrecked sailing ship, half sunk), tualatin (humpback stone arch bridge). A course without a logo shows a lettered badge; without a card, a plain tile.
+- **Card art loads in place** (2026-10-19): card pictures and logos are added to the cards on screen as they arrive instead of redrawing the list, so a tap can't land on a card that is being replaced. The browser test taps like a person (a 60 ms press, two frames after the screen redraws: objects made in a redraw only take input from the next frame) and retries a tap that gets no response; the test machine can run at about 5 frames a second.
+
 ## Phase 0 decisions (developer, 2026-10-18)
 
 - **Name:** the game is called **Silver Swings Golf**.

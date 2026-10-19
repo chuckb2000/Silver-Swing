@@ -549,3 +549,23 @@ paths (relief), not OB, unless the developer says otherwise.
       checked, not just taken.
 - [ ] `validation_report.md`, `CLAUDE.md` 11.N, section 0 and `DECISIONS.md` updated.
 - [ ] Open items listed for the developer with recommendations.
+
+---
+
+## 12. Course-select card, logo and state
+
+- **Course id:** if the developer already has a logo for the course, use
+  its id: `highland_links`, `langdon`, `east_potomac`, `langston`,
+  `stone_creek`, `waverley`, `eastmoreland`, `willamette_valley`,
+  `indian_island`, `gearhart`, `tualatin`
+  (`assets-src/logos.py`). Otherwise ask the developer what the logo should
+  show; the design chat draws it.
+- **State:** add `"state": "<postal code>"` to `course_config.json` and make
+  sure s10 copies it into `course.json` and the course's entry in
+  `game/public/courses/index.json`.
+- **Card:** after the export, run `python3 assets-src/course_cards.py <id> --sheet`,
+  look at the contact sheet of every green
+  (`game/public/sprites/cards/_<id>_greens.png`, delete it afterwards), pick
+  the most striking one with the developer, put it in
+  `assets-src/course_cards.json`, then run `python3 assets-src/course_cards.py <id>`.
+

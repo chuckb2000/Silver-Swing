@@ -1289,7 +1289,8 @@ calm (≈60% of holes below half the max). It is seeded per round.
 
 1.  Title → **Play** / Leaderboard / Settings / Credits
 
-2.  New round: course (from courses/index.json) → tees (default
+2.  Choose a state → choose a course (cards with a crop of the course
+    art and the course's logo; see DECISIONS.md) → new round: tees (default
     **Blue** for the first course) → round length (18 / front 9 / back 9;
     a 9-hole course: 9 / 18 twice around) → difficulty → player name
 
