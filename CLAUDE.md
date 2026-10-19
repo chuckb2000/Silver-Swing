@@ -443,7 +443,9 @@ DECISIONS.md with the reason.
     banned words on leaderboard names, swing-meter display lag, wedge and
     chip release, Highland Links tee boxes, aiming keeps the dragged view),
     and a title screen with a silver trophy logo over a rotating set of
-    course views. 196 unit tests and 3 Playwright tests pass.
+    course views. A menu button in a round (resume, settings, save & exit,
+    quit round); settings opened mid-round hide hand, difficulty and rules.
+    196 unit tests and 4 Playwright tests pass.
 
 -   **Course chat (2026-10-18/19):** second course **Highland Links**
     (Truro, MA; 9 holes, par 35, coastal theme), section 11.5. Phase 0 of
