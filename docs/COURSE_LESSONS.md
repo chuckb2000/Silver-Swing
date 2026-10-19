@@ -238,13 +238,15 @@ notes live in DECISIONS.md.
   other themes' sheets are unchanged. s09b uses the same painters for the
   putting views.
 - **Look at the sprites at 5x on grass before rendering the course.**
-- **Flowers can be painted, not only sprited.** For a garden beside the
-  course (Eastmoreland's rhododendrons), `garden` paints flowering bushes into
-  the terrain art and putting views from the lidar shrub layer, out of
-  bounds, with no game change. Small clumps (under ~2 m across) read as dark
-  dots at 2 px/m: make them 2-4 m across, mostly blossom, with the outline only
-  on the outside. Highest-hit lidar can't see shrubs under trees; a lower
-  density there is flair and is written down as such.
+- **Flowering shrubs are trees.json `c: 3`** (sprites/shrubs.png). The game
+  picks a bush's colour from its index (% 8), so give each bush its colour
+  first and then place it at a matching index (`garden.order_trees()`); redo
+  the ordering after anything drops trees from the list (s06b), or every bush
+  after the drop shifts colour. Eastmoreland first painted the garden flat
+  into the terrain art; clumps under ~2 m across read as dark dots at 2 px/m,
+  and flat paint can't stand up in 3/4 view. Highest-hit lidar can't see
+  shrubs under trees; a lower density there is flair and is written down as
+  such.
 - **DOGAMI downloads arrive as `exportImage.N.tiff`.** Tell them apart by
   their values (ground in the tens to hundreds of feet vs canopy from 0) and a
   quick picture, as with the DC rasters.

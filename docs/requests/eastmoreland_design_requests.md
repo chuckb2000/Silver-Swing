@@ -1,5 +1,7 @@
 # Requests to the design chat from the Eastmoreland course build (2026-10-19)
 
+**Status:** request 1 done by the design chat (merged to main 2026-10-19); the course exports the garden bushes as `c: 3` and the flat paint is gone.
+
 None of these block play; Eastmoreland works with the game as it is.
 
 ## 1. A flowering-shrub sprite (rhododendrons), `trees.json` `c: 3`

@@ -491,8 +491,8 @@ DECISIONS.md with the reason.
 -   **Eastmoreland (course chat, 2026-10-19):** Eastmoreland Golf Course,
     Portland, OR, on branch `course/eastmoreland`: 18 holes from OSM + DOGAMI
     lidar, Blue default, every hazard red (lake, pond, creek traced from
-    lidar), the Crystal Springs Rhododendron Garden painted in flower
-    (`garden`), the two-part boundary joined across SE Bybee Blvd
+    lidar), the Crystal Springs Rhododendron Garden in flower (3,164
+    flowering-shrub sprites, `garden`), the two-part boundary joined across SE Bybee Blvd
     (`join_boundary_parts`). Other courses rebuild unchanged. 278 unit tests
     and 4 Playwright tests pass. Section 11.14; open items:
     data/eastmoreland/report_notes.md; request:
@@ -1922,7 +1922,7 @@ report_notes.md.
     `join_boundary_parts`). Crystal Springs Lake (holes 11, 12, 13, 17, 18), a
     pond (16/18) and Crystal Springs Creek are red penalty areas (developer).
     The Crystal Springs Rhododendron Garden on the lake's peninsula is out of
-    bounds and painted in flower (`garden`).
+    bounds and full of flowering shrubs (3,164 `c: 3` sprites, `garden`).
 -   **Data:** OSM (developer's Overpass Turbo export); DOGAMI bare-earth DTM and
     canopy height model (release `data-eastmoreland`); creek channel and hole
     18 Blue tee from the lidar DTM.
