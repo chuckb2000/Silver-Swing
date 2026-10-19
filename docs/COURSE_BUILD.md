@@ -5,7 +5,8 @@ spec; sections 3, 4, 5, 7.3, 8, 11 and 14 matter most here) and `DECISIONS.md`.
 This file is the procedure; `CLAUDE.md` is the source of truth for rules and
 numbers. If they disagree, `CLAUDE.md` wins and you tell the developer.
 Then read `docs/COURSE_LESSONS.md` (what went wrong on earlier courses and
-what to do instead), and add your own lessons to it at the hand-off.
+what to do instead), and add your own lessons to it at the hand-off. If OSM is missing whole holes,
+also read `docs/COURSE_TRACING.md` (tracing them with the developer).
 
 Recommended setup for this work: **Claude Opus 5.5 at high effort**; use
 **extra-high (xhigh)** for the first new course, because that one also includes
@@ -220,9 +221,19 @@ Known Oswego-specific code, with the fix:
   "connect_fairways": false,            // optional, only where OSM is wrong: s02b runs the fairway up to the green
                                         // (true = every hole, or a list of holes); see COURSE_LESSONS.md 3
   "trees_off_fairways_m": null,         // optional: drop trees whose top is this far (m) inside a fairway (check the course first)
-  "keep_tee_trees": []                  // optional: holes ("10", or "blue 7" with layouts) that keep trees in front of the tee
+  "join_boundary": {"water_osm": ["r123"], "penalty": "red"},
+                                        // optional: a boundary mapped in several parts with water between them
+                                        // (Langston): that water, inside the parts' convex hull, becomes penalty
+                                        // areas and joins the parts into the one polygon the game needs (s02)
+  "green_tiers": [{"hole": 9, "drop_m": 0.91, "width_m": 4.0, "low_side": "left"}],
+                                        // optional: two-tier greens. low_side left|right (step along the line of
+                                        // play, through the centre) or front|back (step across it; "line_frac"
+                                        // places it as a share of the green's depth from the low edge);
+                                        // "pin": "upper_tier" moves the pin to the middle of the upper tier
+  "keep_tee_trees": [],                 // optional: holes ("10", or "blue 7" with layouts) that keep trees in front of the tee
                                         // (a deliberate tree-lined dogleg). Every other tee shot at the middle of the fairway
                                         // is cleared: s06 moves the tee within its box, s06b drops trees (COURSE_LESSONS.md 3)
+  "ob_highways": ["trunk"]              // optional: roads of these OSM highway values inside the boundary are out of bounds (Indian Island's Route 105)
 }
 ```
 
@@ -245,7 +256,17 @@ Write changes to the OSM layout as `data/<id>/edits.json` (add features from a
 `proposed/` file, retag, drop; each with a reason); `merge_edits.py` (run by
 `make course` after s01) turns them into `edited/course.geojson`. `extend_start` moves a hole line's start (a tee without a mapped box) back
 along the line. Tools that make proposals: `propose_tees.py` (raised tee pads in the DEM near each hole's
-tee-shot axis). Large state-wide rasters: `clip_raster.py` cuts them to the
+tee-shot axis; `--wide=<holes>` also searches 250 m around the line start, for a back tee off the
+line), `propose_channels.py` (a penalty area along an OSM stream line, from the channel in the
+DEM; tag it `flatten=no` so s04 keeps its falling bed). `propose_trace.py` (greens, fairways, bunkers, tee pads, hole lines and
+water traced from a georeferenced orthophoto and the DEM, from seeds in
+`data/<id>/trace_spec.json`, for holes OSM lacks). The tracing desk: `desk_export.py`
+writes the data for `pipeline/desk/index.html` (publish it as a claude.ai page
+with `{db: {}, user: {}}`; change its `<title>` per course), where the developer
+drags traced outlines into place and marks each Blue tee against a live yardage
+readout; read the saved holes back into `data/<id>/desk/` and run
+`desk_to_proposed.py`, then add `proposed/approved.geojson` in `edits.json`
+(Indian Island, COURSE_LESSONS.md 3). Large state-wide rasters: `clip_raster.py` cuts them to the
 world before they go into `raw/`.
 
 ### 3.4 Regression check (only when pipeline code changed)

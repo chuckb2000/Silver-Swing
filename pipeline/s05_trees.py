@@ -321,6 +321,14 @@ def main():
     bmask = rasterize([(geom.buffer(1.0), 1) for geom in bld], out_shape=(H, W), transform=tr, fill=0, dtype="uint8").astype(bool) if len(bld) else np.zeros((H, W), bool)
     lake = np.load(build_dir(name) / "lake_mask.npy")[:H, :W]
     excl = g[g.kind.isin(["green", "tee", "bunker", "lateral_water_hazard", "water_hazard", "pool"])]
+    # The penalty areas made by join_boundary (s02) are a lake polygon filled over its marsh
+    # islands and drawn loosely along the banks; trees the lidar finds there stand on that
+    # ground (open water has no canopy), so they stay (Langston: ~440 trees on Kingman Lake's islands).
+    # Likewise a stream channel (tag flatten=no, from propose_channels.py) is a few metres
+    # wide and runs under the trees along its banks (Langston's creek through the woods).
+    if len(excl):
+        keep = excl.osm.astype(str).str.startswith("join_") | excl.tags.apply(lambda t: t.get("flatten") == "no")
+        excl = excl[~keep]
     boundary = play_boundary(g, cfg)
 
     trees, dropped = [], {"building": 0, "lake": 0, "tiny": 0}
