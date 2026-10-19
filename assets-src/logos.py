@@ -445,6 +445,102 @@ def arrowhead(c: dict) -> np.ndarray:
     return outlined(img, c["edge"])
 
 
+# ----------------------------------------------------------------- shipwreck
+def seg(X, Y, x1, y1, x2, y2, w):
+    """Pixels within w of the segment (x1, y1)-(x2, y2)."""
+    t = np.clip(((X - x1) * (x2 - x1) + (Y - y1) * (y2 - y1)) / ((x2 - x1) ** 2 + (y2 - y1) ** 2), 0, 1)
+    return np.hypot(X - (x1 + t * (x2 - x1)), Y - (y1 + t * (y2 - y1))) <= w
+
+
+def shipwreck(c: dict) -> np.ndarray:
+    """A wrecked wooden ship, listing and half sunk, with a snapped mast and a torn sail (Gearhart)."""
+    X, Y = grid()
+    img = np.zeros((S, S, 4), np.uint8)
+    a = math.radians(-14)                       # listing: the bow lifts to the right
+    cx, cy = 16.0, 17.8
+    U = (X - cx) * math.cos(a) + (Y - cy) * math.sin(a)
+    V = -(X - cx) * math.sin(a) + (Y - cy) * math.cos(a)
+    to_xy = lambda u, v: (cx + u * math.cos(a) - v * math.sin(a), cy + u * math.sin(a) + v * math.cos(a))  # noqa: E731
+    def spar(u0, v0, u1, v1, w):
+        x0, y0 = to_xy(u0, v0); x1, y1 = to_xy(u1, v1)
+        return seg(X, Y, x0, y0, x1, y1, w)
+    # masts behind the hull: the main mast snapped at the top, the foremast a stump
+    main = spar(0.5, -2.0, 0.5, -16.8, 1.1)
+    splinter = spar(0.5, -16.8, 3.0, -14.6, 0.55)
+    fore = spar(8.5, -4.0, 9.0, -10.0, 1.0)
+    yard = spar(-6.0, -13.0, 6.5, -14.2, 0.6)
+    # the torn sail hanging from the yard, ragged at the foot, with holes
+    foot = -4.8 - 1.4 * (np.abs(((U + 5.4) % 2.6) - 1.3))           # ragged, saw-toothed foot
+    sail = (U > -5.4) & (U < 5.8) & (V > -13.5 + 0.1 * U) & (V < foot)
+    sail &= ~((V > -10.0 + 1.6 * np.abs(U - 2.0)) & (np.abs(U - 2.0) < 2.2))   # a tear up from the foot
+    paint(img, sail, c["sail"])
+    paint(img, sail & (U > 3.4), c["sail_dark"])
+    paint(img, main | fore | splinter, c["wood_dark"])
+    paint(img, yard, c["wood"])
+    # the hull: deep and curved, raked stem at the bow, a little sheer
+    top = -2.0 - 3.2 * np.clip((U - 4.0) / 9.0, 0, 1) ** 2 - 0.8 * np.clip((-U - 8.0) / 5.0, 0, 1)
+    bot = 7.2 - 0.045 * U * U
+    hull = (V > top) & (V < bot) & (U < 14.5 - 0.55 * (V - top)) & (U > -13.5 + 0.3 * (V - top))
+    paint(img, hull, c["wood"])
+    paint(img, hull & ((np.floor(V - top).astype(int) % 3) == 2), c["wood_dark"])
+    paint(img, hull & (V < top + 1.0), c["wood_light"])           # gunwale
+    hole = (((U + 4.5) / 3.2) ** 2 + ((V - 1.8) / 2.0) ** 2 <= 1)
+    paint(img, hull & hole, c["dark"])
+    paint(img, hull & hole & (np.abs(((U + 4.5) % 2.2) - 1.1) < 0.5), c["wood_dark"])   # ribs
+    # the sea: a rounded patch over the lower hull, wave crests and foam
+    sea = (Y >= 23.8 + 0.9 * np.sin(X * 0.85)) & (((X - 16) / 16.2) ** 2 + ((Y - 25.0) / 7.2) ** 2 <= 1)
+    paint(img, sea, c["water"])
+    paint(img, sea & (Y >= 27.5), c["water_dark"])
+    paint(img, sea & ~np.roll(sea, 1, axis=0), c["foam"])
+    for wx, wy in ((5, 26.5), (25, 27), (12, 29.5), (20, 30)):
+        paint(img, sea & (np.abs(Y - wy) < 0.5) & (np.abs(X - wx) < 1.8), c["water_light"])
+    return outlined(img, c["edge"])
+
+
+# -------------------------------------------------------------------- bridge
+def bridge(c: dict) -> np.ndarray:
+    """A humpback stone arch bridge over a river, grassy banks (Tualatin)."""
+    X, Y = grid()
+    img = np.zeros((S, S, 4), np.uint8)
+    water = (Y >= 22.5) & (((X - 16) / 15.5) ** 2 + ((Y - 23.0) / 8.4) ** 2 <= 1)
+    paint(img, water, c["water"])
+    paint(img, water & (Y >= 27.5), c["water_dark"])
+    deck = 7.0 + 0.028 * (X - 16) ** 2            # top of the parapet, humped in the middle
+    body = (np.abs(X - 16) <= 14.5) & (Y >= deck) & (Y <= 24.5)
+    arch = (((X - 16) / 8.6) ** 2 + ((Y - 24.0) / 11.0) ** 2 <= 1)
+    ring = (((X - 16) / 11.0) ** 2 + ((Y - 24.0) / 13.4) ** 2 <= 1) & ~arch
+    stone = body & ~arch
+    paint(img, stone, c["stone"])
+    # courses of blocks, staggered
+    row = np.floor(Y / 2.5).astype(int)
+    paint(img, stone & ((Y % 2.5) < 0.55), c["mortar"])
+    paint(img, stone & (((X + (row % 2) * 2.5) % 5.0) < 0.55), c["mortar"])
+    # voussoirs round the arch: wedge stones radiating from the centre
+    ang = np.arctan2(Y - 24.0, (X - 16) * 1.25)
+    vou = stone & ring
+    paint(img, vou, c["stone_light"])
+    paint(img, vou & ((np.floor(ang / 0.22).astype(int) % 2) == 0), c["stone"])
+    paint(img, stone & ring_of(arch) & (Y < 24), c["stone_dark"])
+    # shaded right end, lit parapet coping
+    paint(img, stone & (X > 27.5), c["stone_dark"])
+    paint(img, body & (Y < deck + 1.3), c["stone_light"])
+    paint(img, body & (Y >= deck + 1.3) & (Y < deck + 2.4), c["stone_dark"])
+    # under the arch: shadow down to the water, the river beyond
+    paint(img, arch & (Y >= deck) & (Y < 21.5), c["shadow"])
+    paint(img, arch & (Y >= 21.5) & (Y < 22.5), c["water_dark"])
+    # banks: grass sloping down to the water at both ends
+    for bx, sgn in ((0.0, 1), (32.0, -1)):
+        bank = (Y >= 23.0 + 0.7 * np.abs(X - bx)) & (np.abs(X - bx) <= 7.0) & (Y <= 31.5)
+        paint(img, bank, c["grass"])
+        paint(img, bank & ~np.roll(bank, 1, axis=0), c["grass_light"])
+    # the arch's reflection and a few ripples
+    refl = water & (((X - 16) / 8.6) ** 2 + ((Y - 24.0) / 5.0) ** 2 <= 1) & (((X - 16) / 6.0) ** 2 + ((Y - 24.0) / 3.2) ** 2 > 1) & (Y > 24)
+    paint(img, refl, c["water_dark"])
+    for wx, wy in ((16, 29.0), (11, 26.5), (21, 26.8)):
+        paint(img, water & (np.abs(Y - wy) < 0.5) & (np.abs(X - wx) < 1.8), c["water_light"])
+    return outlined(img, c["edge"])
+
+
 EDGE = rgba("#0d1620", 220)
 
 LOGOS = {
@@ -497,6 +593,18 @@ LOGOS = {
     "indian_island": (arrowhead, {
         "glint": rgba("#e6eaf1"), "light": rgba("#b9c0cc"), "mid": rgba("#8c94a3"), "dark": rgba("#646b7a"),
         "deep": rgba("#454b58"), "ridge": rgba("#d7dce5"), "edge": EDGE,
+    }),
+    "gearhart": (shipwreck, {
+        "wood": rgba("#8a5a34"), "wood_light": rgba("#b07a48"), "wood_dark": rgba("#5e3a20"),
+        "dark": rgba("#2a1a10"), "sail": rgba("#e8dcc0"), "sail_dark": rgba("#c4b38e"),
+        "water": rgba("#2f7fc4"), "water_dark": rgba("#205f9a"), "water_light": rgba("#7fbcea"), "foam": rgba("#eaf5ff"),
+        "edge": EDGE,
+    }),
+    "tualatin": (bridge, {
+        "stone": rgba("#b4a58c"), "stone_light": rgba("#d6cab2"), "stone_dark": rgba("#857760"), "mortar": rgba("#988a72"),
+        "shadow": rgba("#3c3a3a"),
+        "water": rgba("#3f86c8"), "water_dark": rgba("#2c66a0"), "water_light": rgba("#86bdf0"),
+        "grass": rgba("#4f9447"), "grass_light": rgba("#74b860"), "edge": EDGE,
     }),
 }
 
