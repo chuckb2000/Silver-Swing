@@ -1,0 +1,11 @@
+{
+ "add": [],
+ "tags": [],
+ "drop": [
+  {
+   "osm": "r12760592",
+   "reason": "Charbonneau Golf Course, a separate course north of NE Miley Road that reaches into the world's north edge; not part of Langdon Farms (its land stays out of bounds)"
+  }
+ ],
+ "extend_start": []
+}

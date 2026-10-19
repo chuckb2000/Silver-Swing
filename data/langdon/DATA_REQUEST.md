@@ -23,6 +23,28 @@ Scorecard: GolfPass and the club's flyover page agree (tees "#8"-"#1", no names)
 except that the flyover page repeats hole 1's yardages on hole 7. Every GolfPass
 column adds up to its total. #6, #4 and #2 are combinations of the sets either side.
 
+## Status (2026-10-19, 19:00)
+
+Received in `data-langdon`, copied to `raw/` and `reference/`:
+
+| Release file | Copied to | SHA-256 | Check |
+|---|---|---|---|
+| `export.geojson` | `raw/overpass.geojson` | 127917443f5a661d25a65e447883dcd47aec47888a04329b476875090d0c503b | 415 features; since the GeoPackage someone mapped hole 1 (line, green, Tee 8 box) and an internal out-of-bounds line (w1569564855, 615 m) |
+| `exportImage.10.tiff` | `raw/dogami_dtm_ft.tif` | 0912a99faa367406e8bdd5b3eabcbfebca35fe64b4761b5fba3af612d5d6d65c | bare earth: EPSG:32610, 1 m, 1224 x 2248, feet, no gaps; 91-208 ft |
+| `exportImage.11.tiff` | `raw/dogami_chm_ft.tif` | 90bf9c6a097059de2cf1f8077cc07808c7b564f65e2a0b0162af7866e31d3486 | canopy height: same grid, feet, 0-199 ft |
+| `sc-front.jpg`, `sc-back.jpg` | `reference/club_card_front.jpg`, `..._back.jpg` | 4dc04d3f..., cc5100ea... | matches GolfPass hole for hole; tees are named "Tee 8"-"Tee 1"; men's ratings on the back |
+
+The Overpass export also holds Charbonneau Golf Course (r12760592) at the north edge;
+`edits.json` drops it.
+
+Orthoimagery: every TIFF exportImage link (OSIP 2024 WM and SL, OSIP 2022, NAIP) returned
+"Error exporting image, Code: 500" for the developer; the same OSIP 2024 WM request with
+`format=jpg` worked (19:03). `langdon.2.jpg` (north half, SHA-256 153b858c...) and
+`langdon.3.jpg` (south half, 7e2c2b0e...), 4016 x 3688 each, placed by the request's bbox,
+mosaicked and resampled to the world grid at 0.32 m as `raw/osip2024_032m.tif`
+(JPEG-compressed GeoTIFF, 5 MB). `langdon.1.jpg` was the 1,024 m test. Alignment
+checked against the OSM bunkers, ponds, cart paths and hole 1 green: within 1-2 m.
+
 ## World and boxes
 
 World (provisional): EPSG:32610, x 517570-518594, y 5012491-5014539 (1,024 x 2,048 m).
