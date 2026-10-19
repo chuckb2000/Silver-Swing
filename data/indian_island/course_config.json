@@ -1,0 +1,50 @@
+{
+  "id": "indian_island",
+  "name": "Indian Island Golf Course",
+  "location": "Riverhead, Suffolk County, New York",
+  "state": "NY",
+  "architects": "William F. Mitchell (1972)",
+  "theme": "bayside",
+  "epsg": 32618,
+  "osm_sources": [
+    "raw/overpass.geojson"
+  ],
+  "boundary_name": "Indian Island Golf Course",
+  "dtm": {
+    "path": "raw/nys_dem_2024_1m_clip.tif",
+    "units": "m",
+    "source": "NYS DEM_2024_Long_Island (NYS ITS Geospatial Services / USGS): 1 m hydro-flattened bare-earth DEM from the 2024 Long Island lidar; NAD83 / UTM 18N (EPSG:26918), NAVD88 (GEOID18) metres; exported by the developer 2026-10-19 (GitHub release data-indian-island, indian_island_dem_2024.tif), clipped to the world + 100 m with pipeline/clip_raster.py"
+  },
+  "world": {
+    "x0": 698261,
+    "y0": 4532163,
+    "width": 1792,
+    "height": 1024,
+    "note": "OSM course boundary bbox (1,548 x 612 m) + scenery, rounded out to whole 256 m chunks and centred: 1,792 m east-west (~122 m each side), 1,024 m north-south (~206 m each side)"
+  },
+  "lake_level_max_m": -0.2,
+  "tee_sets": [
+    {
+      "name": "Blue",
+      "playable": true,
+      "rating": 71.5,
+      "slope": 126,
+      "total_yd": 6516
+    }
+  ],
+  "default_tee": "Blue",
+  "scorecard_source": "Suffolk County Parks scorecard PDF (indianisland-scorecard.pdf, supplied by the developer 2026-10-19, GitHub release data-indian-island): yardages, pars, stroke index, ratings/slopes (Blue 71.5/126, same as the county website). Built from the Blue tees only (developer, 2026-10-19); White, Gold and Red are on the card but not built",
+  "penalty_default": "red",
+  "driving_range_is_ob": true,
+  "wind_mph": {
+    "minMph": 2,
+    "maxMph": 12
+  },
+  "attribution": [
+    "Map data © OpenStreetMap contributors (ODbL)",
+    "Elevation: NYS ITS Geospatial Services / USGS (2024 Long Island lidar DEM)",
+    "Imagery used for tracing: NYS ITS Geospatial Services statewide orthoimagery",
+    "Scorecard: Suffolk County Parks"
+  ],
+  "notes": "Phase 1 decisions (developer, 2026-10-19): Blue tees only; county ratings; course chat traces the holes OSM lacks (9, 10 green and fairway, 11-18) from the NYS orthoimagery and DEM into proposed/ for approval; Peconic River and Flanders Bay red; the inlet pond yellow where played over, red where alongside; Route 105 out of bounds, Riverside Drive and inner roads free relief; police station and sewage plant not out of bounds; new bayside theme after a side-by-side. Wind 2-12 mph is the course chat's choice (open bay, between Oswego 1-7 and Highland 3-14)."
+}
