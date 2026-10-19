@@ -59,6 +59,29 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 11. Hole 16 (White): tee box w865842632 assigned by the developer (tagged hole=16, tee_set=White in edited/course.geojson).
 12. Hole 18: the OSM hole line starts 110 m from the White tee box (w866033746), and only that box matches the card; the line was probably drawn from another tee. Measured from the White box through the line's bend points.
 
+## Other open items (Oregon Golf Club)
+
+Decisions the developer made on 2026-10-19 are in DECISIONS.md ("Oregon Golf Club"). Still open, each with a recommendation:
+
+1. **Scorecard is GolfPass's (unverified); no printed card is available** (developer). Blue and White hole sums match GolfPass's printed Out/In totals; its tee table says White 6,081 where the holes add to 6,080, and Black 7,052 where they add to 7,070. Pars and the men's stroke index agree with the OSM hole tags on all 18 holes. Ratings used: Blue 72.5 / 136, White 69.7 / 133 (GolfPass). Recommendation: keep; replace if a club card turns up.
+2. **Hole 7: a 31 m fir stands 7 m south of the green** (lidar tree at 1074.5, 1422.5; crown radius 7.7 m). In the game's 3/4 view the sprite is drawn over the green and hides the pin (course card contact sheet). Hole 15 has a 23 m broadleaf whose crown edge reaches the green; it doesn't hide the pin. Recommendation: remove the hole 7 fir (`drop_trees`, as Tualatin hole 13); keep hole 15's.
+3. **Driving range polygon is a proposal.** OSM maps no range. The developer: the range takes in target greens P3-P9. Its edge is the OSM road / cart-path loop around them (`tools/propose_range.py`, picture `proposed/range.png`), 6.1 ha, with the short-game area (practice greens P1-P2, its fairway and bunkers) cut out and left in play. The range is out of bounds; it is drawn as rough (developer: "the actual driving range is rough at this course") with range balls and white OB stakes along its edge, and shows as rough on the minimaps. The target greens, P3's mown collar and the hitting area (OSM tee w984701646) are dropped. Recommendation: approve, or say where the edge should run.
+4. **Hole 16 White tee** (course chat's call): box w865842632 measures 377 yd against 383 (-1.5 %) but lies 30 m to the side of the OSM line, outside s06's 25 m search corridor, so it was assigned by tag in `edits.json` (s06's report line says "assigned by the developer"; it was the course chat). Without it White shared the Blue box (+3.8 %). Recommendation: approve.
+5. **Flags (3-8 %), accepted for play by the build:**
+   - Hole 5 White: 523 yd vs 504 (+3.8 %) after moving the tee to the front of its box; the next box forward measures 483 (-4.2 %, likely the White/Green combo tee).
+   - Hole 10 Blue: 343 yd vs 361 (-4.9 %); no box behind the back one is mapped (Black and Blue are both 361 on the card).
+   - Hole 10 White: 337 yd vs 324 (+4.0 %); it shares the Blue box, and the next box forward measures 303 (-6.4 %).
+   Lidar shows no raised pads for these tees (the course's tees are cut into the hillside). Recommendation: accept; a traced box (or a tee position you know) would fix them.
+6. **Power lines removed from the canopy model** (`remove_wires`): the BPA transmission lines across the middle of the course and over the Willamette, and the distribution lines along the roads, were picked up as rows of thin 20-30 m "trees" and as 70-82 m "conifers" where the lines cross the river. 42 wire networks (about 9.5 km of conductor) were taken out before the tree search; 1,254 false trees went with them. The tallest tree is now 59 m (riverside firs). Short pieces of wire over a crown (under 40 m) can remain; none was found near play.
+7. **Tree types are inferred from crown shape** (DOGAMI canopy height model, no leaf-off imagery): 46 % conifers inside the course, 96 % of trees over 30 m. The photos show Douglas fir lining the fairways with oaks and maples between, which matches.
+8. **Water:** every hazard is red (developer), including the pond OSM tags yellow (w865546390). W7 and W8 lie partly outside the boundary; that part is out of bounds, as the boundary is. The Willamette and its islands are off-course water, out of bounds. Two lidar trees standing in hazards (hole 8 ponds, Hershiser Reservoir) were dropped.
+9. **World 1,280 x 2,304 m** (developer approved going past 2,048 m). Load in the sandbox's software renderer: see validation_report.md "World size check".
+10. **Greens:** tilt clamped to 2.5 % on 8 greens; the steepest spot is 5.2 % (holes 4 and 13), inside Oswego Lake's range (up to 6.2 %). No pin area is over 1.5 %.
+11. **Practice greens** P1-P2 (short-game area inside the range) and P10-P11 (beside the clubhouse) are wrong greens (relief required).
+12. **The 8 small `golf=rough` patches** beside tee complexes (holes 1, 2, 3 and 12) are the grass around the tee boxes; they stay rough.
+13. **Course card:** hole 8's green between the creek, the ponds and the firs, picked by the course chat. To use another green, change `assets-src/course_cards.json` and run `python3 assets-src/course_cards.py ogc`.
+14. **Lidar date not recorded.** The DOGAMI mosaic services give no project year for the export. Recommendation: none needed for play.
+
 ## Playability adjustments
 
 - Hole 5 (White): measured 532 yd from the tee-box centre vs 504 on the card (+5.5%); moved the virtual tee within the real tee polygon w865536500 -> 523.2 yd (real 531.6 yd).
