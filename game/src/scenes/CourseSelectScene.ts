@@ -25,6 +25,8 @@ export class CourseSelectScene extends MenuScene {
   private from = 'title';
   private current = '';
   private busy = false;
+  /** Fills for card art and logos still loading (run when they arrive; reset on every build). */
+  private waiting: (() => void)[] = [];
 
   constructor() {
     super('courses');
@@ -50,6 +52,7 @@ export class CourseSelectScene extends MenuScene {
   }
 
   build() {
+    this.waiting = [];
     const W = app.view.w, H = app.view.h;
     const pw = Math.min(470, W - 8), ph = H - 8;
     const x0 = Math.round((W - pw) / 2), y0 = 4;
@@ -115,13 +118,19 @@ export class CourseSelectScene extends MenuScene {
     g.fillStyle(on ? COLORS.orange : 0x394049, 1).fillRect(x - 2, y - 2, w + 4, h + 4);
     g.fillStyle(0x1d2a22, 1).fillRect(x, y, w, h);
     this.root.add(g);
+    // the card art goes in its own layer, filled now or when it has loaded: the
+    // card is never rebuilt under the player's finger (a tap would be lost)
     const ck = `card_${c.id}`;
-    if (this.textures.exists(ck)) {
+    const art = this.add.container(0, 0);
+    this.root.add(art);
+    const fillArt = () => {
+      if (!art.active || !this.textures.exists(ck)) return;
       const src = this.textures.get(ck).getSourceImage() as HTMLImageElement;
       // the middle of the card art (the green sits there), one art pixel per texel
       const cx = Math.max(0, Math.round((src.width - w) / 2)), cy = Math.max(0, Math.round((src.height - h) / 2) - 6);
-      this.root.add(this.add.image(x - cx, y - cy, ck).setOrigin(0, 0).setCrop(cx, cy, Math.min(w, src.width), Math.min(h, src.height)));
-    }
+      art.add(this.add.image(x - cx, y - cy, ck).setOrigin(0, 0).setCrop(cx, cy, Math.min(w, src.width), Math.min(h, src.height)));
+    };
+    if (this.textures.exists(ck)) fillArt(); else this.waiting.push(fillArt);
     // name strip
     const strip = 22;
     this.root.add(this.add.rectangle(x, y + h - strip, w, strip, 0x0b1116, 0.78).setOrigin(0, 0));
@@ -141,8 +150,16 @@ export class CourseSelectScene extends MenuScene {
     this.root.add(txt(this, x + 4, y + h - strip + 12, `${town} · ${c.holes} holes · par ${c.par}`, { color: COLORS.dim, maxWidth: w - 8 }));
     // logo (or a lettered badge) in the top-left corner
     const lk = `logo_${c.id}`;
-    if (this.textures.exists(lk)) this.root.add(this.add.image(x + 3, y + 3, lk).setOrigin(0, 0));
-    else this.badge(c, x + 3, y + 3);
+    const logo = this.add.container(0, 0);
+    this.root.add(logo);
+    const fillLogo = () => {
+      if (!logo.active) return;
+      logo.removeAll(true);
+      if (this.textures.exists(lk)) logo.add(this.add.image(x + 3, y + 3, lk).setOrigin(0, 0));
+      else this.badge(logo, c, x + 3, y + 3);
+    };
+    fillLogo();
+    if (!this.textures.exists(lk)) this.waiting.push(fillLogo);
     // the whole card is the button
     const zone = this.add.zone(x, y, w, h).setOrigin(0, 0).setInteractive({ useHandCursor: true });
     zone.on('pointerup', () => void this.choose(c.id));
@@ -150,17 +167,17 @@ export class CourseSelectScene extends MenuScene {
   }
 
   /** A lettered badge for a course without a logo yet. */
-  private badge(c: CourseInfo, x: number, y: number) {
+  private badge(into: Phaser.GameObjects.Container, c: CourseInfo, x: number, y: number) {
     const initials = c.name.split(/\s+/).filter((w) => /^[a-z]/i.test(w) && !/^(of|the|and|at)$/i.test(w)).slice(0, 2).map((w) => w[0]).join('');
     const g = this.add.graphics();
     g.fillStyle(0x0d1620, 0.85).fillCircle(x + 12, y + 12, 12);
     g.fillStyle(COLORS.white, 1).fillCircle(x + 12, y + 12, 10);
     g.fillStyle(0x2f6f4a, 1).fillCircle(x + 12, y + 12, 9);
-    this.root.add(g);
-    this.root.add(txt(this, x + 12, y + 8, initials, { origin: [0.5, 0] }));
+    into.add(g);
+    into.add(txt(this, x + 12, y + 8, initials, { origin: [0.5, 0] }));
   }
 
-  /** Load the cards and logos of these courses (once), then redraw. */
+  /** Load the cards and logos of these courses (once), then put them into the cards on screen. */
   private requestArt(courses: CourseInfo[]) {
     let n = 0;
     for (const c of courses) {
@@ -172,7 +189,12 @@ export class CourseSelectScene extends MenuScene {
       }
     }
     if (!n) return;
-    this.load.once(Phaser.Loader.Events.COMPLETE, () => { if (this.sys.isActive()) this.rebuild(); });
+    this.load.once(Phaser.Loader.Events.COMPLETE, () => {
+      if (!this.sys.isActive()) return;
+      const fills = this.waiting;
+      this.waiting = [];
+      for (const f of fills) f();
+    });
     this.load.start();
   }
 
