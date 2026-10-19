@@ -437,6 +437,15 @@ DECISIONS.md with the reason.
     and Brave add noise to (a friend saw out of bounds mid-course and
     fairway reading as rough). The practice range stays out of bounds. The
     D1 database is bound. 116 unit tests and 3 Playwright tests pass.
+    Later the same day: East Potomac's design requests (courses grouped by
+    place, a tee choice, "not rated", per-course logos, a flowering-tree
+    sprite type) and the third playtest's fixes (end-of-round name entry,
+    banned words on leaderboard names, swing-meter display lag, wedge and
+    chip release, Highland Links tee boxes, aiming keeps the dragged view),
+    and a title screen with a silver trophy logo over a rotating set of
+    course views. A menu button in a round (resume, settings, save & exit,
+    quit round); settings opened mid-round hide hand, difficulty and rules.
+    199 unit tests and 4 Playwright tests pass (with the East Potomac tee-shot fix merged).
 
 -   **Course chat (2026-10-18/19):** second course **Highland Links**
     (Truro, MA; 9 holes, par 35, coastal theme), section 11.5. Phase 0 of
@@ -453,7 +462,8 @@ DECISIONS.md with the reason.
     theme with flowering cherries around the island. Pipeline gained
     `layouts`, `merge_edits.py`, `s02b_approaches.py` and lidar tee
     proposals; Oswego Lake and Highland Links rebuild unchanged. The Blue
-    course plays the Blue tees (developer). 186 unit tests and 3 Playwright
+    course plays the Blue tees (developer); a fairway-centre tee shot clears
+    the trees on every hole. 189 unit tests and 3 Playwright
     tests pass. Open items: section 11.9.4 and
     data/east_potomac/validation_report.md; requests to the design chat
     in docs/requests/east_potomac_design_requests.md.
@@ -1581,8 +1591,11 @@ data/highland_links/validation_report.md.
     built-up greens and grass mounds.
 -   **Fairways** run into every green (pipeline s02b; the OSM fairways
     stopped short of 19 greens) and no tree stands inside a fairway.
--   **Trees:** 4,177 from lidar; about 1,000 drawn as flowering cherries
+-   **Trees:** 4,171 from lidar; about 1,000 drawn as flowering cherries
     along Ohio Drive and the seawall (theme flair, species not measured).
+    A perfect drive at the middle of the fairway clears the trees near
+    every tee (`clear_tee_shots`: 7 tees moved within their boxes, 6
+    trees removed on Blue 9 and 13).
 
 **11.9.2 Scorecards** (club PDFs supplied by the developer, 2026-10-19)
 

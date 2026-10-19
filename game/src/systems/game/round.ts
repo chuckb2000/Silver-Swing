@@ -4,7 +4,7 @@
 import { CourseRuntime, HoleJson, TeeJson } from '../../data/course';
 import { CLUBS, Club, clubById, isWedge, PUTTER } from '../../data/clubs';
 import { DEFAULT_WIND, Difficulty, gust, makeWind, Preset, PRESETS, roundWinds, Wind } from '../../data/difficulty';
-import { firstBounceK, puttSpeedFor } from '../physics/calibrate';
+import { chipRelease, firstBounceK, puttSpeedFor } from '../physics/calibrate';
 import { Rng } from '../physics/rng';
 import { ShotSpec, SimResult, simulateShot } from '../physics/sim';
 import { isOB, isWater, SURF } from '../physics/surfaces';
@@ -252,11 +252,14 @@ export class Round {
     const sEff = spinEffect(this.lie);
     const spinScaled = spin * (spin < 0 ? sEff : 1);
     const spinBack = spin < 0 && isWedge(c) && sEff === 1 && strike.power > 0.6 ? 2.0 * Math.min(1, (strike.power - 0.6) / 0.4) : 0;
+    // short swings release a little (not out of a bunker, where the ball stops)
+    const bunker = this.lie.kind === 'greenside_bunker' || this.lie.kind === 'fairway_bunker';
+    const release = bunker || c.carryM <= 0 ? 1 : chipRelease(strike.carry / c.carryM);
     return {
       x: b.x, y: b.y, z, aim, pin: this.pin,
       flight: {
         carry: strike.carry, apex: strike.apex, hang: strike.hang, curveDeg: strike.curveDeg,
-        windX: wind.vx, windY: wind.vy, firstBounceK: firstBounceK(c), spin: spinScaled, spinBack,
+        windX: wind.vx, windY: wind.vy, firstBounceK: firstBounceK(c) * release, spin: spinScaled, spinBack,
         apexCap: this.lie.apexCap,
       },
     };

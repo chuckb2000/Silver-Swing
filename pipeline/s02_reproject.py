@@ -89,6 +89,13 @@ def main():
         if geom.geom_type in ("Polygon", "MultiPolygon") and not geom.is_valid:
             g.at[i, "geometry"] = geom.buffer(0)
             fixed += 1
+    # optional: tee boxes drawn larger than mapped (course_config "tee_grow_m", metres per side;
+    # Highland Links: the OSM boxes are 25-50 m2 and looked comically small, developer 2026-10-19)
+    grow = float(cfg.get("tee_grow_m", 0) or 0)
+    if grow > 0:
+        tees = g["kind"] == "tee"
+        g.loc[tees, "geometry"] = g.loc[tees, "geometry"].apply(lambda geom: geom.buffer(grow, join_style=2, mitre_limit=2.0))
+        print(f"[s02] tee boxes grown by {grow} m per side ({int(tees.sum())} boxes)")
     note = ""
     if cfg.get("join_boundary"):
         g, note = join_boundary(g, cfg["join_boundary"])

@@ -2,7 +2,6 @@
 
 import Phaser from 'phaser';
 import { app } from '../app';
-import { flushUploads } from '../save/online';
 import { addToBoard, LeaderboardEntry, saveSettings } from '../save/store';
 import { loadCourse } from '../data/courses';
 import { teeFor } from '../data/registry';
@@ -82,7 +81,7 @@ export async function finishRound(scene: Phaser.Scene) {
   };
   await addToBoard(entry);
   await clearSnapshot();
-  void flushUploads(); // to the shared leaderboard (if this site has one)
+  // sent to the shared leaderboard when the player leaves the summary (they may change the name there first)
   scene.scene.stop('hud');
   scene.scene.stop('play');
   scene.scene.start('summary', { entry });

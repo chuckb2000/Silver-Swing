@@ -216,11 +216,13 @@ Known Oswego-specific code, with the fix:
                                         // optional: a boundary mapped in several parts with water between them
                                         // (Langston): that water, inside the parts' convex hull, becomes penalty
                                         // areas and joins the parts into the one polygon the game needs (s02)
-  "green_tiers": [{"hole": 9, "drop_m": 0.91, "width_m": 4.0, "low_side": "left"}]
+  "green_tiers": [{"hole": 9, "drop_m": 0.91, "width_m": 4.0, "low_side": "left"}],
                                         // optional: two-tier greens. low_side left|right (step along the line of
                                         // play, through the centre) or front|back (step across it; "line_frac"
                                         // places it as a share of the green's depth from the low edge);
                                         // "pin": "upper_tier" moves the pin to the middle of the upper tier
+  "clear_tee_shots": false              // optional: a perfect drive at the middle of the fairway clears the trees near the
+                                        // tee: s06 moves the tee within its box, s06b drops trees (COURSE_LESSONS.md 3)
 }
 ```
 
@@ -614,4 +616,6 @@ paths (relief), not OB, unless the developer says otherwise.
   (`game/public/sprites/cards/_<id>_greens.png`, delete it afterwards), pick
   the most striking one with the developer, put it in
   `assets-src/course_cards.json`, then run `python3 assets-src/course_cards.py <id>`.
+  That also writes the course's view for the title screen's rotation
+  (`game/public/sprites/title/<id>.png` and `index.json`): commit them too.
 

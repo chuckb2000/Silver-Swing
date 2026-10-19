@@ -19,6 +19,24 @@
    "reason": "measured 339 yd from the tee-box centre vs 360 on the card (-5.8%); moved the virtual tee within the real tee polygon w926819254"
   },
   {
+   "hole": 1,
+   "tee_set": "Blue",
+   "step": 2,
+   "type": "tee_position",
+   "from": [
+    709.08,
+    1468.38
+   ],
+   "to": [
+    711.58,
+    1468.38
+   ],
+   "real_yd": 339.0,
+   "adjusted_yd": 359.8,
+   "card_yd": 360.0,
+   "reason": "clear_tee_shots: a perfect drive at the middle of the fairway clipped a tree near the tee; moved 2.5 m within the real tee polygon w926819254 to the nearest clear spot"
+  },
+  {
    "hole": 2,
    "tee_set": "White",
    "step": 2,
@@ -110,6 +128,24 @@
   },
   {
    "hole": 5,
+   "tee_set": "Blue",
+   "step": 2,
+   "type": "tee_position",
+   "from": [
+    1076.73,
+    88.46
+   ],
+   "to": [
+    1073.73,
+    90.96
+   ],
+   "real_yd": 276.8,
+   "adjusted_yd": 283.4,
+   "card_yd": 291.0,
+   "reason": "clear_tee_shots: a perfect drive at the middle of the fairway clipped a tree near the tee; moved 3.9 m within the real tee polygon lidar_tee_6 to the nearest clear spot"
+  },
+  {
+   "hole": 5,
    "tee_set": "White",
    "step": 2,
    "type": "tee_position",
@@ -125,6 +161,24 @@
    "adjusted_yd": 286.0,
    "card_yd": 286.0,
    "reason": "measured 277 yd from the tee-box centre vs 286 on the card (-3.2%); moved the virtual tee within the real tee polygon lidar_tee_6"
+  },
+  {
+   "hole": 5,
+   "tee_set": "White",
+   "step": 2,
+   "type": "tee_position",
+   "from": [
+    1076.73,
+    88.96
+   ],
+   "to": [
+    1073.73,
+    90.96
+   ],
+   "real_yd": 276.8,
+   "adjusted_yd": 283.4,
+   "card_yd": 286.0,
+   "reason": "clear_tee_shots: a perfect drive at the middle of the fairway clipped a tree near the tee; moved 3.6 m within the real tee polygon lidar_tee_6 to the nearest clear spot"
   },
   {
    "hole": 7,
@@ -200,6 +254,24 @@
   },
   {
    "hole": 10,
+   "tee_set": "Blue",
+   "step": 2,
+   "type": "tee_position",
+   "from": [
+    654.27,
+    1421.76
+   ],
+   "to": [
+    646.77,
+    1418.26
+   ],
+   "real_yd": 289.1,
+   "adjusted_yd": 303.9,
+   "card_yd": 311.0,
+   "reason": "clear_tee_shots: a perfect drive at the middle of the fairway clipped a tree near the tee; moved 8.3 m within the real tee polygon lidar_tee_12 to the nearest clear spot"
+  },
+  {
+   "hole": 10,
    "tee_set": "White",
    "step": 2,
    "type": "tee_position",
@@ -253,6 +325,24 @@
    "reason": "measured 179 yd from the tee-box centre vs 167 on the card (+7.0%); moved the virtual tee within the real tee polygon w926825917"
   },
   {
+   "hole": 11,
+   "tee_set": "White",
+   "step": 2,
+   "type": "tee_position",
+   "from": [
+    500.26,
+    1119.24
+   ],
+   "to": [
+    496.76,
+    1115.24
+   ],
+   "real_yd": 178.7,
+   "adjusted_yd": 171.9,
+   "card_yd": 167.0,
+   "reason": "clear_tee_shots: a perfect drive at the middle of the fairway clipped a tree near the tee; moved 5.3 m within the real tee polygon w926825917 to the nearest clear spot"
+  },
+  {
    "hole": 12,
    "tee_set": "White",
    "step": 2,
@@ -271,6 +361,24 @@
    "reason": "measured 441 yd from the tee-box centre vs 456 on the card (-3.2%); moved the virtual tee within the real tee polygon w926825916"
   },
   {
+   "hole": 12,
+   "tee_set": "White",
+   "step": 2,
+   "type": "tee_position",
+   "from": [
+    473.09,
+    1140.19
+   ],
+   "to": [
+    472.09,
+    1139.69
+   ],
+   "real_yd": 441.4,
+   "adjusted_yd": 456.3,
+   "card_yd": 456.0,
+   "reason": "clear_tee_shots: a perfect drive at the middle of the fairway clipped a tree near the tee; moved 1.1 m within the real tee polygon w926825916 to the nearest clear spot"
+  },
+  {
    "hole": 16,
    "tee_set": "Blue",
    "step": 2,
@@ -287,6 +395,24 @@
    "adjusted_yd": 431.4,
    "card_yd": 432.0,
    "reason": "measured 412 yd from the tee-box centre vs 432 on the card (-4.6%); moved the virtual tee within the real tee polygon lidar_tee_22"
+  },
+  {
+   "hole": 16,
+   "tee_set": "Blue",
+   "step": 2,
+   "type": "tee_position",
+   "from": [
+    966.77,
+    245.02
+   ],
+   "to": [
+    964.77,
+    247.02
+   ],
+   "real_yd": 412.2,
+   "adjusted_yd": 428.8,
+   "card_yd": 432.0,
+   "reason": "clear_tee_shots: a perfect drive at the middle of the fairway clipped a tree near the tee; moved 2.8 m within the real tee polygon lidar_tee_22 to the nearest clear spot"
   },
   {
    "hole": 17,

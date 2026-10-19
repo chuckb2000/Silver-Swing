@@ -48,6 +48,12 @@ describe('shared leaderboard server', () => {
     expect(again).toMatchObject({ added: 1 });
   });
 
+  it('stores a banned name as "player" and hides one already stored', async () => {
+    await handlePost(db, JSON.stringify(entry('bad', 74, 'Sh1t Head')));
+    const got = (await (await handleGet(db, new URL('http://x/api/scores?course=oswego_lake'))).json()) as { entries: { id: string; player: string }[] };
+    expect(got.entries.find((e) => e.id === 'bad')!.player).toBe('player');
+  });
+
   it('rejects malformed rounds and oversized requests', async () => {
     const bad = await (await handlePost(db, JSON.stringify([{ id: 'x' }, entry('ok', 70)]))).json();
     expect(bad).toMatchObject({ added: 1, rejected: 1 });

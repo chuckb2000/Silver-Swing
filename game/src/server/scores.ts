@@ -2,6 +2,7 @@
 // functions/api/scores.ts against a D1 (SQLite) database bound as `DB`.
 // Kept free of Phaser and browser APIs so it can be unit-tested.
 
+import { boardName } from '../save/names';
 import { isEntry, LeaderboardEntry } from '../save/entry';
 
 /** The parts of Cloudflare's D1 API used here. */
@@ -71,7 +72,7 @@ export async function handleGet(db: D1Like | undefined, url: URL): Promise<Respo
   for (const r of results) {
     try {
       const e = JSON.parse(r.data) as unknown;
-      if (isEntry(e)) entries.push(e);
+      if (isEntry(e)) entries.push({ ...e, player: boardName(e.player) }); // rounds stored before a word was banned
     } catch { /* skip a damaged row */ }
   }
   return json({ entries });
@@ -90,7 +91,7 @@ export async function handlePost(db: D1Like | undefined, body: string): Promise<
   let added = 0, rejected = 0;
   for (const e of list) {
     if (!isEntry(e)) { rejected++; continue; }
-    const clean: LeaderboardEntry = { ...e, player: e.player.trim().slice(0, 16) || 'player' };
+    const clean: LeaderboardEntry = { ...e, player: boardName(e.player) }; // banned words -> 'player'
     const res = (await db
       .prepare('INSERT OR IGNORE INTO rounds (id, course, length, player, gross, back, date, data, received) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)')
       .bind(clean.id, clean.course, clean.length, clean.player, clean.gross, clean.back ?? null, clean.date, JSON.stringify(clean), now)

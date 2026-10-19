@@ -30,6 +30,7 @@ course:         ## rebuild one course from raw/ (+ edited/) -> game/public/cours
 	$(PY) s04_elevation.py $(NAME) && \
 	$(PY) s05_trees.py $(NAME) && \
 	$(PY) s06_holes.py $(NAME) && \
+	$(PY) s06b_tee_shots.py $(NAME) && \
 	$(PY) s07_greens.py $(NAME) && \
 	$(PY) s08_surface.py $(NAME) && \
 	$(PY) s09_render.py $(NAME) && \
