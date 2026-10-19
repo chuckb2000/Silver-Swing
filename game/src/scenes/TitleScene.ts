@@ -62,12 +62,12 @@ export class TitleScene extends MenuScene {
     const name = GAME_NAME.toLowerCase();
     const trophy = this.textures.exists('trophy') ? this.textures.get('trophy').getSourceImage() as HTMLImageElement : null;
     const one = txt(this, cx, top, name, { origin: [0.5, 0], scale: 4 });
-    const gap = 8;
+    const tgap = 8;
     let placed = false;
-    if (trophy && one.width + trophy.width + gap <= W - 16) {
-      const left = Math.round(cx - (one.width + trophy.width + gap) / 2);
+    if (trophy && one.width + trophy.width + tgap <= W - 16) {
+      const left = Math.round(cx - (one.width + trophy.width + tgap) / 2);
       this.root.add(this.add.image(left, Math.max(2, top - 16), 'trophy').setOrigin(0, 0));
-      one.setX(left + trophy.width + gap + Math.round(one.width / 2));
+      one.setX(left + trophy.width + tgap + Math.round(one.width / 2));
       this.root.add(one);
       placed = true;
     } else if (trophy && H >= 330) {
