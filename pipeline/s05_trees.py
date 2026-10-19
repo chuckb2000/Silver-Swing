@@ -192,6 +192,7 @@ def osm_fallback(name, cfg, world):
     }
     bdir = build_dir(name)
     write_json(bdir / "trees.json", trees)
+    write_json(bdir / "trees_all.json", trees)  # s06 / s06b: tee shots
     write_json(bdir / "trees_report.json", stats, indent=1)
     np.save(bdir / "chm_local.npy", np.zeros((H, W), np.float32))
     img = Image.new("RGB", (W * 2, H * 2), (40, 40, 40))
@@ -371,10 +372,10 @@ def main():
     if leaf is not None:
         type_method = leaf
     species_note = None
-    if cfg.get("clear_tee_shots"):
-        # s06 places the tees against these trees and s06b drops the ones still in the
-        # way of a tee shot, then orders the list again (cherry slots)
-        write_json(build_dir(name) / "trees_all.json", [dict(t_) for t_ in trees])
+    # s06 places the tees against these trees and s06b drops the ones still in the
+    # way of a tee shot, then orders the list again (cherry slots)
+    write_json(build_dir(name) / "trees_all.json", [dict(t_) for t_ in trees])
+    if cfg.get("blossom"):
         np.save(build_dir(name) / "water_cells.npy", water_cells)
     if cfg.get("blossom"):
         trees, species_note = assign_blossoms(trees, cfg["blossom"], boundary, water_cells, bmask)
