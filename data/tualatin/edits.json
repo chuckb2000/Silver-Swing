@@ -43,5 +43,25 @@
    "tags": {},
    "reason": "OSM has no golf=hole lines or pins. Routing from the developer (2026-10-19: greens A-R on proposed/osm_labelled.png are holes 1-18); lines from the mapped tee box via the mapped fairway centreline to the green centre, pins at green centroids (data/tualatin/make_holes.py)"
   }
+ ],
+ "tags": [
+  {
+   "osm": "w821713863",
+   "set": {
+    "hole": "8",
+    "tee_set": "Blue",
+    "assigned_by": "the developer (2026-10-19: hole 8 plays from the back tee)"
+   },
+   "reason": "developer 2026-10-19: the 8th tee pushed back to the back tee (box 24)"
+  },
+  {
+   "osm": "w821713864",
+   "set": {
+    "hole": "10",
+    "tee_set": "Blue",
+    "assigned_by": "the developer (2026-10-19: hole 10 plays from the back tee)"
+   },
+   "reason": "developer 2026-10-19: the 10th tee pushed back to the back tee (box 25)"
+  }
  ]
 }

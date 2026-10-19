@@ -13,9 +13,9 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 | 5 | 3 | Blue | 200 | 192.8 | -7.2 | -3.6% | flag | 200.0 | +0.0% | pass |
 | 6 | 5 | Blue | 518 | 511.5 | -6.5 | -1.3% | pass | 511.5 | -1.3% | pass |
 | 7 | 4 | Blue | 390 | 381.1 | -8.9 | -2.3% | pass | 381.1 | -2.3% | pass |
-| 8 | 4 | Blue | 346 | 339.8 | -6.2 | -1.8% | pass | 339.8 | -1.8% | pass |
+| 8 | 4 | Blue | 346 | 381.4 | +35.4 | +10.2% | FAIL | 376.7 | +8.9% | FAIL |
 | 9 | 5 | Blue | 498 | 484.1 | -13.9 | -2.8% | pass | 484.1 | -2.8% | pass |
-| 10 | 3 | Blue | 155 | 154.6 | -0.4 | -0.2% | pass | 154.6 | -0.2% | pass |
+| 10 | 3 | Blue | 155 | 170.3 | +15.3 | +9.9% | FAIL | 165.9 | +7.0% | flag |
 | 11 | 5 | Blue | 482 | 495.5 | +13.5 | +2.8% | pass | 495.7 | +2.8% | pass |
 | 12 | 4 | Blue | 380 | 374.4 | -5.6 | -1.5% | pass | 374.4 | -1.5% | pass |
 | 13 | 4 | Blue | 364 | 369.7 | +5.7 | +1.6% | pass | 369.7 | +1.6% | pass |
@@ -24,36 +24,42 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 | 16 | 4 | Blue | 375 | 379.2 | +4.2 | +1.1% | pass | 379.2 | +1.1% | pass |
 | 17 | 4 | Blue | 380 | 384.8 | +4.8 | +1.3% | pass | 384.8 | +1.3% | pass |
 | 18 | 4 | Blue | 400 | 398.2 | -1.8 | -0.5% | pass | 398.2 | -0.5% | pass |
-| **total** | 72 | | **6370** | **6324** | -46 | -0.7% | | **6337** | -0.5% | |
+| **total** | 72 | | **6370** | **6381** | +11 | +0.2% | | **6385** | +0.2% | |
 
 ## Open items
 
-None.
+1. Hole 8 (Blue): measured 377 yd vs card 346 (+8.9%) - FAIL, needs a decision.
+2. Hole 8 (Blue): tee box w821713863 assigned by the developer (2026-10-19: hole 8 plays from the back tee) (tagged hole=8, tee_set=Blue in edited/course.geojson).
+3. Hole 10 (Blue): measured 166 yd vs card 155 (+7.0%) even with the virtual tee at the best spot in its box; accepted for play.
+4. Hole 10 (Blue): tee box w821713864 assigned by the developer (2026-10-19: hole 10 plays from the back tee) (tagged hole=10, tee_set=Blue in edited/course.geojson).
 
 ## Other open items (Tualatin Country Club)
 
-Decisions the developer made on 2026-10-19 are in DECISIONS.md ("Tualatin Country Club"). Still open, each with a recommendation:
+Decisions the developer made on 2026-10-19 are in DECISIONS.md ("Tualatin Country Club"). The developer approved the build and every recommendation below on 2026-10-19; the items stay listed for the record.
 
 1. **Scorecard is GolfPass's (unverified); no printed card is available.** The hole yardages add up to the printed Out/In/Total for every tee set, but GolfPass's tee table gives Member/Blue as 6,340 yd while its Blue column adds to 6,370. The rating/slope used, 70.4 / 130, is that table's Member/Blue figure. Recommendation: keep it; replace it if a club card turns up.
-2. **Hole lines and pins are proposals.** OSM maps no golf=hole lines and no pins. The routing is the developer's (greens A-R on `proposed/osm_labelled.png` are holes 1-18); `data/tualatin/make_holes.py` draws each line from the mapped tee box through the mapped fairway's centre line to the green centre, with one bend on a dogleg, at the fairway centre 250 yd (229 m) from the tee (the scratch landing zone the USGA measures through). Pins are at each green's centroid. Picture: `proposed/holes.png`. Recommendation: approve, or name the holes that play a different line.
-3. **Only the Blue tees are built** (developer). OSM has 29 tee boxes; Black, White, Red and Gold yardages are in `scorecard.csv` but not built. Recommendation: add White later if a tee choice is wanted; most of its boxes are mapped.
-4. **The Tualatin River is a red penalty area** (developer: in play on holes 7, 9 and 10), including where it lies outside the course boundary (`red_water_osm`); land across the river is out of bounds. The clubhouse swimming pool (OSM w820800003, inside the boundary) is drawn as water through the same list and is out of play. Both ponds (holes 9 and 18) are red.
-5. **Two trees removed on hole 13** (developer, 2026-10-19): the 41 m and 43 m firs whose crowns stood over the front of the green (`drop_trees`). The canopy under them is cleared too, so no patch of woods is left there. A 36 m fir just left of them stays (its crown only reaches the fringe).
-6. **Tree checks** (the East Potomac problem): a perfect drive down the centre of every par 4 and par 5 touches no tree (unit test). On hole 11 the first hole lines aimed the drive down the right side of the tee chute into a row of 26-40 m trees; the landing-zone bend fixed that without removing trees. The only remaining contact is on hole 8's approach from the centre of the fairway, which clips the edge of a 25 m broadleaf beside the green (ball 12.5 m up, 16 m out). Two crowns (38 m and 23 m) also reach 2-3 % into the back of hole 11's green, beyond the pin from the line of play; the putting view, drawn with north up, shows them over the green's back edge. Recommendation: keep all three (they guard the greens); any of them can be removed the same way as the hole 13 trees.
-7. **Tree types are inferred from crown shape** (DOGAMI canopy height model, no leaf-off imagery): 39 % conifers on the course, 98 % of trees over 30 m. The photos show Douglas fir lining the fairways with maples between, which matches.
-8. **Lidar date not recorded.** The DOGAMI mosaic services give no project year for the export. Recommendation: none needed for play.
-9. **Course card:** hole 9's green between its pond and the river, picked by the course chat. To use another green, change `assets-src/course_cards.json` and run `python3 assets-src/course_cards.py tualatin`.
-10. **Off-course water:** a 3 ha pond north-east of the river (OSM w1067221066, mapped as a stream) is flattened to one level in the heightmap like every OSM water polygon. It is out of bounds and far from play.
+2. **Hole lines and pins are proposals.** OSM maps no golf=hole lines and no pins. The routing is the developer's (greens A-R on `proposed/osm_labelled.png` are holes 1-18); `data/tualatin/make_holes.py` draws each line from the mapped tee box through the mapped fairway's centre line to the green centre, with one bend on a dogleg, at the fairway centre 250 yd (229 m) from the tee (the scratch landing zone the USGA measures through). Pins are at each green's centroid. Picture: `proposed/holes.png`. Approved by the developer (2026-10-19).
+3. **Holes 8 and 10 play from the back tees** (developer, 2026-10-19: "the 8th tee box should be pushed back to the back tee, as should 10"): boxes 24 and 25 (tagged `hole`/`tee_set` in `edits.json`, and the hole lines start there). Measured from the front of each back box (s06 moves the virtual tee within its box toward the card): hole 8 377 yd vs 346 on the Blue card (+8.9 %, over 8 %), hole 10 166 vs 155 (+7.0 %). From the box centres they are 381 and 170 yd, close to the Black card (384 and 168). Accepted by the developer.
+4. **Only the Blue tees are built** (developer). OSM has 29 tee boxes; Black, White, Red and Gold yardages are in `scorecard.csv` but not built. Recommendation: add White later if a tee choice is wanted; most of its boxes are mapped.
+5. **The Tualatin River is a red penalty area** (developer: in play on holes 7, 9 and 10), including where it lies outside the course boundary (`red_water_osm`); land across the river is out of bounds. The clubhouse swimming pool (OSM w820800003, inside the boundary) is drawn as water through the same list and is out of play. Both ponds (holes 9 and 18) are red.
+6. **Four trees removed** (developer, 2026-10-19, `drop_trees`): on hole 13 the 41 m and 43 m firs whose crowns stood over the front of the green (a 36 m fir just left of them stays; its crown only reaches the fringe); on hole 8 the two 25 m broadleaves right of the cart path between the end of the fairway and the green ("super in the way"; the tree left of the path stays). The canopy under each is cleared too, so no patch of woods is left there.
+7. **Tree checks** (the East Potomac problem): a perfect drive down the centre of every par 4 and par 5 touches no tree (unit test). On hole 11 the first hole lines aimed the drive down the right side of the tee chute into a row of 26-40 m trees; the landing-zone bend fixed that without removing trees, and main's tee-shot check (s06/s06b, a lower 110 % drive with a 1 m margin) moved the virtual tee 0.6 m within box 26 and removed nothing. Hole 8's approach from the centre of the fairway used to clip a 25 m broadleaf beside the green; the developer had that tree and its neighbour removed (item 6). Two crowns (38 m and 23 m) also reach 2-3 % into the back of hole 11's green, beyond the pin from the line of play; the putting view, drawn with north up, shows them over the green's back edge. Recommendation: keep both (they stand behind the green); either can be removed the same way.
+8. **Tree types are inferred from crown shape** (DOGAMI canopy height model, no leaf-off imagery): 39 % conifers on the course, 98 % of trees over 30 m. The photos show Douglas fir lining the fairways with maples between, which matches.
+9. **Lidar date not recorded.** The DOGAMI mosaic services give no project year for the export. Recommendation: none needed for play.
+10. **Course card:** hole 9's green between its pond and the river, approved by the developer. To use another green, change `assets-src/course_cards.json` and run `python3 assets-src/course_cards.py tualatin`.
+11. **Off-course water:** a 3 ha pond north-east of the river (OSM w1067221066, mapped as a stream) is flattened to one level in the heightmap like every OSM water polygon. It is out of bounds and far from play.
 
 ## Playability adjustments
 
 - Hole 5 (Blue): measured 193 yd from the tee-box centre vs 200 on the card (-3.6%); moved the virtual tee within the real tee polygon w820825483 -> 200.0 yd (real 192.8 yd).
+- Hole 8 (Blue): measured 381 yd from the tee-box centre vs 346 on the card (+10.2%); moved the virtual tee within the real tee polygon w821713863 -> 376.7 yd (real 381.4 yd).
+- Hole 10 (Blue): measured 170 yd from the tee-box centre vs 155 on the card (+9.9%); moved the virtual tee within the real tee polygon w821713864 -> 165.9 yd (real 170.3 yd).
 - Hole 11 (Blue): tee shot: a perfect drive at the middle of the fairway clipped a tree near the tee; moved 0.6 m within the real tee polygon w821713865 to the nearest clear spot -> 495.7 yd (real 495.5 yd).
 - Hole 15 (Blue): measured 129 yd from the tee-box centre vs 135 on the card (-4.3%); moved the virtual tee within the real tee polygon w821134355 -> 134.9 yd (real 129.2 yd).
 
 ## Tree detection (DOGAMI canopy height model)
 
-- 9022 trees detected in the world extent (1747 inside the course), 2269 conifers / 6753 deciduous; median height 12.7 m, max 55.0 m.
+- 9020 trees detected in the world extent (1745 inside the course), 2269 conifers / 6751 deciduous; median height 12.7 m, max 55.0 m.
 - Dropped: 1313 tops on building footprints, 0 over the lake, 30 tiny crowns.
 - Dropped on playing surfaces (spec 5.4): 3 -> lateral_water_hazard w821134379 (6.9 m), lateral_water_hazard w821134379 (6.4 m), lateral_water_hazard w821134379 (6.1 m)
 - OSM natural=tree points matched by a detected tree within 4 m: 1 of 1.
@@ -93,9 +99,9 @@ Decisions the developer made on 2026-10-19 are in DECISIONS.md ("Tualatin Countr
 | 5 | 3 | yes | yes (3 near) | yes | yes | yes | 4 | 0 |
 | 6 | 5 | yes | yes (1 near) | yes | yes | yes | 4 | 0 |
 | 7 | 4 | yes | yes (1 near) | yes | yes | yes | 2 | 0 |
-| 8 | 4 | yes | yes (1 near) | yes | yes | yes | 0 | 0 |
+| 8 | 4 | yes | yes (2 near) | yes | yes | yes | 0 | 0 |
 | 9 | 5 | yes | yes (1 near) | yes | yes | yes | 1 | 1 |
-| 10 | 3 | yes | yes (2 near) | yes | yes | yes | 2 | 1 |
+| 10 | 3 | yes | yes (2 near) | yes | yes | yes | 3 | 1 |
 | 11 | 5 | yes | yes (2 near) | yes | yes | yes | 6 | 0 |
 | 12 | 4 | yes | yes (2 near) | yes | yes | yes | 5 | 0 |
 | 13 | 4 | yes | yes (1 near) | yes | yes | yes | 3 | 0 |

@@ -42,10 +42,14 @@ describe('Tualatin Country Club course data', () => {
     }
   });
 
-  it('measured yardages are within 3% of the card', () => {
+  it('measured yardages are within 3% of the card, apart from 8 and 10 (the developer\'s back tees)', () => {
     for (const h of json.holes) {
       const t = h.tees.Blue;
-      expect(Math.abs(t.adjYd - t.cardYd) / t.cardYd, `hole ${h.number}`).toBeLessThanOrEqual(0.03);
+      const off = (t.adjYd - t.cardYd) / t.cardYd;
+      if (h.number === 8 || h.number === 10) {
+        expect(off, `hole ${h.number}`).toBeGreaterThan(0.03);
+        expect(off, `hole ${h.number}`).toBeLessThan(0.1);
+      } else expect(Math.abs(off), `hole ${h.number}`).toBeLessThanOrEqual(0.03);
     }
   });
 
@@ -128,7 +132,7 @@ describe('Tualatin Country Club course data', () => {
     expect(blocked).toEqual([]);
   });
 
-  it('hole 13: no tree crown stands over the green (developer: the two firs in front are removed)', () => {
+  it('hole 13: no tree crown stands over the green, and the trees the developer removed on 13 and 8 are gone', () => {
     const h = json.holes.find((x) => x.number === 13)!;
     const green = course.greenPolys.get(h.greenId)!;
     const over = course.obstacles.trees.filter((t) => {
@@ -139,8 +143,9 @@ describe('Tualatin Country Club course data', () => {
       return green.contains(t.x, t.y);
     });
     expect(over.map((t) => `${t.x.toFixed(0)},${t.y.toFixed(0)} (${t.h.toFixed(0)} m)`)).toEqual([]);
-    // the two removed firs (course_config.json drop_trees), front right and front left of the green
-    for (const [x, y] of [[776.5, 588.5], [753.5, 584.5]]) {
+    // the removed trees (course_config.json drop_trees): hole 13's two firs, front right and
+    // front left of the green, and hole 8's two broadleaves right of the cart path before the green
+    for (const [x, y] of [[776.5, 588.5], [753.5, 584.5], [418.5, 908.5], [412.5, 905.5]]) {
       expect(course.obstacles.trees.filter((t) => Math.hypot(t.x - x, t.y - y) < 2), `${x},${y}`).toEqual([]);
     }
   });

@@ -75,7 +75,11 @@ def target_point(tee: Point, centerline: list, pin: Point, fairways) -> Point:
 
 
 class TreeIndex:
-    def __init__(self, trees: list, zgrid: np.ndarray):
+    def __init__(self, trees: list, zgrid: np.ndarray, z_margin: float = 0.0):
+        # z_margin (course_config "tee_shot_margin_m", default 0): extra clearance in metres
+        # above and below each crown, so a ball the game's launch height puts a few
+        # centimetres higher or lower than this model still misses (Stone Creek 15)
+        self.zm = float(z_margin)
         self.t = trees
         self.xy = np.array([[t["x"], t["y"]] for t in trees], float) if trees else np.zeros((0, 2))
         self.z = zgrid
@@ -102,7 +106,7 @@ class TreeIndex:
             h = t["h"]
             # trunk on the line
             if lat[k] < TRUNK_R + MARGIN and 0 < along[k] <= REACH:
-                if z0 + ball_height(along[k]) - self.base[k] < h:
+                if z0 + ball_height(along[k]) - self.base[k] < h + self.zm:
                     out.append(int(k))
                     continue
             R = t["r"] + MARGIN
@@ -115,6 +119,6 @@ class TreeIndex:
             # ball height above the tree's base while inside the crown cylinder (rising)
             lo = z0 + ball_height(s0) - self.base[k]
             hi = z0 + ball_height(s1) - self.base[k]
-            if hi > CANOPY_START * h and lo < h:
+            if hi > CANOPY_START * h - self.zm and lo < h + self.zm:
                 out.append(int(k))
         return out

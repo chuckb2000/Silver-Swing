@@ -234,6 +234,8 @@ Known Oswego-specific code, with the fix:
                                         // (a deliberate tree-lined dogleg). Every other tee shot at the middle of the fairway
                                         // is cleared: s06 moves the tee within its box, s06b drops trees (COURSE_LESSONS.md 3)
   "ob_highways": ["trunk"],             // optional: roads of these OSM highway values inside the boundary are out of bounds (Indian Island's Route 105)
+  "tee_shot_margin_m": 0,               // optional: extra vertical clearance (m) the tee-shot tree check keeps from each crown,
+                                        // when the game test still finds a crown the pipeline check passed by centimetres
   "red_water_osm": ["r123"],            // optional: OSM water features that are red penalty areas wherever they lie,
                                         // also outside the boundary (a river along the course; Tualatin)
   "drop_trees": [{"x": 0, "y": 0, "reason": "..."}], // optional: single trees (local metres) the developer asked to remove

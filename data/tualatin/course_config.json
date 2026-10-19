@@ -31,6 +31,16 @@
       "x": 753.5,
       "y": 584.5,
       "reason": "developer 2026-10-19: hole 13, 43 m fir at the front left of the green, crown over the green; removed for playability"
+    },
+    {
+      "x": 418.5,
+      "y": 908.5,
+      "reason": "developer 2026-10-19: hole 8, 25 m broadleaf right of the cart path between the fairway and the green, in the way of the approach; removed for playability"
+    },
+    {
+      "x": 412.5,
+      "y": 905.5,
+      "reason": "developer 2026-10-19: hole 8, 25 m broadleaf right of the cart path between the fairway and the green, in the way of the approach; removed for playability"
     }
   ],
   "world": {
