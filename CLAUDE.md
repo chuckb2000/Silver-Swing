@@ -474,9 +474,10 @@ DECISIONS.md with the reason.
     developer gave the routing and the lines are drawn through the mapped
     fairways (`data/tualatin/make_holes.py`). Pipeline gained
     `red_water_osm` (the river is a red penalty area outside the
-    boundary) and `drop_trees` (two firs on hole 13); every existing
-    course rebuilds byte-identical. 209 unit tests and 3 Playwright
-    tests pass.
+    boundary) and `drop_trees` (two firs on hole 13); every other
+    course rebuilds as committed (except Highland Links, whose committed
+    files predate main's tee-shot check). 217 unit tests and 4
+    Playwright tests pass (main merged 2026-10-19).
 
 -   **Next task:** the third playtest (putting, yellow misses), the club's
     printed scorecard and the hole 3 Blue tee box. New courses: a separate
