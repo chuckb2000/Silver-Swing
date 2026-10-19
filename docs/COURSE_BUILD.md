@@ -4,6 +4,8 @@ Read this whole file before doing anything. Then read `CLAUDE.md` (the project
 spec; sections 3, 4, 5, 7.3, 8, 11 and 14 matter most here) and `DECISIONS.md`.
 This file is the procedure; `CLAUDE.md` is the source of truth for rules and
 numbers. If they disagree, `CLAUDE.md` wins and you tell the developer.
+Then read `docs/COURSE_LESSONS.md` (what went wrong on earlier courses and
+what to do instead), and add your own lessons to it at the hand-off.
 
 Recommended setup for this work: **Claude Opus 5.5 at high effort**; use
 **extra-high (xhigh)** for the first new course, because that one also includes
