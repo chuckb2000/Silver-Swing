@@ -73,5 +73,8 @@
     "Elevation and lidar: U.S. Geological Survey 3D Elevation Program (2021 Central Eastern Massachusetts lidar)",
     "Scorecard: Highland Links (club scorecard)"
   ],
-  "notes": "Phase 1 decisions (developer, 2026-10-18): 9-hole course, Blue tees only, card pars win over OSM (holes 2 and 6 are par 5), out of bounds = course boundary only, new coastal theme, wind 3-14 mph. dtm / laz entries are added when the data arrives."
+  "notes": "Phase 1 decisions (developer, 2026-10-18): 9-hole course, Blue tees only, card pars win over OSM (holes 2 and 6 are par 5), out of bounds = course boundary only, new coastal theme, wind 3-14 mph. dtm / laz entries are added when the data arrives.",
+  "tee_grow_m": 1.5,
+  "tee_inset_m": 2.0,
+  "tee_note": "tee boxes grown 1.5 m per side (OSM boxes 25-50 m2 looked comically small) and a moved virtual tee kept 2 m inside its box (hole 1 sat on the front edge); developer, third playtest 2026-10-19"
 }

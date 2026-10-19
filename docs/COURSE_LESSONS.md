@@ -118,6 +118,18 @@ and Highland Links notes live in DECISIONS.md.
   tree in the fairway on purpose: check before switching it on. If
   `connect_fairways` is on too, the tree check also covers the new approaches
   (s02b runs before s05).
+- **Aim at the middle of the fairway from every tee.** At East Potomac ten
+  Blue tee shots clipped a crown within 40 m of the tee. Moving the virtual
+  tee to the back of a shared box (to reach the longer set's yardage) put it
+  under trees at the box edge, and tees with no mapped box (a moved line
+  start) can sit in a stand of trees. Run the check for every hole and tee
+  set (the test in `east_potomac.test.ts`: perfect auto-club shot, every
+  canopy a hit). Every course build clears them (the developer: "it should
+  just be the case"): s06 first moves the tee within its box, then s06b drops
+  the trees still in the way. A blocked tee shot can be on purpose: Oswego
+  Lake hole 10 is a dogleg the developer keeps, listed in `keep_tee_trees`.
+  Read the s06b line of the build log and ask about any hole where it drops
+  trees on a new course.
 - **Several courses on one site:** list them as `layouts` in
   `course_config.json` (COURSE_BUILD.md 3.5). Holes go to the layout whose
   `leisure=golf_course` polygon contains them; all greens are shaped once so
@@ -153,9 +165,12 @@ and Highland Links notes live in DECISIONS.md.
     corners and cost 3-5 % on three holes.
   - Store the developer's saves in the repo (`data/<id>/desk/`) so the
     build stays reproducible without the page.
-- **A screenshot or routing map from Google is for identifying holes only.**
-  The developer may say tracing Google screenshots is fine; their terms still
-  forbid it (CLAUDE.md 5.1). The NYS orthoimagery was better anyway.
+- **Prefer state orthoimagery to the developer's Google screenshots.** At
+  Indian Island the Google screenshots were only used to identify holes;
+  every shape was traced from the NYS orthoimagery, which is open data,
+  georeferenced and sharper. Google screenshots may now be traced when the
+  developer supplies them (CLAUDE.md 5.1 note, `source=google`); keep them
+  for features the open imagery can't show.
 - **Big lidar uploads:** LAS files of 180-330 MB failed in the browser's
   release upload, though GitHub allows 2 GB per asset. Ask for one zip (or
   LAZ). A state project may have no vegetation class: take class 1

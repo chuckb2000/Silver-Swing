@@ -100,6 +100,16 @@ export async function addToBoard(e: LeaderboardEntry): Promise<void> {
   await write('leaderboard', all);
 }
 
+/** Change the player name on a round already on this device's board (before it is sent). */
+export async function renameEntry(id: string, player: string): Promise<LeaderboardEntry | null> {
+  const all = await loadBoard();
+  const e = all.find((x) => x.id === id);
+  if (!e) return null;
+  e.player = player;
+  await write('leaderboard', all);
+  return e;
+}
+
 export async function replaceBoard(entries: LeaderboardEntry[]): Promise<void> {
   await write('leaderboard', entries);
 }

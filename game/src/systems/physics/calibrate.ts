@@ -42,6 +42,17 @@ export function firstBounceK(club: Club): number {
   return k;
 }
 
+/**
+ * Short swings release more than the club's full-shot roll suggests: partial
+ * swings keep a fairly high flight in this model and stopped almost dead
+ * (third playtest: "you can basically throw a dart at the green"). Multiplies
+ * the first-bounce factor; 1 at full power, about 1.4 for a short chip.
+ */
+export function chipRelease(fraction: number): number {
+  const f = Math.max(0, Math.min(1, fraction));
+  return 1 + 0.5 * (1 - f) * (1 - f);
+}
+
 export function calibrateAll(): Record<string, number> {
   const out: Record<string, number> = {};
   for (const c of CLUBS) out[c.id] = firstBounceK(c);

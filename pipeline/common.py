@@ -137,6 +137,16 @@ def layouts(cfg: dict) -> list[dict]:
     return out
 
 
+def keeps_tee_trees(cfg: dict, layout: dict, hole: int) -> bool:
+    """A hole listed in course_config.json "keep_tee_trees" ("<hole>", or "<layout
+    short name> <hole>" with layouts) keeps the trees in front of its tee: a
+    deliberate tree-lined dogleg (Oswego Lake 10). Every other tee shot is cleared
+    (s06 / s06b, pipeline/tee_shots.py)."""
+    want = {str(x).strip().lower() for x in cfg.get("keep_tee_trees", [])}
+    key = f"{hole}" if not layout["shared"] else f"{(layout.get('short') or layout['id']).lower()} {hole}"
+    return key in want
+
+
 def layout_dir(name: str, layout: dict) -> Path:
     """Build folder of one layout (the course's build/ folder for a single-layout course)."""
     if not layout["shared"]:
