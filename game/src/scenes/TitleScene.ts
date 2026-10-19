@@ -1,4 +1,5 @@
-// Title menu (runs above the BgScene fly-over).
+// Title menu over a slowly scrolling panorama of the courses' landmarks
+// (sprites/title_pano.png: Oregon, Cape Cod, DC; it loops), with the trophy logo.
 
 import { app, GAME_NAME } from '../app';
 import { coursesByState } from '../data/registry';
@@ -6,28 +7,76 @@ import { initAudio, setVolume } from '../audio/sfx';
 import { peekSnapshot } from '../save/snapshot';
 import { Button, COLORS, Panel, txt } from '../ui/widgets';
 import { resumeRound } from './flow';
-import { ensureBg, MenuScene } from './menu';
+import Phaser from 'phaser';
+import { MenuScene } from './menu';
+
+const SCROLL_PX_PER_S = 10;
+const SKY_TOP = 0x5aa7e6; // the panorama's top sky colour, above it on tall screens
 
 export class TitleScene extends MenuScene {
   constructor() {
     super('title');
   }
 
+  private pano: Phaser.GameObjects.TileSprite | null = null;
+  private sky: Phaser.GameObjects.Rectangle | null = null;
+  private scrollX = Math.random() * 1440;
+
   create() {
-    ensureBg(this);
+    this.flyover = false;
+    if (this.scene.isActive('bg')) this.scene.stop('bg');
+    this.makeBackdrop();
+    this.scale.on('resize', this.layoutBackdrop, this);
+    this.events.once('shutdown', () => { this.scale.off('resize', this.layoutBackdrop, this); this.pano = null; this.sky = null; });
     setVolume(app.settings.volume, app.settings.muted);
     this.input.once('pointerdown', () => { void initAudio(); });
     super.create();
   }
 
+  private makeBackdrop() {
+    if (!this.textures.exists('title_pano')) return;
+    this.sky = this.add.rectangle(0, 0, 10, 10, SKY_TOP, 1).setOrigin(0, 0).setDepth(-2);
+    this.pano = this.add.tileSprite(0, 0, 10, 270, 'title_pano').setOrigin(0, 0).setDepth(-1);
+    this.layoutBackdrop();
+  }
+
+  private layoutBackdrop() {
+    if (!this.pano || !this.sky) return;
+    const W = app.view.w, H = app.view.h;
+    // one art pixel per texel, anchored at the bottom; plain sky above on a tall screen
+    this.pano.setPosition(0, H - 270).setSize(W, 270);
+    this.sky.setPosition(0, 0).setSize(W, Math.max(0, H - 270 + 1));
+  }
+
+  update(_t: number, dt: number) {
+    if (!this.pano) return;
+    this.scrollX = (this.scrollX + (Math.min(dt, 100) / 1000) * SCROLL_PX_PER_S) % 1440;
+    this.pano.tilePositionX = Math.floor(this.scrollX); // whole texels: crisp, no shimmer
+  }
+
   async build() {
     const W = app.view.w, H = app.view.h;
     const cx = Math.round(W / 2);
-    const top = Math.max(8, Math.round(H * 0.14));
-    // the game name as large as fits (4x on a wide screen, two lines on a narrow one)
+    let top = Math.max(8, Math.round(H * 0.14));
+    // the trophy logo beside the game name (4x on a wide screen), or above it on a tall narrow one
     const name = GAME_NAME.toLowerCase();
+    const trophy = this.textures.exists('trophy') ? this.textures.get('trophy').getSourceImage() as HTMLImageElement : null;
     const one = txt(this, cx, top, name, { origin: [0.5, 0], scale: 4 });
-    if (one.width <= W - 16) this.root.add(one);
+    const gap = 8;
+    let placed = false;
+    if (trophy && one.width + trophy.width + gap <= W - 16) {
+      const left = Math.round(cx - (one.width + trophy.width + gap) / 2);
+      this.root.add(this.add.image(left, Math.max(2, top - 16), 'trophy').setOrigin(0, 0));
+      one.setX(left + trophy.width + gap + Math.round(one.width / 2));
+      this.root.add(one);
+      placed = true;
+    } else if (trophy && H >= 330) {
+      this.root.add(this.add.image(cx - Math.round(trophy.width / 2), 4, 'trophy').setOrigin(0, 0));
+      top = Math.max(top, trophy.height + 14);
+      one.setY(top);
+    }
+    if (placed) { /* beside the trophy */ }
+    else if (one.width <= W - 16) this.root.add(one);
     else {
       one.destroy();
       const words = name.split(' ');

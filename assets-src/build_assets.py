@@ -17,6 +17,7 @@ from atlas import Atlas  # noqa: E402
 from font import build_font  # noqa: E402
 from sprites import all_sprites  # noqa: E402
 from trees import TREE_HEIGHTS, TREE_WIDTHS, tree_frames  # noqa: E402
+import title_art  # noqa: E402
 
 OUT = HERE.parent / "game" / "public" / "sprites"
 
@@ -36,6 +37,7 @@ def main():
     (OUT / "trees_meta.json").write_text(
         '{"widths":%s,"heights":%s}' % (TREE_WIDTHS, TREE_HEIGHTS))
     print(f"[assets] trees {len(frames)} frames ({tw}x{th}), sprites ({sw}x{sh}), font {n} glyphs -> {OUT}")
+    title_art.write_sprites(OUT)  # the title screen's panorama and trophy
     # tree sets of the other course themes (palettes/<theme>.json with a "trees" entry)
     import json
     for pal in sorted((HERE / "palettes").glob("*.json")):

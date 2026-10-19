@@ -26,6 +26,8 @@ export class BootScene extends Phaser.Scene {
     this.load.once('complete', () => { this.load.off('progress'); label.destroy(); bar.destroy(); });
     this.load.atlas('ui', 'sprites/sprites.png', 'sprites/sprites.json');
     this.load.bitmapFont('px', 'sprites/pxfont.png', 'sprites/pxfont.xml');
+    this.load.image('title_pano', 'sprites/title_pano.png'); // title screen (assets-src/title_art.py)
+    this.load.image('trophy', 'sprites/trophy.png');
   }
 
   async create() {

@@ -164,10 +164,15 @@ def cloud(img, X, Y, cx, cy, s, rng):
     paint(img, ring_of(m) & (Y > cy - s), P["cloud_e"])
 
 
+PANO_W = 1440
+
+
 def ridge(xs, base, amp, seed, freq=1.0):
+    """A wavy line that repeats every PANO_W px (whole cycles only), so the panorama loops."""
     rng = np.random.default_rng(seed)
     ph = rng.uniform(0, 6.28, 3)
-    return base - amp * (0.55 * np.sin(xs * 0.011 * freq + ph[0]) + 0.3 * np.sin(xs * 0.027 * freq + ph[1]) + 0.15 * np.sin(xs * 0.071 * freq + ph[2]))
+    cyc = [max(1, round(f * freq * PANO_W / (2 * math.pi))) * 2 * math.pi / PANO_W for f in (0.011, 0.027, 0.071)]
+    return base - amp * (0.55 * np.sin(xs * cyc[0] + ph[0]) + 0.3 * np.sin(xs * cyc[1] + ph[1]) + 0.15 * np.sin(xs * cyc[2] + ph[2]))
 
 
 def fir(img, X, Y, x, base, h, w):
@@ -245,7 +250,8 @@ def golfer(img, X, Y, x, base, pose="finish"):
     paint(img, m["cap"], c["cap"])
 
 
-def panorama(W: int = 1440, H: int = 270, seed: int = 4) -> np.ndarray:
+def panorama(W: int = PANO_W, H: int = 270, seed: int = 4) -> np.ndarray:
+    """The courses' landmarks side by side, Oregon -> Cape Cod -> DC; the right edge joins the left."""
     rng = np.random.default_rng(seed)
     X, Y = grid(W, H)
     img = np.zeros((H, W, 4), np.uint8)
@@ -255,12 +261,16 @@ def panorama(W: int = 1440, H: int = 270, seed: int = 4) -> np.ndarray:
     paint(img, np.hypot(X - 1400, Y - 40) <= 15, P["sun2"])
     paint(img, np.hypot(X - 1400, Y - 40) <= 12, P["sun"])
     for cx, cy, s in ((90, 40, 1.4), (300, 70, 1.0), (560, 34, 1.6), (780, 82, 1.0), (980, 46, 1.2), (1300, 72, 1.1), (1410, 36, 1.3)):
-        cloud(img, X, Y, cx, cy, s, rng)
+        state = rng.bit_generator.state
+        for wrap in (-W, 0, W):          # a cloud over the seam shows on both ends
+            rng.bit_generator.state = state
+            cloud(img, X, Y, cx + wrap, cy, s, rng)
     xs = X[0]
     # --- far layer: Mt Hood behind Oregon, soft hills elsewhere
-    MX = 110  # Mt Hood: left in the Oregon frame
-    mtn = (Y >= 58 + np.abs(X - MX) * 0.62) & (Y <= horizon)
-    mtn &= (Y >= 58 + np.abs(X - MX) * 0.62 + 2 * np.sin(X * 0.3))
+    MX = 110  # Mt Hood: left in the Oregon frame (its left foot wraps round the seam)
+    dxm = np.minimum(np.abs(X - MX), np.abs(X - MX - W))
+    mtn = (Y >= 58 + dxm * 0.62) & (Y <= horizon)
+    mtn &= (Y >= 58 + dxm * 0.62 + 2 * np.sin(X * 0.3))
     paint(img, mtn, P["mtn"])
     paint(img, mtn & (X > MX), P["mtn_s"])
     snow = mtn & (Y < 58 + 26 - np.abs(np.sin(X * 0.45)) * 5)
@@ -272,7 +282,7 @@ def panorama(W: int = 1440, H: int = 270, seed: int = 4) -> np.ndarray:
     def taper(x0, x1, ramp):
         # 0 at the ends of a stretch of water, 1 in the middle: the shore closes in over `ramp` px
         return np.clip(np.minimum(X - x0, x1 - X) / ramp, 0, 1)
-    lake = (X < 420) & (Y >= horizon + 2) & (Y <= horizon + 14)
+    lake = (X < 420) & (Y >= horizon + 3) & (Y <= horizon + 15)   # meets the river at the seam
     # the open sea reaches the sky; headlands close it in at both ends
     sea_top = horizon - 10 + (1 - taper(450, 1000, 70)) * 26
     ocean = (X >= 450) & (X < 1000) & (Y >= sea_top) & (Y <= horizon + 16)
@@ -328,7 +338,7 @@ def panorama(W: int = 1440, H: int = 270, seed: int = 4) -> np.ndarray:
     paint(img, base, P["marble"])
     for k in range(13):
         x = 1015 + k * 33 + rng.uniform(-6, 6)
-        if abs(x - mx) < 30:
+        if abs(x - mx) < 30 or x > W - 14:
             continue
         round_tree(img, X, Y, x, horizon + 24, rng.uniform(16, 22), rng.uniform(15, 22), P["cherry"], P["cherry_l"], P["cherry_d"], rng, speckle=P["cherry_l"])
     # --- foreground: one rolling course from end to end
@@ -336,7 +346,7 @@ def panorama(W: int = 1440, H: int = 270, seed: int = 4) -> np.ndarray:
     land = Y >= ground
     paint(img, land, P["rough"])
     paint(img, land & ((np.floor(X).astype(int) * 7 + np.floor(Y).astype(int) * 13) % 23 == 0), P["rough_d"])
-    fair = land & (Y >= ground + 10) & (Y <= ground + 10 + 40 + 10 * np.sin(X * 0.004))
+    fair = land & (Y >= ground + 10) & (Y <= ground + 10 + 40 + 10 * np.sin(X * 6 * math.pi / W))
     paint(img, fair, P["fair"])
     paint(img, fair & ((np.floor((X + Y * 2) / 18).astype(int)) % 2 == 0), P["fair_l"])     # mowing stripes
     for gx in (350, 820, 1300):
@@ -347,6 +357,9 @@ def panorama(W: int = 1440, H: int = 270, seed: int = 4) -> np.ndarray:
         paint(img, bunker, P["sand"])
         paint(img, bunker & (Y < ground + 22), P["sand_d"])
         flagstick(img, X, Y, gx + 6, ground[0, gx] + 15)
+    # a golfer at each course, finishing a swing toward the green
+    for gx in (70, 545, 1020):
+        golfer(img, X, Y, gx, 214)
     # near rough at the bottom edge, darker
     paint(img, land & (Y > 236), P["rough_d"])
     paint(img, land & (Y > 236) & ((np.floor(X).astype(int) * 3 + np.floor(Y).astype(int) * 5) % 9 == 0), P["rough"])
@@ -365,8 +378,18 @@ def frame_with_ui(scene: np.ndarray, x0: int, troph: np.ndarray, golfer_at=None)
     return im
 
 
+def write_sprites(out: Path = HERE.parent / "game" / "public" / "sprites"):
+    """The title screen's art: sprites/title_pano.png (scrolls, loops) and sprites/trophy.png (the logo)."""
+    Image.fromarray(trophy(), "RGBA").save(out / "trophy.png", optimize=True)
+    Image.fromarray(panorama(), "RGBA").save(out / "title_pano.png", optimize=True)
+    print(f"[title] trophy.png, title_pano.png -> {out}")
+
+
 def main():
-    out = Path(sys.argv[1] if len(sys.argv) > 1 else ".")
+    if len(sys.argv) < 2:
+        write_sprites()
+        return
+    out = Path(sys.argv[1])
     out.mkdir(parents=True, exist_ok=True)
     t = trophy()
     Image.fromarray(t, "RGBA").save(out / "trophy.png")
