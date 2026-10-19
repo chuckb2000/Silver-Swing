@@ -4,8 +4,9 @@ shapes from the tracing desk into an approved proposals file.
     python3 desk_to_proposed.py <course>     (after propose_trace.py)
 
 Reads data/<course>/desk/hole<NN>.json (what the developer saved in the
-tracing-desk page: greens, fairways, bunkers and tee boxes per hole, in local
-metres) and data/<course>/proposed/traced.geojson (for the parts the desk does
+tracing-desk page: greens, fairways, bunkers and tee boxes per hole, and the
+hole's Blue tee box (`bluetee`, written as golf=tee + hole + tee_set=Blue so
+s06 uses it for that hole), in local metres) and data/<course>/proposed/traced.geojson (for the parts the desk does
 not edit: water, penalty areas, the grown boundary), and writes
 proposed/approved.geojson (WGS84) with:
   - every desk shape, tagged golf=<kind>, approved=developer <date>;
@@ -39,7 +40,7 @@ def main():
     spec = json.load(open(cdir / "trace_spec.json"))
     g = gpd.read_file(build_dir(name) / "course_local.geojson")
     g["tags"] = g["tags"].apply(lambda t: dict(t) if isinstance(t, dict) else json.loads(t))
-    osm_pins = list(g[g.kind == "pin"].geometry)
+    osm_pins = list(g[(g.kind == "pin") & ~g.osm.astype(str).str.startswith("desk_")].geometry)  # OSM's own pins only
     tr = gpd.read_file(cdir / "proposed" / "traced.geojson").to_crs(cfg["epsg"])
     tr["geometry"] = tr.geometry.translate(-world.x0, -world.y0)
     tr["tags"] = tr["tags"].apply(lambda t: dict(t) if isinstance(t, dict) else json.loads(t))
@@ -54,14 +55,18 @@ def main():
             p = Polygon(f["poly"])
             if not p.is_valid:
                 p = p.buffer(0)
-            tags = {"golf": f["kind"], "hole": k, "source": "tracing desk (developer)", "approved": f"developer {when}"}
+            kind = "tee" if f["kind"] == "bluetee" else f["kind"]
+            tags = {"golf": kind, "hole": k, "source": "tracing desk (developer)", "approved": f"developer {when}"}
+            if f["kind"] == "bluetee":  # the developer's Blue tee for this hole (s06: tagged hole + tee_set wins)
+                tags["tee_set"] = "Blue"
             if f.get("id", "").startswith("tr_"):
                 tags["traced_from"] = f["id"]
-            fid = f"desk_{k}_{f['kind']}_{len([x for x in feats if x['tags'].get('hole') == k and x['kind'] == f['kind']])}"
-            feats.append({"osm": fid, "kind": f["kind"], "geometry": p, "tags": tags})
+            prefix = f"desk_{k}_{f['kind']}_"
+            fid = prefix + str(sum(1 for x in feats if x["osm"].startswith(prefix)))
+            feats.append({"osm": fid, "kind": kind, "geometry": p, "tags": tags})
             if f["kind"] == "green":
                 greens[k] = p
-            if f["kind"] == "tee":
+            if kind == "tee":
                 tees.setdefault(k, []).append(p)
         if d.get("note"):
             print(f"[desk] hole {k} note: {d['note']}")
