@@ -12,6 +12,7 @@ The developer was away overnight and asked for the work not to stop for permissi
   - The cursor's speed grows in step with its position, from the current starting speed at 0 % to the original speed at 100 %, and holds that speed to 110 %.
   - The original speed is the spec's trip time: 1.2 / 1.0 / 0.8 s per 100 % on Easy / Normal / Pro. The starting speeds stay 2.0 / 1.6 / 1.25 s.
   - After tap 2 the cursor comes back at the speed it had at tap 2.
+  - **Peak speed halved back** (developer, 2026-10-20 playtest: "the meter gets going a little too fast now ... split the difference"): the speed at 100 % is now halfway between the old constant speed and the spec's, 1.6 / 1.3 / 1.0 s per 100 % on Easy / Normal / Pro (was 1.2 / 1.0 / 0.8). The starting speeds are unchanged.
   - At Normal, a full swing reaches 100 % in 1.25 s (it was 1.6 s). A 30 % chip comes back at 74 % of a full swing's return speed.
   - `SwingMeter.tapTimes` gives the robot golfer exact tap times.
 - **Only the dead centre of the green zone goes straight** (developer). Inside the zone, a tap off centre curves the ball that way, in proportion to the offset. At the zone's edge the curve is 0.4 × the club's curve factor: a driver curves 0.8°, about 3 yd, half the smallest yellow miss. Putts start up to 0.25° off line at the edge.
