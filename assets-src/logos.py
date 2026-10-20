@@ -748,7 +748,7 @@ LOGOS = {
     }),
     "wannamoisett": (skate, {
         "boot": rgba("#23262e"), "boot_light": rgba("#3d434f"), "boot_dark": rgba("#14161b"),
-        "tongue": rgba("#c23b2e"), "tongue_light": rgba("#e0573f"), "trim": rgba("#c23b2e"),
+        "tongue": rgba("#dcdcd6"), "tongue_light": rgba("#f8f7f2"), "trim": rgba("#eeede6"),
         "lace": rgba("#f4f2ea"), "holder": rgba("#eef0f3"), "holder_dark": rgba("#b9bec7"),
         "steel": rgba("#8e98a5"), "steel_light": rgba("#d6dde6"), "edge": EDGE,
     }),
