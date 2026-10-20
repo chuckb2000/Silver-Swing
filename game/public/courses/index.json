@@ -138,6 +138,21 @@
    ]
   },
   {
+   "id": "eastmoreland",
+   "name": "Eastmoreland Golf Course",
+   "location": "Portland, Multnomah County, Oregon",
+   "state": "OR",
+   "theme": "pnw",
+   "holes": 18,
+   "par": 72,
+   "defaultTee": "Blue",
+   "totalYd": 6529,
+   "teeSets": [
+    "Blue",
+    "White"
+   ]
+  },
+  {
    "id": "willamette_valley",
    "name": "Willamette Valley CC",
    "location": "Canby, Clackamas County, Oregon",

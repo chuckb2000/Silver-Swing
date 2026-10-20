@@ -77,7 +77,7 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 
 | hole | par (OSM) | hole line | tee at line start | fairway | green | pin | bunkers <40 m | water <40 m |
 |---|---|---|---|---|---|---|---|---|
-| 1 | 4 | yes | yes (4 near) | yes | yes | yes | 3 | 0 |
+| 1 | 4 | yes | yes (3 near) | yes | yes | yes | 3 | 0 |
 | 2 | 5 | yes | yes (3 near) | yes | yes | yes | 4 | 0 |
 | 3 | 3 | yes | yes (2 near) | yes | yes | yes | 1 | 1 |
 | 4 | 4 | yes | yes (3 near) | yes | yes | yes | 2 | 1 |
@@ -85,12 +85,12 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 | 6 | 5 | yes | yes (5 near) | yes | yes | yes | 4 | 1 |
 | 7 | 4 | yes | yes (2 near) | yes | yes | yes | 5 | 0 |
 | 8 | 3 | yes | yes (2 near) | yes | yes | yes | 2 | 0 |
-| 9 | 4 | yes | yes (2 near) | - | yes | yes | 3 | 0 |
+| 9 | 4 | yes | yes (2 near) | yes | yes | yes | 3 | 0 |
 | 10 | 4 | yes | yes (4 near) | yes | yes | yes | 3 | 0 |
 | 11 | 5 | yes | yes (3 near) | yes | yes | yes | 5 | 0 |
 | 12 | 4 | yes | yes (3 near) | yes | yes | yes | 2 | 0 |
-| 13 | 3 | yes | yes (4 near) | yes | NO | NO | 0 | 1 |
-| 14 | 5 | yes | yes (2 near) | - | yes | yes | 3 | 1 |
+| 13 | 3 | yes | yes (4 near) | yes | yes | yes | 0 | 1 |
+| 14 | 5 | yes | yes (2 near) | yes | yes | yes | 3 | 1 |
 | 15 | ? | yes | yes (4 near) | yes | yes | yes | 1 | 0 |
 | 16 | 4 | yes | yes (2 near) | yes | yes | yes | 1 | 1 |
 | 17 | 4 | yes | yes (3 near) | yes | yes | yes | 1 | 1 |
@@ -98,11 +98,10 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 
 ## Missing or suspect features
 
-- hole 13: hole line ends 52.8 m from the nearest green
-- hole 13: no golf=pin inside its green
 - hole 15: hole line has no par tag
 - green w1053594241 at (455, 735) is not the end of any hole line (practice green?) -> treated as a wrong green
+- green w1053644812 at (487, 275) is not the end of any hole line (practice green?) -> treated as a wrong green
 - green w1053644816 at (652, 962) is not the end of any hole line (practice green?) -> treated as a wrong green
 
-Totals: 73 tees, 20 greens, 17 fairways, 38 bunkers, 5 water hazards, 18 pins, 11 cart paths, 0 OSM tree points.
+Totals: 72 tees, 21 greens, 19 fairways, 38 bunkers, 5 water hazards, 18 pins, 11 cart paths, 0 OSM tree points.
 
