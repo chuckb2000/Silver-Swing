@@ -1,4 +1,5 @@
-// Settings: handedness, difficulty, units, latency, sound, view size, rules.
+// Settings: handedness, difficulty, sound, view size, casual rules, player code.
+// Units (yards), input latency and the OB rule are no longer settings (developer, 2026-10-20).
 
 import { app } from '../app';
 import { setVolume, sfx } from '../audio/sfx';
@@ -81,8 +82,6 @@ export class SettingsScene extends MenuScene {
       choice('hand', 'lefty', [[false, 'right'], [true, 'left']]);
       choice('difficulty', 'difficulty', [['easy', 'easy'], ['normal', 'normal'], ['pro', 'pro']]);
     }
-    choice('units', 'units', [['yd', 'yards'], ['m', 'metres']]);
-    stepper('input latency', `${s.latencyMs > 0 ? '+' : ''}${s.latencyMs} ms`, () => { s.latencyMs = Math.max(-150, s.latencyMs - 10); }, () => { s.latencyMs = Math.min(150, s.latencyMs + 10); });
     stepper('volume', `${Math.round(s.volume * 100)}%`, () => { s.volume = Math.max(0, Math.round((s.volume - 0.1) * 10) / 10); }, () => { s.volume = Math.min(1, Math.round((s.volume + 0.1) * 10) / 10); sfx('click'); });
     choice('sound', 'muted', [[false, 'on'], [true, 'muted']]);
     stepper('pixel size', ['bigger', 'auto', 'smaller'][s.viewScale + 1], () => { s.viewScale = Math.max(-1, s.viewScale - 1); applyScale(this.game); }, () => { s.viewScale = Math.min(1, s.viewScale + 1); applyScale(this.game); });
@@ -92,7 +91,6 @@ export class SettingsScene extends MenuScene {
       this.root.add(txt(this, x0 + pw / 2, y, 'hand, difficulty and rules are set', { origin: [0.5, 0], color: COLORS.dim }));
       this.root.add(txt(this, x0 + pw / 2, y + 11, 'for this round. change them from the title screen.', { origin: [0.5, 0], color: COLORS.dim }));
     } else {
-      choice('ob rule', 'e5', [[false, 'stroke+dist'], [true, 'local e-5']]);
       this.root.add(txt(this, lx, y + 3, 'casual rules', { color: COLORS.dim }));
       ([['gimmes', 'gimmes'], ['maxDoublePar', 'max 2x par'], ['mulligans', 'mulligan']] as [keyof Settings, string][]).forEach(([k, lab], i) => {
         this.root.add(new Button(this, vx + i * (bw + 2), y, bw, 14, lab, () => { (s[k] as boolean) = !s[k]; save(); }, { color: s[k] ? 'orange' : 'grey' }));

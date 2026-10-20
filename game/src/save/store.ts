@@ -89,6 +89,10 @@ export async function loadSettings(): Promise<Settings> {
   const s = await read<Partial<Settings>>('settings');
   const out = { ...DEFAULT_SETTINGS, ...(s ?? {}) };
   if (!out.tees || typeof out.tees !== 'object') out.tees = {};
+  // no longer settings (developer, 2026-10-20): yards, no latency offset, stroke-and-distance OB
+  out.units = 'yd';
+  out.latencyMs = 0;
+  out.e5 = false;
   if (!isPlayerKey(out.playerKey)) {
     out.playerKey = newPlayerKey();
     await write('settings', out);
