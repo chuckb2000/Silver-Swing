@@ -393,7 +393,7 @@ From docs/reports/player_improvements.md ("for playability, let's do 2, 3, 4, 5,
 - **Friends' activity (8):** leaderboard "recent": the last 50 rounds on the shared board, newest first, with "best" (the player's best on that board so far) and "record!" (lower than anyone's before) badges, worked out in one query (`GET /api/recent`, kept 30 s). Casual rounds are listed without badges.
 - **Replay (9):** "replay" (or R) on the hole-complete panel plays the holing shot again exactly (the physics is deterministic: `Round.replay()` re-runs the stroke with the same random stream), once at playing speed and then its last 2.6 s at 0.35x; a tap ends it. Only when the ball went in (not a gimme or a picked-up maximum).
 - **Milestones (11):** first birdie, eagle and hole in one; a course's first round, birdie and eagle; breaking 100/90/80/70 (nine holes: 50/45/40/35) and level or under par at a course; every course in a state played; every course played. Worked out from the player's finished, non-casual rounds (`src/save/milestones.ts`), so nothing extra is stored. The summary shows those the round earned; "my golf" lists them all.
-- **Title screen:** the extra buttons sit two to a row (my golf, practice, leaderboard, settings, credits) so the menu fits a 270-texel-high screen.
+- **Title screen:** the extra buttons sit two to a row (my golf, practice, leaderboard, settings) so the menu fits a 270-texel-high screen. Credits moved into settings (developer, 2026-10-20); the title's footer says so.
 
 ## Data and pipeline
 

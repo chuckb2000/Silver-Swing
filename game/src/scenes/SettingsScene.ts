@@ -127,5 +127,7 @@ export class SettingsScene extends MenuScene {
       this.root.add(txt(this, x0 + pw / 2, y + 2, 'casual rounds go on their own leaderboard tab', { origin: [0.5, 0], color: COLORS.dim }));
     }
     this.root.add(new Button(this, x0 + 8, y0 + ph - 20, 56, 15, 'back', () => this.back(), { color: 'grey' }));
+    // the credits live here (developer, 2026-10-20), not on the title screen
+    if (!inRound) this.root.add(new Button(this, x0 + pw - 64, y0 + ph - 20, 56, 15, 'credits', () => { void saveSettings(s); this.scene.start('credits'); }, { color: 'grey' }));
   }
 }

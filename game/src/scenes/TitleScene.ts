@@ -232,12 +232,11 @@ export class TitleScene extends MenuScene {
     add2('practice', () => void this.withLoading((progress) => startPractice(this, progress)));
     add2('leaderboard', () => this.scene.start('leaderboard'));
     add2('settings', () => this.scene.start('settings', { from: 'title' }));
-    add2('credits', () => this.scene.start('credits'));
     if (update.ready) {
       // a new version of the game has arrived (offline copy): one tap to start it
       this.root.add(new Button(this, W - 112, 4, 108, 15, 'update - tap to reload', () => update.apply()));
     }
     this.root.add(new Panel(this, 4, H - 16, W - 8, 12, 0.55));
-    this.root.add(txt(this, cx, H - 15, 'map data © openstreetmap contributors · more in credits', { origin: [0.5, 0], color: COLORS.dim }));
+    this.root.add(txt(this, cx, H - 15, 'map data © openstreetmap contributors · credits in settings', { origin: [0.5, 0], color: COLORS.dim }));
   }
 }
