@@ -8,7 +8,7 @@ import { app, GAME_NAME } from '../app';
 import { coursesByState } from '../data/registry';
 import { initAudio, setVolume } from '../audio/sfx';
 import { peekSnapshot } from '../save/snapshot';
-import { Button, COLORS, Panel, txt } from '../ui/widgets';
+import { Button, COLORS, Panel, setTxt, txt } from '../ui/widgets';
 import { resumeRound } from './flow';
 import { ensureBg, MenuScene } from './menu';
 
@@ -24,6 +24,7 @@ interface Shown { img: Phaser.GameObjects.Image; t: number; fromX: number; fromY
 export class TitleScene extends MenuScene {
   private shown: Shown[] = [];
   private shade: Phaser.GameObjects.Rectangle | null = null;
+  private resuming = false;
 
   constructor() {
     super('title');
@@ -160,7 +161,19 @@ export class TitleScene extends MenuScene {
     if (snap) {
       const holeNo = snap.cfg.holes[Math.min(snap.cfg.holes.length - 1, snap.holeIndex + (snap.betweenHoles ? 1 : 0))];
       add(`continue round (hole ${holeNo})`, async () => {
-        const ok = await resumeRound(this);
+        if (this.resuming) return;
+        this.resuming = true;
+        // the round's course may have to load first: show that something is happening
+        const dim = this.add.rectangle(0, 0, W, H, 0x081018, 0.7).setOrigin(0, 0).setInteractive();
+        const msg = txt(this, cx, H / 2 - 4, 'loading course...', { origin: [0.5, 0], scale: 2, color: COLORS.yellow });
+        this.root.add([dim, msg]);
+        let ok = false;
+        try {
+          ok = await resumeRound(this, (f) => { if (msg.active) setTxt(msg, `loading course ${Math.round(f * 100)}%`); });
+        } catch (e) {
+          console.error(e);
+        }
+        this.resuming = false;
         if (!ok) this.rebuild();
         else this.scene.stop('bg');
       });

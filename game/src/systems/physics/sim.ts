@@ -235,8 +235,8 @@ export function simulateShot(terrain: Terrain, obs: Obstacles | null, spec: Shot
     if (fromFlight && f) {
       kept = m.kept * f.firstBounceK;
       if (f.spin < 0) kept *= 1 - 0.4 * -f.spin;
-      else if (f.spin > 0) kept *= 1 + 0.15 * f.spin;
-      decelMult = f.spin < 0 ? 1 + 0.6 * -f.spin : f.spin > 0 ? 1 - 0.25 * f.spin : 1;
+      else if (f.spin > 0) kept *= 1 + 0.1 * f.spin;
+      decelMult = f.spin < 0 ? 1 + 0.6 * -f.spin : f.spin > 0 ? 1 - 0.15 * f.spin : 1;
       if (f.spinBack > 0 && (surf === SURF.green || surf === SURF.fringe)) spinBackLeft = f.spinBack;
     } else {
       kept = 0.5 + 0.5 * m.kept;

@@ -1,9 +1,10 @@
 // Hole locations (systems/game/pins.ts): the developer's rules, on every course:
 // keep the centre pin, add 2-3 more per green, every pin at least 10 ft from
-// every edge of the green; and every round gets a mix of pin positions.
+// every edge of the green (14 ft where the green allows, after "a little too
+// close to the edge"); and every round gets a mix of pin positions.
 import { describe, expect, it } from 'vitest';
 import { courseHoleFor, Round } from '../../src/systems/game/round';
-import { coursePins, PIN_EDGE_MIN_M, PIN_MAX_SLOPE, PIN_MIN_SEP_M, pinSheet, roundPins, slopeAround } from '../../src/systems/game/pins';
+import { coursePins, PIN_EDGE_MIN_M, PIN_EDGE_PREFERRED_M, PIN_MAX_SLOPE, PIN_MIN_SEP_M, pinSheet, roundPins, slopeAround } from '../../src/systems/game/pins';
 import { loadCourseFiles, registry, roundCfg } from './helpers';
 
 const courses = registry().map((c) => ({ id: c.id, course: loadCourseFiles(c.id) }));
@@ -32,6 +33,16 @@ describe('hole locations on every green', () => {
       });
     }, 60_000);
   }
+
+  it('extra pins sit 14 ft from the edge wherever the green has room (12 or 10 ft only on small greens)', () => {
+    let extra = 0, far = 0;
+    for (const { course } of courses) {
+      for (const spots of coursePins(course, course.json.defaultTee)) {
+        for (const s of spots) if (!s.centre) { extra++; if (s.edge >= PIN_EDGE_PREFERRED_M - 1e-6) far++; }
+      }
+    }
+    expect(far / extra).toBeGreaterThan(0.85);
+  });
 
   it('greens offer a mix: hard, easy and medium pins in different parts of the green', () => {
     let hard = 0, easy = 0, greens = 0, zones = 0;

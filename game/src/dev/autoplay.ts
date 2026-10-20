@@ -27,14 +27,12 @@ export function installAutoplay(game: Phaser.Game) {
       const r = p.round;
       const d = r.distToPin();
       const t0 = m.startedAt;
-      const speed = m.speed; // % of bar per ms
       const want = p.club.kind === 'putter'
         ? Math.min(1, (d * 1.12 + 0.3) / p.puttScale) * powerScale
         : Math.max(0.15, Math.min(1, (d * 0.97) / Math.max(1, r.fullCarry(p.club) * p.swingScale))) * powerScale;
-      const t2 = t0 + (want * 100) / speed;
-      const t3 = t2 + (want * 100 - accuracy) / speed;
-      p.tap(t2);
-      p.tap(t3);
+      const [d2, d3] = m.tapTimes(want * 100, accuracy);
+      p.tap(t0 + d2);
+      p.tap(t0 + d3);
       return true;
     },
 

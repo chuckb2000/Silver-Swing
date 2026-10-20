@@ -5,6 +5,8 @@
 import { createStore, del, get, set, UseStore } from 'idb-keyval';
 import type { Difficulty } from '../data/difficulty';
 import { isEntry, LeaderboardEntry } from './entry';
+import type { EagleEvent } from './feats';
+import { isPlayerKey, newPlayerKey } from './identity';
 
 export type { LeaderboardEntry, RoundLength } from './entry';
 export { isEntry } from './entry';
@@ -25,12 +27,14 @@ export interface Settings {
   showTips: boolean;
   courseId: string;  // last course chosen on the new-round screen
   tees: Record<string, string>; // tee set last chosen, per course id
+  playerKey: string; // this device's private key for its names on the shared boards (save/identity.ts)
 }
 
 export const DEFAULT_SETTINGS: Settings = {
   difficulty: 'normal', lefty: false, units: 'yd', latencyMs: 0, volume: 0.7, muted: false,
   e5: false, gimmes: false, maxDoublePar: false, mulligans: false, viewScale: 0, playerName: 'player', showTips: true, courseId: '',
   tees: {},
+  playerKey: '',
 };
 
 const mem = new Map<string, unknown>();
@@ -85,6 +89,10 @@ export async function loadSettings(): Promise<Settings> {
   const s = await read<Partial<Settings>>('settings');
   const out = { ...DEFAULT_SETTINGS, ...(s ?? {}) };
   if (!out.tees || typeof out.tees !== 'object') out.tees = {};
+  if (!isPlayerKey(out.playerKey)) {
+    out.playerKey = newPlayerKey();
+    await write('settings', out);
+  }
   return out;
 }
 
@@ -150,4 +158,28 @@ export async function importBackup(text: string): Promise<number> {
   }
   if (add.length) await replaceBoard([...all, ...add]);
   return add.length;
+}
+
+/** Eagles made on this device: kept for the device's own list, `sent` once the shared list has them. */
+export interface LocalEagle extends EagleEvent { sent: boolean }
+
+export async function loadEagles(): Promise<LocalEagle[]> {
+  return (await read<LocalEagle[]>('eagles')) ?? [];
+}
+
+export const saveEagles = (list: LocalEagle[]) => write('eagles', list);
+
+/** Add an eagle (or replace one with the same id). */
+export async function recordEagle(e: EagleEvent): Promise<void> {
+  const all = (await loadEagles()).filter((x) => x.id !== e.id);
+  all.push({ ...e, sent: false });
+  await saveEagles(all);
+}
+
+/** A round's player name changed: its eagles not yet sent follow it. */
+export async function renameEagles(round: string, player: string): Promise<void> {
+  const all = await loadEagles();
+  let changed = false;
+  for (const e of all) if (e.round === round && !e.sent && e.player !== player) { e.player = player; changed = true; }
+  if (changed) await saveEagles(all);
 }

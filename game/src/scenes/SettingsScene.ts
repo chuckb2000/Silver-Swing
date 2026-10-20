@@ -6,6 +6,9 @@ import { saveSettings, Settings } from '../save/store';
 import { Button, COLORS, Panel, txt } from '../ui/widgets';
 import { applyScale, uiCamera } from '../scale';
 import { MenuScene } from './menu';
+import { keyCode } from '../save/identity';
+import { askCode } from '../ui/codeInput';
+import { nameConflicts } from '../save/online';
 
 export class SettingsScene extends MenuScene {
   private from: 'title' | 'hud' = 'title';
@@ -48,7 +51,7 @@ export class SettingsScene extends MenuScene {
     const s = app.settings;
     const W = app.view.w, H = app.view.h;
     const inRound = this.from === 'hud';
-    const pw = Math.min(320, W - 8), ph = Math.min(H - 8, inRound ? 176 : 236);
+    const pw = Math.min(320, W - 8), ph = Math.min(H - 8, inRound ? 176 : 254);
     const x0 = Math.round((W - pw) / 2), y0 = Math.round((H - ph) / 2);
     if (this.from === 'hud') {
       const dim = this.add.rectangle(0, 0, W, H, 0x05080b, 0.7).setOrigin(0, 0).setInteractive();
@@ -93,6 +96,15 @@ export class SettingsScene extends MenuScene {
       ([['gimmes', 'gimmes'], ['maxDoublePar', 'max 2x par'], ['mulligans', 'mulligan']] as [keyof Settings, string][]).forEach(([k, lab], i) => {
         this.root.add(new Button(this, vx + i * (bw + 2), y, bw, 14, lab, () => { (s[k] as boolean) = !s[k]; save(); }, { color: s[k] ? 'orange' : 'grey' }));
       });
+      y += 17;
+      // the device's private player code: copied to another device, the player's names work there too
+      this.root.add(txt(this, lx, y + 3, 'player code', { color: COLORS.dim }));
+      this.root.add(txt(this, vx, y + 3, keyCode(s.playerKey)));
+      this.root.add(new Button(this, x0 + pw - 70, y, 62, 14, 'use another', () => {
+        askCode(this, (k) => {
+          if (k && k !== s.playerKey) { s.playerKey = k; nameConflicts.clear(); save(); }
+        });
+      }, { color: 'grey' }));
       y += 17;
       this.root.add(txt(this, x0 + pw / 2, y + 2, 'casual rounds go on their own leaderboard tab', { origin: [0.5, 0], color: COLORS.dim }));
     }

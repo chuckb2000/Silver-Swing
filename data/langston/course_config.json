@@ -90,5 +90,22 @@
     "Elevation and canopy: District of Columbia lidar 1 m DEM and normalized surface model, DC GIS / OCTO (CC BY 4.0)",
     "Scorecard: Langston Golf Course (National Links Trust)"
   ],
-  "notes": "Developer decisions 2026-10-19: Royal (Blue) tees default; hole 10 has a back tee across Kingman Lake on the front-nine side; boundary joined across the lake (option A); every water hazard red; fairways run up to the green on every hole except where water lies between; anacostia theme with murky river water, no blossoms; the driving range is not made out of bounds. Hole 13 has a two-tier green (small low front tier), developer 2026-10-19."
+  "notes": "Developer decisions 2026-10-19: Royal (Blue) tees default; hole 10 has a back tee across Kingman Lake on the front-nine side; boundary joined across the lake (option A); every water hazard red; fairways run up to the green on every hole except where water lies between; anacostia theme with murky river water, no blossoms; the driving range is not made out of bounds. Hole 13 has a two-tier green (small low front tier), developer 2026-10-19.",
+  "drop_trees": [
+    {
+      "x": 889.5,
+      "y": 1123.5,
+      "reason": "design chat 2026-10-19, developer: \"Trees in the middle of the fairway on hole 16 at langston should be removed. and hole 17\" - lidar tree standing inside the hole 16 fairway"
+    },
+    {
+      "x": 890.5,
+      "y": 1144.5,
+      "reason": "design chat 2026-10-19, developer: \"Trees in the middle of the fairway on hole 16 at langston should be removed. and hole 17\" - lidar tree standing inside the hole 16 fairway"
+    },
+    {
+      "x": 712.5,
+      "y": 783.5,
+      "reason": "design chat 2026-10-19, developer: \"Trees in the middle of the fairway on hole 16 at langston should be removed. and hole 17\" - lidar tree standing inside the hole 17 fairway"
+    }
+  ]
 }

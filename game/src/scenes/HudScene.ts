@@ -1,6 +1,9 @@
 // HUD overlay for the Play scene: panels, buttons, swing meter, mini-map,
 // banners and the modal dialogs (scorecard, relief, overview, pause).
 
+import { isListedEagle, nameRound } from '../save/eagleReport';
+import { DEFAULT_NAME } from '../save/names';
+import { askName } from '../ui/nameInput';
 import Phaser from 'phaser';
 import { clearSnapshot } from '../save/snapshot';
 import { app, fmtDist, PX_PER_M, unitLabel, YD } from '../app';
@@ -416,16 +419,18 @@ export class HudScene extends Phaser.Scene {
     const lefty = this.play.round.cfg.settings.lefty;
     let label = 'perfect!';
     let color: number = COLORS.green;
-    if (st.quality === 'good') { label = `slight ${missWord(st.side, false, lefty)}`; color = COLORS.yellow; }
+    let note = '';
+    if (st.quality === 'great') { label = 'great!'; note = `tiny ${missWord(st.side, false, lefty)} · `; }
+    else if (st.quality === 'good') { label = `slight ${missWord(st.side, false, lefty)}`; color = COLORS.yellow; }
     else if (st.quality !== 'perfect') { label = missWord(st.side, true, lefty); color = COLORS.red; }
     const pw = Math.round(st.power * 100);
-    this.flash(label, color, `${pw}% power${st.overswing ? ' (overswing)' : ''}`, 1100);
+    this.flash(label, color, `${note}${pw}% power${st.overswing ? ' (overswing)' : ''}`, 1100);
   }
 
   puttFeedback(ps: PuttStrike, power: number) {
     const word = (ps.side > 0) !== this.play.round.cfg.settings.lefty ? 'push' : 'pull'; // a right-hander pushes it right
-    const label = ps.quality === 'perfect' ? 'good stroke' : ps.quality === 'good' ? `slight ${word}` : word;
-    const color = ps.quality === 'perfect' ? COLORS.green : ps.quality === 'good' ? COLORS.yellow : COLORS.red;
+    const label = ps.quality === 'perfect' ? 'pure stroke' : ps.quality === 'great' ? 'good stroke' : ps.quality === 'good' ? `slight ${word}` : word;
+    const color = ps.quality === 'perfect' || ps.quality === 'great' ? COLORS.green : ps.quality === 'good' ? COLORS.yellow : COLORS.red;
     this.flash(label, color, `${Math.round(power * 100)}% of ${puttScaleLabel(this.play.puttScale)}`, 900);
   }
 
@@ -668,7 +673,9 @@ export class HudScene extends Phaser.Scene {
     const color = d < 0 ? COLORS.yellow : d === 0 ? COLORS.green : COLORS.white;
     if (d < 0) sfx('great'); else if (d === 0) sfx('good'); else sfx('bad');
     const tot = totals(r.scores);
-    const w = Math.min(210, this.W - 12), h = 92;
+    const eagle = !maxed && isListedEagle(r, score);
+    const unnamed = eagle && r.cfg.playerName === DEFAULT_NAME;
+    const w = Math.min(210, this.W - 12), h = unnamed ? 112 : eagle ? 100 : 92;
     const x = Math.round((this.W - w) / 2), y = Math.round(this.H * 0.28);
     const pnl = new Panel(this, x, y, w, h, 0.9);
     const t1 = txt(this, x + w / 2, y + 6, name + (gimme ? ' (gimme)' : ''), { origin: [0.5, 0], scale: 2, color });
@@ -678,6 +685,22 @@ export class HudScene extends Phaser.Scene {
     const nb = new Button(this, x + w - 86, y + h - 22, 80, 16, last ? 'finish round' : 'next hole', () => this.continueFromHoled());
     const cb = new Button(this, x + 6, y + h - 22, 60, 16, 'card', () => this.toggleCard(), { color: 'grey' });
     this.modalLayer.add([pnl, t1, t2, t3, nb, cb]);
+    if (eagle) {
+      // the eagle goes on the shared list now; a player with no name is asked for one
+      const t4 = txt(this, x + w / 2, y + 54, unnamed ? 'add your name for the recent eagles list' : 'on the recent eagles list!', { origin: [0.5, 0], color: COLORS.yellow, maxWidth: w - 12 });
+      this.modalLayer.add(t4);
+      if (unnamed) {
+        const ab = new Button(this, x + w / 2 - 34, y + 67, 68, 16, 'add name', () => {
+          askName(this, '', async (name) => {
+            if (!name) return;
+            await nameRound(r, name);
+            setTxt(t4, `${name}: on the recent eagles list!`);
+            ab.setVisible(false);
+          }, 'your name for the eagles list');
+        });
+        this.modalLayer.add(ab);
+      }
+    }
     this.refresh();
   }
 

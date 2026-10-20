@@ -5,7 +5,9 @@
 // easy, medium and hard ones (pinSheet below). Pure functions, no Phaser.
 //
 // A location must be
-//   - on the green and at least 10 ft (3.048 m) from every edge of it,
+//   - on the green and at least 14 ft (4.267 m) from every edge of it (developer:
+//     10 ft was "a little too close to the edge"); a green too small for two
+//     more pins that far in tries 12 ft, then 10 ft,
 //   - on putting surface no steeper than 3 % within a club-length around the
 //     cup (the green model tilts 1-3 % with undulations up to 1.5 %; real
 //     superintendents keep hole locations under about 3 % at these speeds),
@@ -19,7 +21,9 @@ import type { GreenModel } from '../physics/terrain';
 import { Rng } from '../physics/rng';
 import { isOB, isWater, SURF } from '../physics/surfaces';
 
-export const PIN_EDGE_MIN_M = 3.048; // 10 ft from every edge of the green (developer)
+export const PIN_EDGE_PREFERRED_M = 4.267; // 14 ft from every edge of the green (developer: 10 ft was "a little too close to the edge")
+export const PIN_EDGE_STEPS = [4.267, 3.658, 3.048]; // 14, 12, 10 ft: a small green steps down until two more pins fit
+export const PIN_EDGE_MIN_M = 3.048; // never closer than 10 ft
 export const PIN_MAX_SLOPE = 0.03; // steepest grade around the cup
 export const PIN_MIN_SEP_M = 4.572; // 15 ft between two locations on a green
 export const PIN_EXTRA = 3; // extra locations per green, besides the centre pin
@@ -126,47 +130,20 @@ function classify(f: Frame, x: number, y: number): { depth: PinDepth; side: PinS
   return { depth, side };
 }
 
-function difficultyOf(slope: number, edge: number, hz: { d: number; water: boolean }, depth: PinDepth): { score: number; level: 1 | 2 | 3 } {
-  const tucked = hz.d === Infinity ? 0 : Math.max(0, (10 - hz.d) / 6.5) * (hz.water ? 1.5 : 1);
-  const nearEdge = Math.max(0, Math.min(1, (6 - edge) / 3));
+function difficultyOf(slope: number, edge: number, hz: { d: number; water: boolean }, depth: PinDepth, edgeMin = PIN_EDGE_MIN_M): { score: number; level: 1 | 2 | 3 } {
+  const tucked = hz.d === Infinity ? 0 : Math.max(0, (10 + (edgeMin - PIN_EDGE_MIN_M) - hz.d) / 6.5) * (hz.water ? 1.5 : 1);
+  const nearEdge = Math.max(0, Math.min(1, (edgeMin + 3 - edge) / 3)); // as near the edge as this green allows
   const tilt = Math.min(1, slope / PIN_MAX_SLOPE);
   const score = 0.9 * Math.min(1.5, tucked) + 0.6 * nearEdge + 0.5 * tilt + (depth === 'middle' ? 0 : 0.2);
   return { score, level: score < 0.7 ? 1 : score < 1.3 ? 2 : 3 };
 }
 
-/** Hole locations on a hole's green: the centre pin first, then up to PIN_EXTRA more. */
-export function pinSpots(course: CourseRuntime, hole: HoleJson, tee: string): PinSpot[] {
-  const g = greenFor(course, hole);
-  const [px0, py0] = hole.pin;
-  const centreOnly = (): PinSpot[] => [{ x: px0, y: py0, centre: true, depth: 'middle', side: 'centre', difficulty: 1, slope: 0, edge: 0, hazard: Infinity }];
-  if (!g) return centreOnly();
-  const f = frameFor(g, hole, tee);
-  const cells = hazardCells(course, g);
-  const spot = (x: number, y: number, centre: boolean): PinSpot & { score: number } => {
-    const slope = slopeAround(g, x, y);
-    const edge = g.poly.edgeDistance(x, y);
-    const hz = hazardDistance(cells, x, y);
-    const { depth, side } = classify(f, x, y);
-    const d = difficultyOf(slope, edge, hz, depth);
-    return { x, y, centre, depth, side, difficulty: d.level, slope, edge, hazard: hz.d, score: d.score };
-  };
-  const centre = spot(px0, py0, true);
-  // candidates on a grid over the green
-  const p = g.poly;
-  const area = p.area();
-  const step = area > 1500 ? 1 : 0.5;
-  const cands: (PinSpot & { score: number })[] = [];
-  for (let y = Math.ceil(p.minY / step) * step; y <= p.maxY; y += step) {
-    for (let x = Math.ceil(p.minX / step) * step; x <= p.maxX; x += step) {
-      if (!p.contains(x, y)) continue;
-      if (p.edgeDistance(x, y) < PIN_EDGE_MIN_M) continue;
-      if (slopeAround(g, x, y) > PIN_MAX_SLOPE) continue;
-      cands.push(spot(x, y, false));
-    }
-  }
-  // one pin of each kind where the green allows: a hard one tucked near a hazard or an
-  // edge, an easy one in open space, and a medium one, each in a part of the green
-  // (front / middle / back, left / right) the others don't use
+/**
+ * One pin of each kind where the green allows: a hard one tucked near a hazard
+ * or an edge, an easy one in open space, and a medium one, each in a part of
+ * the green (front / middle / back, left / right) the others don't use.
+ */
+function pickPins(centre: PinSpot & { score: number }, cands: (PinSpot & { score: number })[], area: number): (PinSpot & { score: number })[] {
   const chosen: (PinSpot & { score: number })[] = [centre];
   const size = Math.sqrt(area);
   const band = (c: { score: number }) => (c.score < 0.7 ? 1 : c.score < 1.3 ? 2 : 3);
@@ -186,6 +163,44 @@ export function pinSpots(course: CourseRuntime, hole: HoleJson, tee: string): Pi
     }
     if (!best) break;
     chosen.push(best);
+  }
+  return chosen;
+}
+
+/** Hole locations on a hole's green: the centre pin first, then up to PIN_EXTRA more. */
+export function pinSpots(course: CourseRuntime, hole: HoleJson, tee: string): PinSpot[] {
+  const g = greenFor(course, hole);
+  const [px0, py0] = hole.pin;
+  const centreOnly = (): PinSpot[] => [{ x: px0, y: py0, centre: true, depth: 'middle', side: 'centre', difficulty: 1, slope: 0, edge: 0, hazard: Infinity }];
+  if (!g) return centreOnly();
+  const f = frameFor(g, hole, tee);
+  const cells = hazardCells(course, g);
+  const p = g.poly;
+  const area = p.area();
+  const step = area > 1500 ? 1 : 0.5;
+  // candidates on a grid over the green, with their edge distance and slope (the same for every margin tried)
+  const grid: { x: number; y: number; edge: number; slope: number; hz: { d: number; water: boolean } }[] = [];
+  for (let y = Math.ceil(p.minY / step) * step; y <= p.maxY; y += step) {
+    for (let x = Math.ceil(p.minX / step) * step; x <= p.maxX; x += step) {
+      if (!p.contains(x, y)) continue;
+      const edge = p.edgeDistance(x, y);
+      if (edge < PIN_EDGE_MIN_M) continue;
+      const slope = slopeAround(g, x, y);
+      if (slope > PIN_MAX_SLOPE) continue;
+      grid.push({ x, y, edge, slope, hz: hazardDistance(cells, x, y) });
+    }
+  }
+  let chosen: (PinSpot & { score: number })[] = [];
+  for (const edgeMin of PIN_EDGE_STEPS) {
+    const spot = (x: number, y: number, centre: boolean, edge = p.edgeDistance(x, y), slope = slopeAround(g, x, y), hz = hazardDistance(cells, x, y)): PinSpot & { score: number } => {
+      const { depth, side } = classify(f, x, y);
+      const d = difficultyOf(slope, edge, hz, depth, edgeMin);
+      return { x, y, centre, depth, side, difficulty: d.level, slope, edge, hazard: hz.d, score: d.score };
+    };
+    const centre = spot(px0, py0, true);
+    const cands = grid.filter((c) => c.edge >= edgeMin).map((c) => spot(c.x, c.y, false, c.edge, c.slope, c.hz));
+    chosen = pickPins(centre, cands, area);
+    if (chosen.length >= 3) break; // the centre pin and two more fit this far in
   }
   return chosen.map(({ score: _s, ...s }) => ({ ...s, x: Math.round(s.x * 1000) / 1000, y: Math.round(s.y * 1000) / 1000 }));
 }

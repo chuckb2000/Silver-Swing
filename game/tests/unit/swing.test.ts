@@ -1,7 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import { clubById } from '../../src/data/clubs';
 import { FULL_MAX, LATE_POWER_TAP_MS, PART_MAX, SwingMeter, ZONE_REACH } from '../../src/systems/swing/meter';
-import { GOOD_BAND, missCurve, missWord, perfectHalfWidth, powerFactor, puttStrikeFrom, strikeFrom } from '../../src/systems/swing/outcome';
+import { GOOD_BAND, IN_ZONE_CURVE, missCurve, missWord, perfectHalfWidth, powerFactor, puttStrikeFrom, strikeFrom } from '../../src/systems/swing/outcome';
+import { PRESETS } from '../../src/data/difficulty';
 
 const per100 = 1.6; // normal: seconds for 100 % of the bar
 const speed = 100 / (per100 * 1000); // % per ms
@@ -188,5 +189,115 @@ describe('meter cursor after a tap (developer, 2026-10-19: no jump back)', () =>
     m.tap(1405); // the tap, a few ms after that frame
     expect(m.position(1405)).toBeGreaterThanOrEqual(drawn);
     expect(m.position(1405)).toBeCloseTo((1405 - 1000) * m.speed, 6);
+  });
+});
+
+describe('meter speeds up toward 100 % (developer, 2026-10-19)', () => {
+  const pr = PRESETS.normal;
+  const make = (kind: 'full' | 'putt' = 'full') => new SwingMeter(kind, pr.secondsPer100, kind === 'putt' ? PART_MAX : FULL_MAX, 0, pr.fastSecondsPer100);
+
+  it('starts at the slow speed and reaches the original speed at 100 %, never faster', () => {
+    const m = make();
+    expect(m.speedAt(0)).toBeCloseTo(100 / (pr.secondsPer100 * 1000), 9);
+    expect(m.speedAt(50)).toBeGreaterThan(m.speedAt(10));
+    expect(m.speedAt(100)).toBeCloseTo(100 / (pr.fastSecondsPer100 * 1000), 9);
+    expect(m.speedAt(110)).toBeCloseTo(m.speedAt(100), 9);
+    for (const k of ['easy', 'normal', 'pro'] as const) {
+      expect(PRESETS[k].fastSecondsPer100).toBeLessThan(PRESETS[k].secondsPer100);
+    }
+    // the original meter: 100 % in 1.2 / 1.0 / 0.8 s
+    expect([PRESETS.easy.fastSecondsPer100, PRESETS.normal.fastSecondsPer100, PRESETS.pro.fastSecondsPer100]).toEqual([1.2, 1.0, 0.8]);
+  });
+
+  it('100 % comes sooner than at the old constant speed but later than the original meter', () => {
+    const m = make();
+    const t100 = m.timeTo(100);
+    expect(t100).toBeLessThan(pr.secondsPer100 * 1000);
+    expect(t100).toBeGreaterThan(pr.fastSecondsPer100 * 1000);
+  });
+
+  it('the cursor position follows the speed-up and tap times invert it', () => {
+    const m = make();
+    m.tap(0);
+    for (const p of [5, 30, 60, 95, 100, 105]) expect(m.position(m.timeTo(p))).toBeCloseTo(p, 6);
+  });
+
+  it('the cursor comes back at the speed it had at tap 2', () => {
+    for (const power of [25, 60, 100]) {
+      const m = make();
+      m.tap(0);
+      const [t2] = m.tapTimes(power, 0);
+      m.tap(t2);
+      expect(m.backSpeed).toBeCloseTo(m.speedAt(power), 9);
+      expect(m.position(t2 + 100)).toBeCloseTo(power - 100 * m.speedAt(power), 6);
+    }
+  });
+
+  it('a short swing is easier to time than a full one: the green zone lasts longer', () => {
+    const m = make();
+    expect(1 / m.speedAt(30)).toBeGreaterThan(1.3 / m.speedAt(100));
+  });
+
+  it('tapTimes gives the swing asked for', () => {
+    for (const [power, err] of [[40, 0], [80, 3], [100, -2], [110, 0]]) {
+      const m = make();
+      m.tap(1000);
+      const [d2, d3] = m.tapTimes(power, err);
+      m.tap(1000 + d2);
+      m.tap(1000 + d3);
+      expect(m.result!.power).toBeCloseTo(power / 100, 5);
+      expect(m.result!.offset).toBeCloseTo(err, 5);
+    }
+  });
+
+  it('reaching the end turns the cursor at full speed', () => {
+    const m = make();
+    m.tap(0);
+    m.update(m.timeTo(FULL_MAX) + 5);
+    expect(m.phase).toBe('accuracy');
+    expect(m.backSpeed).toBeCloseTo(m.speedAt(100), 9);
+  });
+
+  it('putts speed up the same way', () => {
+    const m = make('putt');
+    expect(m.speedAt(100)).toBeGreaterThan(m.speedAt(0));
+  });
+});
+
+describe('inside the green zone only the centre is straight (developer, 2026-10-19)', () => {
+  const d = clubById('dr');
+  const i7 = clubById('7i');
+
+  it('off centre in the green curves a little that way, growing toward the edge', () => {
+    const half = perfectHalfWidth(2.5, d, lieFairway, false);
+    const c = strikeFrom(swing(100, 0), d, lieFairway, 2.5, false);
+    expect(c.curveDeg).toBe(0);
+    expect(c.quality).toBe('perfect');
+    const r1 = strikeFrom(swing(100, half * 0.5), d, lieFairway, 2.5, false);
+    const r2 = strikeFrom(swing(100, half * 0.95), d, lieFairway, 2.5, false);
+    const l2 = strikeFrom(swing(100, -half * 0.95), d, lieFairway, 2.5, false);
+    expect(r1.curveDeg).toBeGreaterThan(0);
+    expect(r2.curveDeg).toBeGreaterThan(r1.curveDeg);
+    expect(l2.curveDeg).toBeLessThan(0);
+    expect(r2.curveDeg).toBeLessThanOrEqual(IN_ZONE_CURVE * d.curveFactor + 1e-9);
+    expect(r2.loss).toBe(0);
+    expect(r2.quality).toBe('great');
+    // smaller than the smallest yellow miss
+    const yellow = strikeFrom(swing(100, half + 0.05), d, lieFairway, 2.5, false);
+    expect(yellow.curveDeg).toBeGreaterThan(r2.curveDeg);
+  });
+
+  it('the inner part of the zone still counts as perfect', () => {
+    const half = perfectHalfWidth(2.5, i7, lieFairway, false);
+    expect(strikeFrom(swing(100, half * 0.2), i7, lieFairway, 2.5, false).quality).toBe('perfect');
+  });
+
+  it('putts: a slightly off-centre tap starts the ball a touch off line, no distance lost', () => {
+    const pt = clubById('pt');
+    const half = 2.5 * pt.windowMult;
+    const p = puttStrikeFrom(swing(60, half * 0.9, 0, 'putt'), 2.5, pt.windowMult, false);
+    expect(p.dirDeg).toBeGreaterThan(0);
+    expect(p.dirDeg).toBeLessThan(0.3);
+    expect(p.distMult).toBe(1);
   });
 });

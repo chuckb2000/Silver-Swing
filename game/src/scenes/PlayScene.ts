@@ -4,6 +4,7 @@
 // scale.ts); the camera is a smooth spring (ui/cameraRig.ts). Putting uses a
 // zoomed-in view with its own high-resolution green art (ui/greenView.ts).
 
+import { reportEagle } from '../save/eagleReport';
 import Phaser from 'phaser';
 import { app, HEIGHT_PX, PX_PER_M } from '../app';
 import { initAudio, sfx, startAmbience } from '../audio/sfx';
@@ -579,7 +580,7 @@ export class PlayScene extends Phaser.Scene {
   private startMeter(ts: number) {
     const putt = this.isPutting();
     const max = putt || this.swingScale < 1 ? PART_MAX : FULL_MAX;
-    this.meter = new SwingMeter(putt ? 'putt' : 'full', this.round.preset.secondsPer100, max, app.settings.latencyMs); // the tap counts when it happens (developer: timing it is part of the skill)
+    this.meter = new SwingMeter(putt ? 'putt' : 'full', this.round.preset.secondsPer100, max, app.settings.latencyMs, this.round.preset.fastSecondsPer100); // the tap counts when it happens (developer: timing it is part of the skill)
     this.meter.tap(ts);
     this.state = 'swing';
     this.hud.refresh();
@@ -1045,6 +1046,7 @@ export class PlayScene extends Phaser.Scene {
         this.state = 'holed';
         this.hud.showHoled(score, out.kind === 'gimme');
         void saveSnapshot(r);
+        void reportEagle(r, score); // on the recent eagles list straight away, round finished or not
         break;
       }
       case 'max_score': {
