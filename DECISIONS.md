@@ -395,6 +395,15 @@ From docs/reports/player_improvements.md ("for playability, let's do 2, 3, 4, 5,
 - **Milestones (11):** first birdie, eagle and hole in one; a course's first round, birdie and eagle; breaking 100/90/80/70 (nine holes: 50/45/40/35) and level or under par at a course; every course in a state played; every course played. Worked out from the player's finished, non-casual rounds (`src/save/milestones.ts`), so nothing extra is stored. The summary shows those the round earned; "my golf" lists them all.
 - **Title screen:** the extra buttons sit two to a row (my golf, practice, leaderboard, settings) so the menu fits a 270-texel-high screen. Credits moved into settings (developer, 2026-10-20); the title's footer says so.
 
+## Logos: Chambers Bay and Gearhart (developer, 2026-10-20)
+
+`chambers_bay`: the old concrete gravel-plant ruins on the course (a tower with a
+sloping buttress wall either side, each on a thin leg with an open triangle under
+its brace) on a dune of golden fescue, drawn from the developer's photos.
+`gearhart`: a golf ball splashing into a glass stein of beer, foam spilling over;
+it replaces the shipwreck. Both in `assets-src/logos.py`, ready for when the
+courses are built.
+
 ## Rewatch a shot (developer, 2026-10-20)
 
 The hole-complete panel's "replay" showed only the holing stroke. It is now
