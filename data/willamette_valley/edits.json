@@ -41,7 +41,7 @@
         "fw_w1053602282"
       ],
       "tags": {},
-      "reason": "OSM tags hole 9's fairway (228 x 36 m, w1053586147) and hole 14's fairway (328 x 61 m, w1053602282) as golf=tee; both run along their hole lines and neither hole has another fairway mapped. Copies with golf=fairway (pending the developer's check against the south-half OSIP image)"
+      "reason": "OSM tags hole 9's fairway (228 x 36 m, w1053586147) and hole 14's fairway (328 x 61 m, w1053602282) as golf=tee; both are the mown fairways along their hole lines in the OSIP 2022 image (checked 2026-10-19) and neither hole has another fairway mapped. Copies with golf=fairway"
     }
   ],
   "drop": [
