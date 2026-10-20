@@ -266,3 +266,19 @@ describe('hide me from the leaderboards (developer, 2026-10-20)', () => {
     expect((await handleHide(db, JSON.stringify({ owner: 'x', hidden: true }))).status).toBe(400);
   });
 });
+
+describe('older rounds join their player code (developer, 2026-10-20: 5 rounds on the phone, 9 on the computer)', () => {
+  let db: D1Like;
+  beforeEach(() => { resetSchemaCache(); db = fakeD1(); });
+
+  it('a round stored without a key takes the key of the device that holds its name when sent again', async () => {
+    await handlePost(db, JSON.stringify([entry('old', 74, 'charlie')]));              // before player keys
+    await handlePost(db, JSON.stringify([{ ...entry('new', 73, 'charlie'), owner: KEY_A }])); // charlie is now KEY_A's
+    const own = async (k: string) => ((await (await get(db, `owner=${k}`)).json()) as { entries: LeaderboardEntry[] }).entries.map((e) => e.id).sort();
+    expect(await own(KEY_A)).toEqual(['new']);
+    await handlePost(db, JSON.stringify([{ ...entry('old', 74, 'charlie'), owner: KEY_B }])); // not B's name: no change
+    expect(await own(KEY_B)).toEqual([]);
+    await handlePost(db, JSON.stringify([{ ...entry('old', 74, 'charlie'), owner: KEY_A }]));
+    expect(await own(KEY_A)).toEqual(['new', 'old']);
+  });
+});

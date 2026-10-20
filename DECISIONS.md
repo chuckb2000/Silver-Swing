@@ -726,3 +726,15 @@ Branch `fix/afternoon-ui`, from the afternoon review of the screens and flow.
   shows the player's rounds. A hidden player isn't asked for a name, and the summary
   says the round stays off the shared boards. D1 schema 4 adds the table by itself.
 
+
+## Player codes bring their rounds and name (developer, 2026-10-20)
+
+- "I put my player code in on my phone and it only has 5 rounds, compared to 9 rounds on the
+  computer." A device's rounds reach another device through the player code only when the
+  server stored them with that code. Rounds sent before player keys existed (2026-10-19), or
+  before a device had one, were stored without it, so "my golf" on the phone couldn't find
+  them. Now every copy of the game sends its named rounds once more (`golf:resent-for-owner-1`),
+  and the server gives a stored round with no key the sender's key when the sender holds the
+  round's name. Rounds played as "player" (no name) never leave their device.
+- "Once I put my player code in it still had me set my name": entering a player code now takes
+  that code's name when the device has none yet.

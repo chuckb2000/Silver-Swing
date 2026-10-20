@@ -8,6 +8,7 @@ import Phaser from 'phaser';
 import { app } from '../app';
 import { keyCode, parseKeyCode } from '../save/identity';
 import { namesOfKey } from '../save/online';
+import { DEFAULT_NAME } from '../save/names';
 import { dialogInput, dialogText, openDialog } from './domDialog';
 
 /** Ask for a player code; `done` gets the key, or null if the player backed out. */
@@ -44,6 +45,9 @@ export function askCode(scene: Phaser.Scene, done: (key: string | null) => void)
     msg.style.color = '#ff7a6a';
     if (names === null) { msg.textContent = "can't check codes offline - try again when connected"; return; }
     if (!names.length) { msg.textContent = 'no names use that code - check it on the other device'; input.select(); return; }
+    // the code's name comes with it: no need to set it again on this device (developer, 2026-10-20)
+    const cur = app.settings.playerName;
+    if (!cur || cur === DEFAULT_NAME) app.settings.playerName = names[0];
     finish(k);
   };
   ok.addEventListener('click', () => { void submit(); });

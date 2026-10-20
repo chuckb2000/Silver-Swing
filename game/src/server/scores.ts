@@ -342,7 +342,16 @@ export async function handlePost(db: D1Like | undefined, body: string): Promise<
   for (const raw of list) {
     try {
       if (!isEntry(raw) || !validScores(raw)) { rejected++; continue; }
-      if (have.has(raw.id)) continue;
+      if (have.has(raw.id)) {
+        // a round stored before it carried a player key (or before keys existed): it takes the
+        // sender's key when the sender holds its name, so "my golf" on another device finds it
+        const o = ownerOf((raw as { owner?: unknown }).owner);
+        if (o) {
+          await db.prepare('UPDATE rounds SET owner = ? WHERE id = ? AND owner IS NULL AND player IN (SELECT name FROM names WHERE owner = ?)')
+            .bind(o, raw.id, o).run();
+        }
+        continue;
+      }
       const { owner: rawOwner, ...e } = raw as LeaderboardEntry & { owner?: unknown };
       const c = await claim(e.player, rawOwner);
       if (c === 'taken' || c === 'too_many') { taken.push(e.id); continue; }
