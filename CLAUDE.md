@@ -522,7 +522,9 @@ DECISIONS.md with the reason.
     new `pnw_club` theme. OSM had no holes: traced from the OSIP 2024
     orthoimagery and DOGAMI lidar, corrected by the developer in the tracing
     desk. The Willamette and the pond are red penalty areas; hole 11's green
-    keeps its slope (`green_tilt`). Section 11.15; open items in
+    keeps its slope (`green_tilt`). Other courses rebuild unchanged
+    (Eastmoreland's clean build fixed in s05). 316 unit tests and 4
+    Playwright tests pass. Section 11.15; open items in
     data/waverley/report_notes.md.
 
 -   **Next task:** the third playtest (putting, yellow misses), the club's
