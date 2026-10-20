@@ -145,6 +145,30 @@ test('title -> new round -> play hole 1 to the cup', async ({ page }) => {
     try { return JSON.parse(localStorage.getItem('local-golf:round-in-progress') || 'null'); } catch { return null; }
   });
   expect(saved?.scores?.[0]?.hole).toBe(1);
+  // rewatch a shot: the list of the hole's strokes, the first one played back, then the list again
+  await page.waitForFunction(() => window.__game.scene.getScene('hud').modal === 'holed', null, { polling: 100 });
+  const strokes = await page.evaluate(() => window.__golf.round.strokes.length);
+  expect(strokes).toBe(score.strokes - score.penalties);
+  await tap(page, 'hud', { button: 'rewatch' }, () => window.__game.scene.getScene('hud').modal === 'rewatch');
+  await page.screenshot({ path: 'test-results/rewatch-list.png' });
+  const first = await page.evaluate(() => {
+    const g = window.__game, s = g.scene.getScene('hud');
+    const b = s.modalLayer.list.find((o: any) => o.label && /^(shot )?1 · /.test(o.label.text));
+    const canvas = g.canvas.getBoundingClientRect();
+    const k = s.cameras.main.zoom * (canvas.width / g.canvas.width);
+    const m = b.getWorldTransformMatrix();
+    return { x: canvas.left + (m.tx + b.bw / 2) * k, y: canvas.top + (m.ty + b.bh / 2) * k };
+  });
+  await page.mouse.click(first.x, first.y, { delay: 60 });
+  await page.waitForFunction(() => window.__game.scene.getScene('play').state === 'replay', null, { polling: 50 });
+  expect(await page.evaluate(() => window.__game.scene.getScene('play').shot.club.id)).toBe('dr');
+  // the test machine runs at a few frames a second: watch until the ball is in the air, then skip
+  await page.waitForFunction(() => { const p = window.__game.scene.getScene('play'); return p.replaying && !p.fading && p.playT > 1500; }, null, { polling: 100, timeout: 120_000 });
+  await page.screenshot({ path: 'test-results/rewatch-drive.png' });
+  await page.keyboard.press('Escape');
+  await page.waitForFunction(() => window.__game.scene.getScene('hud').modal === 'rewatch', null, { polling: 100, timeout: 60_000 });
+  expect(await page.evaluate(() => window.__game.scene.getScene('play').state)).toBe('holed');
+  await tap(page, 'hud', { button: 'back' }, () => window.__game.scene.getScene('hud').modal === 'holed');
   expect(errors).toEqual([]);
 });
 

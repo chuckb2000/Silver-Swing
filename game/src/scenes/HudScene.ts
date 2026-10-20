@@ -20,12 +20,13 @@ import { uiCamera } from '../scale';
 import type { PlayScene } from './PlayScene';
 import { finishRound } from './flow';
 import { courseHoleFor } from '../systems/game/round';
+import { strokeLabel } from '../systems/game/strokes';
 import type { LeaderboardEntry } from '../save/entry';
 import { DRILL_BALLS, PUTTING_GREENS, RangeShot } from '../systems/game/practice';
 import type { Club } from '../data/clubs';
 import type { SimResult } from '../systems/physics/sim';
 
-type Modal = 'relief' | 'drop' | 'card' | 'overview' | 'pause' | 'holed' | null;
+type Modal = 'relief' | 'drop' | 'card' | 'overview' | 'pause' | 'holed' | 'rewatch' | null;
 
 export class HudScene extends Phaser.Scene {
   play!: PlayScene;
@@ -497,7 +498,8 @@ export class HudScene extends Phaser.Scene {
   onModalKey(e: KeyboardEvent) {
     if (this.modal === 'card' && (e.key === 'c' || e.key === 'C' || e.key === 'Escape' || e.key === ' ' || e.key === 'Enter')) { e.preventDefault(); this.closeCard(); return; }
     if ((e.key === 'c' || e.key === 'C') && this.modal === 'holed') { this.toggleCard(); return; }
-    if ((e.key === 'r' || e.key === 'R') && this.modal === 'holed') { this.play.startReplay(); return; }
+    if ((e.key === 'r' || e.key === 'R') && this.modal === 'holed') { this.rewatch(); return; }
+    if (this.modal === 'rewatch' && (e.key === 'Escape' || e.key === 'r' || e.key === 'R')) { e.preventDefault(); this.backFromRewatch(); return; }
     if (e.key === 'Escape' || e.key === 'Tab' || e.key === 'm' || e.key === 'M' || e.key === 'c' || e.key === 'C') {
       e.preventDefault();
       if (this.modal === 'overview' || this.modal === 'pause') this.closeModal();
@@ -794,9 +796,56 @@ export class HudScene extends Phaser.Scene {
     this.refresh();
   }
 
-  /** The hole-complete panel again, after a replay. */
+  /** Back from a replay: to the list of shots it was chosen from, or the hole-complete panel. */
   reshowHoled() {
+    if (this.rewatching && this.play.replayable() > 1) { this.showRewatch(); return; }
+    this.rewatching = false;
     if (this.lastHoled) this.showHoled(this.lastHoled[0], this.lastHoled[1], this.lastHoled[2], true);
+  }
+
+  /** Was the replay chosen from the list of shots? */
+  private rewatching = false;
+
+  /** "rewatch": one stroke plays at once; several open the list (developer, 2026-10-20). */
+  rewatch() {
+    const n = this.play.replayable();
+    if (n === 1) { this.rewatching = false; this.play.startReplay(0); }
+    else if (n > 1) this.showRewatch();
+  }
+
+  private backFromRewatch() {
+    this.rewatching = false;
+    if (this.lastHoled) this.showHoled(this.lastHoled[0], this.lastHoled[1], this.lastHoled[2], true);
+  }
+
+  /** Every stroke of the hole, to pick one to watch again (the last 16 if there were more). */
+  showRewatch() {
+    this.openModal('rewatch');
+    this.rewatching = true;
+    this.redraw = () => this.showRewatch();
+    const all = this.play.round.strokes;
+    const first = Math.max(0, all.length - 16);
+    const list = all.slice(first);
+    const units = app.settings.units;
+    const two = list.length > 7;
+    const rows = two ? Math.ceil(list.length / 2) : list.length;
+    const w = Math.min(two ? 300 : 210, this.W - 12);
+    const bh = 14, gap = 3;
+    const h = 22 + rows * (bh + gap) + 24;
+    const x = Math.round((this.W - w) / 2), y = Math.max(4, Math.round((this.H - h) / 2));
+    const pnl = new Panel(this, x, y, w, h, 0.9);
+    const title = txt(this, x + w / 2, y + 6, 'rewatch a shot', { origin: [0.5, 0] });
+    this.modalLayer.add([pnl, title]);
+    const cw = two ? Math.floor((w - 18) / 2) : w - 12;
+    list.forEach((st, k) => {
+      const col = two ? Math.floor(k / rows) : 0, row = two ? k % rows : k;
+      const label = two ? strokeLabel(st, units).replace(/^shot /, '').replace(/ · out of bounds$/, ' · ob') : strokeLabel(st, units);
+      const b = new Button(this, x + 6 + col * (cw + 6), y + 20 + row * (bh + gap), cw, bh, label, () => this.play.startReplay(first + k),
+        { color: st.result === 'holed' ? undefined : 'grey' });
+      this.modalLayer.add(b);
+    });
+    this.modalLayer.add(new Button(this, x + w / 2 - 26, y + h - 20, 52, 14, 'back', () => this.backFromRewatch(), { color: 'grey' }));
+    this.refresh();
   }
 
   private lastHoled: [HoleScore, boolean, boolean] | null = null;
@@ -823,9 +872,9 @@ export class HudScene extends Phaser.Scene {
     const nb = new Button(this, x + w - 86, y + h - 22, 80, 16, last ? 'finish round' : 'next hole', () => this.continueFromHoled());
     const cb = new Button(this, x + 6, y + h - 22, 44, 16, 'card', () => this.toggleCard(), { color: 'grey' });
     this.modalLayer.add([pnl, t1, t2, t3, nb, cb]);
-    if (this.play.canReplay()) {
-      // the physics is deterministic: the holing shot plays back exactly (player improvements, item 9)
-      this.modalLayer.add(new Button(this, x + 54, y + h - 22, 52, 16, 'replay', () => this.play.startReplay(), { color: 'grey' }));
+    if (this.play.replayable() > 0) {
+      // the physics is deterministic: any stroke of the hole plays back exactly (player improvements, item 9; a choice of shot, 2026-10-20)
+      this.modalLayer.add(new Button(this, x + 54, y + h - 22, 56, 16, 'rewatch', () => this.rewatch(), { color: 'grey' }));
     }
     if (eagle) {
       // the eagle goes on the shared list now; a player with no name is asked for one

@@ -2,7 +2,9 @@
 // items 2, 3, 4, 5, 7, 8, 9 and 11).
 import { describe, expect, it } from 'vitest';
 import { clubById } from '../../src/data/clubs';
-import { Round } from '../../src/systems/game/round';
+import { PlannedShot, Round } from '../../src/systems/game/round';
+import { strokeLabel } from '../../src/systems/game/strokes';
+import type { SimResult } from '../../src/systems/physics/sim';
 import { loadCourseFiles, meterFor, roundCfg } from './helpers';
 
 describe('replay (item 9)', () => {
@@ -33,6 +35,61 @@ describe('replay (item 9)', () => {
     expect(r.replay()!.end).toEqual(sim.end);
     r.nextHole();
     expect(r.replay()).toBeNull();
+  });
+});
+
+describe('rewatch a shot (developer, 2026-10-20)', () => {
+  const course = loadCourseFiles('oswego_lake');
+
+  it('keeps every played stroke of the hole, and any of them plays back exactly', () => {
+    const r = new Round(course, roundCfg(course, [1, 2], 5));
+    r.startHole(0);
+    const sims: SimResult[] = [];
+    for (const [id, pw] of [['dr', 0.95], ['7i', 0.8], ['sw', 0.6]] as [string, number][]) {
+      const c = clubById(id);
+      // a probe that is never played must not be listed
+      r.simulate(r.plan(c.id, r.defaultAim(c, 1), meterFor(0.3, 0, false), 0, 1));
+      const p = r.plan(c.id, r.defaultAim(c, 1), meterFor(pw, 3, false), 0, 1);
+      const sim = r.simulate(p);
+      const o = r.resolve(p, sim);
+      sims.push(sim);
+      if (o.kind !== 'rest') break;
+    }
+    expect(r.strokes.length).toBe(sims.length);
+    r.strokes.forEach((st, i) => {
+      expect(st.n).toBe(i + 1);
+      const again = r.replayStroke(i)!;
+      expect(again.end).toEqual(sims[i].end);
+      expect(Array.from(again.samples)).toEqual(Array.from(sims[i].samples));
+      expect(st.to).toEqual({ x: sims[i].end.x, y: sims[i].end.y });
+    });
+    expect(r.strokes[0].from).toEqual({ x: r.tee.x, y: r.tee.y });
+    expect(r.replayStroke(9)).toBeNull();
+    r.nextHole();
+    expect(r.strokes).toEqual([]);
+  });
+
+  it('a mulligan takes its stroke off the list', () => {
+    const cfg = roundCfg(course, [1, 2], 7);
+    cfg.settings = { ...cfg.settings, mulligans: true };
+    const r = new Round(course, cfg);
+    r.startHole(0);
+    const c = clubById('dr');
+    const p = r.plan(c.id, r.defaultAim(c, 1), meterFor(0.9, 2, false), 0, 1);
+    r.resolve(p, r.simulate(p));
+    expect(r.strokes.length).toBe(1);
+    expect(r.mulligan()).toBe(true);
+    expect(r.strokes.length).toBe(0);
+  });
+
+  it('labels a stroke by number, club, distance and result', () => {
+    const club = clubById('7i'), pt = clubById('pt');
+    const base = { hole: 1, seq: 0, from: { x: 0, y: 0 } };
+    const shot = (c: typeof club) => ({ club: c }) as unknown as PlannedShot;
+    expect(strokeLabel({ ...base, shot: shot(club), n: 2, to: { x: 0, y: 137.16 }, result: 'rest' }, 'yd')).toBe('shot 2 · 7 iron · 150 yd');
+    expect(strokeLabel({ ...base, shot: shot(club), n: 2, to: { x: 0, y: 137.16 }, result: 'water' }, 'm')).toBe('shot 2 · 7 iron · 137 m · water');
+    expect(strokeLabel({ ...base, shot: shot(pt), n: 4, to: { x: 3.6576, y: 0 }, result: 'holed' }, 'yd')).toBe('shot 4 · putter · 12 ft · holed');
+    expect(strokeLabel({ ...base, shot: shot(pt), n: 4, to: { x: 3.66, y: 0 }, result: 'holed' }, 'm')).toBe('shot 4 · putter · 3.7 m · holed');
   });
 });
 
