@@ -161,18 +161,34 @@ export class PlayScene extends Phaser.Scene {
     const onResize = () => this.rig.apply();
     this.scale.on('resize', onResize);
     this.events.once('shutdown', () => this.scale.off('resize', onResize));
+    // the meter runs on the real clock but the game stops while the tab is hidden: cancel the swing
+    const onHidden = () => this.cancelSwing();
+    this.game.events.on(Phaser.Core.Events.HIDDEN, onHidden);
+    this.events.once('shutdown', () => this.game.events.off(Phaser.Core.Events.HIDDEN, onHidden));
 
     this.hud = this.scene.get('hud') as HudScene;
     this.hud.events.once('create', () => {
       cam.fadeIn(350, ...FADE_RGB);
       void this.green.prepare(this.round.courseHole);
-      if (data?.resume) this.beginShot(true, true); else this.startHoleIntro(false);
+      if (data?.resume) this.resumeShot(); else this.startHoleIntro(false);
     });
     this.scene.launch('hud');
     this.events.once('shutdown', () => this.scene.stop('hud'));
   }
 
   // --------------------------------------------------------------- hole flow
+  /** Back into a saved round: at the ball, with any relief choice the last stroke left open. */
+  private resumeShot() {
+    const r = this.round;
+    const pending = r.pending;
+    this.beginShot(true, true);
+    if (!pending) return;
+    const out = r.reliefOutcome(pending);
+    if (out.kind === 'rest') { r.pending = null; return; }
+    this.outcome = out;
+    this.showReliefFor(out, false);
+  }
+
   startHoleIntro(withCut = true) {
     if (withCut) {
       // leave 'holed' at once so a second "next hole" press cannot skip a hole during the fade
@@ -511,7 +527,7 @@ export class PlayScene extends Phaser.Scene {
   }
 
   cycleClub(dir: number) {
-    if (this.state !== 'aim') return;
+    if (this.state !== 'aim' || this.fading || this.zooming) return;
     const allowed = this.round.allowedClubs();
     let i = allowed.findIndex((c) => c.id === this.club.id);
     if (i < 0) i = 0;
@@ -581,6 +597,20 @@ export class PlayScene extends Phaser.Scene {
       if (before === 'power' && this.meter.phase === 'accuracy') this.onPowerSet();
       if (this.meter.phase === 'done') this.launch();
     }
+  }
+
+  /**
+   * Stop a swing in progress and go back to aiming, without a stroke: opening the menu,
+   * the map or the card, or leaving the tab, must not let the meter run out behind it
+   * (it used to fire a full-power miss).
+   */
+  cancelSwing() {
+    if (this.state !== 'swing') return;
+    this.meter = null;
+    this.state = 'aim';
+    this.pose = 'address';
+    this.updateGolfer();
+    this.hud.refresh();
   }
 
   private startMeter(ts: number) {
@@ -687,7 +717,7 @@ export class PlayScene extends Phaser.Scene {
 
   // --------------------------------------------------------------- per frame
   update(time: number, dt: number) {
-    if (!this.hud || !this.hud.play) return;
+    if (!this.hud || !this.hud.play || this.state === 'done') return;
     const r = this.round;
     // flag waves
     this.flagTimer += dt;
@@ -1063,25 +1093,38 @@ export class PlayScene extends Phaser.Scene {
         break;
       }
       case 'water':
-        this.hud.flash(out.penalty === 'red' ? 'penalty area' : 'water hazard', 0x7cc0ff);
+      case 'ob':
+      case 'wrong_green':
+      case 'cartpath':
+        this.showReliefFor(out, true);
+        // saved with the choice still open: a closed tab reopens it rather than replaying the stroke
+        void saveSnapshot(r);
+        break;
+      default:
+        this.hud.restInfo();
+        this.beginShot(true);
+    }
+  }
+
+  /** The relief panel for a stroke that ended in water, out of bounds, on a wrong green or a cart path. */
+  private showReliefFor(out: Outcome, announce: boolean) {
+    switch (out.kind) {
+      case 'water':
+        if (announce) this.hud.flash(out.penalty === 'red' ? 'penalty area' : 'water hazard', 0x7cc0ff);
         this.openRelief(out.options, false, 'in the water: 1 penalty stroke');
         break;
       case 'ob':
-        this.hud.flash('out of bounds', 0xffffff);
-        if (out.options.length === 1) {
-          this.openRelief(out.options, false, 'out of bounds: stroke and distance');
-        } else this.openRelief(out.options, false, 'out of bounds');
+        if (announce) this.hud.flash('out of bounds', 0xffffff);
+        this.openRelief(out.options, false, out.options.length === 1 ? 'out of bounds: stroke and distance' : 'out of bounds');
         break;
       case 'wrong_green':
-        this.hud.flash('wrong green', 0xffd84a);
+        if (announce) this.hud.flash('wrong green', 0xffd84a);
         this.openRelief([out.area], false, 'wrong green: free relief is required');
         break;
       case 'cartpath':
         this.openRelief([out.area], true, 'on the cart path: free relief available');
         break;
       default:
-        this.hud.restInfo();
-        this.beginShot(true);
     }
   }
 
@@ -1095,6 +1138,7 @@ export class PlayScene extends Phaser.Scene {
   }
 
   chooseRelief(i: number) {
+    if (this.fading || this.zooming) return;
     const a = this.reliefOptions[i];
     if (!a) return;
     if (a.shape === 'point') {
@@ -1123,6 +1167,7 @@ export class PlayScene extends Phaser.Scene {
   }
 
   playAsItLies() {
+    this.round.pending = null;
     this.hud.hideRelief();
     this.reliefArea = null;
     this.round.refreshLie();
@@ -1145,7 +1190,7 @@ export class PlayScene extends Phaser.Scene {
   }
 
   confirmDrop() {
-    if (this.state !== 'drop' || !this.reliefArea || !this.dropPoint) return;
+    if (this.state !== 'drop' || !this.reliefArea || !this.dropPoint || this.fading || this.zooming) return;
     const a = this.reliefArea;
     this.round.applyRelief(a, this.dropPoint);
     this.reliefGfx.clear();

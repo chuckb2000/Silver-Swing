@@ -66,7 +66,7 @@ test('title -> new round -> play hole 1 to the cup', async ({ page }) => {
   test.setTimeout(300_000); // the test machine may render at a few frames a second
   const errors: string[] = [];
   page.on('pageerror', (e) => errors.push(e.message));
-  await page.goto('/');
+  await page.goto('/?autoplay');
   await page.waitForFunction(() => window.__game?.scene.isActive('title'), null, { timeout: 60_000 });
   await tap(page, 'title', { button: 'play' }, sceneActive, 'courses');
   // choose a state, then the course
@@ -120,7 +120,7 @@ test('title -> new round -> play hole 1 to the cup', async ({ page }) => {
 test('portrait phone layout loads and shows the swing button', async ({ browser }) => {
   const ctx = await browser.newContext({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 3, isMobile: true, hasTouch: true });
   const page = await ctx.newPage();
-  await page.goto('/');
+  await page.goto('/?autoplay');
   await page.waitForFunction(() => window.__game?.scene.isActive('title'), null, { timeout: 60_000 });
   // layout size in texels (art pixels)
   const size = await page.evaluate(() => window.__golf.view);
@@ -143,7 +143,7 @@ test('course data is exact when the browser adds noise to canvas reads (Safari 2
       return img;
     };
   });
-  await page.goto('/');
+  await page.goto('/?autoplay');
   await page.waitForFunction(() => window.__golf?.course, null, { timeout: 60_000 });
   const r = await page.evaluate(() => {
     const c = window.__golf.course;
@@ -168,7 +168,7 @@ test('course data is exact when the browser adds noise to canvas reads (Safari 2
 test('the menu button quits a round for good', async ({ page }) => {
   test.setTimeout(300_000);
   await page.addInitScript(() => { if (!localStorage.getItem('local-golf:settings')) localStorage.setItem('local-golf:settings', JSON.stringify({ playerName: 'robot' })); });
-  await page.goto('/');
+  await page.goto('/?autoplay');
   await page.waitForFunction(() => window.__game?.scene.isActive('title'), null, { timeout: 60_000 });
   await tap(page, 'title', { button: 'play' }, sceneActive, 'courses');
   await tap(page, 'courses', { text: 'oregon' }, locate, ['courses', null, 'oswego lake country club'] as [string, string | null, string | null]);

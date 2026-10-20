@@ -280,9 +280,17 @@ export async function handlePost(db: D1Like | undefined, body: string): Promise<
   const claim = claimer(db);
   let added = 0, rejected = 0;
   const taken: string[] = [];
+  // rounds the board already has (a device resending after an import): fine, not "taken", in one query
+  const ids = list.map((r) => (r as { id?: unknown })?.id).filter((v): v is string => typeof v === 'string' && v.length <= 80);
+  const have = new Set<string>();
+  if (ids.length) {
+    const { results } = await db.prepare(`SELECT id FROM rounds WHERE id IN (${ids.map(() => '?').join(', ')})`).bind(...ids).all<{ id: string }>();
+    for (const r of results) have.add(r.id);
+  }
   for (const raw of list) {
     try {
       if (!isEntry(raw) || !validScores(raw)) { rejected++; continue; }
+      if (have.has(raw.id)) continue;
       const { owner: rawOwner, ...e } = raw as LeaderboardEntry & { owner?: unknown };
       const c = await claim(e.player, rawOwner);
       if (c === 'taken' || c === 'too_many') { taken.push(e.id); continue; }
@@ -390,6 +398,11 @@ export async function handleNames(db: D1Like | undefined, req: { method: string;
   }
   name = req.url.searchParams.get('name');
   owner = req.url.searchParams.get('owner');
+  if (name === null && ownerOf(owner)) {
+    // the names a player code holds (a second device checks a typed code before using it)
+    const { results } = await db.prepare('SELECT name FROM names WHERE owner = ? ORDER BY name LIMIT 8').bind(ownerOf(owner)).all<{ name: string }>();
+    return json({ ok: true, names: results.map((r) => r.name) });
+  }
   const n = boardableName(name);
   if (!n) return json({ ok: false, result: 'invalid' });
   const { results } = await db.prepare('SELECT owner FROM names WHERE name = ?').bind(n).all<{ owner: string | null }>();

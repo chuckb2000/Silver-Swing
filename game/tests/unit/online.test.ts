@@ -5,6 +5,7 @@ import { beforeEach, describe, expect, it } from 'vitest';
 import { isEntry, LeaderboardEntry } from '../../src/save/entry';
 import { D1Like, D1Statement, handleEaglesGet, handleEaglesPost, handleGet, handleNames, handlePost, handleRecordsGet, resetSchemaCache } from '../../src/server/scores';
 import { HoleScore } from '../../src/systems/rules/scoring';
+import { isPlayerKey, parseKeyCode } from '../../src/save/identity';
 
 /** Minimal D1 look-alike over node:sqlite. */
 function fakeD1(): D1Like {
@@ -204,5 +205,31 @@ describe('stays inside the free plan: 50 database queries per request', () => {
     n = 0;
     await handleGet(counted, new URL('http://x/api/scores?ping=1'));
     expect(n).toBeLessThanOrEqual(50);
+  });
+});
+
+describe('player codes and resent rounds (review 2026-10-20)', () => {
+  let db: D1Like;
+  beforeEach(() => { resetSchemaCache(); db = fakeD1(); });
+  const names = (method: string, q: string, body?: unknown) => handleNames(db, { method, url: new URL(`http://x/api/names?${q}`), body: body ? JSON.stringify(body) : undefined });
+
+  it('lists the names a player code holds, so a typed code can be checked', async () => {
+    await names('POST', '', { name: 'chuck', owner: KEY_A });
+    await names('POST', '', { name: 'charlie', owner: KEY_A });
+    expect(await (await names('GET', `owner=${KEY_A}`)).json()).toEqual({ ok: true, names: ['charlie', 'chuck'] });
+    expect(await (await names('GET', `owner=${KEY_B}`)).json()).toEqual({ ok: true, names: [] });
+  });
+
+  it('a round the board already has is not reported as taken when it is sent again', async () => {
+    await handlePost(db, JSON.stringify({ ...entry('a1', 72, 'chuck'), owner: KEY_A }));
+    // the same round from a device without the code (an imported backup)
+    expect(await (await handlePost(db, JSON.stringify({ ...entry('a1', 72, 'chuck'), owner: KEY_B }))).json()).toMatchObject({ added: 0, taken: [] });
+  });
+
+  it('a mistyped code (l, o, 0 or 1) is not a player code', () => {
+    expect(isPlayerKey('abcdefghjkmnpqrs')).toBe(true);
+    expect(isPlayerKey('abcdefghjklmnpqr')).toBe(false);
+    expect(parseKeyCode('ABCD-EFGH-JKMN-PQRS')).toBe('abcdefghjkmnpqrs');
+    expect(parseKeyCode('abcd-efgh-jkmn-pqr0')).toBeNull();
   });
 });

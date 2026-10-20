@@ -31,10 +31,19 @@ export abstract class MenuScene extends Phaser.Scene {
     this.rebuild();
   }
 
+  /** Bumped on every rebuild: a build still waiting on the network checks it before drawing. */
+  protected gen = 0;
+
+  /** Is this build (started at generation `g`) still the current one? */
+  protected isCurrentBuild(g: number): boolean {
+    return g === this.gen && this.sys.isActive();
+  }
+
   /** Rebuild on the next tick so a button is never destroyed inside its own input handler. */
   rebuild() {
     this.time.delayedCall(0, () => {
       if (!this.sys.isActive()) return;
+      this.gen++;
       this.root.removeAll(true);
       void this.build();
     });

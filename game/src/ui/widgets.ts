@@ -142,6 +142,8 @@ export class Button extends Phaser.GameObjects.Container {
   setEnabled(on: boolean) {
     this.enabled = on;
     this.setAlpha(on ? 1 : 0.45);
+    // a greyed-out button doesn't catch the pointer: a swing tap that lands on it reaches the course
+    if (this.input) this.input.enabled = on;
     return this;
   }
 

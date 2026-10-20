@@ -185,6 +185,7 @@ export function pinSpots(course: CourseRuntime, hole: HoleJson, tee: string): Pi
       if (!p.contains(x, y)) continue;
       const edge = p.edgeDistance(x, y);
       if (edge < PIN_EDGE_MIN_M) continue;
+      if (course.obstacles.hidesPoint(x, y)) continue; // a cup the player couldn't see behind a tree on the course view
       const slope = slopeAround(g, x, y);
       if (slope > PIN_MAX_SLOPE) continue;
       grid.push({ x, y, edge, slope, hz: hazardDistance(cells, x, y) });

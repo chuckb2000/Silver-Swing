@@ -88,6 +88,7 @@ export class HudScene extends Phaser.Scene {
     this.cardLayer = null;
     this.modalBeforeCard = null;
     this.bannerTimer = undefined;
+    this.redraw = null;
     this.play = this.scene.get('play') as PlayScene;
     uiCamera(this.cameras.main);
     this.W = app.view.w;
@@ -101,11 +102,15 @@ export class HudScene extends Phaser.Scene {
     this.refresh();
   }
 
+  /** Draws the open dialog again (after a resize or a phone turning), so its buttons stay on screen. */
+  private redraw: (() => void) | null = null;
+
   private onResize() {
     uiCamera(this.cameras.main);
     this.W = app.view.w;
     this.H = app.view.h;
     this.layout();
+    if (this.modal && this.redraw) this.redraw();
     this.refresh();
   }
 
@@ -347,7 +352,9 @@ export class HudScene extends Phaser.Scene {
     if (putt) half = r.preset.perfectZone * p.club.windowMult;
     else {
       const mods = lieModsFor(r.lie, p.club);
-      half = perfectHalfWidth(r.preset.perfectZone, p.club, { distMult: mods.distMult, windowMult: mods.windowMult }, false);
+      // an overswing (power past 100 %) halves the zone the moment the power is set, as the strike does
+      const over = !!m && (m.phase === 'accuracy' || m.phase === 'done') && (m.power / 100) * p.swingScale > 1.0001;
+      half = perfectHalfWidth(r.preset.perfectZone, p.club, { distMult: mods.distMult, windowMult: mods.windowMult }, over);
     }
     const good = half + GOOD_BAND;
     g.fillStyle(0xd23b2b, 1).fillRect(X(-ZONE_REACH), y0, X(ZONE_REACH) - X(-ZONE_REACH), h);
@@ -391,7 +398,8 @@ export class HudScene extends Phaser.Scene {
 
   /** True when the pointer is over a HUD control or a modal is open. */
   blocks(ptr: Phaser.Input.Pointer): boolean {
-    if (this.modal) return true;
+    // the drop prompt is open while the player taps inside the relief area to place the ball
+    if (this.modal && this.modal !== 'drop') return true;
     const hits = this.input.hitTestPointer(ptr);
     return hits.some((h) => (h as unknown as { visible?: boolean }).visible !== false && (h as unknown as { enabled?: boolean }).enabled !== false);
   }
@@ -497,6 +505,13 @@ export class HudScene extends Phaser.Scene {
 
   // ------------------------------------------------------------------ modals
   private openModal(kind: Modal) {
+    // a card opened during the shot must not hide (and later strand) the panel that follows it
+    if (this.cardLayer) {
+      this.cardLayer.destroy();
+      this.cardLayer = null;
+      this.modalBeforeCard = null;
+      this.modalLayer.setVisible(true);
+    }
     this.closeModal();
     this.modal = kind;
     this.modalLayer.removeAll(true);
@@ -504,6 +519,7 @@ export class HudScene extends Phaser.Scene {
 
   closeModal() {
     this.modal = null;
+    this.redraw = null;
     this.modalLayer.removeAll(true);
   }
 
@@ -512,6 +528,7 @@ export class HudScene extends Phaser.Scene {
 
   toggleCard() {
     if (this.cardLayer) { this.closeCard(); return; }
+    this.play.cancelSwing();
     if (this.modal && this.modal !== 'holed') return;
     this.modalBeforeCard = this.modal;
     if (this.modal === 'holed') this.modalLayer.setVisible(false);
@@ -537,6 +554,7 @@ export class HudScene extends Phaser.Scene {
 
   toggleOverview() {
     if (this.modal === 'overview') { this.closeModal(); return; }
+    this.play.cancelSwing();
     if (this.modal) return;
     this.openModal('overview');
     const r = this.play.round;
@@ -596,6 +614,7 @@ export class HudScene extends Phaser.Scene {
 
   togglePause() {
     if (this.modal === 'pause') { this.closeModal(); return; }
+    this.play.cancelSwing();
     if (this.modal) return;
     this.openModal('pause');
     const dim = dimmer(this, 0.6);
@@ -643,6 +662,7 @@ export class HudScene extends Phaser.Scene {
   showRelief(title: string, options: ReliefArea[], optional: boolean) {
     this.reliefTitle = title;
     this.openModal('relief');
+    this.redraw = () => this.showRelief(title, options, optional);
     const n = options.length + (optional ? 1 : 0);
     const w = Math.min(232, this.W - 12), h = 26 + n * 18;
     const x = Math.round((this.W - w) / 2), y = Math.round(this.H * 0.42);
@@ -662,6 +682,7 @@ export class HudScene extends Phaser.Scene {
 
   showDrop(a: ReliefArea) {
     this.openModal('drop');
+    this.redraw = () => this.showDrop(a);
     const w = Math.min(232, this.W - 12), h = 38;
     const x = Math.round((this.W - w) / 2), y = this.H - h - 6;
     const pnl = new Panel(this, x, y, w, h, 0.9);
@@ -676,13 +697,14 @@ export class HudScene extends Phaser.Scene {
     this.refresh();
   }
 
-  showHoled(score: HoleScore, gimme: boolean, maxed = false) {
+  showHoled(score: HoleScore, gimme: boolean, maxed = false, quiet = false) {
     this.openModal('holed');
+    this.redraw = () => this.showHoled(score, gimme, maxed, true);
     const r = this.play.round;
     const name = maxed ? 'max score' : scoreName(score.strokes, score.par);
     const d = score.strokes - score.par;
     const color = d < 0 ? COLORS.yellow : d === 0 ? COLORS.green : COLORS.white;
-    if (d < 0) sfx('great'); else if (d === 0) sfx('good'); else sfx('bad');
+    if (!quiet) { if (d < 0) sfx('great'); else if (d === 0) sfx('good'); else sfx('bad'); }
     const tot = totals(r.scores);
     const eagle = !maxed && isListedEagle(r, score);
     const unnamed = eagle && r.cfg.playerName === DEFAULT_NAME;
@@ -705,8 +727,8 @@ export class HudScene extends Phaser.Scene {
           askName(this, '', async (name) => {
             if (!name) return;
             await nameRound(r, name);
-            setTxt(t4, `${name}: on the recent eagles list!`);
-            ab.setVisible(false);
+            if (t4.active) setTxt(t4, `${name}: on the recent eagles list!`);
+            if (ab.active) ab.setVisible(false);
           }, 'your name for the eagles list');
         });
         this.modalLayer.add(ab);
@@ -722,7 +744,8 @@ export class HudScene extends Phaser.Scene {
     if (r.nextHole()) {
       this.play.startHoleIntro();
     } else {
-      finishRound(this);
+      this.play.state = 'done'; // nothing more happens on the course while the round is saved (and a second tap does nothing)
+      void finishRound(this);
     }
   }
 }

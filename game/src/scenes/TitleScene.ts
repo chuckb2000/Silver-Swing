@@ -167,7 +167,8 @@ export class TitleScene extends MenuScene {
     };
     if (snap) {
       const holeNo = snap.cfg.holes[Math.min(snap.cfg.holes.length - 1, snap.holeIndex + (snap.betweenHoles ? 1 : 0))];
-      add(`continue round (hole ${holeNo})`, async () => {
+      const done = snap.betweenHoles && snap.holeIndex + 1 >= snap.cfg.holes.length; // every hole played: only the summary is left
+      add(done ? 'finish last round' : `continue round (hole ${holeNo})`, async () => {
         if (this.resuming) return;
         this.resuming = true;
         // the round's course may have to load first: show that something is happening

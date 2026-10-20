@@ -10,6 +10,15 @@ import { DEFAULT_NAME } from './names';
 import { loadBoard, loadEagles, loadUploaded, saveEagles, saveUploaded } from './store';
 import { app } from '../app';
 
+/** fetch with a time limit: a stalled phone connection must not hang a screen (8 s, 15 s for uploads). */
+function timed(url: string, init: RequestInit = {}, ms = 8000): Promise<Response> {
+  const ctl = typeof AbortController !== 'undefined' ? new AbortController() : null;
+  if (!ctl) return fetch(url, init);
+  const timer = setTimeout(() => ctl.abort(), ms);
+  return fetch(url, { ...init, signal: ctl.signal }).finally(() => clearTimeout(timer));
+}
+
+
 const API = 'api/scores'; // relative to the page
 const EAGLES = 'api/eagles';
 const RECORDS = 'api/records';
@@ -25,7 +34,7 @@ export function onlineAvailable(): Promise<boolean> {
   if (!available) {
     available = (async () => {
       try {
-        const res = await fetch(`${API}?ping=1`, { cache: 'no-store' });
+        const res = await timed(`${API}?ping=1`, { cache: 'no-store' });
         if (!res.ok || !(res.headers.get('content-type') ?? '').includes('application/json')) { failedAt = Date.now(); return false; }
         const j = (await res.json()) as { ok?: boolean };
         if (j.ok !== true) failedAt = Date.now();
@@ -43,7 +52,7 @@ export function onlineAvailable(): Promise<boolean> {
 export async function fetchBoard(course: string): Promise<LeaderboardEntry[] | null> {
   if (!(await onlineAvailable())) return null;
   try {
-    const res = await fetch(`${API}?course=${encodeURIComponent(course)}`, { cache: 'no-store' });
+    const res = await timed(`${API}?course=${encodeURIComponent(course)}`, { cache: 'no-store' });
     if (!res.ok) return null;
     const j = (await res.json()) as { entries?: unknown[] };
     return (j.entries ?? []).filter(isEntry);
@@ -65,7 +74,7 @@ export function flushUploads(): Promise<number> {
       for (let i = 0; i < todo.length; i += 5) {
         const batch = todo.slice(i, i + 5); // a few per request: the server's free plan allows 50 database queries per request
         try {
-          const res = await fetch(API, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(batch.map((e) => ({ ...e, owner }))) });
+          const res = await timed(API, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(batch.map((e) => ({ ...e, owner }))) }, 15_000);
           if (!res.ok) break;
           const j = (await res.json().catch(() => ({}))) as { taken?: string[] };
           const taken = new Set(j.taken ?? []);
@@ -101,7 +110,7 @@ export function flushEagles(): Promise<void> {
       if (!todo.length) return;
       try {
         const body = todo.map(({ sent: _s, ...e }) => ({ ...e, owner: app.settings.playerKey }));
-        const res = await fetch(EAGLES, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body) });
+        const res = await timed(EAGLES, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body) }, 15_000);
         if (!res.ok) return;
         const j = (await res.json().catch(() => ({}))) as { taken?: string[] };
         const taken = new Set(j.taken ?? []);
@@ -120,7 +129,7 @@ export function flushEagles(): Promise<void> {
 export async function fetchEagles(limit = 30): Promise<EagleEvent[] | null> {
   if (!(await onlineAvailable())) return null;
   try {
-    const res = await fetch(`${EAGLES}?limit=${limit}`, { cache: 'no-store' });
+    const res = await timed(`${EAGLES}?limit=${limit}`, { cache: 'no-store' });
     if (!res.ok) return null;
     const j = (await res.json()) as { eagles?: unknown[] };
     return (j.eagles ?? []).filter(isEagle);
@@ -135,7 +144,7 @@ export interface BirdieRow { id: string; player: string; course: string; birdies
 export async function fetchBirdieRecords(limit = 20, course?: string): Promise<BirdieRow[] | null> {
   if (!(await onlineAvailable())) return null;
   try {
-    const res = await fetch(`${RECORDS}?kind=birdies&limit=${limit}${course ? `&course=${encodeURIComponent(course)}` : ''}`, { cache: 'no-store' });
+    const res = await timed(`${RECORDS}?kind=birdies&limit=${limit}${course ? `&course=${encodeURIComponent(course)}` : ''}`, { cache: 'no-store' });
     if (!res.ok) return null;
     const j = (await res.json()) as { records?: BirdieRow[] };
     return (j.records ?? []).filter((r) => r && typeof r.player === 'string' && Number.isFinite(r.birdies));
@@ -153,12 +162,28 @@ export type NameCheck = 'ok' | 'taken' | 'invalid' | 'too_many' | 'offline';
 export async function claimName(name: string): Promise<NameCheck> {
   if (!(await onlineAvailable())) return 'offline';
   try {
-    const res = await fetch(NAMES, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ name, owner: app.settings.playerKey }) });
+    const res = await timed(NAMES, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ name, owner: app.settings.playerKey }) });
     if (!res.ok) return 'offline';
     const j = (await res.json()) as { result?: NameCheck };
     if (j.result === 'ok') nameConflicts.delete(name);
     return j.result ?? 'offline';
   } catch {
     return 'offline';
+  }
+}
+
+/**
+ * The names a player code holds on the shared boards ([] for a code no name
+ * uses yet, null when the shared board can't be reached).
+ */
+export async function namesOfKey(key: string): Promise<string[] | null> {
+  if (!(await onlineAvailable())) return null;
+  try {
+    const res = await timed(`${NAMES}?owner=${encodeURIComponent(key)}`, { cache: 'no-store' });
+    if (!res.ok) return null;
+    const j = (await res.json()) as { names?: unknown };
+    return Array.isArray(j.names) ? j.names.filter((n): n is string => typeof n === 'string') : null;
+  } catch {
+    return null;
   }
 }

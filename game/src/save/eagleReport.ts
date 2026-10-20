@@ -33,6 +33,6 @@ export async function nameRound(r: Round, name: string): Promise<void> {
   app.settings.playerName = name;
   await saveSettings(app.settings);
   await renameEagles(roundId(r.cfg), name);
-  void saveSnapshot(r);
+  if (!r.finished && app.round === r) void saveSnapshot(r); // not after the round has gone to the summary
   void flushEagles();
 }

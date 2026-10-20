@@ -40,4 +40,5 @@ window.addEventListener('resize', () => {
 });
 game.events.once('ready', () => applyScale(game));
 (window as unknown as { __game: Phaser.Game }).__game = game;
-installAutoplay(game);
+// the robot golfer is for the tests only (page address ?autoplay); not a way for anyone to post rounds
+if (import.meta.env.DEV || new URLSearchParams(window.location.search).has('autoplay')) installAutoplay(game);
