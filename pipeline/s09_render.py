@@ -236,10 +236,31 @@ def band_width(cfg, X, Y):
     return np.clip(bm * (1.0 + f), 0.6 * bm, 1.6 * bm)
 
 
+def fescue_geoms(cfg) -> list:
+    """Optional (cfg "fescue_areas": a GeoJSON file in data/<id>/, WGS84): areas of the rough
+    left long (fescue), in local metres. Art only: with the key, the rough outside them is
+    drawn as mown rough (theme "rough_band" tones) and inside them in the theme's rough
+    tones (Gearhart, data/gearhart/make_fescue.py). Without the key: [] and nothing changes."""
+    path = cfg.get("fescue_areas")
+    if not path:
+        return []
+    from common import course_dir
+    f = gpd.read_file(course_dir(cfg["id"]) / path).to_crs(cfg["epsg"])
+    x0, y0 = cfg["world"]["x0"], cfg["world"]["y0"]
+    return [translate(gm, -x0, -y0) for gm in f.geometry if gm is not None and not gm.is_empty]
+
+
 def rough_band_mask(cfg, g, surf, rasterise, X, Y, ppm):
     """Mown rough: rough pixels within a wandering distance (band_width) of a fairway.
     Art only; physics treats it as rough like the rest. `rasterise(geoms)` -> bool mask,
-    X / Y the world coordinates of the pixel centres, ppm pixels per metre."""
+    X / Y the world coordinates of the pixel centres, ppm pixels per metre.
+    With cfg "fescue_areas" also every rough pixel outside those areas (fescue_geoms)."""
+    if cfg.get("fescue_areas"):
+        rough = surf == S["rough"]
+        mown = rough & ~rasterise(fescue_geoms(cfg))
+        if cfg.get("rough_band_m"):
+            mown |= rough_band_mask({k: v for k, v in cfg.items() if k != "fescue_areas"}, g, surf, rasterise, X, Y, ppm)
+        return mown
     bm = cfg.get("rough_band_m")
     fw = smooth_fairways(g)  # the fairways as the surface map draws them (rounded outlines)
     if not bm or not fw:

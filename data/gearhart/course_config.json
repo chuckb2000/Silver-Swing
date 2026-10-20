@@ -4,7 +4,7 @@
   "location": "Gearhart, Clatsop County, Oregon",
   "state": "OR",
   "architects": "Front nine 1892, back nine 1913; links restoration 2013-15 (Wikipedia; unverified)",
-  "theme": "pnw",
+  "theme": "gearhart",
   "epsg": 32610,
   "osm_sources": [
     "raw/overpass.geojson"
@@ -817,5 +817,7 @@
     {"x": 441.5, "y": 1571.5, "reason": "not standing in the OSIP 2024 photo (2013-15 tree removal; check_trees.py, score 0.0)"},
     {"x": 293.5, "y": 1573.5, "reason": "not standing in the OSIP 2024 photo (2013-15 tree removal; check_trees.py, score 0.014)"},
     {"x": 321.5, "y": 1574.5, "reason": "not standing in the OSIP 2024 photo (2013-15 tree removal; check_trees.py, score 0.05)"}
-  ]
+  ],
+  "fescue_areas": "proposed/fescue.geojson",
+  "rough_band_m": 2.0
 }

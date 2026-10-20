@@ -1,0 +1,35 @@
+{
+  "name": "Gearhart (north Oregon coast links)",
+  "note": "Course theme palette (<= 32 colours; same keys as pnw.json plus F0-F2). Gearhart Golf Links on the Clatsop Plains: firm links turf in a cooler, more olive green than pnw; wide areas of fine fescue left long, pale straw in summer (F0-F2, drawn where data/gearhart/proposed/fescue.geojson says, config fescue_areas); mown rough in the G3-G5 greens; pale grey-white coastal bunker sand; slate grey-teal water (Neacoxie Creek and the ponds); shore pine and Sitka spruce (assets-src/trees_gearhart.py). Hues from the OSIP 2024 photo of the course (fairway #8fa26c, fescue #a7a488, sand #bcbbb1, creek #5c6262), saturated for the game's style. Shadows are a 35% black overlay on top of these.",
+  "colors": {
+    "G0": "#1a3326", "G1": "#234530", "G2": "#2f5a37", "G3": "#3d6e3d",
+    "G4": "#4c823f", "G5": "#5b9446", "G6": "#6aa44e", "G7": "#7ab358",
+    "G8": "#8bc163", "G9": "#aed58a",
+    "L0": "#5b7a3f", "L1": "#6b8b45", "L2": "#7d9b50",
+    "S0": "#a4a294", "S1": "#d2cfc2", "S2": "#e9e6db",
+    "W0": "#27404c", "W1": "#38545f", "W2": "#7593a0",
+    "K0": "#26272d", "K1": "#53545c", "K2": "#7a7b83", "K3": "#b3ad9d", "K4": "#d9d3c4",
+    "B0": "#47382a", "B1": "#6b573f", "B2": "#8c7758",
+    "R0": "#4b586a", "WH": "#f6f6f2",
+    "F0": "#857e4c", "F1": "#a29955", "F2": "#bcb06a"
+  },
+  "lut": {
+    "rough": ["F0", "F1", "F2", "F2"],
+    "rough_band": ["G3", "G4", "G5", "G5"]
+  },
+  "aliases": {
+    "TUFT": "F0"
+  },
+  "minimap": {
+    "rough": "#8e8f5f", "woods": "#2f5a37", "ob_woods": "#2a4a32",
+    "water": "#38545f", "ob_water": "#38545f", "bunker": "#d2cfc2", "ob_sand": "#d2cfc2"
+  },
+  "minimap_trees": {
+    "conifer": ["#173a33", "#2e6553"],
+    "deciduous": ["#1f3d27", "#3a6838"]
+  },
+  "trees": {
+    "conifer": "trees_gearhart:conifer",
+    "deciduous": "trees_gearhart:deciduous"
+  }
+}
