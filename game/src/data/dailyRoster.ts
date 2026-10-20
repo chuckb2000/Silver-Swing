@@ -29,4 +29,6 @@ export const DAILY_ROSTER: Readonly<Record<string, string>> = {
   gearhart: '2026-10-21',
   bandon_trails: '2026-10-21',
   chambers_bay: '2026-10-21',
+  // merged on 2026-10-20 in the evening
+  bandon_dunes: '2026-10-21',
 };

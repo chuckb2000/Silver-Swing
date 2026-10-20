@@ -689,3 +689,30 @@ Folded in from docs/courses/chambers_bay.md at the merge (lidar rebuild folded i
 
 -   **Rounded fairway corners pull in at every join.** s08 rounds each fairway piece on its own, so an s02b approach and the fairway it extends, or two OSM fairways drawn edge to edge, each pull back from the shared edge and leave a line of rough and small notches (East Potomac: 161 pockets, 189 m2). Set `merge_touching_fairways` where the fairways come in pieces, and check a course with many s02b approaches for rough slivers inside the fairways.
 
+## 20. Bandon Dunes (2026-10-20)
+
+Folded in from docs/courses/bandon_dunes.md at the merge.
+
+-   **Resort polygons hold several courses.** Drop the other courses'
+    `golf=hole` lines and course polygons in `edits.json`, keep their
+    surfaces, and drop their greens outside the world. s09 crashed on a
+    green beyond the world edge (negative raster size).
+-   **Old lidar, new course.** The DOGAMI South Coast lidar predates parts
+    of the resort. Comparing tree crowns with a recent photo
+    (`trees_need_ortho`) removed 407 trees standing on what are now greens
+    and fairways of the Preserve.
+-   **Shrubs under 4 m are invisible to the tree finder.** The thickets
+    that define this course had to come from the photo. A simple colour
+    rule (dark, blue-green, textured) separated them from the fescue cleanly
+    in the late-summer OSIP image.
+-   **The crown-shape rule misreads coastal pines** (86 % "deciduous"):
+    wind-sheared shore pines are broad and flat. Look at the photo before
+    trusting the split.
+-   **A mapped beach that starts outside the world gives s08 nothing to
+    grow from.** Propose the beach from the DEM instead (`make_beach.py`).
+-   **Tee boxes beside the line.** s06 looks 25 m either side of the hole
+    line. Boxes 26-33 m out (holes 2 and 3) and a tee complex 100 m from a
+    misdrawn line start (hole 11) needed `hole`/`tee_set` tags. Measuring
+    every box within 160 m against the card found them in one pass.
+-   **A sprite outline that uses `np.roll`** wraps a solid bottom row onto
+    the top row (a stray line above every gorse bush). Pad before rolling.

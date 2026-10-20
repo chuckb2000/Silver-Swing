@@ -452,14 +452,15 @@ DECISIONS.md with the reason.
     `src/systems/game/pins.ts`); the meter has a line at the middle of the green, no
     ghost tick and no display-lag allowance. 376 unit tests and 4 Playwright tests pass.
 
--   **Courses (course chats, 2026-10-18 to 2026-10-20):** seventeen data
-    folders, nineteen courses on offer (East Potomac is three) in six states;
+-   **Courses (course chats, 2026-10-18 to 2026-10-20):** eighteen data
+    folders, twenty courses on offer (East Potomac is three) in six states;
     Gearhart Golf Links (Gearhart OR), Bandon Trails (Bandon OR, `bandon`
     theme) and Chambers Bay (University Place WA, `puget` theme) merged 2026-10-20. Oregon Golf Club's creek on
     13, 14 and 15 (from the lidar, `course/ogc-creek`) merged 2026-10-20.
     Chambers Bay's trees from the 2020 lidar (`course/chambers_bay`) and East
     Potomac's fairway joins and Blue 10 object (`fix/east-potomac-tree`) merged
-    2026-10-20.
+    2026-10-20. Bandon Dunes (Bandon OR, `bandon_dunes` theme, penal gorse on
+    surface 17; PR #17) merged 2026-10-20; in the daily rotation from 2026-10-21.
     Each course's build history, facts and open items are in
     `docs/courses/<id>.md` (section 11).
 
@@ -1581,6 +1582,7 @@ files (`game/scripts/course-lists.mjs`). The first course, Oswego Lake, is
 
 | Course | File |
 |---|---|
+| Bandon Dunes | `docs/courses/bandon_dunes.md` |
 | Bandon Trails | `docs/courses/bandon_trails.md` |
 | Chambers Bay | `docs/courses/chambers_bay.md` |
 | East Potomac Golf Links (Blue, White and Red courses) | `docs/courses/east_potomac.md` |
