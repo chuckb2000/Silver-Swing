@@ -229,7 +229,8 @@ export class Round {
     for (const c of this.allowedClubs()) {
       if (c.kind === 'putter') continue;
       const err = Math.abs(this.fullCarry(c) - d);
-      if (err < bestErr) { bestErr = err; best = c; }
+      // in gorse every club carries the same capped distance: take the shortest (a wedge to hack out)
+      if (err < bestErr || (this.lie.carryCap !== undefined && err <= bestErr + 1e-9)) { bestErr = err; best = c; }
     }
     return best;
   }
@@ -244,7 +245,8 @@ export class Round {
   fullCarry(c: Club): number {
     if (c.kind === 'putter') return 0;
     const m = lieModsFor(this.lie, c);
-    return c.carryM * m.distMult * (m.splash ? 0.45 : 1);
+    const full = c.carryM * m.distMult * (m.splash ? 0.45 : 1);
+    return m.carryCap !== undefined ? Math.min(full, m.carryCap) : full;
   }
 
   /** Smallest swing length whose 100 % comfortably covers the distance to the pin. */

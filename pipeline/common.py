@@ -38,6 +38,21 @@ SURF = {
     "range": 15,      # driving range, treated as out of bounds
     "ob_sand": 16,    # beach / dune / cliff sand outside the boundary
 }
+
+# Gorse thickets inside the course (Bandon Dunes): a penal lie in the game
+# (game/src/systems/rules/lie.ts). Kept out of SURF so courses without gorse
+# export exactly the ids they always had; surf_ids() adds it where it is used.
+GORSE_SURF = 17
+
+
+def uses_gorse_ground(cfg: dict) -> bool:
+    """course_config.json "gorse": {"ground": "gorse"}: the ground under the thickets is the gorse surface."""
+    return isinstance(cfg.get("gorse"), dict) and cfg["gorse"].get("ground") == "gorse"
+
+
+def surf_ids(cfg: dict) -> dict:
+    """The surface ids a course's map can hold (SURF, plus gorse where the course has it)."""
+    return {**SURF, "gorse": GORSE_SURF} if uses_gorse_ground(cfg) else dict(SURF)
 SURF_NAME = {v: k for k, v in SURF.items()}
 
 

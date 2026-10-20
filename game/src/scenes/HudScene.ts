@@ -325,7 +325,7 @@ export class HudScene extends Phaser.Scene {
     const swinging = p.state === 'swing';
     setTxt(this.holeTxt, String(r.holeNumber));
     const d = r.distToPin();
-    const lieTxt = r.lie ? r.lie.label : '';
+    const lieTxt = !r.lie ? '' : r.lie.carryCap !== undefined ? `gorse max ${fmtDist(r.lie.carryCap)}${unitLabel()}` : r.lie.label;
     const surf = SURFACE_LABEL[r.surfaceAt()] ?? '';
     setTxt(this.infoLines[0], `par ${r.hole.par}`);
     setTxt(this.infoLines[1], p.state === 'holed' || p.state === 'replay' ? `holed: ${r.tally.strokes}` : `shot ${r.tally.strokes + 1}`);
@@ -443,7 +443,7 @@ export class HudScene extends Phaser.Scene {
       const over = !!m && (m.phase === 'accuracy' || m.phase === 'done') && (m.power / 100) * p.swingScale > 1.0001;
       half = perfectHalfWidth(r.preset.perfectZone, p.club, { distMult: mods.distMult, windowMult: mods.windowMult }, over);
     }
-    const good = half + GOOD_BAND;
+    const good = half + (putt ? GOOD_BAND : lieModsFor(r.lie, p.club).goodBand ?? GOOD_BAND); // gorse: a sliver of yellow
     g.fillStyle(0xd23b2b, 1).fillRect(X(-ZONE_REACH), y0, X(ZONE_REACH) - X(-ZONE_REACH), h);
     g.fillStyle(0xf2c23a, 1).fillRect(X(-good), y0, Math.max(1, X(good) - X(-good)), h);
     g.fillStyle(0x4cd25c, 1).fillRect(X(-half), y0, Math.max(1, X(half) - X(-half)), h);
