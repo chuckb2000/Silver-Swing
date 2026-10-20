@@ -198,8 +198,9 @@ function renderChips() {
 }
 
 function openHole(h) {
+  cur = h; ensureWork(h);   // before cancelDraw, which renders the current hole (its work may have been reset by a load)
   cancelDraw();
-  cur = h; ensureWork(h); sel = null; selPt = null;
+  sel = null; selPt = null;
   const g = W().features.find(f => f.kind === "bluetee") || W().features.find(f => f.kind === "green"); sel = g ? g.id : null;
   fit(); renderChips(); render(); renderPanel();
   $("note").value = W().note;
@@ -342,7 +343,7 @@ function finishDraw() {
   else { const id = "user_" + draw.kind + "_" + Date.now().toString(36); W().features.push({id, kind: draw.kind, poly: draw.pts}); sel = id; }
   cancelDraw(); render(); renderPanel();
 }
-function cancelDraw() { draw = null; svg.classList.remove("drawing"); $("drawbar").hidden = true; if (cur) render(); }
+function cancelDraw() { draw = null; svg.classList.remove("drawing"); $("drawbar").hidden = true; if (cur && vb) render(); }
 $("drawDone").onclick = finishDraw; $("drawCancel").onclick = cancelDraw;
 $("drawUndo").onclick = () => { if (draw) { draw.pts.pop(); updateDrawMsg(); render(); } };
 $("redraw").onclick = () => { const f = W().features.find(x => x.id === sel); if (f) startDraw(f.kind, f.id); };
