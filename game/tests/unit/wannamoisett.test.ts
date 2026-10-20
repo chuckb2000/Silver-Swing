@@ -78,7 +78,7 @@ describe('Wannamoisett: course list, tees and layout', () => {
     const r = new Round(course, roundCfg(course, [14]));
     r.startHole(0);
     r.wind = { dir: 0, mph: 0, vx: 0, vy: 0 };
-    r.ball = { x: 654.0, y: 877.1 };
+    r.ball = { x: 654.0, y: 877.1, teedUp: false };
     const plan = r.plan('pw', 0, meterFor(0.01, 0, false), 0, 1);
     const sim = r.simulate(plan);
     const out = r.resolve(plan, sim);

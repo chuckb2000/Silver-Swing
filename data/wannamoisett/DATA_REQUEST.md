@@ -80,3 +80,20 @@ Add the files to the existing release: https://github.com/chuckb2000/silver-swin
 ## Status
 
 - 2026-10-19: OSM and photos in hand; DEM, lidar and the current scorecard requested.
+- 2026-10-19 evening: DEM, all nine LAZ tiles and a scorecard screenshot in the release. No club card; the build uses GolfPass yardages and the screenshot's stroke index (validation_report.md, item 1). `images.2.jpg` is probably another course (developer) and is not used.
+
+## Checks on arrival (runbook 5.5)
+
+- **DEM** `USGS_1M_19_x30y464_RI_Statewide_D22.tif` (222,810,703 bytes, SHA-256 7c44e325bb5004f80004065fcacec1520af0d18dd4f7224d6032100db8085697): EPSG:26919, 1 m, float32 metres, nodata -999999, none over the world + 100 m. Clipped to `raw/ri_dem_2022_1m_clip.tif`. Heights 5.9-29.4 m over the world.
+- **LAZ** (nine tiles, 33-51 MB each; `raw/laz_src/`, gitignored): NAD83(2011) / Rhode Island (ftUS) + NAVD88 GEOID18 (ftUS); classes 1, 2, 7, 9, 17, 18, 20 (no vegetation class). s00 reprojects the points; building footprints line up with the canopy height (best with no shift). SHA-256:
+  - 362500_275000 b9aa6ec3b9a0b7f7d60c807ab52d617df16bd3ce53b8c28860c577761b742a03
+  - 362500_277500 267c2ce0a6dc4c9a826d0a4c36f6d4a6e2370730d94493b95c225b47d3d89cc5
+  - 362500_280000 546e0326f720fc9df91fc1c4bd4698a5ac68d0fd716f2df8e2c53e5a56605a8a
+  - 365000_275000 4e3613795d6a37aead7610e9f556d9ef8797dd29875fd7b04a7b139160b908a7
+  - 365000_277500 ab2d2352b33c29d60b0c164f9c998426a0ff9da115165229b2a2aea95a52665c
+  - 365000_280000 de7f01c0704e13279b5d35250d0fcdc27d11fbd238fab02e8cdd52e0edaaae3a
+  - 367500_275000 614e1a490b05749b878e492b86733874647830d0935cec3b51ef262fc9b8bfd2
+  - 367500_277500 61d0773a7282af2357bf718f001fabbcdba72e3feec432ec3c622fa9173070e7
+  - 367500_280000 ebf20d245e62b4a69caba5fbec495d9a5bc78a748571abff387b7756329ca7bb
+
+To rebuild: the DEM clip is in git; download the nine LAZ tiles into `data/wannamoisett/raw/laz_src/` and run `make course NAME=wannamoisett`.

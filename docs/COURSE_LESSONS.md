@@ -355,3 +355,32 @@ notes live in DECISIONS.md.
 - `npm install` may rewrite `game/package-lock.json`; revert it unless the
   course needs a new package.
 
+
+## 9. Wannamoisett (2026-10-19)
+
+- **Look at the OSM boundary's inner rings, not only its parts.** The course
+  relation cut the pond beside hole 14 out as an inner ring, so the pond was
+  out of bounds. `join_boundary` with that water fills it; s02 now skips
+  adding a second penalty polygon where the water is already a mapped hazard.
+- **Class-1 lidar holds roofs, and leaf-off they look like pines.** Where a
+  project has no vegetation class and OSM maps few houses, every unmapped roof
+  becomes a "crown" whose returns are all last returns, which the leaf-off
+  conifer split reads as a pine (30 % "pines" here, mostly roofs). Plot the
+  per-crown last-return share before trusting the split: it was bimodal plus
+  a roof mode at 0.85-1 (median 6.6 m high, almost none on the course).
+  `roof_last_share` drops that mode. Then check the crowns it drops inside the
+  course: they should all sit on buildings.
+- **Read every building tag.** The clubhouse was `golf=clubhouse` +
+  `building=yes`; s01 classifies by the golf key first, so it was neither drawn
+  nor an obstruction. Add the outline as a building through `edits.json`.
+- **Third-party cards disagree on tee names.** A scorecard site called the
+  6,732-yd set "Blue"; GolfPass calls the same numbers "Black" and its 6,417
+  set "Blue"; the club website's newer totals keep GolfPass's order. Pick one
+  naming, say so, and line up the handicap row column by column (GolfPass
+  shifted its back nine by one; a clean 1-18 set is the check).
+- **Uploads can arrive partially.** Six of nine lidar tiles reached the release;
+  the missing one held 70 % of the course. Check the asset list against the
+  request and say exactly which files are missing and what they cover.
+- **Run a fixed build twice from clean** (delete `build/` and `edited/`) and
+  compare checksums; start background builds with an explicit `cd` (a nohup
+  shell started elsewhere found no Makefile and silently did nothing).
