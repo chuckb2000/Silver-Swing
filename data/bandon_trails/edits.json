@@ -172,6 +172,50 @@
   {
    "osm": "w888425350",
    "reason": "hole 13 of Bandon Preserve, outside the Bandon Trails boundary"
+  },
+  {
+   "osm": "w1056993353",
+   "reason": "green of another course wholly outside the world box (s07/s09 cannot shape a green off the map)"
+  },
+  {
+   "osm": "w1057044354",
+   "reason": "green of another course wholly outside the world box (s07/s09 cannot shape a green off the map)"
+  },
+  {
+   "osm": "w1057044361",
+   "reason": "green of another course wholly outside the world box (s07/s09 cannot shape a green off the map)"
+  },
+  {
+   "osm": "w1057047150",
+   "reason": "green of another course wholly outside the world box (s07/s09 cannot shape a green off the map)"
+  },
+  {
+   "osm": "w1057196954",
+   "reason": "green of another course wholly outside the world box (s07/s09 cannot shape a green off the map)"
+  },
+  {
+   "osm": "w1057206612",
+   "reason": "green of another course wholly outside the world box (s07/s09 cannot shape a green off the map)"
+  },
+  {
+   "osm": "w1057222111",
+   "reason": "green of another course wholly outside the world box (s07/s09 cannot shape a green off the map)"
+  },
+  {
+   "osm": "w1187067947",
+   "reason": "green of another course wholly outside the world box (s07/s09 cannot shape a green off the map)"
+  },
+  {
+   "osm": "w833234950",
+   "reason": "green of another course wholly outside the world box (s07/s09 cannot shape a green off the map)"
+  },
+  {
+   "osm": "w833234953",
+   "reason": "green of another course wholly outside the world box (s07/s09 cannot shape a green off the map)"
+  },
+  {
+   "osm": "w853761987",
+   "reason": "green of another course wholly outside the world box (s07/s09 cannot shape a green off the map)"
   }
  ]
 }

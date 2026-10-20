@@ -40,6 +40,20 @@ def main():
         assert not trails.contains(h.geometry.representative_point()), h.osm
         course = name.rsplit(" Hole", 1)[0] if name else "Shortys (unnamed hole lines)"
         drop.append({"osm": h.osm, "reason": f"hole {h.tags.get('ref')} of {course}, outside the Bandon Trails boundary"})
+    # Greens wholly outside the world box: s07 shapes every green and s09's
+    # terrain_z_px rasterises each one into a window clipped to the world, which
+    # is empty for these (ValueError: negative dimensions). They are other
+    # courses' greens beyond the edge of the map, so they are dropped.
+    from pyproj import Transformer
+    from shapely.geometry import box
+    from shapely.ops import transform
+    cfg = json.load(open(HERE / "course_config.json"))
+    w = cfg["world"]
+    world = transform(Transformer.from_crs(cfg["epsg"], 4326, always_xy=True).transform,
+                      box(w["x0"], w["y0"], w["x0"] + w["width"], w["y0"] + w["height"]))
+    for _, f in g[g.kind == "green"].sort_values("osm").iterrows():
+        if not f.geometry.intersects(world):
+            drop.append({"osm": f.osm, "reason": "green of another course wholly outside the world box (s07/s09 cannot shape a green off the map)"})
     out = {"note": "Edits to the OSM layout for Bandon Trails, made by make_edits.py; built into edited/course.geojson by pipeline/merge_edits.py.",
            "drop": drop}
     (HERE / "edits.json").write_text(json.dumps(out, indent=1, ensure_ascii=False) + "\n")

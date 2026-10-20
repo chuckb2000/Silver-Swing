@@ -4,7 +4,7 @@
   "location": "Bandon, Coos County, Oregon",
   "state": "OR",
   "architects": "Bill Coore and Ben Crenshaw (opened 2005)",
-  "theme": "pnw",
+  "theme": "bandon",
   "epsg": 32610,
   "osm_sources": [
     "raw/overpass.geojson"
@@ -45,6 +45,7 @@
   ],
   "driving_range_is_ob": true,
   "trees_off_fairways_m": 2,
+  "rough_band_m": 3.5,
   "wind_mph": {
     "minMph": 3,
     "maxMph": 14

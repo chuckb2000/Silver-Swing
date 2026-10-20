@@ -796,6 +796,8 @@ def colour_disc(fn, fill, rim):
 
 EDGE = rgba("#0d1620", 220)
 
+from logo_bandon_trails import trail_post  # noqa: E402  (Bandon Trails, course chat 2026-10-20)
+
 LOGOS = {
     "oswego_lake": (anchor, {
         "mid": rgba("#2f6fd1"), "light": rgba("#5d97ee"), "dark": rgba("#1c4a98"),
@@ -885,6 +887,12 @@ LOGOS = {
         "rim": rgba("#d1b25a"), "rim_dark": rgba("#9c7f34"),
         "skin": rgba("#7c8f4a"), "skin_light": rgba("#a3b66a"), "skin_dark": rgba("#53632f"), "eye": rgba("#1a1d14"),
         "edge": EDGE,
+    }),
+    "bandon_trails": (trail_post, {
+        "spruce": rgba("#2c5f58"), "spruce_light": rgba("#437a6d"), "spruce_dark": rgba("#17383a"), "bark": rgba("#4c3a2c"),
+        "wood": rgba("#9a7448"), "wood_light": rgba("#c29a64"), "wood_dark": rgba("#6b4c2c"),
+        "blaze": rgba("#f4f0e6"), "band": rgba("#d8a031"), "band_dark": rgba("#a87920"),
+        "grass": rgba("#ad9c5b"), "grass_light": rgba("#d3c27a"), "edge": EDGE,
     }),
 }
 
