@@ -254,8 +254,6 @@ def render_art(surf, z, grid: Grid, g, holes, trees, buildings, boundary, P, lut
     tuft3 = np.zeros_like(tuft)
     tuft3[:-2] = tuft[2:]
     put(tuft | tuft2 | tuft3, "TUFT" if "TUFT" in P else "G5")
-    if range_rough:
-        put(range_cells & (n1 > 0.9975), "WH")  # range balls
     # outlines
     pr = PRIO[surf]
     edge = np.zeros((H, W), bool)

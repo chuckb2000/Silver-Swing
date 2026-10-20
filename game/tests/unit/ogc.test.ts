@@ -82,6 +82,19 @@ describe('Oregon Golf Club course data', () => {
     expect(Math.max(...course.obstacles.trees.map((t) => t.h))).toBeLessThan(60);
   });
 
+  it('hole 7: the fir in front of the green is removed (developer: it hid the pin)', () => {
+    expect(course.obstacles.trees.filter((t) => Math.hypot(t.x - 1074.5, t.y - 1422.5) < 2)).toEqual([]);
+    const h = json.holes.find((x) => x.number === 7)!;
+    const green = course.greenPolys.get(h.greenId)!;
+    const over = course.obstacles.trees.filter((t) => {
+      for (let a = 0; a < 360; a += 15) {
+        if (green.contains(t.x + Math.cos((a * Math.PI) / 180) * t.r * 0.95, t.y + Math.sin((a * Math.PI) / 180) * t.r * 0.95)) return true;
+      }
+      return green.contains(t.x, t.y);
+    });
+    expect(over.map((t) => `${t.x.toFixed(0)},${t.y.toFixed(0)} (${t.h.toFixed(0)} m)`)).toEqual([]);
+  });
+
   it('a perfect tee shot at the middle of the fairway clears the trees around the tee, from both tee sets', () => {
     class AlwaysHit extends Rng { next(): number { return 0; } }
     const blocked: string[] = [];

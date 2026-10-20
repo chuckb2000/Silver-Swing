@@ -522,7 +522,7 @@ DECISIONS.md with the reason.
     White tees, a 1,280 x 2,304 m world, the driving range out of bounds
     and drawn as rough; branch `course/ogc` (merged after `course/tualatin`). Pipeline keys `remove_wires` (s05) and
     `range_art` (s09, s09b, s10); every other course rebuilds unchanged.
-    317 unit tests and 4 Playwright tests pass. Open items: section 11.15.
+    318 unit tests and 4 Playwright tests pass. Open items: section 11.15.
 
 -   **Next task:** the third playtest (putting, yellow misses), the club's
     printed scorecard and the hole 3 Blue tee box. New courses: a separate
@@ -2005,9 +2005,13 @@ Black (7,070), Green (5,313), Yellow (4,204) and the combo tees are in
 scorecard_full.csv, not built.
 
 -   **Default tee:** Blue (developer); White is built too.
--   **Known open items:** data/ogc/report_notes.md (a fir hides the hole 7
-    pin; hole 16 White tee assigned by the course
-    chat; flags on 5 White and 10 Blue/White; scorecard unverified).
+-   **Accepted by the developer (2026-10-19):** the hole 7 fir in front
+    of the green removed (`drop_trees`); hole 16 White tee from the box
+    beside the line; flags on 5 White and 10 Blue/White; course card
+    hole 8; the world's load time; no range balls (stakes only); the
+    parts of ponds W7/W8 outside the boundary stay out of bounds.
+-   **Known open items:** scorecard unverified
+    (data/ogc/report_notes.md).
 
 **12. Repository layout**
 

@@ -64,5 +64,12 @@
     "Elevation and canopy height: Oregon Department of Geology and Mineral Industries (DOGAMI) lidar",
     "Scorecard: GolfPass (third-party listing)"
   ],
-  "notes": "Developer, 2026-10-19: world may exceed 2,048 m; Blue and White tees, Blue default; all water hazards red; the driving range holds target greens P3-P9 of proposed/osm_labelled.png (range polygon proposed from the OSM path loop, proposed/range.png); no printed scorecard; pnw theme; wind as Oswego Lake and Tualatin."
+  "notes": "Developer, 2026-10-19: world may exceed 2,048 m; Blue and White tees, Blue default; all water hazards red; the driving range holds target greens P3-P9 of proposed/osm_labelled.png (range polygon proposed from the OSM path loop, proposed/range.png); no printed scorecard; pnw theme; wind as Oswego Lake and Tualatin.",
+  "drop_trees": [
+    {
+      "x": 1074.5,
+      "y": 1422.5,
+      "reason": "developer 2026-10-19: hole 7, 31 m fir 7 m in front of the green; its sprite covered the pin in the 3/4 view; removed for playability"
+    }
+  ]
 }

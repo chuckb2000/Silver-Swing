@@ -366,8 +366,8 @@ def main():
     range_cells = surf == S["range"]
     if cfg.get("range_art") == "rough":
         # optional: a range that is rough on the ground (Oregon Golf Club) is drawn as
-        # rough, without mowing stripes; it stays out of bounds in the surface map and
-        # is marked by its range balls and a line of OB stakes along its edge
+        # rough, without mowing stripes or range balls; it stays out of bounds in the
+        # surface map and is marked by a line of OB stakes along its edge
         surf = surf.copy()
         surf[range_cells] = S["rough"]
     base = np.load(bdir / "height_base.npy").astype(np.float64)
@@ -428,7 +428,8 @@ def main():
     tuft2[:-1] = tuft[1:]
     put(tuft | tuft2, "TUFT" if "TUFT" in P else "G5")
     # range balls
-    put(range_cells & (n1 > 0.9975), "WH")
+    if cfg.get("range_art") != "rough":  # a range drawn as rough shows only its OB stakes (developer, Oregon Golf Club)
+        put(range_cells & (n1 > 0.9975), "WH")
 
     # outlines -----------------------------------------------------------
     pr = PRIO[surf]

@@ -408,7 +408,8 @@ DECISIONS.md.
   collar of a range target, and it left a hole in the range.
 - **Ask how the range looks on the ground.** A range drawn with fairway
   stripes invites players to hit there. This one is rough, so it is drawn as
-  rough with range balls and OB stakes (`range_art`).
+  rough with OB stakes along its edge (`range_art`). No range balls: white
+  dots on the range hid the stakes (developer).
 - **Tee complexes that step sideways.** s06 looks for tee boxes within 25 m
   of the hole line; on a hillside a forward box can be 30 m to the side.
   Measure every box near the line start against the card; assign a clear
