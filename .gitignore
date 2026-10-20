@@ -23,3 +23,7 @@ data/*/raw/*.laz
 data/*/raw/USGS_1M_*.tif
 data/*/raw/**/*.laz
 data/*/raw/**/*.zip
+
+# course lists made from the courses (game/scripts/course-lists.mjs: build, dev server, tests, s10)
+game/public/courses/index.json
+game/public/sprites/title/index.json

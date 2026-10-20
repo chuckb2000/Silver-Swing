@@ -1,0 +1,17 @@
+{
+ "release": "data-indian-island",
+ "note": "build inputs not kept in git; `make fetch NAME=indian_island` puts them in place (pipeline/fetch_raw.py)",
+ "files": [
+  {
+   "asset": "Indian.Island.lidar.zip",
+   "sha256": "aa01511a6037cf520c56f9b8a58aac2107d8c02bb6312784eb660ec1400f2c25",
+   "run": "python3 data/indian_island/make_laz.py {file}",
+   "outputs": {
+    "raw/laz/u_6975053150_c1.laz": "44fafb54e5dbd125bed7994e2997ba87b492ed8fc196ce49811f8f1ca1818ec0",
+    "raw/laz/u_6975053300_c1.laz": "7331dab1b8d2ff5ee8bd39d2f075c9e80a7b51b0de9bb8b36ac45f63d5655cf7",
+    "raw/laz/u_6990053150_c1.laz": "07a1b6ff23e65232632a970b6ed959feb3ad0446f72eac4aba174538fe8de5a0",
+    "raw/laz/u_6990053300_c1.laz": "85dd279f192fbd982663dd8a6174e2b86c4f7a0175e15725c9b0626d0975c75d"
+   }
+  }
+ ]
+}

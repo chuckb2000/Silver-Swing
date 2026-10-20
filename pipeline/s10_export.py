@@ -117,26 +117,17 @@ def render_map(surf, z_px, trees, world, f, region=None):
     return img
 
 
-def update_registry(course: dict):
-    """Add or update this course in game/public/courses/index.json (the list the game offers)."""
-    path = ROOT / "game" / "public" / "courses" / "index.json"
-    reg = json.load(open(path)) if path.exists() else {"courses": []}
-    default = next(t for t in course["teeSets"] if t["name"] == course["defaultTee"])
-    entry = {
-        "id": course["id"], "name": course["name"], "location": course["location"], "state": course["state"],
-        "theme": course["theme"], "holes": len(course["holes"]), "par": course["par"], "defaultTee": course["defaultTee"],
-        "totalYd": default["totalYd"], "teeSets": [t["name"] for t in course["teeSets"]],
-    }
-    if course.get("group"):
-        # one of several courses on the same grounds (East Potomac's Blue / White / Red)
-        entry.update({k: course[k] for k in ("group", "groupName", "layout") if k in course})
-    # update in place, new courses at the end: the first course stays the default for new players
-    ids = [c["id"] for c in reg["courses"]]
-    if entry["id"] in ids:
-        reg["courses"][ids.index(entry["id"])] = entry
-    else:
-        reg["courses"].append(entry)
-    write_json(path, reg, indent=1)
+def update_course_lists():
+    """Remake the game's course lists from every exported course.json (game/scripts/course-lists.mjs).
+    They are generated, not committed, so no course build edits a shared file; the game's build
+    and dev server make them too, so a machine without node only skips this convenience."""
+    import shutil
+    import subprocess
+    node = shutil.which("node")
+    if not node:
+        print("[s10] node not found: courses/index.json is made by the game's build instead")
+        return
+    subprocess.run([node, "scripts/course-lists.mjs"], cwd=ROOT / "game", check=True)
 
 
 def export_greens(src_dir, out):
@@ -367,9 +358,9 @@ def main():
         }
         if shared:
             course.update({"group": cfg["id"], "groupName": cfg["name"], "layout": lay.get("short") or lay["name"]})
+        if cfg.get("practice"):
+            course["practice"] = True  # the practice ground is opened from its own button, not the course list
         write_json(lout / "course.json", course)
-        if not cfg.get("practice"):  # the practice ground is opened from its own button, not the course list
-            update_registry(course)
 
     # validation report -------------------------------------------------------
     table = (bdir / "validation_table.md").read_text()
@@ -407,6 +398,7 @@ def main():
     outs = [out] + ([out_dir(l_["id"]) for l_ in lays] if shared else [])
     sizes = sum(p.stat().st_size for o in outs for p in o.rglob("*") if p.is_file())
     print(f"[s10] exported to {', '.join(str(o.relative_to(ROOT)) for o in outs)}: {cols}x{rows} chunks, {len(trees)} trees, {len(buildings)} buildings, {sizes / 1e6:.1f} MB total")
+    update_course_lists()
 
 
 if __name__ == "__main__":
