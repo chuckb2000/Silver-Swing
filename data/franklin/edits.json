@@ -55,7 +55,7 @@
     "penalty": "red",
     "flatten": "no"
    },
-   "reason": "course chat 2026-10-19: the unnamed stream across holes 13, 16 and 7 (an Uncas Brook tributary in OSM terms) has a clear lidar channel 0.4-0.7 m deep; red like all water on the course (developer). Listed for review in the PR"
+   "reason": "course chat 2026-10-19: the unnamed stream across holes 7, 9 and 16 (and beside 13) (an Uncas Brook tributary in OSM terms) has a clear lidar channel 0.4-0.7 m deep; red like all water on the course (developer). Listed for review in the PR"
   }
  ],
  "tags": [

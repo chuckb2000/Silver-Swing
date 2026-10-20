@@ -69,7 +69,7 @@ describe('Franklin Country Club course data', () => {
     expect(water / inPond, 'painted as penalty water').toBeGreaterThan(0.97);
   });
 
-  it('Uncas Brook and the stream across 13, 16 and 7 are red penalty areas painted as water', () => {
+  it('Uncas Brook and the stream across 7, 9 and 16 are red penalty areas painted as water', () => {
     const ids = ['w942611225', 'w942611227', 'w942611229', 'w942611231', 'w942611233',
       'w1263089459', 'w1263302044', 'w1263302054', 'w1263302049'].map((i) => `channel_${i}`);
     for (const id of ids) {
@@ -105,6 +105,10 @@ describe('Franklin Country Club course data', () => {
       }
     }
     expect([...new Set(blocked)]).toEqual([]);
+  });
+
+  it('the broadleaf left of the 18th tee is gone (course_config.json drop_trees)', () => {
+    expect(course.obstacles.trees.filter((t) => Math.hypot(t.x - 543.5, t.y - 1614.5) < 2)).toEqual([]);
   });
 
   it('a perfect tee shot at the middle of the fairway clears the trees around the tee (the every-course rule)', () => {

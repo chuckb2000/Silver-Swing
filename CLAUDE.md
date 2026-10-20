@@ -523,7 +523,8 @@ DECISIONS.md with the reason.
     centres); USGS 3DEP DEM and leaf-off lidar (37,340 trees); all water
     red, including Uncas Pond across 14 and Uncas Brook from the lidar
     channel. Every hole within 3 % of the card. No pipeline change; other
-    courses untouched.
+    courses untouched. 318 unit and 4 Playwright tests pass (after merging
+    main with Eastmoreland).
 
 -   **Next task:** the third playtest (putting, yellow misses), the club's
     printed scorecard and the hole 3 Blue tee box. New courses: a separate
@@ -1984,8 +1985,8 @@ data/franklin/validation_report.md.
     GitHub release `franklin-data`.
 -   **Water:** all red (developer). Five OSM ponds, two more ponds OSM maps
     only as `natural=water`, Uncas Pond across the par-3 14th (outside the
-    boundary, `red_water_osm`), Uncas Brook and an unnamed stream across 13,
-    16 and 7 (penalty areas from the lidar channels). No internal out of
+    boundary, `red_water_osm`), Uncas Brook and an unnamed stream across 7,
+    9 and 16 (penalty areas from the lidar channels). No internal out of
     bounds; the driving range is out of bounds.
 -   **Trees:** 37,340 from lidar (3,633 on the course), 34 % conifers from
     the leaf-off returns. One broadleaf left of the 18th tee removed (course
