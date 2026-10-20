@@ -107,9 +107,9 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 | 8 | 5 | yes | yes (4 near) | yes | yes | yes | 15 | 0 |
 | 9 | 3 | yes | yes (5 near) | yes | yes | yes | 2 | 0 |
 | 10 | 4 | yes | yes (6 near) | yes | yes | yes | 11 | 0 |
-| 11 | 3 | yes | yes (2 near) | yes | yes | yes | 2 | 0 |
-| 12 | 4 | yes | yes (1 near) | yes | yes | yes | 6 | 0 |
-| 13 | 5 | yes | yes (1 near) | yes | yes | yes | 9 | 0 |
+| 11 | 3 | yes | yes (2 near) | yes | yes | yes | 2 | 1 |
+| 12 | 4 | yes | yes (1 near) | yes | yes | yes | 6 | 1 |
+| 13 | 5 | yes | yes (1 near) | yes | yes | yes | 9 | 1 |
 | 14 | 3 | yes | yes (1 near) | yes | yes | yes | 10 | 1 |
 | 15 | 4 | yes | yes (2 near) | yes | yes | yes | 11 | 0 |
 | 16 | 3 | yes | yes (4 near) | yes | yes | yes | 4 | 0 |
@@ -137,5 +137,5 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 - hole 17: hole line carries handicap=8 (compare with scorecard)
 - hole 18: hole line carries handicap=10 (compare with scorecard)
 
-Totals: 49 tees, 18 greens, 20 fairways, 95 bunkers, 1 water hazards, 18 pins, 0 cart paths, 0 OSM tree points.
+Totals: 49 tees, 18 greens, 20 fairways, 95 bunkers, 2 water hazards, 18 pins, 0 cart paths, 0 OSM tree points.
 
