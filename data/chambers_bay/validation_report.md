@@ -58,8 +58,10 @@ The developer's calls on 2026-10-20: Blue tees; all water red (none on the cours
 9. **Pins** are at the OSM `golf=pin` nodes (one per hole); the game adds up to three more per green.
 10. **Scorecard:** the club card (Golf ScoreCards Inc., 10/2025), every row checked; Black, Sand, White and Teal are in `scorecard.csv`, not built. OSM's pars match the card on every hole.
 11. **Architects:** Robert Trent Jones Jr. with Bruce Charlton and Jay Blasi, 2007 (thefriedegg.com).
-12. **Built without the lidar point cloud** (developer 2026-10-20: finish first, the NOAA job had not arrived; rebuild when it does). Trees are the OSM fallback: the Lone Fir (OSM node 3605861053, `natural=tree`, Douglas fir) and a seeded fill of the three OSM woods, 1,110 trees, all outside the boundary except the Lone Fir. Positions in the woods, heights (6-14 m) and types (half conifers) are drawn at random; tree lines OSM doesn't map (along Grandview Drive, round the south car parks) are missing. Nothing changes in play: every drive at the middle of the fairway clears.
-13. **The Lone Fir is 13.2 m in the game** (the fallback's draw, conifer) against about 12.2 m (40 ft, developer). Recommendation: leave it; the lidar rebuild measures the real tree. Setting it by hand needs a new pipeline key and the hour-long regression check.
+12. **Trees from the 2020 lidar** (first built on the OSM fallback the same day; rebuilt when the NOAA job arrived). 4,441 trees, 30 inside the boundary: the Lone Fir by the 16th tee, a tree line along the east boundary beside hole 8 (13-60 m from its line, real on the NAIP photo), shrubs at the wetland pond. Types from crown shape (flown from 10 April 2020, not leaf-off). Every tee shot at the middle of the fairway clears.
+13. **The Lone Fir is 21.6 m in the lidar** (7.1 m crown, on flat ground), against 40 ft from the developer's search; typed as a conifer from its OSM `leaf_type` (`tree_types_osm`). Recommendation: keep the measured height.
+14. **Not trees, taken out of the canopy:** a freight train on the BNSF track when the lidar was flown (166 crowns, all 4.7 m; `not_trees_areas` from the OSM rail lines, `make_not_trees.py`); the gravel-mine ruins beside the 18th (OSM `historic=ruins`, now drawn as buildings 7.6-8.9 m high; 17 crowns); a 6.9 m pole by hole 7 and the halfway-house roof (`drop_trees`).
+15. **The footbridge to the beach** (outside the boundary, south-west, not in OSM) still shows as a curved row of small trees in the scenery. Recommendation: leave it.
 
 ## Playability adjustments
 
@@ -71,13 +73,13 @@ The developer's calls on 2026-10-20: Blue tees; all water red (none on the cours
 - Hole 13 (Blue): measured 395 yd from the tee-box centre vs 500 on the card (-20.9%); moved the virtual tee along the middle of the real tee polygon w353151446 (on its centre line, at least 2.5 m from its back and front) -> 521.0 yd (real 395.4 yd).
 - Hole 14 (Blue): measured 449 yd from the tee-box centre vs 423 on the card (+6.2%); moved the virtual tee along the middle of the real tee polygon w353153461 (on its centre line, at least 2.5 m from its back and front) -> 440.6 yd (real 449.4 yd).
 
-## Tree detection (OSM fallback (no lidar))
+## Tree detection (2020 USGS lidar)
 
-- 1110 trees detected in the world extent (1 inside the course), 555 conifers / 555 deciduous; median height 10.0 m, max 14.0 m.
-- Dropped: 0 tops on building footprints, 0 over the lake, 0 tiny crowns.
+- 4441 trees detected in the world extent (30 inside the course), 1694 conifers / 2747 deciduous; median height 13.5 m, max 47.0 m.
+- Dropped: 401 tops on building footprints, 0 over the lake, 202 tiny crowns.
 - Dropped on playing surfaces (spec 5.4): 0 -> 
-- OSM natural=tree points matched by a detected tree within 4 m: 0 of 1.
-- LOWER FIDELITY: no canopy raster. Trees are OSM natural=tree points plus a seeded Poisson-disk fill of OSM woods every 6 m; heights 6-14 m and type (50% conifer) are drawn at random, not measured.
+- OSM natural=tree points matched by a detected tree within 4 m: 1 of 1.
+- Conifer vs deciduous is inferred from crown shape only (no leaf-off imagery); see build/trees_preview.png. 1 tree(s) typed from OSM leaf_type (tree_types_osm).
 
 # Green shaping checks
 

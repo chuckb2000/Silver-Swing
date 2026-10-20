@@ -15,6 +15,18 @@
     "units": "m",
     "source": "USGS 3DEP 1 m DEM, project WA_PierceCounty_2020_A20 (2020 Lidar: Pierce County, WA, flown 10 Apr - 4 Jun 2020), tile x53y523 (published 2021-06-13), clipped to the world + 100 m by pipeline/clip_raster.py (release.json); EPSG:26910 (NAD83 / UTM 10N), NAVD88 metres; downloaded by the developer 2026-10-20 (GitHub release chambers-bay-data)"
   },
+  "laz": {
+    "paths": [
+      "raw/laz/*.laz"
+    ],
+    "classes": [
+      1
+    ],
+    "units": "ft",
+    "source": "2020 Lidar: Pierce County, WA (NOAA Data Access Viewer dataset 9343, job J1472993), flown from 10 April 2020 (GPS times; project 10 Apr - 4 Jun 2020); NAD83(2011) / Washington South (EPSG:6598, metres), NAVD88 US survey feet; clipped to the world + 100 m by data/chambers_bay/make_laz.py; class 1 (unclassified: vegetation and structures; the project has no vegetation classes); ordered by the developer 2026-10-20 (GitHub release chambers-bay-data)",
+    "label": "2020 USGS lidar",
+    "leaf_off": false
+  },
   "world": {
     "x0": 531519,
     "y0": 5227314,
@@ -43,9 +55,23 @@
   "trees_off_fairways_m": 2,
   "attribution": [
     "Map data © OpenStreetMap contributors (ODbL)",
-    "Elevation: U.S. Geological Survey 3D Elevation Program (2020 Pierce County, WA lidar, 1 m DEM)",
+    "Elevation and trees: U.S. Geological Survey 3D Elevation Program (2020 Pierce County, WA lidar)",
     "Imagery for tee placement: USDA National Agriculture Imagery Program",
     "Scorecard: Chambers Bay club card (Golf ScoreCards Inc., 10/2025)"
   ],
-  "notes": "Phase 1 decisions (developer, 2026-10-20): Blue tees only; all water red (none mapped on the course); OB = the OSM boundary (BNSF railway, beach and Puget Sound outside it); trails and cart paths inside give free relief; the wetland inside the boundary (w582088908) stays woods, as the pipeline draws it; new theme 'puget' (the developer: coastal would be slightly off); wind 'pumped up a bit' to the open-coast 3-14 mph; the card and title images may be committed. Built without the lidar point cloud (developer 2026-10-20, option a: NOAA had not delivered; the course has one tree in play): trees are the OSM fallback (the Lone Fir node plus a seeded fill of the three OSM woods, all outside the boundary). When the NOAA zip arrives, add the 'laz' entry from docs/courses/chambers_bay.md and its release.json entry, and rebuild."
+  "notes": "Phase 1 decisions (developer, 2026-10-20): Blue tees only; all water red (none mapped on the course); OB = the OSM boundary (BNSF railway, beach and Puget Sound outside it); trails and cart paths inside give free relief; the wetland inside the boundary (w582088908) stays woods, as the pipeline draws it; new theme 'puget' (the developer: coastal would be slightly off); wind 'pumped up a bit' to the open-coast 3-14 mph; the card and title images may be committed. First built without the lidar (developer 2026-10-20, option a); rebuilt with it the same day once the NOAA job arrived.",
+  "tree_types_osm": true,
+  "drop_trees": [
+    {
+      "x": 756.5,
+      "y": 804.5,
+      "reason": "course chat 2026-10-20: not a tree - a single 6.9 m lidar spike (crown radius 1.1 m) on the cart path left of hole 7's fairway; the NAIP photo shows no tree there (a pole or sign)"
+    },
+    {
+      "x": 849.5,
+      "y": 467.5,
+      "reason": "course chat 2026-10-20: not a tree - the roof of the halfway house by the 1st tee (8.2 m), which OSM doesn't map as a building"
+    }
+  ],
+  "not_trees_areas": "proposed/not_trees.geojson"
 }
