@@ -44,8 +44,8 @@ export interface DailyPlan {
  * course plays its front nine on even days and its back nine on odd ones.
  */
 export function dailyPlan(day: string, all: DailyCourse[]): DailyPlan | null {
-  // nine holes: a course of 9 or 18 (or more), or a club's nines; a 13-hole course has no nine
-  const courses = all.filter((c) => c.holes === 9 || c.holes >= 18 || (c.nines?.length ?? 0) >= 3);
+  // nine holes: a course of 9 or 18, or a club's nines; a course of 13 or 19 holes has no nine
+  const courses = all.filter((c) => c.holes === 9 || c.holes === 18 || (c.nines?.length ?? 0) >= 3);
   if (!courses.length) return null;
   const order = courses.slice().sort((a, b) => hash32(seedFromString(a.id)) - hash32(seedFromString(b.id)) || a.id.localeCompare(b.id));
   const n = dayNumber(day);

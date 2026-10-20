@@ -38,7 +38,7 @@ describe('round lengths for every size of course', () => {
     expect(lengthsFor(9)).toEqual(['9', '9x2']);
     expect(lengthsFor(18)).toEqual(['18', 'front', 'back']);
     expect(lengthsFor(13)).toEqual(['all']);
-    expect(lengthsFor(19)).toEqual(['all', '18', 'front', 'back']);
+    expect(lengthsFor(19)).toEqual(['all']); // a par-3 course, played all at once (developer)
     expect(lengthsFor(NINES)).toEqual(['nines:red+white', 'nines:white+blue', 'nines:blue+red', 'nines:red', 'nines:white', 'nines:blue']);
   });
 
@@ -107,12 +107,13 @@ describe('saved rounds and the daily round', () => {
     expect(isEntry(base({ scores: Array.from({ length: 28 }, () => s) }))).toBe(false);
   });
 
-  it('daily: a club of nines plays one nine, a 13-hole course sits out, the rest is unchanged', () => {
+  it('daily: a club of nines plays one nine, 13- and 19-hole courses sit out, the rest is unchanged', () => {
     const c18 = { id: 'oswego_lake', holes: 18, defaultTee: 'Blue', teeSets: ['Blue'] };
     const c9 = { id: 'highland_links', holes: 9, defaultTee: 'Blue', teeSets: ['Blue'] };
     const days = range(0, 30).map((i) => `2026-11-${String(1 + (i % 30)).padStart(2, '0')}`);
     const before = days.map((d) => dailyPlan(d, [c18, c9]));
-    const withSmall = days.map((d) => dailyPlan(d, [c18, c9, { id: 'preserve', holes: 13, defaultTee: 'Blue', teeSets: ['Blue'] }]));
+    const withSmall = days.map((d) => dailyPlan(d, [c18, c9, { id: 'preserve', holes: 13, defaultTee: 'Blue', teeSets: ['Blue'] },
+      { id: 'nineteen', holes: 19, defaultTee: 'Blue', teeSets: ['Blue'] }]));
     expect(withSmall).toEqual(before);
     const club = { id: 'three_nines', holes: 27, defaultTee: 'Blue', teeSets: ['Blue'], nines: NINES.nines };
     const plans = days.map((d) => dailyPlan(d, [club])!);

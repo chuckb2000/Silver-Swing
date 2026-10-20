@@ -1,7 +1,6 @@
 // Round lengths: which holes a round plays. 18-hole courses (all, front or
 // back nine), 9-hole courses (9, or 18 twice around), courses of any other
-// size (13 or 19 holes: all of them; a 19-hole course also its first 18 and
-// either nine), and clubs of three or more nines (any two nines as an 18, or
+// size (13 or 19 holes, par-3 courses: all of them at once), and clubs of three or more nines (any two nines as an 18, or
 // one nine). Pure.
 
 import type { RoundLength } from '../../save/entry';
@@ -35,8 +34,7 @@ export function lengthsFor(shape: CourseShape | number): RoundLength[] {
   }
   if (s.holes === 9) return ['9', '9x2'];
   if (s.holes === 18) return ['18', 'front', 'back'];
-  if (s.holes > 18) return ['all', '18', 'front', 'back']; // 19 holes: all, the first 18, or a nine
-  return ['all']; // 13 holes and the like
+  return ['all']; // 13 or 19 holes and the like: played all at once (developer, 2026-10-20)
 }
 
 const nineOf = (s: CourseShape, id: string) => s.nines?.find((n) => n.id === id);

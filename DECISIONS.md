@@ -450,7 +450,8 @@ so a hole resumed after closing the tab lists the strokes since.
 ## Courses of 13 and 19 holes, and clubs of three nines (developer, 2026-10-20; branch `design/hole-counts`, not merged)
 
 - **Any size.** A course of N holes that isn't 9 or 18 offers "N holes"
-  (`'all'`); a 19-hole course also its first 18 and either nine. The card cuts
+  (`'all'`), played all at once; a 19-hole par-3 course too (developer: no
+  first 18 or nines on a 19-hole course). The card cuts
   any round into nines ("out", "in", then "xtra" for a 19th).
 - **Three or more nines** (`course.json` `nines`, from `course_config.json`
   via s10): rounds of two nines in rotation (a+b, b+c, c+a) and of one nine,
@@ -462,7 +463,7 @@ so a hole resumed after closing the tab lists the strokes since.
 - **Boards and the server**: lengths are checked by pattern; up to 27 holes a
   round; an eagle at a club of nines is listed on the course hole it was made on.
 - **Daily round**: a club of nines plays one of its nines (by the date); a
-  course without a nine (13 holes) is left out of the rotation, so adding one
+  course without a nine (13 or 19 holes) is left out of the rotation, so adding one
   doesn't shift the existing rotation.
 - **Stats and milestones**: two nines count as a full round; 13- and 19-hole
   rounds count as rounds but not in the 18- or 9-hole averages or the

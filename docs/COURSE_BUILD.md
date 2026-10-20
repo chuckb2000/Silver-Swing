@@ -282,7 +282,7 @@ polygons. Each layout is a separate entry in the course list, with `group`,
 
 The game plays a course of **any number of holes** (2026-10-20, branch
 `design/hole-counts` until merged): 9 (9, or 18 twice around), 18 (18, front,
-back), 19 (all 19, the first 18, either nine), and any other size such as a
+back), and any other size, such as a 19-hole or a
 13-hole par-3 course (all of its holes). Nothing to configure: the hole count
 comes from `scorecard.csv`, numbered 1..N with the `golf=hole` refs to match.
 
