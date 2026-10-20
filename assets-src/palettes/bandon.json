@@ -1,0 +1,63 @@
+{
+  "name": "Bandon (southern Oregon coast: dunes, fescue and spruce forest)",
+  "note": "Course theme palette (<= 32 colours; same keys as pnw.json plus F0-F2). Bandon Trails, Bandon OR: fine fescue fairways and greens in a lighter, yellower green than the pnw parkland turf; golden-tan dry fescue rough with a mown band along the fairways (rough_band_m); warm tan dune sand in the bunkers; dark tannin dune lakes; olive dune scrub and forest floor off the course. From the photos and the OSIP 2024 orthophoto in the GitHub release bandon-trails-data. Trees in assets-src/trees_bandon.py: Sitka spruce and Douglas fir, and wind-shaped shore pine. Shadows are a 35% black overlay on top of these.",
+  "colors": {
+    "G0": "#1a2e22",
+    "G1": "#24402b",
+    "G2": "#3f6a33",
+    "G3": "#4d7c37",
+    "G4": "#5e8f3a",
+    "G5": "#6fa042",
+    "G6": "#80b04a",
+    "G7": "#92bf55",
+    "G8": "#a2cc62",
+    "G9": "#c1df8a",
+    "L0": "#4f5a32",
+    "L1": "#5f6a3a",
+    "L2": "#717c45",
+    "S0": "#bfa27a",
+    "S1": "#dcc59e",
+    "S2": "#ece0c4",
+    "W0": "#253f55",
+    "W1": "#335671",
+    "W2": "#5f86a3",
+    "K0": "#26272d",
+    "K1": "#53545c",
+    "K2": "#7a7b83",
+    "K3": "#ada695",
+    "K4": "#d3ccbb",
+    "B0": "#433022",
+    "B1": "#66482f",
+    "B2": "#86603f",
+    "R0": "#4f5763",
+    "WH": "#f6f6f2",
+    "F0": "#97884e",
+    "F1": "#ad9c5b",
+    "F2": "#c2b16a"
+  },
+  "lut": {
+    "rough": ["F0", "F1", "F2", "F2"],
+    "rough_band": ["G3", "G4", "G5", "G5"]
+  },
+  "aliases": {
+    "TUFT": "F0"
+  },
+  "minimap": {
+    "ob": "#5f6a3a",
+    "rough": "#ad9c5b",
+    "woods": "#24402b",
+    "ob_woods": "#1f3826",
+    "water": "#335671",
+    "ob_water": "#335671",
+    "bunker": "#dcc59e",
+    "ob_sand": "#dcc59e"
+  },
+  "minimap_trees": {
+    "conifer": ["#173126", "#2f5a43"],
+    "deciduous": ["#1c3420", "#36592f"]
+  },
+  "trees": {
+    "conifer": "trees_bandon:conifer",
+    "deciduous": "trees_bandon:deciduous"
+  }
+}
