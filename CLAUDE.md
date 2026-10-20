@@ -539,10 +539,11 @@ DECISIONS.md with the reason.
     Dunes must switch its gorse ground to `gorse` and rename its theme (Bandon
     Trails owns `bandon`).
 
--   **Next task:** Langston's committed files predate a rebuild: a fresh
-    build keeps one tree 19 m from the 10th Royal tee that the committed build
-    removed (every other course rebuilds unchanged, 2026-10-20); the fix is on
-    `fix/langston-tree` (developer: remove it), awaiting merge. Item 1 of the player improvements (swing coach) is on
+-   **Langston tree (2026-10-20):** the tree 19 m from the 10th Royal tee is
+    in Langston's `drop_trees` (developer: remove it); `fix/langston-tree`
+    merged 2026-10-20. Every course now rebuilds to its committed files.
+
+-   **Next task:** Item 1 of the player improvements (swing coach) is on
     `design/coach`, unmerged. Also: the third playtest (putting, yellow
     misses), the club's printed scorecard and the hole 3 Blue tee box. New
     courses: a separate chat following docs/COURSE_BUILD.md; after each one
