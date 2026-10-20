@@ -108,6 +108,11 @@ for (const id of LAYOUTS) {
       }
     });
 
+    it('the object in the left side of the Blue 10 fairway is gone (developer, 2026-10-20)', () => {
+      const near = course.obstacles.trees.filter((x) => Math.hypot(x.x - 585.5, x.y - 1269.5) < 2);
+      expect(near).toEqual([]);
+    });
+
     it('no tree stands inside a fairway', () => {
       const t = course.obstacles.trees;
       const S = course.terrain;
