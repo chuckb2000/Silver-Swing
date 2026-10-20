@@ -36,7 +36,7 @@ from rasterio.features import rasterize
 from scipy import ndimage
 from shapely.geometry import MultiPolygon, Point, Polygon
 
-from common import build_dir, course_name_from_argv, joins_parts, layout_dir, layouts, load_config, play_boundary, PX_PER_M, ROOT, SURF, World, write_json
+from common import build_dir, course_name_from_argv, GORSE_SURF, joins_parts, layout_dir, layouts, load_config, play_boundary, PX_PER_M, ROOT, SURF, World, write_json
 from s08_surface import course_layers, road_geoms
 from terrain import tier_offset
 from s09_render import draw_lighthouse, LIGHTHOUSE_DRAW_SCALE  # noqa: E402
@@ -218,7 +218,7 @@ def render_art(surf, z, grid: Grid, g, holes, trees, buildings, boundary, P, lut
     blk = max(1, round(ppm / 6))  # texture grain: the same size on screen at 6 and 12 px/m
     n1 = np.kron(rng.random((H // blk + 1, W // blk + 1)), np.ones((blk, blk)))[:H, :W]
     n2 = np.kron(rng.random((H // (2 * blk) + 1, W // (2 * blk) + 1)), np.ones((2 * blk, 2 * blk)))[:H, :W]
-    grassy = np.isin(surf, [S["rough"], S["ob"], S["woods"], S["ob_woods"], S["range"], S["ob_building"], S["building"]])
+    grassy = np.isin(surf, [S["rough"], S["ob"], S["woods"], GORSE_SURF, S["ob_woods"], S["range"], S["ob_building"], S["building"]])
     t = t + np.where(grassy & (n2 < 0.07), -1, 0) + np.where(grassy & (n2 > 0.95), 1, 0)
     fine = np.isin(surf, [S["fairway"], S["fringe"], S["tee"]])
     t = t + np.where(fine & (n1 < 0.02), -1, 0) + np.where(fine & (n1 > 0.988), 1, 0)
@@ -242,8 +242,8 @@ def render_art(surf, z, grid: Grid, g, holes, trees, buildings, boundary, P, lut
         rgb[mask] = P[col]
     put((surf == S["bunker"]) & (n1 < 0.03), "S0")
     put((surf == S["bunker"]) & (n1 > 0.975), "S2")
-    put((surf == S["woods"]) & (n1 < 0.08), "B1")
-    put((surf == S["woods"]) & (n1 > 0.965), "B0")
+    put(np.isin(surf, [S["woods"], GORSE_SURF]) & (n1 < 0.08), "B1")
+    put(np.isin(surf, [S["woods"], GORSE_SURF]) & (n1 > 0.965), "B0")
     put((surf == S["ob_woods"]) & (n1 < 0.04), "B0")
     put((surf == S["ob_road"]) & (n1 < 0.025), "K2")
     put((surf == S["cartpath"]) & (n1 < 0.03), "K2")
@@ -261,7 +261,7 @@ def render_art(surf, z, grid: Grid, g, holes, trees, buildings, boundary, P, lut
     for dy, dx in ((1, 0), (-1, 0), (0, 1), (0, -1)):
         edge |= np.roll(np.roll(pr, dy, 0), dx, 1) > pr
         own_edge |= np.roll(np.roll(surf, dy, 0), dx, 1) != surf
-    soft = edge & np.isin(surf, [S["rough"], S["fairway"], S["fringe"], S["tee"], S["ob"], S["woods"], S["range"], S["cartpath"]])
+    soft = edge & np.isin(surf, [S["rough"], S["fairway"], S["fringe"], S["tee"], S["ob"], S["woods"], GORSE_SURF, S["range"], S["cartpath"]])
     rgb[soft] = lut[surf[soft], 0]
     if blut is not None:
         rgb[soft & mown] = blut[0]

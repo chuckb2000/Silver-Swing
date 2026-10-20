@@ -19,7 +19,7 @@ from rasterio.features import rasterize
 from scipy import ndimage
 from shapely.ops import unary_union
 
-from common import build_dir, course_name_from_argv, load_config, play_boundary, PX_PER_M, round_corners, SURF, World, write_json
+from common import build_dir, course_name_from_argv, GORSE_SURF, load_config, play_boundary, PX_PER_M, round_corners, SURF, surf_ids, uses_gorse_ground, World, write_json
 
 warnings.filterwarnings("ignore")
 
@@ -185,6 +185,14 @@ def main():
     sizes = ndimage.sum(can_in, lab, range(1, n + 1))
     woods_in = np.isin(lab, 1 + np.where(sizes > 150 * PX_PER_M * PX_PER_M)[0])
     course[woods_in] = SURF["woods"]
+    # optional (course_config.json gorse.ground = "gorse"; the thickets from pipeline/gorse.py):
+    # the ground under the gorse is the gorse surface inside the course (a penal lie in the
+    # game) and ob_woods outside; mapped fairways, greens, tees and bunkers still win
+    if uses_gorse_ground(cfg):
+        gm = np.load(bdir / "gorse_mask.npy")  # 1 m, rows south->north
+        gm = np.kron(np.flipud(gm), np.ones((PX_PER_M, PX_PER_M), bool))[:H, :W]
+        course[gm] = GORSE_SURF
+        surf[gm & ~inside & (surf == SURF["ob"])] = SURF["ob_woods"]
     for geoms, value in course_layers(g, roads, cfg):
         paint(course, geoms, value)
     surf[inside] = course[inside]
@@ -201,10 +209,11 @@ def main():
         surf[obr & (surf != SURF["water"])] = SURF["ob_road"]
 
     np.save(bdir / "surface.npy", surf)
-    counts = {k: int((surf == v).sum()) for k, v in SURF.items()}
+    ids = surf_ids(cfg)
+    counts = {k: int((surf == v).sum()) for k, v in ids.items()}
     legend = {
         "pixel_m": 1 / PX_PER_M, "width": W, "height": H, "row0": "north",
-        "ids": SURF,
+        "ids": ids,
         "ob_ids": [v for k, v in SURF.items() if k.startswith("ob") or k == "range"],
         "area_m2": {k: round(c / (PX_PER_M * PX_PER_M)) for k, c in counts.items()},
     }
