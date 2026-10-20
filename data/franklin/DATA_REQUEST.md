@@ -19,6 +19,23 @@ and ends on a green; 59 tee boxes, 20 greens (2 practice), 24 fairways, 59 bunke
 5 pins are on the range). Hole 14's line crosses Uncas Pond (way 90968191), outside
 the course boundary, for 134 m.
 
+## Status (2026-10-19)
+
+All received in the release `franklin-data`:
+
+| File | SHA-256 | Check |
+|---|---|---|
+| `USGS_1M_19_x30y466_MA_CentralEastern_2021_B21.tif` (345 MB) | b5e489869e7ae33fefc64524c80f1f241d8aa016171d2fc5c89866013fb57388 | EPSG:26919, 1 m, float32, metres, nodata -999999; 10 km tile |
+| `USGS_1M_19_x30y467_MA_CentralEastern_2021_B21.tif` (381 MB) | 273b70537e61711ee85ca36528feee5c265b07c3783eb2ee3257d2ec0551a3b8 | same grid |
+| `ma2021_cent_east_J1472668.zip` (961 MB; one LAZ, 154 M points) | 2b076f89d2a8a782213a4a7acb93b31c1e893d09a0cfbc3b8da41fe6ef5b769b | NAD83(2011) / UTM 19N **US survey feet**, NAVD88 **US survey feet**; classes 2 (ground), 3, 4, 5 (vegetation); GPS times 21 March 2021 (leaf-off); covers the world |
+
+The two tiles are mosaicked and clipped to the world + 100 m by `clip_dem.py`
+into `raw/usgs_dem_2021_1m_clip.tif` (committed; 1,993 x 2,249 px, no gaps,
+59.9-117.9 m). The LAZ goes in `raw/laz/` (not in git). The OSM export becomes
+`raw/overpass.geojson` through `osm_to_geojson.py`.
+
+The original request follows.
+
 ## Scorecard (no official card found)
 
 The club website (franklincc.com) has no scorecard. Third-party listings:
