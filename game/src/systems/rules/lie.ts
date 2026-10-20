@@ -18,7 +18,7 @@ export interface Lie {
   goodBand?: number;
   /** gorse: misses curve this much more */
   curveMult?: number;
-  label: string;      // e.g. "rough -15%"
+  label: string;      // e.g. "rough", "rough flyer", "punch" (no percentages: developer, 2026-10-20)
 }
 
 /**
@@ -84,11 +84,10 @@ export function makeLie(ctx: LieContext, rng: Rng): Lie {
     lie.label = 'gorse';
     return lie;
   }
-  const pct = Math.round((dist - 1) * 100);
   // under a canopy the shot is a punch, played automatically: say so (developer asked how to hit one)
   const name = kind === 'trees' && lie.apexCap !== undefined ? 'punch' : b.name;
-  lie.label = flyer ? `${name} flyer +5%` : pct === 0 ? name : `${name} ${pct > 0 ? '+' : '−'}${Math.abs(pct)}%`;
-  if (kind === 'greenside_bunker') lie.label = 'bunker'; // short: fits the info panel
+  // the lie's name only: the shorter carry shows the penalty (developer, 2026-10-20)
+  lie.label = flyer ? `${name} flyer` : name;
   return lie;
 }
 

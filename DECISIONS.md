@@ -467,7 +467,7 @@ so a hole resumed after closing the tab lists the strokes since.
 - **Gorse** is its own surface (id 17, in bounds) and lie. The developer asked for
   "only 20-50 yards out of it" and "very small sweet spot and lots of red":
   every shot from gorse carries at most a distance drawn between 20 and 50 yd for
-  that lie (shown as "gorse max 38yd"), lower and quicker; the green zone is 30 %
+  that lie (not shown: the label just says "gorse"), lower and quicker; the green zone is 30 %
   of normal and the yellow band 0.35 % of bar instead of 1.2, so most taps are red;
   misses curve 1.8 x as much; no spin, no driver, no putter; the club picked for
   you is the shortest (a wedge to hack out). A ball landing in gorse stops almost
@@ -477,7 +477,11 @@ so a hole resumed after closing the tab lists the strokes since.
   courses without it export exactly the ids they had (`surf_ids`). Oswego Lake,
   Highland Links and Eastmoreland rebuild unchanged.
 - **Punch:** under a canopy the apex was always capped automatically (spec 7.4);
-  the lie now reads "punch -20%" there so the player can see it.
+  the lie now reads "punch" there so the player can see it.
+- **No percentages on lie labels** (developer, 2026-10-20: "cleaner and clear
+  from the fact that your shot doesn't go as far"): the info panel shows the
+  lie's name only ("rough", "rough flyer", "punch", "gorse"); the penalties
+  themselves are unchanged.
 
 ## Data and pipeline
 

@@ -325,7 +325,7 @@ export class HudScene extends Phaser.Scene {
     const swinging = p.state === 'swing';
     setTxt(this.holeTxt, String(r.holeNumber));
     const d = r.distToPin();
-    const lieTxt = !r.lie ? '' : r.lie.carryCap !== undefined ? `gorse max ${fmtDist(r.lie.carryCap)}${unitLabel()}` : r.lie.label;
+    const lieTxt = r.lie ? r.lie.label : '';
     const surf = SURFACE_LABEL[r.surfaceAt()] ?? '';
     setTxt(this.infoLines[0], `par ${r.hole.par}`);
     setTxt(this.infoLines[1], p.state === 'holed' || p.state === 'replay' ? `holed: ${r.tally.strokes}` : `shot ${r.tally.strokes + 1}`);
