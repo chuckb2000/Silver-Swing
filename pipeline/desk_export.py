@@ -17,6 +17,16 @@ Blue tee to mark. Publish OUT_DIR with the page (index.html + holes.json +
 img/) as a claude.ai artifact with capabilities {db: {}, user: {}}; the page
 saves each hole to the `holes/<n>` document, which the course chat reads back
 into data/<id>/desk/hole<NN>.json.
+
+For a course built from OSM (Oregon Golf Club), two options:
+  --edit-osm 9      the OSM greens, fairways and bunkers of these holes (within
+                    25 m of the hole line) become editable shapes, keeping their
+                    OSM ids; data/<id>/desk_offered.json lists them, and
+                    desk_to_proposed.py replaces them with what the developer saves.
+  --area range      adds a "range" page (chip R) with the course's driving range
+                    polygon editable (kind "range"), saved as `holes/range`.
+"ortho" in trace_spec.json may be any RGB GeoTIFF on the course EPSG (an
+orthophoto, or a lidar relief picture until one is available).
 """
 from __future__ import annotations
 
@@ -44,6 +54,8 @@ def main():
     ap.add_argument("course")
     ap.add_argument("out")
     ap.add_argument("--edit", default="", help="holes whose shapes are editable, e.g. 9-18 or 9,11,12")
+    ap.add_argument("--edit-osm", default="", help="holes whose OSM greens/fairways/bunkers are editable (OSM courses)")
+    ap.add_argument("--area", default="", help="extra pages: 'range' = the driving range")
     ap.add_argument("--traced", action="store_true",
                     help="start from proposed/traced.geojson: its hole lines and greens where the layout has none, and its "
                          "greens, tees and bunkers (each bunker to its nearest hole line) as the editable shapes of --edit holes "
@@ -58,6 +70,10 @@ def main():
     for part in filter(None, a.edit.split(",")):
         lo, _, hi = part.partition("-")
         edit |= {str(n) for n in range(int(lo), int(hi or lo) + 1)}
+    edit_osm = set()
+    for part in filter(None, a.edit_osm.split(",")):
+        lo, _, hi = part.partition("-")
+        edit_osm |= {str(n) for n in range(int(lo), int(hi or lo) + 1)}
     o = Ortho(cdir / spec["ortho"], world)
     img = np.clip(o.rgb, 0, 255).astype(np.uint8)
     g = gpd.read_file(bdir / "course_local.geojson")
@@ -97,6 +113,9 @@ def main():
     bnd = g[g.kind == "boundary"].geometry.iloc[0]
     (out / "img").mkdir(parents=True, exist_ok=True)
     holes = []
+    offered = {}
+    units = (f"local metres, origin {world.x0:.0f} E {world.y0:.0f} N, EPSG:{cfg['epsg']}"
+             if (edit_osm or a.area or a.traced) else None)  # the page's default is Indian Island's
     for k in sorted(lines, key=int):
         L = lines[k]
         c = list(L.coords)
@@ -114,9 +133,15 @@ def main():
         fn = f"img/hole{int(k):02d}.jpg"
         crop.save(out / fn, "JPEG", quality=84)
         own = lambda r: str(r.osm).startswith("desk_") and r.tg.get("hole") == k  # noqa: E731
+        if k in edit_osm:
+            # OSM shapes of this hole: greens, fairways and bunkers within 25 m of its line
+            near = L.buffer(25)
+            own = lambda r, near=near: (r.kind in ("green", "fairway", "bunker") and r.geometry.geom_type == "Polygon"  # noqa: E731
+                                        and r.geometry.intersects(near) and not str(r.osm).startswith("desk_"))
+            offered[k] = [r.osm for _, r in g.iterrows() if own(r)]
         if k in saved:
             feats = saved[k]
-        elif k in edit:
+        elif k in edit or k in edit_osm:
             feats = [{"id": r.osm, "kind": r.kind, "poly": ring(r.geometry)} for _, r in g.iterrows()
                      if own(r) and r.kind in ("green", "fairway", "bunker", "tee")]
             if not feats and a.traced:
@@ -130,10 +155,40 @@ def main():
         bl = bnd.boundary.intersection(clip.buffer(5))
         blines = [[[round(x, 1), round(y, 1)] for x, y in ln_.coords] for ln_ in getattr(bl, "geoms", [bl]) if ln_.geom_type == "LineString"]
         holes.append({"hole": k, "par": int(card[k]["par"]), "blue": int(card[k].get("blue") or 0), "white": int(card[k].get("white") or 0),
-                      "units": f"local metres, origin {world.x0:.0f} E {world.y0:.0f} N, EPSG:{cfg['epsg']}",
                       "box": bx0, "w": crop.width, "h": crop.height, "img": fn,
                       "line": [[round(x, 1), round(y, 1)] for x, y in c], "greenCenter": [round(gc.centroid.x, 1), round(gc.centroid.y, 1)],
-                      "features": feats, "refs": refs, "boundary": blines, "editShapes": k in edit})
+                      "features": feats, "refs": refs, "boundary": blines, "editShapes": k in edit or k in edit_osm,
+                      **({"units": units} if units else {}), **({"noBlue": True} if k in edit_osm else {})})
+    if "range" in a.area.split(","):
+        rng = g[g.kind == "driving_range"]
+        b = unary_union(list(rng.geometry)).buffer(60).bounds
+        bx0 = [max(int(b[0]), 0), max(int(b[1]), 0), min(int(b[2]) + 1, int(world.width)), min(int(b[3]) + 1, int(world.height))]
+        c0, r0 = int(bx0[0] / o.res), int((o.top - bx0[3]) / o.res)
+        c1, r1 = int(bx0[2] / o.res), int((o.top - bx0[1]) / o.res)
+        s = min(1.0, 1900 / max(c1 - c0, r1 - r0))
+        crop = Image.fromarray(img[r0:r1, c0:c1])
+        crop = crop.resize((int(crop.width * s), int(crop.height * s)), Image.LANCZOS)
+        crop.save(out / "img" / "range.jpg", "JPEG", quality=84)
+        offered["range"] = list(rng.osm)
+        clip = sbox(*bx0)
+        if "range" in saved:
+            feats = saved["range"]
+        else:
+            feats = []
+            for _, r in rng.iterrows():
+                for i, part in enumerate(getattr(r.geometry, "geoms", [r.geometry])):
+                    feats.append({"id": r.osm if i == 0 else f"{r.osm}:{i}", "kind": "range", "poly": ring(part),
+                                  **({"holes": [[[round(x, 1), round(y, 1)] for x, y in list(hr.coords)[:-1]] for hr in part.interiors]} if part.interiors else {})})
+        refs = [{"kind": r.kind, "poly": ring(r.geometry)} for _, r in g.iterrows()
+                if r.kind in ("green", "fairway", "bunker", "tee") and r.geometry.geom_type == "Polygon" and r.geometry.intersects(clip)]
+        bl = bnd.boundary.intersection(clip.buffer(5))
+        blines = [[[round(x, 1), round(y, 1)] for x, y in ln_.coords] for ln_ in getattr(bl, "geoms", [bl]) if ln_.geom_type == "LineString"]
+        holes.append({"hole": "range", "label": "Range", "area": True, "par": 0, "blue": 0, "white": 0, "box": bx0,
+                      "w": crop.width, "h": crop.height, "img": "img/range.jpg", "line": [], "greenCenter": [0, 0],
+                      "features": feats, "refs": refs, "boundary": blines, "editShapes": True, "noBlue": True,
+                      **({"units": units} if units else {})})
+    if offered:
+        json.dump(offered, open(cdir / "desk_offered.json", "w"), indent=1)
     json.dump(holes, open(out / "holes.json", "w"), separators=(",", ":"))
     print(f"[desk] {len(holes)} holes -> {out}/holes.json + img/ (editable shapes on holes {sorted(edit, key=int)})")
 

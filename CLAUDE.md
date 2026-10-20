@@ -446,6 +446,11 @@ DECISIONS.md with the reason.
     course views. A menu button in a round (resume, settings, save & exit,
     quit round); settings opened mid-round hide hand, difficulty and rules.
     199 unit tests and 4 Playwright tests pass (with the East Potomac tee-shot fix merged).
+    Then: flowering-shrub sprites (trees.json `c: 3`); logos for ogc, Wannamoisett and
+    Franklin; pin positions (every green keeps its centre pin and gets up to three
+    more, 10 ft from every edge, found by the game; each round gets a mixed pin sheet,
+    `src/systems/game/pins.ts`); the meter has a line at the middle of the green, no
+    ghost tick and no display-lag allowance. 376 unit tests and 4 Playwright tests pass.
 
 -   **Course chat (2026-10-18/19):** second course **Highland Links**
     (Truro, MA; 9 holes, par 35, coastal theme), section 11.5. Phase 0 of
@@ -497,6 +502,16 @@ DECISIONS.md with the reason.
     and 4 Playwright tests pass. Section 11.14; open items:
     data/eastmoreland/report_notes.md; request:
     docs/requests/eastmoreland_design_requests.md.
+-   **Willamette Valley (course chat, 2026-10-19):** Willamette Valley
+    Country Club, Canby, OR ("Willamette Valley CC"), branch
+    `course/willamette_valley`: 18 holes, par 72, Blue tees, `pnw`, OSM +
+    DOGAMI DTM and canopy model; hole 13's green traced from the OSIP 2022
+    orthophoto, hole 3's Blue tee placed by the developer, the hole 9 and 14
+    fairways (tagged as tees in OSM) and the cart paths (`golf=path`)
+    relabelled in `edits.json`. Every hole within 3 % (6,513 yd vs 6,514).
+    No pipeline code changed. 319 unit tests and 4 Playwright tests
+    pass (after merging main with Eastmoreland). Section 11.15; open items:
+    data/willamette_valley/report_notes.md.
 
 -   **Stone Creek (course chat, 2026-10-19):** Stone Creek Golf Club,
     Oregon City, OR, branch `course/stone_creek` from main: 18 holes, Blue
@@ -517,14 +532,30 @@ DECISIONS.md with the reason.
     course rebuilds as committed. Approved by the developer and merged
     2026-10-19.
 
+-   **Oregon Golf Club (course chat, 2026-10-19):** Oregon Golf Club,
+    West Linn, OR (`ogc`), 18 holes from OSM and DOGAMI lidar, Blue and
+    White tees, a 1,280 x 2,304 m world, the driving range out of bounds
+    and drawn as rough; branch `course/ogc` (merged after `course/tualatin`). Pipeline keys `remove_wires` (s05) and
+    `range_art` (s09, s09b, s10); every other course rebuilds unchanged.
+    338 unit tests and 4 Playwright tests pass. Open items: section 11.16.
+
+-   **Franklin (course chat, 2026-10-19):** Franklin Country Club,
+    Franklin MA (18 holes, par 71, Blue tees, `bayside`), section 11.17, on
+    branch `course/franklin`. Complete OSM layout (pins added at green
+    centres); USGS 3DEP DEM and leaf-off lidar (37,340 trees); all water
+    red, including Uncas Pond across 14 and Uncas Brook from the lidar
+    channel. Every hole within 3 % of the card. No pipeline change; other
+    courses untouched. 338 unit and 4 Playwright tests pass (after merging
+    main with Eastmoreland and Willamette Valley).
+
 -   **Waverley (course chat, 2026-10-19):** Waverley Country Club,
     Milwaukie OR, branch `course/waverley` from main: 18 holes, Blue tees,
     new `pnw_club` theme. OSM had no holes: traced from the OSIP 2024
     orthoimagery and DOGAMI lidar, corrected by the developer in the tracing
     desk. The Willamette and the pond are red penalty areas; hole 11's green
-    keeps its slope (`green_tilt`). Other courses rebuild unchanged
-    (Eastmoreland's clean build fixed in s05). 316 unit tests and 4
-    Playwright tests pass. Section 11.15; open items in
+    keeps its slope (`green_tilt`); hole 17 accepted short (developer). Other
+    courses rebuild unchanged. 394 unit tests and 4 Playwright tests pass.
+    Section 11.18; open items in
     data/waverley/report_notes.md.
 
 -   **Next task:** the third playtest (putting, yellow misses), the club's
@@ -1046,7 +1077,7 @@ latency calibration setting (± ms offset).
 -   **Overswing (100--110%):** adds distance linearly up to +8% at 110%,
     but **halves the perfect zone and doubles the curve factor**.
 
--   **Ghost tick** at last shot\'s power.
+-   **Ghost tick** at last shot\'s power: removed (developer, 2026-10-19; DECISIONS.md).
 
 -   **Perfect zone:** ±2.5% of bar width (Normal), multiplied by club,
     lie and overswing multipliers.
@@ -1116,7 +1147,7 @@ selected (on or off the green):
 
 -   The aim line and the green\'s slope overlay carry the skill.
 
--   A light \"lag\" ghost shows last putt\'s power.
+-   A light \"lag\" ghost shows last putt\'s power: removed with the ghost tick (developer, 2026-10-19).
 
 **7. Physics (Claude decides; these are the starting model and
 calibration targets)**
@@ -1963,7 +1994,160 @@ report_notes.md.
 -   **Known open items:** hole 13 Blue -3.0 % (flag); tree types from crown
     shape (data/eastmoreland/report_notes.md).
 
-**11.15 Waverley Country Club, Milwaukie, Oregon**
+**11.15 Willamette Valley Country Club, Canby, Oregon**
+
+Built by a course chat (2026-10-19) on branch `course/willamette_valley`;
+details in DECISIONS.md ("Willamette Valley"),
+data/willamette_valley/validation_report.md and report_notes.md.
+
+-   **Location:** 900 Country Club Place, Canby, Clackamas County, Oregon,
+    on a terrace above the Willamette River. `state` OR. Course id
+    `willamette_valley` (logo exists); card name "Willamette Valley CC".
+    Shirley Stone, opened 1962 (golfn.com).
+-   **UTM zone:** 10N (EPSG:32610). World 1,024 x 1,792 m. Theme `pnw`.
+    Wind 1-7 mph.
+-   **Data:** OSM (developer's Overpass Turbo export); DOGAMI bare-earth DTM
+    and canopy height model (1 m, release `willamette-valley-data`); Oregon
+    Statewide Imagery Program 2022 orthophoto (hole 13 green, hole 3 tee,
+    checks); club scorecard PDF.
+-   **Water:** five ponds, all red. The Willamette River (outside the
+    boundary) is out of bounds.
+-   **Trees:** 5,317 from the canopy model (1,671 on the course), type from
+    crown shape; `tee_shot_margin_m` 0.5.
+
+**11.15.1 Scorecard** (club card PDF, Golf ScoreCards Inc. 10/2023, from the
+developer; every row adds up)
+
+  ---------------------------------------------------------------------------------------------------------
+  Hole     1   2   3   4   5   6   7   8   9   Out    10  11  12  13  14  15  16  17  18  In     Total
+  -------- --- --- --- --- --- --- --- --- --- ------ --- --- --- --- --- --- --- --- --- ------ ------
+  Par      4   5   3   4   4   5   4   3   4   36     4   5   4   3   5   3   4   4   4   36     72
+  HCP      5   3   17  13  11  1   7   15  9          10  2   6   18  12  16  14  8   4
+  Blue     385 535 162 347 369 551 361 180 393 3,283  366 545 383 151 470 201 353 365 397 3,231  6,514
+  Built    392 534 162 353 365 539 356 183 403        371 544 390 149 463 196 353 364 398        6,513
+  ---------------------------------------------------------------------------------------------------------
+
+Black (7,017, 74.2/133), White (5,979), Orange (5,423), Yellow (4,702) and
+Maroon (4,168) are on the card (`scorecard.csv`), not built. Blue rating/slope
+71.6/129 (card).
+
+-   **Default tee:** Blue (developer), the only set built.
+-   **Developer's calls (2026-10-19):** Blue tees; hole 13's green is the one
+    left of the pond (traced); hole 3's Blue tee on the fairway from the 2nd
+    green (box placed at 162 yd, approved); practice greens are wrong greens;
+    the maintenance no-play zone (14-16) is not modelled; OB = the course
+    boundary.
+-   **Accepted by the developer (2026-10-19):** course card hole 3; lidar
+    year not recorded (tree types from crown shape). Notes in
+    data/willamette_valley/report_notes.md.
+
+**11.16 Oregon Golf Club, West Linn, Oregon**
+
+Built by a course chat (2026-10-19) following docs/COURSE_BUILD.md;
+details in DECISIONS.md ("Oregon Golf Club") and
+data/ogc/validation_report.md.
+
+-   **Location:** West Linn (Stafford area), Clackamas County, Oregon, on
+    the slopes of Pete's Mountain above the Willamette River. `state` OR.
+    Course id `ogc` (logo: great blue heron).
+-   **Design:** Peter Jacobsen and Jim Hardy with Ken Kavanaugh (1992;
+    GolfPass).
+-   **UTM zone:** 10N (EPSG:32610). World 1,280 x 2,304 m (taller than
+    the 2,048 m limit: the course is 2,120 m north-south; developer
+    approved). Theme `pnw`. Wind 1-7 mph.
+-   **Data:** OSM via Overpass Turbo (all 18 hole lines, pins and 70 tee
+    boxes mapped); DOGAMI bare-earth DTM and canopy height model (1 m,
+    release `ogc-data`). Power lines removed from the canopy before the
+    tree search (`remove_wires`).
+-   **Water:** Hershiser Reservoir (holes 7 and 9), the hole 8 creek and
+    ponds and the hole 4 pond, all red (developer).
+-   **Driving range** (target greens P3-P9): out of bounds, drawn by
+    the developer in the tracing desk, drawn as rough with OB stakes
+    (`range_art`; developer: the range is rough on the ground). Hole 9's
+    fairway was also corrected there (`data/ogc/desk/`).
+-   **Trees:** 12,289 from lidar, 2,902 on the course (46 % conifers).
+    Every tee shot to the middle of the fairway is clear (s06b removed
+    nothing).
+-   **Scorecard** (GolfPass, retrieved 2026-10-19, unverified; no printed
+    card available). Blue 72.5/136, White 69.7/133.
+
+  -------------------------------------------------------------------------------------
+  Hole    1   2   3   4   5   6   7   8   9   Out   10  11  12  13  14  15  16  17  18  In    Total
+  ------- --- --- --- --- --- --- --- --- --- ----- --- --- --- --- --- --- --- --- --- ----- -----
+  Par     5   4   4   3   5   4   4   3   4   36    4   4   3   5   4   5   4   3   4   36    72
+  HCP     3   15  11  17  5   1   7   13  9         18  8   16  12  10  6   4   14  2
+  Blue    523 341 404 162 555 435 384 193 325 3322  361 368 155 484 398 517 410 182 432 3307  6629
+  Built   520 343 398 164 567 435 380 187 325 3319  343 370 152 479 392 515 403 184 434 3272  6591
+  White   491 304 384 162 504 408 361 185 308 3107  324 345 131 443 363 488 383 182 314 2973  6080
+  Built   488 306 378 164 523 408 357 187 315 3126  337 346 128 438 356 486 377 184 315 2967  6093
+  -------------------------------------------------------------------------------------
+
+Black (7,070), Green (5,313), Yellow (4,204) and the combo tees are in
+scorecard_full.csv, not built.
+
+-   **Default tee:** Blue (developer); White is built too.
+-   **Accepted by the developer (2026-10-19):** the hole 7 fir in front
+    of the green removed (`drop_trees`); hole 16 White tee from the box
+    beside the line; flags on 5 White and 10 Blue/White; course card
+    hole 8; the world's load time; no range balls (stakes only); the
+    parts of ponds W7/W8 outside the boundary stay out of bounds.
+-   **Known open items:** scorecard unverified
+    (data/ogc/report_notes.md).
+
+**11.17 Franklin Country Club, Franklin, Massachusetts**
+
+Built by a course chat (2026-10-19) following docs/COURSE_BUILD.md;
+details in DECISIONS.md ("Franklin Country Club") and
+data/franklin/validation_report.md.
+
+-   **Location:** 672 East Central Street, Franklin, Norfolk County,
+    Massachusetts, on the Franklin-Wrentham line. `state` MA. Course id
+    `franklin` (logo: turtle).
+-   **History:** founded 1899 as the Franklin Rod and Gun Club; 18 holes
+    laid out in the early 1920s by Wayne Stiles and John Van Kleek, later
+    work by Phil Wogan and William F. Mitchell (countryclubmag.com, Golf
+    Digest; unverified).
+-   **UTM zone:** 19N (EPSG:32619). World 1,792 x 2,048 m (the 2,048 m
+    limit). Theme `bayside`. Wind 1-9 mph.
+-   **Data:** OSM (the developer's openstreetmap.org export, converted to
+    Overpass GeoJSON by `data/franklin/osm_to_geojson.py`); USGS 3DEP 1 m
+    DEM (MA_CentralEastern_2021_B21, tiles x30y466 and x30y467, clipped by
+    `data/franklin/clip_dem.py`); the same project's lidar points (NOAA
+    Data Access Viewer, flown 21 March 2021, leaf-off). Originals in the
+    GitHub release `franklin-data`.
+-   **Water:** all red (developer). Five OSM ponds, two more ponds OSM maps
+    only as `natural=water`, Uncas Pond across the par-3 14th (outside the
+    boundary, `red_water_osm`), Uncas Brook and an unnamed stream across 7,
+    9 and 16 (penalty areas from the lidar channels). No internal out of
+    bounds; the driving range is out of bounds.
+-   **Trees:** 37,340 from lidar (3,633 on the course), 34 % conifers from
+    the leaf-off returns. One broadleaf left of the 18th tee removed
+    (approved).
+-   **Scorecard** (Stymie, retrieved 2026-10-19, unverified; the club
+    website has no card). Blue 72.3/128.
+
+  -------------------------------------------------------------------------------------
+  Hole    1   2   3   4   5   6   7   8   9   Out   10  11  12  13  14  15  16  17  18  In    Total
+  ------- --- --- --- --- --- --- --- --- --- ----- --- --- --- --- --- --- --- --- --- ----- -----
+  Par     4   4   4   3   4   4   5   3   4   35    4   4   4   4   3   5   3   4   5   36    71
+  HCP     5   13  3   17  11  1   7   15  9         4   14  2   18  8   10  16  6   12
+  Blue    414 357 418 144 365 429 538 178 404 3247  425 343 382 398 213 505 175 408 506 3355  6602
+  Built   403 353 415 144 357 417 527 176 403 3195  418 342 375 404 211 505 176 401 503 3335  6530
+  -------------------------------------------------------------------------------------
+
+Black (6,745), Members (6,367), White (6,139), Gold (5,719), Red (5,496) and
+Green (4,827) are in scorecard.csv, not built.
+
+-   **Default tee:** Blue (developer), the only set built. Every hole within
+    3 % of the card.
+-   **Accepted by the developer (2026-10-19):** the unnamed stream and the
+    two extra ponds as red penalty areas, the hole 18 tree removed, the
+    Stymie scorecard until a printed card turns up, wind 1-9 mph, course
+    card hole 8, the tree count and load time, pins at green centres.
+-   **Known open items:** data/franklin/report_notes.md (scorecard and
+    stroke index unverified).
+
+**11.18 Waverley Country Club, Milwaukie, Oregon**
 
 Built by a course chat (2026-10-19) on branch `course/waverley`; details in
 DECISIONS.md ("Waverley"), data/waverley/validation_report.md and
@@ -2003,10 +2187,13 @@ report_notes.md.
     White 69.1/128 (5,913). Black and White not built.
 
 -   **Default tee:** Blue (the only set built).
--   **Hole 14:** a round green clear of its five ring bunkers (developer,
-    `data/waverley/make_hole14.py`).
--   **Known open items:** hole 17 Blue -16.6 % (asked); holes 2, 4, 18 are
-    flags (data/waverley/report_notes.md).
+-   **Hole 14:** five ring bunkers (moved 1.5 m out, `data/waverley/make_hole14.py`)
+    around a round green the developer shaped in the desk, with fairway
+    between green and sand (developer).
+-   **Accepted by the developer (2026-10-19):** hole 17 plays 409 yd vs 490
+    (-16.6 %) from the developer's Blue tee.
+-   **Known open items:** holes 2, 4, 18 are flags
+    (data/waverley/report_notes.md).
 
 **12. Repository layout**
 

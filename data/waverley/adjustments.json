@@ -135,10 +135,10 @@
    1121.15
   ],
   "to": [
-   342.95,
-   1131.16
+   343.95,
+   1130.66
   ],
-  "real_yd": 146.1,
+  "real_yd": 146.0,
   "adjusted_yd": 137.0,
   "card_yd": 137.0,
   "reason": "measured 146 yd from the tee-box centre vs 137 on the card (+6.6%); moved the virtual tee within the real tee polygon desk_14_tee_0"

@@ -179,3 +179,14 @@ describe('strike outcome (spec 6.2)', () => {
     expect(Math.abs(puttStrikeFrom(swing(60, 14, 0, 'putt'), 2.5, 1, false).dirDeg)).toBeLessThanOrEqual(6);
   });
 });
+
+describe('meter cursor after a tap (developer, 2026-10-19: no jump back)', () => {
+  it('with no latency setting the power tap freezes the cursor where it was, not behind it', () => {
+    const m = new SwingMeter('full', 1.1);
+    m.tap(1000);
+    const drawn = m.position(1400); // the last frame drawn before the tap
+    m.tap(1405); // the tap, a few ms after that frame
+    expect(m.position(1405)).toBeGreaterThanOrEqual(drawn);
+    expect(m.position(1405)).toBeCloseTo((1405 - 1000) * m.speed, 6);
+  });
+});

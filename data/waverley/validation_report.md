@@ -19,7 +19,7 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 | 11 | 3 | Blue | 156 | 164.3 | +8.3 | +5.3% | flag | 159.6 | +2.3% | pass |
 | 12 | 4 | Blue | 400 | 403.4 | +3.4 | +0.8% | pass | 403.4 | +0.8% | pass |
 | 13 | 5 | Blue | 491 | 484.8 | -6.2 | -1.3% | pass | 484.8 | -1.3% | pass |
-| 14 | 3 | Blue | 137 | 146.1 | +9.1 | +6.6% | flag | 137.0 | -0.0% | pass |
+| 14 | 3 | Blue | 137 | 146.0 | +9.0 | +6.6% | flag | 137.0 | -0.0% | pass |
 | 15 | 4 | Blue | 354 | 353.1 | -0.9 | -0.2% | pass | 353.1 | -0.2% | pass |
 | 16 | 3 | Blue | 215 | 213.1 | -1.9 | -0.9% | pass | 213.1 | -0.9% | pass |
 | 17 | 5 | Blue | 490 | 405.5 | -84.5 | -17.2% | FAIL | 408.7 | -16.6% | FAIL |
@@ -52,8 +52,8 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 
 The developer's calls of 2026-10-19 are in DECISIONS.md ("Waverley"): Blue tees only, every penalty area red, the Willamette a red penalty area, no driving range, theme `pnw_club` (pnw with whiter sand). OSM maps only the boundary, the fairways, one pond and the clubhouse; everything else was traced by the course chat from the OSIP 2024 orthoimagery and the DOGAMI DEM and corrected by the developer in the tracing desk (`data/waverley/desk/`).
 
-1. **Hole 17 Blue plays 409 yd against 490 on the card (-16.6 %, over 8 %).** The developer's Blue tee is at the north end of the fairway along the river; the fairway bends less than 30 m off the tee-green line, so no bend point applies. The club map draws 17's tee further north-west, beyond the 16 green. Recommendation: move the Blue tee back in the desk if it is there on the ground; otherwise accept 17 as short. **Waiting on the developer.**
-2. **Hole 14's green complex was made by the course chat at the developer's request** (the desk would not open hole 14 for them): a smooth round green (414 m2, the largest oval that keeps 2.5 m from every bunker, so collar and fairway lie between green and sand), the ring bunkers moved 1.5 m away from the green, and a fifth ring bunker in the tree shadow east of the green placed by eye (`data/waverley/make_hole14.py`). **Approved** (developer, 2026-10-19). If the shadowed oval is not a bunker, it is one line to remove.
+1. **Hole 17 Blue plays 409 yd against 490 on the card (-16.6 %, over 8 %).** The developer's Blue tee is at the north end of the fairway along the river; the fairway bends less than 30 m off the tee-green line, so no bend point applies. **Accepted** (developer, 2026-10-19: the tee stays where it is).
+2. **Hole 14's green complex.** The desk would not open hole 14 at first, so the course chat moved the ring bunkers 1.5 m away from the green and added a fifth ring bunker seen in the tree shadow east of the green (placed by eye; `data/waverley/make_hole14.py`), at the developer's request ("none of the bunkers should be touching the green, there should be fairway between"). After the desk was fixed the developer reshaped the green there: a smooth oval of 376 m2, 2.9-4.0 m from the nearest bunkers. **Approved** (developer, 2026-10-19). If the shadowed oval is not a bunker, it is one line to remove.
 3. **Holes 12 and 13 have no Blue tee marked;** each has one tee box, used as Blue (12: 403 yd with its bend point, +0.8 %; 13: 485 yd, -1.3 %).
 4. **Flags (3-8 %):** hole 2 Blue +5.3 % (the developer's tee 407 yd straight, plus 10 yd for the bend point; the other box measures 392 yd straight, about +2.6 % with the bend); hole 4 Blue +5.1 % (the other box measures -2.5 %); hole 18 -3.5 %. Recommendation: keep the developer's tees.
 5. **Bend points** on holes 2, 8, 12 and 18 (the centre of the hole's own OSM fairway where it lies farthest from the tee-green line, used where that is over 30 m, as at Indian Island). The other holes play straight.
@@ -75,7 +75,7 @@ The developer's calls of 2026-10-19 are in DECISIONS.md ("Waverley"): Blue tees 
 - Hole 6 (Blue): measured 164 yd from the tee-box centre vs 157 on the card (+4.3%); moved the virtual tee within the real tee polygon desk_6_bluetee_0 -> 161.2 yd (real 163.7 yd).
 - Hole 10 (Blue): tee shot: a perfect drive at the middle of the fairway clipped a tree near the tee; moved 6.6 m within the real tee polygon desk_10_bluetee_0 to the nearest clear spot -> 401.2 yd (real 402.7 yd).
 - Hole 11 (Blue): measured 164 yd from the tee-box centre vs 156 on the card (+5.3%); moved the virtual tee within the real tee polygon desk_11_bluetee_0 -> 159.6 yd (real 164.3 yd).
-- Hole 14 (Blue): measured 146 yd from the tee-box centre vs 137 on the card (+6.6%); moved the virtual tee within the real tee polygon desk_14_tee_0 -> 137.0 yd (real 146.1 yd).
+- Hole 14 (Blue): measured 146 yd from the tee-box centre vs 137 on the card (+6.6%); moved the virtual tee within the real tee polygon desk_14_tee_0 -> 137.0 yd (real 146.0 yd).
 - Hole 17 (Blue): measured 406 yd from the tee-box centre vs 490 on the card (-17.2%); moved the virtual tee within the real tee polygon desk_17_bluetee_0 -> 408.7 yd (real 405.5 yd).
 - Hole 18 (Blue): measured 537 yd from the tee-box centre vs 558 on the card (-3.7%); moved the virtual tee within the real tee polygon desk_18_bluetee_0 -> 538.6 yd (real 537.4 yd).
 
@@ -105,7 +105,7 @@ The developer's calls of 2026-10-19 are in DECISIONS.md ("Waverley"): Blue tees 
 | desk_11_green_0 | 11 | 6.5 | 3.5 | 0 | 6.1 | 1.5 |
 | desk_12_green_0 | 12 | 1.6 | 1.6 | 1 | 2.6 | 1.5 |
 | desk_13_green_0 | 13 | 2.8 | 2.5 | 1 | 4.9 | 1.5 |
-| desk_14_green_0 | 14 | 2.0 | 2.0 | 2 | 2.7 | 1.5 |
+| desk_14_green_0 | 14 | 2.1 | 2.1 | 2 | 3.6 | 1.5 |
 | desk_15_green_0 | 15 | 3.0 | 2.5 | 1 | 3.4 | 1.5 |
 | desk_16_green_0 | 16 | 1.6 | 1.6 | 2 | 3.4 | 1.5 |
 | desk_17_green_0 | 17 | 4.0 | 2.5 | 1 | 4.8 | 1.5 |

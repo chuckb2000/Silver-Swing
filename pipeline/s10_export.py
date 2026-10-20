@@ -235,6 +235,10 @@ def main():
     surf = np.load(bdir / "surface.npy")
     Image.fromarray(surf, "L").save(out / "surface.png", optimize=True)
     shutil.copy(bdir / "surface_legend.json", out / "surface_legend.json")
+    map_surf = surf  # what the minimaps draw (range_art "rough": a range drawn as rough, as in s09)
+    if cfg.get("range_art") == "rough":
+        map_surf = surf.copy()
+        map_surf[surf == SURF["range"]] = SURF["rough"]
 
     # heightmap ------------------------------------------------------------------
     hb = np.load(bdir / "height_base.npy").astype(np.float64)
@@ -260,7 +264,7 @@ def main():
 
     # maps --------------------------------------------------------------------
     z_px = np.load(bdir / "z_px.npy")
-    overview = render_map(surf, z_px, trees, world, 4)
+    overview = render_map(map_surf, z_px, trees, world, 4)
     Image.fromarray(overview).save(out / "maps" / "overview_2m.png", optimize=True)
 
     g = gpd.read_file(bdir / "course_local.geojson")
@@ -326,7 +330,7 @@ def main():
             green_views = export_greens(ldir, lout)
             shutil.copy(out / "trees.json", lout / "trees.json")    # the game loads these two from the course folder
             shutil.copy(out / "height.json", lout / "height.json")
-        minimaps = export_minimaps(holes, lay["default_tee"], surf, z_px, trees, world, green_by_osm, lout)
+        minimaps = export_minimaps(holes, lay["default_tee"], map_surf, z_px, trees, world, green_by_osm, lout)
         hole_out = []
         for h in holes:
             hole_out.append({

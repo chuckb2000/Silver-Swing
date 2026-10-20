@@ -15,8 +15,8 @@ import { COURSES_DIR, loadCourseFiles, meterFor, registry, robotRound, roundCfg 
 const ID = 'waverley';
 // holes outside 3% of the Blue card after the tee position (data/waverley/validation_report.md)
 const YARDAGE_FLAGS = ['2', '4', '18'];
-// over 8%: waiting on the developer's decision (hole 17, Blue tee 409 yd vs 490)
-const YARDAGE_OPEN = ['17'];
+// over 8%, accepted by the developer (hole 17: the Blue tee stays, 409 yd vs 490)
+const YARDAGE_ACCEPTED = ['17'];
 
 describe(ID, () => {
   const course = loadCourseFiles(ID);
@@ -43,11 +43,11 @@ describe(ID, () => {
     }
   });
 
-  it('measured yardages are within 3% of the Blue card, the flagged holes within 8%', () => {
+  it('measured yardages are within 3% of the Blue card, the flagged holes within 8%, hole 17 accepted short', () => {
     for (const h of json.holes) {
       const t = h.tees.Blue;
       const off = Math.abs(t.adjYd - t.cardYd) / t.cardYd;
-      if (YARDAGE_OPEN.includes(String(h.number))) expect(off, `hole ${h.number}`).toBeGreaterThan(0.08);
+      if (YARDAGE_ACCEPTED.includes(String(h.number))) expect(off, `hole ${h.number}`).toBeGreaterThan(0.08);
       else if (YARDAGE_FLAGS.includes(String(h.number))) {
         expect(off, `hole ${h.number}`).toBeGreaterThan(0.03);
         expect(off, `hole ${h.number}`).toBeLessThanOrEqual(0.08);

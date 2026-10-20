@@ -7,7 +7,9 @@ with what to do instead. Add to it at the end of every course build.
 Sources so far: East Potomac Golf Links (2026-10-19, three courses on one
 island), Langston (2026-10-19, a course in two parts across a lake), Indian
 Island (2026-10-19, half the course traced), Tualatin Country Club
-(2026-10-19, section 9) and Eastmoreland (2026-10-19, Portland). Oswego Lake and Highland Links
+(2026-10-19, section 9), Eastmoreland (2026-10-19, Portland), Willamette Valley
+(2026-10-19, section 10), Oregon Golf Club (2026-10-19, section 11) and
+Franklin Country Club (2026-10-19, section 12). Oswego Lake and Highland Links
 notes live in DECISIONS.md.
 
 ---
@@ -382,8 +384,119 @@ notes live in DECISIONS.md.
 - `npm install` may rewrite `game/package-lock.json`; revert it unless the
   course needs a new package.
 
+## 10. Willamette Valley CC (2026-10-19)
 
-## 10. Waverley Country Club (2026-10-19)
+- **Check every polygon's tag against its size.** OSM had two whole fairways
+  tagged `golf=tee` (228 x 36 m and 328 x 61 m). The audit only said "no
+  fairway" for those holes; sorting tee polygons by area found them at once.
+  A wrong tag also misleads the tee-shot test: it aimed hole 9's drive at the
+  next hole's fairway, into a tree.
+- **`golf=path` is the current OSM tag for cart paths;** the pipeline reads
+  only `golf=cartpath`. Relabel through `edits.json` (copy from a `proposed/`
+  file with the new kind, drop the original) until s01 learns the new tag.
+  `edits.json` `tags` does not change a feature's kind.
+- **A hole line that ends off any green, with a pin there, usually means the
+  green itself is missing,** not that the line is wrong. The nearest mapped
+  green (53 m away) was a practice area; s06 picked it silently. Ask, then
+  trace the green.
+- **Oregon's state imagery (OSIP 2022, 1 ft, 4-band) exports in one browser
+  click** from `imagery.oregonexplorer.info/.../OSIP_2022/OSIP_2022_SL/ImageServer/exportImage`
+  with `bboxSR`/`imageSR` 32610. 2048 x 1792 exports at 0.5 m worked. Give each
+  link complete, with no "..." shortcuts: a first batch with shortened links
+  didn't work for the developer.
+- **Placing a tee the developer describes:** put it at the card yardage on the
+  feature they name, then look at it on imagery and run the game's tee-shot
+  test before showing it. The first spot (on the hole line) was under a tree.
+- **The sandbox proxy refuses release uploads** (uploads.github.com, binary
+  body). Ask the developer to upload files to the release.
+- **`s03_audit.py` with an `edited/` file measures in degrees** (it reads the
+  WGS84 file): its distances after `merge_edits` are wrong. Read the first
+  audit (before edits) or s06's report instead.
+
+## 11. Oregon Golf Club (2026-10-19)
+
+- **Check the boundary's size against 2,048 m before anything else.** The
+  course was 2,120 m north-south, so the limit couldn't hold even with no
+  scenery; the developer approved 1,280 x 2,304 m in the first message. The
+  game loaded it without trouble (see the report for the timings).
+- **Release file names may say nothing** (`exportImage.6.tiff`). The values
+  tell: a bare-earth DTM has no zeros and the river flat at its minimum; a
+  canopy model is mostly 0-1 with tall tails.
+- **A canopy model contains power lines.** Look at the CHM picture for long
+  straight thin lines before running s05. Here they made 1,254 false trees
+  (rows of 20-30 m "trees" under the line, 70-82 m "conifers" at a river
+  crossing). `remove_wires` takes them out: grey opening (5 x 5 m), cells
+  more than 3 m above it, thin networks with a skeleton over 40 m and a mean
+  width under 3 m. A plain "long and thin" test on connected components
+  fails, because the two conductors of a line and the tree tips they touch
+  join into one wide component; measure width as cells / skeleton cells.
+  Quick check: the tallest tree (Pacific Northwest firs top out near 60 m).
+- **OSM may map the range's targets but not the range.** Build the edge from
+  mapped geometry (the path loop around the targets) and show it as a
+  proposal. Check what each feature inside is before cutting it out: a
+  735 m2 "fairway" I took for part of the short-game area was the mown
+  collar of a range target, and it left a hole in the range.
+- **Ask how the range looks on the ground.** A range drawn with fairway
+  stripes invites players to hit there. This one is rough, so it is drawn as
+  rough with OB stakes along its edge (`range_art`). No range balls: white
+  dots on the range hid the stakes (developer).
+- **Tee complexes that step sideways.** s06 looks for tee boxes within 25 m
+  of the hole line; on a hillside a forward box can be 30 m to the side.
+  Measure every box near the line start against the card; assign a clear
+  match by tag (`hole`, `tee_set` in `edits.json`) and say it was the course
+  chat's call (s06's report line says "developer").
+- **Hillside tees are cut, not raised**: `propose_tees.py` found no pads for
+  the three tee sets that share a box. Don't expect lidar to fill every gap.
+- **Look at the green contact sheet for trees drawn over a pin.** A tree
+  7 m south of a green still covers it in the 3/4 view.
+- **Two CPUs:** the regression rebuild and the in-game screenshots slow each
+  other down several times over. Run the regression first, or accept about
+  7 minutes a hole for screenshots while it runs.
+- **The tracing desk fixes OSM courses too.** The developer asked to correct
+  the driving range and hole 9's fairway themselves; the desk (with
+  `--edit-osm` and `--area range`, over a lidar relief because there was no
+  photo yet) took about twenty minutes from request to saves. Offer it
+  whenever a mapped shape is wrong and the developer knows the course.
+
+## 12. Franklin Country Club (2026-10-19)
+
+- **An openstreetmap.org "Export" (`.osm` XML) is as good as an Overpass
+  export** if its box covers the world. Convert it with
+  `npx osmtogeojson@3.0.0-beta.5` (the converter Overpass Turbo uses), then
+  drop the metadata properties (timestamp, version, changeset, user, uid) and
+  write the id as `@id` (`data/franklin/osm_to_geojson.py`); otherwise the
+  metadata ends up as OSM tags.
+- **`golf=water_hazard` exports as yellow.** s10 reads `water_hazard` as
+  yellow and `lateral_water_hazard` as red, whatever `penalty_default` says.
+  When the developer says "all water is red", tag every hazard
+  `penalty=red` in `edits.json` and check `course.json` `water[]`.
+- **List every water feature inside the boundary, not only the hazards.**
+  Two ponds mapped as plain `natural=water` would have played as rough
+  (Tualatin's pool, again). A plot of hazards, plain water, wetlands and
+  streams over the holes (`proposed/water_osm.png`) shows them at once.
+- **USGS 1 m DEM tile names come from the UTM corner:** `x30y466` covers
+  eastings 300-310 km and northings 4,650-4,660 km (the name is the
+  north-west corner). A course near a 10 km line needs two tiles; mosaic and
+  clip them in a small course script (`data/franklin/clip_dem.py`) rather
+  than committing 350 MB tiles.
+- **A NOAA Data Access Viewer job can come back in feet both ways.** The
+  Franklin job (all classes, one 961 MB LAZ) was NAD83(2011) UTM 19N in US
+  survey feet horizontally *and* vertically: s00 reprojects the horizontal
+  from the file's CRS, but the vertical needs `laz.units: "ft"`. Read the
+  header CRS before the first s00 run.
+- **The centre-line test can fail where s06b passes.** s06b aims at the
+  middle of the fairway where a drive lands; the course test also flies a
+  drive straight down the hole line. At Franklin 18 a broadleaf's crown
+  reached 0.5 m over the line 15 m from the tee. Run both before calling the
+  tee shots clear.
+- **`pkill -f "vite preview"` killed the shell** that ran it (the command
+  line contained the pattern). Start the preview server once and leave it,
+  or kill it by PID.
+- **A big wooded world means many trees.** 37,340 lidar trees (2.5x Indian
+  Island) and a 17 MB export; the game only builds sprites for cells near
+  the camera. Measure the course's load time in the browser.
+
+## 13. Waverley Country Club (2026-10-19)
 
 - **OSM can have fairways and nothing else.** Waverley's OSM had the
   boundary, 18 fairways, a pond and the clubhouse: no holes, greens, tees,
@@ -424,3 +537,7 @@ notes live in DECISIONS.md.
   lesson warns for `s0[0-9]`). Kill by PID. The 90-screenshot look takes
   longer than a foreground command: run it in the background, or in chunks
   (`LOOK_FROM` in the script).
+- **Check the desk with saved data before handing it over.** Once holes
+  were saved, loading them reset the open hole and every hole button threw
+  (fixed in `openHole`). A local copy of the page with a stub `window.claude`
+  serving the saved docs reproduced it in a minute.

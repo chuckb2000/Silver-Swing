@@ -12,7 +12,7 @@ import { Outcome, PlannedShot, puttScales, Round, SWING_SCALES } from '../system
 import { HZ, SimEvent, SimResult } from '../systems/physics/sim';
 import { SURF } from '../systems/physics/surfaces';
 import { ReliefArea } from '../systems/rules/relief';
-import { DISPLAY_LAG_MS, FULL_MAX, PART_MAX, SwingMeter } from '../systems/swing/meter';
+import { FULL_MAX, PART_MAX, SwingMeter } from '../systems/swing/meter';
 import { worldCamera } from '../scale';
 import { saveSnapshot } from '../save/snapshot';
 import { CameraRig, Rect } from '../ui/cameraRig';
@@ -579,7 +579,7 @@ export class PlayScene extends Phaser.Scene {
   private startMeter(ts: number) {
     const putt = this.isPutting();
     const max = putt || this.swingScale < 1 ? PART_MAX : FULL_MAX;
-    this.meter = new SwingMeter(putt ? 'putt' : 'full', this.round.preset.secondsPer100, max, app.settings.latencyMs + DISPLAY_LAG_MS);
+    this.meter = new SwingMeter(putt ? 'putt' : 'full', this.round.preset.secondsPer100, max, app.settings.latencyMs); // the tap counts when it happens (developer: timing it is part of the skill)
     this.meter.tap(ts);
     this.state = 'swing';
     this.hud.refresh();

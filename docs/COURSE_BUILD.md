@@ -241,7 +241,11 @@ Known Oswego-specific code, with the fix:
                                         // when the game test still finds a crown the pipeline check passed by centimetres
   "red_water_osm": ["r123"],            // optional: OSM water features that are red penalty areas wherever they lie,
                                         // also outside the boundary (a river along the course; Tualatin)
-  "drop_trees": [{"x": 0, "y": 0, "reason": "..."}]  // optional: single trees (local metres) the developer asked to remove
+  "drop_trees": [{"x": 0, "y": 0, "reason": "..."}], // optional: single trees (local metres) the developer asked to remove
+  "remove_wires": {"min_len_m": 40, "max_width_m": 3.0, "rise_m": 3.0},  // optional: take power lines out of the
+                                        // canopy model before the tree search (s05; Oregon Golf Club)
+  "range_art": "rough"                  // optional: draw the driving range as rough (no stripes) with OB stakes
+                                        // along its edge; it stays out of bounds (s09, s09b, s10; Oregon Golf Club)
 }
 ```
 
@@ -445,6 +449,8 @@ Common problems and what to do:
 | Problem | Action |
 |---|---|
 | No pin on a green | Open item. Proposal: green centroid, marked as a proposal; the developer approves. |
+
+The course's `pin` is the centre pin. The game adds up to three more hole locations on every green by itself (`game/src/systems/game/pins.ts`: 10 ft from every edge, no steeper than 3 % around the cup, 15 ft apart) and gives each round a mixed pin sheet, so a course needs nothing more than its centre pins. A green too small or steep for that keeps fewer locations; the unit test `pins.test.ts` requires at least three on every green, so check it when a course lands.
 | Hole line ends off the green | Check `ref` numbering and whether it ends on a practice green. Ask. |
 | Hole line starts on another hole's tee (Oswego 7/11) | The tee-set assignment in s06 handles it if the right box exists; report it. |
 | Tee set missing (no box within 8 % of the card) | Open item: the developer traces the box in QGIS, or accepts the line start as the tee. |

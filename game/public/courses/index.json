@@ -153,6 +153,49 @@
    ]
   },
   {
+   "id": "willamette_valley",
+   "name": "Willamette Valley CC",
+   "location": "Canby, Clackamas County, Oregon",
+   "state": "OR",
+   "theme": "pnw",
+   "holes": 18,
+   "par": 72,
+   "defaultTee": "Blue",
+   "totalYd": 6514,
+   "teeSets": [
+    "Blue"
+   ]
+  },
+  {
+   "id": "ogc",
+   "name": "Oregon Golf Club",
+   "location": "West Linn, Clackamas County, Oregon",
+   "state": "OR",
+   "theme": "pnw",
+   "holes": 18,
+   "par": 72,
+   "defaultTee": "Blue",
+   "totalYd": 6629,
+   "teeSets": [
+    "Blue",
+    "White"
+   ]
+  },
+  {
+   "id": "franklin",
+   "name": "Franklin Country Club",
+   "location": "Franklin, Norfolk County, Massachusetts",
+   "state": "MA",
+   "theme": "bayside",
+   "holes": 18,
+   "par": 71,
+   "defaultTee": "Blue",
+   "totalYd": 6602,
+   "teeSets": [
+    "Blue"
+   ]
+  },
+  {
    "id": "waverley",
    "name": "Waverley Country Club",
    "location": "Milwaukie, Clackamas County, Oregon",

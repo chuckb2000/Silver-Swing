@@ -124,7 +124,6 @@
     "desk_13_bunker_5",
     "desk_13_tee_0",
     "desk_13_green_0",
-    "desk_14_green_0",
     "desk_14_bunker_0",
     "desk_14_bunker_1",
     "desk_14_bunker_2",
@@ -134,6 +133,7 @@
     "desk_14_bunker_5",
     "desk_14_bunker_6",
     "desk_14_bunker_7",
+    "desk_14_green_0",
     "desk_15_bunker_0",
     "desk_15_green_0",
     "desk_15_bunker_2",
@@ -212,7 +212,7 @@
    "tags": {
     "proposed": "trace"
    },
-   "reason": "Holes 1-18 (greens, tees, the Blue tee boxes, bunkers, pins, hole lines, fairways on 9 and 11) from the tracing desk; the Willamette strip (red penalty area, developer 2026-10-19) and the boundary grown to include it; hole 14 from data/waverley/make_hole14.py (developer's request and approval, 2026-10-19: a smooth round green with fairway between it and the bunkers; bunkers moved 1.5 m out; a fifth bunker in the tree shadow); hole 15's copy of the bunker by the 14 green (desk_15_bunker_1) is left out, replaced by the moved one"
+   "reason": "Holes 1-18 (greens, tees, the Blue tee boxes, bunkers, pins, hole lines, fairways on 9 and 11) from the tracing desk; the Willamette strip (red penalty area, developer 2026-10-19) and the boundary grown to include it; hole 14's bunkers from data/waverley/make_hole14.py (developer's request, 2026-10-19: moved 1.5 m out, a fifth in the tree shadow) and its green as the developer reshaped it in the desk; hole 15's copy of the bunker by the 14 green (desk_15_bunker_1) is left out, replaced by the moved one"
   }
  ],
  "drop": [

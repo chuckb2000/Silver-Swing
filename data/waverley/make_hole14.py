@@ -7,6 +7,10 @@ and the bunkers. Maybe move all the bunkers a smidge away from the green?").
     python3 data/waverley/make_hole14.py --apply    once approved: desk/hole14.json
                                                     (then pipeline/desk_to_proposed.py waverley)
 
+Superseded for the green: the developer reshaped hole 14's green in the tracing
+desk on 2026-10-19 (data/waverley/desk/hole14.json is now their save, built from
+this script's bunkers). --apply refuses to overwrite a developer save.
+
 Writes hole 14 in the tracing desk's format, from the
 course chat's traces (proposed/traced.geojson) and the developer's hole 15 save:
   - the four bunkers ringing the green (traced 21, 25, 26 and hole 15's saved
@@ -87,6 +91,8 @@ def main():
            "features": feats}
     import sys
     dst = HERE / "desk" / "hole14.json" if "--apply" in sys.argv else HERE / "proposed" / "hole14_proposal.json"
+    if dst.parent.name == "desk" and dst.exists() and json.load(open(dst)).get("by") != out["by"]:
+        raise SystemExit("[hole14] desk/hole14.json is the developer's own save; not overwriting it")
     dst.write_text(json.dumps(out, indent=1))
     print(f"[hole14] green {g.area:.0f} m2 (was {geom['tr_green_14'].area:.0f}), "
           f"closest bunker {min(g.distance(q) for q in moved):.2f} m; {len(feats)} features")

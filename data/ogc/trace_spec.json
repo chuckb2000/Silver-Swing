@@ -1,0 +1,4 @@
+{
+  "note": "Oregon Golf Club is built from OSM; this file only tells the tracing desk (pipeline/desk_export.py) which picture to show. Until an orthophoto arrives it is the lidar relief from data/ogc/tools/desk_relief.py (build/, rebuilt from the DOGAMI rasters).",
+  "ortho": "build/desk_relief.tif"
+}

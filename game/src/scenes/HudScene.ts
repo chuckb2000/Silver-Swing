@@ -339,6 +339,8 @@ export class HudScene extends Phaser.Scene {
     g.fillStyle(0xd23b2b, 1).fillRect(X(-ZONE_REACH), y0, X(ZONE_REACH) - X(-ZONE_REACH), h);
     g.fillStyle(0xf2c23a, 1).fillRect(X(-good), y0, Math.max(1, X(good) - X(-good)), h);
     g.fillStyle(0x4cd25c, 1).fillRect(X(-half), y0, Math.max(1, X(half) - X(-half)), h);
+    // a dark line through the middle of the green, top to bottom of the bar: the perfect spot (developer)
+    g.fillStyle(0x1f5a28, 1).fillRect(X(0), y0, 1, h);
     // ticks
     g.fillStyle(0x0b0f13, 1);
     for (const v of [25, 50, 75, 100]) g.fillRect(X(v), y0 + h - 3, 1, 3);
@@ -347,9 +349,6 @@ export class HudScene extends Phaser.Scene {
       t.setPosition(X(v), y0 + h + 1);
       setTxt(t, putt ? puttScaleLabel(p.puttScale * v / 100) : String(v));
     });
-    // ghost tick: last shot's power with this kind of club
-    const ghost = putt ? (r.lastPuttPower === null ? null : (r.lastPuttPower / p.puttScale) * 100) : r.lastPower === null ? null : (r.lastPower / p.swingScale) * 100;
-    if (ghost !== null && ghost >= 0 && ghost <= max) g.fillStyle(0xffffff, 0.35).fillRect(X(ghost), y0 - 2, 1, h + 4);
     let read = '';
     if (m && (p.state === 'swing' || p.state === 'flight')) {
       const now = performance.now();
@@ -463,8 +462,8 @@ export class HudScene extends Phaser.Scene {
     const t1 = txt(this, 64, 8, `hole ${r.holeNumber}`, { scale: 2 });
     const yd = r.tee.cardYd;
     const ydStr = app.settings.units === 'yd' ? `${yd} yd` : `${Math.round(yd * YD)} m`;
-    const t2 = txt(this, 64, 30, `par ${r.hole.par}  ·  ${ydStr}`, { color: COLORS.yellow });
-    const t3 = txt(this, 64, 41, `handicap ${r.hole.handicap}  ·  ${r.cfg.tee.toLowerCase()} tees`, { color: COLORS.dim });
+    const t2 = txt(this, 64, 30, `par ${r.hole.par}  ·  ${ydStr}  ·  ${r.cfg.tee.toLowerCase()}`, { color: COLORS.yellow });
+    const t3 = txt(this, 64, 41, `handicap ${r.hole.handicap}  ·  pin ${r.pinLabel()}`, { color: COLORS.dim });
     const wtxt = r.wind.mph < 0.5 ? 'calm' : `wind ${r.wind.mph.toFixed(1)} mph`;
     const t4 = txt(this, 64, 52, `${wtxt}  ·  tap to play`, { color: COLORS.dim });
     c.add([pnl, portrait, t1, t2, t3, t4]);
@@ -529,7 +528,7 @@ export class HudScene extends Phaser.Scene {
     dim.on('pointerdown', () => this.closeModal());
     this.modalLayer.add(dim);
     const mPer = app.course!.json.maps.overviewMPerPx;
-    const pts = [...r.tee.centerline, r.hole.pin, [r.ball.x, r.ball.y]];
+    const pts = [...r.tee.centerline, [r.pin.x, r.pin.y], [r.ball.x, r.ball.y]];
     const xs = pts.map((q) => q[0]), ys = pts.map((q) => q[1]);
     const pad = 40;
     let x0 = Math.min(...xs) - pad, x1 = Math.max(...xs) + pad, y0 = Math.min(...ys) - pad, y1 = Math.max(...ys) + pad;
