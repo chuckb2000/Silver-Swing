@@ -2,29 +2,35 @@
 
 import Phaser from 'phaser';
 import { app } from '../app';
-import { addToBoard, LeaderboardEntry, saveSettings } from '../save/store';
+import { addToBoard, LeaderboardEntry, loadBoard, saveSettings } from '../save/store';
 import { loadCourse, LoadProgress } from '../data/courses';
 import { teeFor } from '../data/registry';
 import { clearSnapshot, peekSnapshot, restoreRound } from '../save/snapshot';
 import { courseHoleFor, isCasual, newSeed, Round, RoundConfig, roundId } from '../systems/game/round';
 import { roundPins } from '../systems/game/pins';
 import { totals } from '../systems/rules/scoring';
+import type { DailyPlan } from '../systems/game/daily';
+import { PRACTICE_COURSE } from '../systems/game/practice';
 
 export { holesFor, lengthLabel, lengthOf, lengthsFor } from '../systems/game/lengths';
 export type { RoundLength } from '../save/entry';
 import { holesFor, lengthOf } from '../systems/game/lengths';
 import type { RoundLength } from '../save/entry';
 
-export function startRound(scene: Phaser.Scene, len: RoundLength) {
+/** Start a round on the current course; `daily` fixes everything but the hand from the date (daily round). */
+export function startRound(scene: Phaser.Scene, len: RoundLength, daily?: DailyPlan) {
   const s = app.settings;
   const cfg: RoundConfig = {
     courseId: app.course!.json.id,
-    tee: teeFor(app.course!.json, s.tees),
-    holes: holesFor(len),
+    tee: daily ? daily.tee : teeFor(app.course!.json, s.tees),
+    holes: holesFor(daily ? daily.length : len),
     playerName: s.playerName || 'player',
-    seed: newSeed(),
-    settings: { difficulty: s.difficulty, lefty: s.lefty, e5: s.e5, gimmes: s.gimmes, maxDoublePar: s.maxDoublePar, mulligans: s.mulligans },
+    seed: daily ? daily.seed : newSeed(),
+    settings: daily
+      ? { difficulty: 'normal', lefty: s.lefty, e5: false, gimmes: false, maxDoublePar: false, mulligans: false }
+      : { difficulty: s.difficulty, lefty: s.lefty, e5: s.e5, gimmes: s.gimmes, maxDoublePar: s.maxDoublePar, mulligans: s.mulligans },
     startedAt: new Date().toISOString(),
+    ...(daily ? { daily: daily.day } : {}),
   };
   // a pin for every hole, mixed front / middle / back and easy / medium / hard (pins.ts)
   const n = app.course!.json.holes.length;
@@ -84,10 +90,36 @@ export async function finishRound(scene: Phaser.Scene) {
     scores: r.scores,
     totals: tot,
   };
+  // the daily round counts once a day: a second go on this device is an ordinary round (the server checks the player code too)
+  if (r.cfg.daily && !(await loadBoard()).some((b) => b.daily === r.cfg.daily && b.player === entry.player)) entry.daily = r.cfg.daily;
   await addToBoard(entry);
   await clearSnapshot();
   // sent to the shared leaderboard when the player leaves the summary (they may change the name there first)
   scene.scene.stop('hud');
   scene.scene.stop('play');
   scene.scene.start('summary', { entry });
+}
+
+/** Open the practice ground (player improvements, item 5): range first; nothing scored or saved. */
+export async function startPractice(scene: Phaser.Scene, progress?: LoadProgress): Promise<boolean> {
+  if (app.course?.json.id !== PRACTICE_COURSE) {
+    scene.scene.stop('bg');
+    await untilStopped(scene, 'bg');
+    await loadCourse(scene, PRACTICE_COURSE, progress); // not remembered as the last course played
+  }
+  const s = app.settings;
+  const cfg: RoundConfig = {
+    courseId: PRACTICE_COURSE,
+    tee: app.course!.json.defaultTee,
+    holes: app.course!.json.holes.map((h) => h.number),
+    playerName: s.playerName || 'player',
+    seed: newSeed(),
+    settings: { difficulty: s.difficulty, lefty: s.lefty, e5: false, gimmes: false, maxDoublePar: false, mulligans: false },
+    startedAt: new Date().toISOString(),
+    practice: true,
+  };
+  app.round = new Round(app.course!, cfg);
+  app.round.startHole(0);
+  scene.scene.start('play', { resume: false });
+  return true;
 }

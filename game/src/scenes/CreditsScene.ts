@@ -9,6 +9,10 @@ export class CreditsScene extends MenuScene {
     super('credits');
   }
 
+  protected back() {
+    this.scene.start('settings', { from: 'title' }); // opened from settings
+  }
+
   build() {
     const W = app.view.w, H = app.view.h;
     const pw = Math.min(340, W - 8), ph = Math.min(H - 8, 250);

@@ -113,10 +113,34 @@ def trophy(W: int = 56, H: int = 72) -> np.ndarray:
     return img
 
 
+def app_icon(size: int, scale: int) -> Image.Image:
+    """The home-screen icon: the trophy on a putting green, pixel for pixel (player improvements, item 3)."""
+    bg = Image.new("RGBA", (size, size), (20, 32, 42, 255))
+    yy, xx = np.mgrid[0:size, 0:size]
+    green = np.zeros((size, size, 4), np.uint8)
+    r = size * 0.42
+    d = np.hypot(xx + 0.5 - size / 2, yy + 0.5 - size / 2)
+    green[d <= r] = (58, 122, 64, 255)
+    green[(d <= r) & (d > r - max(2, size // 48))] = (40, 92, 48, 255)
+    bg.alpha_composite(Image.fromarray(green, "RGBA"))
+    t = Image.fromarray(trophy(), "RGBA")
+    t = t.resize((t.width * scale, t.height * scale), Image.NEAREST)
+    bg.alpha_composite(t, ((size - t.width) // 2, (size - t.height) // 2))
+    return bg
+
+
+def write_icons(out: Path = HERE.parent / "game" / "public" / "icons"):
+    out.mkdir(parents=True, exist_ok=True)
+    for size, scale, name in ((192, 2, "icon-192.png"), (512, 5, "icon-512.png"), (180, 2, "apple-touch-icon.png")):
+        app_icon(size, scale).convert("RGB").save(out / name, optimize=True)
+    print(f"[title] app icons -> {out}")
+
+
 def write_sprites(out: Path = HERE.parent / "game" / "public" / "sprites"):
-    """The game's logo: sprites/trophy.png."""
+    """The game's logo: sprites/trophy.png, and the home-screen icons (icons/)."""
     Image.fromarray(trophy(), "RGBA").save(out / "trophy.png", optimize=True)
     print(f"[title] trophy.png -> {out}")
+    write_icons(out.parent / "icons")
 
 
 def main():

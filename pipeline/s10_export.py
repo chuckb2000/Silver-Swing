@@ -368,7 +368,8 @@ def main():
         if shared:
             course.update({"group": cfg["id"], "groupName": cfg["name"], "layout": lay.get("short") or lay["name"]})
         write_json(lout / "course.json", course)
-        update_registry(course)
+        if not cfg.get("practice"):  # the practice ground is opened from its own button, not the course list
+            update_registry(course)
 
     # validation report -------------------------------------------------------
     table = (bdir / "validation_table.md").read_text()

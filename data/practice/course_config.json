@@ -1,0 +1,93 @@
+{
+  "id": "practice",
+  "name": "Practice Ground",
+  "location": "practice ground (made up for the game)",
+  "state": "--",
+  "architects": "Silver Swings Golf (synthetic)",
+  "theme": "pnw",
+  "epsg": 32610,
+  "practice": true,
+  "osm_sources": [
+    "raw/practice.geojson"
+  ],
+  "boundary_name": "Practice Ground",
+  "dtm": {
+    "path": "raw/dtm.tif",
+    "units": "m",
+    "source": "made up by data/practice/make_practice.py (no real place)"
+  },
+  "chm": {
+    "path": "raw/chm.tif",
+    "units": "m",
+    "source": "made up by data/practice/make_practice.py",
+    "label": "made-up trees"
+  },
+  "world": {
+    "x0": 500000,
+    "y0": 5000000,
+    "width": 512,
+    "height": 512,
+    "note": "a synthetic practice ground, 2 x 2 chunks"
+  },
+  "tee_sets": [
+    {
+      "name": "Practice",
+      "playable": true,
+      "rating": 0,
+      "slope": 0,
+      "total_yd": 0
+    }
+  ],
+  "default_tee": "Practice",
+  "scorecard_source": "made up: holes 1-5 are the range targets (50-250 yd), 6-9 the putting greens",
+  "penalty_default": "red",
+  "driving_range_is_ob": false,
+  "wind_mph": {
+    "minMph": 2,
+    "maxMph": 12
+  },
+  "green_tilt": [
+    {
+      "hole": 6,
+      "max_tilt": 0.0,
+      "min_tilt": 0.0,
+      "bumps": 0,
+      "note": "practice green: flat"
+    },
+    {
+      "hole": 7,
+      "max_tilt": 0.01,
+      "min_tilt": 0.01,
+      "bumps": 0,
+      "note": "practice green: 1 %"
+    },
+    {
+      "hole": 8,
+      "max_tilt": 0.02,
+      "min_tilt": 0.02,
+      "bumps": 0,
+      "note": "practice green: 2 %"
+    },
+    {
+      "hole": 9,
+      "max_tilt": 0.01,
+      "min_tilt": 0.01,
+      "bumps": 0,
+      "note": "practice green: two tiers on a 1 % slope"
+    }
+  ],
+  "green_tiers": [
+    {
+      "hole": 9,
+      "drop_m": 0.6,
+      "width_m": 3.0,
+      "low_side": "front",
+      "note": "practice green: the front half 0.6 m below the back",
+      "pin": "upper_tier"
+    }
+  ],
+  "attribution": [
+    "Practice ground made up for the game"
+  ],
+  "notes": "Player improvements item 5 (developer approved 2026-10-20). Not a real course and not on the course list (s10 `practice`)."
+}

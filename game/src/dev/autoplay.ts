@@ -5,6 +5,8 @@
 import type Phaser from 'phaser';
 import type { PlayScene } from '../scenes/PlayScene';
 import type { HudScene } from '../scenes/HudScene';
+import type { LeaderboardEntry } from '../save/entry';
+import { shareImage } from '../ui/shareCard';
 
 export interface AutoplayLog { hole: number; shots: string[] }
 
@@ -34,6 +36,15 @@ export function installAutoplay(game: Phaser.Game) {
       p.tap(t0 + d2);
       p.tap(t0 + d3);
       return true;
+    },
+
+    /** The share picture of a round (player improvements, item 2): its size in bytes and a data URL. */
+    async sharePicture(entry: LeaderboardEntry, rank = ''): Promise<{ bytes: number; url: string } | null> {
+      const scene = game.scene.getScenes(true)[0];
+      const blob = await shareImage(scene, entry, rank);
+      if (!blob) return null;
+      const url = await new Promise<string>((res) => { const fr = new FileReader(); fr.onload = () => res(String(fr.result)); fr.readAsDataURL(blob); });
+      return { bytes: blob.size, url };
     },
 
     /** Advance whatever is pending: skip intro, fast-forward, resolve dialogs. */

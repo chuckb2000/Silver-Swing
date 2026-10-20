@@ -36,6 +36,10 @@ export interface RoundConfig {
   /** Pin for each hole of the round (pins.ts pinSheet), fixed when the round starts so a
    *  resumed round keeps them; rounds saved before pins moved have none: the centre pin. */
   pins?: [number, number][];
+  /** The daily round of this day (yyyy-mm-dd): course, tees, holes, seed and settings fixed by the date. */
+  daily?: string;
+  /** The practice ground (practice.ts): nothing is scored or saved. */
+  practice?: boolean;
 }
 
 export interface BallPos { x: number; y: number; teedUp: boolean }
@@ -117,6 +121,8 @@ export class Round {
   private beforeShot: { tally: { strokes: number; putts: number; penalties: number; fairway: boolean | null; reachedGreenAt: number | null }; shotNo: number; ball: BallPos; prev: BallPos; history: number } | null = null;
   history: { x: number; y: number }[] = [];
   shotSeq = 0;
+  /** The last stroke simulated this hole, kept so it can be played back exactly (replay). */
+  lastStroke: { shot: PlannedShot; hole: number; seq: number } | null = null;
   readonly winds: Wind[];
   /** Player's units (putter scales follow them); set by the game from the settings. */
   units: 'yd' | 'm' = 'yd';
@@ -168,6 +174,7 @@ export class Round {
     this.mulliganUsed = false;
     this.beforeShot = null;
     this.pending = null;
+    this.lastStroke = null;
     this.history = [{ x: this.ball.x, y: this.ball.y }];
     this.refreshLie();
   }
@@ -377,8 +384,18 @@ export class Round {
   }
 
   simulate(p: PlannedShot): SimResult {
-    const r = this.rng.fork(70_000 + this.holeNumber * 1000 + this.shotSeq);
-    return simulateShot(this.course.terrain, this.course.obstacles, p.spec, r);
+    this.lastStroke = { shot: p, hole: this.holeNumber, seq: this.shotSeq };
+    return this.simulateAgain(this.lastStroke);
+  }
+
+  /** The last stroke again, exactly as it was played (the physics is deterministic). */
+  replay(): SimResult | null {
+    return this.lastStroke ? this.simulateAgain(this.lastStroke) : null;
+  }
+
+  private simulateAgain(l: { shot: PlannedShot; hole: number; seq: number }): SimResult {
+    const r = this.rng.fork(70_000 + l.hole * 1000 + l.seq);
+    return simulateShot(this.course.terrain, this.course.obstacles, l.shot.spec, r);
   }
 
   /** Commit a stroke: count it, move the ball, apply the rules. */
@@ -495,6 +512,22 @@ export class Round {
 
   unplayable(): ReliefArea[] {
     return unplayableOptions(this.courseCtx(), this.ball, { x: this.prev.x, y: this.prev.y });
+  }
+
+  /** Practice: the ball back on the stall (`spot` omitted) or on a drill spot; nothing counted. */
+  practiceReset(spot?: { x: number; y: number }) {
+    this.tally = new HoleTally(this.holeNumber, this.hole.par);
+    this.ball = spot ? { x: spot.x, y: spot.y, teedUp: false } : { x: this.tee.x, y: this.tee.y, teedUp: true };
+    this.prev = { ...this.ball };
+    this.shotNo = 0;
+    this.pending = null;
+    this.history = [{ x: this.ball.x, y: this.ball.y }];
+    this.refreshLie();
+  }
+
+  /** Practice: calm, or the wind the round would have on this hole. */
+  practiceWind(on: boolean) {
+    this.wind = on ? this.winds[this.holeIndex] ?? makeWind(0, 0) : makeWind(0, 0);
   }
 
   /** Mulligan (casual): replay the last stroke from its spot without counting it. */

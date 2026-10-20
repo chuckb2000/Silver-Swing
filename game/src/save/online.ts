@@ -6,6 +6,7 @@
 
 import { isEntry, LeaderboardEntry } from './entry';
 import { EagleEvent, isEagle } from './feats';
+import { FeedRow, isFeedRow } from './feed';
 import { DEFAULT_NAME } from './names';
 import { loadBoard, loadEagles, loadUploaded, saveEagles, saveUploaded } from './store';
 import { app } from '../app';
@@ -23,6 +24,7 @@ const API = 'api/scores'; // relative to the page
 const EAGLES = 'api/eagles';
 const RECORDS = 'api/records';
 const NAMES = 'api/names';
+const RECENT = 'api/recent';
 let available: Promise<boolean> | null = null;
 let flushing: Promise<number> | null = null;
 
@@ -49,10 +51,42 @@ export function onlineAvailable(): Promise<boolean> {
 }
 
 /** Every round for a course on the shared leaderboard (null when unreachable). */
-export async function fetchBoard(course: string): Promise<LeaderboardEntry[] | null> {
+export function fetchBoard(course: string): Promise<LeaderboardEntry[] | null> {
+  return fetchEntries(`course=${encodeURIComponent(course)}`);
+}
+
+/** This player code's own rounds, from every device that uses it ("my golf"; null when unreachable). */
+export function fetchOwnRounds(): Promise<LeaderboardEntry[] | null> {
+  return app.settings.playerKey ? fetchEntries(`owner=${encodeURIComponent(app.settings.playerKey)}`) : Promise.resolve(null);
+}
+
+/** A day's daily rounds (null when unreachable). */
+export function fetchDaily(day: string): Promise<LeaderboardEntry[] | null> {
+  return fetchEntries(`daily=${day}`);
+}
+
+/** The daily rounds of the week starting on this day (null when unreachable). */
+export function fetchDailyWeek(first: string): Promise<LeaderboardEntry[] | null> {
+  return fetchEntries(`week=${first}`);
+}
+
+/** The latest rounds on the shared board (friends' activity; null when unreachable). */
+export async function fetchRecent(limit = 30): Promise<FeedRow[] | null> {
   if (!(await onlineAvailable())) return null;
   try {
-    const res = await timed(`${API}?course=${encodeURIComponent(course)}`, { cache: 'no-store' });
+    const res = await timed(`${RECENT}?limit=${limit}`, { cache: 'no-store' });
+    if (!res.ok) return null;
+    const j = (await res.json()) as { rounds?: unknown[] };
+    return (j.rounds ?? []).filter(isFeedRow);
+  } catch {
+    return null;
+  }
+}
+
+async function fetchEntries(query: string): Promise<LeaderboardEntry[] | null> {
+  if (!(await onlineAvailable())) return null;
+  try {
+    const res = await timed(`${API}?${query}`, { cache: 'no-store' });
     if (!res.ok) return null;
     const j = (await res.json()) as { entries?: unknown[] };
     return (j.entries ?? []).filter(isEntry);
