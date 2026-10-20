@@ -55,13 +55,17 @@ def enabled(cfg) -> bool:
     return bool(cfg.get("garden"))
 
 
-def shrub_trees(cfg, g) -> list[dict]:
-    """The garden bushes as tree records: type "shrub", `v` = bloom variant (VARIANTS)."""
+def shrub_trees(cfg, g, chm: np.ndarray | None = None) -> list[dict]:
+    """The garden bushes as tree records: type "shrub", `v` = bloom variant (VARIANTS).
+
+    `chm`: the canopy height model s05 is working on (1 m, rows south->north). s05
+    passes it in because it only saves build/chm_local.npy later, so on a first build
+    from an empty build/ that file doesn't exist yet."""
     gd = cfg["garden"]
     polys = unary_union([geom for geom in g[g.osm.isin(gd["osm"])].geometry if geom is not None])
     if polys.is_empty:
         return []
-    chm = _chm(cfg)
+    chm = _chm(cfg) if chm is None else chm
     H, W = chm.shape
     lo, hi = float(gd.get("shrub_min_m", 0.6)), float(gd.get("shrub_max_m", 7.0))
     shrub = ndimage.binary_closing((chm >= lo) & (chm <= hi), iterations=1)

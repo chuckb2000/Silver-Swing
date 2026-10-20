@@ -6,7 +6,8 @@ import { addToBoard, LeaderboardEntry, saveSettings } from '../save/store';
 import { loadCourse } from '../data/courses';
 import { teeFor } from '../data/registry';
 import { clearSnapshot, peekSnapshot, restoreRound } from '../save/snapshot';
-import { isCasual, newSeed, Round, RoundConfig } from '../systems/game/round';
+import { courseHoleFor, isCasual, newSeed, Round, RoundConfig } from '../systems/game/round';
+import { roundPins } from '../systems/game/pins';
 import { totals } from '../systems/rules/scoring';
 
 export { holesFor, lengthLabel, lengthOf, lengthsFor } from '../systems/game/lengths';
@@ -25,6 +26,9 @@ export function startRound(scene: Phaser.Scene, len: RoundLength) {
     settings: { difficulty: s.difficulty, lefty: s.lefty, e5: s.e5, gimmes: s.gimmes, maxDoublePar: s.maxDoublePar, mulligans: s.mulligans },
     startedAt: new Date().toISOString(),
   };
+  // a pin for every hole, mixed front / middle / back and easy / medium / hard (pins.ts)
+  const n = app.course!.json.holes.length;
+  cfg.pins = roundPins(app.course!, cfg.tee, cfg.holes.map((h) => courseHoleFor(h, n)), cfg.seed);
   app.round = new Round(app.course!, cfg);
   app.round.startHole(0);
   void clearSnapshot();
