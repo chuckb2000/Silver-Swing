@@ -27,6 +27,7 @@ interface Snapshot {
 }
 
 export async function saveSnapshot(r: Round): Promise<void> {
+  if (r.cfg.practice) return; // the practice ground is never resumed
   const betweenHoles = r.scores.length > 0 && r.scores[r.scores.length - 1].hole === r.holeNumber;
   const s: Snapshot = {
     v: 1, cfg: r.cfg, holeIndex: r.holeIndex, scores: r.scores,

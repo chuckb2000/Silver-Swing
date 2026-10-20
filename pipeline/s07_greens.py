@@ -109,7 +109,8 @@ def main():
         tilt = math.hypot(gx, gy)
         hole_no, pin = pin_for.get(row.osm, (None, None))
         cap = tilt_cfg[hole_no]["max_tilt"] if hole_no in tilt_cfg else MAX_TILT
-        used = min(cap, max(0.01, tilt))
+        floor = tilt_cfg[hole_no].get("min_tilt", 0.01) if hole_no in tilt_cfg else 0.01  # optional: the practice ground's flat green
+        used = min(cap, max(floor, tilt))
         if tilt > 1e-9:
             gx, gy = gx / tilt * used, gy / tilt * used
         seed = 7919 * (hole_no or (100 + k)) + 13

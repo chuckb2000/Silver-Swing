@@ -8,7 +8,9 @@
 import { app } from '../app';
 import { Difficulty } from '../data/difficulty';
 import { backupText, LeaderboardEntry, loadBoard, RoundLength } from '../save/store';
-import { BirdieRow, fetchBirdieRecords, fetchBoard, fetchEagles, flushUploads, nameConflicts, onlineAvailable } from '../save/online';
+import { BirdieRow, fetchBirdieRecords, fetchBoard, fetchDaily, fetchDailyWeek, fetchEagles, fetchRecent, flushUploads, nameConflicts, onlineAvailable } from '../save/online';
+import { FeedRow, timeAgo } from '../save/feed';
+import { addDays, dailyPlan, dayStandings, weekStandings, weekStart } from '../systems/game/daily';
 import { birdiesIn, EagleEvent, featName } from '../save/feats';
 import { loadEagles } from '../save/store';
 import { lengthLabel, lengthsFor } from './flow';
@@ -26,7 +28,8 @@ let source: 'friends' | 'device' | null = null; // null: friends when the site h
 let diff: Difficulty | 'all' = 'all';
 let casual = false;
 let page = 0;
-let view: 'scores' | 'eagles' | 'birdies' = 'scores';
+let view: 'scores' | 'daily' | 'recent' | 'eagles' | 'birdies' = 'scores';
+let dailyWhen: 'today' | 'week' = 'today';
 
 /** The calendar day (yyyy-mm-dd) of an ISO time in the player's own time zone (an evening round isn't "tomorrow"). */
 function localDay(iso: string): string {
@@ -52,10 +55,12 @@ export class LeaderboardScene extends MenuScene {
     this.root.add(new Panel(this, x0, y0, pw, ph, 0.9));
     this.root.add(txt(this, x0 + pw / 2, y0 + 5, 'leaderboard', { origin: [0.5, 0], scale: 2 }));
     {
-      const items: [typeof view, string][] = [['scores', 'scores'], ['eagles', 'recent eagles'], ['birdies', 'most birdies']];
-      const bw = Math.floor((pw - 16 - 4) / 3);
+      const items: [typeof view, string][] = [['scores', 'scores'], ['daily', 'daily'], ['recent', 'recent'], ['eagles', 'eagles'], ['birdies', 'birdies']];
+      const bw = Math.floor((pw - 16 - 2 * (items.length - 1)) / items.length);
       items.forEach(([k, lab], i) => this.root.add(new Button(this, x0 + 8 + i * (bw + 2), y0 + 22, bw, 14, lab, () => { view = k; page = 0; this.rebuild(); }, { color: view === k ? 'orange' : 'grey' })));
     }
+    if (view === 'daily') { await this.buildDaily(x0, y0, pw, ph); return; }
+    if (view === 'recent') { await this.buildRecent(x0, y0, pw, ph); return; }
     if (view !== 'scores') { await this.buildFeats(x0, y0, pw, ph); return; }
     // course: the current one unless another was picked here
     const courses = app.courses;
@@ -136,6 +141,99 @@ export class LeaderboardScene extends MenuScene {
       this.rebuild();
       this.root.add(txt(this, x0 + pw / 2, by - 12, n ? `imported ${n} ${n === 1 ? 'round' : 'rounds'}` : 'nothing new to import', { origin: [0.5, 0], color: COLORS.yellow }));
     }, { color: 'grey' }));
+  }
+
+  /** A list with a header row and pages (the daily and recent views). */
+  private table(x0: number, y0: number, pw: number, ph: number, y: number, head: string[], cols: number[], rows: { v: string[]; hi?: number[] }[], empty: string) {
+    const lineH = 11;
+    const listTop = y + 2;
+    const maxRows = Math.max(1, Math.floor((y0 + ph - 36 - listTop) / lineH) - 1);
+    const pages = Math.max(1, Math.ceil(rows.length / maxRows));
+    page = Math.min(page, pages - 1);
+    head.forEach((h, i) => { if (cols[i] >= 0) this.root.add(txt(this, cols[i], listTop, h, { color: COLORS.dim })); });
+    if (!rows.length) this.root.add(txt(this, x0 + pw / 2, listTop + 24, empty, { origin: [0.5, 0], color: COLORS.dim, maxWidth: pw - 16 }));
+    rows.slice(page * maxRows, (page + 1) * maxRows).forEach((r, k) => {
+      const yy = listTop + (k + 1) * lineH;
+      r.v.forEach((v, j) => { if (cols[j] >= 0) this.root.add(txt(this, cols[j], yy, v, { color: r.hi?.includes(j) ? COLORS.yellow : COLORS.white })); });
+    });
+    const by = y0 + ph - 20;
+    if (pages > 1) {
+      this.root.add(new Button(this, x0 + 54, by, 18, 15, '', () => { page = Math.max(0, page - 1); this.rebuild(); }, { icon: 'arrow_left', color: 'grey' }));
+      this.root.add(txt(this, x0 + 84, by + 3, `${page + 1}/${pages}`, { origin: [0.5, 0] }));
+      this.root.add(new Button(this, x0 + 96, by, 18, 15, '', () => { page = Math.min(pages - 1, page + 1); this.rebuild(); }, { icon: 'arrow_right', color: 'grey' }));
+    }
+  }
+
+  /** The daily round's boards: today, and this week (best five of seven, to par). */
+  private async buildDaily(x0: number, y0: number, pw: number, ph: number) {
+    const g = this.gen;
+    this.root.add(new Button(this, x0 + 6, y0 + ph - 20, 44, 15, 'back', () => this.back(), { color: 'grey' }));
+    const online = await onlineAvailable();
+    if (!this.isCurrentBuild(g)) return;
+    const src = source ?? (online ? 'friends' : 'device');
+    let y = y0 + 40;
+    const tab = (items: [string, string][], cur: string, set: (v: string) => void) => {
+      const bw = Math.floor((pw - 16 - (items.length - 1) * 2) / items.length);
+      items.forEach(([k, lab], i) => this.root.add(new Button(this, x0 + 8 + i * (bw + 2), y, bw, 14, lab, () => { set(k); page = 0; this.rebuild(); }, { color: cur === k ? 'orange' : 'grey' })));
+      y += 17;
+    };
+    if (online) tab([['friends', 'friends'], ['device', 'this device']], src, (v) => { source = v as 'friends' | 'device'; });
+    tab([['today', 'today'], ['week', 'this week']], dailyWhen, (v) => { dailyWhen = v as 'today' | 'week'; });
+    const day = localDay(new Date().toISOString());
+    const plan = dailyPlan(day, app.courses);
+    const info = plan ? app.courses.find((c) => c.id === plan.courseId) : undefined;
+    const first = weekStart(day);
+    let list: LeaderboardEntry[] | null = null;
+    let note = '';
+    if (src === 'friends') {
+      await flushUploads();
+      list = dailyWhen === 'today' ? await fetchDaily(day) : await fetchDailyWeek(first);
+      if (!list) note = "can't reach the shared board - showing this device";
+    }
+    if (!list) list = (await loadBoard()).filter((e) => e.daily && e.player !== DEFAULT_NAME);
+    if (!this.isCurrentBuild(g)) return;
+    if (note) { this.root.add(txt(this, x0 + pw / 2, y, note, { origin: [0.5, 0], color: COLORS.yellow, maxWidth: pw - 16 })); y += 11; }
+    const wide = pw > 300;
+    if (dailyWhen === 'today') {
+      const sub = info && plan ? `${info.name.toLowerCase()}  ·  ${lengthLabel(plan.length)}  ·  ${plan.tee.toLowerCase()} tees  ·  normal` : '';
+      this.root.add(txt(this, x0 + pw / 2, y, sub, { origin: [0.5, 0], color: COLORS.dim, maxWidth: pw - 16 }));
+      y += 11;
+      const rows = dayStandings(list, day).map((e, i) => ({ v: [String(i + 1), e.player.slice(0, 12), String(e.gross), toPar(e.toPar), timeAgo(e.date)] }));
+      this.table(x0, y0, pw, ph, y, ['#', 'player', 'gross', 'to par', wide ? 'when' : ''], [x0 + 10, x0 + 30, x0 + 110, x0 + 150, wide ? x0 + 200 : -1], rows,
+        'nobody has played today\'s round yet - be the first');
+    } else {
+      this.root.add(txt(this, x0 + pw / 2, y, `week of ${first.slice(5)}: best five daily rounds, to par`, { origin: [0.5, 0], color: COLORS.dim, maxWidth: pw - 16 }));
+      y += 11;
+      const weekList = list.filter((e) => e.daily! >= first && e.daily! <= addDays(first, 6));
+      const rows = weekStandings(weekList).map((r, i) => ({ v: [String(i + 1), r.player.slice(0, 12), `${r.days}/7`, toPar(r.toPar)] }));
+      this.table(x0, y0, pw, ph, y, ['#', 'player', 'days', 'to par'], [x0 + 10, x0 + 30, x0 + 110, x0 + 150], rows, 'no daily rounds this week yet');
+    }
+  }
+
+  /** Friends' activity: the latest rounds on the shared board. */
+  private async buildRecent(x0: number, y0: number, pw: number, ph: number) {
+    const g = this.gen;
+    this.root.add(new Button(this, x0 + 6, y0 + ph - 20, 44, 15, 'back', () => this.back(), { color: 'grey' }));
+    await flushUploads();
+    const rows = await fetchRecent(50);
+    if (!this.isCurrentBuild(g)) return;
+    let y = y0 + 40;
+    const courseName = (id: string) => app.courses.find((c) => c.id === id)?.name.replace(/ (golf|country) club$| golf (course|links)$/i, '') ?? id;
+    if (!rows) {
+      this.root.add(txt(this, x0 + pw / 2, y + 30, "friends' rounds show here on the hosted game (the shared board can't be reached)", { origin: [0.5, 0], color: COLORS.dim, maxWidth: pw - 24 }));
+      return;
+    }
+    this.root.add(txt(this, x0 + pw / 2, y, 'the latest rounds on the shared board', { origin: [0.5, 0], color: COLORS.dim }));
+    y += 11;
+    const wide = pw > 300;
+    const courseChars = wide ? 16 : 10;
+    const badge = (r: FeedRow) => (r.record ? 'record!' : r.pb ? 'best' : r.daily ? 'daily' : r.casual ? 'casual' : '');
+    const table = rows.map((r) => ({
+      v: [timeAgo(r.received), r.player.slice(0, 10), courseName(r.course).toLowerCase().slice(0, courseChars), `${r.gross} (${toPar(r.toPar)})${r.holes < 18 ? ' 9' : ''}`, badge(r)],
+      hi: r.record || r.pb ? [4] : [],
+    }));
+    this.table(x0, y0, pw, ph, y, ['when', 'player', 'course', 'score', ''],
+      [x0 + 8, x0 + 66, x0 + 128, wide ? x0 + 236 : x0 + 196, wide ? x0 + 296 : -1], table, 'no rounds yet - go play!');
   }
 
   /** The recent eagles and the most birdies in a round, across every course. */

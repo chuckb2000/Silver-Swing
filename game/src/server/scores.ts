@@ -3,6 +3,7 @@
 // Kept free of Phaser and browser APIs so it can be unit-tested.
 
 import { DEFAULT_NAME, nameAllowed, tidyName } from '../save/names';
+import { feedBadges, FeedRow } from '../save/feed';
 import { isEntry, LeaderboardEntry } from '../save/entry';
 import { birdiesIn, EagleEvent, eaglesIn, isEagle } from '../save/feats';
 
@@ -55,12 +56,20 @@ const SCHEMA = [
 ];
 
 /** Bumped when SCHEMA or ROUND_COLUMNS change: a database at this version skips the setup. */
-const SCHEMA_VERSION = '2';
+const SCHEMA_VERSION = '3';
 /** Old rounds counted per request (Cloudflare's free plan allows 50 database queries per request). */
 const BACKFILL_ROWS = 10;
 
 /** Columns added to `rounds` after it was first created (ALTER TABLE fails harmlessly once they exist). */
-const ROUND_COLUMNS = ['owner TEXT', 'birdies INTEGER', 'casual INTEGER'];
+const ROUND_COLUMNS = ['owner TEXT', 'birdies INTEGER', 'casual INTEGER', 'tee TEXT', 'daily TEXT'];
+
+/** Indexes for the lists added with schema 3 (a player's own rounds, the activity feed, the daily round). */
+const ROUND_INDEXES = [
+  'CREATE INDEX IF NOT EXISTS rounds_birdies ON rounds (birdies, date)',
+  'CREATE INDEX IF NOT EXISTS rounds_owner ON rounds (owner, date)',
+  'CREATE INDEX IF NOT EXISTS rounds_received ON rounds (received)',
+  'CREATE INDEX IF NOT EXISTS rounds_daily ON rounds (daily, gross)',
+];
 
 const MAX_BODY = 256 * 1024;  // bytes per request
 const MAX_BATCH = 10;         // rounds or eagles per request (each costs a few queries; the free plan allows 50 per request)
@@ -90,7 +99,9 @@ export function ensureSchema(db: D1Like): Promise<void> {
         for (const col of ROUND_COLUMNS) {
           try { await db.prepare(`ALTER TABLE rounds ADD COLUMN ${col}`).run(); } catch { /* already there */ }
         }
-        await db.prepare('CREATE INDEX IF NOT EXISTS rounds_birdies ON rounds (birdies, date)').run();
+        for (const sql of ROUND_INDEXES) await db.prepare(sql).run();
+        // the tee of rounds stored before it had a column (one statement for them all)
+        try { await db.prepare("UPDATE rounds SET tee = json_extract(data, '$.tee') WHERE tee IS NULL").run(); } catch { /* no JSON functions: the feed's badges skip them */ }
         await db.prepare("INSERT OR REPLACE INTO meta (k, v) VALUES ('schema', ?)").bind(SCHEMA_VERSION).run();
         migratedNow = true; // the setup used this request's queries; the backfill starts with the next one
       }
@@ -232,17 +243,51 @@ export function json(body: unknown, status = 200): Response {
   });
 }
 
-/** GET /api/scores?ping=1 or ?course=<id> */
+const isDay = (v: unknown): v is string => typeof v === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(v) && Number.isFinite(Date.parse(`${v}T00:00:00Z`));
+
+function addDays(day: string, n: number): string {
+  return new Date(Date.parse(`${day}T00:00:00Z`) + n * 86_400_000).toISOString().slice(0, 10);
+}
+
+/**
+ * The daily round counts once per player code and day (the first one the
+ * server gets); it must be the day's nine holes at Normal with no casual
+ * settings, and a day near today. Anything else is an ordinary round.
+ */
+async function dailyCounts(db: D1Like, e: LeaderboardEntry, owner: string | null, now: Date): Promise<boolean> {
+  if (!e.daily || !isDay(e.daily) || !owner || e.casual || e.difficulty !== 'normal' || !['front', 'back', '9'].includes(e.length)) return false;
+  const t = Date.parse(`${e.daily}T12:00:00Z`);
+  if (Math.abs(t - now.getTime()) > 2 * 86_400_000) return false;
+  const { results } = await db.prepare('SELECT id FROM rounds WHERE daily = ? AND owner = ? LIMIT 1').bind(e.daily, owner).all<{ id: string }>();
+  return !results.length;
+}
+
+/** GET /api/scores?ping=1, ?course=<id>, ?owner=<player key>, ?daily=<day> or ?week=<first day> */
 export async function handleGet(db: D1Like | undefined, url: URL): Promise<Response> {
   if (!db) return json({ ok: false, error: 'no database bound (DB)' }, 503);
   await prepareDb(db);
   if (url.searchParams.has('ping')) return json({ ok: true });
+  const owner = url.searchParams.get('owner');
+  const daily = url.searchParams.get('daily');
+  const week = url.searchParams.get('week');
   const course = url.searchParams.get('course') ?? '';
-  if (!course || course.length > 64) return json({ error: 'course required' }, 400);
-  const { results } = await db
-    .prepare('SELECT data FROM rounds WHERE course = ? ORDER BY gross ASC, back ASC, date ASC LIMIT ?')
-    .bind(course, MAX_RETURN)
-    .all<{ data: string }>();
+  let stmt: D1Statement;
+  if (owner !== null) {
+    // a player's own rounds, from every device with the player code ("my golf"): the key is private
+    if (!ownerOf(owner)) return json({ error: 'owner required' }, 400);
+    stmt = db.prepare('SELECT data FROM rounds WHERE owner = ? ORDER BY date DESC LIMIT ?').bind(owner, MAX_RETURN);
+  } else if (daily !== null) {
+    if (!isDay(daily)) return json({ error: 'daily=yyyy-mm-dd' }, 400);
+    stmt = db.prepare('SELECT data FROM rounds WHERE daily = ? ORDER BY gross ASC, back ASC, date ASC LIMIT ?').bind(daily, MAX_RETURN);
+  } else if (week !== null) {
+    // the seven daily rounds from this day on (the week's board: best five of seven, worked out by the game)
+    if (!isDay(week)) return json({ error: 'week=yyyy-mm-dd' }, 400);
+    stmt = db.prepare('SELECT data FROM rounds WHERE daily >= ? AND daily <= ? ORDER BY daily ASC, gross ASC LIMIT ?').bind(week, addDays(week, 6), MAX_RETURN);
+  } else {
+    if (!course || course.length > 64) return json({ error: 'course required' }, 400);
+    stmt = db.prepare('SELECT data FROM rounds WHERE course = ? ORDER BY gross ASC, back ASC, date ASC LIMIT ?').bind(course, MAX_RETURN);
+  }
+  const { results } = await stmt.all<{ data: string }>();
   const entries: LeaderboardEntry[] = [];
   for (const r of results) {
     try {
@@ -296,12 +341,13 @@ export async function handlePost(db: D1Like | undefined, body: string): Promise<
       if (c === 'taken' || c === 'too_many') { taken.push(e.id); continue; }
       if (c !== 'ok') { rejected++; continue; }
       const clean: LeaderboardEntry = { ...e, player: boardableName(e.player)!, date: sane(e.date, nowDate) };
+      if (clean.daily !== undefined && !(await dailyCounts(db, clean, ownerOf(rawOwner), nowDate))) delete clean.daily; // a second go: an ordinary round
       const data = JSON.stringify(clean);
       if (data.length > 16_000) { rejected++; continue; }
       const res = (await db
-        .prepare('INSERT OR IGNORE INTO rounds (id, course, length, player, gross, back, date, data, received, owner, birdies, casual) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)')
+        .prepare('INSERT OR IGNORE INTO rounds (id, course, length, player, gross, back, date, data, received, owner, birdies, casual, tee, daily) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)')
         .bind(clean.id, clean.course, clean.length, clean.player, clean.gross, clean.back ?? null, clean.date, data, now,
-          ownerOf(rawOwner), birdiesIn(clean.scores), clean.casual ? 1 : 0)
+          ownerOf(rawOwner), birdiesIn(clean.scores), clean.casual ? 1 : 0, clean.tee, clean.daily ?? null)
         .run()) as { meta?: { changes?: number }; changes?: number };
       added += res?.meta?.changes ?? res?.changes ?? 0;
       // the round's eagles, in case the live report never arrived (the same ids: never twice)
@@ -409,4 +455,46 @@ export async function handleNames(db: D1Like | undefined, req: { method: string;
   const row = results[0];
   const free = !row || row.owner === null || row.owner === ownerOf(owner);
   return json({ ok: free, result: free ? 'ok' : 'taken' });
+}
+
+let feedCache: { at: number; limit: number; body: { rounds: FeedRow[] } } | null = null;
+const FEED_CACHE_MS = 30_000;
+
+/** For tests: forget the cached feed. */
+export function resetFeedCache() { feedCache = null; }
+
+/**
+ * GET /api/recent?limit=n: the latest rounds on the shared board, newest
+ * first, each marked when it was the player's best or a new record for its
+ * board (course, tees, length) at the time. One query; kept for 30 seconds.
+ */
+export async function handleRecentGet(db: D1Like | undefined, url: URL): Promise<Response> {
+  if (!db) return json({ ok: false, error: 'no database bound (DB)' }, 503);
+  const limit = Math.max(1, Math.min(MAX_LIST, Number(url.searchParams.get('limit')) || 30));
+  if (feedCache && feedCache.limit >= limit && Date.now() - feedCache.at < FEED_CACHE_MS) {
+    return json({ rounds: feedCache.body.rounds.slice(0, limit) });
+  }
+  await prepareDb(db);
+  const { results } = await db.prepare(`SELECT r.id, r.player, r.course, r.length, r.tee, r.gross, r.casual, r.date, r.received, r.daily, r.data,
+      (SELECT MIN(p.gross) FROM rounds p WHERE p.course = r.course AND p.length = r.length AND p.tee IS r.tee AND p.casual = 0 AND p.received < r.received) AS prev_record,
+      (SELECT MIN(p.gross) FROM rounds p WHERE p.course = r.course AND p.length = r.length AND p.tee IS r.tee AND p.casual = 0 AND p.player = r.player AND p.received < r.received) AS prev_best
+    FROM rounds r ORDER BY r.received DESC, r.date DESC LIMIT ?`).bind(limit * 2).all<{
+      id: string; player: string; course: string; length: string; tee: string | null; gross: number; casual: number | null; date: string;
+      received: string; daily: string | null; data: string; prev_record: number | null; prev_best: number | null;
+    }>();
+  const rows: FeedRow[] = [];
+  for (const r of results) {
+    const name = boardableName(r.player);
+    if (!name || rows.length >= limit) continue;
+    let toPar = 0, holes = 0;
+    try { const e = JSON.parse(r.data) as LeaderboardEntry; toPar = e.toPar; holes = e.scores.length; } catch { continue; }
+    const casual = r.casual === 1;
+    rows.push({
+      id: r.id, player: name, course: r.course, length: r.length, tee: r.tee ?? '', gross: r.gross, toPar, holes,
+      casual, daily: r.daily ?? null, date: r.date, received: r.received,
+      ...feedBadges(r.gross, casual, r.prev_best, r.prev_record),
+    });
+  }
+  feedCache = { at: Date.now(), limit, body: { rounds: rows } };
+  return json({ rounds: rows });
 }

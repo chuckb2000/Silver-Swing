@@ -9,7 +9,9 @@ import { coursesByState } from '../data/registry';
 import { initAudio, setVolume } from '../audio/sfx';
 import { peekSnapshot } from '../save/snapshot';
 import { Button, COLORS, Panel, setTxt, txt } from '../ui/widgets';
-import { resumeRound } from './flow';
+import { resumeRound, startRound, useCourse } from './flow';
+import { dailyPlan, localDay } from '../systems/game/daily';
+import { shortName } from '../save/milestones';
 import { LoadSuperseded } from '../data/courses';
 import { STALL_MS } from './CourseSelectScene';
 import { ensureBg, MenuScene } from './menu';
@@ -118,6 +120,41 @@ export class TitleScene extends MenuScene {
     while (this.shown.length > 1 && this.shown[1].t >= FADE_MS) this.shown.shift()!.img.destroy();
   }
 
+  /**
+   * A course may have to load first (a resumed round, the daily round): a
+   * dimmed screen with the progress, and a reload button if it stalls.
+   */
+  private async withLoading(work: (progress: (f: number) => void) => Promise<boolean>) {
+    if (this.resuming) return;
+    this.resuming = true;
+    const W = app.view.w, H = app.view.h, cx = Math.round(W / 2);
+    const dim = this.add.rectangle(0, 0, W, H, 0x081018, 0.7).setOrigin(0, 0).setInteractive();
+    const msg = txt(this, cx, H / 2 - 4, 'loading course...', { origin: [0.5, 0], scale: 2, color: COLORS.yellow });
+    this.root.add([dim, msg]);
+    let ok = false;
+    let last = Date.now();
+    let offered = false;
+    const watch = this.time.addEvent({
+      delay: 1000, loop: true, callback: () => {
+        if (offered || Date.now() - last < STALL_MS || !msg.active) return;
+        offered = true; // stalled: offer what a player did by hand, a reload that opens the round
+        this.root.add(txt(this, cx, H / 2 + 14, 'this is taking a while - the connection may have stalled', { origin: [0.5, 0], color: COLORS.dim, maxWidth: W - 16 }));
+        this.root.add(new Button(this, cx - 40, H / 2 + 28, 80, 16, 'reload', () => window.location.reload()));
+      },
+    });
+    try {
+      ok = await work((f) => { last = Date.now(); if (msg.active) setTxt(msg, `loading course ${Math.round(f * 100)}%`); });
+    } catch (e) {
+      if (e instanceof LoadSuperseded) return;
+      console.error(e);
+    }
+    watch.remove();
+    this.resuming = false;
+    if (!app.course) { window.location.reload(); return; } // the load failed half way: start again on the last good course
+    if (!ok) this.rebuild();
+    else this.scene.stop('bg');
+  }
+
   async build() {
     const W = app.view.w, H = app.view.h;
     const cx = Math.round(W / 2);
@@ -165,44 +202,35 @@ export class TitleScene extends MenuScene {
       this.root.add(new Button(this, cx - bw / 2, y, bw, bh, label, cb, { color: grey ? 'grey' : 'orange' }));
       y += gap;
     };
+    // the rest two to a row (the list no longer fits a 270-texel-high screen one under another)
+    const sw = 80, sgap = 4;
+    let col = 0;
+    const add2 = (label: string, cb: () => void) => {
+      this.root.add(new Button(this, cx - sw - sgap / 2 + col * (sw + sgap), y, sw, bh - 1, label, cb, { color: 'grey' }));
+      col ^= 1;
+      if (!col) y += gap - 2;
+    };
     if (snap) {
       const holeNo = snap.cfg.holes[Math.min(snap.cfg.holes.length - 1, snap.holeIndex + (snap.betweenHoles ? 1 : 0))];
       const done = snap.betweenHoles && snap.holeIndex + 1 >= snap.cfg.holes.length; // every hole played: only the summary is left
-      add(done ? 'finish last round' : `continue round (hole ${holeNo})`, async () => {
-        if (this.resuming) return;
-        this.resuming = true;
-        // the round's course may have to load first: show that something is happening
-        const dim = this.add.rectangle(0, 0, W, H, 0x081018, 0.7).setOrigin(0, 0).setInteractive();
-        const msg = txt(this, cx, H / 2 - 4, 'loading course...', { origin: [0.5, 0], scale: 2, color: COLORS.yellow });
-        this.root.add([dim, msg]);
-        let ok = false;
-        let last = Date.now();
-        let offered = false;
-        const watch = this.time.addEvent({
-          delay: 1000, loop: true, callback: () => {
-            if (offered || Date.now() - last < STALL_MS || !msg.active) return;
-            offered = true; // stalled: offer what a player did by hand, a reload that opens the round
-            this.root.add(txt(this, cx, H / 2 + 14, 'this is taking a while - the connection may have stalled', { origin: [0.5, 0], color: COLORS.dim, maxWidth: W - 16 }));
-            this.root.add(new Button(this, cx - 40, H / 2 + 28, 80, 16, 'reload', () => window.location.reload()));
-          },
-        });
-        try {
-          ok = await resumeRound(this, (f) => { last = Date.now(); if (msg.active) setTxt(msg, `loading course ${Math.round(f * 100)}%`); });
-        } catch (e) {
-          if (e instanceof LoadSuperseded) return;
-          console.error(e);
-        }
-        watch.remove();
-        this.resuming = false;
-        if (!app.course) { window.location.reload(); return; } // the load failed half way: start again on the last good course
-        if (!ok) this.rebuild();
-        else this.scene.stop('bg');
-      });
+      add(done ? 'finish last round' : `continue round (hole ${holeNo})`, () => void this.withLoading((progress) => resumeRound(this, progress)));
     }
     add(snap ? 'new round' : 'play', () => this.scene.start('courses', { purpose: 'play', from: 'title' }), !!snap);
-    add('leaderboard', () => this.scene.start('leaderboard'), true);
-    add('settings', () => this.scene.start('settings', { from: 'title' }), true);
-    add('credits', () => this.scene.start('credits'), true);
+    // the daily round: today's course, nine holes, the same wind and pins for everyone
+    const plan = dailyPlan(localDay(), app.courses);
+    const dc = plan && app.courses.find((c) => c.id === plan.courseId);
+    if (plan && dc) {
+      add(`daily: ${shortName(dc.name)}`, () => void this.withLoading(async (progress) => {
+        await useCourse(this, plan.courseId, progress);
+        startRound(this, plan.length, plan);
+        return true;
+      }), !!snap);
+    }
+    add2('my golf', () => this.scene.start('mygolf'));
+    add2('practice', () => this.scene.start('practice'));
+    add2('leaderboard', () => this.scene.start('leaderboard'));
+    add2('settings', () => this.scene.start('settings', { from: 'title' }));
+    add2('credits', () => this.scene.start('credits'));
     this.root.add(new Panel(this, 4, H - 16, W - 8, 12, 0.55));
     this.root.add(txt(this, cx, H - 15, 'map data © openstreetmap contributors · more in credits', { origin: [0.5, 0], color: COLORS.dim }));
   }

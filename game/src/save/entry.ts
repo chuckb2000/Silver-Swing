@@ -21,6 +21,8 @@ export interface LeaderboardEntry {
   back: number | null;
   scores: HoleScore[];
   totals: RoundTotals;
+  /** the daily round of this day (yyyy-mm-dd), when it counted for the daily board */
+  daily?: string;
 }
 
 const str = (v: unknown, max: number) => typeof v === 'string' && v.length > 0 && v.length <= max;
@@ -36,5 +38,6 @@ export function isEntry(e: unknown): e is LeaderboardEntry {
     && Number.isFinite(x.gross) && Number.isFinite(x.toPar)
     && (x.back === null || x.back === undefined || Number.isFinite(x.back))
     && Array.isArray(x.scores) && x.scores.length <= 18
-    && !!x.totals && typeof x.totals === 'object';
+    && !!x.totals && typeof x.totals === 'object'
+    && (x.daily === undefined || (typeof x.daily === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(x.daily)));
 }

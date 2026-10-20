@@ -21,8 +21,13 @@ import { CourseView, DEPTH } from '../ui/courseView';
 import { GreenLayer, GreenView } from '../ui/greenView';
 import { COLORS } from '../ui/widgets';
 import type { HudScene } from './HudScene';
+import { DRILL_FT, drillSpot, isRangeHole, PracticeLog, rangeShot } from '../systems/game/practice';
 
-export type PlayState = 'loading' | 'intro' | 'aim' | 'swing' | 'flight' | 'settle' | 'relief' | 'drop' | 'holed' | 'done';
+export type PlayState = 'loading' | 'intro' | 'aim' | 'swing' | 'flight' | 'settle' | 'relief' | 'drop' | 'holed' | 'replay' | 'done';
+
+/** Replay of the holing shot: once at playing speed, then its last moments slowed down. */
+const REPLAY_SLOW = 0.35;
+const REPLAY_SLOW_MS = 2600; // the slow-motion pass shows this much of the end of the shot (real time)
 
 type Facing = 'side' | 'front' | 'back';
 
@@ -99,6 +104,9 @@ export class PlayScene extends Phaser.Scene {
   private slopeDirty = true;
   private landedShown = false;
   private worldRect!: Rect;
+  private replaying: { pass: 1 | 2 } | null = null;
+  /** The practice ground (player improvements, item 5): its tallies and the wind switch. */
+  practice: { log: PracticeLog; wind: boolean } | null = null;
   ballOffscreen: { x: number; y: number } | null = null;
 
   constructor() {
@@ -123,6 +131,8 @@ export class PlayScene extends Phaser.Scene {
     this.preroll = null;
     this.explore = false;
     this.meter = null;
+    this.replaying = null;
+    this.practice = this.round.cfg.practice ? { log: new PracticeLog(), wind: false } : null;
     const cam = this.cameras.main;
     worldCamera(cam, COURSE);
     cam.setBackgroundColor('#20381f');
@@ -170,7 +180,8 @@ export class PlayScene extends Phaser.Scene {
     this.hud.events.once('create', () => {
       cam.fadeIn(350, ...FADE_RGB);
       void this.green.prepare(this.round.courseHole);
-      if (data?.resume) this.resumeShot(); else this.startHoleIntro(false);
+      if (this.practice) this.practiceGo(this.round.holeIndex, false);
+      else if (data?.resume) this.resumeShot(); else this.startHoleIntro(false);
     });
     this.scene.launch('hud');
     this.events.once('shutdown', () => this.scene.stop('hud'));
@@ -417,7 +428,9 @@ export class PlayScene extends Phaser.Scene {
       if (this.state === 'flight') { this.fastForward(); return; }
       if (this.state === 'drop') { this.confirmDrop(); return; }
       if (this.state === 'holed') { this.hud.continueFromHoled(); return; }
+      if (this.state === 'replay') { this.endReplay(); return; }
     }
+    if (this.state === 'replay' && k === 'Escape') { this.endReplay(); return; }
     if (k === 'Tab' || k === 'm' || k === 'M') { e.preventDefault(); this.hud.toggleOverview(); return; }
     if (k === 'c' || k === 'C') { this.hud.toggleCard(); return; }
     if (k === 'Escape') { this.hud.togglePause(); return; }
@@ -440,6 +453,7 @@ export class PlayScene extends Phaser.Scene {
     if (this.state === 'swing') { this.tap(ts); return; }
     if (this.state === 'intro') { this.skipIntro(); return; }
     if (this.state === 'flight') { this.fastForward(); return; }
+    if (this.state === 'replay') { this.endReplay(); return; }
     if (this.state === 'drop') { this.pickDrop(p); return; }
     if (this.state === 'aim') {
       const w = this.cameras.main.getWorldPoint(p.x, p.y);
@@ -744,6 +758,8 @@ export class PlayScene extends Phaser.Scene {
       }
     } else if (this.state === 'flight') {
       if (this.preroll) this.stepPreroll(dt); else this.stepPlayback(dt);
+    } else if (this.state === 'replay') {
+      this.stepPlayback(dt);
     } else if (this.state === 'settle') {
       if (time > this.holdUntil) this.afterRest();
     }
@@ -968,6 +984,7 @@ export class PlayScene extends Phaser.Scene {
     let speed = 1;
     if (!putt && this.playT < landT) speed = FLIGHT_PLAYBACK;
     else if (!putt) speed = 1 + 0.7 * smoothstep(1500, 3500, remaining);
+    if (this.replaying?.pass === 2) speed = REPLAY_SLOW;
     this.playT += Math.min(dt, 50) * speed;
     const fi = Math.min(sim.n - 1, (this.playT / 1000) * HZ);
     const i = Math.floor(fi), j = Math.min(sim.n - 1, i + 1), f = fi - i;
@@ -1004,6 +1021,12 @@ export class PlayScene extends Phaser.Scene {
         const a = this.px(S[k * 3], S[k * 3 + 1]);
         this.rig.target(bx + (a.x - bx) * 0.6, by + (a.y - by) * 0.6, 0.28);
       }
+    }
+    if (fi >= sim.n - 1 && this.replaying) {
+      // a moment at the end of each pass, then the slow motion, then back to the panel
+      if (this.holdUntil === Number.POSITIVE_INFINITY) this.holdUntil = this.time.now + 900;
+      else if (this.time.now > this.holdUntil) { if (this.replaying.pass === 1) this.replayPass(2); else this.endReplay(); }
+      return;
     }
     if (fi >= sim.n - 1) {
       this.state = 'settle';
@@ -1067,8 +1090,151 @@ export class PlayScene extends Phaser.Scene {
     this.shadow.setVisible(false);
   }
 
+  // --------------------------------------------------------------- replay
+  /** Can the holing shot be watched again? (it went in: not a gimme, not a picked-up max score) */
+  canReplay(): boolean {
+    return this.state === 'holed' && this.outcome?.kind === 'holed' && !!this.round.lastStroke;
+  }
+
+  /** Watch the holing shot again: at playing speed, then its end in slow motion. Any tap ends it. */
+  startReplay() {
+    if (!this.canReplay()) return;
+    const sim = this.round.replay();
+    if (!sim) return;
+    this.hud.closeModal();
+    this.state = 'replay';
+    this.shot = this.round.lastStroke!.shot;
+    this.sim = sim;
+    const putt = this.shot.club.kind === 'putter';
+    // a putt plays in the putting view it was holed in; anything longer on the course
+    if (!putt && this.green.visible) this.cut(() => { this.applyView(null, COURSE); this.replayPass(1); });
+    else this.replayPass(1);
+  }
+
+  private replayPass(pass: 1 | 2) {
+    const sim = this.sim!;
+    this.replaying = { pass };
+    const total = (sim.n / HZ) * 1000;
+    this.playT = pass === 1 ? 0 : Math.max(0, total - REPLAY_SLOW_MS);
+    this.evIdx = 0;
+    while (this.evIdx < sim.events.length && sim.events[this.evIdx].t * 1000 <= this.playT) this.evIdx++;
+    this.holdUntil = Number.POSITIVE_INFINITY;
+    for (const t of this.trail) t.setVisible(false);
+    this.trailIdx = 0;
+    this.lastTrailI = -999;
+    this.landedShown = true; // no carry readout: the HUD stays as it was
+    this.followArmed = true;
+    this.ballHidden = false;
+    this.resetBallSprite();
+    this.ball.setDepth(DEPTH.flight);
+    const fi = Math.min(sim.n - 1, (this.playT / 1000) * HZ) | 0;
+    const S = sim.samples;
+    const p = this.px(S[fi * 3], S[fi * 3 + 1]);
+    this.updateBallSprite(S[fi * 3], S[fi * 3 + 1], Math.max(0, S[fi * 3 + 2] - app.course!.terrain.z(S[fi * 3], S[fi * 3 + 1])));
+    if (pass === 1 || !this.inView(p.x, p.y, 24)) this.rig.jump(p.x, p.y);
+    this.hud.flash(pass === 1 ? 'replay' : 'slow motion', COLORS.dim, 'tap to skip', 1200);
+  }
+
+  /** Back to the hole-complete panel, the ball in the cup. */
+  endReplay() {
+    if (this.state !== 'replay') return;
+    this.replaying = null;
+    this.state = 'holed';
+    this.resetBallSprite();
+    const pin = this.round.pin;
+    this.updateBallSprite(pin.x, pin.y, 0);
+    const c = this.px(pin.x, pin.y);
+    this.holing = true;
+    this.shadow.setVisible(false);
+    this.ball.setPosition(c.x, c.y + 1 / this.level).setScale(0.55 / this.level).setAlpha(0.75).setDepth(DEPTH.ground + 1.5);
+    this.hud.reshowHoled();
+  }
+
+  // --------------------------------------------------------------- practice
+  /** Go to a range target or a putting green (the round's hole index), the ball on its stall or drill spot. */
+  practiceGo(index: number, withCut = true) {
+    if (!this.practice) return;
+    if (withCut) {
+      this.state = 'loading';
+      this.cut(() => this.practiceGo(index, false));
+      return;
+    }
+    const r = this.round;
+    r.startHole(index);
+    r.practiceWind(this.practice.wind);
+    this.practiceBall();
+    void this.green.prepare(r.courseHole);
+    this.applyView(null, COURSE);
+    this.resetBallSprite();
+    this.placePin();
+    this.beginShot(false, true);
+  }
+
+  /** Range: back to the stall. Putting: the drill's next spot (each ball from a new side). */
+  private practiceBall() {
+    const r = this.round;
+    if (isRangeHole(r.holeNumber)) { r.practiceReset(); return; }
+    const d = this.practice!.log.drill;
+    const start = Math.atan2(r.tee.y - r.pin.y, r.tee.x - r.pin.x);
+    r.practiceReset(drillSpot(r.pin, r.holeGreen, d.ft, d.ball, start) ?? undefined);
+  }
+
+  /** The wind switch on the range. */
+  practiceToggleWind() {
+    if (!this.practice || this.state !== 'aim') return;
+    this.practice.wind = !this.practice.wind;
+    this.round.practiceWind(this.practice.wind);
+    this.hud.refresh();
+  }
+
+  /** The next putting drill distance (5, 15 or 30 ft): a new set of ten. */
+  practiceCycleDrill() {
+    if (!this.practice || this.state !== 'aim') return;
+    const log = this.practice.log;
+    log.setDrill(DRILL_FT[(DRILL_FT.indexOf(log.drill.ft) + 1) % DRILL_FT.length]);
+    this.practiceGo(this.round.holeIndex);
+  }
+
+  /** The next (or previous) range target or putting green; or across to the other area. */
+  practiceStep(dir: number, other = false) {
+    if (!this.practice || this.state !== 'aim') return;
+    const n = this.round.holeNumber;
+    const range = isRangeHole(n);
+    const holes = range !== other ? [0, 1, 2, 3, 4] : [5, 6, 7, 8];
+    const i = other ? 0 : holes.indexOf(this.round.holeIndex);
+    this.practiceGo(holes[(((other ? 0 : i + dir) % holes.length) + holes.length) % holes.length]);
+  }
+
+  /** A practice ball has stopped: its numbers, then the next ball. */
+  private practiceAfterShot() {
+    const r = this.round, sim = this.sim!, shot = this.shot!;
+    const log = this.practice!.log;
+    const from = { x: shot.spec.x, y: shot.spec.y };
+    let wait = 1100;
+    if (isRangeHole(r.holeNumber)) {
+      const rs = rangeShot(from, r.pin, sim);
+      if (sim.landing) log.addCarry(shot.club.id, rs.carry);
+      this.hud.practiceRangeShot(rs, shot.club);
+      wait = 1500;
+    } else {
+      const done = log.putt(sim.holed);
+      this.hud.practicePutt(sim, from, r.pin, done);
+      wait = done ? 2200 : sim.holed ? 1300 : 1100;
+    }
+    this.state = 'loading';
+    this.time.delayedCall(wait, () => {
+      if (!this.practice) return;
+      this.cut(() => {
+        this.practiceBall();
+        this.resetBallSprite();
+        this.beginShot(true, true);
+      });
+    });
+  }
+
   /** After the ball comes to rest: apply the rules and decide what is next. */
   private afterRest() {
+    if (this.practice) { this.practiceAfterShot(); return; }
     const r = this.round;
     const out = r.resolve(this.shot!, this.sim!);
     this.outcome = out;
