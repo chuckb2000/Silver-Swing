@@ -1,5 +1,17 @@
 {
  "note": "Edits to the OSM layout for Chambers Bay. Built into edited/course.geojson by pipeline/merge_edits.py (run by make course).",
+ "add": [
+  {
+   "from": "proposed/tees_blue_naip.geojson",
+   "ids": [
+    "naip_tee_3_blue",
+    "naip_tee_12_blue",
+    "naip_tee_15_blue"
+   ],
+   "tags": {},
+   "reason": "developer 2026-10-20 (approved): Blue tee boxes not in OSM, placed by the course chat on mown grass on the hole line at the card's Blue distance, from the NAIP photo (raw/naip/exportImage.jpg, release.json): hole 3 at 159 yd (card 160), 12 at 271 (270), 15 at 158 (159); 10 x 8 m, aligned with the shot"
+  }
+ ],
  "tags": [
   {
    "osm": "w353151446",
@@ -7,7 +19,7 @@
     "hole": "13",
     "tee_set": "Blue"
    },
-   "reason": "course chat 2026-10-20 (for review): hole 13's tee is one long mapped strip (1,740 m2, ~110 m long) that holds the card's 500 yd near its west end; s06 judged it by its centroid (411 yd) and fell back to the line start (522 yd). Tagged so s06 keeps the virtual tee in this box"
+   "reason": "course chat 2026-10-20 (approved by the developer 2026-10-20): hole 13's tee is one long mapped strip (1,740 m2, ~110 m long) that holds the card's 500 yd near its west end; s06 judged it by its centroid (411 yd) and fell back to the line start (522 yd). Tagged so s06 keeps the virtual tee in this box"
   },
   {
    "osm": "w1456364604",
@@ -15,7 +27,15 @@
     "hole": "8",
     "tee_set": "Blue"
    },
-   "reason": "course chat 2026-10-20 (for review): the only mapped box within 8 % of the Blue card (544 vs 521 yd), 26 m off the OSM line, which starts on the back box (605 yd)"
+   "reason": "course chat 2026-10-20 (approved by the developer 2026-10-20): the only mapped box within 8 % of the Blue card (544 vs 521 yd), 26 m off the OSM line, which starts on the back box (605 yd)"
+  },
+  {
+   "osm": "w1239290226",
+   "set": {
+    "hole": "11",
+    "tee_set": "Blue"
+   },
+   "reason": "developer 2026-10-20 (accepted): hole 11's Blue tee (424 yd) is not mapped and the card distance on the line falls in waste sand; plays from the forward mapped box, 496 yd (+17 %, accepted for play)"
   }
  ]
 }
