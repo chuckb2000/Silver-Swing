@@ -445,6 +445,36 @@ def main():
     if any(t_.get("roof") for t_ in trees):
         dropped["roof"] = sum(1 for t_ in trees if t_.get("roof"))
         trees = [t_ for t_ in trees if not t_.get("roof")]
+    # optional (course_config.json not_trees_areas: a GeoJSON file in data/<id>/, WGS84;
+    # Chambers Bay's railway, where a train stood when the lidar was flown): crowns whose top
+    # lies in these areas are not trees and are dropped. Without the key: nothing.
+    if cfg.get("not_trees_areas") and trees:
+        from shapely import contains_xy
+        from shapely.affinity import translate
+        from shapely.ops import unary_union
+        from common import course_dir
+        na = gpd.read_file(course_dir(name) / cfg["not_trees_areas"]).to_crs(cfg["epsg"])
+        area = unary_union([translate(gm, -world.x0, -world.y0) for gm in na.geometry if gm is not None])
+        inside = contains_xy(area, np.array([t_["x"] for t_ in trees]), np.array([t_["y"] for t_ in trees]))
+        dropped["not_trees_area"] = int(inside.sum())
+        trees = [t_ for t_, k in zip(trees, inside) if not k]
+    # optional (course_config.json tree_types_osm: true; Chambers Bay's Lone Fir): a lidar
+    # tree within 4 m of an OSM natural=tree point tagged leaf_type=needleleaved|broadleaved
+    # takes that type instead of the crown-shape or leaf-off guess. Without the key: nothing.
+    if cfg.get("tree_types_osm") and trees:
+        osm_type = {"needleleaved": "conifer", "broadleaved": "deciduous"}
+        txy = np.array([[t_["x"], t_["y"]] for t_ in trees])
+        retyped = 0
+        for _, ot in g[g.kind == "tree"].iterrows():
+            want = osm_type.get((ot.tags or {}).get("leaf_type"))
+            if not want:
+                continue
+            d = np.hypot(txy[:, 0] - ot.geometry.x, txy[:, 1] - ot.geometry.y)
+            k = int(np.argmin(d))
+            if d[k] < 4 and trees[k]["type"] != want:
+                trees[k]["type"] = want
+                retyped += 1
+        type_method += f" {retyped} tree(s) typed from OSM leaf_type (tree_types_osm)."
     species_note = None
     # flowering shrubs of a garden beside the course (`garden`, pipeline/garden.py): each
     # bush has a bloom colour, and order_trees() (below, and again in s06b) puts it at an

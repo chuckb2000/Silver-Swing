@@ -18,6 +18,15 @@
     "raw/naip/exportImage.jpg": "854996b87521966c7197a50e43ecc577e9c702d0e22febe5d3ec0072e4d1d9d2"
    },
    "note": "USDA NAIP via the USGS National Map image service, 2560 x 3584 px JPEG of the world (0.5 m/px; x0 531519, top 5229106, EPSG:32610, placed by the request bbox). Reference for the proposed Blue tees (proposed/tees_blue_naip.geojson); not read by make course"
+  },
+  {
+   "asset": "wa2020_pierce_J1472993.zip",
+   "sha256": "c3a45d9ded1ac90500a894c36737033615a8e8cca7eb4ace1beaba6c2bd1f035",
+   "run": "python3 data/chambers_bay/make_laz.py {file}",
+   "outputs": {
+    "raw/laz/chambers_bay_2020_clip.laz": "58a8542b87c0ab8349fbe106d4ea21eb0b061d49b5c05e42750727f225caa402"
+   },
+   "note": "NOAA Data Access Viewer job J1472993 (2020 Lidar: Pierce County, WA, dataset 9343), one LAZ of 311 M points, NAD83(2011) / Washington South (m), NAVD88 US ft; make_laz.py keeps the 39.5 M points in the world + 100 m"
   }
  ]
 }

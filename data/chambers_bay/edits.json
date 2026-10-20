@@ -18,6 +18,18 @@
    ],
    "tags": {},
    "reason": "course chat 2026-10-20 (COURSE_BUILD 4.1 default: the driving range is out of bounds): OSM w353151424 (3.0 ha, tagged golf=fairway) is the practice range east of holes 7 and 10 - no hole line uses it and the NAIP photo shows the striped hitting areas at its west end; added as golf=driving_range, the fairway dropped"
+  },
+  {
+   "from": "proposed/ruins.geojson",
+   "ids": [
+    "ruins_w1180342941",
+    "ruins_w1180342942",
+    "ruins_w1180342943",
+    "ruins_w1180342944",
+    "ruins_w1180342945"
+   ],
+   "tags": {},
+   "reason": "course chat 2026-10-20: the concrete sorting-bin ruins of the gravel mine beside the 18th (OSM historic=ruins, which s01 doesn't read) drawn as buildings - the lidar read their pillars as a row of trees; s05 drops crowns on buildings, and the course's landmark (and logo) shows in the game"
   }
  ],
  "tags": [
