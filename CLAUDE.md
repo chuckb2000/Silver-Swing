@@ -2188,7 +2188,7 @@ new tees were built; no per-hole figures. Green and Gold not built.
 -   **Default tee:** Blue (developer); Black also built.
 -   **Known open items:** data/wannamoisett/report_notes.md (scorecard
     unverified; Black 12 -7.4 %; pins at green centres; tree type
-    off the course unverified; course card to confirm).
+    off the course unverified; all accepted by the developer).
 =======
 **12. Repository layout**
 
