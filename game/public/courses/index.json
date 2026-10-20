@@ -208,6 +208,21 @@
    "teeSets": [
     "Blue"
    ]
+  },
+  {
+   "id": "wannamoisett",
+   "name": "Wannamoisett Country Club",
+   "location": "Rumford, East Providence, Rhode Island",
+   "state": "RI",
+   "theme": "seekonk",
+   "holes": 18,
+   "par": 69,
+   "defaultTee": "Blue",
+   "totalYd": 6417,
+   "teeSets": [
+    "Blue",
+    "Black"
+   ]
   }
  ]
 }
