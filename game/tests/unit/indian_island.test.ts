@@ -13,7 +13,8 @@ import { COURSES_DIR, loadCourseFiles, meterFor, registry, robotRound, roundCfg 
 
 const ID = 'indian_island';
 // holes outside 3% of the Blue card after the tee position (data/indian_island/validation_report.md)
-const YARDAGE_FLAGS = ['7', '13', '15'];
+// 1 and 5: flags since the tees centred on their boxes (design chat, 2026-10-20; DECISIONS.md "Overnight requests")
+const YARDAGE_FLAGS = ['1', '5', '7', '13', '15'];
 
 describe(ID, () => {
   const course = loadCourseFiles(ID);

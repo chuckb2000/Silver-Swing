@@ -57,11 +57,13 @@ def status(diff_pct: float) -> str:
 # centre of the tee box"): on the box's centre line - across the line of play the
 # tee keeps RIDGE of the largest distance to the box's sides there, so it stands in
 # the middle of the box's width - and away from its back and front edges by
-# END_MARGIN_M (less on a narrow box). A square box leaves little room; a long strip
-# (several tee sets in one polygon) lets the tee slide along its middle toward the
-# back or front when the card needs it, never to an edge.
+# END_MARGIN_M (on a narrow box, NARROW_MARGIN of its half-width, so a strip that
+# tapers toward the back still has a centre line there). A square box leaves little
+# room; a long strip (several tee sets in one polygon) lets the tee slide along its
+# middle toward the back or front when the card needs it, never to an edge.
 RIDGE = 0.85
 END_MARGIN_M = 2.5
+NARROW_MARGIN = 0.7
 CORE_STEP = 0.25  # m between the points tried
 
 
@@ -95,7 +97,7 @@ def core_points(poly, axis=None):
     pts = [c]
     if r > 0.2:
         ux, uy = axis if axis else (1.0, 0.0)
-        margin = min(max(END_MARGIN_M, 0.5 * r), 0.85 * r)
+        margin = min(max(END_MARGIN_M, 0.5 * r), NARROW_MARGIN * r)
         minx, miny, maxx, maxy = poly.bounds
         cand = []
         for x in np.arange(math.floor(minx / CORE_STEP) * CORE_STEP, maxx + 1e-9, CORE_STEP):
@@ -167,15 +169,18 @@ def clear_point_in(poly, line, green_c, target_m, current, cur_rank, is_clear):
 
 
 def tee_shot_checker(name, cfg, g):
-    """is_clear(tee, centerline, pin) -> bool: no tree in the way of the tee shot."""
-    from tee_shots import TreeIndex, target_point
+    """is_clear(tee, centerline, pin) -> bool: no tree in the way of the tee shot,
+    aimed at the middle of the fairway or straight down the hole line (the game's
+    line aim, Round.lineAim; Tualatin 11 after the tees were centred: the line
+    went through a crown the fairway-middle aim missed)."""
+    from tee_shots import TreeIndex, line_point, target_point
     bdir = build_dir(name)
     trees = json.loads((bdir / "trees_all.json").read_text())
     idx = TreeIndex(trees, np.load(bdir / "height_base.npy"), cfg.get("tee_shot_margin_m", 0.0))
     fairways = list(g[g.kind == "fairway"].geometry)
 
     def is_clear(p, cl, pin):
-        return not idx.blocking(p, target_point(p, cl, pin, fairways))
+        return not idx.blocking(p, target_point(p, cl, pin, fairways)) and not idx.blocking(p, line_point(p, cl, pin))
     return is_clear
 
 

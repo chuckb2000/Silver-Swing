@@ -17,7 +17,8 @@ class AlwaysHit extends Rng { next(): number { return 0; } }
 const LAYOUTS = ['east_potomac_blue', 'east_potomac_white', 'east_potomac_red'];
 // holes accepted outside 3% until the developer decides (data/east_potomac/validation_report.md)
 const YARDAGE_EXCEPTIONS: Record<string, string[]> = {
-  east_potomac_blue: ['6 Blue', '13 White', '15 Blue'],
+  // 5, 9, 16 Blue and 11 White: flags since the tees centred on their boxes (design chat, 2026-10-20; DECISIONS.md "Overnight requests")
+  east_potomac_blue: ['5 Blue', '6 Blue', '9 Blue', '11 White', '13 White', '15 Blue', '16 Blue'],
   east_potomac_white: [],
   east_potomac_red: ['5 White', '6 White', '8 White'],
 };

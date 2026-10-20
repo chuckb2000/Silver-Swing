@@ -501,6 +501,22 @@ does this for flagged holes); widen fairways or shrink rough by ≤ 5 m per
 side; last resort scale one hole along its line by ≤ ±5 %. Never scale the
 whole course. Re-run validation after any change.
 
+**Where the virtual tee goes** (design chat, 2026-10-20, after the
+developer found tees at the edge of their boxes):
+
+- **Default:** the point deepest inside the tee box (pole of
+  inaccessibility). The box centroid can lie outside an L-shaped or curved
+  box, so it is not used.
+- **A move to match the card** stays on the box's centre ridge: points at
+  least 85 % as deep as the deepest point across the box. It also stays at
+  least 2.5 m, or half the box's inscribed radius, from the edge (at
+  most 70 % of that radius on a narrow box).
+
+So a tee on the box edge in a screenshot is a pipeline bug, not a data
+problem. The tee assignment between boxes still uses the centroids.
+`s08_surface.py` rounds fairway corners (σ = 4 m along the outline;
+`FAIRWAY_SMOOTH_M` in `common.py`) except within 2 m of a green.
+
 ### 7.4 `s07_greens.py` — green shaping
 
 Checks in `build/greens_report.md`: used tilt 1–2.5 %, max slope ≤ ~3.5 %,

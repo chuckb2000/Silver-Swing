@@ -14,7 +14,8 @@ import { COURSES_DIR, loadCourseFiles, meterFor, registry, robotRound, roundCfg 
 
 const ID = 'waverley';
 // holes outside 3% of the Blue card after the tee position (data/waverley/validation_report.md)
-const YARDAGE_FLAGS = ['2', '4', '18'];
+// 6 and 11: flags since the tees centred on their boxes (design chat, 2026-10-20; DECISIONS.md "Overnight requests")
+const YARDAGE_FLAGS = ['2', '4', '6', '11', '18'];
 // over 8%, accepted by the developer (hole 17: the Blue tee stays, 409 yd vs 490)
 const YARDAGE_ACCEPTED = ['17'];
 

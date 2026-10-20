@@ -6,25 +6,25 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 
 | hole | par | tee set | card yd | measured yd | diff yd | diff % | status | adjusted yd | adj. diff % | adj. status |
 |---|---|---|---|---|---|---|---|---|---|---|
-| 1 | 4 | Blue | 414 | 403.1 | -10.9 | -2.6% | pass | 403.3 | -2.6% | pass |
-| 2 | 4 | Blue | 357 | 352.9 | -4.1 | -1.1% | pass | 352.9 | -1.1% | pass |
-| 3 | 4 | Blue | 418 | 414.7 | -3.3 | -0.8% | pass | 414.7 | -0.8% | pass |
-| 4 | 3 | Blue | 144 | 137.3 | -6.7 | -4.6% | flag | 144.0 | +0.0% | pass |
-| 5 | 4 | Blue | 365 | 356.9 | -8.1 | -2.2% | pass | 356.9 | -2.2% | pass |
-| 6 | 4 | Blue | 429 | 417.1 | -11.9 | -2.8% | pass | 417.1 | -2.8% | pass |
-| 7 | 5 | Blue | 538 | 527.2 | -10.8 | -2.0% | pass | 527.2 | -2.0% | pass |
-| 8 | 3 | Blue | 178 | 170.9 | -7.1 | -4.0% | flag | 176.2 | -1.0% | pass |
-| 9 | 4 | Blue | 404 | 402.7 | -1.3 | -0.3% | pass | 402.7 | -0.3% | pass |
-| 10 | 4 | Blue | 425 | 418.5 | -6.5 | -1.5% | pass | 418.5 | -1.5% | pass |
-| 11 | 4 | Blue | 343 | 341.6 | -1.4 | -0.4% | pass | 341.6 | -0.4% | pass |
-| 12 | 4 | Blue | 382 | 375.2 | -6.8 | -1.8% | pass | 375.2 | -1.8% | pass |
-| 13 | 4 | Blue | 398 | 404.1 | +6.1 | +1.5% | pass | 404.1 | +1.5% | pass |
-| 14 | 3 | Blue | 213 | 210.9 | -2.1 | -1.0% | pass | 210.9 | -1.0% | pass |
-| 15 | 5 | Blue | 505 | 482.9 | -22.1 | -4.4% | flag | 505.0 | -0.0% | pass |
-| 16 | 3 | Blue | 175 | 175.5 | +0.5 | +0.3% | pass | 175.5 | +0.3% | pass |
-| 17 | 4 | Blue | 408 | 401.4 | -6.6 | -1.6% | pass | 401.4 | -1.6% | pass |
-| 18 | 5 | Blue | 506 | 503.3 | -2.7 | -0.5% | pass | 503.3 | -0.5% | pass |
-| **total** | 71 | | **6602** | **6496** | -106 | -1.6% | | **6531** | -1.1% | |
+| 1 | 4 | Blue | 414 | 397.3 | -16.7 | -4.0% | flag | 403.8 | -2.5% | pass |
+| 2 | 4 | Blue | 357 | 346.1 | -10.9 | -3.1% | flag | 348.1 | -2.5% | pass |
+| 3 | 4 | Blue | 418 | 422.6 | +4.6 | +1.1% | pass | 422.6 | +1.1% | pass |
+| 4 | 3 | Blue | 144 | 138.7 | -5.3 | -3.7% | flag | 140.4 | -2.5% | pass |
+| 5 | 4 | Blue | 365 | 357.0 | -8.0 | -2.2% | pass | 357.0 | -2.2% | pass |
+| 6 | 4 | Blue | 429 | 427.0 | -2.0 | -0.5% | pass | 427.0 | -0.5% | pass |
+| 7 | 5 | Blue | 538 | 513.7 | -24.3 | -4.5% | flag | 524.6 | -2.5% | pass |
+| 8 | 3 | Blue | 178 | 169.7 | -8.3 | -4.7% | flag | 173.6 | -2.5% | pass |
+| 9 | 4 | Blue | 404 | 408.3 | +4.3 | +1.1% | pass | 408.3 | +1.1% | pass |
+| 10 | 4 | Blue | 425 | 418.7 | -6.3 | -1.5% | pass | 418.7 | -1.5% | pass |
+| 11 | 4 | Blue | 343 | 341.3 | -1.7 | -0.5% | pass | 341.3 | -0.5% | pass |
+| 12 | 4 | Blue | 382 | 353.2 | -28.8 | -7.5% | flag | 372.5 | -2.5% | pass |
+| 13 | 4 | Blue | 398 | 411.0 | +13.0 | +3.3% | flag | 407.9 | +2.5% | pass |
+| 14 | 3 | Blue | 213 | 214.4 | +1.4 | +0.7% | pass | 214.4 | +0.7% | pass |
+| 15 | 5 | Blue | 505 | 461.4 | -43.6 | -8.6% | FAIL | 492.5 | -2.5% | pass |
+| 16 | 3 | Blue | 175 | 177.2 | +2.2 | +1.3% | pass | 177.2 | +1.3% | pass |
+| 17 | 4 | Blue | 408 | 392.7 | -15.3 | -3.7% | flag | 397.8 | -2.5% | pass |
+| 18 | 5 | Blue | 506 | 505.3 | -0.7 | -0.1% | pass | 505.3 | -0.1% | pass |
+| **total** | 71 | | **6602** | **6456** | -146 | -2.2% | | **6533** | -1.0% | |
 
 ## Open items
 
@@ -52,10 +52,16 @@ Decisions the developer made on 2026-10-19 are in DECISIONS.md ("Franklin Countr
 
 ## Playability adjustments
 
-- Hole 1 (Blue): tee shot: a perfect drive at the middle of the fairway clipped a tree near the tee; moved 0.2 m within the real tee polygon w1263307412 to the nearest clear spot -> 403.3 yd (real 403.1 yd).
-- Hole 4 (Blue): measured 137 yd from the tee-box centre vs 144 on the card (-4.6%); moved the virtual tee within the real tee polygon w1263307413 -> 144.0 yd (real 137.3 yd).
-- Hole 8 (Blue): measured 171 yd from the tee-box centre vs 178 on the card (-4.0%); moved the virtual tee within the real tee polygon w1263307438 -> 176.2 yd (real 170.9 yd).
-- Hole 15 (Blue): measured 483 yd from the tee-box centre vs 505 on the card (-4.4%); moved the virtual tee within the real tee polygon w1263307432 -> 505.0 yd (real 482.9 yd).
+- Hole 1 (Blue): measured 397 yd from the tee-box centre vs 414 on the card (-4.0%); moved the virtual tee along the middle of the real tee polygon w1263307412 (on its centre line, at least 2.5 m from its back and front) -> 403.7 yd (real 397.3 yd).
+- Hole 1 (Blue): tee shot: a perfect drive at the middle of the fairway clipped a tree near the tee; moved 0.4 m along the middle of the real tee polygon w1263307412 to the nearest clear spot -> 403.8 yd (real 397.3 yd).
+- Hole 2 (Blue): measured 346 yd from the tee-box centre vs 357 on the card (-3.1%); moved the virtual tee along the middle of the real tee polygon w1263307410 (on its centre line, at least 2.5 m from its back and front) -> 348.1 yd (real 346.1 yd).
+- Hole 4 (Blue): measured 139 yd from the tee-box centre vs 144 on the card (-3.7%); moved the virtual tee along the middle of the real tee polygon w1263307413 (on its centre line, at least 2.5 m from its back and front) -> 140.4 yd (real 138.7 yd).
+- Hole 7 (Blue): measured 514 yd from the tee-box centre vs 538 on the card (-4.5%); moved the virtual tee along the middle of the real tee polygon w1263307445 (on its centre line, at least 2.5 m from its back and front) -> 524.6 yd (real 513.7 yd).
+- Hole 8 (Blue): measured 170 yd from the tee-box centre vs 178 on the card (-4.7%); moved the virtual tee along the middle of the real tee polygon w1263307438 (on its centre line, at least 2.5 m from its back and front) -> 173.6 yd (real 169.7 yd).
+- Hole 12 (Blue): measured 353 yd from the tee-box centre vs 382 on the card (-7.5%); moved the virtual tee along the middle of the real tee polygon w1263307424 (on its centre line, at least 2.5 m from its back and front) -> 372.5 yd (real 353.2 yd).
+- Hole 13 (Blue): measured 411 yd from the tee-box centre vs 398 on the card (+3.3%); moved the virtual tee along the middle of the real tee polygon w1263307425 (on its centre line, at least 2.5 m from its back and front) -> 407.9 yd (real 411.0 yd).
+- Hole 15 (Blue): measured 461 yd from the tee-box centre vs 505 on the card (-8.6%); moved the virtual tee along the middle of the real tee polygon w1263307432 (on its centre line, at least 2.5 m from its back and front) -> 492.5 yd (real 461.4 yd).
+- Hole 17 (Blue): measured 393 yd from the tee-box centre vs 408 on the card (-3.7%); moved the virtual tee along the middle of the real tee polygon w1263307423 (on its centre line, at least 2.5 m from its back and front) -> 397.8 yd (real 392.7 yd).
 
 ## Tree detection (2021 USGS lidar, leaf-off)
 

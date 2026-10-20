@@ -2,6 +2,73 @@
 
 Changes from the starting values in CLAUDE.md, and choices the spec left open. Newest first within each area. Date: 2026-10-18 (first build session, then the first and second playtests).
 
+## Overnight requests (developer, 2026-10-19/20; branch `design/overnight`)
+
+The developer was away overnight and asked for the work not to stop for permission, so the calls below are the design chat's, for review.
+
+### Swing and physics
+
+- **Meter speeds up toward 100 %** (developer: "the meter should accelerate as it gets closer to 100. Then the speed it comes back ... should be the speed it was going when the second click ... no faster than you had it going originally").
+  - The cursor's speed grows in step with its position, from the current starting speed at 0 % to the original speed at 100 %, and holds that speed to 110 %.
+  - The original speed is the spec's trip time: 1.2 / 1.0 / 0.8 s per 100 % on Easy / Normal / Pro. The starting speeds stay 2.0 / 1.6 / 1.25 s.
+  - After tap 2 the cursor comes back at the speed it had at tap 2.
+  - At Normal, a full swing reaches 100 % in 1.25 s (it was 1.6 s). A 30 % chip comes back at 74 % of a full swing's return speed.
+  - `SwingMeter.tapTimes` gives the robot golfer exact tap times.
+- **Only the dead centre of the green zone goes straight** (developer). Inside the zone, a tap off centre curves the ball that way, in proportion to the offset. At the zone's edge the curve is 0.4 × the club's curve factor: a driver curves 0.8°, about 3 yd, half the smallest yellow miss. Putts start up to 0.25° off line at the edge.
+  - The inner 30 % of the zone still says "perfect".
+  - The rest of the zone says "great!", with a "tiny draw" or "tiny fade" line.
+- **Topspin rolls less:** first-bounce speed × (1 + 0.10 × spin), was × 1.15, and roll deceleration × (1 − 0.15 × spin), was × 0.75. A driver with full topspin now rolls 36.6 yd instead of 43.2 yd (−15 %). Backspin is unchanged.
+- **Wind unchanged** (developer: "if that's the case as is, ignore my comment"). A 6 mph direct crosswind already moves a driver 5.3 yd at landing and about 7 yd at rest, inside the developer's 4-6 yd reference, so no change was made. Unit test: `physics.test.ts`.
+
+### Pins
+
+- **Pins further from the edge** (developer: "a little too close to the edge"): extra pins are now at least 14 ft (4.27 m) from every edge. A green too small for three such pins steps down to 12 ft, then 10 ft. Over 85 % of extra pins are at 14 ft.
+
+### Names and leaderboards
+
+- **No duplicate names** (developer: "Don't let people use the same name on the leaderboard").
+  - Each copy of the game makes a private player key (16 characters, stored in settings).
+  - A name on the shared boards belongs to the first key that uses it (server table `names`). Names already on the board with no key are claimable once.
+  - The name box checks the name online and refuses one another device holds.
+  - The same person on a second device copies the player code (settings) across. One key holds at most 8 names (a family computer).
+- **Nobody as "player"** (developer): the name box refuses "player". Unnamed rounds never go to the shared board, and the server hides any stored as "player". A player with no name is asked for one at "tee off" (they may skip it).
+- **Recent eagles and most birdies** (developer).
+  - **Recent eagles list:** player, course, hole and date for every eagle or better, newest first (by the time the server received it, so a phone's wrong clock can't reorder the list).
+  - **Live reporting:** an eagle is sent the moment the ball drops, so it counts even if the round is never finished (developer's follow-up). An unnamed player is asked for a name on the hole-complete panel.
+  - **Most birdies in a round:** player, course, number, date. Birdies or better are counted, from non-casual rounds of any length.
+  - **Not split by course for now:** both lists cover every course, but every row keeps its course, and the server accepts `?course=` for a later split.
+  - **Casual rounds are kept off both lists.**
+  - **Server:** tables `eagles` and `names`, and columns `owner`, `birdies` and `casual` on `rounds`. The server creates them itself on the first request after a deploy (schema version in table `meta`), then counts birdies and eagles in old rounds 10 at a time. Every request stays under the free plan's 50 database queries.
+  - **No manual database step is needed.**
+
+### Loading
+
+- **The freeze when loading a course** (developer: "often freezes when I try to load a course for the first time"). Phaser reuses a scene object when it restarts, and the HUD kept the texts of the previous round, which were destroyed by then. The second round in a tab, which is what loading another course after a round starts, threw inside the game loop and froze the game. The HUD and play scenes now reset their state in `create()`.
+- **Load hardening:**
+  - the course screen shows load progress;
+  - after 20 s with no progress it offers a reload, which reopens the same course;
+  - every file gets 3 tries;
+  - a load overtaken by another stops quietly;
+  - menus work after a failed load;
+  - "continue round" has the same watchdog.
+
+### Course data
+
+- **Tees centred on their boxes** (developer: "the tee on langston number 2 is barely on the tee box. Nearly every tee on langston isn't actually in the center ... should be checked on every course").
+  - The virtual tee was the box centroid, moved along the hole line to match the card. That centroid lies outside L-shaped or curved boxes, and the move could reach the box edge.
+  - The tee is now the box's pole of inaccessibility (the point deepest inside it).
+  - A move to match the card stays on the box's centre ridge: points at least 85 % as deep inside the box as the deepest point across it. It also stays clear of the edge by 2.5 m or half the box's inscribed radius, whichever is more (at most 70 % of that radius on a narrow box, so a strip that tapers toward the back keeps a usable centre line).
+  - **Clear of trees:** a tee is now clear when a perfect drive misses the trees aimed both at the middle of the fairway and straight down the hole line (the game's line aim). The line check was added because centring the Tualatin 11 tee put the line through a 26 m oak's crown.
+  - Every course was rebuilt; yardage changes are in each `validation_report.md`.
+  - **Tee positions on main:** 75 of the 333 tees stood less than half the box's depth from its edge.
+  - **Tee positions now:** 5 do. They sit 2.2-3.0 m inside a long box, at the end of its centre line. The 6 tees with no mapped box are unchanged open items (East Potomac Blue 13 and Red 5, 6 and 8, Oswego Lake 3).
+  - **Cost to yardage:** 11 holes went from pass to flag (3-8 %): East Potomac Blue 5, 9, 16 and 11 White; Langston 2 Royal, 13 White and 14 White; Indian Island 1 and 5; Waverley 6 and 11.
+  - **Over 8 %:** only holes the developer accepted earlier.
+    - Tualatin 10 from the back tee is now +8.3 % (was +7.0 %): the tee moved 2.5 m back onto the box's centre line. **Needs the developer's OK.**
+    - The others: East Potomac Blue 15 and Red 8, Langston 6 Royal, Tualatin 8, Eastmoreland 17 White and Waverley 17.
+- **Rounded fairway corners** (developer: "jagged corner should be removed from the fairway ... even if the OSM was jagged"). Fairway outlines are smoothed (resampled every 0.5 m, Gaussian with σ = 4 m along the outline) before rasterising. Each fairway keeps its original shape within 2 m of a green, so approaches still meet the green. A smoothing that changes a fairway's area by over 10 % is skipped. Edges move at most 3.2 m (Langston, Indian Island, Oswego Lake, Franklin measured), inside the spec's 5 m per side for surface edges. σ = 6 m would round more but reaches 4.8 m.
+- **Langston 16 and 17:** the three lidar trees standing in those fairways are removed (`drop_trees`).
+- **East Potomac Blue 10:** the two lidar trees at the front of the tee box are removed (`drop_trees`). They drew over the box beside the aim line. The rest of the row along the cart path stays.
 
 ## Third playtest (developer, 2026-10-19)
 

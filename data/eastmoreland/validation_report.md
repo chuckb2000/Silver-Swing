@@ -6,48 +6,48 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 
 | hole | par | tee set | card yd | measured yd | diff yd | diff % | status | adjusted yd | adj. diff % | adj. status |
 |---|---|---|---|---|---|---|---|---|---|---|
-| 1 | 4 | Blue | 311 | 309.6 | -1.4 | -0.4% | pass | 309.6 | -0.4% | pass |
-| 1 | 4 | White | 292 | 290.1 | -1.9 | -0.6% | pass | 290.1 | -0.6% | pass |
-| 2 | 4 | Blue | 447 | 446.5 | -0.5 | -0.1% | pass | 446.5 | -0.1% | pass |
-| 2 | 4 | White | 427 | 421.5 | -5.5 | -1.3% | pass | 421.5 | -1.3% | pass |
-| 3 | 4 | Blue | 337 | 337.8 | +0.8 | +0.2% | pass | 337.9 | +0.3% | pass |
-| 3 | 4 | White | 317 | 317.4 | +0.4 | +0.1% | pass | 319.9 | +0.9% | pass |
+| 1 | 4 | Blue | 311 | 309.2 | -1.8 | -0.6% | pass | 309.2 | -0.6% | pass |
+| 1 | 4 | White | 292 | 287.3 | -4.7 | -1.6% | pass | 287.2 | -1.6% | pass |
+| 2 | 4 | Blue | 447 | 446.4 | -0.6 | -0.1% | pass | 446.4 | -0.1% | pass |
+| 2 | 4 | White | 427 | 414.3 | -12.7 | -3.0% | pass | 414.3 | -3.0% | pass |
+| 3 | 4 | Blue | 337 | 337.8 | +0.8 | +0.2% | pass | 338.7 | +0.5% | pass |
+| 3 | 4 | White | 317 | 317.4 | +0.4 | +0.1% | pass | 320.4 | +1.1% | pass |
 | 4 | 4 | Blue | 347 | 353.5 | +6.5 | +1.9% | pass | 353.5 | +1.9% | pass |
-| 4 | 4 | White | 325 | 334.5 | +9.5 | +2.9% | pass | 334.5 | +2.9% | pass |
-| 5 | 3 | Blue | 210 | 203.6 | -6.4 | -3.0% | flag | 207.5 | -1.2% | pass |
-| 5 | 3 | White | 175 | 174.8 | -0.2 | -0.1% | pass | 174.8 | -0.1% | pass |
-| 6 | 5 | Blue | 497 | 498.4 | +1.4 | +0.3% | pass | 498.4 | +0.3% | pass |
-| 6 | 5 | White | 489 | 498.4 | +9.4 | +1.9% | pass | 498.4 | +1.9% | pass |
-| 7 | 4 | Blue | 410 | 409.8 | -0.2 | -0.1% | pass | 409.8 | -0.1% | pass |
-| 7 | 4 | White | 391 | 391.1 | +0.1 | +0.0% | pass | 391.1 | +0.0% | pass |
-| 8 | 3 | Blue | 227 | 229.3 | +2.3 | +1.0% | pass | 229.3 | +1.0% | pass |
-| 8 | 3 | White | 202 | 196.8 | -5.2 | -2.6% | pass | 196.8 | -2.6% | pass |
-| 9 | 5 | Blue | 497 | 495.5 | -1.5 | -0.3% | pass | 495.5 | -0.3% | pass |
-| 9 | 5 | White | 472 | 471.6 | -0.4 | -0.1% | pass | 471.6 | -0.1% | pass |
-| 10 | 4 | Blue | 334 | 318.1 | -15.9 | -4.8% | flag | 334.0 | +0.0% | pass |
-| 10 | 4 | White | 325 | 318.1 | -6.9 | -2.1% | pass | 318.1 | -2.1% | pass |
-| 11 | 5 | Blue | 469 | 470.6 | +1.6 | +0.3% | pass | 470.6 | +0.3% | pass |
-| 11 | 5 | White | 443 | 442.1 | -0.9 | -0.2% | pass | 442.1 | -0.2% | pass |
+| 4 | 4 | White | 325 | 331.2 | +6.2 | +1.9% | pass | 331.2 | +1.9% | pass |
+| 5 | 3 | Blue | 210 | 203.6 | -6.4 | -3.1% | flag | 204.8 | -2.5% | pass |
+| 5 | 3 | White | 175 | 178.2 | +3.2 | +1.8% | pass | 178.2 | +1.8% | pass |
+| 6 | 5 | Blue | 497 | 498.3 | +1.3 | +0.3% | pass | 498.3 | +0.3% | pass |
+| 6 | 5 | White | 489 | 498.3 | +9.3 | +1.9% | pass | 498.3 | +1.9% | pass |
+| 7 | 4 | Blue | 410 | 410.5 | +0.5 | +0.1% | pass | 410.5 | +0.1% | pass |
+| 7 | 4 | White | 391 | 391.6 | +0.6 | +0.2% | pass | 391.6 | +0.2% | pass |
+| 8 | 3 | Blue | 227 | 229.2 | +2.2 | +1.0% | pass | 229.2 | +1.0% | pass |
+| 8 | 3 | White | 202 | 208.6 | +6.6 | +3.3% | flag | 207.0 | +2.5% | pass |
+| 9 | 5 | Blue | 497 | 498.5 | +1.5 | +0.3% | pass | 498.5 | +0.3% | pass |
+| 9 | 5 | White | 472 | 465.9 | -6.1 | -1.3% | pass | 465.9 | -1.3% | pass |
+| 10 | 4 | Blue | 334 | 325.3 | -8.7 | -2.6% | pass | 325.3 | -2.6% | pass |
+| 10 | 4 | White | 325 | 325.3 | +0.3 | +0.1% | pass | 325.3 | +0.1% | pass |
+| 11 | 5 | Blue | 469 | 472.5 | +3.5 | +0.8% | pass | 472.5 | +0.8% | pass |
+| 11 | 5 | White | 443 | 447.4 | +4.4 | +1.0% | pass | 447.4 | +1.0% | pass |
 | 12 | 3 | Blue | 167 | 166.3 | -0.7 | -0.4% | pass | 166.3 | -0.4% | pass |
-| 12 | 3 | White | 140 | 138.6 | -1.4 | -1.0% | pass | 138.6 | -1.0% | pass |
-| 13 | 5 | Blue | 463 | 438.4 | -24.6 | -5.3% | flag | 448.9 | -3.0% | flag |
-| 13 | 5 | White | 446 | 438.4 | -7.6 | -1.7% | pass | 438.4 | -1.7% | pass |
-| 14 | 4 | Blue | 383 | 367.3 | -15.7 | -4.1% | flag | 378.6 | -1.1% | pass |
-| 14 | 4 | White | 365 | 367.3 | +2.3 | +0.6% | pass | 367.3 | +0.6% | pass |
-| 15 | 4 | Blue | 381 | 381.0 | -0.0 | -0.0% | pass | 381.0 | -0.0% | pass |
+| 12 | 3 | White | 140 | 163.8 | +23.8 | +17.0% | FAIL | 143.5 | +2.5% | pass |
+| 13 | 5 | Blue | 463 | 442.7 | -20.3 | -4.4% | flag | 446.4 | -3.6% | flag |
+| 13 | 5 | White | 446 | 442.7 | -3.3 | -0.7% | pass | 442.7 | -0.7% | pass |
+| 14 | 4 | Blue | 383 | 370.2 | -12.8 | -3.3% | flag | 373.4 | -2.5% | pass |
+| 14 | 4 | White | 365 | 370.2 | +5.2 | +1.4% | pass | 370.2 | +1.4% | pass |
+| 15 | 4 | Blue | 381 | 380.7 | -0.3 | -0.1% | pass | 380.7 | -0.1% | pass |
 | 15 | 4 | White | 364 | 361.8 | -2.2 | -0.6% | pass | 361.8 | -0.6% | pass |
-| 16 | 4 | Blue | 423 | 414.5 | -8.5 | -2.0% | pass | 414.5 | -2.0% | pass |
-| 16 | 4 | White | 392 | 385.9 | -6.1 | -1.5% | pass | 385.9 | -1.5% | pass |
+| 16 | 4 | Blue | 423 | 419.3 | -3.7 | -0.9% | pass | 419.3 | -0.9% | pass |
+| 16 | 4 | White | 392 | 386.8 | -5.2 | -1.3% | pass | 386.8 | -1.3% | pass |
 | 17 | 3 | Blue | 169 | 167.6 | -1.4 | -0.8% | pass | 167.6 | -0.8% | pass |
 | 17 | 3 | White | 147 | 166.6 | +19.6 | +13.3% | FAIL | 166.6 | +13.3% | FAIL |
-| 18 | 4 | Blue | 457 | 457.2 | +0.2 | +0.1% | pass | 457.2 | +0.1% | pass |
-| 18 | 4 | White | 394 | 386.3 | -7.7 | -2.0% | pass | 386.3 | -2.0% | pass |
-| **total** | 144 | | **12635** | **12566** | -69 | -0.5% | | **12611** | -0.2% | |
+| 18 | 4 | Blue | 457 | 457.7 | +0.7 | +0.2% | pass | 457.7 | +0.2% | pass |
+| 18 | 4 | White | 394 | 383.1 | -10.9 | -2.8% | pass | 383.1 | -2.8% | pass |
+| **total** | 144 | | **12635** | **12630** | -5 | -0.0% | | **12620** | -0.1% | |
 
 ## Open items
 
 1. Hole 12 (Blue): no mapped tee box within 8% of the card; the tee is the start point of the OSM hole line (166 yd). The Blue tee box is not in OSM - trace it to confirm.
-2. Hole 13 (Blue): measured 449 yd vs card 463 (-3.0%) even with the virtual tee at the best spot in its box; accepted for play.
+2. Hole 13 (Blue): measured 446 yd vs card 463 (-3.6%) even with the virtual tee at the best spot in its box; accepted for play.
 3. Hole 17 (White): no mapped tee box within 8% of the card; the tee is the start point of the OSM hole line (167 yd). The White tee box is not in OSM - trace it to confirm.
 4. Hole 17 (White): measured 167 yd vs card 147 (+13.3%) - FAIL, needs a decision.
 5. Hole 18 (Blue): tee box lidar_tee_13 assigned by the course chat (lidar pad, edits.json); approved by the developer 2026-10-19 (tagged hole=18, tee_set=Blue in edited/course.geojson).
@@ -68,19 +68,21 @@ The developer's calls of 2026-10-19 are in DECISIONS.md ("Eastmoreland"): Blue i
 
 ## Playability adjustments
 
-- Hole 3 (Blue): tee shot: a perfect drive at the middle of the fairway clipped a tree near the tee; moved 1.2 m within the real tee polygon w1023495712 to the nearest clear spot -> 337.9 yd (real 337.8 yd).
-- Hole 3 (White): tee shot: a perfect drive at the middle of the fairway clipped a tree near the tee; moved 3.4 m within the real tee polygon w1023495711 to the nearest clear spot -> 319.9 yd (real 317.4 yd).
-- Hole 5 (Blue): measured 204 yd from the tee-box centre vs 210 on the card (-3.0%); moved the virtual tee within the real tee polygon w1023738612 -> 207.5 yd (real 203.6 yd).
-- Hole 10 (Blue): measured 318 yd from the tee-box centre vs 334 on the card (-4.8%); moved the virtual tee within the real tee polygon w1264230742 -> 334.0 yd (real 318.1 yd).
-- Hole 13 (Blue): measured 438 yd from the tee-box centre vs 463 on the card (-5.3%); moved the virtual tee within the real tee polygon w1264367353 -> 448.9 yd (real 438.4 yd).
-- Hole 14 (Blue): measured 367 yd from the tee-box centre vs 383 on the card (-4.1%); moved the virtual tee within the real tee polygon w1264367362 -> 378.6 yd (real 367.3 yd).
+- Hole 1 (White): tee shot: a perfect drive at the middle of the fairway clipped a tree near the tee; moved 0.3 m along the middle of the real tee polygon w1023495702 to the nearest clear spot -> 287.2 yd (real 287.3 yd).
+- Hole 3 (Blue): tee shot: a perfect drive at the middle of the fairway clipped a tree near the tee; moved 3.3 m along the middle of the real tee polygon w1023495712 to the nearest clear spot -> 338.7 yd (real 337.8 yd).
+- Hole 3 (White): tee shot: a perfect drive at the middle of the fairway clipped a tree near the tee; moved 6.3 m along the middle of the real tee polygon w1023495711 to the nearest clear spot -> 320.4 yd (real 317.4 yd).
+- Hole 5 (Blue): measured 204 yd from the tee-box centre vs 210 on the card (-3.1%); moved the virtual tee along the middle of the real tee polygon w1023738612 (on its centre line, at least 2.5 m from its back and front) -> 204.8 yd (real 203.6 yd).
+- Hole 8 (White): measured 209 yd from the tee-box centre vs 202 on the card (+3.3%); moved the virtual tee along the middle of the real tee polygon w1023797121 (on its centre line, at least 2.5 m from its back and front) -> 207.0 yd (real 208.6 yd).
+- Hole 12 (White): measured 164 yd from the tee-box centre vs 140 on the card (+17.0%); moved the virtual tee along the middle of the real tee polygon w1264367351 (on its centre line, at least 2.5 m from its back and front) -> 143.5 yd (real 163.8 yd).
+- Hole 13 (Blue): measured 443 yd from the tee-box centre vs 463 on the card (-4.4%); moved the virtual tee along the middle of the real tee polygon w1264367353 (on its centre line, at least 2.5 m from its back and front) -> 446.4 yd (real 442.7 yd).
+- Hole 14 (Blue): measured 370 yd from the tee-box centre vs 383 on the card (-3.3%); moved the virtual tee along the middle of the real tee polygon w1264367362 (on its centre line, at least 2.5 m from its back and front) -> 373.4 yd (real 370.2 yd).
 
 ## Tree detection (DOGAMI canopy height model)
 
 - 15352 trees detected in the world extent (2019 inside the course), 1768 conifers / 10420 deciduous (plus 3164 flowering shrubs in the garden, c: 3); median height 13.6 m, max 47.9 m.
 - Dropped: 3445 tops on building footprints, 0 over the lake, 52 tiny crowns.
 - Dropped on playing surfaces (spec 5.4): 34 -> lateral_water_hazard lake_w133795911_1 (10.2 m), lateral_water_hazard lake_w133795911_1 (9.8 m), lateral_water_hazard lake_w133795911_1 (15.3 m), lateral_water_hazard lake_w133795911_1 (14.8 m), lateral_water_hazard lake_w133795911_1 (16.5 m), lateral_water_hazard lake_w133795911_1 (15.4 m), lateral_water_hazard lake_w133795911_1 (15.1 m), lateral_water_hazard lake_w133795911_1 (13.1 m), lateral_water_hazard lake_w133795911_1 (15.3 m), lateral_water_hazard lake_w133795911_1 (10.0 m), lateral_water_hazard lake_w133795911_1 (5.3 m), lateral_water_hazard lake_w133795911_1 (7.4 m), lateral_water_hazard lake_w133795911_1 (8.0 m), water_hazard w49807172 (15.8 m), lateral_water_hazard lake_w133795911_1 (7.8 m), water_hazard w49807172 (15.0 m), water_hazard w49807172 (14.3 m), water_hazard w49807172 (14.3 m), lateral_water_hazard lake_w133795911_1 (15.1 m), water_hazard w49807172 (7.2 m), lateral_water_hazard lake_w133795911_1 (14.7 m), water_hazard w49807172 (4.4 m), water_hazard w49807172 (6.1 m), water_hazard w49807172 (7.6 m), water_hazard w49807172 (5.6 m), water_hazard w49807172 (12.9 m), water_hazard w49807172 (15.0 m), water_hazard w49807172 (8.5 m), water_hazard w49807172 (9.5 m), water_hazard w49807172 (11.2 m), water_hazard w49807172 (4.8 m), lateral_water_hazard lake_w133795911_1 (13.3 m), lateral_water_hazard lake_w133795911_1 (7.2 m), lateral_water_hazard lake_w133795911_1 (6.8 m)
-- Dropped from tee shots (s06b): 2 -> 11 Blue (30.2 m tree, 43.6 m from the tee), 11 Blue (30.0 m tree, 37.9 m from the tee)
+- Dropped from tee shots (s06b): 2 -> 11 Blue (30.2 m tree, 45.3 m from the tee), 11 Blue (30.0 m tree, 39.6 m from the tee)
 - OSM natural=tree points matched by a detected tree within 4 m: 115 of 154.
 - Conifer vs deciduous is inferred from crown shape only (no leaf-off imagery); see build/trees_preview.png.
 

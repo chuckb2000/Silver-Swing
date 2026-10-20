@@ -6,55 +6,58 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 
 | hole | par | tee set | card yd | measured yd | diff yd | diff % | status | adjusted yd | adj. diff % | adj. status |
 |---|---|---|---|---|---|---|---|---|---|---|
-| 1 | 5 | Royal | 472 | 449.2 | -22.8 | -4.8% | flag | 455.6 | -3.5% | flag |
-| 1 | 5 | White | 465 | 449.2 | -15.8 | -3.4% | flag | 455.6 | -2.0% | pass |
-| 2 | 4 | Royal | 395 | 376.3 | -18.7 | -4.7% | flag | 384.0 | -2.8% | pass |
-| 2 | 4 | White | 376 | 376.3 | +0.3 | +0.1% | pass | 376.3 | +0.1% | pass |
-| 3 | 5 | Royal | 508 | 507.8 | -0.2 | -0.0% | pass | 507.8 | -0.0% | pass |
-| 3 | 5 | White | 492 | 480.2 | -11.8 | -2.4% | pass | 480.2 | -2.4% | pass |
-| 4 | 3 | Royal | 157 | 152.7 | -4.3 | -2.8% | pass | 152.7 | -2.8% | pass |
-| 4 | 3 | White | 157 | 152.7 | -4.3 | -2.8% | pass | 152.7 | -2.8% | pass |
-| 5 | 4 | Royal | 350 | 350.9 | +0.9 | +0.3% | pass | 350.9 | +0.3% | pass |
-| 5 | 4 | White | 350 | 350.9 | +0.9 | +0.3% | pass | 350.9 | +0.3% | pass |
+| 1 | 5 | Royal | 472 | 447.0 | -25.0 | -5.3% | flag | 452.8 | -4.1% | flag |
+| 1 | 5 | White | 465 | 447.0 | -18.0 | -3.9% | flag | 452.8 | -2.6% | pass |
+| 2 | 4 | Royal | 395 | 376.7 | -18.3 | -4.6% | flag | 380.8 | -3.6% | flag |
+| 2 | 4 | White | 376 | 376.7 | +0.7 | +0.2% | pass | 376.7 | +0.2% | pass |
+| 3 | 5 | Royal | 508 | 508.1 | +0.1 | +0.0% | pass | 508.1 | +0.0% | pass |
+| 3 | 5 | White | 492 | 474.1 | -17.9 | -3.6% | flag | 479.8 | -2.5% | pass |
+| 4 | 3 | Royal | 157 | 153.0 | -4.0 | -2.5% | pass | 153.0 | -2.5% | pass |
+| 4 | 3 | White | 157 | 153.0 | -4.0 | -2.5% | pass | 153.0 | -2.5% | pass |
+| 5 | 4 | Royal | 350 | 350.8 | +0.8 | +0.2% | pass | 350.8 | +0.2% | pass |
+| 5 | 4 | White | 350 | 350.8 | +0.8 | +0.2% | pass | 350.8 | +0.2% | pass |
 | 6 | 4 | Royal | 398 | 350.7 | -47.3 | -11.9% | FAIL | 350.7 | -11.9% | FAIL |
-| 6 | 4 | White | 358 | 347.0 | -11.0 | -3.1% | flag | 358.0 | +0.0% | pass |
-| 7 | 4 | Royal | 341 | 320.1 | -20.9 | -6.1% | flag | 326.4 | -4.3% | flag |
-| 7 | 4 | White | 328 | 320.1 | -7.9 | -2.4% | pass | 320.1 | -2.4% | pass |
-| 8 | 3 | Royal | 205 | 197.5 | -7.5 | -3.7% | flag | 205.0 | -0.0% | pass |
-| 8 | 3 | White | 194 | 197.5 | +3.5 | +1.8% | pass | 197.5 | +1.8% | pass |
-| 9 | 4 | Royal | 400 | 380.2 | -19.8 | -5.0% | flag | 391.4 | -2.2% | pass |
-| 9 | 4 | White | 388 | 380.2 | -7.8 | -2.0% | pass | 380.2 | -2.0% | pass |
-| 10 | 5 | Royal | 538 | 526.9 | -11.1 | -2.1% | pass | 526.5 | -2.1% | pass |
-| 10 | 5 | White | 438 | 453.9 | +15.9 | +3.6% | flag | 447.8 | +2.2% | pass |
-| 11 | 4 | Royal | 406 | 408.0 | +2.0 | +0.5% | pass | 408.0 | +0.5% | pass |
-| 11 | 4 | White | 383 | 389.2 | +6.2 | +1.6% | pass | 389.2 | +1.6% | pass |
-| 12 | 4 | Royal | 444 | 446.3 | +2.3 | +0.5% | pass | 446.3 | +0.5% | pass |
-| 12 | 4 | White | 412 | 416.4 | +4.4 | +1.1% | pass | 416.4 | +1.1% | pass |
-| 13 | 3 | Royal | 175 | 177.7 | +2.7 | +1.5% | pass | 177.7 | +1.5% | pass |
-| 13 | 3 | White | 152 | 140.1 | -11.9 | -7.8% | flag | 147.8 | -2.7% | pass |
-| 14 | 4 | Royal | 341 | 326.1 | -14.9 | -4.4% | flag | 341.0 | -0.0% | pass |
-| 14 | 4 | White | 305 | 326.1 | +21.1 | +6.9% | flag | 311.5 | +2.1% | pass |
-| 15 | 3 | Royal | 203 | 194.0 | -9.0 | -4.4% | flag | 203.0 | -0.0% | pass |
-| 15 | 3 | White | 170 | 168.4 | -1.6 | -0.9% | pass | 168.4 | -0.9% | pass |
-| 16 | 5 | Royal | 540 | 503.7 | -36.3 | -6.7% | flag | 517.4 | -4.2% | flag |
-| 16 | 5 | White | 508 | 503.7 | -4.3 | -0.9% | pass | 503.7 | -0.9% | pass |
-| 17 | 4 | Royal | 396 | 398.0 | +2.0 | +0.5% | pass | 398.0 | +0.5% | pass |
-| 17 | 4 | White | 340 | 339.0 | -1.0 | -0.3% | pass | 339.0 | -0.3% | pass |
-| 18 | 4 | Royal | 383 | 385.9 | +2.9 | +0.8% | pass | 385.9 | +0.8% | pass |
-| 18 | 4 | White | 345 | 344.3 | -0.7 | -0.2% | pass | 344.3 | -0.2% | pass |
-| **total** | 144 | | **12813** | **12587** | -226 | -1.8% | | **12668** | -1.1% | |
+| 6 | 4 | White | 358 | 349.8 | -8.2 | -2.3% | pass | 349.8 | -2.3% | pass |
+| 7 | 4 | Royal | 341 | 319.9 | -21.1 | -6.2% | flag | 323.7 | -5.1% | flag |
+| 7 | 4 | White | 328 | 319.9 | -8.1 | -2.5% | pass | 319.9 | -2.5% | pass |
+| 8 | 3 | Royal | 205 | 193.8 | -11.2 | -5.5% | flag | 199.9 | -2.5% | pass |
+| 8 | 3 | White | 194 | 193.8 | -0.2 | -0.1% | pass | 193.8 | -0.1% | pass |
+| 9 | 4 | Royal | 400 | 375.8 | -24.2 | -6.0% | flag | 388.8 | -2.8% | pass |
+| 9 | 4 | White | 388 | 375.8 | -12.2 | -3.1% | flag | 378.4 | -2.5% | pass |
+| 10 | 5 | Royal | 538 | 526.8 | -11.2 | -2.1% | pass | 526.8 | -2.1% | pass |
+| 10 | 5 | White | 438 | 451.4 | +13.4 | +3.1% | flag | 449.2 | +2.6% | pass |
+| 11 | 4 | Royal | 406 | 405.0 | -1.0 | -0.2% | pass | 405.0 | -0.2% | pass |
+| 11 | 4 | White | 383 | 388.9 | +5.9 | +1.5% | pass | 388.9 | +1.5% | pass |
+| 12 | 4 | Royal | 444 | 449.5 | +5.5 | +1.2% | pass | 449.5 | +1.2% | pass |
+| 12 | 4 | White | 412 | 422.2 | +10.2 | +2.5% | pass | 422.2 | +2.5% | pass |
+| 13 | 3 | Royal | 175 | 176.8 | +1.8 | +1.1% | pass | 176.8 | +1.1% | pass |
+| 13 | 3 | White | 152 | 137.7 | -14.3 | -9.4% | FAIL | 145.2 | -4.5% | flag |
+| 14 | 4 | Royal | 341 | 318.4 | -22.6 | -6.6% | flag | 332.5 | -2.5% | pass |
+| 14 | 4 | White | 305 | 318.4 | +13.4 | +4.4% | flag | 314.5 | +3.1% | flag |
+| 15 | 3 | Royal | 203 | 190.5 | -12.5 | -6.2% | flag | 198.0 | -2.5% | pass |
+| 15 | 3 | White | 170 | 168.0 | -2.0 | -1.2% | pass | 168.0 | -1.2% | pass |
+| 16 | 5 | Royal | 540 | 509.8 | -30.2 | -5.6% | flag | 514.0 | -4.8% | flag |
+| 16 | 5 | White | 508 | 509.8 | +1.8 | +0.4% | pass | 509.8 | +0.4% | pass |
+| 17 | 4 | Royal | 396 | 397.5 | +1.5 | +0.4% | pass | 397.5 | +0.4% | pass |
+| 17 | 4 | White | 340 | 334.4 | -5.6 | -1.6% | pass | 334.4 | -1.6% | pass |
+| 18 | 4 | Royal | 383 | 387.4 | +4.4 | +1.1% | pass | 387.4 | +1.1% | pass |
+| 18 | 4 | White | 345 | 353.6 | +8.6 | +2.5% | pass | 353.6 | +2.5% | pass |
+| **total** | 144 | | **12813** | **12563** | -250 | -2.0% | | **12637** | -1.4% | |
 
 ## Open items
 
-1. Hole 1 (Royal): measured 456 yd vs card 472 (-3.5%) even with the virtual tee at the best spot in its box; accepted for play.
-2. Hole 6 (Royal): no mapped tee box within 8% of the card; the tee is the start point of the OSM hole line (351 yd). The Royal tee box is not in OSM - trace it to confirm.
-3. Hole 6 (Royal): measured 351 yd vs card 398 (-11.9%) - FAIL, needs a decision.
-4. Hole 7 (Royal): measured 326 yd vs card 341 (-4.3%) even with the virtual tee at the best spot in its box; accepted for play.
-5. Hole 10 (Royal): tee box lidar_tee_59 assigned by the course chat at the developer's request (lidar pad, edits.json) (tagged hole=10, tee_set=Royal in edited/course.geojson).
-6. Hole 13 (White): tee box lidar_tee_74 assigned by the course chat (lidar pad, edits.json; approved by the developer) (tagged hole=13, tee_set=White in edited/course.geojson).
-7. Hole 13: two-tiered green; the pin is moved from the OSM pin (1364.7, 1253.8), which is on or near the step, to the middle of the upper tier (1369.3, 1261.8) (config green_tiers pin=upper_tier).
-8. Hole 16 (Royal): measured 517 yd vs card 540 (-4.2%) even with the virtual tee at the best spot in its box; accepted for play.
-9. Hole 17 (Royal): tee box lidar_tee_30 assigned by the course chat (lidar pad, edits.json; approved by the developer) (tagged hole=17, tee_set=Royal in edited/course.geojson).
+1. Hole 1 (Royal): measured 453 yd vs card 472 (-4.1%) even with the virtual tee at the best spot in its box; accepted for play.
+2. Hole 2 (Royal): measured 381 yd vs card 395 (-3.6%) even with the virtual tee at the best spot in its box; accepted for play.
+3. Hole 6 (Royal): no mapped tee box within 8% of the card; the tee is the start point of the OSM hole line (351 yd). The Royal tee box is not in OSM - trace it to confirm.
+4. Hole 6 (Royal): measured 351 yd vs card 398 (-11.9%) - FAIL, needs a decision.
+5. Hole 7 (Royal): measured 324 yd vs card 341 (-5.1%) even with the virtual tee at the best spot in its box; accepted for play.
+6. Hole 10 (Royal): tee box lidar_tee_59 assigned by the course chat at the developer's request (lidar pad, edits.json) (tagged hole=10, tee_set=Royal in edited/course.geojson).
+7. Hole 13 (White): measured 145 yd vs card 152 (-4.5%) even with the virtual tee at the best spot in its box; accepted for play.
+8. Hole 13 (White): tee box lidar_tee_74 assigned by the course chat (lidar pad, edits.json; approved by the developer) (tagged hole=13, tee_set=White in edited/course.geojson).
+9. Hole 13: two-tiered green; the pin is moved from the OSM pin (1364.7, 1253.8), which is on or near the step, to the middle of the upper tier (1369.3, 1261.8) (config green_tiers pin=upper_tier).
+10. Hole 14 (White): measured 315 yd vs card 305 (+3.1%) even with the virtual tee at the best spot in its box; accepted for play.
+11. Hole 16 (Royal): measured 514 yd vs card 540 (-4.8%) even with the virtual tee at the best spot in its box; accepted for play.
+12. Hole 17 (Royal): tee box lidar_tee_30 assigned by the course chat (lidar pad, edits.json; approved by the developer) (tagged hole=17, tee_set=Royal in edited/course.geojson).
 
 ## Open items for the developer (numbered; recommendation in each)
 
@@ -77,26 +80,28 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 
 ## Playability adjustments
 
-- Hole 1 (Royal): measured 449 yd from the tee-box centre vs 472 on the card (-4.8%); moved the virtual tee within the real tee polygon w118116003 -> 455.6 yd (real 449.2 yd).
-- Hole 1 (White): measured 449 yd from the tee-box centre vs 465 on the card (-3.4%); moved the virtual tee within the real tee polygon w118116003 -> 455.6 yd (real 449.2 yd).
-- Hole 2 (Royal): measured 376 yd from the tee-box centre vs 395 on the card (-4.7%); moved the virtual tee within the real tee polygon w1536668774 -> 384.0 yd (real 376.3 yd).
-- Hole 6 (White): measured 347 yd from the tee-box centre vs 358 on the card (-3.1%); moved the virtual tee within the real tee polygon w118116087 -> 358.0 yd (real 347.0 yd).
-- Hole 7 (Royal): measured 320 yd from the tee-box centre vs 341 on the card (-6.1%); moved the virtual tee within the real tee polygon w1536670390 -> 326.4 yd (real 320.1 yd).
-- Hole 8 (Royal): measured 197 yd from the tee-box centre vs 205 on the card (-3.7%); moved the virtual tee within the real tee polygon w118115993 -> 205.0 yd (real 197.5 yd).
-- Hole 9 (Royal): measured 380 yd from the tee-box centre vs 400 on the card (-5.0%); moved the virtual tee within the real tee polygon w118116086 -> 391.4 yd (real 380.2 yd).
-- Hole 10 (Royal): tee shot: a perfect drive at the middle of the fairway clipped a tree near the tee; moved 1.0 m within the real tee polygon lidar_tee_59 to the nearest clear spot -> 526.5 yd (real 526.9 yd).
-- Hole 10 (White): measured 454 yd from the tee-box centre vs 438 on the card (+3.6%); moved the virtual tee within the real tee polygon lidar_tee_56 -> 447.8 yd (real 453.9 yd).
-- Hole 13 (White): measured 140 yd from the tee-box centre vs 152 on the card (-7.8%); moved the virtual tee within the real tee polygon lidar_tee_74 -> 147.8 yd (real 140.1 yd).
-- Hole 14 (Royal): measured 326 yd from the tee-box centre vs 341 on the card (-4.4%); moved the virtual tee within the real tee polygon w118116674 -> 341.0 yd (real 326.1 yd).
-- Hole 14 (White): measured 326 yd from the tee-box centre vs 305 on the card (+6.9%); moved the virtual tee within the real tee polygon w118116674 -> 311.5 yd (real 326.1 yd).
-- Hole 15 (Royal): measured 194 yd from the tee-box centre vs 203 on the card (-4.4%); moved the virtual tee within the real tee polygon w120353236 -> 203.0 yd (real 194.0 yd).
-- Hole 16 (Royal): measured 504 yd from the tee-box centre vs 540 on the card (-6.7%); moved the virtual tee within the real tee polygon w118116671 -> 517.4 yd (real 503.7 yd).
+- Hole 1 (Royal): measured 447 yd from the tee-box centre vs 472 on the card (-5.3%); moved the virtual tee along the middle of the real tee polygon w118116003 (on its centre line, at least 2.5 m from its back and front) -> 452.8 yd (real 447.0 yd).
+- Hole 1 (White): measured 447 yd from the tee-box centre vs 465 on the card (-3.9%); moved the virtual tee along the middle of the real tee polygon w118116003 (on its centre line, at least 2.5 m from its back and front) -> 452.8 yd (real 447.0 yd).
+- Hole 2 (Royal): measured 377 yd from the tee-box centre vs 395 on the card (-4.6%); moved the virtual tee along the middle of the real tee polygon w1536668774 (on its centre line, at least 2.5 m from its back and front) -> 380.8 yd (real 376.7 yd).
+- Hole 3 (White): measured 474 yd from the tee-box centre vs 492 on the card (-3.6%); moved the virtual tee along the middle of the real tee polygon w118116670 (on its centre line, at least 2.5 m from its back and front) -> 479.8 yd (real 474.1 yd).
+- Hole 7 (Royal): measured 320 yd from the tee-box centre vs 341 on the card (-6.2%); moved the virtual tee along the middle of the real tee polygon w1536670390 (on its centre line, at least 2.5 m from its back and front) -> 323.7 yd (real 319.9 yd).
+- Hole 8 (Royal): measured 194 yd from the tee-box centre vs 205 on the card (-5.5%); moved the virtual tee along the middle of the real tee polygon w118115993 (on its centre line, at least 2.5 m from its back and front) -> 199.9 yd (real 193.8 yd).
+- Hole 9 (Royal): measured 376 yd from the tee-box centre vs 400 on the card (-6.0%); moved the virtual tee along the middle of the real tee polygon w118116086 (on its centre line, at least 2.5 m from its back and front) -> 388.8 yd (real 375.8 yd).
+- Hole 9 (White): measured 376 yd from the tee-box centre vs 388 on the card (-3.1%); moved the virtual tee along the middle of the real tee polygon w118116086 (on its centre line, at least 2.5 m from its back and front) -> 378.4 yd (real 375.8 yd).
+- Hole 10 (Royal): tee shot: a perfect drive at the middle of the fairway clipped a tree near the tee; moved 0.7 m along the middle of the real tee polygon lidar_tee_59 to the nearest clear spot -> 526.8 yd (real 526.8 yd).
+- Hole 10 (White): measured 451 yd from the tee-box centre vs 438 on the card (+3.1%); moved the virtual tee along the middle of the real tee polygon lidar_tee_56 (on its centre line, at least 2.5 m from its back and front) -> 449.2 yd (real 451.4 yd).
+- Hole 13 (White): measured 138 yd from the tee-box centre vs 152 on the card (-9.4%); moved the virtual tee along the middle of the real tee polygon lidar_tee_74 (on its centre line, at least 2.5 m from its back and front) -> 145.2 yd (real 137.7 yd).
+- Hole 14 (Royal): measured 318 yd from the tee-box centre vs 341 on the card (-6.6%); moved the virtual tee along the middle of the real tee polygon w118116674 (on its centre line, at least 2.5 m from its back and front) -> 332.5 yd (real 318.4 yd).
+- Hole 14 (White): measured 318 yd from the tee-box centre vs 305 on the card (+4.4%); moved the virtual tee along the middle of the real tee polygon w118116674 (on its centre line, at least 2.5 m from its back and front) -> 314.5 yd (real 318.4 yd).
+- Hole 15 (Royal): measured 190 yd from the tee-box centre vs 203 on the card (-6.2%); moved the virtual tee along the middle of the real tee polygon w120353236 (on its centre line, at least 2.5 m from its back and front) -> 198.0 yd (real 190.5 yd).
+- Hole 16 (Royal): measured 510 yd from the tee-box centre vs 540 on the card (-5.6%); moved the virtual tee along the middle of the real tee polygon w118116671 (on its centre line, at least 2.5 m from its back and front) -> 514.0 yd (real 509.8 yd).
 
 ## Tree detection (DC lidar normalized surface model)
 
-- 12929 trees detected in the world extent (3143 inside the course), 4366 conifers / 8563 deciduous; median height 13.4 m, max 45.1 m.
+- 12925 trees detected in the world extent (3139 inside the course), 4362 conifers / 8563 deciduous; median height 13.4 m, max 45.1 m.
 - Dropped: 1264 tops on building footprints, 0 over the lake, 66 tiny crowns.
 - Dropped on playing surfaces (spec 5.4): 6 -> bunker w1536671348 (17.0 m), bunker w1536671348 (20.3 m), tee w118116086 (21.0 m), tee w118116086 (19.2 m), tee lidar_tee_12 (18.3 m), tee lidar_tee_12 (17.7 m)
+- Dropped from tee shots (s06b): 1 -> 10 Royal (44.5 m tree, 19.4 m from the tee)
 - OSM natural=tree points matched by a detected tree within 4 m: 98 of 183.
 - Conifer vs deciduous is inferred from crown shape only (no leaf-off imagery); see build/trees_preview.png.
 

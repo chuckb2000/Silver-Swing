@@ -6,33 +6,33 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 
 | hole | par | tee set | card yd | measured yd | diff yd | diff % | status | adjusted yd | adj. diff % | adj. status |
 |---|---|---|---|---|---|---|---|---|---|---|
-| 1 | 4 | Blue | 385 | 392.2 | +7.2 | +1.9% | pass | 392.2 | +1.9% | pass |
-| 2 | 5 | Blue | 535 | 534.3 | -0.7 | -0.1% | pass | 534.3 | -0.1% | pass |
-| 3 | 3 | Blue | 162 | 161.9 | -0.1 | -0.0% | pass | 161.9 | -0.0% | pass |
-| 4 | 4 | Blue | 347 | 352.6 | +5.6 | +1.6% | pass | 352.6 | +1.6% | pass |
-| 5 | 4 | Blue | 369 | 364.9 | -4.1 | -1.1% | pass | 364.9 | -1.1% | pass |
-| 6 | 5 | Blue | 551 | 539.1 | -11.9 | -2.2% | pass | 539.1 | -2.2% | pass |
-| 7 | 4 | Blue | 361 | 356.0 | -5.0 | -1.4% | pass | 356.0 | -1.4% | pass |
-| 8 | 3 | Blue | 180 | 183.2 | +3.2 | +1.8% | pass | 183.2 | +1.8% | pass |
-| 9 | 4 | Blue | 393 | 403.1 | +10.1 | +2.6% | pass | 403.1 | +2.6% | pass |
-| 10 | 4 | Blue | 366 | 370.7 | +4.7 | +1.3% | pass | 370.7 | +1.3% | pass |
-| 11 | 5 | Blue | 545 | 543.5 | -1.5 | -0.3% | pass | 543.5 | -0.3% | pass |
-| 12 | 4 | Blue | 383 | 390.2 | +7.2 | +1.9% | pass | 390.2 | +1.9% | pass |
-| 13 | 3 | Blue | 151 | 148.7 | -2.3 | -1.5% | pass | 148.7 | -1.5% | pass |
-| 14 | 5 | Blue | 470 | 462.5 | -7.5 | -1.6% | pass | 462.5 | -1.6% | pass |
-| 15 | 3 | Blue | 201 | 195.7 | -5.3 | -2.6% | pass | 195.7 | -2.6% | pass |
-| 16 | 4 | Blue | 353 | 336.7 | -16.3 | -4.6% | flag | 353.0 | -0.0% | pass |
-| 17 | 4 | Blue | 365 | 363.6 | -1.4 | -0.4% | pass | 363.6 | -0.4% | pass |
-| 18 | 4 | Blue | 397 | 397.7 | +0.7 | +0.2% | pass | 397.7 | +0.2% | pass |
-| **total** | 72 | | **6514** | **6497** | -17 | -0.3% | | **6513** | -0.0% | |
+| 1 | 4 | Blue | 385 | 382.1 | -2.9 | -0.8% | pass | 382.1 | -0.8% | pass |
+| 2 | 5 | Blue | 535 | 540.9 | +5.9 | +1.1% | pass | 540.9 | +1.1% | pass |
+| 3 | 3 | Blue | 162 | 163.0 | +1.0 | +0.6% | pass | 163.0 | +0.6% | pass |
+| 4 | 4 | Blue | 347 | 344.7 | -2.3 | -0.7% | pass | 344.7 | -0.7% | pass |
+| 5 | 4 | Blue | 369 | 361.1 | -7.9 | -2.1% | pass | 361.1 | -2.1% | pass |
+| 6 | 5 | Blue | 551 | 531.5 | -19.5 | -3.5% | flag | 537.2 | -2.5% | pass |
+| 7 | 4 | Blue | 361 | 354.1 | -6.9 | -1.9% | pass | 354.1 | -1.9% | pass |
+| 8 | 3 | Blue | 180 | 156.6 | -23.4 | -13.0% | FAIL | 175.5 | -2.5% | pass |
+| 9 | 4 | Blue | 393 | 401.0 | +8.0 | +2.0% | pass | 401.1 | +2.1% | pass |
+| 10 | 4 | Blue | 366 | 376.2 | +10.2 | +2.8% | pass | 376.2 | +2.8% | pass |
+| 11 | 5 | Blue | 545 | 547.7 | +2.7 | +0.5% | pass | 547.7 | +0.5% | pass |
+| 12 | 4 | Blue | 383 | 390.3 | +7.3 | +1.9% | pass | 390.1 | +1.9% | pass |
+| 13 | 3 | Blue | 151 | 144.0 | -7.0 | -4.6% | flag | 147.3 | -2.5% | pass |
+| 14 | 5 | Blue | 470 | 444.4 | -25.6 | -5.5% | flag | 458.3 | -2.5% | pass |
+| 15 | 3 | Blue | 201 | 200.1 | -0.9 | -0.4% | pass | 200.1 | -0.4% | pass |
+| 16 | 4 | Blue | 353 | 353.0 | -0.0 | -0.0% | pass | 352.7 | -0.1% | pass |
+| 17 | 4 | Blue | 365 | 363.7 | -1.3 | -0.4% | pass | 363.7 | -0.4% | pass |
+| 18 | 4 | Blue | 397 | 397.6 | +0.6 | +0.2% | pass | 397.6 | +0.2% | pass |
+| **total** | 72 | | **6514** | **6452** | -62 | -1.0% | | **6493** | -0.3% | |
 
 ## Open items
 
 1. Hole 3 (Blue): tee box dev_tee3_blue assigned by the developer (tagged hole=3, tee_set=Blue in edited/course.geojson).
-2. Hole 6: the OSM hole line starts 92 m from the Blue tee box (w1053470756), and only that box matches the card; the line was probably drawn from another tee. Measured from the Blue box through the line's bend points.
-3. Hole 7: the OSM hole line starts 63 m from the Blue tee box (w1053586132), and only that box matches the card; the line was probably drawn from another tee. Measured from the Blue box through the line's bend points.
-4. Hole 15: OSM hole line has no par tag; using scorecard par 3.
-5. Hole 16: the OSM hole line starts 61 m from the Blue tee box (w1053602296), and only that box matches the card; the line was probably drawn from another tee. Measured from the Blue box through the line's bend points.
+2. Hole 6: the OSM hole line starts 98 m from the Blue tee box (w1053470756), and only that box matches the card; the line was probably drawn from another tee. Measured from the Blue box through the line's bend points.
+3. Hole 7: the OSM hole line starts 65 m from the Blue tee box (w1053586132), and only that box matches the card; the line was probably drawn from another tee. Measured from the Blue box through the line's bend points.
+4. Hole 8: the OSM hole line starts 54 m from the Blue tee box (w1053586138), and only that box matches the card; the line was probably drawn from another tee. Measured from the Blue box through the line's bend points.
+5. Hole 15: OSM hole line has no par tag; using scorecard par 3.
 6. Hole 18: the OSM hole line starts 51 m from the Blue tee box (w1053607175), and only that box matches the card; the line was probably drawn from another tee. Measured from the Blue box through the line's bend points.
 
 ## Course-specific notes (Willamette Valley CC)
@@ -78,7 +78,13 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 
 ## Playability adjustments
 
-- Hole 16 (Blue): measured 337 yd from the tee-box centre vs 353 on the card (-4.6%); moved the virtual tee within the real tee polygon w1053602296 -> 353.0 yd (real 336.7 yd).
+- Hole 6 (Blue): measured 531 yd from the tee-box centre vs 551 on the card (-3.5%); moved the virtual tee along the middle of the real tee polygon w1053470756 (on its centre line, at least 2.5 m from its back and front) -> 537.2 yd (real 531.5 yd).
+- Hole 8 (Blue): measured 157 yd from the tee-box centre vs 180 on the card (-13.0%); moved the virtual tee along the middle of the real tee polygon w1053586138 (on its centre line, at least 2.5 m from its back and front) -> 175.5 yd (real 156.6 yd).
+- Hole 9 (Blue): tee shot: a perfect drive at the middle of the fairway clipped a tree near the tee; moved 0.1 m along the middle of the real tee polygon w1053586142 to the nearest clear spot -> 401.1 yd (real 401.0 yd).
+- Hole 12 (Blue): tee shot: a perfect drive at the middle of the fairway clipped a tree near the tee; moved 0.4 m along the middle of the real tee polygon w1053602265 to the nearest clear spot -> 390.1 yd (real 390.3 yd).
+- Hole 13 (Blue): measured 144 yd from the tee-box centre vs 151 on the card (-4.6%); moved the virtual tee along the middle of the real tee polygon w1053602273 (on its centre line, at least 2.5 m from its back and front) -> 147.3 yd (real 144.0 yd).
+- Hole 14 (Blue): measured 444 yd from the tee-box centre vs 470 on the card (-5.5%); moved the virtual tee along the middle of the real tee polygon w1053602279 (on its centre line, at least 2.5 m from its back and front) -> 458.3 yd (real 444.4 yd).
+- Hole 16 (Blue): tee shot: a perfect drive at the middle of the fairway clipped a tree near the tee; moved 0.9 m along the middle of the real tee polygon w1053602296 to the nearest clear spot -> 352.7 yd (real 353.0 yd).
 
 ## Tree detection (DOGAMI canopy height model)
 
