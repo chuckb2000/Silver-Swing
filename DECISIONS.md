@@ -215,6 +215,19 @@ Changes from the starting values in CLAUDE.md, and choices the spec left open. N
 - **Course card:** hole 17, the par 3 over the lake (confirmed by the developer).
 - **Developer, 2026-10-19 (PR #7):** White 17 plays from the Blue box (+13.3 %, accepted); the hole 18 Blue lidar tee and the creek channel are approved; the two trees on hole 11's Blue tee shot stay removed; hole 17 is the course card. The build keeps the 2007 card (developer: "we'll stick with the build").
 
+## Willamette Valley Country Club (developer and course chat, 2026-10-19)
+
+- **Course id `willamette_valley`** (the existing logo), card name "Willamette Valley CC" (20 characters; the full name is 30), state OR, UTM 10N, theme `pnw`, wind 1-7 mph (developer).
+- **Blue tees only** (developer): 6,513 yd built against 6,514 on the club card (10/2023); every hole within 3 %. Hole 16's virtual tee moved 15 m within its long box (step 2).
+- **Hole 13 green "A"** (developer): OSM's line and pin end left of the pond with no green mapped; the 1,825 m2 green north-east of the pond is a practice area (striped, OSIP 2022 image) and stays a wrong green. The green was traced from the OSIP 2022 orthophoto by `data/willamette_valley/trace_h13.py` with propose_trace.py's green method (385 m2) and added through `edits.json`.
+- **Hole 3 Blue tee** (developer: "on the green fairway that extends from the 2 green"): no box in OSM, no pad in the lidar. A 6 x 4 m box at the card's 162 yd on the open north end of that fairway (the first spot, on the hole line, sat 11 m from a 24 m tree and the game's tee shot clipped it); approved by the developer on the OSIP image.
+- **Hole 9 and 14 fairways** are tagged `golf=tee` in OSM (228 x 36 m and 328 x 61 m); relabelled as fairways in `edits.json` after checking the OSIP image. Before that, the tee-shot test aimed hole 9's drive at another hole's fairway and into a tree.
+- **Cart paths:** OSM's `golf=path` (the current tag) lines become `golf=cartpath` copies in `edits.json` (the pipeline reads only `golf=cartpath`). No pipeline change, so no regression run.
+- **Not modelled** (developer): the maintenance no-play zone on 14-16 (a red penalty area on land); OB is the course boundary only. All five ponds red.
+- **`tee_shot_margin_m` 0.5**, as at Stone Creek.
+- **Course card:** hole 3, the par 3 over the pond (confirmed by the developer). The unrecorded lidar year is accepted; the developer archives the south-half OSIP image in the release.
+- **Data:** OSM from the developer's Overpass Turbo export (release `willamette-valley-data`, `export.1.geojson`; the API `.osm` export there is not used); DOGAMI DTM and CHM (`exportImage.10/11.tiff`); OSIP 2022 orthophoto tiles exported by the developer (hole 13 and hole 3 tiles in `raw/`, the two 0.5 m halves used only for checking).
+
 ## Franklin Country Club (developer and course chat, 2026-10-19)
 
 - **Course id `franklin`** (no logo yet: requested from the design chat, `docs/requests/franklin_design_requests.md`), name "Franklin Country Club" (21 characters), state MA, UTM 19N, world 1,792 x 2,048 m (the boundary is 1,419 x 1,637 m; 186 m of scenery east and west, 205 m north and south).

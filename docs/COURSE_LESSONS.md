@@ -7,8 +7,9 @@ with what to do instead. Add to it at the end of every course build.
 Sources so far: East Potomac Golf Links (2026-10-19, three courses on one
 island), Langston (2026-10-19, a course in two parts across a lake), Indian
 Island (2026-10-19, half the course traced), Tualatin Country Club
-(2026-10-19, section 9), Eastmoreland (2026-10-19, Portland) and Franklin Country Club
-(2026-10-19, section 10). Oswego Lake and Highland Links
+(2026-10-19, section 9), Eastmoreland (2026-10-19, Portland), Willamette Valley CC
+(2026-10-19, section 10) and Franklin Country Club
+(2026-10-19, section 11). Oswego Lake and Highland Links
 notes live in DECISIONS.md.
 
 ---
@@ -383,7 +384,36 @@ notes live in DECISIONS.md.
 - `npm install` may rewrite `game/package-lock.json`; revert it unless the
   course needs a new package.
 
-## 10. Franklin Country Club (2026-10-19)
+## 10. Willamette Valley CC (2026-10-19)
+
+- **Check every polygon's tag against its size.** OSM had two whole fairways
+  tagged `golf=tee` (228 x 36 m and 328 x 61 m). The audit only said "no
+  fairway" for those holes; sorting tee polygons by area found them at once.
+  A wrong tag also misleads the tee-shot test: it aimed hole 9's drive at the
+  next hole's fairway, into a tree.
+- **`golf=path` is the current OSM tag for cart paths;** the pipeline reads
+  only `golf=cartpath`. Relabel through `edits.json` (copy from a `proposed/`
+  file with the new kind, drop the original) until s01 learns the new tag.
+  `edits.json` `tags` does not change a feature's kind.
+- **A hole line that ends off any green, with a pin there, usually means the
+  green itself is missing,** not that the line is wrong. The nearest mapped
+  green (53 m away) was a practice area; s06 picked it silently. Ask, then
+  trace the green.
+- **Oregon's state imagery (OSIP 2022, 1 ft, 4-band) exports in one browser
+  click** from `imagery.oregonexplorer.info/.../OSIP_2022/OSIP_2022_SL/ImageServer/exportImage`
+  with `bboxSR`/`imageSR` 32610. 2048 x 1792 exports at 0.5 m worked. Give each
+  link complete, with no "..." shortcuts: a first batch with shortened links
+  didn't work for the developer.
+- **Placing a tee the developer describes:** put it at the card yardage on the
+  feature they name, then look at it on imagery and run the game's tee-shot
+  test before showing it. The first spot (on the hole line) was under a tree.
+- **The sandbox proxy refuses release uploads** (uploads.github.com, binary
+  body). Ask the developer to upload files to the release.
+- **`s03_audit.py` with an `edited/` file measures in degrees** (it reads the
+  WGS84 file): its distances after `merge_edits` are wrong. Read the first
+  audit (before edits) or s06's report instead.
+
+## 11. Franklin Country Club (2026-10-19)
 
 - **An openstreetmap.org "Export" (`.osm` XML) is as good as an Overpass
   export** if its box covers the world. Convert it with
