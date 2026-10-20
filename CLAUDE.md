@@ -606,7 +606,7 @@ DECISIONS.md with the reason.
     course on any page (request 1 in docs/requests/langdon_design_requests.md).
 
 -   **Player improvements (design chat, 2026-10-20):** branch
-    `design/player`, not merged. The developer approved items 2, 3, 4, 5, 7,
+    `design/player`, merged 2026-10-20 (developer approved). The developer approved items 2, 3, 4, 5, 7,
     8, 9 and 11 of docs/reports/player_improvements.md:
     -   share a scorecard picture (1080 x 1350 PNG; summary "share");
     -   install to the home screen: manifest, icons, a service worker that
@@ -626,10 +626,9 @@ DECISIONS.md with the reason.
     DECISIONS.md "Player improvements". 492 unit tests and 7 Playwright
     tests pass.
 
--   **Next task:** the developer approved player improvements 2, 3, 4, 5,
-    7, 8, 9 and 11 (2026-10-20); they are built on branch `design/player` and
-    wait for the developer's merge. Item 1 (swing coach) is on
-    `design/coach`, unmerged. Also: the third playtest (putting, yellow
+-   **Next task:** faster course building (docs/reports/course_creation_speedup.md,
+    recommendations 1-3, developer 2026-10-20). Item 1 of the player
+    improvements (swing coach) is on `design/coach`, unmerged. Also: the third playtest (putting, yellow
     misses), the club's printed scorecard and the hole 3 Blue tee box. New
     courses: a separate chat following docs/COURSE_BUILD.md; after each one
     lands, make its course card (docs/COURSE_BUILD.md section 12).
