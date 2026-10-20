@@ -530,10 +530,19 @@ DECISIONS.md with the reason.
     clubs of three nines). Cross-country golf: report only
     (`design/cross-country`), not to be built yet (developer).
 
+-   **Gorse (design chat, 2026-10-20):** branch `design/gorse`, merged
+    2026-10-20: surface 17 `gorse` (course_config `"gorse": {"ground":
+    "gorse"}`), a lie that carries 20-50 yd (drawn per lie), a green zone
+    0.3x normal, a thin yellow band, curve x1.8, no spin, no driver or putter;
+    a ball landing in it stops dead. Punch shots under a canopy now say
+    "punch". DECISIONS.md "Gorse plays penal; punch shots say so". Bandon
+    Dunes must switch its gorse ground to `gorse` and rename its theme (Bandon
+    Trails owns `bandon`).
+
 -   **Next task:** Langston's committed files predate a rebuild: a fresh
     build keeps one tree 19 m from the 10th Royal tee that the committed build
-    removed (every other course rebuilds unchanged, 2026-10-20); recommended:
-    list it in Langston's `drop_trees`. Item 1 of the player improvements (swing coach) is on
+    removed (every other course rebuilds unchanged, 2026-10-20); the fix is on
+    `fix/langston-tree` (developer: remove it), awaiting merge. Item 1 of the player improvements (swing coach) is on
     `design/coach`, unmerged. Also: the third playtest (putting, yellow
     misses), the club's printed scorecard and the hole 3 Blue tee box. New
     courses: a separate chat following docs/COURSE_BUILD.md; after each one
