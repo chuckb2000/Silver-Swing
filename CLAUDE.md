@@ -515,9 +515,11 @@ DECISIONS.md with the reason.
     merged 2026-10-20: the hole-complete panel's "rewatch" lists the hole's
     strokes and plays any of them back. DECISIONS.md "Rewatch a shot".
 
--   **Next task:** the regression check of every course on main (`make regress`),
-    then item 1 of the player
-    improvements (swing coach) is on `design/coach`, unmerged. Also: the third playtest (putting, yellow
+-   **Next task:** logos for Chambers Bay and Gearhart (developer,
+    2026-10-20). The full `make regress` run of the faster-building changes
+    was still going at the merge (East Potomac, Eastmoreland and Franklin
+    unchanged). Item 1 of the player improvements (swing coach) is on
+    `design/coach`, unmerged. Also: the third playtest (putting, yellow
     misses), the club's printed scorecard and the hole 3 Blue tee box. New
     courses: a separate chat following docs/COURSE_BUILD.md; after each one
     lands, add its line to section 11 and fold its lessons into
