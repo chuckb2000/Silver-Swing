@@ -65,5 +65,13 @@
     "Imagery: Oregon Statewide Imagery Program (OSIP) 2024",
     "Scorecard: Waverley Country Club (club website)"
   ],
-  "notes": "Developer decisions 2026-10-19: Blue tees only; every penalty area red; the Willamette is a red penalty area (not out of bounds); the driving range is away from the course and not modelled; theme like pnw with slightly nicer turf and whiter sand. OSM has the boundary, 18 fairways, one pond and the clubhouse only: hole lines, greens, tees, bunkers and pins are traced (Indian Island procedure); hole identity from the club's course layout map (reference/club_course_layout.png). OSM spells the club 'Waverly'; the club and the logo id use 'Waverley'."
+  "notes": "Developer decisions 2026-10-19: Blue tees only; every penalty area red; the Willamette is a red penalty area (not out of bounds); the driving range is away from the course and not modelled; theme like pnw with slightly nicer turf and whiter sand. OSM has the boundary, 18 fairways, one pond and the clubhouse only: hole lines, greens, tees, bunkers and pins are traced (Indian Island procedure); hole identity from the club's course layout map (reference/club_course_layout.png). OSM spells the club 'Waverly'; the club and the logo id use 'Waverley'.",
+  "green_tilt": [
+    {
+      "hole": 11,
+      "max_tilt": 0.035,
+      "bumps": 0,
+      "note": "developer 2026-10-19: 'green slopes back to front strongly'; the lidar plane over the green tilts 6.5 % towards the tee. Cap raised from 2.5 % to 3.5 %, no random undulations"
+    }
+  ]
 }

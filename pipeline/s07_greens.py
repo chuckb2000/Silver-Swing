@@ -76,6 +76,8 @@ def main():
     name = course_name_from_argv()
     cfg = load_config(name)
     tiers_cfg = {int(t["hole"]): t for t in cfg.get("green_tiers", [])}
+    # optional: a green the course knows to be steeper than the usual cap (Waverley 11, developer 2026-10-19)
+    tilt_cfg = {int(t["hole"]): t for t in cfg.get("green_tilt", [])}
     bdir = build_dir(name)
     base = np.load(bdir / "height_base.npy").astype(np.float64)
     holes = json.load(open(bdir / "holes.json"))
@@ -105,10 +107,11 @@ def main():
         coef, *_ = np.linalg.lstsq(A, Z, rcond=None)
         z0, gx, gy = coef
         tilt = math.hypot(gx, gy)
-        used = min(MAX_TILT, max(0.01, tilt))
+        hole_no, pin = pin_for.get(row.osm, (None, None))
+        cap = tilt_cfg[hole_no]["max_tilt"] if hole_no in tilt_cfg else MAX_TILT
+        used = min(cap, max(0.01, tilt))
         if tilt > 1e-9:
             gx, gy = gx / tilt * used, gy / tilt * used
-        hole_no, pin = pin_for.get(row.osm, (None, None))
         seed = 7919 * (hole_no or (100 + k)) + 13
         rng = np.random.default_rng(seed)
         bumps = []
@@ -117,6 +120,8 @@ def main():
         tiers = [tier_for(tiers_cfg[hole_no], hole_by_no[hole_no], c, cfg["default_tee"], poly)] if hole_no in tiers_cfg else []
         if tiers:
             nb = 0  # the tier is this green's feature; no random undulations on top of it
+        if hole_no in tilt_cfg and "bumps" in tilt_cfg[hole_no]:
+            nb = int(tilt_cfg[hole_no]["bumps"])  # the slope is this green's feature
         tries = 0
         while len(bumps) < nb and tries < 200 and not inner.is_empty:
             tries += 1

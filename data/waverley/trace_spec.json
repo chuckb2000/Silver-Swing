@@ -282,7 +282,12 @@
     708,
     975
    ],
-   "bends": []
+   "bends": [
+    [
+     886.3,
+     1046.5
+    ]
+   ]
   },
   "3": {
    "par": 4,
@@ -336,7 +341,12 @@
     598,
     1286
    ],
-   "bends": []
+   "bends": [
+    [
+     572.9,
+     1100.9
+    ]
+   ]
   },
   "9": {
    "par": 3,
@@ -372,7 +382,12 @@
     523,
     1200
    ],
-   "bends": []
+   "bends": [
+    [
+     599.2,
+     1420.3
+    ]
+   ]
   },
   "13": {
    "par": 5,
@@ -426,7 +441,12 @@
     368,
     1043
    ],
-   "bends": []
+   "bends": [
+    [
+     444.6,
+     960.6
+    ]
+   ]
   }
  },
  "fairways": {
@@ -454,5 +474,5 @@
   "boundary_close_m": 10,
   "hazard_why": "developer 2026-10-19: the Willamette is a red penalty area"
  },
- "bend_note": "No bend points yet: added after the developer marks the Blue tees (centre of the fairway where it lies farthest from the tee-green chord, as at Indian Island)."
+ "bend_note": "Bend points (CLAUDE.md 5.5: the dogleg turn at the fairway centre): where the centre of the hole's own OSM fairway lies farthest from the tee-green chord, used on holes whose fairway bends more than 30 m off it (2: 42 m, 8: 31 m, 12: 38 m, 18: 33 m), as at Indian Island; the other holes play straight (largest offset 28 m, hole 13)."
 }

@@ -71,6 +71,30 @@ def main():
         if d.get("note"):
             print(f"[desk] hole {k} note: {d['note']}")
 
+    # optional (--traced-fallback): a hole the developer has not saved keeps the course chat's
+    # traced green, tees and nearest bunkers, tagged approved=pending so it is never mistaken
+    # for the developer's approval (Waverley hole 14, 2026-10-19)
+    if "--traced-fallback" in __import__("sys").argv:
+        lines = {str(r.tags.get("ref")): r.geometry for _, r in tr[tr.kind == "hole"].iterrows()}
+        for k in sorted(set(spec["holes"]) - set(greens), key=int):
+            print(f"[desk] hole {k}: no desk save, using the traced shapes (approved=pending)")
+            for _, r in tr.iterrows():
+                if r.kind == "green" and str(r.tags.get("hole")) == k:
+                    pass
+                elif r.kind == "tee" and str(r.osm).split("_")[2] == k:
+                    pass
+                elif r.kind == "bunker" and min(lines, key=lambda h: lines[h].distance(r.geometry)) == k:
+                    pass
+                else:
+                    continue
+                tags = {"golf": r.kind, "hole": k, "source": r.tags.get("source", "traced"), "traced_from": r.osm,
+                        "approved": "pending (no desk save)"}
+                feats.append({"osm": f"desk_{k}_{r.kind}_{r.osm}", "kind": r.kind, "geometry": r.geometry, "tags": tags})
+                if r.kind == "green":
+                    greens[k] = r.geometry
+                if r.kind == "tee":
+                    tees.setdefault(k, []).append(r.geometry)
+
     for k, p in greens.items():
         if any(p.contains(q) for q in osm_pins):
             continue
