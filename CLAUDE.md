@@ -1316,8 +1316,8 @@ by √power, so partial shots fly lower.
                                                        chipping allowed
   -------------------------------------------------------------------------
 
-The info panel always shows the current lie and its effect, e.g. \"rough
-−15%\".
+The info panel always shows the current lie by name, e.g. \"rough\"
+(no percentages: developer, 2026-10-20).
 
 **7.5 Cup**
 

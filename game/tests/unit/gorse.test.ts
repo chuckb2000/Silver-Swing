@@ -74,7 +74,7 @@ describe('gorse', () => {
     const lie = makeLie({ surface: SURF.rough, teedUp: false, distToGreenEdge: 100, canopyBase: 5 }, new Rng(1));
     expect(lie.kind).toBe('trees');
     expect(lie.apexCap).toBe(4);
-    expect(lie.label).toBe('punch −20%');
-    expect(makeLie({ surface: SURF.woods, teedUp: false, distToGreenEdge: 100, canopyBase: null }, new Rng(1)).label).toBe('under trees −20%');
+    expect(lie.label).toBe('punch');
+    expect(makeLie({ surface: SURF.woods, teedUp: false, distToGreenEdge: 100, canopyBase: null }, new Rng(1)).label).toBe('under trees');
   });
 });
