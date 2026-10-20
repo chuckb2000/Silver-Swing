@@ -1,0 +1,105 @@
+{
+  "id": "bandon_dunes",
+  "name": "Bandon Dunes",
+  "location": "Bandon, Coos County, Oregon",
+  "state": "OR",
+  "architects": "David McLay Kidd (1999)",
+  "theme": "bandon_dunes",
+  "epsg": 32610,
+  "osm_sources": [
+    "raw/overpass.geojson"
+  ],
+  "boundary_name": "Bandon Dunes Golf Resort",
+  "dtm": {
+    "path": "raw/dogami_dtm_ft.tif",
+    "units": "ft",
+    "source": "DOGAMI lidar DIGITAL_TERRAIN_MODEL_MOSAIC (bare earth), exportImage at 1 m in EPSG:32610, box x 385960-387440 / y 4781928-4783920, downloaded by the developer 2026-10-20 (GitHub release bandon-dunes-data, exportImage.18.tiff)"
+  },
+  "chm": {
+    "path": "raw/dogami_chm_ft.tif",
+    "units": "ft",
+    "source": "DOGAMI lidar CANOPY_HEIGHT_MODEL_MOSAIC (highest hit minus bare earth), exportImage at 1 m in EPSG:32610, same box, downloaded by the developer 2026-10-20 (GitHub release bandon-dunes-data, exportImage.19.tiff)",
+    "label": "DOGAMI canopy height model"
+  },
+  "ortho": {
+    "path": "raw/osip2024_05m.tif",
+    "source": "Oregon Statewide Imagery Program 2024 (OSIP_2024_WM), exportImage JPEG at 0.5 m, georeferenced from the request bbox by make_ortho.py (GitHub release bandon-dunes-data, exportImage.jpg)"
+  },
+  "world": {
+    "x0": 386060,
+    "y0": 4782028,
+    "width": 1280,
+    "height": 1792,
+    "note": "provisional: box of the 18 Bandon Dunes hole lines and their tees, greens, fairways and bunkers (1,000 x 1,442 m) plus 140 m east/west and 175 m south/north, rounded to whole 256 m chunks and centred"
+  },
+  "tee_sets": [
+    {
+      "name": "Black",
+      "playable": false,
+      "rating": 73.5,
+      "slope": 143,
+      "total_yd": 6732
+    },
+    {
+      "name": "Green",
+      "playable": true,
+      "rating": 71.1,
+      "slope": 133,
+      "total_yd": 6221
+    },
+    {
+      "name": "Gold",
+      "playable": false,
+      "rating": 69.1,
+      "slope": 124,
+      "total_yd": 5716
+    },
+    {
+      "name": "Royal Blue",
+      "playable": false,
+      "rating": 61.6,
+      "slope": 105,
+      "total_yd": 3986
+    },
+    {
+      "name": "Orange",
+      "playable": false,
+      "rating": 65.5,
+      "slope": 114,
+      "total_yd": 5040
+    }
+  ],
+  "default_tee": "Green",
+  "scorecard_source": "Bandon Dunes Golf Resort club scorecard, 2026 (Website-Bandon-Scorecard-2026.jpg, GitHub release bandon-dunes-data, read 2026-10-20). Every row adds up to its printed totals; men's stroke index 1-18 complete. Ratings/slopes are the card's men's figures (women's: Black 79.6/145, Green 76.8/139, Gold 74.2/133, Royal Blue 64.5/111; Orange 71.6/126). The Orange row has its own stroke index (9,13,1,17,7,15,5,11,3 / 10,12,18,6,14,16,4,8,2), not stored.",
+  "penalty_default": "red",
+  "driving_range_is_ob": true,
+  "wind_mph": {
+    "minMph": 8,
+    "maxMph": 16
+  },
+  "trees_off_fairways_m": 2,
+  "attribution": [
+    "Map data © OpenStreetMap contributors (ODbL)",
+    "Elevation and canopy: Oregon Department of Geology and Mineral Industries (DOGAMI) lidar",
+    "Scorecard: Bandon Dunes Golf Resort (club scorecard)"
+  ],
+  "notes": "Intake 2026-10-20; developer's answers 2026-10-20: Green tees, all water red, OB = the resort polygon, trees from lidar, no separate no-play zones, wind 8-16 mph (rarely 3-8), a theme of its own (bandon_dunes; Bandon Trails has `bandon`) with yellow-flowering gorse, a seal logo (course chat draws both).",
+  "lake_level_max_m": 1.3,
+  "cliff_sand_slope_pct": 45,
+  "beach_max_m": 8.0,
+  "tree_type": "conifer",
+  "tree_type_note": "the trees on and around Bandon Dunes are shore pine (and Sitka spruce in the ravine), whose broad wind-flattened crowns the crown-shape rule calls deciduous; the broadleaf scrub is drawn as gorse",
+  "gorse": {
+    "spacing_m": 3.4,
+    "r_min_m": 1.5,
+    "r_max_m": 2.3,
+    "ground": "gorse",
+    "note": "developer 2026-10-20: the yellow-flowering gorse is an iconic part of this course; thickets from the OSIP 2024 orthophoto (pipeline/gorse.py); the ground under them is the gorse surface (17), a penal lie (design/gorse)"
+  },
+  "trees_need_ortho": {
+    "v_max": 120,
+    "min_share": 0.1,
+    "note": "the DOGAMI lidar (probably 2008-09) is older than the Preserve and the Punchbowl; lidar trees whose crowns are not dark canopy in the OSIP 2024 photo are dropped"
+  },
+  "wind_note": "developer 2026-10-20: 8-16 mph, in very rare cases 3-8. The game draws each round's wind from minMph-maxMph; a rare calm round (say 1 in 20 at 3-8 mph) needs a game change: a design-chat request in docs/courses/bandon_dunes.md"
+}

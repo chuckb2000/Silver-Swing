@@ -1,0 +1,272 @@
+{
+ "drop": [
+  {
+   "osm": "w362513476",
+   "reason": "Bandon Trails course polygon: another course; the OB line is the resort polygon"
+  },
+  {
+   "osm": "w362513478",
+   "reason": "Practice Center polygon: the practice ground's own leisure=golf_course; its driving range stays out of bounds as golf=driving_range"
+  },
+  {
+   "osm": "w674855473",
+   "reason": "Bandon Preserve course polygon: another course; the OB line is the resort polygon"
+  },
+  {
+   "osm": "w1540940976",
+   "reason": "Shortys polygon (the resort's short course): another course; the OB line is the resort polygon"
+  },
+  {
+   "osm": "n3668057526",
+   "reason": "resort name point (leisure=golf_course node), not a boundary"
+  },
+  {
+   "osm": "w674136716",
+   "reason": "Pacific Dunes Hole 1: another course's hole line (its tees, fairways and greens stay as mapped surfaces)"
+  },
+  {
+   "osm": "w674139835",
+   "reason": "Pacific Dunes Hole 2: another course's hole line (its tees, fairways and greens stay as mapped surfaces)"
+  },
+  {
+   "osm": "w674182073",
+   "reason": "Pacific Dunes Hole 3: another course's hole line (its tees, fairways and greens stay as mapped surfaces)"
+  },
+  {
+   "osm": "w674274306",
+   "reason": "Pacific Dunes Hole 4: another course's hole line (its tees, fairways and greens stay as mapped surfaces)"
+  },
+  {
+   "osm": "w674274318",
+   "reason": "Pacific Dunes  Hole 5: another course's hole line (its tees, fairways and greens stay as mapped surfaces)"
+  },
+  {
+   "osm": "w674334360",
+   "reason": "Pacific Dunes Hole 6: another course's hole line (its tees, fairways and greens stay as mapped surfaces)"
+  },
+  {
+   "osm": "w674336242",
+   "reason": "Pacific Dunes Hole 7: another course's hole line (its tees, fairways and greens stay as mapped surfaces)"
+  },
+  {
+   "osm": "w674337517",
+   "reason": "Pacific Dunes  Hole 8: another course's hole line (its tees, fairways and greens stay as mapped surfaces)"
+  },
+  {
+   "osm": "w674342201",
+   "reason": "Pacific Dunes  Hole 9: another course's hole line (its tees, fairways and greens stay as mapped surfaces)"
+  },
+  {
+   "osm": "w674345445",
+   "reason": "Pacific Dunes  Hole 10: another course's hole line (its tees, fairways and greens stay as mapped surfaces)"
+  },
+  {
+   "osm": "w674345455",
+   "reason": "Pacific Dunes  Hole 11: another course's hole line (its tees, fairways and greens stay as mapped surfaces)"
+  },
+  {
+   "osm": "w674345462",
+   "reason": "Pacific Dunes Hole 12: another course's hole line (its tees, fairways and greens stay as mapped surfaces)"
+  },
+  {
+   "osm": "w674353935",
+   "reason": "Pacific Dunes Hole 16: another course's hole line (its tees, fairways and greens stay as mapped surfaces)"
+  },
+  {
+   "osm": "w674353959",
+   "reason": "Pacific Dunes Hole 17: another course's hole line (its tees, fairways and greens stay as mapped surfaces)"
+  },
+  {
+   "osm": "w674357839",
+   "reason": "Pacific Dunes Hole 18: another course's hole line (its tees, fairways and greens stay as mapped surfaces)"
+  },
+  {
+   "osm": "w674855474",
+   "reason": "Bandon Trails Hole 18: another course's hole line (its tees, fairways and greens stay as mapped surfaces)"
+  },
+  {
+   "osm": "w675015133",
+   "reason": "Bandon Trails Hole 2: another course's hole line (its tees, fairways and greens stay as mapped surfaces)"
+  },
+  {
+   "osm": "w675062692",
+   "reason": "Bandon Trails Hole 6: another course's hole line (its tees, fairways and greens stay as mapped surfaces)"
+  },
+  {
+   "osm": "w675531781",
+   "reason": "Bandon Trails Hole 7: another course's hole line (its tees, fairways and greens stay as mapped surfaces)"
+  },
+  {
+   "osm": "w675667303",
+   "reason": "Bandon Trails Hole 17: another course's hole line (its tees, fairways and greens stay as mapped surfaces)"
+  },
+  {
+   "osm": "w888425335",
+   "reason": "Bandon Preserve Hole 1: another course's hole line (its tees, fairways and greens stay as mapped surfaces)"
+  },
+  {
+   "osm": "w888425336",
+   "reason": "Bandon Preserve Hole 2: another course's hole line (its tees, fairways and greens stay as mapped surfaces)"
+  },
+  {
+   "osm": "w888425338",
+   "reason": "Bandon Preserve Hole 3: another course's hole line (its tees, fairways and greens stay as mapped surfaces)"
+  },
+  {
+   "osm": "w888425339",
+   "reason": "Bandon Preserve Hole 4: another course's hole line (its tees, fairways and greens stay as mapped surfaces)"
+  },
+  {
+   "osm": "w888425340",
+   "reason": "Bandon Preserve Hole 5: another course's hole line (its tees, fairways and greens stay as mapped surfaces)"
+  },
+  {
+   "osm": "w888425343",
+   "reason": "Bandon Preserve Hole 6: another course's hole line (its tees, fairways and greens stay as mapped surfaces)"
+  },
+  {
+   "osm": "w888425344",
+   "reason": "Bandon Preserve Hole 7: another course's hole line (its tees, fairways and greens stay as mapped surfaces)"
+  },
+  {
+   "osm": "w888425345",
+   "reason": "Bandon Preserve Hole 8: another course's hole line (its tees, fairways and greens stay as mapped surfaces)"
+  },
+  {
+   "osm": "w888425346",
+   "reason": "Bandon Preserve Hole 9: another course's hole line (its tees, fairways and greens stay as mapped surfaces)"
+  },
+  {
+   "osm": "w888425347",
+   "reason": "Bandon Preserve Hole 10: another course's hole line (its tees, fairways and greens stay as mapped surfaces)"
+  },
+  {
+   "osm": "w888425348",
+   "reason": "Bandon Preserve Hole 11: another course's hole line (its tees, fairways and greens stay as mapped surfaces)"
+  },
+  {
+   "osm": "w888425349",
+   "reason": "Bandon Preserve Hole 12: another course's hole line (its tees, fairways and greens stay as mapped surfaces)"
+  },
+  {
+   "osm": "w888425350",
+   "reason": "Bandon Preserve Hole 13: another course's hole line (its tees, fairways and greens stay as mapped surfaces)"
+  },
+  {
+   "osm": "w1111086161",
+   "reason": "Bandon Trails Hole 1: another course's hole line (its tees, fairways and greens stay as mapped surfaces)"
+  },
+  {
+   "osm": "w1547585708",
+   "reason": "unnamed hole line (ref 11): another course's hole line (its tees, fairways and greens stay as mapped surfaces)"
+  },
+  {
+   "osm": "w1547585709",
+   "reason": "unnamed hole line (ref 12): another course's hole line (its tees, fairways and greens stay as mapped surfaces)"
+  },
+  {
+   "osm": "w674139833",
+   "reason": "a green of another course outside the world (s07 shapes every green; one beyond the world edge has no art grid to blend into)"
+  },
+  {
+   "osm": "w674851264",
+   "reason": "a green of another course outside the world (s07 shapes every green; one beyond the world edge has no art grid to blend into)"
+  },
+  {
+   "osm": "w675667301",
+   "reason": "a green of another course outside the world (s07 shapes every green; one beyond the world edge has no art grid to blend into)"
+  },
+  {
+   "osm": "w1098390737",
+   "reason": "a green of another course outside the world (s07 shapes every green; one beyond the world edge has no art grid to blend into)"
+  },
+  {
+   "osm": "w1098413082",
+   "reason": "a green of another course outside the world (s07 shapes every green; one beyond the world edge has no art grid to blend into)"
+  },
+  {
+   "osm": "w1098413090",
+   "reason": "a green of another course outside the world (s07 shapes every green; one beyond the world edge has no art grid to blend into)"
+  },
+  {
+   "osm": "w1540940985",
+   "reason": "a green of another course outside the world (s07 shapes every green; one beyond the world edge has no art grid to blend into)"
+  },
+  {
+   "osm": "w1547584752",
+   "reason": "a green of another course outside the world (s07 shapes every green; one beyond the world edge has no art grid to blend into)"
+  }
+ ],
+ "add": [
+  {
+   "from": "proposed/tees_lidar.geojson",
+   "ids": [
+    "lidar_tee_82"
+   ],
+   "tags": {
+    "hole": "11",
+    "tee_set": "Green",
+    "assigned_by": "the course chat (2026-10-20, developer away: measured against the card and checked on the OSIP 2024 photo)"
+   },
+   "reason": "hole 11 Green tee: a raised round mown pad (196 m2) left of the 10th green, plainly a tee box on the photo; 344 yd to the green (card 351, -2.1%). The OSM line starts at two boxes 100 m farther south that measure 445-463 yd, longer than any card set"
+  },
+  {
+   "from": "proposed/tees_lidar.geojson",
+   "ids": [
+    "lidar_tee_86",
+    "lidar_tee_78"
+   ],
+   "tags": {},
+   "reason": "hole 11: the other two pads of the same tee complex (377 yd = Black 384 -1.8%; 308 yd = Gold 315 -2.2%), mown boxes on the photo; drawn as tees, not played"
+  },
+  {
+   "from": "proposed/tees_lidar.geojson",
+   "ids": [
+    "lidar_tee_12"
+   ],
+   "tags": {
+    "hole": "1",
+    "tee_set": "Green",
+    "assigned_by": "the course chat (2026-10-20, developer away: measured against the card and checked on the OSIP 2024 photo)"
+   },
+   "reason": "hole 1: the raised mown pad at the start of the OSM hole line (291 m2), the only tee box near the line; 406 yd (Black 386 +5%, Green 352 +15%). No forward tee is mapped or visible - open item"
+  },
+  {
+   "from": "proposed/beach.geojson",
+   "ids": [
+    "x_beach_lidar"
+   ],
+   "tags": {},
+   "reason": "the beach below the bluff (OSM's natural=beach starts south-west of the world): low lidar ground between the sea and the bluff outside the boundary, make_beach.py; scenery only (out of bounds either way)"
+  }
+ ],
+ "tags": [
+  {
+   "osm": "w1056841328",
+   "set": {
+    "hole": "2",
+    "tee_set": "Green",
+    "assigned_by": "the course chat (2026-10-20, developer away: measured against the card and checked on the OSIP 2024 photo)"
+   },
+   "reason": "hole 2 Green tee: the mapped box 33 m right of the OSM line (s06 only looks 25 m either side), 153 yd to the green (card 155, -1.1%)"
+  },
+  {
+   "osm": "w1057045707",
+   "set": {
+    "hole": "12",
+    "tee_set": "Green",
+    "assigned_by": "the course chat (2026-10-20, developer away: measured against the card and checked on the OSIP 2024 photo)"
+   },
+   "reason": "hole 12 Green tee: the long mapped tee strip (834 m2) on the line, whose centre measures 136 yd; s06 slides the tee back along it toward the card's 153 yd"
+  },
+  {
+   "osm": "w1056841347",
+   "set": {
+    "hole": "3",
+    "tee_set": "Green",
+    "assigned_by": "the course chat (2026-10-20, developer away: measured against the card and checked on the OSIP 2024 photo)"
+   },
+   "reason": "hole 3 Green tee: the mapped box 26 m left of the OSM line (s06 looks 25 m either side), 488 yd to the green (card 489, -0.3%); s06 had taken the box behind it (517 yd, +5.6%)"
+  }
+ ]
+}
