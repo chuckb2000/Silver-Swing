@@ -73,6 +73,9 @@ def main():
     rep["conifer"] = int(sum(t_["type"] == "conifer" for t_ in kept))
     rep["deciduous"] = int(sum(t_["type"] == "deciduous" for t_ in kept))
     rep["dropped_for_tee_shots"] = dropped
+    if cfg.get("garden"):  # garden shrubs back in their colour slots (index % 8, pipeline/garden.py)
+        from garden import order_trees
+        kept, _ = order_trees(kept)
     write_json(bdir / "trees.json", kept)
     write_json(bdir / "trees_report.json", rep, indent=1)
     print(f"[s06b] {len(dropped)} trees dropped from tee shots (within {REACH:g} m of the tee): "

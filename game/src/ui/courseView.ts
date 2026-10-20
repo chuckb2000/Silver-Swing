@@ -5,6 +5,7 @@
 import Phaser from 'phaser';
 import { app, HEIGHT_PX, PX_PER_M } from '../app';
 import type { CourseRuntime } from '../data/course';
+import { shrubKey } from './shrubs';
 
 interface TreeInfo { key: string; sheet: string; px: number; py: number; w: number; h: number }
 
@@ -41,6 +42,7 @@ export class CourseView {
     const meta = scene.cache.json.get('treesMeta') as { widths: number[]; heights: number[] };
     const tex = scene.textures.get('trees');
     const bloom = scene.textures.exists('blossom') ? scene.textures.get('blossom') : null;
+    const shrubs = scene.textures.exists('shrubs') ? scene.textures.get('shrubs') : null;
     const trees = course.obstacles.trees;
     this.cols = Math.ceil(j.world.width / this.cell);
     this.rows = Math.ceil(j.world.height / this.cell);
@@ -60,7 +62,12 @@ export class CourseView {
       }
       let key = `${type}_${w}_${h}_${t.i % 3}`;
       let sheet = 'trees';
-      if (t.kind === 2 && bloom?.has(`b_${w}_${h}_${t.i % 3}`)) { key = `b_${w}_${h}_${t.i % 3}`; sheet = 'blossom'; } // flowering: same size grid as deciduous
+      const sk = t.kind === 3 ? shrubKey(t.i, t.r, t.h) : '';
+      if (sk && shrubs?.has(sk)) { // flowering shrub: its own small size grid
+        key = sk; sheet = 'shrubs';
+        const [, sw, sh] = sk.split('_').map(Number);
+        w = sw; h = sh;
+      } else if (t.kind === 2 && bloom?.has(`b_${w}_${h}_${t.i % 3}`)) { key = `b_${w}_${h}_${t.i % 3}`; sheet = 'blossom'; } // flowering: same size grid as deciduous
       else if (!tex.has(key)) key = type === 'c' ? 'c_22_44_0' : 'd_22_32_0';
       const px = Math.round(t.x * PX_PER_M), py = Math.round((j.world.height - t.y) * PX_PER_M);
       this.infos.push({ key, sheet, px, py, w: w + 2, h });

@@ -184,6 +184,54 @@ def layout_holes(g, layout: dict):
     return holes.sort_values("ref")
 
 
+def joins_parts(cfg: dict) -> bool:
+    """course_config.json "join_boundary_parts": the course boundary is mapped in
+    several parts (Eastmoreland: two, either side of SE Bybee Blvd) that are all
+    in play. Without it the game's OB line is the largest part only."""
+    return bool(cfg.get("join_boundary_parts"))
+
+
+def game_boundary(g, cfg: dict):
+    """The single polygon course.json carries as the OB line (the game's Polygon).
+
+    Normally the largest part of play_boundary(). With "join_boundary_parts"
+    ({"max_gap_m": m}) the parts are joined instead: between each part and the
+    rest, the convex hull of the stretches of their outlines within max_gap_m of
+    each other is added (the strip of road between them). The strip stays out of
+    bounds on the surface map (s08 paints only the parts as the course), and the
+    game calls a ball OB on an OB surface as well as outside this polygon.
+    """
+    from shapely.ops import unary_union
+    b = play_boundary(g, cfg)
+    if b.geom_type != "MultiPolygon":
+        return b
+    if not joins_parts(cfg):
+        return max(b.geoms, key=lambda p: p.area)
+    gap = float(cfg["join_boundary_parts"].get("max_gap_m", 16.0))
+    parts = sorted(b.geoms, key=lambda p: -p.area)
+    joined = parts[0]
+    for p in parts[1:]:
+        a0 = joined.intersection(p.buffer(gap))
+        a1 = p.intersection(joined.buffer(gap))
+        if a0.is_empty or a1.is_empty:
+            raise SystemExit(f"[join_boundary_parts] a boundary part is more than {gap} m from the rest")
+        joined = unary_union([joined, p, unary_union([a0, a1]).convex_hull])
+    if joined.geom_type != "Polygon":
+        raise SystemExit(f"[join_boundary_parts] the joined boundary is a {joined.geom_type}, not one polygon")
+    return joined
+
+
+def boundary_rings(g, cfg: dict):
+    """Outlines the OB stakes are drawn along: every part with join_boundary_parts,
+    else the largest part's outline (as before)."""
+    b = play_boundary(g, cfg)
+    if b.geom_type == "MultiPolygon":
+        if joins_parts(cfg):
+            return [p for p in b.geoms]
+        return [max(b.geoms, key=lambda p: p.area)]
+    return [b]
+
+
 def play_boundary(g, cfg: dict):
     """The out-of-bounds line: the course boundary, or with layouts the union of
     every leisure=golf_course polygon in the data (one property, one OB line)."""
