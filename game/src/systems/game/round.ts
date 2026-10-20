@@ -65,6 +65,19 @@ export type PendingRelief =
   | { kind: 'wrong_green' }
   | { kind: 'cartpath' };
 
+/** A stroke played this hole, kept so it can be watched again (the physics is deterministic). */
+export interface PlayedStroke {
+  shot: PlannedShot;
+  hole: number;
+  seq: number;
+  /** its number on the scorecard (penalty strokes before it count) */
+  n: number;
+  from: { x: number; y: number };
+  to: { x: number; y: number };
+  /** how it ended: holed, in a penalty area, out of bounds, or at rest */
+  result: 'holed' | 'water' | 'ob' | 'rest';
+}
+
 export interface PlannedShot {
   club: Club;
   spec: ShotSpec;
@@ -123,6 +136,8 @@ export class Round {
   shotSeq = 0;
   /** The last stroke simulated this hole, kept so it can be played back exactly (replay). */
   lastStroke: { shot: PlannedShot; hole: number; seq: number } | null = null;
+  /** Every stroke played this hole, in order (a mulligan takes its stroke off). Not saved: a resumed hole lists the strokes since. */
+  strokes: PlayedStroke[] = [];
   readonly winds: Wind[];
   /** Player's units (putter scales follow them); set by the game from the settings. */
   units: 'yd' | 'm' = 'yd';
@@ -175,6 +190,7 @@ export class Round {
     this.beforeShot = null;
     this.pending = null;
     this.lastStroke = null;
+    this.strokes = [];
     this.history = [{ x: this.ball.x, y: this.ball.y }];
     this.refreshLie();
   }
@@ -393,6 +409,12 @@ export class Round {
     return this.lastStroke ? this.simulateAgain(this.lastStroke) : null;
   }
 
+  /** One of this hole's strokes again, exactly as it was played. */
+  replayStroke(i: number): SimResult | null {
+    const s = this.strokes[i];
+    return s ? this.simulateAgain(s) : null;
+  }
+
   private simulateAgain(l: { shot: PlannedShot; hole: number; seq: number }): SimResult {
     const r = this.rng.fork(70_000 + l.hole * 1000 + l.seq);
     return simulateShot(this.course.terrain, this.course.obstacles, l.shot.spec, r);
@@ -400,6 +422,21 @@ export class Round {
 
   /** Commit a stroke: count it, move the ball, apply the rules. */
   resolve(p: PlannedShot, sim: SimResult): Outcome {
+    const from = { x: p.spec.x, y: p.spec.y };
+    const n = this.tally.strokes + 1;
+    const o = this.resolveStroke(p, sim);
+    const l = this.lastStroke;
+    if (l && l.shot === p) {
+      const rs = sim.restSurface;
+      const result = sim.holed ? 'holed'
+        : (sim.inWater || isWater(rs)) && !isOB(rs) ? 'water'
+        : isOB(rs) || !this.course.boundary.contains(sim.end.x, sim.end.y) ? 'ob' : 'rest';
+      this.strokes.push({ ...l, n, from, to: { x: sim.end.x, y: sim.end.y }, result });
+    }
+    return o;
+  }
+
+  private resolveStroke(p: PlannedShot, sim: SimResult): Outcome {
     this.pending = null;
     // everything a mulligan rewinds (casual): the shot, any penalty after it and its stats
     this.beforeShot = {
@@ -535,6 +572,7 @@ export class Round {
     if (!this.cfg.settings.mulligans || this.mulliganUsed || this.shotNo === 0) return false;
     this.mulliganUsed = true;
     this.pending = null;
+    this.strokes.pop(); // the stroke never happened, so it can't be watched again
     const b = this.beforeShot;
     if (b) {
       // as if the last shot (and any penalty or drop after it) never happened

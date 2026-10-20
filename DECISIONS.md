@@ -395,6 +395,18 @@ From docs/reports/player_improvements.md ("for playability, let's do 2, 3, 4, 5,
 - **Milestones (11):** first birdie, eagle and hole in one; a course's first round, birdie and eagle; breaking 100/90/80/70 (nine holes: 50/45/40/35) and level or under par at a course; every course in a state played; every course played. Worked out from the player's finished, non-casual rounds (`src/save/milestones.ts`), so nothing extra is stored. The summary shows those the round earned; "my golf" lists them all.
 - **Title screen:** the extra buttons sit two to a row (my golf, practice, leaderboard, settings) so the menu fits a 270-texel-high screen. Credits moved into settings (developer, 2026-10-20); the title's footer says so.
 
+## Rewatch a shot (developer, 2026-10-20)
+
+The hole-complete panel's "replay" showed only the holing stroke. It is now
+"rewatch": the hole's strokes in a list ("shot 2 · 7 iron · 148 yd",
+"shot 5 · putter · 2 ft · holed"; two columns past seven, the last 16 kept),
+any of which plays back exactly (`Round.strokes`, `replayStroke`; the physics
+is deterministic). A hole of one stroke plays at once. A putt plays in the
+putting view that fits it, other strokes on the course, the golfer at the spot
+the stroke was played from; afterwards the list comes back, and "back" returns
+to the panel. A mulligan takes its stroke off the list. The list is not saved,
+so a hole resumed after closing the tab lists the strokes since.
+
 ## Data and pipeline
 
 - **Waverley pipeline additions** (course chat, 2026-10-19), each behind a key or option no other course uses, so every existing course rebuilds as committed: `green_tilt` in `course_config.json` (s07: a per-hole tilt cap and undulation count for a green known to be steep); course-chat tools: `propose_trace.py` spec keys `source`, `water.name`, `water.hazard_why`, `bunkers.max_exg`, a green `ellipse` (placed by eye where tree shadow hides the green), the inlet pond only with `pond_seed`, the fairway classifier only when holes are listed (Indian Island's proposals come out identical); `desk_export.py --traced` (start the desk from `proposed/traced.geojson` when OSM has no holes); `desk_to_proposed.py --traced-fallback` (a hole with no desk save keeps the traced shapes, tagged `approved=pending`).

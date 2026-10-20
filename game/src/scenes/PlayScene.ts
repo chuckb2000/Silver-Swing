@@ -9,7 +9,8 @@ import Phaser from 'phaser';
 import { app, HEIGHT_PX, PX_PER_M } from '../app';
 import { initAudio, sfx, startAmbience } from '../audio/sfx';
 import { CLUBS, Club } from '../data/clubs';
-import { Outcome, PlannedShot, puttScales, Round, SWING_SCALES } from '../systems/game/round';
+import { Outcome, PlannedShot, PlayedStroke, puttScales, Round, SWING_SCALES } from '../systems/game/round';
+import { strokeLabel } from '../systems/game/strokes';
 import { HZ, SimEvent, SimResult } from '../systems/physics/sim';
 import { SURF } from '../systems/physics/surfaces';
 import { ReliefArea } from '../systems/rules/relief';
@@ -132,6 +133,7 @@ export class PlayScene extends Phaser.Scene {
     this.explore = false;
     this.meter = null;
     this.replaying = null;
+    this.replayFrom = null;
     this.practice = this.round.cfg.practice ? { log: new PracticeLog(), wind: false } : null;
     const cam = this.cameras.main;
     worldCamera(cam, COURSE);
@@ -307,23 +309,28 @@ export class PlayScene extends Phaser.Scene {
    * in which ball and hole fit on screen.
    */
   private wantGreenView(): GreenLayer | null {
+    return this.isPutting() ? this.greenViewAt(this.round.ball) : null;
+  }
+
+  /** The putting view for a putt from this spot (null: the course view). */
+  private greenViewAt(ball: { x: number; y: number }): GreenLayer | null {
     const r = this.round;
     const h = r.courseHole;
-    if (!this.isPutting() || !this.green.isReady(h) || !this.green.contains(h, 'far', r.ball.x, r.ball.y, 8)) return null;
+    if (!this.green.isReady(h) || !this.green.contains(h, 'far', ball.x, ball.y, 8)) return null;
     // the closest view in which the ball and the hole both fit on screen
     for (const l of ['close', 'near'] as GreenLayer[]) {
       if (!this.green.def(h, l)) continue;
       const m = l === 'close' ? 3 : 5;
-      if (this.green.contains(h, l, r.ball.x, r.ball.y, m) && this.green.contains(h, l, r.pin.x, r.pin.y, m)
-        && this.puttFits(this.green.level(h, l))) return l;
+      if (this.green.contains(h, l, ball.x, ball.y, m) && this.green.contains(h, l, r.pin.x, r.pin.y, m)
+        && this.puttFits(this.green.level(h, l), ball)) return l;
     }
     return 'far';
   }
 
   /** Do the ball and the hole fit on screen (clear of the HUD) at this level? */
-  private puttFits(level: number): boolean {
+  private puttFits(level: number, ball: { x: number; y: number } = this.round.ball): boolean {
     const r = this.round;
-    const b = this.px(r.ball.x, r.ball.y), pin = this.px(r.pin.x, r.pin.y);
+    const b = this.px(ball.x, ball.y), pin = this.px(r.pin.x, r.pin.y);
     const vw = this.cameras.main.width / (app.zoom * level), vh = this.cameras.main.height / (app.zoom * level);
     const mx = 44 / level, my = 70 / level;
     return Math.abs(pin.x - b.x) < vw - 2 * mx && Math.abs(pin.y - b.y) < vh - 2 * my;
@@ -759,7 +766,7 @@ export class PlayScene extends Phaser.Scene {
     } else if (this.state === 'flight') {
       if (this.preroll) this.stepPreroll(dt); else this.stepPlayback(dt);
     } else if (this.state === 'replay') {
-      this.stepPlayback(dt);
+      if (this.replaying) this.stepPlayback(dt); // not while the view fades to the stroke's
     } else if (this.state === 'settle') {
       if (time > this.holdUntil) this.afterRest();
     }
@@ -1091,25 +1098,39 @@ export class PlayScene extends Phaser.Scene {
   }
 
   // --------------------------------------------------------------- replay
-  /** Can the holing shot be watched again? (it went in: not a gimme, not a picked-up max score) */
-  canReplay(): boolean {
-    return this.state === 'holed' && this.outcome?.kind === 'holed' && !!this.round.lastStroke;
+  /** How many of this hole's strokes can be watched again (on the hole-complete panel). */
+  replayable(): number {
+    return this.state === 'holed' ? this.round.strokes.length : 0;
   }
 
-  /** Watch the holing shot again: at playing speed, then its end in slow motion. Any tap ends it. */
-  startReplay() {
-    if (!this.canReplay()) return;
-    const sim = this.round.replay();
-    if (!sim) return;
+  /**
+   * Watch one of this hole's strokes again (default: the last): at playing
+   * speed, then its end in slow motion. Any tap ends it.
+   */
+  startReplay(i = this.round.strokes.length - 1) {
+    if (this.state !== 'holed') return;
+    const stroke = this.round.strokes[i];
+    const sim = stroke ? this.round.replayStroke(i) : null;
+    if (!stroke || !sim) return;
     this.hud.closeModal();
     this.state = 'replay';
-    this.shot = this.round.lastStroke!.shot;
+    const g = this.golfer;
+    this.replayFrom = { layer: this.green.visible ? this.green.layer : null, level: this.level, stroke,
+      golfer: { x: g.x, y: g.y, frame: g.frame.name, flip: g.flipX, alpha: g.alpha, visible: g.visible } };
+    this.shot = stroke.shot;
     this.sim = sim;
-    const putt = this.shot.club.kind === 'putter';
-    // a putt plays in the putting view it was holed in; anything longer on the course
-    if (!putt && this.green.visible) this.cut(() => { this.applyView(null, COURSE); this.replayPass(1); });
+    // a putt in the putting view that fits it; anything longer on the course
+    const layer = stroke.shot.club.kind === 'putter' ? this.greenViewAt(stroke.from) : null;
+    const level = layer ? this.green.level(this.round.courseHole, layer) : COURSE;
+    const now = this.green.visible ? this.green.layer : null;
+    if (layer !== now || level !== this.level) this.cut(() => { this.applyView(layer, level); this.replayPass(1); });
     else this.replayPass(1);
   }
+
+  private replayFrom: {
+    layer: GreenLayer | null; level: number; stroke: PlayedStroke;
+    golfer: { x: number; y: number; frame: string; flip: boolean; alpha: number; visible: boolean };
+  } | null = null;
 
   private replayPass(pass: 1 | 2) {
     const sim = this.sim!;
@@ -1125,21 +1146,44 @@ export class PlayScene extends Phaser.Scene {
     this.landedShown = true; // no carry readout: the HUD stays as it was
     this.followArmed = true;
     this.ballHidden = false;
+    this.holing = false;
     this.resetBallSprite();
     this.ball.setDepth(DEPTH.flight);
+    // the golfer where the stroke was played, after the swing
+    const st = this.replayFrom?.stroke;
+    if (st) this.placeGolferAt(st.from, st.shot.spec.aim, 'follow');
     const fi = Math.min(sim.n - 1, (this.playT / 1000) * HZ) | 0;
     const S = sim.samples;
     const p = this.px(S[fi * 3], S[fi * 3 + 1]);
     this.updateBallSprite(S[fi * 3], S[fi * 3 + 1], Math.max(0, S[fi * 3 + 2] - app.course!.terrain.z(S[fi * 3], S[fi * 3 + 1])));
     if (pass === 1 || !this.inView(p.x, p.y, 24)) this.rig.jump(p.x, p.y);
-    this.hud.flash(pass === 1 ? 'replay' : 'slow motion', COLORS.dim, 'tap to skip', 1200);
+    const label = st ? strokeLabel(st, app.settings.units) : '';
+    if (pass === 1) this.hud.flash('replay', COLORS.dim, label ? `${label} · tap to skip` : 'tap to skip', 1600);
+    else this.hud.flash('slow motion', COLORS.dim, 'tap to skip', 1200);
   }
 
   /** Back to the hole-complete panel, the ball in the cup. */
   endReplay() {
     if (this.state !== 'replay') return;
     this.replaying = null;
+    const back = this.replayFrom;
+    this.replayFrom = null;
+    const now = this.green.visible ? this.green.layer : null;
+    if (back && (back.layer !== now || back.level !== this.level)) {
+      this.state = 'loading'; // nothing to tap while the view changes back
+      this.cut(() => { this.applyView(back.layer, back.level); this.finishReplay(back); });
+      return;
+    }
+    this.finishReplay(back);
+  }
+
+  private finishReplay(back: typeof this.replayFrom) {
     this.state = 'holed';
+    if (back) {
+      // the golfer as he was when the ball dropped
+      const g = back.golfer;
+      this.golfer.setFrame(g.frame).setFlipX(g.flip).setPosition(g.x, g.y).setDepth(g.y).setAlpha(g.alpha).setVisible(g.visible);
+    }
     this.resetBallSprite();
     const pin = this.round.pin;
     this.updateBallSprite(pin.x, pin.y, 0);
@@ -1480,17 +1524,23 @@ export class PlayScene extends Phaser.Scene {
   }
 
   updateGolfer() {
+    this.placeGolferAt(this.round.ball, this.aim, this.pose);
+  }
+
+  /** The golfer at a ball, facing along an aim. */
+  private placeGolferAt(ball: { x: number; y: number }, aim: number, pose0: string) {
     const r = this.round;
     const lefty = r.cfg.settings.lefty;   // the round's hand, not the live setting
     // facing = aim rotated -90deg (right-hander) or +90deg (left-hander)
-    const f = this.aim + (lefty ? Math.PI / 2 : -Math.PI / 2);
+    const f = aim + (lefty ? Math.PI / 2 : -Math.PI / 2);
     const fx = Math.cos(f), fy = Math.sin(f);
     let facing: Facing, flip = false;
     if (Math.abs(fx) >= Math.abs(fy)) { facing = 'side'; flip = fx < 0; } else { facing = fy < 0 ? 'front' : 'back'; flip = lefty; }
-    const pose = this.isPutting() && this.pose === 'backswing' ? 'putt' : this.isPutting() && this.pose === 'follow' ? 'address' : this.pose;
+    const putting = this.state === 'replay' ? this.shot?.club.kind === 'putter' : this.isPutting();
+    const pose = putting && pose0 === 'backswing' ? 'putt' : putting && pose0 === 'follow' ? 'address' : pose0;
     this.golfer.setFrame(`golfer_${facing}_${pose}`);
     this.golfer.setFlipX(flip);
-    const b = this.px(r.ball.x, r.ball.y);
+    const b = this.px(ball.x, ball.y);
     // sprite canvas is 20 x 22 (18 x 20 + outline); feet at (9, 20)
     let ox = 0, oy = 0;
     if (facing === 'side') { ox = flip ? 7 : -7; oy = 0; }
@@ -1501,7 +1551,7 @@ export class PlayScene extends Phaser.Scene {
     this.golfer.setPosition(feetX, feetY);
     this.golfer.setDepth(feetY);
     // seen from behind, the golfer covers the ball: see through him while lining up a putt
-    const lining = this.green.visible && this.isPutting() && facing === 'back' && (this.state === 'aim' || this.state === 'swing');
+    const lining = this.green.visible && putting && facing === 'back' && (this.state === 'aim' || this.state === 'swing');
     this.golfer.setAlpha(lining ? 0.45 : 1);
     this.golfer.setVisible(true);
   }
