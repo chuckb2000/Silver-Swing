@@ -9,6 +9,15 @@
    "outputs": {
     "raw/usgs_dem_2020_1m_clip.tif": "734846e429ebd5ae361fb8f905428c1ba09a4570d08677379650217ed5c55913"
    }
+  },
+  {
+   "asset": "exportImage.jpg",
+   "sha256": "854996b87521966c7197a50e43ecc577e9c702d0e22febe5d3ec0072e4d1d9d2",
+   "to": "raw/naip/",
+   "outputs": {
+    "raw/naip/exportImage.jpg": "854996b87521966c7197a50e43ecc577e9c702d0e22febe5d3ec0072e4d1d9d2"
+   },
+   "note": "USDA NAIP via the USGS National Map image service, 2560 x 3584 px JPEG of the world (0.5 m/px; x0 531519, top 5229106, EPSG:32610, placed by the request bbox). Reference for the proposed Blue tees (proposed/tees_blue_naip.geojson); not read by make course"
   }
  ]
 }
