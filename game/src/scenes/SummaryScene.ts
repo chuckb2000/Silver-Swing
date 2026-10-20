@@ -66,14 +66,17 @@ export class SummaryScene extends MenuScene {
     // a name another device holds: the round can't go on the shared board under it (say so, rather than a rank it won't get)
     const taken = shared && e.player !== DEFAULT_NAME && (await claimName(e.player)) === 'taken';
     if (!this.sys.isActive()) return;
-    const note = e.player === DEFAULT_NAME
+    const hidden = app.settings.hideFromBoards;
+    const note = hidden
+      ? 'you are hidden from the shared leaderboards (settings) - this round stays on your own boards'
+      : e.player === DEFAULT_NAME
       ? `enter your name to put this round on the leaderboard (it would be #${rank} of ${board.length} ${where})`
       : taken
         ? `another device has the name ${e.player}: tap the name to change it, or to enter that device's player code`
         : rank === 0
           ? 'a second go at the daily round: it goes on the course board, not the daily one'
           : `${e.casual ? 'casual round  ·  ' : ''}#${rank} of ${board.length} ${where} (${lengthLabel(e.length)})${pb ? '  ·  new personal best!' : ''}`;
-    this.rankLine = rank > 0 && e.player !== DEFAULT_NAME && !taken ? `#${rank} of ${board.length} ${where}` : '';
+    this.rankLine = !hidden && rank > 0 && e.player !== DEFAULT_NAME && !taken ? `#${rank} of ${board.length} ${where}` : '';
     const noteTxt = txt(this, W / 2, H - 38, note, { origin: [0.5, 0], color: taken ? COLORS.red : pb ? COLORS.yellow : COLORS.dim, maxWidth: W - 12 });
     if (noteTxt.height > 12) noteTxt.y = H - 30 - noteTxt.height; // wrapped on a narrow screen: keep it above the buttons
     this.root.add(noteTxt);

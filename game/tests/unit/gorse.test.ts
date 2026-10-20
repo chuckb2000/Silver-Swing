@@ -6,6 +6,7 @@ import { clubById } from '../../src/data/clubs';
 import { Rng } from '../../src/systems/physics/rng';
 import { material, SURF, isOB } from '../../src/systems/physics/surfaces';
 import { clubAllowed, GORSE, lieModsFor, makeLie } from '../../src/systems/rules/lie';
+import { spinFor } from '../../src/systems/rules/lie';
 import { GOOD_BAND, strikeFrom } from '../../src/systems/swing/outcome';
 import { loadCourseFiles, meterFor, roundCfg } from './helpers';
 import { Round } from '../../src/systems/game/round';
@@ -78,3 +79,17 @@ describe('gorse', () => {
     expect(makeLie({ surface: SURF.woods, teedUp: false, distToGreenEdge: 100, canopyBase: null }, new Rng(1)).label).toBe('under trees');
   });
 });
+
+describe('spin strength (developer, 2026-10-20: about half, and almost none from rough or sand)', () => {
+  const lie = (surface: number, canopyBase: number | null = null, d = 100) => makeLie({ surface, teedUp: false, distToGreenEdge: d, canopyBase }, new Rng(3));
+  it('a clean lie gives half the chosen spin, rough, trees and bunkers a twentieth', () => {
+    expect(spinFor(lie(SURF.fairway), 1)).toBeCloseTo(0.5);
+    expect(spinFor(lie(SURF.fairway), -1)).toBeCloseTo(-0.5);
+    expect(spinFor(lie(SURF.rough), -1)).toBeCloseTo(-0.05);
+    expect(spinFor(lie(SURF.rough), 1)).toBeCloseTo(0.05);
+    expect(spinFor(lie(SURF.woods), 1)).toBeCloseTo(0.05);
+    expect(spinFor(lie(SURF.bunker, null, 10), -1)).toBeCloseTo(-0.05);
+    expect(spinFor(lie(SURF.bunker, null, 100), -1)).toBeCloseTo(-0.05);
+  });
+});
+

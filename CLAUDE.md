@@ -550,6 +550,15 @@ DECISIONS.md with the reason.
     card line stay inside their boxes. DECISIONS.md "The daily course stays
     put for the day".
 
+-   **Afternoon review (design chat, 2026-10-20):** branch `design/afternoon`
+    (with `hotfix/build`): a second review before friends play
+    (docs/reports/afternoon_review.md) and its fixes; settings trimmed to hand,
+    difficulty, sound, pixel size, casual rules and player code (yards, no
+    latency offset, stroke-and-distance OB); course cards rotate four greens
+    (`assets-src/course_cards.py`, `cards/<id>.json` `"holes"`); spin halved and
+    cut to a twentieth from rough, trees and sand; clearer name entry; a
+    "hide me" setting for the shared leaderboards (D1 schema 4, migrates itself).
+
 -   **Next task:** Item 1 of the player improvements (swing coach) is on
     `design/coach`, unmerged. Also: the third playtest (putting, yellow
     misses), the club's printed scorecard and the hole 3 Blue tee box. New
@@ -1273,6 +1282,11 @@ by √power, so partial shots fly lower.
 
     -   From rough, backspin is limited to 30% effect (\"flyer\").
 
+    -   **Spin strength** (developer, 2026-10-20: too powerful): the ball
+        gets half the chosen spin (top or back) from a clean lie, a
+        twentieth from rough, under trees or a bunker, none from gorse
+        (`rules/lie.ts` `spinEffect`); a wedge spins back at most 1 m.
+
 -   **Slope:** add g × sinθ along the downhill gradient of the heightmap
     during roll. The ball stops when speed \< 0.05 m/s **and** the slope
     pull \< static friction (green ≈ 0.05 g, fairway ≈ 0.08 g).
@@ -1518,8 +1532,16 @@ local leaderboard stays as the offline copy.
 -   **Round in progress:** auto-saved after every shot so a closed tab
     can be resumed.
 
--   **Settings:** handedness, difficulty, units (yd/m), latency offset,
-    master volume/mute.
+-   **Hide me** (developer, 2026-10-20): settings "leaderboards: show me / hide
+    me". A hidden player's rounds and eagles are still sent and kept, but the
+    server leaves them out of every shared list (course boards, daily, eagles,
+    most birdies, activity; `hidden` table, `/api/hide`); "show me" brings them
+    all back. This device's own board and "my golf" keep them, and the game
+    stops asking a hidden player for a name.
+
+-   **Settings:** handedness, difficulty, master volume/mute, pixel size,
+    leaderboards (show me / hide me), casual rules, player code. Yards only, no latency offset, stroke-and-distance
+    OB (developer, 2026-10-20: those three are no longer settings).
 
 -   **Export/import:** the leaderboard as JSON, as a backup.
 

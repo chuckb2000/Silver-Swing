@@ -688,3 +688,40 @@ Branch `fix/afternoon-ui`, from the afternoon review of the screens and flow.
 - **Daily boards keep the day's own course:** rounds tagged with a day but
   played on another course (a daily started before the day's rotation was
   fixed) are left off that day's and the week's boards (`playsPlan`).
+
+## Settings trimmed, rotating course cards, softer spin (developer, 2026-10-20)
+
+- **Settings:** units, input latency and the OB rule are gone ("no one is going to
+  mess around with input latency, they shouldn't have an option what OB rules to
+  play, everyone is going to be using yards"). Saved settings are forced to yards,
+  0 ms and stroke and distance when loaded (`save/store.ts`); the engine keeps the
+  options for tests.
+- **Course cards rotate up to four greens** ("so much water because it seems like
+  the water hole got picked for every course"): `assets-src/course_cards.py` writes
+  a strip of 208 x 128 frames per course. The course's own green ("hole" in
+  `assets-src/cards/<id>.json`) comes first, then the three greens with the most sand
+  and trees around them, at most one more where water fills the view, no
+  neighbouring holes while others are left, and none whose flag a tree hides (checked
+  on the rendered card). A course chat can list its own: `"holes": [n, ...]`. The
+  card shows one frame at a time, changing every 3 s, neighbours in turn. The title
+  screen views still use "hole". Wide screens now show two rows of cards.
+- **Spin** ("backspin and front spin are too powerful: their effectiveness should be
+  cut down like 50% from currently and like 95% when you're hitting out of the rough
+  or sand"): `spinEffect` gives 0.5 of the chosen spin from a clean lie and 0.05 from
+  rough, under trees and both kinds of bunker (rough was 0.3, backspin only; topspin
+  was full everywhere); gorse none. A wedge spins back at most 1 m (was 2 m) and only
+  from a clean lie.
+
+## Hide me from the leaderboards (developer, 2026-10-20)
+
+- "There should be a setting to hide yourself from all leaderboards." Settings has
+  "leaderboards: show me / hide me". Rounds and eagles are still uploaded (so "my
+  golf" on another device with the player code still has them, and showing again
+  needs no re-upload); the server keeps a `hidden` table of player keys and every
+  shared list leaves those keys' rows out: course boards, the daily day and week,
+  recent eagles, most birdies, friends' activity, and the record badges in the
+  activity feed. The choice is sent on change and retried before each upload until
+  the server confirms (`save/online.ts` `syncHidden`). This device's own board still
+  shows the player's rounds. A hidden player isn't asked for a name, and the summary
+  says the round stays off the shared boards. D1 schema 4 adds the table by itself.
+

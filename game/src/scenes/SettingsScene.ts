@@ -10,7 +10,7 @@ import { applyScale, uiCamera } from '../scale';
 import { MenuScene } from './menu';
 import { keyCode } from '../save/identity';
 import { askCode } from '../ui/codeInput';
-import { nameConflicts } from '../save/online';
+import { nameConflicts, syncHidden } from '../save/online';
 
 export class SettingsScene extends MenuScene {
   private from: 'title' | 'hud' = 'title';
@@ -64,7 +64,7 @@ export class SettingsScene extends MenuScene {
     let y = y0 + 26;
     const lx = x0 + 8, vx = x0 + 104;
     const bw = Math.floor((pw - 112) / 3);
-    const save = () => { void saveSettings(s); setVolume(s.volume, s.muted); this.rebuild(); };
+    const save = () => { void saveSettings(s).then(() => syncHidden()); setVolume(s.volume, s.muted); this.rebuild(); };
     const choice = <K extends keyof Settings>(label: string, key: K, opts: [Settings[K], string][], note = '') => {
       this.root.add(txt(this, lx, y + 3, label, { color: COLORS.dim }));
       opts.forEach(([v, lab], i) => this.root.add(new Button(this, vx + i * (bw + 2), y, bw, 14, lab, () => { s[key] = v; save(); }, { color: s[key] === v ? 'orange' : 'grey' })));
@@ -91,6 +91,8 @@ export class SettingsScene extends MenuScene {
       this.root.add(txt(this, x0 + pw / 2, y, 'hand, difficulty and rules are set', { origin: [0.5, 0], color: COLORS.dim }));
       this.root.add(txt(this, x0 + pw / 2, y + 11, 'for this round. change them from the title screen.', { origin: [0.5, 0], color: COLORS.dim }));
     } else {
+      // off every shared leaderboard (friends, daily, eagles, records, activity); this device's own board keeps them
+      choice('leaderboards', 'hideFromBoards', [[false, 'show me'], [true, 'hide me']]);
       this.root.add(txt(this, lx, y + 3, 'casual rules', { color: COLORS.dim }));
       ([['gimmes', 'gimmes'], ['maxDoublePar', 'max 2x par'], ['mulligans', 'mulligan']] as [keyof Settings, string][]).forEach(([k, lab], i) => {
         this.root.add(new Button(this, vx + i * (bw + 2), y, bw, 14, lab, () => { (s[k] as boolean) = !s[k]; save(); }, { color: s[k] ? 'orange' : 'grey' }));

@@ -252,7 +252,7 @@ export class TitleScene extends MenuScene {
     if (plan && dc) add(`daily: ${shortName(dc.name)}`, () => this.playDaily(plan), !!snap);
     if (this.dailyNow) { this.dailyNow = false; if (plan && dc) this.playDaily(plan); }
     // no name yet: rounds stay on this device, so say so where every visit starts (developer, 2026-10-20)
-    if (!hasName()) add('set your name for the leaderboard', () => editName(this, () => this.rebuild()), true, COLORS.yellow);
+    if (!hasName() && !app.settings.hideFromBoards) add('set your name for the leaderboard', () => editName(this, () => this.rebuild()), true, COLORS.yellow);
     add2('my golf', () => this.scene.start('mygolf'));
     add2('practice', () => void this.withLoading((progress) => startPractice(this, progress)));
     add2('leaderboard', () => this.scene.start('leaderboard'));

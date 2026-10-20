@@ -9,7 +9,7 @@ import { Rng } from '../physics/rng';
 import { ShotSpec, SimResult, simulateShot } from '../physics/sim';
 import { isOB, isWater, SURF } from '../physics/surfaces';
 import { Polygon, Terrain } from '../physics/terrain';
-import { clubAllowed, Lie, lieIsPenal, lieModsFor, makeLie, spinEffect, spinFor } from '../rules/lie';
+import { clubAllowed, Lie, lieIsPenal, lieModsFor, makeLie, SPIN_CLEAN, spinEffect, spinFor } from '../rules/lie';
 import { CourseCtx, freeReliefArea, obOptions, penaltyAreaOptions, ReliefArea, unplayableOptions, validDrop } from '../rules/relief';
 import { HoleScore, HoleTally } from '../rules/scoring';
 import { MeterResult } from '../swing/meter';
@@ -342,7 +342,8 @@ export class Round {
     const z = this.groundZ() + (b.teedUp ? TEE_HEIGHT : 0);
     const sEff = spinEffect(this.lie);
     const spinScaled = spinFor(this.lie, spin); // gorse: no spin either way
-    const spinBack = spin < 0 && isWedge(c) && sEff === 1 && strike.power > 0.6 ? 2.0 * Math.min(1, (strike.power - 0.6) / 0.4) : 0;
+    // a wedge from a clean lie may spin back, up to 1 m (was 2 m before spin was halved, 2026-10-20)
+    const spinBack = spin < 0 && isWedge(c) && sEff >= SPIN_CLEAN && strike.power > 0.6 ? 1.0 * Math.min(1, (strike.power - 0.6) / 0.4) : 0;
     // short swings release a little (not out of a bunker, where the ball stops)
     const bunker = this.lie.kind === 'greenside_bunker' || this.lie.kind === 'fairway_bunker';
     const release = bunker || c.carryM <= 0 ? 1 : chipRelease(strike.carry / c.carryM);

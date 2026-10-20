@@ -3,7 +3,7 @@
 import { DatabaseSync } from 'node:sqlite';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { isEntry, LeaderboardEntry } from '../../src/save/entry';
-import { D1Like, D1Statement, handleEaglesGet, handleEaglesPost, handleGet, handleNames, handlePost, handleRecordsGet, resetSchemaCache } from '../../src/server/scores';
+import { D1Like, D1Statement, handleEaglesGet, handleEaglesPost, handleGet, handleHide, handleNames, handlePost, handleRecentGet, handleRecordsGet, resetFeedCache, resetSchemaCache } from '../../src/server/scores';
 import { HoleScore } from '../../src/systems/rules/scoring';
 import { isPlayerKey, parseKeyCode } from '../../src/save/identity';
 
@@ -231,5 +231,38 @@ describe('player codes and resent rounds (review 2026-10-20)', () => {
     expect(isPlayerKey('abcdefghjklmnpqr')).toBe(false);
     expect(parseKeyCode('ABCD-EFGH-JKMN-PQRS')).toBe('abcdefghjkmnpqrs');
     expect(parseKeyCode('abcd-efgh-jkmn-pqr0')).toBeNull();
+  });
+});
+
+describe('hide me from the leaderboards (developer, 2026-10-20)', () => {
+  let db: D1Like;
+  beforeEach(() => { resetSchemaCache(); resetFeedCache(); db = fakeD1(); });
+
+  it("keeps a hidden player's rounds and eagles off every shared list, and brings them back when shown", async () => {
+    const pars = [4, 4, 4, 4, 4, 4, 4, 4, 4];
+    const mine = { ...scored('m1', 'charlie', [2, 3, 4, 4, 4, 4, 4, 4, 4], pars), owner: KEY_A, daily: '2026-10-20' };
+    const theirs = { ...scored('t1', 'sam', [3, 4, 4, 4, 4, 4, 4, 4, 4], pars), owner: KEY_B, daily: '2026-10-20' };
+    await handlePost(db, JSON.stringify([mine, theirs]));
+    const ids = async () => {
+      resetFeedCache();
+      const course = ((await (await get(db, 'course=oswego_lake')).json()) as { entries: LeaderboardEntry[] }).entries.map((e) => e.id);
+      const daily = ((await (await get(db, 'daily=2026-10-20')).json()) as { entries: LeaderboardEntry[] }).entries.map((e) => e.id);
+      const eagles = ((await (await handleEaglesGet(db, new URL('http://x/api/eagles'))).json()) as { eagles: { player: string }[] }).eagles.map((e) => e.player);
+      const records = ((await (await handleRecordsGet(db, new URL('http://x/api/records?kind=birdies'))).json()) as { records: { id: string }[] }).records.map((r) => r.id);
+      const recent = ((await (await handleRecentGet(db, new URL('http://x/api/recent'))).json()) as { rounds: { id: string }[] }).rounds.map((r) => r.id);
+      const own = ((await (await get(db, `owner=${KEY_A}`)).json()) as { entries: LeaderboardEntry[] }).entries.map((e) => e.id);
+      return { course, daily, eagles, records, recent, own };
+    };
+    const before = await ids();
+    expect(before.course).toContain('m1');
+    expect(before.eagles).toContain('charlie');
+    expect(await (await handleHide(db, JSON.stringify({ owner: KEY_A, hidden: true }))).json()).toEqual({ ok: true, hidden: true });
+    const hid = await ids();
+    for (const list of [hid.course, hid.daily, hid.records, hid.recent]) { expect(list).not.toContain('m1'); expect(list).toContain('t1'); }
+    expect(hid.eagles).not.toContain('charlie');
+    expect(hid.own).toEqual(['m1']); // "my golf" still finds them
+    await handleHide(db, JSON.stringify({ owner: KEY_A, hidden: false }));
+    expect((await ids()).course).toContain('m1');
+    expect((await handleHide(db, JSON.stringify({ owner: 'x', hidden: true }))).status).toBe(400);
   });
 });

@@ -86,7 +86,7 @@ let skippedName = false;
  * need to enter their name").
  */
 export function withName(scene: Phaser.Scene, go: () => void) {
-  if (hasName() || skippedName) { go(); return; }
+  if (hasName() || skippedName || app.settings.hideFromBoards) { go(); return; } // hidden from the boards: no need
   askName(scene, '', (name) => {
     if (name) { app.settings.playerName = name; void saveSettings(app.settings); } else skippedName = true;
     if (scene.sys.isActive()) go();
