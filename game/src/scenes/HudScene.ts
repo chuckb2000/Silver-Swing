@@ -332,7 +332,7 @@ export class HudScene extends Phaser.Scene {
     // with the putter in hand the distance is in feet (or metres), like the putting meter
     setTxt(this.infoLines[2], p.club.kind === 'putter' ? distLabel(d).replace(/(\d)(ft|m)$/, '$1 $2') : `${fmtDist(d)} ${unitLabel()}`);
     setTxt(this.infoLines[3], r.ball.teedUp ? 'tee' : lieTxt || surf);
-    this.infoLines[3].setTint(r.lie && r.lie.distMult < 1 ? COLORS.yellow : COLORS.green);
+    this.infoLines[3].setTint(r.lie && r.penalLie() ? COLORS.yellow : COLORS.green);
     if (r.cfg.practice) {
       setTxt(this.infoLines[0], r.holeNumber <= 5 ? 'range' : 'putting green');
       setTxt(this.infoLines[1], 'practice');
@@ -349,7 +349,7 @@ export class HudScene extends Phaser.Scene {
     this.clubIcon.setFrame(`club_${c.kind === 'driver' ? 'driver' : c.kind}`);
     setTxt(this.clubName, c.name);
     if (c.kind === 'putter') setTxt(this.clubCarry, `100%: ${puttScaleLabel(p.puttScale)}`);
-    else setTxt(this.clubCarry, `${fmtDist(r.fullCarry(c) * p.swingScale)} ${unitLabel()}`);
+    else setTxt(this.clubCarry, `${fmtDist(r.carryFor(c, p.swingScale))} ${unitLabel()}`);
     this.spinBtn.setIcon(`spin_${p.spin}`).setVisible(c.kind !== 'putter');
     this.scaleBtn.setLabel(c.kind === 'putter' ? puttScaleLabel(p.puttScale) : swingLabel(p.swingScale)).setVisible(true);
     for (const b of [this.aimL, this.aimR, this.clubUp, this.clubDown, this.spinBtn, this.scaleBtn]) b.setEnabled(aiming);
@@ -470,7 +470,7 @@ export class HudScene extends Phaser.Scene {
       // how far the cursor's power would send it (flat, calm)
       const pw = m.phase === 'power' ? pos : m.power;
       if (pw > 0) {
-        const metres = putt ? p.puttScale * pw / 100 : r.fullCarry(p.club) * p.swingScale * pw / 100;
+        const metres = putt ? p.puttScale * pw / 100 : r.carryFor(p.club, p.swingScale, pw / 100); // overswing: +8 % at most
         read = putt ? distLabel(metres) : `${fmtDist(metres)} ${unitLabel()}`;
       }
     }

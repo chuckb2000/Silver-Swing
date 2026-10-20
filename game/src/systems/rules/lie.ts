@@ -126,3 +126,27 @@ export function spinEffect(lie: Lie): number {
   if (lie.kind === 'gorse') return 0; // no spin out of a bush
   return lie.kind === 'rough' || lie.kind === 'trees' ? 0.3 : 1;
 }
+
+/** The spin a shot actually gets from this lie: backspin scaled by spinEffect; none at all (top or back) from gorse. */
+export function spinFor(lie: Lie, spin: number): number {
+  if (lie.kind === 'gorse') return 0;
+  return spin < 0 ? spin * spinEffect(lie) : spin;
+}
+
+/**
+ * A lie that costs something (the info panel shows it in yellow): rough, under
+ * trees (punch), gorse, bunkers, or any lie that takes distance off. Gorse and a
+ * rough flyer keep (or add) distance but are still bad lies.
+ */
+export function lieIsPenal(lie: Lie): boolean {
+  switch (lie.kind) {
+    case 'rough':
+    case 'trees':
+    case 'gorse':
+    case 'fairway_bunker':
+    case 'greenside_bunker':
+      return true;
+    default:
+      return lie.distMult < 1;
+  }
+}

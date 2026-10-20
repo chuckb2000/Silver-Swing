@@ -15,6 +15,12 @@ export const LIP_R = 0.075;
 export const BALL_R = 0.0214;
 export const MPH = 0.44704;
 const ROLL_SLOPE = 5 / 7; // rolling solid sphere on an incline: a = 5/7 g sin(theta)
+/**
+ * A rolling ball that meets a trunk slower than this (m/s) stops against it. On
+ * a slope steeper than static friction holds, the ball otherwise rolled into the
+ * trunk, bounced off and rolled back for ever (Eastmoreland 13, afternoon review).
+ */
+export const TRUNK_REST_SPEED = 0.3;
 
 export interface FlightSpec {
   carry: number;        // nominal carry on flat ground in calm air (m)
@@ -98,6 +104,7 @@ export function simulateShot(terrain: Terrain, obs: Obstacles | null, spec: Shot
   let spinBackLeft = 0;
   let canopyCooldown = 0;
   let lipArmed = true;
+  let trunkSpeed = -1; // horizontal speed at the last trunk contact this step (-1: none)
   const ux = Math.cos(spec.aim), uy = Math.sin(spec.aim);
   const rx = uy, ry = -ux;
 
@@ -159,6 +166,7 @@ export function simulateShot(terrain: Terrain, obs: Obstacles | null, spec: Shot
         const nx = dx / (d || 1), ny = dy / (d || 1);
         const vn = s.vx * nx + s.vy * ny;
         if (vn < 0) {
+          trunkSpeed = Math.hypot(s.vx, s.vy);
           s.vx = (s.vx - 2 * vn * nx) * 0.5;
           s.vy = (s.vy - 2 * vn * ny) * 0.5;
           s.vz *= 0.5;
@@ -344,8 +352,14 @@ export function simulateShot(terrain: Terrain, obs: Obstacles | null, spec: Shot
           lipArmed = true;
         }
       }
+      trunkSpeed = -1;
       obstacles(px, py, pz, 0);
-      if (Math.hypot(s.vx, s.vy) < 0.05 && aSlope <= Math.max(m.staticMu * G, decel)) {
+      if (trunkSpeed >= 0 && trunkSpeed < TRUNK_REST_SPEED) {
+        // a slow ball stops against the trunk (the slope may pull it into the tree, but no further)
+        s.z = terrain.z(s.x, s.y);
+        decelMult = 1;
+        toRest();
+      } else if (Math.hypot(s.vx, s.vy) < 0.05 && aSlope <= Math.max(m.staticMu * G, decel)) {
         decelMult = 1;
         toRest();
       }
