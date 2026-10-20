@@ -26,7 +26,7 @@ from shapely.affinity import translate
 from shapely.geometry import LineString, MultiPolygon, Point, Polygon
 from shapely.ops import unary_union
 
-from common import build_dir, course_name_from_argv, layouts, load_config, play_boundary, PX_PER_M, ROOT, SURF, World, write_json
+from common import boundary_rings, build_dir, course_name_from_argv, layouts, load_config, PX_PER_M, ROOT, SURF, World, write_json
 from terrain import tier_offset
 
 warnings.filterwarnings("ignore")
@@ -531,25 +531,23 @@ def main():
     rgb = np.array(img)
 
     # OB stakes along the boundary ------------------------------------------
-    boundary = play_boundary(g, cfg)
-    if boundary.geom_type == "MultiPolygon":
-        boundary = max(boundary.geoms, key=lambda p_: p_.area)
-    ring = boundary.exterior
-    for s_ in np.arange(0, ring.length, 9.0):
-        p = ring.interpolate(s_)
-        q = ring.interpolate(min(ring.length, s_ + 0.5))
-        dx, dy = q.x - p.x, q.y - p.y
-        ln = math.hypot(dx, dy) or 1
-        nx_, ny_ = dy / ln, -dx / ln  # right-hand normal
-        cand = Point(p.x + nx_ * 0.8, p.y + ny_ * 0.8)
-        if boundary.contains(cand):
-            cand = Point(p.x - nx_ * 0.8, p.y - ny_ * 0.8)
-        col = int(cand.x * PX_PER_M)
-        row = int((world.height - cand.y) * PX_PER_M)
-        if 2 <= row < H - 1 and 0 <= col < W - 1:
-            rgb[row + 1, col + 1] = (rgb[row + 1, col + 1] * 0.6).astype(np.uint8)
-            rgb[row - 2:row + 1, col] = P["WH"]
-            rgb[row - 2, col] = P["K2"]
+    for boundary in boundary_rings(g, cfg):
+        ring = boundary.exterior
+        for s_ in np.arange(0, ring.length, 9.0):
+            p = ring.interpolate(s_)
+            q = ring.interpolate(min(ring.length, s_ + 0.5))
+            dx, dy = q.x - p.x, q.y - p.y
+            ln = math.hypot(dx, dy) or 1
+            nx_, ny_ = dy / ln, -dx / ln  # right-hand normal
+            cand = Point(p.x + nx_ * 0.8, p.y + ny_ * 0.8)
+            if boundary.contains(cand):
+                cand = Point(p.x - nx_ * 0.8, p.y - ny_ * 0.8)
+            col = int(cand.x * PX_PER_M)
+            row = int((world.height - cand.y) * PX_PER_M)
+            if 2 <= row < H - 1 and 0 <= col < W - 1:
+                rgb[row + 1, col + 1] = (rgb[row + 1, col + 1] * 0.6).astype(np.uint8)
+                rgb[row - 2:row + 1, col] = P["WH"]
+                rgb[row - 2, col] = P["K2"]
 
     Image.fromarray(rgb).save(art / "terrain.png")
     meta = {"buildings": [{"osm": o, "h": round(h, 1), **({"kind": kinds[o]} if kinds.get(o) != "house" else {})} for _, h, o in buildings]}

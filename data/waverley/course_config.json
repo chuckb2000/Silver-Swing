@@ -73,5 +73,9 @@
       "bumps": 0,
       "note": "developer 2026-10-19: 'green slopes back to front strongly'; the lidar plane over the green tilts 6.5 % towards the tee. Cap raised from 2.5 % to 3.5 %, no random undulations"
     }
-  ]
+  ],
+  "red_water_osm": [
+    "w432810024"
+  ],
+  "red_water_note": "the pond between holes 11, 12 and 13 (OSM natural=water, way 432810024) is a red penalty area (developer 2026-10-19: all water red)"
 }

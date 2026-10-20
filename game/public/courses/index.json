@@ -110,6 +110,49 @@
    ]
   },
   {
+   "id": "stone_creek",
+   "name": "Stone Creek Golf Club",
+   "location": "Oregon City, Clackamas County, Oregon",
+   "state": "OR",
+   "theme": "pnw",
+   "holes": 18,
+   "par": 72,
+   "defaultTee": "Blue",
+   "totalYd": 6456,
+   "teeSets": [
+    "Blue"
+   ]
+  },
+  {
+   "id": "tualatin",
+   "name": "Tualatin Country Club",
+   "location": "Tualatin, Washington County, Oregon",
+   "state": "OR",
+   "theme": "pnw",
+   "holes": 18,
+   "par": 72,
+   "defaultTee": "Blue",
+   "totalYd": 6370,
+   "teeSets": [
+    "Blue"
+   ]
+  },
+  {
+   "id": "eastmoreland",
+   "name": "Eastmoreland Golf Course",
+   "location": "Portland, Multnomah County, Oregon",
+   "state": "OR",
+   "theme": "pnw",
+   "holes": 18,
+   "par": 72,
+   "defaultTee": "Blue",
+   "totalYd": 6529,
+   "teeSets": [
+    "Blue",
+    "White"
+   ]
+  },
+  {
    "id": "waverley",
    "name": "Waverley Country Club",
    "location": "Milwaukie, Clackamas County, Oregon",

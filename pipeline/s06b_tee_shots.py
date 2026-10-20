@@ -35,7 +35,7 @@ def main():
     g = gpd.read_file(bdir / "course_local.geojson")
     trees = json.loads((bdir / "trees_all.json").read_text())
     zgrid = np.load(bdir / "height_base.npy")
-    idx = TreeIndex(trees, zgrid)
+    idx = TreeIndex(trees, zgrid, cfg.get("tee_shot_margin_m", 0.0))
     fairways = list(g[g.kind == "fairway"].geometry)
     lays = {l_["id"]: l_ for l_ in layouts(cfg)}
     names = {k: (l_.get("short") or k) for k, l_ in lays.items()}
@@ -73,6 +73,9 @@ def main():
     rep["conifer"] = int(sum(t_["type"] == "conifer" for t_ in kept))
     rep["deciduous"] = int(sum(t_["type"] == "deciduous" for t_ in kept))
     rep["dropped_for_tee_shots"] = dropped
+    if cfg.get("garden"):  # garden shrubs back in their colour slots (index % 8, pipeline/garden.py)
+        from garden import order_trees
+        kept, _ = order_trees(kept)
     write_json(bdir / "trees.json", kept)
     write_json(bdir / "trees_report.json", rep, indent=1)
     print(f"[s06b] {len(dropped)} trees dropped from tee shots (within {REACH:g} m of the tee): "

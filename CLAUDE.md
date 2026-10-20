@@ -488,6 +488,42 @@ DECISIONS.md with the reason.
     out of bounds), trees from the 2024 NYS lidar. Other courses rebuild
     unchanged. 241 unit tests and 4 Playwright tests pass (after merging main with Langston). Open items:
     section 11.11.4; request in docs/requests/indian_island_design_requests.md.
+-   **Eastmoreland (course chat, 2026-10-19):** Eastmoreland Golf Course,
+    Portland, OR, on branch `course/eastmoreland`: 18 holes from OSM + DOGAMI
+    lidar, Blue default, every hazard red (lake, pond, creek traced from
+    lidar), the Crystal Springs Rhododendron Garden in flower (3,164
+    flowering-shrub sprites, `garden`), the two-part boundary joined across SE Bybee Blvd
+    (`join_boundary_parts`). Other courses rebuild unchanged. 299 unit tests
+    and 4 Playwright tests pass. Section 11.14; open items:
+    data/eastmoreland/report_notes.md; request:
+    docs/requests/eastmoreland_design_requests.md.
+
+-   **Stone Creek (course chat, 2026-10-19):** Stone Creek Golf Club,
+    Oregon City, OR, branch `course/stone_creek` from main: 18 holes, Blue
+    tees, `pnw` theme, DOGAMI DTM and canopy model, three red ponds, OB =
+    the OSM boundary. Every hole within 3 % except hole 6 (-3.1 %). New
+    optional config key `tee_shot_margin_m` (tee-shot tree check);
+    Oswego Lake, Highland Links, East Potomac, Langston and Indian Island
+    rebuild byte-identical. 260 unit tests and 4 Playwright tests pass.
+    Section 11.12; open items in data/stone_creek/validation_report.md.
+
+-   **Tualatin (course chat, 2026-10-19):** Tualatin Country Club,
+    Tualatin OR (18 holes, par 72, Blue tees, `pnw`), section 11.13, on
+    branch `course/tualatin`. OSM had no hole lines or pins: the
+    developer gave the routing and the lines are drawn through the mapped
+    fairways (`data/tualatin/make_holes.py`). Pipeline gained
+    `red_water_osm` (the river is a red penalty area outside the
+    boundary) and `drop_trees` (four trees, on holes 8 and 13); every other
+    course rebuilds as committed. Approved by the developer and merged
+    2026-10-19.
+
+-   **Waverley (course chat, 2026-10-19):** Waverley Country Club,
+    Milwaukie OR, branch `course/waverley` from main: 18 holes, Blue tees,
+    new `pnw_club` theme. OSM had no holes: traced from the OSIP 2024
+    orthoimagery and DOGAMI lidar, corrected by the developer in the tracing
+    desk. The Willamette and the pond are red penalty areas; hole 11's green
+    keeps its slope (`green_tilt`). Section 11.15; open items in
+    data/waverley/report_notes.md.
 
 -   **Next task:** the third playtest (putting, yellow misses), the club's
     printed scorecard and the hole 3 Blue tee box. New courses: a separate
@@ -1779,6 +1815,195 @@ Ratings (county): Blue 71.5/126, White 69.4/122, Red 71.3/118. White
 3.  Driving range not mapped; plays as rough.
 4.  E-5 drop on Route 105 measured from where the ball stopped (design request 1).
 5.  Pins at green centres; a few lidar crowns on unmapped houses off the course.
+
+**11.12 Stone Creek Golf Club, Oregon City, Oregon**
+
+**11.12.1 Facts**
+
+-   **Location:** 14603 S Stoneridge Drive, Oregon City, Clackamas County,
+    Oregon. Course id `stone_creek` (logo already made), `state` OR.
+-   **Design:** Peter Jacobsen and Jim Hardy; opened 2002 (golfn; the OGA
+    lists 2003). About 120 acres among old-growth Douglas firs, with ponds
+    and wetlands (OGA).
+-   **Built as:** one world 1,280 x 1,280 m (UTM 10N, EPSG:32610), theme
+    `pnw`. Out of bounds = the OSM course boundary (developer).
+-   **Data:** OSM (Overpass Turbo export, 2026-10-19), DOGAMI 1 m bare-earth
+    DTM and canopy height model (exportImage, feet), club scorecard image;
+    all in release `stone-creek-data`, the DOGAMI files also in
+    `data/stone_creek/raw/` (9 MB each).
+-   **Terrain:** 90-166 m; fairway slopes p50 5.7 %. Beaver Creek's wooded
+    ravine and a reed-bed wetland lie just north of the boundary.
+-   **Water:** three ponds, all red (developer): between 3 and 4, in front
+    of the 6th green, and by the 17th green / 15th and 18th tees.
+-   **Trees:** 5,661 from the DOGAMI canopy model (1,210 inside the
+    boundary), up to 57 m; type from crown shape.
+
+**11.12.2 Scorecard** (club scorecard image, supplied by the developer
+2026-10-19; every tee set adds up to the printed totals)
+
+  -------------------------------------------------------------------------------------------
+  Hole         1   2   3   4   5   6   7   8   9   Out   10  11  12  13  14  15  16  17  18  In    Total
+  ------------ --- --- --- --- --- --- --- --- --- ----- --- --- --- --- --- --- --- --- --- ----- -----
+  Par          4   3   4   5   4   3   4   5   4   36    4   5   4   4   3   4   3   4   5   36    72
+  Men's HCP    8   18  10  2   12  16  6   4   14        9   1   11  3   15  7   17  13  5
+  Blue         373 156 374 475 409 149 349 508 358 3151  408 513 396 422 134 376 144 408 504 3305  6456
+  Built Blue   373 156 368 467 403 144 346 510 363       413 512 392 412 137 367 144 404 517       6428
+  -------------------------------------------------------------------------------------------
+
+Jacobsen 6,840 (73.8/140), White 5,925 (69.1/127) and Gold 5,123
+(70.3/121) are on the card, not built; ladies' handicaps in
+`data/stone_creek/scorecard_full.csv`. Blue rating/slope 71.7/135 (card).
+
+**11.12.3 Default tee**
+
+Blue (developer, 2026-10-19), the only set built.
+
+**11.12.4 Known open items** (details in data/stone_creek/validation_report.md)
+
+1.  Hole 6 plays 144 yd vs 149 (-3.1 %, flag), accepted by the developer;
+    every other hole passes.
+2.  Hole 16's tee is the OSM line start, inside the large back tee
+    polygon (accepted).
+3.  The wetland north of 12/13 plays as woods, not a penalty area
+    (accepted).
+4.  Tree types from crown shape only.
+
+**11.13 Tualatin Country Club, Tualatin, Oregon**
+
+Built by a course chat (2026-10-19) following docs/COURSE_BUILD.md;
+details in DECISIONS.md ("Tualatin Country Club") and
+data/tualatin/validation_report.md.
+
+-   **Location:** Tualatin, Washington County, Oregon, on a terrace above
+    the Tualatin River. `state` OR. Course id `tualatin`.
+-   **Design:** George Junor (the original nine, 1913, now the back
+    nine); H. Chandler Egan (the second nine, 1919, now the front nine);
+    redesign by Bob Cupp and John Fought (1992); later work by Dan
+    Hixson (club history PDF).
+-   **UTM zone:** 10N (EPSG:32610). World 1,280 x 1,536 m. Theme `pnw`.
+    Wind 1-7 mph.
+-   **Data:** OSM via Overpass Turbo (no hole lines or pins in OSM: the
+    developer gave the routing, `data/tualatin/make_holes.py` draws the
+    lines through the mapped fairways, `edits.json` adds them); DOGAMI
+    bare-earth DTM and canopy height model (1 m, release `data-tualatin`).
+-   **Water:** two ponds (holes 9 and 18) and the Tualatin River (holes
+    7, 9, 10), all red; the river is a penalty area although it lies
+    outside the course boundary (`red_water_osm`).
+-   **Trees:** 9,020 from lidar, 1,745 on the course (39 % conifers);
+    two firs in front of the hole 13 green and two broadleaves before the
+    hole 8 green removed (developer, `drop_trees`). A drive down the centre of every par 4 and 5 is clear
+    of trees (unit test).
+-   **Scorecard** (GolfPass, retrieved 2026-10-19, unverified; no printed
+    card available). Blue 70.4/130.
+
+  -------------------------------------------------------------------------------------
+  Hole    1   2   3   4   5   6   7   8   9   Out   10  11  12  13  14  15  16  17  18  In    Total
+  ------- --- --- --- --- --- --- --- --- --- ----- --- --- --- --- --- --- --- --- --- ----- -----
+  Par     4   4   4   4   3   5   4   4   5   37    3   5   4   4   4   3   4   4   4   35    72
+  HCP     11  17  5   3   15  9   1   7   13        14  16  4   12  8   18  6   10  2
+  Blue    339 285 384 398 200 518 390 346 498 3358  155 482 380 364 341 135 375 380 400 3012  6370
+  Built   331 279 383 391 200 512 381 377 484 3338  166 496 374 370 344 135 379 385 398 3047  6385
+  -------------------------------------------------------------------------------------
+
+Black (6,700), White (5,940), Red (5,450) and Gold (4,364) are in
+scorecard.csv, not built.
+
+-   **Default tee:** Blue (the only set built). Holes 8 and 10 play
+    from the back tees (developer): +8.9 % and +7.0 % on the Blue card.
+-   **Known open items:** data/tualatin/report_notes.md (hole lines and
+    pins are proposals from the developer's routing; scorecard
+    unverified).
+
+**11.14 Eastmoreland Golf Course, Portland, OR**
+
+Built by a course chat (2026-10-19) on branch `course/eastmoreland`; details in
+DECISIONS.md ("Eastmoreland"), data/eastmoreland/validation_report.md and
+report_notes.md.
+
+-   **Location:** 2425 SE Bybee Blvd, Portland, Multnomah County, Oregon (a
+    City of Portland course). `state` OR. Course id `eastmoreland` (logo
+    exists). H. Chandler Egan, 1918 (club scorecard).
+-   **UTM zone:** 10N (EPSG:32610). World 1,280 x 2,048 m (the 2,048 m limit
+    binds: 53 m of scenery north and south).
+-   **Layout:** 18 holes, par 72, in two parts either side of SE Bybee Blvd
+    (front nine south, back nine north, joined into one OB line,
+    `join_boundary_parts`). Crystal Springs Lake (holes 11, 12, 13, 17, 18), a
+    pond (16/18) and Crystal Springs Creek are red penalty areas (developer).
+    The Crystal Springs Rhododendron Garden on the lake's peninsula is out of
+    bounds and full of flowering shrubs (3,164 `c: 3` sprites, `garden`).
+-   **Data:** OSM (developer's Overpass Turbo export); DOGAMI bare-earth DTM and
+    canopy height model (release `data-eastmoreland`); creek channel and hole
+    18 Blue tee from the lidar DTM.
+-   **Theme:** `pnw`. Wind 1-7 mph. Trees: 12,180 from lidar (2,016 inside the
+    course); conifer/deciduous from crown shape.
+-   **Scorecard** (club card, Golf ScoreCards Inc. 7/2007, from the developer;
+    GolfPass lists a later card, open item):
+
+  ---------------------------------------------------------------------------------------------------------
+  Hole     1   2   3   4   5   6   7   8   9   Out    10  11  12  13  14  15  16  17  18  In     Total
+  -------- --- --- --- --- --- --- --- --- --- ------ --- --- --- --- --- --- --- --- --- ------ ------
+  Par      4   4   4   4   3   5   4   3   5   36     4   5   3   5   4   4   4   3   4   36     72
+  HCP      13  3   11  9   17  1   5   15  7          14  8   18  2   12  10  4   16  6
+  Blue     311 447 337 347 210 497 410 227 497 3,283  334 469 167 463 383 381 423 169 457 3,246  6,529
+  White    292 427 317 325 175 489 391 202 472 3,090  325 443 140 446 365 364 392 147 394 3,016  6,106
+  ---------------------------------------------------------------------------------------------------------
+
+    Ratings/slopes (card): Blue 71.0/124, White 69.3/115, Red (women's par 74,
+    5,646 yd, not built) 72.5/124.
+
+-   **Default tee:** Blue (developer). Measured (adjusted) totals: Blue
+    6,507 yd (card 6,529), White 6,104 yd (card 6,106).
+-   **Accepted by the developer (2026-10-19):** hole 17 White plays from
+    the Blue box (+13.3 %); the hole 18 Blue tee (lidar pad) and the creek
+    channel (lidar); two trees removed on hole 11's Blue tee shot; course
+    card hole 17; the 2007 scorecard stays the card (GolfPass lists a later
+    one).
+-   **Known open items:** hole 13 Blue -3.0 % (flag); tree types from crown
+    shape (data/eastmoreland/report_notes.md).
+
+**11.15 Waverley Country Club, Milwaukie, Oregon**
+
+Built by a course chat (2026-10-19) on branch `course/waverley`; details in
+DECISIONS.md ("Waverley"), data/waverley/validation_report.md and
+report_notes.md.
+
+-   **Location:** 1100 SE Waverly Dr, Milwaukie, Clackamas County, Oregon, on
+    the east bank of the Willamette. `state` OR. Course id `waverley` (logo
+    exists). Club founded 1896; Jack Moffat's routing (1898), H. Chandler
+    Egan's current routing, bunkers and greens (1912-1924), restoration by
+    Gil Hanse (c. 2012).
+-   **UTM zone:** 10N (EPSG:32610). World 1,280 x 1,792 m.
+-   **Layout:** 18 holes, par 72, Blue tees (developer). The Willamette
+    beside the course is a red penalty area (a 60 m strip inside a grown
+    boundary; beyond it out of bounds); the pond by 11-13 is red. Hole 15
+    plays north; holes 9 and 10 share a tee area by the clubhouse.
+-   **Data:** OSM (boundary, fairways, pond, clubhouse only); greens, tees,
+    bunkers and hole lines traced from the OSIP 2024 orthoimagery and the
+    DOGAMI DEM by the course chat and corrected by the developer in the
+    tracing desk (`data/waverley/desk/`); DOGAMI DTM and canopy height model;
+    club website scorecard. Originals in the GitHub release `waverley-data`.
+-   **Theme:** `pnw_club` (pnw with cleaner mown turf and whiter sand). Wind
+    1-7 mph. Trees: 7,852 from lidar (860 inside the course), types from
+    crown shape. Hole 11's green slopes hard back to front (`green_tilt`
+    3.5 %).
+-   **Scorecard** (club website, screenshot from the developer, 2026-10-19):
+
+  ---------------------------------------------------------------------------------------------------------
+  Hole     1   2   3   4   5   6   7   8   9   Out    10  11  12  13  14  15  16  17  18  In     Total
+  -------- --- --- --- --- --- --- --- --- --- ------ --- --- --- --- --- --- --- --- --- ------ ------
+  Par      4   4   4   4   5   3   4   5   3   36     4   3   4   5   3   4   3   5   5   36     72
+  HCP      11  13  7   9   3   15  5   1   17         12  14  6   4   16  2   18  8   10
+  Blue     324 392 347 406 451 157 373 568 119 3,137  400 156 400 491 137 354 215 490 558 3,201  6,338
+  Built    325 413 356 427 449 161 379 567 121 3,198  401 160 403 485 137 353 213 409 539 3,100  6,297
+  ---------------------------------------------------------------------------------------------------------
+
+    Ratings/slopes (card): Black 72.8/135 (6,668, par 71), Blue 71.2/130,
+    White 69.1/128 (5,913). Black and White not built.
+
+-   **Default tee:** Blue (the only set built).
+-   **Known open items:** hole 17 Blue -16.6 % and hole 14 not saved in the
+    desk (both asked); holes 2, 4, 18 are flags
+    (data/waverley/report_notes.md).
 
 **12. Repository layout**
 

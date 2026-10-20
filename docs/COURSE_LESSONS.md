@@ -5,8 +5,9 @@ new course. Each lesson is something that cost time on an earlier course,
 with what to do instead. Add to it at the end of every course build.
 
 Sources so far: East Potomac Golf Links (2026-10-19, three courses on one
-island), Langston (2026-10-19, a course in two parts across a lake) and Indian
-Island (2026-10-19, half the course traced). Oswego Lake and Highland Links
+island), Langston (2026-10-19, a course in two parts across a lake), Indian
+Island (2026-10-19, half the course traced), Tualatin Country Club
+(2026-10-19, section 9) and Eastmoreland (2026-10-19, Portland). Oswego Lake and Highland Links
 notes live in DECISIONS.md.
 
 ---
@@ -177,6 +178,17 @@ notes live in DECISIONS.md.
   LAZ). A state project may have no vegetation class: take class 1
   (unclassified) and let s05 drop trees on OSM buildings. The points' GPS
   times give the flight date, which tells you whether it was leaf-off.
+- **Count the boundary's parts.** The game takes one OB polygon and s10
+  used to keep only the largest part. Eastmoreland's OSM boundary is two
+  polygons either side of a road, so the whole front nine was out of bounds;
+  nothing failed until the robot round scored 16 on every front-nine hole. Look
+  at the boundary's geometry type in Phase 1 and run a robot round as soon as
+  the course exports. Fix: `join_boundary_parts`.
+- **natural=water inside the boundary is not in play.** s08 paints OSM
+  `natural=water` only outside the course; inside it becomes rough. A lake the
+  holes play over must be added as a `golf=lateral_water_hazard` (or
+  `water_hazard`) penalty area (Eastmoreland: `make_water.py` +
+  `edits.json`). Streams mapped only as lines need `propose_channels.py`.
 
 ## 4. World and pipeline
 
@@ -203,6 +215,10 @@ notes live in DECISIONS.md.
   killed the session's shell). Kill by PID. Likewise a `pgrep -f <name>`
   wait loop matches its own command line and never ends.
 
+- **Bash calls stop at 10 minutes.** A Playwright pass over 18 holes takes
+  longer on software WebGL: start it with `nohup ... &` and poll, or split it
+  by hole (env vars in the spec).
+
 ## 5. Trees and theme
 
 - **A theme's flair can be data-driven without a game change.** The game draws
@@ -222,6 +238,18 @@ notes live in DECISIONS.md.
   other themes' sheets are unchanged. s09b uses the same painters for the
   putting views.
 - **Look at the sprites at 5x on grass before rendering the course.**
+- **Flowering shrubs are trees.json `c: 3`** (sprites/shrubs.png). The game
+  picks a bush's colour from its index (% 8), so give each bush its colour
+  first and then place it at a matching index (`garden.order_trees()`); redo
+  the ordering after anything drops trees from the list (s06b), or every bush
+  after the drop shifts colour. Eastmoreland first painted the garden flat
+  into the terrain art; clumps under ~2 m across read as dark dots at 2 px/m,
+  and flat paint can't stand up in 3/4 view. Highest-hit lidar can't see
+  shrubs under trees; a lower density there is flair and is written down as
+  such.
+- **DOGAMI downloads arrive as `exportImage.N.tiff`.** Tell them apart by
+  their values (ground in the tens to hundreds of feet vs canopy from 0) and a
+  quick picture, as with the DC rasters.
 
 ## 6. Checking the build
 
@@ -242,6 +270,20 @@ notes live in DECISIONS.md.
 - **Course cards:** after the export, run `assets-src/course_cards.py <id>
   --sheet`, pick greens that show what makes the course special (cherries
   here), confirm with the developer, delete the contact sheets.
+
+- **The pipeline's tee-shot check can pass by centimetres where the game
+  fails.** Stone Creek 15: s06b cleared the hole by 0.1 m under a 43 m fir's
+  crown, but the game test's ball (launched from the game's own tee height)
+  clipped it. Run the game test for every hole after s06b; where it disagrees,
+  set `tee_shot_margin_m` (0.5 m did it) rather than dropping trees by hand.
+- **Read the build arrays the right way up.** `height_base.npy` (and the other
+  s04/s05 grids) run south to north (row 0 = south); `surface.npy` and the
+  exported PNGs run north to south. A hillshade drawn with the wrong origin
+  looks plausible and puts the creek on the wrong side of the course.
+- **Rebasing in the shallow clone fails.** With `--depth 1` there is no merge
+  base, so `git rebase origin/main` sees every file as added on both sides.
+  When `main` moves before anything is shared, recreate the branch from the new
+  `main` and copy the course's own files back in.
 
 ## 7. Hand-off
 
@@ -285,3 +327,100 @@ notes live in DECISIONS.md.
 - **The developer may send corrections mid-build** (Langston's two-tier 13th
   green came after the first export). Keep every step rebuildable so such a
   change is one config entry and a rerun from s06.
+
+## 9. Tualatin Country Club (2026-10-19)
+
+- **OSM may map every tee, fairway and green but no hole lines or pins.**
+  Don't guess the routing. Plot the greens with letters and the tee boxes
+  with numbers (`data/tualatin/proposed/osm_labelled.png`) and ask the
+  developer which green is which hole; that one picture settled all 18.
+  Then check it against the card: for each hole, the tee box beside the
+  previous green should sit at the card distance from the green
+  (straight-line distances were within 5 % on every hole).
+- **Draw hole lines from the mapped features, not by eye.**
+  `data/tualatin/make_holes.py`: tee box centroid -> fairway centre line
+  -> green centroid, pins at green centroids, added through `edits.json`.
+  The fairway centre line is the *longest path* through the medial axis
+  (skeleton) of the fairway polygon; the raw skeleton has spurs into every
+  corner and lobe, and a bend chosen on a spur was 69 m off line.
+- **Put a dogleg's bend in the landing zone** (250 yd from the tee, the
+  USGA's scratch landing area), not at the axis point farthest from the
+  straight line. Where the line bends decides where the game's default
+  aim points the drive: the farthest-point bend aimed hole 11's drive down
+  the right edge of a tree-lined chute, where a perfect drive clipped three
+  26-40 m trees; the landing-zone bend cleared it without touching a tree. Start the line at
+  the Blue box (run s06 once, then use the box it assigns).
+- **Check tee shots with the game's own flight model.** A drive aimed down
+  the centre line (`Round.lineAim`) with a perfect strike, through
+  `simulateShot` without obstacles, then test every sample against each
+  tree's trunk and canopy cylinder: that names the blocking trees, their
+  heights and the ball's height. Do the approach from where that drive
+  stops too. The test is in `game/tests/unit/tualatin.test.ts`.
+- **Look at the greens the way the game draws them.** Trees on the near
+  (south) side of a green are drawn over it in the 3/4 view, so a contact
+  sheet of greens (the course-card sheet) shows trees "blocking" a green
+  that a top-down plot doesn't. The developer spotted two on hole 13 and
+  had them removed (`drop_trees`, which also clears their canopy so no
+  woods patch is left on the ground).
+- **Water in play outside the boundary.** A river along the boundary is
+  out of bounds by default (everything outside is OB). If the developer
+  says it is a red penalty area, list it in `red_water_osm`; the game
+  checks water before OB and keeps drops inside the boundary.
+- **A swimming pool tagged `natural=water` inside the boundary** is drawn
+  as rough unless it is listed somewhere; check every water feature inside
+  the boundary, not only the ones tagged as hazards.
+- **DOGAMI image services** (Oregon) give a 1 m GeoTIFF in the course's
+  UTM zone in one browser click, already on the world grid (s00 copies it
+  cell for cell). The links are in `data/tualatin/DATA_REQUEST.md`.
+- **Regression checks catch small slips.** Inserting a block into s05 split
+  an existing `if` and dropped two keys from East Potomac's tree report;
+  comparing each step's outputs with a `main` worktree found it in a
+  minute. Re-check after every pipeline edit, not only the first.
+- **In-game screenshots take about a minute a hole** (5 views) in the
+  sandbox. Run them in the background in chunks and read the first
+  contact sheets while the rest render.
+- `npm install` may rewrite `game/package-lock.json`; revert it unless the
+  course needs a new package.
+
+
+## 10. Waverley Country Club (2026-10-19)
+
+- **OSM can have fairways and nothing else.** Waverley's OSM had the
+  boundary, 18 fairways, a pond and the clubhouse: no holes, greens, tees,
+  bunkers or pins. The Indian Island tools covered it: trace from the state
+  orthophoto and DEM, then the tracing desk. `desk_export.py --traced`
+  starts the desk from `proposed/traced.geojson`; `desk_to_proposed.py
+  --traced-fallback` keeps the traces of any hole the developer doesn't save,
+  tagged `approved=pending` (hole 14 was missed).
+- **Oregon imagery: OSIP 2024 ImageServer.** `exportImage` with `f=image`
+  failed in the developer's browser; `f=json` returns a link (`href`) to the
+  finished GeoTIFF, which downloads. The service caps height at 4,100 px, so
+  a 1 ft course takes two halves. `data/waverley/make_ortho.py` mosaics them
+  onto the world grid.
+- **Club layout maps are schematic and rotated.** A similarity fit onto the
+  lidar got within 20-40 m, enough to tell which OSM fairway is which hole,
+  but not where a green is. Zoom into the map itself to read each hole's
+  direction (which end has the green circle, where the tee rectangles are):
+  reading the fitted positions alone put hole 15's green at the wrong end.
+- **Greens in tree shadow defeat the texture trace** (three at Waverley).
+  Place an `ellipse` by eye in `trace_spec.json` and say so; the developer
+  corrects it in the desk.
+- **Tune sand per image.** OSIP sand is darker and greener than the NYS
+  photo (`bunkers.max_exg` 28, `min_brightness` 150), and sand on the
+  riverbank looked like bunkers until `min_z_m` sat above the bank
+  (6 m against a 2.3 m river).
+- **A `natural=water` pond inside the boundary paints as rough.** List it in
+  `red_water_osm` (or retag it as a penalty area); check every pond on the
+  surface map.
+- **Measure the developer's tees before building.** Straight tee-to-green
+  distances for every desk tee against the card show the >8 % holes and
+  missing saves at once, so all the questions go in one message.
+- **Bend points from the hole's own fairway.** Taking the farthest fairway
+  centre from all fairways near the line picks up neighbouring holes; use
+  the hole's own OSM fairway id.
+- **The desk used to label saves with Indian Island's origin**; the
+  coordinates were right. `desk_export.py` now writes each hole's `units`.
+- **`pkill -f "playwright test"` killed the session's shell** (as the earlier
+  lesson warns for `s0[0-9]`). Kill by PID. The 90-screenshot look takes
+  longer than a foreground command: run it in the background, or in chunks
+  (`LOOK_FROM` in the script).

@@ -120,7 +120,7 @@ def tee_shot_checker(name, cfg, g):
     from tee_shots import TreeIndex, target_point
     bdir = build_dir(name)
     trees = json.loads((bdir / "trees_all.json").read_text())
-    idx = TreeIndex(trees, np.load(bdir / "height_base.npy"))
+    idx = TreeIndex(trees, np.load(bdir / "height_base.npy"), cfg.get("tee_shot_margin_m", 0.0))
     fairways = list(g[g.kind == "fairway"].geometry)
 
     def is_clear(p, cl, pin):

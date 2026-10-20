@@ -212,24 +212,12 @@
     "proposed": "trace"
    },
    "reason": "Holes 1-18 (greens, tees, the Blue tee boxes, bunkers, pins, hole lines, fairways on 9 and 11) from the tracing desk; the Willamette strip (red penalty area, developer 2026-10-19) and the boundary grown to include it"
-  },
-  {
-   "from": "proposed/pond.geojson",
-   "ids": [
-    "pond_w432810024"
-   ],
-   "tags": {},
-   "reason": "The OSM pond (natural=water, way 432810024) as a red penalty area: inside the boundary a plain natural=water paints as rough (s08), and every penalty area on this course is red (developer 2026-10-19)"
   }
  ],
  "drop": [
   {
    "osm": "w96457214",
    "reason": "OSM course boundary replaced by tr_boundary (the same line grown to include the Willamette penalty strip)"
-  },
-  {
-   "osm": "w432810024",
-   "reason": "replaced by pond_w432810024 (same outline, tagged as a red penalty area)"
   }
  ]
 }

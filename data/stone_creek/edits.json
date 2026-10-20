@@ -1,0 +1,8 @@
+{
+ "note": "Edits to the OSM layout for Stone Creek, built into edited/course.geojson by pipeline/merge_edits.py (run by make course).",
+ "tags": [
+  {"osm": "r18457410", "set": {"penalty": "red"}, "reason": "W1, pond between holes 3 and 4: red (developer 2026-10-19, 'all hazards are red'); OSM tags it golf=water_hazard (yellow)"},
+  {"osm": "w1214418633", "set": {"penalty": "red"}, "reason": "W2, pond in front of the 6th green: red (developer 2026-10-19)"},
+  {"osm": "w1214421185", "set": {"penalty": "red"}, "reason": "W3, pond by the 17th green and the 15th/18th tees: red (developer 2026-10-19)"}
+ ]
+}

@@ -130,6 +130,7 @@ def main():
         bl = bnd.boundary.intersection(clip.buffer(5))
         blines = [[[round(x, 1), round(y, 1)] for x, y in ln_.coords] for ln_ in getattr(bl, "geoms", [bl]) if ln_.geom_type == "LineString"]
         holes.append({"hole": k, "par": int(card[k]["par"]), "blue": int(card[k].get("blue") or 0), "white": int(card[k].get("white") or 0),
+                      "units": f"local metres, origin {world.x0:.0f} E {world.y0:.0f} N, EPSG:{cfg['epsg']}",
                       "box": bx0, "w": crop.width, "h": crop.height, "img": fn,
                       "line": [[round(x, 1), round(y, 1)] for x, y in c], "greenCenter": [round(gc.centroid.x, 1), round(gc.centroid.y, 1)],
                       "features": feats, "refs": refs, "boundary": blines, "editShapes": k in edit})

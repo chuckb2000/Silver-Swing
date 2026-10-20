@@ -74,3 +74,16 @@ Without it the routing would be guessed, which the rules forbid.
 DOGAMI Lidar Data Viewer (linked from https://www.oregon.gov/dogami/lidar): click
 the course with the project layer on and note the lidar project name and year
 (leaf-on or leaf-off decides how tree types are read).
+
+## Received (2026-10-19)
+
+| Release asset (`waverley-data`) | SHA-256 (first 16) | Use |
+|---|---|---|
+| `exportImage.10.tiff` | 9e175ae83a6f9c0e | DOGAMI bare-earth DTM (feet), `raw/dogami_dtm_ft.tif` |
+| `exportImage.11.tiff` | 9aecbbafa62837e6 | DOGAMI canopy height model (feet), `raw/dogami_chm_ft.tif` |
+| `_ags_0230fb21_24b6_4f5f_ba56_733fc9b7208e.tif` | d84e9bb53c93f3bb | OSIP 2024, south half (4 bands, 0.3048 m) |
+| `_ags_bc54798d_7d8a_4d4d_bbec_b872d7829f96.tif` | 9c7cea0c2f12168f | OSIP 2024, north half; both mosaicked by `make_ortho.py` into `raw/osip2024_032m.tif` |
+| `Screenshot.2026-10-19.170736.png` | 12abdf9811c1e5bb | the club's course layout map, `reference/club_course_layout.png` (hole identity only) |
+
+The images came through the `f=json` form of the OSIP links (the `f=image`
+form failed in the browser): open the link, then the `href` it shows.

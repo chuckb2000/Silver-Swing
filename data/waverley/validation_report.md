@@ -48,6 +48,24 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 18. Hole 18 (Blue): measured 539 yd vs card 558 (-3.5%) even with the virtual tee at the best spot in its box; accepted for play.
 19. Hole 18 (Blue): tee box desk_18_bluetee_0 assigned by the developer (tagged hole=18, tee_set=Blue in edited/course.geojson).
 
+## Other open items (Waverley)
+
+The developer's calls of 2026-10-19 are in DECISIONS.md ("Waverley"): Blue tees only, every penalty area red, the Willamette a red penalty area, no driving range, theme `pnw_club` (pnw with whiter sand). OSM maps only the boundary, the fairways, one pond and the clubhouse; everything else was traced by the course chat from the OSIP 2024 orthoimagery and the DOGAMI DEM and corrected by the developer in the tracing desk (`data/waverley/desk/`).
+
+1. **Hole 17 Blue plays 409 yd against 490 on the card (-16.6 %, over 8 %).** The developer's Blue tee is at the north end of the fairway along the river; the fairway bends less than 30 m off the tee-green line, so no bend point applies. The club map draws 17's tee further north-west, beyond the 16 green. Recommendation: move the Blue tee back in the desk if it is there on the ground; otherwise accept 17 as short. **Waiting on the developer.**
+2. **Hole 14 was not saved in the tracing desk.** Its green, tee and bunkers are the course chat's traces, tagged `approved=pending` (`desk_to_proposed.py --traced-fallback`). The green is an ellipse placed by eye (tree shadow on the photo), with the ring of bunkers cut out of it. Recommendation: open hole 14 in the desk, correct it and save; the rebuild is one command. **Waiting on the developer.**
+3. **Holes 12 and 13 have no Blue tee marked;** each has one tee box, used as Blue (12: 403 yd with its bend point, +0.8 %; 13: 485 yd, -1.3 %).
+4. **Flags (3-8 %):** hole 2 Blue +5.3 % (the developer's tee 407 yd straight, plus 10 yd for the bend point; the other box measures 392 yd straight, about +2.6 % with the bend); hole 4 Blue +5.1 % (the other box measures -2.5 %); hole 18 -3.5 %. Recommendation: keep the developer's tees.
+5. **Bend points** on holes 2, 8, 12 and 18 (the centre of the hole's own OSM fairway where it lies farthest from the tee-green line, used where that is over 30 m, as at Indian Island). The other holes play straight.
+6. **Hole 11's green** keeps its strong back-to-front slope (developer): tilt capped at 3.5 % instead of 2.5 %, no random undulations (`green_tilt`); the lidar plane over the green tilts 6.5 %. Flat within 3 m of the pin (1.5 %).
+7. **The Willamette:** a 60 m strip of the river beside the course is a red penalty area and the out-of-bounds line was grown to include it; the river beyond the strip is out of bounds.
+8. **The pond** by holes 11-13 (OSM way 432810024) is a red penalty area (`red_water_osm`).
+9. **The practice area** south of the clubhouse (two small OSM fairways, a practice green and tee lines) is inside the boundary and plays as fairway and rough; no hole uses it. The parking lot inside the boundary is a cart-path obstruction (free relief).
+10. **Tree types come from crown shape only** (DOGAMI's Portland flight is leaf-on): 30 % conifers overall. One tree was removed on hole 18's Blue tee shot (34 m tall, 42 m out; the rule for every course).
+11. **Scorecard:** the club website's card (screenshot); Black (par 71, hole 5 a par 4) and White are on the card, not built; the women's back nine was cut off in the screenshot.
+12. **Hole identity** comes from the club's course layout map, fitted onto the lidar and the photo (look only). Hole 15 plays north from beside the 14 green; holes 9 and 10 start from the same tee area.
+13. **Course card:** hole 11 (green beside the pond), the course chat's pick; hole 14's bunker-ringed green is the alternative.
+
 ## Playability adjustments
 
 - Hole 2 (Blue): measured 417 yd from the tee-box centre vs 392 on the card (+6.4%); moved the virtual tee within the real tee polygon desk_2_bluetee_0 -> 412.8 yd (real 417.1 yd).
@@ -107,9 +125,9 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 | 8 | 5 | yes | yes (4 near) | yes | yes | yes | 15 | 0 |
 | 9 | 3 | yes | yes (5 near) | yes | yes | yes | 2 | 0 |
 | 10 | 4 | yes | yes (6 near) | yes | yes | yes | 11 | 0 |
-| 11 | 3 | yes | yes (2 near) | yes | yes | yes | 2 | 1 |
-| 12 | 4 | yes | yes (1 near) | yes | yes | yes | 6 | 1 |
-| 13 | 5 | yes | yes (1 near) | yes | yes | yes | 9 | 1 |
+| 11 | 3 | yes | yes (2 near) | yes | yes | yes | 2 | 0 |
+| 12 | 4 | yes | yes (1 near) | yes | yes | yes | 6 | 0 |
+| 13 | 5 | yes | yes (1 near) | yes | yes | yes | 9 | 0 |
 | 14 | 3 | yes | yes (1 near) | yes | yes | yes | 10 | 1 |
 | 15 | 4 | yes | yes (2 near) | yes | yes | yes | 11 | 0 |
 | 16 | 3 | yes | yes (4 near) | yes | yes | yes | 4 | 0 |
@@ -137,5 +155,5 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 - hole 17: hole line carries handicap=8 (compare with scorecard)
 - hole 18: hole line carries handicap=10 (compare with scorecard)
 
-Totals: 49 tees, 18 greens, 20 fairways, 95 bunkers, 2 water hazards, 18 pins, 0 cart paths, 0 OSM tree points.
+Totals: 49 tees, 18 greens, 20 fairways, 95 bunkers, 1 water hazards, 18 pins, 0 cart paths, 0 OSM tree points.
 

@@ -410,7 +410,7 @@ function focusOn(f) {
 $("save").onclick = async () => {
   if (!db) { status("Saving isn't available in this view. Open the page from your Claude gallery while signed in.", true); return; }
   const w = W(); $("save").disabled = true; status("Saving hole " + cur.hole + "…");
-  const body = {hole: cur.hole, features: w.features.map(f => ({id: f.id, kind: f.kind, poly: f.poly})), note: w.note, savedAt: new Date().toISOString(), by: uid || null, units: "local metres, origin 698261 E 4532163 N, EPSG:32618"};
+  const body = {hole: cur.hole, features: w.features.map(f => ({id: f.id, kind: f.kind, poly: f.poly})), note: w.note, savedAt: new Date().toISOString(), by: uid || null, units: cur.units || "local metres (see the course config for the origin)"};
   try { await db.doc("holes/" + cur.hole).set(body); saved[cur.hole] = clone(body); w.dirty = false; renderChips(); status("Saved hole " + cur.hole + " at " + new Date().toLocaleTimeString([], {hour: "numeric", minute: "2-digit"}) + ". Claude can read it now."); }
   catch (e) { const code = e && e.code; if (code === "invalid_argument") { canSave = false; status("Your access to this page is view-only, so changes can't be saved.", true); } else status("Couldn't save (" + (code || "error") + "). Try again in a moment.", true); }
   finally { renderPanel(); }

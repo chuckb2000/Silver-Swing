@@ -49,10 +49,24 @@ def course_layers(g, roads, cfg):
         (greens, SURF["green"]),
         (list(g[g.kind.isin(["lateral_water_hazard", "water_hazard"])].geometry), SURF["water"]),
     ]
+    if cfg.get("red_water_osm"):
+        layers.append((red_water_geoms(g, cfg), SURF["water"]))
     if cfg.get("driving_range_is_ob", True):
         layers.append((list(g[g.kind == "driving_range"].geometry), SURF["range"]))
     layers.append((list(g[g.kind == "building"].geometry), SURF["building"]))
     return layers
+
+
+def red_water_geoms(g, cfg):
+    """Water features listed in cfg red_water_osm (OSM ids): red penalty areas
+    wherever they lie, also outside the course boundary (Tualatin: the river
+    along holes 7, 9 and 10). Without the key nothing changes."""
+    ids = cfg.get("red_water_osm") or []
+    sel = g[g.osm.isin(ids)]
+    missing = set(ids) - set(sel.osm)
+    if missing:
+        raise SystemExit(f"red_water_osm: no features {sorted(missing)} in the course data")
+    return list(sel.geometry)
 
 
 def road_geoms(g):
@@ -156,6 +170,11 @@ def main():
     for geoms, value in course_layers(g, roads, cfg):
         paint(course, geoms, value)
     surf[inside] = course[inside]
+    if cfg.get("red_water_osm"):
+        # the same water outside the boundary is a penalty area too (it is not OB);
+        # bridges and buildings over it stay as they are
+        red_out = mask(red_water_geoms(g, cfg)) & ~inside & ~np.isin(surf, [SURF["ob_road"], SURF["ob_building"]])
+        surf[red_out] = SURF["water"]
     # roads inside the boundary that are out of bounds (config "ob_highways": highway values,
     # e.g. Indian Island's Route 105 between the two halves of the course); other roads inside
     # the boundary stay cart paths with free relief
