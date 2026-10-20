@@ -41,14 +41,21 @@ export async function peekSnapshot(): Promise<{ cfg: RoundConfig; holeIndex: num
   return s;
 }
 
-/** Rebuild a Round from the saved snapshot. Returns null if there is none. */
-export async function restoreRound(): Promise<{ round: Round; betweenHoles: boolean } | null> {
+/**
+ * Rebuild a Round from the saved snapshot. Returns null if there is none.
+ * `finished`: the last hole was completed but the round never reached the
+ * leaderboard (the tab closed on the hole-complete panel); the caller finishes it.
+ */
+export async function restoreRound(): Promise<{ round: Round; betweenHoles: boolean; finished?: boolean } | null> {
   const s = await loadRoundInProgress<Snapshot>();
   if (!s || s.v !== 1 || !app.course) return null;
   const r = new Round(app.course, s.cfg);
-  if (s.betweenHoles) {
+  if (s.betweenHoles || s.holeIndex >= s.cfg.holes.length) {
     r.scores = s.scores;
-    if (s.holeIndex + 1 >= s.cfg.holes.length) return null;
+    if (s.holeIndex + 1 >= s.cfg.holes.length) {
+      r.holeIndex = s.cfg.holes.length;
+      return { round: r, betweenHoles: true, finished: true };
+    }
     r.startHole(s.holeIndex + 1);
     return { round: r, betweenHoles: true };
   }

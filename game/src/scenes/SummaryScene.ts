@@ -46,14 +46,16 @@ export class SummaryScene extends MenuScene {
     const note = e.player === DEFAULT_NAME
       ? `enter your name to put this round on the leaderboard (it would be #${rank} of ${board.length} ${where})`
       : `${e.casual ? 'casual round  ·  ' : ''}#${rank} of ${board.length} ${where} (${lengthLabel(e.length)})${pb ? '  ·  new personal best!' : ''}`;
-    this.root.add(txt(this, W / 2, H - 38, note, { origin: [0.5, 0], color: pb ? COLORS.yellow : COLORS.dim }));
+    const noteTxt = txt(this, W / 2, H - 38, note, { origin: [0.5, 0], color: pb ? COLORS.yellow : COLORS.dim, maxWidth: W - 12 });
+    if (noteTxt.height > 12) noteTxt.y = H - 30 - noteTxt.height; // wrapped on a narrow screen: keep it above the buttons
+    this.root.add(noteTxt);
     // the name on the leaderboard: easy to miss at the start, so it can be set here before the round is sent
     const unnamed = e.player === DEFAULT_NAME;
     const nw = 104;
     const nx = W >= 400 ? W - nw - 6 : Math.round(W / 2 - nw / 2), ny = W >= 400 ? 4 : H - 56;
     this.root.add(new Button(this, nx, ny, nw, 16, unnamed ? 'enter your name' : `name: ${e.player}`, () => this.rename(), { color: unnamed ? 'orange' : 'grey' }));
     // leaving the summary sends the round to the shared leaderboard
-    const leave = (to: string) => { void flushUploads(); this.scene.start(to); };
+    const leave = (to: string) => { void flushUploads(); this.scene.start(to, to === 'leaderboard' ? { courseId: e.course } : undefined); };
     const bw = 84;
     this.root.add(new Button(this, W / 2 - bw * 1.5 - 4, H - 24, bw, 16, 'title', () => leave('title'), { color: 'grey' }));
     this.root.add(new Button(this, W / 2 - bw / 2, H - 24, bw, 16, 'leaderboard', () => leave('leaderboard'), { color: 'grey' }));

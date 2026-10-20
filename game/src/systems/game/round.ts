@@ -101,6 +101,7 @@ export class Round {
   lastPower: number | null = null;
   lastPuttPower: number | null = null;
   mulliganUsed = false;
+  private beforeShot: { tally: { strokes: number; putts: number; penalties: number; fairway: boolean | null; reachedGreenAt: number | null }; shotNo: number; ball: BallPos; prev: BallPos; history: number } | null = null;
   history: { x: number; y: number }[] = [];
   shotSeq = 0;
   readonly winds: Wind[];
@@ -152,6 +153,7 @@ export class Round {
     this.wind = this.winds[index] ?? makeWind(0, 0);
     this.shotNo = 0;
     this.mulliganUsed = false;
+    this.beforeShot = null;
     this.history = [{ x: this.ball.x, y: this.ball.y }];
     this.refreshLie();
   }
@@ -367,6 +369,11 @@ export class Round {
 
   /** Commit a stroke: count it, move the ball, apply the rules. */
   resolve(p: PlannedShot, sim: SimResult): Outcome {
+    // everything a mulligan rewinds (casual): the shot, any penalty after it and its stats
+    this.beforeShot = {
+      tally: { strokes: this.tally.strokes, putts: this.tally.putts, penalties: this.tally.penalties, fairway: this.tally.fairway, reachedGreenAt: this.tally.reachedGreenAt },
+      shotNo: this.shotNo, ball: { ...this.ball }, prev: { ...this.prev }, history: this.history.length,
+    };
     const wasOnGreen = this.onHoleGreen();
     this.tally.stroke(wasOnGreen && p.club.kind === 'putter');
     if (p.club.kind === 'putter') this.lastPuttPower = p.puttDist ?? 0;
@@ -384,27 +391,30 @@ export class Round {
     }
     const s = sim.restSurface;
     const ctx = this.courseCtx();
-    if (sim.inWater || isWater(s)) {
+    const capped = () => this.cfg.settings.maxDoublePar && this.tally.strokes + 1 >= this.hole.par * 2; // a drop would reach the cap
+    // water outside the course (a river or lake beyond the boundary, surface ob_water) is out of bounds, not a penalty area
+    if ((sim.inWater || isWater(s)) && !isOB(s)) {
+      if (capped()) return { kind: 'max_score' };
       const wpoly = this.course.water.find((w) => w.poly.contains(end.x, end.y)) ?? null;
       const pen = wpoly ? wpoly.penalty : 'red';
       const cross = sim.waterCross ?? { x: this.prev.x, y: this.prev.y };
       return { kind: 'water', penalty: pen, options: penaltyAreaOptions(ctx, pen, { x: this.prev.x, y: this.prev.y }, cross, wpoly ? wpoly.poly : null) };
     }
     if (isOB(s) || !this.course.boundary.contains(end.x, end.y)) {
+      if (capped()) return { kind: 'max_score' };
       const out = lastInBounds(sim, this.course.boundary);
       return { kind: 'ob', options: obOptions(ctx, { x: this.prev.x, y: this.prev.y }, out, this.cfg.settings.e5) };
     }
     const onGreen = this.onHoleGreen();
     this.tally.rested(onGreen, s === SURF.fairway, isTeeShot);
-    if (this.cfg.settings.maxDoublePar && this.tally.strokes >= this.hole.par * 2 && !onGreen) {
-      return { kind: 'max_score' };
+    if (this.cfg.settings.maxDoublePar && this.tally.strokes >= this.hole.par * 2) {
+      return { kind: 'max_score' }; // before the gimme, which would add a stroke past the cap
     }
     if (this.cfg.settings.gimmes && onGreen && this.distToPin() <= 0.6) {
       this.tally.strokes += 1; // the conceded putt still counts
       this.tally.putts += 1;
       return { kind: 'gimme' };
     }
-    if (this.cfg.settings.maxDoublePar && this.tally.strokes >= this.hole.par * 2) return { kind: 'max_score' };
     const wrongGreen = ctx.otherGreens.find((g) => g.contains(end.x, end.y));
     if (wrongGreen) {
       const area = freeReliefArea(ctx, this.ball, (x, y) => wrongGreen.contains(x, y), 'wrong green: free relief required');
@@ -445,15 +455,27 @@ export class Round {
   mulligan(): boolean {
     if (!this.cfg.settings.mulligans || this.mulliganUsed || this.shotNo === 0) return false;
     this.mulliganUsed = true;
-    this.tally.strokes -= 1;
-    this.ball = { ...this.prev };
+    const b = this.beforeShot;
+    if (b) {
+      // as if the last shot (and any penalty or drop after it) never happened
+      Object.assign(this.tally, b.tally);
+      this.shotNo = b.shotNo;
+      this.ball = { ...b.ball };
+      this.prev = { ...b.prev };
+      this.history.length = Math.min(this.history.length, b.history);
+    } else {
+      this.tally.strokes -= 1;
+      this.ball = { ...this.prev };
+    }
     this.history.push({ x: this.ball.x, y: this.ball.y });
     this.refreshLie();
     return true;
   }
 
   finishHole(maxed = false): HoleScore {
-    if (maxed) this.tally.strokes = Math.max(this.tally.strokes, this.hole.par * 2);
+    // casual double-par maximum: picked up at the cap, never above it
+    if (maxed) this.tally.strokes = this.hole.par * 2;
+    else if (this.cfg.settings.maxDoublePar) this.tally.strokes = Math.min(this.tally.strokes, this.hole.par * 2);
     const s = this.tally.finish();
     this.scores.push(s);
     return s;

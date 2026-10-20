@@ -56,11 +56,12 @@ export async function useCourse(scene: Phaser.Scene, id: string, progress?: Load
 export async function resumeRound(scene: Phaser.Scene, progress?: LoadProgress): Promise<boolean> {
   const snap = await peekSnapshot();
   if (!snap) return false;
-  if (!app.courses.some((c) => c.id === snap.cfg.courseId)) return false; // course no longer offered
+  if (!app.courses.some((c) => c.id === snap.cfg.courseId)) { await clearSnapshot(); return false; } // course no longer offered
   await useCourse(scene, snap.cfg.courseId, progress);
   const res = await restoreRound();
-  if (!res) return false;
+  if (!res) { await clearSnapshot(); return false; } // nothing that can be played on: don't offer it again
   app.round = res.round;
+  if (res.finished) { await finishRound(scene); return true; } // the last hole was holed: straight to the summary
   scene.scene.start('play', { resume: !res.betweenHoles });
   return true;
 }

@@ -161,6 +161,10 @@ export class PlayScene extends Phaser.Scene {
     const onResize = () => this.rig.apply();
     this.scale.on('resize', onResize);
     this.events.once('shutdown', () => this.scale.off('resize', onResize));
+    // the meter runs on the real clock but the game stops while the tab is hidden: cancel the swing
+    const onHidden = () => this.cancelSwing();
+    this.game.events.on(Phaser.Core.Events.HIDDEN, onHidden);
+    this.events.once('shutdown', () => this.game.events.off(Phaser.Core.Events.HIDDEN, onHidden));
 
     this.hud = this.scene.get('hud') as HudScene;
     this.hud.events.once('create', () => {
@@ -511,7 +515,7 @@ export class PlayScene extends Phaser.Scene {
   }
 
   cycleClub(dir: number) {
-    if (this.state !== 'aim') return;
+    if (this.state !== 'aim' || this.fading || this.zooming) return;
     const allowed = this.round.allowedClubs();
     let i = allowed.findIndex((c) => c.id === this.club.id);
     if (i < 0) i = 0;
@@ -581,6 +585,20 @@ export class PlayScene extends Phaser.Scene {
       if (before === 'power' && this.meter.phase === 'accuracy') this.onPowerSet();
       if (this.meter.phase === 'done') this.launch();
     }
+  }
+
+  /**
+   * Stop a swing in progress and go back to aiming, without a stroke: opening the menu,
+   * the map or the card, or leaving the tab, must not let the meter run out behind it
+   * (it used to fire a full-power miss).
+   */
+  cancelSwing() {
+    if (this.state !== 'swing') return;
+    this.meter = null;
+    this.state = 'aim';
+    this.pose = 'address';
+    this.updateGolfer();
+    this.hud.refresh();
   }
 
   private startMeter(ts: number) {
@@ -687,7 +705,7 @@ export class PlayScene extends Phaser.Scene {
 
   // --------------------------------------------------------------- per frame
   update(time: number, dt: number) {
-    if (!this.hud || !this.hud.play) return;
+    if (!this.hud || !this.hud.play || this.state === 'done') return;
     const r = this.round;
     // flag waves
     this.flagTimer += dt;
@@ -1095,6 +1113,7 @@ export class PlayScene extends Phaser.Scene {
   }
 
   chooseRelief(i: number) {
+    if (this.fading || this.zooming) return;
     const a = this.reliefOptions[i];
     if (!a) return;
     if (a.shape === 'point') {
@@ -1145,7 +1164,7 @@ export class PlayScene extends Phaser.Scene {
   }
 
   confirmDrop() {
-    if (this.state !== 'drop' || !this.reliefArea || !this.dropPoint) return;
+    if (this.state !== 'drop' || !this.reliefArea || !this.dropPoint || this.fading || this.zooming) return;
     const a = this.reliefArea;
     this.round.applyRelief(a, this.dropPoint);
     this.reliefGfx.clear();

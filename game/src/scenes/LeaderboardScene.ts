@@ -28,6 +28,14 @@ let casual = false;
 let page = 0;
 let view: 'scores' | 'eagles' | 'birdies' = 'scores';
 
+/** The calendar day (yyyy-mm-dd) of an ISO time in the player's own time zone (an evening round isn't "tomorrow"). */
+function localDay(iso: string): string {
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return iso.slice(0, 10);
+  const p = (n: number) => String(n).padStart(2, '0');
+  return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}`;
+}
+
 export class LeaderboardScene extends MenuScene {
   constructor() {
     super('leaderboard');
@@ -62,8 +70,11 @@ export class LeaderboardScene extends MenuScene {
     }
     const lens = lengthsFor(info.holes);
     if (!lens.includes(len)) len = lens[0];
+    const g = this.gen;
+    // the way out first, so a slow network never leaves the screen without one
+    this.root.add(new Button(this, x0 + 6, y0 + ph - 20, 44, 15, 'back', () => this.back(), { color: 'grey' }));
     const online = await onlineAvailable();
-    if (!this.sys.isActive()) return;
+    if (!this.isCurrentBuild(g)) return;
     const src = source ?? (online ? 'friends' : 'device');
     let y = y0 + 55;
     const tab = (items: [string, string][], cur: string, set: (v: string) => void) => {
@@ -81,11 +92,13 @@ export class LeaderboardScene extends MenuScene {
     let all = local;
     let note = '';
     if (src === 'friends') {
+      await flushUploads(); // a round just finished goes up before the board is read
+      if (!this.isCurrentBuild(g)) return;
       const shared = await fetchBoard(info.id);
       if (shared) all = shared;
       else note = "can't reach the shared leaderboard - showing this device";
     }
-    if (!this.sys.isActive()) return;
+    if (!this.isCurrentBuild(g)) return;
     const rows = all.filter((e) => e.player !== DEFAULT_NAME && e.course === info.id && (tees.length < 2 || e.tee === teeSel) && e.length === len && e.casual === casual && (diff === 'all' || e.difficulty === diff));
     rows.sort(compareRounds);
     if (!note && src === 'friends' && nameConflicts.size) note = `another player has the name ${[...nameConflicts][0]} - some of your rounds weren't added`;
@@ -105,11 +118,10 @@ export class LeaderboardScene extends MenuScene {
       const yy = listTop + (k + 1) * lineH;
       const i = page * maxRows + k;
       const pb = best.get(e.player) === e;
-      const vals = [String(i + 1), e.player.slice(0, 12), String(e.gross), toPar(e.toPar), e.difficulty, e.date.slice(0, 10)];
+      const vals = [String(i + 1), e.player.slice(0, 12), String(e.gross), toPar(e.toPar), e.difficulty, localDay(e.date)];
       vals.forEach((v, j) => { if (cols[j] >= 0) this.root.add(txt(this, cols[j], yy, v, { color: j === 1 && pb ? COLORS.yellow : COLORS.white })); });
     });
     const by = y0 + ph - 20;
-    this.root.add(new Button(this, x0 + 6, by, 44, 15, 'back', () => this.back(), { color: 'grey' }));
     if (pages > 1) {
       this.root.add(new Button(this, x0 + 54, by, 18, 15, '', () => { page = Math.max(0, page - 1); this.rebuild(); }, { icon: 'arrow_left', color: 'grey' }));
       this.root.add(txt(this, x0 + 84, by + 3, `${page + 1}/${pages}`, { origin: [0.5, 0] }));
@@ -127,8 +139,10 @@ export class LeaderboardScene extends MenuScene {
 
   /** The recent eagles and the most birdies in a round, across every course. */
   private async buildFeats(x0: number, y0: number, pw: number, ph: number) {
+    const g = this.gen;
+    this.root.add(new Button(this, x0 + 6, y0 + ph - 20, 44, 15, 'back', () => this.back(), { color: 'grey' }));
     const online = await onlineAvailable();
-    if (!this.sys.isActive()) return;
+    if (!this.isCurrentBuild(g)) return;
     const src = source ?? (online ? 'friends' : 'device');
     let y = y0 + 40;
     if (online) {
@@ -144,11 +158,13 @@ export class LeaderboardScene extends MenuScene {
     const wide = pw > 300;
     if (view === 'eagles') {
       let list: EagleEvent[] | null = null;
-      if (src === 'friends') { list = await fetchEagles(50); if (!list) note = "can't reach the shared list - showing this device"; }
+      if (src === 'friends') { await flushUploads(); list = await fetchEagles(50); if (!list) note = "can't reach the shared list - showing this device"; }
       if (!list) list = (await loadEagles()).filter((e) => e.player !== DEFAULT_NAME).sort((a, b) => (a.date < b.date ? 1 : -1));
       head = ['date', 'player', 'course', 'hole', ''];
-      cols = [x0 + 10, x0 + 52, x0 + 128, wide ? x0 + 262 : x0 + 230, wide ? x0 + 290 : x0 + 254];
-      rows = list.map((e) => [e.date.slice(5, 10), e.player.slice(0, 12), courseName(e.course).slice(0, wide ? 22 : 17), String(e.hole), featName(e.strokes, e.par)]);
+      // columns from the panel's width: on a narrow phone the course name gives way
+      const featX = pw - 66, holeX = featX - 26, courseChars = Math.max(0, Math.floor((holeX - 128 - 6) / 6));
+      cols = [x0 + 10, x0 + 52, courseChars >= 6 ? x0 + 128 : -1, x0 + holeX, x0 + featX];
+      rows = list.map((e) => [localDay(e.date).slice(5), e.player.slice(0, 12), courseName(e.course).slice(0, courseChars), String(e.hole), featName(e.strokes, e.par)]);
       if (!rows.length) note ||= 'no eagles yet - the first one goes here';
     } else {
       let list: BirdieRow[] | null = null;
@@ -162,11 +178,11 @@ export class LeaderboardScene extends MenuScene {
       }
       head = ['#', 'player', 'birdies', 'course', 'date'];
       cols = [x0 + 10, x0 + 30, x0 + 110, x0 + 150, wide ? x0 + 300 : -1];
-      rows = list.map((r, i) => [String(i + 1), r.player.slice(0, 12), String(r.birdies), courseName(r.course).slice(0, wide ? 24 : 18), r.date.slice(0, 10)]);
+      rows = list.map((r, i) => [String(i + 1), r.player.slice(0, 12), String(r.birdies), courseName(r.course).slice(0, wide ? 24 : 18), localDay(r.date)]);
       if (!rows.length) note ||= 'no birdies yet - go make some!';
       else this.root.add(txt(this, x0 + pw / 2, y0 + ph - 32, 'birdies or better in one round, any course (casual rounds left out)', { origin: [0.5, 0], color: COLORS.dim, maxWidth: pw - 16 }));
     }
-    if (!this.sys.isActive()) return;
+    if (!this.isCurrentBuild(g)) return;
     if (note) { this.root.add(txt(this, x0 + pw / 2, y, note, { origin: [0.5, 0], color: COLORS.yellow, maxWidth: pw - 16 })); y += 11; }
     const listTop = y + 2;
     const maxRows = Math.max(1, Math.floor((y0 + ph - 36 - listTop) / lineH) - 1);
@@ -178,7 +194,6 @@ export class LeaderboardScene extends MenuScene {
       r.forEach((v, j) => { if (cols[j] >= 0) this.root.add(txt(this, cols[j], yy, v, { color: j === 4 && view === 'eagles' ? COLORS.yellow : COLORS.white })); });
     });
     const by = y0 + ph - 20;
-    this.root.add(new Button(this, x0 + 6, by, 44, 15, 'back', () => this.back(), { color: 'grey' }));
     if (pages > 1) {
       this.root.add(new Button(this, x0 + 54, by, 18, 15, '', () => { page = Math.max(0, page - 1); this.rebuild(); }, { icon: 'arrow_left', color: 'grey' }));
       this.root.add(txt(this, x0 + 84, by + 3, `${page + 1}/${pages}`, { origin: [0.5, 0] }));

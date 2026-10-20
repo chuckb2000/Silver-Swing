@@ -133,6 +133,7 @@ export class SwingMeter {
       return this.phase;
     }
     if (this.phase === 'power') {
+      if (t <= this.t0) return this.phase; // the start tap delivered twice, or a tap inside the latency allowance
       const pos = this.outAt(t - this.t0);
       if (pos >= this.max) {
         // tapped just as (or after) the cursor reached the end: maximum power
@@ -146,6 +147,7 @@ export class SwingMeter {
       return this.phase;
     }
     if (this.phase === 'accuracy') {
+      if (t <= this.t2 && !this.maxed) return this.phase; // the power tap delivered twice
       // the cursor turned by itself and the player was a moment late with tap 2
       if (this.maxed && t - this.t2 < LATE_POWER_TAP_MS) return this.phase;
       const pos = this.powerPos - (t - this.t2) * this.vBack;
@@ -160,10 +162,12 @@ export class SwingMeter {
 
   /** Call every frame: turns the cursor at the right end and ends a missed tap 3. */
   update(now: number): MeterPhase {
-    if (this.phase === 'power' && this.outAt(now - this.t0) >= this.max) {
+    // the frame clock is shifted like the taps, so the turn and the run-out match what a tap would get
+    const t = now - this.latencyMs;
+    if (this.phase === 'power' && this.outAt(t - this.t0) >= this.max) {
       this.turnAtEnd();
     }
-    if (this.phase === 'accuracy' && this.powerPos - (now - this.t2) * this.vBack <= -ZONE_REACH) {
+    if (this.phase === 'accuracy' && this.powerPos - (t - this.t2) * this.vBack <= -ZONE_REACH) {
       this.finish(-ZONE_REACH, true);
     }
     return this.phase;

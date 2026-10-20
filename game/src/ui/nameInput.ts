@@ -65,7 +65,7 @@ export function askName(scene: Phaser.Scene, current: string, done: (name: strin
     msg.textContent = '';
     if (closed) return true;
     if (r === 'taken') {
-      msg.textContent = 'another player has that name - try another';
+      msg.textContent = "another device has that name. if it's yours, copy its player code (settings) to this device";
       input.select();
       return false;
     }

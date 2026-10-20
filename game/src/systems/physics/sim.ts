@@ -73,17 +73,19 @@ export function windCarryMult(alongMs: number): number {
   return alongMs >= 0 ? 1 + 0.005 * mph : 1 - 0.01 * mph;
 }
 
-const uOf = (tau: number) => {
-  const t = Math.min(tau, 2.1);
-  return 1.3 * t - 0.3 * t * t;
-};
+// flight progress along the carry: eases off toward the landing, then (a ball still in the
+// air past its flat-ground landing, e.g. downhill) carries on at the landing pace instead of
+// stopping in mid-air (a capped punch shot down a slope used to hang there for 45 s)
+const uOf = (tau: number) => (tau <= 1 ? 1.3 * tau - 0.3 * tau * tau : 1 + 0.7 * (tau - 1));
 
 export function simulateShot(terrain: Terrain, obs: Obstacles | null, spec: ShotSpec, rng: Rng): SimResult {
   const out: number[] = [];
   const events: SimEvent[] = [];
   const maxSteps = Math.round((spec.maxTime ?? 45) * HZ);
   const s: State = { x: spec.x, y: spec.y, z: spec.z, vx: 0, vy: 0, vz: 0 };
-  let phase: 'flight' | 'air' | 'roll' | 'rest' = spec.flight ? 'flight' : 'roll';
+  // a swing with no power (or no flight time) doesn't fly: the ball stays where it is
+  const flies = !!spec.flight && spec.flight.carry > 0.01 && spec.flight.hang > 0.01;
+  let phase: 'flight' | 'air' | 'roll' | 'rest' = flies ? 'flight' : 'roll';
   let t = 0;
   let landed = false;
   let landing: SimResult['landing'] = null;
@@ -100,7 +102,7 @@ export function simulateShot(terrain: Terrain, obs: Obstacles | null, spec: Shot
   const rx = uy, ry = -ux;
 
   // flight parameters
-  const f = spec.flight;
+  const f = flies ? spec.flight : undefined;
   let C = 0, A = 0, T = 1, latCurve = 0, drift = 0;
   if (f) {
     const w = windComponents(spec.aim, f.windX, f.windY);
@@ -234,6 +236,8 @@ export function simulateShot(terrain: Terrain, obs: Obstacles | null, spec: Shot
     let kept: number;
     if (fromFlight && f) {
       kept = m.kept * f.firstBounceK;
+      // a punch (apex capped under trees) comes in faster along the ground than a full shot: no runaway roll
+      if (A < f.apex) kept *= Math.sqrt(A / Math.max(0.01, f.apex));
       if (f.spin < 0) kept *= 1 - 0.4 * -f.spin;
       else if (f.spin > 0) kept *= 1 + 0.1 * f.spin;
       decelMult = f.spin < 0 ? 1 + 0.6 * -f.spin : f.spin > 0 ? 1 - 0.15 * f.spin : 1;

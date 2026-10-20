@@ -20,13 +20,15 @@ const STRONG = [
   'nigg', 'nigga', 'chink', 'gook', 'wetback', 'beaner', 'kike', 'raghead', 'towelhead',
   'sandnig', 'jigaboo', 'porchmonk', 'junglebunn', 'darkie', 'zipperhead', 'redskin',
   'faggot', 'fagot', 'tranny', 'shemale', 'retard', 'spaz', 'mongoloid', 'cripple',
+  'nlgger', 'phuk', 'biotch', 'asshat', 'dumbass', 'jackass', 'titties', 'boobies',
 ];
 
 const MILD = [
   'ass', 'arse', 'fag', 'fags', 'cock', 'dick', 'dicks', 'tit', 'tits', 'titty', 'cum', 'jap', 'japs', 'homo', 'queer',
   'damn', 'piss', 'crap', 'hoe', 'hoes', 'sex', 'sexy', 'nude', 'nudes', 'boob', 'boobs', 'butt', 'balls', 'nutsack',
   'spick', 'kyke', 'anal', 'rape', 'raped', 'rapes', 'pedo', 'pedos', 'nazi', 'nazis', 'gyp', 'gypped', 'coon', 'coons',
-  'spic', 'spics', 'niger', 'negro', 'negros', 'injun', 'injuns', 'paki', 'pakis', 'dyke', 'dykes', 'hooker', 'hookers', 'turd', 'prick', 'pecker', 'schlong', 'knob', 'bellend', 'minge', 'kunt', 'azz',
+  'spic', 'spics', 'niger', 'negro', 'negros', 'injun', 'injuns', 'paki', 'pakis', 'dyke', 'dykes', 'hooker', 'hookers', 'turd', 'prick', 'pecker', 'schlong', 'knob', 'bellend', 'minge', 'kunt', 'kunts', 'azz',
+  'shlt', 'fuq', 'cocks', 'penus',
 ];
 
 // look-alike characters -> letters (1 and | are tried both as i and as l)
@@ -53,7 +55,8 @@ function readings(name: string): { words: string[][]; joined: string[] } {
 
 // squashed forms too ("fuuuck" -> "fuck"), unless that leaves too little ("kkk" -> "k", "ass" -> "as")
 const squash = (w: string) => w.replace(/(.)\1+/g, '$1');
-const strongSquashed = STRONG.map(squash).filter((w) => w.length >= 3 && w !== 'as');
+// (at least 4 letters: "nigg" -> "nig" and "gook" -> "gok" refused Nigel, Knight, Gokul)
+const strongSquashed = STRONG.map(squash).filter((w) => w.length >= 4);
 const mildSet = new Set([...MILD, ...MILD.map(squash).filter((w) => w.length >= 3)]);
 
 /** Is this name allowed on the leaderboard? */
@@ -71,7 +74,10 @@ export const DEFAULT_NAME = 'player';
 
 /** Characters a name may use, lower case, at most 16 long (the game's font and the board's column). */
 export function tidyName(raw: string): string {
-  return raw.trim().toLowerCase().replace(/[^a-z0-9 .'-]/g, '').replace(/\s+/g, ' ').slice(0, 16).trim();
+  // accented letters keep their letter (josé -> jose, zoë -> zoe) instead of disappearing
+  const plain = raw.toLowerCase().replace(/ø/g, 'o').replace(/æ/g, 'ae').replace(/ß/g, 'ss').replace(/œ/g, 'oe')
+    .normalize('NFKD').replace(/[\u0300-\u036f]/g, '');
+  return plain.trim().replace(/[^a-z0-9 .'-]/g, '').replace(/\s+/g, ' ').slice(0, 16).trim();
 }
 
 /** The name to show or store: tidied, and the default if it is empty or not allowed. */
