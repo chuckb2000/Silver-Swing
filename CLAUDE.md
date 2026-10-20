@@ -557,7 +557,7 @@ DECISIONS.md with the reason.
     out of bounds (`join_boundary_parts` with separate features); the barns
     on 8 and by 18 are drawn red (`building_colours`). Five holes are flags,
     none over 8 %. Every other course rebuilds byte-identical.
-    376 unit tests pass; 2 of 4 Playwright tests fail because Oswego Lake
+    396 unit tests pass; 2 of 4 Playwright tests fail because Oswego Lake
     moved to page 2 of Oregon (request in docs/requests/langdon_design_requests.md).
 
 -   **Next task:** the third playtest (putting, yellow misses), the club's

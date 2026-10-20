@@ -22,4 +22,4 @@ start the course with the scene's `choose('oswego_lake')`, as the course
 chats' screenshot scripts do). No game code changes.
 
 **Status:** with Langdon Farms merged, `npm run e2e` fails these two tests;
-the other two pass. Unit tests (376) pass.
+the other two pass. Unit tests (396) pass.
