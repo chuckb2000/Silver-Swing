@@ -2,7 +2,7 @@
 // can be resumed exactly where it was.
 
 import { app } from '../app';
-import { Round, RoundConfig } from '../systems/game/round';
+import { PendingRelief, Round, RoundConfig } from '../systems/game/round';
 import { HoleScore } from '../systems/rules/scoring';
 import { clearRoundInProgress, loadRoundInProgress, saveRoundInProgress } from './store';
 
@@ -21,6 +21,8 @@ interface Snapshot {
   history: { x: number; y: number }[];
   shotSeq: number;
   betweenHoles: boolean;
+  /** a relief choice still open (water, out of bounds...): reopened on resume, so closing the tab never replays a stroke */
+  pending?: PendingRelief | null;
   savedAt: string;
 }
 
@@ -30,7 +32,7 @@ export async function saveSnapshot(r: Round): Promise<void> {
     v: 1, cfg: r.cfg, holeIndex: r.holeIndex, scores: r.scores,
     tally: { strokes: r.tally.strokes, putts: r.tally.putts, penalties: r.tally.penalties, fairway: r.tally.fairway, reachedGreenAt: r.tally.reachedGreenAt },
     ball: r.ball, prev: r.prev, shotNo: r.shotNo, lastPower: r.lastPower, lastPuttPower: r.lastPuttPower,
-    mulliganUsed: r.mulliganUsed, history: r.history, shotSeq: r.shotSeq, betweenHoles, savedAt: new Date().toISOString(),
+    mulliganUsed: r.mulliganUsed, history: r.history, shotSeq: r.shotSeq, betweenHoles, pending: betweenHoles ? null : r.pending, savedAt: new Date().toISOString(),
   };
   await saveRoundInProgress(s);
 }
@@ -70,6 +72,7 @@ export async function restoreRound(): Promise<{ round: Round; betweenHoles: bool
   r.mulliganUsed = s.mulliganUsed;
   r.history = s.history;
   r.shotSeq = s.shotSeq;
+  r.pending = s.pending ?? null;
   r.refreshLie();
   return { round: r, betweenHoles: false };
 }

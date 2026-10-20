@@ -1,59 +1,53 @@
 // Player code: the same person on a second device types the code shown in
 // settings on the first one, so their names on the shared boards work there
-// too (save/identity.ts).
+// too (save/identity.ts). The code is checked with the shared board first: a
+// code that holds no names is refused (a typo would otherwise make a new
+// identity), and this device's own code is shown so it can be written down.
 
 import Phaser from 'phaser';
-import { parseKeyCode } from '../save/identity';
+import { app } from '../app';
+import { keyCode, parseKeyCode } from '../save/identity';
+import { namesOfKey } from '../save/online';
+import { dialogInput, dialogText, openDialog } from './domDialog';
 
 /** Ask for a player code; `done` gets the key, or null if the player backed out. */
 export function askCode(scene: Phaser.Scene, done: (key: string | null) => void) {
-  const r = scene.game.canvas.getBoundingClientRect();
-  const box = document.createElement('div');
-  Object.assign(box.style, {
-    position: 'fixed', left: `${r.left + r.width / 2 - 150}px`, top: `${r.top + r.height / 2 - 60}px`, width: '300px',
-    padding: '10px', background: '#121a20', border: '3px solid #e8681e', borderRadius: '6px', zIndex: '10',
-    font: '14px monospace', color: '#f6f6f2', textAlign: 'center',
-  } as CSSStyleDeclaration);
-  const label = document.createElement('div');
-  label.textContent = 'player code from your other device (your names come with it)';
-  const input = document.createElement('input');
-  input.type = 'text';
-  input.maxLength = 24;
-  input.placeholder = 'abcd-efgh-ijkm-npqr';
-  Object.assign(input.style, {
-    display: 'block', width: '250px', margin: '8px auto 0', font: '18px monospace', padding: '6px',
-    border: '2px solid #394049', background: '#0b1116', color: '#f6f6f2', borderRadius: '4px',
-  } as CSSStyleDeclaration);
-  const msg = document.createElement('div');
-  Object.assign(msg.style, { minHeight: '18px', marginTop: '6px', color: '#ff7a6a', fontSize: '13px' } as CSSStyleDeclaration);
-  const row = document.createElement('div');
-  const ok = document.createElement('button');
-  const cancel = document.createElement('button');
-  ok.textContent = 'use code';
-  cancel.textContent = 'cancel';
-  for (const b of [ok, cancel]) Object.assign(b.style, { margin: '6px 6px 0', font: '14px monospace', padding: '4px 10px' } as CSSStyleDeclaration);
-  row.append(ok, cancel);
-  box.append(label, input, msg, row);
-  document.body.appendChild(box);
-  input.focus();
-  let closed = false;
-  const close = (key: string | null) => {
-    if (closed) return;
-    closed = true;
-    box.remove();
+  const dlg = openDialog(scene, 310, () => done(null));
+  const input = dialogInput(24, 'abcd-efgh-ijkm-npqr');
+  input.style.fontSize = '18px';
+  const msg = dialogText('', '#ff7a6a', 13);
+  dlg.box.append(
+    dialogText('player code from your other device (its names come with it)', '#f6f6f2', 14),
+    input,
+    dialogText(`this device's code now: ${keyCode(app.settings.playerKey)} - write it down to come back to it`, '#9fb0bd', 12),
+    msg,
+  );
+  const [ok, cancel] = dlg.buttons(['use code', 'cancel']);
+  try { input.focus(); } catch { /* tapped instead (iOS) */ }
+  let busy = false;
+  const finish = (key: string | null) => {
+    if (dlg.closed) return;
+    dlg.close();
     done(key);
   };
-  const submit = () => {
+  const submit = async () => {
+    if (busy || dlg.closed) return;
     const k = parseKeyCode(input.value);
     if (!k) { msg.textContent = 'that is not a player code'; input.select(); return; }
-    close(k);
+    if (k === app.settings.playerKey) { finish(k); return; }
+    busy = true;
+    msg.style.color = '#9fb0bd';
+    msg.textContent = 'checking...';
+    const names = await namesOfKey(k);
+    busy = false;
+    if (dlg.closed) return;
+    msg.style.color = '#ff7a6a';
+    if (names === null) { msg.textContent = "can't check codes offline - try again when connected"; return; }
+    if (!names.length) { msg.textContent = 'no names use that code - check it on the other device'; input.select(); return; }
+    finish(k);
   };
-  ok.addEventListener('click', submit);
-  cancel.addEventListener('click', () => close(null));
+  ok.addEventListener('click', () => { void submit(); });
+  cancel.addEventListener('click', () => finish(null));
   input.addEventListener('input', () => { msg.textContent = ''; });
-  input.addEventListener('keydown', (e) => {
-    e.stopPropagation();
-    if (e.key === 'Enter') submit();
-    if (e.key === 'Escape') close(null);
-  });
+  input.addEventListener('keydown', (e) => { if (e.key === 'Enter') void submit(); });
 }

@@ -170,13 +170,25 @@ export class PlayScene extends Phaser.Scene {
     this.hud.events.once('create', () => {
       cam.fadeIn(350, ...FADE_RGB);
       void this.green.prepare(this.round.courseHole);
-      if (data?.resume) this.beginShot(true, true); else this.startHoleIntro(false);
+      if (data?.resume) this.resumeShot(); else this.startHoleIntro(false);
     });
     this.scene.launch('hud');
     this.events.once('shutdown', () => this.scene.stop('hud'));
   }
 
   // --------------------------------------------------------------- hole flow
+  /** Back into a saved round: at the ball, with any relief choice the last stroke left open. */
+  private resumeShot() {
+    const r = this.round;
+    const pending = r.pending;
+    this.beginShot(true, true);
+    if (!pending) return;
+    const out = r.reliefOutcome(pending);
+    if (out.kind === 'rest') { r.pending = null; return; }
+    this.outcome = out;
+    this.showReliefFor(out, false);
+  }
+
   startHoleIntro(withCut = true) {
     if (withCut) {
       // leave 'holed' at once so a second "next hole" press cannot skip a hole during the fade
@@ -1081,25 +1093,38 @@ export class PlayScene extends Phaser.Scene {
         break;
       }
       case 'water':
-        this.hud.flash(out.penalty === 'red' ? 'penalty area' : 'water hazard', 0x7cc0ff);
+      case 'ob':
+      case 'wrong_green':
+      case 'cartpath':
+        this.showReliefFor(out, true);
+        // saved with the choice still open: a closed tab reopens it rather than replaying the stroke
+        void saveSnapshot(r);
+        break;
+      default:
+        this.hud.restInfo();
+        this.beginShot(true);
+    }
+  }
+
+  /** The relief panel for a stroke that ended in water, out of bounds, on a wrong green or a cart path. */
+  private showReliefFor(out: Outcome, announce: boolean) {
+    switch (out.kind) {
+      case 'water':
+        if (announce) this.hud.flash(out.penalty === 'red' ? 'penalty area' : 'water hazard', 0x7cc0ff);
         this.openRelief(out.options, false, 'in the water: 1 penalty stroke');
         break;
       case 'ob':
-        this.hud.flash('out of bounds', 0xffffff);
-        if (out.options.length === 1) {
-          this.openRelief(out.options, false, 'out of bounds: stroke and distance');
-        } else this.openRelief(out.options, false, 'out of bounds');
+        if (announce) this.hud.flash('out of bounds', 0xffffff);
+        this.openRelief(out.options, false, out.options.length === 1 ? 'out of bounds: stroke and distance' : 'out of bounds');
         break;
       case 'wrong_green':
-        this.hud.flash('wrong green', 0xffd84a);
+        if (announce) this.hud.flash('wrong green', 0xffd84a);
         this.openRelief([out.area], false, 'wrong green: free relief is required');
         break;
       case 'cartpath':
         this.openRelief([out.area], true, 'on the cart path: free relief available');
         break;
       default:
-        this.hud.restInfo();
-        this.beginShot(true);
     }
   }
 
@@ -1142,6 +1167,7 @@ export class PlayScene extends Phaser.Scene {
   }
 
   playAsItLies() {
+    this.round.pending = null;
     this.hud.hideRelief();
     this.reliefArea = null;
     this.round.refreshLie();

@@ -45,21 +45,51 @@ function runLoader(scene: Phaser.Scene, queue: (l: Phaser.Loader.LoaderPlugin) =
   });
 }
 
-/** fetch with a time limit and a few tries (a stalled request must not hang the load). */
-async function fetchRetry(url: string, tries = 3, ms = 60_000): Promise<Response> {
+/**
+ * Download a file in full, with a few tries. A try is given up when no bytes
+ * have arrived for `idleMs` (a slow but moving download is never cut off);
+ * `onBytes` hears every chunk, so the course screen can show progress on the
+ * large data images (up to ~5 MB) and its stall watchdog stays quiet.
+ */
+async function fetchBytes(url: string, onBytes?: (got: number, total: number) => void, tries = 3, idleMs = 20_000): Promise<ArrayBuffer> {
   let last: unknown = null;
   for (let k = 0; k < tries; k++) {
     const ctl = typeof AbortController !== 'undefined' ? new AbortController() : null;
-    const timer = ctl ? setTimeout(() => ctl.abort(), ms) : 0;
+    let timer: ReturnType<typeof setTimeout> | null = null;
+    const arm = () => {
+      if (!ctl) return;
+      if (timer) clearTimeout(timer);
+      timer = setTimeout(() => ctl.abort(), idleMs);
+    };
+    arm();
     try {
       const res = await fetch(url, ctl ? { signal: ctl.signal } : undefined);
-      if (res.ok) {
-        // the body too must arrive in time
-        const buf = await res.arrayBuffer();
-        return new Response(buf, { status: res.status, headers: res.headers });
+      if (!res.ok) {
+        last = new Error(`${url}: ${res.status}`);
+        if (res.status >= 400 && res.status < 500) break;
+        continue;
       }
-      last = new Error(`${url}: ${res.status}`);
-      if (res.status >= 400 && res.status < 500) break;
+      const total = Number(res.headers.get('content-length')) || 0;
+      const reader = res.body && typeof res.body.getReader === 'function' ? res.body.getReader() : null;
+      if (!reader) {
+        const buf = await res.arrayBuffer();
+        onBytes?.(buf.byteLength, buf.byteLength);
+        return buf;
+      }
+      const parts: Uint8Array[] = [];
+      let got = 0;
+      for (;;) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        parts.push(value);
+        got += value.byteLength;
+        arm();
+        onBytes?.(got, total);
+      }
+      const out = new Uint8Array(got);
+      let o = 0;
+      for (const part of parts) { out.set(part, o); o += part.byteLength; }
+      return out.buffer;
     } catch (e) {
       last = e;
     } finally {
@@ -79,14 +109,14 @@ export class LoadSuperseded extends Error {}
  * in Safari 26, Brave or Firefox with resistFingerprinting (see png.ts). The
  * canvas is only a fallback for browsers without DecompressionStream.
  */
-async function imageData(url: string): Promise<{ data: Uint8Array | Uint8ClampedArray; w: number; h: number; channels: number }> {
-  const res = await fetchRetry(url);
+async function imageData(url: string, onBytes?: (got: number, total: number) => void): Promise<{ data: Uint8Array | Uint8ClampedArray; w: number; h: number; channels: number }> {
+  const buf = await fetchBytes(url, onBytes);
   if (canDecodePng()) {
-    const img = await decodePng(await res.arrayBuffer());
+    const img = await decodePng(buf);
     return { data: img.data, w: img.width, h: img.height, channels: img.channels };
   }
   console.warn('no DecompressionStream: reading course data through a canvas');
-  const blob = await res.blob();
+  const blob = new Blob([buf], { type: 'image/png' });
   const bmp = await createImageBitmap(blob, { colorSpaceConversion: 'none', premultiplyAlpha: 'none' });
   const c = document.createElement('canvas');
   c.width = bmp.width;
@@ -180,7 +210,14 @@ export async function loadCourse(scene: Phaser.Scene, id: string, progress?: Loa
   }
   alive();
   loadedTheme = theme;
-  const [h, s] = await Promise.all([imageData(base + json.height.file).then((v) => { tick(); return v; }), imageData(base + json.surface.file).then((v) => { tick(); return v; })]);
+  // the two data images: progress by bytes (height.png is up to ~5 MB)
+  const part = [0, 0];
+  const bytes = (i: number) => (got: number, all: number) => {
+    part[i] = all > 0 ? Math.min(0.95, got / all) : 0.5;
+    progress?.(Math.min(0.99, (done + part[0] + part[1]) / Math.max(1, total)));
+  };
+  const image = (i: number, file: string) => imageData(base + file, bytes(i)).then((v) => { part[i] = 0; tick(); return v; });
+  const [h, s] = await Promise.all([image(0, json.height.file), image(1, json.surface.file)]);
   alive();
   const heights = decodeHeights(h.data, hmeta, h.channels);
   // sanity check the exact decode against samples written by the pipeline

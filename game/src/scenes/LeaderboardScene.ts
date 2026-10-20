@@ -99,7 +99,8 @@ export class LeaderboardScene extends MenuScene {
       else note = "can't reach the shared leaderboard - showing this device";
     }
     if (!this.isCurrentBuild(g)) return;
-    const rows = all.filter((e) => e.player !== DEFAULT_NAME && e.course === info.id && (tees.length < 2 || e.tee === teeSel) && e.length === len && e.casual === casual && (diff === 'all' || e.difficulty === diff));
+    // rounds played before a name was set stay on this device's board (the shared board never has them)
+    const rows = all.filter((e) => (all === local || e.player !== DEFAULT_NAME) && e.course === info.id && (tees.length < 2 || e.tee === teeSel) && e.length === len && e.casual === casual && (diff === 'all' || e.difficulty === diff));
     rows.sort(compareRounds);
     if (!note && src === 'friends' && nameConflicts.size) note = `another player has the name ${[...nameConflicts][0]} - some of your rounds weren't added`;
     if (note) { this.root.add(txt(this, x0 + pw / 2, y, note, { origin: [0.5, 0], color: COLORS.yellow, maxWidth: pw - 16 })); y += 11; }
@@ -118,7 +119,7 @@ export class LeaderboardScene extends MenuScene {
       const yy = listTop + (k + 1) * lineH;
       const i = page * maxRows + k;
       const pb = best.get(e.player) === e;
-      const vals = [String(i + 1), e.player.slice(0, 12), String(e.gross), toPar(e.toPar), e.difficulty, localDay(e.date)];
+      const vals = [String(i + 1), e.player === DEFAULT_NAME ? '(no name)' : e.player.slice(0, 12), String(e.gross), toPar(e.toPar), e.difficulty, localDay(e.date)];
       vals.forEach((v, j) => { if (cols[j] >= 0) this.root.add(txt(this, cols[j], yy, v, { color: j === 1 && pb ? COLORS.yellow : COLORS.white })); });
     });
     const by = y0 + ph - 20;

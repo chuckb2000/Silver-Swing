@@ -13,7 +13,8 @@ export function newPlayerKey(): string {
   return s;
 }
 
-export const isPlayerKey = (v: unknown): v is string => typeof v === 'string' && /^[a-z0-9]{16}$/.test(v);
+/** A key as the game makes them (the alphabet above): a mistyped l, o, 0 or 1 is caught. */
+export const isPlayerKey = (v: unknown): v is string => typeof v === 'string' && /^[a-km-np-z2-9]{16}$/.test(v);
 
 /** The key as a code to read out or copy: abcd-efgh-ijkm-npqr. */
 export const keyCode = (k: string) => k.replace(/(.{4})(?=.)/g, '$1-');

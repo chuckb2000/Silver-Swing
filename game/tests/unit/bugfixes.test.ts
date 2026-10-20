@@ -80,6 +80,57 @@ describe('rules', () => {
   });
 });
 
+describe('a relief choice left open is saved with the round', () => {
+  const langston = loadCourseFiles('langston');
+  const t = langston.terrain;
+  const find = (want: number) => {
+    for (let y = 2; y < t.height; y += 3) for (let x = 2; x < t.width; x += 3) if (t.surface(x, y) === want) return { x, y };
+    throw new Error(`no surface ${want}`);
+  };
+  const strip = (o: { kind: string; options?: { kind: string; center: { x: number; y: number }; radius: number; penalty: number }[] }) =>
+    (o.options ?? []).map((a) => ({ kind: a.kind, center: a.center, radius: a.radius, penalty: a.penalty }));
+
+  it('water: a resumed round reopens the same options with the stroke counted (no free replay)', () => {
+    const r = new Round(langston, roundCfg(langston, [1]));
+    r.startHole(0);
+    const p = r.plan('dr', r.defaultAim(clubById('dr'), 1), meterFor(1, 0, false), 0, 1);
+    const w = find(SURF.water);
+    const out = r.resolve(p, fakeSim(r.ball, w.x, w.y, SURF.water));
+    expect(out.kind).toBe('water');
+    expect(r.pending?.kind).toBe('water');
+    // what the snapshot keeps (JSON), into a fresh round
+    const saved = JSON.parse(JSON.stringify({ pending: r.pending, ball: r.ball, prev: r.prev, strokes: r.tally.strokes }));
+    const r2 = new Round(langston, r.cfg);
+    r2.startHole(0);
+    r2.tally.strokes = saved.strokes;
+    r2.ball = saved.ball;
+    r2.prev = saved.prev;
+    r2.pending = saved.pending;
+    const again = r2.reliefOutcome(r2.pending!);
+    expect(again.kind).toBe('water');
+    expect(strip(again as never)).toEqual(strip(out as never));
+    expect(r2.tally.strokes).toBe(1);
+    if (again.kind !== 'water') return;
+    r2.applyRelief(again.options[0], again.options[0].center);
+    expect(r2.pending).toBeNull();
+    expect([r2.tally.strokes, r2.tally.penalties]).toEqual([2, 1]); // the stroke and its penalty, once
+  });
+
+  it('out of bounds: the E-5 option comes back too', () => {
+    const cfg = roundCfg(langston, [1]);
+    cfg.settings.e5 = true;
+    const r = new Round(langston, cfg);
+    r.startHole(0);
+    const p = r.plan('dr', r.defaultAim(clubById('dr'), 1), meterFor(1, 0, false), 0, 1);
+    const o = find(SURF.ob);
+    const out = r.resolve(p, fakeSim(r.ball, o.x, o.y, SURF.ob));
+    expect(out.kind).toBe('ob');
+    const saved = JSON.parse(JSON.stringify(r.pending));
+    const again = r.reliefOutcome(saved);
+    expect(strip(again as never)).toEqual(strip(out as never));
+  });
+});
+
 describe('physics', () => {
   it('a punch shot (apex capped under trees) hit down a slope lands instead of hanging in the air', () => {
     const c = clubById('7i');

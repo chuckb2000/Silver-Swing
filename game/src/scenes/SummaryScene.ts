@@ -8,7 +8,7 @@ import { askName } from '../ui/nameInput';
 import { compareRounds, toPar } from '../systems/rules/scoring';
 import { Button, COLORS, txt } from '../ui/widgets';
 import { scorecard } from './HudScene';
-import { fetchBoard, flushUploads } from '../save/online';
+import { claimName, fetchBoard, flushUploads } from '../save/online';
 import { lengthLabel } from './flow';
 import { MenuScene } from './menu';
 
@@ -43,20 +43,25 @@ export class SummaryScene extends MenuScene {
     const best = mine.length ? mine.slice().sort(compareRounds)[0] : null;
     const pb = best && best.id === e.id && mine.length > 1;
     if (pb) sfx('great');
+    // a name another device holds: the round can't go on the shared board under it (say so, rather than a rank it won't get)
+    const taken = shared && e.player !== DEFAULT_NAME && (await claimName(e.player)) === 'taken';
+    if (!this.sys.isActive()) return;
     const note = e.player === DEFAULT_NAME
       ? `enter your name to put this round on the leaderboard (it would be #${rank} of ${board.length} ${where})`
-      : `${e.casual ? 'casual round  ·  ' : ''}#${rank} of ${board.length} ${where} (${lengthLabel(e.length)})${pb ? '  ·  new personal best!' : ''}`;
-    const noteTxt = txt(this, W / 2, H - 38, note, { origin: [0.5, 0], color: pb ? COLORS.yellow : COLORS.dim, maxWidth: W - 12 });
+      : taken
+        ? `another device has the name ${e.player}: tap the name to change it, or to enter that device's player code`
+        : `${e.casual ? 'casual round  ·  ' : ''}#${rank} of ${board.length} ${where} (${lengthLabel(e.length)})${pb ? '  ·  new personal best!' : ''}`;
+    const noteTxt = txt(this, W / 2, H - 38, note, { origin: [0.5, 0], color: taken ? COLORS.red : pb ? COLORS.yellow : COLORS.dim, maxWidth: W - 12 });
     if (noteTxt.height > 12) noteTxt.y = H - 30 - noteTxt.height; // wrapped on a narrow screen: keep it above the buttons
     this.root.add(noteTxt);
     // the name on the leaderboard: easy to miss at the start, so it can be set here before the round is sent
-    const unnamed = e.player === DEFAULT_NAME;
+    const unnamed = e.player === DEFAULT_NAME || taken;
     const nw = 104;
     const nx = W >= 400 ? W - nw - 6 : Math.round(W / 2 - nw / 2), ny = W >= 400 ? 4 : H - 56;
-    this.root.add(new Button(this, nx, ny, nw, 16, unnamed ? 'enter your name' : `name: ${e.player}`, () => this.rename(), { color: unnamed ? 'orange' : 'grey' }));
+    this.root.add(new Button(this, nx, ny, nw, 16, e.player === DEFAULT_NAME ? 'enter your name' : `name: ${e.player}`, () => this.rename(), { color: unnamed ? 'orange' : 'grey' }));
     // leaving the summary sends the round to the shared leaderboard
     const leave = (to: string) => { void flushUploads(); this.scene.start(to, to === 'leaderboard' ? { courseId: e.course } : undefined); };
-    const bw = 84;
+    const bw = Math.min(84, Math.floor((W - 16) / 3)); // three buttons fit a narrow phone
     this.root.add(new Button(this, W / 2 - bw * 1.5 - 4, H - 24, bw, 16, 'title', () => leave('title'), { color: 'grey' }));
     this.root.add(new Button(this, W / 2 - bw / 2, H - 24, bw, 16, 'leaderboard', () => leave('leaderboard'), { color: 'grey' }));
     this.root.add(new Button(this, W / 2 + bw / 2 + 4, H - 24, bw, 16, 'play again', () => leave('setup')));
@@ -64,7 +69,8 @@ export class SummaryScene extends MenuScene {
 
   private rename() {
     askName(this, this.entry.player, async (name) => {
-      if (!name || name === this.entry.player) return;
+      if (!name) return;
+      if (name === this.entry.player) { if (this.sys.isActive()) this.rebuild(); return; } // the same name, now this device's (player code)
       await renameEntry(this.entry.id, name);
       await renameEagles(this.entry.id, name);
       this.entry = { ...this.entry, player: name };

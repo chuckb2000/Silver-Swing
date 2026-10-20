@@ -3,96 +3,74 @@
 // (save/names.ts); "player" is not a name; on the hosted site the name is
 // claimed for this device, so a name another player holds is refused
 // (developer, 2026-10-19). A refused name is shown in red and not accepted.
+// The same person on a new device ("that name is taken" for their own name)
+// enters the player code of their first device from here.
 
 import Phaser from 'phaser';
+import { app } from '../app';
 import { DEFAULT_NAME, nameAllowed, tidyName } from '../save/names';
-import { claimName } from '../save/online';
+import { claimName, nameConflicts } from '../save/online';
+import { saveSettings } from '../save/store';
+import { askCode } from './codeInput';
+import { dialogInput, dialogText, openDialog } from './domDialog';
 
 /** Ask for a name; `done` gets the new name, or null if the player backed out. */
 export function askName(scene: Phaser.Scene, current: string, done: (name: string | null) => void, title = 'name for the leaderboard') {
-  const r = scene.game.canvas.getBoundingClientRect();
-  const box = document.createElement('div');
-  Object.assign(box.style, {
-    position: 'fixed', left: `${r.left + r.width / 2 - 125}px`, top: `${r.top + r.height / 2 - 40}px`, width: '250px',
-    padding: '10px', background: '#121a20', border: '3px solid #e8681e', borderRadius: '6px', zIndex: '10',
-    font: '15px monospace', color: '#f6f6f2', textAlign: 'center',
-  } as CSSStyleDeclaration);
-  const label = document.createElement('div');
-  label.textContent = title;
-  const input = document.createElement('input');
-  input.type = 'text';
-  input.maxLength = 16;
-  input.value = current === DEFAULT_NAME ? '' : current;
-  input.placeholder = 'your name';
-  Object.assign(input.style, {
-    display: 'block', width: '220px', margin: '8px auto 0', font: '20px monospace', padding: '6px',
-    border: '2px solid #394049', background: '#0b1116', color: '#f6f6f2', borderRadius: '4px',
-  } as CSSStyleDeclaration);
-  const msg = document.createElement('div');
-  Object.assign(msg.style, { minHeight: '18px', marginTop: '6px', color: '#ff7a6a', fontSize: '13px' } as CSSStyleDeclaration);
-  box.append(label, input, msg);
-  document.body.appendChild(box);
-  input.focus();
-  let closed = false;
-  const close = (name: string | null) => {
-    if (closed) return;
-    closed = true;
-    box.remove();
+  const dlg = openDialog(scene, 270, () => done(null));
+  const input = dialogInput(16, 'your name', current === DEFAULT_NAME ? '' : current);
+  const msg = dialogText('', '#ff7a6a', 13);
+  dlg.box.append(dialogText(title), input, msg);
+  const [ok, cancel, mine] = dlg.buttons(['ok', 'cancel', "it's mine"]);
+  mine.style.display = 'none';
+  try { input.focus(); } catch { /* the player taps the box instead (iOS) */ }
+  let busy = false;
+  const finish = (name: string | null) => {
+    if (dlg.closed) return;
+    dlg.close();
     done(name);
   };
-  let busy = false;
-  /** true: accepted or backed out; false: refused (the box stays) */
-  const submit = async (): Promise<boolean> => {
-    if (busy) return false;
+  const refuse = (text: string, taken = false) => {
+    msg.style.color = '#ff7a6a';
+    msg.textContent = text;
+    mine.style.display = taken ? '' : 'none';
+    input.select();
+  };
+  const submit = async () => {
+    if (busy || dlg.closed) return;
     const v = tidyName(input.value);
-    if (!v) { close(null); return true; }
-    if (v === DEFAULT_NAME) {
-      msg.textContent = 'pick a name of your own';
-      input.select();
-      return false;
-    }
-    if (!nameAllowed(v)) {
-      msg.textContent = "that name isn't allowed - try another";
-      input.select();
-      return false;
-    }
+    if (!v) { finish(null); return; }
+    if (v === DEFAULT_NAME) { refuse('pick a name of your own'); return; }
+    if (!nameAllowed(v)) { refuse("that name isn't allowed - try another"); return; }
     busy = true;
     msg.style.color = '#9fb0bd';
     msg.textContent = 'checking...';
     const r = await claimName(v);
     busy = false;
-    msg.style.color = '#ff7a6a';
+    if (dlg.closed) return;
     msg.textContent = '';
-    if (closed) return true;
-    if (r === 'taken') {
-      msg.textContent = "another device has that name. if it's yours, copy its player code (settings) to this device";
-      input.select();
-      return false;
-    }
-    if (r === 'too_many') {
-      msg.textContent = 'this device has too many names - use one of yours';
-      input.select();
-      return false;
-    }
-    if (r === 'invalid') {
-      msg.textContent = "that name isn't allowed - try another";
-      input.select();
-      return false;
-    }
-    close(v);
-    return true;
+    if (r === 'taken') { refuse('another device has that name. yours? tap "it\'s mine" and enter its player code (settings on that device)', true); return; }
+    if (r === 'too_many') { refuse('this device has too many names - use one of yours'); return; }
+    if (r === 'invalid') { refuse("that name isn't allowed - try another"); return; }
+    finish(v);
   };
-  input.addEventListener('input', () => { msg.textContent = ''; });
-  input.addEventListener('keydown', (e) => {
-    e.stopPropagation();
-    if (e.key === 'Enter') void submit();
-    if (e.key === 'Escape') close(null);
+  ok.addEventListener('click', () => { void submit(); });
+  cancel.addEventListener('click', () => finish(null));
+  mine.addEventListener('click', () => {
+    // the player code of the device that holds the name; then the name is checked again
+    const name = input.value;
+    dlg.close();
+    askCode(scene, (key) => {
+      if (!scene.sys.isActive()) { done(null); return; }
+      if (key && key !== app.settings.playerKey) {
+        app.settings.playerKey = key;
+        nameConflicts.clear();
+        void saveSettings(app.settings);
+      }
+      askName(scene, name, done, title);
+    });
   });
-  // tapping elsewhere: keep a good name, drop a refused one
-  input.addEventListener('blur', () => {
-    setTimeout(async () => {
-      if (closed || busy) return;
-      if (!(await submit())) close(null);
-    }, 0);
+  input.addEventListener('input', () => { msg.textContent = ''; mine.style.display = 'none'; });
+  input.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') void submit();
   });
 }

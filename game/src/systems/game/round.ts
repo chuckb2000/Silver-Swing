@@ -50,6 +50,17 @@ export type Outcome =
   | { kind: 'cartpath'; area: ReliefArea }
   | { kind: 'max_score' };
 
+/**
+ * A relief choice still to be made after a stroke (water, out of bounds, a
+ * wrong green, a cart path). Saved with the round so a closed tab reopens the
+ * same choice instead of replaying the stroke for free.
+ */
+export type PendingRelief =
+  | { kind: 'water'; cross: { x: number; y: number } }
+  | { kind: 'ob'; wentOut: { x: number; y: number } | null }
+  | { kind: 'wrong_green' }
+  | { kind: 'cartpath' };
+
 export interface PlannedShot {
   club: Club;
   spec: ShotSpec;
@@ -101,6 +112,8 @@ export class Round {
   lastPower: number | null = null;
   lastPuttPower: number | null = null;
   mulliganUsed = false;
+  /** the relief choice the last stroke left open (null once the ball is dropped or played) */
+  pending: PendingRelief | null = null;
   private beforeShot: { tally: { strokes: number; putts: number; penalties: number; fairway: boolean | null; reachedGreenAt: number | null }; shotNo: number; ball: BallPos; prev: BallPos; history: number } | null = null;
   history: { x: number; y: number }[] = [];
   shotSeq = 0;
@@ -154,6 +167,7 @@ export class Round {
     this.shotNo = 0;
     this.mulliganUsed = false;
     this.beforeShot = null;
+    this.pending = null;
     this.history = [{ x: this.ball.x, y: this.ball.y }];
     this.refreshLie();
   }
@@ -369,6 +383,7 @@ export class Round {
 
   /** Commit a stroke: count it, move the ball, apply the rules. */
   resolve(p: PlannedShot, sim: SimResult): Outcome {
+    this.pending = null;
     // everything a mulligan rewinds (casual): the shot, any penalty after it and its stats
     this.beforeShot = {
       tally: { strokes: this.tally.strokes, putts: this.tally.putts, penalties: this.tally.penalties, fairway: this.tally.fairway, reachedGreenAt: this.tally.reachedGreenAt },
@@ -385,7 +400,7 @@ export class Round {
     this.ball = { x: end.x, y: end.y, teedUp: false };
     this.history.push({ x: end.x, y: end.y });
     if (sim.holed) {
-      this.tally.rested(true, false, isTeeShot);
+      this.tally.rested(true, true, isTeeShot); // holed from the tee: the fairway counts as hit, not missed
       if (this.tally.reachedGreenAt === null) this.tally.reachedGreenAt = this.tally.strokes;
       return { kind: 'holed' };
     }
@@ -395,15 +410,11 @@ export class Round {
     // water outside the course (a river or lake beyond the boundary, surface ob_water) is out of bounds, not a penalty area
     if ((sim.inWater || isWater(s)) && !isOB(s)) {
       if (capped()) return { kind: 'max_score' };
-      const wpoly = this.course.water.find((w) => w.poly.contains(end.x, end.y)) ?? null;
-      const pen = wpoly ? wpoly.penalty : 'red';
-      const cross = sim.waterCross ?? { x: this.prev.x, y: this.prev.y };
-      return { kind: 'water', penalty: pen, options: penaltyAreaOptions(ctx, pen, { x: this.prev.x, y: this.prev.y }, cross, wpoly ? wpoly.poly : null) };
+      return this.open({ kind: 'water', cross: sim.waterCross ?? { x: this.prev.x, y: this.prev.y } });
     }
     if (isOB(s) || !this.course.boundary.contains(end.x, end.y)) {
       if (capped()) return { kind: 'max_score' };
-      const out = lastInBounds(sim, this.course.boundary);
-      return { kind: 'ob', options: obOptions(ctx, { x: this.prev.x, y: this.prev.y }, out, this.cfg.settings.e5) };
+      return this.open({ kind: 'ob', wentOut: lastInBounds(sim, this.course.boundary) });
     }
     const onGreen = this.onHoleGreen();
     this.tally.rested(onGreen, s === SURF.fairway, isTeeShot);
@@ -415,24 +426,59 @@ export class Round {
       this.tally.putts += 1;
       return { kind: 'gimme' };
     }
-    const wrongGreen = ctx.otherGreens.find((g) => g.contains(end.x, end.y));
-    if (wrongGreen) {
-      const area = freeReliefArea(ctx, this.ball, (x, y) => wrongGreen.contains(x, y), 'wrong green: free relief required');
-      if (area) return { kind: 'wrong_green', area };
+    if (ctx.otherGreens.some((g) => g.contains(end.x, end.y))) {
+      const o = this.open({ kind: 'wrong_green' });
+      if (o.kind !== 'rest') return o;
     }
     if (s === SURF.cartpath || s === SURF.building) {
-      const area = freeReliefArea(ctx, this.ball, (x, y) => {
-        const q = this.course.terrain.surface(x, y);
-        return q === SURF.cartpath || q === SURF.building;
-      }, 'cart path: free relief');
-      if (area) return { kind: 'cartpath', area };
+      const o = this.open({ kind: 'cartpath' });
+      if (o.kind !== 'rest') return o;
     }
     this.refreshLie();
     return { kind: 'rest' };
   }
 
+  /** Leave a relief choice open and return its options (none to offer: the ball is just at rest). */
+  private open(p: PendingRelief): Outcome {
+    const o = this.reliefOutcome(p);
+    this.pending = o.kind === 'rest' ? null : p;
+    return o;
+  }
+
+  /**
+   * The relief options of a pending choice, from the ball where it ended and
+   * the spot it was played from. Pure: the same answer after a resume.
+   */
+  reliefOutcome(p: PendingRelief): Outcome {
+    const ctx = this.courseCtx();
+    const end = this.ball;
+    const prev = { x: this.prev.x, y: this.prev.y };
+    switch (p.kind) {
+      case 'water': {
+        const wpoly = this.course.water.find((w) => w.poly.contains(end.x, end.y)) ?? null;
+        const pen = wpoly ? wpoly.penalty : 'red';
+        return { kind: 'water', penalty: pen, options: penaltyAreaOptions(ctx, pen, prev, p.cross, wpoly ? wpoly.poly : null) };
+      }
+      case 'ob':
+        return { kind: 'ob', options: obOptions(ctx, prev, p.wentOut, this.cfg.settings.e5) };
+      case 'wrong_green': {
+        const g = ctx.otherGreens.find((q) => q.contains(end.x, end.y));
+        const area = g ? freeReliefArea(ctx, end, (x, y) => g.contains(x, y), 'wrong green: free relief required') : null;
+        return area ? { kind: 'wrong_green', area } : { kind: 'rest' };
+      }
+      case 'cartpath': {
+        const area = freeReliefArea(ctx, end, (x, y) => {
+          const q = this.course.terrain.surface(x, y);
+          return q === SURF.cartpath || q === SURF.building;
+        }, 'cart path: free relief');
+        return area ? { kind: 'cartpath', area } : { kind: 'rest' };
+      }
+    }
+  }
+
   /** Apply a relief choice: move the ball and add its penalty strokes. */
   applyRelief(area: ReliefArea, p: { x: number; y: number }) {
+    this.pending = null;
     this.tally.penalty(area.penalty);
     if (area.kind === 'stroke_distance') {
       this.ball = { ...this.prev };
@@ -455,6 +501,7 @@ export class Round {
   mulligan(): boolean {
     if (!this.cfg.settings.mulligans || this.mulliganUsed || this.shotNo === 0) return false;
     this.mulliganUsed = true;
+    this.pending = null;
     const b = this.beforeShot;
     if (b) {
       // as if the last shot (and any penalty or drop after it) never happened
