@@ -1924,9 +1924,10 @@ data/ogc/validation_report.md.
     tree search (`remove_wires`).
 -   **Water:** Hershiser Reservoir (holes 7 and 9), the hole 8 creek and
     ponds and the hole 4 pond, all red (developer).
--   **Driving range** (target greens P3-P9): out of bounds, edge from the
-    OSM path loop (a proposal), drawn as rough with OB stakes
-    (`range_art`; developer: the range is rough on the ground).
+-   **Driving range** (target greens P3-P9): out of bounds, drawn by
+    the developer in the tracing desk, drawn as rough with OB stakes
+    (`range_art`; developer: the range is rough on the ground). Hole 9's
+    fairway was also corrected there (`data/ogc/desk/`).
 -   **Trees:** 12,289 from lidar, 2,902 on the course (46 % conifers).
     Every tee shot to the middle of the fairway is clear (s06b removed
     nothing).
@@ -1949,7 +1950,7 @@ scorecard_full.csv, not built.
 
 -   **Default tee:** Blue (developer); White is built too.
 -   **Known open items:** data/ogc/report_notes.md (a fir hides the hole 7
-    pin; range edge is a proposal; hole 16 White tee assigned by the course
+    pin; hole 16 White tee assigned by the course
     chat; flags on 5 White and 10 Blue/White; scorecard unverified).
 
 **12. Repository layout**

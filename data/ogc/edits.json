@@ -1,26 +1,89 @@
 {
-  "note": "Edits to the OSM layout for Oregon Golf Club. Built into edited/course.geojson by pipeline/merge_edits.py (run by make course).",
-  "add": [
-    {
-      "from": "proposed/range.geojson",
-      "ids": ["range_paths"],
-      "tags": {},
-      "reason": "developer 2026-10-19: the driving range takes in target greens P3-P9 (OSM maps no range); edge = the OSM road/cart-path loop around them, short-game area cut out (data/ogc/tools/propose_range.py, proposed/range.png); proposal for the developer's approval"
-    }
-  ],
-  "tags": [
-    {"osm": "w865546390", "set": {"penalty": "red"}, "reason": "developer 2026-10-19: all water hazards are red (OSM tags this pond golf=water_hazard, yellow)"},
-    {"osm": "w865842632", "set": {"hole": "16", "tee_set": "White"}, "reason": "course chat 2026-10-19 (for review): hole 16's tee complex steps sideways, and this box measures 377 yd vs 383 on the White card (-1.5 %) but lies 30 m off the OSM line, outside s06's 25 m search corridor; without it White shared the Blue box (+3.8 %)"}
-  ],
-  "drop": [
-    {"osm": "w866037971", "reason": "range target green P3 (developer 2026-10-19); inside the range, out of bounds"},
-    {"osm": "w866037973", "reason": "range target green P4"},
-    {"osm": "w866037974", "reason": "range target green P5"},
-    {"osm": "w866037975", "reason": "range target green P6"},
-    {"osm": "w866037976", "reason": "range target green P7"},
-    {"osm": "w866037977", "reason": "range target green P8"},
-    {"osm": "w866037978", "reason": "range target green P9"},
-    {"osm": "r14014795", "reason": "mown collar (tagged golf=fairway, 735 m2) around range target P3; part of the range, drawn as rough with it"},
-    {"osm": "w984701646", "reason": "the range's hitting area (3,750 m2, tagged golf=tee), inside the range; not a hole's tee"}
-  ]
+ "note": "Edits to the OSM layout for Oregon Golf Club. Built into edited/course.geojson by pipeline/merge_edits.py (run by make course).",
+ "add": [
+  {
+   "from": "proposed/approved.geojson",
+   "ids": [
+    "desk_9_fairway_0",
+    "desk_9_fairway_1",
+    "desk_9_bunker_0",
+    "desk_9_green_0",
+    "desk_9_fairway_2",
+    "desk_range_range_0"
+   ],
+   "tags": {},
+   "reason": "developer 2026-10-19, tracing desk (data/ogc/desk/): the driving range redrawn (2.9 ha, around targets P3-P9) and hole 9's shapes with a third fairway added; built by pipeline/desk_to_proposed.py"
+  }
+ ],
+ "tags": [
+  {
+   "osm": "w865546390",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "developer 2026-10-19: all water hazards are red (OSM tags this pond golf=water_hazard, yellow)"
+  },
+  {
+   "osm": "w865842632",
+   "set": {
+    "hole": "16",
+    "tee_set": "White"
+   },
+   "reason": "course chat 2026-10-19 (for review): hole 16's tee complex steps sideways, and this box measures 377 yd vs 383 on the White card (-1.5 %) but lies 30 m off the OSM line, outside s06's 25 m search corridor; without it White shared the Blue box (+3.8 %)"
+  }
+ ],
+ "drop": [
+  {
+   "osm": "w866037971",
+   "reason": "range target green P3 (developer 2026-10-19); inside the range, out of bounds"
+  },
+  {
+   "osm": "w866037973",
+   "reason": "range target green P4"
+  },
+  {
+   "osm": "w866037974",
+   "reason": "range target green P5"
+  },
+  {
+   "osm": "w866037975",
+   "reason": "range target green P6"
+  },
+  {
+   "osm": "w866037976",
+   "reason": "range target green P7"
+  },
+  {
+   "osm": "w866037977",
+   "reason": "range target green P8"
+  },
+  {
+   "osm": "w866037978",
+   "reason": "range target green P9"
+  },
+  {
+   "osm": "r14014795",
+   "reason": "mown collar (tagged golf=fairway, 735 m2) around range target P3, at the range; drawn as rough"
+  },
+  {
+   "osm": "w984701646",
+   "reason": "the range's hitting area (3,750 m2, tagged golf=tee), not a hole's tee; plays as rough west of the developer's range"
+  },
+  {
+   "osm": "r18566931",
+   "reason": "hole 9 fairway, replaced by the developer's saved shape (tracing desk)"
+  },
+  {
+   "osm": "w865546399",
+   "reason": "hole 9 fairway, replaced by the developer's saved shape (tracing desk)"
+  },
+  {
+   "osm": "w865548285",
+   "reason": "hole 9 bunker, replaced by the developer's saved shape (tracing desk)"
+  },
+  {
+   "osm": "w984705460",
+   "reason": "hole 9 green, replaced by the developer's saved shape (tracing desk)"
+  }
+ ]
 }

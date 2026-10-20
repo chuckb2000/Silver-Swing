@@ -393,3 +393,8 @@ Oswego Lake and Highland Links notes live in DECISIONS.md.
 - **Two CPUs:** the regression rebuild and the in-game screenshots slow each
   other down several times over. Run the regression first, or accept about
   7 minutes a hole for screenshots while it runs.
+- **The tracing desk fixes OSM courses too.** The developer asked to correct
+  the driving range and hole 9's fairway themselves; the desk (with
+  `--edit-osm` and `--area range`, over a lidar relief because there was no
+  photo yet) took about twenty minutes from request to saves. Offer it
+  whenever a mapped shape is wrong and the developer knows the course.

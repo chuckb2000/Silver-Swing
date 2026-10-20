@@ -22,7 +22,7 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 | 7 | 4 | White | 361 | 357.2 | -3.8 | -1.1% | pass | 357.2 | -1.1% | pass |
 | 8 | 3 | Blue | 193 | 187.2 | -5.8 | -3.0% | pass | 187.2 | -3.0% | pass |
 | 8 | 3 | White | 185 | 187.2 | +2.2 | +1.2% | pass | 187.2 | +1.2% | pass |
-| 9 | 4 | Blue | 325 | 314.9 | -10.1 | -3.1% | flag | 324.9 | -0.0% | pass |
+| 9 | 4 | Blue | 325 | 314.9 | -10.1 | -3.1% | flag | 325.0 | -0.0% | pass |
 | 9 | 4 | White | 308 | 314.9 | +6.9 | +2.3% | pass | 314.9 | +2.3% | pass |
 | 10 | 4 | Blue | 361 | 340.1 | -20.9 | -5.8% | flag | 343.4 | -4.9% | flag |
 | 10 | 4 | White | 324 | 340.1 | +16.1 | +5.0% | flag | 337.1 | +4.0% | flag |
@@ -65,7 +65,7 @@ Decisions the developer made on 2026-10-19 are in DECISIONS.md ("Oregon Golf Clu
 
 1. **Scorecard is GolfPass's (unverified); no printed card is available** (developer). Blue and White hole sums match GolfPass's printed Out/In totals; its tee table says White 6,081 where the holes add to 6,080, and Black 7,052 where they add to 7,070. Pars and the men's stroke index agree with the OSM hole tags on all 18 holes. Ratings used: Blue 72.5 / 136, White 69.7 / 133 (GolfPass). Recommendation: keep; replace if a club card turns up.
 2. **Hole 7: a 31 m fir stands 7 m south of the green** (lidar tree at 1074.5, 1422.5; crown radius 7.7 m). In the game's 3/4 view the sprite is drawn over the green and hides the pin (course card contact sheet). Hole 15 has a 23 m broadleaf whose crown edge reaches the green; it doesn't hide the pin. Recommendation: remove the hole 7 fir (`drop_trees`, as Tualatin hole 13); keep hole 15's.
-3. **Driving range polygon is a proposal.** OSM maps no range. The developer: the range takes in target greens P3-P9. Its edge is the OSM road / cart-path loop around them (`tools/propose_range.py`, picture `proposed/range.png`), 6.1 ha, with the short-game area (practice greens P1-P2, its fairway and bunkers) cut out and left in play. The range is out of bounds; it is drawn as rough (developer: "the actual driving range is rough at this course") with range balls and white OB stakes along its edge, and shows as rough on the minimaps. The target greens, P3's mown collar and the hitting area (OSM tee w984701646) are dropped. In the game the stakes are small (3 px posts, as on the course boundary) and the range balls are white dots too, so the edge is easy to miss at normal zoom. Recommendation: approve the edge; if it should read more clearly, drop the range balls (one line in s09/s09b) so the stakes are the only white marks.
+3. **Driving range and hole 9: drawn by the developer in the tracing desk** (2026-10-19; saves in `data/ogc/desk/`, built by `pipeline/desk_to_proposed.py`). The range is 2.9 ha around targets P3-P9, out of bounds, drawn as rough with range balls and white OB stakes along its edge; the short-game area (practice greens P1-P2) and the hitting area west of it now play as rough. Hole 9 has a third fairway linking the two OSM ones; its green, bunker and yardage are unchanged. The first range edge (the OSM path loop, `tools/propose_range.py`) is superseded. In the game the stakes are small (3 px posts) and the range balls are white dots too. Recommendation: if the edge should read more clearly, drop the range balls (one line in s09/s09b).
 4. **Hole 16 White tee** (course chat's call): box w865842632 measures 377 yd against 383 (-1.5 %) but lies 30 m to the side of the OSM line, outside s06's 25 m search corridor, so it was assigned by tag in `edits.json` (s06's report line says "assigned by the developer"; it was the course chat). Without it White shared the Blue box (+3.8 %). Recommendation: approve.
 5. **Flags (3-8 %), accepted for play by the build:**
    - Hole 5 White: 523 yd vs 504 (+3.8 %) after moving the tee to the front of its box; the next box forward measures 483 (-4.2 %, likely the White/Green combo tee).
@@ -85,7 +85,7 @@ Decisions the developer made on 2026-10-19 are in DECISIONS.md ("Oregon Golf Clu
 ## Playability adjustments
 
 - Hole 5 (White): measured 532 yd from the tee-box centre vs 504 on the card (+5.5%); moved the virtual tee within the real tee polygon w865536500 -> 523.2 yd (real 531.6 yd).
-- Hole 9 (Blue): measured 315 yd from the tee-box centre vs 325 on the card (-3.1%); moved the virtual tee within the real tee polygon w865546397 -> 324.9 yd (real 314.9 yd).
+- Hole 9 (Blue): measured 315 yd from the tee-box centre vs 325 on the card (-3.1%); moved the virtual tee within the real tee polygon w865546397 -> 325.0 yd (real 314.9 yd).
 - Hole 10 (Blue): measured 340 yd from the tee-box centre vs 361 on the card (-5.8%); moved the virtual tee within the real tee polygon w865571099 -> 343.4 yd (real 340.1 yd).
 - Hole 10 (White): measured 340 yd from the tee-box centre vs 324 on the card (+5.0%); moved the virtual tee within the real tee polygon w865571099 -> 337.1 yd (real 340.1 yd).
 - Hole 17 (Blue): tee shot: a perfect drive at the middle of the fairway clipped a tree near the tee; moved 3.0 m within the real tee polygon w865844776 to the nearest clear spot -> 184.1 yd (real 185.9 yd).
@@ -116,7 +116,6 @@ Decisions the developer made on 2026-10-19 are in DECISIONS.md ("Oregon Golf Clu
 | w984701681 | 6 | 2.6 | 2.5 | 2 | 3.7 | 1.5 |
 | w984701683 | 7 | 3.0 | 2.5 | 2 | 3.8 | 1.5 |
 | w984701685 | 8 | 2.6 | 2.5 | 2 | 4.1 | 1.5 |
-| w984705460 | 9 | 1.2 | 1.2 | 1 | 2.4 | 1.2 |
 | w984705464 | 10 | 1.9 | 1.9 | 1 | 2.9 | 1.5 |
 | w984705469 | 12 | 2.8 | 2.5 | 1 | 3.7 | 1.5 |
 | w984705474 | 13 | 2.9 | 2.5 | 1 | 5.2 | 1.5 |
@@ -125,6 +124,7 @@ Decisions the developer made on 2026-10-19 are in DECISIONS.md ("Oregon Golf Clu
 | w984709080 | 16 | 3.1 | 2.5 | 2 | 4.5 | 1.5 |
 | w984709083 | 17 | 2.4 | 2.4 | 1 | 4.7 | 1.5 |
 | w984709086 | 18 | 2.8 | 2.5 | 2 | 4.9 | 1.5 |
+| desk_9_green_0 | 9 | 1.2 | 1.2 | 1 | 2.4 | 1.2 |
 
 # OSM coverage audit
 
@@ -174,5 +174,5 @@ Decisions the developer made on 2026-10-19 are in DECISIONS.md ("Oregon Golf Clu
 - green w984701643 at (733, 1325) is not the end of any hole line (practice green?) -> treated as a wrong green
 - green w984701644 at (727, 1299) is not the end of any hole line (practice green?) -> treated as a wrong green
 
-Totals: 69 tees, 22 greens, 23 fairways, 34 bunkers, 8 water hazards, 18 pins, 46 cart paths, 0 OSM tree points.
+Totals: 69 tees, 22 greens, 24 fairways, 34 bunkers, 8 water hazards, 18 pins, 46 cart paths, 0 OSM tree points.
 
