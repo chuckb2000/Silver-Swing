@@ -1,0 +1,17 @@
+## Other open items (Waverley)
+
+The developer's calls of 2026-10-19 are in DECISIONS.md ("Waverley"): Blue tees only, every penalty area red, the Willamette a red penalty area, no driving range, theme `pnw_club` (pnw with whiter sand). OSM maps only the boundary, the fairways, one pond and the clubhouse; everything else was traced by the course chat from the OSIP 2024 orthoimagery and the DOGAMI DEM and corrected by the developer in the tracing desk (`data/waverley/desk/`).
+
+1. **Hole 17 Blue plays 409 yd against 490 on the card (-16.6 %, over 8 %).** The developer's Blue tee is at the north end of the fairway along the river; the fairway bends less than 30 m off the tee-green line, so no bend point applies. **Accepted** (developer, 2026-10-19: the tee stays where it is).
+2. **Hole 14's green complex.** The desk would not open hole 14 at first, so the course chat moved the ring bunkers 1.5 m away from the green and added a fifth ring bunker seen in the tree shadow east of the green (placed by eye; `data/waverley/make_hole14.py`), at the developer's request ("none of the bunkers should be touching the green, there should be fairway between"). After the desk was fixed the developer reshaped the green there: a smooth oval of 376 m2, 2.9-4.0 m from the nearest bunkers. **Approved** (developer, 2026-10-19). If the shadowed oval is not a bunker, it is one line to remove.
+3. **Holes 12 and 13 have no Blue tee marked;** each has one tee box, used as Blue (12: 403 yd with its bend point, +0.8 %; 13: 485 yd, -1.3 %).
+4. **Flags (3-8 %):** hole 2 Blue +5.3 % (the developer's tee 407 yd straight, plus 10 yd for the bend point; the other box measures 392 yd straight, about +2.6 % with the bend); hole 4 Blue +5.1 % (the other box measures -2.5 %); hole 18 -3.5 %. Recommendation: keep the developer's tees.
+5. **Bend points** on holes 2, 8, 12 and 18 (the centre of the hole's own OSM fairway where it lies farthest from the tee-green line, used where that is over 30 m, as at Indian Island). The other holes play straight.
+6. **Hole 11's green** keeps its strong back-to-front slope (developer): tilt capped at 3.5 % instead of 2.5 %, no random undulations (`green_tilt`); the lidar plane over the green tilts 6.5 %. Flat within 3 m of the pin (1.5 %).
+7. **The Willamette:** a 60 m strip of the river beside the course is a red penalty area and the out-of-bounds line was grown to include it; the river beyond the strip is out of bounds.
+8. **The pond** by holes 11-13 (OSM way 432810024) is a red penalty area (`red_water_osm`).
+9. **The practice area** south of the clubhouse (two small OSM fairways, a practice green and tee lines) is inside the boundary and plays as fairway and rough; no hole uses it. The parking lot inside the boundary is a cart-path obstruction (free relief).
+10. **Tree types come from crown shape only** (DOGAMI's Portland flight is leaf-on): 30 % conifers overall. One tree was removed on hole 18's Blue tee shot (34 m tall, 42 m out; the rule for every course).
+11. **Scorecard:** the club website's card (screenshot); Black (par 71, hole 5 a par 4) and White are on the card, not built; the women's back nine was cut off in the screenshot.
+12. **Hole identity** comes from the club's course layout map, fitted onto the lidar and the photo (look only). Hole 15 plays north from beside the 14 green; holes 9 and 10 start from the same tee area.
+13. **Course card:** hole 11 (green beside the pond), the course chat's pick; hole 14's bunker-ringed green is the alternative.

@@ -194,6 +194,20 @@
    "teeSets": [
     "Blue"
    ]
+  },
+  {
+   "id": "waverley",
+   "name": "Waverley Country Club",
+   "location": "Milwaukie, Clackamas County, Oregon",
+   "state": "OR",
+   "theme": "pnw_club",
+   "holes": 18,
+   "par": 72,
+   "defaultTee": "Blue",
+   "totalYd": 6338,
+   "teeSets": [
+    "Blue"
+   ]
   }
  ]
 }

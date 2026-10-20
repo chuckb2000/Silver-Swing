@@ -230,6 +230,9 @@ Known Oswego-specific code, with the fix:
                                         // play, through the centre) or front|back (step across it; "line_frac"
                                         // places it as a share of the green's depth from the low edge);
                                         // "pin": "upper_tier" moves the pin to the middle of the upper tier
+  "green_tilt": [{"hole": 11, "max_tilt": 0.035, "bumps": 0}],
+                                        // optional: a green the course knows to be steeper than the usual 2.5 % cap
+                                        // (Waverley 11); bumps sets its random undulations (0 = the slope is the feature)
   "keep_tee_trees": [],                 // optional: holes ("10", or "blue 7" with layouts) that keep trees in front of the tee
                                         // (a deliberate tree-lined dogleg). Every other tee shot at the middle of the fairway
                                         // is cleared: s06 moves the tee within its box, s06b drops trees (COURSE_LESSONS.md 3)
@@ -274,7 +277,7 @@ writes the data for `pipeline/desk/index.html` (publish it as a claude.ai page
 with `{db: {}, user: {}}`; change its `<title>` per course), where the developer
 drags traced outlines into place and marks each Blue tee against a live yardage
 readout; read the saved holes back into `data/<id>/desk/` and run
-`desk_to_proposed.py`, then add `proposed/approved.geojson` in `edits.json`
+`desk_to_proposed.py`, then add `proposed/approved.geojson` in `edits.json` (Waverley, where OSM maps no holes: `desk_export.py --traced` starts the desk from `proposed/traced.geojson`, and `desk_to_proposed.py --traced-fallback` keeps the traces of a hole the developer has not saved, tagged `approved=pending`)
 (Indian Island, COURSE_LESSONS.md 3). Large state-wide rasters: `clip_raster.py` cuts them to the
 world before they go into `raw/`.
 

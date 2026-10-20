@@ -496,3 +496,48 @@ notes live in DECISIONS.md.
   Island) and a 17 MB export; the game only builds sprites for cells near
   the camera. Measure the course's load time in the browser.
 
+## 13. Waverley Country Club (2026-10-19)
+
+- **OSM can have fairways and nothing else.** Waverley's OSM had the
+  boundary, 18 fairways, a pond and the clubhouse: no holes, greens, tees,
+  bunkers or pins. The Indian Island tools covered it: trace from the state
+  orthophoto and DEM, then the tracing desk. `desk_export.py --traced`
+  starts the desk from `proposed/traced.geojson`; `desk_to_proposed.py
+  --traced-fallback` keeps the traces of any hole the developer doesn't save,
+  tagged `approved=pending` (hole 14 was missed).
+- **Oregon imagery: OSIP 2024 ImageServer.** `exportImage` with `f=image`
+  failed in the developer's browser; `f=json` returns a link (`href`) to the
+  finished GeoTIFF, which downloads. The service caps height at 4,100 px, so
+  a 1 ft course takes two halves. `data/waverley/make_ortho.py` mosaics them
+  onto the world grid.
+- **Club layout maps are schematic and rotated.** A similarity fit onto the
+  lidar got within 20-40 m, enough to tell which OSM fairway is which hole,
+  but not where a green is. Zoom into the map itself to read each hole's
+  direction (which end has the green circle, where the tee rectangles are):
+  reading the fitted positions alone put hole 15's green at the wrong end.
+- **Greens in tree shadow defeat the texture trace** (three at Waverley).
+  Place an `ellipse` by eye in `trace_spec.json` and say so; the developer
+  corrects it in the desk.
+- **Tune sand per image.** OSIP sand is darker and greener than the NYS
+  photo (`bunkers.max_exg` 28, `min_brightness` 150), and sand on the
+  riverbank looked like bunkers until `min_z_m` sat above the bank
+  (6 m against a 2.3 m river).
+- **A `natural=water` pond inside the boundary paints as rough.** List it in
+  `red_water_osm` (or retag it as a penalty area); check every pond on the
+  surface map.
+- **Measure the developer's tees before building.** Straight tee-to-green
+  distances for every desk tee against the card show the >8 % holes and
+  missing saves at once, so all the questions go in one message.
+- **Bend points from the hole's own fairway.** Taking the farthest fairway
+  centre from all fairways near the line picks up neighbouring holes; use
+  the hole's own OSM fairway id.
+- **The desk used to label saves with Indian Island's origin**; the
+  coordinates were right. `desk_export.py` now writes each hole's `units`.
+- **`pkill -f "playwright test"` killed the session's shell** (as the earlier
+  lesson warns for `s0[0-9]`). Kill by PID. The 90-screenshot look takes
+  longer than a foreground command: run it in the background, or in chunks
+  (`LOOK_FROM` in the script).
+- **Check the desk with saved data before handing it over.** Once holes
+  were saved, loading them reset the open hole and every hole button threw
+  (fixed in `openHole`). A local copy of the page with a stub `window.claude`
+  serving the saved docs reproduced it in a minute.
