@@ -13,7 +13,7 @@ tees in a new `bandon_dunes` theme (shore pine, yellow-flowering gorse, fescue,
 beach), with a seal logo. Every hole but the 1st is within 3 % of the card;
 the 1st has no forward tee, so it plays 394 yd against 352. With the 13 course
 tests (`data/bandon_dunes/tests/bandon_dunes.test.ts`) copied into
-`game/tests/unit/`, all 565 unit tests pass (after merging `main` and `design/gorse`), and all 7 Playwright tests pass. Robot rounds over five seeds scored 73-80 with
+`game/tests/unit/`, 566 of 567 unit tests pass (on `main` at 289ef24). The one failure is `player.test.ts` "every course is in the daily rotation", which waits for the design chat to add `bandon_dunes` to `dailyRoster.ts`, and all 7 Playwright tests pass. Robot rounds over five seeds scored 73-80 with
 no hole over par + 4.
 
 ## Facts
@@ -105,12 +105,11 @@ All made on 2026-10-20:
 Three new keys, each optional; without them every step does what it did
 before.
 
-`make regress` result (2026-10-20, all 16 courses rebuilt): 14 other courses
-are unchanged. Langston differs in 10 files (`trees.json`, hole 18's putting
-views and some minimaps: s06b no longer drops the 44.5 m tree on Royal 10). A
-clean `main` worktree rebuilds Langston byte-for-byte the same way as this
-branch, so the difference is already on `main` and is not caused by these keys.
-Langston's committed files are left as they were (a design-chat item).
+Regression check (2026-10-20, on `main` at 289ef24, the sample the
+developer asked for): `make regress NAMES="oswego_lake bandon_trails
+chambers_bay"` came back unchanged on all three. The shared changes run only
+when a course sets `gorse`, `trees_need_ortho` or `tree_type`. The design chat
+runs the full regression at merge time.
 
 -   **`gorse`** (`pipeline/gorse.py`, run from s05 and s08): thickets
     classified in the orthophoto (`cfg["ortho"]`) become bushes of type
@@ -157,13 +156,10 @@ edit:
     `{share: 0.05, minMph: 3, maxMph: 8}`, noted in `course_config.json`
     `wind_note`.
 2.  **Move `data/bandon_dunes/tests/bandon_dunes.test.ts` into
-    `game/tests/unit/`.** The course chat was asked to write only in its own
+    `game/tests/unit/`, and add Bandon Dunes to the daily rotation
+    (`game/src/data/dailyRoster.ts`).** The course chat was asked to write only in its own
     folders. The test passes when copied there.
-3.  **Langston no longer rebuilds to its committed files on `main`.**
-    `make course NAME=langston` on a clean `main` keeps a tree that the
-    committed build dropped from Royal 10's tee shot (see above). Rebuild and
-    commit Langston, or find why s06b's result changed.
-4.  Optional: a waste-sand surface for the card's "sand areas are general
+3.  Optional: a waste-sand surface for the card's "sand areas are general
     areas" rule. Not needed now, since OSM maps only bunkers.
 
 ## Open items
