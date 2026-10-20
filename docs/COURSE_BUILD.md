@@ -238,7 +238,11 @@ Known Oswego-specific code, with the fix:
                                         // when the game test still finds a crown the pipeline check passed by centimetres
   "red_water_osm": ["r123"],            // optional: OSM water features that are red penalty areas wherever they lie,
                                         // also outside the boundary (a river along the course; Tualatin)
-  "drop_trees": [{"x": 0, "y": 0, "reason": "..."}]  // optional: single trees (local metres) the developer asked to remove
+  "drop_trees": [{"x": 0, "y": 0, "reason": "..."}], // optional: single trees (local metres) the developer asked to remove
+  "remove_wires": {"min_len_m": 40, "max_width_m": 3.0, "rise_m": 3.0},  // optional: take power lines out of the
+                                        // canopy model before the tree search (s05; Oregon Golf Club)
+  "range_art": "rough"                  // optional: draw the driving range as rough (no stripes) with OB stakes
+                                        // along its edge; it stays out of bounds (s09, s09b, s10; Oregon Golf Club)
 }
 ```
 

@@ -165,6 +165,21 @@
    "teeSets": [
     "Blue"
    ]
+  },
+  {
+   "id": "ogc",
+   "name": "Oregon Golf Club",
+   "location": "West Linn, Clackamas County, Oregon",
+   "state": "OR",
+   "theme": "pnw",
+   "holes": 18,
+   "par": 72,
+   "defaultTee": "Blue",
+   "totalYd": 6629,
+   "teeSets": [
+    "Blue",
+    "White"
+   ]
   }
  ]
 }

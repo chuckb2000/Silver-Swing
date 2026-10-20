@@ -17,6 +17,13 @@ proposed/approved.geojson (WGS84) with:
     green's centroid (hole par/handicap from trace_spec.json);
   - the traced water, penalty areas and boundary, unchanged.
 edits.json then adds this file's features (merge_edits.py, run by make course).
+
+For a course built from OSM (no traced.geojson; Oregon Golf Club), only the
+desk shapes are written: hole lines stay OSM's unless trace_spec.json lists the
+hole under "holes"; a saved "range" page becomes golf=driving_range (its interior
+holes kept); and the OSM ids the desk offered for each saved page
+(desk_offered.json, written by desk_export.py) are printed as the ones to drop
+in edits.json, since the saved shapes replace them.
 """
 from __future__ import annotations
 
@@ -41,9 +48,15 @@ def main():
     g = gpd.read_file(build_dir(name) / "course_local.geojson")
     g["tags"] = g["tags"].apply(lambda t: dict(t) if isinstance(t, dict) else json.loads(t))
     osm_pins = list(g[(g.kind == "pin") & ~g.osm.astype(str).str.startswith("desk_")].geometry)  # OSM's own pins only
-    tr = gpd.read_file(cdir / "proposed" / "traced.geojson").to_crs(cfg["epsg"])
-    tr["geometry"] = tr.geometry.translate(-world.x0, -world.y0)
-    tr["tags"] = tr["tags"].apply(lambda t: dict(t) if isinstance(t, dict) else json.loads(t))
+    traced = cdir / "proposed" / "traced.geojson"
+    tr = None
+    if traced.exists():
+        tr = gpd.read_file(traced).to_crs(cfg["epsg"])
+        tr["geometry"] = tr.geometry.translate(-world.x0, -world.y0)
+        tr["tags"] = tr["tags"].apply(lambda t: dict(t) if isinstance(t, dict) else json.loads(t))
+    offered_path = cdir / "desk_offered.json"
+    offered = json.load(open(offered_path)) if offered_path.exists() else {}
+    replaced = []
 
     feats = []
     greens, tees = {}, {}
@@ -51,12 +64,17 @@ def main():
         d = json.load(open(path))
         k = str(d["hole"])
         when = d.get("savedAt", "")[:10]
+        replaced += offered.get(k, [])
         for f in d["features"]:
-            p = Polygon(f["poly"])
+            p = Polygon(f["poly"], f.get("holes") or [])
             if not p.is_valid:
                 p = p.buffer(0)
-            kind = "tee" if f["kind"] == "bluetee" else f["kind"]
+            kind = {"bluetee": "tee", "range": "driving_range"}.get(f["kind"], f["kind"])
             tags = {"golf": kind, "hole": k, "source": "tracing desk (developer)", "approved": f"developer {when}"}
+            if kind == "driving_range":
+                del tags["hole"]
+            if f.get("id") in offered.get(k, []):
+                tags["replaces"] = f["id"]
             if f["kind"] == "bluetee":  # the developer's Blue tee for this hole (s06: tagged hole + tee_set wins)
                 tags["tee_set"] = "Blue"
             if f.get("id", "").startswith("tr_"):
@@ -78,7 +96,7 @@ def main():
         feats.append({"osm": f"desk_{k}_pin", "kind": "pin", "geometry": c,
                       "tags": {"golf": "pin", "hole": k, "source": "centroid of the developer's green (proposal)"}})
 
-    for k, h in spec["holes"].items():
+    for k, h in spec.get("holes", {}).items():
         gc = greens[k].centroid
         start = max(tees[k], key=lambda t: t.centroid.distance(gc)).centroid
         L = LineString([start.coords[0], *map(tuple, h["bends"]), gc.coords[0]])
@@ -86,8 +104,9 @@ def main():
                       "tags": {"golf": "hole", "ref": k, "par": str(h["par"]), "handicap": str(h["handicap"]),
                                "source": "back desk tee -> spec bend points -> desk green centroid"}})
 
-    for _, r in tr[tr.kind.isin(["water", "lateral_water_hazard", "water_hazard", "boundary"])].iterrows():
-        feats.append({"osm": r.osm, "kind": r.kind, "geometry": r.geometry, "tags": r.tags})
+    if tr is not None:
+        for _, r in tr[tr.kind.isin(["water", "lateral_water_hazard", "water_hazard", "boundary"])].iterrows():
+            feats.append({"osm": r.osm, "kind": r.kind, "geometry": r.geometry, "tags": r.tags})
 
     out = gpd.GeoDataFrame(feats, geometry="geometry")
     out["geometry"] = out.geometry.translate(world.x0, world.y0)
@@ -98,7 +117,9 @@ def main():
     for f in feats:
         counts[f["kind"]] = counts.get(f["kind"], 0) + 1
     print(f"[desk] proposed/approved.geojson: {len(feats)} features {counts}")
-    for k in sorted(spec["holes"], key=int):
+    if replaced:
+        print(f"[desk] replaced by the desk (drop in edits.json): {json.dumps(sorted(set(replaced)))}")
+    for k in sorted(spec.get("holes", {}), key=int):
         L = [f for f in feats if f["osm"] == f"desk_{k}_hole"][0]["geometry"]
         print(f"[desk] hole {k}: line {L.length / 0.9144:.0f} yd")
 

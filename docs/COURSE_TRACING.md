@@ -146,6 +146,15 @@ pass the artifact's URL.
 Tell the developer how to use it in four lines: pick a hole; drag points;
 use **Mark Blue tee**; **Save hole**.
 
+**Fixing a course built from OSM** (Oregon Golf Club): no trace is needed.
+`desk_export.py <id> OUT --edit-osm 9 --area range` offers the OSM greens,
+fairways and bunkers of the listed holes, and a page for the driving range
+(kind `range`), and hides the Blue-tee marking. Without an orthophoto, point
+`trace_spec.json` `"ortho"` at a lidar relief picture (as
+`data/ogc/tools/desk_relief.py` makes). Publish only the pages the developer
+asked for. On read-back, `desk_to_proposed.py` lists the OSM ids the saves
+replace: drop them in `edits.json` and add `proposed/approved.geojson`.
+
 ## 6. Tees: let the developer place them
 
 At Indian Island the traced tees measured like the **White** card (6,049 yd
