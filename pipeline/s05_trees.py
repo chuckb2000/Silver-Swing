@@ -418,6 +418,10 @@ def main():
     if garden_enabled(cfg):
         if cfg.get("blossom"):
             raise SystemExit("[s05] `garden` and `blossom` both order trees.json; not supported together")
+        # garden reads build/chm_local.npy, which this step only writes below: give it this
+        # run's canopy (the same array, as float32) so a clean build doesn't fail or read a stale file
+        import garden as _garden
+        _garden._CHM[cfg["id"]] = chm.astype(np.float32)
         shrubs = shrub_trees(cfg, g)
         trees = trees + shrubs
         n_shrubs = len(shrubs)
