@@ -225,7 +225,7 @@ Changes from the starting values in CLAUDE.md, and choices the spec left open. N
 - **Cart paths:** OSM's `golf=path` (the current tag) lines become `golf=cartpath` copies in `edits.json` (the pipeline reads only `golf=cartpath`). No pipeline change, so no regression run.
 - **Not modelled** (developer): the maintenance no-play zone on 14-16 (a red penalty area on land); OB is the course boundary only. All five ponds red.
 - **`tee_shot_margin_m` 0.5**, as at Stone Creek.
-- **Course card:** hole 3, the par 3 over the pond (course chat's pick, to confirm).
+- **Course card:** hole 3, the par 3 over the pond (confirmed by the developer). The unrecorded lidar year is accepted; the developer archives the south-half OSIP image in the release.
 - **Data:** OSM from the developer's Overpass Turbo export (release `willamette-valley-data`, `export.1.geojson`; the API `.osm` export there is not used); DOGAMI DTM and CHM (`exportImage.10/11.tiff`); OSIP 2022 orthophoto tiles exported by the developer (hole 13 and hole 3 tiles in `raw/`, the two 0.5 m halves used only for checking).
 
 ## Data and pipeline

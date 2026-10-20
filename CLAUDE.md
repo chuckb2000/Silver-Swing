@@ -2006,8 +2006,9 @@ Maroon (4,168) are on the card (`scorecard.csv`), not built. Blue rating/slope
     green (box placed at 162 yd, approved); practice greens are wrong greens;
     the maintenance no-play zone (14-16) is not modelled; OB = the course
     boundary.
--   **Known open items:** lidar year not recorded; tree types from crown
-    shape; course card hole 3 to confirm (data/willamette_valley/report_notes.md).
+-   **Accepted by the developer (2026-10-19):** course card hole 3; lidar
+    year not recorded (tree types from crown shape). Notes in
+    data/willamette_valley/report_notes.md.
 
 **12. Repository layout**
 

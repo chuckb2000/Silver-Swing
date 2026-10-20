@@ -73,7 +73,8 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
    crowns over the hole 6 pond were dropped.
 9. **Trees** from the DOGAMI canopy model (lidar year not recorded; probably the
    2013 Clackamol flight, leaf-on), types from crown shape only. They match the
-   2022 imagery around the course. `tee_shot_margin_m` 0.5 as at Stone Creek.
+   2022 imagery around the course (lidar year accepted as unknown by the
+   developer). `tee_shot_margin_m` 0.5 as at Stone Creek.
 
 ## Playability adjustments
 
