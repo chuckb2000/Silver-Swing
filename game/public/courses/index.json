@@ -180,6 +180,20 @@
     "Blue",
     "White"
    ]
+  },
+  {
+   "id": "franklin",
+   "name": "Franklin Country Club",
+   "location": "Franklin, Norfolk County, Massachusetts",
+   "state": "MA",
+   "theme": "bayside",
+   "holes": 18,
+   "par": 71,
+   "defaultTee": "Blue",
+   "totalYd": 6602,
+   "teeSets": [
+    "Blue"
+   ]
   }
  ]
 }

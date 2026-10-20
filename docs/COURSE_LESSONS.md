@@ -8,8 +8,9 @@ Sources so far: East Potomac Golf Links (2026-10-19, three courses on one
 island), Langston (2026-10-19, a course in two parts across a lake), Indian
 Island (2026-10-19, half the course traced), Tualatin Country Club
 (2026-10-19, section 9), Eastmoreland (2026-10-19, Portland), Willamette Valley
-(2026-10-19, section 10) and Oregon Golf Club (2026-10-19, section 11). Oswego
-Lake and Highland Links notes live in DECISIONS.md.
+(2026-10-19, section 10), Oregon Golf Club (2026-10-19, section 11) and
+Franklin Country Club (2026-10-19, section 12). Oswego Lake and Highland Links
+notes live in DECISIONS.md.
 
 ---
 
@@ -456,3 +457,42 @@ Lake and Highland Links notes live in DECISIONS.md.
   `--edit-osm` and `--area range`, over a lidar relief because there was no
   photo yet) took about twenty minutes from request to saves. Offer it
   whenever a mapped shape is wrong and the developer knows the course.
+
+## 12. Franklin Country Club (2026-10-19)
+
+- **An openstreetmap.org "Export" (`.osm` XML) is as good as an Overpass
+  export** if its box covers the world. Convert it with
+  `npx osmtogeojson@3.0.0-beta.5` (the converter Overpass Turbo uses), then
+  drop the metadata properties (timestamp, version, changeset, user, uid) and
+  write the id as `@id` (`data/franklin/osm_to_geojson.py`); otherwise the
+  metadata ends up as OSM tags.
+- **`golf=water_hazard` exports as yellow.** s10 reads `water_hazard` as
+  yellow and `lateral_water_hazard` as red, whatever `penalty_default` says.
+  When the developer says "all water is red", tag every hazard
+  `penalty=red` in `edits.json` and check `course.json` `water[]`.
+- **List every water feature inside the boundary, not only the hazards.**
+  Two ponds mapped as plain `natural=water` would have played as rough
+  (Tualatin's pool, again). A plot of hazards, plain water, wetlands and
+  streams over the holes (`proposed/water_osm.png`) shows them at once.
+- **USGS 1 m DEM tile names come from the UTM corner:** `x30y466` covers
+  eastings 300-310 km and northings 4,650-4,660 km (the name is the
+  north-west corner). A course near a 10 km line needs two tiles; mosaic and
+  clip them in a small course script (`data/franklin/clip_dem.py`) rather
+  than committing 350 MB tiles.
+- **A NOAA Data Access Viewer job can come back in feet both ways.** The
+  Franklin job (all classes, one 961 MB LAZ) was NAD83(2011) UTM 19N in US
+  survey feet horizontally *and* vertically: s00 reprojects the horizontal
+  from the file's CRS, but the vertical needs `laz.units: "ft"`. Read the
+  header CRS before the first s00 run.
+- **The centre-line test can fail where s06b passes.** s06b aims at the
+  middle of the fairway where a drive lands; the course test also flies a
+  drive straight down the hole line. At Franklin 18 a broadleaf's crown
+  reached 0.5 m over the line 15 m from the tee. Run both before calling the
+  tee shots clear.
+- **`pkill -f "vite preview"` killed the shell** that ran it (the command
+  line contained the pattern). Start the preview server once and leave it,
+  or kill it by PID.
+- **A big wooded world means many trees.** 37,340 lidar trees (2.5x Indian
+  Island) and a 17 MB export; the game only builds sprites for cells near
+  the camera. Measure the course's load time in the browser.
+
