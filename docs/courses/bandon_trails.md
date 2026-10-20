@@ -74,6 +74,9 @@ Dunes); the course chat picks the card hole. Logo: a wooden trail-marker post wi
 spruce behind it (drawn by the course chat with permission, `assets-src/logo_bandon_trails.py`).
 A new theme for the course (permission given). The developer asked for the build to
 go ahead without questions while away.
+2026-10-20 (after the build): every recommendation in the pull request and in
+Open items 1-4 accepted: tees moved within their boxes on holes 1, 5, 7, 8, 11, 12
+and 13; unraked sand as rough; tree species drawn from crown shape; wind 3-14 mph.
 
 ## New pipeline keys or theme
 

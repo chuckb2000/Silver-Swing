@@ -34,7 +34,7 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 
 ## Other open items (Bandon Trails)
 
-Built 2026-10-20 by a course chat with the standing defaults (docs/COURSE_BUILD.md 4.1). The developer accepted every recommendation of the intake message, asked for a new theme and for the trail-marker logo, and asked for the build to go ahead without questions. The items below are the course chat's calls and the data's gaps, each with a recommendation.
+Built 2026-10-20 by a course chat with the standing defaults (docs/COURSE_BUILD.md 4.1). The developer accepted every recommendation of the intake message, asked for a new theme and for the trail-marker logo, and asked for the build to go ahead without questions. The items below are the course chat's calls and the data's gaps, each with a recommendation. **The developer accepted every recommendation below on 2026-10-20** (after the build); the items stay listed for the record.
 
 1. **Scorecard:** the resort's 2026 Bandon Trails card (resort website image, in the release). Every row adds up to its printed totals; the stroke index is a clean 1-18 (odd out, even in). The Orange set has its own handicap row (different on holes 3, 4, 7, 9, 13 and 18); it is not built. Recommendation: none needed.
 2. **Green tees** (6,249 yd, 72.0/137): the card has no Blue; Green is the set closest to 6,300 yd. "Royal Blue" is the 3,937-yd forward set. Black, Gold, Royal Blue and Orange are in `scorecard.csv`, not built.
