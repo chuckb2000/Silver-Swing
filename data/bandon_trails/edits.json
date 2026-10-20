@@ -1,0 +1,177 @@
+{
+ "note": "Edits to the OSM layout for Bandon Trails, made by make_edits.py; built into edited/course.geojson by pipeline/merge_edits.py.",
+ "drop": [
+  {
+   "osm": "w362513477",
+   "reason": "Bandon Dunes course boundary (another course of the resort, outside Bandon Trails): out of bounds here"
+  },
+  {
+   "osm": "w674855473",
+   "reason": "Bandon Preserve course boundary (another course of the resort, outside Bandon Trails): out of bounds here"
+  },
+  {
+   "osm": "w1540940976",
+   "reason": "Shortys course boundary (another course of the resort, outside Bandon Trails): out of bounds here"
+  },
+  {
+   "osm": "w1547376228",
+   "reason": "hole 1 of Shortys (unnamed hole lines), outside the Bandon Trails boundary"
+  },
+  {
+   "osm": "w1547376237",
+   "reason": "hole 2 of Shortys (unnamed hole lines), outside the Bandon Trails boundary"
+  },
+  {
+   "osm": "w1547384744",
+   "reason": "hole 3 of Shortys (unnamed hole lines), outside the Bandon Trails boundary"
+  },
+  {
+   "osm": "w1547585701",
+   "reason": "hole 4 of Shortys (unnamed hole lines), outside the Bandon Trails boundary"
+  },
+  {
+   "osm": "w1547585702",
+   "reason": "hole 5 of Shortys (unnamed hole lines), outside the Bandon Trails boundary"
+  },
+  {
+   "osm": "w1547585703",
+   "reason": "hole 6 of Shortys (unnamed hole lines), outside the Bandon Trails boundary"
+  },
+  {
+   "osm": "w1547585704",
+   "reason": "hole 7 of Shortys (unnamed hole lines), outside the Bandon Trails boundary"
+  },
+  {
+   "osm": "w1547585705",
+   "reason": "hole 8 of Shortys (unnamed hole lines), outside the Bandon Trails boundary"
+  },
+  {
+   "osm": "w1547585706",
+   "reason": "hole 9 of Shortys (unnamed hole lines), outside the Bandon Trails boundary"
+  },
+  {
+   "osm": "w1547585707",
+   "reason": "hole 10 of Shortys (unnamed hole lines), outside the Bandon Trails boundary"
+  },
+  {
+   "osm": "w1547585708",
+   "reason": "hole 11 of Shortys (unnamed hole lines), outside the Bandon Trails boundary"
+  },
+  {
+   "osm": "w1547585709",
+   "reason": "hole 12 of Shortys (unnamed hole lines), outside the Bandon Trails boundary"
+  },
+  {
+   "osm": "w1547585710",
+   "reason": "hole 13 of Shortys (unnamed hole lines), outside the Bandon Trails boundary"
+  },
+  {
+   "osm": "w1547585711",
+   "reason": "hole 14 of Shortys (unnamed hole lines), outside the Bandon Trails boundary"
+  },
+  {
+   "osm": "w1547585713",
+   "reason": "hole 15 of Shortys (unnamed hole lines), outside the Bandon Trails boundary"
+  },
+  {
+   "osm": "w1547585714",
+   "reason": "hole 16 of Shortys (unnamed hole lines), outside the Bandon Trails boundary"
+  },
+  {
+   "osm": "w1547585715",
+   "reason": "hole 17 of Shortys (unnamed hole lines), outside the Bandon Trails boundary"
+  },
+  {
+   "osm": "w1547585716",
+   "reason": "hole 18 of Shortys (unnamed hole lines), outside the Bandon Trails boundary"
+  },
+  {
+   "osm": "w1547585717",
+   "reason": "hole 19 of Shortys (unnamed hole lines), outside the Bandon Trails boundary"
+  },
+  {
+   "osm": "w676282393",
+   "reason": "hole 1 of Bandon Dunes, outside the Bandon Trails boundary"
+  },
+  {
+   "osm": "w676390138",
+   "reason": "hole 10 of Bandon Dunes, outside the Bandon Trails boundary"
+  },
+  {
+   "osm": "w676390154",
+   "reason": "hole 11 of Bandon Dunes, outside the Bandon Trails boundary"
+  },
+  {
+   "osm": "w676398216",
+   "reason": "hole 13 of Bandon Dunes, outside the Bandon Trails boundary"
+  },
+  {
+   "osm": "w676398258",
+   "reason": "hole 14 of Bandon Dunes, outside the Bandon Trails boundary"
+  },
+  {
+   "osm": "w676400567",
+   "reason": "hole 15 of Bandon Dunes, outside the Bandon Trails boundary"
+  },
+  {
+   "osm": "w676412407",
+   "reason": "hole 17 of Bandon Dunes, outside the Bandon Trails boundary"
+  },
+  {
+   "osm": "w676412460",
+   "reason": "hole 18 of Bandon Dunes, outside the Bandon Trails boundary"
+  },
+  {
+   "osm": "w888425335",
+   "reason": "hole 1 of Bandon Preserve, outside the Bandon Trails boundary"
+  },
+  {
+   "osm": "w888425336",
+   "reason": "hole 2 of Bandon Preserve, outside the Bandon Trails boundary"
+  },
+  {
+   "osm": "w888425338",
+   "reason": "hole 3 of Bandon Preserve, outside the Bandon Trails boundary"
+  },
+  {
+   "osm": "w888425339",
+   "reason": "hole 4 of Bandon Preserve, outside the Bandon Trails boundary"
+  },
+  {
+   "osm": "w888425340",
+   "reason": "hole 5 of Bandon Preserve, outside the Bandon Trails boundary"
+  },
+  {
+   "osm": "w888425343",
+   "reason": "hole 6 of Bandon Preserve, outside the Bandon Trails boundary"
+  },
+  {
+   "osm": "w888425344",
+   "reason": "hole 7 of Bandon Preserve, outside the Bandon Trails boundary"
+  },
+  {
+   "osm": "w888425345",
+   "reason": "hole 8 of Bandon Preserve, outside the Bandon Trails boundary"
+  },
+  {
+   "osm": "w888425346",
+   "reason": "hole 9 of Bandon Preserve, outside the Bandon Trails boundary"
+  },
+  {
+   "osm": "w888425347",
+   "reason": "hole 10 of Bandon Preserve, outside the Bandon Trails boundary"
+  },
+  {
+   "osm": "w888425348",
+   "reason": "hole 11 of Bandon Preserve, outside the Bandon Trails boundary"
+  },
+  {
+   "osm": "w888425349",
+   "reason": "hole 12 of Bandon Preserve, outside the Bandon Trails boundary"
+  },
+  {
+   "osm": "w888425350",
+   "reason": "hole 13 of Bandon Preserve, outside the Bandon Trails boundary"
+  }
+ ]
+}
