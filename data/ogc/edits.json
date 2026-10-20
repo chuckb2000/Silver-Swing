@@ -13,6 +13,19 @@
    ],
    "tags": {},
    "reason": "developer 2026-10-19, tracing desk (data/ogc/desk/): the driving range redrawn (2.9 ha, around targets P3-P9) and hole 9's shapes with a third fairway added; built by pipeline/desk_to_proposed.py"
+  },
+  {
+   "from": "proposed/channels_lidar.geojson",
+   "ids": [
+    "channel_w984705476",
+    "channel_w866033745",
+    "channel_w984705479"
+   ],
+   "tags": {
+    "proposed": "lidar",
+    "flatten": "no"
+   },
+   "reason": "The creek in front of the 13th green, up the right side of 14 and between the 15th fairway and green (developer, 2026-10-20) is only three OSM stream lines (w984705476, w866033745, w984705479), which the pipeline does not build. The penalty areas follow the channel the lidar DEM shows along those lines (pipeline/propose_channels.py ogc w984705476 w866033745 w984705479: 4.7-7.1 m wide, about 0.5 m deep). Red, as every water hazard here (developer). Tagged flatten=no: the bed falls 47 m from the 15th tee to the boundary east of the 13th green. Upstream of the boundary the creek runs on in a ravine that is already out of bounds."
   }
  ],
  "tags": [

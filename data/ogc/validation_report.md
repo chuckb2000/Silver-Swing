@@ -143,9 +143,9 @@ Decisions the developer made on 2026-10-19 are in DECISIONS.md ("Oregon Golf Clu
 | 10 | 4 | yes | yes (3 near) | yes | yes | yes | 2 | 0 |
 | 11 | 4 | yes | yes (4 near) | yes | yes | yes | 3 | 0 |
 | 12 | 3 | yes | yes (4 near) | yes | yes | yes | 3 | 0 |
-| 13 | 5 | yes | yes (3 near) | yes | yes | yes | 0 | 0 |
-| 14 | 4 | yes | yes (3 near) | yes | yes | yes | 0 | 0 |
-| 15 | 5 | yes | yes (3 near) | yes | yes | yes | 2 | 0 |
+| 13 | 5 | yes | yes (3 near) | yes | yes | yes | 0 | 1 |
+| 14 | 4 | yes | yes (3 near) | yes | yes | yes | 0 | 2 |
+| 15 | 5 | yes | yes (3 near) | yes | yes | yes | 2 | 3 |
 | 16 | 4 | yes | yes (2 near) | yes | yes | yes | 3 | 0 |
 | 17 | 3 | yes | yes (3 near) | yes | yes | yes | 1 | 0 |
 | 18 | 4 | yes | yes (1 near) | yes | yes | yes | 1 | 0 |
@@ -175,5 +175,5 @@ Decisions the developer made on 2026-10-19 are in DECISIONS.md ("Oregon Golf Clu
 - green w984701643 at (733, 1325) is not the end of any hole line (practice green?) -> treated as a wrong green
 - green w984701644 at (727, 1299) is not the end of any hole line (practice green?) -> treated as a wrong green
 
-Totals: 69 tees, 22 greens, 24 fairways, 34 bunkers, 8 water hazards, 18 pins, 46 cart paths, 0 OSM tree points.
+Totals: 69 tees, 22 greens, 24 fairways, 34 bunkers, 11 water hazards, 18 pins, 46 cart paths, 0 OSM tree points.
 
