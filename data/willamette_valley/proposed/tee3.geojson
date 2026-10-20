@@ -1,0 +1,8 @@
+{
+"type": "FeatureCollection",
+"name": "tee3",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+"features": [
+{ "type": "Feature", "properties": { "osm": "dev_tee3_blue", "kind": "tee", "tags": { "golf": "tee", "hole": "3", "tee_set": "Blue", "proposed": "developer_location", "note": "developer 2026-10-19: hole 3's Blue tee is on the fairway that runs from the 2nd green; placed at the card's 162 yd on the open (treeless) north end of that fairway in the OSIP 2022 image; 6 x 4 m" } }, "geometry": { "type": "Polygon", "coordinates": [ [ [ -122.685733423203942, 45.291431665303627 ], [ -122.685658932362571, 45.291419322848753 ], [ -122.685647274996427, 45.291454375630714 ], [ -122.685721765881084, 45.291466718093218 ], [ -122.685733423203942, 45.291431665303627 ] ] ] } }
+]
+}

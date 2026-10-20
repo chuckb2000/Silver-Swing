@@ -36,15 +36,16 @@ from rasterio.features import rasterize
 from scipy import ndimage
 from shapely.geometry import MultiPolygon, Point, Polygon
 
-from common import build_dir, course_name_from_argv, layout_dir, layouts, load_config, play_boundary, PX_PER_M, ROOT, SURF, World, write_json
+from common import build_dir, course_name_from_argv, joins_parts, layout_dir, layouts, load_config, play_boundary, PX_PER_M, ROOT, SURF, World, write_json
 from s08_surface import course_layers, road_geoms
 from terrain import tier_offset
 from s09_render import draw_lighthouse, LIGHTHOUSE_DRAW_SCALE  # noqa: E402
-from s09_render import BAYER4, PRIO, SHADOW_DIR, SHADOW_MULT, band_lut, build_lut, load_palette, load_theme, rough_band_mask, wave_mask
+from s09_render import BAYER4, PRIO, SHADOW_DIR, SHADOW_MULT, band_lut, build_lut, load_palette, load_theme, rough_band_mask, stake_lines, wave_mask
 
 sys.path.insert(0, str(ROOT / "assets-src"))
 from atlas import Atlas  # noqa: E402
 from trees import theme_painters  # noqa: E402
+from shrubs import VARIANTS as SHRUB_VARIANTS, shrub as shrub_painter  # noqa: E402  (flowering shrubs, c: 3)
 
 warnings.filterwarnings("ignore")
 
@@ -206,6 +207,11 @@ def stripe_field(g, holes, grid: Grid, tee: str) -> np.ndarray:
 def render_art(surf, z, grid: Grid, g, holes, trees, buildings, boundary, P, lut, rng, tee, max_h=TREE_MAX_H, cfg=None, blut=None):
     H, W = surf.shape
     ppm = grid.ppm
+    range_rough = bool(cfg and cfg.get("range_art") == "rough")
+    if range_rough:  # drawn as rough, OB in physics (s09_render, range_art)
+        range_cells = surf == S["range"]
+        surf = surf.copy()
+        surf[range_cells] = S["rough"]
     tone = hillshade_tone(z, surf, ppm)
     stripe = stripe_field(g, holes, grid, tee)
     t = tone.astype(np.int16)
@@ -324,22 +330,23 @@ def render_art(surf, z, grid: Grid, g, holes, trees, buildings, boundary, P, lut
     rgb = np.array(img)
 
     # OB stakes along the boundary (every 9 m, just outside it)
-    ring = boundary.exterior
-    for s_ in np.arange(0, ring.length, 9.0):
-        p = ring.interpolate(s_)
-        q = ring.interpolate(min(ring.length, s_ + 0.5))
-        dx, dy = q.x - p.x, q.y - p.y
-        ln = math.hypot(dx, dy) or 1
-        nx_, ny_ = dy / ln, -dx / ln
-        cand = Point(p.x + nx_ * 0.8, p.y + ny_ * 0.8)
-        if boundary.contains(cand):
-            cand = Point(p.x - nx_ * 0.8, p.y - ny_ * 0.8)
-        col, row = (int(v) for v in grid.px(cand.x, cand.y))
-        hpx = int(round(ppm * 1.0))
-        if hpx + 1 <= row < H - 2 and 1 <= col < W - 2:
-            rgb[row + 1, col:col + 2] = (rgb[row + 1, col:col + 2] * 0.6).astype(np.uint8)
-            rgb[row - hpx:row + 1, col:col + 2] = P["WH"]
-            rgb[row - hpx, col:col + 2] = P["K2"]
+    parts = list(boundary.geoms) if boundary.geom_type == "MultiPolygon" else [boundary]
+    for ring, poly, ob_inside in stake_lines(parts, g, cfg or {}):
+        for s_ in np.arange(0, ring.length, 9.0):
+            p = ring.interpolate(s_)
+            q = ring.interpolate(min(ring.length, s_ + 0.5))
+            dx, dy = q.x - p.x, q.y - p.y
+            ln = math.hypot(dx, dy) or 1
+            nx_, ny_ = dy / ln, -dx / ln
+            cand = Point(p.x + nx_ * 0.8, p.y + ny_ * 0.8)
+            if poly.contains(cand) != ob_inside:
+                cand = Point(p.x - nx_ * 0.8, p.y - ny_ * 0.8)
+            col, row = (int(v) for v in grid.px(cand.x, cand.y))
+            hpx = int(round(ppm * 1.0))
+            if hpx + 1 <= row < H - 2 and 1 <= col < W - 2:
+                rgb[row + 1, col:col + 2] = (rgb[row + 1, col:col + 2] * 0.6).astype(np.uint8)
+                rgb[row - hpx:row + 1, col:col + 2] = P["WH"]
+                rgb[row - hpx, col:col + 2] = P["K2"]
     return rgb
 
 
@@ -349,6 +356,10 @@ LIGHTHOUSES: set = set()  # building ids drawn as lighthouses (render_meta kind)
 def tree_sprite_key(tr_, i, L):
     ppm = L["ppm"]
     hk = ppm * HEIGHT_K
+    if tr_["type"] == "shrub":  # flowering shrub (trees.json c: 3): colour = index % 8, as in the game
+        w = int(np.clip(round(tr_["r"] * 2 * ppm / 2) * 2, 6, L["max_w"]))
+        h = int(np.clip(round((0.6 * w + tr_["h"] * hk) / 2) * 2, max(4, int(0.5 * w)), w + 2))
+        return "s", w, h, i % SHRUB_VARIANTS
     conif = tr_["type"] == "conifer"
     w = int(np.clip(round(tr_["r"] * 2 * ppm / L["qw"]) * L["qw"], 18, L["max_w"]))
     h = int(np.clip(round(tr_["h"] * hk / L["qh"]) * L["qh"], 24, L["max_h"]))
@@ -377,7 +388,7 @@ def main():
     trees_all = json.load(open(bdir / "trees.json"))
     g = gpd.read_file(bdir / "course_local.geojson")
     boundary = play_boundary(g, cfg)
-    if isinstance(boundary, MultiPolygon):
+    if isinstance(boundary, MultiPolygon) and not joins_parts(cfg):  # several parts in play: keep them all
         boundary = max(boundary.geoms, key=lambda p_: p_.area)
     meta = json.load(open(bdir / "art" / "render_meta.json"))
     bh_by_osm = {b["osm"]: b["h"] for b in meta["buildings"]}
@@ -399,7 +410,7 @@ def main():
     make_c, make_d = conifer, deciduous  # the theme's tree painters (trees.theme_painters)
     # with blossoms (s05) the sprite variant follows the tree's index in trees.json,
     # exactly as the course view draws it, so cherries stay cherries up close
-    gidx = {id(t): k for k, t in enumerate(trees_all)} if cfg.get("blossom") else None
+    gidx = {id(t): k for k, t in enumerate(trees_all)} if (cfg.get("blossom") or cfg.get("garden")) else None
     only = {int(v) for v in os.environ.get("HOLES", "").split(",") if v.strip()}
     for lay in layouts(cfg):
         render_layout(lay, name, cfg, world, layout_dir(name, lay), holes, green_by_osm, only, LAYERS, g, surf05, base, greens,
@@ -446,7 +457,7 @@ def render_layout(lay, name, cfg, world, ldir, all_holes, green_by_osm, only, LA
                 kind, w, hh, v = tree_sprite_key(t, i if gidx is None else gidx[id(t)], L)
                 key = f"{kind}_{w}_{hh}_{v}"
                 if key not in made:
-                    made[key] = (make_c if kind == "c" else make_d)(w, hh, v)  # the theme's tree painters
+                    made[key] = (shrub_painter if kind == "s" else make_c if kind == "c" else make_d)(w, hh, v)  # the theme's tree painters
                     atlas.add(key, made[key])
                 places.append({"f": key, "x": round(t["x"], 2), "y": round(t["y"], 2)})
             aw, ah = atlas.write(outd)

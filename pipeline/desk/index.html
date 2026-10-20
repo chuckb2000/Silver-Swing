@@ -7,7 +7,7 @@
 :root{
   --bg:#eef1ec; --panel:#f8faf6; --ink:#1d2620; --muted:#5d6a61; --line:#cfd8cf; --plate:#2a312c;
   --accent:#1f6f4a; --accent-ink:#ffffff; --warn:#a14a1c;
-  --green:#3ddc84; --fairway:#4cc9f0; --bunker:#ff6b6b; --tee:#e879f9; --hole:#facc15; --bluetee:#6d8bff; --ob:#ff9f1c;
+  --green:#3ddc84; --fairway:#4cc9f0; --bunker:#ff6b6b; --tee:#e879f9; --hole:#facc15; --bluetee:#6d8bff; --ob:#ff9f1c; --range:#f43f5e;
   --pass:#1f7a46; --flag:#9a6a00; --fail:#b3261e;
   --display:"Barlow Semi Condensed","Arial Narrow",system-ui,sans-serif;
   --body:"Atkinson Hyperlegible",system-ui,-apple-system,"Segoe UI",sans-serif;
@@ -90,7 +90,7 @@ textarea{width:100%;box-sizing:border-box;min-height:70px;resize:vertical;border
       <svg id="svg" aria-label="Aerial photo with traced outlines"></svg>
       <div class="scale" id="scale">20 m<b id="scalebar"></b></div>
       <div class="zoom"><button id="zin" aria-label="Zoom in">+</button><button id="zout" aria-label="Zoom out">−</button><button id="zfit" aria-label="Fit hole">⤢</button></div>
-      <div class="legend"><span><i style="background:var(--green)"></i>green</span><span><i style="background:var(--fairway)"></i>fairway</span><span><i style="background:var(--bunker)"></i>bunker</span><span><i style="background:var(--tee)"></i>tee</span><span><i style="background:var(--bluetee)"></i><b id="legTee" style="font-weight:inherit">Blue tee</b></span><span><i style="background:var(--hole)"></i>line of play → green</span><span><i style="background:transparent;border:1px dashed #fff"></i>other holes / raised lidar pad</span><span><i style="background:var(--ob)"></i>out of bounds</span></div>
+      <div class="legend"><span><i style="background:var(--green)"></i>green</span><span><i style="background:var(--fairway)"></i>fairway</span><span><i style="background:var(--bunker)"></i>bunker</span><span><i style="background:var(--tee)"></i>tee</span><span><i style="background:var(--bluetee)"></i><b id="legTee" style="font-weight:inherit">Blue tee</b></span><span><i style="background:var(--hole)"></i>line of play → green</span><span><i style="background:transparent;border:1px dashed #fff"></i>other holes / raised lidar pad</span><span><i style="background:var(--ob)"></i>out of bounds</span><span id="lgRange" hidden><i style="background:var(--range)"></i>driving range (out of bounds)</span></div>
       <div class="drawbar" id="drawbar" hidden><span id="drawmsg">Click to place points</span><button class="btn" id="drawUndo">Undo point</button><button class="btn primary" id="drawDone">Finish</button><button class="btn" id="drawCancel">Cancel</button></div>
     </div>
     <aside>
@@ -114,6 +114,7 @@ textarea{width:100%;box-sizing:border-box;min-height:70px;resize:vertical;border
           <button class="btn" id="newBunker">New bunker</button>
           <button class="btn" id="newGreen">New green</button>
           <button class="btn" id="newTee">New tee</button>
+          <button class="btn wide" id="newRange" hidden>New range area</button>
           <button class="btn" id="undo">Undo</button>
           <button class="btn" id="revert">Discard changes</button>
         </div>
@@ -134,8 +135,9 @@ textarea{width:100%;box-sizing:border-box;min-height:70px;resize:vertical;border
 <script>
 (() => {
 const NS = "http://www.w3.org/2000/svg";
-const COLORS = {green:"var(--green)", fairway:"var(--fairway)", bunker:"var(--bunker)", tee:"var(--tee)", bluetee:"var(--bluetee)", pad:"var(--tee)"};
-const LABEL = {green:"Green", fairway:"Fairway", bunker:"Bunker", tee:"Tee box", bluetee:"Blue tee"};
+const COLORS = {green:"var(--green)", fairway:"var(--fairway)", bunker:"var(--bunker)", tee:"var(--tee)", bluetee:"var(--bluetee)", pad:"var(--tee)", range:"var(--range)"};
+const LABEL = {green:"Green", fairway:"Fairway", bunker:"Bunker", tee:"Tee box", bluetee:"Blue tee", range:"Range"};
+const NAME = h => h.area ? (h.label || h.hole) : "hole " + h.hole;   // "hole 9" or "Range"
 const TN = () => (HOLES[0] && HOLES[0].teeName) || "Blue";   // the tee set being marked (holes.json; Indian Island: Blue)
 const RN = () => (HOLES[0] && HOLES[0].refName) || "White";  // the second card column shown
 const YD = 0.9144;
@@ -188,8 +190,8 @@ function renderChips() {
   const nav = $("holes"); nav.textContent = "";
   for (const h of HOLES) {
     const b = document.createElement("button");
-    b.className = "chip"; b.textContent = h.hole; b.setAttribute("aria-current", cur && cur.hole === h.hole ? "true" : "false");
-    b.setAttribute("aria-label", "Hole " + h.hole);
+    b.className = "chip"; b.textContent = h.area ? (h.label || h.hole) : h.hole; b.setAttribute("aria-current", cur && cur.hole === h.hole ? "true" : "false");
+    b.setAttribute("aria-label", h.area ? (h.label || h.hole) : "Hole " + h.hole);
     const w = work[h.hole];
     if ((w && w.dirty) || saved[h.hole]) { const d = document.createElement("span"); d.className = "dot " + (w && w.dirty ? "dirty" : "saved"); b.appendChild(d); }
     const bi = blueInfo(h, w ? w.features : (saved[h.hole] ? saved[h.hole].features : h.features));
@@ -205,7 +207,7 @@ function openHole(h) {
   const g = W().features.find(f => f.kind === "bluetee") || W().features.find(f => f.kind === "green"); sel = g ? g.id : null;
   fit(); renderChips(); render(); renderPanel();
   $("note").value = W().note;
-  status(saved[h.hole] ? "Showing your saved version of hole " + h.hole + "." : (h.editShapes ? "Showing the approved shapes for hole " + h.hole + "." : "Hole " + h.hole + " comes from OpenStreetMap (dashed). Mark its " + TN() + " tee."));
+  status(saved[h.hole] ? "Showing your saved version of " + NAME(h) + "." : (h.noBlue ? "Showing " + NAME(h) + " as built from OpenStreetMap. Drag points to fix it, then save." : h.editShapes ? "Showing the approved shapes for hole " + h.hole + "." : "Hole " + h.hole + " comes from OpenStreetMap (dashed). Mark its " + TN() + " tee."));
 }
 
 function fit() { vb = [0, 0, cur.w, cur.h]; applyVB(); }
@@ -234,8 +236,8 @@ function render() {
   const defs = el("defs", {}, svg);
   const mk = el("marker", {id: "arr", viewBox: "0 0 10 10", refX: 8, refY: 5, markerWidth: 6, markerHeight: 6, orient: "auto-start-reverse"}, defs);
   el("path", {d: "M0,0 L10,5 L0,10 z", fill: "#facc15"}, mk);
-  el("polyline", {points: cur.line.map(toPx).map(p => p.join(",")).join(" "), fill: "none", stroke: "#facc15", "stroke-width": 1.6 * k, "stroke-dasharray": `${6 * k} ${4 * k}`, "marker-end": "url(#arr)", "pointer-events": "none"}, svg);
-  const order = {fairway: 0, tee: 1, green: 2, bunker: 3, bluetee: 4};
+  if (cur.line.length > 1) el("polyline", {points: cur.line.map(toPx).map(p => p.join(",")).join(" "), fill: "none", stroke: "#facc15", "stroke-width": 1.6 * k, "stroke-dasharray": `${6 * k} ${4 * k}`, "marker-end": "url(#arr)", "pointer-events": "none"}, svg);
+  const order = {range: -1, fairway: 0, tee: 1, green: 2, bunker: 3, bluetee: 4};
   const feats = [...W().features].sort((a, b) => order[a.kind] - order[b.kind]);
   const bi = blueInfo(cur, W().features);
   if (bi) el("polyline", {points: bi.c.path.map(toPx).map(q => q.join(",")).join(" "), fill: "none", stroke: "#ffffff", "stroke-width": 1.4 * k, "stroke-opacity": 0.9, "pointer-events": "none"}, svg);
@@ -244,6 +246,7 @@ function render() {
     const isSel = f.id === sel;
     const p = el("polygon", {points: pts.map(q => q.join(",")).join(" "), fill: COLORS[f.kind], "fill-opacity": isSel ? 0.12 : 0.06, stroke: COLORS[f.kind], "stroke-width": (isSel ? 2.6 : 1.6) * k, "stroke-linejoin": "round", style: "cursor:pointer"}, svg);
     p.addEventListener("pointerdown", () => { if (!draw) pendingSel = f.id; });
+    for (const hole of f.holes || []) el("polygon", {points: hole.map(toPx).map(q => q.join(",")).join(" "), fill: "none", stroke: COLORS[f.kind], "stroke-width": 1.4 * k, "stroke-dasharray": `${4 * k} ${3 * k}`, "pointer-events": "none"}, svg);
   }
   if (draw) {
     const pts = draw.pts.map(toPx);
@@ -352,6 +355,7 @@ $("newFairway").onclick = () => startDraw("fairway");
 $("newBunker").onclick = () => startDraw("bunker");
 $("newGreen").onclick = () => startDraw("green");
 $("newTee").onclick = () => startDraw("tee");
+$("newRange").onclick = () => startDraw("range");
 $("newBlue").onclick = () => { const f = W().features.find(x => x.kind === "bluetee"); startDraw("bluetee", f ? f.id : undefined); };
 let delArm = null;
 $("delShape").onclick = () => {
@@ -369,11 +373,11 @@ $("revert").onclick = () => {
 $("note").addEventListener("input", () => { W().note = $("note").value; W().dirty = true; renderChips(); });
 
 function renderPanel() {
-  $("featsTitle").textContent = "Shapes on hole " + cur.hole;
+  $("featsTitle").textContent = cur.area ? "Shapes on the " + (cur.label || cur.hole).toLowerCase() : "Shapes on hole " + cur.hole;
   const ul = $("feats"); ul.textContent = "";
   const counts = {};
   renderYard();
-  const order = {bluetee: -1, green: 0, fairway: 1, bunker: 2, tee: 3};
+  const order = {range: -2, bluetee: -1, green: 0, fairway: 1, bunker: 2, tee: 3};
   for (const f of [...W().features].sort((a, b) => order[a.kind] - order[b.kind])) {
     counts[f.kind] = (counts[f.kind] || 0) + 1;
     const li = document.createElement("li"); const b = document.createElement("button");
@@ -388,14 +392,26 @@ function renderPanel() {
   $("redraw").disabled = !has; $("delShape").disabled = !has; $("delPoint").disabled = !(has && selPt != null);
   $("undo").disabled = !W().history.length;
   for (const id of ["newFairway", "newBunker", "newGreen", "newTee", "revert"]) $(id).disabled = !cur.editShapes;
+  for (const id of ["newFairway", "newBunker", "newGreen", "newTee"]) $(id).hidden = !!cur.area;
+  $("newRange").hidden = !cur.area; $("lgRange").hidden = !cur.area;
+  $("newBlue").hidden = !!cur.noBlue; $("yardHint").hidden = !!cur.noBlue;
   if (!cur.editShapes && sel) { const f = W().features.find(x => x.id === sel); if (f && f.kind !== "bluetee") { $("redraw").disabled = true; $("delShape").disabled = true; } }
   $("save").disabled = !canSave;
+  $("save").textContent = cur.area ? "Save " + (cur.label || cur.hole).toLowerCase() : "Save hole";
 }
 function renderYard() {
-  $("yardTitle").textContent = `Hole ${cur.hole} · par ${cur.par}`;
   const dl = $("yard"); dl.textContent = "";
   const row = (k, v, pill) => { const dt = document.createElement("dt"); dt.textContent = k; const dd = document.createElement("dd"); dd.textContent = v; if (pill) { const p = document.createElement("span"); p.className = "pill " + pill; p.textContent = pill; dd.appendChild(p); } dl.append(dt, dd); };
+  if (cur.area) {
+    $("yardTitle").textContent = `${cur.label || cur.hole} · out of bounds`;
+    let a = 0; for (const f of W().features) a += area(f.poly) - (f.holes || []).reduce((s, h) => s + area(h), 0);
+    row("Area", (a / 10000).toFixed(2) + " ha");
+    row("Holes inside", (W().features.reduce((n, f) => n + (f.holes || []).length, 0)) + " (left in play)");
+    return;
+  }
+  $("yardTitle").textContent = `Hole ${cur.hole} · par ${cur.par}`;
   row(TN() + " card", cur.blue + " yd"); row(RN() + " card", cur.white + " yd");
+  if (cur.noBlue) return;
   const bi = blueInfo(cur, W().features);
   if (bi) { row("Your " + TN() + " tee", `${Math.round(bi.c.yd)} yd  ${bi.pct >= 0 ? "+" : ""}${bi.pct.toFixed(1)}%`, bi.st); row("Back of box", Math.round(bi.back) + " yd"); $("newBlue").textContent = "Redraw " + TN() + " tee"; }
   else { row("Your " + TN() + " tee", "not marked yet"); $("newBlue").textContent = "Mark " + TN() + " tee"; }
@@ -411,9 +427,9 @@ function focusOn(f) {
 
 $("save").onclick = async () => {
   if (!db) { status("Saving isn't available in this view. Open the page from your Claude gallery while signed in.", true); return; }
-  const w = W(); $("save").disabled = true; status("Saving hole " + cur.hole + "…");
-  const body = {hole: cur.hole, features: w.features.map(f => ({id: f.id, kind: f.kind, poly: f.poly})), note: w.note, savedAt: new Date().toISOString(), by: uid || null, units: (HOLES[0] && HOLES[0].units) || "local metres, origin 698261 E 4532163 N, EPSG:32618"};
-  try { await db.doc("holes/" + cur.hole).set(body); saved[cur.hole] = clone(body); w.dirty = false; renderChips(); status("Saved hole " + cur.hole + " at " + new Date().toLocaleTimeString([], {hour: "numeric", minute: "2-digit"}) + ". Claude can read it now."); }
+  const w = W(); $("save").disabled = true; status("Saving " + NAME(cur) + "…");
+  const body = {hole: cur.hole, features: w.features.map(f => ({id: f.id, kind: f.kind, poly: f.poly, ...(f.holes ? {holes: f.holes} : {})})), note: w.note, savedAt: new Date().toISOString(), by: uid || null, units: cur.units || (HOLES[0] && HOLES[0].units) || "local metres, origin 698261 E 4532163 N, EPSG:32618"};
+  try { await db.doc("holes/" + cur.hole).set(body); saved[cur.hole] = clone(body); w.dirty = false; renderChips(); status("Saved " + NAME(cur) + " at " + new Date().toLocaleTimeString([], {hour: "numeric", minute: "2-digit"}) + ". Claude can read it now."); }
   catch (e) { const code = e && e.code; if (code === "invalid_argument") { canSave = false; status("Your access to this page is view-only, so changes can't be saved.", true); } else status("Couldn't save (" + (code || "error") + "). Try again in a moment.", true); }
   finally { renderPanel(); }
 };

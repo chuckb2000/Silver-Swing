@@ -612,6 +612,89 @@ def heron(c: dict) -> np.ndarray:
     return outlined_outside(img, c["edge"])
 
 
+# --------------------------------------------------------------------- skate
+def skate(c: dict) -> np.ndarray:
+    """A hockey skate in profile, toe to the right: black boot, white laces, holder and steel blade (Wannamoisett)."""
+    X, Y = grid()
+    img = np.zeros((S, S, 4), np.uint8)
+    # steel blade with a slight rocker, longer than the boot at both ends
+    rock = 27.6 + 0.010 * (X - 16.5) ** 2
+    blade = (X >= 3.5) & (X <= 29.5) & (Y >= rock - 1.6) & (Y <= rock)
+    paint(img, blade, c["steel"])
+    paint(img, blade & (Y < rock - 0.8), c["steel_light"])
+    # the holder: a white bridge from heel to toe, open between its two posts
+    holder = poly(X, Y, [(6.6, 21.0), (27.2, 21.0), (26.6, 23.2), (25.4, 26.4), (21.4, 26.4), (20.4, 23.6),
+                         (13.2, 23.6), (12.2, 26.4), (8.2, 26.4), (6.8, 23.2)])
+    paint(img, holder, c["holder"])
+    paint(img, holder & (Y >= 24.6), c["holder_dark"])
+    # the boot: tall ankle cuff at the heel, tongue at the top, laced front sloping to a rounded toe
+    boot = poly(X, Y, [(5.6, 4.0), (12.6, 3.4), (13.2, 6.0), (16.0, 10.2), (21.0, 13.0), (25.6, 14.6),
+                       (28.4, 16.8), (28.8, 19.6), (27.6, 21.2), (6.0, 21.2), (5.0, 17.6), (5.4, 9.0)])
+    tongue = poly(X, Y, [(12.0, 1.8), (16.0, 1.4), (16.6, 4.4), (14.0, 6.4), (12.6, 5.0)])
+    paint(img, tongue, c["tongue"])
+    paint(img, tongue & (Y < 3.0), c["tongue_light"])
+    paint(img, boot, c["boot"])
+    paint(img, boot & (X < 9.5) & (Y < 18), c["boot_light"])            # lit heel and cuff, upper left
+    paint(img, boot & (Y > 19.6), c["boot_dark"])                         # the sole edge
+    stripe = boot & (np.abs((Y - 13.0) - 0.42 * (X - 8.0)) < 0.9) & (X < 21.5)
+    paint(img, stripe, c["trim"])                                         # a coloured stripe along the quarter
+    paint(img, boot & (np.abs(X - 7.0) < 0.6) & (Y > 5.0) & (Y < 19.5), c["boot_dark"])  # heel seam
+    # laces: white crossings packed down the front, just inside its edge
+    path = [(12.9, 6.6), (15.0, 10.0), (19.8, 12.9), (24.0, 14.6)]
+    segs = [(path[k], path[k + 1]) for k in range(len(path) - 1)]
+    total = sum(math.hypot(b[0] - a[0], b[1] - a[1]) for a, b in segs)
+    for k in range(8):
+        d = (k + 0.4) / 8 * total
+        for (ax, ay), (bx, by) in segs:
+            L_ = math.hypot(bx - ax, by - ay)
+            if d <= L_:
+                ux, uy = (bx - ax) / L_, (by - ay) / L_
+                lx, ly = ax + ux * d, ay + uy * d
+                break
+            d -= L_
+        nx, ny = -uy, ux                                                  # across the front edge
+        paint(img, seg(X, Y, lx - nx * 1.1, ly - ny * 1.1, lx + nx * 1.3, ly + ny * 1.3, 0.5) & boot, c["lace"])
+    return outlined_outside(img, c["edge"])
+
+
+# -------------------------------------------------------------------- turtle
+def turtle(c: dict) -> np.ndarray:
+    """A turtle walking right: high domed shell with scutes, head and legs out (Franklin)."""
+    X, Y = grid()
+    img = np.zeros((S, S, 4), np.uint8)
+    cx, base = 14.5, 20.0
+    # legs and tail behind the shell
+    legs = poly(X, Y, [(6.5, 18.5), (10.5, 18.5), (10.8, 24.6), (6.8, 24.6), (6.0, 23.0)]) | \
+        poly(X, Y, [(18.8, 18.5), (23.0, 18.5), (23.4, 23.2), (22.4, 24.6), (18.6, 24.6)])
+    tail = poly(X, Y, [(2.0, 21.4), (5.0, 18.6), (5.6, 20.6)])
+    neck = seg(X, Y, 22.0, 17.6, 26.0, 14.8, 1.9)
+    head = (((X - 27.2) / 3.3) ** 2 + ((Y - 14.2) / 2.5) ** 2 <= 1)
+    skin = legs | tail | neck | head
+    paint(img, skin, c["skin"])
+    paint(img, skin & (Y < 14.0) | (head & (X < 27.0) & (Y < 13.6)), c["skin_light"])
+    paint(img, legs & (Y > 23.4), c["skin_dark"])                           # toes in shade
+    paint(img, (legs & (np.abs(X - 8.6) < 0.4)) | (legs & (np.abs(X - 21.0) < 0.4)), c["skin_dark"])
+    paint(img, (np.abs(X - 28.4) < 0.6) & (np.abs(Y - 13.5) < 0.6), c["eye"])
+    paint(img, head & (Y > 14.9) & (X > 26.0) & (np.abs(Y - 15.2) < 0.4), c["skin_dark"])  # mouth
+    # the shell: a high dome over a light rim (the marginal scutes)
+    dome = (((X - cx) / 11.0) ** 2 + ((Y - base) / 13.0) ** 2 <= 1) & (Y <= base)
+    rim = (((X - cx) / 12.6) ** 2 + ((Y - base) / 2.4) ** 2 <= 1) & (Y >= base - 1.6)
+    paint(img, rim, c["rim"])
+    paint(img, rim & (Y > base + 0.4), c["rim_dark"])
+    paint(img, rim & (np.abs(((X - cx) % 3.2) - 1.6) < 0.35) & (Y > base - 1.2), c["rim_dark"])
+    paint(img, dome, c["shell"])
+    # scutes: a central row of plates over the dome, divided by dark seams
+    d = np.hypot((X - cx) / 11.0, (Y - base) / 13.0)
+    ang = np.degrees(np.arctan2(-(Y - base) / 13.0, (X - cx) / 11.0))      # 0 at the right, 90 at the top
+    seam = dome & ((np.abs(d - 0.62) < 0.05) | ((d > 0.62) & (np.abs(((ang + 18) % 36) - 18) < 2.8)) |
+                   ((d <= 0.62) & (np.abs(((ang + 30) % 60) - 30) < 3.6) & (d > 0.18)))
+    lit = dome & (((X - cx) * -0.62 + (Y - base + 6) * -0.78) > 2.0)
+    paint(img, lit, c["shell_light"])
+    paint(img, dome & (X > cx + 6.5) & (Y > base - 6), c["shell_dark"])  # lower right in shade
+    paint(img, seam, c["seam"])
+    return outlined(img, c["edge"])
+
+
 def colour_disc(fn, fill, rim):
     """A logo drawn over a disc in a course's colour: one course of several at a
     place (East Potomac Blue / White / Red)."""
@@ -699,6 +782,18 @@ LOGOS = {
         "face": rgba("#f4f4f0"), "plume": rgba("#1d2129"), "eye": rgba("#f0c23a"),
         "bill": rgba("#eab43a"), "bill_dark": rgba("#b98422"), "thigh": rgba("#9a5b3a"), "leg": rgba("#4f4c3e"),
         "grass": rgba("#e0b43c"), "grass_light": rgba("#f4d36a"), "grass_dark": rgba("#b08424"), "seed": rgba("#fbe9a6"),
+        "edge": EDGE,
+    }),
+    "wannamoisett": (skate, {
+        "boot": rgba("#23262e"), "boot_light": rgba("#3d434f"), "boot_dark": rgba("#14161b"),
+        "tongue": rgba("#dcdcd6"), "tongue_light": rgba("#f8f7f2"), "trim": rgba("#eeede6"),
+        "lace": rgba("#f4f2ea"), "holder": rgba("#eef0f3"), "holder_dark": rgba("#b9bec7"),
+        "steel": rgba("#8e98a5"), "steel_light": rgba("#d6dde6"), "edge": EDGE,
+    }),
+    "franklin": (turtle, {
+        "shell": rgba("#4f7d3a"), "shell_light": rgba("#73a352"), "shell_dark": rgba("#355a27"), "seam": rgba("#24391b"),
+        "rim": rgba("#d1b25a"), "rim_dark": rgba("#9c7f34"),
+        "skin": rgba("#7c8f4a"), "skin_light": rgba("#a3b66a"), "skin_dark": rgba("#53632f"), "eye": rgba("#1a1d14"),
         "edge": EDGE,
     }),
 }

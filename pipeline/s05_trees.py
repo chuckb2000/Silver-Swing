@@ -277,6 +277,39 @@ def assign_blossoms(trees, rule, boundary, water_cells, bmask):
     return out, note
 
 
+def remove_wires(chm, rule):
+    """Optional (course_config.json remove_wires): take power lines out of the canopy.
+
+    A canopy model keeps every lidar hit above the ground, so conductors show as
+    1-3 m wide lines 10-30 m up, which the top finder turns into rows of thin
+    "trees". A cell is wire when it stands more than rise_m above the grey opening
+    of the canopy (a 5 x 5 m window, which erases anything narrower than 5 m) and
+    belongs to a connected thin network whose skeleton is at least min_len_m long
+    and whose mean width (cells / skeleton cells) is at most max_width_m. Such
+    cells take the opened height (the crown below the wire, or the ground).
+    Returns (chm, stats).
+    """
+    from skimage.measure import label
+    from skimage.morphology import skeletonize
+
+    opened = ndimage.grey_opening(chm, footprint=np.ones((5, 5), bool))
+    thin = (chm - opened) > float(rule.get("rise_m", 3.0))
+    lab = label(thin, connectivity=2)
+    n = int(lab.max())
+    if n == 0:
+        return chm, {"components": 0, "cells": 0}
+    idx = range(1, n + 1)
+    skel = np.asarray(ndimage.sum(skeletonize(thin), lab, idx))
+    cells = np.asarray(ndimage.sum(thin, lab, idx))
+    ok = np.zeros(n + 1, bool)
+    ok[1:] = (skel >= float(rule.get("min_len_m", 40))) & (cells / np.maximum(skel, 1) <= float(rule.get("max_width_m", 3.0)))
+    wire = ok[lab]
+    out = chm.copy()
+    out[wire] = opened[wire]
+    return out, {"components": int(ok.sum()), "cells": int(wire.sum()),
+                 "skeleton_m": int(skel[ok[1:]].sum())}
+
+
 def main():
     name = course_name_from_argv()
     cfg = load_config(name)
@@ -295,6 +328,9 @@ def main():
     chm = np.flipud(chm)  # rows south->north: row j = local y in [j, j+1]
     water_cells = chm <= -4.0  # DC's normalized surface model marks open water -5
     chm[chm < 0] = 0
+    wires = None
+    if cfg.get("remove_wires"):
+        chm, wires = remove_wires(chm, cfg["remove_wires"])
     sm = ndimage.gaussian_filter(chm, 0.6)
 
     # height-dependent local maximum
@@ -392,6 +428,17 @@ def main():
     if leaf is not None:
         type_method = leaf
     species_note = None
+    # flowering shrubs of a garden beside the course (`garden`, pipeline/garden.py): each
+    # bush has a bloom colour, and order_trees() (below, and again in s06b) puts it at an
+    # index whose % 8 is that colour, which is how the game picks the shrub sprite
+    n_shrubs = 0
+    from garden import enabled as garden_enabled, order_trees, shrub_trees
+    if garden_enabled(cfg):
+        if cfg.get("blossom"):
+            raise SystemExit("[s05] `garden` and `blossom` both order trees.json; not supported together")
+        shrubs = shrub_trees(cfg, g)
+        trees = trees + shrubs
+        n_shrubs = len(shrubs)
     # s06 places the tees against these trees and s06b drops the ones still in the
     # way of a tee shot, then orders the list again (cherry slots)
     write_json(build_dir(name) / "trees_all.json", [dict(t_) for t_ in trees])
@@ -400,20 +447,21 @@ def main():
     if cfg.get("blossom"):
         trees, species_note = assign_blossoms(trees, cfg["blossom"], boundary, water_cells, bmask)
 
-    # OSM natural=tree cross-check
+    # OSM natural=tree cross-check (lidar trees only: garden shrubs are not counted)
+    rt = [t_ for t_ in trees if t_["type"] != "shrub"] if n_shrubs else trees
     osm_trees = g[g.kind == "tree"]
-    tx = np.array([[t_["x"], t_["y"]] for t_ in trees])
+    tx = np.array([[t_["x"], t_["y"]] for t_ in rt])
     matched = 0
     for p in osm_trees.geometry:
         d = np.hypot(tx[:, 0] - p.x, tx[:, 1] - p.y).min()
         matched += d < 4
     stats = {
-        "detected": len(trees),
-        "inside_course": int(sum(t_["in"] for t_ in trees)),
-        "conifer": int(sum(t_["type"] == "conifer" for t_ in trees)),
-        "deciduous": int(sum(t_["type"] == "deciduous" for t_ in trees)),
-        "height_p50_m": float(np.median([t_["h"] for t_ in trees])),
-        "height_max_m": float(max(t_["h"] for t_ in trees)),
+        "detected": len(rt),
+        "inside_course": int(sum(t_["in"] for t_ in rt)),
+        "conifer": int(sum(t_["type"] == "conifer" for t_ in rt)),
+        "deciduous": int(sum(t_["type"] == "deciduous" for t_ in rt)),
+        "height_p50_m": float(np.median([t_["h"] for t_ in rt])),
+        "height_max_m": float(max(t_["h"] for t_ in rt)),
         "dropped": dropped,
         "dropped_on_playing_surfaces": dropped_surface,
         "osm_tree_points": int(len(osm_trees)),
@@ -421,11 +469,21 @@ def main():
         "source": canopy_label(cfg),
         "type_method": type_method + (f" {species_note['text']}" if species_note else ""),
     }
+    if n_shrubs:
+        from garden import colour_counts
+        trees, misplaced = order_trees(trees)
+        stats["shrub"] = n_shrubs
+        stats["garden"] = (f"{n_shrubs} flowering shrubs in the garden ({', '.join(cfg['garden']['osm'])}), trees.json c: 3, "
+                           f"drawn from sprites/shrubs.png; colours {colour_counts(trees)}"
+                           + (f", {misplaced} not in their colour's slot" if misplaced else "")
+                           + "; positions from the lidar shrub layer, species and colours flair, not surveyed")
     if species_note:
         stats["cherry"] = int(sum(t_["type"] == "cherry" for t_ in trees))
         stats["blossom"] = species_note
     if removed:
         stats["removed_by_developer"] = removed
+    if wires is not None:
+        stats["wires_removed"] = wires
     bdir = build_dir(name)
     write_json(bdir / "trees.json", trees)
     write_json(bdir / "trees_report.json", stats, indent=1)
