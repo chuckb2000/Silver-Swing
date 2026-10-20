@@ -2003,9 +2003,10 @@ report_notes.md.
     White 69.1/128 (5,913). Black and White not built.
 
 -   **Default tee:** Blue (the only set built).
--   **Known open items:** hole 17 Blue -16.6 % and hole 14 not saved in the
-    desk (both asked); holes 2, 4, 18 are flags
-    (data/waverley/report_notes.md).
+-   **Hole 14:** a round green clear of its five ring bunkers (developer,
+    `data/waverley/make_hole14.py`).
+-   **Known open items:** hole 17 Blue -16.6 % (asked); holes 2, 4, 18 are
+    flags (data/waverley/report_notes.md).
 
 **12. Repository layout**
 

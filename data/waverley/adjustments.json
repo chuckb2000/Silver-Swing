@@ -135,13 +135,13 @@
    1121.15
   ],
   "to": [
-   339.46,
-   1129.16
+   342.95,
+   1131.16
   ],
-  "real_yd": 142.5,
+  "real_yd": 146.1,
   "adjusted_yd": 137.0,
   "card_yd": 137.0,
-  "reason": "measured 142 yd from the tee-box centre vs 137 on the card (+4.0%); moved the virtual tee within the real tee polygon desk_14_tee_tr_tee_14_12"
+  "reason": "measured 146 yd from the tee-box centre vs 137 on the card (+6.6%); moved the virtual tee within the real tee polygon desk_14_tee_0"
  },
  {
   "hole": 17,
