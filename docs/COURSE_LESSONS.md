@@ -667,3 +667,18 @@ Folded in from docs/courses/bandon_trails.md at the merge.
     overlay the crowns on photo crops.
 -   **`golf=path`** is still not read by s01 (COURSE_LESSONS.md 10); `make_edits.py`
     copies it as a cart path with a new id (dropping by id would otherwise remove the copy).
+
+## 18. Chambers Bay (2026-10-20)
+
+Folded in from docs/courses/chambers_bay.md at the merge.
+
+-   **Ask what the lidar buys before waiting for it.** Here the DEM gave every elevation and the course has one tree in play; the point cloud only changes scenery outside the boundary, so the course was finished on the OSM tree fallback and the lidar becomes a one-step rebuild. A NOAA Data Access Viewer job can take hours.
+
+-   **A complete-looking OSM course can still lack the middle tees.** Chambers Bay's OSM maps the tips (the 2015 U.S. Open tees) and some forward boxes. On four holes no box was near the Blue card. Measure every box near each hole against every column of the card first (here 4729 = Black 295, 4730 = Sand 253 on 12), so the missing set is clear before asking.
+-   **Measure off-line boxes the way s06 does** (`path_from`: straight from the tee to the next bend). Adding the sideways offset to the along-line distance put hole 3's White box (126 yd) at 149 and made it look like the Blue tee.
+-   **On a links course, place a missing tee where the card distance crosses the line on mown grass.** A contour of s06's own distance over the photo, plus a green-pixel test away from paths and sand, found the spot on 3, 12 and 15 in one pass; where it fell in waste sand (11), say so instead of placing a tee there.
+-   **The USDA NAIP ImageServer (gis.apfo.usda.gov) reset the developer's connection;** the same NAIP from `imagery.nationalmap.gov/arcgis/rest/services/USGSNAIPImagery/ImageServer/exportImage` (JPEG, up to 4,000 px) worked at once. Pierce County's own orthophotos are vendor-licensed.
+-   **A long, narrow tee strip has a centre ridge only at its wide end,** so s06's tee move (which stays on the ridge) can overshoot the card (hole 13: 521 vs 500). Accept it as a flag or ask the design chat; don't hand-place the tee.
+-   **Big practice ranges can be mapped as `golf=fairway`.** List every fairway, green and tee farther than 15 m from any hole line; the 3 ha "fairway" east of 7 and 10 was the range (striped hitting areas on the photo).
+-   **Scratch runs that edit the config must restore it with an absolute path.** A `trap` that copied a relative path after the script had changed directory left the config without its `laz` key.
+-   **Hydro-flattened sea** sits at one value (-1.49 m here); `lake_level_max_m` just above it turns the sound into water without touching the beach.

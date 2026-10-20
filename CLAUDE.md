@@ -452,10 +452,11 @@ DECISIONS.md with the reason.
     `src/systems/game/pins.ts`); the meter has a line at the middle of the green, no
     ghost tick and no display-lag allowance. 376 unit tests and 4 Playwright tests pass.
 
--   **Courses (course chats, 2026-10-18 to 2026-10-20):** sixteen data
-    folders, eighteen courses on offer (East Potomac is three) in five states;
-    Gearhart Golf Links (Gearhart OR) and Bandon Trails (Bandon OR, `bandon`
-    theme) merged 2026-10-20.
+-   **Courses (course chats, 2026-10-18 to 2026-10-20):** seventeen data
+    folders, nineteen courses on offer (East Potomac is three) in six states;
+    Gearhart Golf Links (Gearhart OR), Bandon Trails (Bandon OR, `bandon`
+    theme) and Chambers Bay (University Place WA, `puget` theme; trees from
+    OSM until its lidar arrives) merged 2026-10-20.
     Each course's build history, facts and open items are in
     `docs/courses/<id>.md` (section 11).
 
@@ -1538,6 +1539,7 @@ files (`game/scripts/course-lists.mjs`). The first course, Oswego Lake, is
 | Course | File |
 |---|---|
 | Bandon Trails | `docs/courses/bandon_trails.md` |
+| Chambers Bay | `docs/courses/chambers_bay.md` |
 | East Potomac Golf Links (Blue, White and Red courses) | `docs/courses/east_potomac.md` |
 | Eastmoreland Golf Course | `docs/courses/eastmoreland.md` |
 | Franklin Country Club | `docs/courses/franklin.md` |
