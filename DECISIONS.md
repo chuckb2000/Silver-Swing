@@ -395,6 +395,21 @@ From docs/reports/player_improvements.md ("for playability, let's do 2, 3, 4, 5,
 - **Milestones (11):** first birdie, eagle and hole in one; a course's first round, birdie and eagle; breaking 100/90/80/70 (nine holes: 50/45/40/35) and level or under par at a course; every course in a state played; every course played. Worked out from the player's finished, non-casual rounds (`src/save/milestones.ts`), so nothing extra is stored. The summary shows those the round earned; "my golf" lists them all.
 - **Title screen:** the extra buttons sit two to a row (my golf, practice, leaderboard, settings) so the menu fits a 270-texel-high screen. Credits moved into settings (developer, 2026-10-20); the title's footer says so.
 
+## Course chats draw their own logos, themes and bushes (developer, 2026-10-20)
+
+Course chats now design their course's logo, theme and special plants (Bandon
+Dunes: a seal and gorse; Bandon Trails: a trail sign post). So that no two
+chats edit one file: logos go in `assets-src/course_logos/<id>.py` (loaded by
+`logos.py`, which writes one logo with `logos.py <id>`); a theme's tree and
+bush painters in `assets-src/trees_<theme>.py`, named in its palette; a theme
+can name a `"shrub"` painter, built into `sprites/shrubs_<theme>.png` and drawn
+for trees.json `c: 3` on its courses (s10 writes `course.json` `"shrubs"`, the
+game loads that sheet, s09b paints the putting views with it);
+`build_assets.py --theme <t>` builds one theme's sheets without rewriting the
+shared ones. `make regress --since` now rebuilds only the courses a change can
+reach (a theme file: that theme's courses; logos, cards, docs: none). Courses
+without a theme bush are unchanged.
+
 ## Logos: Chambers Bay and Gearhart (developer, 2026-10-20)
 
 `chambers_bay`: the old concrete gravel-plant ruins on the course (a tower with a

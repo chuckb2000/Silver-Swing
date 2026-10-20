@@ -3,8 +3,10 @@ written to game/public/sprites/logos/<id>.png (32 x 32, transparent).
 
     python3 assets-src/logos.py
 
-Each course has an entry in LOGOS: a drawing function and its colours. A
-course without a logo gets a lettered badge in the game instead.
+Each course has an entry in LOGOS (the design chat's) or its own file
+assets-src/course_logos/<id>.py (a course chat's, 2026-10-20): a drawing
+function and its colours. `python3 assets-src/logos.py <id>` writes one logo
+only. A course without a logo gets a lettered badge in the game instead.
 """
 from __future__ import annotations
 
@@ -893,9 +895,33 @@ for _layout, _fill, _rim in (("blue", "#2f6fd1", "#5d97ee"), ("white", "#f6f6f2"
     LOGOS[f"east_potomac_{_layout}"] = (colour_disc(memorial, rgba(_fill), rgba(_rim)), LOGOS["east_potomac"][1])
 
 
-def main():
+def course_logos() -> dict:
+    """Logos drawn by course chats, one file per course: assets-src/course_logos/<id>.py,
+    each defining LOGO = (draw_function, colours), drawn with the helpers here
+    (`from logos import S, grid, paint, poly, seg, shade, ring_of, outlined, rgba, EDGE`).
+    A course's own file wins over an entry in LOGOS."""
+    import importlib.util
+    out = {}
+    for p in sorted((HERE / "course_logos").glob("*.py")):
+        spec = importlib.util.spec_from_file_location(f"course_logo_{p.stem}", p)
+        mod = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(mod)
+        out[p.stem] = mod.LOGO
+    return out
+
+
+def all_logos() -> dict:
+    return {**LOGOS, **course_logos()}
+
+
+def main(argv: list[str] | None = None):
+    """python3 assets-src/logos.py [id ...]: every logo, or only the ones named."""
+    import sys
+    want = set((argv if argv is not None else sys.argv[1:]))
     OUT.mkdir(parents=True, exist_ok=True)
-    for cid, (fn, colours) in LOGOS.items():
+    for cid, (fn, colours) in all_logos().items():
+        if want and cid not in want:
+            continue
         Image.fromarray(fn(colours), "RGBA").save(OUT / f"{cid}.png", optimize=True)
         print(f"[logos] {cid} -> sprites/logos/{cid}.png")
 

@@ -14,6 +14,7 @@ export { initialCourseId, treeSheet } from './registry';
 import type { CourseInfo } from './registry';
 
 let loadedTheme: string | null = null;
+let loadedShrubs: string | null = null; // the sheet in the 'shrubs' texture (a theme may have its own bushes)
 
 /** Progress of a course load: the fraction done (0..1); called whenever anything arrives. */
 export type LoadProgress = (fraction: number) => void;
@@ -190,7 +191,11 @@ export async function loadCourse(scene: Phaser.Scene, id: string, progress?: Loa
     l.image('overview', base + json.maps.overview);
     for (const m of json.maps.holes) l.image(`mini_${m.hole}`, base + m.file);
     if (trees.c.includes(2) && !scene.textures.exists('blossom')) l.atlas('blossom', 'sprites/blossom.png', 'sprites/blossom.json'); // flowering trees
-    if (trees.c.includes(3) && !scene.textures.exists('shrubs')) l.atlas('shrubs', 'sprites/shrubs.png', 'sprites/shrubs.json'); // flowering shrubs
+    if (trees.c.includes(3)) { // flowering shrubs, or the theme's own bushes
+      const sheet = json.shrubs || 'shrubs';
+      if (scene.textures.exists('shrubs') && loadedShrubs !== sheet) scene.textures.remove('shrubs');
+      if (!scene.textures.exists('shrubs')) { l.atlas('shrubs', `sprites/${sheet}.png`, `sprites/${sheet}.json`); loadedShrubs = sheet; }
+    }
     if (wantTrees) {
       const sheet = treeSheet(theme);
       l.atlas('trees', `${sheet}.png`, `${sheet}.json`);
