@@ -11,6 +11,7 @@ import { peekSnapshot } from '../save/snapshot';
 import { Button, COLORS, Panel, setTxt, txt } from '../ui/widgets';
 import { resumeRound, startPractice, startRound, useCourse } from './flow';
 import { dailyPlan, localDay } from '../systems/game/daily';
+import { DAILY_ROSTER } from '../data/dailyRoster';
 import { shortName } from '../save/milestones';
 import { update, whenUpdateReady } from '../save/offline';
 import { LoadSuperseded } from '../data/courses';
@@ -201,7 +202,11 @@ export class TitleScene extends MenuScene {
     const bw = 124, bh = 17, gap = 21;
     let y = top + 84 + dy;
     const add = (label: string, cb: () => void, grey = false) => {
-      this.root.add(new Button(this, cx - bw / 2, y, bw, bh, label, cb, { color: grey ? 'grey' : 'orange' }));
+      // wide enough for its label (a long daily course name ran out of the button)
+      const probe = txt(this, 0, 0, label);
+      const w = Math.min(W - 8, Math.max(bw, Math.ceil(probe.width) + 12));
+      probe.destroy();
+      this.root.add(new Button(this, Math.round(cx - w / 2), y, w, bh, label, cb, { color: grey ? 'grey' : 'orange' }));
       y += gap;
     };
     // the rest two to a row (the list no longer fits a 270-texel-high screen one under another)
@@ -219,7 +224,7 @@ export class TitleScene extends MenuScene {
     }
     add(snap ? 'new round' : 'play', () => this.scene.start('courses', { purpose: 'play', from: 'title' }), !!snap);
     // the daily round: today's course, nine holes, the same wind and pins for everyone
-    const plan = dailyPlan(localDay(), app.courses);
+    const plan = dailyPlan(localDay(), app.courses, DAILY_ROSTER);
     const dc = plan && app.courses.find((c) => c.id === plan.courseId);
     if (plan && dc) {
       add(`daily: ${shortName(dc.name)}`, () => void this.withLoading(async (progress) => {

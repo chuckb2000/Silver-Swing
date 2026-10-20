@@ -571,3 +571,19 @@ so a hole resumed after closing the tab lists the strokes since.
 
 - TypeScript 6.0.3, Vite 8, Vitest 5, Phaser 3.90.0, Playwright 1.56.0 (matches the preinstalled Chromium build).
 - `window.__autoplay` (src/dev/autoplay.ts) is a robot golfer used by the Playwright smoke test; it drives the real input path (`PlayScene.tap` with timestamps).
+
+## The daily course stays put for the day (developer, 2026-10-20)
+
+- The developer played the daily at Stone Creek in the morning; by the
+  afternoon it showed East Potomac Red. The day's course was picked from the
+  whole course list, so each course merged that day (Gearhart, Bandon Trails,
+  Chambers Bay) moved it. Now only the courses in the daily rotation on that
+  day count (`src/data/dailyRoster.ts`: course id and first day). The sixteen
+  courses of 2026-10-20 start that day (so 2026-10-20 is Stone Creek again);
+  the three merged that afternoon start 2026-10-21. When a course is merged,
+  the design chat adds it from the next day (docs/COURSE_BUILD.md section 0).
+  A course not listed is never the daily; a unit test checks every course is.
+- **Text that ran out of its box:** the title's daily button now grows to fit
+  the course name ("daily: east potomac red course"), and a course card's
+  second line keeps to one line, dropping the town when it doesn't fit
+  (Chambers Bay: "18 holes · par 72").

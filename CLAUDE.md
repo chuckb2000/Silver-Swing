@@ -543,6 +543,13 @@ DECISIONS.md with the reason.
     in Langston's `drop_trees` (developer: remove it); `fix/langston-tree`
     merged 2026-10-20. Every course now rebuilds to its committed files.
 
+-   **Daily fix (design chat, 2026-10-20):** the daily course is picked from
+    the courses in the rotation that day (`src/data/dailyRoster.ts`), so a
+    course merged today no longer changes today's daily; the design chat adds
+    each merged course from the next day. Long daily names and Chambers Bay's
+    card line stay inside their boxes. DECISIONS.md "The daily course stays
+    put for the day".
+
 -   **Next task:** Item 1 of the player improvements (swing coach) is on
     `design/coach`, unmerged. Also: the third playtest (putting, yellow
     misses), the club's printed scorecard and the hole 3 Blue tee box. New
@@ -1452,7 +1459,8 @@ calm (≈60% of holes below half the max). It is seeded per round.
     (`data/practice`, not on the course list), nothing scored or saved.
 
 -   **Daily round** (2026-10-20): one course a day, nine holes at Normal,
-    fixed by the date; one counted round per player code and day.
+    fixed by the date and the day's rotation (`src/data/dailyRoster.ts`; a
+    merged course joins the next day); one counted round per player code and day.
 
 -   **Later:** local pass-and-play for up to 4 players
 
