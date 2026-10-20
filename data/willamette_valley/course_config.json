@@ -1,0 +1,55 @@
+{
+  "id": "willamette_valley",
+  "name": "Willamette Valley CC",
+  "location": "Canby, Clackamas County, Oregon",
+  "state": "OR",
+  "architects": "Shirley Stone (opened 1962; golfn.com)",
+  "theme": "pnw",
+  "epsg": 32610,
+  "osm_sources": [
+    "raw/overpass.geojson"
+  ],
+  "boundary_name": "Willamette Valley Country Club",
+  "dtm": {
+    "path": "raw/dogami_dtm_ft.tif",
+    "units": "ft",
+    "source": "DOGAMI lidar DIGITAL_TERRAIN_MODEL_MOSAIC (bare earth), exportImage at 1 m in EPSG:32610, box x 524251-525475 / y 5013652-5015644, downloaded by the developer 2026-10-19 (GitHub release willamette-valley-data, exportImage.10.tiff)"
+  },
+  "chm": {
+    "path": "raw/dogami_chm_ft.tif",
+    "units": "ft",
+    "source": "DOGAMI lidar CANOPY_HEIGHT_MODEL_MOSAIC (highest hit minus bare earth), exportImage at 1 m in EPSG:32610, same box, downloaded by the developer 2026-10-19 (GitHub release willamette-valley-data, exportImage.11.tiff)",
+    "label": "DOGAMI canopy height model"
+  },
+  "world": {
+    "x0": 524351,
+    "y0": 5013752,
+    "width": 1024,
+    "height": 1792,
+    "note": "OSM boundary way/146072029 bbox (586 x 1,554 m) + ~120 m scenery, rounded out to whole 256 m chunks and centred: 219 m of scenery west and east, 119 m south and north"
+  },
+  "tee_sets": [
+    {
+      "name": "Blue",
+      "playable": true,
+      "rating": 71.6,
+      "slope": 129,
+      "total_yd": 6514
+    }
+  ],
+  "default_tee": "Blue",
+  "scorecard_source": "Club scorecard PDF (Golf ScoreCards Inc., 10/2023; release willamette-valley-data, wvcc.scorecard.pdf), 2026-10-19. Hole sums match the printed Out/In/Total for all six tee sets; men's rating/slope from the card. Full card (women's handicaps) in scorecard_full.csv",
+  "penalty_default": "red",
+  "driving_range_is_ob": true,
+  "wind_mph": {
+    "minMph": 1,
+    "maxMph": 7
+  },
+  "attribution": [
+    "Map data © OpenStreetMap contributors (ODbL)",
+    "Elevation and canopy height: Oregon Department of Geology and Mineral Industries (DOGAMI) lidar",
+    "Scorecard: Willamette Valley Country Club"
+  ],
+  "notes": "Phase 1 decisions (developer, 2026-10-19): Blue tees; card name 'Willamette Valley CC'; hole 13 green proposed from the lidar for approval; the maintenance no-play zone (holes 14-16) is not modelled; practice greens play as wrong greens; out of bounds = the OSM course boundary.",
+  "tee_shot_margin_m": 0.5
+}
