@@ -1,0 +1,74 @@
+{
+  "id": "franklin",
+  "name": "Franklin Country Club",
+  "location": "Franklin, Norfolk County, Massachusetts",
+  "state": "MA",
+  "architects": "Wayne Stiles and John Van Kleek (18 holes, early 1920s); later work by Phil Wogan and William F. Mitchell (countryclubmag.com, Golf Digest; unverified)",
+  "theme": "bayside",
+  "epsg": 32619,
+  "osm_sources": [
+    "raw/overpass.geojson"
+  ],
+  "boundary_name": "Franklin Country Club",
+  "dtm": {
+    "path": "raw/usgs_dem_2021_1m_clip.tif",
+    "units": "m",
+    "source": "USGS 3DEP 1 m DEM, project MA_CentralEastern_2021_B21 (2021 USGS Lidar: Central Eastern Massachusetts, flown 20 Mar - 24 Apr 2021), tiles x30y466 and x30y467 mosaicked and clipped to the world + 100 m by data/franklin/clip_dem.py; EPSG:26919 (NAD83 / UTM 19N), NAVD88 metres; downloaded by the developer 2026-10-19 (GitHub release franklin-data)"
+  },
+  "laz": {
+    "paths": [
+      "raw/laz/*.laz"
+    ],
+    "classes": [
+      3,
+      4,
+      5
+    ],
+    "units": "ft",
+    "source": "2021 USGS Lidar: Central Eastern Massachusetts (NOAA Data Access Viewer dataset 9777, job J1472668), clipped to the course box, classes 2-5 delivered (3-5 used); NAD83(2011) / UTM 19N US survey feet, NAVD88 US survey feet; flown 21 March 2021 (GPS times), leaf-off; ordered by the developer 2026-10-19 (GitHub release franklin-data, ma2021_cent_east_J1472668.zip)",
+    "label": "2021 USGS lidar, leaf-off",
+    "leaf_off": true
+  },
+  "world": {
+    "x0": 303177,
+    "y0": 4659147,
+    "width": 1792,
+    "height": 2048,
+    "note": "OSM course boundary bbox (1,419 x 1,637 m) + scenery, rounded out to whole 256 m chunks and centred: 1,792 m east-west (186 m each side), 2,048 m north-south (205 m each side; the 2,048 m limit)"
+  },
+  "tee_sets": [
+    {
+      "name": "Blue",
+      "playable": true,
+      "rating": 72.3,
+      "slope": 128,
+      "total_yd": 6602
+    }
+  ],
+  "default_tee": "Blue",
+  "scorecard_source": "Stymie (stymie.golf/golf-courses/massachusetts/norfolk-county/franklin/franklin-country-club), retrieved 2026-10-19; unverified third-party listing (the club website has no card). Every tee row adds up to its printed total. Conflicts: back-nine stroke indexes differ on OpenGolfAPI and GolfingRecord; OpenGolfAPI gives Blue 72.7/131. Built from the Blue tees only (developer, 2026-10-19).",
+  "penalty_default": "red",
+  "red_water_osm": [
+    "w90968191",
+    "w89790565",
+    "w1263089460"
+  ],
+  "driving_range_is_ob": true,
+  "wind_mph": {
+    "minMph": 1,
+    "maxMph": 9
+  },
+  "attribution": [
+    "Map data © OpenStreetMap contributors (ODbL)",
+    "Elevation and trees: U.S. Geological Survey 3D Elevation Program (2021 Central Eastern Massachusetts lidar)",
+    "Scorecard: Stymie (third-party listing)"
+  ],
+  "notes": "Phase 1 decisions (developer, 2026-10-19): Blue tees only; all water red, including Uncas Pond (hole 14 plays over it, outside the boundary: red_water_osm); Uncas Brook modelled as a red penalty area; no internal out of bounds; bayside theme; logo by the design chat. Wind 1-9 mph is the course chat's call for an inland wooded course (Oswego 1-7, Indian Island 2-12). Two ponds inside the boundary mapped only as natural=water (w89790565 by the 18th fairway, w1263089460 between holes 1 and 5) are red penalty areas through red_water_osm (course chat: all water red; otherwise they would play as rough).",
+  "drop_trees": [
+    {
+      "x": 543.5,
+      "y": 1614.5,
+      "reason": "course chat 2026-10-19, approved by the developer: hole 18, 21 m broadleaf 15 m left-front of the Blue tee whose crown (10.4 m radius) reaches 0.5 m over the hole line; a perfect drive straight down the line clipped it (the East Potomac / Tualatin rule that trees must not block normal lines)"
+    }
+  ]
+}

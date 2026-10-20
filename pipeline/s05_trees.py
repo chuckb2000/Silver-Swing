@@ -292,6 +292,39 @@ def assign_blossoms(trees, rule, boundary, water_cells, bmask):
     return out, note
 
 
+def remove_wires(chm, rule):
+    """Optional (course_config.json remove_wires): take power lines out of the canopy.
+
+    A canopy model keeps every lidar hit above the ground, so conductors show as
+    1-3 m wide lines 10-30 m up, which the top finder turns into rows of thin
+    "trees". A cell is wire when it stands more than rise_m above the grey opening
+    of the canopy (a 5 x 5 m window, which erases anything narrower than 5 m) and
+    belongs to a connected thin network whose skeleton is at least min_len_m long
+    and whose mean width (cells / skeleton cells) is at most max_width_m. Such
+    cells take the opened height (the crown below the wire, or the ground).
+    Returns (chm, stats).
+    """
+    from skimage.measure import label
+    from skimage.morphology import skeletonize
+
+    opened = ndimage.grey_opening(chm, footprint=np.ones((5, 5), bool))
+    thin = (chm - opened) > float(rule.get("rise_m", 3.0))
+    lab = label(thin, connectivity=2)
+    n = int(lab.max())
+    if n == 0:
+        return chm, {"components": 0, "cells": 0}
+    idx = range(1, n + 1)
+    skel = np.asarray(ndimage.sum(skeletonize(thin), lab, idx))
+    cells = np.asarray(ndimage.sum(thin, lab, idx))
+    ok = np.zeros(n + 1, bool)
+    ok[1:] = (skel >= float(rule.get("min_len_m", 40))) & (cells / np.maximum(skel, 1) <= float(rule.get("max_width_m", 3.0)))
+    wire = ok[lab]
+    out = chm.copy()
+    out[wire] = opened[wire]
+    return out, {"components": int(ok.sum()), "cells": int(wire.sum()),
+                 "skeleton_m": int(skel[ok[1:]].sum())}
+
+
 def main():
     name = course_name_from_argv()
     cfg = load_config(name)
@@ -310,6 +343,9 @@ def main():
     chm = np.flipud(chm)  # rows south->north: row j = local y in [j, j+1]
     water_cells = chm <= -4.0  # DC's normalized surface model marks open water -5
     chm[chm < 0] = 0
+    wires = None
+    if cfg.get("remove_wires"):
+        chm, wires = remove_wires(chm, cfg["remove_wires"])
     sm = ndimage.gaussian_filter(chm, 0.6)
 
     # height-dependent local maximum
@@ -468,6 +504,8 @@ def main():
         stats["blossom"] = species_note
     if removed:
         stats["removed_by_developer"] = removed
+    if wires is not None:
+        stats["wires_removed"] = wires
     bdir = build_dir(name)
     write_json(bdir / "trees.json", trees)
     write_json(bdir / "trees_report.json", stats, indent=1)
