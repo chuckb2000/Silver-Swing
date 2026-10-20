@@ -1,0 +1,15 @@
+## Other open items (Chambers Bay)
+
+The developer's calls on 2026-10-20: Blue tees; all water red (none on the course); out of bounds = the OSM boundary; the wetland stays woods; new `puget` theme; wind 3-14 mph; the Blue tees on 3, 12 and 15 traced from NAIP; hole 11 from the 496 yd box; holes 13 and 14 accepted as flags; the course card and title view may be committed. The items below are for the record, each with a recommendation.
+
+1. **Hole 11 plays 494 yd against 424 on the Blue card (+16 %, accepted by the developer).** Both OSM boxes measure longer than the card's Black tee (531 and 496 yd vs 460); the card distance on the hole line falls in a waste-sand area, and the nearest mown grass at that distance is 59 m off the line. Recommendation: keep until the developer can point out the Blue tee.
+2. **Holes 13 and 14 play +4.2 % (flags, accepted).** Hole 13's tee is one long mapped strip (1,740 m2); s06 keeps the virtual tee on the strip's centre ridge, which exists only at its wide west end (521 yd vs 500). Hole 14's Blue box is 84 m from the OSM line start; measured from it, 441 yd vs 423.
+3. **Blue tees on holes 3, 12 and 15 are not in OSM.** Traced by the course chat on mown grass on the hole line at the card's Blue distance, from the NAIP photo (10 x 8 m boxes, `proposed/tees_blue_naip.geojson`), approved by the developer. Chambers Bay's teeing grounds are irregular mown patches in the fescue, so the boxes are where the yardage says, not surveyed shapes.
+4. **Hole 8's Blue box** (w1456364604, 26 m off the OSM line) and **hole 13's tee strip** were assigned by tag (`edits.json`).
+5. **The practice range** (OSM w353151424, 3.0 ha, tagged `golf=fairway`) is out of bounds as a driving range (COURSE_BUILD 4.1 default); the NAIP photo shows its hitting areas. Recommendation: keep.
+6. **The wetland pond between holes 1/10 and the range** (w582088908, 0.17 ha) is drawn as woods (developer, 2026-10-20). The photo shows open water with reeds; it is away from every hole line.
+7. **Puget Sound** is water below -1.2 m in the hydro-flattened DEM (`lake_level_max_m`), out of bounds beyond the BNSF railway; the beach polygon is `ob_sand`.
+8. **Two practice greens** (w353151415 by the clubhouse, w606811080 south of the boundary) are wrong greens.
+9. **Pins** are at the OSM `golf=pin` nodes (one per hole); the game adds up to three more per green.
+10. **Scorecard:** the club card (Golf ScoreCards Inc., 10/2025), every row checked; Black, Sand, White and Teal are in `scorecard.csv`, not built. Chambers Bay changes its set-up (holes 1 and 18 swap par 4 / par 5 for events); the card's pars are used (1 par 4, 18 par 5), matching OSM.
+11. **Architects:** Robert Trent Jones Jr. with Bruce Charlton and Jay Blasi, 2007 (thefriedegg.com).
