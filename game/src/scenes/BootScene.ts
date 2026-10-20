@@ -33,6 +33,8 @@ export class BootScene extends Phaser.Scene {
   async create() {
     const label = this.add.text(app.view.w / 2, app.view.h / 2, 'loading course', { fontFamily: 'monospace', fontSize: '8px', color: '#dfe6e9' }).setOrigin(0.5);
     try {
+      // ask the browser to keep this site's data (rounds, player key): Safari clears it after a week otherwise
+      try { void navigator.storage?.persist?.(); } catch { /* not offered */ }
       const [settings, courses] = await Promise.all([loadSettings(), loadRegistry()]);
       app.settings = settings;
       app.courses = courses;

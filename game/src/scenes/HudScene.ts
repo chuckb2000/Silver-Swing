@@ -88,6 +88,7 @@ export class HudScene extends Phaser.Scene {
     this.cardLayer = null;
     this.modalBeforeCard = null;
     this.bannerTimer = undefined;
+    this.redraw = null;
     this.play = this.scene.get('play') as PlayScene;
     uiCamera(this.cameras.main);
     this.W = app.view.w;
@@ -101,11 +102,15 @@ export class HudScene extends Phaser.Scene {
     this.refresh();
   }
 
+  /** Draws the open dialog again (after a resize or a phone turning), so its buttons stay on screen. */
+  private redraw: (() => void) | null = null;
+
   private onResize() {
     uiCamera(this.cameras.main);
     this.W = app.view.w;
     this.H = app.view.h;
     this.layout();
+    if (this.modal && this.redraw) this.redraw();
     this.refresh();
   }
 
@@ -514,6 +519,7 @@ export class HudScene extends Phaser.Scene {
 
   closeModal() {
     this.modal = null;
+    this.redraw = null;
     this.modalLayer.removeAll(true);
   }
 
@@ -656,6 +662,7 @@ export class HudScene extends Phaser.Scene {
   showRelief(title: string, options: ReliefArea[], optional: boolean) {
     this.reliefTitle = title;
     this.openModal('relief');
+    this.redraw = () => this.showRelief(title, options, optional);
     const n = options.length + (optional ? 1 : 0);
     const w = Math.min(232, this.W - 12), h = 26 + n * 18;
     const x = Math.round((this.W - w) / 2), y = Math.round(this.H * 0.42);
@@ -675,6 +682,7 @@ export class HudScene extends Phaser.Scene {
 
   showDrop(a: ReliefArea) {
     this.openModal('drop');
+    this.redraw = () => this.showDrop(a);
     const w = Math.min(232, this.W - 12), h = 38;
     const x = Math.round((this.W - w) / 2), y = this.H - h - 6;
     const pnl = new Panel(this, x, y, w, h, 0.9);
@@ -689,13 +697,14 @@ export class HudScene extends Phaser.Scene {
     this.refresh();
   }
 
-  showHoled(score: HoleScore, gimme: boolean, maxed = false) {
+  showHoled(score: HoleScore, gimme: boolean, maxed = false, quiet = false) {
     this.openModal('holed');
+    this.redraw = () => this.showHoled(score, gimme, maxed, true);
     const r = this.play.round;
     const name = maxed ? 'max score' : scoreName(score.strokes, score.par);
     const d = score.strokes - score.par;
     const color = d < 0 ? COLORS.yellow : d === 0 ? COLORS.green : COLORS.white;
-    if (d < 0) sfx('great'); else if (d === 0) sfx('good'); else sfx('bad');
+    if (!quiet) { if (d < 0) sfx('great'); else if (d === 0) sfx('good'); else sfx('bad'); }
     const tot = totals(r.scores);
     const eagle = !maxed && isListedEagle(r, score);
     const unnamed = eagle && r.cfg.playerName === DEFAULT_NAME;
