@@ -446,6 +446,11 @@ DECISIONS.md with the reason.
     course views. A menu button in a round (resume, settings, save & exit,
     quit round); settings opened mid-round hide hand, difficulty and rules.
     199 unit tests and 4 Playwright tests pass (with the East Potomac tee-shot fix merged).
+    Then: flowering-shrub sprites (trees.json `c: 3`); logos for ogc, Wannamoisett and
+    Franklin; pin positions (every green keeps its centre pin and gets up to three
+    more, 10 ft from every edge, found by the game; each round gets a mixed pin sheet,
+    `src/systems/game/pins.ts`); the meter has a line at the middle of the green, no
+    ghost tick and no display-lag allowance. 376 unit tests and 4 Playwright tests pass.
 
 -   **Course chat (2026-10-18/19):** second course **Highland Links**
     (Truro, MA; 9 holes, par 35, coastal theme), section 11.5. Phase 0 of
@@ -548,8 +553,7 @@ DECISIONS.md with the reason.
     11.18, branch `course/wannamoisett`. New `seekonk` theme (very early
     fall). Pipeline gained `roof_last_share` (s05: roofs of unmapped houses
     in class-1 lidar are not trees) and `join_boundary` now fills a mapped
-    pond cut out of the course; s05 hands Eastmoreland's garden its
-    canopy (a clean build failed); every other course rebuilds as
+    pond cut out of the course; every other course rebuilds as
     committed. 378 unit tests and 4 Playwright tests pass.
 
 -   **Next task:** the third playtest (putting, yellow misses), the club's
@@ -1071,7 +1075,7 @@ latency calibration setting (± ms offset).
 -   **Overswing (100--110%):** adds distance linearly up to +8% at 110%,
     but **halves the perfect zone and doubles the curve factor**.
 
--   **Ghost tick** at last shot\'s power.
+-   **Ghost tick** at last shot\'s power: removed (developer, 2026-10-19; DECISIONS.md).
 
 -   **Perfect zone:** ±2.5% of bar width (Normal), multiplied by club,
     lie and overswing multipliers.
@@ -1141,7 +1145,7 @@ selected (on or off the green):
 
 -   The aim line and the green\'s slope overlay carry the skill.
 
--   A light \"lag\" ghost shows last putt\'s power.
+-   A light \"lag\" ghost shows last putt\'s power: removed with the ghost tick (developer, 2026-10-19).
 
 **7. Physics (Claude decides; these are the starting model and
 calibration targets)**

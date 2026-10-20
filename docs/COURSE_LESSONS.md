@@ -524,4 +524,4 @@ notes live in DECISIONS.md.
 - **Run a fixed build twice from clean** (delete `build/` and `edited/`) and
   compare checksums; start background builds with an explicit `cd` (a nohup
   shell started elsewhere found no Makefile and silently did nothing).
-- **Rebuild every course from clean in the regression check.** A step that reads its own output from a previous run (Eastmoreland's garden read `chm_local.npy` before s05 wrote it) passes in the chat that built it and fails for everyone else.
+- **Rebuild every course from clean in the regression check.** A step that reads its own output from a previous run (Eastmoreland's garden read `chm_local.npy` before s05 wrote it) passes in the chat that built it and fails for everyone else (fixed on main the same day).
