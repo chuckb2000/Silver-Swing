@@ -9,8 +9,9 @@ drawn in the game at 2 px/m), written to game/public/sprites/cards/<id>.png.
 Each course also gets a 720 x 400 view around the same green for the title
 screen's rotating backdrop (sprites/title/<id>.png, listed in sprites/title/index.json).
 
-The green is set per course in assets-src/course_cards.json ({"<id>": {"hole": n}});
-without an entry the green with the most sand and water around it is used.
+The green is set per course in assets-src/cards/<id>.json ({"hole": n, "why": "..."}),
+one file per course so two course builds never edit the same file; without one
+the green with the most sand and water around it is used.
 Reads only the exported game files (game/public/...), so it works on any
 course that has been built.
 """
@@ -27,7 +28,7 @@ HERE = Path(__file__).resolve().parent
 ROOT = HERE.parent
 PUBLIC = ROOT / "game" / "public"
 OUT = PUBLIC / "sprites" / "cards"
-CONFIG = HERE / "course_cards.json"
+CONFIG = HERE / "cards"
 
 sys.path.insert(0, str(HERE))
 from shrubs import shrub_key  # noqa: E402  (flowering shrubs, trees.json c: 3)
@@ -162,7 +163,19 @@ def _paste_clipped(img: Image.Image, spr: Image.Image, x: int, y: int):
 
 
 def config() -> dict:
-    return json.load(open(CONFIG)) if CONFIG.exists() else {}
+    """Every course's card choice (assets-src/cards/<id>.json)."""
+    return {p.stem: json.load(open(p)) for p in sorted(CONFIG.glob("*.json"))}
+
+
+def listed_courses() -> list[dict]:
+    """The listed courses, from their own course.json files (the course list itself is generated)."""
+    out = []
+    for f in sorted((PUBLIC / "courses").glob("*/course.json")):
+        c = json.load(open(f))
+        if c.get("practice") or c.get("id") != f.parent.name:
+            continue
+        out.append({"id": c["id"], "group": c.get("group")})
+    return out
 
 
 def card_hole(c: Course, cfg: dict) -> int:
@@ -196,20 +209,23 @@ def title_map(c: Course, hole: int) -> Path:
     return p
 
 
-def write_title_index():
-    """sprites/title/index.json: every title map there, one per place (grouped courses share a world)."""
-    index = json.load(open(PUBLIC / "courses" / "index.json"))["courses"]
+def tidy_title_maps():
+    """One title view per place (grouped courses share a world): the others' views go. The list
+    itself (sprites/title/index.json) is made by game/scripts/course-lists.mjs."""
     seen, maps = set(), []
-    for e in index:
+    for e in listed_courses():
         key = e.get("group") or e["id"]
         if key in seen or not (TITLE_OUT / f"{e['id']}.png").exists():
             continue
         seen.add(key)
         maps.append(e["id"])
-    (TITLE_OUT / "index.json").write_text(json.dumps({"maps": maps}) + "\n")
-    for f in TITLE_OUT.glob("*.png"):          # the other courses of a place: not needed
+    for f in TITLE_OUT.glob("*.png"):
         if f.stem not in maps:
             f.unlink()
+    import shutil
+    import subprocess
+    if shutil.which("node"):
+        subprocess.run(["node", "scripts/course-lists.mjs"], cwd=ROOT / "game", check=True)
     return maps
 
 
@@ -217,7 +233,7 @@ def main(argv: list[str]):
     OUT.mkdir(parents=True, exist_ok=True)
     ids = [a for a in argv if not a.startswith("--")]
     if not ids:
-        ids = [c["id"] for c in json.load(open(PUBLIC / "courses" / "index.json"))["courses"]]
+        ids = [c["id"] for c in listed_courses()]
     cfg = config()
     for cid in ids:
         c = Course(cid)
@@ -229,7 +245,7 @@ def main(argv: list[str]):
         print(f"[cards] {cid}: hole {hole} green -> sprites/cards/{cid}.png")
         title_map(c, hole)
     if "--sheet" not in argv:
-        print(f"[cards] title screen maps: {', '.join(write_title_index())} -> sprites/title/")
+        print(f"[cards] title screen maps: {', '.join(tidy_title_maps())} -> sprites/title/")
 
 
 if __name__ == "__main__":

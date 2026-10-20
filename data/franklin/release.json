@@ -1,0 +1,17 @@
+{
+ "release": "franklin-data",
+ "note": "build inputs not kept in git; `make fetch NAME=franklin` puts them in place (pipeline/fetch_raw.py)",
+ "files": [
+  {
+   "asset": "ma2021_cent_east_J1472668.zip",
+   "sha256": "2b076f89d2a8a782213a4a7acb93b31c1e893d09a0cfbc3b8da41fe6ef5b769b",
+   "extract": [
+    "ma2021_cent_east_J1472668tR0_C0.laz"
+   ],
+   "to": "raw/laz/",
+   "outputs": {
+    "raw/laz/ma2021_cent_east_J1472668tR0_C0.laz": "5841be58d2d2f30aa901539374103dd3c772f6dec14cc613275465a0c21ee306"
+   }
+  }
+ ]
+}

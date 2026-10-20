@@ -2,7 +2,9 @@
 
 Read this after `docs/COURSE_BUILD.md` (the procedure) and before starting a
 new course. Each lesson is something that cost time on an earlier course,
-with what to do instead. Add to it at the end of every course build.
+with what to do instead. Course chats don't edit this file (2026-10-20): they
+write their lessons in `docs/courses/<id>.md`, and the design chat folds them
+in here after the merge.
 
 Sources so far: East Potomac Golf Links (2026-10-19, three courses on one
 island), Langston (2026-10-19, a course in two parts across a lake), Indian

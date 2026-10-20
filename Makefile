@@ -1,8 +1,9 @@
-# Local Golf - one command per job (see CLAUDE.md section 12)
+# Silver Swings Golf - one command per job (see CLAUDE.md section 12)
 NAME ?= oswego_lake
+NAMES ?=
 PY   ?= python3
 
-.PHONY: dev build test e2e course assets cards all clean-course
+.PHONY: dev build test e2e course fetch regress lists assets cards all clean-course
 
 dev:            ## run the game locally (Vite dev server)
 	cd game && npm run dev
@@ -19,7 +20,16 @@ e2e:            ## Playwright smoke test (builds first)
 assets:         ## regenerate sprites, UI art and the bitmap font
 	$(PY) assets-src/build_assets.py
 
-course:         ## rebuild one course from raw/ (+ edited/) -> game/public/courses/$(NAME)
+fetch:          ## put a course's build inputs that aren't in git (lidar, big DEMs) into data/$(NAME)/raw/
+	$(PY) pipeline/fetch_raw.py $(NAME)
+
+regress:        ## rebuild every course (or NAMES="a b") and check its committed files came out the same
+	$(PY) pipeline/regress.py $(NAMES)
+
+lists:          ## make the game's course lists (courses/index.json, sprites/title/index.json)
+	cd game && node scripts/course-lists.mjs
+
+course: fetch   ## rebuild one course from raw/ (+ edited/) -> game/public/courses/$(NAME)
 	cd pipeline && \
 	$(PY) s00_prepare_rasters.py $(NAME) && \
 	$(PY) s01_osm.py $(NAME) && \

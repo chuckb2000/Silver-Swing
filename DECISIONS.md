@@ -395,6 +395,38 @@ From docs/reports/player_improvements.md ("for playability, let's do 2, 3, 4, 5,
 - **Milestones (11):** first birdie, eagle and hole in one; a course's first round, birdie and eagle; breaking 100/90/80/70 (nine holes: 50/45/40/35) and level or under par at a course; every course in a state played; every course played. Worked out from the player's finished, non-casual rounds (`src/save/milestones.ts`), so nothing extra is stored. The summary shows those the round earned; "my golf" lists them all.
 - **Title screen:** the extra buttons sit two to a row (my golf, practice, leaderboard, settings) so the menu fits a 270-texel-high screen. Credits moved into settings (developer, 2026-10-20); the title's footer says so.
 
+## Faster course building (developer, 2026-10-20: recommendations 1-3 of docs/reports/course_creation_speedup.md)
+
+- **Standing defaults** (docs/COURSE_BUILD.md 4.1): Blue tees, every penalty area
+  red, OB = the course boundary, the range OB, game-made pins, trees in a
+  fairway or a centre drive's path removed and listed, wind by region, the
+  region's theme, the chat's pick of card hole. The chat sends one intake
+  message: the data request, the defaults it will use, the genuinely open
+  questions. Reason: the developer gave the same answers on every course.
+- **No shared file in a course build.** `game/public/courses/index.json` and
+  `game/public/sprites/title/index.json` are generated from each course's
+  `course.json` (`game/scripts/course-lists.mjs`: at every Vite build, before
+  the unit tests, at the end of s10, and `make lists`) and are no longer in git.
+  A `course.json` with `"practice": true` stays off the list. Card picks moved
+  from `assets-src/course_cards.json` to `assets-src/cards/<id>.json`. The course
+  sections of CLAUDE.md (11.1-11.20) and their section 0 bullets moved to
+  `docs/courses/<id>.md`; course chats write that file (facts, calls, open
+  items, new keys, lessons) instead of CLAUDE.md, DECISIONS.md and
+  COURSE_LESSONS.md, which the design chat updates after the merge. Reason:
+  every course merge conflicted on those files.
+- **Pipeline changes are config keys only**, with a default that changes
+  nothing; a change to existing behaviour goes to the design chat.
+  `make regress` (`pipeline/regress.py`) rebuilds every course (or the ones a
+  diff can change, `--since <ref>`), compares with the committed files and
+  prints one line per course. The committed files are the baseline instead of
+  the report's `build_hashes.json`: git already holds them.
+- **`make fetch`** (`pipeline/fetch_raw.py`): files not in git are listed in
+  `data/<id>/release.json` (release asset, hash, where it goes, and outputs
+  with hashes) and downloaded through `gh api`, resuming cut downloads.
+  `make course` runs it first. Written for Franklin, Highland Links, Indian
+  Island (`data/indian_island/make_laz.py` reproduces the clipped tiles
+  byte for byte) and Wannamoisett; the other courses keep every input in git.
+
 ## Data and pipeline
 
 - **Waverley pipeline additions** (course chat, 2026-10-19), each behind a key or option no other course uses, so every existing course rebuilds as committed: `green_tilt` in `course_config.json` (s07: a per-hole tilt cap and undulation count for a green known to be steep); course-chat tools: `propose_trace.py` spec keys `source`, `water.name`, `water.hazard_why`, `bunkers.max_exg`, a green `ellipse` (placed by eye where tree shadow hides the green), the inlet pond only with `pond_seed`, the fairway classifier only when holes are listed (Indian Island's proposals come out identical); `desk_export.py --traced` (start the desk from `proposed/traced.geojson` when OSM has no holes); `desk_to_proposed.py --traced-fallback` (a hole with no desk save keeps the traced shapes, tagged `approved=pending`).
