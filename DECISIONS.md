@@ -462,6 +462,27 @@ so a hole resumed after closing the tab lists the strokes since.
   Island (`data/indian_island/make_laz.py` reproduces the clipped tiles
   byte for byte) and Wannamoisett; the other courses keep every input in git.
 
+## Gorse plays penal; punch shots say so (developer, 2026-10-20)
+
+- **Gorse** is its own surface (id 17, in bounds) and lie. The developer asked for
+  "only 20-50 yards out of it" and "very small sweet spot and lots of red":
+  every shot from gorse carries at most a distance drawn between 20 and 50 yd for
+  that lie (not shown: the label just says "gorse"), lower and quicker; the green zone is 30 %
+  of normal and the yellow band 0.35 % of bar instead of 1.2, so most taps are red;
+  misses curve 1.8 x as much; no spin, no driver, no putter; the club picked for
+  you is the shortest (a wedge to hack out). A ball landing in gorse stops almost
+  where it lands. Numbers in `rules/lie.ts` `GORSE`.
+- **Pipeline:** `course_config.json` `"gorse": {"ground": "gorse"}` paints the
+  ground under the thickets (pipeline/gorse.py, Bandon Dunes) as surface 17;
+  courses without it export exactly the ids they had (`surf_ids`). Oswego Lake,
+  Highland Links and Eastmoreland rebuild unchanged.
+- **Punch:** under a canopy the apex was always capped automatically (spec 7.4);
+  the lie now reads "punch" there so the player can see it.
+- **No percentages on lie labels** (developer, 2026-10-20: "cleaner and clear
+  from the fact that your shot doesn't go as far"): the info panel shows the
+  lie's name only ("rough", "rough flyer", "punch", "gorse"); the penalties
+  themselves are unchanged.
+
 ## Data and pipeline
 
 - **Waverley pipeline additions** (course chat, 2026-10-19), each behind a key or option no other course uses, so every existing course rebuilds as committed: `green_tilt` in `course_config.json` (s07: a per-hole tilt cap and undulation count for a green known to be steep); course-chat tools: `propose_trace.py` spec keys `source`, `water.name`, `water.hazard_why`, `bunkers.max_exg`, a green `ellipse` (placed by eye where tree shadow hides the green), the inlet pond only with `pond_seed`, the fairway classifier only when holes are listed (Indian Island's proposals come out identical); `desk_export.py --traced` (start the desk from `proposed/traced.geojson` when OSM has no holes); `desk_to_proposed.py --traced-fallback` (a hole with no desk save keeps the traced shapes, tagged `approved=pending`).
@@ -550,3 +571,19 @@ so a hole resumed after closing the tab lists the strokes since.
 
 - TypeScript 6.0.3, Vite 8, Vitest 5, Phaser 3.90.0, Playwright 1.56.0 (matches the preinstalled Chromium build).
 - `window.__autoplay` (src/dev/autoplay.ts) is a robot golfer used by the Playwright smoke test; it drives the real input path (`PlayScene.tap` with timestamps).
+
+## The daily course stays put for the day (developer, 2026-10-20)
+
+- The developer played the daily at Stone Creek in the morning; by the
+  afternoon it showed East Potomac Red. The day's course was picked from the
+  whole course list, so each course merged that day (Gearhart, Bandon Trails,
+  Chambers Bay) moved it. Now only the courses in the daily rotation on that
+  day count (`src/data/dailyRoster.ts`: course id and first day). The sixteen
+  courses of 2026-10-20 start that day (so 2026-10-20 is Stone Creek again);
+  the three merged that afternoon start 2026-10-21. When a course is merged,
+  the design chat adds it from the next day (docs/COURSE_BUILD.md section 0).
+  A course not listed is never the daily; a unit test checks every course is.
+- **Text that ran out of its box:** the title's daily button now grows to fit
+  the course name ("daily: east potomac red course"), and a course card's
+  second line keeps to one line, dropping the town when it doesn't fit
+  (Chambers Bay: "18 holes · par 72").

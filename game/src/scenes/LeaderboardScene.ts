@@ -12,6 +12,7 @@ import { BirdieRow, fetchBirdieRecords, fetchBoard, fetchDaily, fetchDailyWeek, 
 import { FeedRow, timeAgo } from '../save/feed';
 import { shareRound } from '../ui/shareCard';
 import { addDays, dailyPlan, dayStandings, weekStandings, weekStart } from '../systems/game/daily';
+import { DAILY_ROSTER } from '../data/dailyRoster';
 import { birdiesIn, EagleEvent, featName } from '../save/feats';
 import { loadEagles } from '../save/store';
 import { lengthLabel, lengthsFor } from './flow';
@@ -187,7 +188,7 @@ export class LeaderboardScene extends MenuScene {
     if (online) tab([['friends', 'friends'], ['device', 'this device']], src, (v) => { source = v as 'friends' | 'device'; });
     tab([['today', 'today'], ['week', 'this week']], dailyWhen, (v) => { dailyWhen = v as 'today' | 'week'; });
     const day = localDay(new Date().toISOString());
-    const plan = dailyPlan(day, app.courses);
+    const plan = dailyPlan(day, app.courses, DAILY_ROSTER);
     const info = plan ? app.courses.find((c) => c.id === plan.courseId) : undefined;
     const first = weekStart(day);
     let list: LeaderboardEntry[] | null = null;

@@ -26,7 +26,7 @@ from shapely.affinity import translate
 from shapely.geometry import LineString, MultiPolygon, Point, Polygon
 from shapely.ops import unary_union
 
-from common import boundary_rings, build_dir, course_name_from_argv, layouts, load_config, PX_PER_M, ROOT, SURF, World, write_json
+from common import boundary_rings, build_dir, course_name_from_argv, GORSE_SURF, layouts, load_config, PX_PER_M, ROOT, SURF, World, write_json
 from terrain import tier_offset
 from s08_surface import smooth_fairways
 
@@ -81,10 +81,12 @@ def build_lut(P, overrides=None):
         S["building"]: ["G2", "G2", "G3", "G3"],
         S["range"]: ["G5", "G6", "G7", "G7"],
         S["ob_sand"]: ["S0", "S1", "S2", "S2"],
+        GORSE_SURF: ["G0", "G1", "G2", "G2"],  # ground under gorse: as woods unless the theme says ("gorse")
     }
+    named = {**S, "gorse": GORSE_SURF}
     for name, keys in (overrides or {}).items():
-        if name in S:  # "rough_band" is an art role, not a surface (see rough_band_mask)
-            t[S[name]] = keys
+        if name in named:  # "rough_band" is an art role, not a surface (see rough_band_mask)
+            t[named[name]] = keys
     lut = np.zeros((32, 4, 3), np.uint8)
     for sid, names in t.items():
         for i, n in enumerate(names):
@@ -98,6 +100,7 @@ for k, v in {"ob_woods": 1, "ob": 2, "ob_building": 2, "ob_road": 3, "ob_water":
              "range": 7, "fairway": 8, "fringe": 9, "cartpath": 10, "tee": 11, "bunker": 12, "green": 13,
              "water": 14, "building": 15, "ob_sand": 3}.items():
     PRIO[S[k]] = v
+PRIO[GORSE_SURF] = PRIO[S["woods"]]
 
 
 def terrain_z_px(world, base, greens, H, W):
@@ -408,7 +411,7 @@ def main():
     # textures -----------------------------------------------------------
     n1 = rng.random((H, W))
     n2 = np.kron(rng.random((H // 2 + 1, W // 2 + 1)), np.ones((2, 2)))[:H, :W]
-    grassy = np.isin(surf, [S["rough"], S["ob"], S["woods"], S["ob_woods"], S["range"], S["ob_building"], S["building"]])
+    grassy = np.isin(surf, [S["rough"], S["ob"], S["woods"], GORSE_SURF, S["ob_woods"], S["range"], S["ob_building"], S["building"]])
     t = t + np.where(grassy & (n2 < 0.07), -1, 0) + np.where(grassy & (n2 > 0.95), 1, 0)
     fine = np.isin(surf, [S["fairway"], S["fringe"], S["tee"]])
     t = t + np.where(fine & (n1 < 0.025), -1, 0) + np.where(fine & (n1 > 0.985), 1, 0)
@@ -438,8 +441,8 @@ def main():
         rgb[mask] = P[col]
     put((surf == S["bunker"]) & (n1 < 0.035), "S0")
     put((surf == S["bunker"]) & (n1 > 0.97), "S2")
-    put((surf == S["woods"]) & (n1 < 0.10), "B1")
-    put((surf == S["woods"]) & (n1 > 0.96), "B0")
+    put(np.isin(surf, [S["woods"], GORSE_SURF]) & (n1 < 0.10), "B1")
+    put(np.isin(surf, [S["woods"], GORSE_SURF]) & (n1 > 0.96), "B0")
     put((surf == S["ob_woods"]) & (n1 < 0.05), "B0")
     put((surf == S["ob_road"]) & (n1 < 0.03), "K2")
     put((surf == S["cartpath"]) & (n1 < 0.04), "K2")
@@ -463,7 +466,7 @@ def main():
     for dy, dx in ((1, 0), (-1, 0), (0, 1), (0, -1)):
         sh = np.roll(np.roll(surf, dy, 0), dx, 1)
         own_edge |= sh != surf
-    soft = edge & np.isin(surf, [S["rough"], S["fairway"], S["fringe"], S["tee"], S["ob"], S["woods"], S["range"], S["cartpath"]])
+    soft = edge & np.isin(surf, [S["rough"], S["fairway"], S["fringe"], S["tee"], S["ob"], S["woods"], GORSE_SURF, S["range"], S["cartpath"]])
     rgb[soft] = lut[surf[soft], 0]
     rgb[soft & mown] = blut[0]
     put(own_edge & (surf == S["bunker"]), "S0")

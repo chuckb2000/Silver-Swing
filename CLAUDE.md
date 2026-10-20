@@ -452,10 +452,11 @@ DECISIONS.md with the reason.
     `src/systems/game/pins.ts`); the meter has a line at the middle of the green, no
     ghost tick and no display-lag allowance. 376 unit tests and 4 Playwright tests pass.
 
--   **Courses (course chats, 2026-10-18 to 2026-10-20):** sixteen data
-    folders, eighteen courses on offer (East Potomac is three) in five states;
-    Gearhart Golf Links (Gearhart OR) and Bandon Trails (Bandon OR, `bandon`
-    theme) merged 2026-10-20.
+-   **Courses (course chats, 2026-10-18 to 2026-10-20):** seventeen data
+    folders, nineteen courses on offer (East Potomac is three) in six states;
+    Gearhart Golf Links (Gearhart OR), Bandon Trails (Bandon OR, `bandon`
+    theme) and Chambers Bay (University Place WA, `puget` theme; trees from
+    OSM until its lidar arrives) merged 2026-10-20.
     Each course's build history, facts and open items are in
     `docs/courses/<id>.md` (section 11).
 
@@ -529,10 +530,27 @@ DECISIONS.md with the reason.
     clubs of three nines). Cross-country golf: report only
     (`design/cross-country`), not to be built yet (developer).
 
--   **Next task:** Langston's committed files predate a rebuild: a fresh
-    build keeps one tree 19 m from the 10th Royal tee that the committed build
-    removed (every other course rebuilds unchanged, 2026-10-20); recommended:
-    list it in Langston's `drop_trees`. Item 1 of the player improvements (swing coach) is on
+-   **Gorse (design chat, 2026-10-20):** branch `design/gorse`, merged
+    2026-10-20: surface 17 `gorse` (course_config `"gorse": {"ground":
+    "gorse"}`), a lie that carries 20-50 yd (drawn per lie), a green zone
+    0.3x normal, a thin yellow band, curve x1.8, no spin, no driver or putter;
+    a ball landing in it stops dead. Punch shots under a canopy now say
+    "punch". DECISIONS.md "Gorse plays penal; punch shots say so". Bandon
+    Dunes must switch its gorse ground to `gorse` and rename its theme (Bandon
+    Trails owns `bandon`).
+
+-   **Langston tree (2026-10-20):** the tree 19 m from the 10th Royal tee is
+    in Langston's `drop_trees` (developer: remove it); `fix/langston-tree`
+    merged 2026-10-20. Every course now rebuilds to its committed files.
+
+-   **Daily fix (design chat, 2026-10-20):** the daily course is picked from
+    the courses in the rotation that day (`src/data/dailyRoster.ts`), so a
+    course merged today no longer changes today's daily; the design chat adds
+    each merged course from the next day. Long daily names and Chambers Bay's
+    card line stay inside their boxes. DECISIONS.md "The daily course stays
+    put for the day".
+
+-   **Next task:** Item 1 of the player improvements (swing coach) is on
     `design/coach`, unmerged. Also: the third playtest (putting, yellow
     misses), the club's printed scorecard and the hole 3 Blue tee box. New
     courses: a separate chat following docs/COURSE_BUILD.md; after each one
@@ -1305,8 +1323,8 @@ by √power, so partial shots fly lower.
                                                        chipping allowed
   -------------------------------------------------------------------------
 
-The info panel always shows the current lie and its effect, e.g. \"rough
-−15%\".
+The info panel always shows the current lie by name, e.g. \"rough\"
+(no percentages: developer, 2026-10-20).
 
 **7.5 Cup**
 
@@ -1441,7 +1459,8 @@ calm (≈60% of holes below half the max). It is seeded per round.
     (`data/practice`, not on the course list), nothing scored or saved.
 
 -   **Daily round** (2026-10-20): one course a day, nine holes at Normal,
-    fixed by the date; one counted round per player code and day.
+    fixed by the date and the day's rotation (`src/data/dailyRoster.ts`; a
+    merged course joins the next day); one counted round per player code and day.
 
 -   **Later:** local pass-and-play for up to 4 players
 
@@ -1538,6 +1557,7 @@ files (`game/scripts/course-lists.mjs`). The first course, Oswego Lake, is
 | Course | File |
 |---|---|
 | Bandon Trails | `docs/courses/bandon_trails.md` |
+| Chambers Bay | `docs/courses/chambers_bay.md` |
 | East Potomac Golf Links (Blue, White and Red courses) | `docs/courses/east_potomac.md` |
 | Eastmoreland Golf Course | `docs/courses/eastmoreland.md` |
 | Franklin Country Club | `docs/courses/franklin.md` |
