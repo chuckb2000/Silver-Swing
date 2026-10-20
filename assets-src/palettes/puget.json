@@ -1,0 +1,73 @@
+{
+  "name": "Puget Sound links (Chambers Bay)",
+  "note": "Course theme palette (<= 32 colours; same keys as pnw.json plus F0-F2, like coastal). A links course on an old gravel mine above Puget Sound: tawny golden native fescue for the rough (no cut rough at Chambers Bay), firm yellow-green fescue fairways, brighter Poa greens, cool grey-white waste sand, grey-blue sound water, dark Douglas firs on the bluff (the pnw tree painters). From the developer's photos in the release chambers-bay-data (2026-10-20). Shadows are a 35% black overlay on top of these.",
+  "colors": {
+    "G0": "#17301f",
+    "G1": "#22422a",
+    "G2": "#305633",
+    "G3": "#47703a",
+    "G4": "#668f3c",
+    "G5": "#77a043",
+    "G6": "#88b14b",
+    "G7": "#9bc356",
+    "G8": "#aed463",
+    "G9": "#cbe58f",
+    "L0": "#5a6837",
+    "L1": "#6d7c40",
+    "L2": "#82904c",
+    "S0": "#a8a596",
+    "S1": "#d3d1c5",
+    "S2": "#e9e8df",
+    "W0": "#1b435c",
+    "W1": "#285b78",
+    "W2": "#6895ab",
+    "K0": "#26272d",
+    "K1": "#55565d",
+    "K2": "#7d7e86",
+    "K3": "#aeaba0",
+    "K4": "#d2cfc4",
+    "B0": "#4a3424",
+    "B1": "#6f5038",
+    "B2": "#93704f",
+    "R0": "#5b5e66",
+    "WH": "#f6f6f2",
+    "F0": "#86744a",
+    "F1": "#a4935f",
+    "F2": "#bfb07a"
+  },
+  "lut": {
+    "rough": [
+      "F0",
+      "F1",
+      "F2",
+      "F2"
+    ]
+  },
+  "aliases": {
+    "TUFT": "F0"
+  },
+  "minimap": {
+    "ob": "#6d7c40",
+    "rough": "#a4935f",
+    "woods": "#305633",
+    "ob_woods": "#22422a",
+    "water": "#285b78",
+    "ob_water": "#285b78",
+    "bunker": "#d3d1c5",
+    "ob_sand": "#d3d1c5"
+  },
+  "minimap_trees": {
+    "conifer": [
+      "#173322",
+      "#2d5536"
+    ],
+    "deciduous": [
+      "#2f4a22",
+      "#4f6d34"
+    ]
+  },
+  "trees": {
+    "conifer": "conifer",
+    "deciduous": "deciduous"
+  }
+}

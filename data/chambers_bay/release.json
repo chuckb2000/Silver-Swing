@@ -1,0 +1,23 @@
+{
+ "release": "chambers-bay-data",
+ "note": "build inputs not kept in git; `make fetch NAME=chambers_bay` puts them in place (pipeline/fetch_raw.py). The DEM clip is also committed, so the 303 MB tile is only fetched when the clip is missing.",
+ "files": [
+  {
+   "asset": "USGS_1M_10_x53y523_WA_PierceCounty_2020_A20.tif",
+   "sha256": "c86098a0df41ed78716cba8b4df4a5bb73cf49cf3bd2fa2993f8805918c142f1",
+   "run": "python3 pipeline/clip_raster.py {file} data/chambers_bay/raw/usgs_dem_2020_1m_clip.tif --epsg 32610 --bbox 531519 5227314 532799 5229106 --margin 100",
+   "outputs": {
+    "raw/usgs_dem_2020_1m_clip.tif": "734846e429ebd5ae361fb8f905428c1ba09a4570d08677379650217ed5c55913"
+   }
+  },
+  {
+   "asset": "exportImage.jpg",
+   "sha256": "854996b87521966c7197a50e43ecc577e9c702d0e22febe5d3ec0072e4d1d9d2",
+   "to": "raw/naip/",
+   "outputs": {
+    "raw/naip/exportImage.jpg": "854996b87521966c7197a50e43ecc577e9c702d0e22febe5d3ec0072e4d1d9d2"
+   },
+   "note": "USDA NAIP via the USGS National Map image service, 2560 x 3584 px JPEG of the world (0.5 m/px; x0 531519, top 5229106, EPSG:32610, placed by the request bbox). Reference for the proposed Blue tees (proposed/tees_blue_naip.geojson); not read by make course"
+  }
+ ]
+}

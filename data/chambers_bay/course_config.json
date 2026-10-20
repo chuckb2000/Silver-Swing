@@ -1,0 +1,51 @@
+{
+  "id": "chambers_bay",
+  "name": "Chambers Bay",
+  "location": "University Place, Pierce County, Washington",
+  "state": "WA",
+  "architects": "Robert Trent Jones Jr., with Bruce Charlton (on site) and Jay Blasi (project architect), 2007 (thefriedegg.com)",
+  "theme": "puget",
+  "epsg": 32610,
+  "osm_sources": [
+    "raw/overpass.geojson"
+  ],
+  "boundary_name": "Chambers Bay Golf Course",
+  "dtm": {
+    "path": "raw/usgs_dem_2020_1m_clip.tif",
+    "units": "m",
+    "source": "USGS 3DEP 1 m DEM, project WA_PierceCounty_2020_A20 (2020 Lidar: Pierce County, WA, flown 10 Apr - 4 Jun 2020), tile x53y523 (published 2021-06-13), clipped to the world + 100 m by pipeline/clip_raster.py (release.json); EPSG:26910 (NAD83 / UTM 10N), NAVD88 metres; downloaded by the developer 2026-10-20 (GitHub release chambers-bay-data)"
+  },
+  "world": {
+    "x0": 531519,
+    "y0": 5227314,
+    "width": 1280,
+    "height": 1792,
+    "note": "OSM course boundary bbox (917 x 1,301 m, UTM 10N) + scenery, rounded out to whole 256 m chunks and centred: 1,280 m east-west (182 m each side), 1,792 m north-south (246 m each side)"
+  },
+  "lake_level_max_m": -1.2,
+  "tee_sets": [
+    {
+      "name": "Blue",
+      "playable": true,
+      "rating": 72.4,
+      "slope": 134,
+      "total_yd": 6748
+    }
+  ],
+  "default_tee": "Blue",
+  "scorecard_source": "Club scorecard PDF (Golf ScoreCards Inc., 10/2025, Chambers-Bay-Scorecard-10-2.pdf, supplied by the developer in the release chambers-bay-data, 2026-10-20). Every tee row adds up to its printed total. Built from the Blue tees only (COURSE_BUILD 4.1 default).",
+  "penalty_default": "red",
+  "driving_range_is_ob": true,
+  "wind_mph": {
+    "minMph": 3,
+    "maxMph": 14
+  },
+  "trees_off_fairways_m": 2,
+  "attribution": [
+    "Map data © OpenStreetMap contributors (ODbL)",
+    "Elevation: U.S. Geological Survey 3D Elevation Program (2020 Pierce County, WA lidar, 1 m DEM)",
+    "Imagery for tee placement: USDA National Agriculture Imagery Program",
+    "Scorecard: Chambers Bay club card (Golf ScoreCards Inc., 10/2025)"
+  ],
+  "notes": "Phase 1 decisions (developer, 2026-10-20): Blue tees only; all water red (none mapped on the course); OB = the OSM boundary (BNSF railway, beach and Puget Sound outside it); trails and cart paths inside give free relief; the wetland inside the boundary (w582088908) stays woods, as the pipeline draws it; new theme 'puget' (the developer: coastal would be slightly off); wind 'pumped up a bit' to the open-coast 3-14 mph; the card and title images may be committed. Built without the lidar point cloud (developer 2026-10-20, option a: NOAA had not delivered; the course has one tree in play): trees are the OSM fallback (the Lone Fir node plus a seeded fill of the three OSM woods, all outside the boundary). When the NOAA zip arrives, add the 'laz' entry from docs/courses/chambers_bay.md and its release.json entry, and rebuild."
+}
