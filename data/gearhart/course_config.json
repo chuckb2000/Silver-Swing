@@ -1,0 +1,35 @@
+{
+  "id": "gearhart",
+  "name": "Gearhart Golf Links",
+  "location": "Gearhart, Clatsop County, Oregon",
+  "state": "OR",
+  "architects": "Front nine 1892, back nine 1913; links restoration 2013-15 (Wikipedia; unverified)",
+  "theme": "pnw",
+  "epsg": 32610,
+  "osm_sources": ["raw/overpass.geojson"],
+  "boundary_name": "Gearhart Golf Links",
+  "world": {
+    "x0": 428261,
+    "y0": 5097199,
+    "width": 1024,
+    "height": 1792,
+    "note": "provisional: OSM boundary bbox (572 x 1,364 m) + 120 m each side, rounded out to whole 256 m chunks and centred (about 220 m of scenery on every side)"
+  },
+  "tee_sets": [
+    {"name": "Stones", "playable": false, "rating": 72.7, "slope": 139, "total_yd": 6551},
+    {"name": "Black", "playable": true, "rating": 70.8, "slope": 137, "total_yd": 6176},
+    {"name": "White", "playable": false, "rating": 69.3, "slope": 130, "total_yd": 5741},
+    {"name": "Green", "playable": false, "rating": 66.1, "slope": 121, "total_yd": 5157}
+  ],
+  "default_tee": "Black",
+  "scorecard_source": "Club scorecard PDF (Golf ScoreCards Inc., 03/2020, 'Version 1'), GitHub release gearhart-data, supplied by the developer 2026-10-20. Every row adds up to its printed Out/In/Total. 'The Stones' is stored as Stones. The card prints no rating or slope: men's ratings from GolfPass (golfpass.com/travel-advisor/courses/51-gearhart-golf-links/scorecard-and-layout, retrieved 2026-10-20; unverified). GolfPass also lists a Craic set (5,896) that is not on the card, and its White row differs from the card only on hole 7 (273 against the card's 328; GolfPass's White holes add to 5,686). Stones, Black and Green agree hole by hole. Full card with the ladies' handicap row in scorecard_full.csv",
+  "penalty_default": "red",
+  "driving_range_is_ob": true,
+  "red_water_osm": ["w422896233"],
+  "wind_mph": {"minMph": 3, "maxMph": 14},
+  "trees_off_fairways_m": 2,
+  "attribution": [
+    "Map data © OpenStreetMap contributors (ODbL)"
+  ],
+  "notes": "Standing defaults (COURSE_BUILD.md 4.1): Black tees only, all water red (Neacoxie Creek, w422896233, by the 6th and 8th tees: red_water_osm), OB = the OSM boundary, wind 3-14 mph (open coast), theme pnw. DTM/CHM, attribution for DOGAMI and the OSIP photo, and the intake answers (hole numbering 14-16, roads and parking lots, lidar age) are pending."
+}
