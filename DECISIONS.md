@@ -13,7 +13,7 @@ The developer was away overnight and asked for the work not to stop for permissi
   - The original speed is the spec's trip time: 1.2 / 1.0 / 0.8 s per 100 % on Easy / Normal / Pro. The starting speeds stay 2.0 / 1.6 / 1.25 s.
   - After tap 2 the cursor comes back at the speed it had at tap 2.
   - **Peak speed halved back** (developer, 2026-10-20 playtest: "the meter gets going a little too fast now ... split the difference"): the speed at 100 % is now halfway between the old constant speed and the spec's, 1.6 / 1.3 / 1.0 s per 100 % on Easy / Normal / Pro (was 1.2 / 1.0 / 0.8). The starting speeds are unchanged.
-  - At Normal, a full swing reaches 100 % in 1.25 s (it was 1.6 s). A 30 % chip comes back at 74 % of a full swing's return speed.
+  - With these speeds a full swing reaches 100 % in 1.44 s on Normal (1.79 s Easy, 1.12 s Pro; a constant meter at the starting speed took 1.6 s on Normal), and a 30 % chip comes back at 87 % of a full swing's return speed (86 % on Easy and Pro). Recomputed from `src/data/difficulty.ts` in the afternoon review, 2026-10-20 (the note had said 1.25 s and 74 %, the figures before the peak speed was halved back).
   - `SwingMeter.tapTimes` gives the robot golfer exact tap times.
 - **Only the dead centre of the green zone goes straight** (developer). Inside the zone, a tap off centre curves the ball that way, in proportion to the offset. At the zone's edge the curve is 0.4 × the club's curve factor: a driver curves 0.8°, about 3 yd, half the smallest yellow miss. Putts start up to 0.25° off line at the edge.
   - The inner 30 % of the zone still says "perfect".
@@ -572,6 +572,56 @@ so a hole resumed after closing the tab lists the strokes since.
 - TypeScript 6.0.3, Vite 8, Vitest 5, Phaser 3.90.0, Playwright 1.56.0 (matches the preinstalled Chromium build).
 - `window.__autoplay` (src/dev/autoplay.ts) is a robot golfer used by the Playwright smoke test; it drives the real input path (`PlayScene.tap` with timestamps).
 
+## Afternoon review fixes: engine (2026-10-20)
+
+From the afternoon review; branch `fix/afternoon-engine`. Tests:
+`tests/unit/afternoon_engine.test.ts`, `tests/unit/afternoon_snapshot.test.ts`.
+
+- **Water beyond the boundary** (Round Lake at Bandon Trails 7, Neacoxie Creek at
+  Gearhart 5-8: red penalty areas by the developer's choice). The reference point
+  for relief was the last sample off the water, usually on the out-of-bounds bank
+  between the boundary line and the water, so back-on-the-line and lateral drops had
+  no valid spot. The reference is now the last dry sample inside the boundary
+  (`round.ts waterReference`). A ball that crossed more than `WATER_BANK_M` (20 m,
+  tune; the banks measure 0-20 m) of out-of-bounds ground before reaching water beyond
+  the boundary went out of bounds first: stroke and distance, the OB banner. Every
+  tee shot into that water at Gearhart 6 and Bandon Trails 7 now gets its drops.
+- **Same notion of water for the reference and the drop check:** the reference point
+  is the last sample that is off the mapped water *and* outside the penalty area's
+  polygon (the outline can be wider than the mapped water). Lateral drops at Stone
+  Creek 4 that had no valid spot now have one.
+- **A ball against a trunk on a steep slope** rolled into the trunk, bounced back and
+  repeated until the 45 s cap (Eastmoreland 13). A rolling ball that meets a trunk
+  slower than 0.3 m/s (`sim.ts TRUNK_REST_SPEED`) now stops against it.
+- **Touching greens are one putting surface** (Langdon's 9/18 double green, traced as
+  two halves 0.00 m apart). Greens less than 0.5 m apart (`greenPartners`) are not
+  each other's wrong green: an approach to 18 on the hole-9 half is on the green
+  (putter, putts and green in regulation count; holing out unchanged). Langdon's are
+  the only touching greens on any hole. The putting view needs no change: a ball
+  outside the hole's view window gets the course view, as before.
+- **Longer putter settings:** 120 and 160 ft (36 and 48 m) after 80 ft (24 m), so the
+  far corners of big greens (Langdon, Chambers Bay, Bandon Trails) can be putted from;
+  the automatic setting picks them. A setting is a distance, not a power (100 % of it
+  rolls that far on a flat stimp-10 green), so the putt calibration is unchanged. The
+  farthest half of Langdon's double green from the other pin (up to about 90 m) still
+  needs a chip.
+- **Gorse carry, one formula:** carry = min(club x lie x power factor(power x swing
+  length), cap) (`outcome.ts shotCarry`), for the strike, the club's carry label, the
+  meter readout and the automatic swing length (the labels had shown cap x swing x
+  power, and the swing length was chosen from it).
+- **Gorse looks and plays like a bad lie:** the info panel's lie is yellow for rough,
+  punch, gorse and bunkers, or any lie that costs distance (`lie.ts lieIsPenal`; it was
+  yellow only below full distance, so gorse and a rough flyer showed green); no topspin
+  from gorse either (`spinFor`).
+- **Meter readout** uses the overswing power factor (110 % reads +8 %, not +10 %).
+- **A mulligan after a resume** takes back the penalty too: the state before the last
+  stroke is saved in the round snapshot (`beforeShot`). Rounds saved before this keep
+  the old behaviour (the stroke only) for that one shot.
+- **Default aim in the wind:** the clear-line check now flies the perfect shot in the
+  hole's steady wind (no gust) and also rejects a line that finishes on a wrong green.
+  It still only turns the aim up to 16 degrees: into some winds no driver line on
+  Eastmoreland 14 clears the creek, and the club is still the player's choice.
+
 ## The daily course stays put for the day (developer, 2026-10-20)
 
 - The developer played the daily at Stone Creek in the morning; by the
@@ -587,3 +637,91 @@ so a hole resumed after closing the tab lists the strokes since.
   the course name ("daily: east potomac red course"), and a course card's
   second line keeps to one line, dropping the town when it doesn't fit
   (Chambers Bay: "18 holes · par 72").
+
+## Afternoon review fixes: screens (2026-10-20)
+
+Branch `fix/afternoon-ui`, from the afternoon review of the screens and flow.
+
+- **A round in progress is never thrown away without asking.** "tee off" on
+  the new-round screen and the daily round (title, and the leaderboard's new
+  "play today's round" on an empty day board) ask "you have a round in
+  progress at <course>, hole N - start a new one and lose it?" (keep it /
+  start new), in the style of the round menu's "quit this round?"
+  (`ui/confirm.ts`, `flow.confirmDiscard`).
+- **The name is obvious (developer: "it should be more obvious that players
+  need to enter their name").** Without one the title shows "set your name for
+  the leaderboard" (yellow, under play and the daily), the new-round screen's
+  name row is orange ("your name: tap to enter it · for the boards"), and a new
+  round or the daily asks once, with the reason ("rounds without a name stay on
+  this device and never reach the shared boards") and a "skip" button. Skipped
+  once, it is not asked again on that visit; "player" still plays. The summary's
+  name button is orange while there is none.
+- **Update offer only for an old page.** The page loads network-first, so after
+  a deploy it is already new: the waiting worker now takes over quietly when the
+  running bundle (index.html's module script) is the one the site serves, and
+  the page fetches its files again so the new worker keeps them for offline
+  play. Only a page older than the site (opened offline) is offered "update -
+  tap to reload".
+- **Layout:** the summary's name button sits over the note that explains it (it
+  covered the end of the title on a desktop and sat on a two-line note on a
+  phone), and the card moves up to clear it on a short screen; the scorecard's
+  stats line wraps between items ("gir 6/9" stays together) and the panel grows
+  with it (also on the share picture); phone scorecard cells are 19 texels (17:
+  three-digit yardages touched); a long title menu moves up to clear the footer;
+  the yes/no title no longer wraps into its text; the empty eagles / birdies
+  boards say so under the column headers; on a phone the title's lines close up
+  under the 1x course count.
+- **In a round:** the relief and drop panels refresh the HUD (it showed the
+  stroke before) and hide the shot controls; "back on the line outside the
+  bunker" lost "(2 strokes)" (the button adds "(+2)"); the result banner moves
+  to the top in a putting view (it covered the cup or golfer); a panel over the
+  course (hole complete, menu, map) hides the banner; an approach that ends on
+  the green reports its length in yards ("185 ft" for a 63-yd wedge), what is
+  left in feet; the carry banner says "yd"; the off-screen ball arrow sits at
+  the nearest point of the free screen edge, the right edge under the mini-map
+  included (it floated mid-fairway); on a portrait screen the aim framing moves
+  up 24 texels (its bottom controls are deeper); trees in front of the cup and
+  flag fade in the course view too (six default pins were hidden); a back-nine
+  round's card shows only the back nine; "pitching w" is "p wedge"
+  ("pitching wedge" fills the club panel edge to edge and runs out of the
+  two-column rewatch buttons).
+- **Daily boards keep the day's own course:** rounds tagged with a day but
+  played on another course (a daily started before the day's rotation was
+  fixed) are left off that day's and the week's boards (`playsPlan`).
+
+## Settings trimmed, rotating course cards, softer spin (developer, 2026-10-20)
+
+- **Settings:** units, input latency and the OB rule are gone ("no one is going to
+  mess around with input latency, they shouldn't have an option what OB rules to
+  play, everyone is going to be using yards"). Saved settings are forced to yards,
+  0 ms and stroke and distance when loaded (`save/store.ts`); the engine keeps the
+  options for tests.
+- **Course cards rotate up to four greens** ("so much water because it seems like
+  the water hole got picked for every course"): `assets-src/course_cards.py` writes
+  a strip of 208 x 128 frames per course. The course's own green ("hole" in
+  `assets-src/cards/<id>.json`) comes first, then the three greens with the most sand
+  and trees around them, at most one more where water fills the view, no
+  neighbouring holes while others are left, and none whose flag a tree hides (checked
+  on the rendered card). A course chat can list its own: `"holes": [n, ...]`. The
+  card shows one frame at a time, changing every 3 s, neighbours in turn. The title
+  screen views still use "hole". Wide screens now show two rows of cards.
+- **Spin** ("backspin and front spin are too powerful: their effectiveness should be
+  cut down like 50% from currently and like 95% when you're hitting out of the rough
+  or sand"): `spinEffect` gives 0.5 of the chosen spin from a clean lie and 0.05 from
+  rough, under trees and both kinds of bunker (rough was 0.3, backspin only; topspin
+  was full everywhere); gorse none. A wedge spins back at most 1 m (was 2 m) and only
+  from a clean lie.
+
+## Hide me from the leaderboards (developer, 2026-10-20)
+
+- "There should be a setting to hide yourself from all leaderboards." Settings has
+  "leaderboards: show me / hide me". Rounds and eagles are still uploaded (so "my
+  golf" on another device with the player code still has them, and showing again
+  needs no re-upload); the server keeps a `hidden` table of player keys and every
+  shared list leaves those keys' rows out: course boards, the daily day and week,
+  recent eagles, most birdies, friends' activity, and the record badges in the
+  activity feed. The choice is sent on change and retried before each upload until
+  the server confirms (`save/online.ts` `syncHidden`). This device's own board still
+  shows the player's rounds. A hidden player isn't asked for a name, and the summary
+  says the round stays off the shared boards. D1 schema 4 adds the table by itself.
+

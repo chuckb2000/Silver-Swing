@@ -68,6 +68,18 @@ export function missCurve(excess: number, band = GOOD_BAND): number {
 
 export const powerFactor = (p: number) => (p <= 1 ? p : 1 + 0.08 * Math.min(1, (p - 1) / 0.1));
 
+/**
+ * Nominal carry (m, flat and calm, before any miss) of a club from a lie at a
+ * swing length and meter power: club carry x lie x power factor of
+ * (power x swing length), never past the lie's carry cap (gorse). The strike,
+ * the club's carry label, the meter readout and the automatic swing length all
+ * use this, so they agree.
+ */
+export function shotCarry(club: Club, lie: LieMods, swingScale = 1, power = 1): number {
+  const full = club.carryM * powerFactor(power * swingScale) * (lie.splash ? 0.45 : 1) * lie.distMult;
+  return lie.carryCap !== undefined ? Math.min(full, lie.carryCap) : full;
+}
+
 export function perfectHalfWidth(base: number, club: Club, lie: LieMods, overswing: boolean): number {
   return base * lie.windowMult * club.windowMult * (overswing ? 0.5 : 1);
 }
@@ -84,14 +96,11 @@ export function strikeFrom(m: MeterResult, club: Club, lie: LieMods, perfectZone
   const p = m.power * swingScale;
   const pf = powerFactor(p);
   const overswing = p > 1.0001;
-  const splashMult = lie.splash ? 0.45 : 1;
-  let baseCarry = club.carryM * pf * splashMult * lie.distMult;
+  const uncapped = shotCarry(club, { ...lie, carryCap: undefined }, swingScale, m.power);
+  const baseCarry = shotCarry(club, lie, swingScale, m.power);
   let flightScale = Math.sqrt(Math.min(pf, 1.08));
-  if (lie.carryCap !== undefined && baseCarry > lie.carryCap) {
-    // gorse: the club can't get through - the ball comes out short, lower and sooner
-    flightScale *= Math.sqrt(lie.carryCap / baseCarry);
-    baseCarry = lie.carryCap;
-  }
+  // gorse: the club can't get through - the ball comes out short, lower and sooner
+  if (baseCarry < uncapped) flightScale *= Math.sqrt(baseCarry / uncapped);
   let apex = club.apexM * flightScale;
   const hang = club.hangS * flightScale;
   const band = lie.goodBand ?? GOOD_BAND;

@@ -15,7 +15,9 @@ const VERSIONS = 'courses/versions.json';
 let versions = null;
 let versionsAt = 0;
 
-self.addEventListener('install', () => { /* waits until the page asks (an update is offered on the title screen) */ });
+// waits until the page asks: at once when the page is already this version (it
+// loads network-first), else after the player takes the update offered on the title
+self.addEventListener('install', () => {});
 
 self.addEventListener('message', (e) => {
   if (e.data === 'skip-waiting') self.skipWaiting();

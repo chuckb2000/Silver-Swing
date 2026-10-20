@@ -20,6 +20,7 @@ import { uiCamera } from '../scale';
 import type { PlayScene } from './PlayScene';
 import { finishRound } from './flow';
 import { courseHoleFor } from '../systems/game/round';
+import { cardBlocks } from '../systems/game/lengths';
 import { strokeLabel } from '../systems/game/strokes';
 import type { LeaderboardEntry } from '../save/entry';
 import { DRILL_BALLS, PUTTING_GREENS, RangeShot } from '../systems/game/practice';
@@ -311,8 +312,7 @@ export class HudScene extends Phaser.Scene {
     this.unplayBtn.setPosition(4, 21 + 48 + 3);
     this.mulliganBtn.setPosition(4, 21 + 48 + 3 + 16);
     this.practiceBox?.setPosition(4, 21 + 48 + 3);
-    this.banner.setPosition(Math.round(W / 2), Math.round(H * 0.3));
-    this.sub.setPosition(Math.round(W / 2), Math.round(H * 0.3) + 16);
+    this.placeBanner();
     if (this.intro) this.showIntro();
   }
 
@@ -332,7 +332,7 @@ export class HudScene extends Phaser.Scene {
     // with the putter in hand the distance is in feet (or metres), like the putting meter
     setTxt(this.infoLines[2], p.club.kind === 'putter' ? distLabel(d).replace(/(\d)(ft|m)$/, '$1 $2') : `${fmtDist(d)} ${unitLabel()}`);
     setTxt(this.infoLines[3], r.ball.teedUp ? 'tee' : lieTxt || surf);
-    this.infoLines[3].setTint(r.lie && r.lie.distMult < 1 ? COLORS.yellow : COLORS.green);
+    this.infoLines[3].setTint(r.lie && r.penalLie() ? COLORS.yellow : COLORS.green);
     if (r.cfg.practice) {
       setTxt(this.infoLines[0], r.holeNumber <= 5 ? 'range' : 'putting green');
       setTxt(this.infoLines[1], 'practice');
@@ -349,7 +349,7 @@ export class HudScene extends Phaser.Scene {
     this.clubIcon.setFrame(`club_${c.kind === 'driver' ? 'driver' : c.kind}`);
     setTxt(this.clubName, c.name);
     if (c.kind === 'putter') setTxt(this.clubCarry, `100%: ${puttScaleLabel(p.puttScale)}`);
-    else setTxt(this.clubCarry, `${fmtDist(r.fullCarry(c) * p.swingScale)} ${unitLabel()}`);
+    else setTxt(this.clubCarry, `${fmtDist(r.carryFor(c, p.swingScale))} ${unitLabel()}`);
     this.spinBtn.setIcon(`spin_${p.spin}`).setVisible(c.kind !== 'putter');
     this.scaleBtn.setLabel(c.kind === 'putter' ? puttScaleLabel(p.puttScale) : swingLabel(p.swingScale)).setVisible(true);
     for (const b of [this.aimL, this.aimR, this.clubUp, this.clubDown, this.spinBtn, this.scaleBtn]) b.setEnabled(aiming);
@@ -357,7 +357,7 @@ export class HudScene extends Phaser.Scene {
     this.swingBtn.setLabel(c.kind === 'putter' ? 'putt' : 'swing');
     this.unplayBtn.setVisible(aiming && !r.ball.teedUp && r.tally.strokes > 0 && !r.onHoleGreen());
     this.mulliganBtn.setVisible(aiming && r.cfg.settings.mulligans && !r.mulliganUsed && r.shotNo > 0);
-    const showCtl = !['intro', 'holed', 'loading'].includes(p.state);
+    const showCtl = !['intro', 'holed', 'loading', 'relief', 'drop'].includes(p.state); // not behind the relief / drop panels
     for (const o of [this.aimL, this.aimR, this.aimLabel, this.clubPanel, this.clubUp, this.clubDown, this.swingBtn, this.meterPanel]) o.setVisible(showCtl);
     if (!showCtl) { this.spinBtn.setVisible(false); this.scaleBtn.setVisible(false); this.unplayBtn.setVisible(false); this.mulliganBtn.setVisible(false); }
     // minimap
@@ -392,10 +392,32 @@ export class HudScene extends Phaser.Scene {
     g.fillStyle(0xffffff, 1).fillRect(b.x, b.y, 1, 1);
   }
 
+  /**
+   * The result banner: a third of the way down, or at the top in a putting
+   * view, where a third of the way down is where the cup or the golfer is
+   * (afternoon review, 2026-10-20). Checked every frame: the view can change
+   * while a banner shows (the cut to the green after an approach).
+   */
+  private placeBanner() {
+    const y = this.play?.green && this.play.inGreenView() ? 16 : Math.round(this.H * 0.3);
+    if (this.banner.y !== y) this.banner.setPosition(Math.round(this.W / 2), y);
+    if (this.sub.y !== y + 16) this.sub.setPosition(Math.round(this.W / 2), y + 16);
+    if (this.banner.x !== Math.round(this.W / 2)) { this.banner.x = Math.round(this.W / 2); this.sub.x = this.banner.x; }
+  }
+
+  /** Hide the result banner at once (a panel opens over the course). */
+  hideBanner() {
+    this.bannerTimer?.remove();
+    this.tweens.killTweensOf([this.banner, this.sub]);
+    this.banner.setVisible(false);
+    this.sub.setVisible(false);
+  }
+
   /** Called every frame by the Play scene. */
   tick() {
     const p = this.play;
     this.drawMeter();
+    if (this.banner.visible) this.placeBanner();
     if (p.state === 'flight') this.drawMiniBall();
     // arrow toward an off-screen ball (kept clear of the HUD panels)
     const off = p.ballOffscreen;
@@ -403,14 +425,22 @@ export class HudScene extends Phaser.Scene {
       const cam = p.cameras.main;
       // play-camera device pixels -> HUD texels
       const sx = ((off.x - cam.worldView.x) * cam.zoom) / app.zoom, sy = ((off.y - cam.worldView.y) * cam.zoom) / app.zoom;
-      const x0 = 96, x1 = this.W - 16 - Math.max(48, this.miniPanel.pw + 8), y0 = 30, y1 = this.H - 78;
-      const cx = (x0 + x1) / 2, cy = (y0 + y1) / 2;
-      const ang = Math.atan2(sy - cy, sx - cx);
-      const t = Math.min((x1 - cx) / Math.abs(Math.cos(ang) || 1e-6), (y1 - cy) / Math.abs(Math.sin(ang) || 1e-6));
+      // the screen's edges less the HUD: the info panel (left), the bottom controls and the mini-map
+      // column (top right); under the mini-map the right edge itself, down to the swing button
+      // (it floated mid-fairway, at the mini-map column's left side, for the full height)
+      const portrait = this.H > this.W;
+      const x0 = 96, xm = this.W - 16 - Math.max(48, this.miniPanel.pw + 8), x1 = this.W - 12, y0 = 30;
+      const y1 = portrait ? Math.min(this.H - 78, this.meterPanel.y - 10) : this.H - 78;
+      const yb = this.mapBtn.y + 13 + 10, yr = Math.min(this.swingBtn.y, this.spinBtn.y, portrait ? this.meterPanel.y : this.swingBtn.y) - 10;
+      // the arrow sits at the nearest point of that area to the ball, pointing at it
+      const clamp = (v: number, lo: number, hi: number) => Math.max(lo, Math.min(hi, v));
+      const spots = [{ x: clamp(sx, x0, xm), y: clamp(sy, y0, y1) }];
+      if (yr > yb) spots.push({ x: clamp(sx, xm, x1), y: clamp(sy, yb, yr) });
+      const at = spots.reduce((a, b) => (Math.hypot(b.x - sx, b.y - sy) < Math.hypot(a.x - sx, a.y - sy) ? b : a));
+      const ang = Math.atan2(sy - at.y, sx - at.x);
       const k = ((Math.round(-ang / (Math.PI / 8)) % 16) + 16) % 16;
       const pulse = 0.65 + 0.35 * Math.sin(this.time.now / 180);
-      this.offArrow.setVisible(true).setFrame(`wind_${k}`).setAlpha(pulse)
-        .setPosition(Math.round(cx + Math.cos(ang) * t), Math.round(cy + Math.sin(ang) * t));
+      this.offArrow.setVisible(true).setFrame(`wind_${k}`).setAlpha(pulse).setPosition(Math.round(at.x), Math.round(at.y));
     } else this.offArrow.setVisible(false);
   }
 
@@ -470,7 +500,7 @@ export class HudScene extends Phaser.Scene {
       // how far the cursor's power would send it (flat, calm)
       const pw = m.phase === 'power' ? pos : m.power;
       if (pw > 0) {
-        const metres = putt ? p.puttScale * pw / 100 : r.fullCarry(p.club) * p.swingScale * pw / 100;
+        const metres = putt ? p.puttScale * pw / 100 : r.carryFor(p.club, p.swingScale, pw / 100); // overswing: +8 % at most
         read = putt ? distLabel(metres) : `${fmtDist(metres)} ${unitLabel()}`;
       }
     }
@@ -547,7 +577,7 @@ export class HudScene extends Phaser.Scene {
     const st = p.shot?.spec;
     if (!st) return;
     const carry = Math.hypot(e.x - st.x, e.y - st.y);
-    this.flash(`carry ${fmtDist(carry)}`, COLORS.white, '', 1200);
+    this.flash(`carry ${fmtDist(carry)} ${unitLabel()}`, COLORS.white, '', 1200);
   }
 
   restInfo() {
@@ -557,10 +587,12 @@ export class HudScene extends Phaser.Scene {
     if (!st || !p.sim) return;
     const total = Math.hypot(p.sim.end.x - st.x, p.sim.end.y - st.y);
     const where = SURFACE_LABEL[r.surfaceAt()] ?? '';
-    // on and around the green distances are in feet, like the putting meter
-    const short = p.shot?.club.kind === 'putter' || r.onHoleGreen();
-    const f = (m: number) => (short ? distLabel(m).replace(/(\d)(ft|m)$/, '$1 $2') : `${fmtDist(m)} ${unitLabel()}`);
-    this.flash(where, COLORS.white, `${f(total)} · ${f(r.distToPin())} to go`, 1600);
+    // a putt is measured in feet, like the putting meter, and so is what is left on the green;
+    // an approach that ends on the green is still in yards ("185 ft" for a 63-yd wedge)
+    const putt = p.shot?.club.kind === 'putter';
+    const ft = (m: number) => distLabel(m).replace(/(\d)(ft|m)$/, '$1 $2');
+    const yd = (m: number) => `${fmtDist(m)} ${unitLabel()}`;
+    this.flash(where, COLORS.white, `${(putt ? ft : yd)(total)} · ${(putt || r.onHoleGreen() ? ft : yd)(r.distToPin())} to go`, 1600);
   }
 
   // ------------------------------------------------------------------ intro
@@ -604,6 +636,9 @@ export class HudScene extends Phaser.Scene {
     this.closeModal();
     this.modal = kind;
     this.modalLayer.removeAll(true);
+    // a panel over the course hides the banner ("in the hole!" showed above the hole-complete panel);
+    // the relief panels keep it: it says why they opened ("out of bounds")
+    if (kind !== 'relief' && kind !== 'drop') this.hideBanner();
   }
 
   closeModal() {
@@ -777,6 +812,7 @@ export class HudScene extends Phaser.Scene {
       const b = new Button(this, x + 6, y + 20 + options.length * 18, w - 12, 16, 'play it as it lies', () => this.play.playAsItLies(), { color: 'grey' });
       this.modalLayer.add(b);
     }
+    this.refresh(); // the stroke count and lie of this stroke, not the one before (and no shot controls behind the panel)
   }
 
   showDrop(a: ReliefArea) {
@@ -789,6 +825,7 @@ export class HudScene extends Phaser.Scene {
     const ok = new Button(this, x + w - 74, y + 18, 68, 16, 'drop here', () => this.play.confirmDrop());
     const back = new Button(this, x + 6, y + 18, 50, 16, 'back', () => this.play.cancelDrop(), { color: 'grey' });
     this.modalLayer.add([pnl, t, ok, back]);
+    this.refresh();
   }
 
   hideRelief() {
@@ -922,7 +959,7 @@ export function cardOfRound(r: import('../systems/game/round').Round): CardData 
   const nCourse = holes.length;
   return {
     title: `${r.course.json.name}  ·  ${r.cfg.tee.toLowerCase()} tees  ·  ${r.cfg.playerName}`,
-    blocks: nCourse === 9 && r.cfg.holes.length <= 9 ? [[1, 9, 'tot']] : [[1, 9, 'out'], [10, 18, 'in']],
+    blocks: cardBlocks(r.cfg.holes, nCourse),
     hole: (h) => { const hj = holes[courseHoleFor(h, nCourse) - 1]; return { par: hj.par, yd: hj.tees[r.cfg.tee]?.cardYd ?? 0 }; },
     scores: r.scores,
   };
@@ -955,7 +992,7 @@ export function scorecard(scene: Phaser.Scene, r: import('../systems/game/round'
 export function scorecardOf(scene: Phaser.Scene, d: CardData, W: number, H: number): Phaser.GameObjects.Container {
   const c = scene.add.container(0, 0);
   const blocks = d.blocks;
-  const cellW = W < 330 ? 17 : 21;
+  const cellW = W < 330 ? 19 : 21; // 17 on a phone: three-digit yardages touched
   const labelW = 34, sumW = 24;
   const tw = labelW + cellW * 9 + sumW + 2;
   const x0 = Math.round((W - tw) / 2);
@@ -966,7 +1003,21 @@ export function scorecardOf(scene: Phaser.Scene, d: CardData, W: number, H: numb
   const nRows = showYd ? 3 : 2;
   const parRow = showYd ? 2 : 1;
   const blockH = rowH * nRows + scoreH + 4;
-  const th = blockH * blocks.length + 36;
+  // the stats line: wrapped between its items, never inside one ("gir" and "6/9" were split), the panel taller by the extra lines
+  const tot = totals(d.scores);
+  const fw = tot.fairwayChances ? `${tot.fairways}/${tot.fairwayChances}` : '-';
+  const items = [`total ${tot.strokes || '-'} (${tot.holes ? toPar(tot.toPar) : 'e'})`, `putts ${tot.putts}`, `fairways ${fw}`, `gir ${tot.gir}/${tot.holes}`, `penalties ${tot.penalties}`];
+  const probe = txt(scene, 0, 0, '');
+  const fits = (str: string) => { setTxt(probe, str); return probe.width <= tw; };
+  const lines: string[] = [];
+  for (const it of items) {
+    const last = lines.length - 1;
+    if (last >= 0 && fits(`${lines[last]}  ·  ${it}`)) lines[last] += `  ·  ${it}`;
+    else lines.push(it);
+  }
+  probe.destroy();
+  const statsH = 11 * (lines.length - 1);
+  const th = blockH * blocks.length + 36 + statsH;
   const y0 = Math.max(4, Math.round((H - th) / 2) - 6);
   const pnl = new Panel(scene, x0 - 6, y0 - 4, tw + 12, th + 8, 0.94);
   c.add(pnl);
@@ -1014,11 +1065,7 @@ export function scorecardOf(scene: Phaser.Scene, d: CardData, W: number, H: numb
     c.add(txt(scene, sx, yb + rowH * parRow + 1, String(sumPar), { origin: [0.5, 0] }));
     if (any) c.add(txt(scene, sx, sy, String(sumSc), { origin: [0.5, 0], color: COLORS.yellow }));
   });
-  const tot = totals(d.scores);
-  const fw = tot.fairwayChances ? `${tot.fairways}/${tot.fairwayChances}` : '-';
-  c.add(txt(scene, x0, y0 + 14 + blocks.length * (blockH + 6) - 2,
-    `total ${tot.strokes || '-'} (${tot.holes ? toPar(tot.toPar) : 'e'})  ·  putts ${tot.putts}  ·  fairways ${fw}  ·  gir ${tot.gir}/${tot.holes}  ·  penalties ${tot.penalties}`,
-    { color: COLORS.dim, maxWidth: tw }));
+  lines.forEach((l, i) => c.add(txt(scene, x0, y0 + 14 + blocks.length * (blockH + 6) - 2 + i * 11, l, { color: COLORS.dim })));
   c.setData('bottom', y0 + th + 4);
   c.setData('top', y0 - 4);
   return c;

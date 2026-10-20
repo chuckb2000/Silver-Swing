@@ -8,7 +8,7 @@ import { isEntry, LeaderboardEntry } from './entry';
 import { EagleEvent, isEagle } from './feats';
 import { FeedRow, isFeedRow } from './feed';
 import { DEFAULT_NAME } from './names';
-import { loadBoard, loadEagles, loadUploaded, saveEagles, saveUploaded } from './store';
+import { loadBoard, loadEagles, loadUploaded, saveEagles, saveSettings, saveUploaded } from './store';
 import { app } from '../app';
 
 /** fetch with a time limit: a stalled phone connection must not hang a screen (8 s, 15 s for uploads). */
@@ -25,6 +25,7 @@ const EAGLES = 'api/eagles';
 const RECORDS = 'api/records';
 const NAMES = 'api/names';
 const RECENT = 'api/recent';
+const HIDE = 'api/hide';
 let available: Promise<boolean> | null = null;
 let flushing: Promise<number> | null = null;
 
@@ -100,6 +101,7 @@ export function flushUploads(): Promise<number> {
   if (!flushing) {
     flushing = (async () => {
       if (!(await onlineAvailable())) return 0;
+      await syncHidden();
       const [all, sent] = await Promise.all([loadBoard(), loadUploaded()]);
       // a round with no name of its own stays on this device (developer: nobody on the board as "player")
       const todo = all.filter((e) => !sent.has(e.id) && isEntry(e) && e.player !== DEFAULT_NAME);
@@ -221,3 +223,27 @@ export async function namesOfKey(key: string): Promise<string[] | null> {
     return null;
   }
 }
+
+/**
+ * Tell the server whether this player is hidden from the shared leaderboards
+ * (settings "leaderboards"), when it doesn't know yet: on a change, and before
+ * every upload until it has confirmed. Rounds are still sent while hidden; the
+ * server keeps them out of every shared list, so showing again brings them back.
+ */
+export async function syncHidden(): Promise<boolean> {
+  const s = app.settings;
+  if (!s.playerKey || s.hideSent === s.hideFromBoards) return true;
+  if (!s.hideFromBoards && s.hideSent === null) return true; // never hidden: nothing to tell
+  if (!(await onlineAvailable())) return false;
+  try {
+    const want = s.hideFromBoards;
+    const res = await timed(HIDE, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ owner: s.playerKey, hidden: want }) });
+    if (!res.ok) return false;
+    s.hideSent = want;
+    await saveSettings(s);
+    return true;
+  } catch {
+    return false;
+  }
+}
+

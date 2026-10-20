@@ -47,6 +47,9 @@ const FADE_RGB = [20, 32, 42] as const;
 
 interface Flyover { pts: { x: number; y: number }[]; cum: number[]; len: number; T: number; ta: number; t: number; hold: number }
 
+/** Texels the aim framing moves up on a portrait screen (its deeper bottom controls, HudScene.layout). */
+const PORTRAIT_LIFT = 24;
+
 export class PlayScene extends Phaser.Scene {
   round!: Round;
   view!: CourseView;
@@ -784,15 +787,18 @@ export class PlayScene extends Phaser.Scene {
       const want = near ? 0.25 : 1;
       if (Math.abs(this.flag.alpha - want) > 0.01) this.flag.setAlpha(this.flag.alpha + (want - this.flag.alpha) * Math.min(1, dt / 120));
     }
-    // trees in front of the golfer, the ball and (putting) the hole fade out
+    // trees in front of the golfer, the ball and the hole fade out (the hole in the course view too:
+    // six centre pins were hidden behind trees, afternoon review 2026-10-20)
     const pts: { x: number; y: number; depth: number }[] = [];
     if (this.golfer.visible) pts.push({ x: this.golfer.x, y: this.golfer.y - 8 / this.level, depth: this.golfer.y });
     if (this.ball.visible && this.ball.depth < DEPTH.flight) pts.push({ x: this.ball.x, y: this.ball.y, depth: this.ball.y });
     if (this.state === 'drop' && this.dropPoint) { const d = this.px(this.dropPoint.x, this.dropPoint.y); pts.push({ x: d.x, y: d.y, depth: d.y }); }
-    if (this.green.visible) {
-      pts.push({ x: this.cup.x, y: this.cup.y, depth: this.cup.y });
-      this.green.fadeOccluders(pts);
-    } else this.view.fadeOccluders(pts);
+    if (this.cup.visible) pts.push({ x: this.cup.x, y: this.cup.y, depth: this.cup.y });
+    if (this.green.visible) this.green.fadeOccluders(pts);
+    else {
+      if (this.flag.visible) pts.push({ x: this.flag.x, y: this.cup.y - 8, depth: this.cup.y }); // the flag, half way up
+      this.view.fadeOccluders(pts);
+    }
     // off-screen ball arrow for the HUD
     const bp = this.px(r.ball.x, r.ball.y);
     const v = cam.worldView;
@@ -809,8 +815,19 @@ export class PlayScene extends Phaser.Scene {
     this.aimHold(left ? 1 : -1, key.getDuration(), dt, k.SHIFT.isDown);
   }
 
-  /** Spec 10.3: frame ball and target; if they don't fit, look at the target. */
+  /**
+   * Spec 10.3: frame ball and target; if they don't fit, look at the target.
+   * On a portrait screen the controls at the bottom are about 50 texels deeper
+   * than in landscape (the meter sits over the club panel): the framing moves
+   * up by half of that, so the golfer and ball stay clear of them.
+   */
   private aimFraming(): { x: number; y: number } {
+    const f = this.aimFramingRaw();
+    if (this.state === 'drop' || app.view.h <= app.view.w) return f;
+    return { x: f.x, y: f.y + PORTRAIT_LIFT / this.level };
+  }
+
+  private aimFramingRaw(): { x: number; y: number } {
     const r = this.round;
     const b = this.px(r.ball.x, r.ball.y);
     const L = this.level;

@@ -9,7 +9,10 @@ drawn in the game at 2 px/m), written to game/public/sprites/cards/<id>.png.
 Each course also gets a 720 x 400 view around the same green for the title
 screen's rotating backdrop (sprites/title/<id>.png, listed in sprites/title/index.json).
 
-The green is set per course in assets-src/cards/<id>.json ({"hole": n, "why": "..."}),
+The card rotates through up to four greens (a strip of 208 x 128 frames): the course's
+own green first, set per course in assets-src/cards/<id>.json ({"hole": n, "why": "..."}),
+then three more picked for sand and trees (at most one more water view), or exactly the
+ones listed in "holes": [n, ...]. The title view uses "hole".
 one file per course so two course builds never edit the same file; without one
 the green with the most sand and water around it is used.
 Reads only the exported game files (game/public/...), so it works on any
@@ -151,6 +154,35 @@ class Course:
         s = self.surface[max(0, py - 60):py + 60, max(0, px - 100):px + 100]
         return float((s == SURF_BUNKER).sum() + 1.5 * (s == SURF_WATER).sum())
 
+    def flag_hidden(self, hole: int) -> bool:
+        """Does a tree drawn in front cover much of the flag on the card?"""
+        img = np.array(self.render(hole))
+        flag = np.array(self.ui.get("flag_0"))
+        px, py = self.pin_px(hole)
+        x0 = int(np.clip(px - CARD_W // 2, 0, self.cols * self.chunk - CARD_W))
+        y0 = int(np.clip(py - CARD_H // 2 + 8, 0, self.rows * self.chunk - CARD_H))
+        fx, fy = px - round(flag.shape[1] * 0.25) - x0, py - flag.shape[0] - y0
+        hit = tot = 0
+        for j in range(flag.shape[0]):
+            for i in range(flag.shape[1]):
+                if flag[j, i, 3] < 255 or not (0 <= fy + j < CARD_H and 0 <= fx + i < CARD_W):
+                    continue
+                tot += 1
+                hit += int(np.abs(img[fy + j, fx + i, :3].astype(int) - flag[j, i, :3].astype(int)).sum() < 30)
+        return tot > 0 and hit < 0.6 * tot
+
+    def features(self, hole: int) -> dict:
+        """What the card around a green shows: sand, water (pixels) and trees."""
+        px, py = self.pin_px(hole)
+        s = self.surface[max(0, py - 60):py + 60, max(0, px - 100):px + 100]
+        T = self.trees
+        tx = np.round(np.array(T["x"]) * PX_PER_M)
+        ty = np.round((self.H - np.array(T["y"])) * PX_PER_M)
+        trees = int(((np.abs(tx - px) < 100) & (ty > py - 60) & (ty < py + 70)).sum())
+        hides = self.flag_hidden(hole)
+        return {"sand": int((s == SURF_BUNKER).sum()), "water": int((s == SURF_WATER).sum()),
+                "trees": trees, "px": s.size, "hidden": hides}
+
 
 def _paste_clipped(img: Image.Image, spr: Image.Image, x: int, y: int):
     """alpha_composite with clipping at the image edges."""
@@ -182,6 +214,38 @@ def card_hole(c: Course, cfg: dict) -> int:
     if c.id in cfg and "hole" in cfg[c.id]:
         return int(cfg[c.id]["hole"])
     return max((h["number"] for h in c.json["holes"]), key=c.interest)
+
+
+CARD_FRAMES = 4   # greens a card rotates through (developer, 2026-10-20: "3 or 4 notable greens")
+
+
+def card_holes(c: Course, cfg: dict) -> list[int]:
+    """The greens a course's card rotates through. assets-src/cards/<id>.json "holes" sets
+    them; otherwise the card's own green ("hole") comes first, then the greens with the most
+    sand and trees around them (not ones whose flag a tree hides), with at most one more where water fills much of the view
+    (the single pick was usually the water hole, so every card was mostly water), and not
+    two neighbouring holes when others are left."""
+    own = cfg.get(c.id, {})
+    holes = [h["number"] for h in c.json["holes"]]
+    if "holes" in own:
+        return [int(h) for h in own["holes"] if int(h) in holes][:CARD_FRAMES] or [card_hole(c, cfg)]
+    first = card_hole(c, cfg)
+    f = {h: c.features(h) for h in holes}
+    wet = lambda h: f[h]["water"] > 0.15 * f[h]["px"]  # noqa: E731
+    score = lambda h: f[h]["sand"] + 120 * min(f[h]["trees"], 40) - 0.5 * f[h]["water"]  # noqa: E731
+    out = [first]
+    wet_used = 1 if wet(first) else 0
+    for near_ok in (False, True):
+        for h in sorted(holes, key=score, reverse=True):
+            if len(out) >= CARD_FRAMES:
+                break
+            if h in out or f[h]["hidden"] or (wet(h) and wet_used >= 1):
+                continue
+            if not near_ok and any(abs(h - o) <= 1 for o in out):
+                continue
+            out.append(h)
+            wet_used += wet(h)
+    return out
 
 
 def contact_sheet(c: Course) -> Path:
@@ -241,8 +305,13 @@ def main(argv: list[str]):
             contact_sheet(c)
             continue
         hole = card_hole(c, cfg)
-        c.render(hole).convert("RGB").save(OUT / f"{cid}.png", optimize=True)
-        print(f"[cards] {cid}: hole {hole} green -> sprites/cards/{cid}.png")
+        holes = card_holes(c, cfg)
+        # one strip of CARD_W-wide frames, played in turn by the course-select card
+        strip = Image.new("RGB", (CARD_W * len(holes), CARD_H))
+        for k, h in enumerate(holes):
+            strip.paste(c.render(h).convert("RGB"), (k * CARD_W, 0))
+        strip.save(OUT / f"{cid}.png", optimize=True)
+        print(f"[cards] {cid}: greens {', '.join(map(str, holes))} -> sprites/cards/{cid}.png")
         title_map(c, hole)
     if "--sheet" not in argv:
         print(f"[cards] title screen maps: {', '.join(tidy_title_maps())} -> sprites/title/")

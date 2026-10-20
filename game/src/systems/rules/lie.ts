@@ -121,8 +121,40 @@ export function lieModsFor(lie: Lie, club: Club): { distMult: number; windowMult
   return { distMult, windowMult: lie.windowMult, splash, ...(lie.carryCap !== undefined ? { carryCap: lie.carryCap, goodBand: lie.goodBand, curveMult: lie.curveMult } : {}) };
 }
 
-/** How much backspin survives the lie (rough -> "flyer", 30% effect). */
+/**
+ * How much of the spin chosen (top or back) the ball gets (developer, 2026-10-20: "backspin
+ * and front spin are too powerful ... cut down like 50% ... and like 95% when you're hitting
+ * out of the rough or sand"): half from a clean lie, a twentieth from rough, under trees or
+ * a bunker, none from gorse.
+ */
+export const SPIN_CLEAN = 0.5;
+export const SPIN_POOR = 0.05;
 export function spinEffect(lie: Lie): number {
   if (lie.kind === 'gorse') return 0; // no spin out of a bush
-  return lie.kind === 'rough' || lie.kind === 'trees' ? 0.3 : 1;
+  const poor = lie.kind === 'rough' || lie.kind === 'trees' || lie.kind === 'fairway_bunker' || lie.kind === 'greenside_bunker';
+  return poor ? SPIN_POOR : SPIN_CLEAN;
+}
+
+/** The spin a shot actually gets from this lie (top or back): the chosen spin times spinEffect. */
+export function spinFor(lie: Lie, spin: number): number {
+  const e = spinEffect(lie);
+  return e === 0 ? 0 : spin * e;
+}
+
+/**
+ * A lie that costs something (the info panel shows it in yellow): rough, under
+ * trees (punch), gorse, bunkers, or any lie that takes distance off. Gorse and a
+ * rough flyer keep (or add) distance but are still bad lies.
+ */
+export function lieIsPenal(lie: Lie): boolean {
+  switch (lie.kind) {
+    case 'rough':
+    case 'trees':
+    case 'gorse':
+    case 'fairway_bunker':
+    case 'greenside_bunker':
+      return true;
+    default:
+      return lie.distMult < 1;
+  }
 }

@@ -141,7 +141,7 @@ export function unplayableOptions(ctx: CourseCtx, ball: Pt, previous: Pt): Relie
     { kind: 'unplayable_2cl', shape: 'circle', center: ball, radius: 2 * CLUB_LENGTH, hole, refDist: dist(ball, hole), bunker: inBunker ? 'in' : undefined, penalty: 1, label: 'drop within 2 club-lengths' },
   ];
   if (inBunker) {
-    opts.push({ kind: 'unplayable_line_out', shape: 'line', center: ball, radius: CLUB_LENGTH, dir: awayFromHole(hole, ball), hole, refDist: dist(ball, hole), bunker: 'out', penalty: 2, label: 'back on the line outside the bunker (2 strokes)' });
+    opts.push({ kind: 'unplayable_line_out', shape: 'line', center: ball, radius: CLUB_LENGTH, dir: awayFromHole(hole, ball), hole, refDist: dist(ball, hole), bunker: 'out', penalty: 2, label: 'back on the line outside the bunker' });
   }
   return opts;
 }

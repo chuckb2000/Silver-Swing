@@ -28,6 +28,8 @@ export interface Settings {
   courseId: string;  // last course chosen on the new-round screen
   tees: Record<string, string>; // tee set last chosen, per course id
   playerKey: string; // this device's private key for its names on the shared boards (save/identity.ts)
+  hideFromBoards: boolean; // keep this player off every shared leaderboard (server /api/hide; developer, 2026-10-20)
+  hideSent: boolean | null; // the hide choice the server last confirmed (null: never sent)
 }
 
 export const DEFAULT_SETTINGS: Settings = {
@@ -35,6 +37,8 @@ export const DEFAULT_SETTINGS: Settings = {
   e5: false, gimmes: false, maxDoublePar: false, mulligans: false, viewScale: 0, playerName: 'player', showTips: true, courseId: '',
   tees: {},
   playerKey: '',
+  hideFromBoards: false,
+  hideSent: null,
 };
 
 const mem = new Map<string, unknown>();
@@ -89,6 +93,10 @@ export async function loadSettings(): Promise<Settings> {
   const s = await read<Partial<Settings>>('settings');
   const out = { ...DEFAULT_SETTINGS, ...(s ?? {}) };
   if (!out.tees || typeof out.tees !== 'object') out.tees = {};
+  // no longer settings (developer, 2026-10-20): yards, no latency offset, stroke-and-distance OB
+  out.units = 'yd';
+  out.latencyMs = 0;
+  out.e5 = false;
   if (!isPlayerKey(out.playerKey)) {
     out.playerKey = newPlayerKey();
     await write('settings', out);

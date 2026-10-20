@@ -9,8 +9,8 @@ import { coursesByState } from '../data/registry';
 import { initAudio, setVolume } from '../audio/sfx';
 import { peekSnapshot } from '../save/snapshot';
 import { Button, COLORS, Panel, setTxt, txt } from '../ui/widgets';
-import { resumeRound, startPractice, startRound, useCourse } from './flow';
-import { dailyPlan, localDay } from '../systems/game/daily';
+import { confirmDiscard, editName, hasName, resumeRound, snapshotHole, startPractice, startRound, useCourse, withName } from './flow';
+import { DailyPlan, dailyPlan, localDay } from '../systems/game/daily';
 import { DAILY_ROSTER } from '../data/dailyRoster';
 import { shortName } from '../save/milestones';
 import { update, whenUpdateReady } from '../save/offline';
@@ -31,9 +31,15 @@ export class TitleScene extends MenuScene {
   private shown: Shown[] = [];
   private shade: Phaser.GameObjects.Rectangle | null = null;
   private resuming = false;
+  /** Opened to start today's daily round (the leaderboard's "play today's round"). */
+  private dailyNow = false;
 
   constructor() {
     super('title');
+  }
+
+  init(data?: { daily?: boolean }) {
+    this.dailyNow = !!data?.daily;
   }
 
   create() {
@@ -158,6 +164,19 @@ export class TitleScene extends MenuScene {
     else this.scene.stop('bg');
   }
 
+  /**
+   * Today's daily round: a round in progress is only thrown away once the
+   * player says so, and a player with no name is asked for one first, as on
+   * the new-round screen (afternoon review, 2026-10-20).
+   */
+  private playDaily(plan: DailyPlan) {
+    void confirmDiscard(this, this.root, () => withName(this, () => void this.withLoading(async (progress) => {
+      await useCourse(this, plan.courseId, progress);
+      startRound(this, plan.length, plan);
+      return true;
+    })));
+  }
+
   async build() {
     const W = app.view.w, H = app.view.h;
     const cx = Math.round(W / 2);
@@ -195,18 +214,22 @@ export class TitleScene extends MenuScene {
     const n = app.courses.length;
     const states = coursesByState(app.courses).length;
     const sub = n === 1 ? app.courses[0].name : `${n} courses${states > 1 ? ` in ${states} states` : ''}`;
-    this.root.add(txt(this, cx, top + 46 + dy, sub, { origin: [0.5, 0], scale: W < 330 ? 1 : 2, color: COLORS.yellow }));
+    const small = W < 330; // a phone: the course count at 1x, and everything under it moves up by the line it saves
+    this.root.add(txt(this, cx, top + 46 + dy, sub, { origin: [0.5, 0], scale: small ? 1 : 2, color: COLORS.yellow }));
+    if (small) dy -= 9;
     this.root.add(txt(this, cx, top + 66 + dy, 'real courses, rebuilt from map and lidar data', { origin: [0.5, 0], color: COLORS.dim }));
     const snap = await peekSnapshot();
     if (!this.sys.isActive()) return;
     const bw = 124, bh = 17, gap = 21;
     let y = top + 84 + dy;
-    const add = (label: string, cb: () => void, grey = false) => {
+    let bottom = y;
+    const add = (label: string, cb: () => void, grey = false, textColor?: number) => {
       // wide enough for its label (a long daily course name ran out of the button)
       const probe = txt(this, 0, 0, label);
       const w = Math.min(W - 8, Math.max(bw, Math.ceil(probe.width) + 12));
       probe.destroy();
-      this.root.add(new Button(this, Math.round(cx - w / 2), y, w, bh, label, cb, { color: grey ? 'grey' : 'orange' }));
+      this.root.add(new Button(this, Math.round(cx - w / 2), y, w, bh, label, cb, { color: grey ? 'grey' : 'orange', textColor }));
+      bottom = y + bh;
       y += gap;
     };
     // the rest two to a row (the list no longer fits a 270-texel-high screen one under another)
@@ -214,29 +237,32 @@ export class TitleScene extends MenuScene {
     let col = 0;
     const add2 = (label: string, cb: () => void) => {
       this.root.add(new Button(this, cx - sw - sgap / 2 + col * (sw + sgap), y, sw, bh - 1, label, cb, { color: 'grey' }));
+      bottom = y + bh - 1;
       col ^= 1;
       if (!col) y += gap - 2;
     };
     if (snap) {
-      const holeNo = snap.cfg.holes[Math.min(snap.cfg.holes.length - 1, snap.holeIndex + (snap.betweenHoles ? 1 : 0))];
-      const done = snap.betweenHoles && snap.holeIndex + 1 >= snap.cfg.holes.length; // every hole played: only the summary is left
+      const { hole: holeNo, done } = snapshotHole(snap); // done: every hole played, only the summary is left
       add(done ? 'finish last round' : `continue round (hole ${holeNo})`, () => void this.withLoading((progress) => resumeRound(this, progress)));
     }
     add(snap ? 'new round' : 'play', () => this.scene.start('courses', { purpose: 'play', from: 'title' }), !!snap);
     // the daily round: today's course, nine holes, the same wind and pins for everyone
     const plan = dailyPlan(localDay(), app.courses, DAILY_ROSTER);
     const dc = plan && app.courses.find((c) => c.id === plan.courseId);
-    if (plan && dc) {
-      add(`daily: ${shortName(dc.name)}`, () => void this.withLoading(async (progress) => {
-        await useCourse(this, plan.courseId, progress);
-        startRound(this, plan.length, plan);
-        return true;
-      }), !!snap);
-    }
+    if (plan && dc) add(`daily: ${shortName(dc.name)}`, () => this.playDaily(plan), !!snap);
+    if (this.dailyNow) { this.dailyNow = false; if (plan && dc) this.playDaily(plan); }
+    // no name yet: rounds stay on this device, so say so where every visit starts (developer, 2026-10-20)
+    if (!hasName() && !app.settings.hideFromBoards) add('set your name for the leaderboard', () => editName(this, () => this.rebuild()), true, COLORS.yellow);
     add2('my golf', () => this.scene.start('mygolf'));
     add2('practice', () => void this.withLoading((progress) => startPractice(this, progress)));
     add2('leaderboard', () => this.scene.start('leaderboard'));
     add2('settings', () => this.scene.start('settings', { from: 'title' }));
+    // a long menu (a round to continue, the daily, the name) on a short screen: everything moves up to clear the footer
+    const over = bottom - (H - 19);
+    if (over > 0) {
+      const lift = Math.min(over, Math.max(0, top - 20));
+      for (const o of this.root.list as unknown as { y: number }[]) o.y -= lift;
+    }
     if (update.ready) {
       // a new version of the game has arrived (offline copy): one tap to start it
       this.root.add(new Button(this, W - 112, 4, 108, 15, 'update - tap to reload', () => update.apply()));

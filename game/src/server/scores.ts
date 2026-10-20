@@ -53,10 +53,17 @@ const SCHEMA = [
   )`,
   'CREATE INDEX IF NOT EXISTS eagles_received ON eagles (received)',
   'CREATE TABLE IF NOT EXISTS meta (k TEXT PRIMARY KEY, v TEXT)',
+  // players who chose "hide me from the leaderboards" (developer, 2026-10-20): their rounds and
+  // eagles are kept but left out of every shared list, so showing them again brings them all back
+  'CREATE TABLE IF NOT EXISTS hidden (owner TEXT PRIMARY KEY, since TEXT NOT NULL)',
 ];
 
+/** Rows of players who haven't hidden themselves (rounds and eagles both have `owner`). */
+const SHOWN = '(owner IS NULL OR owner NOT IN (SELECT owner FROM hidden))';
+const shownAs = (t: string) => `(${t}.owner IS NULL OR ${t}.owner NOT IN (SELECT owner FROM hidden))`;
+
 /** Bumped when SCHEMA or ROUND_COLUMNS change: a database at this version skips the setup. */
-const SCHEMA_VERSION = '3';
+const SCHEMA_VERSION = '4';
 /** Old rounds counted per request (Cloudflare's free plan allows 50 database queries per request). */
 const BACKFILL_ROWS = 10;
 
@@ -278,14 +285,14 @@ export async function handleGet(db: D1Like | undefined, url: URL): Promise<Respo
     stmt = db.prepare('SELECT data FROM rounds WHERE owner = ? ORDER BY date DESC LIMIT ?').bind(owner, MAX_RETURN);
   } else if (daily !== null) {
     if (!isDay(daily)) return json({ error: 'daily=yyyy-mm-dd' }, 400);
-    stmt = db.prepare('SELECT data FROM rounds WHERE daily = ? ORDER BY gross ASC, back ASC, date ASC LIMIT ?').bind(daily, MAX_RETURN);
+    stmt = db.prepare(`SELECT data FROM rounds WHERE daily = ? AND ${SHOWN} ORDER BY gross ASC, back ASC, date ASC LIMIT ?`).bind(daily, MAX_RETURN);
   } else if (week !== null) {
     // the seven daily rounds from this day on (the week's board: best five of seven, worked out by the game)
     if (!isDay(week)) return json({ error: 'week=yyyy-mm-dd' }, 400);
-    stmt = db.prepare('SELECT data FROM rounds WHERE daily >= ? AND daily <= ? ORDER BY daily ASC, gross ASC LIMIT ?').bind(week, addDays(week, 6), MAX_RETURN);
+    stmt = db.prepare(`SELECT data FROM rounds WHERE daily >= ? AND daily <= ? AND ${SHOWN} ORDER BY daily ASC, gross ASC LIMIT ?`).bind(week, addDays(week, 6), MAX_RETURN);
   } else {
     if (!course || course.length > 64) return json({ error: 'course required' }, 400);
-    stmt = db.prepare('SELECT data FROM rounds WHERE course = ? ORDER BY gross ASC, back ASC, date ASC LIMIT ?').bind(course, MAX_RETURN);
+    stmt = db.prepare(`SELECT data FROM rounds WHERE course = ? AND ${SHOWN} ORDER BY gross ASC, back ASC, date ASC LIMIT ?`).bind(course, MAX_RETURN);
   }
   const { results } = await stmt.all<{ data: string }>();
   const entries: LeaderboardEntry[] = [];
@@ -365,7 +372,7 @@ export async function handleEaglesGet(db: D1Like | undefined, url: URL): Promise
   await prepareDb(db);
   const limit = Math.max(1, Math.min(MAX_LIST, Number(url.searchParams.get('limit')) || 30));
   const course = url.searchParams.get('course');
-  const sql = `SELECT id, round, player, course, hole, par, strokes, tee, difficulty, date FROM eagles${course ? ' WHERE course = ?' : ''} ORDER BY received DESC, date DESC LIMIT ?`;
+  const sql = `SELECT id, round, player, course, hole, par, strokes, tee, difficulty, date FROM eagles WHERE ${SHOWN}${course ? ' AND course = ?' : ''} ORDER BY received DESC, date DESC LIMIT ?`;
   const stmt = course ? db.prepare(sql).bind(course, limit * 2) : db.prepare(sql).bind(limit * 2);
   const { results } = await stmt.all<EagleEvent>();
   const eagles: EagleEvent[] = [];
@@ -417,7 +424,7 @@ export async function handleRecordsGet(db: D1Like | undefined, url: URL): Promis
   if (kind !== 'birdies') return json({ error: 'unknown kind' }, 400);
   const limit = Math.max(1, Math.min(MAX_LIST, Number(url.searchParams.get('limit')) || 20));
   const course = url.searchParams.get('course');
-  const sql = `SELECT id, player, course, birdies, length, data, date FROM rounds WHERE birdies > 0 AND casual = 0${course ? ' AND course = ?' : ''} ORDER BY birdies DESC, date ASC LIMIT ?`;
+  const sql = `SELECT id, player, course, birdies, length, data, date FROM rounds WHERE birdies > 0 AND casual = 0 AND ${SHOWN}${course ? ' AND course = ?' : ''} ORDER BY birdies DESC, date ASC LIMIT ?`;
   const stmt = course ? db.prepare(sql).bind(course, limit * 2) : db.prepare(sql).bind(limit * 2);
   const { results } = await stmt.all<{ id: string; player: string; course: string; birdies: number; length: string; data: string; date: string }>();
   const rows: BirdieRecord[] = [];
@@ -476,9 +483,9 @@ export async function handleRecentGet(db: D1Like | undefined, url: URL): Promise
   }
   await prepareDb(db);
   const { results } = await db.prepare(`SELECT r.id, r.player, r.course, r.length, r.tee, r.gross, r.casual, r.date, r.received, r.daily, r.data,
-      (SELECT MIN(p.gross) FROM rounds p WHERE p.course = r.course AND p.length = r.length AND p.tee IS r.tee AND p.casual = 0 AND p.received < r.received) AS prev_record,
+      (SELECT MIN(p.gross) FROM rounds p WHERE p.course = r.course AND p.length = r.length AND p.tee IS r.tee AND p.casual = 0 AND p.received < r.received AND ${shownAs('p')}) AS prev_record,
       (SELECT MIN(p.gross) FROM rounds p WHERE p.course = r.course AND p.length = r.length AND p.tee IS r.tee AND p.casual = 0 AND p.player = r.player AND p.received < r.received) AS prev_best
-    FROM rounds r ORDER BY r.received DESC, r.date DESC LIMIT ?`).bind(limit * 2).all<{
+    FROM rounds r WHERE ${shownAs('r')} ORDER BY r.received DESC, r.date DESC LIMIT ?`).bind(limit * 2).all<{
       id: string; player: string; course: string; length: string; tee: string | null; gross: number; casual: number | null; date: string;
       received: string; daily: string | null; data: string; prev_record: number | null; prev_best: number | null;
     }>();
@@ -498,3 +505,22 @@ export async function handleRecentGet(db: D1Like | undefined, url: URL): Promise
   feedCache = { at: Date.now(), limit, body: { rounds: rows } };
   return json({ rounds: rows });
 }
+
+/**
+ * POST /api/hide with `{ owner, hidden }`: hide this player code's rounds and eagles
+ * from every shared list (settings "leaderboards: hidden"), or show them again.
+ * The rounds stay stored ("my golf" still finds them under the player code).
+ */
+export async function handleHide(db: D1Like | undefined, body: string): Promise<Response> {
+  if (!db) return json({ ok: false, error: 'no database bound (DB)' }, 503);
+  let owner: unknown, hidden: unknown;
+  try { ({ owner, hidden } = JSON.parse(body) as { owner?: unknown; hidden?: unknown }); } catch { return json({ error: 'not json' }, 400); }
+  const o = ownerOf(owner);
+  if (!o || typeof hidden !== 'boolean') return json({ error: 'owner and hidden required' }, 400);
+  await prepareDb(db);
+  if (hidden) await db.prepare('INSERT OR IGNORE INTO hidden (owner, since) VALUES (?, ?)').bind(o, new Date().toISOString()).run();
+  else await db.prepare('DELETE FROM hidden WHERE owner = ?').bind(o).run();
+  feedCache = null;
+  return json({ ok: true, hidden });
+}
+

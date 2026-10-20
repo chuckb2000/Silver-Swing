@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc --noEmit && vite build && node scripts/course-versions.mjs && node scripts/artifact-page.mjs",
+    "build": "node scripts/course-lists.mjs && tsc --noEmit && vite build && node scripts/course-versions.mjs && node scripts/artifact-page.mjs",
     "preview": "vite preview",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
