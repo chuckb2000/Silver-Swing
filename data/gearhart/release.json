@@ -1,0 +1,38 @@
+{
+ "release": "gearhart-data",
+ "note": "build inputs; all of them are also committed in raw/ (each under 11 MB), so `make fetch NAME=gearhart` only restores a missing or changed one (pipeline/fetch_raw.py). DOGAMI exportImage.14 = bare earth (feet), exportImage.15 = canopy height (feet), exportImage.jpg = OSIP 2024 photo (0.5 m, placed by its request bbox), export.2.geojson = Overpass export of the world + 150 m (2026-10-20 15:13 UTC)",
+ "files": [
+  {
+   "asset": "exportImage.14.tiff",
+   "sha256": "92583daea54bc081a9a06389603a34cff3d2b043069c3854b6966b2b726455a2",
+   "run": "cp {file} data/gearhart/raw/dogami_dtm_ft.tif",
+   "outputs": {
+    "raw/dogami_dtm_ft.tif": "92583daea54bc081a9a06389603a34cff3d2b043069c3854b6966b2b726455a2"
+   }
+  },
+  {
+   "asset": "exportImage.15.tiff",
+   "sha256": "700b0e3ac5f3011f7f96ddb49e5aeaf45494f4c3e508ecbed8f66635f6a9b077",
+   "run": "cp {file} data/gearhart/raw/dogami_chm_ft.tif",
+   "outputs": {
+    "raw/dogami_chm_ft.tif": "700b0e3ac5f3011f7f96ddb49e5aeaf45494f4c3e508ecbed8f66635f6a9b077"
+   }
+  },
+  {
+   "asset": "exportImage.jpg",
+   "sha256": "45c527250a95a6398fa3f017589c64ed2523c2eaa950e549afce2b1b6b19ec18",
+   "run": "cp {file} data/gearhart/raw/osip2024_05m.jpg",
+   "outputs": {
+    "raw/osip2024_05m.jpg": "45c527250a95a6398fa3f017589c64ed2523c2eaa950e549afce2b1b6b19ec18"
+   }
+  },
+  {
+   "asset": "export.2.geojson",
+   "sha256": "6e2158797fe7dd76ac4b4a95aec18af96255724c8d51c7839fc0e50d02834d85",
+   "run": "cp {file} data/gearhart/raw/overpass.geojson",
+   "outputs": {
+    "raw/overpass.geojson": "6e2158797fe7dd76ac4b4a95aec18af96255724c8d51c7839fc0e50d02834d85"
+   }
+  }
+ ]
+}

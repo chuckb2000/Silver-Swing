@@ -1,0 +1,58 @@
+{
+  "add": [
+    {
+      "from": "proposed/boundary_no_parking.geojson",
+      "ids": [
+        "bd_w158904851"
+      ],
+      "tags": {},
+      "reason": "developer 2026-10-20 (intake question 2): the card's local rule makes parking lots out of bounds; the OSM boundary (w158904851) minus the three mapped parking lots (w891581592, w891581593, w891681298), made by data/gearhart/make_boundary.py. Replaces the OSM boundary"
+    }
+  ],
+  "tags": [
+    {
+      "osm": "w1322722942",
+      "set": {
+        "ref": "14"
+      },
+      "reason": "developer 2026-10-20 (intake question 1): OSM numbers this par-4 line 15; by par (4), length (354 yd from the back tee; card 14: 371 Stones), order of play (it starts at the 13th green and ends at the next line's tee) and the card's map it is hole 14"
+    },
+    {
+      "osm": "w1322722943",
+      "set": {
+        "ref": "15"
+      },
+      "reason": "developer 2026-10-20 (intake question 1): OSM numbers this par-3 line 16; by par (3), length (120 yd; card 15: 122 Stones), order of play and the card's map it is hole 15"
+    },
+    {
+      "osm": "w1322656824",
+      "set": {
+        "hole": "4",
+        "tee_set": "Black"
+      },
+      "reason": "course chat 2026-10-20: hole 4's long teeing ground (46 x 6 m) runs from 130 to 180 yd from the green and holds the Black card's 176 yd; its centroid (155 yd) is more than 8 % short, so s06 didn't consider it. The lidar pad at 173 yd (propose_tees.py) is rough beside the cart path in the 2024 photo, not used"
+    },
+    {
+      "osm": "w1322653215",
+      "set": {
+        "hole": "15",
+        "tee_set": "Black"
+      },
+      "reason": "course chat 2026-10-20: hole 15's teeing ground (980 m2) runs from 72 to 126 yd from the green and holds the Black card's 116 yd; its centroid (95 yd) is more than 8 % short, so s06 used the line start instead"
+    }
+  ],
+  "drop": [
+    {
+      "osm": "w158904851",
+      "reason": "replaced by bd_w158904851 (the same boundary without the parking lots)"
+    },
+    {
+      "osm": "w1539563205",
+      "reason": "an unnamed leisure=golf_course polygon at the north edge of the world, not part of Gearhart Golf Links (the pipeline takes every golf_course polygon as a boundary)"
+    },
+    {
+      "osm": "w1539596594",
+      "reason": "an unnamed leisure=golf_course polygon north of the world, not part of Gearhart Golf Links"
+    }
+  ]
+}
