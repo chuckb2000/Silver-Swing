@@ -71,7 +71,7 @@ water red, Round Lake a red penalty area, Fahys Lake out of bounds; the OSM boun
 as out of bounds and Round Lake Drive as a cart path; lidar trees with
 `trees_off_fairways_m`; wind 3-14 mph; built on its own (not as a layout with Bandon
 Dunes); the course chat picks the card hole. Logo: a wooden trail-marker post with a
-spruce behind it (drawn by the course chat with permission, `assets-src/logo_bandon_trails.py`).
+spruce behind it (drawn by the course chat with permission, `assets-src/course_logos/bandon_trails.py`).
 A new theme for the course (permission given). The developer asked for the build to
 go ahead without questions while away.
 2026-10-20 (after the build): every recommendation in the pull request and in
@@ -90,10 +90,9 @@ and 13; unraked sand as rough; tree species drawn from crown shape; wind 3-14 mp
     fir and older-growth spruce as the three conifer variants (pnw shapes recoloured),
     and a new wind-shaped shore pine (flat, lumpy crown leaning east) for the broad
     crowns. `make assets` leaves every other sheet byte-identical.
--   Logo: `assets-src/logo_bandon_trails.py` (`trail_post`), registered in
-    `assets-src/logos.py` LOGOS as `bandon_trails` (a one-line import and one entry;
-    every other logo is byte-identical). The design chat owns `logos.py`: if it would
-    rather add the entry itself, the drawing module stands alone.
+-   Logo: `assets-src/course_logos/bandon_trails.py` (`trail_post`; moved there
+    from `assets-src/logo_bandon_trails.py` and out of `logos.py` at the merge,
+    design chat 2026-10-20, the PNG byte-identical).
 -   `make regress` (`python3 pipeline/regress.py --since origin/main --mine
     bandon_trails`; the new theme files are under `assets-src/`, so it rebuilt every
     course), 2026-10-20: every course unchanged except Langston, where the rebuild no

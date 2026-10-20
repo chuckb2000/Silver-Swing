@@ -647,3 +647,23 @@ Folded in from docs/courses/gearhart.md at the merge.
 -   **Playwright ignores specs inside its own output folder** (`test-results/`)
     and wipes it at the start of a run; keep a throwaway look script under
     `playwright-report/` (also git-ignored) with its own config.
+
+## 17. Bandon Trails (2026-10-20)
+
+Folded in from docs/courses/bandon_trails.md at the merge.
+
+-   **A resort export holds every course in the box.** The pipeline takes every
+    `leisure=golf_course` and every `golf=hole` it finds, so the neighbours' boundaries
+    and hole lines must be dropped (`make_edits.py` does it by name and checks each
+    line lies outside the boundary). Their greens off the map must go too, or s09 fails.
+-   **Overpass exports made with metadata on** carry @user/@uid/@timestamp per feature;
+    strip them before s01 (they would become OSM tags).
+-   **Long shared tee complexes measure badly from the centre.** Four holes were over 8 %
+    from the box centres and within 3 % once s06 moved the tee along the box. Read the
+    adjusted column before calling a FAIL.
+-   **On a coastal conifer course the "deciduous" crowns are pines.** A theme can draw
+    the broad-crown class as shore pine; say so as a drawing choice.
+-   **The 2024 orthophoto settles the lidar's age** when the mosaic gives no year:
+    overlay the crowns on photo crops.
+-   **`golf=path`** is still not read by s01 (COURSE_LESSONS.md 10); `make_edits.py`
+    copies it as a cart path with a new id (dropping by id would otherwise remove the copy).

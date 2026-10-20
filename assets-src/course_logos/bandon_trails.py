@@ -1,8 +1,9 @@
 """Bandon Trails logo: a wooden trail-marker post with a spruce behind it,
 in golden dune grass (developer, 2026-10-20). Original drawing; not the
-resort's swallowtail mark. Registered in logos.py LOGOS as "bandon_trails".
+resort's swallowtail mark. Loaded by logos.py from assets-src/course_logos/
+(moved here from assets-src/logo_bandon_trails.py at the merge).
 
-    python3 assets-src/logo_bandon_trails.py out.png   # an 8x preview to look at
+    python3 assets-src/course_logos/bandon_trails.py out.png   # an 8x preview to look at
 """
 from __future__ import annotations
 
@@ -113,3 +114,13 @@ if __name__ == "__main__":
     import sys
     bg.save(sys.argv[1])
     print(sys.argv[1])
+
+
+from logos import EDGE, rgba  # noqa: E402
+
+LOGO = (trail_post, {
+    "spruce": rgba("#2c5f58"), "spruce_light": rgba("#437a6d"), "spruce_dark": rgba("#17383a"), "bark": rgba("#4c3a2c"),
+    "wood": rgba("#9a7448"), "wood_light": rgba("#c29a64"), "wood_dark": rgba("#6b4c2c"),
+    "blaze": rgba("#f4f0e6"), "band": rgba("#d8a031"), "band_dark": rgba("#a87920"),
+    "grass": rgba("#ad9c5b"), "grass_light": rgba("#d3c27a"), "edge": EDGE,
+})
