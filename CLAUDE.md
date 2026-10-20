@@ -515,8 +515,10 @@ DECISIONS.md with the reason.
     merged 2026-10-20: the hole-complete panel's "rewatch" lists the hole's
     strokes and plays any of them back. DECISIONS.md "Rewatch a shot".
 
--   **Next task:** logos for Chambers Bay and Gearhart (developer,
-    2026-10-20). The full `make regress` run of the faster-building changes
+-   **Logos (design chat, 2026-10-20):** Chambers Bay (the concrete ruins)
+    and Gearhart (a golf ball in a beer stein), merged 2026-10-20.
+
+-   **Next task:** the full `make regress` run of the faster-building changes
     was still going at the merge (East Potomac, Eastmoreland and Franklin
     unchanged). Item 1 of the player improvements (swing coach) is on
     `design/coach`, unmerged. Also: the third playtest (putting, yellow
