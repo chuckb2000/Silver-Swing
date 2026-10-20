@@ -37,6 +37,9 @@ in docs/requests/east_potomac_design_requests.md.
     built-up greens and grass mounds.
 -   **Fairways** run into every green (pipeline s02b; the OSM fairways
     stopped short of 19 greens) and no tree stands inside a fairway.
+    Touching fairway pieces are merged before their corners are rounded
+    (`merge_touching_fairways`, developer 2026-10-20): rounded one at a
+    time they left a line of rough and small notches along each join.
 -   **Trees:** 4,171 from lidar; about 1,000 drawn as flowering cherries
     along Ohio Drive and the seawall (theme flair, species not measured).
     A perfect drive at the middle of the fairway clears the trees near
