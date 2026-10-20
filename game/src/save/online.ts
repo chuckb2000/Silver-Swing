@@ -103,8 +103,12 @@ export function flushUploads(): Promise<number> {
       if (!(await onlineAvailable())) return 0;
       await syncHidden();
       const [all, sent] = await Promise.all([loadBoard(), loadUploaded()]);
-      // a round with no name of its own stays on this device (developer: nobody on the board as "player")
-      const todo = all.filter((e) => !sent.has(e.id) && isEntry(e) && e.player !== DEFAULT_NAME);
+      // a round with no name of its own stays on this device (developer: nobody on the board as "player").
+      // Once, every named round is sent again: rounds sent before player keys get this device's key on
+      // the server, so the player code finds them on another device (developer, 2026-10-20: 5 rounds
+      // on the phone, 9 on the computer). The server ignores rounds it has, apart from that.
+      const resend = !resentForOwner();
+      const todo = all.filter((e) => (resend || !sent.has(e.id)) && isEntry(e) && e.player !== DEFAULT_NAME);
       const owner = app.settings.playerKey;
       let n = 0;
       for (let i = 0; i < todo.length; i += 5) {
@@ -124,11 +128,20 @@ export function flushUploads(): Promise<number> {
         }
       }
       if (n) await saveUploaded(sent);
+      if (resend && todo.every((e) => sent.has(e.id) || nameConflicts.has(e.player))) markResentForOwner();
       await flushEagles();
       return n;
     })().finally(() => { flushing = null; });
   }
   return flushing;
+}
+
+const RESENT_KEY = 'golf:resent-for-owner-1';
+function resentForOwner(): boolean {
+  try { return localStorage.getItem(RESENT_KEY) === '1'; } catch { return true; } // no storage: don't resend every time
+}
+function markResentForOwner() {
+  try { localStorage.setItem(RESENT_KEY, '1'); } catch { /* next visit tries again */ }
 }
 
 /** Names this device used that another device already holds (its rounds were not added). */
