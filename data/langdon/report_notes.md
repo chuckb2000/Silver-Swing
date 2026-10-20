@@ -1,0 +1,19 @@
+## Other open items (Langdon Farms Golf Club)
+
+Decisions the developer made on 2026-10-19 are in DECISIONS.md ("Langdon Farms Golf Club"): Tee 7, the routing, all water red, the driving range in bounds, OR 551 out of bounds, the two red barns, free relief from the barn on 8. The items below are the data's gaps and the course chat's calls, each with a recommendation.
+
+1. **Five holes are flags (3-8 %), none over 8 %**: 1 (+6.4 %), 3 (-4.0 %), 9 (+4.8 %), 15 (+3.4 %) and 17 (+4.4 %), measured from the developer's Tee 7 boxes. Total 6,566 yd against 6,522 (+0.7 %). Hole 1 is the largest: the box the developer marked is the OSM `tee=8` box (Tee 8 card 405 yd, measured 396). Recommendation: accept; or move hole 1's Tee 7 box forward about 22 m in the tracing desk if Tee 7 sits in front of it.
+2. **Hole 9 has no fairway of its own** (developer: the fairway drawn on hole 8 is shared by 8 and 9), so its line has no dogleg bend and runs straight from the tee to its part of the double green. Recommendation: accept.
+3. **Double green 9/18**: drawn by the developer once per hole; hole 18 keeps its drawing and hole 9 gets the rest (east side of the pond), so each hole has its own green centre and pin. Hole 9's part is a crescent whose centroid lies off the green, so its yardage is measured to a point on the green (s06) and its putting views centre on the pin (s09b). The two parts are shaped as separate green models (s07), so the tilt may step where they meet. Recommendation: accept; one green model across both parts would be a pipeline change.
+4. **Pins are at the green centres** (proposals; hole 9's at a point inside its crescent): OSM maps none.
+5. **Every green, fairway, bunker and tee box is traced** from the Oregon Statewide Imagery Program 2024 orthophoto (1 ft) and corrected by the developer in the tracing desk; OSM had only hole 1, ten bunkers, cart paths and two ponds. The OSM hole 1 shapes and five OSM bunkers the developer redrew are dropped in `edits.json`.
+6. **Dogleg bends** come from the developer's fairways (`data/langdon/make_bends.py`, Tualatin's landing-zone rule): holes 2, 4, 5, 7, 8, 11, 12 and 15.
+7. **OR 551 is out of bounds** between the two parts of the course (`join_boundary_parts`, 60 m). The game's OB polygon covers the strip, the surface map marks it OB.
+8. **The driving range is in bounds** (developer) and plays as rough; OSM's internal out-of-bounds line along it (w1569564855) is not used.
+9. **The barns**: the barn on 8 (w324295601) and the event barn by the 18th green (w324295657) are drawn in barn red. Both stand inside the boundary, so the game gives free relief from them (developer's choice; the card's local rule calls the barn on 8 an integral object).
+10. **Trees**: 5,043 from the DOGAMI canopy model (799 on the course), conifer or broadleaf from crown shape only (no leaf-off imagery), p50 19 m, max 60 m. No tree stands in the way of a centre-line drive or of the fairway-middle tee shot on any hole (unit tests), and s06b removed none.
+11. **Ponds**: the clubhouse pond (w334609000, beside 9 and 18) and the pond on the west part (w334607763, between 12 and 13) are red penalty areas (`red_water_osm`; mapped only as `natural=water`). The ponds west of the course near I-5 lie outside the boundary.
+12. **Scorecard**: the club's own card (2/2020), identical to GolfPass hole for hole. Tee 7 rating/slope 71.5/133 from the card (GolfPass: 71.9/132). Tee 8, 5, 3 and 1 are in scorecard.csv, not built.
+13. **Robot rounds** (5 seeds): 62-71, no penalties, no hole over par + 2.
+
+Tracing desk: https://claude.ai/artifact/G4bThDJVqubcH8TdhBfTFc (`desk_export.py langdon <dir> --edit 1-18 --traced`; saves read back into `data/langdon/desk/`).

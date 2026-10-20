@@ -223,6 +223,20 @@
     "Blue",
     "Black"
    ]
+  },
+  {
+   "id": "langdon",
+   "name": "Langdon Farms Golf Club",
+   "location": "Aurora, Clackamas County, Oregon",
+   "state": "OR",
+   "theme": "pnw",
+   "holes": 18,
+   "par": 71,
+   "defaultTee": "Tee 7",
+   "totalYd": 6522,
+   "teeSets": [
+    "Tee 7"
+   ]
   }
  ]
 }

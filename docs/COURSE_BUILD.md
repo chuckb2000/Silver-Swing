@@ -244,8 +244,11 @@ Known Oswego-specific code, with the fix:
   "drop_trees": [{"x": 0, "y": 0, "reason": "..."}], // optional: single trees (local metres) the developer asked to remove
   "remove_wires": {"min_len_m": 40, "max_width_m": 3.0, "rise_m": 3.0},  // optional: take power lines out of the
                                         // canopy model before the tree search (s05; Oregon Golf Club)
-  "range_art": "rough"                  // optional: draw the driving range as rough (no stripes) with OB stakes
+  "range_art": "rough",                 // optional: draw the driving range as rough (no stripes) with OB stakes
                                         // along its edge; it stays out of bounds (s09, s09b, s10; Oregon Golf Club)
+  "join_boundary_parts": {"max_gap_m": 16},  // optional: a boundary in several parts, all in play, with OB land between
+                                        // (Eastmoreland's road; Langdon Farms' highway, its parts mapped as separate ways)
+  "building_colours": {"w123": "#a3302a"}    // optional: buildings drawn in their own colour (Langdon Farms' red barns)
 }
 ```
 

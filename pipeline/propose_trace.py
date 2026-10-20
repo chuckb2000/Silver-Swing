@@ -110,7 +110,10 @@ class Ortho:
         return rasterize([(g, 1) for g in geoms], out_shape=(self.H, self.W), transform=self.tr).astype(bool)
 
 
-def trace_green(o, seed, t, r=24.0, sig=2.0):
+def trace_green(o, seed, t, r=24.0, sig=2.0, br_delta=None):
+    """br_delta (optional, spec greens "br_delta"): also keep only pixels whose smoothed
+    brightness is within br_delta of the seed's (greens are mown lighter than their
+    collar; Langdon Farms, where texture alone ran into the collar and approach)."""
     x, y = seed
     r0, c0 = o.rc(x, y)
     k = int(r / o.res)
@@ -118,6 +121,11 @@ def trace_green(o, seed, t, r=24.0, sig=2.0):
     tex = ndimage.gaussian_filter(o.tex[sl], sig)
     yy, xx = np.mgrid[sl]
     m = (tex < t) & (o.br[sl] < 185) & ((yy - r0) ** 2 + (xx - c0) ** 2 <= k * k)
+    if br_delta is not None:
+        brs = ndimage.gaussian_filter(o.br[sl], sig)
+        i0, j0 = r0 - sl[0].start, c0 - sl[1].start
+        s0 = np.median(brs[max(i0 - 6, 0):i0 + 6, max(j0 - 6, 0):j0 + 6])
+        m &= np.abs(brs - s0) < br_delta
     m = ndimage.binary_opening(m, iterations=3)
     lab, _ = ndimage.label(m)
     v = lab[r0 - sl[0].start, c0 - sl[1].start]
@@ -217,11 +225,15 @@ def main():
                 f"ellipse placed by eye on the orthophoto ({s.get('why', 'not traceable')})")
             add(f"tr_pin_{k}", "pin", Point(cx, cy), {"golf": "pin", "hole": k}, "green centre (proposal)")
             continue
-        p = trace_green(o, s["seed"], s["t"])
+        p = trace_green(o, s["seed"], s["t"], r=s.get("r", 24.0), br_delta=s.get("br_delta"))
         if p is None:
             print(f"[trace] green {k}: nothing at the seed")
             continue
         p = green_shape(p)
+        if "cut" in s:  # optional: one hole's part of a double green, cut by a line, the part nearer `keep`
+            from shapely.ops import split
+            parts = split(p, LineString(s["cut"])).geoms
+            p = min(parts, key=lambda q: q.distance(Point(s["keep"])))
         greens[k] = p
         add(f"tr_green_{k}", "green", p, {"golf": "green", "hole": k},
             f"smooth turf on the orthophoto at {s['seed']}, texture < {s['t']}")
@@ -261,7 +273,10 @@ def main():
     # fairways -----------------------------------------------------------------------
     fs = spec["fairways"]
     keys = [k for k in fs["holes"] if k in lines]
-    prob = fairway_probability(o, g) if keys else None  # none listed: OSM already maps the fairways
+    if keys and "rule" in fs:  # optional: no OSM fairways to train on (Langdon Farms): a colour/texture rule
+        prob = fairway_rule(o, fs["rule"])
+    else:
+        prob = fairway_probability(o, g) if keys else None  # none listed: OSM already maps the fairways
     yy, xx = np.mgrid[0:o.H, 0:o.W]
     X = (xx + 0.5) * o.res
     Y = o.top - (yy + 0.5) * o.res
@@ -293,7 +308,7 @@ def main():
     # bunkers ------------------------------------------------------------------------
     bs = spec["bunkers"]
     near = unary_union([lines[k].buffer(bs["near_m"]) for k in spec["holes"]] + [p.buffer(bs["near_m"]) for p in greens.values()])
-    near = near.intersection(g[g.kind == "boundary"].geometry.iloc[0])  # not the sewage plant's tanks
+    near = near.intersection(unary_union(list(g[g.kind == "boundary"].geometry)))  # not the sewage plant's tanks; every boundary part
     sand = (o.br > bs["min_brightness"]) & (o.exg < bs.get("max_exg", 8))
     sand = ndimage.binary_opening(ndimage.binary_closing(sand, iterations=2), iterations=2)
     sand = ndimage.binary_fill_holes(sand) & o.mask([near])
@@ -318,55 +333,56 @@ def main():
             f["geometry"] = max(getattr(q, "geoms", [q]), key=lambda a: a.area)
 
     # water, penalty areas, boundary -----------------------------------------------
-    ws = spec["water"]
-    zf = z.astype(np.float32)
-    flat = (ndimage.maximum_filter(zf, 5) - ndimage.minimum_filter(zf, 5) < ws["flat_m"]) & (zf < ws["max_z_m"])
-    lab_w, n = ndimage.label(flat)
-    sizes = ndimage.sum(flat, lab_w, range(1, n + 1))
-    water = np.isin(lab_w, 1 + np.where(sizes > ws["min_area_m2"])[0])
-    water = ndimage.binary_fill_holes(ndimage.binary_closing(water, iterations=2))
-    water |= (zf < ws["edge_z_m"]) & ndimage.binary_dilation(water, iterations=25)
-    water = ndimage.binary_opening(water, iterations=2)
-    # the inlet pond (optional, `pond_seed`): low cells connected to the seed
-    pond = None
-    if "pond_seed" in ws:
-        px, py = ws["pond_seed"]
-        jj, ii = np.mgrid[0:Hz, 0:zf.shape[1]]
-        near_seed = (ii - px) ** 2 + (jj - (Hz - py)) ** 2 <= ws["pond_radius_m"] ** 2  # the pond opens to the bay
-        low = ndimage.binary_opening((zf < ws["pond_max_z_m"]) & near_seed, iterations=1)
-        lab_p, _ = ndimage.label(low)
-        pond_m = lab_p == lab_p[int(Hz - py), int(px)]
-        water &= ~ndimage.binary_dilation(pond_m, iterations=2)
-        pond = rounded(max(polys_of(pond_m, trz), key=lambda p: p.area), 1.5).simplify(0.5)
-    bnd = g[g.kind == "boundary"].geometry.iloc[0]
-    wname = ws.get("name", "Peconic River / Flanders Bay")
-    wpolys = [rounded(p, 2.0).simplify(1.0) for p in polys_of(water, trz, ws["min_area_m2"])]
-    strip = bnd.buffer(ws["hazard_strip_m"])
-    hazards = []
-    for i, p in enumerate(wpolys):
-        add(f"tr_water_{i}", "water", p, {"natural": "water", "name": wname},
-            "hydro-flattened water in the DEM")
-        if p.distance(bnd) < 5:
-            hz = p.intersection(strip)
-            for q in getattr(hz, "geoms", [hz]):
-                if q.area > 200 and q.distance(bnd) < 5:
-                    hazards.append(q)
-    for i, q in enumerate(hazards):
-        add(f"tr_hazard_{i}", "lateral_water_hazard", q.simplify(0.5),
-            {"golf": "lateral_water_hazard", "penalty": "red", "name": wname},
-            f"DEM water within {ws['hazard_strip_m']} m of the course boundary "
-            f"({ws.get('hazard_why', 'developer: river and bay are red')})")
-    from shapely.geometry import box as sbox
-    for i, part in enumerate(ws["pond_parts"] if pond is not None else []):
-        q = pond.intersection(sbox(part.get("x_min", -1e9), -1e9, part.get("x_max", 1e9), 1e9))
-        kind = {"red": "lateral_water_hazard", "yellow": "water_hazard"}[part["penalty"]]
-        add(f"tr_pond_{i}", kind, q, {"golf": kind, "penalty": part["penalty"], "name": "inlet pond"},
-            f"DEM ground below {ws['pond_max_z_m']} m within {ws['pond_radius_m']} m of {ws['pond_seed']}; "
-            f"{part['penalty']}: {part['why']}")
-    cl = ws["boundary_close_m"]
-    nb_poly = rounded(unary_union([bnd, *([pond] if pond is not None else []), *hazards]), cl)
-    add("tr_boundary", "boundary", nb_poly, {"leisure": "golf_course", "name": cfg.get("boundary_name", cfg["name"])},
-        "OSM boundary grown to include the traced penalty areas")
+    if "water" in spec:  # optional: courses whose water OSM already maps have no water to trace (Langdon Farms)
+        ws = spec["water"]
+        zf = z.astype(np.float32)
+        flat = (ndimage.maximum_filter(zf, 5) - ndimage.minimum_filter(zf, 5) < ws["flat_m"]) & (zf < ws["max_z_m"])
+        lab_w, n = ndimage.label(flat)
+        sizes = ndimage.sum(flat, lab_w, range(1, n + 1))
+        water = np.isin(lab_w, 1 + np.where(sizes > ws["min_area_m2"])[0])
+        water = ndimage.binary_fill_holes(ndimage.binary_closing(water, iterations=2))
+        water |= (zf < ws["edge_z_m"]) & ndimage.binary_dilation(water, iterations=25)
+        water = ndimage.binary_opening(water, iterations=2)
+        # the inlet pond (optional, `pond_seed`): low cells connected to the seed
+        pond = None
+        if "pond_seed" in ws:
+            px, py = ws["pond_seed"]
+            jj, ii = np.mgrid[0:Hz, 0:zf.shape[1]]
+            near_seed = (ii - px) ** 2 + (jj - (Hz - py)) ** 2 <= ws["pond_radius_m"] ** 2  # the pond opens to the bay
+            low = ndimage.binary_opening((zf < ws["pond_max_z_m"]) & near_seed, iterations=1)
+            lab_p, _ = ndimage.label(low)
+            pond_m = lab_p == lab_p[int(Hz - py), int(px)]
+            water &= ~ndimage.binary_dilation(pond_m, iterations=2)
+            pond = rounded(max(polys_of(pond_m, trz), key=lambda p: p.area), 1.5).simplify(0.5)
+        bnd = g[g.kind == "boundary"].geometry.iloc[0]
+        wname = ws.get("name", "Peconic River / Flanders Bay")
+        wpolys = [rounded(p, 2.0).simplify(1.0) for p in polys_of(water, trz, ws["min_area_m2"])]
+        strip = bnd.buffer(ws["hazard_strip_m"])
+        hazards = []
+        for i, p in enumerate(wpolys):
+            add(f"tr_water_{i}", "water", p, {"natural": "water", "name": wname},
+                "hydro-flattened water in the DEM")
+            if p.distance(bnd) < 5:
+                hz = p.intersection(strip)
+                for q in getattr(hz, "geoms", [hz]):
+                    if q.area > 200 and q.distance(bnd) < 5:
+                        hazards.append(q)
+        for i, q in enumerate(hazards):
+            add(f"tr_hazard_{i}", "lateral_water_hazard", q.simplify(0.5),
+                {"golf": "lateral_water_hazard", "penalty": "red", "name": wname},
+                f"DEM water within {ws['hazard_strip_m']} m of the course boundary "
+                f"({ws.get('hazard_why', 'developer: river and bay are red')})")
+        from shapely.geometry import box as sbox
+        for i, part in enumerate(ws["pond_parts"] if pond is not None else []):
+            q = pond.intersection(sbox(part.get("x_min", -1e9), -1e9, part.get("x_max", 1e9), 1e9))
+            kind = {"red": "lateral_water_hazard", "yellow": "water_hazard"}[part["penalty"]]
+            add(f"tr_pond_{i}", kind, q, {"golf": kind, "penalty": part["penalty"], "name": "inlet pond"},
+                f"DEM ground below {ws['pond_max_z_m']} m within {ws['pond_radius_m']} m of {ws['pond_seed']}; "
+                f"{part['penalty']}: {part['why']}")
+        cl = ws["boundary_close_m"]
+        nb_poly = rounded(unary_union([bnd, *([pond] if pond is not None else []), *hazards]), cl)
+        add("tr_boundary", "boundary", nb_poly, {"leisure": "golf_course", "name": cfg.get("boundary_name", cfg["name"])},
+            "OSM boundary grown to include the traced penalty areas")
 
     # write ----------------------------------------------------------------------------
     out = gpd.GeoDataFrame(feats, geometry="geometry", crs=None)
@@ -381,6 +397,20 @@ def main():
         counts[f["kind"]] = counts.get(f["kind"], 0) + 1
     print(f"[trace] proposed/traced.geojson: {len(feats)} features {counts}")
     previews(o, g, feats, lines, pdir)
+
+
+def fairway_rule(o, rule):
+    """Fairway 'probability' (0/1, smoothed) from a colour/texture rule, for a course with no
+    mapped fairways to train the classifier on: mown turf is greener (2G-R-B, smoothed over
+    `sigma` px) and smoother (local brightness std) than the dry rough of a summer photo."""
+    s = rule.get("sigma", 4)
+    exg = ndimage.gaussian_filter(o.exg, s)
+    tex = ndimage.gaussian_filter(o.tex, s)
+    m = (exg > rule["exg_min"]) & (tex < rule["tex_max"]) & (o.br < rule.get("br_max", 185))
+    if "gr_min" in rule:  # fairways are a bluer green (G - R) than irrigated rough beside them
+        R, G = o.rgb[..., 0], o.rgb[..., 1]
+        m &= ndimage.gaussian_filter(G - R, s) > rule["gr_min"]
+    return ndimage.gaussian_filter(m.astype(np.float32), 3)
 
 
 def fairway_probability(o, g):

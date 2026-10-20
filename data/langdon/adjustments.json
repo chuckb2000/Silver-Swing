@@ -1,0 +1,38 @@
+[
+ {
+  "hole": 6,
+  "tee_set": "Tee 7",
+  "step": 2,
+  "type": "tee_position",
+  "from": [
+   893.91,
+   1390.69
+  ],
+  "to": [
+   893.25,
+   1396.25
+  ],
+  "real_yd": 119.4,
+  "adjusted_yd": 118.0,
+  "card_yd": 115.0,
+  "reason": "measured 119 yd from the tee-box centre vs 115 on the card (+3.8%); moved the virtual tee along the middle of the real tee polygon desk_6_bluetee_0 (on its centre line, at least 2.5 m from its back and front)"
+ },
+ {
+  "hole": 18,
+  "tee_set": "Tee 7",
+  "step": 2,
+  "type": "tee_position",
+  "from": [
+   680.1,
+   155.08
+  ],
+  "to": [
+   679.25,
+   155.0
+  ],
+  "real_yd": 499.7,
+  "adjusted_yd": 499.8,
+  "card_yd": 502.0,
+  "reason": "tee shot: a perfect drive at the middle of the fairway clipped a tree near the tee; moved 0.9 m along the middle of the real tee polygon desk_18_bluetee_0 to the nearest clear spot"
+ }
+]

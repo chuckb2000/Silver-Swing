@@ -8,16 +8,17 @@ declare global {
   }
 }
 
-type Target = { button?: string; text?: string };
+type Target = { button?: string; text?: string; icon?: string };
 
 /** Screen position (CSS px) of a Button (by label) or a piece of text in an active scene, else null. */
-const locate = ([scene, label, text]: [string, string | null, string | null]) => {
+const locate = ([scene, label, text, icon]: [string, string | null, string | null, (string | null)?]) => {
   const g = window.__game;
   const s = g?.scene.getScene(scene);
   if (!s || !s.sys.isActive() || !s.cameras?.main) return null;
   const find = (list: any[]): any => {
     for (const o of list) {
       if (label !== null && o.label && o.label.text === label) return o;
+      if (icon && o.opts?.icon === icon) return o;
       if (text !== null && o.type === 'BitmapText' && o.text === text) return o;
       if (o.list) { const f = find(o.list); if (f) return f; }
     }
@@ -28,7 +29,7 @@ const locate = ([scene, label, text]: [string, string | null, string | null]) =>
   const canvas = g.canvas.getBoundingClientRect();
   // scene units are texels: x camera zoom = device px, x css/device = css px
   const k = s.cameras.main.zoom * (canvas.width / g.canvas.width);
-  if (label !== null) {
+  if (label !== null || icon) {
     const m = o.getWorldTransformMatrix();
     return { x: canvas.left + (m.tx + o.bw / 2) * k, y: canvas.top + (m.ty + o.bh / 2) * k };
   }
@@ -47,7 +48,7 @@ async function tap(page: Page, scene: string, what: Target, done: (arg: any) => 
   for (let attempt = 1; attempt <= 3; attempt++) {
     const f0 = await page.evaluate(() => window.__game.loop.frame);
     await page.waitForFunction((f) => window.__game.loop.frame >= f + 2, f0, { polling: 20 });
-    const handle = await page.waitForFunction(locate, [scene, what.button ?? null, what.text ?? null] as [string, string | null, string | null], { polling: 100, timeout: 30_000 });
+    const handle = await page.waitForFunction(locate, [scene, what.button ?? null, what.text ?? null, what.icon ?? null] as [string, string | null, string | null, string | null], { polling: 100, timeout: 30_000 });
     const pos = (await handle.jsonValue()) as { x: number; y: number };
     await page.mouse.click(pos.x, pos.y, { delay: 60 });
     try {
@@ -62,6 +63,37 @@ async function tap(page: Page, scene: string, what: Target, done: (arg: any) => 
 
 const sceneActive = (key: string) => window.__game.scene.isActive(key);
 
+/** The course screen's state page shows `name`, or has a next-page arrow. */
+const courseOrNext = (name: string) => {
+  const s = window.__game.scene.getScene('courses');
+  const has = (list: any[]): boolean => list.some((o) => (o.type === 'BitmapText' && o.text === name) || o.opts?.icon === 'arrow_right' || (o.list && has(o.list)));
+  return s.sys.isActive() && has(s.children.list);
+};
+
+/** Open a state on the course screen and page through it to a course (states list
+ * their courses alphabetically, a few to a page), then tap the course. */
+async function pickCourse(page: Page, state: string, name: string) {
+  await tap(page, 'courses', { text: state }, courseOrNext, name);
+  // the footer's "page/pages" counter
+  const counter = () => {
+    const find = (list: any[]): string | null => {
+      for (const o of list) {
+        if (o.type === 'BitmapText' && /^\d+\/\d+$/.test(o.text)) return o.text;
+        const f = o.list ? find(o.list) : null;
+        if (f) return f;
+      }
+      return null;
+    };
+    return find(window.__game.scene.getScene('courses').children.list);
+  };
+  for (let i = 0; i < 6; i++) {
+    if (await page.evaluate(locate, ['courses', null, name, null] as [string, string | null, string | null, string | null])) break;
+    const before = await page.evaluate(counter);
+    await tap(page, 'courses', { icon: 'arrow_right' }, new Function('before', `return (${counter.toString()})() !== before;`) as (b: unknown) => boolean, before);
+  }
+  await tap(page, 'courses', { text: name }, sceneActive, 'setup');
+}
+
 test('title -> new round -> play hole 1 to the cup', async ({ page }) => {
   test.setTimeout(300_000); // the test machine may render at a few frames a second
   const errors: string[] = [];
@@ -70,8 +102,7 @@ test('title -> new round -> play hole 1 to the cup', async ({ page }) => {
   await page.waitForFunction(() => window.__game?.scene.isActive('title'), null, { timeout: 60_000 });
   await tap(page, 'title', { button: 'play' }, sceneActive, 'courses');
   // choose a state, then the course
-  await tap(page, 'courses', { text: 'oregon' }, locate, ['courses', null, 'oswego lake country club'] as [string, string | null, string | null]);
-  await tap(page, 'courses', { text: 'oswego lake country club' }, sceneActive, 'setup');
+  await pickCourse(page, 'oregon', 'oswego lake country club');
   const frontNineOn = () => {
     const find = (list: any[]): any => {
       for (const o of list) {
@@ -171,8 +202,7 @@ test('the menu button quits a round for good', async ({ page }) => {
   await page.goto('/?autoplay');
   await page.waitForFunction(() => window.__game?.scene.isActive('title'), null, { timeout: 60_000 });
   await tap(page, 'title', { button: 'play' }, sceneActive, 'courses');
-  await tap(page, 'courses', { text: 'oregon' }, locate, ['courses', null, 'oswego lake country club'] as [string, string | null, string | null]);
-  await tap(page, 'courses', { text: 'oswego lake country club' }, sceneActive, 'setup');
+  await pickCourse(page, 'oregon', 'oswego lake country club');
   await tap(page, 'setup', { button: 'tee off' }, () => window.__game.scene.isActive('play') && window.__game.scene.getScene('play').state === 'intro');
   await page.keyboard.press('Space');
   await page.waitForFunction(() => window.__game.scene.getScene('play').state === 'aim', null, { polling: 100 });

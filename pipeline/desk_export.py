@@ -59,7 +59,7 @@ def main():
     ap.add_argument("--traced", action="store_true",
                     help="start from proposed/traced.geojson: its hole lines and greens where the layout has none, and its "
                          "greens, tees and bunkers (each bunker to its nearest hole line) as the editable shapes of --edit holes "
-                         "not yet saved in the desk (Waverley, where OSM maps no holes)")
+                         "not yet saved in the desk (Waverley and Langdon Farms, where OSM maps no holes)")
     a = ap.parse_args()
     name, out = a.course, Path(a.out)
     cfg = load_config(name)
@@ -111,6 +111,21 @@ def main():
                 continue
             traced.setdefault(k, []).append({"id": r.osm, "kind": r.kind, "poly": ring(r.geometry)})
     bnd = g[g.kind == "boundary"].geometry.iloc[0]
+    traced = None
+    if a.traced:
+        traced = gpd.read_file(cdir / "proposed" / "traced.geojson").to_crs(cfg["epsg"])
+        traced["geometry"] = traced.geometry.translate(-world.x0, -world.y0)
+        traced["tg"] = [t if isinstance(t, dict) else json.loads(t) for t in traced["tags"]]
+        for _, r in traced[traced.kind == "hole"].iterrows():
+            lines.setdefault(str(r.tg.get("ref")), r.geometry)
+        tg_ = traced[traced.kind == "green"]  # local metres, no CRS (as course_local.geojson)
+        greens = gpd.GeoDataFrame({"osm": list(greens.osm) + list(tg_.osm)},
+                                  geometry=list(greens.geometry) + list(tg_.geometry))
+        bnd = unary_union(list(g[g.kind == "boundary"].geometry))  # every boundary part
+        if bnd.geom_type == "MultiPolygon":
+            bnd = max(bnd.geoms, key=lambda q: q.area).union(bnd)
+    dk = spec.get("desk", {})  # optional: the tee set to mark and the card column shown beside it (default Blue / White)
+    tee_name, ref_name = dk.get("tee", "Blue"), dk.get("ref", "White")
     (out / "img").mkdir(parents=True, exist_ok=True)
     holes = []
     offered = {}
@@ -141,6 +156,14 @@ def main():
             offered[k] = [r.osm for _, r in g.iterrows() if own(r)]
         if k in saved:
             feats = saved[k]
+        elif traced is not None and k in edit:
+            def mine(r):  # a traced shape of this hole: tagged with it, or (bunkers) nearest this hole's line
+                if r.kind not in ("green", "fairway", "bunker", "tee"):
+                    return False
+                if r.tg.get("hole") is not None:
+                    return str(r.tg.get("hole")) == k
+                return min(lines, key=lambda q: lines[q].distance(r.geometry)) == k
+            feats = [{"id": r.osm, "kind": r.kind, "poly": ring(r.geometry)} for _, r in traced.iterrows() if mine(r)]
         elif k in edit or k in edit_osm:
             feats = [{"id": r.osm, "kind": r.kind, "poly": ring(r.geometry)} for _, r in g.iterrows()
                      if own(r) and r.kind in ("green", "fairway", "bunker", "tee")]
@@ -154,7 +177,15 @@ def main():
         refs += [{"kind": "pad", "poly": ring(p)} for p in pads if p.intersects(clip)]
         bl = bnd.boundary.intersection(clip.buffer(5))
         blines = [[[round(x, 1), round(y, 1)] for x, y in ln_.coords] for ln_ in getattr(bl, "geoms", [bl]) if ln_.geom_type == "LineString"]
-        holes.append({"hole": k, "par": int(card[k]["par"]), "blue": int(card[k].get("blue") or 0), "white": int(card[k].get("white") or 0),
+        if traced is not None:
+            refs += [{"kind": r.kind, "poly": ring(r.geometry)} for _, r in traced.iterrows()
+                     if r.kind in ("green", "fairway", "bunker", "tee") and r.geometry.intersects(clip)
+                     and not any(f["id"] == r.osm for f in feats)]
+        extra = {} if not dk else {"teeName": tee_name, "refName": ref_name, "course": cfg["name"],
+                                   "photo": dk.get("photo", "orthophoto"),
+                                   "units": f"local metres, origin {world.x0:.0f} E {world.y0:.0f} N, EPSG:{cfg['epsg']}"}
+        holes.append({**extra, "hole": k, "par": int(card[k]["par"]),
+                      "blue": int(card[k].get(tee_name.lower()) or 0), "white": int(card[k].get(ref_name.lower()) or 0),
                       "box": bx0, "w": crop.width, "h": crop.height, "img": fn,
                       "line": [[round(x, 1), round(y, 1)] for x, y in c], "greenCenter": [round(gc.centroid.x, 1), round(gc.centroid.y, 1)],
                       "features": feats, "refs": refs, "boundary": blines, "editShapes": k in edit or k in edit_osm,

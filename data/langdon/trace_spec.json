@@ -1,0 +1,397 @@
+{
+ "note": "Langdon Farms trace (course chat, 2026-10-19). Routing from the developer (proposed/greens_labelled.jpg: 1 I, 2 D, 3 C, 4 A, 5 B, 6 F, 7 J, 8 P, 9 and 18 one double green around the north end of the pond (L/M), 10 W, 11 R, 12 T, 13 V, 14 S, 15 X, 16 N, 17 Q; E and G are spare-turf nursery greens, H and O are fairway, Y is a tee box, U is nothing). Hole 1's green is in OSM. Tee points are first guesses (lidar pads near the card's Tee 7 distance); the developer marks every Tee 7 box in the tracing desk. Local metres, world origin (517570, 5012491).",
+ "ortho": "raw/osip2024_032m.tif",
+ "source": "traced (course chat) from the Oregon Statewide Imagery Program 2024 orthophoto (1 ft) and the DOGAMI lidar DTM",
+ "greens": {
+  "2": {
+   "seed": [
+    599,
+    1448
+   ],
+   "t": 2.5,
+   "br_delta": 5.5
+  },
+  "3": {
+   "seed": [
+    644,
+    1596
+   ],
+   "t": 2.5,
+   "br_delta": 5.5
+  },
+  "4": {
+   "seed": [
+    754,
+    1843
+   ],
+   "t": 2.5,
+   "br_delta": 5.5
+  },
+  "5": {
+   "seed": [
+    859,
+    1476
+   ],
+   "t": 2.5,
+   "br_delta": 5.5
+  },
+  "6": {
+   "seed": [
+    784,
+    1401
+   ],
+   "t": 2.5,
+   "br_delta": 5.5
+  },
+  "7": {
+   "seed": [
+    776,
+    854
+   ],
+   "t": 2.5,
+   "br_delta": 5.5
+  },
+  "8": {
+   "seed": [
+    780,
+    284
+   ],
+   "t": 2.5,
+   "br_delta": 5.5
+  },
+  "9": {
+   "seed": [
+    754,
+    579
+   ],
+   "t": 2.5,
+   "br_delta": 5.5
+  },
+  "10": {
+   "seed": [
+    141,
+    761
+   ],
+   "t": 2.5,
+   "br_delta": 5.5
+  },
+  "11": {
+   "seed": [
+    432,
+    1306
+   ],
+   "t": 2.5,
+   "br_delta": 5.5
+  },
+  "12": {
+   "seed": [
+    274,
+    899
+   ],
+   "t": 2.5,
+   "br_delta": 5.5
+  },
+  "13": {
+   "seed": [
+    339,
+    844
+   ],
+   "t": 2.5,
+   "br_delta": 5.5
+  },
+  "14": {
+   "seed": [
+    478,
+    1171
+   ],
+   "t": 2.5,
+   "br_delta": 5.5
+  },
+  "15": {
+   "seed": [
+    466,
+    800
+   ],
+   "t": 2.5,
+   "br_delta": 5.5
+  },
+  "16": {
+   "seed": [
+    615,
+    354
+   ],
+   "t": 2.5,
+   "br_delta": 5.5
+  },
+  "17": {
+   "seed": [
+    614,
+    165
+   ],
+   "t": 2.5,
+   "br_delta": 5.5
+  },
+  "18": {
+   "seed": [
+    697,
+    646
+   ],
+   "t": 2.5,
+   "br_delta": 5.5
+  }
+ },
+ "tees": [],
+ "holes": {
+  "1": {
+   "par": 4,
+   "handicap": 13,
+   "tee": [
+    585,
+    764
+   ],
+   "bends": []
+  },
+  "2": {
+   "par": 4,
+   "handicap": 11,
+   "tee": [
+    583,
+    1107
+   ],
+   "bends": [
+    [
+     637.5,
+     1334.2
+    ]
+   ]
+  },
+  "3": {
+   "par": 3,
+   "handicap": 17,
+   "tee": [
+    634,
+    1453
+   ],
+   "bends": []
+  },
+  "4": {
+   "par": 4,
+   "handicap": 9,
+   "tee": [
+    686,
+    1550
+   ],
+   "bends": [
+    [
+     763.8,
+     1741.8
+    ]
+   ]
+  },
+  "5": {
+   "par": 4,
+   "handicap": 7,
+   "tee": [
+    881,
+    1846
+   ],
+   "bends": [
+    [
+     857.0,
+     1619.2
+    ]
+   ]
+  },
+  "6": {
+   "par": 3,
+   "handicap": 15,
+   "tee": [
+    885,
+    1390
+   ],
+   "bends": []
+  },
+  "7": {
+   "par": 5,
+   "handicap": 3,
+   "tee": [
+    787,
+    1323
+   ],
+   "bends": [
+    [
+     794.2,
+     1094.0
+    ]
+   ]
+  },
+  "8": {
+   "par": 4,
+   "handicap": 1,
+   "tee": [
+    809,
+    701
+   ],
+   "bends": [
+    [
+     807.5,
+     460.2
+    ]
+   ]
+  },
+  "9": {
+   "par": 4,
+   "handicap": 5,
+   "tee": [
+    720,
+    230
+   ],
+   "bends": []
+  },
+  "10": {
+   "par": 4,
+   "handicap": 12,
+   "tee": [
+    480,
+    765
+   ],
+   "bends": []
+  },
+  "11": {
+   "par": 5,
+   "handicap": 2,
+   "tee": [
+    170,
+    810
+   ],
+   "bends": [
+    [
+     272.6,
+     1012.0
+    ]
+   ]
+  },
+  "12": {
+   "par": 4,
+   "handicap": 4,
+   "tee": [
+    458,
+    1251
+   ],
+   "bends": [
+    [
+     368.4,
+     1040.5
+    ]
+   ]
+  },
+  "13": {
+   "par": 3,
+   "handicap": 18,
+   "tee": [
+    198,
+    841
+   ],
+   "bends": []
+  },
+  "14": {
+   "par": 4,
+   "handicap": 14,
+   "tee": [
+    381,
+    832
+   ],
+   "bends": []
+  },
+  "15": {
+   "par": 4,
+   "handicap": 10,
+   "tee": [
+    502,
+    1117
+   ],
+   "bends": [
+    [
+     467.4,
+     898.8
+    ]
+   ]
+  },
+  "16": {
+   "par": 4,
+   "handicap": 8,
+   "tee": [
+    587,
+    722
+   ],
+   "bends": []
+  },
+  "17": {
+   "par": 3,
+   "handicap": 16,
+   "tee": [
+    592,
+    349
+   ],
+   "bends": []
+  },
+  "18": {
+   "par": 5,
+   "handicap": 6,
+   "tee": [
+    660,
+    200
+   ],
+   "bends": []
+  }
+ },
+ "fairways": {
+  "holes": [
+   "1",
+   "2",
+   "4",
+   "5",
+   "7",
+   "8",
+   "9",
+   "10",
+   "11",
+   "12",
+   "14",
+   "15",
+   "16",
+   "18"
+  ],
+  "corridor_m": 45,
+  "prob": 0.5,
+  "min_area_m2": 250,
+  "rule": {
+   "exg_min": 48,
+   "tex_max": 3.5,
+   "sigma": 4,
+   "gr_min": 19
+  }
+ },
+ "bunkers": {
+  "near_m": 45,
+  "min_area_m2": 12,
+  "max_area_m2": 700,
+  "min_z_m": 0,
+  "min_brightness": 175,
+  "min_compactness": 0.35
+ },
+ "desk": {
+  "tee": "Tee 7",
+  "ref": "Tee 8",
+  "photo": "Oregon 2024 photo"
+ },
+ "double_greens": [
+  {
+   "holes": [
+    "9",
+    "18"
+   ],
+   "note": "developer 2026-10-19: one green around the north end of the clubhouse pond shared by 9 and 18; hole 9 plays to the east side (the side nearer the 8th tee), 18 to the north-west. Hole 18 keeps the green the developer drew for it; hole 9's is the rest of its drawing."
+  }
+ ]
+}

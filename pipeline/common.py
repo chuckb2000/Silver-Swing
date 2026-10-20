@@ -237,6 +237,11 @@ def play_boundary(g, cfg: dict):
     every leisure=golf_course polygon in the data (one property, one OB line)."""
     b = g[g.kind == "boundary"]
     if not cfg.get("layouts"):
+        if len(b) > 1 and joins_parts(cfg):
+            # join_boundary_parts with the parts mapped as separate features (Langdon Farms:
+            # two leisure=golf_course ways either side of OR 551): all of them, as one MultiPolygon
+            from shapely.ops import unary_union
+            return unary_union(list(b.geometry))
         return b.geometry.iloc[0]
     from shapely.ops import unary_union
     u = unary_union(list(b.geometry))

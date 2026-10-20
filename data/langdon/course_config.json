@@ -1,0 +1,94 @@
+{
+  "id": "langdon",
+  "name": "Langdon Farms Golf Club",
+  "location": "Aurora, Clackamas County, Oregon",
+  "state": "OR",
+  "architects": "John Fought and Bob Cupp (1995)",
+  "theme": "pnw",
+  "epsg": 32610,
+  "osm_sources": [
+    "raw/overpass.geojson"
+  ],
+  "boundary_name": "Langdon Farms Golf Course",
+  "dtm": {
+    "path": "raw/dogami_dtm_ft.tif",
+    "units": "ft",
+    "source": "DOGAMI lidar DIGITAL_TERRAIN_MODEL_MOSAIC (bare earth), exportImage at 1 m in EPSG:32610, box x 517470-518694 / y 5012391-5014639, downloaded by the developer 2026-10-19 (GitHub release data-langdon, exportImage.10.tiff)"
+  },
+  "chm": {
+    "path": "raw/dogami_chm_ft.tif",
+    "units": "ft",
+    "source": "DOGAMI lidar CANOPY_HEIGHT_MODEL_MOSAIC, exportImage at 1 m in EPSG:32610, same box, downloaded by the developer 2026-10-19 (GitHub release data-langdon, exportImage.11.tiff)",
+    "label": "DOGAMI canopy height model"
+  },
+  "world": {
+    "x0": 517570,
+    "y0": 5012491,
+    "width": 1024,
+    "height": 2048,
+    "note": "provisional (intake 2026-10-19): OSM boundary bbox (two parts, 801 x 1804 m) + scenery, rounded out to whole 256 m chunks and centred (111 m west/east, 122 m south/north); 2048 m north-south is the size limit"
+  },
+  "tee_sets": [
+    {
+      "name": "Tee 7",
+      "playable": true,
+      "rating": 71.5,
+      "slope": 133,
+      "total_yd": 6522
+    },
+    {
+      "name": "Tee 8",
+      "playable": false,
+      "rating": 73.7,
+      "slope": 133,
+      "total_yd": 6931
+    },
+    {
+      "name": "Tee 5",
+      "playable": false,
+      "rating": 69.3,
+      "slope": 126,
+      "total_yd": 6052
+    },
+    {
+      "name": "Tee 3",
+      "playable": false,
+      "rating": 65.6,
+      "slope": 115,
+      "total_yd": 5246
+    },
+    {
+      "name": "Tee 1",
+      "playable": false,
+      "rating": 61.4,
+      "slope": 110,
+      "total_yd": 4190
+    }
+  ],
+  "default_tee": "Tee 7",
+  "scorecard_source": "Club scorecard (langdonfarms.com sc-front.jpg / sc-back.jpg, (c) Golf ScoreCards Inc. 2/2020), supplied by the developer 2026-10-19; tees are named Tee 8 to Tee 1 on the card; Tee 6, 4 and 2 are combinations. Every row adds up to its printed totals and matches GolfPass hole for hole. Men's rating/slope from the card (Tee 7 71.5/133; GolfPass says 71.9/132).",
+  "penalty_default": "red",
+  "driving_range_is_ob": false,
+  "wind_mph": {
+    "minMph": 1,
+    "maxMph": 7
+  },
+  "attribution": [
+    "Map data © OpenStreetMap contributors (ODbL)",
+    "Elevation and canopy: Oregon Department of Geology and Mineral Industries (DOGAMI) lidar",
+    "Scorecard: Langdon Farms Golf Club (club scorecard)"
+  ],
+  "notes": "Intake 2026-10-19. OSM has the boundary (two ways, w30516492 west of OR 551 and w30516571 east of it), 12 bunkers, cart paths and two ponds; no holes, tees, fairways, greens or pins. The whole layout is to be traced (docs/COURSE_TRACING.md). Developer 2026-10-19: build Tee 7 (the card's name); no hole plays across OR 551 (a cart path runs under it), so the two parts are joined with the highway strip out of bounds; all water red; driving range in bounds (plays as rough).",
+  "building_colours": {
+    "w324295601": "#a3302a",
+    "w324295657": "#a3302a"
+  },
+  "red_water_osm": [
+    "w334607763",
+    "w334609000"
+  ],
+  "join_boundary_parts": {
+    "max_gap_m": 60,
+    "note": "OR 551 between the two OSM course ways (w30516492 west, w30516571 east), 35-58 m apart; no hole plays across it, a cart path runs under it (developer 2026-10-19): the highway strip stays out of bounds"
+  }
+}
