@@ -37,11 +37,18 @@ in docs/requests/east_potomac_design_requests.md.
     built-up greens and grass mounds.
 -   **Fairways** run into every green (pipeline s02b; the OSM fairways
     stopped short of 19 greens) and no tree stands inside a fairway.
+    Touching fairway pieces are merged before their corners are rounded
+    (`merge_touching_fairways`, developer 2026-10-20): rounded one at a
+    time they left a line of rough and small notches along each join.
 -   **Trees:** 4,171 from lidar; about 1,000 drawn as flowering cherries
     along Ohio Drive and the seawall (theme flair, species not measured).
     A perfect drive at the middle of the fairway clears the trees near
     every tee (every course build checks this: 7 tees moved within their
-    boxes, 6 trees removed on Blue 9 and 13).
+    boxes, 6 trees removed on Blue 9 and 13). Removed at the developer's
+    request (`drop_trees`): the two trees at the front of the Blue 10 tee
+    box, and a 28.5 m, 1.5 m-crown object (probably a pole or a lidar
+    artefact) standing in the left side of the Blue 10 fairway, 159 m from
+    the Blue tee (2026-10-20).
 
 ### Scorecards (club PDFs supplied by the developer, 2026-10-19)
 

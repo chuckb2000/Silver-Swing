@@ -36,7 +36,7 @@ def course_layers(g, roads, cfg):
     """
     greens = list(g[g.kind == "green"].geometry)
     fringe = [geom.buffer(1.5).difference(geom) for geom in greens]
-    fairways = smooth_fairways(g)
+    fairways = smooth_fairways(g, cfg)
     paths = [r.geometry.buffer(1.2, cap_style=1) for _, r in g[g.kind == "cartpath"].iterrows()]
     layers = [
         (fairways, SURF["fairway"]),
@@ -58,14 +58,26 @@ def course_layers(g, roads, cfg):
     return layers
 
 
-def smooth_fairways(g):
+def smooth_fairways(g, cfg=None):
     """The fairways with smooth, rounded outlines (common.round_corners; developer,
     2026-10-19), still touching every green they touched: within 2 m of a green
-    the original outline is kept, so an approach never pulls back from the collar."""
+    the original outline is kept, so an approach never pulls back from the collar.
+
+    Optional (course_config.json "merge_touching_fairways": true): fairway pieces
+    that touch (an s02b approach and the fairway it extends, or two OSM fairways
+    drawn edge to edge) are merged before rounding. Rounded one at a time, each
+    piece pulls in at the shared edge and leaves a line of rough and small notches
+    along the join (East Potomac, developer 2026-10-20). Without the key nothing
+    changes."""
     greens = [geom for geom in g[g.kind == "green"].geometry if geom is not None]
     near_greens = unary_union([geom.buffer(2.0) for geom in greens]) if greens else None
     out = []
-    for geom in g[g.kind == "fairway"].geometry:
+    geoms = [geom for geom in g[g.kind == "fairway"].geometry if geom is not None and not geom.is_empty]
+    if (cfg or {}).get("merge_touching_fairways") and geoms:
+        # close hairline gaps (< 0.2 m) between pieces drawn edge to edge, then one polygon per merged piece
+        merged = unary_union([geom.buffer(0.1, join_style=2) for geom in geoms]).buffer(-0.1, join_style=2)
+        geoms = [p for p in getattr(merged, "geoms", [merged]) if p.geom_type == "Polygon" and p.area > 0.5]
+    for geom in geoms:
         if geom is None or geom.is_empty:
             continue
         r = round_corners(geom)

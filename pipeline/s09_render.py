@@ -265,7 +265,7 @@ def rough_band_mask(cfg, g, surf, rasterise, X, Y, ppm):
             mown |= rough_band_mask({k: v for k, v in cfg.items() if k != "fescue_areas"}, g, surf, rasterise, X, Y, ppm)
         return mown
     bm = cfg.get("rough_band_m")
-    fw = smooth_fairways(g)  # the fairways as the surface map draws them (rounded outlines)
+    fw = smooth_fairways(g, cfg)  # the fairways as the surface map draws them (rounded outlines)
     if not bm or not fw:
         return np.zeros(surf.shape, bool)
     union = unary_union(fw)

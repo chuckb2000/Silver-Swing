@@ -165,12 +165,12 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 
 ## Tree detection (DC lidar normalized surface model)
 
-- 4169 trees detected in the world extent (1632 inside the course), 385 conifers / 2780 deciduous / 1004 flowering cherries; median height 11.3 m, max 48.0 m.
+- 4168 trees detected in the world extent (1631 inside the course), 384 conifers / 2779 deciduous / 1005 flowering cherries; median height 11.3 m, max 48.0 m.
 - Dropped: 816 tops on building footprints, 0 over the lake, 13 tiny crowns.
 - Dropped on playing surfaces (spec 5.4): 15 -> green w926822934 (33.1 m), tee lidar_tee_22 (17.0 m), tee lidar_tee_22 (18.4 m), fairway w926826615 (22.0 m), fairway w926819269 (25.9 m), fairway w926819263 (21.1 m), fairway w926819263 (15.8 m), fairway r19842887 (17.4 m), fairway r19842887 (13.1 m), green w926833409 (19.6 m), green w926833395 (12.1 m), fairway r19842886 (19.6 m), tee lidar_tee_12 (9.6 m), tee lidar_tee_12 (10.0 m), fairway w926830866 (10.0 m)
 - Dropped from tee shots (s06b): 6 -> Blue 13 Blue/Blue 13 White (19.0 m tree, 60.0 m from the tee), Blue 13 Blue/Blue 13 White (19.1 m tree, 56.9 m from the tee), Blue 13 Blue/Blue 13 White (16.5 m tree, 25.2 m from the tee), Blue 13 Blue/Blue 13 White (15.6 m tree, 26.6 m from the tee), Blue 9 Blue (8.5 m tree, 6.5 m from the tee), Blue 9 Blue/Blue 9 White (9.1 m tree, 15.9 m from the tee)
 - OSM natural=tree points matched by a detected tree within 4 m: 380 of 1199.
-- Conifer vs deciduous is inferred from crown shape only (no leaf-off imagery); see build/trees_preview.png. Cherries (theme flair, species not measured): deciduous trees <= 12 m outside the golf boundary, within 45 m of open water and 100 m of the boundary (867 trees); 137 more deciduous trees (the most cherry-like by the same measures) are drawn as cherries to fill the sprite slots, 0 cherries are drawn plain.
+- Conifer vs deciduous is inferred from crown shape only (no leaf-off imagery); see build/trees_preview.png. Cherries (theme flair, species not measured): deciduous trees <= 12 m outside the golf boundary, within 45 m of open water and 100 m of the boundary (867 trees); 138 more deciduous trees (the most cherry-like by the same measures) are drawn as cherries to fill the sprite slots, 0 cherries are drawn plain.
 
 # Green shaping checks
 

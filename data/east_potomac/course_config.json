@@ -118,6 +118,7 @@
   "paint_range_outside": true,
   "connect_fairways": true,
   "trees_off_fairways_m": 2.0,
+  "merge_touching_fairways": true,
   "wind_mph": {
     "minMph": 2,
     "maxMph": 10
@@ -138,6 +139,11 @@
       "x": 649.5,
       "y": 1406.5,
       "reason": "design chat 2026-10-20, developer: \"There is a tree right in front of the 10th tee on east potomac. It's narrow and doesn't have many leaves but it should be removed\" - the two lidar trees at the front of the Blue/White tee box of Blue 10 (they draw over the box, beside the aim line)"
+    },
+    {
+      "x": 585.5,
+      "y": 1269.5,
+      "reason": "developer 2026-10-20: \"there is a tree in the fairway on the left side of hole 10 that should not be there\" - Blue 10, 159 m from the Blue tee, trunk 1.5 m inside the fairway edge; lidar 28.5 m tall with a 1.5 m crown radius (more likely a pole or a lidar artefact than a tree)"
     }
   ]
 }
