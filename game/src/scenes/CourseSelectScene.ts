@@ -18,7 +18,7 @@ import { LoadSuperseded } from '../data/courses';
 export const STALL_MS = 20_000;
 /** Width of one green in a card strip (assets-src/course_cards.py CARD_W), and how long each shows. */
 const CARD_FRAME_W = 208;
-const FLIP_MS = 1500;
+const FLIP_MS = 15_000; // each card changes every 30 s, neighbours 15 s apart (developer, 2026-10-20: 3 s was too quick)
 export const OPEN_COURSE_KEY = 'golf:open-course';
 
 /** Reload the page and open this course straight away (what a player did by hand when a load hung). */
