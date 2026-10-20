@@ -206,7 +206,7 @@ describe('meter speeds up toward 100 % (developer, 2026-10-19)', () => {
       expect(PRESETS[k].fastSecondsPer100).toBeLessThan(PRESETS[k].secondsPer100);
     }
     // the original meter: 100 % in 1.2 / 1.0 / 0.8 s
-    expect([PRESETS.easy.fastSecondsPer100, PRESETS.normal.fastSecondsPer100, PRESETS.pro.fastSecondsPer100]).toEqual([1.2, 1.0, 0.8]);
+    expect([PRESETS.easy.fastSecondsPer100, PRESETS.normal.fastSecondsPer100, PRESETS.pro.fastSecondsPer100]).toEqual([1.6, 1.3, 1.0]); // halfway between the old constant speeds and the spec's (developer, 2026-10-20)
   });
 
   it('100 % comes sooner than at the old constant speed but later than the original meter', () => {
@@ -235,7 +235,7 @@ describe('meter speeds up toward 100 % (developer, 2026-10-19)', () => {
 
   it('a short swing is easier to time than a full one: the green zone lasts longer', () => {
     const m = make();
-    expect(1 / m.speedAt(30)).toBeGreaterThan(1.3 / m.speedAt(100));
+    expect(1 / m.speedAt(30)).toBeGreaterThan(1.1 / m.speedAt(100)); // gentler since the peak speed was halved back (2026-10-20)
   });
 
   it('tapTimes gives the swing asked for', () => {
