@@ -456,7 +456,8 @@ DECISIONS.md with the reason.
     folders, nineteen courses on offer (East Potomac is three) in six states;
     Gearhart Golf Links (Gearhart OR), Bandon Trails (Bandon OR, `bandon`
     theme) and Chambers Bay (University Place WA, `puget` theme; trees from
-    OSM until its lidar arrives) merged 2026-10-20.
+    OSM until its lidar arrives) merged 2026-10-20. Oregon Golf Club's creek on
+    13, 14 and 15 (from the lidar, `course/ogc-creek`) merged 2026-10-20.
     Each course's build history, facts and open items are in
     `docs/courses/<id>.md` (section 11).
 
