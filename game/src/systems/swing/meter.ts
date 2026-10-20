@@ -15,14 +15,6 @@ export const FULL_MAX = 110;    // full swings can overswing to 110 %
 export const PART_MAX = 100;    // putts and partial swings stop at 100 %
 export const ZONE_REACH = 15;   // the bar runs 15 % left of the zone centre
 export const LATE_POWER_TAP_MS = 150;
-/**
- * What the player sees trails the real cursor: a frame reaches the screen a
- * frame or so after it is drawn, and a tap reaches the browser a little after
- * the finger lands. Taps are counted this much earlier so a tap timed to the
- * picture lands where it looked (third playtest: the perfect spot sat right of
- * the green box). The latency setting adjusts on top of this.
- */
-export const DISPLAY_LAG_MS = 30; // a tap this soon after an automatic turn is the late power tap
 
 export type MeterPhase = 'idle' | 'power' | 'accuracy' | 'done';
 
