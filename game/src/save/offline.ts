@@ -13,6 +13,8 @@ export function whenUpdateReady(cb: () => void) {
 }
 
 export function registerOffline() {
+  // installing is optional (developer, 2026-10-20): no browser install banner; the browser menu still offers it
+  window.addEventListener('beforeinstallprompt', (e) => e.preventDefault());
   const q = new URLSearchParams(location.search);
   const test = q.has('sw') && location.hostname === 'localhost'; // the Playwright test of the offline copy
   if (import.meta.env.DEV || !('serviceWorker' in navigator) || (location.protocol !== 'https:' && !test)) return;
