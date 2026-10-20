@@ -522,7 +522,7 @@ DECISIONS.md with the reason.
     White tees, a 1,280 x 2,304 m world, the driving range out of bounds
     and drawn as rough; branch `course/ogc` (merged after `course/tualatin`). Pipeline keys `remove_wires` (s05) and
     `range_art` (s09, s09b, s10); every other course rebuilds unchanged.
-    299 unit tests and 4 Playwright tests pass. Open items: section 11.15.
+    317 unit tests and 4 Playwright tests pass. Open items: section 11.15.
 
 -   **Next task:** the third playtest (putting, yellow misses), the club's
     printed scorecard and the hole 3 Blue tee box. New courses: a separate
