@@ -11,7 +11,7 @@ export interface LieMods {
   splash?: boolean; // greenside bunker splash with a wedge
 }
 
-export type StrikeQuality = 'perfect' | 'good' | 'hook' | 'slice';
+export type StrikeQuality = 'perfect' | 'great' | 'good' | 'hook' | 'slice';
 
 export interface Strike {
   carry: number;      // nominal carry (m)
@@ -30,13 +30,25 @@ export interface Strike {
 export interface PuttStrike {
   dirDeg: number;     // start-line error, + = right
   distMult: number;
-  quality: 'perfect' | 'good' | 'push' | 'pull';
+  quality: 'perfect' | 'great' | 'good' | 'push' | 'pull';
   side: -1 | 0 | 1;
   excess: number;
 }
 
 /** Accuracy needed to count as "good" beyond the perfect zone (% of bar). */
 export const GOOD_BAND = 1.2;
+
+/**
+ * Inside the green (perfect) zone only the dead centre is straight (developer,
+ * 2026-10-19): a tap off centre curves the ball a little that way, growing to
+ * IN_ZONE_CURVE x the club's curve factor at the zone's edge (about half the
+ * smallest yellow miss: 0.8 deg, about 3 yd, for a driver). The inner
+ * PERFECT_CORE of the zone still flashes "perfect".
+ */
+export const IN_ZONE_CURVE = 0.4;
+export const PERFECT_CORE = 0.3;
+/** Putts: the start line is off by up to this much at the edge of the zone. */
+export const IN_ZONE_PUTT_DEG = 0.25;
 
 /**
  * Curve (in units of the club's curveFactor) for a miss `excess` % of bar
@@ -74,11 +86,15 @@ export function strikeFrom(m: MeterResult, club: Club, lie: LieMods, perfectZone
   const half = perfectHalfWidth(perfectZone, club, lie, overswing);
   const offset = m.offset;
   const excess = Math.max(0, Math.abs(offset) - half);
-  const side = (excess === 0 ? 0 : Math.sign(offset)) as -1 | 0 | 1;
-  const curveDeg = side === 0 ? 0 : side * Math.min(25, missCurve(excess) * club.curveFactor * (overswing ? 2 : 1));
+  const inZone = excess === 0 ? Math.min(1, Math.abs(offset) / half) : 0; // 0 at the centre, 1 at the zone's edge
+  const side = (offset === 0 ? 0 : Math.sign(offset)) as -1 | 0 | 1;
+  const swingMult = overswing ? 2 : 1;
+  const curveDeg = side === 0 ? 0
+    : excess === 0 ? side * IN_ZONE_CURVE * inZone * club.curveFactor * swingMult
+      : side * Math.min(25, missCurve(excess) * club.curveFactor * swingMult);
   const loss = excess === 0 ? 0 : Math.min(0.15, 0.05 + 0.01 * excess);
   if (lie.splash) apex *= 0.9;
-  let quality: StrikeQuality = 'perfect';
+  let quality: StrikeQuality = inZone <= PERFECT_CORE ? 'perfect' : 'great';
   if (excess > 0) {
     if (excess < GOOD_BAND) quality = 'good';
     else quality = missWord(side, true, lefty) as 'hook' | 'slice';
@@ -90,10 +106,11 @@ export function strikeFrom(m: MeterResult, club: Club, lie: LieMods, perfectZone
 export function puttStrikeFrom(m: MeterResult, perfectZone: number, windowMult: number, lefty: boolean): PuttStrike {
   const half = perfectZone * windowMult;
   const excess = Math.max(0, Math.abs(m.offset) - half);
-  const side = (excess === 0 ? 0 : Math.sign(m.offset)) as -1 | 0 | 1;
-  const dirDeg = side * Math.min(6, 0.6 * excess);
+  const inZone = Math.min(1, Math.abs(m.offset) / half);
+  const side = (m.offset === 0 ? 0 : Math.sign(m.offset)) as -1 | 0 | 1;
+  const dirDeg = side * Math.min(6, IN_ZONE_PUTT_DEG * inZone + 0.6 * excess);
   const distMult = 1 - Math.min(0.08, 0.008 * excess);
-  let quality: PuttStrike['quality'] = 'perfect';
+  let quality: PuttStrike['quality'] = inZone <= PERFECT_CORE ? 'perfect' : 'great';
   if (excess > 0) {
     if (excess < GOOD_BAND) quality = 'good';
     else quality = (side > 0) !== lefty ? 'push' : 'pull'; // a right-hander pushes it right

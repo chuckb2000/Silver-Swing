@@ -2,7 +2,7 @@
 
 import { app } from '../app';
 import { sfx } from '../audio/sfx';
-import { LeaderboardEntry, loadBoard, renameEntry, saveSettings } from '../save/store';
+import { LeaderboardEntry, loadBoard, renameEagles, renameEntry, saveSettings } from '../save/store';
 import { DEFAULT_NAME } from '../save/names';
 import { askName } from '../ui/nameInput';
 import { compareRounds, toPar } from '../systems/rules/scoring';
@@ -35,14 +35,17 @@ export class SummaryScene extends MenuScene {
     if (!this.sys.isActive()) return;
     const pool = shared ? (shared.some((b) => b.id === e.id) ? shared : [...shared, e]) : await loadBoard();
     const where = shared ? 'among friends' : 'on this device';
-    const board = pool.filter((b) => b.course === e.course && b.tee === e.tee && b.length === e.length && b.casual === e.casual);
+    // rounds with no name don't go on the boards (developer: nobody as "player"); this one is counted to show where it would be
+    const board = pool.filter((b) => b.course === e.course && b.tee === e.tee && b.length === e.length && b.casual === e.casual && (b.player !== DEFAULT_NAME || b.id === e.id));
     board.sort(compareRounds);
     const rank = board.findIndex((b) => b.id === e.id) + 1;
     const mine = board.filter((b) => b.player === e.player);
     const best = mine.length ? mine.slice().sort(compareRounds)[0] : null;
     const pb = best && best.id === e.id && mine.length > 1;
     if (pb) sfx('great');
-    const note = `${e.casual ? 'casual round  ·  ' : ''}#${rank} of ${board.length} ${where} (${lengthLabel(e.length)})${pb ? '  ·  new personal best!' : ''}`;
+    const note = e.player === DEFAULT_NAME
+      ? `enter your name to put this round on the leaderboard (it would be #${rank} of ${board.length} ${where})`
+      : `${e.casual ? 'casual round  ·  ' : ''}#${rank} of ${board.length} ${where} (${lengthLabel(e.length)})${pb ? '  ·  new personal best!' : ''}`;
     this.root.add(txt(this, W / 2, H - 38, note, { origin: [0.5, 0], color: pb ? COLORS.yellow : COLORS.dim }));
     // the name on the leaderboard: easy to miss at the start, so it can be set here before the round is sent
     const unnamed = e.player === DEFAULT_NAME;
@@ -61,6 +64,7 @@ export class SummaryScene extends MenuScene {
     askName(this, this.entry.player, async (name) => {
       if (!name || name === this.entry.player) return;
       await renameEntry(this.entry.id, name);
+      await renameEagles(this.entry.id, name);
       this.entry = { ...this.entry, player: name };
       app.settings.playerName = name; // and for the next rounds
       void saveSettings(app.settings);

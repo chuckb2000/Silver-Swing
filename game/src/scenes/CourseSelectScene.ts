@@ -12,6 +12,17 @@ import { app } from '../app';
 import { courseEntries, coursesByState, CourseInfo, stateOf } from '../data/registry';
 import { Button, COLORS, Panel, setTxt, txt } from '../ui/widgets';
 import { useCourse } from './flow';
+import { LoadSuperseded } from '../data/courses';
+
+/** No progress for this long while a course loads: offer a reload (which then opens the course). */
+export const STALL_MS = 20_000;
+export const OPEN_COURSE_KEY = 'golf:open-course';
+
+/** Reload the page and open this course straight away (what a player did by hand when a load hung). */
+function reloadInto(id: string) {
+  try { sessionStorage.setItem(OPEN_COURSE_KEY, id); } catch { /* storage blocked: the title screen then */ }
+  window.location.reload();
+}
 import { ensureBg, MenuScene } from './menu';
 
 type Purpose = 'play' | 'board';
@@ -30,6 +41,14 @@ export class CourseSelectScene extends MenuScene {
   private from = 'title';
   private current = '';
   private busy = false;
+  private stalled = false;
+  private loadFrac = 0;
+  private loadTxt: Phaser.GameObjects.BitmapText | null = null;
+  private loadError = '';
+
+  private showLoad() {
+    if (this.loadTxt?.active) setTxt(this.loadTxt, `${Math.round(this.loadFrac * 100)}%`);
+  }
   /** Fills for card art and logos still loading (run when they arrive; reset on every build). */
   private waiting: (() => void)[] = [];
 
@@ -48,10 +67,13 @@ export class CourseSelectScene extends MenuScene {
     view = 'states';
     page = 0;
     this.busy = false;
+    this.loadError = '';
   }
 
   protected back() {
     if (this.busy) return;
+    // a failed load left no course: start the page again on the last course that loaded
+    if (!app.course) { window.location.reload(); return; }
     if (view === 'group') { view = 'courses'; page = 0; this.rebuild(); return; }
     if (view === 'courses') { view = 'states'; page = 0; this.rebuild(); return; }
     if (this.from === 'leaderboard') this.scene.start('leaderboard', { courseId: this.current });
@@ -72,9 +94,20 @@ export class CourseSelectScene extends MenuScene {
     if (view === 'states') this.buildStates(groups, x0, y0, pw, ph);
     else if (view === 'courses') this.buildCourses(state!, x0, y0, pw, ph);
     else if (group && group.kind === 'group') this.buildGroup(group, x0, y0, pw, ph);
+    if (this.loadError && !this.busy) {
+      this.root.add(txt(this, W / 2, y0 + ph - 34, this.loadError, { origin: [0.5, 0], color: COLORS.yellow, maxWidth: pw - 16 }));
+    }
     if (this.busy) {
       this.root.add(this.add.rectangle(x0, y0, pw, ph, 0x081018, 0.7).setOrigin(0, 0));
-      this.root.add(txt(this, W / 2, H / 2 - 4, 'loading course...', { origin: [0.5, 0], scale: 2, color: COLORS.yellow }));
+      this.root.add(txt(this, W / 2, H / 2 - 14, 'loading course...', { origin: [0.5, 0], scale: 2, color: COLORS.yellow }));
+      // how far it has got, and a way out if it stops moving (developer: first loads froze)
+      this.loadTxt = txt(this, W / 2, H / 2 + 6, '', { origin: [0.5, 0] });
+      this.root.add(this.loadTxt);
+      this.showLoad();
+      if (this.stalled) {
+        this.root.add(txt(this, W / 2, H / 2 + 20, 'this is taking a while - the connection may have stalled', { origin: [0.5, 0], color: COLORS.dim, maxWidth: pw - 16 }));
+        this.root.add(new Button(this, W / 2 - 40, H / 2 + 34, 80, 16, 'reload', () => reloadInto(this.current)));
+      }
     }
   }
 
@@ -247,19 +280,32 @@ export class CourseSelectScene extends MenuScene {
 
   private async choose(id: string) {
     if (this.busy) return;
+    this.loadError = '';
     if (this.purpose === 'board') { this.scene.start('leaderboard', { courseId: id }); return; }
     this.current = id;
     if (app.course?.json.id === id) { this.scene.start('setup'); return; }
     this.busy = true;
+    this.stalled = false;
+    this.loadFrac = 0;
     this.rebuild();
+    let last = Date.now();
+    const watch = this.time.addEvent({
+      delay: 1000, loop: true, callback: () => {
+        if (!this.stalled && Date.now() - last > STALL_MS) { this.stalled = true; this.rebuild(); }
+      },
+    });
     try {
-      await useCourse(this, id);
+      await useCourse(this, id, (f) => { last = Date.now(); this.loadFrac = f; this.showLoad(); });
     } catch (e) {
+      watch.remove();
+      if (e instanceof LoadSuperseded) return;
       console.error(e);
       this.busy = false;
+      this.loadError = `couldn't load the course: ${(e as Error).message}`.slice(0, 120);
       if (this.sys.isActive()) this.rebuild();
       return;
     }
+    watch.remove();
     this.busy = false;
     if (!this.sys.isActive()) return;
     ensureBg(this);

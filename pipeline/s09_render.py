@@ -28,6 +28,7 @@ from shapely.ops import unary_union
 
 from common import boundary_rings, build_dir, course_name_from_argv, layouts, load_config, PX_PER_M, ROOT, SURF, World, write_json
 from terrain import tier_offset
+from s08_surface import smooth_fairways
 
 warnings.filterwarnings("ignore")
 
@@ -240,7 +241,7 @@ def rough_band_mask(cfg, g, surf, rasterise, X, Y, ppm):
     Art only; physics treats it as rough like the rest. `rasterise(geoms)` -> bool mask,
     X / Y the world coordinates of the pixel centres, ppm pixels per metre."""
     bm = cfg.get("rough_band_m")
-    fw = [geom for geom in g[g.kind == "fairway"].geometry if geom is not None]
+    fw = smooth_fairways(g)  # the fairways as the surface map draws them (rounded outlines)
     if not bm or not fw:
         return np.zeros(surf.shape, bool)
     union = unary_union(fw)

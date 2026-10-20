@@ -41,10 +41,10 @@ describe('Highland Links course data', () => {
     }
   });
 
-  it('measured yardages are within 3% of the card (hole 1: the developer\'s tee, accepted at +3.8%)', () => {
+  it('measured yardages are within 3% of the card (hole 1: the developer\'s tee, accepted at +3.8%, now +4.0%)', () => {
     for (const h of course.json.holes) {
       const t = h.tees.Blue;
-      const lim = h.number === 1 ? 0.04 : 0.03;
+      const lim = h.number === 1 ? 0.045 : 0.03; // hole 1: +3.8 %, +4.0 % since the tees centred on their boxes (design chat, 2026-10-20; DECISIONS.md "Overnight requests")
       expect(Math.abs(t.adjYd - t.cardYd) / t.cardYd, `hole ${h.number}`).toBeLessThanOrEqual(lim);
     }
   });

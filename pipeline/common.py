@@ -243,3 +243,64 @@ def play_boundary(g, cfg: dict):
     if u.geom_type == "MultiPolygon":
         u = max(u.geoms, key=lambda p: p.area)
     return u
+
+
+# --- rounded fairway corners (developer, 2026-10-19: "jagged corners should be
+# removed from the fairway, these should be rounded, even if the OSM was jagged")
+FAIRWAY_SMOOTH_M = 4.0  # m: how far along the outline the smoothing reaches (Gaussian sigma)
+
+
+def _smooth_ring(coords, sigma: float, step: float = 0.5):
+    """A closed ring resampled every `step` m and smoothed along its length
+    (Gaussian, `sigma` m): kinks and corners become curves, straight runs stay
+    straight, and a narrow part keeps its width (each side moves along itself)."""
+    import numpy as np
+    from scipy.ndimage import gaussian_filter1d
+    pts = np.asarray(coords, float)[:, :2]
+    if len(pts) > 1 and np.allclose(pts[0], pts[-1]):
+        pts = pts[:-1]
+    if len(pts) < 3:
+        return [tuple(p) for p in pts]
+    closed = np.vstack([pts, pts[:1]])
+    seg = np.hypot(*np.diff(closed, axis=0).T)
+    cum = np.concatenate([[0.0], np.cumsum(seg)])
+    total = cum[-1]
+    if total < 4 * sigma:
+        return [tuple(p) for p in closed]
+    n = max(8, int(round(total / step)))
+    s = np.linspace(0.0, total, n, endpoint=False)
+    x = np.interp(s, cum, closed[:, 0])
+    y = np.interp(s, cum, closed[:, 1])
+    sp = sigma / (total / n)
+    xs = gaussian_filter1d(x, sp, mode="wrap")
+    ys = gaussian_filter1d(y, sp, mode="wrap")
+    ring = list(zip(xs.tolist(), ys.tolist()))
+    ring.append(ring[0])
+    return ring
+
+
+def round_corners(geom, sigma: float = FAIRWAY_SMOOTH_M):
+    """The polygon (or multipolygon) with a smooth, rounded outline (holes too);
+    the original where smoothing would break it or change its area by more
+    than 10 %."""
+    from shapely.geometry import MultiPolygon, Polygon
+    if geom is None or geom.is_empty:
+        return geom
+    if geom.geom_type == "MultiPolygon":
+        parts = []
+        for p in geom.geoms:
+            q = round_corners(p, sigma)
+            parts.extend(list(q.geoms) if q.geom_type == "MultiPolygon" else [q])
+        return MultiPolygon([p for p in parts if not p.is_empty])
+    if geom.geom_type != "Polygon":
+        return geom
+    try:
+        poly = Polygon(_smooth_ring(geom.exterior.coords, sigma), [_smooth_ring(h.coords, sigma) for h in geom.interiors])
+        if not poly.is_valid:
+            poly = poly.buffer(0)
+        poly = poly.simplify(0.05, preserve_topology=True)
+    except Exception:
+        return geom
+    if poly.is_empty or poly.geom_type not in ("Polygon", "MultiPolygon") or abs(poly.area - geom.area) > 0.10 * geom.area:
+        return geom
+    return poly

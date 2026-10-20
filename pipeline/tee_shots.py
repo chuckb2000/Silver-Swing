@@ -37,6 +37,20 @@ def ball_height(s: float) -> float:
     return DRIVER_APEX * (1 - ((u - 0.55) / 0.45) ** 2)
 
 
+def line_point(tee: Point, centerline: list, pin: Point) -> Point:
+    """Where the game's line aim points (Round.lineAim): the centre-line point a
+    full drive away, or the pin when a drive reaches the green."""
+    if CARRY_FOR_AIM >= 0.92 * tee.distance(pin):
+        return pin
+    for i in range(len(centerline) - 1):
+        (ax, ay), (bx, by) = centerline[i], centerline[i + 1]
+        for t in np.linspace(0, 1, 101):
+            px, py = ax + (bx - ax) * t, ay + (by - ay) * t
+            if math.hypot(px - tee.x, py - tee.y) >= CARRY_FOR_AIM:
+                return Point(px, py)
+    return Point(centerline[-1])
+
+
 def target_point(tee: Point, centerline: list, pin: Point, fairways) -> Point:
     """Middle of the fairway where a full drive meets the centre line (Round.lineAim),
     or the pin when a drive reaches the green."""

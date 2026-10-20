@@ -15,7 +15,7 @@ export class CreditsScene extends MenuScene {
     const x0 = Math.round((W - pw) / 2), y0 = Math.round((H - ph) / 2);
     this.root.add(new Panel(this, x0, y0, pw, ph, 0.92));
     this.root.add(txt(this, x0 + pw / 2, y0 + 5, 'credits', { origin: [0.5, 0], scale: 2 }));
-    const c = app.course!.json;
+    const c = (app.course ?? null)?.json ?? { name: 'no course loaded', location: '', architects: 'unknown', attribution: [] as string[] } as unknown as NonNullable<typeof app.course>['json'];
     // the game, then the current course: its designers and data sources (from course.json)
     const lines: [string, number][] = [
       [GAME_NAME.toLowerCase(), COLORS.white],

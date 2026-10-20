@@ -26,6 +26,9 @@ const game = new Phaser.Game({
   disableContextMenu: true,
   scale: { mode: Phaser.Scale.NONE, width: layout.W, height: layout.H, zoom: layout.r / layout.dpr },
   input: { activePointers: 2 },
+  // course files: a request that stalls (seen on first loads over the network, developer 2026-10-19)
+  // times out and is tried again instead of hanging the load; fewer at once so each one finishes
+  loader: { maxParallelDownloads: 8, timeout: 45_000, maxRetries: 3 },
   fps: { target: 60 },
   scene: [BootScene, BgScene, TitleScene, CourseSelectScene, SetupScene, PlayScene, HudScene, SummaryScene, LeaderboardScene, SettingsScene, CreditsScene],
 });

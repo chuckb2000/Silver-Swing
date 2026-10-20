@@ -155,3 +155,22 @@ describe('tree occlusion on screen (3/4 view)', () => {
   });
 });
 
+
+describe('spin roll-out (developer, 2026-10-19: topspin driver rolled too far)', () => {
+  it('topspin adds about 30 % to a driver roll-out, not 50 %; wind drift matches the developer reference', () => {
+    const d = clubById('dr');
+    const plain = rollOutFor(d, firstBounceK(d), SURF.fairway, 1, 0).roll;
+    const top = rollOutFor(d, firstBounceK(d), SURF.fairway, 1, 1).roll;
+    expect(top / plain).toBeGreaterThan(1.2);
+    expect(top / plain).toBeLessThan(1.4);
+    // a 6 mph direct crosswind blows a drive 4-6 yd off line where it lands
+    const t = flatTerrain(SURF.fairway, { width: 700, height: 200 });
+    const shot = (wy: number) => simulateShot(t, null, {
+      x: 10, y: 100, z: t.z(10, 100), aim: 0, pin: null,
+      flight: { carry: d.carryM, apex: d.apexM, hang: d.hangS, curveDeg: 0, windX: 0, windY: wy, firstBounceK: firstBounceK(d), spin: 0, spinBack: 0 },
+    }, new Rng(1)).landing!;
+    const yd = Math.abs(shot(6 * MPH).y - shot(0).y) / 0.9144;
+    expect(yd).toBeGreaterThan(4);
+    expect(yd).toBeLessThan(6);
+  });
+});

@@ -2,13 +2,16 @@
 playable tee set(s), assign each tee set's tee polygon, measure every hole
 the way courses do, and write the validation report.
 
-Measurement (CLAUDE.md 5.5): from the centre of the tee polygon, through the
-golf=hole line's bend points that lie ahead of the tee, to the green centre.
-Horizontal metres -> yards. <=3% pass, 3-8% flag, >8% fail.
+Measurement (CLAUDE.md 5.5): from the centre of the tee polygon (its visual
+centre, the point farthest from its edges), through the golf=hole line's bend
+points that lie ahead of the tee, to the green centre. Horizontal metres ->
+yards. <=3% pass, 3-8% flag, >8% fail.
 
 Playability step 2 (5.6): when a hole is flagged, the virtual tee may move
-anywhere inside the real tee polygon; the move is logged in
-adjustments.json and both real and adjusted yardages are reported.
+inside the real tee polygon, but only along its middle and well away from its
+edges (core_points; developer 2026-10-19: tees must stand in the centre of
+their boxes); the move is logged in adjustments.json and both real and
+adjusted yardages are reported.
 
 Tee shots clear the trees (pipeline/tee_shots.py, every course): a virtual
 tee from which a perfect drive at the middle of the fairway would clip a tree
@@ -21,6 +24,7 @@ from __future__ import annotations
 
 import csv
 import json
+import math
 import warnings
 
 import geopandas as gpd
@@ -48,83 +52,135 @@ def status(diff_pct: float) -> str:
     return "pass" if a <= 3 else ("flag" if a <= 8 else "FAIL")
 
 
-def best_point_in(poly, line, green_c, target_m, inset=0.75):
-    """Grid-search the tee polygon (inset by `inset` m) for the point whose
-    measured length is closest to target_m."""
-    inner = poly.buffer(-inset)
-    if inner.is_empty:
-        inner = poly
-    minx, miny, maxx, maxy = inner.bounds
-    best = None
-    for x in np.arange(minx, maxx + 0.01, 0.5):
-        for y in np.arange(miny, maxy + 0.01, 0.5):
-            p = Point(x, y)
-            if not inner.contains(p):
-                continue
-            m, _ = path_from(p, line, green_c)
-            err = abs(m - target_m)
-            if best is None or err < best[0]:
-                best = (err, p, m)
-    return best
+# Where the virtual tee may stand in its box (developer, 2026-10-19: "the tee on
+# Langston 2 is barely on the tee box ... nearly every tee isn't actually in the
+# centre of the tee box"): on the box's centre line - across the line of play the
+# tee keeps RIDGE of the largest distance to the box's sides there, so it stands in
+# the middle of the box's width - and away from its back and front edges by
+# END_MARGIN_M (on a narrow box, NARROW_MARGIN of its half-width, so a strip that
+# tapers toward the back still has a centre line there). A square box leaves little
+# room; a long strip (several tee sets in one polygon) lets the tee slide along its
+# middle toward the back or front when the card needs it, never to an edge.
+RIDGE = 0.85
+END_MARGIN_M = 2.5
+NARROW_MARGIN = 0.7
+CORE_STEP = 0.25  # m between the points tried
 
 
-def end_point_in(poly, line, green_c, back=True, inset=0.75):
-    """The point of the tee polygon (inset) farthest from (back) or nearest to
-    (front) the green, measured along the hole."""
-    inner = poly.buffer(-inset)
-    if inner.is_empty:
-        inner = poly
-    minx, miny, maxx, maxy = inner.bounds
+def box_centre(poly):
+    """The visual centre of a tee box (the point farthest from its edges) and that distance."""
+    from shapely.ops import polylabel
+    part = poly if poly.geom_type == "Polygon" else max(poly.geoms, key=lambda q: q.area)
+    c = polylabel(part, tolerance=0.05)
+    return c, part.exterior.distance(c) if not part.interiors else part.boundary.distance(c)
+
+
+def play_axis(poly, line, green_c):
+    """Unit vector of the line of play leaving this box."""
+    c, _ = box_centre(poly)
+    _, pts = path_from(c, line, green_c)
+    (x0, y0), (x1, y1) = pts[0], pts[1]
+    d = math.hypot(x1 - x0, y1 - y0) or 1.0
+    return (x1 - x0) / d, (y1 - y0) / d
+
+
+_core_cache: dict = {}
+
+
+def core_points(poly, axis=None):
+    """The points a virtual tee may use in this box: its centre first, then the
+    grid points on the box's centre line (see RIDGE / END_MARGIN_M)."""
+    key = (poly.wkb, axis)
+    if key in _core_cache:
+        return _core_cache[key]
+    c, r = box_centre(poly)
+    pts = [c]
+    if r > 0.2:
+        ux, uy = axis if axis else (1.0, 0.0)
+        margin = min(max(END_MARGIN_M, 0.5 * r), NARROW_MARGIN * r)
+        minx, miny, maxx, maxy = poly.bounds
+        cand = []
+        for x in np.arange(math.floor(minx / CORE_STEP) * CORE_STEP, maxx + 1e-9, CORE_STEP):
+            for y in np.arange(math.floor(miny / CORE_STEP) * CORE_STEP, maxy + 1e-9, CORE_STEP):
+                p = Point(x, y)
+                if not poly.contains(p):
+                    continue
+                d = poly.boundary.distance(p)
+                if d < margin:
+                    continue
+                u = (x - c.x) * ux + (y - c.y) * uy
+                cand.append((round(u / 0.5), d, p))
+        best = {}
+        for b, d, _p in cand:
+            best[b] = max(best.get(b, 0.0), d)
+        pts += [p for b, d, p in cand if d >= RIDGE * best[b]]
+    _core_cache[key] = pts
+    return pts
+
+
+def best_point_in(poly, line, green_c, target_m):
+    """The point of the box's centre line whose measured length passes nearest the
+    centre (within 2.5 % of the card if it can), else the one closest to the card."""
+    pts = core_points(poly, play_axis(poly, line, green_c))
+    c = pts[0]
+    best_pass, best_any = None, None
+    for p in pts:
+        m, _ = path_from(p, line, green_c)
+        err = abs(m - target_m)
+        d = p.distance(c)
+        if err <= 0.025 * target_m and (best_pass is None or d < best_pass[0]):
+            best_pass = (d, p, m)
+        if best_any is None or err < best_any[0] - 1e-6 or (abs(err - best_any[0]) <= 1e-6 and d < best_any[3]):
+            best_any = (err, p, m, d)
+    if best_pass is not None:
+        return (abs(best_pass[2] - target_m), best_pass[1], best_pass[2])
+    return best_any[:3]
+
+
+def end_point_in(poly, line, green_c, back=True):
+    """The point of the box's core farthest from (back) or nearest to (front)
+    the green, measured along the hole."""
     best = None
-    for x in np.arange(minx, maxx + 0.01, 0.5):
-        for y in np.arange(miny, maxy + 0.01, 0.5):
-            p = Point(x, y)
-            if not inner.contains(p):
-                continue
-            m, _ = path_from(p, line, green_c)
-            key = m if back else -m
-            if best is None or key > best[0]:
-                best = (key, p, m)
+    for p in core_points(poly, play_axis(poly, line, green_c)):
+        m, _ = path_from(p, line, green_c)
+        key = m if back else -m
+        if best is None or key > best[0]:
+            best = (key, p, m)
     return best[1], best[2]
 
 
 RANK = {"pass": 0, "flag": 1, "FAIL": 2}
 
 
-def clear_point_in(poly, line, green_c, target_m, current, cur_rank, is_clear, inset=0.75):
-    """The clear point of the tee polygon (inset) nearest to `current` whose yardage
+def clear_point_in(poly, line, green_c, target_m, current, cur_rank, is_clear):
+    """The clear point of the box's core nearest to `current` whose yardage
     status is no worse than `cur_rank`; None if there is none."""
-    inner = poly.buffer(-inset)
-    if inner.is_empty:
-        inner = poly
-    minx, miny, maxx, maxy = inner.bounds
     best = None
-    for x in np.arange(minx, maxx + 0.01, 0.5):
-        for y in np.arange(miny, maxy + 0.01, 0.5):
-            p = Point(x, y)
-            if not inner.contains(p):
-                continue
-            m, cl = path_from(p, line, green_c)
-            if RANK[status((m - target_m) / target_m * 100)] > cur_rank:
-                continue
-            d = p.distance(current)
-            if best is not None and d >= best[0]:
-                continue
-            if is_clear(p, cl):
-                best = (d, p, m)
+    for p in core_points(poly, play_axis(poly, line, green_c)):
+        m, cl = path_from(p, line, green_c)
+        if RANK[status((m - target_m) / target_m * 100)] > cur_rank:
+            continue
+        d = p.distance(current)
+        if best is not None and d >= best[0]:
+            continue
+        if is_clear(p, cl):
+            best = (d, p, m)
     return best
 
 
 def tee_shot_checker(name, cfg, g):
-    """is_clear(tee, centerline, pin) -> bool: no tree in the way of the tee shot."""
-    from tee_shots import TreeIndex, target_point
+    """is_clear(tee, centerline, pin) -> bool: no tree in the way of the tee shot,
+    aimed at the middle of the fairway or straight down the hole line (the game's
+    line aim, Round.lineAim; Tualatin 11 after the tees were centred: the line
+    went through a crown the fairway-middle aim missed)."""
+    from tee_shots import TreeIndex, line_point, target_point
     bdir = build_dir(name)
     trees = json.loads((bdir / "trees_all.json").read_text())
     idx = TreeIndex(trees, np.load(bdir / "height_base.npy"), cfg.get("tee_shot_margin_m", 0.0))
     fairways = list(g[g.kind == "fairway"].geometry)
 
     def is_clear(p, cl, pin):
-        return not idx.blocking(p, target_point(p, cl, pin, fairways))
+        return not idx.blocking(p, target_point(p, cl, pin, fairways)) and not idx.blocking(p, line_point(p, cl, pin))
     return is_clear
 
 
@@ -213,7 +269,7 @@ def build_layout(name, cfg, lay, g):
             ti = assign.get((n, ts))
             if ti is not None:
                 tpoly = tees.loc[ti].geometry
-                tee_pt = tpoly.centroid
+                tee_pt = box_centre(tpoly)[0]
                 tee_osm = tees.loc[ti].osm
                 m, _ = path_from(tee_pt, L, gc)
             else:
@@ -238,14 +294,14 @@ def build_layout(name, cfg, lay, g):
                     "reason": f"developer: tee at the {pos} of the tee box {tee_osm} (tag tee_pos={pos})",
                 })
             elif status(diff) != "pass" and tpoly is not None:
-                best = best_point_in(tpoly, L, gc, target, inset=float(cfg.get("tee_inset_m", 0.75)))  # keep the golfer on the box
+                best = best_point_in(tpoly, L, gc, target)  # on the box's centre line, well inside it
                 if best and abs(best[2] - target) < abs(m - target) - 0.5:
                     adj_pt, adj_m = best[1], best[2]
                     adjustments.append({
                         "hole": n, "tee_set": ts, "step": 2, "type": "tee_position",
                         "from": [rnd(tee_pt.x), rnd(tee_pt.y)], "to": [rnd(adj_pt.x), rnd(adj_pt.y)],
                         "real_yd": rnd(real_yd, 1), "adjusted_yd": rnd(adj_m / YD, 1), "card_yd": card_yd,
-                        "reason": f"measured {real_yd:.0f} yd from the tee-box centre vs {card_yd:.0f} on the card ({diff:+.1f}%); moved the virtual tee within the real tee polygon {tee_osm}",
+                        "reason": f"measured {real_yd:.0f} yd from the tee-box centre vs {card_yd:.0f} on the card ({diff:+.1f}%); moved the virtual tee along the middle of the real tee polygon {tee_osm} (on its centre line, at least {END_MARGIN_M:g} m from its back and front)",
                     })
             if tpoly is not None and pos not in ("back", "front") and not keeps_tee_trees(cfg, lay, n):
                 _, cl = path_from(adj_pt, L, gc)
@@ -258,7 +314,7 @@ def build_layout(name, cfg, lay, g):
                             "from": [rnd(adj_pt.x), rnd(adj_pt.y)], "to": [rnd(best[1].x), rnd(best[1].y)],
                             "real_yd": rnd(real_yd, 1), "adjusted_yd": rnd(best[2] / YD, 1), "card_yd": card_yd,
                             "reason": f"tee shot: a perfect drive at the middle of the fairway clipped a tree near the tee; "
-                                      f"moved {best[0]:.1f} m within the real tee polygon {tee_osm} to the nearest clear spot",
+                                      f"moved {best[0]:.1f} m along the middle of the real tee polygon {tee_osm} to the nearest clear spot",
                         })
                         adj_pt, adj_m = best[1], best[2]
             adj_yd = adj_m / YD

@@ -15,21 +15,63 @@ import type { CourseInfo } from './registry';
 
 let loadedTheme: string | null = null;
 
+/** Progress of a course load: the fraction done (0..1); called whenever anything arrives. */
+export type LoadProgress = (fraction: number) => void;
+
 /** Run the scene's loader for the files queued by `queue`; resolves when they are all done. */
-function runLoader(scene: Phaser.Scene, queue: (l: Phaser.Loader.LoaderPlugin) => void): Promise<string[]> {
-  return new Promise((resolve) => {
+function runLoader(scene: Phaser.Scene, queue: (l: Phaser.Loader.LoaderPlugin) => void, onFile?: () => void): Promise<string[]> {
+  return new Promise((resolve, reject) => {
     const failed: string[] = [];
     const l = scene.load;
     const onError = (f: Phaser.Loader.File) => failed.push(f.key);
+    const onDone = () => onFile?.();
+    // the scene stopping mid-load resets its loader, which would never finish: fail instead of hanging
+    const onShutdown = () => {
+      l.off(Phaser.Loader.Events.FILE_LOAD_ERROR, onError);
+      l.off(Phaser.Loader.Events.FILE_COMPLETE, onDone);
+      reject(new Error('the screen closed while the course was loading'));
+    };
     l.on(Phaser.Loader.Events.FILE_LOAD_ERROR, onError);
+    l.on(Phaser.Loader.Events.FILE_COMPLETE, onDone);
+    scene.events.once(Phaser.Scenes.Events.SHUTDOWN, onShutdown);
     queue(l);
     l.once(Phaser.Loader.Events.COMPLETE, () => {
+      scene.events.off(Phaser.Scenes.Events.SHUTDOWN, onShutdown);
       l.off(Phaser.Loader.Events.FILE_LOAD_ERROR, onError);
+      l.off(Phaser.Loader.Events.FILE_COMPLETE, onDone);
       resolve(failed);
     });
     l.start();
   });
 }
+
+/** fetch with a time limit and a few tries (a stalled request must not hang the load). */
+async function fetchRetry(url: string, tries = 3, ms = 60_000): Promise<Response> {
+  let last: unknown = null;
+  for (let k = 0; k < tries; k++) {
+    const ctl = typeof AbortController !== 'undefined' ? new AbortController() : null;
+    const timer = ctl ? setTimeout(() => ctl.abort(), ms) : 0;
+    try {
+      const res = await fetch(url, ctl ? { signal: ctl.signal } : undefined);
+      if (res.ok) {
+        // the body too must arrive in time
+        const buf = await res.arrayBuffer();
+        return new Response(buf, { status: res.status, headers: res.headers });
+      }
+      last = new Error(`${url}: ${res.status}`);
+      if (res.status >= 400 && res.status < 500) break;
+    } catch (e) {
+      last = e;
+    } finally {
+      if (timer) clearTimeout(timer);
+    }
+  }
+  throw last instanceof Error ? last : new Error(`${url}: failed`);
+}
+
+/** Each course load gets a number; a load overtaken by a newer one stops quietly. */
+let loadSeq = 0;
+export class LoadSuperseded extends Error {}
 
 /**
  * The exact pixel values of a data image (surface ids, packed heights). They
@@ -38,8 +80,7 @@ function runLoader(scene: Phaser.Scene, queue: (l: Phaser.Loader.LoaderPlugin) =
  * canvas is only a fallback for browsers without DecompressionStream.
  */
 async function imageData(url: string): Promise<{ data: Uint8Array | Uint8ClampedArray; w: number; h: number; channels: number }> {
-  const res = await fetch(url);
-  if (!res.ok) throw new Error(`${url}: ${res.status}`);
+  const res = await fetchRetry(url);
   if (canDecodePng()) {
     const img = await decodePng(await res.arrayBuffer());
     return { data: img.data, w: img.width, h: img.height, channels: img.channels };
@@ -79,15 +120,26 @@ export function unloadCourse(scene: Phaser.Scene) {
   app.course = null;
 }
 
-/** Load a course by id and make it the current one (app.course). */
-export async function loadCourse(scene: Phaser.Scene, id: string): Promise<CourseRuntime> {
+/**
+ * Load a course by id and make it the current one (app.course). `progress`
+ * hears how far it has got (the course screen shows it, and offers a reload
+ * if it stops moving).
+ */
+export async function loadCourse(scene: Phaser.Scene, id: string, progress?: LoadProgress): Promise<CourseRuntime> {
+  const my = ++loadSeq;
+  const alive = () => { if (my !== loadSeq) throw new LoadSuperseded(`course ${id}: load overtaken`); };
   unloadCourse(scene);
   const base = `courses/${id}/`;
+  // progress: 3 small files, then the art (counted once its list is known), then the two data images
+  let done = 0, total = 6;
+  const tick = (n = 1) => { done += n; progress?.(Math.min(0.99, done / Math.max(1, total))); };
+  progress?.(0);
   const failed = await runLoader(scene, (l) => {
     l.json('course', `${base}course.json`);
     l.json('treeData', `${base}trees.json`);
     l.json('heightMeta', `${base}height.json`);
-  });
+  }, () => tick());
+  alive();
   if (failed.length) throw new Error(`course ${id}: could not load ${failed.join(', ')}`);
   const json = scene.cache.json.get('course') as CourseJson;
   const hmeta = scene.cache.json.get('heightMeta') as HeightMeta;
@@ -98,6 +150,7 @@ export async function loadCourse(scene: Phaser.Scene, id: string): Promise<Cours
     if (scene.textures.exists('trees')) scene.textures.remove('trees');
     scene.cache.json.remove('treesMeta');
   }
+  total = 3 + json.terrain.rows * json.terrain.cols + 1 + json.maps.holes.length + 4 + 2;
   const failed2 = await runLoader(scene, (l) => {
     for (let j = 0; j < json.terrain.rows; j++) {
       for (let i = 0; i < json.terrain.cols; i++) {
@@ -113,7 +166,8 @@ export async function loadCourse(scene: Phaser.Scene, id: string): Promise<Cours
       l.atlas('trees', `${sheet}.png`, `${sheet}.json`);
       l.json('treesMeta', `${sheet}_meta.json`);
     }
-  });
+  }, () => tick());
+  alive();
   if (wantTrees && (failed2.includes('trees') || failed2.includes('treesMeta')) && theme !== 'pnw') {
     // a theme without its own trees yet: use the original set
     console.warn(`no tree sprites for theme "${theme}", using pnw`);
@@ -124,8 +178,10 @@ export async function loadCourse(scene: Phaser.Scene, id: string): Promise<Cours
       l.json('treesMeta', 'sprites/trees_meta.json');
     });
   }
+  alive();
   loadedTheme = theme;
-  const [h, s] = await Promise.all([imageData(base + json.height.file), imageData(base + json.surface.file)]);
+  const [h, s] = await Promise.all([imageData(base + json.height.file).then((v) => { tick(); return v; }), imageData(base + json.surface.file).then((v) => { tick(); return v; })]);
+  alive();
   const heights = decodeHeights(h.data, hmeta, h.channels);
   // sanity check the exact decode against samples written by the pipeline
   for (const [i, j, z] of hmeta.samples) {
@@ -137,5 +193,6 @@ export async function loadCourse(scene: Phaser.Scene, id: string): Promise<Cours
   const bad = surface.find((v) => !known.has(v));
   if (bad !== undefined) console.warn(`surface map has an unknown id ${bad}: the course data did not decode exactly`);
   app.course = buildRuntime(json, heights, hmeta, surface, trees, base);
+  progress?.(1);
   return app.course;
 }

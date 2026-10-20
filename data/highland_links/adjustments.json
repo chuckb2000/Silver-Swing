@@ -5,35 +5,17 @@
   "step": 2,
   "type": "tee_position",
   "from": [
-   279.57,
-   446.19
+   278.22,
+   448.77
   ],
   "to": [
-   285.47,
-   442.02
+   284.5,
+   442.25
   ],
-  "real_yd": 266.9,
-  "adjusted_yd": 259.2,
+  "real_yd": 270.0,
+  "adjusted_yd": 260.1,
   "card_yd": 250.0,
-  "reason": "measured 267 yd from the tee-box centre vs 250 on the card (+6.7%); moved the virtual tee within the real tee polygon w709063013"
- },
- {
-  "hole": 1,
-  "tee_set": "Blue",
-  "step": 2,
-  "type": "tee_position",
-  "from": [
-   285.47,
-   442.02
-  ],
-  "to": [
-   285.26,
-   442.38
-  ],
-  "real_yd": 266.9,
-  "adjusted_yd": 259.6,
-  "card_yd": 250.0,
-  "reason": "tee shot: a perfect drive at the middle of the fairway clipped a tree near the tee; moved 0.4 m within the real tee polygon w709063013 to the nearest clear spot"
+  "reason": "measured 270 yd from the tee-box centre vs 250 on the card (+8.0%); moved the virtual tee along the middle of the real tee polygon w709063013 (on its centre line, at least 2.5 m from its back and front)"
  },
  {
   "hole": 3,
@@ -41,17 +23,17 @@
   "step": 2,
   "type": "tee_position",
   "from": [
-   878.13,
-   207.24
+   877.63,
+   207.73
   ],
   "to": [
-   876.07,
-   208.73
+   876.25,
+   208.25
   ],
-  "real_yd": 166.8,
-  "adjusted_yd": 164.0,
+  "real_yd": 166.0,
+  "adjusted_yd": 164.5,
   "card_yd": 160.0,
-  "reason": "measured 167 yd from the tee-box centre vs 160 on the card (+4.2%); moved the virtual tee within the real tee polygon w709143119"
+  "reason": "measured 166 yd from the tee-box centre vs 160 on the card (+3.8%); moved the virtual tee along the middle of the real tee polygon w709143119 (on its centre line, at least 2.5 m from its back and front)"
  },
  {
   "hole": 9,
@@ -59,15 +41,15 @@
   "step": 2,
   "type": "tee_position",
   "from": [
-   186.35,
-   525.58
+   170.54,
+   526.53
   ],
   "to": [
-   168.03,
-   524.23
+   169.5,
+   525.75
   ],
-  "real_yd": 115.1,
-  "adjusted_yd": 135.1,
+  "real_yd": 132.3,
+  "adjusted_yd": 133.5,
   "card_yd": 136.0,
   "reason": "developer: tee at the back of the tee box w1023658086 (tag tee_pos=back)"
  }

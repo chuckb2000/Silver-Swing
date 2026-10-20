@@ -480,6 +480,9 @@ function lastInBounds(sim: SimResult, boundary: Polygon): { x: number; y: number
   return last;
 }
 
+/** The round's id on the leaderboards (and the prefix of its eagles' ids). */
+export const roundId = (cfg: { startedAt: string; seed: number }) => `${cfg.startedAt}-${cfg.seed}`;
+
 /** Scorecard hole number -> the course's hole (9-hole courses played twice around). */
 export function courseHoleFor(slot: number, courseHoles: number): number {
   return ((slot - 1) % courseHoles) + 1;

@@ -4,7 +4,8 @@ import Phaser from 'phaser';
 import { app } from '../app';
 import { applyScale, uiCamera } from '../scale';
 import { initialCourseId, loadCourse, loadRegistry } from '../data/courses';
-import { loadSettings } from '../save/store';
+import { loadSettings, saveSettings } from '../save/store';
+import { OPEN_COURSE_KEY } from './CourseSelectScene';
 import { calibrateAll } from '../systems/physics/calibrate';
 import { flushUploads } from '../save/online';
 
@@ -36,14 +37,19 @@ export class BootScene extends Phaser.Scene {
       app.settings = settings;
       app.courses = courses;
       applyScale(this.game); // the saved pixel-size setting
-      const id = initialCourseId(courses, settings.courseId);
+      // after a "reload" on the course screen, open the course that was being loaded
+      let open = '';
+      try { open = sessionStorage.getItem(OPEN_COURSE_KEY) ?? ''; sessionStorage.removeItem(OPEN_COURSE_KEY); } catch { /* blocked */ }
+      if (open && !courses.some((c) => c.id === open)) open = '';
+      const id = open || initialCourseId(courses, settings.courseId);
       if (!id) throw new Error('no courses found (courses/index.json)');
-      await loadCourse(this, id);
+      await loadCourse(this, id, (f) => label.setText(`loading course ${Math.round(f * 100)}%`));
+      if (open) { app.settings.courseId = open; void saveSettings(app.settings); }
       app.calibration = calibrateAll();
       (window as unknown as { __golf: unknown }).__golf = app;
       label.destroy();
       void flushUploads(); // rounds finished offline go to the shared leaderboard now
-      this.scene.start('title');
+      this.scene.start(open ? 'setup' : 'title');
     } catch (e) {
       console.error(e);
       label.destroy();

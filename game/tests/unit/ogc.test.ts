@@ -15,7 +15,8 @@ import { COURSES_DIR, loadCourseFiles, meterFor, registry, robotRound, roundCfg 
 const ID = 'ogc';
 const TEES = ['Blue', 'White'] as const;
 // flags (3-8 %) accepted for play, listed in data/ogc/validation_report.md
-const FLAGS: Record<string, number> = { '5 White': 0.05, '10 Blue': 0.05, '10 White': 0.05 };
+// 10 Blue: -5.0 %, -5.4 % since the tees centred on their boxes (design chat, 2026-10-20; DECISIONS.md "Overnight requests")
+const FLAGS: Record<string, number> = { '5 White': 0.05, '10 Blue': 0.06, '10 White': 0.05 };
 
 describe('Oregon Golf Club course data', () => {
   const course = loadCourseFiles(ID);

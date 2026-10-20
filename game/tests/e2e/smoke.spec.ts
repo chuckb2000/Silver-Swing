@@ -84,7 +84,15 @@ test('title -> new round -> play hole 1 to the cup', async ({ page }) => {
     return !!b && b.opts?.color === 'orange';
   };
   await tap(page, 'setup', { button: 'front 9' }, frontNineOn);
-  await tap(page, 'setup', { button: 'tee off' }, () => window.__game.scene.isActive('play') && window.__game.scene.getScene('play').state === 'intro');
+  // a player with no name is asked for one before teeing off ("player" doesn't go on the boards)
+  await tap(page, 'setup', { button: 'tee off' }, () => !!document.querySelector('input[placeholder="your name"]'));
+  await page.fill('input[placeholder="your name"]', 'player');
+  await page.keyboard.press('Enter');
+  await page.waitForFunction(() => /name of your own/.test(document.body.innerText));
+  await page.fill('input[placeholder="your name"]', 'robot');
+  await page.keyboard.press('Enter');
+  await page.waitForFunction(() => window.__game.scene.isActive('play') && window.__game.scene.getScene('play').state === 'intro', null, { timeout: 60_000 });
+  expect(await page.evaluate(() => window.__golf.round.cfg.playerName)).toBe('robot');
   // skip the fly-over with the keyboard, then play with the robot golfer
   await page.keyboard.press('Space');
   await page.waitForFunction(() => window.__game.scene.getScene('play').state === 'aim', null, { polling: 100 });
@@ -159,6 +167,7 @@ test('course data is exact when the browser adds noise to canvas reads (Safari 2
 
 test('the menu button quits a round for good', async ({ page }) => {
   test.setTimeout(300_000);
+  await page.addInitScript(() => { if (!localStorage.getItem('local-golf:settings')) localStorage.setItem('local-golf:settings', JSON.stringify({ playerName: 'robot' })); });
   await page.goto('/');
   await page.waitForFunction(() => window.__game?.scene.isActive('title'), null, { timeout: 60_000 });
   await tap(page, 'title', { button: 'play' }, sceneActive, 'courses');
@@ -185,4 +194,20 @@ test('the menu button quits a round for good', async ({ page }) => {
   await page.waitForTimeout(500);
   expect(await page.evaluate(() => localStorage.getItem('local-golf:round-in-progress'))).toBeNull();
   expect(await page.evaluate(locate, ['title', 'play', null] as [string, string | null, string | null])).not.toBeNull(); // not "continue round"
+  // a second round in the same tab, on another course: the HUD used to write to the first round's
+  // destroyed text and freeze (developer: "freezes when I load a course for the first time")
+  const errors: string[] = [];
+  page.on('pageerror', (e) => errors.push(e.message));
+  await tap(page, 'title', { button: 'play' }, sceneActive, 'courses');
+  await page.evaluate(() => (window.__game.scene.getScene('courses') as any).choose('highland_links'));
+  await page.waitForFunction(() => window.__game.scene.isActive('setup'), null, { timeout: 120_000 });
+  await tap(page, 'setup', { button: 'tee off' }, () => window.__game.scene.isActive('play') && window.__game.scene.getScene('play').state === 'intro');
+  await page.keyboard.press('Space');
+  await page.waitForFunction(() => window.__game.scene.getScene('play').state === 'aim', null, { polling: 100 });
+  await page.evaluate(() => window.__autoplay.shot(0));
+  await page.waitForFunction(() => ['aim', 'holed', 'relief', 'drop'].includes(window.__game.scene.getScene('play').state), null, { polling: 100, timeout: 120_000 });
+  const f0 = await page.evaluate(() => window.__game.loop.frame);
+  await page.waitForFunction((f) => window.__game.loop.frame > f + 5, f0, { timeout: 30_000 }); // still running
+  expect(await page.evaluate(() => window.__golf.round.cfg.courseId)).toBe('highland_links');
+  expect(errors).toEqual([]);
 });

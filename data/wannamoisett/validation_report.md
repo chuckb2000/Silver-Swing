@@ -6,57 +6,58 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 
 | hole | par | tee set | card yd | measured yd | diff yd | diff % | status | adjusted yd | adj. diff % | adj. status |
 |---|---|---|---|---|---|---|---|---|---|---|
-| 1 | 4 | Blue | 420 | 417.5 | -2.5 | -0.6% | pass | 417.5 | -0.6% | pass |
-| 1 | 4 | Black | 430 | 417.5 | -12.5 | -2.9% | pass | 417.5 | -2.9% | pass |
-| 2 | 4 | Blue | 456 | 449.5 | -6.5 | -1.4% | pass | 449.5 | -1.4% | pass |
-| 2 | 4 | Black | 505 | 502.6 | -2.4 | -0.5% | pass | 502.6 | -0.5% | pass |
-| 3 | 3 | Blue | 127 | 126.6 | -0.4 | -0.3% | pass | 126.6 | -0.3% | pass |
-| 3 | 3 | Black | 137 | 126.6 | -10.4 | -7.6% | flag | 137.0 | -0.0% | pass |
-| 4 | 4 | Blue | 429 | 428.7 | -0.3 | -0.1% | pass | 428.7 | -0.1% | pass |
-| 4 | 4 | Black | 438 | 428.7 | -9.3 | -2.1% | pass | 428.7 | -2.1% | pass |
-| 5 | 4 | Blue | 364 | 352.4 | -11.6 | -3.2% | flag | 364.0 | -0.0% | pass |
-| 5 | 4 | Black | 372 | 352.4 | -19.6 | -5.3% | flag | 372.1 | +0.0% | pass |
-| 6 | 4 | Blue | 415 | 419.2 | +4.2 | +1.0% | pass | 419.2 | +1.0% | pass |
-| 6 | 4 | Black | 437 | 419.2 | -17.8 | -4.1% | flag | 436.9 | -0.0% | pass |
-| 7 | 4 | Blue | 335 | 337.4 | +2.4 | +0.7% | pass | 337.4 | +0.7% | pass |
-| 7 | 4 | Black | 345 | 337.4 | -7.6 | -2.2% | pass | 337.4 | -2.2% | pass |
-| 8 | 3 | Blue | 175 | 174.5 | -0.5 | -0.3% | pass | 174.5 | -0.3% | pass |
+| 1 | 4 | Blue | 420 | 417.3 | -2.7 | -0.6% | pass | 417.3 | -0.6% | pass |
+| 1 | 4 | Black | 430 | 417.3 | -12.7 | -2.9% | pass | 417.3 | -2.9% | pass |
+| 2 | 4 | Blue | 456 | 431.8 | -24.2 | -5.3% | flag | 444.7 | -2.5% | pass |
+| 2 | 4 | Black | 505 | 499.2 | -5.8 | -1.2% | pass | 499.2 | -1.2% | pass |
+| 3 | 3 | Blue | 127 | 121.5 | -5.5 | -4.3% | flag | 123.9 | -2.5% | pass |
+| 3 | 3 | Black | 137 | 121.5 | -15.5 | -11.3% | FAIL | 133.6 | -2.5% | pass |
+| 4 | 4 | Blue | 429 | 428.1 | -0.9 | -0.2% | pass | 428.1 | -0.2% | pass |
+| 4 | 4 | Black | 438 | 428.1 | -9.9 | -2.3% | pass | 428.1 | -2.3% | pass |
+| 5 | 4 | Blue | 364 | 340.6 | -23.4 | -6.4% | flag | 354.9 | -2.5% | pass |
+| 5 | 4 | Black | 372 | 340.6 | -31.4 | -8.5% | FAIL | 362.8 | -2.5% | pass |
+| 6 | 4 | Blue | 415 | 401.5 | -13.5 | -3.2% | flag | 404.6 | -2.5% | pass |
+| 6 | 4 | Black | 437 | 401.5 | -35.5 | -8.1% | FAIL | 426.2 | -2.5% | pass |
+| 7 | 4 | Blue | 335 | 327.5 | -7.5 | -2.2% | pass | 327.5 | -2.2% | pass |
+| 7 | 4 | Black | 345 | 327.5 | -17.5 | -5.1% | flag | 336.4 | -2.5% | pass |
+| 8 | 3 | Blue | 175 | 172.2 | -2.8 | -1.6% | pass | 172.2 | -1.6% | pass |
 | 8 | 3 | Black | 190 | 191.2 | +1.2 | +0.6% | pass | 191.2 | +0.6% | pass |
 | 9 | 4 | Blue | 428 | 430.7 | +2.7 | +0.6% | pass | 430.7 | +0.6% | pass |
-| 9 | 4 | Black | 453 | 455.6 | +2.6 | +0.6% | pass | 455.6 | +0.6% | pass |
+| 9 | 4 | Black | 453 | 455.9 | +2.9 | +0.6% | pass | 455.9 | +0.6% | pass |
 | 10 | 4 | Blue | 399 | 393.1 | -5.9 | -1.5% | pass | 393.1 | -1.5% | pass |
-| 10 | 4 | Black | 421 | 416.3 | -4.7 | -1.1% | pass | 416.3 | -1.1% | pass |
-| 11 | 4 | Blue | 386 | 383.1 | -2.9 | -0.7% | pass | 383.1 | -0.7% | pass |
-| 11 | 4 | Black | 391 | 383.1 | -7.9 | -2.0% | pass | 383.1 | -2.0% | pass |
-| 12 | 3 | Blue | 200 | 192.6 | -7.4 | -3.7% | flag | 199.9 | -0.0% | pass |
+| 10 | 4 | Black | 421 | 412.0 | -9.0 | -2.1% | pass | 412.0 | -2.1% | pass |
+| 11 | 4 | Blue | 386 | 381.2 | -4.8 | -1.2% | pass | 381.2 | -1.2% | pass |
+| 11 | 4 | Black | 391 | 381.2 | -9.8 | -2.5% | pass | 381.2 | -2.5% | pass |
+| 12 | 3 | Blue | 200 | 210.1 | +10.1 | +5.1% | flag | 204.9 | +2.4% | pass |
 | 12 | 3 | Black | 211 | 195.4 | -15.6 | -7.4% | flag | 195.4 | -7.4% | flag |
-| 13 | 4 | Blue | 361 | 359.3 | -1.7 | -0.5% | pass | 359.3 | -0.5% | pass |
-| 13 | 4 | Black | 383 | 380.5 | -2.5 | -0.6% | pass | 380.5 | -0.6% | pass |
-| 14 | 4 | Blue | 353 | 340.1 | -12.9 | -3.7% | flag | 353.0 | -0.0% | pass |
-| 14 | 4 | Black | 365 | 340.1 | -24.9 | -6.8% | flag | 360.0 | -1.4% | pass |
-| 15 | 3 | Blue | 187 | 187.4 | +0.4 | +0.2% | pass | 187.4 | +0.2% | pass |
-| 15 | 3 | Black | 196 | 187.4 | -8.6 | -4.4% | flag | 196.0 | -0.0% | pass |
-| 16 | 4 | Blue | 426 | 423.5 | -2.5 | -0.6% | pass | 423.5 | -0.6% | pass |
-| 16 | 4 | Black | 444 | 441.6 | -2.4 | -0.5% | pass | 441.6 | -0.5% | pass |
-| 17 | 5 | Blue | 533 | 527.3 | -5.7 | -1.1% | pass | 527.3 | -1.1% | pass |
-| 17 | 5 | Black | 558 | 557.3 | -0.7 | -0.1% | pass | 557.3 | -0.1% | pass |
-| 18 | 4 | Blue | 423 | 421.6 | -1.4 | -0.3% | pass | 421.6 | -0.3% | pass |
-| 18 | 4 | Black | 456 | 445.2 | -10.8 | -2.4% | pass | 445.2 | -2.4% | pass |
-| **total** | 138 | | **13149** | **12943** | -206 | -1.6% | | **13051** | -0.7% | |
+| 13 | 4 | Blue | 361 | 370.3 | +9.3 | +2.6% | pass | 370.3 | +2.6% | pass |
+| 13 | 4 | Black | 383 | 380.4 | -2.6 | -0.7% | pass | 380.4 | -0.7% | pass |
+| 14 | 4 | Blue | 353 | 358.1 | +5.1 | +1.4% | pass | 358.1 | +1.4% | pass |
+| 14 | 4 | Black | 365 | 358.1 | -6.9 | -1.9% | pass | 358.1 | -1.9% | pass |
+| 15 | 3 | Blue | 187 | 176.9 | -10.1 | -5.4% | flag | 182.3 | -2.5% | pass |
+| 15 | 3 | Black | 196 | 176.9 | -19.1 | -9.7% | FAIL | 191.1 | -2.5% | pass |
+| 16 | 4 | Blue | 426 | 424.4 | -1.6 | -0.4% | pass | 424.4 | -0.4% | pass |
+| 16 | 4 | Black | 444 | 440.0 | -4.0 | -0.9% | pass | 440.0 | -0.9% | pass |
+| 17 | 5 | Blue | 533 | 521.9 | -11.1 | -2.1% | pass | 521.9 | -2.1% | pass |
+| 17 | 5 | Black | 558 | 554.0 | -4.0 | -0.7% | pass | 554.0 | -0.7% | pass |
+| 18 | 4 | Blue | 423 | 421.5 | -1.5 | -0.3% | pass | 421.5 | -0.3% | pass |
+| 18 | 4 | Black | 456 | 442.9 | -13.1 | -2.9% | pass | 442.9 | -2.9% | pass |
+| **total** | 138 | | **13149** | **12852** | -297 | -2.3% | | **12967** | -1.4% | |
 
 ## Open items
 
-1. Hole 10: OSM hole line has no par tag; using scorecard par 4.
-2. Hole 11: OSM hole line has no par tag; using scorecard par 4.
-3. Hole 12: OSM hole line has no par tag; using scorecard par 3.
-4. Hole 12 (Black): no mapped tee box within 8% of the card; the tee is the start point of the OSM hole line (195 yd). The Black tee box is not in OSM - trace it to confirm.
-5. Hole 12 (Black): measured 195 yd vs card 211 (-7.4%) even with the virtual tee at the best spot in its box; accepted for play.
-6. Hole 13: OSM hole line has no par tag; using scorecard par 4.
-7. Hole 14: OSM hole line has no par tag; using scorecard par 4.
-8. Hole 15: OSM hole line has no par tag; using scorecard par 3.
-9. Hole 16: OSM hole line has no par tag; using scorecard par 4.
-10. Hole 17: OSM hole line has no par tag; using scorecard par 5.
-11. Hole 18: OSM hole line has no par tag; using scorecard par 4.
+1. Hole 2: the OSM hole line starts 65 m from the Blue tee box (w482558323), and only that box matches the card; the line was probably drawn from another tee. Measured from the Blue box through the line's bend points.
+2. Hole 10: OSM hole line has no par tag; using scorecard par 4.
+3. Hole 11: OSM hole line has no par tag; using scorecard par 4.
+4. Hole 12: OSM hole line has no par tag; using scorecard par 3.
+5. Hole 12 (Black): no mapped tee box within 8% of the card; the tee is the start point of the OSM hole line (195 yd). The Black tee box is not in OSM - trace it to confirm.
+6. Hole 12 (Black): measured 195 yd vs card 211 (-7.4%) even with the virtual tee at the best spot in its box; accepted for play.
+7. Hole 13: OSM hole line has no par tag; using scorecard par 4.
+8. Hole 14: OSM hole line has no par tag; using scorecard par 4.
+9. Hole 15: OSM hole line has no par tag; using scorecard par 3.
+10. Hole 16: OSM hole line has no par tag; using scorecard par 4.
+11. Hole 17: OSM hole line has no par tag; using scorecard par 5.
+12. Hole 18: OSM hole line has no par tag; using scorecard par 4.
 
 ## Other open items (Wannamoisett)
 
@@ -74,15 +75,17 @@ Decisions the developer made on 2026-10-19 are in DECISIONS.md ("Wannamoisett").
 
 ## Playability adjustments
 
-- Hole 3 (Black): measured 127 yd from the tee-box centre vs 137 on the card (-7.6%); moved the virtual tee within the real tee polygon w746432095 -> 137.0 yd (real 126.6 yd).
-- Hole 5 (Blue): measured 352 yd from the tee-box centre vs 364 on the card (-3.2%); moved the virtual tee within the real tee polygon w746432103 -> 364.0 yd (real 352.4 yd).
-- Hole 5 (Black): measured 352 yd from the tee-box centre vs 372 on the card (-5.3%); moved the virtual tee within the real tee polygon w746432103 -> 372.1 yd (real 352.4 yd).
-- Hole 6 (Black): measured 419 yd from the tee-box centre vs 437 on the card (-4.1%); moved the virtual tee within the real tee polygon w746432104 -> 437.0 yd (real 419.2 yd).
-- Hole 6 (Black): tee shot: a perfect drive at the middle of the fairway clipped a tree near the tee; moved 1.4 m within the real tee polygon w746432104 to the nearest clear spot -> 436.9 yd (real 419.2 yd).
-- Hole 12 (Blue): measured 193 yd from the tee-box centre vs 200 on the card (-3.7%); moved the virtual tee within the real tee polygon w482561277 -> 199.9 yd (real 192.6 yd).
-- Hole 14 (Blue): measured 340 yd from the tee-box centre vs 353 on the card (-3.7%); moved the virtual tee within the real tee polygon w482561271 -> 353.0 yd (real 340.1 yd).
-- Hole 14 (Black): measured 340 yd from the tee-box centre vs 365 on the card (-6.8%); moved the virtual tee within the real tee polygon w482561271 -> 360.0 yd (real 340.1 yd).
-- Hole 15 (Black): measured 187 yd from the tee-box centre vs 196 on the card (-4.4%); moved the virtual tee within the real tee polygon w482687965 -> 196.0 yd (real 187.4 yd).
+- Hole 2 (Blue): measured 432 yd from the tee-box centre vs 456 on the card (-5.3%); moved the virtual tee along the middle of the real tee polygon w482558323 (on its centre line, at least 2.5 m from its back and front) -> 444.7 yd (real 431.8 yd).
+- Hole 3 (Blue): measured 121 yd from the tee-box centre vs 127 on the card (-4.3%); moved the virtual tee along the middle of the real tee polygon w746432095 (on its centre line, at least 2.5 m from its back and front) -> 123.9 yd (real 121.5 yd).
+- Hole 3 (Black): measured 121 yd from the tee-box centre vs 137 on the card (-11.3%); moved the virtual tee along the middle of the real tee polygon w746432095 (on its centre line, at least 2.5 m from its back and front) -> 133.6 yd (real 121.5 yd).
+- Hole 5 (Blue): measured 341 yd from the tee-box centre vs 364 on the card (-6.4%); moved the virtual tee along the middle of the real tee polygon w746432103 (on its centre line, at least 2.5 m from its back and front) -> 354.9 yd (real 340.6 yd).
+- Hole 5 (Black): measured 341 yd from the tee-box centre vs 372 on the card (-8.5%); moved the virtual tee along the middle of the real tee polygon w746432103 (on its centre line, at least 2.5 m from its back and front) -> 362.8 yd (real 340.6 yd).
+- Hole 6 (Blue): measured 402 yd from the tee-box centre vs 415 on the card (-3.2%); moved the virtual tee along the middle of the real tee polygon w746432104 (on its centre line, at least 2.5 m from its back and front) -> 404.6 yd (real 401.5 yd).
+- Hole 6 (Black): measured 402 yd from the tee-box centre vs 437 on the card (-8.1%); moved the virtual tee along the middle of the real tee polygon w746432104 (on its centre line, at least 2.5 m from its back and front) -> 426.2 yd (real 401.5 yd).
+- Hole 7 (Black): measured 327 yd from the tee-box centre vs 345 on the card (-5.1%); moved the virtual tee along the middle of the real tee polygon w414804483 (on its centre line, at least 2.5 m from its back and front) -> 336.4 yd (real 327.5 yd).
+- Hole 12 (Blue): measured 210 yd from the tee-box centre vs 200 on the card (+5.1%); moved the virtual tee along the middle of the real tee polygon w482561277 (on its centre line, at least 2.5 m from its back and front) -> 204.9 yd (real 210.1 yd).
+- Hole 15 (Blue): measured 177 yd from the tee-box centre vs 187 on the card (-5.4%); moved the virtual tee along the middle of the real tee polygon w482687965 (on its centre line, at least 2.5 m from its back and front) -> 182.3 yd (real 176.9 yd).
+- Hole 15 (Black): measured 177 yd from the tee-box centre vs 196 on the card (-9.7%); moved the virtual tee along the middle of the real tee polygon w482687965 (on its centre line, at least 2.5 m from its back and front) -> 191.1 yd (real 176.9 yd).
 
 ## Tree detection (2022 USGS RI statewide lidar, leaf-off)
 

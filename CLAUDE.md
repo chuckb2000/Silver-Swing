@@ -567,8 +567,34 @@ DECISIONS.md with the reason.
     committed. 398 unit tests and 4 Playwright tests pass; 416 unit
     and 4 Playwright tests pass on main with Waverley merged.
 
--   **Next task:** the third playtest (putting, yellow misses), the club's
-    printed scorecard and the hole 3 Blue tee box. New courses: a separate
+-   **Overnight (design chat, 2026-10-19/20):** branch `design/overnight`,
+    not merged. The developer's overnight list:
+    -   a meter that speeds up toward 100 % and returns at its tap-2 speed;
+    -   only the dead centre of the green zone goes straight;
+    -   topspin rolls about 15 % less (wind already matched the reference);
+    -   pins 14 ft from the edge;
+    -   one device per name and nobody as "player";
+    -   recent eagles (sent when the ball drops) and most birdies in a round;
+    -   the freeze on a second round in a tab (the HUD kept destroyed texts),
+        and load hardening;
+    -   tees centred on their boxes, and rounded fairway corners (every course
+        rebuilt);
+    -   trees removed on Langston 16/17 and East Potomac Blue 10;
+    -   a report on faster course creation (docs/reports/course_creation_speedup.md).
+
+    Then a bug review (docs/reports/bug_and_playability_review.md). Its fixes
+    are on branch `design/bugfixes`, built on `design/overnight`, also not
+    merged. Player improvements are in docs/reports/player_improvements.md.
+    DECISIONS.md "Overnight requests" has the details. The D1 tables
+    migrate themselves; no manual step.
+
+    The "Built" yardages and flag lists in section 11 date from before the
+    tees were centred. The current figures are in each course's
+    validation_report.md. 439 unit tests and 4 Playwright tests pass.
+
+-   **Next task:** the developer reviews and merges `design/overnight`, then
+    `design/bugfixes`. After that: the third playtest (putting, yellow
+    misses), the club's printed scorecard and the hole 3 Blue tee box. New courses: a separate
     chat following docs/COURSE_BUILD.md; after each one lands, make its
     course card (docs/COURSE_BUILD.md section 12).
 
@@ -1077,8 +1103,17 @@ latency calibration setting (± ms offset).
 
 **6.2 Tuning (tune)**
 
--   **Constant cursor speed.** One full trip from 0% to 110% takes 1.1 s
-    on Normal (section 9 has the presets).
+-   **Cursor speed** (developer, 2026-10-19; was constant): the cursor
+    starts slowly and speeds up in step with its position. At 100 % it
+    reaches the original speed (one trip from 0 % to 110 % in 1.1 s on
+    Normal), and it holds that speed to the end of the bar. After tap 2 it
+    returns at the speed it had at tap 2, so short swings are easier to
+    time. The starting and 100 % speeds per preset are in
+    `src/data/difficulty.ts`.
+
+-   **Inside the green zone** only the dead centre is straight (developer,
+    2026-10-19). An off-centre tap curves the ball that way, up to
+    0.4 × the club's curve factor at the zone's edge.
 
 -   **Power:** carry = club carry × power, linear (70% of a 7-iron ≈ 101
     m / 111 yd).
@@ -1272,7 +1307,9 @@ by √power, so partial shots fly lower.
     -   Backspin: first-bounce horizontal speed × 0.6 and rolling
         deceleration × 1.6. Wedges on the green may spin back up to 2 m.
 
-    -   Topspin: horizontal speed × 1.15 and deceleration × 0.75.
+    -   Topspin: horizontal speed × 1.10 and deceleration × 0.85
+        (developer, 2026-10-19: "a little too OP with the driver"; was
+        1.15 and 0.75).
 
     -   From rough, backspin is limited to 30% effect (\"flyer\").
 
@@ -1492,6 +1529,18 @@ local leaderboard stays as the offline copy.
 -   **Ranking:** lowest gross wins; ties broken by the back-9 score
     (standard countback), then by date. Casual rounds go on a separate
     \"casual\" tab.
+
+-   **Names** (developer, 2026-10-19): a name on the shared boards
+    belongs to one device. Each copy of the game has a private player key;
+    the same person on another device copies the player code from
+    settings. "player" is not a name: unnamed rounds stay on the device.
+
+-   **Recent eagles and most birdies** (developer, 2026-10-19): a list of
+    eagles or better on any course (player, course, hole, date), each sent
+    when the ball drops, so unfinished rounds count. Also a board of the
+    most birdies (or better) in a round (player, course, number, date).
+    Both cover all courses and keep the course, for a later split.
+    Casual rounds are excluded.
 
 -   **Personal bests:** per player, per course.
 

@@ -3,10 +3,10 @@
 import Phaser from 'phaser';
 import { app } from '../app';
 import { addToBoard, LeaderboardEntry, saveSettings } from '../save/store';
-import { loadCourse } from '../data/courses';
+import { loadCourse, LoadProgress } from '../data/courses';
 import { teeFor } from '../data/registry';
 import { clearSnapshot, peekSnapshot, restoreRound } from '../save/snapshot';
-import { courseHoleFor, isCasual, newSeed, Round, RoundConfig } from '../systems/game/round';
+import { courseHoleFor, isCasual, newSeed, Round, RoundConfig, roundId } from '../systems/game/round';
 import { roundPins } from '../systems/game/pins';
 import { totals } from '../systems/rules/scoring';
 
@@ -44,20 +44,20 @@ async function untilStopped(scene: Phaser.Scene, key: string) {
  * Make `id` the current course (no-op if it already is). The menu background
  * is stopped while the old course is unloaded; the caller relaunches it.
  */
-export async function useCourse(scene: Phaser.Scene, id: string): Promise<void> {
+export async function useCourse(scene: Phaser.Scene, id: string, progress?: LoadProgress): Promise<void> {
   if (app.course?.json.id === id) return;
   scene.scene.stop('bg');
   await untilStopped(scene, 'bg');
-  await loadCourse(scene, id);
+  await loadCourse(scene, id, progress);
   app.settings.courseId = id;
   void saveSettings(app.settings);
 }
 
-export async function resumeRound(scene: Phaser.Scene): Promise<boolean> {
+export async function resumeRound(scene: Phaser.Scene, progress?: LoadProgress): Promise<boolean> {
   const snap = await peekSnapshot();
   if (!snap) return false;
   if (!app.courses.some((c) => c.id === snap.cfg.courseId)) return false; // course no longer offered
-  await useCourse(scene, snap.cfg.courseId);
+  await useCourse(scene, snap.cfg.courseId, progress);
   const res = await restoreRound();
   if (!res) return false;
   app.round = res.round;
@@ -69,7 +69,7 @@ export async function finishRound(scene: Phaser.Scene) {
   const r = app.round!;
   const tot = totals(r.scores);
   const entry: LeaderboardEntry = {
-    id: `${r.cfg.startedAt}-${r.cfg.seed}`,
+    id: roundId(r.cfg),
     course: r.cfg.courseId,
     tee: r.cfg.tee,
     length: lengthOf(r.cfg.holes, r.course.json.holes.length),

@@ -3,7 +3,8 @@
 import { DatabaseSync } from 'node:sqlite';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { isEntry, LeaderboardEntry } from '../../src/save/entry';
-import { D1Like, D1Statement, handleGet, handlePost, resetSchemaCache } from '../../src/server/scores';
+import { D1Like, D1Statement, handleEaglesGet, handleEaglesPost, handleGet, handleNames, handlePost, handleRecordsGet, resetSchemaCache } from '../../src/server/scores';
+import { HoleScore } from '../../src/systems/rules/scoring';
 
 /** Minimal D1 look-alike over node:sqlite. */
 function fakeD1(): D1Like {
@@ -48,10 +49,16 @@ describe('shared leaderboard server', () => {
     expect(again).toMatchObject({ added: 1 });
   });
 
-  it('stores a banned name as "player" and hides one already stored', async () => {
-    await handlePost(db, JSON.stringify(entry('bad', 74, 'Sh1t Head')));
+  it('refuses a banned name or "player", and hides ones already stored', async () => {
+    const res = await (await handlePost(db, JSON.stringify([entry('bad', 74, 'Sh1t Head'), entry('anon', 73, 'player')]))).json();
+    expect(res).toMatchObject({ added: 0, rejected: 2 });
+    // stored by an older version of the server
+    for (const [id, who] of [['old1', 'player'], ['old2', 'sh1t head']]) {
+      await db.prepare('INSERT INTO rounds (id, course, length, player, gross, back, date, data, received) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)')
+        .bind(id, 'oswego_lake', '18', who, 70, 35, '2026-10-18', JSON.stringify(entry(id, 70, who)), 'x').run();
+    }
     const got = (await (await handleGet(db, new URL('http://x/api/scores?course=oswego_lake'))).json()) as { entries: { id: string; player: string }[] };
-    expect(got.entries.find((e) => e.id === 'bad')!.player).toBe('player');
+    expect(got.entries).toEqual([]);
   });
 
   it('rejects malformed rounds and oversized requests', async () => {
@@ -60,5 +67,142 @@ describe('shared leaderboard server', () => {
     expect((await handlePost(db, 'not json')).status).toBe(400);
     expect((await handlePost(db, JSON.stringify(Array.from({ length: 51 }, (_, i) => entry(`n${i}`, 72))))).status).toBe(413);
     expect((await get(db, 'course=')).status).toBe(400);
+  });
+});
+
+const KEY_A = 'aaaaaaaaaaaaaaaa', KEY_B = 'bbbbbbbbbbbbbbbb';
+const holes = (strokes: number[], pars: number[]): HoleScore[] => strokes.map((st, i) => ({ hole: i + 1, par: pars[i], strokes: st, putts: 1, penalties: 0, fairway: null, gir: true }));
+const scored = (id: string, player: string, strokes: number[], pars: number[], extra: Partial<LeaderboardEntry> = {}): LeaderboardEntry => {
+  const e = entry(id, strokes.reduce((a, b) => a + b, 0), player);
+  return { ...e, length: strokes.length === 9 ? 'front' : '18', scores: holes(strokes, pars), ...extra };
+};
+
+describe('names belong to one device (developer, 2026-10-19)', () => {
+  let db: D1Like;
+  beforeEach(() => { resetSchemaCache(); db = fakeD1(); });
+  const names = (method: string, q: string, body?: unknown) => handleNames(db, { method, url: new URL(`http://x/api/names?${q}`), body: body ? JSON.stringify(body) : undefined });
+
+  it('the first device to use a name keeps it; another device is refused', async () => {
+    expect(await (await handlePost(db, JSON.stringify({ ...entry('a1', 72, 'chuck'), owner: KEY_A }))).json()).toMatchObject({ added: 1, taken: [] });
+    expect(await (await handlePost(db, JSON.stringify({ ...entry('b1', 70, 'chuck'), owner: KEY_B }))).json()).toMatchObject({ added: 0, taken: ['b1'] });
+    expect(await (await handlePost(db, JSON.stringify({ ...entry('a2', 71, 'Chuck'), owner: KEY_A }))).json()).toMatchObject({ added: 1 });
+    // a round with no key (an old copy of the game) can't use a claimed name either
+    expect(await (await handlePost(db, JSON.stringify(entry('c1', 69, 'chuck')))).json()).toMatchObject({ added: 0, taken: ['c1'] });
+    expect(await (await names('GET', `name=chuck&owner=${KEY_B}`)).json()).toMatchObject({ ok: false, result: 'taken' });
+    expect(await (await names('GET', `name=chuck&owner=${KEY_A}`)).json()).toMatchObject({ ok: true });
+    expect(await (await names('POST', '', { name: 'sam', owner: KEY_B })).json()).toMatchObject({ ok: true });
+    expect(await (await names('POST', '', { name: 'sam', owner: KEY_A })).json()).toMatchObject({ ok: false, result: 'taken' });
+    expect(await (await names('POST', '', { name: 'player', owner: KEY_A })).json()).toMatchObject({ ok: false, result: 'invalid' });
+  });
+
+  it('never returns a device key', async () => {
+    await handlePost(db, JSON.stringify({ ...entry('a1', 72, 'chuck'), owner: KEY_A }));
+    const text = await (await get(db, 'course=oswego_lake')).text();
+    expect(text).not.toContain(KEY_A);
+    expect(text).not.toContain('owner');
+  });
+
+  it('a name only old rounds used goes to the first device that claims it', async () => {
+    await handlePost(db, JSON.stringify(entry('old', 75, 'pat')));
+    expect(await (await names('POST', '', { name: 'pat', owner: KEY_B })).json()).toMatchObject({ ok: true });
+    expect(await (await handlePost(db, JSON.stringify({ ...entry('new', 74, 'pat'), owner: KEY_A }))).json()).toMatchObject({ taken: ['new'] });
+  });
+
+  it('a device holds at most 8 names', async () => {
+    for (let i = 0; i < 8; i++) expect(await (await names('POST', '', { name: `kid ${i}`, owner: KEY_A })).json()).toMatchObject({ ok: true });
+    expect(await (await names('POST', '', { name: 'kid 9', owner: KEY_A })).json()).toMatchObject({ result: 'too_many' });
+  });
+});
+
+describe('recent eagles and most birdies (developer, 2026-10-19)', () => {
+  let db: D1Like;
+  beforeEach(() => { resetSchemaCache(); db = fakeD1(); });
+  const eagle = (id: string, player: string, date: string, extra = {}) => ({
+    id: `r-${id}-h3`, round: `r-${id}`, player, course: 'oswego_lake', hole: 3, par: 5, strokes: 3, tee: 'Blue', difficulty: 'normal', date, owner: KEY_A, ...extra,
+  });
+
+  it('an eagle is kept the moment it is reported, newest first, and only once', async () => {
+    expect(await (await handleEaglesPost(db, JSON.stringify([eagle('1', 'chuck', '2026-10-19T10:00:00Z'), eagle('2', 'chuck', '2026-10-19T12:00:00Z')]))).json()).toMatchObject({ added: 2 });
+    expect(await (await handleEaglesPost(db, JSON.stringify(eagle('1', 'chuck', '2026-10-19T10:00:00Z')))).json()).toMatchObject({ added: 0 });
+    const got = (await (await handleEaglesGet(db, new URL('http://x/api/eagles'))).json()) as { eagles: { id: string; owner?: string }[] };
+    expect(got.eagles.map((e) => e.id)).toEqual(['r-2-h3', 'r-1-h3']);
+    expect(got.eagles[0].owner).toBeUndefined();
+  });
+
+  it('refuses a birdie dressed as an eagle, "player", and a name another device holds', async () => {
+    const res = await (await handleEaglesPost(db, JSON.stringify([
+      eagle('b', 'chuck', '2026-10-19T10:00:00Z', { strokes: 4 }),
+      eagle('p', 'player', '2026-10-19T10:00:00Z'),
+      eagle('t', 'sam', '2026-10-19T10:00:00Z', { owner: KEY_B }),
+      eagle('u', 'sam', '2026-10-19T11:00:00Z'),
+    ]))).json();
+    expect(res).toMatchObject({ added: 1, rejected: 2, taken: ['r-u-h3'] });
+  });
+
+  it('a finished round adds its eagles too (same id as the live report), not twice', async () => {
+    const pars = [4, 5, 3, 4, 4, 5, 3, 4, 4];
+    await handleEaglesPost(db, JSON.stringify({ ...eagle('x', 'chuck', '2026-10-19T10:00:00Z'), id: 'R1-h2', round: 'R1', hole: 2, par: 5, strokes: 3 }));
+    await handlePost(db, JSON.stringify({ ...scored('R1', 'chuck', [4, 3, 1, 4, 4, 5, 3, 4, 4], pars), owner: KEY_A }));
+    const got = (await (await handleEaglesGet(db, new URL('http://x/api/eagles'))).json()) as { eagles: { id: string; strokes: number }[] };
+    expect(got.eagles.map((e) => e.id).sort()).toEqual(['R1-h2', 'R1-h3']); // the eagle on 2 and the ace on 3
+  });
+
+  it('most birdies in a round: across courses, ties to whoever did it first, casual rounds left out', async () => {
+    const pars = Array(18).fill(4);
+    const s = (n: number) => pars.map((p, i) => (i < n ? p - 1 : p));
+    await handlePost(db, JSON.stringify([
+      { ...scored('A', 'chuck', s(5), pars, { date: '2026-10-19T09:00:00Z' }), owner: KEY_A },
+      { ...scored('B', 'sam', s(7), pars, { date: '2026-10-19T10:00:00Z', course: 'franklin' }), owner: KEY_B },
+      { ...scored('C', 'chuck', s(5), pars, { date: '2026-10-18T09:00:00Z' }), owner: KEY_A },
+      { ...scored('D', 'chuck', s(9), pars, { date: '2026-10-19T11:00:00Z', casual: true }), owner: KEY_A },
+    ]));
+    const got = (await (await handleRecordsGet(db, new URL('http://x/api/records?kind=birdies'))).json()) as { records: { id: string; birdies: number; course: string }[] };
+    expect(got.records.map((r) => [r.id, r.birdies])).toEqual([['B', 7], ['C', 5], ['A', 5]]);
+    const one = (await (await handleRecordsGet(db, new URL('http://x/api/records?kind=birdies&course=franklin'))).json()) as { records: { id: string }[] };
+    expect(one.records.map((r) => r.id)).toEqual(['B']);
+  });
+
+  it('an older database is brought up to date: its rounds get birdie counts and their eagles', async () => {
+    // the rounds table as the first version of the server made it
+    const raw = fakeD1();
+    await raw.prepare(`CREATE TABLE rounds (id TEXT PRIMARY KEY, course TEXT NOT NULL, length TEXT NOT NULL, player TEXT NOT NULL, gross INTEGER NOT NULL, back INTEGER, date TEXT NOT NULL, data TEXT NOT NULL, received TEXT NOT NULL)`).run();
+    const pars = Array(18).fill(4);
+    const old = scored('OLD', 'chuck', pars.map((p, i) => (i === 0 ? 2 : i < 4 ? 3 : p)), pars);
+    await raw.prepare('INSERT INTO rounds (id, course, length, player, gross, back, date, data, received) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)')
+      .bind(old.id, old.course, old.length, old.player, old.gross, old.back, old.date, JSON.stringify(old), '2026-10-18').run();
+    resetSchemaCache();
+    await handleGet(raw, new URL('http://x/api/scores?ping=1')); // the first request sets the tables up; old rounds follow on the next
+    const rec = (await (await handleRecordsGet(raw, new URL('http://x/api/records?kind=birdies'))).json()) as { records: { id: string; birdies: number }[] };
+    expect(rec.records).toEqual([expect.objectContaining({ id: 'OLD', birdies: 4 })]);
+    const eg = (await (await handleEaglesGet(raw, new URL('http://x/api/eagles'))).json()) as { eagles: { id: string }[] };
+    expect(eg.eagles.map((e) => e.id)).toEqual(['OLD-h1']);
+  });
+});
+
+describe('stays inside the free plan: 50 database queries per request', () => {
+  it('a cold start on an old database, then uploads, each stay under 50 queries', async () => {
+    const real = fakeD1();
+    let n = 0;
+    const counted: D1Like = { prepare: (sql: string) => { const s = real.prepare(sql); const wrap = (st: D1Statement): D1Statement => ({ bind: (...v: unknown[]) => wrap(st.bind(...v)), all: (async () => { n++; return st.all(); }) as D1Statement['all'], run: async () => { n++; return st.run(); } }); return wrap(s); } };
+    // an old database with 60 rounds and no new columns
+    await real.prepare(`CREATE TABLE rounds (id TEXT PRIMARY KEY, course TEXT NOT NULL, length TEXT NOT NULL, player TEXT NOT NULL, gross INTEGER NOT NULL, back INTEGER, date TEXT NOT NULL, data TEXT NOT NULL, received TEXT NOT NULL)`).run();
+    const pars = Array(18).fill(4);
+    for (let i = 0; i < 60; i++) {
+      const e = scored(`old${i}`, 'chuck', pars.map((p, k) => (k === 0 ? 2 : p)), pars);
+      await real.prepare('INSERT INTO rounds (id, course, length, player, gross, back, date, data, received) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)')
+        .bind(e.id, e.course, e.length, e.player, e.gross, e.back, e.date, JSON.stringify(e), 'x').run();
+    }
+    for (let req = 0; req < 8; req++) {
+      resetSchemaCache(); // every request a cold start (the worst case)
+      n = 0;
+      const batch = Array.from({ length: 5 }, (_, i) => ({ ...scored(`new${req}-${i}`, 'chuck', pars.map((p, k) => (k < 2 ? p - 2 : p)), pars), owner: KEY_A }));
+      const res = await handlePost(counted, JSON.stringify(batch));
+      expect(res.status).toBe(200);
+      expect(n).toBeLessThanOrEqual(50);
+    }
+    resetSchemaCache();
+    n = 0;
+    await handleGet(counted, new URL('http://x/api/scores?ping=1'));
+    expect(n).toBeLessThanOrEqual(50);
   });
 });

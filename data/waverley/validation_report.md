@@ -6,47 +6,49 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 
 | hole | par | tee set | card yd | measured yd | diff yd | diff % | status | adjusted yd | adj. diff % | adj. status |
 |---|---|---|---|---|---|---|---|---|---|---|
-| 1 | 4 | Blue | 324 | 325.1 | +1.1 | +0.3% | pass | 325.1 | +0.3% | pass |
-| 2 | 4 | Blue | 392 | 417.1 | +25.1 | +6.4% | flag | 412.8 | +5.3% | flag |
-| 3 | 4 | Blue | 347 | 360.9 | +13.9 | +4.0% | flag | 356.0 | +2.6% | pass |
-| 4 | 4 | Blue | 406 | 431.7 | +25.7 | +6.3% | flag | 426.7 | +5.1% | flag |
-| 5 | 5 | Blue | 451 | 449.0 | -2.0 | -0.4% | pass | 449.0 | -0.4% | pass |
-| 6 | 3 | Blue | 157 | 163.7 | +6.7 | +4.3% | flag | 161.2 | +2.7% | pass |
-| 7 | 4 | Blue | 373 | 378.8 | +5.8 | +1.6% | pass | 378.8 | +1.6% | pass |
-| 8 | 5 | Blue | 568 | 567.3 | -0.7 | -0.1% | pass | 567.3 | -0.1% | pass |
-| 9 | 3 | Blue | 119 | 120.5 | +1.5 | +1.3% | pass | 120.5 | +1.3% | pass |
-| 10 | 4 | Blue | 400 | 402.7 | +2.7 | +0.7% | pass | 401.2 | +0.3% | pass |
-| 11 | 3 | Blue | 156 | 164.3 | +8.3 | +5.3% | flag | 159.6 | +2.3% | pass |
-| 12 | 4 | Blue | 400 | 403.4 | +3.4 | +0.8% | pass | 403.4 | +0.8% | pass |
-| 13 | 5 | Blue | 491 | 484.8 | -6.2 | -1.3% | pass | 484.8 | -1.3% | pass |
-| 14 | 3 | Blue | 137 | 146.0 | +9.0 | +6.6% | flag | 137.0 | -0.0% | pass |
-| 15 | 4 | Blue | 354 | 353.1 | -0.9 | -0.2% | pass | 353.1 | -0.2% | pass |
-| 16 | 3 | Blue | 215 | 213.1 | -1.9 | -0.9% | pass | 213.1 | -0.9% | pass |
-| 17 | 5 | Blue | 490 | 405.5 | -84.5 | -17.2% | FAIL | 408.7 | -16.6% | FAIL |
-| 18 | 5 | Blue | 558 | 537.4 | -20.6 | -3.7% | flag | 538.6 | -3.5% | flag |
-| **total** | 72 | | **6338** | **6324** | -14 | -0.2% | | **6297** | -0.6% | |
+| 1 | 4 | Blue | 324 | 325.6 | +1.6 | +0.5% | pass | 325.6 | +0.5% | pass |
+| 2 | 4 | Blue | 392 | 417.8 | +25.8 | +6.6% | flag | 414.8 | +5.8% | flag |
+| 3 | 4 | Blue | 347 | 362.7 | +15.7 | +4.5% | flag | 357.3 | +3.0% | pass |
+| 4 | 4 | Blue | 406 | 431.6 | +25.6 | +6.3% | flag | 428.7 | +5.6% | flag |
+| 5 | 5 | Blue | 451 | 447.9 | -3.1 | -0.7% | pass | 447.9 | -0.7% | pass |
+| 6 | 3 | Blue | 157 | 163.8 | +6.8 | +4.3% | flag | 162.8 | +3.7% | flag |
+| 7 | 4 | Blue | 373 | 378.9 | +5.9 | +1.6% | pass | 378.9 | +1.6% | pass |
+| 8 | 5 | Blue | 568 | 569.5 | +1.5 | +0.3% | pass | 569.5 | +0.3% | pass |
+| 9 | 3 | Blue | 119 | 120.6 | +1.6 | +1.3% | pass | 120.6 | +1.3% | pass |
+| 10 | 4 | Blue | 400 | 402.6 | +2.6 | +0.7% | pass | 401.5 | +0.4% | pass |
+| 11 | 3 | Blue | 156 | 164.5 | +8.5 | +5.4% | flag | 161.6 | +3.6% | flag |
+| 12 | 4 | Blue | 400 | 410.2 | +10.2 | +2.5% | pass | 410.2 | +2.5% | pass |
+| 13 | 5 | Blue | 491 | 475.7 | -15.3 | -3.1% | flag | 478.8 | -2.5% | pass |
+| 14 | 3 | Blue | 137 | 138.7 | +1.7 | +1.2% | pass | 138.7 | +1.2% | pass |
+| 15 | 4 | Blue | 354 | 353.1 | -0.9 | -0.3% | pass | 353.1 | -0.3% | pass |
+| 16 | 3 | Blue | 215 | 212.8 | -2.2 | -1.0% | pass | 212.8 | -1.0% | pass |
+| 17 | 5 | Blue | 490 | 405.5 | -84.5 | -17.3% | FAIL | 406.8 | -17.0% | FAIL |
+| 18 | 5 | Blue | 558 | 537.6 | -20.4 | -3.7% | flag | 538.3 | -3.5% | flag |
+| **total** | 72 | | **6338** | **6319** | -19 | -0.3% | | **6308** | -0.5% | |
 
 ## Open items
 
 1. Hole 1 (Blue): tee box desk_1_bluetee_0 assigned by the developer (tagged hole=1, tee_set=Blue in edited/course.geojson).
-2. Hole 2 (Blue): measured 413 yd vs card 392 (+5.3%) even with the virtual tee at the best spot in its box; accepted for play.
+2. Hole 2 (Blue): measured 415 yd vs card 392 (+5.8%) even with the virtual tee at the best spot in its box; accepted for play.
 3. Hole 2 (Blue): tee box desk_2_bluetee_0 assigned by the developer (tagged hole=2, tee_set=Blue in edited/course.geojson).
 4. Hole 3 (Blue): tee box desk_3_bluetee_0 assigned by the developer (tagged hole=3, tee_set=Blue in edited/course.geojson).
-5. Hole 4 (Blue): measured 427 yd vs card 406 (+5.1%) even with the virtual tee at the best spot in its box; accepted for play.
+5. Hole 4 (Blue): measured 429 yd vs card 406 (+5.6%) even with the virtual tee at the best spot in its box; accepted for play.
 6. Hole 4 (Blue): tee box desk_4_bluetee_0 assigned by the developer (tagged hole=4, tee_set=Blue in edited/course.geojson).
 7. Hole 5 (Blue): tee box desk_5_bluetee_0 assigned by the developer (tagged hole=5, tee_set=Blue in edited/course.geojson).
-8. Hole 6 (Blue): tee box desk_6_bluetee_0 assigned by the developer (tagged hole=6, tee_set=Blue in edited/course.geojson).
-9. Hole 7 (Blue): tee box desk_7_bluetee_0 assigned by the developer (tagged hole=7, tee_set=Blue in edited/course.geojson).
-10. Hole 8 (Blue): tee box desk_8_bluetee_0 assigned by the developer (tagged hole=8, tee_set=Blue in edited/course.geojson).
-11. Hole 9 (Blue): tee box desk_9_bluetee_0 assigned by the developer (tagged hole=9, tee_set=Blue in edited/course.geojson).
-12. Hole 10 (Blue): tee box desk_10_bluetee_0 assigned by the developer (tagged hole=10, tee_set=Blue in edited/course.geojson).
-13. Hole 11 (Blue): tee box desk_11_bluetee_0 assigned by the developer (tagged hole=11, tee_set=Blue in edited/course.geojson).
-14. Hole 15 (Blue): tee box desk_15_bluetee_0 assigned by the developer (tagged hole=15, tee_set=Blue in edited/course.geojson).
-15. Hole 16 (Blue): tee box desk_16_bluetee_0 assigned by the developer (tagged hole=16, tee_set=Blue in edited/course.geojson).
-16. Hole 17 (Blue): measured 409 yd vs card 490 (-16.6%) - FAIL, needs a decision.
-17. Hole 17 (Blue): tee box desk_17_bluetee_0 assigned by the developer (tagged hole=17, tee_set=Blue in edited/course.geojson).
-18. Hole 18 (Blue): measured 539 yd vs card 558 (-3.5%) even with the virtual tee at the best spot in its box; accepted for play.
-19. Hole 18 (Blue): tee box desk_18_bluetee_0 assigned by the developer (tagged hole=18, tee_set=Blue in edited/course.geojson).
+8. Hole 6 (Blue): measured 163 yd vs card 157 (+3.7%) even with the virtual tee at the best spot in its box; accepted for play.
+9. Hole 6 (Blue): tee box desk_6_bluetee_0 assigned by the developer (tagged hole=6, tee_set=Blue in edited/course.geojson).
+10. Hole 7 (Blue): tee box desk_7_bluetee_0 assigned by the developer (tagged hole=7, tee_set=Blue in edited/course.geojson).
+11. Hole 8 (Blue): tee box desk_8_bluetee_0 assigned by the developer (tagged hole=8, tee_set=Blue in edited/course.geojson).
+12. Hole 9 (Blue): tee box desk_9_bluetee_0 assigned by the developer (tagged hole=9, tee_set=Blue in edited/course.geojson).
+13. Hole 10 (Blue): tee box desk_10_bluetee_0 assigned by the developer (tagged hole=10, tee_set=Blue in edited/course.geojson).
+14. Hole 11 (Blue): measured 162 yd vs card 156 (+3.6%) even with the virtual tee at the best spot in its box; accepted for play.
+15. Hole 11 (Blue): tee box desk_11_bluetee_0 assigned by the developer (tagged hole=11, tee_set=Blue in edited/course.geojson).
+16. Hole 15 (Blue): tee box desk_15_bluetee_0 assigned by the developer (tagged hole=15, tee_set=Blue in edited/course.geojson).
+17. Hole 16 (Blue): tee box desk_16_bluetee_0 assigned by the developer (tagged hole=16, tee_set=Blue in edited/course.geojson).
+18. Hole 17 (Blue): measured 407 yd vs card 490 (-17.0%) - FAIL, needs a decision.
+19. Hole 17 (Blue): tee box desk_17_bluetee_0 assigned by the developer (tagged hole=17, tee_set=Blue in edited/course.geojson).
+20. Hole 18 (Blue): measured 538 yd vs card 558 (-3.5%) even with the virtual tee at the best spot in its box; accepted for play.
+21. Hole 18 (Blue): tee box desk_18_bluetee_0 assigned by the developer (tagged hole=18, tee_set=Blue in edited/course.geojson).
 
 ## Other open items (Waverley)
 
@@ -68,23 +70,22 @@ The developer's calls of 2026-10-19 are in DECISIONS.md ("Waverley"): Blue tees 
 
 ## Playability adjustments
 
-- Hole 2 (Blue): measured 417 yd from the tee-box centre vs 392 on the card (+6.4%); moved the virtual tee within the real tee polygon desk_2_bluetee_0 -> 412.8 yd (real 417.1 yd).
-- Hole 3 (Blue): measured 361 yd from the tee-box centre vs 347 on the card (+4.0%); moved the virtual tee within the real tee polygon desk_3_bluetee_0 -> 355.5 yd (real 360.9 yd).
-- Hole 3 (Blue): tee shot: a perfect drive at the middle of the fairway clipped a tree near the tee; moved 1.6 m within the real tee polygon desk_3_bluetee_0 to the nearest clear spot -> 356.0 yd (real 360.9 yd).
-- Hole 4 (Blue): measured 432 yd from the tee-box centre vs 406 on the card (+6.3%); moved the virtual tee within the real tee polygon desk_4_bluetee_0 -> 426.7 yd (real 431.7 yd).
-- Hole 6 (Blue): measured 164 yd from the tee-box centre vs 157 on the card (+4.3%); moved the virtual tee within the real tee polygon desk_6_bluetee_0 -> 161.2 yd (real 163.7 yd).
-- Hole 10 (Blue): tee shot: a perfect drive at the middle of the fairway clipped a tree near the tee; moved 6.6 m within the real tee polygon desk_10_bluetee_0 to the nearest clear spot -> 401.2 yd (real 402.7 yd).
-- Hole 11 (Blue): measured 164 yd from the tee-box centre vs 156 on the card (+5.3%); moved the virtual tee within the real tee polygon desk_11_bluetee_0 -> 159.6 yd (real 164.3 yd).
-- Hole 14 (Blue): measured 146 yd from the tee-box centre vs 137 on the card (+6.6%); moved the virtual tee within the real tee polygon desk_14_tee_0 -> 137.0 yd (real 146.0 yd).
-- Hole 17 (Blue): measured 406 yd from the tee-box centre vs 490 on the card (-17.2%); moved the virtual tee within the real tee polygon desk_17_bluetee_0 -> 408.7 yd (real 405.5 yd).
-- Hole 18 (Blue): measured 537 yd from the tee-box centre vs 558 on the card (-3.7%); moved the virtual tee within the real tee polygon desk_18_bluetee_0 -> 538.6 yd (real 537.4 yd).
+- Hole 2 (Blue): measured 418 yd from the tee-box centre vs 392 on the card (+6.6%); moved the virtual tee along the middle of the real tee polygon desk_2_bluetee_0 (on its centre line, at least 2.5 m from its back and front) -> 414.8 yd (real 417.8 yd).
+- Hole 3 (Blue): measured 363 yd from the tee-box centre vs 347 on the card (+4.5%); moved the virtual tee along the middle of the real tee polygon desk_3_bluetee_0 (on its centre line, at least 2.5 m from its back and front) -> 357.3 yd (real 362.7 yd).
+- Hole 4 (Blue): measured 432 yd from the tee-box centre vs 406 on the card (+6.3%); moved the virtual tee along the middle of the real tee polygon desk_4_bluetee_0 (on its centre line, at least 2.5 m from its back and front) -> 428.7 yd (real 431.6 yd).
+- Hole 6 (Blue): measured 164 yd from the tee-box centre vs 157 on the card (+4.3%); moved the virtual tee along the middle of the real tee polygon desk_6_bluetee_0 (on its centre line, at least 2.5 m from its back and front) -> 162.8 yd (real 163.8 yd).
+- Hole 10 (Blue): tee shot: a perfect drive at the middle of the fairway clipped a tree near the tee; moved 1.4 m along the middle of the real tee polygon desk_10_bluetee_0 to the nearest clear spot -> 401.5 yd (real 402.6 yd).
+- Hole 11 (Blue): measured 164 yd from the tee-box centre vs 156 on the card (+5.4%); moved the virtual tee along the middle of the real tee polygon desk_11_bluetee_0 (on its centre line, at least 2.5 m from its back and front) -> 161.6 yd (real 164.5 yd).
+- Hole 13 (Blue): measured 476 yd from the tee-box centre vs 491 on the card (-3.1%); moved the virtual tee along the middle of the real tee polygon desk_13_tee_0 (on its centre line, at least 2.5 m from its back and front) -> 478.8 yd (real 475.7 yd).
+- Hole 17 (Blue): measured 405 yd from the tee-box centre vs 490 on the card (-17.3%); moved the virtual tee along the middle of the real tee polygon desk_17_bluetee_0 (on its centre line, at least 2.5 m from its back and front) -> 406.8 yd (real 405.5 yd).
+- Hole 18 (Blue): measured 538 yd from the tee-box centre vs 558 on the card (-3.7%); moved the virtual tee along the middle of the real tee polygon desk_18_bluetee_0 (on its centre line, at least 2.5 m from its back and front) -> 538.3 yd (real 537.6 yd).
 
 ## Tree detection (DOGAMI canopy height model)
 
-- 7852 trees detected in the world extent (859 inside the course), 2330 conifers / 5522 deciduous; median height 14.5 m, max 59.1 m.
+- 7851 trees detected in the world extent (858 inside the course), 2330 conifers / 5521 deciduous; median height 14.5 m, max 59.1 m.
 - Dropped: 1941 tops on building footprints, 0 over the lake, 34 tiny crowns.
 - Dropped on playing surfaces (spec 5.4): 5 -> lateral_water_hazard tr_hazard_0 (18.0 m), bunker desk_9_bunker_2 (6.0 m), tee desk_14_tee_0 (23.4 m), tee desk_14_tee_0 (24.5 m), pool w1067787866 (24.5 m)
-- Dropped from tee shots (s06b): 1 -> 18 Blue (33.7 m tree, 42.3 m from the tee)
+- Dropped from tee shots (s06b): 2 -> 18 Blue (33.7 m tree, 42.1 m from the tee), 3 Blue (28.8 m tree, 51.1 m from the tee)
 - OSM natural=tree points matched by a detected tree within 4 m: 0 of 0.
 - Conifer vs deciduous is inferred from crown shape only (no leaf-off imagery); see build/trees_preview.png.
 

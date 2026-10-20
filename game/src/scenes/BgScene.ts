@@ -16,7 +16,13 @@ export class BgScene extends Phaser.Scene {
   }
 
   create() {
-    const course = app.course!;
+    const course = app.course;
+    this.path = []; // the scene object is reused: start from this course's holes, not the last one's
+    if (!course) {
+      // no course loaded (a load failed): no fly-over rather than a crash
+      this.scene.stop();
+      return;
+    }
     worldCamera(this.cameras.main);
     this.view = new CourseView(this, course);
     const H = course.json.world.height;
@@ -34,6 +40,7 @@ export class BgScene extends Phaser.Scene {
 
   update(_t: number, dt: number) {
     const n = this.path.length;
+    if (!n || !this.view) return;
     this.t = (this.t + Math.min(dt, 50) / 11000) % n;
     const i = Math.floor(this.t), f = this.t - i;
     const a = this.path[i], b = this.path[(i + 1) % n];

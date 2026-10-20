@@ -19,7 +19,7 @@ from rasterio.features import rasterize
 from scipy import ndimage
 from shapely.ops import unary_union
 
-from common import build_dir, course_name_from_argv, load_config, play_boundary, PX_PER_M, SURF, World, write_json
+from common import build_dir, course_name_from_argv, load_config, play_boundary, PX_PER_M, round_corners, SURF, World, write_json
 
 warnings.filterwarnings("ignore")
 
@@ -36,9 +36,10 @@ def course_layers(g, roads, cfg):
     """
     greens = list(g[g.kind == "green"].geometry)
     fringe = [geom.buffer(1.5).difference(geom) for geom in greens]
+    fairways = smooth_fairways(g)
     paths = [r.geometry.buffer(1.2, cap_style=1) for _, r in g[g.kind == "cartpath"].iterrows()]
     layers = [
-        (list(g[g.kind == "fairway"].geometry), SURF["fairway"]),
+        (fairways, SURF["fairway"]),
         (fringe, SURF["fringe"]),
         # paved: cart paths (2.4 m), service roads / parking inside the boundary
         (paths, SURF["cartpath"]),
@@ -55,6 +56,23 @@ def course_layers(g, roads, cfg):
         layers.append((list(g[g.kind == "driving_range"].geometry), SURF["range"]))
     layers.append((list(g[g.kind == "building"].geometry), SURF["building"]))
     return layers
+
+
+def smooth_fairways(g):
+    """The fairways with smooth, rounded outlines (common.round_corners; developer,
+    2026-10-19), still touching every green they touched: within 2 m of a green
+    the original outline is kept, so an approach never pulls back from the collar."""
+    greens = [geom for geom in g[g.kind == "green"].geometry if geom is not None]
+    near_greens = unary_union([geom.buffer(2.0) for geom in greens]) if greens else None
+    out = []
+    for geom in g[g.kind == "fairway"].geometry:
+        if geom is None or geom.is_empty:
+            continue
+        r = round_corners(geom)
+        if near_greens is not None and geom.intersects(near_greens):
+            r = r.union(geom.intersection(near_greens))
+        out.append(r)
+    return out
 
 
 def red_water_geoms(g, cfg):

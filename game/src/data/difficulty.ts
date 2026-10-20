@@ -7,16 +7,17 @@ export type Difficulty = 'easy' | 'normal' | 'pro';
 
 export interface Preset {
   name: Difficulty;
-  secondsPer100: number; // meter: time for the cursor to cover 100 % of the bar
+  secondsPer100: number; // meter: its starting speed, as the time 100 % of the bar would take at it
+  fastSecondsPer100: number; // meter: its speed at 100 % (it speeds up on the way; the original speeds)
   perfectZone: number;   // +-% of bar
   landingPreview: boolean;
   windScale: number;     // multiplies the course's wind range
 }
 
 export const PRESETS: Record<Difficulty, Preset> = {
-  easy: { name: 'easy', secondsPer100: 2.0, perfectZone: 3.5, landingPreview: true, windScale: 0.6 },
-  normal: { name: 'normal', secondsPer100: 1.6, perfectZone: 2.5, landingPreview: true, windScale: 1 },
-  pro: { name: 'pro', secondsPer100: 1.25, perfectZone: 1.8, landingPreview: false, windScale: 1 },
+  easy: { name: 'easy', secondsPer100: 2.0, fastSecondsPer100: 1.2, perfectZone: 3.5, landingPreview: true, windScale: 0.6 },
+  normal: { name: 'normal', secondsPer100: 1.6, fastSecondsPer100: 1.0, perfectZone: 2.5, landingPreview: true, windScale: 1 },
+  pro: { name: 'pro', secondsPer100: 1.25, fastSecondsPer100: 0.8, perfectZone: 1.8, landingPreview: false, windScale: 1 },
 };
 
 export interface Wind {

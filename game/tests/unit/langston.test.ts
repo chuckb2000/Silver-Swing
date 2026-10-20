@@ -18,7 +18,8 @@ class AlwaysHit extends Rng { next(): number { return 0; } }
 
 const ID = 'langston';
 // holes accepted outside 3% until the developer decides (data/langston/validation_report.md)
-const YARDAGE_EXCEPTIONS = ['1 Royal', '6 Royal', '7 Royal', '16 Royal'];
+// 2 Royal, 13 White and 14 White: flags since the tees centred on their boxes (design chat, 2026-10-20; DECISIONS.md "Overnight requests")
+const YARDAGE_EXCEPTIONS = ['1 Royal', '2 Royal', '6 Royal', '7 Royal', '13 White', '14 White', '16 Royal'];
 // over 8%, accepted by the developer (2026-10-19): Royal 6 plays from the White box (no Royal box mapped)
 const OVER_8 = ['6 Royal'];
 

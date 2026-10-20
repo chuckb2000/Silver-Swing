@@ -127,5 +127,17 @@
     "Elevation and canopy: District of Columbia lidar 1 m DEM and normalized surface model, DC GIS / OCTO (CC BY 4.0)",
     "Scorecards: East Potomac Golf Links (National Links Trust)"
   ],
-  "notes": "Three courses on one island share one world: every layout is exported as its own course (courses/<layout id>/) whose terrain, surface, height and overview files live in courses/east_potomac/. Out of bounds = outside the union of the four OSM golf-course boundaries (Blue, White, Red, Practice Holes)."
+  "notes": "Three courses on one island share one world: every layout is exported as its own course (courses/<layout id>/) whose terrain, surface, height and overview files live in courses/east_potomac/. Out of bounds = outside the union of the four OSM golf-course boundaries (Blue, White, Red, Practice Holes).",
+  "drop_trees": [
+    {
+      "x": 651.5,
+      "y": 1409.5,
+      "reason": "design chat 2026-10-20, developer: \"There is a tree right in front of the 10th tee on east potomac. It's narrow and doesn't have many leaves but it should be removed\" - the two lidar trees at the front of the Blue/White tee box of Blue 10 (they draw over the box, beside the aim line)"
+    },
+    {
+      "x": 649.5,
+      "y": 1406.5,
+      "reason": "design chat 2026-10-20, developer: \"There is a tree right in front of the 10th tee on east potomac. It's narrow and doesn't have many leaves but it should be removed\" - the two lidar trees at the front of the Blue/White tee box of Blue 10 (they draw over the box, beside the aim line)"
+    }
+  ]
 }
