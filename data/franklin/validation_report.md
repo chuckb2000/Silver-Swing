@@ -6,7 +6,7 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 
 | hole | par | tee set | card yd | measured yd | diff yd | diff % | status | adjusted yd | adj. diff % | adj. status |
 |---|---|---|---|---|---|---|---|---|---|---|
-| 1 | 4 | Blue | 414 | 403.1 | -10.9 | -2.6% | pass | 403.1 | -2.6% | pass |
+| 1 | 4 | Blue | 414 | 403.1 | -10.9 | -2.6% | pass | 403.3 | -2.6% | pass |
 | 2 | 4 | Blue | 357 | 352.9 | -4.1 | -1.1% | pass | 352.9 | -1.1% | pass |
 | 3 | 4 | Blue | 418 | 414.7 | -3.3 | -0.8% | pass | 414.7 | -0.8% | pass |
 | 4 | 3 | Blue | 144 | 137.3 | -6.7 | -4.6% | flag | 144.0 | +0.0% | pass |
@@ -30,19 +30,36 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 
 None.
 
+## Other open items (Franklin Country Club)
+
+Decisions the developer made on 2026-10-19 are in DECISIONS.md ("Franklin Country Club"): Blue tees, all water red, Uncas Brook modelled, no internal out of bounds, `bayside` theme, logo by the design chat. The items below are the course chat's calls and the data's gaps, each with a recommendation.
+
+1. **Scorecard is Stymie's (unverified); the club website has no card.** Every tee row adds up to its total. Other listings disagree: back-nine stroke indexes (Stymie 4, 14, 2, 18, 8, 10, 16, 6, 12 for holes 10-18; OpenGolfAPI 6, 16, 2, 4, 10, 12, 18, 8, 14; GolfingRecord 8, 16, 2, 4, 10, 12, 18, 6, 14) and the Blue rating/slope (Stymie 72.3/128, OpenGolfAPI 72.7/131). Recommendation: keep Stymie's until a printed card is available.
+2. **Pins are at the green centres** (proposals, `make_pins.py`): OSM maps pins only on the practice range.
+3. **The five OSM ponds are red** (developer: all water red). OSM tags them `golf=water_hazard`, which the export reads as yellow, so `edits.json` sets `penalty=red` on each.
+4. **Two more ponds are red penalty areas** (course chat): w89790565 beside the 18th fairway and w1263089460 between holes 1 and 5 are mapped only as `natural=water` inside the boundary, so they would have played as rough. Listed in `red_water_osm`. Recommendation: keep.
+5. **Uncas Pond is a red penalty area across hole 14** although it lies outside the course boundary (`red_water_osm`, as Tualatin's river). Land beyond it is out of bounds.
+6. **Uncas Brook** (developer: model it) is mapped in OSM as stream lines only. Its penalty areas come from the lidar channel along the lines (`pipeline/propose_channels.py`): about 3-5 m wide, 0.3-0.4 m deep, from north of the 5th tee past the 4th green's pond and along the south side of the 2nd fairway. Culverts under paths are left as ground. North and east of the boundary the brook is out of bounds like everything outside.
+7. **The unnamed stream across holes 13, 16 and 7 is a red penalty area too** (course chat): OSM maps it as an unnamed `waterway=stream`; the lidar shows a channel 0.4-0.7 m deep and 4-9 m wide. Recommendation: keep (all water is red); one `edits.json` entry removes it.
+8. **Not modelled:** a second, narrower channel near holes 1 and 2 shows in the lidar (`proposed/channels_lidar.png`) but is not in OSM, so it plays as ground. Recommendation: leave it unless you know it holds water.
+9. **Wind 1-9 mph** (course chat: an inland, wooded site; Oswego Lake 1-7, Indian Island 2-12).
+10. **Architects unverified:** Wayne Stiles and John Van Kleek (early 1920s), later Phil Wogan and William F. Mitchell (countryclubmag.com; Golf Digest lists Wogan).
+11. **Off-course scenery:** the Wrentham quarry south-east of the course is drawn as ground with the lidar's hillshade (no quarry surface exists); it is out of bounds and away from play.
+
 ## Playability adjustments
 
+- Hole 1 (Blue): tee shot: a perfect drive at the middle of the fairway clipped a tree near the tee; moved 0.2 m within the real tee polygon w1263307412 to the nearest clear spot -> 403.3 yd (real 403.1 yd).
 - Hole 4 (Blue): measured 137 yd from the tee-box centre vs 144 on the card (-4.6%); moved the virtual tee within the real tee polygon w1263307413 -> 144.0 yd (real 137.3 yd).
 - Hole 8 (Blue): measured 171 yd from the tee-box centre vs 178 on the card (-4.0%); moved the virtual tee within the real tee polygon w1263307438 -> 176.2 yd (real 170.9 yd).
 - Hole 15 (Blue): measured 483 yd from the tee-box centre vs 505 on the card (-4.4%); moved the virtual tee within the real tee polygon w1263307432 -> 505.0 yd (real 482.9 yd).
 
-## Tree detection (OSM fallback (no lidar))
+## Tree detection (2021 USGS lidar, leaf-off)
 
-- 4920 trees detected in the world extent (323 inside the course), 2478 conifers / 2442 deciduous; median height 10.0 m, max 14.0 m.
-- Dropped: 0 tops on building footprints, 0 over the lake, 0 tiny crowns.
-- Dropped on playing surfaces (spec 5.4): 0 -> 
+- 37340 trees detected in the world extent (3633 inside the course), 12841 conifers / 24499 deciduous; median height 21.1 m, max 47.1 m.
+- Dropped: 113 tops on building footprints, 0 over the lake, 73 tiny crowns.
+- Dropped on playing surfaces (spec 5.4): 7 -> water_hazard w89915703 (5.7 m), water_hazard w89915703 (7.1 m), water_hazard w89915703 (6.2 m), water_hazard w89915703 (16.5 m), water_hazard w89915703 (13.1 m), water_hazard w89915703 (6.5 m), water_hazard w89915703 (6.9 m)
 - OSM natural=tree points matched by a detected tree within 4 m: 0 of 0.
-- LOWER FIDELITY: no canopy raster. Trees are OSM natural=tree points plus a seeded Poisson-disk fill of OSM woods every 6 m; heights 6-14 m and type (50% conifer) are drawn at random, not measured.
+- Conifer (pitch pine) vs deciduous (oak) from the leaf-off lidar: share of a crown's vegetation returns that were the last return of their pulse, split at Otsu's threshold 0.271 (12645 of 37126 crowns with >= 20 returns are conifers); the other 214 small crowns keep the crown-shape rule. See build/trees_preview.png.
 
 # Green shaping checks
 

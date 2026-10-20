@@ -1,5 +1,23 @@
 [
  {
+  "hole": 1,
+  "tee_set": "Blue",
+  "step": 2,
+  "type": "tee_position",
+  "from": [
+   1206.23,
+   1648.22
+  ],
+  "to": [
+   1206.01,
+   1648.13
+  ],
+  "real_yd": 403.1,
+  "adjusted_yd": 403.3,
+  "card_yd": 414.0,
+  "reason": "tee shot: a perfect drive at the middle of the fairway clipped a tree near the tee; moved 0.2 m within the real tee polygon w1263307412 to the nearest clear spot"
+ },
+ {
   "hole": 4,
   "tee_set": "Blue",
   "step": 2,
