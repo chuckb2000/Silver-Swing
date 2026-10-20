@@ -415,9 +415,9 @@ without a theme bush are unchanged.
 `chambers_bay`: the old concrete gravel-plant ruins on the course (a tower with a
 sloping buttress wall either side, each on a thin leg with an open triangle under
 its brace) on a dune of golden fescue, drawn from the developer's photos.
-`gearhart`: a golf ball splashing into a glass stein of beer, foam spilling over;
-it replaces the shipwreck. Both in `assets-src/logos.py`, ready for when the
-courses are built.
+`gearhart`: a golf ball splashing into a glass stein of beer was drawn, then
+dropped the same day (developer, 2026-10-20: keep the shipwreck); Gearhart keeps
+its wrecked ship. Both in `assets-src/logos.py`.
 
 ## Rewatch a shot (developer, 2026-10-20)
 

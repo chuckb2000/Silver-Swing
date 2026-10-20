@@ -760,7 +760,7 @@ paths (relief), not OB, unless the developer says otherwise.
 - **Course id:** if the design chat already drew a logo for the course, use
   its id: `highland_links`, `langdon`, `east_potomac`, `langston`,
   `stone_creek`, `waverley`, `eastmoreland`, `willamette_valley`,
-  `indian_island`, `gearhart` (a golf ball in a beer stein), `tualatin`,
+  `indian_island`, `gearhart` (a shipwreck), `tualatin`,
   `chambers_bay` (the concrete ruins) (`assets-src/logos.py`).
 - **Logo:** otherwise draw it yourself (developer, 2026-10-20): ask what it
   should show in the intake message, then write

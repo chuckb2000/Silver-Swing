@@ -21,7 +21,7 @@ and 7 Playwright tests pass after merging `main` (logos).
 -   **Location:** 1157 N Marion Ave, Gearhart, Clatsop County, Oregon, on the
     Clatsop Plains about 700 m from the Pacific beach. Neacoxie Creek runs
     along the east edge of the front nine. `state` OR. Course id `gearhart`
-    (logo: a golf ball in a beer stein, design chat 2026-10-20, `assets-src/logos.py`).
+    (logo: a wrecked ship, `assets-src/logos.py`; the developer chose it over the beer stein, 2026-10-20).
 -   **Design:** front nine 1892, back nine 1913; a 2013-15 renovation took out
     many trees to restore the open links (Wikipedia; unverified, no designer
     named). Managed by Greenway Golf (GolfPass).
@@ -92,7 +92,7 @@ Standing defaults used without asking (4.1): Black tees, all water red, OB =
 the OSM boundary, pins at the mapped `golf=pin`, trees from lidar with
 fairway and tee-shot trees removed (`trees_off_fairways_m: 2`), wind by
 region, card hole 7 (the course chat's pick: the green between two ponds
-with spruce and the creek behind it), the logo from main (golf ball in a beer stein).
+with spruce and the creek behind it), the logo from main (golf ball in a beer stein; replaced by the shipwreck at the merge, developer 2026-10-20).
 
 ## New pipeline keys or theme
 

@@ -621,3 +621,29 @@ notes live in DECISIONS.md.
   main's, re-apply mine" (`git diff <base> HEAD -- <file> | git apply --3way`)
   resolved the desk files that both branches changed.
 
+## 16. Gearhart Golf Links (2026-10-20)
+
+Folded in from docs/courses/gearhart.md at the merge.
+
+-   **Check the lidar's date against the course's history.** The DOGAMI
+    mosaic here predates a renovation that removed most trees; the first
+    tree pass put 1,067 trees on an open links. Comparing every crown with
+    the latest state orthophoto (dark-canopy share in the crown, best within
+    2.5 m for the lean of tall crowns in the photo) separated the 737 gone
+    from the 248 standing cleanly; the developer confirmed the result at a
+    glance.
+-   **`drop_trees` clears the canopy too**, so removing hundreds of trees
+    leaves no woods patches behind; keep the list one entry per line.
+-   **The pipeline takes every `leisure=golf_course` polygon as a boundary**
+    (`boundary_name` is not read). A second export with a wider box pulled in
+    two unnamed course polygons nearby; drop them in `edits.json`.
+-   **A long teeing ground can hold a set its centroid misses.** s06 assigns
+    boxes by centroid, so a 46 m box covering 130-180 yd was skipped for a
+    176 yd card; measure every box's yardage range before taking a lidar pad.
+    The pad here was rough in the 2024 photo.
+-   **Fescue vs mown rough is one colour rule on a summer photo** (green minus
+    red: turf +10 to +26, fescue -10 to +1); OSM's `golf=rough` covered only
+    part of it.
+-   **Playwright ignores specs inside its own output folder** (`test-results/`)
+    and wipes it at the start of a run; keep a throwaway look script under
+    `playwright-report/` (also git-ignored) with its own config.

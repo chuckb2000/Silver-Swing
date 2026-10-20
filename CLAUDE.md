@@ -452,8 +452,9 @@ DECISIONS.md with the reason.
     `src/systems/game/pins.ts`); the meter has a line at the middle of the green, no
     ghost tick and no display-lag allowance. 376 unit tests and 4 Playwright tests pass.
 
--   **Courses (course chats, 2026-10-18 to 2026-10-20):** fourteen data
-    folders, sixteen courses on offer (East Potomac is three) in five states.
+-   **Courses (course chats, 2026-10-18 to 2026-10-20):** fifteen data
+    folders, seventeen courses on offer (East Potomac is three) in five states;
+    Gearhart Golf Links (Gearhart OR) merged 2026-10-20.
     Each course's build history, facts and open items are in
     `docs/courses/<id>.md` (section 11).
 
@@ -516,11 +517,21 @@ DECISIONS.md with the reason.
     strokes and plays any of them back. DECISIONS.md "Rewatch a shot".
 
 -   **Logos (design chat, 2026-10-20):** Chambers Bay (the concrete ruins)
-    and Gearhart (a golf ball in a beer stein), merged 2026-10-20.
+    and Gearhart (a golf ball in a beer stein), merged 2026-10-20; Gearhart then
+    went back to its shipwreck (developer, 2026-10-20).
 
--   **Next task:** the full `make regress` run of the faster-building changes
-    was still going at the merge (East Potomac, Eastmoreland and Franklin
-    unchanged). Item 1 of the player improvements (swing coach) is on
+-   **Course assets (design chat, 2026-10-20):** branch `design/course-assets`,
+    merged 2026-10-20: course chats draw their own logos
+    (`assets-src/course_logos/<id>.py`), themes and theme bushes (gorse:
+    `shrubs_<theme>`), `build_assets.py --theme`, `regress --since` picks the
+    affected courses. Unmerged, ready: `design/hole-counts` (13/19-hole courses,
+    clubs of three nines). Cross-country golf: report only
+    (`design/cross-country`), not to be built yet (developer).
+
+-   **Next task:** Langston's committed files predate a rebuild: a fresh
+    build keeps one tree 19 m from the 10th Royal tee that the committed build
+    removed (every other course rebuilds unchanged, 2026-10-20); recommended:
+    list it in Langston's `drop_trees`. Item 1 of the player improvements (swing coach) is on
     `design/coach`, unmerged. Also: the third playtest (putting, yellow
     misses), the club's printed scorecard and the hole 3 Blue tee box. New
     courses: a separate chat following docs/COURSE_BUILD.md; after each one
@@ -1528,6 +1539,7 @@ files (`game/scripts/course-lists.mjs`). The first course, Oswego Lake, is
 | East Potomac Golf Links (Blue, White and Red courses) | `docs/courses/east_potomac.md` |
 | Eastmoreland Golf Course | `docs/courses/eastmoreland.md` |
 | Franklin Country Club | `docs/courses/franklin.md` |
+| Gearhart Golf Links | `docs/courses/gearhart.md` |
 | Highland Links | `docs/courses/highland_links.md` |
 | Indian Island Golf Course | `docs/courses/indian_island.md` |
 | Langdon Farms Golf Club | `docs/courses/langdon.md` |
