@@ -1120,8 +1120,9 @@ latency calibration setting (± ms offset).
 
 -   **Cursor speed** (developer, 2026-10-19; was constant): the cursor
     starts slowly and speeds up in step with its position. At 100 % it
-    reaches the original speed (one trip from 0 % to 110 % in 1.1 s on
-    Normal), and it holds that speed to the end of the bar. After tap 2 it
+    reaches 1.3 s per 100 % on Normal (developer, 2026-10-20: halfway
+    between the old constant 1.6 s and the spec's 1.0 s, which felt too
+    fast), and it holds that speed to the end of the bar. After tap 2 it
     returns at the speed it had at tap 2, so short swings are easier to
     time. The starting and 100 % speeds per preset are in
     `src/data/difficulty.ts`.
