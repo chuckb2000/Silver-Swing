@@ -1,0 +1,50 @@
+{
+ "note": "Edits to the OSM layout for Eastmoreland, built into edited/course.geojson by pipeline/merge_edits.py (run by make course). Developer, 2026-10-19: every hazard is red; the lidar tee for hole 18 and the creek channel are approved.",
+ "add": [
+  {
+   "from": "proposed/water.geojson",
+   "ids": [
+    "lake_w133795911_1"
+   ],
+   "tags": {},
+   "reason": "Crystal Springs Lake (OSM natural=water) is in play on holes 11, 12, 13, 17 and 18 but the pipeline paints natural=water only outside the boundary; its part inside the golf boundary becomes a red penalty area (data/eastmoreland/make_water.py; developer: all hazards red)"
+  },
+  {
+   "from": "proposed/channels_lidar.geojson",
+   "ids": [
+    "channel_w49807228",
+    "channel_w49809487",
+    "channel_w146979974",
+    "channel_w146979976"
+   ],
+   "tags": {
+    "flatten": "no",
+    "approved": "developer 2026-10-19"
+   },
+   "reason": "Crystal Springs Creek is mapped only as stream lines (waterway=stream); its channel in the lidar DEM (pipeline/propose_channels.py: cells > 0.25 m below the 25 m running median within 5 m of the line) becomes a red penalty area (developer: all hazards red). Not flattened: the bed falls along its length. The 9 m stub w146979977 shows no channel and is left out"
+  },
+  {
+   "from": "proposed/tees_lidar.geojson",
+   "ids": [
+    "lidar_tee_13"
+   ],
+   "tags": {
+    "proposed": "lidar",
+    "hole": "18",
+    "tee_set": "Blue",
+    "assigned_by": "the course chat (lidar pad, edits.json); approved by the developer 2026-10-19",
+    "approved": "developer 2026-10-19"
+   },
+   "reason": "Hole 18 Blue tee: OSM maps no tee behind the White tee (386 yd from the farthest mapped box against 457 on the card, -15.5%). A raised levelled pad (34 m2, 0.39 m step) 65 m behind the line start, between the pond and the lake, measures 457 yd (+0.1%) (pipeline/propose_tees.py)"
+  }
+ ],
+ "tags": [
+  {
+   "osm": "w49807172",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "Pond between holes 16 and 18 (golf=water_hazard, yellow by default): red, developer 2026-10-19"
+  }
+ ]
+}

@@ -5,9 +5,9 @@ new course. Each lesson is something that cost time on an earlier course,
 with what to do instead. Add to it at the end of every course build.
 
 Sources so far: East Potomac Golf Links (2026-10-19, three courses on one
-island), Langston (2026-10-19, a course in two parts across a lake) , Indian
-Island (2026-10-19, half the course traced) and Tualatin Country Club
-(2026-10-19, section 9). Oswego Lake and Highland Links
+island), Langston (2026-10-19, a course in two parts across a lake), Indian
+Island (2026-10-19, half the course traced), Tualatin Country Club
+(2026-10-19, section 9) and Eastmoreland (2026-10-19, Portland). Oswego Lake and Highland Links
 notes live in DECISIONS.md.
 
 ---
@@ -178,6 +178,17 @@ notes live in DECISIONS.md.
   LAZ). A state project may have no vegetation class: take class 1
   (unclassified) and let s05 drop trees on OSM buildings. The points' GPS
   times give the flight date, which tells you whether it was leaf-off.
+- **Count the boundary's parts.** The game takes one OB polygon and s10
+  used to keep only the largest part. Eastmoreland's OSM boundary is two
+  polygons either side of a road, so the whole front nine was out of bounds;
+  nothing failed until the robot round scored 16 on every front-nine hole. Look
+  at the boundary's geometry type in Phase 1 and run a robot round as soon as
+  the course exports. Fix: `join_boundary_parts`.
+- **natural=water inside the boundary is not in play.** s08 paints OSM
+  `natural=water` only outside the course; inside it becomes rough. A lake the
+  holes play over must be added as a `golf=lateral_water_hazard` (or
+  `water_hazard`) penalty area (Eastmoreland: `make_water.py` +
+  `edits.json`). Streams mapped only as lines need `propose_channels.py`.
 
 ## 4. World and pipeline
 
@@ -204,6 +215,10 @@ notes live in DECISIONS.md.
   killed the session's shell). Kill by PID. Likewise a `pgrep -f <name>`
   wait loop matches its own command line and never ends.
 
+- **Bash calls stop at 10 minutes.** A Playwright pass over 18 holes takes
+  longer on software WebGL: start it with `nohup ... &` and poll, or split it
+  by hole (env vars in the spec).
+
 ## 5. Trees and theme
 
 - **A theme's flair can be data-driven without a game change.** The game draws
@@ -223,6 +238,18 @@ notes live in DECISIONS.md.
   other themes' sheets are unchanged. s09b uses the same painters for the
   putting views.
 - **Look at the sprites at 5x on grass before rendering the course.**
+- **Flowering shrubs are trees.json `c: 3`** (sprites/shrubs.png). The game
+  picks a bush's colour from its index (% 8), so give each bush its colour
+  first and then place it at a matching index (`garden.order_trees()`); redo
+  the ordering after anything drops trees from the list (s06b), or every bush
+  after the drop shifts colour. Eastmoreland first painted the garden flat
+  into the terrain art; clumps under ~2 m across read as dark dots at 2 px/m,
+  and flat paint can't stand up in 3/4 view. Highest-hit lidar can't see
+  shrubs under trees; a lower density there is flair and is written down as
+  such.
+- **DOGAMI downloads arrive as `exportImage.N.tiff`.** Tell them apart by
+  their values (ground in the tens to hundreds of feet vs canopy from 0) and a
+  quick picture, as with the DC rasters.
 
 ## 6. Checking the build
 
@@ -355,8 +382,37 @@ notes live in DECISIONS.md.
 - `npm install` may rewrite `game/package-lock.json`; revert it unless the
   course needs a new package.
 
+## 10. Willamette Valley CC (2026-10-19)
 
-## 9. Wannamoisett (2026-10-19)
+- **Check every polygon's tag against its size.** OSM had two whole fairways
+  tagged `golf=tee` (228 x 36 m and 328 x 61 m). The audit only said "no
+  fairway" for those holes; sorting tee polygons by area found them at once.
+  A wrong tag also misleads the tee-shot test: it aimed hole 9's drive at the
+  next hole's fairway, into a tree.
+- **`golf=path` is the current OSM tag for cart paths;** the pipeline reads
+  only `golf=cartpath`. Relabel through `edits.json` (copy from a `proposed/`
+  file with the new kind, drop the original) until s01 learns the new tag.
+  `edits.json` `tags` does not change a feature's kind.
+- **A hole line that ends off any green, with a pin there, usually means the
+  green itself is missing,** not that the line is wrong. The nearest mapped
+  green (53 m away) was a practice area; s06 picked it silently. Ask, then
+  trace the green.
+- **Oregon's state imagery (OSIP 2022, 1 ft, 4-band) exports in one browser
+  click** from `imagery.oregonexplorer.info/.../OSIP_2022/OSIP_2022_SL/ImageServer/exportImage`
+  with `bboxSR`/`imageSR` 32610. 2048 x 1792 exports at 0.5 m worked. Give each
+  link complete, with no "..." shortcuts: a first batch with shortened links
+  didn't work for the developer.
+- **Placing a tee the developer describes:** put it at the card yardage on the
+  feature they name, then look at it on imagery and run the game's tee-shot
+  test before showing it. The first spot (on the hole line) was under a tree.
+- **The sandbox proxy refuses release uploads** (uploads.github.com, binary
+  body). Ask the developer to upload files to the release.
+- **`s03_audit.py` with an `edited/` file measures in degrees** (it reads the
+  WGS84 file): its distances after `merge_edits` are wrong. Read the first
+  audit (before edits) or s06's report instead.
+
+
+## 11. Wannamoisett (2026-10-19)
 
 - **Look at the OSM boundary's inner rings, not only its parts.** The course
   relation cut the pond beside hole 14 out as an inner ring, so the pond was

@@ -488,6 +488,25 @@ DECISIONS.md with the reason.
     out of bounds), trees from the 2024 NYS lidar. Other courses rebuild
     unchanged. 241 unit tests and 4 Playwright tests pass (after merging main with Langston). Open items:
     section 11.11.4; request in docs/requests/indian_island_design_requests.md.
+-   **Eastmoreland (course chat, 2026-10-19):** Eastmoreland Golf Course,
+    Portland, OR, on branch `course/eastmoreland`: 18 holes from OSM + DOGAMI
+    lidar, Blue default, every hazard red (lake, pond, creek traced from
+    lidar), the Crystal Springs Rhododendron Garden in flower (3,164
+    flowering-shrub sprites, `garden`), the two-part boundary joined across SE Bybee Blvd
+    (`join_boundary_parts`). Other courses rebuild unchanged. 299 unit tests
+    and 4 Playwright tests pass. Section 11.14; open items:
+    data/eastmoreland/report_notes.md; request:
+    docs/requests/eastmoreland_design_requests.md.
+-   **Willamette Valley (course chat, 2026-10-19):** Willamette Valley
+    Country Club, Canby, OR ("Willamette Valley CC"), branch
+    `course/willamette_valley`: 18 holes, par 72, Blue tees, `pnw`, OSM +
+    DOGAMI DTM and canopy model; hole 13's green traced from the OSIP 2022
+    orthophoto, hole 3's Blue tee placed by the developer, the hole 9 and 14
+    fairways (tagged as tees in OSM) and the cart paths (`golf=path`)
+    relabelled in `edits.json`. Every hole within 3 % (6,513 yd vs 6,514).
+    No pipeline code changed. 319 unit tests and 4 Playwright tests
+    pass (after merging main with Eastmoreland). Section 11.15; open items:
+    data/willamette_valley/report_notes.md.
 
 -   **Stone Creek (course chat, 2026-10-19):** Stone Creek Golf Club,
     Oregon City, OR, branch `course/stone_creek` from main: 18 holes, Blue
@@ -510,7 +529,7 @@ DECISIONS.md with the reason.
 
 -   **Wannamoisett (course chat, 2026-10-19):** Wannamoisett Country
     Club, Rumford RI (18 holes, par 69, Blue and Black tees), section
-    11.14, branch `course/wannamoisett`. New `seekonk` theme (very early
+    11.16, branch `course/wannamoisett`. New `seekonk` theme (very early
     fall). Pipeline gained `roof_last_share` (s05: roofs of unmapped houses
     in class-1 lidar are not trees) and `join_boundary` now fills a mapped
     pond cut out of the course; every other course rebuilds as committed.
@@ -1904,7 +1923,103 @@ scorecard.csv, not built.
     pins are proposals from the developer's routing; scorecard
     unverified).
 
-**11.14 Wannamoisett Country Club, Rumford, Rhode Island**
+<<<<<<< HEAD
+**11.14 Eastmoreland Golf Course, Portland, OR**
+
+Built by a course chat (2026-10-19) on branch `course/eastmoreland`; details in
+DECISIONS.md ("Eastmoreland"), data/eastmoreland/validation_report.md and
+report_notes.md.
+
+-   **Location:** 2425 SE Bybee Blvd, Portland, Multnomah County, Oregon (a
+    City of Portland course). `state` OR. Course id `eastmoreland` (logo
+    exists). H. Chandler Egan, 1918 (club scorecard).
+-   **UTM zone:** 10N (EPSG:32610). World 1,280 x 2,048 m (the 2,048 m limit
+    binds: 53 m of scenery north and south).
+-   **Layout:** 18 holes, par 72, in two parts either side of SE Bybee Blvd
+    (front nine south, back nine north, joined into one OB line,
+    `join_boundary_parts`). Crystal Springs Lake (holes 11, 12, 13, 17, 18), a
+    pond (16/18) and Crystal Springs Creek are red penalty areas (developer).
+    The Crystal Springs Rhododendron Garden on the lake's peninsula is out of
+    bounds and full of flowering shrubs (3,164 `c: 3` sprites, `garden`).
+-   **Data:** OSM (developer's Overpass Turbo export); DOGAMI bare-earth DTM and
+    canopy height model (release `data-eastmoreland`); creek channel and hole
+    18 Blue tee from the lidar DTM.
+-   **Theme:** `pnw`. Wind 1-7 mph. Trees: 12,180 from lidar (2,016 inside the
+    course); conifer/deciduous from crown shape.
+-   **Scorecard** (club card, Golf ScoreCards Inc. 7/2007, from the developer;
+    GolfPass lists a later card, open item):
+
+  ---------------------------------------------------------------------------------------------------------
+  Hole     1   2   3   4   5   6   7   8   9   Out    10  11  12  13  14  15  16  17  18  In     Total
+  -------- --- --- --- --- --- --- --- --- --- ------ --- --- --- --- --- --- --- --- --- ------ ------
+  Par      4   4   4   4   3   5   4   3   5   36     4   5   3   5   4   4   4   3   4   36     72
+  HCP      13  3   11  9   17  1   5   15  7          14  8   18  2   12  10  4   16  6
+  Blue     311 447 337 347 210 497 410 227 497 3,283  334 469 167 463 383 381 423 169 457 3,246  6,529
+  White    292 427 317 325 175 489 391 202 472 3,090  325 443 140 446 365 364 392 147 394 3,016  6,106
+  ---------------------------------------------------------------------------------------------------------
+
+    Ratings/slopes (card): Blue 71.0/124, White 69.3/115, Red (women's par 74,
+    5,646 yd, not built) 72.5/124.
+
+-   **Default tee:** Blue (developer). Measured (adjusted) totals: Blue
+    6,507 yd (card 6,529), White 6,104 yd (card 6,106).
+-   **Accepted by the developer (2026-10-19):** hole 17 White plays from
+    the Blue box (+13.3 %); the hole 18 Blue tee (lidar pad) and the creek
+    channel (lidar); two trees removed on hole 11's Blue tee shot; course
+    card hole 17; the 2007 scorecard stays the card (GolfPass lists a later
+    one).
+-   **Known open items:** hole 13 Blue -3.0 % (flag); tree types from crown
+    shape (data/eastmoreland/report_notes.md).
+
+**11.15 Willamette Valley Country Club, Canby, Oregon**
+
+Built by a course chat (2026-10-19) on branch `course/willamette_valley`;
+details in DECISIONS.md ("Willamette Valley"),
+data/willamette_valley/validation_report.md and report_notes.md.
+
+-   **Location:** 900 Country Club Place, Canby, Clackamas County, Oregon,
+    on a terrace above the Willamette River. `state` OR. Course id
+    `willamette_valley` (logo exists); card name "Willamette Valley CC".
+    Shirley Stone, opened 1962 (golfn.com).
+-   **UTM zone:** 10N (EPSG:32610). World 1,024 x 1,792 m. Theme `pnw`.
+    Wind 1-7 mph.
+-   **Data:** OSM (developer's Overpass Turbo export); DOGAMI bare-earth DTM
+    and canopy height model (1 m, release `willamette-valley-data`); Oregon
+    Statewide Imagery Program 2022 orthophoto (hole 13 green, hole 3 tee,
+    checks); club scorecard PDF.
+-   **Water:** five ponds, all red. The Willamette River (outside the
+    boundary) is out of bounds.
+-   **Trees:** 5,317 from the canopy model (1,671 on the course), type from
+    crown shape; `tee_shot_margin_m` 0.5.
+
+**11.15.1 Scorecard** (club card PDF, Golf ScoreCards Inc. 10/2023, from the
+developer; every row adds up)
+
+  ---------------------------------------------------------------------------------------------------------
+  Hole     1   2   3   4   5   6   7   8   9   Out    10  11  12  13  14  15  16  17  18  In     Total
+  -------- --- --- --- --- --- --- --- --- --- ------ --- --- --- --- --- --- --- --- --- ------ ------
+  Par      4   5   3   4   4   5   4   3   4   36     4   5   4   3   5   3   4   4   4   36     72
+  HCP      5   3   17  13  11  1   7   15  9          10  2   6   18  12  16  14  8   4
+  Blue     385 535 162 347 369 551 361 180 393 3,283  366 545 383 151 470 201 353 365 397 3,231  6,514
+  Built    392 534 162 353 365 539 356 183 403        371 544 390 149 463 196 353 364 398        6,513
+  ---------------------------------------------------------------------------------------------------------
+
+Black (7,017, 74.2/133), White (5,979), Orange (5,423), Yellow (4,702) and
+Maroon (4,168) are on the card (`scorecard.csv`), not built. Blue rating/slope
+71.6/129 (card).
+
+-   **Default tee:** Blue (developer), the only set built.
+-   **Developer's calls (2026-10-19):** Blue tees; hole 13's green is the one
+    left of the pond (traced); hole 3's Blue tee on the fairway from the 2nd
+    green (box placed at 162 yd, approved); practice greens are wrong greens;
+    the maintenance no-play zone (14-16) is not modelled; OB = the course
+    boundary.
+-   **Accepted by the developer (2026-10-19):** course card hole 3; lidar
+    year not recorded (tree types from crown shape). Notes in
+    data/willamette_valley/report_notes.md.
+>>>>>>> origin/main
+
+**11.16 Wannamoisett Country Club, Rumford, Rhode Island**
 
 Built by a course chat (2026-10-19) following docs/COURSE_BUILD.md;
 details in DECISIONS.md ("Wannamoisett Country Club") and
@@ -1912,7 +2027,7 @@ data/wannamoisett/validation_report.md.
 
 -   **Location:** 96 Hoyt Avenue, Rumford (East Providence), Providence
     County, Rhode Island, near the Seekonk River. `state` RI. Course id
-    `wannamoisett` (no logo yet).
+    `wannamoisett` (logo: a hockey skate, design chat).
 -   **Design:** Willie Campbell (nine holes, 1899); Donald Ross (18 holes,
     1914; revamped 1926). Host of the 1931 PGA Championship and the
     Northeast Amateur.
@@ -1947,8 +2062,8 @@ new tees were built; no per-hole figures. Green and Gold not built.
 -   **Default tee:** Blue (developer); Black also built.
 -   **Known open items:** data/wannamoisett/report_notes.md (scorecard
     unverified; Black 12 -7.4 %; pins at green centres; tree type
-    off the course unverified; course card to confirm; logo to come).
-
+    off the course unverified; course card to confirm).
+=======
 **12. Repository layout**
 
 /CLAUDE.md ← this file

@@ -410,6 +410,17 @@ def main():
         dropped["roof"] = sum(1 for t_ in trees if t_.get("roof"))
         trees = [t_ for t_ in trees if not t_.get("roof")]
     species_note = None
+    # flowering shrubs of a garden beside the course (`garden`, pipeline/garden.py): each
+    # bush has a bloom colour, and order_trees() (below, and again in s06b) puts it at an
+    # index whose % 8 is that colour, which is how the game picks the shrub sprite
+    n_shrubs = 0
+    from garden import enabled as garden_enabled, order_trees, shrub_trees
+    if garden_enabled(cfg):
+        if cfg.get("blossom"):
+            raise SystemExit("[s05] `garden` and `blossom` both order trees.json; not supported together")
+        shrubs = shrub_trees(cfg, g)
+        trees = trees + shrubs
+        n_shrubs = len(shrubs)
     # s06 places the tees against these trees and s06b drops the ones still in the
     # way of a tee shot, then orders the list again (cherry slots)
     write_json(build_dir(name) / "trees_all.json", [dict(t_) for t_ in trees])
@@ -418,20 +429,21 @@ def main():
     if cfg.get("blossom"):
         trees, species_note = assign_blossoms(trees, cfg["blossom"], boundary, water_cells, bmask)
 
-    # OSM natural=tree cross-check
+    # OSM natural=tree cross-check (lidar trees only: garden shrubs are not counted)
+    rt = [t_ for t_ in trees if t_["type"] != "shrub"] if n_shrubs else trees
     osm_trees = g[g.kind == "tree"]
-    tx = np.array([[t_["x"], t_["y"]] for t_ in trees])
+    tx = np.array([[t_["x"], t_["y"]] for t_ in rt])
     matched = 0
     for p in osm_trees.geometry:
         d = np.hypot(tx[:, 0] - p.x, tx[:, 1] - p.y).min()
         matched += d < 4
     stats = {
-        "detected": len(trees),
-        "inside_course": int(sum(t_["in"] for t_ in trees)),
-        "conifer": int(sum(t_["type"] == "conifer" for t_ in trees)),
-        "deciduous": int(sum(t_["type"] == "deciduous" for t_ in trees)),
-        "height_p50_m": float(np.median([t_["h"] for t_ in trees])),
-        "height_max_m": float(max(t_["h"] for t_ in trees)),
+        "detected": len(rt),
+        "inside_course": int(sum(t_["in"] for t_ in rt)),
+        "conifer": int(sum(t_["type"] == "conifer" for t_ in rt)),
+        "deciduous": int(sum(t_["type"] == "deciduous" for t_ in rt)),
+        "height_p50_m": float(np.median([t_["h"] for t_ in rt])),
+        "height_max_m": float(max(t_["h"] for t_ in rt)),
         "dropped": dropped,
         "dropped_on_playing_surfaces": dropped_surface,
         "osm_tree_points": int(len(osm_trees)),
@@ -439,6 +451,14 @@ def main():
         "source": canopy_label(cfg),
         "type_method": type_method + (f" {species_note['text']}" if species_note else ""),
     }
+    if n_shrubs:
+        from garden import colour_counts
+        trees, misplaced = order_trees(trees)
+        stats["shrub"] = n_shrubs
+        stats["garden"] = (f"{n_shrubs} flowering shrubs in the garden ({', '.join(cfg['garden']['osm'])}), trees.json c: 3, "
+                           f"drawn from sprites/shrubs.png; colours {colour_counts(trees)}"
+                           + (f", {misplaced} not in their colour's slot" if misplaced else "")
+                           + "; positions from the lidar shrub layer, species and colours flair, not surveyed")
     if species_note:
         stats["cherry"] = int(sum(t_["type"] == "cherry" for t_ in trees))
         stats["blossom"] = species_note

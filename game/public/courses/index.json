@@ -138,18 +138,32 @@
    ]
   },
   {
-   "id": "wannamoisett",
-   "name": "Wannamoisett Country Club",
-   "location": "Rumford, East Providence, Rhode Island",
-   "state": "RI",
-   "theme": "seekonk",
+   "id": "eastmoreland",
+   "name": "Eastmoreland Golf Course",
+   "location": "Portland, Multnomah County, Oregon",
+   "state": "OR",
+   "theme": "pnw",
    "holes": 18,
-   "par": 69,
+   "par": 72,
    "defaultTee": "Blue",
-   "totalYd": 6417,
+   "totalYd": 6529,
    "teeSets": [
     "Blue",
-    "Black"
+    "White"
+   ]
+  },
+  {
+   "id": "willamette_valley",
+   "name": "Willamette Valley CC",
+   "location": "Canby, Clackamas County, Oregon",
+   "state": "OR",
+   "theme": "pnw",
+   "holes": 18,
+   "par": 72,
+   "defaultTee": "Blue",
+   "totalYd": 6514,
+   "teeSets": [
+    "Blue"
    ]
   }
  ]
