@@ -13,6 +13,7 @@ import { clubAllowed, Lie, lieModsFor, makeLie, spinEffect } from '../rules/lie'
 import { CourseCtx, freeReliefArea, obOptions, penaltyAreaOptions, ReliefArea, unplayableOptions, validDrop } from '../rules/relief';
 import { HoleScore, HoleTally } from '../rules/scoring';
 import { MeterResult } from '../swing/meter';
+import { coursePins, pinLabel as spotLabel } from './pins';
 import { PuttStrike, puttStrikeFrom, Strike, strikeFrom } from '../swing/outcome';
 
 export interface RoundSettings {
@@ -32,6 +33,9 @@ export interface RoundConfig {
   seed: number;
   settings: RoundSettings;
   startedAt: string;
+  /** Pin for each hole of the round (pins.ts pinSheet), fixed when the round starts so a
+   *  resumed round keeps them; rounds saved before pins moved have none: the centre pin. */
+  pins?: [number, number][];
 }
 
 export interface BallPos { x: number; y: number; teedUp: boolean }
@@ -118,7 +122,18 @@ export class Round {
   get courseHole(): number { return courseHoleFor(this.holeNumber, this.course.json.holes.length); }
   get hole(): HoleJson { return this.course.json.holes[this.courseHole - 1]; }
   get tee(): TeeJson { return this.hole.tees[this.cfg.tee] ?? Object.values(this.hole.tees)[0]; }
-  get pin(): { x: number; y: number } { return { x: this.hole.pin[0], y: this.hole.pin[1] }; }
+  get pin(): { x: number; y: number } {
+    const p = this.cfg.pins?.[this.holeIndex] ?? this.hole.pin;
+    return { x: p[0], y: p[1] };
+  }
+  /** Where today's pin is on the green ("back left", "middle"...), for the hole intro. */
+  pinLabel(): string {
+    const spots = coursePins(this.course, this.cfg.tee)[this.courseHole - 1] ?? [];
+    const p = this.pin;
+    let best = spots[0], d = Infinity;
+    for (const s of spots) { const e = Math.hypot(s.x - p.x, s.y - p.y); if (e < d) { d = e; best = s; } }
+    return best && d < 0.5 ? spotLabel(best) : 'middle';
+  }
   get holeGreen(): Polygon { return this.course.greenPolys.get(this.hole.greenId)!; }
   get finished(): boolean { return this.holeIndex >= this.cfg.holes.length; }
   get isLastHole(): boolean { return this.holeIndex === this.cfg.holes.length - 1; }
