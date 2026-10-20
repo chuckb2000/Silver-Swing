@@ -670,8 +670,10 @@ Folded in from docs/courses/bandon_trails.md at the merge.
 
 ## 18. Chambers Bay (2026-10-20)
 
-Folded in from docs/courses/chambers_bay.md at the merge.
+Folded in from docs/courses/chambers_bay.md at the merge (lidar rebuild folded in the same day).
 
+-   **Look at the lidar's "trees" on a treeless course before trusting them.** Of 32 crowns inside the boundary, 2 were structures; outside it a parked freight train made 166 identical 4.7 m crowns along the track, and the mine ruins 17 more. Equal heights in a straight line are a vehicle or a structure. Drop them with `not_trees_areas` (a GeoJSON of areas whose crowns aren't trees).
+-   **OSM tags the pipeline doesn't read can still be used:** `historic=ruins` polygons became buildings through a `proposed/` file and `edits.json`; OSM `natural=tree` points with `leaf_type` can set a lidar tree's type (`tree_types_osm`).
 -   **Ask what the lidar buys before waiting for it.** Here the DEM gave every elevation and the course has one tree in play; the point cloud only changes scenery outside the boundary, so the course was finished on the OSM tree fallback and the lidar becomes a one-step rebuild. A NOAA Data Access Viewer job can take hours.
 
 -   **A complete-looking OSM course can still lack the middle tees.** Chambers Bay's OSM maps the tips (the 2015 U.S. Open tees) and some forward boxes. On four holes no box was near the Blue card. Measure every box near each hole against every column of the card first (here 4729 = Black 295, 4730 = Sand 253 on 12), so the missing set is clear before asking.
@@ -682,3 +684,8 @@ Folded in from docs/courses/chambers_bay.md at the merge.
 -   **Big practice ranges can be mapped as `golf=fairway`.** List every fairway, green and tee farther than 15 m from any hole line; the 3 ha "fairway" east of 7 and 10 was the range (striped hitting areas on the photo).
 -   **Scratch runs that edit the config must restore it with an absolute path.** A `trap` that copied a relative path after the script had changed directory left the config without its `laz` key.
 -   **Hydro-flattened sea** sits at one value (-1.49 m here); `lake_level_max_m` just above it turns the sound into water without touching the beach.
+
+## 19. East Potomac: fairway joins (2026-10-20)
+
+-   **Rounded fairway corners pull in at every join.** s08 rounds each fairway piece on its own, so an s02b approach and the fairway it extends, or two OSM fairways drawn edge to edge, each pull back from the shared edge and leave a line of rough and small notches (East Potomac: 161 pockets, 189 m2). Set `merge_touching_fairways` where the fairways come in pieces, and check a course with many s02b approaches for rough slivers inside the fairways.
+
