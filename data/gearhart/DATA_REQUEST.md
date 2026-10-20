@@ -1,7 +1,7 @@
 # Gearhart Golf Links — data request (2026-10-20)
 
 Course: Gearhart Golf Links, 1157 N Marion Ave, Gearhart, Clatsop County, OR.
-Course id `gearhart` (logo already exists: the wrecked ship). UTM zone 10N
+Course id `gearhart` (logo by the design chat: a golf ball in a beer stein). UTM zone 10N
 (EPSG:32610).
 
 ## Already in hand (GitHub release `gearhart-data`)

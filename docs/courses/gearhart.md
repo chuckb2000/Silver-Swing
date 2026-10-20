@@ -13,14 +13,15 @@ Blue). A new `gearhart` theme: straw fescue rough traced from the 2024 photo
 (art only), mown green rough, grey-white coastal sand, slate water, shore pine
 and Sitka spruce. Every hole within 3 % of the card (6,166 yd built vs 6,176).
 One new pipeline key, `fescue_areas`; `make regress` shows every other course
-unchanged. Unit and Playwright test counts are in the pull request.
+unchanged except Langston, which drifts the same way on `main`. 516 unit tests
+and 7 Playwright tests pass after merging `main` (logos).
 
 ## Facts
 
 -   **Location:** 1157 N Marion Ave, Gearhart, Clatsop County, Oregon, on the
     Clatsop Plains about 700 m from the Pacific beach. Neacoxie Creek runs
     along the east edge of the front nine. `state` OR. Course id `gearhart`
-    (logo: the wrecked ship, `assets-src/logos.py`).
+    (logo: a golf ball in a beer stein, design chat 2026-10-20, `assets-src/logos.py`).
 -   **Design:** front nine 1892, back nine 1913; a 2013-15 renovation took out
     many trees to restore the open links (Wikipedia; unverified, no designer
     named). Managed by Greenway Golf (GolfPass).
@@ -91,7 +92,7 @@ Standing defaults used without asking (4.1): Black tees, all water red, OB =
 the OSM boundary, pins at the mapped `golf=pin`, trees from lidar with
 fairway and tee-shot trees removed (`trees_off_fairways_m: 2`), wind by
 region, card hole 7 (the course chat's pick: the green between two ponds
-with spruce and the creek behind it), the existing logo.
+with spruce and the creek behind it), the logo from main (golf ball in a beer stein).
 
 ## New pipeline keys or theme
 
@@ -99,8 +100,11 @@ with spruce and the creek behind it), the existing logo.
     `pipeline/s09_render.py`): a GeoJSON file of areas of the rough left long.
     With it, rough inside those areas is drawn in the theme's rough tones and
     the rest of the rough in its `rough_band` (mown) tones; physics is
-    unchanged. Without the key nothing changes (`make regress`: every other
-    course unchanged). For COURSE_BUILD.md 3.3:
+    unchanged. Without the key nothing changes. `make regress` (2026-10-20, all 15
+    other data folders): 14 unchanged; Langston's rebuild differs in 10 files
+    (one tree more, its s06b tee-shot drop gone), and an untouched `main`
+    worktree rebuilds Langston byte for byte the same way, so that drift is
+    on `main`, not from this branch. For COURSE_BUILD.md 3.3:
     `"fescue_areas": "proposed/fescue.geojson"   // optional, art only: rough inside these areas is drawn as long fescue, the rest as mown rough (Gearhart)`.
 -   **Theme `gearhart`** (`assets-src/palettes/gearhart.json`,
     `assets-src/trees_gearhart.py`, `game/public/sprites/trees_gearhart.*`):
