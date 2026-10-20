@@ -117,6 +117,12 @@ def render_map(surf, z_px, trees, world, f, region=None):
     return img
 
 
+def theme_has_shrubs(theme: str) -> bool:
+    """Does the theme draw its own bushes (palettes/<theme>.json "trees": {"shrub": ...})?"""
+    pal = ROOT / "assets-src" / "palettes" / f"{theme}.json"
+    return pal.exists() and bool(json.load(open(pal)).get("trees", {}).get("shrub"))
+
+
 def update_course_lists():
     """Remake the game's course lists from every exported course.json (game/scripts/course-lists.mjs).
     They are generated, not committed, so no course build edits a shared file; the game's build
@@ -358,6 +364,8 @@ def main():
         }
         if shared:
             course.update({"group": cfg["id"], "groupName": cfg["name"], "layout": lay.get("short") or lay["name"]})
+        if theme_has_shrubs(cfg["theme"]):
+            course["shrubs"] = f"shrubs_{cfg['theme']}"  # trees.json c: 3 drawn from the theme's own bushes (gorse)
         if cfg.get("practice"):
             course["practice"] = True  # the practice ground is opened from its own button, not the course list
         write_json(lout / "course.json", course)

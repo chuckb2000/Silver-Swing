@@ -621,3 +621,49 @@ notes live in DECISIONS.md.
   main's, re-apply mine" (`git diff <base> HEAD -- <file> | git apply --3way`)
   resolved the desk files that both branches changed.
 
+## 16. Gearhart Golf Links (2026-10-20)
+
+Folded in from docs/courses/gearhart.md at the merge.
+
+-   **Check the lidar's date against the course's history.** The DOGAMI
+    mosaic here predates a renovation that removed most trees; the first
+    tree pass put 1,067 trees on an open links. Comparing every crown with
+    the latest state orthophoto (dark-canopy share in the crown, best within
+    2.5 m for the lean of tall crowns in the photo) separated the 737 gone
+    from the 248 standing cleanly; the developer confirmed the result at a
+    glance.
+-   **`drop_trees` clears the canopy too**, so removing hundreds of trees
+    leaves no woods patches behind; keep the list one entry per line.
+-   **The pipeline takes every `leisure=golf_course` polygon as a boundary**
+    (`boundary_name` is not read). A second export with a wider box pulled in
+    two unnamed course polygons nearby; drop them in `edits.json`.
+-   **A long teeing ground can hold a set its centroid misses.** s06 assigns
+    boxes by centroid, so a 46 m box covering 130-180 yd was skipped for a
+    176 yd card; measure every box's yardage range before taking a lidar pad.
+    The pad here was rough in the 2024 photo.
+-   **Fescue vs mown rough is one colour rule on a summer photo** (green minus
+    red: turf +10 to +26, fescue -10 to +1); OSM's `golf=rough` covered only
+    part of it.
+-   **Playwright ignores specs inside its own output folder** (`test-results/`)
+    and wipes it at the start of a run; keep a throwaway look script under
+    `playwright-report/` (also git-ignored) with its own config.
+
+## 17. Bandon Trails (2026-10-20)
+
+Folded in from docs/courses/bandon_trails.md at the merge.
+
+-   **A resort export holds every course in the box.** The pipeline takes every
+    `leisure=golf_course` and every `golf=hole` it finds, so the neighbours' boundaries
+    and hole lines must be dropped (`make_edits.py` does it by name and checks each
+    line lies outside the boundary). Their greens off the map must go too, or s09 fails.
+-   **Overpass exports made with metadata on** carry @user/@uid/@timestamp per feature;
+    strip them before s01 (they would become OSM tags).
+-   **Long shared tee complexes measure badly from the centre.** Four holes were over 8 %
+    from the box centres and within 3 % once s06 moved the tee along the box. Read the
+    adjusted column before calling a FAIL.
+-   **On a coastal conifer course the "deciduous" crowns are pines.** A theme can draw
+    the broad-crown class as shore pine; say so as a drawing choice.
+-   **The 2024 orthophoto settles the lidar's age** when the mosaic gives no year:
+    overlay the crowns on photo crops.
+-   **`golf=path`** is still not read by s01 (COURSE_LESSONS.md 10); `make_edits.py`
+    copies it as a cart path with a new id (dropping by id would otherwise remove the copy).

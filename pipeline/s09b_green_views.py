@@ -44,7 +44,7 @@ from s09_render import BAYER4, PRIO, SHADOW_DIR, SHADOW_MULT, band_lut, build_lu
 
 sys.path.insert(0, str(ROOT / "assets-src"))
 from atlas import Atlas  # noqa: E402
-from trees import theme_painters  # noqa: E402
+from trees import theme_painters, theme_shrub_painter  # noqa: E402
 from shrubs import VARIANTS as SHRUB_VARIANTS, shrub as shrub_painter  # noqa: E402  (flowering shrubs, c: 3)
 
 warnings.filterwarnings("ignore")
@@ -381,6 +381,8 @@ def main():
     lut = build_lut(P, load_theme(cfg["theme"]).get("lut"))
     blut = band_lut(P, load_theme(cfg["theme"]))
     conifer, deciduous = theme_painters(cfg["theme"])
+    global shrub_painter
+    shrub_painter = theme_shrub_painter(cfg["theme"]) or shrub_painter  # a theme's own bushes (gorse), drawn for c: 3
     surf05 = np.load(bdir / "surface.npy")
     base = np.load(bdir / "height_base.npy").astype(np.float64)
     greens = json.load(open(bdir / "greens.json"))

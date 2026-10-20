@@ -280,6 +280,16 @@ def theme_painters(theme: str = "pnw"):
     return _painter(t.get("conifer", "conifer")), _painter(t.get("deciduous", "deciduous"))
 
 
+def theme_shrub_painter(theme: str = "pnw"):
+    """The theme's own low-bush painter (palettes/<theme>.json "trees": {"shrub": "module:function"},
+    e.g. gorse), drawn for trees.json `c: 3` instead of the flowering shrubs; None if it has none."""
+    import json
+    from pathlib import Path
+    d = json.load(open(Path(__file__).resolve().parent / "palettes" / f"{theme}.json"))
+    name = d.get("trees", {}).get("shrub")
+    return _painter(name) if name else None
+
+
 def _painter(name: str):
     """A name in PAINTERS, or "module:function" for a theme's own module (trees_potomac:cherry...)."""
     if ":" in name:

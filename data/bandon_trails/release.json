@@ -1,0 +1,30 @@
+{
+ "release": "bandon-trails-data",
+ "note": "build inputs not kept in git; `make fetch NAME=bandon_trails` puts them in place (pipeline/fetch_raw.py). exportImage.16 = DOGAMI bare-earth DTM (ft), exportImage.17 = DOGAMI canopy height model (ft), exportImage.jpg = OSIP 2024 0.5 m orthophoto (JPEG, corners = the bbox in DATA_REQUEST.md: x 386401-388393, y 4780541-4782533, EPSG:32610; look-only checks)",
+ "files": [
+  {
+   "asset": "exportImage.16.tiff",
+   "sha256": "41b837d9143ecce9c529795b116522c86a95dc5b72f8a77d9119a34405dd9e9c",
+   "run": "cp {file} data/bandon_trails/raw/dogami_dtm_ft.tif",
+   "outputs": {
+    "raw/dogami_dtm_ft.tif": "41b837d9143ecce9c529795b116522c86a95dc5b72f8a77d9119a34405dd9e9c"
+   }
+  },
+  {
+   "asset": "exportImage.17.tiff",
+   "sha256": "057760f9533d1585ebdfec130c3015acd6681e981f23d142087f83ff0a2e438b",
+   "run": "cp {file} data/bandon_trails/raw/dogami_chm_ft.tif",
+   "outputs": {
+    "raw/dogami_chm_ft.tif": "057760f9533d1585ebdfec130c3015acd6681e981f23d142087f83ff0a2e438b"
+   }
+  },
+  {
+   "asset": "exportImage.jpg",
+   "sha256": "328ec7af6f69ccb0583d951071564964d4fe08738c0325072acb802eef89725b",
+   "run": "cp {file} data/bandon_trails/raw/osip2024_05m.jpg",
+   "outputs": {
+    "raw/osip2024_05m.jpg": "328ec7af6f69ccb0583d951071564964d4fe08738c0325072acb802eef89725b"
+   }
+  }
+ ]
+}
