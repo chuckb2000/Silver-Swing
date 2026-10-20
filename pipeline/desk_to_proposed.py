@@ -71,6 +71,22 @@ def main():
         if d.get("note"):
             print(f"[desk] hole {k} note: {d['note']}")
 
+    # optional (trace_spec "double_greens"): a green shared by two holes, which the developer drew
+    # once per hole (Langdon Farms 9/18): the smaller drawing stays that hole's green and the larger
+    # loses it, so each hole has its own green centre and pin and the two parts make one green
+    for dg in spec.get("double_greens", []):
+        a, b = dg["holes"]
+        big, small = (a, b) if greens[a].area >= greens[b].area else (b, a)
+        cut = greens[big].difference(greens[small])
+        cut = max(getattr(cut, "geoms", [cut]), key=lambda q: q.area)
+        greens[big] = cut
+        for f in feats:
+            if f["osm"].startswith(f"desk_{big}_green_"):
+                f["geometry"] = cut
+                f["tags"]["double_green"] = f"with hole {small}: its own part (the developer's drawing minus hole {small}'s green)"
+            if f["osm"].startswith(f"desk_{small}_green_"):
+                f["tags"]["double_green"] = f"with hole {big}"
+
     for k, p in greens.items():
         if any(p.contains(q) for q in osm_pins):
             continue
@@ -79,7 +95,7 @@ def main():
                       "tags": {"golf": "pin", "hole": k, "source": "centroid of the developer's green (proposal)"}})
 
     for k, h in spec["holes"].items():
-        gc = greens[k].centroid
+        gc = greens[k].centroid if greens[k].contains(greens[k].centroid) else greens[k].representative_point()  # as the pin
         start = max(tees[k], key=lambda t: t.centroid.distance(gc)).centroid
         L = LineString([start.coords[0], *map(tuple, h["bends"]), gc.coords[0]])
         feats.append({"osm": f"desk_{k}_hole", "kind": "hole", "geometry": L,

@@ -149,7 +149,10 @@ def build_layout(name, cfg, lay, g):
         L = h.geometry
         start, end = Point(L.coords[0]), Point(L.coords[-1])
         gi = greens.distance(end).idxmin()
-        geo[n] = (L, start, gi, greens.loc[gi].geometry.centroid)
+        gpoly_ = greens.loc[gi].geometry
+        # a green whose centroid lies off it (one hole's part of a double green wrapped round a
+        # pond, Langdon Farms 9) is measured to a point on it; no other course has such a green
+        geo[n] = (L, start, gi, gpoly_.centroid if gpoly_.contains(gpoly_.centroid) else gpoly_.representative_point())
 
     # Tee assignment per tee set: one tee polygon per hole, solved jointly so a
     # box that clearly belongs to one hole is not reused for its neighbour.

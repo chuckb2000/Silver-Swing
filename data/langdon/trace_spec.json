@@ -142,6 +142,15 @@
  },
  "tees": [],
  "holes": {
+  "1": {
+   "par": 4,
+   "handicap": 13,
+   "tee": [
+    585,
+    764
+   ],
+   "bends": []
+  },
   "2": {
    "par": 4,
    "handicap": 11,
@@ -149,7 +158,12 @@
     583,
     1107
    ],
-   "bends": []
+   "bends": [
+    [
+     637.5,
+     1334.2
+    ]
+   ]
   },
   "3": {
    "par": 3,
@@ -167,7 +181,12 @@
     686,
     1550
    ],
-   "bends": []
+   "bends": [
+    [
+     763.8,
+     1741.8
+    ]
+   ]
   },
   "5": {
    "par": 4,
@@ -176,7 +195,12 @@
     881,
     1846
    ],
-   "bends": []
+   "bends": [
+    [
+     857.0,
+     1619.2
+    ]
+   ]
   },
   "6": {
    "par": 3,
@@ -194,7 +218,12 @@
     787,
     1323
    ],
-   "bends": []
+   "bends": [
+    [
+     794.2,
+     1094.0
+    ]
+   ]
   },
   "8": {
    "par": 4,
@@ -203,7 +232,12 @@
     809,
     701
    ],
-   "bends": []
+   "bends": [
+    [
+     807.5,
+     460.2
+    ]
+   ]
   },
   "9": {
    "par": 4,
@@ -230,7 +264,12 @@
     170,
     810
    ],
-   "bends": []
+   "bends": [
+    [
+     272.6,
+     1012.0
+    ]
+   ]
   },
   "12": {
    "par": 4,
@@ -239,7 +278,12 @@
     458,
     1251
    ],
-   "bends": []
+   "bends": [
+    [
+     368.4,
+     1040.5
+    ]
+   ]
   },
   "13": {
    "par": 3,
@@ -266,7 +310,12 @@
     502,
     1117
    ],
-   "bends": []
+   "bends": [
+    [
+     467.4,
+     898.8
+    ]
+   ]
   },
   "16": {
    "par": 4,
@@ -335,5 +384,14 @@
   "tee": "Tee 7",
   "ref": "Tee 8",
   "photo": "Oregon 2024 photo"
- }
+ },
+ "double_greens": [
+  {
+   "holes": [
+    "9",
+    "18"
+   ],
+   "note": "developer 2026-10-19: one green around the north end of the clubhouse pond shared by 9 and 18; hole 9 plays to the east side (the side nearer the 8th tee), 18 to the north-west. Hole 18 keeps the green the developer drew for it; hole 9's is the rest of its drawing."
+  }
+ ]
 }

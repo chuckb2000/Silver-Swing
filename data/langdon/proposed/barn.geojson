@@ -1,8 +1,0 @@
-{
-"type": "FeatureCollection",
-"name": "barn",
-"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
-"features": [
-{ "type": "Feature", "properties": { "osm": "pr_barn_8", "kind": "building", "tags": { "building": "barn", "name": "barn on hole 8", "source": "traced (course chat) from the Oregon Statewide Imagery Program 2024 orthophoto: the brown roof at the east end of the hedge row north of the hole 8 tee", "proposed": "trace" } }, "geometry": { "type": "Polygon", "coordinates": [ [ [ -122.765555961148209, 45.272439220436013 ], [ -122.765555249580416, 45.272612047704676 ], [ -122.765792369523439, 45.27261253418601 ], [ -122.765793080371552, 45.272439706914433 ], [ -122.765555961148209, 45.272439220436013 ] ] ] } }
-]
-}

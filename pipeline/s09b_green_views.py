@@ -419,6 +419,8 @@ def render_layout(lay, name, cfg, world, ldir, all_holes, green_by_osm, only, LA
             continue
         gpoly = Polygon(green_by_osm[h["green_osm"]]["poly"])
         cx, cy = gpoly.centroid.x, gpoly.centroid.y
+        if not gpoly.contains(gpoly.centroid):  # a crescent (Langdon Farms 9, half a double green): centre on the pin
+            cx, cy = h["pin"]
         entry = {"hole": n}
         for L in LAYERS:
             WIN, ppm = L["win"], L["ppm"]
