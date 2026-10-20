@@ -704,7 +704,7 @@ Branch `fix/afternoon-ui`, from the afternoon review of the screens and flow.
   and trees around them, at most one more where water fills the view, no
   neighbouring holes while others are left, and none whose flag a tree hides (checked
   on the rendered card). A course chat can list its own: `"holes": [n, ...]`. The
-  card shows one frame at a time, changing every 3 s, neighbours in turn. The title
+  card shows one frame at a time, changing every 30 s, neighbours 15 s apart (was 3 s: "they should change like every 30"). The title
   screen views still use "hole". Wide screens now show two rows of cards.
 - **Spin** ("backspin and front spin are too powerful: their effectiveness should be
   cut down like 50% from currently and like 95% when you're hitting out of the rough
