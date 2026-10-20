@@ -241,3 +241,66 @@ test('the menu button quits a round for good', async ({ page }) => {
   expect(await page.evaluate(() => window.__golf.round.cfg.courseId)).toBe('highland_links');
   expect(errors).toEqual([]);
 });
+
+test('practice ground: three range balls, then putts until one drops (player improvements, item 5)', async ({ page }) => {
+  test.setTimeout(240_000);
+  const errors: string[] = [];
+  page.on('pageerror', (e) => errors.push(e.message));
+  await page.goto('/?autoplay');
+  await page.waitForFunction(() => window.__game?.scene.isActive('title'), null, { timeout: 60_000 });
+  await tap(page, 'title', { button: 'practice' }, () => window.__game.scene.isActive('play') && window.__game.scene.getScene('play').state === 'aim');
+  for (let i = 0; i < 3; i++) {
+    await page.waitForFunction(() => ((p) => p.state === 'aim' && !p.fading && !p.zooming)(window.__game.scene.getScene('play')), null, { timeout: 60_000 });
+    expect(await page.evaluate(() => window.__autoplay.shot(0))).toBe(true);
+    await page.waitForFunction(() => window.__game.scene.getScene('play').state === 'loading', null, { timeout: 60_000, polling: 50 });
+  }
+  await page.waitForFunction(() => ((p) => p.state === 'aim' && !p.fading && !p.zooming)(window.__game.scene.getScene('play')), null, { timeout: 60_000 });
+  const carries = await page.evaluate(() => [...window.__game.scene.getScene('play').practice.log.carries.values()].flat().length);
+  expect(carries).toBe(3);
+  // the putting green, 5 ft putts
+  await page.evaluate(() => window.__game.scene.getScene('play').practiceStep(0, true));
+  await page.waitForFunction(() => { const p = window.__game.scene.getScene('play'); return p.state === 'aim' && !p.fading && p.round.holeNumber === 6; }, null, { timeout: 60_000 });
+  await page.evaluate(() => window.__game.scene.getScene('play').practiceCycleDrill()); // 15 -> 30
+  await page.waitForFunction(() => ((p) => p.state === 'aim' && !p.fading && !p.zooming)(window.__game.scene.getScene('play')), null, { timeout: 60_000 });
+  await page.evaluate(() => window.__game.scene.getScene('play').practiceCycleDrill()); // 30 -> 5
+  for (let i = 0; i < 6; i++) {
+    await page.waitForFunction(() => ((p) => p.state === 'aim' && !p.fading && !p.zooming)(window.__game.scene.getScene('play')), null, { timeout: 60_000 });
+    if (await page.evaluate(() => window.__game.scene.getScene('play').practice.log.drill.holed > 0)) break;
+    await page.evaluate(() => window.__autoplay.shot(0));
+    await page.waitForFunction(() => window.__game.scene.getScene('play').state === 'loading', null, { timeout: 60_000, polling: 50 });
+  }
+  await page.waitForFunction(() => ((p) => p.state === 'aim' && !p.fading && !p.zooming)(window.__game.scene.getScene('play')), null, { timeout: 60_000 });
+  const drill = await page.evaluate(() => window.__game.scene.getScene('play').practice.log.drill);
+  expect(drill.ft).toBe(5);
+  expect(drill.holed).toBeGreaterThan(0);
+  expect(errors).toEqual([]);
+});
+
+test('a round shares as a 1080 x 1350 picture (player improvements, item 2)', async ({ page }) => {
+  await page.goto('/?autoplay');
+  await page.waitForFunction(() => window.__game?.scene.isActive('title'), null, { timeout: 60_000 });
+  const scores = Array.from({ length: 9 }, (_, i) => ({ hole: i + 1, par: 4, strokes: i === 2 ? 3 : 4, putts: 2, penalties: 0, fairway: true, gir: true }));
+  const res = await page.evaluate((scores) => window.__autoplay.sharePicture({
+    id: 't1', course: 'oswego_lake', tee: 'Blue', length: 'front', difficulty: 'normal', casual: false, player: 'robot', date: '2026-10-20T12:00:00Z',
+    gross: 35, toPar: -1, back: null, scores, totals: { strokes: 35, par: 36, toPar: -1, putts: 18, penalties: 0, fairways: 9, fairwayChances: 9, gir: 9, holes: 9, front: 35, back: null },
+  }, '#1 of 3 among friends'), scores);
+  expect(res).not.toBeNull();
+  expect(res!.bytes).toBeGreaterThan(10_000);
+  const size = await page.evaluate((url) => new Promise<[number, number]>((r) => { const im = new Image(); im.onload = () => r([im.width, im.height]); im.src = url; }), res!.url);
+  expect(size).toEqual([1080, 1350]);
+});
+
+test('the offline copy: a played course and the game open with no connection (player improvements, item 3)', async ({ page, context }) => {
+  await page.goto('/?sw');
+  await page.waitForFunction(() => navigator.serviceWorker?.ready.then(() => true), null, { timeout: 30_000 });
+  await page.reload();
+  await page.waitForFunction(() => !!navigator.serviceWorker.controller, null, { timeout: 30_000 });
+  await page.waitForFunction(() => window.__game?.scene.isActive('title'), null, { timeout: 60_000 });
+  const fetchCourse = () => page.evaluate(async () => { const r = await fetch('courses/practice/course.json'); return r.ok ? ((await r.json()) as { id: string }).id : null; });
+  expect(await fetchCourse()).toBe('practice');
+  await context.setOffline(true);
+  expect(await fetchCourse()).toBe('practice');
+  await page.reload();
+  await page.waitForFunction(() => window.__game?.scene.isActive('title'), null, { timeout: 60_000 });
+  await context.setOffline(false);
+});

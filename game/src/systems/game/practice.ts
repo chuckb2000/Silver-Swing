@@ -43,8 +43,8 @@ export function rangeShot(from: { x: number; y: number }, target: { x: number; y
 export function drillSpot(cup: { x: number; y: number }, green: Polygon, ft: number, k: number, startAngle = 0): { x: number; y: number } | null {
   const d = ft * FT;
   const golden = Math.PI * (3 - Math.sqrt(5));
-  for (let t = 0; t < 36; t++) {
-    const a = startAngle + (k + t * 7) * golden;
+  for (let t = 0; t < 37; t++) {
+    const a = startAngle + k * golden + (t * 2 * Math.PI) / 37; // no room that way: turn a little further
     const x = cup.x + Math.cos(a) * d, y = cup.y + Math.sin(a) * d;
     if (green.contains(x, y) && green.edgeDistance(x, y) >= 0.5) return { x, y };
   }

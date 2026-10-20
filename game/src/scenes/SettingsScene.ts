@@ -3,7 +3,8 @@
 import { app } from '../app';
 import { setVolume, sfx } from '../audio/sfx';
 import { saveSettings, Settings } from '../save/store';
-import { Button, COLORS, Panel, txt } from '../ui/widgets';
+import { Button, COLORS, Panel, setTxt, txt } from '../ui/widgets';
+import { freeUpSpace, keptCourses } from '../save/offline';
 import { applyScale, uiCamera } from '../scale';
 import { MenuScene } from './menu';
 import { keyCode } from '../save/identity';
@@ -51,7 +52,7 @@ export class SettingsScene extends MenuScene {
     const s = app.settings;
     const W = app.view.w, H = app.view.h;
     const inRound = this.from === 'hud';
-    const pw = Math.min(320, W - 8), ph = Math.min(H - 8, inRound ? 176 : 254);
+    const pw = Math.min(320, W - 8), ph = Math.min(H - 8, inRound ? 176 : 262);
     const x0 = Math.round((W - pw) / 2), y0 = Math.round((H - ph) / 2);
     if (this.from === 'hud') {
       const dim = this.add.rectangle(0, 0, W, H, 0x05080b, 0.7).setOrigin(0, 0).setInteractive();
@@ -106,6 +107,23 @@ export class SettingsScene extends MenuScene {
         });
       }, { color: 'grey' }));
       y += 17;
+      // courses kept on this device by the offline copy (player improvements, item 3)
+      if (typeof navigator !== 'undefined' && navigator.serviceWorker?.controller) {
+        const g = this.gen;
+        const row = y;
+        this.root.add(txt(this, lx, row + 3, 'kept courses', { color: COLORS.dim }));
+        const val = txt(this, vx, row + 3, '...');
+        this.root.add(val);
+        void keptCourses().then((k) => {
+          if (!this.isCurrentBuild(g)) return;
+          setTxt(val, `${k.courses}${k.bytes !== null ? `  ·  ${Math.round(k.bytes / 1e6)} mb` : ''}`);
+        });
+        this.root.add(new Button(this, x0 + pw - 70, row, 62, 14, 'free up space', async () => {
+          await freeUpSpace();
+          this.rebuild();
+        }, { color: 'grey' }));
+        y += 17;
+      }
       this.root.add(txt(this, x0 + pw / 2, y + 2, 'casual rounds go on their own leaderboard tab', { origin: [0.5, 0], color: COLORS.dim }));
     }
     this.root.add(new Button(this, x0 + 8, y0 + ph - 20, 56, 15, 'back', () => this.back(), { color: 'grey' }));

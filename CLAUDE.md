@@ -605,6 +605,27 @@ DECISIONS.md with the reason.
     with the centred tees and rounded fairways; the smoke tests now find a
     course on any page (request 1 in docs/requests/langdon_design_requests.md).
 
+-   **Player improvements (design chat, 2026-10-20):** branch
+    `design/player`, not merged. The developer approved items 2, 3, 4, 5, 7,
+    8, 9 and 11 of docs/reports/player_improvements.md:
+    -   share a scorecard picture (1080 x 1350 PNG; summary "share");
+    -   install to the home screen: manifest, icons, a service worker that
+        keeps played courses (`public/sw.js`, `courses/versions.json` written
+        by the build), "free up space" in settings, an update offer on the title;
+    -   the daily round (title "daily: ..."; nine holes at Normal, the same
+        course, tees, wind and pins for everyone; leaderboard "daily": today
+        and this week, best five of seven);
+    -   the practice ground (title "practice"; a synthetic course built by the
+        pipeline, `data/practice`: a range with targets at 50-250 yd and four
+        putting greens, flat / 1 % / 2 % / two tiers, ten-putt drills);
+    -   "my golf" (stats, course passport, milestones);
+    -   friends' activity (leaderboard "recent", with best and record badges);
+    -   replay the holing shot (hole-complete panel);
+    -   milestones (on the summary and in "my golf").
+    The D1 tables migrate themselves (schema 3); no manual step. Details in
+    DECISIONS.md "Player improvements". 492 unit tests and 7 Playwright
+    tests pass.
+
 -   **Next task:** the developer approved player improvements 2, 3, 4, 5,
     7, 8, 9 and 11 (2026-10-20); they are built on branch `design/player` and
     wait for the developer's merge. Item 1 (swing coach) is on
@@ -1511,8 +1532,13 @@ calm (≈60% of holes below half the max). It is seeded per round.
 
 -   **M1--M5:** single player
 
--   **Later:** local pass-and-play for up to 4 players, and a practice
-    range plus a practice green
+-   **Practice ground** (2026-10-20): a range and four putting greens
+    (`data/practice`, not on the course list), nothing scored or saved.
+
+-   **Daily round** (2026-10-20): one course a day, nine holes at Normal,
+    fixed by the date; one counted round per player code and day.
+
+-   **Later:** local pass-and-play for up to 4 players
 
 **10.3 Camera**
 
@@ -1559,6 +1585,11 @@ local leaderboard stays as the offline copy.
     Casual rounds are excluded.
 
 -   **Personal bests:** per player, per course.
+
+-   **Friends' activity** (2026-10-20): the latest rounds on the shared
+    board (`/api/recent`), marked when they were a personal best or a new
+    record for their board. **My golf:** a player's stats, passport and
+    milestones from this device and the player code's rounds (`/api/scores?owner=`).
 
 -   **Round in progress:** auto-saved after every shot so a closed tab
     can be resumed.

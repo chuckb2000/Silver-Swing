@@ -10,6 +10,7 @@ import { Difficulty } from '../data/difficulty';
 import { backupText, LeaderboardEntry, loadBoard, RoundLength } from '../save/store';
 import { BirdieRow, fetchBirdieRecords, fetchBoard, fetchDaily, fetchDailyWeek, fetchEagles, fetchRecent, flushUploads, nameConflicts, onlineAvailable } from '../save/online';
 import { FeedRow, timeAgo } from '../save/feed';
+import { shareRound } from '../ui/shareCard';
 import { addDays, dailyPlan, dayStandings, weekStandings, weekStart } from '../systems/game/daily';
 import { birdiesIn, EagleEvent, featName } from '../save/feats';
 import { loadEagles } from '../save/store';
@@ -44,8 +45,9 @@ export class LeaderboardScene extends MenuScene {
     super('leaderboard');
   }
 
-  init(data: { courseId?: string }) {
-    if (data?.courseId) { courseId = data.courseId; teeSel = ''; page = 0; }
+  init(data: { courseId?: string; view?: typeof view }) {
+    if (data?.courseId) { courseId = data.courseId; teeSel = ''; page = 0; view = 'scores'; }
+    if (data?.view) { view = data.view; dailyWhen = 'today'; page = 0; }
   }
 
   async build() {
@@ -111,13 +113,14 @@ export class LeaderboardScene extends MenuScene {
     if (note) { this.root.add(txt(this, x0 + pw / 2, y, note, { origin: [0.5, 0], color: COLORS.yellow, maxWidth: pw - 16 })); y += 11; }
     const lineH = 11;
     const listTop = y + 2;
-    const maxRows = Math.max(1, Math.floor((y0 + ph - 26 - listTop) / lineH) - 1);
+    const maxRows = Math.max(1, Math.floor((y0 + ph - 34 - listTop) / lineH) - 1);
     const pages = Math.max(1, Math.ceil(rows.length / maxRows));
     page = Math.min(page, pages - 1);
     const cols = [x0 + 10, x0 + 30, x0 + 110, x0 + 150, x0 + 186, pw > 300 ? x0 + 240 : -1];
     const head = ['#', 'player', 'gross', 'to par', 'level', 'date'];
     head.forEach((h, i) => { if (cols[i] >= 0) this.root.add(txt(this, cols[i], listTop, h, { color: COLORS.dim })); });
     if (!rows.length) this.root.add(txt(this, x0 + pw / 2, listTop + 24, 'no rounds yet - go play!', { origin: [0.5, 0], color: COLORS.dim }));
+    else this.root.add(txt(this, x0 + pw / 2, y0 + ph - 32, 'tap a round to share its card', { origin: [0.5, 0], color: COLORS.dim }));
     const best = new Map<string, LeaderboardEntry>();
     for (const e of rows) if (!best.has(e.player)) best.set(e.player, e);
     rows.slice(page * maxRows, (page + 1) * maxRows).forEach((e, k) => {
@@ -126,6 +129,10 @@ export class LeaderboardScene extends MenuScene {
       const pb = best.get(e.player) === e;
       const vals = [String(i + 1), e.player === DEFAULT_NAME ? '(no name)' : e.player.slice(0, 12), String(e.gross), toPar(e.toPar), e.difficulty, localDay(e.date)];
       vals.forEach((v, j) => { if (cols[j] >= 0) this.root.add(txt(this, cols[j], yy, v, { color: j === 1 && pb ? COLORS.yellow : COLORS.white })); });
+      // tap a round to share its card (player improvements, item 2)
+      const zone = this.add.zone(x0 + 6, yy - 1, pw - 12, lineH).setOrigin(0, 0).setInteractive({ useHandCursor: true });
+      zone.on('pointerup', () => { void shareRound(this, e, `#${i + 1} of ${rows.length} ${src === 'friends' ? 'among friends' : 'on this device'}`); });
+      this.root.add(zone);
     });
     const by = y0 + ph - 20;
     if (pages > 1) {

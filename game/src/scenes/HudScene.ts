@@ -21,6 +21,9 @@ import type { PlayScene } from './PlayScene';
 import { finishRound } from './flow';
 import { courseHoleFor } from '../systems/game/round';
 import type { LeaderboardEntry } from '../save/entry';
+import { DRILL_BALLS, PUTTING_GREENS, RangeShot } from '../systems/game/practice';
+import type { Club } from '../data/clubs';
+import type { SimResult } from '../systems/physics/sim';
 
 type Modal = 'relief' | 'drop' | 'card' | 'overview' | 'pause' | 'holed' | null;
 
@@ -72,6 +75,12 @@ export class HudScene extends Phaser.Scene {
   private bannerTimer?: Phaser.Time.TimerEvent;
   private intro: Phaser.GameObjects.Container | null = null;
   reliefTitle = '';
+  // the practice ground's panel (target / green, wind or drill, the other area, a tally)
+  private practiceBox: Panel | null = null;
+  private practiceLabel!: Phaser.GameObjects.BitmapText;
+  private practiceA!: Button;
+  private practiceB!: Button;
+  private practiceStats!: Phaser.GameObjects.BitmapText;
 
   constructor() {
     super('hud');
@@ -90,6 +99,7 @@ export class HudScene extends Phaser.Scene {
     this.modalBeforeCard = null;
     this.bannerTimer = undefined;
     this.redraw = null;
+    this.practiceBox = null;
     this.play = this.scene.get('play') as PlayScene;
     uiCamera(this.cameras.main);
     this.W = app.view.w;
@@ -175,6 +185,73 @@ export class HudScene extends Phaser.Scene {
     this.sub = txt(this, 0, 0, '', { origin: [0.5, 0.5] }).setDepth(50);
     this.root.add([this.menuBtn, this.cardBtn, this.holeBox, this.info, this.windPanel, this.miniPanel, this.mapBtn, this.aimL, this.aimR, this.aimLabel,
       this.clubPanel, this.clubUp, this.clubDown, this.spinBtn, this.scaleBtn, this.unplayBtn, this.mulliganBtn, this.meterPanel, this.meterRead, this.swingBtn, this.offArrow]);
+    if (p.round.cfg.practice) this.buildPractice();
+  }
+
+  /** The practice ground's panel: change target or green, wind or drill distance, go to the other area. */
+  private buildPractice() {
+    const p = this.play;
+    const w = 150;
+    const box = new Panel(this, 0, 0, w, 50);
+    const prev = new Button(this, 4, 3, 16, 13, '', () => p.practiceStep(-1), { icon: 'arrow_left', color: 'grey' });
+    const next = new Button(this, w - 20, 3, 16, 13, '', () => p.practiceStep(1), { icon: 'arrow_right', color: 'grey' });
+    this.practiceLabel = txt(this, w / 2, 5, '', { origin: [0.5, 0] });
+    this.practiceA = new Button(this, 4, 19, 70, 13, ' ', () => {
+      if (p.round.holeNumber <= 5) p.practiceToggleWind(); else p.practiceCycleDrill();
+    }, { color: 'grey' });
+    this.practiceB = new Button(this, 76, 19, 70, 13, ' ', () => p.practiceStep(0, true));
+    this.practiceStats = txt(this, 5, 36, '', { color: COLORS.dim, maxWidth: w - 8 });
+    box.add([prev, next, this.practiceLabel, this.practiceA, this.practiceB, this.practiceStats]);
+    this.practiceBox = box;
+    this.root.add(box);
+  }
+
+  private refreshPractice() {
+    const box = this.practiceBox;
+    const pr = this.play.practice;
+    if (!box || !pr) return;
+    const r = this.play.round;
+    const range = r.holeNumber <= 5;
+    box.setVisible(this.play.state === 'aim' && !this.modal);
+    if (range) {
+      setTxt(this.practiceLabel, `${app.settings.units === 'yd' ? `${r.tee.cardYd} yd` : `${Math.round(r.tee.cardYd * YD)} m`} target`);
+      this.practiceA.setLabel(`wind: ${pr.wind ? 'on' : 'off'}`);
+      this.practiceB.setLabel('putting green');
+      const c = pr.log.avgCarry(this.play.club.id);
+      setTxt(this.practiceStats, c ? `${this.play.club.name}: ${c.n} ${c.n === 1 ? 'ball' : 'balls'}, avg carry ${fmtDist(c.avg)} ${unitLabel()}` : 'no balls with this club yet');
+    } else {
+      setTxt(this.practiceLabel, `green: ${PUTTING_GREENS[r.holeNumber - 6] ?? ''}`);
+      const d = pr.log.drill;
+      this.practiceA.setLabel(`${d.ft} ft putts`);
+      this.practiceB.setLabel('range');
+      setTxt(this.practiceStats, `ball ${d.ball + 1} of ${DRILL_BALLS}  ·  holed ${d.holed}`);
+    }
+  }
+
+  /** A range ball has stopped: carry, total, and how far off line. */
+  practiceRangeShot(rs: RangeShot, club: Club) {
+    if (rs.holed) { this.flash('in the hole!', COLORS.yellow, `${club.name}  ·  carry ${fmtDist(rs.carry)} ${unitLabel()}`, 1500); return; }
+    const off = Math.abs(rs.offline);
+    const line = off < 1 ? 'on line' : `${fmtDist(off)} ${unitLabel()} ${rs.offline > 0 ? 'right' : 'left'}`;
+    this.flash(`carry ${fmtDist(rs.carry)} ${unitLabel()}`, COLORS.white, `total ${fmtDist(rs.total)} ${unitLabel()}  ·  ${line}`, 1500);
+    this.refresh();
+  }
+
+  /** A drill putt has stopped: holed, or how far long or short; after ten, the set's tally. */
+  practicePutt(sim: SimResult, from: { x: number; y: number }, cup: { x: number; y: number }, setDone: boolean) {
+    const log = this.play.practice?.log;
+    if (setDone && log?.lastSet) {
+      const s = log.lastSet;
+      this.flash(`${s.holed} of ${DRILL_BALLS} holed`, s.holed >= 7 ? COLORS.yellow : COLORS.white, `from ${s.ft} ft  ·  ten more`, 2000);
+    } else if (sim.holed) {
+      this.flash('holed!', COLORS.green, '', 1000);
+    } else {
+      const ux = cup.x - from.x, uy = cup.y - from.y, L = Math.hypot(ux, uy) || 1;
+      const along = ((sim.end.x - cup.x) * ux + (sim.end.y - cup.y) * uy) / L;
+      const d = Math.hypot(sim.end.x - cup.x, sim.end.y - cup.y);
+      this.flash(`${distLabel(d).replace(/(\d)(ft|m)$/, '$1 $2')} ${along > 0 ? 'long' : 'short'}`, COLORS.white, '', 1000);
+    }
+    this.refresh();
   }
 
   private holdRepeat(b: Button, dir: number) {
@@ -232,6 +309,7 @@ export class HudScene extends Phaser.Scene {
     this.scaleBtn.setPosition(W - 62 - 24 - 38, by - 18);
     this.unplayBtn.setPosition(4, 21 + 48 + 3);
     this.mulliganBtn.setPosition(4, 21 + 48 + 3 + 16);
+    this.practiceBox?.setPosition(4, 21 + 48 + 3);
     this.banner.setPosition(Math.round(W / 2), Math.round(H * 0.3));
     this.sub.setPosition(Math.round(W / 2), Math.round(H * 0.3) + 16);
     if (this.intro) this.showIntro();
@@ -254,6 +332,12 @@ export class HudScene extends Phaser.Scene {
     setTxt(this.infoLines[2], p.club.kind === 'putter' ? distLabel(d).replace(/(\d)(ft|m)$/, '$1 $2') : `${fmtDist(d)} ${unitLabel()}`);
     setTxt(this.infoLines[3], r.ball.teedUp ? 'tee' : lieTxt || surf);
     this.infoLines[3].setTint(r.lie && r.lie.distMult < 1 ? COLORS.yellow : COLORS.green);
+    if (r.cfg.practice) {
+      setTxt(this.infoLines[0], r.holeNumber <= 5 ? 'range' : 'putting green');
+      setTxt(this.infoLines[1], 'practice');
+      setTxt(this.holeTxt, r.holeNumber <= 5 ? `${r.holeNumber}` : `${r.holeNumber - 5}`);
+    }
+    this.cardBtn.setVisible(!r.cfg.practice);
     // wind
     const w = r.wind;
     const k = ((Math.round(w.dir / (Math.PI / 8)) % 16) + 16) % 16;
@@ -283,6 +367,7 @@ export class HudScene extends Phaser.Scene {
       this.layout();
     }
     this.drawMini();
+    this.refreshPractice();
   }
 
   private drawMini() {
@@ -628,6 +713,16 @@ export class HudScene extends Phaser.Scene {
     const b1 = new Button(this, x + 15, y + 30, w - 30, 16, 'resume', () => this.closeModal());
     const b2 = new Button(this, x + 15, y + 50, w - 30, 16, 'settings', () => { this.closeModal(); this.scene.launch('settings', { from: 'hud' }); this.scene.pause('play'); this.scene.pause('hud'); }, { color: 'grey' });
     // the round is saved after every shot: this leaves it to continue from the title screen
+    if (this.play.round.cfg.practice) {
+      // practice: nothing to save
+      const leave = new Button(this, x + 15, y + 70, w - 30, 16, 'leave practice', () => {
+        this.closeModal();
+        this.scene.stop('play');
+        this.scene.start('title');
+      }, { color: 'grey' });
+      this.modalLayer.add([pnl, t, b1, b2, leave]);
+      return;
+    }
     const b3 = new Button(this, x + 15, y + 70, w - 30, 16, 'save & exit', () => {
       this.closeModal();
       this.scene.stop('play');
@@ -722,7 +817,7 @@ export class HudScene extends Phaser.Scene {
     const x = Math.round((this.W - w) / 2), y = Math.round(this.H * 0.28);
     const pnl = new Panel(this, x, y, w, h, 0.9);
     const t1 = txt(this, x + w / 2, y + 6, name + (gimme ? ' (gimme)' : ''), { origin: [0.5, 0], scale: 2, color });
-    const t2 = txt(this, x + w / 2, y + 28, `${score.strokes} strokes on a par ${score.par}${score.penalties ? ` · ${score.penalties} penalty` : ''}`, { origin: [0.5, 0] });
+    const t2 = txt(this, x + w / 2, y + 28, `${score.strokes} ${score.strokes === 1 ? 'stroke' : 'strokes'} on a par ${score.par}${score.penalties ? ` · ${score.penalties} penalty` : ''}`, { origin: [0.5, 0] });
     const t3 = txt(this, x + w / 2, y + 40, `${toPar(tot.toPar)} through ${tot.holes} · ${tot.strokes} total`, { origin: [0.5, 0], color: COLORS.dim });
     const last = r.isLastHole;
     const nb = new Button(this, x + w - 86, y + h - 22, 80, 16, last ? 'finish round' : 'next hole', () => this.continueFromHoled());
@@ -817,7 +912,11 @@ export function scorecardOf(scene: Phaser.Scene, d: CardData, W: number, H: numb
   const x0 = Math.round((W - tw) / 2);
   const rowH = 11;
   const scoreH = 17; // tall enough for a circle / square around the number
-  const blockH = rowH * 3 + scoreH + 4;
+  // no yards row when they aren't known (a shared card of a course that isn't loaded)
+  const showYd = blocks.some(([a, b]) => { for (let h = a; h <= b; h++) if (d.hole(h).yd !== null) return true; return false; });
+  const nRows = showYd ? 3 : 2;
+  const parRow = showYd ? 2 : 1;
+  const blockH = rowH * nRows + scoreH + 4;
   const th = blockH * blocks.length + 36;
   const y0 = Math.max(4, Math.round((H - th) / 2) - 6);
   const pnl = new Panel(scene, x0 - 6, y0 - 4, tw + 12, th + 8, 0.94);
@@ -828,11 +927,12 @@ export function scorecardOf(scene: Phaser.Scene, d: CardData, W: number, H: numb
     const yb = y0 + 14 + k * (blockH + 6);
     const g = scene.add.graphics();
     g.fillStyle(0xffffff, 0.06).fillRect(x0, yb, tw, rowH);
-    g.fillStyle(0xffffff, 0.04).fillRect(x0, yb + rowH * 2, tw, rowH);
+    g.fillStyle(0xffffff, 0.04).fillRect(x0, yb + rowH * parRow, tw, rowH);
     c.add(g);
-    const rows = ['hole', 'yards', 'par', 'score'];
-    const sy = yb + rowH * 3 + 4; // score text top (its digits are 6 x 9 px including the outline)
-    rows.forEach((rl, i) => c.add(txt(scene, x0 + 2, i === 3 ? sy : yb + i * rowH + 1, rl, { color: i === 3 ? COLORS.yellow : COLORS.dim })));
+    const rows = showYd ? ['hole', 'yards', 'par'] : ['hole', 'par'];
+    const sy = yb + rowH * nRows + 4; // score text top (its digits are 6 x 9 px including the outline)
+    rows.forEach((rl, i) => c.add(txt(scene, x0 + 2, yb + i * rowH + 1, rl, { color: COLORS.dim })));
+    c.add(txt(scene, x0 + 2, sy, 'score', { color: COLORS.yellow }));
     let sumPar = 0, sumYd = 0, sumSc = 0, any = false, ydKnown = true;
     for (let h = a; h <= b; h++) {
       const hj = d.hole(h);
@@ -840,8 +940,8 @@ export function scorecardOf(scene: Phaser.Scene, d: CardData, W: number, H: numb
       sumPar += hj.par;
       if (hj.yd === null) ydKnown = false; else sumYd += hj.yd;
       c.add(txt(scene, cx, yb + 1, String(h), { origin: [0.5, 0] }));
-      c.add(txt(scene, cx, yb + rowH + 1, hj.yd === null ? '-' : String(hj.yd), { origin: [0.5, 0], color: COLORS.dim }));
-      c.add(txt(scene, cx, yb + rowH * 2 + 1, String(hj.par), { origin: [0.5, 0] }));
+      if (showYd) c.add(txt(scene, cx, yb + rowH + 1, hj.yd === null ? '-' : String(hj.yd), { origin: [0.5, 0], color: COLORS.dim }));
+      c.add(txt(scene, cx, yb + rowH * parRow + 1, String(hj.par), { origin: [0.5, 0] }));
       const s = byHole.get(h);
       if (s) {
         any = true;
@@ -861,8 +961,8 @@ export function scorecardOf(scene: Phaser.Scene, d: CardData, W: number, H: numb
     }
     const sx = x0 + labelW + 9 * cellW + sumW / 2;
     c.add(txt(scene, sx, yb + 1, lab, { origin: [0.5, 0], color: COLORS.dim }));
-    c.add(txt(scene, sx, yb + rowH + 1, ydKnown ? String(sumYd) : '-', { origin: [0.5, 0], color: COLORS.dim }));
-    c.add(txt(scene, sx, yb + rowH * 2 + 1, String(sumPar), { origin: [0.5, 0] }));
+    if (showYd) c.add(txt(scene, sx, yb + rowH + 1, ydKnown ? String(sumYd) : '-', { origin: [0.5, 0], color: COLORS.dim }));
+    c.add(txt(scene, sx, yb + rowH * parRow + 1, String(sumPar), { origin: [0.5, 0] }));
     if (any) c.add(txt(scene, sx, sy, String(sumSc), { origin: [0.5, 0], color: COLORS.yellow }));
   });
   const tot = totals(d.scores);

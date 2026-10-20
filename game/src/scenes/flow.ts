@@ -10,6 +10,7 @@ import { courseHoleFor, isCasual, newSeed, Round, RoundConfig, roundId } from '.
 import { roundPins } from '../systems/game/pins';
 import { totals } from '../systems/rules/scoring';
 import type { DailyPlan } from '../systems/game/daily';
+import { PRACTICE_COURSE } from '../systems/game/practice';
 
 export { holesFor, lengthLabel, lengthOf, lengthsFor } from '../systems/game/lengths';
 export type { RoundLength } from '../save/entry';
@@ -97,4 +98,28 @@ export async function finishRound(scene: Phaser.Scene) {
   scene.scene.stop('hud');
   scene.scene.stop('play');
   scene.scene.start('summary', { entry });
+}
+
+/** Open the practice ground (player improvements, item 5): range first; nothing scored or saved. */
+export async function startPractice(scene: Phaser.Scene, progress?: LoadProgress): Promise<boolean> {
+  if (app.course?.json.id !== PRACTICE_COURSE) {
+    scene.scene.stop('bg');
+    await untilStopped(scene, 'bg');
+    await loadCourse(scene, PRACTICE_COURSE, progress); // not remembered as the last course played
+  }
+  const s = app.settings;
+  const cfg: RoundConfig = {
+    courseId: PRACTICE_COURSE,
+    tee: app.course!.json.defaultTee,
+    holes: app.course!.json.holes.map((h) => h.number),
+    playerName: s.playerName || 'player',
+    seed: newSeed(),
+    settings: { difficulty: s.difficulty, lefty: s.lefty, e5: false, gimmes: false, maxDoublePar: false, mulligans: false },
+    startedAt: new Date().toISOString(),
+    practice: true,
+  };
+  app.round = new Round(app.course!, cfg);
+  app.round.startHole(0);
+  scene.scene.start('play', { resume: false });
+  return true;
 }

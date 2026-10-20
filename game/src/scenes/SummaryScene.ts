@@ -81,7 +81,7 @@ export class SummaryScene extends MenuScene {
     const nx = W >= 400 ? W - nw - 6 : Math.round(W / 2 - nw / 2), ny = W >= 400 ? 4 : H - 56;
     this.root.add(new Button(this, nx, ny, nw, 16, e.player === DEFAULT_NAME ? 'enter your name' : `name: ${e.player}`, () => this.rename(), { color: unnamed ? 'orange' : 'grey' }));
     // leaving the summary sends the round to the shared leaderboard
-    const leave = (to: string) => { void flushUploads(); this.scene.start(to, to === 'leaderboard' ? { courseId: e.course } : undefined); };
+    const leave = (to: string) => { void flushUploads(); this.scene.start(to, to === 'leaderboard' ? (e.daily ? { view: 'daily' } : { courseId: e.course }) : undefined); };
     const bw = Math.min(84, Math.floor((W - 20) / 4)); // four buttons fit a narrow phone
     const bx = (i: number) => Math.round(W / 2 - 2 * bw - 6 + i * (bw + 4));
     this.root.add(new Button(this, bx(0), H - 24, bw, 16, 'title', () => leave('title'), { color: 'grey' }));
@@ -96,7 +96,7 @@ export class SummaryScene extends MenuScene {
       else if (res === 'failed') share.setLabel('failed');
     }, { color: 'grey' });
     this.root.add(share);
-    this.root.add(new Button(this, bx(3), H - 24, bw, 16, e.daily ? 'title' : 'play again', () => leave(e.daily ? 'title' : 'setup')));
+    this.root.add(new Button(this, bx(3), H - 24, bw, 16, e.daily ? 'my golf' : 'play again', () => leave(e.daily ? 'mygolf' : 'setup')));
   }
 
   private rename() {

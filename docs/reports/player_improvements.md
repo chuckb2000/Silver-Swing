@@ -21,6 +21,8 @@ This list looks at the game as a friend who opens the link for the first time, a
 
 Items 1-3 are what I would do before more people are invited. Item 4 is the best value after that.
 
+**Status (2026-10-20):** items 2, 3, 4, 5, 7, 8, 9 and 11 approved and built on branch `design/player` (DECISIONS.md "Player improvements").
+
 **Item 1 is already written**, on branch `design/coach`, which is built on `design/bugfixes`. It is not merged. It has unit tests in `tests/unit/coach.test.ts`.
 
 ## Plans

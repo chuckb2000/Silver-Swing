@@ -9,9 +9,10 @@ import { coursesByState } from '../data/registry';
 import { initAudio, setVolume } from '../audio/sfx';
 import { peekSnapshot } from '../save/snapshot';
 import { Button, COLORS, Panel, setTxt, txt } from '../ui/widgets';
-import { resumeRound, startRound, useCourse } from './flow';
+import { resumeRound, startPractice, startRound, useCourse } from './flow';
 import { dailyPlan, localDay } from '../systems/game/daily';
 import { shortName } from '../save/milestones';
+import { update, whenUpdateReady } from '../save/offline';
 import { LoadSuperseded } from '../data/courses';
 import { STALL_MS } from './CourseSelectScene';
 import { ensureBg, MenuScene } from './menu';
@@ -43,6 +44,7 @@ export class TitleScene extends MenuScene {
     this.scale.on('resize', this.layoutShade, this);
     this.events.once('shutdown', () => { this.scale.off('resize', this.layoutShade, this); this.shade = null; this.shown = []; });
     void this.startMaps();
+    whenUpdateReady(() => { if (this.sys.isActive()) this.rebuild(); });
     setVolume(app.settings.volume, app.settings.muted);
     this.input.once('pointerdown', () => { void initAudio(); });
     super.create();
@@ -227,10 +229,14 @@ export class TitleScene extends MenuScene {
       }), !!snap);
     }
     add2('my golf', () => this.scene.start('mygolf'));
-    add2('practice', () => this.scene.start('practice'));
+    add2('practice', () => void this.withLoading((progress) => startPractice(this, progress)));
     add2('leaderboard', () => this.scene.start('leaderboard'));
     add2('settings', () => this.scene.start('settings', { from: 'title' }));
     add2('credits', () => this.scene.start('credits'));
+    if (update.ready) {
+      // a new version of the game has arrived (offline copy): one tap to start it
+      this.root.add(new Button(this, W - 112, 4, 108, 15, 'update - tap to reload', () => update.apply()));
+    }
     this.root.add(new Panel(this, 4, H - 16, W - 8, 12, 0.55));
     this.root.add(txt(this, cx, H - 15, 'map data © openstreetmap contributors · more in credits', { origin: [0.5, 0], color: COLORS.dim }));
   }

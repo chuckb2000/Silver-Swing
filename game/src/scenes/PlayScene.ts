@@ -1163,11 +1163,17 @@ export class PlayScene extends Phaser.Scene {
     r.startHole(index);
     r.practiceWind(this.practice.wind);
     this.practiceBall();
-    void this.green.prepare(r.courseHole);
-    this.applyView(null, COURSE);
-    this.resetBallSprite();
-    this.placePin();
-    this.beginShot(false, true);
+    this.state = 'loading';
+    const go = () => {
+      if (!this.practice || this.round.holeIndex !== index) return;
+      this.applyView(null, COURSE);
+      this.resetBallSprite();
+      this.placePin();
+      this.beginShot(false, true);
+    };
+    // a putting green opens in its putting view: its art has to be there first
+    if (isRangeHole(r.holeNumber)) { void this.green.prepare(r.courseHole); go(); }
+    else void Promise.race([this.green.prepare(r.courseHole), new Promise((res) => setTimeout(res, 8000))]).then(go);
   }
 
   /** Range: back to the stall. Putting: the drill's next spot (each ball from a new side). */
@@ -1202,6 +1208,7 @@ export class PlayScene extends Phaser.Scene {
     const range = isRangeHole(n);
     const holes = range !== other ? [0, 1, 2, 3, 4] : [5, 6, 7, 8];
     const i = other ? 0 : holes.indexOf(this.round.holeIndex);
+    this.practice.log.setDrill(this.practice.log.drill.ft); // a new green: a new set of ten
     this.practiceGo(holes[(((other ? 0 : i + dir) % holes.length) + holes.length) % holes.length]);
   }
 
