@@ -17,16 +17,21 @@ const NAMES = 'api/names';
 let available: Promise<boolean> | null = null;
 let flushing: Promise<number> | null = null;
 
-/** Is the shared leaderboard reachable? (checked once per session) */
+let failedAt = 0;
+
+/** Is the shared leaderboard reachable? (checked once per session; a failed check is tried again after a minute) */
 export function onlineAvailable(): Promise<boolean> {
+  if (available && failedAt && Date.now() - failedAt > 60_000) { available = null; failedAt = 0; }
   if (!available) {
     available = (async () => {
       try {
         const res = await fetch(`${API}?ping=1`, { cache: 'no-store' });
-        if (!res.ok || !(res.headers.get('content-type') ?? '').includes('application/json')) return false;
+        if (!res.ok || !(res.headers.get('content-type') ?? '').includes('application/json')) { failedAt = Date.now(); return false; }
         const j = (await res.json()) as { ok?: boolean };
+        if (j.ok !== true) failedAt = Date.now();
         return j.ok === true;
       } catch {
+        failedAt = Date.now();
         return false;
       }
     })();
@@ -57,8 +62,8 @@ export function flushUploads(): Promise<number> {
       const todo = all.filter((e) => !sent.has(e.id) && isEntry(e) && e.player !== DEFAULT_NAME);
       const owner = app.settings.playerKey;
       let n = 0;
-      for (let i = 0; i < todo.length; i += 20) {
-        const batch = todo.slice(i, i + 20);
+      for (let i = 0; i < todo.length; i += 5) {
+        const batch = todo.slice(i, i + 5); // a few per request: the server's free plan allows 50 database queries per request
         try {
           const res = await fetch(API, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(batch.map((e) => ({ ...e, owner }))) });
           if (!res.ok) break;
@@ -92,7 +97,7 @@ export function flushEagles(): Promise<void> {
     eagling = (async () => {
       if (!(await onlineAvailable())) return;
       const list = await loadEagles();
-      const todo = list.filter((e) => !e.sent && e.player !== DEFAULT_NAME);
+      const todo = list.filter((e) => !e.sent && e.player !== DEFAULT_NAME).slice(0, 8);
       if (!todo.length) return;
       try {
         const body = todo.map(({ sent: _s, ...e }) => ({ ...e, owner: app.settings.playerKey }));

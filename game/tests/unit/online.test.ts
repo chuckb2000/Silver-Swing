@@ -171,9 +171,38 @@ describe('recent eagles and most birdies (developer, 2026-10-19)', () => {
     await raw.prepare('INSERT INTO rounds (id, course, length, player, gross, back, date, data, received) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)')
       .bind(old.id, old.course, old.length, old.player, old.gross, old.back, old.date, JSON.stringify(old), '2026-10-18').run();
     resetSchemaCache();
+    await handleGet(raw, new URL('http://x/api/scores?ping=1')); // the first request sets the tables up; old rounds follow on the next
     const rec = (await (await handleRecordsGet(raw, new URL('http://x/api/records?kind=birdies'))).json()) as { records: { id: string; birdies: number }[] };
     expect(rec.records).toEqual([expect.objectContaining({ id: 'OLD', birdies: 4 })]);
     const eg = (await (await handleEaglesGet(raw, new URL('http://x/api/eagles'))).json()) as { eagles: { id: string }[] };
     expect(eg.eagles.map((e) => e.id)).toEqual(['OLD-h1']);
+  });
+});
+
+describe('stays inside the free plan: 50 database queries per request', () => {
+  it('a cold start on an old database, then uploads, each stay under 50 queries', async () => {
+    const real = fakeD1();
+    let n = 0;
+    const counted: D1Like = { prepare: (sql: string) => { const s = real.prepare(sql); const wrap = (st: D1Statement): D1Statement => ({ bind: (...v: unknown[]) => wrap(st.bind(...v)), all: (async () => { n++; return st.all(); }) as D1Statement['all'], run: async () => { n++; return st.run(); } }); return wrap(s); } };
+    // an old database with 60 rounds and no new columns
+    await real.prepare(`CREATE TABLE rounds (id TEXT PRIMARY KEY, course TEXT NOT NULL, length TEXT NOT NULL, player TEXT NOT NULL, gross INTEGER NOT NULL, back INTEGER, date TEXT NOT NULL, data TEXT NOT NULL, received TEXT NOT NULL)`).run();
+    const pars = Array(18).fill(4);
+    for (let i = 0; i < 60; i++) {
+      const e = scored(`old${i}`, 'chuck', pars.map((p, k) => (k === 0 ? 2 : p)), pars);
+      await real.prepare('INSERT INTO rounds (id, course, length, player, gross, back, date, data, received) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)')
+        .bind(e.id, e.course, e.length, e.player, e.gross, e.back, e.date, JSON.stringify(e), 'x').run();
+    }
+    for (let req = 0; req < 8; req++) {
+      resetSchemaCache(); // every request a cold start (the worst case)
+      n = 0;
+      const batch = Array.from({ length: 5 }, (_, i) => ({ ...scored(`new${req}-${i}`, 'chuck', pars.map((p, k) => (k < 2 ? p - 2 : p)), pars), owner: KEY_A }));
+      const res = await handlePost(counted, JSON.stringify(batch));
+      expect(res.status).toBe(200);
+      expect(n).toBeLessThanOrEqual(50);
+    }
+    resetSchemaCache();
+    n = 0;
+    await handleGet(counted, new URL('http://x/api/scores?ping=1'));
+    expect(n).toBeLessThanOrEqual(50);
   });
 });

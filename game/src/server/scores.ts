@@ -50,14 +50,20 @@ const SCHEMA = [
     date TEXT NOT NULL,
     received TEXT NOT NULL
   )`,
-  'CREATE INDEX IF NOT EXISTS eagles_date ON eagles (date)',
+  'CREATE INDEX IF NOT EXISTS eagles_received ON eagles (received)',
+  'CREATE TABLE IF NOT EXISTS meta (k TEXT PRIMARY KEY, v TEXT)',
 ];
+
+/** Bumped when SCHEMA or ROUND_COLUMNS change: a database at this version skips the setup. */
+const SCHEMA_VERSION = '2';
+/** Old rounds counted per request (Cloudflare's free plan allows 50 database queries per request). */
+const BACKFILL_ROWS = 10;
 
 /** Columns added to `rounds` after it was first created (ALTER TABLE fails harmlessly once they exist). */
 const ROUND_COLUMNS = ['owner TEXT', 'birdies INTEGER', 'casual INTEGER'];
 
 const MAX_BODY = 256 * 1024;  // bytes per request
-const MAX_BATCH = 50;         // rounds per request
+const MAX_BATCH = 10;         // rounds or eagles per request (each costs a few queries; the free plan allows 50 per request)
 const MAX_RETURN = 2000;      // rounds per course returned
 const MAX_NAMES_PER_OWNER = 8; // names one device can hold (a shared family computer)
 const MAX_LIST = 50;          // eagles / records returned
@@ -73,24 +79,54 @@ let ready: Promise<void> | null = null;
 export function ensureSchema(db: D1Like): Promise<void> {
   if (!ready) {
     ready = (async () => {
-      for (const sql of SCHEMA) await db.prepare(sql).run();
-      for (const col of ROUND_COLUMNS) {
-        try { await db.prepare(`ALTER TABLE rounds ADD COLUMN ${col}`).run(); } catch { /* already there */ }
+      // one query on a database that is up to date
+      let version: string | null = null;
+      try {
+        const { results } = await db.prepare("SELECT v FROM meta WHERE k = 'schema'").all<{ v: string }>();
+        version = results[0]?.v ?? null;
+      } catch { /* no meta table yet */ }
+      if (version !== SCHEMA_VERSION) {
+        for (const sql of SCHEMA) await db.prepare(sql).run();
+        for (const col of ROUND_COLUMNS) {
+          try { await db.prepare(`ALTER TABLE rounds ADD COLUMN ${col}`).run(); } catch { /* already there */ }
+        }
+        await db.prepare('CREATE INDEX IF NOT EXISTS rounds_birdies ON rounds (birdies, date)').run();
+        await db.prepare("INSERT OR REPLACE INTO meta (k, v) VALUES ('schema', ?)").bind(SCHEMA_VERSION).run();
+        migratedNow = true; // the setup used this request's queries; the backfill starts with the next one
       }
-      await db.prepare('CREATE INDEX IF NOT EXISTS rounds_birdies ON rounds (birdies, date)').run();
-      await backfill(db);
     })();
     ready.catch(() => { ready = null; });
   }
   return ready;
 }
 
-/** Rounds stored before the birdie column: count their birdies and list their eagles. */
+let backfilled = false;
+let migratedNow = false;
+
+/** Before every request: the tables exist, and a few old rounds are brought up to date. */
+export async function prepareDb(db: D1Like): Promise<void> {
+  await ensureSchema(db);
+  if (migratedNow) { migratedNow = false; return; }
+  await backfill(db);
+}
+
+/**
+ * Rounds stored before the birdie column: count their birdies and list their
+ * eagles, a few per request so no request goes over the query limit. Once none
+ * are left, a flag in `meta` stops the check.
+ */
 async function backfill(db: D1Like) {
-  for (let pass = 0; pass < 20; pass++) {
-    const { results } = await db.prepare('SELECT id, data, received FROM rounds WHERE birdies IS NULL LIMIT 200').all<{ id: string; data: string; received: string }>();
-    if (!results.length) return;
-    for (const r of results) {
+  if (backfilled) return;
+  const { results: flag } = await db.prepare("SELECT v FROM meta WHERE k = 'backfill'").all<{ v: string }>();
+  if (flag[0]?.v === 'done') { backfilled = true; return; }
+  const { results } = await db.prepare(`SELECT id, data, received FROM rounds WHERE birdies IS NULL LIMIT ${BACKFILL_ROWS}`).all<{ id: string; data: string; received: string }>();
+  if (!results.length) {
+    await db.prepare("INSERT OR REPLACE INTO meta (k, v) VALUES ('backfill', 'done')").run();
+    backfilled = true;
+    return;
+  }
+  for (const r of results) {
+    try {
       let e: unknown = null;
       try { e = JSON.parse(r.data); } catch { /* damaged */ }
       if (!isEntry(e)) {
@@ -99,6 +135,9 @@ async function backfill(db: D1Like) {
       }
       await db.prepare('UPDATE rounds SET birdies = ?, casual = ? WHERE id = ?').bind(birdiesIn(e.scores), e.casual ? 1 : 0, r.id).run();
       for (const ev of eaglesIn(e, slotToHole(e))) await insertEagle(db, ev, null, r.received);
+    } catch {
+      // a row that can't be read is set aside, not retried on every request
+      try { await db.prepare('UPDATE rounds SET birdies = 0, casual = 1 WHERE id = ?').bind(r.id).run(); } catch { /* ignore */ }
     }
   }
 }
@@ -157,6 +196,33 @@ export async function claimName(db: D1Like, rawName: unknown, rawOwner: unknown)
 /** For tests: forget that the schema was created (a new database). */
 export function resetSchemaCache() {
   ready = null;
+  backfilled = false;
+  migratedNow = false;
+}
+
+/** One claim check per name and device in a request (a batch is usually one player's rounds). */
+function claimer(db: D1Like) {
+  const memo = new Map<string, Promise<ClaimResult>>();
+  return (name: unknown, owner: unknown) => {
+    const k = `${String(name)}\u0000${String(owner)}`;
+    let p = memo.get(k);
+    if (!p) { p = claimName(db, name, owner); memo.set(k, p); }
+    return p;
+  };
+}
+
+const int = (v: unknown, lo: number, hi: number) => Number.isInteger(v) && (v as number) >= lo && (v as number) <= hi;
+
+/** A round's scores as the game writes them (nothing else gets stored). */
+export function validScores(e: LeaderboardEntry): boolean {
+  return e.scores.every((s) => !!s && int(s.hole, 1, 18) && int(s.par, 3, 6) && int(s.strokes, 0, 40)
+    && int(s.putts, 0, 40) && int(s.penalties, 0, 40));
+}
+
+/** An ISO time no later than tomorrow (a wrong clock or a made-up date can't sit at the top of a list). */
+function sane(date: string, now: Date): string {
+  const t = Date.parse(date);
+  return Number.isFinite(t) && t <= now.getTime() + 86_400_000 ? new Date(t).toISOString() : now.toISOString();
 }
 
 export function json(body: unknown, status = 200): Response {
@@ -169,7 +235,7 @@ export function json(body: unknown, status = 200): Response {
 /** GET /api/scores?ping=1 or ?course=<id> */
 export async function handleGet(db: D1Like | undefined, url: URL): Promise<Response> {
   if (!db) return json({ ok: false, error: 'no database bound (DB)' }, 503);
-  await ensureSchema(db);
+  await prepareDb(db);
   if (url.searchParams.has('ping')) return json({ ok: true });
   const course = url.searchParams.get('course') ?? '';
   if (!course || course.length > 64) return json({ error: 'course required' }, 400);
@@ -208,26 +274,33 @@ export async function handlePost(db: D1Like | undefined, body: string): Promise<
   if (!db) return json({ ok: false, error: 'no database bound (DB)' }, 503);
   const list = parseList(body);
   if (list instanceof Response) return list;
-  await ensureSchema(db);
-  const now = new Date().toISOString();
+  await prepareDb(db);
+  const nowDate = new Date();
+  const now = nowDate.toISOString();
+  const claim = claimer(db);
   let added = 0, rejected = 0;
   const taken: string[] = [];
   for (const raw of list) {
-    if (!isEntry(raw)) { rejected++; continue; }
-    const { owner: rawOwner, ...e } = raw as LeaderboardEntry & { owner?: unknown };
-    const claim = await claimName(db, e.player, rawOwner);
-    if (claim === 'taken' || claim === 'too_many') { taken.push(e.id); continue; }
-    if (claim !== 'ok') { rejected++; continue; }
-    const clean: LeaderboardEntry = { ...e, player: boardableName(e.player)! };
-    const res = (await db
-      .prepare('INSERT OR IGNORE INTO rounds (id, course, length, player, gross, back, date, data, received, owner, birdies, casual) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)')
-      .bind(clean.id, clean.course, clean.length, clean.player, clean.gross, clean.back ?? null, clean.date, JSON.stringify(clean), now,
-        ownerOf(rawOwner), birdiesIn(clean.scores), clean.casual ? 1 : 0)
-      .run()) as { meta?: { changes?: number }; changes?: number };
-    const n = res?.meta?.changes ?? res?.changes ?? 0;
-    added += n;
-    // the round's eagles, in case the live report never arrived
-    if (n) for (const ev of eaglesIn(clean, slotToHole(clean))) await insertEagle(db, ev, ownerOf(rawOwner), now);
+    try {
+      if (!isEntry(raw) || !validScores(raw)) { rejected++; continue; }
+      const { owner: rawOwner, ...e } = raw as LeaderboardEntry & { owner?: unknown };
+      const c = await claim(e.player, rawOwner);
+      if (c === 'taken' || c === 'too_many') { taken.push(e.id); continue; }
+      if (c !== 'ok') { rejected++; continue; }
+      const clean: LeaderboardEntry = { ...e, player: boardableName(e.player)!, date: sane(e.date, nowDate) };
+      const data = JSON.stringify(clean);
+      if (data.length > 16_000) { rejected++; continue; }
+      const res = (await db
+        .prepare('INSERT OR IGNORE INTO rounds (id, course, length, player, gross, back, date, data, received, owner, birdies, casual) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)')
+        .bind(clean.id, clean.course, clean.length, clean.player, clean.gross, clean.back ?? null, clean.date, data, now,
+          ownerOf(rawOwner), birdiesIn(clean.scores), clean.casual ? 1 : 0)
+        .run()) as { meta?: { changes?: number }; changes?: number };
+      added += res?.meta?.changes ?? res?.changes ?? 0;
+      // the round's eagles, in case the live report never arrived (the same ids: never twice)
+      for (const ev of eaglesIn(clean, slotToHole(clean))) await insertEagle(db, ev, ownerOf(rawOwner), now);
+    } catch {
+      rejected++; // one bad round doesn't hold up the rest
+    }
   }
   return json({ ok: true, added, rejected, taken });
 }
@@ -235,10 +308,10 @@ export async function handlePost(db: D1Like | undefined, body: string): Promise<
 /** GET /api/eagles?limit=n: the most recent eagles (and better) on any course. */
 export async function handleEaglesGet(db: D1Like | undefined, url: URL): Promise<Response> {
   if (!db) return json({ ok: false, error: 'no database bound (DB)' }, 503);
-  await ensureSchema(db);
+  await prepareDb(db);
   const limit = Math.max(1, Math.min(MAX_LIST, Number(url.searchParams.get('limit')) || 30));
   const course = url.searchParams.get('course');
-  const sql = `SELECT id, round, player, course, hole, par, strokes, tee, difficulty, date FROM eagles${course ? ' WHERE course = ?' : ''} ORDER BY date DESC LIMIT ?`;
+  const sql = `SELECT id, round, player, course, hole, par, strokes, tee, difficulty, date FROM eagles${course ? ' WHERE course = ?' : ''} ORDER BY received DESC, date DESC LIMIT ?`;
   const stmt = course ? db.prepare(sql).bind(course, limit * 2) : db.prepare(sql).bind(limit * 2);
   const { results } = await stmt.all<EagleEvent>();
   const eagles: EagleEvent[] = [];
@@ -254,17 +327,24 @@ export async function handleEaglesPost(db: D1Like | undefined, body: string): Pr
   if (!db) return json({ ok: false, error: 'no database bound (DB)' }, 503);
   const list = parseList(body);
   if (list instanceof Response) return list;
-  await ensureSchema(db);
-  const now = new Date().toISOString();
+  await prepareDb(db);
+  const nowDate = new Date();
+  const now = nowDate.toISOString();
+  const claim = claimer(db);
   let added = 0, rejected = 0;
   const taken: string[] = [];
   for (const raw of list) {
-    if (!isEagle(raw)) { rejected++; continue; }
-    const { owner: rawOwner, ...ev } = raw as EagleEvent & { owner?: unknown };
-    const claim = await claimName(db, ev.player, rawOwner);
-    if (claim === 'taken' || claim === 'too_many') { taken.push(ev.id); continue; }
-    if (claim !== 'ok') { rejected++; continue; }
-    added += await insertEagle(db, { ...ev, player: boardableName(ev.player)! }, ownerOf(rawOwner), now);
+    try {
+      if (!isEagle(raw)) { rejected++; continue; }
+      const { owner: rawOwner, ...ev } = raw as EagleEvent & { owner?: unknown };
+      if (!ownerOf(rawOwner)) { rejected++; continue; } // eagles come only from a copy of the game that has a player key
+      const c = await claim(ev.player, rawOwner);
+      if (c === 'taken' || c === 'too_many') { taken.push(ev.id); continue; }
+      if (c !== 'ok') { rejected++; continue; }
+      added += await insertEagle(db, { ...ev, player: boardableName(ev.player)!, date: sane(ev.date, nowDate) }, ownerOf(rawOwner), now);
+    } catch {
+      rejected++;
+    }
   }
   return json({ ok: true, added, rejected, taken });
 }
@@ -278,7 +358,7 @@ export interface BirdieRecord { player: string; course: string; birdies: number;
  */
 export async function handleRecordsGet(db: D1Like | undefined, url: URL): Promise<Response> {
   if (!db) return json({ ok: false, error: 'no database bound (DB)' }, 503);
-  await ensureSchema(db);
+  await prepareDb(db);
   const kind = url.searchParams.get('kind') ?? 'birdies';
   if (kind !== 'birdies') return json({ error: 'unknown kind' }, 400);
   const limit = Math.max(1, Math.min(MAX_LIST, Number(url.searchParams.get('limit')) || 20));
@@ -300,7 +380,7 @@ export async function handleRecordsGet(db: D1Like | undefined, url: URL): Promis
 /** GET /api/names?name=x&owner=k: may this device use the name? POST the same to claim it. */
 export async function handleNames(db: D1Like | undefined, req: { method: string; url: URL; body?: string }): Promise<Response> {
   if (!db) return json({ ok: false, error: 'no database bound (DB)' }, 503);
-  await ensureSchema(db);
+  await prepareDb(db);
   let name: unknown, owner: unknown;
   if (req.method === 'POST') {
     try { ({ name, owner } = JSON.parse(req.body ?? '') as { name?: unknown; owner?: unknown }); } catch { return json({ error: 'not json' }, 400); }
