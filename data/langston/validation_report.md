@@ -88,7 +88,6 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 - Hole 8 (Royal): measured 194 yd from the tee-box centre vs 205 on the card (-5.5%); moved the virtual tee along the middle of the real tee polygon w118115993 (on its centre line, at least 2.5 m from its back and front) -> 199.9 yd (real 193.8 yd).
 - Hole 9 (Royal): measured 376 yd from the tee-box centre vs 400 on the card (-6.0%); moved the virtual tee along the middle of the real tee polygon w118116086 (on its centre line, at least 2.5 m from its back and front) -> 388.8 yd (real 375.8 yd).
 - Hole 9 (White): measured 376 yd from the tee-box centre vs 388 on the card (-3.1%); moved the virtual tee along the middle of the real tee polygon w118116086 (on its centre line, at least 2.5 m from its back and front) -> 378.4 yd (real 375.8 yd).
-- Hole 10 (Royal): tee shot: a perfect drive at the middle of the fairway clipped a tree near the tee; moved 0.7 m along the middle of the real tee polygon lidar_tee_59 to the nearest clear spot -> 526.8 yd (real 526.8 yd).
 - Hole 10 (White): measured 451 yd from the tee-box centre vs 438 on the card (+3.1%); moved the virtual tee along the middle of the real tee polygon lidar_tee_56 (on its centre line, at least 2.5 m from its back and front) -> 449.2 yd (real 451.4 yd).
 - Hole 13 (White): measured 138 yd from the tee-box centre vs 152 on the card (-9.4%); moved the virtual tee along the middle of the real tee polygon lidar_tee_74 (on its centre line, at least 2.5 m from its back and front) -> 145.2 yd (real 137.7 yd).
 - Hole 14 (Royal): measured 318 yd from the tee-box centre vs 341 on the card (-6.6%); moved the virtual tee along the middle of the real tee polygon w118116674 (on its centre line, at least 2.5 m from its back and front) -> 332.5 yd (real 318.4 yd).
@@ -101,7 +100,6 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 - 12925 trees detected in the world extent (3139 inside the course), 4362 conifers / 8563 deciduous; median height 13.4 m, max 45.1 m.
 - Dropped: 1264 tops on building footprints, 0 over the lake, 66 tiny crowns.
 - Dropped on playing surfaces (spec 5.4): 6 -> bunker w1536671348 (17.0 m), bunker w1536671348 (20.3 m), tee w118116086 (21.0 m), tee w118116086 (19.2 m), tee lidar_tee_12 (18.3 m), tee lidar_tee_12 (17.7 m)
-- Dropped from tee shots (s06b): 1 -> 10 Royal (44.5 m tree, 19.4 m from the tee)
 - OSM natural=tree points matched by a detected tree within 4 m: 98 of 183.
 - Conifer vs deciduous is inferred from crown shape only (no leaf-off imagery); see build/trees_preview.png.
 
