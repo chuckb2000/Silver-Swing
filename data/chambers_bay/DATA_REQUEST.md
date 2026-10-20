@@ -55,6 +55,20 @@ south 47.1976, west -122.5852, north 47.2156, east -122.5655
 (planned world 1,280 x 1,792 m, UTM 10N x 531,519-532,799, y 5,227,314-5,229,106,
 plus 100 m on every side).
 
+### 2b. Orthophoto for four Blue tee boxes (added 2026-10-20)
+
+OSM maps the tips and the Black/Sand/White boxes but not the Blue box on holes 3,
+11, 12 and 15 (s06 with the developer's DEM). USDA NAIP (0.6 m, public domain;
+Pierce County's own orthophotos are vendor-licensed) for the whole world, as JPEG
+(TIFF exports failed at Langdon Farms; the bbox in the URL places the JPEG):
+
+The USDA (gis.apfo.usda.gov) link gave the developer ERR_CONNECTION_RESET (2026-10-20). Same NAIP from the
+USGS National Map image service, 0.5 m:
+
+https://imagery.nationalmap.gov/arcgis/rest/services/USGSNAIPImagery/ImageServer/exportImage?bbox=531519,5227314,532799,5229106&bboxSR=32610&imageSR=32610&size=2560,3584&format=jpg&f=image
+
+Save it as `chambers_naip.jpg` and add it to the release.
+
 ### 3. Hand-off
 
 Add both files to the existing release `chambers-bay-data`: open
