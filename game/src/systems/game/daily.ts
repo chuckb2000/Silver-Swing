@@ -63,15 +63,35 @@ export interface WeekRow {
   rounds: LeaderboardEntry[];
 }
 
+/** Was this round played on the day's own round (course, nine and tees)? */
+export function playsPlan(e: LeaderboardEntry, plan: DailyPlan): boolean {
+  return e.daily === plan.day && e.course === plan.courseId && e.length === plan.length && e.tee === plan.tee;
+}
+
+/**
+ * The plan of each day, for the boards to keep only rounds of that day's own
+ * course: a round tagged with the day but played on another course (a daily
+ * started before the day's rotation changed, an older build) is left out.
+ */
+export type PlanFor = (day: string) => DailyPlan | null;
+
 /**
  * The week's board: each player's best five daily rounds (to par: the courses
  * differ), more rounds first, then the lower total. One round per player and
- * day (the first, if a list has more).
+ * day (the first, if a list has more). With `planFor`, only rounds of each
+ * day's own course count.
  */
-export function weekStandings(entries: LeaderboardEntry[], best = 5): WeekRow[] {
+export function weekStandings(entries: LeaderboardEntry[], best = 5, planFor?: PlanFor): WeekRow[] {
   const by = new Map<string, Map<string, LeaderboardEntry>>();
+  const plans = new Map<string, DailyPlan | null>();
+  const fits = (e: LeaderboardEntry) => {
+    if (!planFor) return true;
+    if (!plans.has(e.daily!)) plans.set(e.daily!, planFor(e.daily!));
+    const p = plans.get(e.daily!);
+    return !!p && playsPlan(e, p);
+  };
   for (const e of entries) {
-    if (!e.daily) continue;
+    if (!e.daily || !fits(e)) continue;
     if (!by.has(e.player)) by.set(e.player, new Map());
     const days = by.get(e.player)!;
     const had = days.get(e.daily);
@@ -85,11 +105,16 @@ export function weekStandings(entries: LeaderboardEntry[], best = 5): WeekRow[] 
   return rows.sort((a, b) => b.counted - a.counted || a.toPar - b.toPar || a.player.localeCompare(b.player));
 }
 
-/** A day's board: one round per player (the first), lowest first. */
-export function dayStandings(entries: LeaderboardEntry[], day: string): LeaderboardEntry[] {
+/**
+ * A day's board: one round per player (the first), lowest first. With the
+ * day's `plan`, only rounds of its course, nine and tees count (rounds of
+ * different courses tagged with the same day used to share the board).
+ */
+export function dayStandings(entries: LeaderboardEntry[], day: string, plan?: DailyPlan | null): LeaderboardEntry[] {
   const first = new Map<string, LeaderboardEntry>();
   for (const e of entries) {
     if (e.daily !== day) continue;
+    if (plan !== undefined && (!plan || !playsPlan(e, plan))) continue;
     const had = first.get(e.player);
     if (!had || e.date < had.date) first.set(e.player, e);
   }

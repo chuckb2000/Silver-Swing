@@ -4,11 +4,10 @@ import { app } from '../app';
 import { Difficulty } from '../data/difficulty';
 import { ratingText, teeFor } from '../data/registry';
 import { saveSettings } from '../save/store';
-import { Button, COLORS, Panel, txt } from '../ui/widgets';
-import { lengthLabel, lengthsFor, RoundLength, startRound } from './flow';
+import { Button, COLORS, Panel, setTxt, txt } from '../ui/widgets';
+import { shortName } from '../save/milestones';
+import { confirmDiscard, editName, hasName, lengthLabel, lengthsFor, RoundLength, startRound, withName } from './flow';
 import { MenuScene } from './menu';
-import { askName } from '../ui/nameInput';
-import { DEFAULT_NAME } from '../save/names';
 
 let length: RoundLength = '18';
 
@@ -33,7 +32,9 @@ export class SetupScene extends MenuScene {
     const row = (label: string) => { this.root.add(txt(this, lx, y + 3, label, { color: COLORS.dim })); };
     row('course');
     // the course was chosen on the course screen; 'change' goes back there
-    const name = txt(this, vx, y + 3, c.name, { maxWidth: pw - 86 - 56 });
+    const name = txt(this, vx, y + 3, c.name);
+    if (name.width > pw - 86 - 56) setTxt(name, shortName(c.name)); // a phone: "oswego lake" (the full name wrapped onto the tees row)
+    if (name.width > pw - 86 - 56) name.setMaxWidth(pw - 86 - 56);
     this.root.add(name);
     this.root.add(new Button(this, x0 + pw - 54, y, 46, 15, 'change', () => this.scene.start('courses', { purpose: 'play', from: 'setup' }), { color: 'grey' }));
     y += 16;
@@ -74,8 +75,11 @@ export class SetupScene extends MenuScene {
       this.root.add(new Button(this, vx + i * (bw + 2), y, bw, 15, h, () => { app.settings.lefty = h === 'left'; void saveSettings(app.settings); this.rebuild(); }, { color: on ? 'orange' : 'grey' }));
     });
     y += 19;
-    row('player');
-    this.root.add(new Button(this, vx, y, bw * 2 + 2, 15, app.settings.playerName && app.settings.playerName !== DEFAULT_NAME ? app.settings.playerName : 'enter your name', () => this.editName(), { color: 'grey' }));
+    // the name: orange until there is one (rounds as "player" stay off the shared boards)
+    const named = hasName();
+    this.root.add(txt(this, lx, y + 3, named ? 'player' : 'your name', { color: named ? COLORS.dim : COLORS.yellow }));
+    this.root.add(new Button(this, vx, y, bw * 2 + 2, 15, named ? app.settings.playerName : 'tap to enter it', () => editName(this, () => this.rebuild()), { color: named ? 'grey' : 'orange' }));
+    if (!named && pw - 86 - (bw * 2 + 2) >= 52) this.root.add(txt(this, vx + bw * 2 + 6, y + 3, 'for the boards', { color: COLORS.dim, maxWidth: pw - 86 - bw * 2 - 4 }));
     y += 21;
     const desc = {
       easy: 'slower meter, wide sweet spot, lighter wind',
@@ -88,20 +92,11 @@ export class SetupScene extends MenuScene {
     this.root.add(new Button(this, x0 + pw - 98, by, 90, 16, 'tee off', () => this.teeOff()));
   }
 
-  /** Tee off; a player with no name yet is asked for one first (they may skip it). */
+  /**
+   * Tee off: a round in progress is only thrown away once the player says so;
+   * a player with no name yet is asked for one first (they may skip it).
+   */
   private teeOff() {
-    const go = () => { this.scene.stop('bg'); startRound(this, length); };
-    if (app.settings.playerName && app.settings.playerName !== DEFAULT_NAME) { go(); return; }
-    askName(this, '', (name) => {
-      if (name) { app.settings.playerName = name; void saveSettings(app.settings); }
-      if (this.sys.isActive()) go();
-    }, 'your name for the leaderboard');
-  }
-
-  private editName() {
-    askName(this, app.settings.playerName, (name) => {
-      if (name) { app.settings.playerName = name; void saveSettings(app.settings); }
-      if (this.sys.isActive()) this.rebuild();
-    });
+    void confirmDiscard(this, this.root, () => withName(this, () => { this.scene.stop('bg'); startRound(this, length); }));
   }
 }
