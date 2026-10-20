@@ -637,3 +637,54 @@ From the afternoon review; branch `fix/afternoon-engine`. Tests:
   the course name ("daily: east potomac red course"), and a course card's
   second line keeps to one line, dropping the town when it doesn't fit
   (Chambers Bay: "18 holes · par 72").
+
+## Afternoon review fixes: screens (2026-10-20)
+
+Branch `fix/afternoon-ui`, from the afternoon review of the screens and flow.
+
+- **A round in progress is never thrown away without asking.** "tee off" on
+  the new-round screen and the daily round (title, and the leaderboard's new
+  "play today's round" on an empty day board) ask "you have a round in
+  progress at <course>, hole N - start a new one and lose it?" (keep it /
+  start new), in the style of the round menu's "quit this round?"
+  (`ui/confirm.ts`, `flow.confirmDiscard`).
+- **The name is obvious (developer: "it should be more obvious that players
+  need to enter their name").** Without one the title shows "set your name for
+  the leaderboard" (yellow, under play and the daily), the new-round screen's
+  name row is orange ("your name: tap to enter it · for the boards"), and a new
+  round or the daily asks once, with the reason ("rounds without a name stay on
+  this device and never reach the shared boards") and a "skip" button. Skipped
+  once, it is not asked again on that visit; "player" still plays. The summary's
+  name button is orange while there is none.
+- **Update offer only for an old page.** The page loads network-first, so after
+  a deploy it is already new: the waiting worker now takes over quietly when the
+  running bundle (index.html's module script) is the one the site serves, and
+  the page fetches its files again so the new worker keeps them for offline
+  play. Only a page older than the site (opened offline) is offered "update -
+  tap to reload".
+- **Layout:** the summary's name button sits over the note that explains it (it
+  covered the end of the title on a desktop and sat on a two-line note on a
+  phone), and the card moves up to clear it on a short screen; the scorecard's
+  stats line wraps between items ("gir 6/9" stays together) and the panel grows
+  with it (also on the share picture); phone scorecard cells are 19 texels (17:
+  three-digit yardages touched); a long title menu moves up to clear the footer;
+  the yes/no title no longer wraps into its text; the empty eagles / birdies
+  boards say so under the column headers; on a phone the title's lines close up
+  under the 1x course count.
+- **In a round:** the relief and drop panels refresh the HUD (it showed the
+  stroke before) and hide the shot controls; "back on the line outside the
+  bunker" lost "(2 strokes)" (the button adds "(+2)"); the result banner moves
+  to the top in a putting view (it covered the cup or golfer); a panel over the
+  course (hole complete, menu, map) hides the banner; an approach that ends on
+  the green reports its length in yards ("185 ft" for a 63-yd wedge), what is
+  left in feet; the carry banner says "yd"; the off-screen ball arrow sits at
+  the nearest point of the free screen edge, the right edge under the mini-map
+  included (it floated mid-fairway); on a portrait screen the aim framing moves
+  up 24 texels (its bottom controls are deeper); trees in front of the cup and
+  flag fade in the course view too (six default pins were hidden); a back-nine
+  round's card shows only the back nine; "pitching w" is "p wedge"
+  ("pitching wedge" fills the club panel edge to edge and runs out of the
+  two-column rewatch buttons).
+- **Daily boards keep the day's own course:** rounds tagged with a day but
+  played on another course (a daily started before the day's rotation was
+  fixed) are left off that day's and the week's boards (`playsPlan`).

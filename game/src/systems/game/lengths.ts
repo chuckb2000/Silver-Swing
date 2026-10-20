@@ -25,3 +25,16 @@ export function lengthOf(holes: number[], courseHoles: number): RoundLength {
   if (holes.length === 18) return '18';
   return holes[0] === 1 ? 'front' : 'back';
 }
+
+/**
+ * The nines a round's scorecard shows: only those it plays (a back-nine round
+ * showed an empty front nine, afternoon review 2026-10-20); a 9-hole course
+ * twice around shows both.
+ */
+export function cardBlocks(holes: number[], nCourse: number): (readonly [number, number, string])[] {
+  if (nCourse === 9 && holes.length <= 9) return [[1, 9, 'tot']];
+  const front = holes.some((h) => h <= 9), back = holes.some((h) => h >= 10);
+  if (front && !back) return [[1, 9, 'out']];
+  if (back && !front) return [[10, 18, 'in']];
+  return [[1, 9, 'out'], [10, 18, 'in']];
+}

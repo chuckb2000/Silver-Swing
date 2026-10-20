@@ -11,6 +11,10 @@ import { roundPins } from '../systems/game/pins';
 import { totals } from '../systems/rules/scoring';
 import type { DailyPlan } from '../systems/game/daily';
 import { PRACTICE_COURSE } from '../systems/game/practice';
+import { confirmBox } from '../ui/confirm';
+import { askName } from '../ui/nameInput';
+import { DEFAULT_NAME } from '../save/names';
+import { shortName } from '../save/milestones';
 
 export { holesFor, lengthLabel, lengthOf, lengthsFor } from '../systems/game/lengths';
 export type { RoundLength } from '../save/entry';
@@ -39,6 +43,62 @@ export function startRound(scene: Phaser.Scene, len: RoundLength, daily?: DailyP
   app.round.startHole(0);
   void clearSnapshot();
   scene.scene.start('play', { resume: false });
+}
+
+type Snap = NonNullable<Awaited<ReturnType<typeof peekSnapshot>>>;
+
+/** The hole a saved round continues on, and whether only its summary is left. */
+export function snapshotHole(snap: Snap): { hole: number; done: boolean } {
+  const hole = snap.cfg.holes[Math.min(snap.cfg.holes.length - 1, snap.holeIndex + (snap.betweenHoles ? 1 : 0))];
+  return { hole, done: snap.betweenHoles && snap.holeIndex + 1 >= snap.cfg.holes.length };
+}
+
+/**
+ * Starting a round throws away the one in progress (startRound clears the
+ * saved round): with one saved, ask first, like "quit round" in the round's
+ * menu (afternoon review, 2026-10-20). `go` runs at once when nothing is saved.
+ */
+export async function confirmDiscard(scene: Phaser.Scene, parent: Phaser.GameObjects.Container | null, go: () => void): Promise<void> {
+  const snap = await peekSnapshot();
+  if (!scene.sys.isActive()) return;
+  if (!snap) { go(); return; }
+  const c = app.courses.find((k) => k.id === snap.cfg.courseId);
+  const where = c ? shortName(c.name) : 'another course';
+  const { hole, done } = snapshotHole(snap);
+  const body = done
+    ? `your round at ${where} has every hole played but isn't on the leaderboard yet - start a new one and lose it?`
+    : `you have a round in progress at ${where}, hole ${hole} - start a new one and lose it?`;
+  confirmBox(scene, parent, 'new round?', body, 'keep it', 'start new', () => { if (scene.sys.isActive()) go(); });
+}
+
+/** Has the player a name of their own (rounds as "player" stay off the shared boards)? */
+export function hasName(): boolean {
+  return !!app.settings.playerName && app.settings.playerName !== DEFAULT_NAME;
+}
+
+/** Skipped the name once on this visit: not asked again before every round (the title and new-round screen still show it). */
+let skippedName = false;
+
+/**
+ * A player with no name yet is asked for one before a round, with the reason
+ * (they may skip it, and are asked once a visit): a new round and the daily
+ * round alike (developer, 2026-10-20: "it should be more obvious that players
+ * need to enter their name").
+ */
+export function withName(scene: Phaser.Scene, go: () => void) {
+  if (hasName() || skippedName) { go(); return; }
+  askName(scene, '', (name) => {
+    if (name) { app.settings.playerName = name; void saveSettings(app.settings); } else skippedName = true;
+    if (scene.sys.isActive()) go();
+  }, 'your name for the leaderboard', { why: 'rounds without a name stay on this device and never reach the shared boards', skip: 'skip' });
+}
+
+/** Set the player's name from a menu (title, new-round screen); `then` runs after the box closes. */
+export function editName(scene: Phaser.Scene, then: () => void) {
+  askName(scene, app.settings.playerName, (name) => {
+    if (name) { app.settings.playerName = name; void saveSettings(app.settings); }
+    if (scene.sys.isActive()) then();
+  }, 'your name for the leaderboard', hasName() ? {} : { why: 'your rounds go on the shared boards under it' });
 }
 
 /** Wait (up to ~1 s) until a scene has really stopped. */

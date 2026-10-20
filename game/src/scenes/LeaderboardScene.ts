@@ -206,14 +206,18 @@ export class LeaderboardScene extends MenuScene {
       const sub = info && plan ? `${info.name.toLowerCase()}  ·  ${lengthLabel(plan.length)}  ·  ${plan.tee.toLowerCase()} tees  ·  normal` : '';
       this.root.add(txt(this, x0 + pw / 2, y, sub, { origin: [0.5, 0], color: COLORS.dim, maxWidth: pw - 16 }));
       y += 11;
-      const rows = dayStandings(list, day).map((e, i) => ({ v: [String(i + 1), e.player.slice(0, 12), String(e.gross), toPar(e.toPar), timeAgo(e.date)] }));
+      const rows = dayStandings(list, day, plan).map((e, i) => ({ v: [String(i + 1), e.player.slice(0, 12), String(e.gross), toPar(e.toPar), timeAgo(e.date)] }));
       this.table(x0, y0, pw, ph, y, ['#', 'player', 'gross', 'to par', wide ? 'when' : ''], [x0 + 10, x0 + 30, x0 + 110, x0 + 150, wide ? x0 + 200 : -1], rows,
         'nobody has played today\'s round yet - be the first');
+      if (!rows.length && plan && info) {
+        // the empty board says "be the first": the way to do it (through the title, which asks about a round in progress and a name)
+        this.root.add(new Button(this, Math.round(x0 + pw / 2 - 60), y + 2 + 24 + 28, 120, 16, "play today's round", () => this.scene.start('title', { daily: true })));
+      }
     } else {
       this.root.add(txt(this, x0 + pw / 2, y, `week of ${first.slice(5)}: best five daily rounds, to par`, { origin: [0.5, 0], color: COLORS.dim, maxWidth: pw - 16 }));
       y += 11;
       const weekList = list.filter((e) => e.daily! >= first && e.daily! <= addDays(first, 6));
-      const rows = weekStandings(weekList).map((r, i) => ({ v: [String(i + 1), r.player.slice(0, 12), `${r.days}/7`, toPar(r.toPar)] }));
+      const rows = weekStandings(weekList, 5, (d) => dailyPlan(d, app.courses, DAILY_ROSTER)).map((r, i) => ({ v: [String(i + 1), r.player.slice(0, 12), `${r.days}/7`, toPar(r.toPar)] }));
       this.table(x0, y0, pw, ph, y, ['#', 'player', 'days', 'to par'], [x0 + 10, x0 + 30, x0 + 110, x0 + 150], rows, 'no daily rounds this week yet');
     }
   }
@@ -259,6 +263,7 @@ export class LeaderboardScene extends MenuScene {
     }
     const courseName = (id: string) => app.courses.find((c) => c.id === id)?.name.replace(/ (golf|country) club$| golf (course|links)$/i, '') ?? id;
     let note = '';
+    let empty = ''; // under the column headers, like the other boards
     const lineH = 11;
     type Row = string[];
     let head: string[], cols: number[], rows: Row[];
@@ -272,7 +277,7 @@ export class LeaderboardScene extends MenuScene {
       const featX = pw - 66, holeX = featX - 26, courseChars = Math.max(0, Math.floor((holeX - 128 - 6) / 6));
       cols = [x0 + 10, x0 + 52, courseChars >= 6 ? x0 + 128 : -1, x0 + holeX, x0 + featX];
       rows = list.map((e) => [localDay(e.date).slice(5), e.player.slice(0, 12), courseName(e.course).slice(0, courseChars), String(e.hole), featName(e.strokes, e.par)]);
-      if (!rows.length) note ||= 'no eagles yet - the first one goes here';
+      if (!rows.length) empty = 'no eagles yet - the first one goes here';
     } else {
       let list: BirdieRow[] | null = null;
       if (src === 'friends') { list = await fetchBirdieRecords(50); if (!list) note = "can't reach the shared board - showing this device"; }
@@ -286,7 +291,7 @@ export class LeaderboardScene extends MenuScene {
       head = ['#', 'player', 'birdies', 'course', 'date'];
       cols = [x0 + 10, x0 + 30, x0 + 110, x0 + 150, wide ? x0 + 300 : -1];
       rows = list.map((r, i) => [String(i + 1), r.player.slice(0, 12), String(r.birdies), courseName(r.course).slice(0, wide ? 24 : 18), localDay(r.date)]);
-      if (!rows.length) note ||= 'no birdies yet - go make some!';
+      if (!rows.length) empty = 'no birdies yet - go make some!';
       else this.root.add(txt(this, x0 + pw / 2, y0 + ph - 32, 'birdies or better in one round, any course (casual rounds left out)', { origin: [0.5, 0], color: COLORS.dim, maxWidth: pw - 16 }));
     }
     if (!this.isCurrentBuild(g)) return;
@@ -296,6 +301,7 @@ export class LeaderboardScene extends MenuScene {
     const pages = Math.max(1, Math.ceil(rows.length / maxRows));
     page = Math.min(page, pages - 1);
     head.forEach((h, i) => { if (cols[i] >= 0) this.root.add(txt(this, cols[i], listTop, h, { color: COLORS.dim })); });
+    if (empty) this.root.add(txt(this, x0 + pw / 2, listTop + 24, empty, { origin: [0.5, 0], color: COLORS.dim, maxWidth: pw - 16 }));
     rows.slice(page * maxRows, (page + 1) * maxRows).forEach((r, k) => {
       const yy = listTop + (k + 1) * lineH;
       r.forEach((v, j) => { if (cols[j] >= 0) this.root.add(txt(this, cols[j], yy, v, { color: j === 4 && view === 'eagles' ? COLORS.yellow : COLORS.white })); });
