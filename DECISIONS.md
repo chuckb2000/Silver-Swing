@@ -13,7 +13,7 @@ The developer was away overnight and asked for the work not to stop for permissi
   - The original speed is the spec's trip time: 1.2 / 1.0 / 0.8 s per 100 % on Easy / Normal / Pro. The starting speeds stay 2.0 / 1.6 / 1.25 s.
   - After tap 2 the cursor comes back at the speed it had at tap 2.
   - **Peak speed halved back** (developer, 2026-10-20 playtest: "the meter gets going a little too fast now ... split the difference"): the speed at 100 % is now halfway between the old constant speed and the spec's, 1.6 / 1.3 / 1.0 s per 100 % on Easy / Normal / Pro (was 1.2 / 1.0 / 0.8). The starting speeds are unchanged.
-  - At Normal, a full swing reaches 100 % in 1.25 s (it was 1.6 s). A 30 % chip comes back at 74 % of a full swing's return speed.
+  - With these speeds a full swing reaches 100 % in 1.44 s on Normal (1.79 s Easy, 1.12 s Pro; a constant meter at the starting speed took 1.6 s on Normal), and a 30 % chip comes back at 87 % of a full swing's return speed (86 % on Easy and Pro). Recomputed from `src/data/difficulty.ts` in the afternoon review, 2026-10-20 (the note had said 1.25 s and 74 %, the figures before the peak speed was halved back).
   - `SwingMeter.tapTimes` gives the robot golfer exact tap times.
 - **Only the dead centre of the green zone goes straight** (developer). Inside the zone, a tap off centre curves the ball that way, in proportion to the offset. At the zone's edge the curve is 0.4 × the club's curve factor: a driver curves 0.8°, about 3 yd, half the smallest yellow miss. Putts start up to 0.25° off line at the edge.
   - The inner 30 % of the zone still says "perfect".
@@ -571,6 +571,56 @@ so a hole resumed after closing the tab lists the strokes since.
 
 - TypeScript 6.0.3, Vite 8, Vitest 5, Phaser 3.90.0, Playwright 1.56.0 (matches the preinstalled Chromium build).
 - `window.__autoplay` (src/dev/autoplay.ts) is a robot golfer used by the Playwright smoke test; it drives the real input path (`PlayScene.tap` with timestamps).
+
+## Afternoon review fixes: engine (2026-10-20)
+
+From the afternoon review; branch `fix/afternoon-engine`. Tests:
+`tests/unit/afternoon_engine.test.ts`, `tests/unit/afternoon_snapshot.test.ts`.
+
+- **Water beyond the boundary** (Round Lake at Bandon Trails 7, Neacoxie Creek at
+  Gearhart 5-8: red penalty areas by the developer's choice). The reference point
+  for relief was the last sample off the water, usually on the out-of-bounds bank
+  between the boundary line and the water, so back-on-the-line and lateral drops had
+  no valid spot. The reference is now the last dry sample inside the boundary
+  (`round.ts waterReference`). A ball that crossed more than `WATER_BANK_M` (20 m,
+  tune; the banks measure 0-20 m) of out-of-bounds ground before reaching water beyond
+  the boundary went out of bounds first: stroke and distance, the OB banner. Every
+  tee shot into that water at Gearhart 6 and Bandon Trails 7 now gets its drops.
+- **Same notion of water for the reference and the drop check:** the reference point
+  is the last sample that is off the mapped water *and* outside the penalty area's
+  polygon (the outline can be wider than the mapped water). Lateral drops at Stone
+  Creek 4 that had no valid spot now have one.
+- **A ball against a trunk on a steep slope** rolled into the trunk, bounced back and
+  repeated until the 45 s cap (Eastmoreland 13). A rolling ball that meets a trunk
+  slower than 0.3 m/s (`sim.ts TRUNK_REST_SPEED`) now stops against it.
+- **Touching greens are one putting surface** (Langdon's 9/18 double green, traced as
+  two halves 0.00 m apart). Greens less than 0.5 m apart (`greenPartners`) are not
+  each other's wrong green: an approach to 18 on the hole-9 half is on the green
+  (putter, putts and green in regulation count; holing out unchanged). Langdon's are
+  the only touching greens on any hole. The putting view needs no change: a ball
+  outside the hole's view window gets the course view, as before.
+- **Longer putter settings:** 120 and 160 ft (36 and 48 m) after 80 ft (24 m), so the
+  far corners of big greens (Langdon, Chambers Bay, Bandon Trails) can be putted from;
+  the automatic setting picks them. A setting is a distance, not a power (100 % of it
+  rolls that far on a flat stimp-10 green), so the putt calibration is unchanged. The
+  farthest half of Langdon's double green from the other pin (up to about 90 m) still
+  needs a chip.
+- **Gorse carry, one formula:** carry = min(club x lie x power factor(power x swing
+  length), cap) (`outcome.ts shotCarry`), for the strike, the club's carry label, the
+  meter readout and the automatic swing length (the labels had shown cap x swing x
+  power, and the swing length was chosen from it).
+- **Gorse looks and plays like a bad lie:** the info panel's lie is yellow for rough,
+  punch, gorse and bunkers, or any lie that costs distance (`lie.ts lieIsPenal`; it was
+  yellow only below full distance, so gorse and a rough flyer showed green); no topspin
+  from gorse either (`spinFor`).
+- **Meter readout** uses the overswing power factor (110 % reads +8 %, not +10 %).
+- **A mulligan after a resume** takes back the penalty too: the state before the last
+  stroke is saved in the round snapshot (`beforeShot`). Rounds saved before this keep
+  the old behaviour (the stroke only) for that one shot.
+- **Default aim in the wind:** the clear-line check now flies the perfect shot in the
+  hole's steady wind (no gust) and also rejects a line that finishes on a wrong green.
+  It still only turns the aim up to 16 degrees: into some winds no driver line on
+  Eastmoreland 14 clears the creek, and the club is still the player's choice.
 
 ## The daily course stays put for the day (developer, 2026-10-20)
 
