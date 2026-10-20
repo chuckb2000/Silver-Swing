@@ -12,7 +12,8 @@ developer).
 
 **A course chat edits no shared file.** Everything it writes is in its own
 places: `data/<id>/`, `game/public/courses/<id>/`, `docs/courses/<id>.md`,
-`assets-src/cards/<id>.json`, and (rarely) a new theme or a new config key
+`assets-src/cards/<id>.json`, `assets-src/course_logos/<id>.py`, and (rarely)
+a new theme or a new config key
 (section 0). The course list, the title-screen list, `CLAUDE.md`,
 `DECISIONS.md` and `COURSE_LESSONS.md` are generated or kept by the design
 chat, so merging a course never conflicts with another course.
@@ -32,14 +33,15 @@ Two chats work on this repository.
 | `game/src/**` (engine, physics, rules, UI, camera, swing) | design chat | read only. Never change gameplay. |
 | `game/tests/**` | design chat | add course-specific test cases (section 8.2) only |
 | `assets-src/sprites.py`, `font.py`, UI art | design chat | read only |
-| `assets-src/palettes/<new theme>.json`, new tree variants for a new theme | course chat | create; never change an existing theme |
+| A new theme: `assets-src/palettes/<theme>.json`, `assets-src/trees_<theme>.py` (its tree and bush painters), `game/public/sprites/trees_<theme>*` and `shrubs_<theme>*` | course chat | create (7.6); never change an existing theme or `trees.py` / `shrubs.py` |
 | `pipeline/**` | course chat | **add a config key** whose default changes nothing (section 3.4); never change what an existing course gets. A change to existing behaviour is a request to the design chat |
 | `data/<course>/**`, `game/public/courses/<course>/**` | course chat | own it fully |
 | `docs/courses/<course>.md` | course chat | write it: facts, scorecard, the developer's calls, open items, new config keys, lessons (section 9) |
 | `assets-src/cards/<course>.json` | course chat | write it (section 12) |
 | `game/public/courses/index.json`, `game/public/sprites/title/index.json` | nobody | generated from the courses' `course.json` files at every build (`game/scripts/course-lists.mjs`); not in git |
 | `CLAUDE.md`, `DECISIONS.md`, `docs/COURSE_LESSONS.md` | design chat | read only. The design chat adds the course's line to `CLAUDE.md` and folds its lessons into `COURSE_LESSONS.md` after the merge |
-| `assets-src/logos.py` | design chat | read only; ask for a logo (section 12) |
+| `assets-src/course_logos/<course>.py`, `game/public/sprites/logos/<course>.png` | course chat | draw the course's logo (section 12) |
+| `assets-src/logos.py` | design chat | read only (its helpers are imported by course logos) |
 
 If the course needs a game change (a new surface type, internal out-of-bounds
 lines the engine doesn't support, a 9-hole round length, a new tree theme in
@@ -620,10 +622,22 @@ developer.
   `pnw.json` (G0–G9, L0–L2, S0–S2, W0–W2, K0–K4, B0–B2, R0, WH), because
   `build_lut` maps surfaces to keys. Keep the art rules of CLAUDE.md section 4
   (no gradients, light from the upper-left, saturated and limited).
-- Tree sprites for the theme (e.g. eastern hardwoods: oak, maple, tulip
-  poplar; fewer conifers): new variants in `assets-src/trees.py` output to
-  `sprites/trees_<theme>.png`, without changing the `pnw` output byte for
-  byte. Loading them per course is a game change (3.1).
+- Tree sprites for the theme: painters in your own `assets-src/trees_<theme>.py`
+  (copy `trees_bayside.py` or `trees_seekonk.py`), named in the palette:
+  `"trees": {"conifer": "trees_<theme>:pine", "deciduous": "trees_<theme>:oak"}`.
+  The game loads `sprites/trees_<theme>.png` for any course of that theme.
+- A theme's own low bushes (gorse, heather, beach rose): add
+  `"shrub": "trees_<theme>:gorse"` to the same `"trees"` entry. The painter is
+  `gorse(W, H, variant)` returning an RGBA array W+2 wide (see `shrubs.py`
+  `shrub()` for the shape and size rules); variants 0-7 are yours to use (a
+  bush's index in trees.json % 8 picks one). Bushes are trees.json `c: 3`
+  (deciduous for physics). s10 then writes `"shrubs": "shrubs_<theme>"` into
+  course.json and the game draws c: 3 from that sheet; s09b uses the same
+  painter in the putting views. Courses of other themes keep the flowering
+  shrubs.
+- Build only your theme's sheets: `python3 assets-src/build_assets.py --theme <theme>`
+  (writes `trees_<theme>*` and `shrubs_<theme>*`; nothing shared is rewritten).
+  Never run the full `make assets` from a course chat.
 - Show the developer a side-by-side of one hole in the old and new theme
   before rendering the whole course.
 
@@ -743,13 +757,17 @@ paths (relief), not OB, unless the developer says otherwise.
 
 ## 12. Course-select card, logo and state
 
-- **Course id:** if the developer already has a logo for the course, use
+- **Course id:** if the design chat already drew a logo for the course, use
   its id: `highland_links`, `langdon`, `east_potomac`, `langston`,
   `stone_creek`, `waverley`, `eastmoreland`, `willamette_valley`,
   `indian_island`, `gearhart` (a golf ball in a beer stein), `tualatin`,
-  `chambers_bay` (the concrete ruins)
-  (`assets-src/logos.py`). Otherwise ask the developer what the logo should
-  show; the design chat draws it.
+  `chambers_bay` (the concrete ruins) (`assets-src/logos.py`).
+- **Logo:** otherwise draw it yourself (developer, 2026-10-20): ask what it
+  should show in the intake message, then write
+  `assets-src/course_logos/<id>.py` (`assets-src/course_logos/README.md` has
+  the template) and run `python3 assets-src/logos.py <id>`. Show the developer
+  the logo at 1x and enlarged before the card. An original drawing only: never
+  the club's own logo, crest or trademark (CLAUDE.md 14).
 - **State:** add `"state": "<postal code>"` to `course_config.json`; s10
   copies it into `course.json`, and the course list is made from that.
 - **Card:** after the export, run `python3 assets-src/course_cards.py <id> --sheet`,

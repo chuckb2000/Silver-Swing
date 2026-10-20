@@ -38,9 +38,42 @@ def outputs(name: str) -> list[str]:
 def since(ref: str) -> list[str]:
     changed = subprocess.check_output(["git", "diff", "--name-only", ref, "--"], cwd=ROOT, text=True).split()
     changed += subprocess.check_output(["git", "ls-files", "--others", "--exclude-standard"], cwd=ROOT, text=True).split()
-    if any(f.startswith(SHARED) for f in changed):
-        return all_courses()
-    return [c for c in all_courses() if any(f.startswith(f"data/{c}/") for f in changed)]
+    return affected(changed)
+
+
+# assets-src files no course build reads (logos, cards, the title art, UI sprites, the font)
+NO_BUILD = ("assets-src/course_logos/", "assets-src/cards/", "assets-src/logos.py", "assets-src/course_cards.py",
+            "assets-src/title_art.py", "assets-src/sprites.py", "assets-src/font.py", "assets-src/build_assets.py")
+
+
+def theme_of(name: str) -> str:
+    return json.load(open(ROOT / "data" / name / "course_config.json")).get("theme", "pnw")
+
+
+def affected(changed: list[str]) -> list[str]:
+    """Courses whose build a set of changed files can reach: a course's own folder reaches
+    that course; a theme's palette or tree painters (palettes/<t>.json, trees_<t>.py) the
+    courses of that theme; any other shared file every course."""
+    out = set()
+    courses = all_courses()
+    for f in changed:
+        if f.startswith(NO_BUILD) or f.startswith("game/") or f.startswith("docs/") or f.endswith(".md"):
+            if not f.startswith("data/"):
+                continue
+        m = f.split("/")
+        if f.startswith("data/") and len(m) > 2:
+            if m[1] in courses:
+                out.add(m[1])
+            continue
+        if f.startswith("assets-src/palettes/") and f.endswith(".json"):
+            out |= {c for c in courses if theme_of(c) == m[-1][:-5]}
+            continue
+        if f.startswith("assets-src/trees_") and f.endswith(".py"):
+            out |= {c for c in courses if theme_of(c) == m[-1][len("trees_"):-3]}
+            continue
+        if f.startswith(SHARED):
+            return courses
+    return sorted(out)
 
 
 def changed_files(name: str) -> list[str]:

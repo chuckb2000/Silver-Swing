@@ -137,23 +137,42 @@ def shrub(W: int, H: int, variant: int) -> np.ndarray:
     return img
 
 
-def shrub_frames():
+def shrub_frames(painter=None):
+    """Every frame of a shrub sheet: the flowering shrubs, or a theme's own bush painter
+    (same size grid and variants, so the game's shrubKey() picks from either)."""
+    paint_ = painter or shrub
     out = []
     for W in SHRUB_WIDTHS:
         for H in SHRUB_HEIGHTS:
             if _ok(W, H):
                 for v in range(VARIANTS):
-                    out.append((f"s_{W}_{H}_{v}", shrub(W, H, v)))
+                    out.append((f"s_{W}_{H}_{v}", paint_(W, H, v)))
     return out
 
 
-def main():
-    a = Atlas("shrubs", max_w=1024)
-    frames = shrub_frames()
+def write_sheet(name: str, painter=None):
+    a = Atlas(name, max_w=1024)
+    frames = shrub_frames(painter)
     for key, img in frames:
         a.add(key, img)
     w, h = a.write(OUT)
-    print(f"[shrubs] {len(frames)} frames ({w}x{h}) -> {OUT}/shrubs.png")
+    print(f"[shrubs] {len(frames)} frames ({w}x{h}) -> {OUT}/{name}.png")
+
+
+def theme_sheets(only: str | None = None):
+    """shrubs_<theme>.png/json for every theme with its own bush painter (gorse and the like)."""
+    import json
+    from trees import theme_shrub_painter
+    for pal in sorted((HERE / "palettes").glob("*.json")):
+        if only and pal.stem != only:
+            continue
+        if json.load(open(pal)).get("trees", {}).get("shrub"):
+            write_sheet(f"shrubs_{pal.stem}", theme_shrub_painter(pal.stem))
+
+
+def main():
+    write_sheet("shrubs")
+    theme_sheets()
 
 
 if __name__ == "__main__":
