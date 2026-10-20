@@ -25,6 +25,7 @@ export interface Settings {
   viewScale: number; // -1 bigger pixels / 0 auto / +1 smaller pixels
   playerName: string;
   showTips: boolean;
+  tipsSeen: string[]; // swing-coach tips already learnt on this device (ui/coach.ts)
   courseId: string;  // last course chosen on the new-round screen
   tees: Record<string, string>; // tee set last chosen, per course id
   playerKey: string; // this device's private key for its names on the shared boards (save/identity.ts)
@@ -32,7 +33,7 @@ export interface Settings {
 
 export const DEFAULT_SETTINGS: Settings = {
   difficulty: 'normal', lefty: false, units: 'yd', latencyMs: 0, volume: 0.7, muted: false,
-  e5: false, gimmes: false, maxDoublePar: false, mulligans: false, viewScale: 0, playerName: 'player', showTips: true, courseId: '',
+  e5: false, gimmes: false, maxDoublePar: false, mulligans: false, viewScale: 0, playerName: 'player', showTips: true, tipsSeen: [], courseId: '',
   tees: {},
   playerKey: '',
 };
@@ -89,6 +90,7 @@ export async function loadSettings(): Promise<Settings> {
   const s = await read<Partial<Settings>>('settings');
   const out = { ...DEFAULT_SETTINGS, ...(s ?? {}) };
   if (!out.tees || typeof out.tees !== 'object') out.tees = {};
+  if (!Array.isArray(out.tipsSeen)) out.tipsSeen = [];
   if (!isPlayerKey(out.playerKey)) {
     out.playerKey = newPlayerKey();
     await write('settings', out);

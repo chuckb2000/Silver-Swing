@@ -636,6 +636,7 @@ export class PlayScene extends Phaser.Scene {
   private launch() {
     const r = this.round;
     const m = this.meter!.result!;
+    this.hud.tipsUsed(m.late); // the coach's tips for this shot are learnt
     this.shot = r.plan(this.club.id, this.aim, m, this.spin, this.scaleArg());
     this.sim = r.simulate(this.shot);
     (window as unknown as { __last: unknown }).__last = { shot: this.shot, sim: { landing: this.sim.landing, end: this.sim.end, events: this.sim.events, n: this.sim.n, hitTree: this.sim.hitTree }, meter: m };

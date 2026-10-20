@@ -51,7 +51,7 @@ export class SettingsScene extends MenuScene {
     const s = app.settings;
     const W = app.view.w, H = app.view.h;
     const inRound = this.from === 'hud';
-    const pw = Math.min(320, W - 8), ph = Math.min(H - 8, inRound ? 176 : 254);
+    const pw = Math.min(320, W - 8), ph = Math.min(H - 8, inRound ? 190 : 258);
     const x0 = Math.round((W - pw) / 2), y0 = Math.round((H - ph) / 2);
     if (this.from === 'hud') {
       const dim = this.add.rectangle(0, 0, W, H, 0x05080b, 0.7).setOrigin(0, 0).setInteractive();
@@ -85,6 +85,15 @@ export class SettingsScene extends MenuScene {
     stepper('volume', `${Math.round(s.volume * 100)}%`, () => { s.volume = Math.max(0, Math.round((s.volume - 0.1) * 10) / 10); }, () => { s.volume = Math.min(1, Math.round((s.volume + 0.1) * 10) / 10); sfx('click'); });
     choice('sound', 'muted', [[false, 'on'], [true, 'muted']]);
     stepper('pixel size', ['bigger', 'auto', 'smaller'][s.viewScale + 1], () => { s.viewScale = Math.max(-1, s.viewScale - 1); applyScale(this.game); }, () => { s.viewScale = Math.min(1, s.viewScale + 1); applyScale(this.game); });
+    // swing coach (ui/coach.ts): turning tips on shows every tip again
+    this.root.add(txt(this, lx, y + 3, 'tips', { color: COLORS.dim }));
+    ([[true, 'on'], [false, 'off']] as [boolean, string][]).forEach(([v, lab], i) => this.root.add(new Button(this, vx + i * (bw + 2), y, bw, 14, lab, () => {
+      if (v) s.tipsSeen = [];
+      s.showTips = v;
+      save();
+    }, { color: s.showTips === v ? 'orange' : 'grey' })));
+    if (s.showTips && s.tipsSeen.length) this.root.add(txt(this, vx + 2 * (bw + 2), y + 3, 'on: again', { color: COLORS.dim }));
+    y += 17;
     if (inRound) {
       // hand, difficulty and the rules were fixed when the round started (Round.cfg.settings)
       y += 4;

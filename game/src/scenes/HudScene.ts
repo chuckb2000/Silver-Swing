@@ -4,6 +4,8 @@
 import { isListedEagle, nameRound } from '../save/eagleReport';
 import { DEFAULT_NAME } from '../save/names';
 import { askName } from '../ui/nameInput';
+import { learnt, tipFor } from '../ui/coach';
+import { saveSettings } from '../save/store';
 import Phaser from 'phaser';
 import { clearSnapshot } from '../save/snapshot';
 import { app, fmtDist, PX_PER_M, unitLabel, YD } from '../app';
@@ -70,6 +72,11 @@ export class HudScene extends Phaser.Scene {
   private sub!: Phaser.GameObjects.BitmapText;
   private bannerTimer?: Phaser.Time.TimerEvent;
   private intro: Phaser.GameObjects.Container | null = null;
+  /** swing coach (ui/coach.ts): the tip on show and the tips shown for the shot being played */
+  private tipPanel!: Panel;
+  private tipTxt!: Phaser.GameObjects.BitmapText;
+  private tipKey: string | null = null;
+  private tipsShown = new Set<string>();
   reliefTitle = '';
 
   constructor() {
@@ -89,6 +96,8 @@ export class HudScene extends Phaser.Scene {
     this.modalBeforeCard = null;
     this.bannerTimer = undefined;
     this.redraw = null;
+    this.tipKey = null;
+    this.tipsShown = new Set();
     this.play = this.scene.get('play') as PlayScene;
     uiCamera(this.cameras.main);
     this.W = app.view.w;
@@ -110,6 +119,7 @@ export class HudScene extends Phaser.Scene {
     this.W = app.view.w;
     this.H = app.view.h;
     this.layout();
+    this.tipKey = null; // laid out again on the next frame
     if (this.modal && this.redraw) this.redraw();
     this.refresh();
   }
@@ -172,6 +182,11 @@ export class HudScene extends Phaser.Scene {
     this.offArrow = this.add.image(0, 0, 'ui', 'wind_0').setVisible(false).setTint(0xfff2a0);
     this.banner = txt(this, 0, 0, '', { origin: [0.5, 0.5], scale: 2 }).setDepth(50);
     this.sub = txt(this, 0, 0, '', { origin: [0.5, 0.5] }).setDepth(50);
+    this.tipPanel = new Panel(this, 0, 0, 200, 20, 0.9);
+    this.tipTxt = txt(this, 6, 4, '', { color: COLORS.yellow });
+    this.tipPanel.add(this.tipTxt);
+    this.tipPanel.setVisible(false);
+    this.root.add(this.tipPanel);
     this.root.add([this.menuBtn, this.cardBtn, this.holeBox, this.info, this.windPanel, this.miniPanel, this.mapBtn, this.aimL, this.aimR, this.aimLabel,
       this.clubPanel, this.clubUp, this.clubDown, this.spinBtn, this.scaleBtn, this.unplayBtn, this.mulliganBtn, this.meterPanel, this.meterRead, this.swingBtn, this.offArrow]);
   }
@@ -309,6 +324,7 @@ export class HudScene extends Phaser.Scene {
   tick() {
     const p = this.play;
     this.drawMeter();
+    this.updateTip();
     if (p.state === 'flight') this.drawMiniBall();
     // arrow toward an off-screen ball (kept clear of the HUD panels)
     const off = p.ballOffscreen;
@@ -325,6 +341,39 @@ export class HudScene extends Phaser.Scene {
       this.offArrow.setVisible(true).setFrame(`wind_${k}`).setAlpha(pulse)
         .setPosition(Math.round(cx + Math.cos(ang) * t), Math.round(cy + Math.sin(ang) * t));
     } else this.offArrow.setVisible(false);
+  }
+
+  /** The swing coach's tip for this moment, above the meter (ui/coach.ts). */
+  private updateTip() {
+    const p = this.play;
+    const s = app.settings;
+    const tip = tipFor({
+      on: s.showTips, seen: s.tipsSeen, state: p.state, phase: p.meter ? p.meter.phase : null, putting: p.isPutting(),
+      lie: p.round?.lie ? p.round.lie.kind : null, blocked: !!this.modal || !!this.intro || !this.meterPanel.visible,
+    });
+    const key = tip ? tip.key : null;
+    if (key === this.tipKey) return;
+    this.tipKey = key;
+    if (!tip) { this.tipPanel.setVisible(false); return; }
+    this.tipsShown.add(tip.key);
+    const w = Math.min(this.W - 16, 240);
+    this.tipTxt.setMaxWidth(w - 12);
+    setTxt(this.tipTxt, tip.text);
+    const h = Math.round(this.tipTxt.height) + 8;
+    this.tipPanel.resize(w, h, 0.9);
+    const mp = this.meterPanel;
+    this.tipPanel.setPosition(Math.round(Math.max(8, Math.min(this.W - 8 - w, mp.x + mp.pw / 2 - w / 2))), Math.round(mp.y - 14 - h));
+    this.tipPanel.setVisible(true);
+  }
+
+  /** A shot was struck: the tips shown for it are learnt (saved on this device). */
+  tipsUsed(lateThirdTap: boolean) {
+    const s = app.settings;
+    const add = learnt(this.tipsShown, lateThirdTap).filter((k) => !s.tipsSeen.includes(k));
+    this.tipsShown.clear();
+    if (!add.length) return;
+    s.tipsSeen = [...s.tipsSeen, ...add];
+    void saveSettings(s);
   }
 
   private drawMiniBall() {
