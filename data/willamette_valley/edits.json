@@ -1,0 +1,101 @@
+{
+  "add": [
+    {
+      "from": "proposed/cartpaths.geojson",
+      "ids": [
+        "cp_w1053634749",
+        "cp_w1053634750",
+        "cp_w1053634751",
+        "cp_w1053634752",
+        "cp_w1053634753",
+        "cp_w1053634754",
+        "cp_w1053634755",
+        "cp_w1053634756",
+        "cp_w1053634757",
+        "cp_w1053634758",
+        "cp_w1053634759"
+      ],
+      "tags": {},
+      "reason": "OSM tags the course's 11 cart paths golf=path + highway=path (the current OSM tag); the pipeline reads golf=cartpath, so these copies carry kind cartpath (paved 2.4 m, free relief: the card lists cart paths as immovable obstructions)"
+    },
+    {
+      "from": "proposed/green13.geojson",
+      "ids": [
+        "tr_green13"
+      ],
+      "tags": {},
+      "reason": "developer 2026-10-19: hole 13's green is 'A', left of the pond where OSM's hole line and pin end; OSM maps no green there. Traced from the OSIP 2022 orthophoto by data/willamette_valley/trace_h13.py (385 m2)"
+    },
+    {
+      "from": "proposed/tee3.geojson",
+      "ids": [
+        "dev_tee3_blue"
+      ],
+      "tags": {},
+      "reason": "developer 2026-10-19: the hole 3 Blue tee is on the fairway from the 2nd green (no box in OSM, no pad in the lidar); a 6 x 4 m box at the card's 162 yd on the open north end of that fairway (OSIP 2022 image; the south part is under trees)"
+    },
+    {
+      "from": "proposed/fairways_from_tees.geojson",
+      "ids": [
+        "fw_w1053586147",
+        "fw_w1053602282"
+      ],
+      "tags": {},
+      "reason": "OSM tags hole 9's fairway (228 x 36 m, w1053586147) and hole 14's fairway (328 x 61 m, w1053602282) as golf=tee; both are the mown fairways along their hole lines in the OSIP 2022 image (checked 2026-10-19) and neither hole has another fairway mapped. Copies with golf=fairway"
+    }
+  ],
+  "drop": [
+    {
+      "osm": "w1053634749",
+      "reason": "replaced by its golf=cartpath copy (cp_w1053634749)"
+    },
+    {
+      "osm": "w1053634750",
+      "reason": "replaced by its golf=cartpath copy (cp_w1053634750)"
+    },
+    {
+      "osm": "w1053634751",
+      "reason": "replaced by its golf=cartpath copy (cp_w1053634751)"
+    },
+    {
+      "osm": "w1053634752",
+      "reason": "replaced by its golf=cartpath copy (cp_w1053634752)"
+    },
+    {
+      "osm": "w1053634753",
+      "reason": "replaced by its golf=cartpath copy (cp_w1053634753)"
+    },
+    {
+      "osm": "w1053634754",
+      "reason": "replaced by its golf=cartpath copy (cp_w1053634754)"
+    },
+    {
+      "osm": "w1053634755",
+      "reason": "replaced by its golf=cartpath copy (cp_w1053634755)"
+    },
+    {
+      "osm": "w1053634756",
+      "reason": "replaced by its golf=cartpath copy (cp_w1053634756)"
+    },
+    {
+      "osm": "w1053634757",
+      "reason": "replaced by its golf=cartpath copy (cp_w1053634757)"
+    },
+    {
+      "osm": "w1053634758",
+      "reason": "replaced by its golf=cartpath copy (cp_w1053634758)"
+    },
+    {
+      "osm": "w1053634759",
+      "reason": "replaced by its golf=cartpath copy (cp_w1053634759)"
+    },
+    {
+      "osm": "w1053586147",
+      "reason": "replaced by its golf=fairway copy (fw_w1053586147)"
+    },
+    {
+      "osm": "w1053602282",
+      "reason": "replaced by its golf=fairway copy (fw_w1053602282)"
+    }
+  ]
+}
