@@ -32,7 +32,7 @@ None.
 
 ## Other open items (Franklin Country Club)
 
-Decisions the developer made on 2026-10-19 are in DECISIONS.md ("Franklin Country Club"): Blue tees, all water red, Uncas Brook modelled, no internal out of bounds, `bayside` theme, logo by the design chat. The items below are the course chat's calls and the data's gaps, each with a recommendation.
+Decisions the developer made on 2026-10-19 are in DECISIONS.md ("Franklin Country Club"): Blue tees, all water red, Uncas Brook modelled, no internal out of bounds, `bayside` theme, logo by the design chat. The items below are the course chat's calls and the data's gaps, each with a recommendation. **The developer accepted every recommendation below on 2026-10-19** ("I agree with all of your decisions"); the items stay listed for the record.
 
 1. **Scorecard is Stymie's (unverified); the club website has no card.** Every tee row adds up to its total. Other listings disagree: back-nine stroke indexes (Stymie 4, 14, 2, 18, 8, 10, 16, 6, 12 for holes 10-18; OpenGolfAPI 6, 16, 2, 4, 10, 12, 18, 8, 14; GolfingRecord 8, 16, 2, 4, 10, 12, 18, 6, 14) and the Blue rating/slope (Stymie 72.3/128, OpenGolfAPI 72.7/131). Recommendation: keep Stymie's until a printed card is available.
 2. **Pins are at the green centres** (proposals, `make_pins.py`): OSM maps pins only on the practice range.
@@ -45,7 +45,7 @@ Decisions the developer made on 2026-10-19 are in DECISIONS.md ("Franklin Countr
 9. **Wind 1-9 mph** (course chat: an inland, wooded site; Oswego Lake 1-7, Indian Island 2-12).
 10. **Architects unverified:** Wayne Stiles and John Van Kleek (early 1920s), later Phil Wogan and William F. Mitchell (countryclubmag.com; Golf Digest lists Wogan).
 11. **Off-course scenery:** the Wrentham quarry south-east of the course is drawn as ground with the lidar's hillshade (no quarry surface exists); it is out of bounds and away from play.
-12. **One tree removed on hole 18** (course chat, for review; `drop_trees`): a 21 m broadleaf 15 m left-front of the Blue tee whose crown (10.4 m radius) reached 0.5 m over the hole line; a perfect drive straight down the line clipped it. The default aim and the pipeline's fairway-middle check already cleared it. Recommendation: keep it removed (the rule from East Potomac and Tualatin); one config entry restores it.
+12. **One tree removed on hole 18** (course chat; approved by the developer; `drop_trees`): a 21 m broadleaf 15 m left-front of the Blue tee whose crown (10.4 m radius) reached 0.5 m over the hole line; a perfect drive straight down the line clipped it. The default aim and the pipeline's fairway-middle check already cleared it. Recommendation: keep it removed (the rule from East Potomac and Tualatin); one config entry restores it.
 13. **The stream crosses hole 9's fairway 305 yd from the Blue tee.** In calm air a perfect drive stops short; with a 7-9 mph tailwind it can run in (the robot golfer took a penalty there in 2 of 5 seeds). A real hazard if the stream is real; it goes with item 7.
 14. **Trees and load time:** 37,340 lidar trees (3,633 on the course; 34 % conifers from the leaf-off returns, p50 21 m, max 47 m), the most of any course, and a 17.3 MB export. In the sandbox's software renderer the course loads in 5-6 s (Tualatin 2.6 s, Indian Island 3.6 s) with a 131 MB heap (86 MB). Recommendation: accept; if it is slow on a phone, thin the woods far from play (a pipeline option, not built).
 15. **Driving range** beside hole 3 is out of bounds, as on every course; a drive that strays toward it on 3 finishes out of bounds.

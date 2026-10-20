@@ -2046,8 +2046,8 @@ data/franklin/validation_report.md.
     9 and 16 (penalty areas from the lidar channels). No internal out of
     bounds; the driving range is out of bounds.
 -   **Trees:** 37,340 from lidar (3,633 on the course), 34 % conifers from
-    the leaf-off returns. One broadleaf left of the 18th tee removed (course
-    chat, for review).
+    the leaf-off returns. One broadleaf left of the 18th tee removed
+    (approved).
 -   **Scorecard** (Stymie, retrieved 2026-10-19, unverified; the club
     website has no card). Blue 72.3/128.
 
@@ -2065,9 +2065,12 @@ Green (4,827) are in scorecard.csv, not built.
 
 -   **Default tee:** Blue (developer), the only set built. Every hole within
     3 % of the card.
+-   **Accepted by the developer (2026-10-19):** the unnamed stream and the
+    two extra ponds as red penalty areas, the hole 18 tree removed, the
+    Stymie scorecard until a printed card turns up, wind 1-9 mph, course
+    card hole 8, the tree count and load time, pins at green centres.
 -   **Known open items:** data/franklin/report_notes.md (scorecard and
-    stroke index unverified; pins at green centres; the unnamed stream, the
-    two extra ponds and the hole 18 tree are the course chat's calls).
+    stroke index unverified; logo from the design chat).
 
 **12. Repository layout**
 
