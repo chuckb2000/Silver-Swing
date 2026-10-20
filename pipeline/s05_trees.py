@@ -436,7 +436,7 @@ def main():
     if garden_enabled(cfg):
         if cfg.get("blossom"):
             raise SystemExit("[s05] `garden` and `blossom` both order trees.json; not supported together")
-        shrubs = shrub_trees(cfg, g)
+        shrubs = shrub_trees(cfg, g, chm)
         trees = trees + shrubs
         n_shrubs = len(shrubs)
     # s06 places the tees against these trees and s06b drops the ones still in the
