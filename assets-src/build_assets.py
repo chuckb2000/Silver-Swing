@@ -3,7 +3,12 @@
     python3 assets-src/build_assets.py      (or: make assets)
 
 Outputs to game/public/sprites/: trees.png/json, sprites.png/json,
-pxfont.png/xml. Everything is drawn in code - no external art.
+pxfont.png/xml, and every theme's sheets.
+
+    python3 assets-src/build_assets.py --theme <name>
+
+writes one theme's sheets only (trees_<name>, shrubs_<name>), for a course
+chat adding a theme: nothing shared is rewritten. Everything is drawn in code - no external art.
 """
 from __future__ import annotations
 
@@ -24,7 +29,28 @@ import shrubs  # noqa: E402
 OUT = HERE.parent / "game" / "public" / "sprites"
 
 
+def theme_trees(theme: str):
+    """trees_<theme>.png/json/_meta.json for a theme with its own tree painters."""
+    t = Atlas(f"trees_{theme}", max_w=1024)
+    frames = tree_frames(theme)
+    for key, img in frames:
+        t.add(key, img)
+    tw, th = t.write(OUT)
+    (OUT / f"trees_{theme}_meta.json").write_text(
+        '{"widths":%s,"heights":%s}' % (TREE_WIDTHS, TREE_HEIGHTS))
+    print(f"[assets] trees_{theme} {len(frames)} frames ({tw}x{th})")
+
+
 def main():
+    if len(sys.argv) > 2 and sys.argv[1] == "--theme":
+        # one course theme's sheets only (a course chat's new theme): nothing shared is rewritten
+        import json
+        theme = sys.argv[2]
+        OUT.mkdir(parents=True, exist_ok=True)
+        if "trees" in json.load(open(HERE / "palettes" / f"{theme}.json")) and theme != "pnw":
+            theme_trees(theme)
+        shrubs.theme_sheets(theme)
+        return
     OUT.mkdir(parents=True, exist_ok=True)
     t = Atlas("trees", max_w=1024)
     frames = tree_frames()
@@ -46,16 +72,9 @@ def main():
         theme = pal.stem
         if theme == "pnw" or "trees" not in json.load(open(pal)):
             continue
-        t = Atlas(f"trees_{theme}", max_w=1024)
-        frames = tree_frames(theme)
-        for key, img in frames:
-            t.add(key, img)
-        tw, th = t.write(OUT)
-        (OUT / f"trees_{theme}_meta.json").write_text(
-            '{"widths":%s,"heights":%s}' % (TREE_WIDTHS, TREE_HEIGHTS))
-        print(f"[assets] trees_{theme} {len(frames)} frames ({tw}x{th})")
+        theme_trees(theme)
     blossom.main()  # flowering trees (trees.json c: 2), any theme
-    shrubs.main()   # flowering shrubs (trees.json c: 3), any theme
+    shrubs.main()   # flowering shrubs (trees.json c: 3), any theme, and themes' own bushes (shrubs_<theme>)
 
 
 if __name__ == "__main__":

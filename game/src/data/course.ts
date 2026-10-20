@@ -52,6 +52,8 @@ export interface CourseJson {
   greenViews?: GreenViewJson[];
   /** a club of three or more nines: each nine's id, name and course holes (lengths.ts) */
   nines?: { id: string; name: string; holes: number[] }[];
+  /** the theme's own bush sheet for trees.json c: 3 (gorse and the like), instead of the flowering shrubs */
+  shrubs?: string;
 }
 
 export interface HeightMeta { cols: number; rows: number; res: number; min: number; max: number; samples: [number, number, number][] }
