@@ -102,6 +102,8 @@ import { mergeRounds, playerStats } from '../../src/save/stats';
 import { feedBadges, timeAgo } from '../../src/save/feed';
 import { D1Like, D1Statement, handleGet, handlePost, handleRecentGet, resetFeedCache, resetSchemaCache } from '../../src/server/scores';
 import { addDays, dailyPlan, dayStandings, weekStandings, weekStart } from '../../src/systems/game/daily';
+import { DAILY_ROSTER } from '../../src/data/dailyRoster';
+import index from '../../public/courses/index.json';
 import { drillSpot, PracticeLog, rangeShot } from '../../src/systems/game/practice';
 import type { HoleScore } from '../../src/systems/rules/scoring';
 import { totals } from '../../src/systems/rules/scoring';
@@ -182,6 +184,22 @@ describe('daily round (item 4)', () => {
       else expect(['front', 'back']).toContain(q.length);
       if (q.courseId === 'c') expect(q.tee).toBe('Royal'); // the default isn't built: the first set
     }
+  });
+
+  it('a course added to the rotation changes the daily from its first day on, never before (developer, 2026-10-20)', () => {
+    const roster = { a: '2026-10-20', b: '2026-10-20', c: '2026-10-20' };
+    const before = Array.from({ length: 5 }, (_, i) => dailyPlan(addDays('2026-10-20', i), courses, roster)!.courseId);
+    const more = [...courses, { id: 'd', holes: 18, defaultTee: 'Blue', teeSets: ['Blue'] }];
+    const later = { ...roster, d: '2026-10-23' };
+    const after = Array.from({ length: 5 }, (_, i) => dailyPlan(addDays('2026-10-20', i), more, later)!.courseId);
+    expect(after.slice(0, 3)).toEqual(before.slice(0, 3));
+    expect(dailyPlan('2026-10-20', courses, {})).toBeNull(); // not in the rotation: never the daily
+  });
+
+  it("the real rotation: 2026-10-20 stays Stone Creek after that afternoon's three courses", () => {
+    const all = (index as { courses: { id: string; holes: number; defaultTee: string; teeSets: string[] }[] }).courses;
+    expect(dailyPlan('2026-10-20', all, DAILY_ROSTER)!.courseId).toBe('stone_creek');
+    for (const c of all) expect(DAILY_ROSTER[c.id], `${c.id} is in the daily rotation`).toBeDefined();
   });
 
   it('weeks start on Monday; the week board counts the best five days, more days first', () => {

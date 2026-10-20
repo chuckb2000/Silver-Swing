@@ -213,7 +213,19 @@ export class CourseSelectScene extends MenuScene {
       }
     }
     this.root.add(name);
-    this.root.add(txt(this, x + 4, y + h - strip + 12, t.sub, { color: COLORS.dim, maxWidth: w - 8 }));
+    // one line, inside the strip (University Place ran onto a second line, out of the card):
+    // the whole line, else without the town, else cut short
+    const sub = txt(this, x + 4, y + h - strip + 12, t.sub, { color: COLORS.dim });
+    const fitSub = (s: string) => { setTxt(sub, s); return sub.width <= w - 8; };
+    if (!fitSub(t.sub)) {
+      const parts = t.sub.split(' · ');
+      if (parts.length < 2 || !fitSub(parts.slice(1).join(' · '))) {
+        let s = parts.length < 2 ? t.sub : parts.slice(1).join(' · ');
+        while (s.length > 3 && !fitSub(`${s}...`)) s = s.slice(0, -1).trimEnd();
+        fitSub(`${s}...`);
+      }
+    }
+    this.root.add(sub);
     // logo (the first of t.logos that exists, e.g. the course's own, else its place's), or a lettered badge
     const logo = this.add.container(0, 0);
     this.root.add(logo);

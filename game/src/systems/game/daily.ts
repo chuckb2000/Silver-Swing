@@ -39,10 +39,13 @@ export interface DailyPlan {
 
 /**
  * The day's round. Courses take turns in a fixed shuffled order (by a hash of
- * the id, so a new course slots in without reordering the rest); an 18-hole
- * course plays its front nine on even days and its back nine on odd ones.
+ * the id); an 18-hole course plays its front nine on even days and its back
+ * nine on odd ones. With a roster (src/data/dailyRoster.ts), only the courses
+ * in the rotation on that day count, so a course added today changes the
+ * daily from its first day on, never today's.
  */
-export function dailyPlan(day: string, courses: DailyCourse[]): DailyPlan | null {
+export function dailyPlan(day: string, all: DailyCourse[], roster?: Readonly<Record<string, string>>): DailyPlan | null {
+  const courses = roster ? all.filter((c) => roster[c.id] !== undefined && roster[c.id] <= day) : all;
   if (!courses.length) return null;
   const order = courses.slice().sort((a, b) => hash32(seedFromString(a.id)) - hash32(seedFromString(b.id)) || a.id.localeCompare(b.id));
   const n = dayNumber(day);
