@@ -169,12 +169,7 @@ def main():
     course[woods_in] = SURF["woods"]
     for geoms, value in course_layers(g, roads, cfg):
         paint(course, geoms, value)
-    oba = list(g[g.kind == "ob_area"].geometry)  # config join_boundary_ob (s02): out-of-bounds land inside the boundary
-    off = surf.copy() if oba else None
     surf[inside] = course[inside]
-    if oba:  # drawn as the off-course ground it is (the highway stays a road)
-        m_oba = mask(oba)
-        surf[m_oba] = off[m_oba]
     if cfg.get("red_water_osm"):
         # the same water outside the boundary is a penalty area too (it is not OB);
         # bridges and buildings over it stay as they are

@@ -434,6 +434,13 @@ def main():
     n_shrubs = 0
     from garden import enabled as garden_enabled, order_trees, shrub_trees
     if garden_enabled(cfg):
+        # garden.py reads build/chm_local.npy: write this run's canopy first (it read the
+        # previous run's, so a clean build failed; Langdon Farms regression, 2026-10-19)
+        if removed:
+            jj, ii = np.mgrid[0:chm.shape[0], 0:chm.shape[1]]
+            for t_ in removed:
+                chm[np.hypot(ii + 0.5 - t_["x"], jj + 0.5 - t_["y"]) <= t_["r"] + 1.0] = 0
+        np.save(build_dir(name) / "chm_local.npy", chm.astype(np.float32))
         if cfg.get("blossom"):
             raise SystemExit("[s05] `garden` and `blossom` both order trees.json; not supported together")
         shrubs = shrub_trees(cfg, g)

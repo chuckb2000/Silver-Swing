@@ -580,27 +580,6 @@ def main():
                 rgb[row - 2:row + 1, col] = P["WH"]
                 rgb[row - 2, col] = P["K2"]
 
-    # OB stakes along out-of-bounds land inside the boundary (config join_boundary_ob, s02), on the course side
-    for _, r_ in g[g.kind == "ob_area"].iterrows():
-        edge = r_.geometry.exterior.intersection(boundary.buffer(-1.0))
-        for ln_ in getattr(edge, "geoms", [edge]):
-            if ln_.geom_type != "LineString":
-                continue
-            for s_ in np.arange(0, ln_.length, 9.0):
-                p = ln_.interpolate(s_)
-                q = ln_.interpolate(min(ln_.length, s_ + 0.5))
-                dx, dy = q.x - p.x, q.y - p.y
-                ln = math.hypot(dx, dy) or 1
-                cand = Point(p.x + dy / ln * 0.8, p.y - dx / ln * 0.8)
-                if r_.geometry.contains(cand):
-                    cand = Point(p.x - dy / ln * 0.8, p.y + dx / ln * 0.8)
-                col = int(cand.x * PX_PER_M)
-                row = int((world.height - cand.y) * PX_PER_M)
-                if 2 <= row < H - 1 and 0 <= col < W - 1:
-                    rgb[row + 1, col + 1] = (rgb[row + 1, col + 1] * 0.6).astype(np.uint8)
-                    rgb[row - 2:row + 1, col] = P["WH"]
-                    rgb[row - 2, col] = P["K2"]
-
     Image.fromarray(rgb).save(art / "terrain.png")
     meta = {"buildings": [{"osm": o, "h": round(h, 1), **({"kind": kinds[o]} if kinds.get(o) != "house" else {})} for _, h, o in buildings]}
     write_json(art / "render_meta.json", meta)

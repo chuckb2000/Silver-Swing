@@ -78,11 +78,7 @@
     "Elevation and canopy: Oregon Department of Geology and Mineral Industries (DOGAMI) lidar",
     "Scorecard: Langdon Farms Golf Club (club scorecard)"
   ],
-  "notes": "Intake 2026-10-19. OSM has the boundary (two ways, w30516492 west of OR 551 and w30516571 east of it), 12 bunkers, cart paths and two ponds; no holes, tees, fairways, greens or pins. The whole layout is to be traced (docs/COURSE_TRACING.md). Developer 2026-10-19: build Tee 7 (the card's name); no hole plays across OR 551 (a cart path runs under it), so the two parts are joined with the highway strip out of bounds; all water red; driving range in bounds (plays as rough). Orthophoto still to come (OSIP 2024 export returned a server error).",
-  "join_boundary_ob": {
-    "max_gap_m": 70,
-    "reason": "OR 551 between the two parts of the course (w30516492 west, w30516571 east); no hole plays across it, a cart path runs under it (developer 2026-10-19)"
-  },
+  "notes": "Intake 2026-10-19. OSM has the boundary (two ways, w30516492 west of OR 551 and w30516571 east of it), 12 bunkers, cart paths and two ponds; no holes, tees, fairways, greens or pins. The whole layout is to be traced (docs/COURSE_TRACING.md). Developer 2026-10-19: build Tee 7 (the card's name); no hole plays across OR 551 (a cart path runs under it), so the two parts are joined with the highway strip out of bounds; all water red; driving range in bounds (plays as rough).",
   "building_colours": {
     "w324295601": "#a3302a",
     "w324295657": "#a3302a"
@@ -90,5 +86,9 @@
   "red_water_osm": [
     "w334607763",
     "w334609000"
-  ]
+  ],
+  "join_boundary_parts": {
+    "max_gap_m": 60,
+    "note": "OR 551 between the two OSM course ways (w30516492 west, w30516571 east), 35-58 m apart; no hole plays across it, a cart path runs under it (developer 2026-10-19): the highway strip stays out of bounds"
+  }
 }

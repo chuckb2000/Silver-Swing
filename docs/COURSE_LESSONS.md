@@ -9,7 +9,7 @@ island), Langston (2026-10-19, a course in two parts across a lake), Indian
 Island (2026-10-19, half the course traced), Tualatin Country Club
 (2026-10-19, section 9), Eastmoreland (2026-10-19, Portland), Willamette Valley
 (2026-10-19, section 10), Oregon Golf Club (2026-10-19, section 11) and
-Franklin Country Club (2026-10-19, section 12). Oswego Lake and Highland Links
+Franklin Country Club (2026-10-19, section 12) and Langdon Farms (2026-10-19, section 13, every hole traced). Oswego Lake and Highland Links
 notes live in DECISIONS.md.
 
 ---
@@ -495,4 +495,51 @@ notes live in DECISIONS.md.
 - **A big wooded world means many trees.** 37,340 lidar trees (2.5x Indian
   Island) and a 17 MB export; the game only builds sprites for cells near
   the camera. Measure the course's load time in the browser.
+
+## 13. Langdon Farms (2026-10-19)
+
+- **OSIP exportImage can fail as TIFF and work as JPEG.** Every TIFF export
+  (OSIP 2024 WM and SL, OSIP 2022, NAIP) gave the developer "Error exporting
+  image, Code: 500"; the same 2024 request with `format=jpg` worked at once.
+  A JPEG has no georeferencing, but the bbox in the URL fixes its corners:
+  mosaic the halves and set the transform from the bbox (the alignment
+  against OSM bunkers and ponds was within 1-2 m). Offer a small test link
+  first (1,024 m square), then the full halves.
+- **A course with no mapped holes can still be traced in one pass.** OSM had
+  only hole 1. A labelled map of candidate greens (letters on the photo,
+  `proposed/greens_labelled.jpg`) got the routing in one reply, including
+  which candidates were nursery greens, fairway or a tee. Then
+  `propose_trace.py` and the desk with `--traced` (traced shapes as the
+  editable first pass); the developer corrected all 18 holes and marked every
+  Tee 7 box in about 45 minutes.
+- **Greens: texture alone runs into the collar on summer imagery.** On the one
+  mapped green the texture trace gave IoU 0.37 (1,300 m2 for a 480 m2
+  green). Adding "brightness within 5.5 of the seed's" (`br_delta`) gave 0.81.
+  Calibrate on any mapped green before tracing the rest, and try seeds a few
+  metres apart (keep the most compact result).
+- **No mapped fairways to train on:** a colour rule (smoothed 2G-R-B, texture
+  and G-R) is a usable first pass in a dry summer photo, where the irrigated
+  fairways are bluer and smoother than the rough. Expect the developer to
+  redraw most of them anyway.
+- **Lidar tee pads are unreliable on a flat, tree-lined course.** Most raised
+  flat patches near the line starts were tree bases and mounds. Let the
+  developer mark the tee boxes in the desk and use the pads only as hints.
+- **Double greens:** the developer drew the shared green once per hole. Keep
+  the smaller drawing as that hole's green and give the other hole the rest
+  (trace_spec `double_greens`), so each hole has its own centre and pin. The
+  rest can be a crescent whose centroid is off the green: measure and centre
+  the putting views on a point inside it.
+- **Check `main` for an option before writing one.** I wrote a boundary join
+  for the two parts either side of OR 551, then found Eastmoreland's
+  `join_boundary_parts` on `main` doing the same; extending it to boundaries
+  mapped as separate ways was a five-line change. Fetch `main` (and read its
+  COURSE_LESSONS) as soon as a course needs a pipeline change.
+- **Identify a building the developer names by asking where it is.** "The
+  barn on 8" was not the unmapped building beside the 8th tee I guessed; it
+  was on the left of the fairway, away from hole 9. Show the candidate on the
+  photo and ask before colouring or tagging it.
+- **A shallow clone can't merge `main` after it has moved** (no merge base).
+  `git fetch --depth=300 origin main` gave the base, and per file "take
+  main's, re-apply mine" (`git diff <base> HEAD -- <file> | git apply --3way`)
+  resolved the desk files that both branches changed.
 
