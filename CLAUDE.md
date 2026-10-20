@@ -554,7 +554,7 @@ DECISIONS.md with the reason.
     fall). Pipeline gained `roof_last_share` (s05: roofs of unmapped houses
     in class-1 lidar are not trees) and `join_boundary` now fills a mapped
     pond cut out of the course; every other course rebuilds as
-    committed. 378 unit tests and 4 Playwright tests pass.
+    committed. 398 unit tests and 4 Playwright tests pass.
 
 -   **Next task:** the third playtest (putting, yellow misses), the club's
     printed scorecard and the hole 3 Blue tee box. New courses: a separate
