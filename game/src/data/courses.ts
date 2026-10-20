@@ -20,15 +20,23 @@ export type LoadProgress = (fraction: number) => void;
 
 /** Run the scene's loader for the files queued by `queue`; resolves when they are all done. */
 function runLoader(scene: Phaser.Scene, queue: (l: Phaser.Loader.LoaderPlugin) => void, onFile?: () => void): Promise<string[]> {
-  return new Promise((resolve) => {
+  return new Promise((resolve, reject) => {
     const failed: string[] = [];
     const l = scene.load;
     const onError = (f: Phaser.Loader.File) => failed.push(f.key);
     const onDone = () => onFile?.();
+    // the scene stopping mid-load resets its loader, which would never finish: fail instead of hanging
+    const onShutdown = () => {
+      l.off(Phaser.Loader.Events.FILE_LOAD_ERROR, onError);
+      l.off(Phaser.Loader.Events.FILE_COMPLETE, onDone);
+      reject(new Error('the screen closed while the course was loading'));
+    };
     l.on(Phaser.Loader.Events.FILE_LOAD_ERROR, onError);
     l.on(Phaser.Loader.Events.FILE_COMPLETE, onDone);
+    scene.events.once(Phaser.Scenes.Events.SHUTDOWN, onShutdown);
     queue(l);
     l.once(Phaser.Loader.Events.COMPLETE, () => {
+      scene.events.off(Phaser.Scenes.Events.SHUTDOWN, onShutdown);
       l.off(Phaser.Loader.Events.FILE_LOAD_ERROR, onError);
       l.off(Phaser.Loader.Events.FILE_COMPLETE, onDone);
       resolve(failed);

@@ -15,7 +15,7 @@ import { useCourse } from './flow';
 import { LoadSuperseded } from '../data/courses';
 
 /** No progress for this long while a course loads: offer a reload (which then opens the course). */
-const STALL_MS = 20_000;
+export const STALL_MS = 20_000;
 export const OPEN_COURSE_KEY = 'golf:open-course';
 
 /** Reload the page and open this course straight away (what a player did by hand when a load hung). */
@@ -67,10 +67,13 @@ export class CourseSelectScene extends MenuScene {
     view = 'states';
     page = 0;
     this.busy = false;
+    this.loadError = '';
   }
 
   protected back() {
     if (this.busy) return;
+    // a failed load left no course: start the page again on the last course that loaded
+    if (!app.course) { window.location.reload(); return; }
     if (view === 'group') { view = 'courses'; page = 0; this.rebuild(); return; }
     if (view === 'courses') { view = 'states'; page = 0; this.rebuild(); return; }
     if (this.from === 'leaderboard') this.scene.start('leaderboard', { courseId: this.current });

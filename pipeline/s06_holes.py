@@ -54,11 +54,14 @@ def status(diff_pct: float) -> str:
 
 # Where the virtual tee may stand in its box (developer, 2026-10-19: "the tee on
 # Langston 2 is barely on the tee box ... nearly every tee isn't actually in the
-# centre of the tee box"): on the box's centre line, at least CORE_FRAC of the
-# box's half-width from every edge. A square box leaves only its centre; a long
-# strip (several tee sets in one OSM polygon) lets the tee slide along its middle
-# to the back or front, but never to the edge.
-CORE_FRAC = 0.9
+# centre of the tee box"): on the box's centre line - across the line of play the
+# tee keeps RIDGE of the largest distance to the box's sides there, so it stands in
+# the middle of the box's width - and away from its back and front edges by
+# END_MARGIN_M (less on a narrow box). A square box leaves little room; a long strip
+# (several tee sets in one polygon) lets the tee slide along its middle toward the
+# back or front when the card needs it, never to an edge.
+RIDGE = 0.85
+END_MARGIN_M = 2.5
 CORE_STEP = 0.25  # m between the points tried
 
 
@@ -70,29 +73,53 @@ def box_centre(poly):
     return c, part.exterior.distance(c) if not part.interiors else part.boundary.distance(c)
 
 
-def core_points(poly):
-    """The points a virtual tee may use in this box: its centre first, then a
-    grid over the box's core (shrunk by CORE_FRAC x the half-width)."""
+def play_axis(poly, line, green_c):
+    """Unit vector of the line of play leaving this box."""
+    c, _ = box_centre(poly)
+    _, pts = path_from(c, line, green_c)
+    (x0, y0), (x1, y1) = pts[0], pts[1]
+    d = math.hypot(x1 - x0, y1 - y0) or 1.0
+    return (x1 - x0) / d, (y1 - y0) / d
+
+
+_core_cache: dict = {}
+
+
+def core_points(poly, axis=None):
+    """The points a virtual tee may use in this box: its centre first, then the
+    grid points on the box's centre line (see RIDGE / END_MARGIN_M)."""
+    key = (poly.wkb, axis)
+    if key in _core_cache:
+        return _core_cache[key]
     c, r = box_centre(poly)
     pts = [c]
-    if r <= 0.2:
-        return pts
-    core = poly.buffer(-CORE_FRAC * r)
-    if core.is_empty:
-        return pts
-    minx, miny, maxx, maxy = core.bounds
-    for x in np.arange(math.floor(minx / CORE_STEP) * CORE_STEP, maxx + 1e-9, CORE_STEP):
-        for y in np.arange(math.floor(miny / CORE_STEP) * CORE_STEP, maxy + 1e-9, CORE_STEP):
-            p = Point(x, y)
-            if core.contains(p):
-                pts.append(p)
+    if r > 0.2:
+        ux, uy = axis if axis else (1.0, 0.0)
+        margin = min(max(END_MARGIN_M, 0.5 * r), 0.85 * r)
+        minx, miny, maxx, maxy = poly.bounds
+        cand = []
+        for x in np.arange(math.floor(minx / CORE_STEP) * CORE_STEP, maxx + 1e-9, CORE_STEP):
+            for y in np.arange(math.floor(miny / CORE_STEP) * CORE_STEP, maxy + 1e-9, CORE_STEP):
+                p = Point(x, y)
+                if not poly.contains(p):
+                    continue
+                d = poly.boundary.distance(p)
+                if d < margin:
+                    continue
+                u = (x - c.x) * ux + (y - c.y) * uy
+                cand.append((round(u / 0.5), d, p))
+        best = {}
+        for b, d, _p in cand:
+            best[b] = max(best.get(b, 0.0), d)
+        pts += [p for b, d, p in cand if d >= RIDGE * best[b]]
+    _core_cache[key] = pts
     return pts
 
 
 def best_point_in(poly, line, green_c, target_m):
-    """The point of the box's core whose measured length passes nearest the
+    """The point of the box's centre line whose measured length passes nearest the
     centre (within 2.5 % of the card if it can), else the one closest to the card."""
-    pts = core_points(poly)
+    pts = core_points(poly, play_axis(poly, line, green_c))
     c = pts[0]
     best_pass, best_any = None, None
     for p in pts:
@@ -112,7 +139,7 @@ def end_point_in(poly, line, green_c, back=True):
     """The point of the box's core farthest from (back) or nearest to (front)
     the green, measured along the hole."""
     best = None
-    for p in core_points(poly):
+    for p in core_points(poly, play_axis(poly, line, green_c)):
         m, _ = path_from(p, line, green_c)
         key = m if back else -m
         if best is None or key > best[0]:
@@ -127,7 +154,7 @@ def clear_point_in(poly, line, green_c, target_m, current, cur_rank, is_clear):
     """The clear point of the box's core nearest to `current` whose yardage
     status is no worse than `cur_rank`; None if there is none."""
     best = None
-    for p in core_points(poly):
+    for p in core_points(poly, play_axis(poly, line, green_c)):
         m, cl = path_from(p, line, green_c)
         if RANK[status((m - target_m) / target_m * 100)] > cur_rank:
             continue
@@ -269,7 +296,7 @@ def build_layout(name, cfg, lay, g):
                         "hole": n, "tee_set": ts, "step": 2, "type": "tee_position",
                         "from": [rnd(tee_pt.x), rnd(tee_pt.y)], "to": [rnd(adj_pt.x), rnd(adj_pt.y)],
                         "real_yd": rnd(real_yd, 1), "adjusted_yd": rnd(adj_m / YD, 1), "card_yd": card_yd,
-                        "reason": f"measured {real_yd:.0f} yd from the tee-box centre vs {card_yd:.0f} on the card ({diff:+.1f}%); moved the virtual tee along the middle of the real tee polygon {tee_osm} (kept {CORE_FRAC:.0%} of its half-width from every edge)",
+                        "reason": f"measured {real_yd:.0f} yd from the tee-box centre vs {card_yd:.0f} on the card ({diff:+.1f}%); moved the virtual tee along the middle of the real tee polygon {tee_osm} (on its centre line, at least {END_MARGIN_M:g} m from its back and front)",
                     })
             if tpoly is not None and pos not in ("back", "front") and not keeps_tee_trees(cfg, lay, n):
                 _, cl = path_from(adj_pt, L, gc)

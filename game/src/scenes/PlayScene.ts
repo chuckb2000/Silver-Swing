@@ -117,6 +117,12 @@ export class PlayScene extends Phaser.Scene {
     this.level = COURSE;
     this.holing = false;
     this.fading = false;
+    // a scene object is reused from round to round: nothing from the last one carries over
+    this.zooming = false;
+    this.drag = null;
+    this.preroll = null;
+    this.explore = false;
+    this.meter = null;
     const cam = this.cameras.main;
     worldCamera(cam, COURSE);
     cam.setBackgroundColor('#20381f');

@@ -10,6 +10,8 @@ import { initAudio, setVolume } from '../audio/sfx';
 import { peekSnapshot } from '../save/snapshot';
 import { Button, COLORS, Panel, setTxt, txt } from '../ui/widgets';
 import { resumeRound } from './flow';
+import { LoadSuperseded } from '../data/courses';
+import { STALL_MS } from './CourseSelectScene';
 import { ensureBg, MenuScene } from './menu';
 
 const SHOW_MS = 9000;   // each course on screen
@@ -33,6 +35,7 @@ export class TitleScene extends MenuScene {
   create() {
     this.flyover = false;
     this.shown = [];
+    this.resuming = false;
     this.shade = this.add.rectangle(0, 0, 10, 10, 0x081018, SHADE).setOrigin(0, 0).setDepth(-1);
     this.layoutShade();
     this.scale.on('resize', this.layoutShade, this);
@@ -41,6 +44,10 @@ export class TitleScene extends MenuScene {
     setVolume(app.settings.volume, app.settings.muted);
     this.input.once('pointerdown', () => { void initAudio(); });
     super.create();
+  }
+
+  protected back() {
+    // ESC on the title does nothing (it used to restart the scene, also in the middle of loading a round's course)
   }
 
   private layoutShade() {
@@ -168,12 +175,25 @@ export class TitleScene extends MenuScene {
         const msg = txt(this, cx, H / 2 - 4, 'loading course...', { origin: [0.5, 0], scale: 2, color: COLORS.yellow });
         this.root.add([dim, msg]);
         let ok = false;
+        let last = Date.now();
+        let offered = false;
+        const watch = this.time.addEvent({
+          delay: 1000, loop: true, callback: () => {
+            if (offered || Date.now() - last < STALL_MS || !msg.active) return;
+            offered = true; // stalled: offer what a player did by hand, a reload that opens the round
+            this.root.add(txt(this, cx, H / 2 + 14, 'this is taking a while - the connection may have stalled', { origin: [0.5, 0], color: COLORS.dim, maxWidth: W - 16 }));
+            this.root.add(new Button(this, cx - 40, H / 2 + 28, 80, 16, 'reload', () => window.location.reload()));
+          },
+        });
         try {
-          ok = await resumeRound(this, (f) => { if (msg.active) setTxt(msg, `loading course ${Math.round(f * 100)}%`); });
+          ok = await resumeRound(this, (f) => { last = Date.now(); if (msg.active) setTxt(msg, `loading course ${Math.round(f * 100)}%`); });
         } catch (e) {
+          if (e instanceof LoadSuperseded) return;
           console.error(e);
         }
+        watch.remove();
         this.resuming = false;
+        if (!app.course) { window.location.reload(); return; } // the load failed half way: start again on the last good course
         if (!ok) this.rebuild();
         else this.scene.stop('bg');
       });

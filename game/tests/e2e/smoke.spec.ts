@@ -194,4 +194,20 @@ test('the menu button quits a round for good', async ({ page }) => {
   await page.waitForTimeout(500);
   expect(await page.evaluate(() => localStorage.getItem('local-golf:round-in-progress'))).toBeNull();
   expect(await page.evaluate(locate, ['title', 'play', null] as [string, string | null, string | null])).not.toBeNull(); // not "continue round"
+  // a second round in the same tab, on another course: the HUD used to write to the first round's
+  // destroyed text and freeze (developer: "freezes when I load a course for the first time")
+  const errors: string[] = [];
+  page.on('pageerror', (e) => errors.push(e.message));
+  await tap(page, 'title', { button: 'play' }, sceneActive, 'courses');
+  await page.evaluate(() => (window.__game.scene.getScene('courses') as any).choose('highland_links'));
+  await page.waitForFunction(() => window.__game.scene.isActive('setup'), null, { timeout: 120_000 });
+  await tap(page, 'setup', { button: 'tee off' }, () => window.__game.scene.isActive('play') && window.__game.scene.getScene('play').state === 'intro');
+  await page.keyboard.press('Space');
+  await page.waitForFunction(() => window.__game.scene.getScene('play').state === 'aim', null, { polling: 100 });
+  await page.evaluate(() => window.__autoplay.shot(0));
+  await page.waitForFunction(() => ['aim', 'holed', 'relief', 'drop'].includes(window.__game.scene.getScene('play').state), null, { polling: 100, timeout: 120_000 });
+  const f0 = await page.evaluate(() => window.__game.loop.frame);
+  await page.waitForFunction((f) => window.__game.loop.frame > f + 5, f0, { timeout: 30_000 }); // still running
+  expect(await page.evaluate(() => window.__golf.round.cfg.courseId)).toBe('highland_links');
+  expect(errors).toEqual([]);
 });

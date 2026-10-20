@@ -77,6 +77,17 @@ export class HudScene extends Phaser.Scene {
   }
 
   create() {
+    // Phaser reuses this object when the scene starts again (the next round in the same
+    // tab): forget the last round's objects, which were destroyed when it stopped. Left
+    // in place, refresh() wrote to destroyed text and froze the game on the second round
+    // (developer, 2026-10-19: "freezes when I load a course for the first time").
+    this.infoLines = [];
+    this.meterLabels = [];
+    this.intro = null;
+    this.modal = null;
+    this.cardLayer = null;
+    this.modalBeforeCard = null;
+    this.bannerTimer = undefined;
     this.play = this.scene.get('play') as PlayScene;
     uiCamera(this.cameras.main);
     this.W = app.view.w;

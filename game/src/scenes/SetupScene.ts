@@ -24,7 +24,8 @@ export class SetupScene extends MenuScene {
     const x0 = Math.round((W - pw) / 2), y0 = Math.round((H - ph) / 2);
     this.root.add(new Panel(this, x0, y0, pw, ph, 0.9));
     this.root.add(txt(this, x0 + pw / 2, y0 + 6, 'new round', { origin: [0.5, 0], scale: 2 }));
-    const c = app.course!.json;
+    if (!app.course) { this.scene.start('courses', { purpose: 'play', from: 'title' }); return; } // a course load failed
+    const c = app.course.json;
     const teeName = teeFor(c, app.settings.tees);
     const tee = c.teeSets.find((t) => t.name === teeName) ?? c.teeSets[0];
     let y = y0 + 30;

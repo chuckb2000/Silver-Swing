@@ -51,7 +51,7 @@ export class LeaderboardScene extends MenuScene {
     if (view !== 'scores') { await this.buildFeats(x0, y0, pw, ph); return; }
     // course: the current one unless another was picked here
     const courses = app.courses;
-    if (!courses.some((c) => c.id === courseId)) courseId = app.course!.json.id;
+    if (!courses.some((c) => c.id === courseId)) courseId = app.course?.json.id ?? courses[0]?.id ?? '';
     const ci = Math.max(0, courses.findIndex((c) => c.id === courseId));
     const info = courses[ci];
     const tees = info.teeSets;
