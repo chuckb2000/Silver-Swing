@@ -548,7 +548,9 @@ DECISIONS.md with the reason.
     11.18, branch `course/wannamoisett`. New `seekonk` theme (very early
     fall). Pipeline gained `roof_last_share` (s05: roofs of unmapped houses
     in class-1 lidar are not trees) and `join_boundary` now fills a mapped
-    pond cut out of the course; every other course rebuilds as committed.
+    pond cut out of the course; s05 hands Eastmoreland's garden its
+    canopy (a clean build failed); every other course rebuilds as
+    committed. 378 unit tests and 4 Playwright tests pass.
 
 -   **Next task:** the third playtest (putting, yellow misses), the club's
     printed scorecard and the hole 3 Blue tee box. New courses: a separate
