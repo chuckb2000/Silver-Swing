@@ -138,6 +138,21 @@
    ]
   },
   {
+   "id": "eastmoreland",
+   "name": "Eastmoreland Golf Course",
+   "location": "Portland, Multnomah County, Oregon",
+   "state": "OR",
+   "theme": "pnw",
+   "holes": 18,
+   "par": 72,
+   "defaultTee": "Blue",
+   "totalYd": 6529,
+   "teeSets": [
+    "Blue",
+    "White"
+   ]
+  },
+  {
    "id": "ogc",
    "name": "Oregon Golf Club",
    "location": "West Linn, Clackamas County, Oregon",

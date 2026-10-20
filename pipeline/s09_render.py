@@ -26,7 +26,7 @@ from shapely.affinity import translate
 from shapely.geometry import LineString, MultiPolygon, Point, Polygon
 from shapely.ops import unary_union
 
-from common import build_dir, course_name_from_argv, layouts, load_config, play_boundary, PX_PER_M, ROOT, SURF, World, write_json
+from common import boundary_rings, build_dir, course_name_from_argv, layouts, load_config, PX_PER_M, ROOT, SURF, World, write_json
 from terrain import tier_offset
 
 warnings.filterwarnings("ignore")
@@ -158,12 +158,13 @@ def hillshade_tone(z, surf):
     return tone, shade
 
 
-def stake_lines(boundary, g, cfg):
-    """Lines of white OB stakes: (ring, polygon, ob_inside). Always the course
-    boundary, stakes on its outer (OB) side; with cfg range_art "rough" also the
-    edge of each driving range, stakes on its inner (OB) side, since a range drawn
-    as rough has no other edge in the art."""
-    out = [(boundary.exterior, boundary, False)]
+def stake_lines(boundaries, g, cfg):
+    """Lines of white OB stakes: (ring, polygon, ob_inside). Always each course
+    boundary part given (common.boundary_rings in s09, the boundary's parts in
+    s09b), stakes on its outer (OB) side; with cfg range_art "rough" also the edge
+    of each driving range, stakes on its inner (OB) side, since a range drawn as
+    rough has no other edge in the art."""
+    out = [(b.exterior, b, False) for b in boundaries]
     if cfg.get("range_art") == "rough":
         for geom in g[g.kind == "driving_range"].geometry:
             for part in getattr(geom, "geoms", [geom]):
@@ -551,10 +552,7 @@ def main():
     rgb = np.array(img)
 
     # OB stakes along the boundary ------------------------------------------
-    boundary = play_boundary(g, cfg)
-    if boundary.geom_type == "MultiPolygon":
-        boundary = max(boundary.geoms, key=lambda p_: p_.area)
-    for ring, poly, ob_inside in stake_lines(boundary, g, cfg):
+    for ring, poly, ob_inside in stake_lines(boundary_rings(g, cfg), g, cfg):
         for s_ in np.arange(0, ring.length, 9.0):
             p = ring.interpolate(s_)
             q = ring.interpolate(min(ring.length, s_ + 0.5))
