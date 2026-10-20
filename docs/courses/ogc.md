@@ -11,6 +11,10 @@ and drawn as rough; branch `course/ogc` (merged after `course/tualatin`). Pipeli
 `range_art` (s09, s09b, s10); every other course rebuilds unchanged.
 338 unit tests and 4 Playwright tests pass. Open items: section 11.16.
 
+The creek on 13, 14 and 15 (developer, 2026-10-20): three red penalty
+areas traced from the lidar channel along OSM's stream lines
+(`propose_channels.py`, `flatten=no`); branch `course/ogc-creek`.
+
 ## Facts, scorecard and open items
 
 Built by a course chat (2026-10-19) following docs/COURSE_BUILD.md;
@@ -30,7 +34,9 @@ data/ogc/validation_report.md.
     release `ogc-data`). Power lines removed from the canopy before the
     tree search (`remove_wires`).
 -   **Water:** Hershiser Reservoir (holes 7 and 9), the hole 8 creek and
-    ponds and the hole 4 pond, all red (developer).
+    ponds, the hole 4 pond, and the creek in front of the 13th green, up
+    the right side of 14 and between the 15th fairway and green (from the
+    lidar along the OSM stream lines, 2026-10-20), all red (developer).
 -   **Driving range** (target greens P3-P9): out of bounds, drawn by
     the developer in the tracing desk, drawn as rough with OB stakes
     (`range_art`; developer: the range is rough on the ground). Hole 9's
