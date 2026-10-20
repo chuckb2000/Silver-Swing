@@ -746,7 +746,8 @@ paths (relief), not OB, unless the developer says otherwise.
 - **Course id:** if the developer already has a logo for the course, use
   its id: `highland_links`, `langdon`, `east_potomac`, `langston`,
   `stone_creek`, `waverley`, `eastmoreland`, `willamette_valley`,
-  `indian_island`, `gearhart`, `tualatin`
+  `indian_island`, `gearhart` (a golf ball in a beer stein), `tualatin`,
+  `chambers_bay` (the concrete ruins)
   (`assets-src/logos.py`). Otherwise ask the developer what the logo should
   show; the design chat draws it.
 - **State:** add `"state": "<postal code>"` to `course_config.json`; s10

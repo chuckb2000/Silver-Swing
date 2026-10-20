@@ -695,6 +695,88 @@ def turtle(c: dict) -> np.ndarray:
     return outlined(img, c["edge"])
 
 
+# ------------------------------------------------------------- concrete ruins
+def ruins(c: dict) -> np.ndarray:
+    """The old concrete gravel-plant ruins on a fescue dune, Puget Sound showing through (Chambers Bay)."""
+    X, Y = grid()
+    img = np.zeros((S, S, 4), np.uint8)
+
+    def structure(tx0, tx1, ttop, lx, rx, wall_drop, base, cols):
+        """A tower with a sloping buttress wall either side; each wall ends on a thin
+        leg, and the brace under it leaves a triangular opening to the ground."""
+        lit, mid, shade_ = cols
+        tower = (X >= tx0) & (X <= tx1) & (Y >= ttop) & (Y <= base)
+        tower |= (X >= tx0 + 1.0) & (X <= tx0 + 3.0) & (Y >= ttop - 1.5) & (Y <= base)    # the raised step on top
+        leg_top = ttop + wall_drop
+        lw = poly(X, Y, [(tx0, ttop + 6.0), (lx, leg_top), (lx, leg_top + 1.5), (tx0, base - 1.0)])
+        rw = poly(X, Y, [(tx1, ttop + 6.0), (rx, leg_top), (rx, leg_top + 1.5), (tx1, base - 1.0)])
+        legl = (X >= lx - 1.0) & (X <= lx + 0.2) & (Y >= leg_top) & (Y <= base)
+        legr = (X >= rx - 0.2) & (X <= rx + 1.0) & (Y >= leg_top) & (Y <= base)
+        paint(img, lw | legl, lit)
+        paint(img, rw | legr, shade_)
+        paint(img, tower, mid)
+        paint(img, tower & (X < (tx0 + tx1) / 2), lit)
+        # the tower's edges stand out from the walls behind it
+        paint(img, tower & ((X < tx0 + 1.0) | (X > tx1 - 1.0)) & (Y > ttop + 5.0), c["seam"])
+        return tower | lw | rw | legl | legr
+
+    # one great ruin, the openings under its braces left open to the sky
+    near = structure(12.5, 19.5, 2.5, 4.0, 28.0, 12.0, 26.0, (c["wall_lit"], c["mid"], c["shade"]))
+    paint(img, near & (np.abs(X - 16.0) < 0.5) & (Y > 3) & (Y < 26), c["edge_light"])     # the corner catching the light
+    for sx, y0, y1 in ((14.5, 3, 8), (18.0, 3, 11), (9.5, 11, 14), (23.0, 11, 15), (26.0, 13, 15)):
+        paint(img, near & (np.abs(X - sx) < 0.5) & (Y >= y0) & (Y <= y1), c["stain"])   # rain stains
+    # the dune: golden fescue, tufts above its crest
+    crest = 25.0 + 0.010 * (X - 16.0) ** 2 - 0.7 * np.sin(X * 0.8)
+    dune = (Y >= crest) & (Y <= 30.5) & (X >= 0.5) & (X <= 31.5)
+    paint(img, dune, c["grass"])
+    paint(img, dune & (Y >= crest + 3.0), c["grass_dark"])
+    paint(img, dune & (Y < crest + 1.0), c["grass_light"])
+    blades = (Y < crest) & (Y >= crest - 2.0) & ((np.floor(X).astype(int) % 3) == 0) & (X > 1) & (X < 31)
+    paint(img, blades, c["grass_light"])
+    return outlined(img, c["edge"])
+
+
+# ----------------------------------------------------------- ball in a stein
+def stein(c: dict) -> np.ndarray:
+    """A golf ball splashing into a glass stein of beer, foam spilling over (Gearhart)."""
+    X, Y = grid()
+    img = np.zeros((S, S, 4), np.uint8)
+    # the handle, a thick loop on the right
+    hd = np.hypot((X - 22.0) / 1.0, (Y - 19.5) / 1.15)
+    handle = (hd <= 6.2) & (hd >= 3.6) & (X >= 21.0)
+    paint(img, handle, c["glass_edge"])
+    paint(img, handle & (X > 26.0), c["glass_dark"])
+    # the glass: straight sides, a thick base
+    body = (X >= 6.0) & (X <= 22.0) & (Y >= 10.0) & (Y <= 29.5)
+    paint(img, body, c["glass_edge"])
+    beer = (X >= 7.5) & (X <= 20.5) & (Y >= 11.0) & (Y <= 26.5)
+    paint(img, beer, c["beer"])
+    paint(img, beer & (X > 17.5), c["beer_dark"])
+    paint(img, beer & (X < 9.5), c["beer_light"])
+    paint(img, body & (Y > 26.5), c["glass_base"])                         # the thick glass base
+    # dimpled-mug facets and rising bubbles
+    paint(img, beer & (np.abs(((X - 7.5) % 4.4) - 4.0) < 0.45), c["beer_light"])
+    for bx, by in ((11.5, 23.5), (13.5, 20.5), (11.5, 17.5), (15.5, 24.5), (16.5, 18.5)):
+        paint(img, (np.hypot(X - bx, Y - by) < 0.75), c["bubble"])
+    paint(img, body & (np.abs(X - 8.0) < 0.5) & (Y > 13) & (Y < 25), c["glint"])  # glint down the glass
+    # the foam head, bumpy, spilling over the rim with drips
+    top = 9.0 - 1.2 * np.abs(np.sin(X * 0.95))
+    foam = (Y >= top) & (Y <= 12.5) & (X >= 5.0) & (X <= 23.0)
+    drips = ((np.abs(X - 6.0) < 1.0) & (Y <= 15.5) & (Y >= 12)) | ((np.abs(X - 21.5) < 1.0) & (Y <= 14.5) & (Y >= 12))
+    paint(img, foam | drips, c["foam"])
+    paint(img, (foam | drips) & ((Y > 11.5) | (X > 19.5)), c["foam_shade"])
+    # the ball, half sunk in the foam, splash flying out
+    bd = np.hypot(X - 13.5, Y - 5.5)
+    ball = (bd <= 3.6) & (Y < 9.0)
+    paint(img, ball, c["ball"])
+    paint(img, ball & (X - 13.5 + Y - 5.5 > 1.8), c["ball_shade"])
+    paint(img, ball & (np.floor(X).astype(int) % 2 == 0) & (np.floor(Y).astype(int) % 2 == 1) & (bd < 2.8), c["dimple"])
+    paint(img, ring_of(ball) & (Y < 8.5), c["ball_rim"])
+    for dx, dy, r in ((7.5, 5.0, 0.9), (5.0, 7.0, 0.7), (19.5, 6.5, 0.9), (22.0, 8.0, 0.7), (8.5, 2.5, 0.6)):
+        paint(img, np.hypot(X - dx, Y - dy) <= r, c["foam"])
+    return outlined(img, c["edge"])
+
+
 def colour_disc(fn, fill, rim):
     """A logo drawn over a disc in a course's colour: one course of several at a
     place (East Potomac Blue / White / Red)."""
@@ -765,10 +847,18 @@ LOGOS = {
         "glint": rgba("#e6eaf1"), "light": rgba("#b9c0cc"), "mid": rgba("#8c94a3"), "dark": rgba("#646b7a"),
         "deep": rgba("#454b58"), "ridge": rgba("#d7dce5"), "edge": EDGE,
     }),
-    "gearhart": (shipwreck, {
-        "wood": rgba("#8a5a34"), "wood_light": rgba("#b07a48"), "wood_dark": rgba("#5e3a20"),
-        "dark": rgba("#2a1a10"), "sail": rgba("#e8dcc0"), "sail_dark": rgba("#c4b38e"),
-        "water": rgba("#2f7fc4"), "water_dark": rgba("#205f9a"), "water_light": rgba("#7fbcea"), "foam": rgba("#eaf5ff"),
+    "gearhart": (stein, {
+        "glass_edge": rgba("#d9e6ee"), "glass_dark": rgba("#a9bccb"), "glass_base": rgba("#c3d4e0"), "glint": rgba("#ffffff"),
+        "beer": rgba("#e3a21f"), "beer_light": rgba("#f6c34a"), "beer_dark": rgba("#b77913"), "bubble": rgba("#ffe08a"),
+        "foam": rgba("#fbf6e8"), "foam_shade": rgba("#e3d9bf"),
+        "ball": rgba("#ffffff"), "ball_shade": rgba("#dfe3e8"), "dimple": rgba("#c9d0d8"), "ball_rim": rgba("#7d8894"),
+        "edge": EDGE,
+    }),
+    "chambers_bay": (ruins, {
+        "lit": rgba("#cfcec6"), "wall_lit": rgba("#bab9b1"), "seam": rgba("#8a8982"), "mid": rgba("#a6a59d"), "shade": rgba("#8e8d86"), "deep": rgba("#6f6e68"),
+        "edge_light": rgba("#e3e2db"), "stain": rgba("#7d7b72"), "haze": rgba("#aab3bb"), "haze_light": rgba("#c3cad0"),
+        "water": rgba("#5f86a8"), "water_light": rgba("#8fb0cc"),
+        "grass": rgba("#cfa64a"), "grass_light": rgba("#e8c66c"), "grass_dark": rgba("#a4802f"),
         "edge": EDGE,
     }),
     "tualatin": (bridge, {
