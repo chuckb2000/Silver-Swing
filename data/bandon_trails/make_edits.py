@@ -54,8 +54,24 @@ def main():
     for _, f in g[g.kind == "green"].sort_values("osm").iterrows():
         if not f.geometry.intersects(world):
             drop.append({"osm": f.osm, "reason": "green of another course wholly outside the world box (s07/s09 cannot shape a green off the map)"})
+    # golf=path (the current OSM tag for a course path) is not read as a cart
+    # path by s01 (COURSE_LESSONS.md 10): copy it as golf=cartpath, drop the original
+    paths = g[(g.kind == "golf_other") & g.tags.apply(lambda t: t.get("golf") == "path")]
+    paths = paths[paths.geometry.intersects(trails)]
+    add = []
+    if len(paths):
+        prop = paths.copy()
+        prop["osm"] = prop.osm + "_cartpath"  # a new id: "drop" removes by id, and the original goes
+        prop["kind"] = "cartpath"
+        prop["tags"] = prop.tags.apply(lambda t: {**t, "golf": "cartpath", "was": "golf=path"})
+        (HERE / "proposed").mkdir(exist_ok=True)
+        prop[["osm", "kind", "tags", "geometry"]].to_file(HERE / "proposed" / "paths_as_cartpaths.geojson", driver="GeoJSON")
+        add.append({"from": "proposed/paths_as_cartpaths.geojson", "ids": sorted(prop.osm),
+                    "reason": "golf=path inside the boundary (a course path near hole 3), not read by s01: copied as golf=cartpath (free relief, drawn as a path)"})
+        for o in sorted(paths.osm):
+            drop.append({"osm": o, "reason": "replaced by its golf=cartpath copy (add above)"})
     out = {"note": "Edits to the OSM layout for Bandon Trails, made by make_edits.py; built into edited/course.geojson by pipeline/merge_edits.py.",
-           "drop": drop}
+           "add": add, "drop": drop}
     (HERE / "edits.json").write_text(json.dumps(out, indent=1, ensure_ascii=False) + "\n")
     print(f"edits.json: {len(drop)} drops")
 

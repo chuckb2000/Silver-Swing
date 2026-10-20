@@ -1,5 +1,14 @@
 {
  "note": "Edits to the OSM layout for Bandon Trails, made by make_edits.py; built into edited/course.geojson by pipeline/merge_edits.py.",
+ "add": [
+  {
+   "from": "proposed/paths_as_cartpaths.geojson",
+   "ids": [
+    "w685698025_cartpath"
+   ],
+   "reason": "golf=path inside the boundary (a course path near hole 3), not read by s01: copied as golf=cartpath (free relief, drawn as a path)"
+  }
+ ],
  "drop": [
   {
    "osm": "w362513477",
@@ -216,6 +225,10 @@
   {
    "osm": "w853761987",
    "reason": "green of another course wholly outside the world box (s07/s09 cannot shape a green off the map)"
+  },
+  {
+   "osm": "w685698025",
+   "reason": "replaced by its golf=cartpath copy (add above)"
   }
  ]
 }

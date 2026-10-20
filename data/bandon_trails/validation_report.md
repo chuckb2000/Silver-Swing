@@ -32,6 +32,22 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 2. Hole 7: the OSM hole line starts 65 m from the Green tee box (w888290706), and only that box matches the card; the line was probably drawn from another tee. Measured from the Green box through the line's bend points.
 3. Hole 18: the OSM hole line starts 54 m from the Green tee box (w674855470), and only that box matches the card; the line was probably drawn from another tee. Measured from the Green box through the line's bend points.
 
+## Other open items (Bandon Trails)
+
+Built 2026-10-20 by a course chat with the standing defaults (docs/COURSE_BUILD.md 4.1). The developer accepted every recommendation of the intake message, asked for a new theme and for the trail-marker logo, and asked for the build to go ahead without questions. The items below are the course chat's calls and the data's gaps, each with a recommendation.
+
+1. **Scorecard:** the resort's 2026 Bandon Trails card (resort website image, in the release). Every row adds up to its printed totals; the stroke index is a clean 1-18 (odd out, even in). The Orange set has its own handicap row (different on holes 3, 4, 7, 9, 13 and 18); it is not built. Recommendation: none needed.
+2. **Green tees** (6,249 yd, 72.0/137): the card has no Blue; Green is the set closest to 6,300 yd. "Royal Blue" is the 3,937-yd forward set. Black, Gold, Royal Blue and Orange are in `scorecard.csv`, not built.
+3. **Virtual tees moved within their boxes on seven holes** (1, 5, 7, 8, 11, 12, 13; `adjustments.json`). Measured from the box centres, holes 5 (-11.8 %), 7 (-8.1 %), 11 (+8.0 %) and 12 (-10.7 %) are over 8 %; each box is a long tee complex shared by several sets, and moving the tee along its centre line (s06's rule) brings every hole within 3 % of the card (course total 6,258 yd against 6,249). The OSM hole lines of 6, 7 and 18 start 53-65 m from the Green box (they were drawn from the back tees); those holes are measured from the Green box along the line. Recommendation: accept.
+4. **Water, all red:** the two ponds by hole 11 (OSM lateral water hazards inside the boundary) and Round Lake beside the 7th tee (w266664506, a lateral water hazard just outside the boundary, made a penalty area through `red_water_osm` so it is not out of bounds). Fahys Lake (w266664497, 108 m from hole 13 through forest, outside the boundary, not a hazard in OSM) stays out of bounds. Chrome Lake (w266664513, a Bandon Dunes hazard north of the map) appears in course.json's water list but lies outside the world, so it can't be reached.
+5. **The other resort courses are out of bounds.** The OSM export also holds Bandon Dunes, Bandon Preserve and Shortys. `edits.json` (written by `make_edits.py`) drops their three course boundaries and 40 hole lines, and 11 Bandon Dunes greens that lie wholly off the map (s07/s09 cannot shape a green outside the world; a request for the design chat). Their remaining greens, tees and bunkers are drawn as out-of-bounds ground.
+6. **Unraked sand is rough.** The card makes every sand area without rakes a general area; OSM maps only the bunkers, so the dune sand between holes plays and is drawn as fescue rough. Recommendation: accept (tracing the waste areas from the orthophoto would need a surface the game doesn't have, or would play them as bunkers).
+7. **Round Lake Drive** crosses holes 3 and 18 inside the boundary and plays as a cart path (free relief). A course path near hole 3 tagged `golf=path` is copied as a cart path (`edits.json`).
+8. **Trees:** 25,950 from the DOGAMI canopy height model (5,080 on the course; median 19.5 m, max 43.3 m). The lidar crowns match the 2024 orthophoto across the course (checked in crops), so the flight post-dates construction; the DOGAMI mosaic doesn't give the project year. One 18.7 m tree inside hole 9's fairway was removed (`trees_off_fairways_m: 2`); 32 crowns inside Round Lake's mapped outline (along its wooded arms), 3 on bunkers and 23 on the neighbouring courses' greens and tees were dropped (spec 5.4). s06b found every tee shot at the middle of the fairway clear; no tree was dropped for a tee shot.
+9. **Tree types are a drawing choice.** s05 splits crowns by shape (41 % narrow "conifer", 59 % broad). On this coast nearly every tree is a conifer, so the `bandon` theme draws narrow crowns as Sitka spruce and Douglas fir and broad ones as wind-shaped shore pine rather than broadleaves. Not a surveyed species map.
+10. **Wind 3-14 mph** (open coast default). The back nine sits in forest; if it plays too windy, 2-12 is the bay setting.
+11. **Course card:** hole 11's green beside the forest pond (course chat's pick).
+
 ## Playability adjustments
 
 - Hole 1 (Green): measured 340 yd from the tee-box centre vs 356 on the card (-4.5%); moved the virtual tee along the middle of the real tee polygon w888289364 (on its centre line, at least 2.5 m from its back and front) -> 347.2 yd (real 339.9 yd).
@@ -136,23 +152,12 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 - green w833092164 at (190, 1461) is not the end of any hole line (practice green?) -> treated as a wrong green
 - green w833092173 at (68, 1364) is not the end of any hole line (practice green?) -> treated as a wrong green
 - green w833094299 at (50, 1398) is not the end of any hole line (practice green?) -> treated as a wrong green
-- green w833234950 at (-67, 1386) is not the end of any hole line (practice green?) -> treated as a wrong green
-- green w833234953 at (-110, 1457) is not the end of any hole line (practice green?) -> treated as a wrong green
 - green w833234958 at (58, 1459) is not the end of any hole line (practice green?) -> treated as a wrong green
-- green w853761987 at (-78, 1507) is not the end of any hole line (practice green?) -> treated as a wrong green
 - green w853761988 at (13, 1459) is not the end of any hole line (practice green?) -> treated as a wrong green
 - green w853761989 at (166, 1542) is not the end of any hole line (practice green?) -> treated as a wrong green
 - green w888362150 at (412, 1657) is not the end of any hole line (practice green?) -> treated as a wrong green
-- green w1056993353 at (172, 1999) is not the end of any hole line (practice green?) -> treated as a wrong green
-- green w1057044354 at (135, 1889) is not the end of any hole line (practice green?) -> treated as a wrong green
-- green w1057044361 at (-5, 2191) is not the end of any hole line (practice green?) -> treated as a wrong green
 - green w1057046552 at (80, 1683) is not the end of any hole line (practice green?) -> treated as a wrong green
-- green w1057047150 at (-95, 1861) is not the end of any hole line (practice green?) -> treated as a wrong green
-- green w1057196954 at (-195, 2057) is not the end of any hole line (practice green?) -> treated as a wrong green
-- green w1057206612 at (-284, 1751) is not the end of any hole line (practice green?) -> treated as a wrong green
 - green w1057216441 at (49, 1582) is not the end of any hole line (practice green?) -> treated as a wrong green
-- green w1057222111 at (476, 1900) is not the end of any hole line (practice green?) -> treated as a wrong green
-- green w1187067947 at (515, 1943) is not the end of any hole line (practice green?) -> treated as a wrong green
 - green w1540940977 at (203, 626) is not the end of any hole line (practice green?) -> treated as a wrong green
 - green w1547376225 at (145, 637) is not the end of any hole line (practice green?) -> treated as a wrong green
 - green w1547384733 at (182, 751) is not the end of any hole line (practice green?) -> treated as a wrong green
@@ -171,5 +176,5 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 - green w1547584783 at (240, 964) is not the end of any hole line (practice green?) -> treated as a wrong green
 - green w1547585712 at (288, 1116) is not the end of any hole line (practice green?) -> treated as a wrong green
 
-Totals: 122 tees, 59 greens, 32 fairways, 268 bunkers, 4 water hazards, 39 pins, 66 cart paths, 12 OSM tree points.
+Totals: 122 tees, 48 greens, 32 fairways, 268 bunkers, 4 water hazards, 39 pins, 67 cart paths, 12 OSM tree points.
 
