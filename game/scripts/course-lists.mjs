@@ -22,6 +22,7 @@ export function entryOf(c) {
     holes: c.holes.length, par: c.par, defaultTee: c.defaultTee, totalYd: def.totalYd, teeSets: tees.map((t) => t.name),
   };
   if (c.group) Object.assign(e, { group: c.group, groupName: c.groupName, layout: c.layout });
+  if (c.nines) e.nines = c.nines; // a club of three or more nines: the rounds it offers
   return e;
 }
 

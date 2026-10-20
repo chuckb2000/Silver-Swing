@@ -6,6 +6,7 @@ import { ratingText, teeFor } from '../data/registry';
 import { saveSettings } from '../save/store';
 import { Button, COLORS, Panel, txt } from '../ui/widgets';
 import { lengthLabel, lengthsFor, RoundLength, startRound } from './flow';
+import { shapeOfCourse } from '../systems/game/lengths';
 import { MenuScene } from './menu';
 import { askName } from '../ui/nameInput';
 import { DEFAULT_NAME } from '../save/names';
@@ -56,11 +57,14 @@ export class SetupScene extends MenuScene {
       y += 18;
     }
     row('round');
-    const options = lengthsFor(c.holes.length);
+    const shape = shapeOfCourse(c);
+    const options = lengthsFor(shape);
     if (!options.includes(length)) length = options[0];
-    const lens: [RoundLength, string][] = options.map((k) => [k, lengthLabel(k)]);
+    const lens: [RoundLength, string][] = options.map((k) => [k, lengthLabel(k, shape)]);
+    // three to a row (a club of nines: its three pairs, then each nine alone)
     lens.forEach(([k, lab], i) => {
-      this.root.add(new Button(this, vx + i * (bw + 2), y, bw, 15, lab, () => { length = k; this.rebuild(); }, { color: length === k ? 'orange' : 'grey' }));
+      if (i > 0 && i % 3 === 0) y += 17;
+      this.root.add(new Button(this, vx + (i % 3) * (bw + 2), y, bw, 15, lab, () => { length = k; this.rebuild(); }, { color: length === k ? 'orange' : 'grey' }));
     });
     y += 19;
     row('difficulty');

@@ -8,7 +8,7 @@
 import Phaser from 'phaser';
 import { app, GAME_NAME } from '../app';
 import type { LeaderboardEntry } from '../save/entry';
-import { lengthLabel } from '../systems/game/lengths';
+import { cardBlocks, lengthLabel, shapeOfCourse } from '../systems/game/lengths';
 import { toPar } from '../systems/rules/scoring';
 import { cardOfEntry, scorecardOf } from '../scenes/HudScene';
 import { COLORS, txt } from './widgets';
@@ -49,8 +49,9 @@ export async function shareImage(scene: Phaser.Scene, e: LeaderboardEntry, rank 
   box.add(g);
   box.add(txt(scene, W / 2, 4, GAME_NAME.toLowerCase(), { origin: [0.5, 0], color: COLORS.dim }));
   // the course's card art (the middle of it: the signature green), with its logo
-  const nines = e.length === '18' || e.length === '9x2' ? 2 : 1;
-  const artH = nines === 2 ? 92 : 132;
+  const shape = info ? shapeOfCourse(info) : undefined;
+  const nines = cardBlocks(e.length, e.scores.length, shape).length;
+  const artH = nines >= 3 ? 52 : nines === 2 ? 92 : 132;
   const ax = Math.round((W - 208) / 2), ay = 15;
   const frame = scene.add.graphics();
   frame.fillStyle(0x394049, 1).fillRect(ax - 2, ay - 2, 212, artH + 4);
@@ -67,7 +68,7 @@ export async function shareImage(scene: Phaser.Scene, e: LeaderboardEntry, rank 
   let y = ay + artH + 6;
   box.add(txt(scene, W / 2, y, name, { origin: [0.5, 0], maxWidth: W - 12 }));
   y += 11;
-  const meta = [dayText(e.date), `${e.tee.toLowerCase()} tees`, lengthLabel(e.length), e.difficulty, ...(e.casual ? ['casual'] : []), ...(e.daily ? ['daily round'] : [])];
+  const meta = [dayText(e.date), `${e.tee.toLowerCase()} tees`, lengthLabel(e.length, shape), e.difficulty, ...(e.casual ? ['casual'] : []), ...(e.daily ? ['daily round'] : [])];
   box.add(txt(scene, W / 2, y, meta.join('  ·  '), { origin: [0.5, 0], color: COLORS.dim, maxWidth: W - 12 }));
   y += 13;
   const who = txt(scene, 8, y + 4, e.player, { scale: 2, color: COLORS.white });

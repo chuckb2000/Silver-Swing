@@ -13,7 +13,8 @@ import { playerStats } from '../save/stats';
 import { toPar } from '../systems/rules/scoring';
 import { ensureImages } from '../ui/shareCard';
 import { Button, COLORS, Panel, txt } from '../ui/widgets';
-import { lengthLabel } from './flow';
+import { lengthLabel, shapeById } from './flow';
+import { isFullRound } from '../systems/game/lengths';
 import { MenuScene } from './menu';
 
 let tab: 'stats' | 'passport' | 'milestones' = 'stats';
@@ -114,7 +115,7 @@ export class MyGolfScene extends MenuScene {
     const n = Math.max(1, Math.floor((bottom - (y + 11)) / 11));
     st.courses.slice(0, n).forEach((c, i) => {
       const yy = y + 11 * (i + 1);
-      const best = c.best ? `${c.best.gross} (${toPar(c.best.toPar)}) ${c.best.length === '18' || c.best.length === '9x2' ? '' : lengthLabel(c.best.length)}` : '-';
+      const best = c.best ? `${c.best.gross} (${toPar(c.best.toPar)}) ${isFullRound(c.best.length) ? '' : lengthLabel(c.best.length, shapeById(c.best.course))}` : '-';
       [this.courseName(c.course).slice(0, 22), String(c.rounds), c.avg18 === null ? '-' : c.avg18.toFixed(1), c.avg9 === null ? '-' : c.avg9.toFixed(1), best]
         .forEach((v, j) => this.root.add(txt(this, cols[j], yy, v, { color: j === 4 ? COLORS.yellow : COLORS.white })));
     });

@@ -5,6 +5,7 @@
 import type { LeaderboardEntry, RoundLength } from '../../save/entry';
 import { hash32, seedFromString } from '../physics/rng';
 import { compareRounds } from '../rules/scoring';
+import type { Nine } from './lengths';
 
 /** The calendar day (yyyy-mm-dd) in the player's own time zone. */
 export function localDay(d: Date = new Date()): string {
@@ -27,7 +28,7 @@ export function weekStart(day: string): string {
   return addDays(day, -dow);
 }
 
-export interface DailyCourse { id: string; holes: number; defaultTee: string; teeSets: string[] }
+export interface DailyCourse { id: string; holes: number; defaultTee: string; teeSets: string[]; nines?: Nine[] }
 
 export interface DailyPlan {
   day: string;
@@ -42,13 +43,17 @@ export interface DailyPlan {
  * the id, so a new course slots in without reordering the rest); an 18-hole
  * course plays its front nine on even days and its back nine on odd ones.
  */
-export function dailyPlan(day: string, courses: DailyCourse[]): DailyPlan | null {
+export function dailyPlan(day: string, all: DailyCourse[]): DailyPlan | null {
+  // nine holes: a course of 9 or 18 (or more), or a club's nines; a 13-hole course has no nine
+  const courses = all.filter((c) => c.holes === 9 || c.holes >= 18 || (c.nines?.length ?? 0) >= 3);
   if (!courses.length) return null;
   const order = courses.slice().sort((a, b) => hash32(seedFromString(a.id)) - hash32(seedFromString(b.id)) || a.id.localeCompare(b.id));
   const n = dayNumber(day);
   const c = order[((n % order.length) + order.length) % order.length];
   const tee = c.teeSets.includes(c.defaultTee) ? c.defaultTee : c.teeSets[0] ?? c.defaultTee;
-  const length: RoundLength = c.holes === 9 ? '9' : n % 2 === 0 ? 'front' : 'back';
+  const nines = (c.nines?.length ?? 0) >= 3 ? c.nines! : null;
+  const length: RoundLength = nines ? `nines:${nines[((n % nines.length) + nines.length) % nines.length].id}`
+    : c.holes === 9 ? '9' : n % 2 === 0 ? 'front' : 'back';
   return { day, courseId: c.id, tee, length, seed: seedFromString(`daily:${day}`) };
 }
 

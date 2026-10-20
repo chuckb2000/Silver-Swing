@@ -117,6 +117,26 @@ def render_map(surf, z_px, trees, world, f, region=None):
     return img
 
 
+def nines_of(spec, numbers: list[int]):
+    """course_config.json "nines" (optional; a club of three or more nines):
+    [{"id": "red", "name": "Red", "holes": [1, 9]}, ...] with "holes" a first-last
+    range or a list of the course's hole numbers. Every hole in exactly one nine."""
+    if not spec:
+        return None
+    import re
+    out = []
+    for n in spec:
+        hs = n["holes"]
+        hs = list(range(hs[0], hs[1] + 1)) if len(hs) == 2 and hs[1] - hs[0] > 1 else list(hs)
+        if not re.fullmatch(r"[a-z0-9_]{1,16}", n["id"]):
+            raise SystemExit(f"[s10] nine id {n['id']!r}: lower-case letters, digits and _ only (at most 16)")
+        out.append({"id": n["id"], "name": n.get("name", n["id"]), "holes": hs})
+    flat = [h for n in out for h in n["holes"]]
+    if len(out) < 3 or sorted(flat) != sorted(numbers) or len(set(flat)) != len(flat):
+        raise SystemExit(f"[s10] nines must be three or more and cover every hole once: {flat} vs {numbers}")
+    return out
+
+
 def update_course_lists():
     """Remake the game's course lists from every exported course.json (game/scripts/course-lists.mjs).
     They are generated, not committed, so no course build edits a shared file; the game's build
@@ -358,6 +378,9 @@ def main():
         }
         if shared:
             course.update({"group": cfg["id"], "groupName": cfg["name"], "layout": lay.get("short") or lay["name"]})
+        nines = nines_of(lay.get("nines") if shared else cfg.get("nines"), [h["number"] for h in holes])
+        if nines:
+            course["nines"] = nines  # a club of three or more nines: the game offers each pair and each nine
         if cfg.get("practice"):
             course["practice"] = True  # the practice ground is opened from its own button, not the course list
         write_json(lout / "course.json", course)

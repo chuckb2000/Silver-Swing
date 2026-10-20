@@ -31,7 +31,7 @@ export function isEagle(e: unknown): e is EagleEvent {
   const x = e as Partial<EagleEvent> | null;
   return !!x && typeof x === 'object'
     && str(x.id, 140) && str(x.round, 120) && str(x.player, 40) && str(x.course, 64)
-    && int(x.hole, 1, 18) && int(x.par, 3, 6) && int(x.strokes, 1, 4) && (x.strokes as number) <= (x.par as number) - 2
+    && int(x.hole, 1, 36) && int(x.par, 3, 6) && int(x.strokes, 1, 4) && (x.strokes as number) <= (x.par as number) - 2
     && str(x.tee, 32) && str(x.difficulty, 16) && str(x.date, 40);
 }
 

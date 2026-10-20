@@ -173,6 +173,7 @@ these assumptions must go. Check each one; it may already have been fixed.
       files present, list matches `course.json`, minimaps and the three
       putting views per hole, a robot round). `course.test.ts` stays
       Oswego-specific.
+- [x] Courses of any size and clubs of three nines (3.5a).
 - [x] 9-hole courses: rounds of 9 holes or 18 (twice around). The scorecard
       numbers the second loop 10-18; `Round.courseHole` is the course's own
       hole. A 9-hole course needs only holes 1-9 in `course.json`.
@@ -276,6 +277,34 @@ heights, trees, every green, art) is built once and exported to
 `scorecard` file. The OB line is the union of all `leisure=golf_course`
 polygons. Each layout is a separate entry in the course list, with `group`,
 `groupName` and `layout` fields.
+
+### 3.5a Courses of other sizes, and clubs of three nines
+
+The game plays a course of **any number of holes** (2026-10-20, branch
+`design/hole-counts` until merged): 9 (9, or 18 twice around), 18 (18, front,
+back), 19 (all 19, the first 18, either nine), and any other size such as a
+13-hole par-3 course (all of its holes). Nothing to configure: the hole count
+comes from `scorecard.csv`, numbered 1..N with the `golf=hole` refs to match.
+
+A **club of three or more nines** (27 holes played as Red/White, White/Blue,
+Blue/Red, or one nine) is one data folder and one course, its holes numbered
+1..27 in OSM refs and `scorecard.csv`, with the nines named in
+`course_config.json`:
+
+```jsonc
+"nines": [
+  {"id": "red",   "name": "Red",   "holes": [1, 9]},     // a first-last range,
+  {"id": "white", "name": "White", "holes": [10, 18]},   // or a list of hole numbers
+  {"id": "blue",  "name": "Blue",  "holes": [19, 27]}
+]
+```
+
+Ids: lower-case letters, digits and `_`. Every hole in exactly one nine
+(s10 stops otherwise). The game offers each nine with the next one (a+b, b+c,
+c+a) and each nine alone, shows holes as "red 3", and the daily round can pick
+one of the nines. If the club's card numbers each nine 1-9, write them 1-27 in
+the data in nine order and note it in your course file. A layout (3.5) can
+carry its own `"nines"` the same way.
 
 ### 3.6 Edits and proposals
 

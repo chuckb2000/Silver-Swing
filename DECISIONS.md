@@ -447,6 +447,27 @@ so a hole resumed after closing the tab lists the strokes since.
   Island (`data/indian_island/make_laz.py` reproduces the clipped tiles
   byte for byte) and Wannamoisett; the other courses keep every input in git.
 
+## Courses of 13 and 19 holes, and clubs of three nines (developer, 2026-10-20; branch `design/hole-counts`, not merged)
+
+- **Any size.** A course of N holes that isn't 9 or 18 offers "N holes"
+  (`'all'`); a 19-hole course also its first 18 and either nine. The card cuts
+  any round into nines ("out", "in", then "xtra" for a 19th).
+- **Three or more nines** (`course.json` `nines`, from `course_config.json`
+  via s10): rounds of two nines in rotation (a+b, b+c, c+a) and of one nine,
+  stored as `nines:<a>+<b>` / `nines:<a>`. A round keeps the course hole of
+  each slot (`RoundConfig.courseHoles`, `LeaderboardEntry.holes`) only when it
+  differs from the usual one, so every existing round, snapshot and board is
+  unchanged. Slots are 1-18 for the card and countback; holes are shown by
+  their number in their nine ("white 3").
+- **Boards and the server**: lengths are checked by pattern; up to 27 holes a
+  round; an eagle at a club of nines is listed on the course hole it was made on.
+- **Daily round**: a club of nines plays one of its nines (by the date); a
+  course without a nine (13 holes) is left out of the rotation, so adding one
+  doesn't shift the existing rotation.
+- **Stats and milestones**: two nines count as a full round; 13- and 19-hole
+  rounds count as rounds but not in the 18- or 9-hole averages or the
+  "broke 80 / 40" milestones.
+
 ## Data and pipeline
 
 - **Waverley pipeline additions** (course chat, 2026-10-19), each behind a key or option no other course uses, so every existing course rebuilds as committed: `green_tilt` in `course_config.json` (s07: a per-hole tilt cap and undulation count for a green known to be steep); course-chat tools: `propose_trace.py` spec keys `source`, `water.name`, `water.hazard_why`, `bunkers.max_exg`, a green `ellipse` (placed by eye where tree shadow hides the green), the inlet pond only with `pond_seed`, the fairway classifier only when holes are listed (Indian Island's proposals come out identical); `desk_export.py --traced` (start the desk from `proposed/traced.geojson` when OSM has no holes); `desk_to_proposed.py --traced-fallback` (a hole with no desk save keeps the traced shapes, tagged `approved=pending`).
