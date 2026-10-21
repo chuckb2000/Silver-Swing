@@ -17,6 +17,8 @@ and 4 Playwright tests pass. Section 11.10; open items in
 data/langston/validation_report.md; requests in
 docs/requests/langston_design_requests.md.
 
+2026-10-21: touching fairway pieces are merged before their corners are rounded (`merge_touching_fairways`; developer: rough was left along the joins of the approaches that run the fairways up to the greens). 108 rough pockets inside the fairways (122 m2) gone; course test added.
+
 ## Facts, scorecard and open items
 
 ### Facts
