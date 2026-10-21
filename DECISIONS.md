@@ -66,7 +66,7 @@ The developer was away overnight and asked for the work not to stop for permissi
   - **Cost to yardage:** 11 holes went from pass to flag (3-8 %): East Potomac Blue 5, 9, 16 and 11 White; Langston 2 Royal, 13 White and 14 White; Indian Island 1 and 5; Waverley 6 and 11.
   - **Over 8 %:** only holes the developer accepted earlier.
     - Tualatin 10 from the back tee is now +8.3 % (was +7.0 %): the tee moved 2.5 m back onto the box's centre line. Accepted by the developer (2026-10-20).
-    - The others: East Potomac Blue 15 and Red 8, Langston 6 Royal, Tualatin 8, Eastmoreland 17 White and Waverley 17.
+    - The others: East Potomac Blue 15 and Red 8, Langston 6 Royal, Tualatin 8, Eastmoreland 17 White and Waverley 17 (Waverley 17's tee moved back by the developer on 2026-10-21: now -3.2 %, a flag).
 - **Rounded fairway corners** (developer: "jagged corner should be removed from the fairway ... even if the OSM was jagged"). Fairway outlines are smoothed (resampled every 0.5 m, Gaussian with σ = 4 m along the outline) before rasterising. Each fairway keeps its original shape within 2 m of a green, so approaches still meet the green. A smoothing that changes a fairway's area by over 10 % is skipped. Edges move at most 3.2 m (Langston, Indian Island, Oswego Lake, Franklin measured), inside the spec's 5 m per side for surface edges. σ = 6 m would round more but reaches 4.8 m.
 - **Langston 16 and 17:** the three lidar trees standing in those fairways are removed (`drop_trees`).
 - **East Potomac Blue 10:** the two lidar trees at the front of the tee box are removed (`drop_trees`). They drew over the box beside the aim line. The rest of the row along the cart path stays.
@@ -349,6 +349,11 @@ The developer was away overnight and asked for the work not to stop for permissi
 - **Hole 11's green slopes hard back to front** (developer): `green_tilt` caps it at 3.5 % (not 2.5 %) with no random undulations; the lidar plane tilts 6.5 %.
 - **Theme `pnw_club`** (developer: "like pnw but make it a touch nicer: the sand just a smidge whiter. This is the nicest course in Portland"): the pnw palette with the mown turf (G5-G9) 6 % more saturated and 3 % brighter and whiter bunker sand (S0-S2); rough, woods, water and trees as pnw (tree sheet `trees_pnw_club`, identical to pnw's). Side-by-side: `data/waverley/proposed/theme_side_by_side.png`.
 - **Trees:** 7,852 from the DOGAMI canopy height model (860 inside the course), types from crown shape (leaf-on flight); one removed on hole 18's tee shot (s06b).
+- **Developer's fixes, 2026-10-21** (branch `course/waverley-tees`):
+  - **Hole 10:** three trees in front of the tee removed ("trees right in front of the tee on the 10th hole... I would love them removed"; `drop_trees`). The lidar canopy model has them (22-23 m), the OSIP 2024 photo shows grass there. The tee no longer needs moving in its box.
+  - **Hole 14's Blue tee** redrawn by the developer in the desk ("that's not where the tee is"): 137 yd, on the card. The game had used the course chat's traced box (278 m2, overlapping the trees beside the 17th green), because the earlier save marked no Blue tee. The traced bunker by the old box (`tr_bunker_53`) was dropped with it. s06b removes one 24 m tree 40 m out on the new tee shot (developer: "we can remove trees if we have to").
+  - **Hole 17's Blue tee** moved back by the developer "to more closely reflect the real course": 475 yd vs 490 (-3.2 %, a flag), replacing the accepted 409 yd.
+  - The rebuild under the current main pipeline also drops one tree on hole 3's tee shot (s06b: 28.8 m, 51.1 m out).
 - **Course card:** hole 11, the green beside the pond (course chat's pick, developer to confirm).
 - **Data:** OSM (developer's Overpass export), DOGAMI DTM and canopy height model, OSIP 2024 orthoimagery, the club website's scorecard. Originals in the GitHub release `waverley-data` (SHA-256 in `data/waverley/DATA_REQUEST.md`).
 

@@ -15,16 +15,16 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 | 7 | 4 | Blue | 373 | 378.9 | +5.9 | +1.6% | pass | 378.9 | +1.6% | pass |
 | 8 | 5 | Blue | 568 | 569.5 | +1.5 | +0.3% | pass | 569.5 | +0.3% | pass |
 | 9 | 3 | Blue | 119 | 120.6 | +1.6 | +1.3% | pass | 120.6 | +1.3% | pass |
-| 10 | 4 | Blue | 400 | 402.6 | +2.6 | +0.7% | pass | 401.5 | +0.4% | pass |
+| 10 | 4 | Blue | 400 | 402.6 | +2.6 | +0.7% | pass | 402.6 | +0.7% | pass |
 | 11 | 3 | Blue | 156 | 164.5 | +8.5 | +5.4% | flag | 161.6 | +3.6% | flag |
 | 12 | 4 | Blue | 400 | 410.2 | +10.2 | +2.5% | pass | 410.2 | +2.5% | pass |
 | 13 | 5 | Blue | 491 | 475.7 | -15.3 | -3.1% | flag | 478.8 | -2.5% | pass |
-| 14 | 3 | Blue | 137 | 138.7 | +1.7 | +1.2% | pass | 138.7 | +1.2% | pass |
+| 14 | 3 | Blue | 137 | 137.2 | +0.2 | +0.2% | pass | 137.2 | +0.2% | pass |
 | 15 | 4 | Blue | 354 | 353.1 | -0.9 | -0.3% | pass | 353.1 | -0.3% | pass |
 | 16 | 3 | Blue | 215 | 212.8 | -2.2 | -1.0% | pass | 212.8 | -1.0% | pass |
-| 17 | 5 | Blue | 490 | 405.5 | -84.5 | -17.3% | FAIL | 406.8 | -17.0% | FAIL |
+| 17 | 5 | Blue | 490 | 474.5 | -15.5 | -3.2% | flag | 474.5 | -3.2% | flag |
 | 18 | 5 | Blue | 558 | 537.6 | -20.4 | -3.7% | flag | 538.3 | -3.5% | flag |
-| **total** | 72 | | **6338** | **6319** | -19 | -0.3% | | **6308** | -0.5% | |
+| **total** | 72 | | **6338** | **6387** | +49 | +0.8% | | **6375** | +0.6% | |
 
 ## Open items
 
@@ -43,12 +43,13 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 13. Hole 10 (Blue): tee box desk_10_bluetee_0 assigned by the developer (tagged hole=10, tee_set=Blue in edited/course.geojson).
 14. Hole 11 (Blue): measured 162 yd vs card 156 (+3.6%) even with the virtual tee at the best spot in its box; accepted for play.
 15. Hole 11 (Blue): tee box desk_11_bluetee_0 assigned by the developer (tagged hole=11, tee_set=Blue in edited/course.geojson).
-16. Hole 15 (Blue): tee box desk_15_bluetee_0 assigned by the developer (tagged hole=15, tee_set=Blue in edited/course.geojson).
-17. Hole 16 (Blue): tee box desk_16_bluetee_0 assigned by the developer (tagged hole=16, tee_set=Blue in edited/course.geojson).
-18. Hole 17 (Blue): measured 407 yd vs card 490 (-17.0%) - FAIL, needs a decision.
-19. Hole 17 (Blue): tee box desk_17_bluetee_0 assigned by the developer (tagged hole=17, tee_set=Blue in edited/course.geojson).
-20. Hole 18 (Blue): measured 538 yd vs card 558 (-3.5%) even with the virtual tee at the best spot in its box; accepted for play.
-21. Hole 18 (Blue): tee box desk_18_bluetee_0 assigned by the developer (tagged hole=18, tee_set=Blue in edited/course.geojson).
+16. Hole 14 (Blue): tee box desk_14_bluetee_0 assigned by the developer (tagged hole=14, tee_set=Blue in edited/course.geojson).
+17. Hole 15 (Blue): tee box desk_15_bluetee_0 assigned by the developer (tagged hole=15, tee_set=Blue in edited/course.geojson).
+18. Hole 16 (Blue): tee box desk_16_bluetee_0 assigned by the developer (tagged hole=16, tee_set=Blue in edited/course.geojson).
+19. Hole 17 (Blue): measured 475 yd vs card 490 (-3.2%) even with the virtual tee at the best spot in its box; accepted for play.
+20. Hole 17 (Blue): tee box desk_17_bluetee_0 assigned by the developer (tagged hole=17, tee_set=Blue in edited/course.geojson).
+21. Hole 18 (Blue): measured 538 yd vs card 558 (-3.5%) even with the virtual tee at the best spot in its box; accepted for play.
+22. Hole 18 (Blue): tee box desk_18_bluetee_0 assigned by the developer (tagged hole=18, tee_set=Blue in edited/course.geojson).
 
 ## Other open items (Waverley)
 
@@ -67,6 +68,7 @@ The developer's calls of 2026-10-19 are in DECISIONS.md ("Waverley"): Blue tees 
 11. **Scorecard:** the club website's card (screenshot); Black (par 71, hole 5 a par 4) and White are on the card, not built; the women's back nine was cut off in the screenshot.
 12. **Hole identity** comes from the club's course layout map, fitted onto the lidar and the photo (look only). Hole 15 plays north from beside the 14 green; holes 9 and 10 start from the same tee area.
 13. **Course card:** hole 11 (green beside the pond), the course chat's pick; hole 14's bunker-ringed green is the alternative.
+11. **Three trees in front of the hole 10 tee were removed** (developer, 2026-10-21; `drop_trees`): 22-23 m tall, 20-29 m out and 6-9 m left of the line. The lidar canopy model has them, but the OSIP 2024 photo shows open grass there, so they are probably gone since the flight. The hole 10 tee no longer needs moving within its box.
 
 ## Playability adjustments
 
@@ -74,18 +76,16 @@ The developer's calls of 2026-10-19 are in DECISIONS.md ("Waverley"): Blue tees 
 - Hole 3 (Blue): measured 363 yd from the tee-box centre vs 347 on the card (+4.5%); moved the virtual tee along the middle of the real tee polygon desk_3_bluetee_0 (on its centre line, at least 2.5 m from its back and front) -> 357.3 yd (real 362.7 yd).
 - Hole 4 (Blue): measured 432 yd from the tee-box centre vs 406 on the card (+6.3%); moved the virtual tee along the middle of the real tee polygon desk_4_bluetee_0 (on its centre line, at least 2.5 m from its back and front) -> 428.7 yd (real 431.6 yd).
 - Hole 6 (Blue): measured 164 yd from the tee-box centre vs 157 on the card (+4.3%); moved the virtual tee along the middle of the real tee polygon desk_6_bluetee_0 (on its centre line, at least 2.5 m from its back and front) -> 162.8 yd (real 163.8 yd).
-- Hole 10 (Blue): tee shot: a perfect drive at the middle of the fairway clipped a tree near the tee; moved 1.4 m along the middle of the real tee polygon desk_10_bluetee_0 to the nearest clear spot -> 401.5 yd (real 402.6 yd).
 - Hole 11 (Blue): measured 164 yd from the tee-box centre vs 156 on the card (+5.4%); moved the virtual tee along the middle of the real tee polygon desk_11_bluetee_0 (on its centre line, at least 2.5 m from its back and front) -> 161.6 yd (real 164.5 yd).
 - Hole 13 (Blue): measured 476 yd from the tee-box centre vs 491 on the card (-3.1%); moved the virtual tee along the middle of the real tee polygon desk_13_tee_0 (on its centre line, at least 2.5 m from its back and front) -> 478.8 yd (real 475.7 yd).
-- Hole 17 (Blue): measured 405 yd from the tee-box centre vs 490 on the card (-17.3%); moved the virtual tee along the middle of the real tee polygon desk_17_bluetee_0 (on its centre line, at least 2.5 m from its back and front) -> 406.8 yd (real 405.5 yd).
 - Hole 18 (Blue): measured 538 yd from the tee-box centre vs 558 on the card (-3.7%); moved the virtual tee along the middle of the real tee polygon desk_18_bluetee_0 (on its centre line, at least 2.5 m from its back and front) -> 538.3 yd (real 537.6 yd).
 
 ## Tree detection (DOGAMI canopy height model)
 
-- 7851 trees detected in the world extent (858 inside the course), 2330 conifers / 5521 deciduous; median height 14.5 m, max 59.1 m.
+- 7849 trees detected in the world extent (856 inside the course), 2329 conifers / 5520 deciduous; median height 14.5 m, max 59.1 m.
 - Dropped: 1941 tops on building footprints, 0 over the lake, 34 tiny crowns.
-- Dropped on playing surfaces (spec 5.4): 5 -> lateral_water_hazard tr_hazard_0 (18.0 m), bunker desk_9_bunker_2 (6.0 m), tee desk_14_tee_0 (23.4 m), tee desk_14_tee_0 (24.5 m), pool w1067787866 (24.5 m)
-- Dropped from tee shots (s06b): 2 -> 18 Blue (33.7 m tree, 42.1 m from the tee), 3 Blue (28.8 m tree, 51.1 m from the tee)
+- Dropped on playing surfaces (spec 5.4): 3 -> lateral_water_hazard tr_hazard_0 (18.0 m), bunker desk_9_bunker_2 (6.0 m), pool w1067787866 (24.5 m)
+- Dropped from tee shots (s06b): 3 -> 18 Blue (33.7 m tree, 42.1 m from the tee), 3 Blue (28.8 m tree, 51.1 m from the tee), 14 Blue (24.2 m tree, 40.5 m from the tee)
 - OSM natural=tree points matched by a detected tree within 4 m: 0 of 0.
 - Conifer vs deciduous is inferred from crown shape only (no leaf-off imagery); see build/trees_preview.png.
 
@@ -126,13 +126,13 @@ The developer's calls of 2026-10-19 are in DECISIONS.md ("Waverley"): Blue tees 
 | 8 | 5 | yes | yes (4 near) | yes | yes | yes | 15 | 0 |
 | 9 | 3 | yes | yes (5 near) | yes | yes | yes | 2 | 0 |
 | 10 | 4 | yes | yes (6 near) | yes | yes | yes | 11 | 0 |
-| 11 | 3 | yes | yes (2 near) | yes | yes | yes | 2 | 0 |
+| 11 | 3 | yes | yes (3 near) | yes | yes | yes | 2 | 0 |
 | 12 | 4 | yes | yes (1 near) | yes | yes | yes | 6 | 0 |
 | 13 | 5 | yes | yes (1 near) | yes | yes | yes | 10 | 0 |
-| 14 | 3 | yes | yes (1 near) | yes | yes | yes | 11 | 1 |
+| 14 | 3 | yes | yes (2 near) | yes | yes | yes | 12 | 0 |
 | 15 | 4 | yes | yes (2 near) | yes | yes | yes | 12 | 0 |
 | 16 | 3 | yes | yes (4 near) | yes | yes | yes | 4 | 0 |
-| 17 | 5 | yes | yes (3 near) | yes | yes | yes | 10 | 1 |
+| 17 | 5 | yes | yes (4 near) | yes | yes | yes | 9 | 1 |
 | 18 | 5 | yes | yes (2 near) | yes | yes | yes | 5 | 1 |
 
 ## Missing or suspect features
@@ -156,5 +156,5 @@ The developer's calls of 2026-10-19 are in DECISIONS.md ("Waverley"): Blue tees 
 - hole 17: hole line carries handicap=8 (compare with scorecard)
 - hole 18: hole line carries handicap=10 (compare with scorecard)
 
-Totals: 49 tees, 18 greens, 20 fairways, 96 bunkers, 1 water hazards, 18 pins, 0 cart paths, 0 OSM tree points.
+Totals: 51 tees, 18 greens, 20 fairways, 95 bunkers, 1 water hazards, 18 pins, 0 cart paths, 0 OSM tree points.
 

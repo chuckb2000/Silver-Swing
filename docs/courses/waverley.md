@@ -9,7 +9,7 @@ Milwaukie OR, branch `course/waverley` from main: 18 holes, Blue tees,
 new `pnw_club` theme. OSM had no holes: traced from the OSIP 2024
 orthoimagery and DOGAMI lidar, corrected by the developer in the tracing
 desk. The Willamette and the pond are red penalty areas; hole 11's green
-keeps its slope (`green_tilt`); hole 17 accepted short (developer). Other
+keeps its slope (`green_tilt`); hole 17 accepted short (developer; its tee later moved back). Other
 courses rebuild unchanged. 394 unit tests and 4 Playwright tests pass.
 Section 11.18; open items in
 data/waverley/report_notes.md.
@@ -47,7 +47,7 @@ report_notes.md.
   Par      4   4   4   4   5   3   4   5   3   36     4   3   4   5   3   4   3   5   5   36     72
   HCP      11  13  7   9   3   15  5   1   17         12  14  6   4   16  2   18  8   10
   Blue     324 392 347 406 451 157 373 568 119 3,137  400 156 400 491 137 354 215 490 558 3,201  6,338
-  Built    325 413 356 427 449 161 379 567 121 3,198  401 160 403 485 137 353 213 409 539 3,100  6,297
+  Built    326 415 357 429 448 163 379 570 121 3,208  403 162 410 479 137 353 213 474 538 3,169  6,377
   ---------------------------------------------------------------------------------------------------------
 
     Ratings/slopes (card): Black 72.8/135 (6,668, par 71), Blue 71.2/130,
@@ -57,7 +57,12 @@ report_notes.md.
 -   **Hole 14:** five ring bunkers (moved 1.5 m out, `data/waverley/make_hole14.py`)
     around a round green the developer shaped in the desk, with fairway
     between green and sand (developer).
--   **Accepted by the developer (2026-10-19):** hole 17 plays 409 yd vs 490
-    (-16.6 %) from the developer's Blue tee.
--   **Known open items:** holes 2, 4, 18 are flags
-    (data/waverley/report_notes.md).
+-   **Developer's changes (2026-10-21, `course/waverley-tees`):** hole 14's
+    Blue tee redrawn in the desk where the real tee is (137 yd, the old traced
+    box overlapped the trees by the 17th green; one 24 m tree 40 m out removed
+    by s06b); hole 17's Blue tee moved back to the real back tee (475 yd vs
+    490, -3.2 %; was 409 yd, -16.6 %); three trees in front of the hole 10 tee
+    removed (`drop_trees`; the OSIP 2024 photo shows grass there).
+-   **Known open items:** holes 2, 4, 6, 11, 17 and 18 are flags (3-8 %;
+    data/waverley/validation_report.md, report_notes.md). Blue total
+    6,377 yd vs 6,338.

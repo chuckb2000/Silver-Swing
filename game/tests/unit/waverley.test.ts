@@ -15,9 +15,10 @@ import { COURSES_DIR, loadCourseFiles, meterFor, registry, robotRound, roundCfg 
 const ID = 'waverley';
 // holes outside 3% of the Blue card after the tee position (data/waverley/validation_report.md)
 // 6 and 11: flags since the tees centred on their boxes (design chat, 2026-10-20; DECISIONS.md "Overnight requests")
-const YARDAGE_FLAGS = ['2', '4', '6', '11', '18'];
-// over 8%, accepted by the developer (hole 17: the Blue tee stays, 409 yd vs 490)
-const YARDAGE_ACCEPTED = ['17'];
+// 17: the developer's new Blue tee (2026-10-21), 475 yd vs 490
+const YARDAGE_FLAGS = ['2', '4', '6', '11', '17', '18'];
+// over 8%, accepted by the developer (none since hole 17's tee moved back, 2026-10-21)
+const YARDAGE_ACCEPTED: string[] = [];
 
 describe(ID, () => {
   const course = loadCourseFiles(ID);
@@ -44,7 +45,7 @@ describe(ID, () => {
     }
   });
 
-  it('measured yardages are within 3% of the Blue card, the flagged holes within 8%, hole 17 accepted short', () => {
+  it('measured yardages are within 3% of the Blue card, the flagged holes within 8%', () => {
     for (const h of json.holes) {
       const t = h.tees.Blue;
       const off = Math.abs(t.adjYd - t.cardYd) / t.cardYd;
