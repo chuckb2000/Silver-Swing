@@ -71,8 +71,19 @@ describe('handicap', () => {
   it('the board: one row per player, lowest first, with last week', () => {
     const now = new Date('2026-10-25T12:00:00Z');
     const rows = handicapBoard([round(all(5), { date: '2026-10-01T12:00:00Z' }), round(all(4), { player: 'kim', date: '2026-10-02T12:00:00Z' }),
-      round(all(6), { player: 'kim', date: '2026-10-24T12:00:00Z' })], courses, now);
+      round(all(6), { player: 'kim', date: '2026-10-24T12:00:00Z' })], courses, now, 0);
     expect(rows.map((r) => [r.player, r.h.index])).toEqual([['kim', -2], ['sam', 16]]);
     expect(rows[0].weekAgo).not.toBeNull();
+  });
+
+  it('the board needs 27 holes: three nines, or an 18 and a nine (developer); the index itself starts at 18', () => {
+    const one18 = [round(all(5))];
+    expect(handicapOf(one18, courses)!.holes).toBe(18);
+    expect(handicapBoard(one18, courses)).toEqual([]);
+    const plusNine = [...one18, round(all(5, 9))];
+    expect(handicapBoard(plusNine, courses).map((r) => r.player)).toEqual(['sam']);
+    const threeNines = [round(all(5, 9), { player: 'kim' }), round(all(5, 9), { player: 'kim', length: 'back' }), round(all(5, 9), { player: 'kim' })];
+    expect(handicapBoard(threeNines, courses).map((r) => r.player)).toEqual(['kim']);
+    expect(handicapBoard(threeNines.slice(0, 2), courses)).toEqual([]);
   });
 });

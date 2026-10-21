@@ -821,3 +821,7 @@ Branch `fix/afternoon-ui`, from the afternoon review of the screens and flow.
   minute); the game works the indexes out. Leaderboard tab "handicap" (index, differentials
   counted of the record, change since a week ago), a "my golf" tile, and "handicap 3.6" on the
   new-round screen.
+- **The handicap board needs 27 holes** (developer, 2026-10-20: "otherwise there will be lots of
+  one off players that only played one round then never came back"): a player is listed once
+  their counting rounds add up to three nines or an 18 and a nine (`BOARD_MIN_HOLES`). Their own
+  index still starts at 18 holes ("my golf", the new-round screen).

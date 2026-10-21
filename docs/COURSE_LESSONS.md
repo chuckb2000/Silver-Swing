@@ -723,3 +723,13 @@ Folded in from docs/courses/bandon_dunes.md at the merge.
     every box within 160 m against the card found them in one pass.
 -   **A sprite outline that uses `np.roll`** wraps a solid bottom row onto
     the top row (a stray line above every gorse bush). Pad before rolling.
+
+## 21. Triggs Memorial (2026-10-20)
+
+Folded in from docs/courses/triggs.md at the merge.
+
+-   **NOAA's Data Access Viewer can ignore the requested projection.** The job came back in RI State Plane metres (EPSG:6567), not UTM 19N; read the LAZ header before the first s00 run. s00 reprojects the horizontal from the file's CRS, so only the vertical units need setting in the config.
+-   **rockyweb.usgs.gov can time out in the developer's browser,** and a project's LAZ is not always on prd-tnm.s3.amazonaws.com (only its browse images were). Offer the NOAA viewer job from the start: one clipped zip instead of nine tiles.
+-   **A back tee just past the previous green** can sit outside s06's 25 m search: measuring every box within 200 m of the line start against the card found hole 15's Blue box at 506 vs 508 yd.
+-   **The card's subtitle is the text before the first comma of `location`.** "Mount Pleasant, Providence, ..." would have shown the neighbourhood; use the town first.
+-   **The preliminary build without lidar** (a scratch config with the `laz` key removed, restored by absolute path on exit) let terrain, greens, surfaces and art be checked while the NOAA job ran.

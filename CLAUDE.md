@@ -452,15 +452,16 @@ DECISIONS.md with the reason.
     `src/systems/game/pins.ts`); the meter has a line at the middle of the green, no
     ghost tick and no display-lag allowance. 376 unit tests and 4 Playwright tests pass.
 
--   **Courses (course chats, 2026-10-18 to 2026-10-20):** eighteen data
-    folders, twenty courses on offer (East Potomac is three) in six states;
+-   **Courses (course chats, 2026-10-18 to 2026-10-20):** nineteen data
+    folders, twenty-one courses on offer (East Potomac is three) in six states;
     Gearhart Golf Links (Gearhart OR), Bandon Trails (Bandon OR, `bandon`
     theme) and Chambers Bay (University Place WA, `puget` theme) merged 2026-10-20. Oregon Golf Club's creek on
     13, 14 and 15 (from the lidar, `course/ogc-creek`) merged 2026-10-20.
     Chambers Bay's trees from the 2020 lidar (`course/chambers_bay`) and East
     Potomac's fairway joins and Blue 10 object (`fix/east-potomac-tree`) merged
     2026-10-20. Bandon Dunes (Bandon OR, `bandon_dunes` theme, penal gorse on
-    surface 17; PR #17) merged 2026-10-20; in the daily rotation from 2026-10-21.
+    surface 17; PR #17) merged 2026-10-20; in the daily rotation from 2026-10-21. Triggs Memorial (Providence RI,
+    `seekonk` theme; PR #21) merged 2026-10-20; in the daily rotation from 2026-10-21.
     Each course's build history, facts and open items are in
     `docs/courses/<id>.md` (section 11).
 
@@ -1551,7 +1552,8 @@ local leaderboard stays as the offline copy.
     under 20 differentials, best 8 of the latest 20; provisional ("12.4*") from 18
     holes, official from 54. Normal, non-casual rounds on rated tees only (East
     Potomac Red has no rating). Shown on the leaderboard's "handicap" tab (index,
-    differentials counted, change in a week; `/api/handicaps`), in "my golf" and on
+    differentials counted, change in a week; `/api/handicaps`; a player is listed
+    from 27 holes: three nines or an 18 and a nine), in "my golf" and on
     the new-round screen (strokes on those tees). No net scores on the boards
     (developer).
 
@@ -1562,7 +1564,8 @@ local leaderboard stays as the offline copy.
     under 20 differentials, best 8 of the latest 20; provisional ("12.4*") from 18
     holes, official from 54. Normal, non-casual rounds on rated tees only (East
     Potomac Red has no rating). Shown on the leaderboard's "handicap" tab (index,
-    differentials counted, change in a week; `/api/handicaps`), in "my golf" and on
+    differentials counted, change in a week; `/api/handicaps`; a player is listed
+    from 27 holes: three nines or an 18 and a nine), in "my golf" and on
     the new-round screen. No net scores and no strokes shown anywhere: nobody plays
     net (developer).
 
@@ -1619,6 +1622,7 @@ files (`game/scripts/course-lists.mjs`). The first course, Oswego Lake, is
 | Oregon Golf Club | `docs/courses/ogc.md` |
 | Oswego Lake Country Club | `docs/courses/oswego_lake.md` |
 | Stone Creek Golf Club | `docs/courses/stone_creek.md` |
+| Triggs Memorial Golf Course | `docs/courses/triggs.md` |
 | Tualatin Country Club | `docs/courses/tualatin.md` |
 | Wannamoisett Country Club | `docs/courses/wannamoisett.md` |
 | Waverley Country Club | `docs/courses/waverley.md` |

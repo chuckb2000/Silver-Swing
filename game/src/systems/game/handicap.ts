@@ -38,6 +38,8 @@ export interface Handicap {
   counted: number;            // differentials used
   of: number;                 // differentials in the record (at most 20)
   differentials: Differential[];
+  /** holes in the rounds that count (a nine still waiting for its partner included) */
+  holes: number;
 }
 
 const MAX_INDEX = 54;
@@ -57,7 +59,7 @@ export function indexOf(diffs: Differential[]): Handicap | null {
   const [k, adj] = TABLE[rec.length - 1];
   const low = rec.map((d) => d.value).sort((a, b) => a - b).slice(0, k);
   const avg = low.reduce((a, b) => a + b, 0) / low.length;
-  return { index: Math.min(MAX_INDEX, round1(avg + adj)), provisional: rec.length < 3, counted: k, of: rec.length, differentials: rec };
+  return { index: Math.min(MAX_INDEX, round1(avg + adj)), provisional: rec.length < 3, counted: k, of: rec.length, differentials: rec, holes: 0 };
 }
 
 /** Does this round count for the shared index? */
@@ -134,7 +136,9 @@ export function handicapOf(rounds: HcpRound[], courses: Map<string, HcpCourse>, 
       waiting = null;
     }
   }
-  return indexOf(diffs);
+  const h = indexOf(diffs);
+  if (h) h.holes = list.reduce((a, e) => a + e.scores.length, 0);
+  return h;
 }
 
 /** "12.4", a plus handicap as "+1.2", provisional with a star. */
@@ -154,7 +158,10 @@ export function hcpCourses(list: { id: string; holes: number; pars?: number[]; s
 }
 
 /** Each player's handicap from a list of rounds (names as on the boards), lowest first; with the index a week earlier. */
-export function handicapBoard(rounds: HcpRound[], courses: Map<string, HcpCourse>, now: Date = new Date()): { player: string; h: Handicap; weekAgo: Handicap | null }[] {
+/** Holes a player needs on the handicap board: three nines, or an 18 and a nine (developer: no one-round players). */
+export const BOARD_MIN_HOLES = 27;
+
+export function handicapBoard(rounds: HcpRound[], courses: Map<string, HcpCourse>, now: Date = new Date(), minHoles = BOARD_MIN_HOLES): { player: string; h: Handicap; weekAgo: Handicap | null }[] {
   const by = new Map<string, HcpRound[]>();
   for (const e of rounds) {
     if (!by.has(e.player)) by.set(e.player, []);
@@ -164,7 +171,7 @@ export function handicapBoard(rounds: HcpRound[], courses: Map<string, HcpCourse
   const out: { player: string; h: Handicap; weekAgo: Handicap | null }[] = [];
   for (const [player, list] of by) {
     const h = handicapOf(list, courses);
-    if (h) out.push({ player, h, weekAgo: handicapOf(list, courses, weekAgo) });
+    if (h && h.holes >= minHoles) out.push({ player, h, weekAgo: handicapOf(list, courses, weekAgo) });
   }
   return out.sort((a, b) => a.h.index - b.h.index || a.player.localeCompare(b.player));
 }
