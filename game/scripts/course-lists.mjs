@@ -20,6 +20,9 @@ export function entryOf(c) {
   const e = {
     id: c.id, name: c.name, location: c.location, state: c.state, theme: c.theme,
     holes: c.holes.length, par: c.par, defaultTee: c.defaultTee, totalYd: def.totalYd, teeSets: tees.map((t) => t.name),
+    // for handicaps (src/systems/game/handicap.ts): each hole's par and stroke index, each tee's rating and slope
+    pars: c.holes.map((h) => h.par), si: c.holes.map((h) => h.handicap ?? 0),
+    ratings: Object.fromEntries(tees.filter((t) => t.rating > 0 && t.slope > 0).map((t) => [t.name, [t.rating, t.slope]])),
   };
   if (c.group) Object.assign(e, { group: c.group, groupName: c.groupName, layout: c.layout });
   return e;

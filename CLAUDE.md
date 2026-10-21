@@ -1544,6 +1544,28 @@ local leaderboard stays as the offline copy.
     all back. This device's own board and "my golf" keep them, and the game
     stops asking a hidden player for a name.
 
+-   **Handicaps** (developer, 2026-10-20: option 2 of the proposal): a WHS-style
+    index (`src/systems/game/handicap.ts`): differential = 113 / slope x
+    (adjusted gross - course rating), holes capped at net double bogey (par + 5
+    before an index); two nines make one 18-hole differential; the WHS table for
+    under 20 differentials, best 8 of the latest 20; provisional ("12.4*") from 18
+    holes, official from 54. Normal, non-casual rounds on rated tees only (East
+    Potomac Red has no rating). Shown on the leaderboard's "handicap" tab (index,
+    differentials counted, change in a week; `/api/handicaps`), in "my golf" and on
+    the new-round screen (strokes on those tees). No net scores on the boards
+    (developer).
+
+-   **Handicaps** (developer, 2026-10-20: option 2 of the proposal): a WHS-style
+    index (`src/systems/game/handicap.ts`): differential = 113 / slope x
+    (adjusted gross - course rating), holes capped at net double bogey (par + 5
+    before an index); two nines make one 18-hole differential; the WHS table for
+    under 20 differentials, best 8 of the latest 20; provisional ("12.4*") from 18
+    holes, official from 54. Normal, non-casual rounds on rated tees only (East
+    Potomac Red has no rating). Shown on the leaderboard's "handicap" tab (index,
+    differentials counted, change in a week; `/api/handicaps`), in "my golf" and on
+    the new-round screen. No net scores and no strokes shown anywhere: nobody plays
+    net (developer).
+
 -   **Settings:** handedness, difficulty, master volume/mute, pixel size,
     leaderboards (show me / hide me), casual rules, player code. Yards only, no latency offset, stroke-and-distance
     OB (developer, 2026-10-20: those three are no longer settings).

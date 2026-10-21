@@ -10,6 +10,7 @@ import { FeedRow, isFeedRow } from './feed';
 import { DEFAULT_NAME } from './names';
 import { loadBoard, loadEagles, loadUploaded, saveEagles, saveSettings, saveUploaded } from './store';
 import { app } from '../app';
+import type { HcpRound } from '../systems/game/handicap';
 
 /** fetch with a time limit: a stalled phone connection must not hang a screen (8 s, 15 s for uploads). */
 function timed(url: string, init: RequestInit = {}, ms = 8000): Promise<Response> {
@@ -26,6 +27,7 @@ const RECORDS = 'api/records';
 const NAMES = 'api/names';
 const RECENT = 'api/recent';
 const HIDE = 'api/hide';
+const HANDICAPS = 'api/handicaps';
 let available: Promise<boolean> | null = null;
 let flushing: Promise<number> | null = null;
 
@@ -257,6 +259,22 @@ export async function syncHidden(): Promise<boolean> {
     return true;
   } catch {
     return false;
+  }
+}
+
+/** Every shown player's latest Normal rounds, for the handicaps board (null when unreachable). */
+export async function fetchHandicapRounds(): Promise<HcpRound[] | null> {
+  if (!(await onlineAvailable())) return null;
+  try {
+    const res = await timed(HANDICAPS, { cache: 'no-store' });
+    if (!res.ok) return null;
+    const j = (await res.json()) as { rounds?: unknown[] };
+    return (j.rounds ?? []).filter((r): r is HcpRound => {
+      const x = r as HcpRound;
+      return !!x && typeof x.id === 'string' && typeof x.course === 'string' && typeof x.player === 'string' && Array.isArray(x.scores);
+    });
+  } catch {
+    return null;
   }
 }
 

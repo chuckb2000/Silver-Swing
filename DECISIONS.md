@@ -777,3 +777,47 @@ Branch `fix/afternoon-ui`, from the afternoon review of the screens and flow.
   `src/data/dailyRoster.ts` sets a day's course, nine (and optionally tee) by hand; the rotation
   carries on around it. 2026-10-21: Oswego Lake, back nine, Blue tees. Add a pick before its day
   starts, never on the day (players would see the daily change).
+
+## Handicaps (developer, 2026-10-20)
+
+- Of four proposals the developer chose "WHS with a quick start", Normal rounds only for the
+  shared index, and no net scores on the leaderboards; East Potomac Red (a par-3 course, no
+  rating) doesn't count.
+- `src/systems/game/handicap.ts`, pure: score differential = 113 / slope x (adjusted gross -
+  course rating); each hole capped at net double bogey (par + 2 + strokes received by stroke
+  index), or par + 5 before the player has an index; a nine is half a round, and two nines
+  (oldest first, any courses) make one 18-hole differential, the sum of their nine-hole
+  differentials (course rating halved; East Potomac White's 31.0 is already a nine-hole rating,
+  Highland Links' 67.2 is for 18); index from the latest 20 differentials with the WHS table (3:
+  lowest - 2.0 ... 20: best 8), and with 1 or 2 differentials the same lowest - 2.0, marked
+  provisional ("12.4*"); rounded to a tenth, at most 54.0. Rounds are taken in date order and
+  each one's cap uses the index before it. Playing Conditions Calculation and the 2024
+  expected-score treatment of a lone nine are left out (a lone nine waits for a partner).
+- The course list carries each hole's par and stroke index and each tee's rating and slope
+  (`scripts/course-lists.mjs`). `/api/handicaps` sends each shown player's latest 40 Normal,
+  non-casual rounds cut to what the index needs (one query over the latest 3,000 rounds, kept a
+  minute); the game works the indexes out. Leaderboard tab "handicap" (index, differentials
+  counted of the record, change since a week ago), "my golf" tile, and the new-round screen
+  ("handicap 3.6 · 3 strokes on these tees").
+
+## Handicaps (developer, 2026-10-20)
+
+- Of four proposals the developer chose "WHS with a quick start", Normal rounds only for the
+  shared index, no net scores on the leaderboards, and no strokes shown ("no one is playing net
+  golf"); East Potomac Red (a par-3 course, no rating) doesn't count.
+- `src/systems/game/handicap.ts`, pure: score differential = 113 / slope x (adjusted gross -
+  course rating); each hole capped at net double bogey (par + 2 + strokes received by stroke
+  index), or par + 5 before the player has an index; a nine is half a round, and two nines
+  (oldest first, any courses) make one 18-hole differential, the sum of their nine-hole
+  differentials (course rating halved; East Potomac White's 31.0 is already a nine-hole rating,
+  Highland Links' 67.2 is for 18); index from the latest 20 differentials with the WHS table (3:
+  lowest - 2.0 ... 20: best 8), and with 1 or 2 differentials the same lowest - 2.0, marked
+  provisional ("12.4*"); rounded to a tenth, at most 54.0. Rounds are taken in date order and
+  each one's cap uses the index before it. The Playing Conditions Calculation and the 2024
+  expected-score treatment of a lone nine are left out (a lone nine waits for a partner).
+- The course list carries each hole's par and stroke index and each tee's rating and slope
+  (`scripts/course-lists.mjs`). `/api/handicaps` sends each shown player's latest 40 Normal,
+  non-casual rounds cut to what the index needs (one query over the latest 3,000 rounds, kept a
+  minute); the game works the indexes out. Leaderboard tab "handicap" (index, differentials
+  counted of the record, change since a week ago), a "my golf" tile, and "handicap 3.6" on the
+  new-round screen.

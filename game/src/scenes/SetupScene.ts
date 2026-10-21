@@ -8,8 +8,12 @@ import { Button, COLORS, Panel, setTxt, txt } from '../ui/widgets';
 import { shortName } from '../save/milestones';
 import { confirmDiscard, editName, hasName, lengthLabel, lengthsFor, RoundLength, startRound, withName } from './flow';
 import { MenuScene } from './menu';
+import { myRounds } from '../save/mine';
+import { handicapOf, hcpCourses, indexLabel } from '../systems/game/handicap';
 
 let length: RoundLength = '18';
+/** The player's rounds for the handicap line, kept for a minute (the screen rebuilds on every tap). */
+let mine: { at: number; rounds: Promise<{ rounds: import('../save/entry').LeaderboardEntry[] }> } | null = null;
 
 export class SetupScene extends MenuScene {
   constructor() {
@@ -87,6 +91,17 @@ export class SetupScene extends MenuScene {
       pro: 'faster meter, tight sweet spot, no landing preview',
     }[app.settings.difficulty];
     this.root.add(txt(this, x0 + pw / 2, y, desc, { origin: [0.5, 0], color: COLORS.dim, maxWidth: pw - 12 }));
+    // the player's handicap (Normal rounds only), filled in once the rounds are counted; no strokes: nobody plays net (developer)
+    const hcpTxt = txt(this, x0 + pw / 2, y + 12, '', { origin: [0.5, 0], color: 0x8ec5ff, maxWidth: pw - 12 });
+    this.root.add(hcpTxt);
+    const g = this.gen;
+    if (!mine || Date.now() - mine.at > 60_000) mine = { at: Date.now(), rounds: myRounds() };
+    void mine.rounds.then(({ rounds }) => {
+      if (!this.isCurrentBuild(g) || !hcpTxt.active) return;
+      const h = handicapOf(rounds, hcpCourses(app.courses));
+      if (!h) setTxt(hcpTxt, app.settings.difficulty === 'normal' ? 'handicap: after 18 holes at normal' : '');
+      else setTxt(hcpTxt, `handicap ${indexLabel(h)}${app.settings.difficulty === 'normal' ? '' : '  ·  only normal rounds count'}`);
+    });
     const by = y0 + ph - 22;
     this.root.add(new Button(this, x0 + 8, by, 56, 16, 'back', () => this.back(), { color: 'grey' }));
     this.root.add(new Button(this, x0 + pw - 98, by, 90, 16, 'tee off', () => this.teeOff()));
