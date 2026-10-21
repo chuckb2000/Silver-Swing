@@ -184,6 +184,23 @@ export async function recordEagle(e: EagleEvent): Promise<void> {
   await saveEagles(all);
 }
 
+/**
+ * A player's names merged into one (settings "merge names"): this device's rounds and eagles under
+ * any of `names` go under `into` too (the shared board has already moved them). Returns how many rounds.
+ */
+export async function renameAllLocal(names: string[], into: string): Promise<number> {
+  const from = new Set(names.filter((n) => n !== into));
+  const all = await loadBoard();
+  let n = 0;
+  for (const e of all) if (from.has(e.player)) { e.player = into; n++; }
+  if (n) await write('leaderboard', all);
+  const eagles = await loadEagles();
+  let m = 0;
+  for (const e of eagles) if (from.has(e.player)) { e.player = into; m++; }
+  if (m) await saveEagles(eagles);
+  return n;
+}
+
 /** A round's player name changed: its eagles not yet sent follow it. */
 export async function renameEagles(round: string, player: string): Promise<void> {
   const all = await loadEagles();

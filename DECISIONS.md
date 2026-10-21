@@ -891,3 +891,20 @@ Not merged (the developer will say when). Design note: docs/reports/multiplayer_
   100,000 writes a day allow about 450 full matches; HTTP polling (only when WebSockets fail) slows
   to 5 s after two quiet minutes, 8 s in a background tab, once a minute after 5 minutes out of
   sight, and stops after 30 minutes out of sight until the page is looked at again.
+
+## Merging names, and tips under the title (developer, 2026-10-21)
+
+- "How to merge your scores if you've played under two names? And if that's not possible to merge
+  them can you make it possible": it wasn't (only the handicap and "my golf" joined a player
+  code's names; the boards and "recent" kept each name apart). Settings has a "name" row with
+  **merge names**: the names this player code holds on the shared boards, to pick the one to
+  keep, and an optional box for another device's player code, whose names, rounds and eagles join
+  this code first (knowing a code is the proof, as for "use another"). The server
+  (`/api/merge`, `handleMerge`) moves every round and eagle under the other names (and old rounds
+  under them stored without a code) to the kept name, in its stored copy too; this device's own
+  board and eagles follow (`renameAllLocal`). The other names stay this player's, so nobody else
+  can take them up. Asked twice (the first tap says what will happen). The other device is told to
+  use this player code; until it does, its next rounds meet "that name is taken - it's mine".
+- The title's footer turns every 6 s between the map credit (first, as OpenStreetMap's licence asks;
+  the full credits stay in settings) and three tips: merging names, a player code on another device,
+  and "my golf". Each has a shorter form for a narrow phone.

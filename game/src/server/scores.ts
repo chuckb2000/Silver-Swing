@@ -596,6 +596,54 @@ export async function handleHide(db: D1Like | undefined, body: string): Promise<
   return json({ ok: true, hidden });
 }
 
+/**
+ * POST /api/merge with `{ owner, into, from? }`: one player under one name (developer, 2026-10-21:
+ * "how to merge your scores if you've played under two names"). With `from`, another device's
+ * player code (knowing it is the proof, as for "use another" in settings), that code's names,
+ * rounds and eagles become this code's first. Then every round and eagle under this code's other
+ * names (and old rounds under them stored without a code) goes under `into`, one of this code's
+ * names. The other names stay this code's, so nobody else can take them up.
+ */
+export async function handleMerge(db: D1Like | undefined, body: string): Promise<Response> {
+  if (!db) return json({ ok: false, error: 'no database bound (DB)' }, 503);
+  let owner: unknown, into: unknown, from: unknown;
+  try { ({ owner, into, from } = JSON.parse(body) as { owner?: unknown; into?: unknown; from?: unknown }); } catch { return json({ error: 'not json' }, 400); }
+  const o = ownerOf(owner);
+  if (!o) return json({ ok: false, error: 'owner required' }, 400);
+  let f: string | null = null;
+  if (from !== undefined && from !== null && from !== '') {
+    f = ownerOf(from);
+    if (!f) return json({ ok: false, error: 'bad_code', message: 'that is not a player code' }, 400);
+    if (f === o) f = null;
+  }
+  await prepareDb(db);
+  if (f) {
+    const { results: theirs } = await db.prepare('SELECT name FROM names WHERE owner = ?').bind(f).all<{ name: string }>();
+    if (!theirs.length) return json({ ok: false, error: 'no_names', message: 'no names use that code' }, 404);
+    await db.prepare('UPDATE names SET owner = ? WHERE owner = ?').bind(o, f).run();
+    await db.prepare('UPDATE rounds SET owner = ? WHERE owner = ?').bind(o, f).run();
+    await db.prepare('UPDATE eagles SET owner = ? WHERE owner = ?').bind(o, f).run();
+    await db.prepare('DELETE FROM hidden WHERE owner = ?').bind(f).run(); // this code's choice stands
+  }
+  const { results } = await db.prepare('SELECT name FROM names WHERE owner = ? ORDER BY name').bind(o).all<{ name: string }>();
+  const names = results.map((r) => r.name);
+  const keep = boardableName(into);
+  if (!keep || !names.includes(keep)) return json({ ok: false, error: 'not_yours', message: 'keep one of this code\'s names', names }, 400);
+  const others = names.filter((n) => n !== keep);
+  let moved = 0;
+  if (others.length) {
+    const qs = others.map(() => '?').join(', ');
+    // the round's stored copy says its player too (the boards read it)
+    const r = (await db.prepare(`UPDATE rounds SET player = ?, owner = ?, data = json_set(data, '$.player', ?) WHERE player IN (${qs}) AND (owner = ? OR owner IS NULL)`)
+      .bind(keep, o, keep, ...others, o).run()) as { meta?: { changes?: number }; changes?: number };
+    moved = r?.meta?.changes ?? r?.changes ?? 0;
+    await db.prepare(`UPDATE eagles SET player = ?, owner = ? WHERE player IN (${qs}) AND (owner = ? OR owner IS NULL)`).bind(keep, o, ...others, o).run();
+  }
+  feedCache = null;
+  hcpCache = null;
+  return json({ ok: true, names, into: keep, moved });
+}
+
 let hcpCache: { at: number; body: unknown } | null = null;
 const HCP_CACHE_MS = 60_000;
 const HCP_SCAN = 3000;   // the latest rounds looked at

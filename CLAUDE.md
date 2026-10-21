@@ -566,6 +566,14 @@ DECISIONS.md with the reason.
     cut to a twentieth from rough, trees and sand; clearer name entry; a
     "hide me" setting for the shared leaderboards (D1 schema 4, migrates itself).
 
+-   **Merge names (design chat, 2026-10-21):** branch `design/merge-names`,
+    merged 2026-10-21 (PR #31): settings "merge names" puts a player's rounds
+    and eagles under one name (`/api/merge`, `src/ui/mergeNames.ts`), also from
+    another device's player code; the other names stay reserved for the
+    player. The title's OSM line rotates with short tips. No schema change.
+    DECISIONS.md "Merging names, and tips under the title". Live match play
+    (`design/multiplayer`) is not merged (developer: not for a while).
+
 -   **Next task:** Item 1 of the player improvements (swing coach) is on
     `design/coach`, unmerged. Also: the third playtest (putting, yellow
     misses), the club's printed scorecard and the hole 3 Blue tee box. New
