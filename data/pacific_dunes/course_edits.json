@@ -1,0 +1,61 @@
+{
+ "add": [],
+ "tags": [
+  {
+   "osm": "w674268637",
+   "set": {
+    "hole": "4",
+    "tee_set": "Green",
+    "assigned_by": "the course chat (2026-10-21)"
+   },
+   "reason": "hole 4: the OSM line starts at a forward box; this mapped box behind it measures 459 yd from its centre against the Green card's 449 (checked on the 2024 photo: a mown tee behind the line start, facing the green)"
+  },
+  {
+   "osm": "w1056956912",
+   "set": {
+    "hole": "8",
+    "tee_set": "Green",
+    "assigned_by": "the course chat (2026-10-21)"
+   },
+   "reason": "hole 8: the OSM line starts at a forward box; this mapped box behind it measures 360 yd from its centre against the Green card's 369 (checked on the 2024 photo: a mown tee behind the line start, facing the green)"
+  },
+  {
+   "osm": "w674345458",
+   "set": {
+    "hole": "12",
+    "tee_set": "Green",
+    "assigned_by": "the course chat (2026-10-21)"
+   },
+   "reason": "hole 12: the OSM line starts at a forward box; this mapped box behind it measures 507 yd from its centre against the Green card's 507 (checked on the 2024 photo: a mown tee behind the line start, facing the green)"
+  },
+  {
+   "osm": "w674350938",
+   "set": {
+    "hole": "15",
+    "tee_set": "Green",
+    "assigned_by": "the course chat (2026-10-21)"
+   },
+   "reason": "hole 15: the OSM line starts at a forward box; this mapped box behind it measures 508 yd from its centre against the Green card's 504 (checked on the 2024 photo: a mown tee behind the line start, facing the green)"
+  },
+  {
+   "osm": "w674353912",
+   "set": {
+    "hole": "16",
+    "tee_set": "Green",
+    "assigned_by": "the course chat (2026-10-21)"
+   },
+   "reason": "hole 16: the OSM line starts at a forward box; this mapped box behind it measures 334 yd from its centre against the Green card's 338 (checked on the 2024 photo: a mown tee behind the line start, facing the green)"
+  },
+  {
+   "osm": "w674353937",
+   "set": {
+    "hole": "17",
+    "tee_set": "Green",
+    "assigned_by": "the course chat (2026-10-21)"
+   },
+   "reason": "hole 17: the OSM line starts at a forward box; this mapped box behind it measures 191 yd from its centre against the Green card's 189 (checked on the 2024 photo: a mown tee behind the line start, facing the green)"
+  }
+ ],
+ "drop": [],
+ "extend_start": []
+}
