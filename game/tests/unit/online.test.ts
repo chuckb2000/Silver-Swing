@@ -3,7 +3,7 @@
 import { DatabaseSync } from 'node:sqlite';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { isEntry, LeaderboardEntry } from '../../src/save/entry';
-import { D1Like, D1Statement, handleEaglesGet, handleEaglesPost, handleGet, handleHandicapsGet, handleHide, handleMerge, resetHandicapCache, handleNames, handlePost, handleRecentGet, handleRecordsGet, resetFeedCache, resetSchemaCache } from '../../src/server/scores';
+import { D1Like, D1Statement, handleEaglesGet, handleEaglesPost, handleGet, handleHandicapsGet, handleHide, handleMerge, recordMatch, resetHandicapCache, handleNames, handlePost, handleRecentGet, handleRecordsGet, resetFeedCache, resetSchemaCache } from '../../src/server/scores';
 import { HoleScore } from '../../src/systems/rules/scoring';
 import { isPlayerKey, parseKeyCode } from '../../src/save/identity';
 
@@ -356,6 +356,29 @@ describe('merging names (developer, 2026-10-21: "played under two names")', () =
     expect(((await (await get(db, `owner=${KEY_B}`)).json()) as { entries: unknown[] }).entries).toEqual([]);
     const hc = (await (await handleHandicapsGet(db)).json()) as { rounds: { player: string }[] };
     expect(new Set(hc.rounds.map((x) => x.player))).toEqual(new Set(['charlie'])); // one handicap
+  });
+
+  it('finished matches on "recent" follow the merge (names and codes)', async () => {
+    const KEY_C = 'cccccccccccccccc';
+    await handlePost(db, JSON.stringify([
+      { ...scored('a1', 'chuck', pars, pars), owner: KEY_A },
+      { ...scored('a2', 'charlie', pars, pars), owner: KEY_A },
+      { ...scored('p1', 'chuckb', pars, pars), owner: KEY_C }, // the phone
+      { ...scored('s1', 'sam', pars, pars), owner: KEY_B },
+    ]));
+    const match = (code: string, players: [string, string], owners: [string, string]) => recordMatch(db, code, {
+      finished: true, courseId: 'oswego_lake', tee: 'blue', holes: 9, played: 8, winner: 0, players, owners, margin: '2&1', how: 'holes', date: '2026-10-21T15:00:00Z',
+    });
+    expect(await match('mmmm01', ['chuck', 'sam'], [KEY_A, KEY_B])).toBe('ok');
+    expect(await match('mmmm02', ['sam', 'chuckb'], [KEY_B, KEY_C])).toBe('ok');
+    expect((await merge({ owner: KEY_A, from: KEY_C, into: 'charlie' })).j).toMatchObject({ ok: true });
+    resetFeedCache();
+    const m = ((await (await handleRecentGet(db, new URL('http://x/api/recent'))).json()) as { matches: { code: string; winner: string; loser: string }[] }).matches;
+    expect(Object.fromEntries(m.map((x) => [x.code, `${x.winner} def. ${x.loser}`]))).toEqual({ mmmm01: 'charlie def. sam', mmmm02: 'sam def. charlie' });
+    // and they go with the player when hidden (the phone's match is this code's now)
+    await handleHide(db, JSON.stringify({ owner: KEY_A, hidden: true }));
+    resetFeedCache();
+    expect(((await (await handleRecentGet(db, new URL('http://x/api/recent'))).json()) as { matches: unknown[] }).matches).toEqual([]);
   });
 
   it('refuses a name or a code that is not the player\'s', async () => {

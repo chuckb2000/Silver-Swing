@@ -891,6 +891,9 @@ Not merged (the developer will say when). Design note: docs/reports/multiplayer_
   100,000 writes a day allow about 450 full matches; HTTP polling (only when WebSockets fail) slows
   to 5 s after two quiet minutes, 8 s in a background tab, once a minute after 5 minutes out of
   sight, and stops after 30 minutes out of sight until the page is looked at again.
+- **Merged names** (main's "merge names", merged into this branch 2026-10-21): a merge also moves
+  the player's finished matches, so "recent" says the kept name, and a code merged in brings its
+  matches (and "hide me" covers them).
 
 ## Merging names, and tips under the title (developer, 2026-10-21)
 

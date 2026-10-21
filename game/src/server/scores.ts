@@ -623,6 +623,8 @@ export async function handleMerge(db: D1Like | undefined, body: string): Promise
     await db.prepare('UPDATE names SET owner = ? WHERE owner = ?').bind(o, f).run();
     await db.prepare('UPDATE rounds SET owner = ? WHERE owner = ?').bind(o, f).run();
     await db.prepare('UPDATE eagles SET owner = ? WHERE owner = ?').bind(o, f).run();
+    await db.prepare('UPDATE matches SET winner_owner = ? WHERE winner_owner = ?').bind(o, f).run();
+    await db.prepare('UPDATE matches SET loser_owner = ? WHERE loser_owner = ?').bind(o, f).run();
     await db.prepare('DELETE FROM hidden WHERE owner = ?').bind(f).run(); // this code's choice stands
   }
   const { results } = await db.prepare('SELECT name FROM names WHERE owner = ? ORDER BY name').bind(o).all<{ name: string }>();
@@ -638,6 +640,9 @@ export async function handleMerge(db: D1Like | undefined, body: string): Promise
       .bind(keep, o, keep, ...others, o).run()) as { meta?: { changes?: number }; changes?: number };
     moved = r?.meta?.changes ?? r?.changes ?? 0;
     await db.prepare(`UPDATE eagles SET player = ?, owner = ? WHERE player IN (${qs}) AND (owner = ? OR owner IS NULL)`).bind(keep, o, ...others, o).run();
+    // finished matches on "recent" say the kept name too
+    await db.prepare(`UPDATE matches SET winner = ?, winner_owner = ? WHERE winner IN (${qs}) AND (winner_owner = ? OR winner_owner IS NULL)`).bind(keep, o, ...others, o).run();
+    await db.prepare(`UPDATE matches SET loser = ?, loser_owner = ? WHERE loser IN (${qs}) AND (loser_owner = ? OR loser_owner IS NULL)`).bind(keep, o, ...others, o).run();
   }
   feedCache = null;
   hcpCache = null;
