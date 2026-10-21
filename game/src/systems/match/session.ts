@@ -107,6 +107,8 @@ export class MatchSession {
   readonly queue: Logged[] = [];
   /** the strokes of the hole being played (and of the last hole until the next one starts) */
   strokes: MatchStroke[] = [];
+  /** the ids of the moves shown so far (a move still in the outbox may already be among them: its answer was on its way) */
+  readonly appliedCids = new Set<string>();
   /** the hole whose play the Rounds are set up for */
   private roundHole = -1;
 
@@ -152,6 +154,7 @@ export class MatchSession {
   apply(e: Logged): Applied {
     const before = this.state;
     this.state = applyEvent(before ?? null, e);
+    if (e.cid) this.appliedCids.add(e.cid);
     const s = this.state;
     const out: Applied = { ev: e, closed: null, started: false, over: s.phase === 'finished' && before?.phase !== 'finished' };
     if (e.t === 'created' || e.t === 'joined') {

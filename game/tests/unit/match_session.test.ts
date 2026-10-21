@@ -185,8 +185,8 @@ describe('match sessions: receiving', () => {
     const log: Logged[] = [
       { t: 'created', cfg, player: { name: 'a', lefty: false }, seq: 1, at: '' },
       { t: 'joined', player: { name: 'b', lefty: false }, honour: 0, seq: 2, at: '' },
-      { t: 'ready', by: 0, hole: 0, seq: 3, at: '' },
-      { t: 'ready', by: 1, hole: 0, seq: 4, at: '' },
+      { t: 'ready', by: 0, hole: 0, seq: 3, at: '', cid: 'readyA' },
+      { t: 'ready', by: 1, hole: 0, seq: 4, at: '', cid: 'readyB' },
     ];
     const g = new MatchSession(COURSE, 'x', 0, log.slice(0, 1));
     expect(g.receive([log[2]])).toBe(false); // 3 before 2: ask again
@@ -195,8 +195,10 @@ describe('match sessions: receiving', () => {
     expect(g.receive([log[3], log[2]])).toBe(true); // out of order in one batch is fine
     expect(g.knownSeq).toBe(4);
     expect(g.idle).toBe(false);
+    expect(g.appliedCids.has('readyA')).toBe(false); // received, not shown yet
     while (g.applyNext()) { /* show them */ }
     expect(g.idle).toBe(true);
+    expect([...g.appliedCids]).toEqual(['readyA', 'readyB']); // the moves shown, by id (a reloaded page waits for no move already shown)
     expect(g.turn).toBe(0);
     expect(g.rounds[1]!.cfg.settings.lefty).toBe(false);
     expect(g.rounds[0]!.holeIndex).toBe(0);

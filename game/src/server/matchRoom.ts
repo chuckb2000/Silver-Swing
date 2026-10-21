@@ -18,6 +18,7 @@ export interface RoomStorage {
   put(entries: Record<string, unknown>): Promise<void>;
   list<T>(opts: { prefix: string; start?: string; limit?: number }): Promise<Map<string, T>>;
   deleteAll(): Promise<void>;
+  getAlarm(): Promise<number | null>;
   setAlarm(at: number): Promise<void>;
 }
 
@@ -29,6 +30,8 @@ export interface SocketInfo {
   seat: Seat | null;
   /** when it opened or said hello (ms) */
   at: number;
+  /** the server has closed it (it may take a while to go: it no longer counts) */
+  closing?: boolean;
 }
 
 export interface RoomSocket {
@@ -56,7 +59,9 @@ const MAX_MESSAGE = 256 * 1024;   // a stroke with its path is ~10-40 KB
 const MAX_EVENTS = 4000;          // a 36-hole match of wild golf is well under 1,000
 const MAX_SOCKETS = 12;
 const HELLO_MS = 10_000;          // a socket that hasn't said who it is by then is closed (to make room)
-const ALIVE_MS = 45_000;          // a game pings every 15 s: one silent this long is gone (a phone that slept)
+// a game pings every 15 s, but a background tab's timers may run once a minute: one silent this long is
+// gone (a phone that slept); 45 s made background tabs flicker "offline" and get closed for nothing
+const ALIVE_MS = 100_000;
 const POLLED_MS = 12_000;         // a game asking over HTTP counts as there this long after it asked
 const BATCH = 40;                 // events per message when catching a game up
 const LIVE_DAYS = 14;             // a match nobody touches for two weeks is deleted
@@ -101,6 +106,8 @@ export class MatchRoomCore {
   private keys: [string, string | null] | null = null;
   /** games asking over HTTP: when each seat last asked (kept in memory: a guess at who is there, not a record) */
   private polled: [number, number] = [0, 0];
+  /** who was there in the last presence sent to everyone */
+  private lastOnline = '';
   /**
    * Moves are taken one at a time. A Durable Object already holds other events
    * back while it waits on its storage (input gates), but two moves read
@@ -126,13 +133,27 @@ export class MatchRoomCore {
     return this.state;
   }
 
+  /** The sockets that count: not the ones this server has closed (a dead line may never finish closing). */
+  private live(): RoomSocket[] {
+    return this.host.sockets().filter((ws) => !ws.info()?.closing);
+  }
+
   private seatOf(key: string): Seat | null {
     if (!this.keys) return null;
     return this.keys[0] === key ? 0 : this.keys[1] === key ? 1 : null;
   }
 
+  /**
+   * The match is deleted `days` after now (its last move). Setting an alarm is a storage write, and the
+   * free plan allows 100,000 a day, so it is moved only when it is more than half a day off (it used to
+   * be set on every move: ~200 writes per match for nothing).
+   */
   private async keepFor(days: number) {
-    try { await this.host.storage.setAlarm(this.host.now() + days * 86_400_000); } catch { /* the next move sets it again */ }
+    try {
+      const want = this.host.now() + days * 86_400_000;
+      const cur = await this.host.storage.getAlarm();
+      if (cur === null || Math.abs(cur - want) > 43_200_000) await this.host.storage.setAlarm(want);
+    } catch { /* the next move sets it again */ }
   }
 
   // ----------------------------------------------------------------- HTTP
@@ -230,17 +251,18 @@ export class MatchRoomCore {
     const s = await this.load();
     if (!s) return jsonResponse({ error: 'no match' }, 404);
     const now = this.host.now();
-    // make room: sockets that never said who they are, then ones gone quiet
-    for (const ws of this.host.sockets()) {
+    // make room: sockets that never said who they are, then ones gone quiet (closed ones no longer count)
+    for (const ws of this.live()) {
       const i = ws.info();
       if ((!i || !i.key) && now - (i?.at ?? 0) > HELLO_MS) this.drop(ws, CLOSE.noHello, 'no hello');
       else if (i?.key && !this.alive(ws, now)) this.drop(ws, 1001, 'gone quiet');
     }
-    if (this.host.sockets().length >= MAX_SOCKETS) return jsonResponse({ error: 'busy' }, 429);
+    if (this.live().length >= MAX_SOCKETS) return jsonResponse({ error: 'busy' }, 429);
     return this.host.accept({ key: '', seat: null, at: now }); // who it is comes in its first message (not in the address, which gets logged)
   }
 
   private drop(ws: RoomSocket, code: number, reason: string) {
+    try { ws.setInfo({ ...(ws.info() ?? { key: '', seat: null, at: 0 }), closing: true }); } catch { /* gone */ }
     try { ws.close(code, reason); } catch { /* gone */ }
   }
 
@@ -263,6 +285,13 @@ export class MatchRoomCore {
       const who = ws.info();
       if (!who?.key) { this.send(ws, { type: 'error', code: 'hello', message: 'say hello first' }); return; }
       ws.setInfo({ ...who, at: this.host.now() }); // heard from
+      if (m.type === 'who') {
+        // who is there: to the one asking, and to everyone if it changed (a phone that slept just goes quiet)
+        const online = this.online();
+        this.send(ws, { type: 'presence', online });
+        if (online.join() !== this.lastOnline) this.broadcast({ type: 'presence', online }, ws);
+        return;
+      }
       if (m.type === 'sync') { await this.serial(async () => this.catchUp(ws, Math.max(0, Number(m.since) | 0), (await this.load())!)); return; }
       if (m.type === 'act') {
         const joining = m.action?.t === 'join';
@@ -292,7 +321,7 @@ export class MatchRoomCore {
       const now = (await this.load())!;
       const seat = this.seatOf(key);
       // one line per player key: an older one (another tab, a phone that slept and woke up) is closed
-      for (const other of this.host.sockets()) {
+      for (const other of this.live()) {
         if (other !== ws && other.info()?.key === key) this.drop(other, CLOSE.replaced, 'opened elsewhere');
       }
       ws.setInfo({ key, seat, at: this.host.now() });
@@ -313,7 +342,7 @@ export class MatchRoomCore {
   }
 
   private async expire(): Promise<void> {
-    for (const ws of this.host.sockets()) this.drop(ws, CLOSE.expired, 'match expired');
+    for (const ws of this.live()) this.drop(ws, CLOSE.expired, 'match expired');
     await this.host.storage.deleteAll();
     this.state = null;
     this.keys = null;
@@ -386,7 +415,7 @@ export class MatchRoomCore {
   private online(gone?: RoomSocket): [boolean, boolean] {
     const now = this.host.now();
     const on: [boolean, boolean] = [now - this.polled[0] < POLLED_MS, now - this.polled[1] < POLLED_MS];
-    for (const ws of this.host.sockets()) {
+    for (const ws of this.live()) {
       if (ws === gone) continue;
       const i = ws.info();
       if (i && i.key && i.seat !== null && this.alive(ws, now)) on[i.seat] = true;
@@ -399,8 +428,9 @@ export class MatchRoomCore {
   }
 
   private broadcast(r: Reply, except?: RoomSocket) {
+    if (r.type === 'presence') this.lastOnline = r.online.join();
     const text = JSON.stringify(r);
-    for (const ws of this.host.sockets()) {
+    for (const ws of this.live()) {
       if (ws === except || !ws.info()?.key) continue;
       try { ws.send(text); } catch { /* closed */ }
     }

@@ -363,3 +363,20 @@ describe('match play: what the server accepts', () => {
     expect(cleanAction({ t: 'rematch', code: 'BAD CODE' })).toBeNull();
   });
 });
+
+describe('match play: the settings a match is made with', () => {
+  const made = (c: unknown) => applyEvent(null, { t: 'created', cfg: c as MatchConfig, player: { name: 'charlie', lefty: false } });
+  it('are kept field by field (nothing else rides along)', () => {
+    const s = made({ ...cfg(2), extra: 'x'.repeat(3000), pins: [[1, 2, 3], [4, 5]] });
+    expect(Object.keys(s.cfg).sort()).toEqual(['courseId', 'courseVersion', 'difficulty', 'holes', 'pins', 'protocol', 'seed', 'startedAt', 'tee']);
+    expect(s.cfg.pins).toEqual([[1, 2], [4, 5]]);
+  });
+  it('refuse what no game makes', () => {
+    expect(code(() => made({ ...cfg(), tee: 'x'.repeat(2000) }))).toBe('bad_config');
+    expect(code(() => made({ ...cfg(), tee: '<b>' }))).toBe('bad_config');
+    expect(code(() => made({ ...cfg(1), pins: [[1e300, 0]] }))).toBe('bad_config');
+    expect(code(() => made({ ...cfg(), startedAt: 'yesterday' }))).toBe('bad_config');
+    expect(code(() => made({ ...cfg(), courseVersion: '' }))).toBe('bad_config');
+    expect(code(() => made({ ...cfg(), holes: [0] , pins: [PIN] }))).toBe('bad_config');
+  });
+});

@@ -36,6 +36,7 @@ export class MatchRoom extends DurableObject<Env> {
         put: (e) => st.put(e),
         list: (o) => st.list(o),
         deleteAll: () => st.deleteAll(),
+        getAlarm: () => st.getAlarm(),
         setAlarm: (t) => st.setAlarm(t),
       },
       sockets: () => ctx.getWebSockets().map((w) => this.socket(w)),

@@ -37,8 +37,10 @@ class FakeStorage implements RoomStorage {
     const keys = [...this.m.keys()].filter((k) => k.startsWith(o.prefix) && (!o.start || k >= o.start)).sort().slice(0, o.limit ?? Infinity);
     return new Map(keys.map((k) => [k, structuredClone(this.m.get(k)) as T]));
   }
+  alarmsSet = 0;
   async deleteAll() { this.m.clear(); this.alarm = null; }
-  async setAlarm(t: number) { this.alarm = t; }
+  async getAlarm() { return this.alarm; }
+  async setAlarm(t: number) { this.alarm = t; this.alarmsSet++; }
 }
 
 /** The server's end of a connection. */
@@ -50,7 +52,13 @@ class ServerEnd implements RoomSocket {
   pinged: number | null = null;
   constructor(private net: FakeNet) {}
   send(t: string) { if (!this.open) throw new Error('closed'); this.net.deliver(() => this.peer?.receive(t)); }
-  close(code = 1000) { if (!this.open) return; this.open = false; this.net.deliver(() => this.peer?.closedByServer(code)); }
+  /** closed by the server: gone once the game's end answers; a socket with nobody at the other end lingers (as dead ones do) */
+  close(code = 1000) {
+    if (!this.open) return;
+    if (!this.peer) return;
+    this.open = false;
+    this.net.deliver(() => this.peer?.closedByServer(code));
+  }
   info() { return this.inf; }
   setInfo(i: SocketInfo) { this.inf = structuredClone(i); }
   pingedAt() { return this.pinged; }
@@ -451,6 +459,8 @@ describe('match server: playing over a line that drops', () => {
   it('a match nobody plays for two weeks is deleted, and its games are told', async () => {
     const { a } = await twoPlayers();
     expect(current.storage.alarm! - current.now).toBeGreaterThan(13 * 86_400_000);
+    // its alarm (a storage write each time) was set once for the four entries, not on every move
+    expect(current.storage.alarmsSet).toBe(1);
     await current.core.alarm();
     await current.run(10);
     expect(current.storage.m.size).toBe(0);
@@ -501,7 +511,7 @@ describe('match server: review fixes', () => {
     a.client.start();
     await current.run(10);
     expect(a.client.status).toBe('online');
-    expect(current.host.sockets()).toHaveLength(1); // the silent ones were closed
+    expect(current.host.sockets().filter((x) => !x.info()?.closing)).toHaveLength(1); // the silent ones were closed (they linger: nobody answers)
   });
 
   it('the same player opening the match in another tab takes it over; the first tab waits until it is looked at', async () => {
@@ -648,5 +658,69 @@ describe('match server: review fixes', () => {
     const bad = first.client.send({ t: 'stroke', hole: 0, after: { nope: 1 }, shot: {}, path: 1 } as unknown as Action);
     await current.run(10);
     expect(await bad).toMatchObject({ ok: false, code: 'bad_move' });
+  });
+});
+
+describe('match server: second review fixes', () => {
+  it('sockets the server has closed no longer count: the first game after 10 s gets in', async () => {
+    current = new FakeNet();
+    const code = await newMatch(current);
+    for (let i = 0; i < 12; i++) await current.core.fetch(upgrade()); // twelve with nobody behind them: they never finish closing
+    current.now += 11_000;
+    expect((await current.core.fetch(upgrade())).status).toBe(200); // (the fake accepts with 200; Cloudflare's is 101)
+    expect(current.host.sockets().length).toBeGreaterThan(12); // the silent ones linger...
+    const a = new Game(current, code, KEY_A);
+    a.client.start();
+    await current.run(10);
+    expect(a.client.status).toBe('online'); // ...and don't count
+  });
+
+  it('background tabs (timers once a minute) stay "there" for each other, and a third socket closes nobody', async () => {
+    const { code, a, b } = await twoPlayers();
+    current.throttle = 60_000;
+    const seen = new Set<string>();
+    const dials = current.dials;
+    let opened = 0;
+    for (let t = 0; t < 60; t++) {
+      await current.run(5_000);
+      seen.add(`${a.client.online}|${b.client.online}`);
+      // someone opens the link late in a minute, 50-60 s after the tabs' last keep-alive (45 s closed them)
+      if (opened < 2 && t > 12 && current.now % 60_000 > 50_000) { new Game(current, code, opened ? KEY_C : 'ppppqqqqrrrrssss').client.start(); opened++; }
+    }
+    expect(opened).toBe(2);
+    expect([...seen]).toEqual(['true,true|true,true']);
+    expect(current.dials).toBe(dials + 2); // only the watchers'
+  });
+
+  it('a phone that went to sleep (its socket just goes quiet) is shown as gone within about two minutes', async () => {
+    current = new FakeNet();
+    const code = await newMatch(current);
+    const a = new Game(current, code, KEY_A);
+    a.client.start();
+    await current.run(10);
+    // kevin joins and opens a socket, which then goes silent (no keep-alives: the phone is asleep)
+    const j = await (await current.fetch(`http://x/api/match/${code}/act`, { method: 'POST', body: JSON.stringify({ key: KEY_B, cid: 'joinkevin', action: { t: 'join', player: { name: 'kevin', lefty: false } }, rules: RULES }) })).json();
+    expect(j).toMatchObject({ type: 'ack', seat: 1 });
+    await current.core.fetch(upgrade());
+    const sleeper = current.servers[current.servers.length - 1];
+    sleeper.peer = { receive: () => undefined, closedByServer: () => undefined } as unknown as ClientEnd;
+    await current.core.message(sleeper, JSON.stringify({ type: 'hello', key: KEY_B, since: 0, rules: RULES }));
+    await current.run(1_000);
+    expect(a.client.online).toEqual([true, true]);
+    await current.run(140_000);
+    expect(a.client.online).toEqual([true, false]);
+  });
+
+  it('a game whose line stopped for good makes no moves (a swing run out under the panel is not kept for later)', async () => {
+    const { code, a, b } = await twoPlayers();
+    const a2 = new Game(current, code, KEY_A, a.store); // another tab: the first one steps aside
+    a2.client.start();
+    await current.run(50);
+    expect(a.client.status).toBe('elsewhere');
+    const r = await a.client.send(strokeA(0, 1, 150));
+    expect(r).toMatchObject({ ok: false, code: 'elsewhere' });
+    expect(a.client.unanswered).toEqual([]);
+    expect(a.store.m.get(`golf:match:${code}:outbox`)).toBeUndefined();
+    void b;
   });
 });

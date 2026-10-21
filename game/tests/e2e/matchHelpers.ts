@@ -33,6 +33,14 @@ export const locate = ([scene, label, text]: [string, string | null, string | nu
  */
 export async function tapButton(page: Page, scene: string, label: string, timeout = 30_000, done?: () => Promise<boolean>) {
   for (let attempt = 1; attempt <= 3; attempt++) {
+    // a menu screen that is rebuilding (MenuScene.gen moves on each build) gets new buttons that take input a
+    // frame later: wait until it has stood still for a few frames, then find the button
+    await page.waitForFunction((sc) => {
+      const g = (window as any).__game, s = g.scene.getScene(sc), w = window as any;
+      const key = `${sc}:${s?.gen ?? 0}`;
+      if (w.__tapKey !== key) { w.__tapKey = key; w.__tapFrame = g.loop.frame; return false; }
+      return g.loop.frame - w.__tapFrame >= 3;
+    }, scene, { polling: 20, timeout });
     const h = await page.waitForFunction(locate, [scene, label, null] as [string, string | null, string | null], { polling: 100, timeout });
     const pos = (await h.jsonValue()) as { x: number; y: number };
     const f0 = await page.evaluate(() => (window as any).__game.loop.frame);
@@ -57,6 +65,8 @@ export async function fillDialog(page: Page, value: string, button = 'ok') {
   await input.waitFor({ timeout: 15_000 });
   await input.fill(value);
   await page.getByRole('button', { name: button, exact: true }).last().click();
+  // a name is checked with the server first ("checking..."): the dialog, and its backdrop, stay until then
+  await input.waitFor({ state: 'detached', timeout: 15_000 });
 }
 
 export const sceneActive = (page: Page, key: string) => page.evaluate((k) => (window as any).__game.scene.isActive(k), key);

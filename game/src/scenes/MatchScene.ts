@@ -15,13 +15,14 @@ import { Button, COLORS, Panel, setTxt, txt } from '../ui/widgets';
 import { courseVersion, flagTab, forgetMatch, LiveMatch, matchInfo, MatchInfo, matchLink, myMatches, parseMatchCode } from '../match/live';
 import { PROTOCOL, RULES } from '../systems/match/types';
 import { lengthOf } from '../systems/game/lengths';
-import { lengthLabel, useCourse } from './flow';
+import { hasName, lengthLabel, useCourse } from './flow';
 import { ensureBg, MenuScene } from './menu';
 
 type Mode =
   | { mode: 'home' }
   | { mode: 'invite'; code: string }
-  | { mode: 'join'; code: string }
+  /** auto: joined at once (a rematch the player chose; their name and hand are known) */
+  | { mode: 'join'; code: string; auto?: boolean }
   | { mode: 'continue'; code: string };
 
 /** Start the play scene on a match that is caught up. */
@@ -161,6 +162,7 @@ export class MatchScene extends MenuScene {
       if (this.m.mode === 'join' || this.m.mode === 'continue') {
         if (s.players[1]) { this.busy = false; this.note = 'this match already has two players'; this.refreshView(); return; }
         this.busy = false;
+        if (this.m.mode === 'join' && this.m.auto && hasName()) { this.m = { ...this.m, auto: false }; void this.join(); return; }
         this.refreshView(); // shows "join"
       }
       return;

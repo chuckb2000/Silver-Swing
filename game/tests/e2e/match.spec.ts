@@ -86,9 +86,16 @@ test('two players make, join and play a match, through a lost line, a reload and
 
   let watched = false, offlineDone = false, reloadDone = false, gave = false, conceded = false;
   const t0 = Date.now();
+  let lastLog = 0;
   for (let guard = 0; guard < 4000; guard++) {
     expect(Date.now() - t0).toBeLessThan(540_000);
     const [ma, mb] = [await matchOf(a), await matchOf(b)];
+    // a line every 20 s: where each game is (a hang shows here)
+    if (Date.now() - lastLog > 20_000) {
+      lastLog = Date.now();
+      const brief = (m: Awaited<ReturnType<typeof matchOf>>) => m && `${m.state}/${m.modal ?? '-'} hole ${m.hole} seq ${m.seq} q${m.queue} turn ${m.turn} ${m.status}`;
+      console.log(`[${Math.round((Date.now() - t0) / 1000)}s] a: ${brief(ma)} | b: ${brief(mb)} | ${JSON.stringify({ offlineDone, reloadDone, gave, conceded })}`);
+    }
     if (ma?.phase === 'finished' && mb?.phase === 'finished' && ma.state === 'over' && mb.state === 'over') break;
     // a look at the other player's turn
     if (!watched && (ma?.state === 'watch' || mb?.state === 'watch')) {
@@ -122,6 +129,8 @@ test('two players make, join and play a match, through a lost line, a reload and
       for (const p of [a, b]) {
         if (await p.evaluate(() => window.__game.scene.getScene('play').canGivePutt?.())) {
           await tapButton(p, 'hud', 'give putt', 5_000).catch(() => p.evaluate(() => window.__game.scene.getScene('play').matchConcede('stroke')));
+          // asked first when the putt would win them the hole: give it (left open, the match waits under the question)
+          if (await p.evaluate(() => window.__game.scene.getScene('hud').modal === 'pause')) await tapButton(p, 'hud', 'give it', 5_000);
           gave = true;
           break;
         }

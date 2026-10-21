@@ -64,6 +64,7 @@ const TICK_MS = 5_000;         // the keep-alive clock
 const PING_MS = 15_000;        // a keep-alive this often
 const ANSWER_MS = 10_000;      // a keep-alive not answered in this long: the line is dead
 const POKE_ANSWER_MS = 4_000;  // the page came back to view: the line is checked at once, and quickly
+const WHO_MS = 30_000;         // who is there, asked this often
 const POLL_MS = 2_000;
 const POLL_HIDDEN_MS = 8_000;  // a background tab asks less often (it still counts as there: the server allows 12 s)
 // WebSockets that never worked here (a network that blocks them) give way to HTTP after three tries; ones that
@@ -109,6 +110,7 @@ export class MatchClient {
   /** a keep-alive is out: the line is dead if nothing is heard by then */
   private deadline: number | null = null;
   private lastPingAt = 0;
+  private whoAt = 0;
   private waiting = new Map<string, (r: SendResult) => void>();
   private outbox: Outgoing[] = [];
   private polling = false;
@@ -343,7 +345,7 @@ export class MatchClient {
         this.learnSeat(m.seat);
         this.setOnline(m.online);
         this.setStatus('online');
-        this.lastPingAt = this.T.now();
+        this.lastPingAt = this.whoAt = this.T.now();
         this.tick();
         for (const o of this.outbox) this.sendRaw(JSON.stringify({ type: 'act', cid: o.cid, action: o.action }));
         return;
@@ -408,6 +410,9 @@ export class MatchClient {
       const now = this.T.now();
       if (this.deadline !== null && now >= this.deadline) { this.dropLine(ws, 'no answer'); return; }
       if (this.deadline === null && now - this.lastPingAt >= PING_MS) this.sendPing(ANSWER_MS);
+      // who is there, now and then: the server tells only when someone comes or goes cleanly, and a phone
+      // that slept just goes quiet
+      if (now - this.whoAt >= WHO_MS) { this.whoAt = now; this.sendRaw('{"type":"who"}'); }
       this.tick(this.deadline !== null ? Math.max(50, Math.min(TICK_MS, this.deadline - now)) : TICK_MS);
     }, ms);
   }
@@ -438,6 +443,12 @@ export class MatchClient {
 
   /** Make a move: kept until the server answers (through any reconnects), then resolved with its place in the log or the reason it was refused. */
   send(action: Action, cid: string = this.newCid()): Promise<SendResult> {
+    // a line stopped for good (the match gone, opened elsewhere, the versions differ): no move is made.
+    // Kept, it would go later as a move nobody meant (a swing that ran out under the panel)
+    if (this.status === 'gone' || this.status === 'elsewhere' || this.status === 'version') {
+      const why = this.status === 'gone' ? 'this match no longer exists' : this.status === 'elsewhere' ? 'the match is open elsewhere' : this.problem ?? 'reload to update';
+      return Promise.resolve({ ok: false, code: this.status === 'gone' ? 'no_match' : this.status, message: why });
+    }
     const o = { cid, action, at: this.T.now() };
     this.outbox.push(o);
     this.saveOutbox(); // before it goes: a reload a moment later still sends it

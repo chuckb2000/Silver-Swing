@@ -249,7 +249,11 @@ test('match screens on a phone held upright', async ({ browser }) => {
       shots.card = true;
       await a.mouse.click(10, 10); // tap anywhere to close
     }
-    if (m?.modal === 'mwait' && !shots.wait) { await a.screenshot({ path: `${SHOTS}/p6-wait.png` }); shots.wait = true; }
+    if (m?.modal === 'mwait' && !shots.wait) {
+      await a.screenshot({ path: `${SHOTS}/p6-wait.png` });
+      // kept only if the panel was still up when the picture was taken (the friend may reach the tee meanwhile)
+      shots.wait = (await matchOf(a))?.modal === 'mwait';
+    }
     if (m?.modal === 'mhole' && shots.card) await a.evaluate(() => window.__game.scene.getScene('play').matchNextHole());
     else await step(a);
     await step(b);

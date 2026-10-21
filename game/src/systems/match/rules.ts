@@ -32,15 +32,25 @@ function checkPlayer(p: unknown): MatchPlayer {
   return { name: x.name, lefty: x.lefty };
 }
 
+/**
+ * The match's settings, rebuilt from their own fields with their limits (the
+ * server stores and sends exactly this: nothing else a game put in rides along).
+ */
 function checkConfig(c: unknown): MatchConfig {
   const x = c as MatchConfig | null;
   if (!x || x.protocol !== PROTOCOL) fail('protocol', 'this match was made by another version of the game');
-  if (typeof x.courseId !== 'string' || !x.courseId || typeof x.tee !== 'string' || !x.tee) fail('bad_config', 'no course or tees');
+  const id = (v: unknown, max: number) => typeof v === 'string' && v.length >= 1 && v.length <= max && /^[A-Za-z0-9_.\-/ ]+$/.test(v);
+  if (!id(x.courseId, 40) || !id(x.tee, 40)) fail('bad_config', 'no course or tees');
   if (!Array.isArray(x.holes) || x.holes.length < 1 || x.holes.length > 18 || !x.holes.every((h) => isCount(h, 36) && h >= 1)) fail('bad_config', 'bad holes');
-  if (!Array.isArray(x.pins) || x.pins.length !== x.holes.length || !x.pins.every((p) => Array.isArray(p) && isNum(p[0]) && isNum(p[1]))) fail('bad_config', 'bad pins');
-  if (!['easy', 'normal', 'pro'].includes(x.difficulty) || !isCount(x.seed, 2 ** 32) || typeof x.startedAt !== 'string') fail('bad_config', 'bad settings');
-  if (typeof x.courseVersion !== 'string') fail('bad_config', 'no course version');
-  return x;
+  const coord = (v: unknown) => isNum(v) && Math.abs(v) < 1e6;
+  if (!Array.isArray(x.pins) || x.pins.length !== x.holes.length || !x.pins.every((p) => Array.isArray(p) && coord(p[0]) && coord(p[1]))) fail('bad_config', 'bad pins');
+  if (!['easy', 'normal', 'pro'].includes(x.difficulty) || !isCount(x.seed, 2 ** 32)) fail('bad_config', 'bad settings');
+  if (typeof x.startedAt !== 'string' || x.startedAt.length > 40 || Number.isNaN(Date.parse(x.startedAt))) fail('bad_config', 'bad start time');
+  if (!id(x.courseVersion, 64)) fail('bad_config', 'no course version');
+  return {
+    protocol: PROTOCOL, courseId: x.courseId, courseVersion: x.courseVersion, tee: x.tee, holes: [...x.holes], difficulty: x.difficulty,
+    seed: x.seed, pins: x.pins.map((p) => [p[0], p[1]] as [number, number]), startedAt: x.startedAt,
+  };
 }
 
 /** A hole snapshot that makes sense for this hole (the server keeps nothing else). */

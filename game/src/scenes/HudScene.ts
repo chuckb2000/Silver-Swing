@@ -399,10 +399,26 @@ export class HudScene extends Phaser.Scene {
       // between the info panel (left: it starts at y 21, under the bar's bottom, so the bar clears its right
       // edge at 78) and the menu button (right); on a narrow phone, under them
       const left = 4 + 74 + 4, right = W - 48 - 34 - 4;
-      const bw = Math.min(170, Math.max(110, right - left));
+      let bw: number, bx: number, top: number;
+      if (right - left >= 110) {
+        bw = Math.min(170, right - left);
+        bx = Math.round(left + (right - left - bw) / 2);
+        top = 4;
+      } else {
+        // a narrow phone: under the info panel and its buttons, clear of the mini-map column; if that
+        // leaves too little room, under the mini-map and its button, the whole width
+        const miniLeft = W - 4 - this.miniPanel.pw - 4;
+        if (miniLeft - 4 >= 110) {
+          bw = Math.min(170, miniLeft - 4);
+          bx = Math.round(4 + (miniLeft - 4 - bw) / 2);
+          top = 21 + 48 + 3 + 34;
+        } else {
+          bw = Math.min(170, W - 8);
+          bx = Math.round((W - bw) / 2);
+          top = 54 + this.miniPanel.ph + 3 + 13 + 6;
+        }
+      }
       this.matchBar.resize(bw, 25);
-      const top = right - left >= 110 ? 4 : 21 + 48 + 3 + 34;
-      const bx = right - left >= 110 ? Math.round(left + (right - left - bw) / 2) : Math.round((W - bw) / 2);
       this.matchBar.setPosition(bx, top);
       this.matchNames.setX(Math.round(bw / 2));
       this.matchStatus.setX(Math.round(bw / 2));
@@ -875,6 +891,7 @@ export class HudScene extends Phaser.Scene {
     this.modal = this.modalBeforeCard;
     this.modalBeforeCard = null;
     this.modalLayer.setVisible(true);
+    if (this.play.match) this.play.matchUnheld(); // what came while the card was open
   }
 
   toggleOverview() {
@@ -1183,7 +1200,14 @@ export class HudScene extends Phaser.Scene {
     if (p.givePuttOutcome() !== 'wins') { p.matchConcede('stroke'); this.refresh(); return; }
     this.openModal('pause'); // the match waits while the question is up
     confirmBox(this, this.modalLayer, 'give the putt?', `${p.oppName()} wins the hole with it`, 'let them putt', 'give it',
-      () => { this.closeModal(); p.matchConcede('stroke'); this.refresh(); }, () => { this.closeModal(); this.refresh(); });
+      () => {
+        this.closeModal();
+        // they putted while the question was up: their stroke stands
+        if (!p.canGivePutt()) this.flash('too late', COLORS.white, `${p.oppName()} has putted`, 1400);
+        else p.matchConcede('stroke');
+        p.matchUnheld();
+        this.refresh();
+      }, () => { this.closeModal(); p.matchUnheld(); this.refresh(); });
   }
 
   /** Close the pause menu: back to the match panel it was opened over, if any. */
@@ -1192,6 +1216,7 @@ export class HudScene extends Phaser.Scene {
     this.pauseReturn = null;
     this.closeModal();
     if (back) back();
+    if (this.play.match) this.play.matchUnheld(); // what came while the menu was open
   }
 
   /** The match's line has stopped for good: why, and what can be done. */
@@ -1199,6 +1224,7 @@ export class HudScene extends Phaser.Scene {
     const p = this.play;
     const live = p.match;
     if (!live) return;
+    p.cancelSwing(); // a swing under this panel would run out into a full-power miss
     this.openModal('mlink');
     this.redraw = () => this.showMatchLink();
     this.modalLayer.add(dimmer(this, 0.55));
@@ -1341,7 +1367,7 @@ export class HudScene extends Phaser.Scene {
     const mine = s.rematch && s.rematch.by === me ? s.rematch.code : null;
     if (theirs) {
       this.modalLayer.add(txt(this, x + w / 2, y + 44, `${p.oppName()} wants a rematch`, { origin: [0.5, 0], color: COLORS.yellow }));
-      this.modalLayer.add(new Button(this, x + w / 2 - 50, y + 58, 100, 16, 'play the rematch', () => { this.scene.stop('play'); this.scene.start('match', { mode: 'join', code: theirs }); }));
+      this.modalLayer.add(new Button(this, x + w / 2 - 50, y + 58, 100, 16, 'play the rematch', () => { this.scene.stop('play'); this.scene.start('match', { mode: 'join', code: theirs, auto: true }); }));
     } else if (mine) {
       this.modalLayer.add(txt(this, x + w / 2, y + 48, `rematch offered: code ${mine}`, { origin: [0.5, 0], color: COLORS.dim }));
     } else {
@@ -1352,7 +1378,7 @@ export class HudScene extends Phaser.Scene {
         if (!made) { if (rb.active) { rb.setEnabled(true); rb.setLabel('rematch'); } return; }
         if (!this.sys.isActive()) return;
         this.scene.stop('play');
-        this.scene.start('match', made.join ? { mode: 'join', code: made.code } : { mode: 'invite', code: made.code });
+        this.scene.start('match', made.join ? { mode: 'join', code: made.code, auto: true } : { mode: 'invite', code: made.code });
       });
       this.modalLayer.add(rb);
     }
@@ -1377,8 +1403,8 @@ export class HudScene extends Phaser.Scene {
     const mine = s.players[me];
     const r = await createLiveMatch(cfg, { name: mine?.name ?? app.settings.playerName, lefty: mine?.lefty ?? app.settings.lefty });
     if (!r.ok) { this.flash("couldn't make the rematch", COLORS.red, r.message, 1800); return null; }
-    // offered on this match's screen (wait a moment for it to go: leaving closes the line)
-    const sent = await Promise.race([live.client.send({ t: 'rematch', code: r.code }), new Promise<null>((res) => setTimeout(() => res(null), 3000))]);
+    // offered on this match's screen (wait for it to go: leaving closes the line; 10 s on a slow one)
+    const sent = await Promise.race([live.client.send({ t: 'rematch', code: r.code }), new Promise<null>((res) => setTimeout(() => res(null), 10_000))]);
     if (sent && !sent.ok && sent.code === 'rematch_exists') {
       const theirs = await rematchOffered(live);
       if (theirs) { forgetMatch(r.code); return { code: theirs, join: true }; }
