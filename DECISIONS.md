@@ -856,6 +856,45 @@ Branch `fix/afternoon-ui`, from the afternoon review of the screens and flow.
   every hide of the page (tab closed, app switched, phone locked) sends anything still waiting, and
   rounds the server lacks go before the one-time resend of older ones.
 
+## Live match play: the clock, extra holes, results (developer, 2026-10-21; branch design/multiplayer)
+
+Not merged (the developer will say when). Design note: docs/reports/multiplayer_live_match.md.
+
+- **Match rounds don't count towards handicaps** (developer). Nor the course boards, "my golf"
+  or the eagles: a match is not a round on the leaderboards.
+- **A tied match goes to extra holes, the only way it ends** (developer: "Let's do extra holes as
+  the only option"). Sudden death in the round's order (Rule 3.2a(4)): the 19th is the round's
+  first hole with its pin, and so on, until a hole is won ("charlie won at the 19th"). The wind
+  drifts on from hole to hole. After 36 extra holes, all halved, the match is halved: a limit
+  nobody will reach, kept so the match's record and the scorecard stay bounded.
+- **The move clock** (developer: stop "someone from just quitting on the last hole"; "5 minutes",
+  "love the waiting player decides bit", "give the warning at 3:30", "a penalty stroke assessed at
+  two minutes (that the waiting player) can decide not to enforce"). Per shot, on the server's time,
+  starting 15 s after the move before (time to watch the ball):
+  - 2:00: the waiting player may add one penalty stroke for slow play (Rule 5.6a), asked first. It
+    is kept apart from the player's own count, so a stroke struck as the penalty goes still counts;
+    a penalty sent after the shot was played is void ("moved"). It can decide a hole.
+  - 3:30: the player on the clock gets a banner, a sound and a red line under the match bar.
+  - 5:00: the waiting player may claim the match (won by forfeit), asked first.
+  - Between holes (one player at the next tee, the other not) only the claim applies: a penalty
+    stroke needs a hole to count on.
+  - The clock runs whether or not either player is in the match (developer, 2026-10-21: "have the
+    move clock run while the waiting player is away"). A first version stopped it while the
+    waiting player was away more than 5 minutes; that rule is gone, and with it the record of who
+    was there when (nothing is stored when a player comes or goes).
+- **Results on "recent"** (developer: "kevin def. charlie 3&2 and then the course and date"). A game
+  that sees its match end reports it; the site takes the result from the match's own server and
+  lists it once ("kevin def. charlie at the 19th", "by forfeit", "(conceded)"). Names must be their
+  players' on the boards, and a hidden player's matches stay off.
+- **Quota** (developer: "I'm concerned with other traffic"): the whole match is one stored record,
+  written once per move (it was three writes, plus an alarm each move), so the Durable Objects'
+  100,000 writes a day allow about 450 full matches; HTTP polling (only when WebSockets fail) slows
+  to 5 s after two quiet minutes, 8 s in a background tab, once a minute after 5 minutes out of
+  sight, and stops after 30 minutes out of sight until the page is looked at again.
+- **Merged names** (main's "merge names", merged into this branch 2026-10-21): a merge also moves
+  the player's finished matches, so "recent" says the kept name, and a code merged in brings its
+  matches (and "hide me" covers them).
+
 ## Merging names, and tips under the title (developer, 2026-10-21)
 
 - "How to merge your scores if you've played under two names? And if that's not possible to merge

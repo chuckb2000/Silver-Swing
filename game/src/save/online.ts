@@ -6,7 +6,7 @@
 
 import { isEntry, LeaderboardEntry } from './entry';
 import { EagleEvent, isEagle } from './feats';
-import { FeedRow, isFeedRow } from './feed';
+import { FeedRow, isFeedRow, isMatchFeedRow, MatchFeedRow } from './feed';
 import { DEFAULT_NAME } from './names';
 import { loadBoard, loadEagles, loadUploaded, saveEagles, saveSettings, saveUploaded } from './store';
 import { app } from '../app';
@@ -74,14 +74,14 @@ export function fetchDailyWeek(first: string): Promise<LeaderboardEntry[] | null
   return fetchEntries(`week=${first}`);
 }
 
-/** The latest rounds on the shared board (friends' activity; null when unreachable). */
-export async function fetchRecent(limit = 30): Promise<FeedRow[] | null> {
+/** The latest rounds and finished matches on the shared board (friends' activity; null when unreachable). */
+export async function fetchRecent(limit = 30): Promise<{ rounds: FeedRow[]; matches: MatchFeedRow[] } | null> {
   if (!(await onlineAvailable())) return null;
   try {
     const res = await timed(`${RECENT}?limit=${limit}`, { cache: 'no-store' });
     if (!res.ok) return null;
-    const j = (await res.json()) as { rounds?: unknown[] };
-    return (j.rounds ?? []).filter(isFeedRow);
+    const j = (await res.json()) as { rounds?: unknown[]; matches?: unknown[] };
+    return { rounds: (j.rounds ?? []).filter(isFeedRow), matches: (j.matches ?? []).filter(isMatchFeedRow) };
   } catch {
     return null;
   }

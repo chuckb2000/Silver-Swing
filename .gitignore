@@ -2,6 +2,8 @@
 node_modules
 game/dist/
 game/test-results/
+# live match screenshots (tests/e2e/match*.spec.ts; kept apart: Playwright empties test-results on each run)
+game/shots/
 game/playwright-report/
 __pycache__/
 *.pyc

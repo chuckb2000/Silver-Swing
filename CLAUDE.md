@@ -571,8 +571,22 @@ DECISIONS.md with the reason.
     and eagles under one name (`/api/merge`, `src/ui/mergeNames.ts`), also from
     another device's player code; the other names stay reserved for the
     player. The title's OSM line rotates with short tips. No schema change.
-    DECISIONS.md "Merging names, and tips under the title". Live match play
-    (`design/multiplayer`) is not merged (developer: not for a while).
+    DECISIONS.md "Merging names, and tips under the title".
+
+-   **Live match play (design chat, 2026-10-20/21):** branch
+    `design/multiplayer`, merged 2026-10-21 (developer: "merge"; played on an
+    iPhone on the branch preview first). Two players, match play by link or
+    6-letter code: one Durable Object per match in the Worker
+    `silver-swings-match` (`game/match-worker`, built by Cloudflare from GitHub),
+    reached through the Pages Functions as the binding `MATCH`; the same rules
+    (`src/systems/match/rules.ts`) on the server and both games. A move clock
+    (penalty stroke from 2:00, warning at 3:30, claim at 5:00, both the waiting
+    player's call; it runs whoever is in the match), extra holes for a tie,
+    results on the leaderboard's "recent" list (D1 table `matches`, schema 5,
+    migrates itself); matches don't count on boards, handicaps or "my golf".
+    Without the `MATCH` binding the title doesn't offer matches. Design note:
+    docs/reports/multiplayer_live_match.md (setup in section 7); DECISIONS.md
+    "Live match play".
 
 -   **Next task:** Item 1 of the player improvements (swing coach) is on
     `design/coach`, unmerged. Also: the third playtest (putting, yellow
@@ -1491,6 +1505,9 @@ calm (≈60% of holes below half the max). It is seeded per round.
     fixed by the date and the day's rotation (`src/data/dailyRoster.ts`; a
     merged course joins the next day; a day can be picked by hand in
     `DAILY_PICKS`); one counted round per player code and day.
+
+-   **Live match play** (2026-10-21): two players on their own devices, match
+    play (section 0; docs/reports/multiplayer_live_match.md).
 
 -   **Later:** local pass-and-play for up to 4 players
 

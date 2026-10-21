@@ -8,6 +8,7 @@ import { loadSettings, saveSettings } from '../save/store';
 import { OPEN_COURSE_KEY } from './CourseSelectScene';
 import { calibrateAll } from '../systems/physics/calibrate';
 import { flushUploads } from '../save/online';
+import { parseMatchCode } from '../match/live';
 
 export class BootScene extends Phaser.Scene {
   constructor() {
@@ -53,6 +54,14 @@ export class BootScene extends Phaser.Scene {
       void flushUploads(); // rounds finished offline go to the shared leaderboard now
       // and whenever the game is put away (tab closed or hidden, phone locked): nothing waits for the next visit
       document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') void flushUploads(); });
+      // a match link (?match=abc234): straight to the invitation
+      const q = new URLSearchParams(window.location.search);
+      const code = parseMatchCode(q.get('match') ?? '');
+      if (q.has('match')) {
+        q.delete('match');
+        try { window.history.replaceState(null, '', `${window.location.pathname}${q.toString() ? `?${q}` : ''}${window.location.hash}`); } catch { /* fine */ }
+      }
+      if (code) { this.scene.start('match', { mode: 'join', code }); return; }
       this.scene.start(open ? 'setup' : 'title');
     } catch (e) {
       console.error(e);
