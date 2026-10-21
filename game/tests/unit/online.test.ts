@@ -3,7 +3,7 @@
 import { DatabaseSync } from 'node:sqlite';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { isEntry, LeaderboardEntry } from '../../src/save/entry';
-import { D1Like, D1Statement, handleEaglesGet, handleEaglesPost, handleGet, handleHide, handleNames, handlePost, handleRecentGet, handleRecordsGet, resetFeedCache, resetSchemaCache } from '../../src/server/scores';
+import { D1Like, D1Statement, handleEaglesGet, handleEaglesPost, handleGet, handleHandicapsGet, handleHide, resetHandicapCache, handleNames, handlePost, handleRecentGet, handleRecordsGet, resetFeedCache, resetSchemaCache } from '../../src/server/scores';
 import { HoleScore } from '../../src/systems/rules/scoring';
 import { isPlayerKey, parseKeyCode } from '../../src/save/identity';
 
@@ -280,5 +280,25 @@ describe('older rounds join their player code (developer, 2026-10-20: 5 rounds o
     expect(await own(KEY_B)).toEqual([]);
     await handlePost(db, JSON.stringify([{ ...entry('old', 74, 'charlie'), owner: KEY_A }]));
     expect(await own(KEY_A)).toEqual(['new', 'old']);
+  });
+});
+
+describe('handicap rounds (developer, 2026-10-20)', () => {
+  let db: D1Like;
+  beforeEach(() => { resetSchemaCache(); resetFeedCache(); resetHandicapCache(); db = fakeD1(); });
+
+  it("sends each shown player's Normal, non-casual rounds, cut down", async () => {
+    await handlePost(db, JSON.stringify([
+      { ...entry('n1', 80, 'charlie'), owner: KEY_A },
+      { ...entry('e1', 70, 'charlie'), difficulty: 'easy', owner: KEY_A },
+      { ...entry('c1', 70, 'charlie'), casual: true, owner: KEY_A },
+      { ...entry('n2', 85, 'sam'), owner: KEY_B },
+    ]));
+    const got = async () => { resetHandicapCache(); return ((await (await handleHandicapsGet(db)).json()) as { rounds: { id: string; player: string; scores: unknown[]; totals?: unknown }[] }).rounds; };
+    const r = await got();
+    expect(r.map((x) => x.id).sort()).toEqual(['n1', 'n2']);
+    expect(r[0].totals).toBeUndefined();
+    await handleHide(db, JSON.stringify({ owner: KEY_B, hidden: true }));
+    expect((await got()).map((x) => x.id)).toEqual(['n1']);
   });
 });

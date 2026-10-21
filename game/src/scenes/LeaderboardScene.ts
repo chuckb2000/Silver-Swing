@@ -8,11 +8,12 @@
 import { app } from '../app';
 import { Difficulty } from '../data/difficulty';
 import { backupText, LeaderboardEntry, loadBoard, RoundLength } from '../save/store';
-import { BirdieRow, fetchBirdieRecords, fetchBoard, fetchDaily, fetchDailyWeek, fetchEagles, fetchRecent, flushUploads, nameConflicts, onlineAvailable } from '../save/online';
+import { BirdieRow, fetchBirdieRecords, fetchHandicapRounds, fetchBoard, fetchDaily, fetchDailyWeek, fetchEagles, fetchRecent, flushUploads, nameConflicts, onlineAvailable } from '../save/online';
 import { FeedRow, timeAgo } from '../save/feed';
 import { shareRound } from '../ui/shareCard';
 import { addDays, dailyPlan, dayStandings, weekStandings, weekStart } from '../systems/game/daily';
 import { DAILY_PICKS, DAILY_ROSTER } from '../data/dailyRoster';
+import { handicapBoard, HcpRound, hcpCourses, indexLabel } from '../systems/game/handicap';
 import { birdiesIn, EagleEvent, featName } from '../save/feats';
 import { loadEagles } from '../save/store';
 import { lengthLabel, lengthsFor } from './flow';
@@ -30,7 +31,7 @@ let source: 'friends' | 'device' | null = null; // null: friends when the site h
 let diff: Difficulty | 'all' = 'all';
 let casual = false;
 let page = 0;
-let view: 'scores' | 'daily' | 'recent' | 'eagles' | 'birdies' = 'scores';
+let view: 'scores' | 'daily' | 'recent' | 'eagles' | 'birdies' | 'handicaps' = 'scores';
 let dailyWhen: 'today' | 'week' = 'today';
 
 /** The calendar day (yyyy-mm-dd) of an ISO time in the player's own time zone (an evening round isn't "tomorrow"). */
@@ -58,8 +59,9 @@ export class LeaderboardScene extends MenuScene {
     this.root.add(new Panel(this, x0, y0, pw, ph, 0.9));
     this.root.add(txt(this, x0 + pw / 2, y0 + 5, 'leaderboard', { origin: [0.5, 0], scale: 2 }));
     {
-      const items: [typeof view, string][] = [['scores', 'scores'], ['daily', 'daily'], ['recent', 'recent'], ['eagles', 'eagles'], ['birdies', 'birdies']];
+      const items: [typeof view, string][] = [['scores', 'scores'], ['daily', 'daily'], ['recent', 'recent'], ['eagles', 'eagles'], ['birdies', 'birdies'], ['handicaps', 'handicap']];
       const bw = Math.floor((pw - 16 - 2 * (items.length - 1)) / items.length);
+      if (bw < 46) items[5][1] = 'hcp'; // a narrow phone
       items.forEach(([k, lab], i) => this.root.add(new Button(this, x0 + 8 + i * (bw + 2), y0 + 22, bw, 14, lab, () => { view = k; page = 0; this.rebuild(); }, { color: view === k ? 'orange' : 'grey' })));
     }
     if (view === 'daily') { await this.buildDaily(x0, y0, pw, ph); return; }
@@ -278,6 +280,21 @@ export class LeaderboardScene extends MenuScene {
       cols = [x0 + 10, x0 + 52, courseChars >= 6 ? x0 + 128 : -1, x0 + holeX, x0 + featX];
       rows = list.map((e) => [localDay(e.date).slice(5), e.player.slice(0, 12), courseName(e.course).slice(0, courseChars), String(e.hole), featName(e.strokes, e.par)]);
       if (!rows.length) empty = 'no eagles yet - the first one goes here';
+    } else if (view === 'handicaps') {
+      // each player's index from their Normal rounds (systems/game/handicap.ts); lowest first
+      let list: HcpRound[] | null = null;
+      if (src === 'friends') { await flushUploads(); list = await fetchHandicapRounds(); if (!list) note = "can't reach the shared board - showing this device"; }
+      if (!list) list = (await loadBoard()).filter((e) => e.player !== DEFAULT_NAME);
+      const board = handicapBoard(list, hcpCourses(app.courses));
+      head = ['#', 'player', 'index', 'counted', 'week'];
+      cols = [x0 + 10, x0 + 30, x0 + 110, x0 + 150, pw > 260 ? x0 + 205 : -1];
+      rows = board.map((r, i) => {
+        const d = r.weekAgo ? Math.round((r.h.index - r.weekAgo.index) * 10) / 10 : null;
+        const week = d === null ? 'new' : d === 0 ? '-' : d < 0 ? `down ${(-d).toFixed(1)}` : `up ${d.toFixed(1)}`;
+        return [String(i + 1), r.player.slice(0, 12), indexLabel(r.h), `${r.h.counted} of ${r.h.of}`, week];
+      });
+      if (!rows.length) empty = 'no handicaps yet - 18 holes at normal difficulty give you one';
+      else this.root.add(txt(this, x0 + pw / 2, y0 + ph - 32, '* provisional until 54 holes  ·  normal rounds only, not casual', { origin: [0.5, 0], color: COLORS.dim, maxWidth: pw - 16 }));
     } else {
       let list: BirdieRow[] | null = null;
       if (src === 'friends') { list = await fetchBirdieRecords(50); if (!list) note = "can't reach the shared board - showing this device"; }

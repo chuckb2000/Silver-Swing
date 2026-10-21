@@ -530,6 +530,43 @@ export async function handleHide(db: D1Like | undefined, body: string): Promise<
   if (hidden) await db.prepare('INSERT OR IGNORE INTO hidden (owner, since) VALUES (?, ?)').bind(o, new Date().toISOString()).run();
   else await db.prepare('DELETE FROM hidden WHERE owner = ?').bind(o).run();
   feedCache = null;
+  hcpCache = null;
   return json({ ok: true, hidden });
+}
+
+let hcpCache: { at: number; body: unknown } | null = null;
+const HCP_CACHE_MS = 60_000;
+const HCP_SCAN = 3000;   // the latest rounds looked at
+const HCP_PER_PLAYER = 40; // a player's latest Normal rounds sent (20 differentials, even all nines)
+
+/** For tests: forget the cached handicap rounds. */
+export function resetHandicapCache() { hcpCache = null; }
+
+/**
+ * GET /api/handicaps: each shown player's latest Normal, non-casual rounds, cut down
+ * to what a handicap needs (src/systems/game/handicap.ts works the index out in the
+ * game, which has the course ratings). One query; kept for a minute.
+ */
+export async function handleHandicapsGet(db: D1Like | undefined): Promise<Response> {
+  if (!db) return json({ ok: false, error: 'no database bound (DB)' }, 503);
+  if (hcpCache && Date.now() - hcpCache.at < HCP_CACHE_MS) return json(hcpCache.body);
+  await prepareDb(db);
+  const { results } = await db.prepare(`SELECT player, data FROM rounds WHERE casual = 0 AND ${SHOWN} ORDER BY date DESC LIMIT ?`).bind(HCP_SCAN).all<{ player: string; data: string }>();
+  const by = new Map<string, unknown[]>();
+  for (const r of results) {
+    const name = boardableName(r.player);
+    if (!name) continue;
+    let e: LeaderboardEntry;
+    try { e = JSON.parse(r.data) as LeaderboardEntry; } catch { continue; }
+    if (!isEntry(e) || e.difficulty !== 'normal' || e.casual) continue;
+    const list = by.get(name) ?? [];
+    if (list.length >= HCP_PER_PLAYER) continue;
+    list.push({ id: e.id, course: e.course, tee: e.tee, difficulty: e.difficulty, casual: false, player: name, date: e.date,
+      scores: e.scores.map((h) => ({ hole: h.hole, par: h.par, strokes: h.strokes })) });
+    by.set(name, list);
+  }
+  const body = { rounds: [...by.values()].flat() };
+  hcpCache = { at: Date.now(), body };
+  return json(body);
 }
 
