@@ -1,0 +1,63 @@
+{
+  "id": "triggs",
+  "name": "Triggs Memorial Golf Course",
+  "location": "Mount Pleasant, Providence, Rhode Island",
+  "state": "RI",
+  "architects": "Donald Ross (opened 1932)",
+  "theme": "seekonk",
+  "epsg": 32619,
+  "osm_sources": [
+    "raw/overpass.geojson"
+  ],
+  "boundary_name": "Triggs Memorial Golf Course",
+  "dtm": {
+    "path": "raw/ri_dem_2022_1m_clip.tif",
+    "units": "m",
+    "source": "USGS 3DEP 1 m DEM, project RI_Statewide_D22 (2022 USGS Lidar: RI Statewide, QL1, flown March 2022), tile x29y464; NAD83 / UTM 19N (EPSG:26919), NAVD88 metres; requested 2026-10-20 (GitHub release data-triggs), clipped to the world + 100 m with pipeline/clip_raster.py"
+  },
+  "laz": {
+    "paths": [
+      "raw/laz_src/*.laz"
+    ],
+    "classes": [
+      1
+    ],
+    "units": "ft",
+    "source": "2022 USGS Lidar: RI Statewide (project RI_Statewide_D22, workunit RI_Statewide_1_D22), QL1, flown March 2022 (leaf-off); NAD83(2011) / Rhode Island State Plane (US ft), NAVD88 (GEOID18) US ft; class 1 (unclassified: vegetation and structures; the project has no vegetation classes); nine tiles 335000-340000 x 270000-275000, requested 2026-10-20 (GitHub release data-triggs)",
+    "label": "2022 USGS RI statewide lidar, leaf-off",
+    "leaf_off": true
+  },
+  "roof_last_share": 0.85,
+  "roof_note": "s05: as at Wannamoisett (same lidar project), crowns whose returns are >= 85 % last returns are roofs of houses OSM doesn't map; to be checked on this course's per-crown last-return share before trusting it",
+  "trees_off_fairways_m": 2,
+  "world": {
+    "x0": 295174,
+    "y0": 4633941,
+    "width": 1280,
+    "height": 1280,
+    "note": "OSM course boundary bbox (887 x 1,033 m, way 43150786) + scenery, rounded out to whole 256 m chunks and centred: 1,280 m east-west (~197 m each side), 1,280 m north-south (~123 m each side)"
+  },
+  "tee_sets": [
+    {
+      "name": "Blue",
+      "playable": true,
+      "rating": 71.5,
+      "slope": 129,
+      "total_yd": 6588
+    }
+  ],
+  "default_tee": "Blue",
+  "scorecard_source": "Interim, unverified: per-hole Blue yardages, pars and stroke index from the OSM golf=hole tags (dist, par, handicap); they add up to the club website's Blue total (triggs.us/the-course, retrieved 2026-10-20: Blue 6,588 71.5/129, White 6,327 70.5/126, Red 5,374 72/124). The club's card images (triggs.us scorecard front/back) are requested to verify per hole. 1golf.eu lists older totals (Black 6,522, White 6,302, Red 5,392); not used.",
+  "penalty_default": "red",
+  "driving_range_is_ob": true,
+  "wind_mph": {
+    "minMph": 1,
+    "maxMph": 9
+  },
+  "attribution": [
+    "Map data © OpenStreetMap contributors (ODbL)",
+    "Elevation and trees: U.S. Geological Survey 3D Elevation Program (2022 USGS Lidar: RI Statewide)",
+    "Scorecard: triggs.us and OpenStreetMap (unverified)"
+  ],
+  "notes": "Phase 1 (2026-10-20): standing defaults (COURSE_BUILD.md 4.1): Blue only, every penalty area red, OSM boundary is OB, range OB, pins at green centres, trees from lidar, wind 1-9 mph (inland New England). Theme seekonk (developer, 2026-10-20)."
+}
