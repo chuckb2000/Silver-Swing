@@ -1,0 +1,27 @@
+{
+ "release": "data-tpc-boston",
+ "note": "build inputs not kept in git; `make fetch NAME=tpc_boston` puts them in place (pipeline/fetch_raw.py). The OSM export is cut down into raw/overpass.geojson (in git) by clip_osm.py; the release also keeps the original export, the club's scorecard PDF and two unusable 8-bit DEM pictures (DATA_REQUEST.md).",
+ "files": [
+  {
+   "asset": "exportImage.10.tiff",
+   "sha256": "bc18407184e10bb37dd257c97fbdbffe194fa9d1653fc9d7956a578f48b3b623",
+   "run": "python3 data/tpc_boston/place_dem.py {file}",
+   "outputs": {
+    "raw/USGS_1M_3DEP_service_tpc_boston.tif": "bc18407184e10bb37dd257c97fbdbffe194fa9d1653fc9d7956a578f48b3b623"
+   }
+  },
+  {
+   "asset": "ma2021_cent_east_J1473646.zip",
+   "sha256": "756844256dc86e2725dbb0ffc81f4986aee02ea8e236b12fd43f416f557bb3e1",
+   "extract": [
+    "ma2021_cent_east_J1473646tR0_C0.laz",
+    "ma2021_cent_east_J1473646tR0_C1.laz"
+   ],
+   "to": "raw/laz/",
+   "outputs": {
+    "raw/laz/ma2021_cent_east_J1473646tR0_C0.laz": "225ba4baf2ba8e0471862e974760ad4a59f2ddf25e6e69269d1ab780b65bd9c3",
+    "raw/laz/ma2021_cent_east_J1473646tR0_C1.laz": "2655657b7fade5d2b039fb908fa9fbc5b192dc343a1d350d791b5ed48892835a"
+   }
+  }
+ ]
+}
