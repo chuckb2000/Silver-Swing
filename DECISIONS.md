@@ -749,3 +749,11 @@ Branch `fix/afternoon-ui`, from the afternoon review of the screens and flow.
   `save/snapshot.ts` `saveStruck`). A reload mid-flight resumes after the stroke: the ball where
   it stops, the relief choice open if it went in water or out of bounds, or the next hole if it
   was holed.
+
+## Sharing a scorecard on a computer (developer, 2026-10-20)
+
+- On a computer, "share" opened the system share window (Windows: contacts, Outlook, Teams...),
+  which was confusing; on a phone the share sheet "works perfectly". Phones and tablets (touch
+  first: `maxTouchPoints > 0` and a coarse pointer) keep the share sheet. A computer now shows the
+  picture in a box with "copy picture" (to paste into a chat or message), "download", "more..."
+  (the system share window, when the browser has one) and "close" (`ui/shareCard.ts`).
