@@ -110,13 +110,15 @@ export function flushUploads(): Promise<number> {
       // the server, so the player code finds them on another device (developer, 2026-10-20: 5 rounds
       // on the phone, 9 on the computer). The server ignores rounds it has, apart from that.
       const resend = !resentForOwner();
-      const todo = all.filter((e) => (resend || !sent.has(e.id)) && isEntry(e) && e.player !== DEFAULT_NAME);
+      const todo = all.filter((e) => (resend || !sent.has(e.id)) && isEntry(e) && e.player !== DEFAULT_NAME)
+        .sort((a, b) => Number(sent.has(a.id)) - Number(sent.has(b.id))); // rounds the server hasn't got first
       const owner = app.settings.playerKey;
       let n = 0;
       for (let i = 0; i < todo.length; i += 5) {
         const batch = todo.slice(i, i + 5); // a few per request: the server's free plan allows 50 database queries per request
         try {
-          const res = await timed(API, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(batch.map((e) => ({ ...e, owner }))) }, 15_000);
+          // keepalive: the request finishes even if the tab is closed or the phone locks right after the round
+          const res = await timed(API, { method: 'POST', keepalive: true, headers: { 'content-type': 'application/json' }, body: JSON.stringify(batch.map((e) => ({ ...e, owner }))) }, 15_000);
           if (!res.ok) break;
           const j = (await res.json().catch(() => ({}))) as { taken?: string[] };
           const taken = new Set(j.taken ?? []);

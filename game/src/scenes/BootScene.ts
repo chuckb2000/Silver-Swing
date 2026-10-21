@@ -51,6 +51,8 @@ export class BootScene extends Phaser.Scene {
       (window as unknown as { __golf: unknown }).__golf = app;
       label.destroy();
       void flushUploads(); // rounds finished offline go to the shared leaderboard now
+      // and whenever the game is put away (tab closed or hidden, phone locked): nothing waits for the next visit
+      document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') void flushUploads(); });
       this.scene.start(open ? 'setup' : 'title');
     } catch (e) {
       console.error(e);

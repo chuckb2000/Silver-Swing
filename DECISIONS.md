@@ -825,3 +825,12 @@ Branch `fix/afternoon-ui`, from the afternoon review of the screens and flow.
   one off players that only played one round then never came back"): a player is listed once
   their counting rounds add up to three nines or an 18 and a nine (`BOARD_MIN_HOLES`). Their own
   index still starts at 18 holes ("my golf", the new-round screen).
+
+## Rounds go up when they finish (developer, 2026-10-20)
+
+- A friend's 63 at Oswego Lake (finished by 10:16 pm) wasn't in "recent": a finished round was sent only
+  when the player left the summary, at the next start-up or when a leaderboard opened, so a tab closed on
+  the summary kept it on the device. Now a named round is sent as soon as it finishes (an unnamed one
+  still waits for its name on the summary), uploads use `keepalive` so they finish if the tab closes,
+  every hide of the page (tab closed, app switched, phone locked) sends anything still waiting, and
+  rounds the server lacks go before the one-time resend of older ones.
