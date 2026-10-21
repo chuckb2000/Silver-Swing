@@ -776,3 +776,12 @@ Details in each course's file (`docs/courses/<id>.md`, "Lessons").
   bisector of the two pins (`split_double_greens.py`, as at Langdon Farms).
 - **OSM `handicap` tags can be another row of the card**; s06 uses the card.
 - **A developer's draft release isn't visible to `make fetch`**: ask for it to be published.
+
+## 24. Langdon Farms: trees in a pond, a double green traced whole (2026-10-21)
+
+- **s05 drops lidar trees in golf water hazards, not in plain `natural=water`.** Canopy tops in a
+  pond mapped as `natural=water` stay unless listed in `drop_trees`; check ponds against the photo
+  (Langston keeps trees on its lake islands, so this stays per course).
+- **Trace a double green as one outline** (`desk_export.py --area double`: a page with the whole
+  green and the split line as a guide); `desk_to_proposed.py` cuts it for both holes. Per-hole
+  drawings had taken in the collar (3,656 m² against 2,348 m² traced whole).
