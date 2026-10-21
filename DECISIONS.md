@@ -878,10 +878,10 @@ Not merged (the developer will say when). Design note: docs/reports/multiplayer_
   - 5:00: the waiting player may claim the match (won by forfeit), asked first.
   - Between holes (one player at the next tee, the other not) only the claim applies: a penalty
     stroke needs a hole to count on.
-  - Added (Claude, told to the developer): the clock only runs while the waiting player is in the
-    match. Back after more than 5 minutes away, their wait starts again, so two friends who stop
-    for the night can't have one claim the match the moment they return. Shorter absences
-    (another app, a lost signal) don't stop it.
+  - The clock runs whether or not either player is in the match (developer, 2026-10-21: "have the
+    move clock run while the waiting player is away"). A first version stopped it while the
+    waiting player was away more than 5 minutes; that rule is gone, and with it the record of who
+    was there when (nothing is stored when a player comes or goes).
 - **Results on "recent"** (developer: "kevin def. charlie 3&2 and then the course and date"). A game
   that sees its match end reports it; the site takes the result from the match's own server and
   lists it once ("kevin def. charlie at the 19th", "by forfeit", "(conceded)"). Names must be their

@@ -31,7 +31,7 @@ handicap or "my golf" (developer, 2026-10-21).
    MatchClient (net/matchClient.ts) ----> match Worker "silver-swings-match" (game/match-worker)
      WebSocket, or HTTP polling             Durable Object MatchRoom, one per match code
      outbox in localStorage                   MatchRoomCore (server/matchRoom.ts)
-                                              SQLite storage: one record "m" {state, keys, log, here}
+                                              SQLite storage: one record "m" {state, keys, log}
 ```
 
 - **One Durable Object per match** (named by its 6-character code). It keeps
@@ -99,21 +99,20 @@ HTTP (all JSON, `cache-control: no-store`):
 | `GET /api/matches?ping=1` | live matches set up here? (503 without the MATCH binding: the title hides "play a friend") |
 | `POST /api/matches {cfg, player, key, rules}` | a new match; returns its code |
 | `GET /api/match/<code>/info` | anyone: course, players, phase, status line, rules |
-| `GET /api/match/<code>/events?since=N` | polling: the log after N (key in the `x-match-key` header, never the address; `x-match-hidden: 1` from a background tab), `more`, `online`, `here`, `now`, `seat` |
-| `POST /api/match/<code>/hello {key, rules}` | polling: the seat, who is there, `here`, `now` |
+| `GET /api/match/<code>/events?since=N` | polling: the log after N (key in the `x-match-key` header, never the address; `x-match-hidden: 1` from a background tab), `more`, `online`, `now`, `seat` |
+| `POST /api/match/<code>/hello {key, rules}` | polling: the seat, who is there, `now` |
 | `POST /api/match/<code>/act {key, cid, action, rules}` | polling: a move |
 | `POST /api/match/<code>/report` | a game saw the match end: the Pages Function asks the object for its result (`/result`, not reachable from outside) and puts it on the "recent" list once (D1 table `matches`; settings "merge names", `/api/merge`, renames and moves a player's matches too) |
 | `GET /api/match/<code>/ws` | the WebSocket |
 
 WebSocket, game to server: `hello {key, since, rules}`, `sync {since}`,
 `act {cid, action}`, `who` (every 30 s), and the keep-alive `{"type":"ping"}`.
-Server to game: `welcome {protocol, rules, seat, seq, online, here, now}`,
+Server to game: `welcome {protocol, rules, seat, seq, online, now}`,
 `events {events, last}` (catch-up in batches of 40), `ack {cid, seq, seat,
 now}`, `nack {cid, code, message, seq, now, wait?}` (`wait`: a penalty or
-claim made too early, ms to go), `presence {online, here, now}`, `seat
+claim made too early, ms to go), `presence {online, now}`, `seat
 {seat}`, `error {code, message}`, `pong`. `now` is the server's clock (the
-games show the move clock from it); `here` is since when each player has been
-in the match.
+games show the move clock from it).
 
 Development only (`scripts/match-dev.sh`, `MATCH_DEBUG=1`): `POST
 localhost:8787/debug/<code>/skip?ms=N` moves a match's clock on, for the
@@ -135,16 +134,14 @@ Worker needs deploying" (the server is older).
   has an id, kept in the log with it; a move sent twice (an answer lost, a
   reconnect, a reload, the object restarted) is answered with its first result.
 - **One write per move.** The match is one stored record (`m`: state, players'
-  keys, log, `here`), written once per accepted move; flights are kept for the
+  keys, log), written once per accepted move; flights are kept for the
   hole being played and the one before, and the record stays under 1.5 MB (the
   storage allows 2 MB a record). The deletion alarm is moved only when it is
   half a day off.
-- **Who is here** (the move clock): `here.back[k]`, when player k's current stay
-  began, and `here.seen[k]`, when they were last known to be here (written when
-  their last line closes, and once a minute for a game asking over HTTP, since
-  the object can be evicted between questions). A player back after more than
-  5 minutes away starts a new stay. A penalty or claim needs its time counted
-  from the later of the clock's start and the waiting player's stay.
+- **The move clock** counts from `state.clock.at` (the last move plus 15 s of
+  grace), on the server's time, whether or not either player is in the match
+  (developer, 2026-10-21). Who is there (`online`) is only shown, never stored:
+  live sockets and recent HTTP questions.
 - **Catch-up by sequence number.** Every entry has a `seq`; a game asks for
   everything after the last one it has (hello, sync, polling). A gap starts a
   resync. A game that knows the server is further on (`serverSeq`) offers no

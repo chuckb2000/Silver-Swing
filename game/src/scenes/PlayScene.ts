@@ -1715,6 +1715,9 @@ export class PlayScene extends Phaser.Scene {
     const r = this.ms.rounds[turn]!;
     if (turn === me) {
       if (this.state === 'aim' && this.round === r) { this.hud.refresh(); return; }
+      // a stroke of this player's still on its way (made before a reload; the catch-up showed the
+      // other player's shot first): wait for it rather than offer the shot again
+      if (this.matchResumeCommit()) return;
       this.round = r;
       this.hud.closeModal();
       this.beginShot(true);

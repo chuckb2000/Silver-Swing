@@ -130,16 +130,23 @@ test('match flows: a drop, a putt given on your turn, a reload mid-stroke, a sec
         });
         if (sent) { done.cross = true; break; }
       }
+      if (done.cross) continue; // what was read above is out of date now (a stroke is on its way)
     }
 
     // 3. charlie's page reloads while his stroke is on its way (his line is down: it waits in the outbox)
     if (!done.reload && done.give && done.cross && ma.state === 'aim' && ma.turn === 0) {
       const before = ma.strokes[0];
-      // the scene taking taps (not in a cut between views), as a player would wait for it
-      await a.waitForFunction(() => { const ps = window.__game.scene.getScene('play'); return ps.state === 'aim' && !ps.fading && !ps.zooming; }, null, { timeout: 15_000 });
       A.net.down = true;
       await a.evaluate(() => window.__game.scene.getScene('play').match.client.ws?.close());
-      expect(await a.evaluate(() => window.__autoplay.shot(0))).toBe(true);
+      // the scene taking taps (not in a cut between views), as a player would wait for it; a tap that
+      // lands as a view change starts is ignored, as for a player, so it is tried again
+      let swung = false;
+      for (let i = 0; i < 20 && !swung; i++) {
+        await a.waitForFunction(() => { const ps = window.__game.scene.getScene('play'); return ps.state === 'aim' && !ps.fading && !ps.zooming; }, null, { timeout: 15_000 });
+        swung = await a.evaluate(() => window.__autoplay.shot(0));
+        if (!swung) await a.waitForTimeout(250);
+      }
+      expect(swung).toBe(true);
       await a.waitForFunction(() => window.__game.scene.getScene('play').state === 'commit', null, { timeout: 15_000 });
       await a.waitForTimeout(1000);
       await a.reload();

@@ -105,11 +105,9 @@ export class MatchClient {
   onSeat: (seat: Seat) => void = () => {};
   /** a move refused by the server that no one was waiting for (made before a reload) */
   onRefused: (action: Action, code: string, message: string) => void = () => {};
-  /** since when each player has been in the match, on the server's clock (the move clock counts from then at the earliest) */
-  here: [number, number] = [0, 0];
   /** the server's clock less this device's (ms), from the last message that said the time */
   offset = 0;
-  /** the server said the time, or who has been here since when */
+  /** the server said the time (the move clock is shown on it) */
   onClock: () => void = () => {};
 
   private ws: WebSocketLike | null = null;
@@ -160,17 +158,13 @@ export class MatchClient {
     return this.T.now() + this.offset;
   }
 
-  /** A message said the server's time (`now`) and who has been here since when (`here`). */
-  private learnClock(now: unknown, here?: unknown) {
+  /** A message said the server's time (`now`). */
+  private learnClock(now: unknown) {
     let changed = false;
     if (typeof now === 'number' && Number.isFinite(now)) {
       const o = now - this.T.now();
       if (Math.abs(o - this.offset) > 250) changed = true;
       this.offset = o;
-    }
-    if (Array.isArray(here) && here.length === 2 && here.every((v) => typeof v === 'number' && Number.isFinite(v)) && (here[0] !== this.here[0] || here[1] !== this.here[1])) {
-      this.here = [here[0], here[1]];
-      changed = true;
     }
     if (changed) this.onClock();
   }
@@ -387,7 +381,7 @@ export class MatchClient {
       for (const e of m.events) this.seen((e as Logged).seq);
       if (m.events.length) this.lastNews = this.T.now();
     }
-    if (m.type === 'welcome' || m.type === 'presence' || m.type === 'ack' || m.type === 'nack') this.learnClock(m.now, m.here);
+    if (m.type === 'welcome' || m.type === 'presence' || m.type === 'ack' || m.type === 'nack') this.learnClock(m.now);
     switch (m.type) {
       case 'pong': return;
       case 'welcome': {
@@ -558,7 +552,7 @@ export class MatchClient {
         this.learnSeat(j.seat);
         this.setOnline(j.online);
         this.seen((j as { seq?: unknown }).seq);
-        this.learnClock((j as { now?: unknown }).now, (j as { here?: unknown }).here);
+        this.learnClock((j as { now?: unknown }).now);
       }
     } catch { /* offline: the next poll tries */ }
   }
@@ -576,13 +570,13 @@ export class MatchClient {
       if (this.stopped || !this.polling) return;
       if (res.status === 404) { this.gone(); return; }
       if (res.ok) {
-        const j = (await res.json()) as { events?: Logged[]; more?: boolean; online?: unknown; seat?: unknown; seq?: unknown; now?: unknown; here?: unknown };
+        const j = (await res.json()) as { events?: Logged[]; more?: boolean; online?: unknown; seat?: unknown; seq?: unknown; now?: unknown };
         if (this.stopped || !this.polling) return;
         this.setStatus('polling');
         this.seen(j.seq);
         this.learnSeat(j.seat);
         this.setOnline(j.online);
-        this.learnClock(j.now, j.here);
+        this.learnClock(j.now);
         more = !!j.more;
         const evs = Array.isArray(j.events) ? j.events : [];
         if (evs.length) this.lastNews = this.T.now();

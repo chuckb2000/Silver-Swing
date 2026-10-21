@@ -10,6 +10,7 @@ import { createMatch, MatchEnv, newMatchCode, toMatch } from '../../src/server/m
 import { D1Like, D1Statement, handleHide, handlePost, handleRecentGet, resetFeedCache, resetSchemaCache } from '../../src/server/scores';
 import { ClientDeps, KeyValue, MatchClient, WebSocketLike } from '../../src/net/matchClient';
 import { MatchSession } from '../../src/systems/match/session';
+import { waitingOn } from '../../src/systems/match/rules';
 import { Action, CLOCK, CLOSE, HoleSnap, Logged, MatchConfig, MatchState, PING, PONG, PROTOCOL, RULES, Seat } from '../../src/systems/match/types';
 import { matchFeedText, MatchFeedRow } from '../../src/save/feed';
 import { loadCourseFiles } from './helpers';
@@ -162,7 +163,7 @@ class FakeNet {
     this.core = new MatchRoomCore(this.host);
   }
   /** What the object has stored (one record). */
-  get stored(): { state: MatchState; log: Logged[]; here: { back: [number, number]; seen: [number, number] } } {
+  get stored(): { state: MatchState; log: Logged[] } & Record<string, unknown> {
     return this.storage.m.get('m') as never;
   }
   fetch = async (url: string, init?: RequestInit) => {
@@ -236,6 +237,11 @@ class Game {
       while (this.session?.applyNext()) { /* shown at once */ }
     };
     this.client.onRefused = (_a, code2) => this.refused.push(code2);
+  }
+  /** The move clock as the game shows it (as src/match/live.ts works it out): how long the move waited on has taken. */
+  clock(): { elapsed: number } | null {
+    const s = this.session?.state;
+    return s && waitingOn(s) ? { elapsed: this.client.serverNow() - s.clock.at } : null;
   }
 }
 
@@ -836,29 +842,37 @@ describe('match server: the move clock (developer, 2026-10-21)', () => {
     expect(a.session!.state.phase).toBe('playing');
   });
 
-  it('the clock counts only while the waiting player is in the match: back after a long break, they wait again', async () => {
+  it('the clock runs while the waiting player is away (developer, 2026-10-21): back after a long break, they can claim at once', async () => {
     const { code, a, b } = await twoPlayers();
-    const { waiter, waiterSeat } = onClock(a, b);
+    const { on, waiter, waiterSeat } = onClock(a, b);
     const store = waiter.store;
     const t = waiter.session!.state.clock.seq;
+    const writes = current.storage.writes;
     waiter.client.stop(); // the waiting player leaves (closes the game)
-    await current.run(10);
-    expect(current.stored.here.seen[waiterSeat]).toBeGreaterThan(0); // written down as seen when they went
     await current.run(30 * MIN); // a long break; the object may be evicted meanwhile
+    expect(current.storage.writes).toBe(writes); // coming and going isn't stored
+    expect(Object.keys(current.stored).sort()).toEqual(['keys', 'log', 'state']);
     current.restart();
     const back = new Game(current, code, keyOf(waiterSeat), store);
     back.client.start();
     await current.run(100);
-    expect(back.client.here[waiterSeat]).toBeGreaterThan(current.now - 1000); // their stay starts now
+    const c = back.clock();
+    expect(c?.elapsed).toBeGreaterThan(29 * MIN); // the clock shown counts the time away too
     const claim = back.client.send({ t: 'claim', turn: t });
     await current.run(10);
-    const r = await claim;
-    expect(r).toMatchObject({ ok: false, code: 'too_soon' });
-    expect((r as { wait: number }).wait).toBeGreaterThan(4.9 * MIN);
-    await current.run(5 * MIN);
-    const claim2 = back.client.send({ t: 'claim', turn: t });
+    expect(await claim).toMatchObject({ ok: true });
+    for (const g of [on, back]) expect(g.session!.state.outcome).toMatchObject({ how: 'forfeit' });
+  });
+
+  it('the clock runs while the player on it is away too, and the one waiting sees it', async () => {
+    const { a, b } = await twoPlayers();
+    const { on, waiter } = onClock(a, b);
+    on.client.stop(); // the slow player's phone dies
+    await current.run(CLOCK.graceMs + CLOCK.penaltyMs + 1000);
+    expect(waiter.clock()?.elapsed).toBeGreaterThanOrEqual(CLOCK.penaltyMs);
+    const pen = waiter.client.send({ t: 'slow', hole: 0, turn: waiter.session!.state.clock.seq });
     await current.run(10);
-    expect(await claim2).toMatchObject({ ok: true });
+    expect(await pen).toMatchObject({ ok: true });
   });
 
   it('a short absence (another app, a lost signal) does not stop the clock', async () => {

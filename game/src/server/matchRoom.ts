@@ -5,8 +5,8 @@
 // and sends each new entry to both players' games over a WebSocket (or by
 // HTTP when a WebSocket can't be had).
 //
-// The whole match is one stored record (the state, the log, who has been
-// here), written once per move: the free plan allows 100,000 writes a day, and
+// The whole match is one stored record (the state, the players' keys and the
+// log), written once per move: the free plan allows 100,000 writes a day, and
 // a match is about 200 moves. Flights are kept for the hole being played and
 // the one before (catch-up and "rewatch"); older strokes keep where they went.
 //
@@ -73,10 +73,6 @@ const POLLED_HIDDEN_MS = 75_000;  // a background tab asks once a minute (net/ma
 const BATCH = 40;                 // events per message when catching a game up
 const LIVE_DAYS = 14;             // a match nobody touches for two weeks is deleted
 const DONE_DAYS = 3;              // a finished one after three days (time for a rematch)
-// the move clock counts while the waiting player is in the match: away longer than this (a night's break), their
-// wait starts again when they come back. Shorter (another app, a lost signal) doesn't stop it
-const AWAY_MS = 5 * 60_000;
-const SEEN_EVERY_MS = 60_000;     // a game asking over HTTP is written down as seen this often (the object may be evicted)
 const MAX_RECORD = 1_500_000;     // the stored match stays under the storage's 2 MB a record
 
 export const isMatchCode = (c: unknown): c is string => typeof c === 'string' && /^[a-km-np-z2-9]{6}$/.test(c);
@@ -111,15 +107,6 @@ interface Stored {
   state: MatchState;
   keys: [string, string | null];
   log: Logged[];
-  here: Here;
-}
-
-/** Who has been in the match since when (the move clock counts while the waiting player is here). */
-interface Here {
-  /** when each player's current stay began (the match's clock, ms; 0: not yet) */
-  back: [number, number];
-  /** when each player was last known to be here (ms; written when they leave) */
-  seen: [number, number];
 }
 
 /** A finished match as the site's leaderboard keeps it (the "recent" list; functions/api/match/[[path]].ts "report"). */
@@ -142,11 +129,11 @@ export interface MatchResult {
 }
 
 export type Reply =
-  | { type: 'welcome'; protocol: number; rules: number; seat: Seat | null; seq: number; online: [boolean, boolean]; here: [number, number]; now: number }
+  | { type: 'welcome'; protocol: number; rules: number; seat: Seat | null; seq: number; online: [boolean, boolean]; now: number }
   | { type: 'events'; events: Logged[]; last: boolean }
   | { type: 'ack'; cid: string; seq: number; seat: Seat | null; now: number }
   | { type: 'nack'; cid: string; code: string; message: string; seq: number; now: number; wait?: number }
-  | { type: 'presence'; online: [boolean, boolean]; here: [number, number]; now: number }
+  | { type: 'presence'; online: [boolean, boolean]; now: number }
   | { type: 'seat'; seat: Seat }
   | { type: 'error'; code: string; message: string };
 
@@ -156,7 +143,6 @@ export class MatchRoomCore {
   private log: Logged[] = [];
   /** the moves in the log by player and id (`seat:cid` -> seq): a move sent twice counts once */
   private cids = new Map<string, number>();
-  private here: Here = { back: [0, 0], seen: [0, 0] };
   private loading: Promise<MatchState | null> | null = null;
   /** games asking over HTTP: when each seat last asked, and how long that counts (kept in memory: a guess at who is there) */
   private polled: [number, number] = [0, 0];
@@ -197,7 +183,6 @@ export class MatchRoomCore {
           this.state = m?.state ?? null;
           this.keys = m?.keys ?? null;
           this.log = m?.log ?? [];
-          this.here = m?.here ?? { back: [0, 0], seen: [0, 0] };
           this.cids = new Map();
           for (const e of this.log) if (e.cid) this.cids.set(`${authorOf(e)}:${e.cid}`, e.seq);
           return this.state;
@@ -224,7 +209,7 @@ export class MatchRoomCore {
       const e = this.log[i];
       if (e.t === 'stroke' && e.path) { bytes -= e.path.length; this.log[i] = { ...e, path: '' }; }
     }
-    const rec: Stored = { state: s, keys: this.keys!, log: this.log, here: this.here };
+    const rec: Stored = { state: s, keys: this.keys!, log: this.log };
     await this.host.storage.put({ m: rec });
   }
 
@@ -272,29 +257,6 @@ export class MatchRoomCore {
     });
   }
 
-  /** The last time a player was heard from on any line (sockets that have gone quiet too), or written down as seen. */
-  private lastHeard(seat: Seat, except?: RoomSocket): number {
-    let t = Math.max(this.here.seen[seat], this.polled[seat]);
-    for (const ws of this.host.sockets()) {
-      const i = ws.info();
-      if (ws !== except && i?.key && i.seat === seat) t = Math.max(t, this.heard(ws));
-    }
-    return t;
-  }
-
-  /**
-   * A player's game is here (a hello, or a question over HTTP): if they had
-   * been away longer than AWAY_MS (or never came), their stay starts now. True
-   * if that changed what is stored.
-   */
-  private arrive(seat: Seat, via?: RoomSocket): boolean {
-    const now = this.host.now();
-    if (this.present(seat, now, via)) return false;
-    if (this.here.back[seat] !== 0 && now - this.lastHeard(seat, via) <= AWAY_MS) return false;
-    this.here.back[seat] = this.clock();
-    return true;
-  }
-
   /** Which players have a game there (`gone`: a socket that is closing). */
   private online(gone?: RoomSocket): [boolean, boolean] {
     const now = this.host.now();
@@ -302,7 +264,7 @@ export class MatchRoomCore {
   }
 
   private presence(gone?: RoomSocket): Reply {
-    return { type: 'presence', online: this.online(gone), here: [...this.here.back], now: this.clock() };
+    return { type: 'presence', online: this.online(gone), now: this.clock() };
   }
 
   // ----------------------------------------------------------------- HTTP
@@ -344,7 +306,6 @@ export class MatchRoomCore {
     this.keys = [b.key, null];
     this.log = [{ ...ev, cfg: s.cfg } as Logged];
     this.cids = new Map();
-    this.here = { back: [0, 0], seen: [0, 0] };
     await this.save();
     await this.keepFor(LIVE_DAYS);
     return jsonResponse({ ok: true, seq: 1 });
@@ -398,21 +359,16 @@ export class MatchRoomCore {
     const since = Math.max(0, Number(url.searchParams.get('since') ?? 0) | 0);
     const events = this.eventsSince(since, 400);
     const more = events.length > 0 && events[events.length - 1].seq < s.seq;
-    return jsonResponse({ events, more, seq: s.seq, online: this.online(), here: this.here.back, now: this.clock(), seat });
+    return jsonResponse({ events, more, seq: s.seq, online: this.online(), now: this.clock(), seat });
   }
 
-  /** A game asked over HTTP: it is here (its stay starts if it was away; written down as seen now and then). */
+  /** A game asked over HTTP: it is there for a while (nothing is stored); the others hear when that changes who is. */
   private polledBy(seat: Seat, hidden = false): Promise<void> {
     return this.serial(async () => {
-      const now = this.host.now();
-      let changed = this.arrive(seat);
-      this.polled[seat] = now;
+      this.polled[seat] = this.host.now();
       this.pollWindow[seat] = hidden ? POLLED_HIDDEN_MS : POLLED_MS;
-      if (now - this.here.seen[seat] > SEEN_EVERY_MS) { this.here.seen[seat] = now; changed = true; }
-      if (changed && this.state) {
-        await this.save();
-        this.broadcast(this.presence());
-      }
+      const p = this.presence();
+      if (this.state && p.type === 'presence' && p.online.join() !== this.lastOnline) this.broadcast(p);
     });
   }
 
@@ -427,7 +383,7 @@ export class MatchRoomCore {
     if (!isKey(b.key)) return jsonResponse({ type: 'error', code: 'key', message: 'no player key' }, 400);
     const seat = this.seatOf(b.key);
     if (seat !== null) await this.polledBy(seat);
-    const r: Reply = { type: 'welcome', protocol: PROTOCOL, rules: RULES, seat, seq: s.seq, online: this.online(), here: [...this.here.back], now: this.clock() };
+    const r: Reply = { type: 'welcome', protocol: PROTOCOL, rules: RULES, seat, seq: s.seq, online: this.online(), now: this.clock() };
     return jsonResponse(r);
   }
 
@@ -514,31 +470,24 @@ export class MatchRoomCore {
     await this.serial(async () => {
       const s = (await this.load())!;
       const seat = this.seatOf(key);
-      // back after a while away: the stay starts now (counted before the older line of the same player goes)
-      if (seat !== null && this.arrive(seat, ws)) await this.save();
       // one line per player key: an older one (another tab, a phone that slept and woke up) is closed
       for (const other of this.live()) {
         if (other !== ws && other.info()?.key === key) this.drop(other, CLOSE.replaced, 'opened elsewhere');
       }
       ws.setInfo({ key, seat, at: this.host.now() });
       const p = this.presence();
-      this.send(ws, { type: 'welcome', protocol: PROTOCOL, rules: RULES, seat, seq: s.seq, online: this.online(), here: [...this.here.back], now: this.clock() });
+      this.send(ws, { type: 'welcome', protocol: PROTOCOL, rules: RULES, seat, seq: s.seq, online: this.online(), now: this.clock() });
       await this.catchUp(ws, Math.max(0, Number(since) | 0));
       this.broadcast(p, ws);
     });
   }
 
-  /** A socket closed (or broke): the other player sees who is still there; a player gone is written down as seen then. */
+  /** A socket closed (or broke): the other player sees who is still there (nothing is stored). */
   closed(ws: RoomSocket): Promise<void> {
-    // read now: the socket may be gone once the storage has answered
-    const i = ws.info();
-    const t = this.heard(ws);
-    if (!i?.key) return Promise.resolve();
+    if (!ws.info()?.key) return Promise.resolve();
     return this.serial(async () => {
-      const s = await this.load();
+      await this.load();
       this.broadcast(this.presence(ws), ws);
-      if (!s || i.seat === null || this.present(i.seat, this.host.now(), ws)) return;
-      if (t > this.here.seen[i.seat]) { this.here.seen[i.seat] = t; await this.save(); }
     });
   }
 
@@ -553,7 +502,6 @@ export class MatchRoomCore {
     this.keys = null;
     this.log = [];
     this.cids = new Map();
-    this.here = { back: [0, 0], seen: [0, 0] };
   }
 
   // ----------------------------------------------------------------- moves
@@ -570,13 +518,12 @@ export class MatchRoomCore {
 
   /**
    * How long before the waiting player may add a penalty stroke or claim the
-   * match: the clock counts from the move before, or from when they came back
-   * if they were away (developer, 2026-10-21: no claim straight away after a
-   * night's break).
+   * match: the clock counts from the move before (and its grace), whether or
+   * not either player is in the match (developer, 2026-10-21: "have the move
+   * clock run while the waiting player is away").
    */
-  private clockLeft(s: MatchState, by: Seat, what: 'slow' | 'claim'): number {
-    const from = Math.max(s.clock.at, this.here.back[by]);
-    return from + (what === 'claim' ? CLOCK.claimMs : CLOCK.penaltyMs) - this.clock();
+  private clockLeft(s: MatchState, what: 'slow' | 'claim'): number {
+    return s.clock.at + (what === 'claim' ? CLOCK.claimMs : CLOCK.penaltyMs) - this.clock();
   }
 
   private async actNow(key: string, cid: unknown, raw: unknown, beforeBroadcast?: () => void): Promise<Reply> {
@@ -607,20 +554,15 @@ export class MatchRoomCore {
     try { next = applyEvent(s, ev); } catch (e) {
       if (!(e instanceof MatchError)) throw e;
       if (e.code === 'too_soon' && (action.t === 'slow' || action.t === 'claim')) {
-        const left = this.clockLeft(s, by, action.t);
+        const left = this.clockLeft(s, action.t);
         return this.nack(id, 'too_soon', `not yet: ${clockText(left)} to go`, Math.max(0, left));
       }
       return this.nack(id, e.code, e.message);
     }
-    if (action.t === 'slow' || action.t === 'claim') {
-      // the waiting player has to have been here for it (back after a break: from then)
-      const left = this.clockLeft(s, by, action.t);
-      if (left > 0) return this.nack(id, 'too_soon', `not yet: ${clockText(left)} to go`, left);
-    }
-    const before = { state: this.state, keys: this.keys, log: this.log.length, back: this.here.back[1] };
+    const before = { state: this.state, keys: this.keys, log: this.log.length };
     this.state = next;
     this.log.push(ev);
-    if (action.t === 'join') { this.keys = [this.keys![0], key]; this.here.back[1] = this.clock(); }
+    if (action.t === 'join') this.keys = [this.keys![0], key];
     try {
       await this.save();
     } catch (e) {
@@ -628,7 +570,6 @@ export class MatchRoomCore {
       this.state = before.state;
       this.keys = before.keys;
       this.log.length = before.log;
-      this.here.back[1] = before.back;
       throw e;
     }
     this.cids.set(`${by}:${id}`, ev.seq);

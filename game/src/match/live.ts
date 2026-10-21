@@ -275,9 +275,8 @@ export class LiveMatch {
     const s = ms.state;
     const w = waitingOn(s);
     if (!w) return null;
-    // from the move before, or (later) from when the waiting player came back to the match after a break
-    const from = Math.max(s.clock.at, this.client.here[w.waiter]);
-    return { ...w, elapsed: this.client.serverNow() - from, slowGiven: s.clock.slow, turn: s.clock.seq };
+    // from the move before (and its grace), whoever is in the match (developer, 2026-10-21)
+    return { ...w, elapsed: this.client.serverNow() - s.clock.at, slowGiven: s.clock.slow, turn: s.clock.seq };
   }
 
   /** Is this player in the match now, as far as the server knows (the other player: their game is open)? */
@@ -291,7 +290,7 @@ export class LiveMatch {
   private clockAttention() {
     if (typeof document === 'undefined' || document.visibilityState !== 'hidden' || this.seat === null) return;
     const c = this.clock();
-    if (!c || !this.isHere(c.waiter)) return;
+    if (!c) return;
     const s = this.session!.state;
     const me = this.seat;
     let key = '', text = '';

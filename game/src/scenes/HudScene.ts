@@ -619,12 +619,11 @@ export class HudScene extends Phaser.Scene {
    * The move clock under the match bar (CLOCK, developer 2026-10-21): to the
    * player it waits for, from a minute on, the penalty stroke at 2:00, the
    * warning from 3:30 and the claim at 5:00; to the waiting player, how long
-   * it has been. Nothing while the waiting player is away (it isn't running).
+   * it has been. It runs whether or not either player is in the match.
    */
   private clockLine(c: ClockView): { text: string; color: number } | null {
     const p = this.play;
-    const live = p.match!;
-    if (!live.isHere(c.waiter) || c.elapsed < 60_000) return null;
+    if (c.elapsed < 60_000) return null;
     const t = clockText(c.elapsed);
     const opp = p.oppName().slice(0, 10);
     if (c.on === p.me) {
@@ -640,8 +639,6 @@ export class HudScene extends Phaser.Scene {
   /** Once per shot: the 3:30 warning to the player on the clock (a banner and a sound), and the claim's sound for the one waiting. */
   private clockNotice(c: ClockView, claimable: boolean) {
     const p = this.play;
-    const live = p.match!;
-    if (!live.isHere(c.waiter)) return;
     if (c.on === p.me && c.elapsed >= CLOCK.warnMs && c.elapsed < CLOCK.claimMs && this.warnedTurn !== c.turn) {
       this.warnedTurn = c.turn;
       this.flash('play now', COLORS.red, `${p.oppName()} can claim the match in ${clockText(CLOCK.claimMs - c.elapsed)}`, 2600);
