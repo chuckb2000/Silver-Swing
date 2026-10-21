@@ -217,6 +217,16 @@ On Cloudflare (free plan), once, by the developer:
 Merging before step 2 is safe: without the binding the ping answers 503 and
 the title doesn't offer matches.
 
+Done from the dashboard instead (developer, 2026-10-21, for the branch
+preview): the Worker `silver-swings-match` is built by Cloudflare from GitHub
+(Workers & Pages > Create > Continue with GitHub; root directory
+`game/match-worker`, no build command, deploy command `npx wrangler deploy`,
+production branch `design/multiplayer`, preview builds off). A build starts on
+a push to that branch; the dashboard's "retry" only rebuilds the same commit.
+The binding then goes on the Pages project's Preview environment. When the
+branch merges: switch the Worker's production branch to `main` and add the
+same binding to Production.
+
 When `rules.ts` changes: bump `RULES`, deploy the Worker, then the site, close
 together. Games and matches in progress are told to reload; their logs must
 still read the same under the new rules, or those matches can't continue
