@@ -749,3 +749,14 @@ Branch `fix/afternoon-ui`, from the afternoon review of the screens and flow.
   `save/snapshot.ts` `saveStruck`). A reload mid-flight resumes after the stroke: the ball where
   it stops, the relief choice open if it went in water or out of bounds, or the next hole if it
   was holed.
+
+## Height to the pin in the info panel (developer, 2026-10-20)
+
+- Elevation changes carry a lot in the game (the ball lands where its flight meets the ground):
+  10 ft below the tee adds about 6 yd to a driver, 4 to a 7-iron, 3 to a sand wedge, and the same
+  is lost uphill. 107 of 333 holes change more than 16 ft tee to green, and par 3s such as
+  Chambers Bay 9 (85 ft down) and Oswego Lake 8 (83 ft down) play one or two clubs shorter.
+  Of three options (height only; also a "plays like" yardage and club; also a landing marker on
+  the ground) the developer chose the first: the distance line shows an up or down arrow and the
+  pin's height above or below the ball in feet ("178 yd ▼ 84 ft"), hidden when putting and within
+  3 ft. The physics, the club pick and the landing marker are unchanged.
