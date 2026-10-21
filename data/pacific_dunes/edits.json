@@ -1,0 +1,1076 @@
+{
+ "note": "Edits to the OSM layout for Pacific Dunes, written by make_edits.py (generic resort edits, then course_edits.json); built into edited/course.geojson by pipeline/merge_edits.py.",
+ "add": [
+  {
+   "from": "proposed/paths_as_cartpaths.geojson",
+   "ids": [
+    "w1030003114_cartpath",
+    "w1030003115_cartpath",
+    "w1030003116_cartpath",
+    "w1030003117_cartpath",
+    "w1030015901_cartpath",
+    "w1030015902_cartpath",
+    "w1030906041_cartpath",
+    "w1031647251_cartpath",
+    "w1056841323_cartpath",
+    "w1056841331_cartpath",
+    "w1056841332_cartpath",
+    "w1056841333_cartpath",
+    "w1056841335_cartpath",
+    "w1056841336_cartpath",
+    "w1056841338_cartpath",
+    "w1056841341_cartpath",
+    "w1056841342_cartpath",
+    "w1056841344_cartpath",
+    "w1056841346_cartpath",
+    "w1056841348_cartpath",
+    "w1056841350_cartpath",
+    "w1056841351_cartpath",
+    "w1056844961_cartpath",
+    "w1056844967_cartpath",
+    "w1056844970_cartpath",
+    "w1056844971_cartpath",
+    "w1056844972_cartpath",
+    "w1056844976_cartpath",
+    "w1056844977_cartpath",
+    "w1056877796_cartpath",
+    "w1056877797_cartpath",
+    "w1056877798_cartpath",
+    "w1056877800_cartpath",
+    "w1056877801_cartpath",
+    "w1056877804_cartpath",
+    "w1056877809_cartpath",
+    "w1056877810_cartpath",
+    "w1056877811_cartpath",
+    "w1056877812_cartpath",
+    "w1056877813_cartpath",
+    "w1056877819_cartpath",
+    "w1056877821_cartpath",
+    "w1056877822_cartpath",
+    "w1056956892_cartpath",
+    "w1056956893_cartpath",
+    "w1056956894_cartpath",
+    "w1056956895_cartpath",
+    "w1056956896_cartpath",
+    "w1056956897_cartpath",
+    "w1056956902_cartpath",
+    "w1056956903_cartpath",
+    "w1056956907_cartpath",
+    "w1056956908_cartpath",
+    "w1056956910_cartpath",
+    "w1056956911_cartpath",
+    "w1056956913_cartpath",
+    "w1056985417_cartpath",
+    "w1056985420_cartpath",
+    "w1057044869_cartpath",
+    "w1057045708_cartpath",
+    "w1057045709_cartpath",
+    "w1057045710_cartpath",
+    "w1057045711_cartpath",
+    "w1057483449_cartpath",
+    "w1057483450_cartpath",
+    "w1057483451_cartpath",
+    "w1057483452_cartpath",
+    "w1057483460_cartpath",
+    "w1057483461_cartpath",
+    "w1186884942_cartpath",
+    "w1186884943_cartpath",
+    "w1202382076_cartpath",
+    "w1202382077_cartpath",
+    "w1202382078_cartpath",
+    "w1202382079_cartpath",
+    "w1202382080_cartpath",
+    "w1202382081_cartpath",
+    "w1202382082_cartpath",
+    "w1202382083_cartpath",
+    "w1202382084_cartpath",
+    "w1202382085_cartpath",
+    "w1202382086_cartpath",
+    "w1202382087_cartpath",
+    "w1202382088_cartpath",
+    "w1202382089_cartpath",
+    "w1202382090_cartpath",
+    "w1202382091_cartpath",
+    "w1202382092_cartpath",
+    "w1202382093_cartpath",
+    "w1202382094_cartpath",
+    "w1202382095_cartpath",
+    "w1202382096_cartpath",
+    "w1202382097_cartpath",
+    "w1202382098_cartpath",
+    "w1202382099_cartpath",
+    "w1202382100_cartpath",
+    "w1202382101_cartpath",
+    "w1202382102_cartpath",
+    "w1202382103_cartpath",
+    "w1202382104_cartpath",
+    "w1202382105_cartpath",
+    "w1202382106_cartpath",
+    "w1202382107_cartpath",
+    "w1202382108_cartpath",
+    "w1202382109_cartpath",
+    "w1202382110_cartpath",
+    "w1202382111_cartpath",
+    "w1203178280_cartpath",
+    "w1203178281_cartpath",
+    "w1203178282_cartpath",
+    "w1203178283_cartpath",
+    "w1203178284_cartpath",
+    "w1203178285_cartpath",
+    "w1203178286_cartpath",
+    "w1203178287_cartpath",
+    "w1203178288_cartpath",
+    "w1203178289_cartpath",
+    "w1203178290_cartpath",
+    "w1203178291_cartpath",
+    "w1203178292_cartpath",
+    "w1203178294_cartpath",
+    "w1203178295_cartpath",
+    "w1203178296_cartpath",
+    "w1203178297_cartpath",
+    "w1203178298_cartpath",
+    "w1203178299_cartpath",
+    "w1203178300_cartpath",
+    "w1203178301_cartpath",
+    "w1203178302_cartpath",
+    "w1203178303_cartpath",
+    "w1203178304_cartpath",
+    "w1203178305_cartpath",
+    "w1203178306_cartpath",
+    "w686728923_cartpath",
+    "w686728924_cartpath",
+    "w686941566_cartpath",
+    "w686941568_cartpath",
+    "w686941571_cartpath",
+    "w686941573_cartpath",
+    "w686941574_cartpath",
+    "w686941577_cartpath",
+    "w687232295_cartpath",
+    "w687232297_cartpath",
+    "w694844361_cartpath",
+    "w694844364_cartpath",
+    "w696739532_cartpath",
+    "w696739534_cartpath",
+    "w696741153_cartpath",
+    "w696788291_cartpath",
+    "w697049189_cartpath",
+    "w697055293_cartpath",
+    "w698128805_cartpath",
+    "w698131021_cartpath",
+    "w698131023_cartpath",
+    "w698313180_cartpath",
+    "w698379565_cartpath",
+    "w698379566_cartpath",
+    "w698413921_cartpath",
+    "w698413922_cartpath",
+    "w698413924_cartpath",
+    "w698413925_cartpath",
+    "w698415012_cartpath",
+    "w698415015_cartpath",
+    "w699100218_cartpath",
+    "w699104186_cartpath",
+    "w699223652_cartpath",
+    "w699223653_cartpath"
+   ],
+   "reason": "167 golf=path ways inside the boundary, not read by s01: copied as golf=cartpath (free relief, drawn as paths)"
+  }
+ ],
+ "tags": [
+  {
+   "osm": "w694622373",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "Elbow Lake (golf=water_hazard): every penalty area red (standing default)"
+  },
+  {
+   "osm": "w674268637",
+   "set": {
+    "hole": "4",
+    "tee_set": "Green",
+    "assigned_by": "the course chat (2026-10-21)"
+   },
+   "reason": "hole 4: the OSM line starts at a forward box; this mapped box behind it measures 459 yd from its centre against the Green card's 449 (checked on the 2024 photo: a mown tee behind the line start, facing the green)"
+  },
+  {
+   "osm": "w1056956912",
+   "set": {
+    "hole": "8",
+    "tee_set": "Green",
+    "assigned_by": "the course chat (2026-10-21)"
+   },
+   "reason": "hole 8: the OSM line starts at a forward box; this mapped box behind it measures 360 yd from its centre against the Green card's 369 (checked on the 2024 photo: a mown tee behind the line start, facing the green)"
+  },
+  {
+   "osm": "w674345458",
+   "set": {
+    "hole": "12",
+    "tee_set": "Green",
+    "assigned_by": "the course chat (2026-10-21)"
+   },
+   "reason": "hole 12: the OSM line starts at a forward box; this mapped box behind it measures 507 yd from its centre against the Green card's 507 (checked on the 2024 photo: a mown tee behind the line start, facing the green)"
+  },
+  {
+   "osm": "w674350938",
+   "set": {
+    "hole": "15",
+    "tee_set": "Green",
+    "assigned_by": "the course chat (2026-10-21)"
+   },
+   "reason": "hole 15: the OSM line starts at a forward box; this mapped box behind it measures 508 yd from its centre against the Green card's 504 (checked on the 2024 photo: a mown tee behind the line start, facing the green)"
+  },
+  {
+   "osm": "w674353912",
+   "set": {
+    "hole": "16",
+    "tee_set": "Green",
+    "assigned_by": "the course chat (2026-10-21)"
+   },
+   "reason": "hole 16: the OSM line starts at a forward box; this mapped box behind it measures 334 yd from its centre against the Green card's 338 (checked on the 2024 photo: a mown tee behind the line start, facing the green)"
+  },
+  {
+   "osm": "w674353937",
+   "set": {
+    "hole": "17",
+    "tee_set": "Green",
+    "assigned_by": "the course chat (2026-10-21)"
+   },
+   "reason": "hole 17: the OSM line starts at a forward box; this mapped box behind it measures 191 yd from its centre against the Green card's 189 (checked on the 2024 photo: a mown tee behind the line start, facing the green)"
+  }
+ ],
+ "drop": [
+  {
+   "osm": "w362513478",
+   "reason": "Practice Center (leisure=golf_course): another course of the resort; the out-of-bounds line is this course's own polygon"
+  },
+  {
+   "osm": "w1056848368",
+   "reason": "Bandon Dunes Hole 5 (ref 5): another course's hole line; its surfaces stay as mapped"
+  },
+  {
+   "osm": "w676282393",
+   "reason": "Bandon Dunes Hole 1 (ref 1): another course's hole line; its surfaces stay as mapped"
+  },
+  {
+   "osm": "w676307028",
+   "reason": "Bandon Dunes Hole 2 (ref 2): another course's hole line; its surfaces stay as mapped"
+  },
+  {
+   "osm": "w676317346",
+   "reason": "Bandon Dunes Hole 3 (ref 3): another course's hole line; its surfaces stay as mapped"
+  },
+  {
+   "osm": "w676317358",
+   "reason": "Bandon Dunes Hole 4 (ref 4): another course's hole line; its surfaces stay as mapped"
+  },
+  {
+   "osm": "w676327187",
+   "reason": "Bandon Dunes Hole 6 (ref 6): another course's hole line; its surfaces stay as mapped"
+  },
+  {
+   "osm": "w676327196",
+   "reason": "Bandon Dunes Hole 7 (ref 7): another course's hole line; its surfaces stay as mapped"
+  },
+  {
+   "osm": "w676327220",
+   "reason": "Bandon Dunes Hole 8 (ref 8): another course's hole line; its surfaces stay as mapped"
+  },
+  {
+   "osm": "w676328636",
+   "reason": "Bandon Dunes Hole 9 (ref 9): another course's hole line; its surfaces stay as mapped"
+  },
+  {
+   "osm": "w676390154",
+   "reason": "Bandon Dunes Hole 11 (ref 11): another course's hole line; its surfaces stay as mapped"
+  },
+  {
+   "osm": "w676398200",
+   "reason": "Bandon Dunes Hole 12 (ref 12): another course's hole line; its surfaces stay as mapped"
+  },
+  {
+   "osm": "w694870408",
+   "reason": "an unnamed line (ref 9): another course's hole line; its surfaces stay as mapped"
+  },
+  {
+   "osm": "w695845075",
+   "reason": "an unnamed line (ref 3): another course's hole line; its surfaces stay as mapped"
+  },
+  {
+   "osm": "w695879569",
+   "reason": "an unnamed line (ref 16): another course's hole line; its surfaces stay as mapped"
+  },
+  {
+   "osm": "w696980292",
+   "reason": "an unnamed line (ref 1): another course's hole line; its surfaces stay as mapped"
+  },
+  {
+   "osm": "w696980293",
+   "reason": "an unnamed line (ref 2): another course's hole line; its surfaces stay as mapped"
+  },
+  {
+   "osm": "w696980294",
+   "reason": "an unnamed line (ref 15): another course's hole line; its surfaces stay as mapped"
+  },
+  {
+   "osm": "w696987773",
+   "reason": "an unnamed line (ref 4): another course's hole line; its surfaces stay as mapped"
+  },
+  {
+   "osm": "w697664231",
+   "reason": "an unnamed line (ref 5): another course's hole line; its surfaces stay as mapped"
+  },
+  {
+   "osm": "w697913094",
+   "reason": "an unnamed line (ref 6): another course's hole line; its surfaces stay as mapped"
+  },
+  {
+   "osm": "w698131025",
+   "reason": "an unnamed line (ref 7): another course's hole line; its surfaces stay as mapped"
+  },
+  {
+   "osm": "w698132442",
+   "reason": "an unnamed line (ref 8): another course's hole line; its surfaces stay as mapped"
+  },
+  {
+   "osm": "w698410970",
+   "reason": "an unnamed line (ref 10): another course's hole line; its surfaces stay as mapped"
+  },
+  {
+   "osm": "w698931934",
+   "reason": "an unnamed line (ref 11): another course's hole line; its surfaces stay as mapped"
+  },
+  {
+   "osm": "w699104567",
+   "reason": "an unnamed line (ref 12): another course's hole line; its surfaces stay as mapped"
+  },
+  {
+   "osm": "w699106369",
+   "reason": "an unnamed line (ref 13): another course's hole line; its surfaces stay as mapped"
+  },
+  {
+   "osm": "w699136819",
+   "reason": "an unnamed line (ref 14): another course's hole line; its surfaces stay as mapped"
+  },
+  {
+   "osm": "w699240549",
+   "reason": "an unnamed line (ref 17): another course's hole line; its surfaces stay as mapped"
+  },
+  {
+   "osm": "w699240550",
+   "reason": "an unnamed line (ref 18): another course's hole line; its surfaces stay as mapped"
+  },
+  {
+   "osm": "w1057044359",
+   "reason": "another course's green wholly outside the world box (s07/s09 cannot shape a green off the map)"
+  },
+  {
+   "osm": "w1057044361",
+   "reason": "another course's green wholly outside the world box (s07/s09 cannot shape a green off the map)"
+  },
+  {
+   "osm": "w676307026",
+   "reason": "another course's green wholly outside the world box (s07/s09 cannot shape a green off the map)"
+  },
+  {
+   "osm": "w676317355",
+   "reason": "another course's green wholly outside the world box (s07/s09 cannot shape a green off the map)"
+  },
+  {
+   "osm": "w695879568",
+   "reason": "another course's green wholly outside the world box (s07/s09 cannot shape a green off the map)"
+  },
+  {
+   "osm": "w696551649",
+   "reason": "another course's green wholly outside the world box (s07/s09 cannot shape a green off the map)"
+  },
+  {
+   "osm": "w696788690",
+   "reason": "another course's green wholly outside the world box (s07/s09 cannot shape a green off the map)"
+  },
+  {
+   "osm": "w699136651",
+   "reason": "another course's green wholly outside the world box (s07/s09 cannot shape a green off the map)"
+  },
+  {
+   "osm": "w699229066",
+   "reason": "another course's green wholly outside the world box (s07/s09 cannot shape a green off the map)"
+  },
+  {
+   "osm": "w699238645",
+   "reason": "another course's green wholly outside the world box (s07/s09 cannot shape a green off the map)"
+  },
+  {
+   "osm": "w777556364",
+   "reason": "another course's green wholly outside the world box (s07/s09 cannot shape a green off the map)"
+  },
+  {
+   "osm": "w1030003114",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1030003115",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1030003116",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1030003117",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1030015901",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1030015902",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1030906041",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1031647251",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1056841323",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1056841331",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1056841332",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1056841333",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1056841335",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1056841336",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1056841338",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1056841341",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1056841342",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1056841344",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1056841346",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1056841348",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1056841350",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1056841351",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1056844961",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1056844967",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1056844970",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1056844971",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1056844972",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1056844976",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1056844977",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1056877796",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1056877797",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1056877798",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1056877800",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1056877801",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1056877804",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1056877809",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1056877810",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1056877811",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1056877812",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1056877813",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1056877819",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1056877821",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1056877822",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1056956892",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1056956893",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1056956894",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1056956895",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1056956896",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1056956897",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1056956902",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1056956903",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1056956907",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1056956908",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1056956910",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1056956911",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1056956913",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1056985417",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1056985420",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1057044869",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1057045708",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1057045709",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1057045710",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1057045711",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1057483449",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1057483450",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1057483451",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1057483452",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1057483460",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1057483461",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1186884942",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1186884943",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1202382076",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1202382077",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1202382078",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1202382079",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1202382080",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1202382081",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1202382082",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1202382083",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1202382084",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1202382085",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1202382086",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1202382087",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1202382088",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1202382089",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1202382090",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1202382091",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1202382092",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1202382093",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1202382094",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1202382095",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1202382096",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1202382097",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1202382098",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1202382099",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1202382100",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1202382101",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1202382102",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1202382103",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1202382104",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1202382105",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1202382106",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1202382107",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1202382108",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1202382109",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1202382110",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1202382111",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1203178280",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1203178281",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1203178282",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1203178283",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1203178284",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1203178285",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1203178286",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1203178287",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1203178288",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1203178289",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1203178290",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1203178291",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1203178292",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1203178294",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1203178295",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1203178296",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1203178297",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1203178298",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1203178299",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1203178300",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1203178301",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1203178302",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1203178303",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1203178304",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1203178305",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1203178306",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w686728923",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w686728924",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w686941566",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w686941568",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w686941571",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w686941573",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w686941574",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w686941577",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w687232295",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w687232297",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w694844361",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w694844364",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w696739532",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w696739534",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w696741153",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w696788291",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w697049189",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w697055293",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w698128805",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w698131021",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w698131023",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w698313180",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w698379565",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w698379566",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w698413921",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w698413922",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w698413924",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w698413925",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w698415012",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w698415015",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w699100218",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w699104186",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w699223652",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w699223653",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  }
+ ],
+ "extend_start": []
+}

@@ -1,0 +1,38 @@
+{
+ "release": "pacific-dunes-data",
+ "note": "build inputs not kept in git, shared by Pacific Dunes, Old Macdonald and Sheep Ranch (one release for the three); `make fetch NAME=pacific_dunes` puts them in place (pipeline/fetch_raw.py). The DOGAMI exports kept the server's file names (_ags_...tif). PENDING: the north photo tile is not in the release yet (the developer sent it in the chat on 2026-10-21, where it was stored as a PNG; the build used that PNG). The last entry's asset name and sha256 are filled in once the original JPEG is uploaded.",
+ "files": [
+  {
+   "asset": "_ags_5895eba5_2261_4029_9a2a_cf5121494bfb.tif",
+   "sha256": "cc2b017ccaeee18e7ac93a2ed7b06eaa0cd228042d7ad8d217ccd3bdefaeb186",
+   "run": "cp {file} data/pacific_dunes/raw/dogami_dtm_ft.tif",
+   "outputs": {
+    "raw/dogami_dtm_ft.tif": "cc2b017ccaeee18e7ac93a2ed7b06eaa0cd228042d7ad8d217ccd3bdefaeb186"
+   }
+  },
+  {
+   "asset": "_ags_3c331496_959e_469c_8d52_987562653ff9.tif",
+   "sha256": "d517eed9e7bd7b40b0086d20954421a1b52ceefbcc67782789c1e72138e61d82",
+   "run": "cp {file} data/pacific_dunes/raw/dogami_chm_ft.tif",
+   "outputs": {
+    "raw/dogami_chm_ft.tif": "d517eed9e7bd7b40b0086d20954421a1b52ceefbcc67782789c1e72138e61d82"
+   }
+  },
+  {
+   "asset": "exportImage.jpg",
+   "sha256": "69ccd0c2c008db38b6a370df282de28a7f4f81e062bb88528c5a241e20a94744",
+   "run": "cp {file} data/pacific_dunes/raw/osip2024_south.jpg",
+   "outputs": {
+    "raw/osip2024_south.jpg": "69ccd0c2c008db38b6a370df282de28a7f4f81e062bb88528c5a241e20a94744"
+   }
+  },
+  {
+   "asset": "PENDING-north-photo.jpg",
+   "sha256": "PENDING",
+   "run": "python3 data/pacific_dunes/make_ortho.py data/pacific_dunes/raw/osip2024_south.jpg {file}",
+   "outputs": {
+    "raw/osip2024_05m.tif": "4d0cee26e78a2b4a9943e987a3dbaa7ce2de2c2734b719609c8dd63c08e30773"
+   }
+  }
+ ]
+}
