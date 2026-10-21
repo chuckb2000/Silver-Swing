@@ -789,8 +789,8 @@ Branch `fix/afternoon-ui`, from the afternoon review of the screens and flow.
   (oldest first, any courses) make one 18-hole differential, the sum of their nine-hole
   differentials (course rating halved; East Potomac White's 31.0 is already a nine-hole rating,
   Highland Links' 67.2 is for 18); index from the latest 20 differentials with the WHS table (3:
-  lowest - 2.0 ... 20: best 8), and with 1 or 2 differentials the same lowest - 2.0, marked
-  provisional ("12.4*"); rounded to a tenth, at most 54.0. Rounds are taken in date order and
+  lowest - 2.0 ... 20: best 8), and with 1 or 2 differentials the same lowest - 2.0 (provisional
+  in WHS, not marked: see below); rounded to a tenth, at most 54.0. Rounds are taken in date order and
   each one's cap uses the index before it. Playing Conditions Calculation and the 2024
   expected-score treatment of a lone nine are left out (a lone nine waits for a partner).
 - The course list carries each hole's par and stroke index and each tee's rating and slope
@@ -811,8 +811,8 @@ Branch `fix/afternoon-ui`, from the afternoon review of the screens and flow.
   (oldest first, any courses) make one 18-hole differential, the sum of their nine-hole
   differentials (course rating halved; East Potomac White's 31.0 is already a nine-hole rating,
   Highland Links' 67.2 is for 18); index from the latest 20 differentials with the WHS table (3:
-  lowest - 2.0 ... 20: best 8), and with 1 or 2 differentials the same lowest - 2.0, marked
-  provisional ("12.4*"); rounded to a tenth, at most 54.0. Rounds are taken in date order and
+  lowest - 2.0 ... 20: best 8), and with 1 or 2 differentials the same lowest - 2.0 (provisional
+  in WHS, not marked: see below); rounded to a tenth, at most 54.0. Rounds are taken in date order and
   each one's cap uses the index before it. The Playing Conditions Calculation and the 2024
   expected-score treatment of a lone nine are left out (a lone nine waits for a partner).
 - The course list carries each hole's par and stroke index and each tee's rating and slope
@@ -825,6 +825,14 @@ Branch `fix/afternoon-ui`, from the afternoon review of the screens and flow.
   one off players that only played one round then never came back"): a player is listed once
   their counting rounds add up to three nines or an 18 and a nine (`BOARD_MIN_HOLES`). Their own
   index still starts at 18 holes ("my golf", the new-round screen).
+- **One index per player, everywhere** (developer, 2026-10-20: "my golf" and the board showed
+  different numbers). `/api/handicaps` groups rounds by player code, under the name of the code's
+  latest round (rounds from before player codes stay grouped by name), as "my golf" already did;
+  and "my golf" and the new-round screen leave out rounds played as "player" once the player has
+  a name, since those never reach the board (`ownHcpRounds`). The board's "this device" tab still
+  counts only this device's rounds.
+- **No provisional mark** (developer, 2026-10-20: "it doesn't matter that a player's handicap is
+  provisional"): no star after an index under 54 holes and no note on the board.
 
 ## Rounds go up when they finish (developer, 2026-10-20)
 

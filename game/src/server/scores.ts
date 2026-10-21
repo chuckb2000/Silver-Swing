@@ -551,21 +551,25 @@ export async function handleHandicapsGet(db: D1Like | undefined): Promise<Respon
   if (!db) return json({ ok: false, error: 'no database bound (DB)' }, 503);
   if (hcpCache && Date.now() - hcpCache.at < HCP_CACHE_MS) return json(hcpCache.body);
   await prepareDb(db);
-  const { results } = await db.prepare(`SELECT player, data FROM rounds WHERE casual = 0 AND ${SHOWN} ORDER BY date DESC LIMIT ?`).bind(HCP_SCAN).all<{ player: string; data: string }>();
-  const by = new Map<string, unknown[]>();
+  const { results } = await db.prepare(`SELECT player, owner, data FROM rounds WHERE casual = 0 AND ${SHOWN} ORDER BY date DESC LIMIT ?`).bind(HCP_SCAN).all<{ player: string; owner: string | null; data: string }>();
+  // one handicap per player code, under the name of its latest round: a player who changed their
+  // name, or played under two, has one index here and in "my golf" (developer, 2026-10-20: the two
+  // differed). Rounds sent before player codes are grouped by name.
+  const by = new Map<string, { name: string; list: unknown[] }>();
   for (const r of results) {
     const name = boardableName(r.player);
     if (!name) continue;
     let e: LeaderboardEntry;
     try { e = JSON.parse(r.data) as LeaderboardEntry; } catch { continue; }
     if (!isEntry(e) || e.difficulty !== 'normal' || e.casual) continue;
-    const list = by.get(name) ?? [];
-    if (list.length >= HCP_PER_PLAYER) continue;
-    list.push({ id: e.id, course: e.course, tee: e.tee, difficulty: e.difficulty, casual: false, player: name, date: e.date,
+    const key = r.owner ? `o:${r.owner}` : `n:${name}`;
+    const g = by.get(key) ?? { name, list: [] }; // newest first: the first round's name is the latest
+    if (g.list.length >= HCP_PER_PLAYER) continue;
+    g.list.push({ id: e.id, course: e.course, tee: e.tee, difficulty: e.difficulty, casual: false, player: g.name, date: e.date,
       scores: e.scores.map((h) => ({ hole: h.hole, par: h.par, strokes: h.strokes })) });
-    by.set(name, list);
+    by.set(key, g);
   }
-  const body = { rounds: [...by.values()].flat() };
+  const body = { rounds: [...by.values()].flatMap((g) => g.list) };
   hcpCache = { at: Date.now(), body };
   return json(body);
 }

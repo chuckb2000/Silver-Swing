@@ -1,7 +1,7 @@
 // Handicaps (developer, 2026-10-20: WHS arithmetic with a quick start, Normal only).
 import { describe, expect, it } from 'vitest';
 import type { LeaderboardEntry } from '../../src/save/entry';
-import { courseHandicap, handicapBoard, handicapOf, HcpCourse, indexLabel, indexOf, strokesOn } from '../../src/systems/game/handicap';
+import { courseHandicap, handicapBoard, handicapOf, HcpCourse, HcpRound, indexLabel, indexOf, ownHcpRounds, strokesOn } from '../../src/systems/game/handicap';
 
 const C18: HcpCourse = { id: 'c18', holes: 18, pars: Array(18).fill(4), si: Array.from({ length: 18 }, (_, i) => i + 1), ratings: { Blue: [72, 113] } };
 const C9: HcpCourse = { id: 'c9', holes: 9, pars: Array(9).fill(4), si: [1, 2, 3, 4, 5, 6, 7, 8, 9], ratings: { White: [35, 113], Red: [0, 0] } };
@@ -27,7 +27,7 @@ describe('handicap', () => {
     const h = handicapOf([round(all(5))], courses)!; // 90 on a 72 / 113 course: differential 18.0
     expect(h.differentials.map((d) => d.value)).toEqual([18]);
     expect([h.index, h.provisional]).toEqual([16, true]);
-    expect(indexLabel(h)).toBe('16.0*');
+    expect(indexLabel(h)).toBe('16.0');
   });
 
   it('is official from three rounds (54 holes), and follows the WHS table', () => {
@@ -85,5 +85,14 @@ describe('handicap', () => {
     const threeNines = [round(all(5, 9), { player: 'kim' }), round(all(5, 9), { player: 'kim', length: 'back' }), round(all(5, 9), { player: 'kim' })];
     expect(handicapBoard(threeNines, courses).map((r) => r.player)).toEqual(['kim']);
     expect(handicapBoard(threeNines.slice(0, 2), courses)).toEqual([]);
+  });
+});
+
+describe('own handicap rounds (the same as the board: developer, 2026-10-20)', () => {
+  const r = (id: string, player: string) => ({ id, player }) as unknown as HcpRound;
+  it('leaves out rounds played as "player" once the player has a name', () => {
+    const list = [r('a', 'charlie'), r('b', 'player'), r('c', 'charlieb')];
+    expect(ownHcpRounds(list, 'charlie', 'player').map((e) => e.id)).toEqual(['a', 'c']);
+    expect(ownHcpRounds(list, 'player', 'player').map((e) => e.id)).toEqual(['a', 'b', 'c']);
   });
 });

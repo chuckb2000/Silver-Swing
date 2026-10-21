@@ -9,7 +9,8 @@ import { shortName } from '../save/milestones';
 import { confirmDiscard, editName, hasName, lengthLabel, lengthsFor, RoundLength, startRound, withName } from './flow';
 import { MenuScene } from './menu';
 import { myRounds } from '../save/mine';
-import { handicapOf, hcpCourses, indexLabel } from '../systems/game/handicap';
+import { handicapOf, hcpCourses, indexLabel, ownHcpRounds } from '../systems/game/handicap';
+import { DEFAULT_NAME } from '../save/names';
 
 let length: RoundLength = '18';
 /** The player's rounds for the handicap line, kept for a minute (the screen rebuilds on every tap). */
@@ -98,7 +99,7 @@ export class SetupScene extends MenuScene {
     if (!mine || Date.now() - mine.at > 60_000) mine = { at: Date.now(), rounds: myRounds() };
     void mine.rounds.then(({ rounds }) => {
       if (!this.isCurrentBuild(g) || !hcpTxt.active) return;
-      const h = handicapOf(rounds, hcpCourses(app.courses));
+      const h = handicapOf(ownHcpRounds(rounds, app.settings.playerName, DEFAULT_NAME), hcpCourses(app.courses));
       if (!h) setTxt(hcpTxt, app.settings.difficulty === 'normal' ? 'handicap: after 18 holes at normal' : '');
       else setTxt(hcpTxt, `handicap ${indexLabel(h)}${app.settings.difficulty === 'normal' ? '' : '  ·  only normal rounds count'}`);
     });

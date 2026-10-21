@@ -1549,20 +1549,9 @@ local leaderboard stays as the offline copy.
     index (`src/systems/game/handicap.ts`): differential = 113 / slope x
     (adjusted gross - course rating), holes capped at net double bogey (par + 5
     before an index); two nines make one 18-hole differential; the WHS table for
-    under 20 differentials, best 8 of the latest 20; provisional ("12.4*") from 18
-    holes, official from 54. Normal, non-casual rounds on rated tees only (East
-    Potomac Red has no rating). Shown on the leaderboard's "handicap" tab (index,
-    differentials counted, change in a week; `/api/handicaps`; a player is listed
-    from 27 holes: three nines or an 18 and a nine), in "my golf" and on
-    the new-round screen (strokes on those tees). No net scores on the boards
-    (developer).
-
--   **Handicaps** (developer, 2026-10-20: option 2 of the proposal): a WHS-style
-    index (`src/systems/game/handicap.ts`): differential = 113 / slope x
-    (adjusted gross - course rating), holes capped at net double bogey (par + 5
-    before an index); two nines make one 18-hole differential; the WHS table for
-    under 20 differentials, best 8 of the latest 20; provisional ("12.4*") from 18
-    holes, official from 54. Normal, non-casual rounds on rated tees only (East
+    under 20 differentials, best 8 of the latest 20; from 18 holes, with no
+    provisional mark. One index per player code (`/api/handicaps` groups by
+    code; "my golf" leaves out rounds played as "player"). Normal, non-casual rounds on rated tees only (East
     Potomac Red has no rating). Shown on the leaderboard's "handicap" tab (index,
     differentials counted, change in a week; `/api/handicaps`; a player is listed
     from 27 holes: three nines or an 18 and a nine), in "my golf" and on

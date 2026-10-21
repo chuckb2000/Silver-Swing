@@ -10,8 +10,8 @@
 //   18-hole differential, the sum of their nine-hole differentials (the course
 //   rating halved for a nine; a 9-hole course rated for nine holes is used as is).
 // - The index from the latest 20 differentials, with the WHS table for fewer;
-//   with one or two (18 to 45 holes) it is provisional ("12.4*"), the table's
-//   lowest-minus-2.0 rule; official from three (54 holes). Rounded to a tenth,
+//   with one or two (18 to 45 holes) it is the table's lowest-minus-2.0 rule
+//   (provisional in WHS; not marked in the game, developer 2026-10-20). Rounded to a tenth,
 //   at most 54.0.
 
 import type { LeaderboardEntry } from '../../save/entry';
@@ -141,10 +141,18 @@ export function handicapOf(rounds: HcpRound[], courses: Map<string, HcpCourse>, 
   return h;
 }
 
-/** "12.4", a plus handicap as "+1.2", provisional with a star. */
+/** "12.4", a plus handicap as "+1.2" (no mark for a provisional index: developer, 2026-10-20). */
 export function indexLabel(h: Handicap): string {
-  const v = h.index < 0 ? `+${(-h.index).toFixed(1)}` : h.index.toFixed(1);
-  return h.provisional ? `${v}*` : v;
+  return h.index < 0 ? `+${(-h.index).toFixed(1)}` : h.index.toFixed(1);
+}
+
+/**
+ * The rounds that make a player's own handicap ("my golf", the new-round screen), the
+ * same ones the board counts: rounds under a name. Rounds played as "player" never
+ * reach the board, so they count only while the player has no name at all.
+ */
+export function ownHcpRounds<T extends HcpRound>(rounds: T[], playerName: string, defaultName: string): T[] {
+  return playerName === defaultName ? rounds : rounds.filter((e) => e.player !== defaultName);
 }
 
 /** The handicap view of the course list (courses without ratings drop out). */

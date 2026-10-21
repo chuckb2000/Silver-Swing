@@ -301,4 +301,16 @@ describe('handicap rounds (developer, 2026-10-20)', () => {
     await handleHide(db, JSON.stringify({ owner: KEY_B, hidden: true }));
     expect((await got()).map((x) => x.id)).toEqual(['n1']);
   });
+
+  it('puts a player code\'s rounds under one name, its latest (my golf showed a different index)', async () => {
+    await handlePost(db, JSON.stringify([
+      { ...entry('old', 80, 'charlieb'), date: '2026-10-20T01:00:00.000Z', owner: KEY_A },
+      { ...entry('new', 78, 'charlie'), date: '2026-10-21T01:00:00.000Z', owner: KEY_A },
+      { ...entry('pre', 82, 'sam'), date: '2026-10-19T01:00:00.000Z' }, // before player codes: by name
+    ]));
+    resetHandicapCache();
+    const r = ((await (await handleHandicapsGet(db)).json()) as { rounds: { id: string; player: string }[] }).rounds;
+    const by = Object.fromEntries(r.map((x) => [x.id, x.player]));
+    expect(by).toEqual({ new: 'charlie', old: 'charlie', pre: 'sam' });
+  });
 });

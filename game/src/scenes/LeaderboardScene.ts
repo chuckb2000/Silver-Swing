@@ -294,7 +294,7 @@ export class LeaderboardScene extends MenuScene {
         return [String(i + 1), r.player.slice(0, 12), indexLabel(r.h), `${r.h.counted} of ${r.h.of}`, week];
       });
       if (!rows.length) empty = 'no handicaps yet - 27 holes at normal difficulty put you on this board';
-      else this.root.add(txt(this, x0 + pw / 2, y0 + ph - 32, 'on the board after 27 holes  ·  * provisional until 54  ·  normal rounds only', { origin: [0.5, 0], color: COLORS.dim, maxWidth: pw - 16 }));
+      else this.root.add(txt(this, x0 + pw / 2, y0 + ph - 32, 'on the board after 27 holes  ·  normal rounds only', { origin: [0.5, 0], color: COLORS.dim, maxWidth: pw - 16 }));
     } else {
       let list: BirdieRow[] | null = null;
       if (src === 'friends') { list = await fetchBirdieRecords(50); if (!list) note = "can't reach the shared board - showing this device"; }
