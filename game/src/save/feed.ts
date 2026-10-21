@@ -18,6 +18,35 @@ export interface FeedRow {
   record: boolean;   // lower than anyone's before it on this board
 }
 
+/** A finished live match on the "recent" list (src/server/scores.ts recordMatch). */
+export interface MatchFeedRow {
+  code: string;
+  winner: string;
+  loser: string;
+  course: string;
+  tee: string;
+  /** holes in the round (9 or 18) */
+  holes: number;
+  /** holes played (19: won at the 19th) */
+  played: number;
+  /** "3&2", "1 up", "at the 19th", "by forfeit", "conceded" */
+  margin: string;
+  how: string;
+  date: string;      // when it ended
+  received: string;  // when the board got it
+}
+
+export function isMatchFeedRow(r: unknown): r is MatchFeedRow {
+  const x = r as Partial<MatchFeedRow> | null;
+  return !!x && typeof x === 'object' && typeof x.code === 'string' && typeof x.winner === 'string' && typeof x.loser === 'string'
+    && typeof x.course === 'string' && typeof x.margin === 'string' && typeof x.received === 'string';
+}
+
+/** "kevin def. charlie 3&2" (a conceded match: "kevin def. charlie (conceded)"). */
+export function matchFeedText(m: Pick<MatchFeedRow, 'winner' | 'loser' | 'margin' | 'how'>): string {
+  return `${m.winner} def. ${m.loser} ${m.how === 'conceded' ? '(conceded)' : m.margin}`;
+}
+
 /** Badges for a round, from the best scores on its board before it arrived (null: none yet). */
 export function feedBadges(gross: number, casual: boolean, prevBest: number | null, prevRecord: number | null): { pb: boolean; record: boolean } {
   if (casual) return { pb: false, record: false };

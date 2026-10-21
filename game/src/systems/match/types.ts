@@ -15,7 +15,33 @@ export const PROTOCOL = 1;
  * a game whose number differs from the server's is told to update (or, if the
  * server is the older one, that the match server needs deploying).
  */
-export const RULES = 2;
+export const RULES = 3;
+
+/**
+ * The move clock (developer, 2026-10-21). It runs on the server's time, from
+ * each move (`graceMs` later: time to watch it), while the waiting player is
+ * in the match. The waiting player decides what to do about a slow player:
+ * nothing happens unless they ask for it.
+ */
+export const CLOCK = {
+  /** the clock starts this long after the move before it (the ball in the air, the camera back) */
+  graceMs: 15_000,
+  /** the waiting player may add a penalty stroke for slow play (Rule 5.6a), once per shot */
+  penaltyMs: 120_000,
+  /** the player on the clock is warned */
+  warnMs: 210_000,
+  /** the waiting player may claim the match (won by forfeit) */
+  claimMs: 300_000,
+} as const;
+
+/**
+ * Extra holes (developer, 2026-10-21: the only way a tied match ends): one at a
+ * time in the round's order, with the same pins, until one is won. Past this
+ * many the match is halved, a limit nobody will reach (every hole halved).
+ */
+export const MAX_EXTRA = 36;
+/** hole indexes a match can reach: 18 and the extra holes */
+export const MAX_HOLES = 18 + MAX_EXTRA;
 
 /** The keep-alive a game sends, and the server's answer (sent without waking the match's object). */
 export const PING = '{"type":"ping"}';
@@ -62,7 +88,7 @@ export interface MatchConfig {
 
 /** A player's hole after a stroke or a drop: what the other game needs to show it and to know whose turn it is. */
 export interface HoleSnap {
-  /** index of the hole in cfg.holes */
+  /** index of the hole in the match (MatchState.hole) */
   hole: number;
   tally: { strokes: number; putts: number; penalties: number; fairway: boolean | null; reachedGreenAt: number | null };
   ball: BallPos;
@@ -97,7 +123,11 @@ export type Action =
   | { t: 'relief'; hole: number; after: HoleSnap; penalty: number; label: string }
   /** `strokes`: what the other player had played when the putt was given (a stroke that crossed it makes it void) */
   | { t: 'concede'; what: ConcedeWhat; hole: number; strokes?: number }
-  | { t: 'rematch'; code: string };
+  | { t: 'rematch'; code: string }
+  /** a penalty stroke for slow play on the other player, given by the player waiting; `turn`: the clock it is for (MatchClock.seq) */
+  | { t: 'slow'; hole: number; turn: number }
+  /** the other player hasn't moved for CLOCK.claimMs: the waiting player wins the match by forfeit */
+  | { t: 'claim'; turn: number };
 
 /** An entry in the match's log, numbered by the server. */
 export type MatchEvent =
@@ -109,7 +139,10 @@ export type Logged = MatchEvent & { seq: number; at: string; cid?: string };
 
 /** One player's hole, as the match sees it (enough for the order of play and the result). */
 export interface PlayerHole {
+  /** strokes and penalties as the player's game counts them */
   strokes: number;
+  /** penalty strokes for slow play on this hole (counted in the score; the player's game doesn't hold them) */
+  slow: number;
   x: number;
   y: number;
   /** still on the teeing area (not started, or to play again from it) */
@@ -121,20 +154,34 @@ export interface PlayerHole {
 }
 
 export interface HoleResult {
-  /** index of the hole in cfg.holes */
+  /** index of the hole in the match (past cfg.holes: an extra hole) */
   hole: number;
+  /** each player's score, penalty strokes for slow play included */
   strokes: [number, number];
   holed: [boolean, boolean];
   winner: Seat | null;
   /** 'conceded': a player gave up the hole */
   how: 'played' | 'conceded';
+  /** penalty strokes for slow play in `strokes` */
+  slow: [number, number];
 }
 
 export interface MatchOutcome {
   winner: Seat | null;
-  /** "3&2", "1 up", "all square", "conceded" */
+  /** "3&2", "1 up", "at the 19th", "by forfeit", "conceded", "all square" */
   margin: string;
-  how: 'holes' | 'conceded';
+  /** extra: won on an extra hole; forfeit: the other player didn't play on (the clock) */
+  how: 'holes' | 'extra' | 'conceded' | 'forfeit';
+}
+
+/** The move clock: who is waiting since when (CLOCK). */
+export interface MatchClock {
+  /** the move that started it (a claim or a penalty names it: one made after another move is void) */
+  seq: number;
+  /** when it started (ms, server time: that move's time plus CLOCK.graceMs) */
+  at: number;
+  /** a penalty stroke for slow play has been given on it */
+  slow: boolean;
 }
 
 export interface MatchState {
@@ -142,7 +189,7 @@ export interface MatchState {
   players: [MatchPlayer, MatchPlayer | null];
   seq: number;
   phase: 'waiting' | 'playing' | 'finished';
-  /** index (in cfg.holes) of the hole being played, or about to be */
+  /** index of the hole being played, or about to be (in cfg.holes; past it: an extra hole) */
   hole: number;
   honour: Seat;
   /** both players have to be at the hole (past the last hole's result) before anyone plays it */
@@ -152,6 +199,7 @@ export interface MatchState {
   outcome: MatchOutcome | null;
   /** a new match one of the players made after this one (its code) */
   rematch: { by: Seat; code: string } | null;
+  clock: MatchClock;
 }
 
 /** A rule a move broke; `code` is for the game, the message for a person. */

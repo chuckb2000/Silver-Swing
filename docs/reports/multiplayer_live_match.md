@@ -11,9 +11,12 @@ Two players, each on their own device, play a match against each other on the
 same course, tees, wind and pins, taking turns as in real match play: the
 honour on the tee, then the ball farther from the hole. Each hole is won,
 lost or halved; the match ends when one player leads by more holes than are
-left ("3&2"), on the last hole ("1 up"), all square, or by concession.
+left ("3&2"), after the last hole ("1 up"), on an extra hole when it was all
+square ("at the 19th"), by concession, or by forfeit (the move clock).
 Players can give a putt ("that's good"), give up a hole or the match, leave
-and come back later, and offer a rematch.
+and come back later, and offer a rematch. A finished match goes on the
+leaderboard's "recent" list ("kevin def. charlie 3&2"); it counts on no board,
+handicap or "my golf" (developer, 2026-10-21).
 
 ## 2. How it fits together
 
@@ -28,7 +31,7 @@ and come back later, and offer a rematch.
    MatchClient (net/matchClient.ts) ----> match Worker "silver-swings-match" (game/match-worker)
      WebSocket, or HTTP polling             Durable Object MatchRoom, one per match code
      outbox in localStorage                   MatchRoomCore (server/matchRoom.ts)
-                                              SQLite storage: state, keys, e:<seq>, cid:<key>:<id>
+                                              SQLite storage: one record "m" {state, keys, log, here}
 ```
 
 - **One Durable Object per match** (named by its 6-character code). It keeps
@@ -60,6 +63,8 @@ and come back later, and offer a rematch.
 | `stroke {hole, after, shot, path}` | the player to play | `after`: the hole as the stroke left it (count, ball, relief still open, holed) |
 | `relief {hole, after, penalty, label}` | the player | a drop (water, out of bounds, unplayable, free relief), or "as it lies" |
 | `concede {what: stroke/hole/match, hole, strokes?}` | either player | a given putt carries the stroke count it was given at |
+| `slow {hole, turn}` | the waiting player | a penalty stroke for slow play on the other (2:00 on the clock `turn`) |
+| `claim {turn}` | the waiting player | the match won by forfeit (5:00 on the clock `turn`) |
 | `rematch {code}` | either player, match over | the new match's code |
 
 Rules (`rules.ts`, tests in `match_rules.test.ts`):
@@ -71,7 +76,19 @@ Rules (`rules.ts`, tests in `match_rules.test.ts`):
 - halved: the honour stays; won: the winner takes it;
 - a stroke is refused while a water or out-of-bounds drop is pending; a drop's
   penalty is at least what its relief costs; a given putt is void if a stroke
-  of the other player crossed it ("moved").
+  of the other player crossed it ("moved");
+- extra holes: all square after the last hole, the match goes on with the
+  round's holes again (hole index `n`, `n+1`... is card hole `holes[i % n]`,
+  pin `pins[i % n]`) until one is won; halved after 36 extra holes, a limit
+  nobody reaches (`MAX_EXTRA`);
+- the move clock (`CLOCK`, `state.clock = {seq, at, slow}`): every move except a
+  penalty stroke starts it again at its server time plus 15 s. `waitingOn(s)`
+  says who waits on whom: the player to play (a stroke or a drop), or the one not
+  yet at the next tee. `slow` needs 2:00, the waiting player, a shot (not the
+  tee), one per clock, and the clock it was meant for (`turn`, else "moved");
+  it adds to `p[k].slow`, which counts in the score (`scoreOf`) and in the
+  hole's result but not in the player's own count, so a stroke struck as the
+  penalty arrives still adds up. `claim` needs 5:00 and the waiting player.
 
 ## 4. Messages
 
@@ -82,17 +99,25 @@ HTTP (all JSON, `cache-control: no-store`):
 | `GET /api/matches?ping=1` | live matches set up here? (503 without the MATCH binding: the title hides "play a friend") |
 | `POST /api/matches {cfg, player, key, rules}` | a new match; returns its code |
 | `GET /api/match/<code>/info` | anyone: course, players, phase, status line, rules |
-| `GET /api/match/<code>/events?since=N` | polling: the log after N (key in the `x-match-key` header, never the address), `more`, `online`, `seat` |
-| `POST /api/match/<code>/hello {key, rules}` | polling: the seat and who is there |
+| `GET /api/match/<code>/events?since=N` | polling: the log after N (key in the `x-match-key` header, never the address; `x-match-hidden: 1` from a background tab), `more`, `online`, `here`, `now`, `seat` |
+| `POST /api/match/<code>/hello {key, rules}` | polling: the seat, who is there, `here`, `now` |
 | `POST /api/match/<code>/act {key, cid, action, rules}` | polling: a move |
+| `POST /api/match/<code>/report` | a game saw the match end: the Pages Function asks the object for its result (`/result`, not reachable from outside) and puts it on the "recent" list once (D1 table `matches`) |
 | `GET /api/match/<code>/ws` | the WebSocket |
 
 WebSocket, game to server: `hello {key, since, rules}`, `sync {since}`,
-`act {cid, action}`, and the keep-alive `{"type":"ping"}`. Server to game:
-`welcome {protocol, rules, seat, seq, online}`, `events {events, last}`
-(catch-up in batches of 40), `ack {cid, seq, seat}`, `nack {cid, code,
-message, seq}`, `presence {online}`, `seat {seat}`, `error {code, message}`,
-`pong`.
+`act {cid, action}`, `who` (every 30 s), and the keep-alive `{"type":"ping"}`.
+Server to game: `welcome {protocol, rules, seat, seq, online, here, now}`,
+`events {events, last}` (catch-up in batches of 40), `ack {cid, seq, seat,
+now}`, `nack {cid, code, message, seq, now, wait?}` (`wait`: a penalty or
+claim made too early, ms to go), `presence {online, here, now}`, `seat
+{seat}`, `error {code, message}`, `pong`. `now` is the server's clock (the
+games show the move clock from it); `here` is since when each player has been
+in the match.
+
+Development only (`scripts/match-dev.sh`, `MATCH_DEBUG=1`): `POST
+localhost:8787/debug/<code>/skip?ms=N` moves a match's clock on, for the
+two-browser test of the clock.
 
 Close codes (`types.ts` CLOSE): 4004 no such match, 4008 no hello within
 10 s, 4010 expired, 4011 opened elsewhere (same player key), 4012 rules
@@ -107,9 +132,19 @@ Worker needs deploying" (the server is older).
 
 - **Moves are never lost or counted twice.** A move goes into an outbox in
   localStorage before it is sent and leaves it only when answered. Each move
-  has an id; the server stores `cid:<key>:<id>` with the move, so a move sent
-  twice (an answer lost, a reconnect, a reload) is answered with its first
-  result.
+  has an id, kept in the log with it; a move sent twice (an answer lost, a
+  reconnect, a reload, the object restarted) is answered with its first result.
+- **One write per move.** The match is one stored record (`m`: state, players'
+  keys, log, `here`), written once per accepted move; flights are kept for the
+  hole being played and the one before, and the record stays under 1.5 MB (the
+  storage allows 2 MB a record). The deletion alarm is moved only when it is
+  half a day off.
+- **Who is here** (the move clock): `here.back[k]`, when player k's current stay
+  began, and `here.seen[k]`, when they were last known to be here (written when
+  their last line closes, and once a minute for a game asking over HTTP, since
+  the object can be evicted between questions). A player back after more than
+  5 minutes away starts a new stay. A penalty or claim needs its time counted
+  from the later of the clock's start and the waiting player's stay.
 - **Catch-up by sequence number.** Every entry has a `seq`; a game asks for
   everything after the last one it has (hello, sync, polling). A gap starts a
   resync. A game that knows the server is further on (`serverSeq`) offers no
@@ -120,8 +155,9 @@ Worker needs deploying" (the server is older).
   (4 s) when the page comes back into view or the network returns;
   reconnects with backoff and jitter; HTTP polling after three failed
   WebSockets (six if one has worked: a phone that lost its signal), every
-  2 s (8 s in the background), with WebSockets tried again after 5, 15, 30,
-  60 s.
+  2 s, 5 s after two minutes with nothing new, 8 s in a background tab, once a
+  minute after 5 minutes out of sight and not at all after 30 (until the page is
+  looked at again), with WebSockets tried again after 5, 15, 30, 60 s.
 - **One line per player.** A second tab or device with the same player key
   takes the match over; the first shows "playing elsewhere" with "play here",
   and a background tab never takes it back on its own.
@@ -196,21 +232,31 @@ still read the same under the new rules, or those matches can't continue
 | `tests/unit/match_live.test.ts` | the real Worker and Pages Functions under wrangler (`MATCH_URL=http://localhost:8788`) |
 | `tests/e2e/match.spec.ts` | two browsers through the screens: lost line, reload, give putt, concede, rematch |
 | `tests/e2e/match_flows.spec.ts` | water and drop, crossed concession, reload mid-stroke, second tab, pause over the waiting panel, an old server; phone portrait screens |
+| `tests/e2e/match_clock.spec.ts` | the move clock (penalty at 2:00, warning at 3:30, claim at 5:00, the result on "recent" with `MATCH_D1=1`); extra holes (the 10th of a nine-hole match) and a claim at the tee |
 
 Run: `npx vitest run` (the live test is skipped without MATCH_URL);
 `npm run build && npx playwright test -c playwright.match.config.ts` (starts
-the servers if they aren't running; about 9 minutes).
+the servers if they aren't running; about 12 minutes). The "recent" check runs
+when the servers were started with `MATCH_D1=1 bash scripts/match-dev.sh`
+(then only one name per browser: run match_clock.spec.ts alone).
 
 ## 9. Costs and limits (Workers free plan)
 
 Durable Objects: 100,000 requests a day, 13,000 GB-s, 100,000 rows written
 and 5 million read a day, 5 GB stored. Incoming WebSocket messages count
 1/20 of a request; outgoing messages and auto-answered keep-alives are free;
-a hibernating object costs no duration. An 18-hole match is about 200 moves:
-some 20-30 requests and about 800 rows written, about 1.5 MB stored (deleted
-3 days after it ends, 14 days after its last move). Polling costs a request
-every 2 s per player (two Pages Function invocations and Durable Object
-requests a second per match): it is the fallback, not the way to play.
+an idle object costs no duration, even before it hibernates. An 18-hole match
+is about 200 moves: about 210 rows written (one per move, two alarms, the
+deletion, a few arrivals and departures), some 30-40 requests, a record of
+about 200-400 KB (deleted 3 days after it ends, 14 days after its last move).
+So about 450 full matches a day fit the free plan's writes, and the requests
+far more. The site's own requests (Pages Functions: 100,000 a day, shared with
+the leaderboards) are about 15 per match over WebSockets. Polling costs a
+request every 2 s while things happen (about 1,800 an hour per player), less
+when they don't: it is the fallback, not the way to play. Over a limit, only
+that kind of request fails until midnight UTC: matches can't be made or
+played if the Durable Objects' writes run out, but the leaderboards (D1, its
+own allowance) and the game itself (static files, free) keep working.
 
 ## 10. Known limits
 
@@ -221,6 +267,10 @@ requests a second per match): it is the fallback, not the way to play.
 - Two players. A third person opening the link is told the match already
   has two players (the server would let them watch; the game has no
   watching screen).
-- Matches aren't on the leaderboards, handicaps or "my golf".
+- Matches are on the "recent" list only: not on the course boards, handicaps
+  or "my golf" (developer, 2026-10-21).
+- The move clock is the waiting player's call: nothing stops a player from
+  claiming against a friend whose phone died. They see whether the other
+  player's game is open ("offline") before they claim.
 - Course versions: a course rebuilt between the two players' loads is
   flagged ("you should both reload"), not prevented.

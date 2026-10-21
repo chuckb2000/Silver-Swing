@@ -2,8 +2,8 @@
 // concessions and how the match stands, against the USGA rules (3.2, 6.4).
 
 import { describe, expect, it } from 'vitest';
-import { applyEvent, cleanAction, decided, holesLeft, lead, MAX_PATH, statusText, stateOf, toPlay } from '../../src/systems/match/rules';
-import { HoleSnap, MatchConfig, MatchError, MatchEvent, MatchState, PROTOCOL, Seat } from '../../src/systems/match/types';
+import { applyEvent, cleanAction, clockText, decided, holeNo, holesLeft, isExtra, lead, MAX_PATH, ordinal, pinOf, statusText, stateOf, toPlay, waitingOn } from '../../src/systems/match/rules';
+import { CLOCK, HoleSnap, Logged, MatchConfig, MatchError, MatchEvent, MatchState, MAX_EXTRA, PROTOCOL, Seat } from '../../src/systems/match/types';
 import type { PendingRelief } from '../../src/systems/game/round';
 
 const PIN: [number, number] = [100, 300];
@@ -249,16 +249,52 @@ describe('match play: the match', () => {
     expect(statusText(s)).toBe('charlie won 4&2');
   });
 
-  it('is won "1 up" on the last hole, or halved all square', () => {
+  it('is won "1 up" on the last hole; all square after it goes to extra holes, sudden death (Rule 3.2a(4))', () => {
     let s = started(1, 3);
     s = winHole(s, 1);
     s = winHole(s, 0);
     expect(statusText(s)).toBe('all square');
     const won = winHole(s, 1);
-    expect(won.outcome).toMatchObject({ winner: 1, margin: '1 up' });
-    const halved = winHole(s, null);
-    expect(halved.outcome).toMatchObject({ winner: null, margin: 'all square' });
-    expect(statusText(halved)).toBe('match halved');
+    expect(won.outcome).toMatchObject({ winner: 1, margin: '1 up', how: 'holes' });
+    // the last hole halved: the match goes on, the round's first hole again with its pin
+    let x = winHole(s, null);
+    expect(x.phase).toBe('playing');
+    expect(x.outcome).toBeNull();
+    expect(x.hole).toBe(3);
+    expect(isExtra(x.cfg, x.hole)).toBe(true);
+    expect(holeNo(x.cfg, x.hole)).toBe(1);
+    expect(pinOf(x)).toEqual(x.cfg.pins[0]);
+    expect(holesLeft(x)).toBe(0);
+    expect(statusText(x)).toBe('all square'); // not "dormie"
+    x = winHole(x, null); // the 4th halved too: on to the 5th (hole 2)
+    expect(x.phase).toBe('playing');
+    expect(holeNo(x.cfg, x.hole)).toBe(2);
+    x = winHole(x, 0);
+    expect(x.outcome).toMatchObject({ winner: 0, margin: 'at the 5th', how: 'extra' });
+    expect(statusText(x)).toBe('charlie won at the 5th');
+    expect(statusText(x, 1)).toBe('charlie won at the 5th');
+    expect(statusText(x, 0)).toBe('you won at the 5th');
+  });
+
+  it('an 18-hole match tied after 18 is won at the 19th; a limit nobody reaches halves it', () => {
+    let s = started(0, 18);
+    for (let h = 0; h < 18; h++) s = winHole(s, null);
+    expect(s.phase).toBe('playing');
+    s = winHole(s, 1);
+    expect(s.outcome).toMatchObject({ winner: 1, margin: 'at the 19th' });
+    expect(ordinal(19)).toBe('19th');
+    expect([1, 2, 3, 4, 11, 12, 13, 21, 22, 23, 101, 111].map(ordinal)).toEqual(['1st', '2nd', '3rd', '4th', '11th', '12th', '13th', '21st', '22nd', '23rd', '101st', '111th']);
+    let t = started(0, 1);
+    for (let h = 0; h < 1 + MAX_EXTRA; h++) t = winHole(t, null);
+    expect(t.outcome).toMatchObject({ winner: null, margin: 'all square' });
+    expect(statusText(t)).toBe('match halved');
+  });
+
+  it('a lead after the last hole of a 9-hole match is "2 up"', () => {
+    let s = started(0, 2);
+    s = winHole(s, 0);
+    s = winHole(s, 0);
+    expect(s.outcome).toMatchObject({ winner: 0, margin: '2 up' });
   });
 
   it('a 9-hole match can end 5&4', () => {
@@ -361,6 +397,12 @@ describe('match play: what the server accepts', () => {
     expect(cleanAction({ t: 'relief', hole: 0, after, penalty: 3, label: 'x' })).toBeNull();
     expect(cleanAction({ t: 'concede', what: 'everything', hole: 0 })).toBeNull();
     expect(cleanAction({ t: 'rematch', code: 'BAD CODE' })).toBeNull();
+    expect(cleanAction({ t: 'slow', hole: 0 })).toBeNull(); // the clock it is for is needed
+    expect(cleanAction({ t: 'claim', turn: 0 })).toBeNull();
+    expect(cleanAction({ t: 'slow', hole: 2, turn: 7, by: 1 })).toEqual({ t: 'slow', hole: 2, turn: 7 });
+    expect(cleanAction({ t: 'claim', turn: 7, hole: 3 })).toEqual({ t: 'claim', turn: 7 });
+    expect(cleanAction({ t: 'ready', hole: 53 })).toEqual({ t: 'ready', hole: 53 }); // extra holes
+    expect(cleanAction({ t: 'ready', hole: 54 })).toBeNull();
   });
 });
 
@@ -378,5 +420,120 @@ describe('match play: the settings a match is made with', () => {
     expect(code(() => made({ ...cfg(), startedAt: 'yesterday' }))).toBe('bad_config');
     expect(code(() => made({ ...cfg(), courseVersion: '' }))).toBe('bad_config');
     expect(code(() => made({ ...cfg(), holes: [0] , pins: [PIN] }))).toBe('bad_config');
+  });
+});
+
+// ------------------------------------------------------------- the move clock
+const T0 = Date.parse('2026-10-21T18:00:00.000Z');
+/** An entry as the server logs it, at `t` ms after T0. */
+const at = (e: MatchEvent, t: number): Logged => ({ ...e, at: new Date(T0 + t).toISOString() } as Logged);
+/** Apply a timed entry. */
+const go = (s: MatchState, e: MatchEvent, t: number) => applyEvent(s, at(e, t));
+
+/** Both players at the first tee, every entry logged at time 0. */
+function startedAt(honour: Seat = 0, holes = 18): MatchState {
+  let s: MatchState | null = null;
+  for (const e of [
+    { t: 'created', cfg: cfg(holes), player: { name: 'charlie', lefty: false } },
+    { t: 'joined', player: { name: 'kevin', lefty: true }, honour },
+    { t: 'ready', by: 0, hole: 0 },
+    { t: 'ready', by: 1, hole: 0 },
+  ] as MatchEvent[]) s = applyEvent(s, at(e, 0));
+  return s!;
+}
+
+describe('match play: the move clock (developer, 2026-10-21)', () => {
+  const MIN = 60_000;
+  it('starts with each move, a little after it (time to watch it)', () => {
+    const s = startedAt(0);
+    expect(s.clock).toEqual({ seq: 4, at: T0 + CLOCK.graceMs, slow: false });
+    expect(waitingOn(s)).toEqual({ on: 0, waiter: 1, kind: 'shot' });
+    const s2 = go(s, stroke(0, s, 1, 150), 30_000);
+    expect(s2.clock).toEqual({ seq: 5, at: T0 + 30_000 + CLOCK.graceMs, slow: false });
+    expect(waitingOn(s2)).toEqual({ on: 1, waiter: 0, kind: 'shot' });
+    expect(clockText(125_000)).toBe('2:05');
+    expect(clockText(59_001)).toBe('1:00');
+  });
+
+  it('a penalty stroke for slow play: the waiting player, from 2:00, once per shot, for the shot it was meant for', () => {
+    const s = startedAt(0); // charlie to play, kevin waiting
+    const slow = (by: Seat, turn = s.clock.seq): MatchEvent => ({ t: 'slow', by, hole: 0, turn });
+    const t2 = CLOCK.graceMs + CLOCK.penaltyMs;
+    expect(code(() => go(s, slow(1), t2 - 1))).toBe('too_soon');
+    expect(code(() => go(s, slow(0), t2))).toBe('not_waiting'); // not on oneself
+    expect(code(() => go(s, slow(1, 3), t2))).toBe('moved'); // meant for an earlier clock
+    expect(code(() => applyEvent(s, slow(1)))).toBe('no_time'); // only the server can time it
+    const p = go(s, slow(1), t2);
+    expect(p.p[0]).toMatchObject({ strokes: 0, slow: 1 });
+    expect(p.clock).toEqual({ ...s.clock, slow: true }); // the clock runs on
+    expect(code(() => go(p, slow(1), t2 + MIN))).toBe('given');
+    // charlie plays: his own count is untouched (his game never held the penalty), the stroke counts
+    const q = go(p, stroke(0, p, 1, 150), t2 + 5_000);
+    expect(q.p[0]).toMatchObject({ strokes: 1, slow: 1 });
+    expect(q.clock.slow).toBe(false);
+    expect(q.clock.seq).toBe(q.seq);
+  });
+
+  it('a stroke struck as the penalty went still counts, whichever reached the server first', () => {
+    const s = startedAt(0);
+    const t2 = CLOCK.graceMs + CLOCK.penaltyMs;
+    const penalty: MatchEvent = { t: 'slow', by: 1, hole: 0, turn: s.clock.seq };
+    const shot1 = stroke(0, s, 1, 150);
+    const a = go(go(s, penalty, t2), shot1, t2 + 1); // the penalty first
+    expect(a.p[0]).toMatchObject({ strokes: 1, slow: 1 });
+    const b = go(s, shot1, t2); // the stroke first: the penalty is for a clock that has stopped
+    expect(code(() => go(b, penalty, t2 + 1))).toBe('moved');
+  });
+
+  it('counts in the score, and can decide the hole', () => {
+    let s = startedAt(0);
+    s = play(s, (x) => at(stroke(0, x, 1, 150), 1_000), (x) => at(stroke(1, x, 1, 140), 2_000), (x) => at(stroke(0, x, 2, 4), 3_000), (x) => at(stroke(1, x, 2, 5), 3_500));
+    s = go(s, stroke(1, s, 3, 0, { holed: true }), 4_000); // kevin holes in 3
+    expect(toPlay(s)).toBe(0); // charlie lies 2: a putt to halve
+    const t = 4_000 + CLOCK.graceMs + CLOCK.penaltyMs;
+    const p = go(s, { t: 'slow', by: 1, hole: 0, turn: s.clock.seq }, t);
+    expect(p.results[0]).toMatchObject({ winner: 1, strokes: [3, 3], holed: [false, true], slow: [1, 0] }); // 2 + 1: he can't halve now
+    expect(p.hole).toBe(1);
+    expect(p.clock).toEqual({ seq: p.seq, at: T0 + t + CLOCK.graceMs, slow: false }); // a new wait: the next tee
+  });
+
+  it('claiming the match: the waiting player, from 5:00, at a shot or at the next tee', () => {
+    const s = startedAt(0);
+    const claim = (by: Seat, turn = s.clock.seq): MatchEvent => ({ t: 'claim', by, turn });
+    const t5 = CLOCK.graceMs + CLOCK.claimMs;
+    expect(code(() => go(s, claim(1), t5 - 1))).toBe('too_soon');
+    expect(code(() => go(s, claim(0), t5))).toBe('not_waiting');
+    expect(code(() => go(s, claim(1, 2), t5))).toBe('moved');
+    const w = go(s, claim(1), t5);
+    expect(w.phase).toBe('finished');
+    expect(w.outcome).toEqual({ winner: 1, margin: 'by forfeit', how: 'forfeit' });
+    expect(statusText(w)).toBe('kevin won by forfeit');
+    expect(statusText(w, 1)).toBe('you won by forfeit');
+    // between holes: the player at the next tee may claim against the one who hasn't come
+    let h = startedAt(0, 3);
+    h = play(h, (x) => at(stroke(0, x, 1, 150), 1_000), (x) => at(stroke(1, x, 1, 140), 2_000), (x) => at(stroke(0, x, 2, 1), 3_000), (x) => at(stroke(1, x, 2, 0, { holed: true }), 4_000));
+    expect(h.results).toHaveLength(1);
+    expect(waitingOn(h)).toBeNull(); // both at the result: nobody waits
+    h = go(h, { t: 'ready', by: 1, hole: h.hole }, 10_000);
+    expect(waitingOn(h)).toEqual({ on: 0, waiter: 1, kind: 'tee' });
+    expect(code(() => go(h, { t: 'slow', by: 1, hole: h.hole, turn: h.clock.seq }, 10_000 + CLOCK.graceMs + CLOCK.penaltyMs))).toBe('not_ready'); // no penalty stroke off the course
+    expect(go(h, { t: 'claim', by: 1, turn: h.clock.seq }, 10_000 + CLOCK.graceMs + CLOCK.claimMs).outcome).toMatchObject({ winner: 1, how: 'forfeit' });
+    // nothing to claim before anyone has joined, or once it's over
+    const lone = applyEvent(null, at({ t: 'created', cfg: cfg(), player: { name: 'charlie', lefty: false } }, 0));
+    expect(code(() => go(lone, claim(0, 1), t5))).toBe('not_started');
+    expect(code(() => go(w, claim(1, w.clock.seq), t5 * 3))).toBe('finished');
+  });
+
+  it('is the same state however the log is applied (server and both games), and survives JSON', () => {
+    let s = startedAt(0);
+    const log: Logged[] = [];
+    const add = (e: MatchEvent, t: number) => { const l = { ...at(e, t), seq: s.seq + 1 } as Logged; log.push(l); s = applyEvent(s, l); };
+    add(stroke(0, s, 1, 150), 1_000);
+    add({ t: 'slow', by: 0, hole: 0, turn: s.clock.seq }, 1_000 + CLOCK.graceMs + CLOCK.penaltyMs);
+    add(stroke(1, s, 1, 140), 200_000);
+    let t = startedAt(0);
+    for (const e of log) t = applyEvent(t, e);
+    expect(t).toEqual(s);
+    expect(JSON.parse(JSON.stringify(s))).toEqual(s);
   });
 });

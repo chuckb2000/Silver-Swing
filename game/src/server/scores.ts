@@ -3,7 +3,8 @@
 // Kept free of Phaser and browser APIs so it can be unit-tested.
 
 import { DEFAULT_NAME, nameAllowed, tidyName } from '../save/names';
-import { feedBadges, FeedRow } from '../save/feed';
+import { feedBadges, FeedRow, MatchFeedRow } from '../save/feed';
+import type { MatchResult } from './matchRoom';
 import { isEntry, LeaderboardEntry } from '../save/entry';
 import { birdiesIn, EagleEvent, eaglesIn, isEagle } from '../save/feats';
 
@@ -56,6 +57,24 @@ const SCHEMA = [
   // players who chose "hide me from the leaderboards" (developer, 2026-10-20): their rounds and
   // eagles are kept but left out of every shared list, so showing them again brings them all back
   'CREATE TABLE IF NOT EXISTS hidden (owner TEXT PRIMARY KEY, since TEXT NOT NULL)',
+  // finished live matches, for the "recent" list (developer, 2026-10-21: "kevin def. charlie 3&2", the course
+  // and the date). Not rounds: no board, handicap or "my golf" counts them
+  `CREATE TABLE IF NOT EXISTS matches (
+    code TEXT PRIMARY KEY,
+    course TEXT NOT NULL,
+    tee TEXT NOT NULL,
+    holes INTEGER NOT NULL,
+    played INTEGER NOT NULL,
+    winner TEXT NOT NULL,
+    loser TEXT NOT NULL,
+    winner_owner TEXT,
+    loser_owner TEXT,
+    margin TEXT NOT NULL,
+    how TEXT NOT NULL,
+    date TEXT NOT NULL,
+    received TEXT NOT NULL
+  )`,
+  'CREATE INDEX IF NOT EXISTS matches_received ON matches (received)',
 ];
 
 /** Rows of players who haven't hidden themselves (rounds and eagles both have `owner`). */
@@ -63,7 +82,7 @@ const SHOWN = '(owner IS NULL OR owner NOT IN (SELECT owner FROM hidden))';
 const shownAs = (t: string) => `(${t}.owner IS NULL OR ${t}.owner NOT IN (SELECT owner FROM hidden))`;
 
 /** Bumped when SCHEMA or ROUND_COLUMNS change: a database at this version skips the setup. */
-const SCHEMA_VERSION = '4';
+const SCHEMA_VERSION = '5';
 /** Old rounds counted per request (Cloudflare's free plan allows 50 database queries per request). */
 const BACKFILL_ROWS = 10;
 
@@ -473,7 +492,7 @@ export async function handleNames(db: D1Like | undefined, req: { method: string;
   return json({ ok: free, result: free ? 'ok' : 'taken' });
 }
 
-let feedCache: { at: number; limit: number; body: { rounds: FeedRow[] } } | null = null;
+let feedCache: { at: number; limit: number; body: { rounds: FeedRow[]; matches: MatchFeedRow[] } } | null = null;
 const FEED_CACHE_MS = 30_000;
 
 /** For tests: forget the cached feed. */
@@ -488,7 +507,7 @@ export async function handleRecentGet(db: D1Like | undefined, url: URL): Promise
   if (!db) return json({ ok: false, error: 'no database bound (DB)' }, 503);
   const limit = Math.max(1, Math.min(MAX_LIST, Number(url.searchParams.get('limit')) || 30));
   if (feedCache && feedCache.limit >= limit && Date.now() - feedCache.at < FEED_CACHE_MS) {
-    return json({ rounds: feedCache.body.rounds.slice(0, limit) });
+    return json({ rounds: feedCache.body.rounds.slice(0, limit), matches: feedCache.body.matches.slice(0, limit) });
   }
   await prepareDb(db);
   const { results } = await db.prepare(`SELECT r.id, r.player, r.course, r.length, r.tee, r.gross, r.casual, r.date, r.received, r.daily, r.data,
@@ -511,8 +530,51 @@ export async function handleRecentGet(db: D1Like | undefined, url: URL): Promise
       ...feedBadges(r.gross, casual, r.prev_best, r.prev_record),
     });
   }
-  feedCache = { at: Date.now(), limit, body: { rounds: rows } };
-  return json({ rounds: rows });
+  const matches = await recentMatches(db, limit);
+  feedCache = { at: Date.now(), limit, body: { rounds: rows, matches } };
+  return json({ rounds: rows, matches });
+}
+
+/** The latest finished matches, neither player hidden, under names still allowed. */
+async function recentMatches(db: D1Like, limit: number): Promise<MatchFeedRow[]> {
+  const { results } = await db.prepare(`SELECT code, course, tee, holes, played, winner, loser, margin, how, date, received FROM matches
+    WHERE (winner_owner IS NULL OR winner_owner NOT IN (SELECT owner FROM hidden)) AND (loser_owner IS NULL OR loser_owner NOT IN (SELECT owner FROM hidden))
+    ORDER BY received DESC LIMIT ?`).bind(limit).all<MatchFeedRow>();
+  const out: MatchFeedRow[] = [];
+  for (const m of results) {
+    const w = boardableName(m.winner), l = boardableName(m.loser);
+    if (w && l) out.push({ ...m, winner: w, loser: l });
+  }
+  return out;
+}
+
+const MARGIN = /^(\d{1,2}&\d{1,2}|\d{1,2} up|at the \d{1,3}(st|nd|rd|th)|by forfeit|conceded)$/;
+
+/**
+ * A finished live match, from the match's own server (src/server/matchRoutes.ts
+ * reportMatch), onto the "recent" list once. Each name must be its player's on
+ * the boards (as for rounds); 'exists' when it is there already.
+ */
+export async function recordMatch(db: D1Like, code: string, r: MatchResult): Promise<'ok' | 'exists' | 'name' | 'invalid'> {
+  if (!/^[a-z0-9]{4,12}$/.test(code) || (r.winner !== 0 && r.winner !== 1) || !Array.isArray(r.players) || !Array.isArray(r.owners)) return 'invalid';
+  if (typeof r.margin !== 'string' || !MARGIN.test(r.margin) || !['holes', 'extra', 'conceded', 'forfeit'].includes(r.how)) return 'invalid';
+  if (!int(r.holes, 1, 18) || !int(r.played, 0, 99) || typeof r.courseId !== 'string' || r.courseId.length > 64 || typeof r.tee !== 'string' || r.tee.length > 40) return 'invalid';
+  await prepareDb(db);
+  const { results: have } = await db.prepare('SELECT code FROM matches WHERE code = ?').bind(code).all<{ code: string }>();
+  if (have.length) return 'exists';
+  const names: string[] = [];
+  for (const k of [0, 1]) {
+    const name = boardableName(r.players[k]);
+    if (!name || (await claimName(db, name, r.owners[k])) !== 'ok') return 'name';
+    names.push(name);
+  }
+  const w = r.winner, l = 1 - r.winner;
+  const now = new Date();
+  await db.prepare('INSERT OR IGNORE INTO matches (code, course, tee, holes, played, winner, loser, winner_owner, loser_owner, margin, how, date, received) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)')
+    .bind(code, r.courseId, r.tee, r.holes, r.played, names[w], names[l], ownerOf(r.owners[w]), ownerOf(r.owners[l]), r.margin, r.how, sane(r.date, now), now.toISOString())
+    .run();
+  feedCache = null;
+  return 'ok';
 }
 
 /**

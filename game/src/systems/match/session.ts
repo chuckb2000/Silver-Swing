@@ -9,17 +9,23 @@ import { CLUBS, PUTTER } from '../../data/clubs';
 import type { SimResult } from '../physics/sim';
 import { courseHoleFor, PlannedShot, PlayedStroke, Round, RoundConfig } from '../game/round';
 import { decodePath } from './path';
-import { applyEvent, holeLive, other, toPlay } from './rules';
-import { HoleResult, HoleSnap, Logged, MatchConfig, MatchPlayer, MatchState, Seat, ShotInfo } from './types';
+import { applyEvent, holeLive, holeNo, other, toPlay } from './rules';
+import { HoleResult, HoleSnap, Logged, MatchConfig, MatchPlayer, MatchState, MAX_EXTRA, Seat, ShotInfo } from './types';
 
-/** A player's Round config in a match: everything but the name and the hand is the match's. */
+/**
+ * A player's Round config in a match: everything but the name and the hand is
+ * the match's. Its holes go on past the round's, for extra holes (the round's
+ * holes again, with their pins; the wind drifts on as from hole to hole).
+ */
 export function matchRoundConfig(cfg: MatchConfig, p: MatchPlayer, seat: Seat): RoundConfig {
+  const n = cfg.holes.length;
+  const all = Array.from({ length: n + MAX_EXTRA }, (_, i) => i);
   return {
-    courseId: cfg.courseId, tee: cfg.tee, holes: cfg.holes, playerName: p.name, seed: cfg.seed,
+    courseId: cfg.courseId, tee: cfg.tee, holes: all.map((i) => cfg.holes[i % n]), playerName: p.name, seed: cfg.seed,
     settings: { difficulty: cfg.difficulty, lefty: p.lefty, e5: false, gimmes: false, maxDoublePar: false, mulligans: false },
     // one round id per player (eagles and the like are keyed by it); the seed (wind, lies) is shared
     startedAt: seat === 0 ? cfg.startedAt : cfg.startedAt.replace(/Z$/, '1Z'),
-    pins: cfg.pins,
+    pins: all.map((i) => cfg.pins[i % n]),
   };
 }
 
@@ -211,7 +217,8 @@ export class MatchSession {
     for (const k of [0, 1] as Seat[]) {
       const r = this.rounds[k];
       if (!r || r.scores.length > res.hole) continue;
-      r.tally.strokes = res.strokes[k];
+      r.tally.strokes = res.strokes[k]; // penalty strokes for slow play included
+      r.tally.penalties += res.slow[k];
       r.finishHole();
     }
   }
@@ -238,9 +245,9 @@ export class MatchSession {
     return !!this.state && holeLive(this.state) && this.state.p[k].holed;
   }
 
-  /** The hole being played, on the scorecard (10-18 for the second nine). */
+  /** The hole being played, on the scorecard (10-18 for the second nine; an extra hole: the round's hole again). */
   get holeNumber(): number {
-    return this.state.cfg.holes[Math.min(this.state.hole, this.state.cfg.holes.length - 1)];
+    return holeNo(this.state.cfg, this.state.hole);
   }
 
   /** The course's own hole being played. */

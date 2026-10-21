@@ -12,7 +12,7 @@ import { saveSettings } from '../save/store';
 import { dialogInput, dialogText, openDialog } from '../ui/domDialog';
 import { askName } from '../ui/nameInput';
 import { Button, COLORS, Panel, setTxt, txt } from '../ui/widgets';
-import { courseVersion, flagTab, forgetMatch, LiveMatch, matchInfo, MatchInfo, matchLink, myMatches, parseMatchCode } from '../match/live';
+import { courseVersion, flagTab, forgetMatch, LiveMatch, matchInfo, MatchInfo, matchLink, myMatches, parseMatchCode, reportMatch } from '../match/live';
 import { PROTOCOL, RULES } from '../systems/match/types';
 import { lengthOf } from '../systems/game/lengths';
 import { hasName, lengthLabel, useCourse } from './flow';
@@ -47,7 +47,8 @@ export class MatchScene extends MenuScene {
   private note = '';
   private busy = false;
   private info: MatchInfo | null = null;
-  private infos = new Map<string, MatchInfo | null>();
+  /** each listed match's info (null: asked, no answer yet; 'unreachable': the server couldn't be reached) */
+  private infos = new Map<string, MatchInfo | null | 'unreachable'>();
 
   constructor() {
     super('match');
@@ -222,14 +223,19 @@ export class MatchScene extends MenuScene {
     for (const m of list.slice(0, 4)) {
       const c = app.courses.find((k) => k.id === m.courseId);
       const info = this.infos.get(m.code);
-      const status = info === undefined ? '...' : !info || !info.exists ? 'ended' : info.status;
+      const status = !info ? '...' : info === 'unreachable' ? "can't reach the server" : !info.exists ? 'ended' : info.status;
       const label = `${m.vs ? `vs ${m.vs}` : 'waiting for a friend'}  ·  ${c ? shortName(c.name) : m.courseId}  ·  ${status}`;
       this.root.add(new Button(this, x0 + 8, y, pw - 40, 15, label, () => this.scene.start('match', { mode: 'continue', code: m.code }), { color: m.done ? 'grey' : 'orange' }));
       this.root.add(new Button(this, x0 + pw - 28, y, 20, 15, 'x', () => { forgetMatch(m.code); this.rebuild(); }, { color: 'grey' }));
       y += 18;
       if (info === undefined) {
         this.infos.set(m.code, null);
-        void matchInfo(m.code).then((i) => { this.infos.set(m.code, i); if (this.sys.isActive()) this.rebuild(); });
+        void matchInfo(m.code).then((i) => {
+          this.infos.set(m.code, i ?? 'unreachable');
+          // a finished match not yet on the "recent" list (its games closed before they could report it)
+          if (i?.exists && i.phase === 'finished' && !m.reported) void reportMatch(m.code);
+          if (this.sys.isActive()) this.rebuild();
+        });
       }
     }
   }

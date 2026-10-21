@@ -11,9 +11,9 @@ import { roundPins } from '../../src/systems/game/pins';
 import { Rng } from '../../src/systems/physics/rng';
 import { suggestDrop } from '../../src/systems/rules/relief';
 import { encodePath } from '../../src/systems/match/path';
-import { applyEvent, eventOf, toPlay } from '../../src/systems/match/rules';
+import { applyEvent, eventOf, holeNo, ordinal, other, pinOf, toPlay } from '../../src/systems/match/rules';
 import { holeSnapOf, MatchSession, restoreHole, shotInfoOf } from '../../src/systems/match/session';
-import { Action, Logged, MatchConfig, MatchState, PROTOCOL, Seat } from '../../src/systems/match/types';
+import { Action, CLOCK, Logged, MatchConfig, MatchState, PROTOCOL, Seat } from '../../src/systems/match/types';
 import { loadCourseFiles, meterFor } from './helpers';
 
 const COURSE = loadCourseFiles('oswego_lake');
@@ -171,6 +171,25 @@ describe('match sessions: two robots play whole matches', () => {
     }
   });
 
+  it('a tied match plays extra holes, the round\'s holes again with their pins, until one is won (both games agree)', () => {
+    let extra = 0;
+    for (let seed = 1; seed <= 60 && extra < 3; seed++) {
+      const { server, games } = run([1, 2], seed, [1.2, 1.2]);
+      const s = server.state!;
+      expect(s.phase).toBe('finished');
+      if (s.results.length <= 2) continue;
+      extra++;
+      expect(s.outcome).toMatchObject({ how: 'extra', margin: `at the ${ordinal(s.results.length)}` });
+      expect(s.results.slice(2, -1).every((r) => r.winner === null)).toBe(true); // halved until the one that was won
+      for (const k of [0, 1] as Seat[]) {
+        const r = games[other(k)].rounds[k]!;
+        expect(r.scores.map((x) => x.hole)).toEqual(s.results.map((x) => holeNo(s.cfg, x.hole)));
+        expect(r.pin).toEqual({ x: pinOf(s, s.results.length - 1)[0], y: pinOf(s, s.results.length - 1)[1] });
+      }
+    }
+    expect(extra).toBeGreaterThan(0);
+  });
+
   it('a game that joins late (or reloads) rebuilds the same match from the log', () => {
     const { server, games } = run([1, 2, 3, 4, 5, 6], 5, [1.2, 1.2]);
     const late = new MatchSession(COURSE, 'test', 1, JSON.parse(JSON.stringify(server.log)));
@@ -216,5 +235,28 @@ describe('match sessions: receiving', () => {
     expect(a!.winds).toEqual(b!.winds);
     expect(b!.cfg.settings.lefty).toBe(true);
     expect(PUTTER.kind).toBe('putter');
+  });
+});
+
+describe('match sessions: penalty strokes for slow play', () => {
+  it('count on the card and in the hole result, not in the player\'s own count (which their game sends)', () => {
+    const cfg = makeConfig([1, 2], 9);
+    const T = Date.parse('2026-10-21T12:00:00.000Z');
+    const iso = (ms: number) => new Date(T + ms).toISOString();
+    const g = new MatchSession(COURSE, 'x', 0, [
+      { t: 'created', cfg, player: { name: 'a', lefty: false }, seq: 1, at: iso(0) },
+      { t: 'joined', player: { name: 'b', lefty: false }, honour: 1, seq: 2, at: iso(0) },
+      { t: 'ready', by: 0, hole: 0, seq: 3, at: iso(0) },
+      { t: 'ready', by: 1, hole: 0, seq: 4, at: iso(0) },
+    ]);
+    expect(g.turn).toBe(1);
+    g.receive([{ t: 'slow', by: 0, hole: 0, turn: 4, seq: 5, at: iso(CLOCK.graceMs + CLOCK.penaltyMs) }]);
+    g.applyNext();
+    expect(g.state.p[1].slow).toBe(1);
+    expect(g.rounds[1]!.tally.strokes).toBe(0); // the player's game counts its own strokes; the match adds the penalty
+    g.receive([{ t: 'concede', by: 1, what: 'hole', hole: 0, seq: 6, at: iso(200_000) }]);
+    g.applyNext();
+    expect(g.state.results[0]).toMatchObject({ winner: 0, strokes: [0, 1], slow: [0, 1] });
+    expect(g.rounds[1]!.scores[0]).toMatchObject({ strokes: 1, penalties: 1 });
   });
 });

@@ -2,7 +2,10 @@
 // says who it is, catches up from the last event the game has, sends moves
 // and hears everything that happens. It reconnects by itself (a phone that
 // slept, a train tunnel), checks the line with keep-alives, and falls back to
-// asking over HTTP every couple of seconds when a WebSocket can't be had.
+// asking over HTTP every couple of seconds when a WebSocket can't be had
+// (less often when nothing is happening or the page is out of sight, and not
+// at all after half an hour out of sight: each question costs the site a
+// request, from the same daily allowance as the leaderboards).
 //
 // A move is kept (in localStorage) from the moment it is made until the server
 // answers it, and sent again after any reconnect or reload: the server knows
@@ -54,7 +57,8 @@ export interface WebSocketLike {
   close(code?: number, reason?: string): void;
 }
 
-export type SendResult = { ok: true; seq: number } | { ok: false; code: string; message: string };
+/** `wait`: a move on the clock refused as too early, how long until it isn't (ms). */
+export type SendResult = { ok: true; seq: number } | { ok: false; code: string; message: string; wait?: number };
 
 interface Outgoing { cid: string; action: Action; at: number }
 
@@ -66,7 +70,12 @@ const ANSWER_MS = 10_000;      // a keep-alive not answered in this long: the li
 const POKE_ANSWER_MS = 4_000;  // the page came back to view: the line is checked at once, and quickly
 const WHO_MS = 30_000;         // who is there, asked this often
 const POLL_MS = 2_000;
-const POLL_HIDDEN_MS = 8_000;  // a background tab asks less often (it still counts as there: the server allows 12 s)
+const POLL_QUIET_MS = 5_000;          // nothing has happened for QUIET_MS: asked less often
+const QUIET_MS = 120_000;
+const POLL_HIDDEN_MS = 8_000;         // a background tab asks less often (it still counts as there: the server allows 75 s)
+const POLL_HIDDEN_LONG_MS = 60_000;   // out of sight for HIDDEN_LONG_MS: once a minute
+const HIDDEN_LONG_MS = 5 * 60_000;
+const HIDDEN_STOP_MS = 30 * 60_000;   // out of sight for half an hour: no more questions until the page is looked at
 // WebSockets that never worked here (a network that blocks them) give way to HTTP after three tries; ones that
 // did (a phone that lost its signal for a moment) after six, about 15 s of trying
 const FAILS_BEFORE_POLL = 3;
@@ -96,6 +105,12 @@ export class MatchClient {
   onSeat: (seat: Seat) => void = () => {};
   /** a move refused by the server that no one was waiting for (made before a reload) */
   onRefused: (action: Action, code: string, message: string) => void = () => {};
+  /** since when each player has been in the match, on the server's clock (the move clock counts from then at the earliest) */
+  here: [number, number] = [0, 0];
+  /** the server's clock less this device's (ms), from the last message that said the time */
+  offset = 0;
+  /** the server said the time, or who has been here since when */
+  onClock: () => void = () => {};
 
   private ws: WebSocketLike | null = null;
   private welcomed = false;
@@ -117,6 +132,12 @@ export class MatchClient {
   private inFlight = new Set<string>();
   private everWelcomed = false;
   private wsRetries = 0;
+  /** when something last happened on the match (an event came, this game made a move): polling slows when nothing does */
+  private lastNews = 0;
+  /** since when the page has been out of sight (0: in sight), as polling saw it */
+  private hiddenSince = 0;
+  /** polling stopped while the page was out of sight; looking at it again starts it */
+  private parked = false;
 
   constructor(readonly code: string, private key: string, private deps: ClientDeps) {
     this.outbox = this.loadOutbox();
@@ -132,6 +153,26 @@ export class MatchClient {
 
   private hidden(): boolean {
     try { return !!this.deps.hidden?.(); } catch { return false; }
+  }
+
+  /** The server's clock now (ms), as well as this device can tell. */
+  serverNow(): number {
+    return this.T.now() + this.offset;
+  }
+
+  /** A message said the server's time (`now`) and who has been here since when (`here`). */
+  private learnClock(now: unknown, here?: unknown) {
+    let changed = false;
+    if (typeof now === 'number' && Number.isFinite(now)) {
+      const o = now - this.T.now();
+      if (Math.abs(o - this.offset) > 250) changed = true;
+      this.offset = o;
+    }
+    if (Array.isArray(here) && here.length === 2 && here.every((v) => typeof v === 'number' && Number.isFinite(v)) && (here[0] !== this.here[0] || here[1] !== this.here[1])) {
+      this.here = [here[0], here[1]];
+      changed = true;
+    }
+    if (changed) this.onClock();
   }
 
   private later(f: () => void, ms: number): unknown {
@@ -231,7 +272,16 @@ export class MatchClient {
       this.tick(POKE_ANSWER_MS);
       return;
     }
-    if (this.polling) { void this.pollOnce(); if (!this.ws) this.connect(); return; } // the network may be back: a WebSocket too
+    if (this.polling) {
+      // the network may be back: a WebSocket too. Polling stopped out of sight starts again, quickly (the
+      // player is back: a move is likely)
+      this.parked = false;
+      this.lastNews = this.T.now();
+      void this.pollOnce();
+      if (!this.ws) this.connect();
+      if (this.retryTimer === null) this.scheduleWsRetry();
+      return;
+    }
     if (!this.ws) { this.fails = 0; this.connect(); }
   }
 
@@ -333,7 +383,11 @@ export class MatchClient {
     let m: { type?: string; [k: string]: unknown };
     try { m = JSON.parse(raw); } catch { return; }
     if (m.type === 'welcome' || m.type === 'ack' || m.type === 'nack') this.seen(m.seq);
-    if (m.type === 'events' && Array.isArray(m.events)) for (const e of m.events) this.seen((e as Logged).seq);
+    if (m.type === 'events' && Array.isArray(m.events)) {
+      for (const e of m.events) this.seen((e as Logged).seq);
+      if (m.events.length) this.lastNews = this.T.now();
+    }
+    if (m.type === 'welcome' || m.type === 'presence' || m.type === 'ack' || m.type === 'nack') this.learnClock(m.now, m.here);
     switch (m.type) {
       case 'pong': return;
       case 'welcome': {
@@ -352,7 +406,7 @@ export class MatchClient {
       }
       case 'events': this.onEvents(Array.isArray(m.events) ? (m.events as Logged[]) : [], m.last !== false); return;
       case 'ack': this.learnSeat(m.seat); this.answered(String(m.cid), { ok: true, seq: Number(m.seq) }); return;
-      case 'nack': this.answered(String(m.cid), { ok: false, code: String(m.code), message: String(m.message ?? '') }); return;
+      case 'nack': this.answered(String(m.cid), nackOf(m as { code?: unknown; message?: unknown; wait?: unknown })); return;
       case 'seat': this.learnSeat(m.seat); return;
       case 'presence': this.setOnline(m.online); return;
       case 'error':
@@ -450,6 +504,7 @@ export class MatchClient {
       return Promise.resolve({ ok: false, code: this.status === 'gone' ? 'no_match' : this.status, message: why });
     }
     const o = { cid, action, at: this.T.now() };
+    this.lastNews = o.at;
     this.outbox.push(o);
     this.saveOutbox(); // before it goes: a reload a moment later still sends it
     const p = new Promise<SendResult>((res) => this.waiting.set(cid, res));
@@ -482,7 +537,7 @@ export class MatchClient {
 
   private retryWs() {
     this.retryTimer = null;
-    if (this.stopped || !this.polling) return;
+    if (this.stopped || !this.polling || this.parked) return; // out of sight for long: tried again when looked at
     this.connect(); // stays polling until a welcome arrives
     this.scheduleWsRetry();
   }
@@ -499,7 +554,12 @@ export class MatchClient {
       if (this.stopped) return;
       if (res.status === 404 || j?.code === 'no_match') { this.gone(); return; }
       if (j?.code === 'version') { this.versionProblem(String(j.message ?? '')); return; }
-      if (j?.type === 'welcome') { this.learnSeat(j.seat); this.setOnline(j.online); this.seen((j as { seq?: unknown }).seq); }
+      if (j?.type === 'welcome') {
+        this.learnSeat(j.seat);
+        this.setOnline(j.online);
+        this.seen((j as { seq?: unknown }).seq);
+        this.learnClock((j as { now?: unknown }).now, (j as { here?: unknown }).here);
+      }
     } catch { /* offline: the next poll tries */ }
   }
 
@@ -508,24 +568,50 @@ export class MatchClient {
     this.cancel(this.pollTimer); this.pollTimer = null;
     let more = false;
     try {
-      // the key in a header, not the address (addresses get logged); the server's answers say no-store
-      const res = await this.deps.fetch(`${this.url('events')}?since=${this.since()}`, { headers: { 'x-match-key': this.key } });
+      // the key in a header, not the address (addresses get logged); the server's answers say no-store. A
+      // background tab says so: it asks once a minute and still counts as there
+      const headers: Record<string, string> = { 'x-match-key': this.key };
+      if (this.hidden()) headers['x-match-hidden'] = '1';
+      const res = await this.deps.fetch(`${this.url('events')}?since=${this.since()}`, { headers });
       if (this.stopped || !this.polling) return;
       if (res.status === 404) { this.gone(); return; }
       if (res.ok) {
-        const j = (await res.json()) as { events?: Logged[]; more?: boolean; online?: unknown; seat?: unknown; seq?: unknown };
+        const j = (await res.json()) as { events?: Logged[]; more?: boolean; online?: unknown; seat?: unknown; seq?: unknown; now?: unknown; here?: unknown };
         if (this.stopped || !this.polling) return;
         this.setStatus('polling');
         this.seen(j.seq);
         this.learnSeat(j.seat);
         this.setOnline(j.online);
+        this.learnClock(j.now, j.here);
         more = !!j.more;
-        this.onEvents(Array.isArray(j.events) ? j.events : [], !more);
+        const evs = Array.isArray(j.events) ? j.events : [];
+        if (evs.length) this.lastNews = this.T.now();
+        this.onEvents(evs, !more);
         // moves still unanswered (an answer lost on the way): again; each counts once
         for (const o of this.outbox) void this.postAct(o);
       } else this.setStatus('connecting');
     } catch { if (!this.stopped && this.polling) this.setStatus('connecting'); /* offline: try again */ }
-    if (!this.stopped && this.polling) this.pollTimer = this.later(() => void this.pollOnce(), more ? 0 : this.hidden() ? POLL_HIDDEN_MS : POLL_MS);
+    if (this.stopped || !this.polling) return;
+    const wait = more ? 0 : this.pollDelay();
+    if (wait === null) { this.parked = true; return; } // out of sight for half an hour: poke() starts it again
+    this.pollTimer = this.later(() => void this.pollOnce(), wait);
+  }
+
+  /**
+   * How long until the next question: 2 s, 5 s when nothing has happened for
+   * two minutes, 8 s out of sight, a minute after five minutes out of sight,
+   * and none after half an hour (null) until the page is looked at again.
+   */
+  private pollDelay(): number | null {
+    const now = this.T.now();
+    if (this.hidden()) {
+      if (!this.hiddenSince) this.hiddenSince = now;
+      const h = now - this.hiddenSince;
+      if (h >= HIDDEN_STOP_MS) return null;
+      return h >= HIDDEN_LONG_MS ? POLL_HIDDEN_LONG_MS : POLL_HIDDEN_MS;
+    }
+    this.hiddenSince = 0;
+    return now - this.lastNews >= QUIET_MS ? POLL_QUIET_MS : POLL_MS;
   }
 
   private async postAct(o: Outgoing) {
@@ -536,17 +622,24 @@ export class MatchClient {
       const res = await this.deps.fetch(this.url('act'), {
         method: 'POST', headers: JSON_HEADERS, body: JSON.stringify({ key: this.key, cid: o.cid, action: o.action, rules: RULES }),
       });
-      const j = (await res.json().catch(() => null)) as { type?: string; cid?: string; seq?: number; seat?: unknown; code?: string; message?: string } | null;
-      if (j?.type === 'ack' || j?.type === 'nack') this.seen(j.seq);
+      const j = (await res.json().catch(() => null)) as { type?: string; cid?: string; seq?: number; seat?: unknown; code?: string; message?: string; now?: unknown; wait?: unknown } | null;
+      if (j?.type === 'ack' || j?.type === 'nack') { this.seen(j.seq); this.learnClock(j.now); }
       if (j?.type === 'nack' && j.code === 'version') this.versionProblem(String(j.message ?? ''));
       else if (j?.type === 'ack') { this.learnSeat(j.seat); this.answered(o.cid, { ok: true, seq: Number(j.seq) }); answered = true; }
-      else if (j?.type === 'nack') { this.answered(o.cid, { ok: false, code: String(j.code), message: String(j.message ?? '') }); answered = true; }
+      else if (j?.type === 'nack') { this.answered(o.cid, nackOf(j)); answered = true; }
       else if (res.status === 404) this.gone();
     } catch { /* offline: sent again on the next poll or connection */ } finally {
       this.inFlight.delete(o.cid);
     }
     if (answered && this.polling) void this.pollOnce(); // the move's event at once
   }
+}
+
+/** A refusal as the game reads it (`wait`: a move on the clock made too early, how long until it isn't). */
+function nackOf(m: { code?: unknown; message?: unknown; wait?: unknown }): SendResult {
+  const r: SendResult = { ok: false, code: String(m.code), message: String(m.message ?? '') };
+  if (typeof m.wait === 'number' && Number.isFinite(m.wait)) r.wait = m.wait;
+  return r;
 }
 
 /** localStorage as the client's store (blocked storage: nothing kept). */

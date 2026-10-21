@@ -29,6 +29,7 @@ import { encodePath } from '../systems/match/path';
 import { applyEvent, holeLive, other } from '../systems/match/rules';
 import { Applied, holeSnapOf, MatchSession, plannedOf, restoreHole, shotInfoOf } from '../systems/match/session';
 import { decodePath } from '../systems/match/path';
+import { CLOCK } from '../systems/match/types';
 import type { Action, HoleResult, HoleSnap, Logged, Seat } from '../systems/match/types';
 import type { SendResult } from '../net/matchClient';
 
@@ -147,6 +148,8 @@ export class PlayScene extends Phaser.Scene {
   private nudgeAt = 0;
   /** this player gave up the hole or the match: nothing is offered until the server has it */
   private awaitCid: string | null = null;
+  /** a penalty stroke for slow play, or a claim of the match, on its way (the buttons wait for its answer) */
+  private clockCid: string | null = null;
 
   constructor() {
     super('play');
@@ -166,6 +169,7 @@ export class PlayScene extends Phaser.Scene {
     this.introShownFor = -1;
     this.concedeCid = null;
     this.awaitCid = null;
+    this.clockCid = null;
     this.nudgeAt = 0;
     this.seenSwaps = this.match?.swaps ?? 0;
     if (this.match) app.round = this.match.session!.activeRound();
@@ -1794,6 +1798,8 @@ export class PlayScene extends Phaser.Scene {
       // this game's move came back: on with it. A move of this player's made before it (a "that's good",
       // "ready") goes first; the other player's move first means this one is refused (its answer follows)
       if (head.cid === undefined || head.cid !== this.pendingCid) {
+        // the other player's penalty stroke for slow play doesn't stop this stroke: shown, and the stroke follows
+        if (head.t === 'slow') { this.matchApplyBehind(); return; }
         if (!('by' in head) || head.by !== this.me || head.t === 'stroke' || head.t === 'relief') return;
         this.matchApplyBehind();
         return;
@@ -1804,7 +1810,7 @@ export class PlayScene extends Phaser.Scene {
     } else if (st === 'swing') {
       // the other player gave this putt or the hole while it was being struck: the swing stops. Anything
       // of this player's own (their "that's good" a moment before) waits until the stroke is sent
-      if (head.t === 'concede' && head.by !== this.me) this.cancelSwing(); else return;
+      if ((head.t === 'concede' || head.t === 'claim') && head.by !== this.me) this.cancelSwing(); else return;
     } else if (['flight', 'settle', 'loading', 'replay', 'done'].includes(st)) return;
     // a long catch-up (back after a while): all but the last few at once, then the scene shows where things are
     if (q.length > 4 && q[0].cid !== this.pendingCid) {
@@ -1813,6 +1819,7 @@ export class PlayScene extends Phaser.Scene {
           const a = this.ms.applyNext();
           if (a?.ev.cid && a.ev.cid === this.concedeCid) this.concedeCid = null;
           if (a?.ev.cid && a.ev.cid === this.awaitCid) this.awaitCid = null;
+          if (a?.ev.cid && a.ev.cid === this.clockCid) this.clockCid = null;
           if (a?.started) this.introShownFor = this.ms.state.hole; // no fly-over for a hole already under way
         }
       } catch (e) {
@@ -1843,6 +1850,7 @@ export class PlayScene extends Phaser.Scene {
     if (!applied) return;
     if (mine) this.clearPending();
     if (applied.ev.cid && applied.ev.cid === this.concedeCid) this.concedeCid = null;
+    if (applied.ev.cid && applied.ev.cid === this.clockCid) this.clockCid = null;
     if (!quiet) this.matchAnnounce(applied, mine);
     this.matchAfterApplied(applied);
   }
@@ -1858,7 +1866,8 @@ export class PlayScene extends Phaser.Scene {
     if (!applied) return;
     if (applied.ev.cid && applied.ev.cid === this.concedeCid) this.concedeCid = null;
     if (applied.ev.cid && applied.ev.cid === this.awaitCid) this.awaitCid = null;
-    this.matchAnnounce(applied, true);
+    if (applied.ev.cid && applied.ev.cid === this.clockCid) this.clockCid = null;
+    this.matchAnnounce(applied, applied.ev.t !== 'slow' || applied.ev.by === this.me);
     this.hud.refresh(); // the hole may have ended with it: the stroke behind it is refused, and its answer moves the scene on
   }
 
@@ -1870,6 +1879,7 @@ export class PlayScene extends Phaser.Scene {
     if (!waiting) this.clearPending();
     this.concedeCid = null;
     this.awaitCid = null;
+    this.clockCid = null;
     this.matchEv = null;
     this.matchReplaying = false;
     this.replaying = null;
@@ -1912,6 +1922,11 @@ export class PlayScene extends Phaser.Scene {
         if (e.by === this.me) this.hud.flash(`you gave ${opp} the putt`, COLORS.white, '', 1300);
         else { this.hud.flash("that's good", COLORS.green, `${opp} gave you the putt`, 1500); sfx('good'); }
       } else if (e.what === 'hole') this.hud.flash(e.by === this.me ? 'you conceded the hole' : `${opp} conceded the hole`, COLORS.white, '', 1500);
+    } else if (e.t === 'slow') {
+      // a penalty stroke for slow play: counted on the hole (and the hole may have ended with it)
+      const ended = a.closed ? (a.closed.winner === this.me ? '  ·  you win the hole' : '  ·  the hole is lost') : '';
+      if (e.by === this.me) this.hud.flash('penalty stroke added', COLORS.white, `${opp}: slow play${a.closed ? '  ·  you win the hole' : ''}`, 1800);
+      else { this.hud.flash('penalty stroke', COLORS.red, `slow play: ${opp} added a stroke${ended}`, 2200); sfx('bad'); }
     } else if (e.t === 'rematch' && e.by !== this.me) this.hud.refresh();
     void mine;
   }
@@ -1922,6 +1937,8 @@ export class PlayScene extends Phaser.Scene {
     // between holes, the other player reaching the next tee changes nothing on this screen (the hole's
     // result, the list of shots to rewatch): it stays, and the match bar says it
     if (this.state === 'between' && a.ev.t === 'ready' && !a.started && !a.closed && !a.over) { this.hud.refresh(); return; }
+    // a penalty stroke for slow play changes the count, not the shot: the aim (or the view of the other's) stays
+    if (a.ev.t === 'slow' && !a.closed && !a.over && ['aim', 'swing', 'watch', 'relief', 'drop'].includes(this.state)) { this.hud.refresh(); return; }
     if (this.hud.holdsMatch()) {
       // under the pause menu or the card nothing opens or moves: shown once it closes
       if (!['relief', 'drop', 'between', 'over'].includes(this.state)) this.state = 'idle';
@@ -1984,6 +2001,7 @@ export class PlayScene extends Phaser.Scene {
     if (!this.sys.isActive() || !this.match?.session) return;
     if (cid === this.concedeCid && !res.ok) this.concedeCid = null; // given: cleared when its event is shown
     if (cid === this.awaitCid && !res.ok) this.awaitCid = null;
+    if (cid === this.clockCid && !res.ok) this.clockCid = null;
     if (res.ok) {
       // its event is in the queue (matchPump plays it), or was shown already (a catch-up brought it before
       // this answer): then nothing more is coming, and waiting for it would wait forever
@@ -1995,6 +2013,16 @@ export class PlayScene extends Phaser.Scene {
       return;
     }
     if (action.t === 'ready' && res.code === 'already_ready') return;
+    if (action.t === 'slow' || action.t === 'claim') {
+      // the other player moved as it was sent, or it was early (the server's clock, or this player was away)
+      const what = action.t === 'slow' ? 'no penalty stroke' : 'not claimed';
+      const why = res.code === 'moved' ? `${this.oppName()} has played` : res.code === 'given' ? 'one has been given for this shot' : res.message;
+      if (res.code !== 'no_match' && res.code !== 'version' && res.code !== 'elsewhere') this.hud.flash(what, COLORS.white, why, 1800);
+      // a claim put the waiting view away while it went: back to it
+      if (action.t === 'claim' && (this.state === 'idle' || this.state === 'between')) { this.state = 'idle'; this.matchSettleView(); }
+      this.hud.refresh();
+      return;
+    }
     if (action.t === 'concede') {
       // "moved": the putt was struck as it was given (the moves crossed); it plays out instead
       if (res.code !== 'no_match' && res.code !== 'moved') this.hud.flash("couldn't concede", COLORS.red, res.message, 1600);
@@ -2062,7 +2090,9 @@ export class PlayScene extends Phaser.Scene {
     const r = this.ms.rounds[ev.by]!;
     const who = ev.by === this.me ? null : this.oppName();
     if (ev.after.holed) {
-      if (who) this.hud.flash(`${who} holes out`, COLORS.yellow, `${ev.after.tally.strokes} ${ev.after.tally.strokes === 1 ? 'stroke' : 'strokes'}`, 1400);
+      // the score: penalty strokes for slow play count too
+      const n = ev.after.tally.strokes + (applied.closed ? applied.closed.slow[ev.by] : this.ms.state.p[ev.by].slow);
+      if (who) this.hud.flash(`${who} holes out`, COLORS.yellow, `${n} ${n === 1 ? 'stroke' : 'strokes'}`, 1400);
     } else if (ev.after.pending) {
       const out = r.reliefOutcome(ev.after.pending);
       if (!who && out.kind !== 'rest' && !applied.closed) {
@@ -2138,6 +2168,49 @@ export class PlayScene extends Phaser.Scene {
     this.cancelSwing();
     this.awaitCid = this.matchSend({ t: 'concede', what, hole: s.hole });
     if (this.state === 'aim' || this.state === 'watch') this.state = 'idle';
+    this.hud.refresh();
+  }
+
+  /** Penalty strokes for slow play on this round's player on the hole being played (the HUD's "shot n"). */
+  slowOf(r: Round): number {
+    if (!this.match?.session) return 0;
+    const s = this.ms.state;
+    const k: Seat | null = r === this.ms.rounds[0] ? 0 : r === this.ms.rounds[1] ? 1 : null;
+    return k === null || !holeLive(s) ? 0 : s.p[k].slow;
+  }
+
+  /** The move clock, when this player is the one waiting and may act on it: what they can do now. */
+  clockChoice(): { penalty: boolean; claim: boolean } {
+    const live = this.match;
+    const none = { penalty: false, claim: false };
+    if (!live?.session || live.seat === null || this.clockCid || this.awaitCid || this.matchBusy()) return none;
+    if (this.state !== 'watch' && this.state !== 'between') return none;
+    const c = live.clock();
+    if (!c || c.waiter !== this.me || !live.isHere(this.me)) return none;
+    return {
+      penalty: c.kind === 'shot' && !c.slowGiven && c.elapsed >= CLOCK.penaltyMs && this.state === 'watch',
+      claim: c.elapsed >= CLOCK.claimMs,
+    };
+  }
+
+  /** "penalty stroke" (the HUD has asked first): a stroke for slow play on the other player, on this clock. */
+  matchPenalty() {
+    const live = this.match;
+    const c = live?.clock();
+    if (!c || !this.clockChoice().penalty) return;
+    this.clockCid = this.matchSend({ t: 'slow', hole: this.ms.state.hole, turn: c.turn });
+    this.hud.refresh();
+  }
+
+  /** "claim the match" (the HUD has asked first): won by forfeit, the other player having not played on. */
+  matchClaim() {
+    const live = this.match;
+    const c = live?.clock();
+    if (!c || !this.clockChoice().claim) return;
+    this.cancelSwing();
+    this.clockCid = this.matchSend({ t: 'claim', turn: c.turn });
+    this.awaitCid = this.clockCid;
+    if (this.state === 'watch') this.state = 'idle';
     this.hud.refresh();
   }
 

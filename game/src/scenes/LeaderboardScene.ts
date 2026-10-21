@@ -9,7 +9,7 @@ import { app } from '../app';
 import { Difficulty } from '../data/difficulty';
 import { backupText, LeaderboardEntry, loadBoard, RoundLength } from '../save/store';
 import { BirdieRow, fetchBirdieRecords, fetchHandicapRounds, fetchBoard, fetchDaily, fetchDailyWeek, fetchEagles, fetchRecent, flushUploads, nameConflicts, onlineAvailable } from '../save/online';
-import { FeedRow, timeAgo } from '../save/feed';
+import { FeedRow, matchFeedText, timeAgo } from '../save/feed';
 import { shareRound } from '../ui/shareCard';
 import { addDays, dailyPlan, dayStandings, weekStandings, weekStart } from '../systems/game/daily';
 import { DAILY_PICKS, DAILY_ROSTER } from '../data/dailyRoster';
@@ -153,8 +153,11 @@ export class LeaderboardScene extends MenuScene {
     }, { color: 'grey' }));
   }
 
-  /** A list with a header row and pages (the daily and recent views). */
-  private table(x0: number, y0: number, pw: number, ph: number, y: number, head: string[], cols: number[], rows: { v: string[]; hi?: number[] }[], empty: string) {
+  /**
+   * A list with a header row and pages (the daily and recent views). A row with `span` has two values: the
+   * first column's, and a line across the rest (a match on the recent list), cut to fit.
+   */
+  private table(x0: number, y0: number, pw: number, ph: number, y: number, head: string[], cols: number[], rows: { v: string[]; hi?: number[]; span?: boolean }[], empty: string) {
     const lineH = 11;
     const listTop = y + 2;
     const maxRows = Math.max(1, Math.floor((y0 + ph - 36 - listTop) / lineH) - 1);
@@ -164,6 +167,20 @@ export class LeaderboardScene extends MenuScene {
     if (!rows.length) this.root.add(txt(this, x0 + pw / 2, listTop + 24, empty, { origin: [0.5, 0], color: COLORS.dim, maxWidth: pw - 16 }));
     rows.slice(page * maxRows, (page + 1) * maxRows).forEach((r, k) => {
       const yy = listTop + (k + 1) * lineH;
+      if (r.span) {
+        this.root.add(txt(this, cols[0], yy, r.v[0]));
+        const t = txt(this, cols[1], yy, r.v[1], { color: COLORS.white });
+        const room = x0 + pw - 8 - cols[1];
+        // too long: the course goes first (after the last " · "), then letters off the end
+        let line = r.v[1];
+        while (t.width > room && line.length > 8) {
+          const cut = line.lastIndexOf('  ·  ');
+          line = cut > 0 ? line.slice(0, cut) : line.slice(0, -1);
+          t.setText(line);
+        }
+        this.root.add(t);
+        return;
+      }
       r.v.forEach((v, j) => { if (cols[j] >= 0) this.root.add(txt(this, cols[j], yy, v, { color: r.hi?.includes(j) ? COLORS.yellow : COLORS.white })); });
     });
     const by = y0 + ph - 20;
@@ -224,28 +241,37 @@ export class LeaderboardScene extends MenuScene {
     }
   }
 
-  /** Friends' activity: the latest rounds on the shared board. */
+  /** Friends' activity: the latest rounds on the shared board, and matches played ("kevin def. charlie 3&2"). */
   private async buildRecent(x0: number, y0: number, pw: number, ph: number) {
     const g = this.gen;
     this.root.add(new Button(this, x0 + 6, y0 + ph - 20, 44, 15, 'back', () => this.back(), { color: 'grey' }));
     await flushUploads();
-    const rows = await fetchRecent(50);
+    const feed = await fetchRecent(50);
     if (!this.isCurrentBuild(g)) return;
     let y = y0 + 40;
     const courseName = (id: string) => app.courses.find((c) => c.id === id)?.name.replace(/ (golf|country) club$| golf (course|links)$/i, '') ?? id;
-    if (!rows) {
+    if (!feed) {
       this.root.add(txt(this, x0 + pw / 2, y + 30, "friends' rounds show here on the hosted game (the shared board can't be reached)", { origin: [0.5, 0], color: COLORS.dim, maxWidth: pw - 24 }));
       return;
     }
-    this.root.add(txt(this, x0 + pw / 2, y, 'the latest rounds on the shared board', { origin: [0.5, 0], color: COLORS.dim }));
+    this.root.add(txt(this, x0 + pw / 2, y, 'the latest rounds and matches on the shared board', { origin: [0.5, 0], color: COLORS.dim, maxWidth: pw - 16 }));
     y += 11;
     const wide = pw > 300;
     const courseChars = wide ? 16 : 10;
     const badge = (r: FeedRow) => (r.record ? 'record!' : r.pb ? 'best' : r.daily ? 'daily' : r.casual ? 'casual' : '');
-    const table = rows.map((r) => ({
-      v: [timeAgo(r.received), r.player.slice(0, 10), courseName(r.course).toLowerCase().slice(0, courseChars), `${r.gross} (${toPar(r.toPar)})${r.holes < 18 ? ' 9' : ''}`, badge(r)],
-      hi: r.record || r.pb ? [4] : [],
+    const rounds = feed.rounds.map((r) => ({
+      at: r.received,
+      row: {
+        v: [timeAgo(r.received), r.player.slice(0, 10), courseName(r.course).toLowerCase().slice(0, courseChars), `${r.gross} (${toPar(r.toPar)})${r.holes < 18 ? ' 9' : ''}`, badge(r)],
+        hi: r.record || r.pb ? [4] : [],
+      } as { v: string[]; hi?: number[]; span?: boolean },
     }));
+    // a match across the player, course and score columns: "kevin def. charlie 3&2 · oswego lake"
+    const matches = feed.matches.map((m) => ({
+      at: m.received,
+      row: { v: [timeAgo(m.received), `${matchFeedText({ ...m, winner: m.winner.slice(0, 10), loser: m.loser.slice(0, 10) })}  ·  ${courseName(m.course).toLowerCase()}`], span: true },
+    }));
+    const table = [...rounds, ...matches].sort((a, b) => (a.at < b.at ? 1 : a.at > b.at ? -1 : 0)).slice(0, 50).map((x) => x.row);
     this.table(x0, y0, pw, ph, y, ['when', 'player', 'course', 'score', ''],
       [x0 + 8, x0 + 66, x0 + 128, wide ? x0 + 236 : x0 + 196, wide ? x0 + 296 : -1], table, 'no rounds yet - go play!');
   }

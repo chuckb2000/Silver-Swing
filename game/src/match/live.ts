@@ -8,8 +8,8 @@ import { browserStore, LinkStatus, MatchClient } from '../net/matchClient';
 import { roundPins } from '../systems/game/pins';
 import { courseHoleFor, newSeed } from '../systems/game/round';
 import { MatchSession } from '../systems/match/session';
-import { applyEvent, holeLive, other, resultFor, statusText, toPlay } from '../systems/match/rules';
-import { Action, Logged, MatchConfig, MatchPlayer, PROTOCOL, RULES, Seat } from '../systems/match/types';
+import { applyEvent, clockText, holeLive, holeNo, other, resultFor, statusText, toPlay, waitingOn } from '../systems/match/rules';
+import { Action, CLOCK, Logged, MatchConfig, MatchPlayer, PROTOCOL, RULES, Seat } from '../systems/match/types';
 import type { Difficulty } from '../data/difficulty';
 
 /** What the server tells anyone about a match (its info page). */
@@ -126,8 +126,11 @@ export function matchLink(code: string): string {
 }
 
 // ----------------------------------------------------------- my matches
-/** A match on this device's list. `key`: the player key it is played with (kept: the player code can change in settings). */
-export interface MyMatch { code: string; vs: string; courseId: string; at: string; done?: boolean; key?: string }
+/**
+ * A match on this device's list. `key`: the player key it is played with (kept: the player code can change in
+ * settings). `reported`: its result is on the leaderboard's "recent" list.
+ */
+export interface MyMatch { code: string; vs: string; courseId: string; at: string; done?: boolean; key?: string; reported?: boolean }
 const LIST_KEY = 'golf:matches';
 
 export function myMatches(): MyMatch[] {
@@ -139,7 +142,7 @@ export function myMatches(): MyMatch[] {
 
 export function rememberMatch(m: MyMatch) {
   const old = myMatches().find((x) => x.code === m.code);
-  const keep = { ...m, key: m.key ?? old?.key };
+  const keep = { ...m, key: m.key ?? old?.key, reported: m.reported ?? old?.reported };
   const l = [keep, ...myMatches().filter((x) => x.code !== m.code)].slice(0, 12);
   try { localStorage.setItem(LIST_KEY, JSON.stringify(l)); } catch { /* blocked */ }
 }
@@ -152,6 +155,45 @@ export function keyFor(code: string): string {
 
 export function forgetMatch(code: string) {
   try { localStorage.setItem(LIST_KEY, JSON.stringify(myMatches().filter((m) => m.code !== code))); } catch { /* blocked */ }
+}
+
+const reporting = new Set<string>();
+
+/**
+ * A match this device saw end goes on the leaderboard's "recent" list (the
+ * site takes the result from the match's server, once; both players' games
+ * report it). Tried again from the match list until it has gone.
+ */
+export async function reportMatch(code: string): Promise<void> {
+  if (reporting.has(code) || myMatches().find((m) => m.code === code)?.reported) return;
+  reporting.add(code);
+  try {
+    const r = await fetch(`api/match/${code}/report`, { method: 'POST', keepalive: true });
+    const j = (await r.json().catch(() => null)) as { ok?: boolean; finished?: boolean } | null;
+    // on the list, or never to be (a name another device holds, the match gone): not asked again
+    if ((r.ok && j?.ok && j.finished) || r.status === 404) {
+      const m = myMatches().find((x) => x.code === code);
+      if (m) rememberMatch({ ...m, reported: true });
+    }
+  } catch { /* offline: the match list tries again */ } finally {
+    reporting.delete(code);
+  }
+}
+
+/** The move clock as this game shows it (CLOCK; null: nobody is waiting on anybody). */
+export interface ClockView {
+  /** the player the match waits for */
+  on: Seat;
+  /** the player waiting */
+  waiter: Seat;
+  /** 'shot': a stroke or a drop; 'tee': coming to the next tee */
+  kind: 'shot' | 'tee';
+  /** how long the clock has run (ms; it starts CLOCK.graceMs after the move before, or when the waiting player came back) */
+  elapsed: number;
+  /** a penalty stroke for slow play has been given on this clock */
+  slowGiven: boolean;
+  /** the clock's id (the move that started it): a penalty or a claim names it */
+  turn: number;
 }
 
 // ------------------------------------------------------------ the match
@@ -177,6 +219,8 @@ export class LiveMatch {
   private listeners = new Set<() => void>();
   private onVisible = () => { if (document.visibilityState === 'visible') this.client.poke(); };
   private onOnline = () => this.client.poke();
+  private clockTimer: ReturnType<typeof setInterval> | null = null;
+  private reported = false;
 
   constructor(readonly code: string) {
     this.key = keyFor(code);
@@ -196,6 +240,7 @@ export class LiveMatch {
       this.changed();
     };
     this.client.onRefused = (action, code, message) => { this.refused.push({ action, code, message }); this.changed(); };
+    this.client.onClock = () => this.changed();
   }
 
   /** Is the session being rebuilt (the play scene waits)? */
@@ -207,13 +252,67 @@ export class LiveMatch {
     document.addEventListener('visibilitychange', this.onVisible);
     window.addEventListener('online', this.onOnline);
     this.client.start();
+    // the move clock in a background tab (the game's loop is paused there): its title says when it matters
+    this.clockTimer = setInterval(() => this.clockAttention(), 10_000);
   }
 
   stop() {
     document.removeEventListener('visibilitychange', this.onVisible);
     window.removeEventListener('online', this.onOnline);
+    if (this.clockTimer) clearInterval(this.clockTimer);
+    this.clockTimer = null;
     this.client.stop();
     this.listeners.clear();
+  }
+
+  /**
+   * The move clock of the match as shown (null while nobody waits, or while
+   * moves are still to be shown: the clock that matters is the one after them).
+   */
+  clock(): ClockView | null {
+    const ms = this.session;
+    if (!ms || !ms.idle || this.client.serverSeq > ms.knownSeq) return null;
+    const s = ms.state;
+    const w = waitingOn(s);
+    if (!w) return null;
+    // from the move before, or (later) from when the waiting player came back to the match after a break
+    const from = Math.max(s.clock.at, this.client.here[w.waiter]);
+    return { ...w, elapsed: this.client.serverNow() - from, slowGiven: s.clock.slow, turn: s.clock.seq };
+  }
+
+  /** Is this player in the match now, as far as the server knows (the other player: their game is open)? */
+  isHere(k: Seat): boolean {
+    return k === this.seat ? this.status === 'online' || this.status === 'polling' : this.online[k];
+  }
+
+  private clockFlag = '';
+
+  /** In a background tab: the title says when the clock matters (this player's shot running long, a claim to be had). */
+  private clockAttention() {
+    if (typeof document === 'undefined' || document.visibilityState !== 'hidden' || this.seat === null) return;
+    const c = this.clock();
+    if (!c || !this.isHere(c.waiter)) return;
+    const s = this.session!.state;
+    const me = this.seat;
+    let key = '', text = '';
+    if (c.on === me) {
+      const waiter = s.players[c.waiter]?.name ?? 'your friend';
+      if (c.elapsed >= CLOCK.claimMs) { key = 'claim'; text = `${waiter} can claim the match`; }
+      else if (c.elapsed >= CLOCK.warnMs) { key = 'warn'; text = `play now: ${clockText(CLOCK.claimMs - c.elapsed)} left`; }
+      else if (c.elapsed >= CLOCK.penaltyMs && c.kind === 'shot' && !c.slowGiven) { key = 'slow'; text = 'your shot: running long'; }
+    } else if (c.waiter === me && c.elapsed >= CLOCK.claimMs) { key = 'claimable'; text = 'you can claim the match'; }
+    if (!key) return;
+    key = `${c.turn}:${key}`;
+    if (key === this.clockFlag) return;
+    this.clockFlag = key;
+    flagTab(text);
+  }
+
+  /** The match is over: its result goes on the leaderboard's "recent" list (once per page; the match list tries again). */
+  report() {
+    if (this.reported || this.session?.state.phase !== 'finished') return;
+    this.reported = true;
+    void reportMatch(this.code);
   }
 
   /** Called on every change (events, line, presence). */
@@ -271,7 +370,8 @@ export class LiveMatch {
     else if (!holeLive(s) && s.results.length && !s.ready[me]) {
       const r = s.results[s.results.length - 1];
       key = `hole:${r.hole}`;
-      text = { won: `you won hole ${s.cfg.holes[r.hole]}`, lost: `${opp} won hole ${s.cfg.holes[r.hole]}`, halved: `hole ${s.cfg.holes[r.hole]} halved` }[resultFor(r, me)];
+      const n = holeNo(s.cfg, r.hole);
+      text = { won: `you won hole ${n}`, lost: `${opp} won hole ${n}`, halved: `hole ${n} halved` }[resultFor(r, me)];
     } else if (!holeLive(s) && s.ready[other(me)] && !s.ready[me]) { key = `tee:${s.hole}`; text = `${opp} is on the tee`; }
     if (!key || key === this.flaggedFor) return;
     this.flaggedFor = key;
@@ -284,6 +384,7 @@ export class LiveMatch {
     if (!s || this.seat === null) return;
     const vs = s.players[this.seat === 0 ? 1 : 0]?.name ?? '';
     rememberMatch({ code: this.code, vs, courseId: s.cfg.courseId, at: new Date().toISOString(), done: s.phase === 'finished', key: this.key });
+    this.report();
   }
 
   /**

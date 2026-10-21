@@ -3,12 +3,15 @@
 // connections, lose answers and refuse WebSockets: whatever happens on the
 // line, both games end up with the server's log, each move counted once.
 
+import { DatabaseSync } from 'node:sqlite';
 import { describe, expect, it } from 'vitest';
 import { MatchRoomCore, RoomHost, RoomSocket, RoomStorage, SocketInfo } from '../../src/server/matchRoom';
 import { createMatch, MatchEnv, newMatchCode, toMatch } from '../../src/server/matchRoutes';
+import { D1Like, D1Statement, handleHide, handlePost, handleRecentGet, resetFeedCache, resetSchemaCache } from '../../src/server/scores';
 import { ClientDeps, KeyValue, MatchClient, WebSocketLike } from '../../src/net/matchClient';
 import { MatchSession } from '../../src/systems/match/session';
-import { Action, CLOSE, HoleSnap, Logged, MatchConfig, PING, PONG, PROTOCOL, RULES, Seat } from '../../src/systems/match/types';
+import { Action, CLOCK, CLOSE, HoleSnap, Logged, MatchConfig, MatchState, PING, PONG, PROTOCOL, RULES, Seat } from '../../src/systems/match/types';
+import { matchFeedText, MatchFeedRow } from '../../src/save/feed';
 import { loadCourseFiles } from './helpers';
 
 const COURSE = loadCourseFiles('oswego_lake');
@@ -32,10 +35,6 @@ class FakeStorage implements RoomStorage {
   async put(e: Record<string, unknown>) {
     if (this.failPuts > 0) { this.failPuts--; throw new Error('storage unavailable'); }
     for (const [k, v] of Object.entries(e)) { this.m.set(k, structuredClone(v)); this.writes++; }
-  }
-  async list<T>(o: { prefix: string; start?: string; limit?: number }) {
-    const keys = [...this.m.keys()].filter((k) => k.startsWith(o.prefix) && (!o.start || k >= o.start)).sort().slice(0, o.limit ?? Infinity);
-    return new Map(keys.map((k) => [k, structuredClone(this.m.get(k)) as T]));
   }
   alarmsSet = 0;
   async deleteAll() { this.m.clear(); this.alarm = null; }
@@ -152,9 +151,19 @@ class FakeNet {
     if (s && s.open) { s.open = false; this.core.closed(s); }
     if (c.readyState !== 3) { c.readyState = 3; c.onclose?.({ code: 1006 }); }
   }
+  /** the leaderboard's database, when a test gives one */
+  db: D1Like | undefined = undefined;
   /** One match room behind a MATCH binding (every code reaches this one object). */
   get env(): MatchEnv {
-    return { MATCH: { idFromName: (n) => n, get: () => ({ fetch: (input: Request | string, init?: RequestInit) => this.core.fetch(typeof input === 'string' ? new Request(input, init) : input) }) } };
+    return { DB: this.db, MATCH: { idFromName: (n) => n, get: () => ({ fetch: (input: Request | string, init?: RequestInit) => this.core.fetch(typeof input === 'string' ? new Request(input, init) : input) }) } };
+  }
+  /** The match's object is evicted from memory and starts again from its storage (its sockets stay, as with hibernation). */
+  restart() {
+    this.core = new MatchRoomCore(this.host);
+  }
+  /** What the object has stored (one record). */
+  get stored(): { state: MatchState; log: Logged[]; here: { back: [number, number]; seen: [number, number] } } {
+    return this.storage.m.get('m') as never;
   }
   fetch = async (url: string, init?: RequestInit) => {
     const u = new URL(url, 'http://x');
@@ -440,6 +449,9 @@ describe('match server: playing over a line that drops', () => {
     // the first hole's flights are left out; the hole just finished keeps them (its result panel's "rewatch")
     expect(strokes.filter((e) => e.hole === 0).every((e) => e.path === '')).toBe(true);
     expect(strokes.filter((e) => e.hole === 1 && e.after.tally.strokes === 1).every((e) => e.path.length === 100)).toBe(true);
+    // and they aren't stored either (the record stays small)
+    const kept = current.stored.log.filter((e): e is Extract<Logged, { t: 'stroke' }> => e.t === 'stroke');
+    expect(kept.filter((e) => e.hole === 0).every((e) => e.path === '')).toBe(true);
   });
 
   it('two moves arriving at the same moment are both counted, in turn', async () => {
@@ -452,8 +464,7 @@ describe('match server: playing over a line that drops', () => {
     ]);
     expect([r1.type, r2.type]).toEqual(['ack', 'ack']);
     expect([(r1 as { seq: number }).seq, (r2 as { seq: number }).seq]).toEqual([5, 6]);
-    const ids = [...(await current.storage.list<Logged>({ prefix: 'e:' })).values()].map((e) => e.seq);
-    expect(ids).toEqual([1, 2, 3, 4, 5, 6]);
+    expect(current.stored.log.map((e) => e.seq)).toEqual([1, 2, 3, 4, 5, 6]);
   });
 
   it('a match nobody plays for two weeks is deleted, and its games are told', async () => {
@@ -722,5 +733,261 @@ describe('match server: second review fixes', () => {
     expect(a.client.unanswered).toEqual([]);
     expect(a.store.m.get(`golf:match:${code}:outbox`)).toBeUndefined();
     void b;
+  });
+});
+
+// ------------------------------------------------------------------ storage, the clock, results
+/** The SQLite stand-in for D1 (as tests/unit/online.test.ts). */
+function fakeD1(): D1Like {
+  const db = new DatabaseSync(':memory:');
+  const stmt = (sql: string, args: unknown[] = []): D1Statement => ({
+    bind: (...v: unknown[]) => stmt(sql, v),
+    all: async <T,>() => ({ results: db.prepare(sql).all(...(args as never[])) as T[] }),
+    run: async () => { const r = db.prepare(sql).run(...(args as never[])); return { meta: { changes: Number(r.changes) } }; },
+  });
+  return { prepare: (sql: string) => stmt(sql) };
+}
+
+const MIN = 60_000;
+const keyOf = (k: Seat) => (k === 0 ? KEY_A : KEY_B);
+/** The game of the player the match waits on, and of the one waiting. */
+function onClock(a: Game, b: Game) {
+  const s = a.session!.state;
+  const on = s.p && toPlayOf(s);
+  return { on: gameOf(on, a, b), waiter: gameOf(on === 0 ? 1 : 0, a, b), onSeat: on, waiterSeat: (on === 0 ? 1 : 0) as Seat };
+}
+function toPlayOf(s: MatchState): Seat {
+  // (the honour on the tee in these tests)
+  return s.p[0].strokes === 0 && s.p[1].strokes === 0 ? s.honour : s.p[0].strokes > s.p[1].strokes ? 1 : 0;
+}
+
+describe('match server: storage', () => {
+  it('a move is one storage write (the whole match is one record); the alarm is set once', async () => {
+    const { a, b } = await twoPlayers();
+    const first = gameOf(honourOf(a), a, b);
+    const w0 = current.storage.writes;
+    void first.client.send(strokeA(0, 1, 150));
+    await current.run(5);
+    expect(current.storage.writes - w0).toBe(1);
+    expect([...current.storage.m.keys()]).toEqual(['m']);
+    expect(current.stored.state).toEqual(a.session!.state);
+    expect(current.storage.alarmsSet).toBe(1);
+  });
+
+  it('after the object restarts (evicted from memory), it carries on from its record: a move sent again still counts once', async () => {
+    const { a, b } = await twoPlayers();
+    const first = gameOf(honourOf(a), a, b);
+    const key = keyOf(honourOf(a));
+    const r1 = await current.core.act(key, 'samemove1', strokeA(0, 1, 150));
+    current.restart();
+    const r2 = await current.core.act(key, 'samemove1', strokeA(0, 1, 150));
+    expect(r2).toMatchObject({ type: 'ack', seq: (r1 as { seq: number }).seq });
+    expect(current.stored.log.filter((e) => e.t === 'stroke')).toHaveLength(1);
+    // the games, still connected (hibernation keeps the sockets), go on playing
+    void gameOf(honourOf(a) === 0 ? 1 : 0, a, b).client.send(strokeA(0, 1, 140));
+    await current.run(10);
+    expect(b.session!.state).toEqual(a.session!.state);
+    expect(a.session!.state.p.map((p) => p.strokes)).toEqual([1, 1]);
+    void first;
+  });
+});
+
+describe('match server: the move clock (developer, 2026-10-21)', () => {
+  it('2:00: the waiting player may add a penalty stroke; 5:00: claim the match; both games see it', async () => {
+    const { a, b } = await twoPlayers();
+    const { on, waiter, onSeat } = onClock(a, b);
+    const turn = () => waiter.session!.state.clock.seq;
+    const early = waiter.client.send({ t: 'slow', hole: 0, turn: turn() });
+    await current.run(10);
+    expect(await early).toMatchObject({ ok: false, code: 'too_soon' });
+    expect((await early as { wait?: number }).wait).toBeGreaterThan(CLOCK.penaltyMs - 1000);
+    await current.run(CLOCK.graceMs + CLOCK.penaltyMs);
+    expect(waiter.client.serverNow()).toBe(current.now); // the server's clock, learned from its messages
+    const pen = waiter.client.send({ t: 'slow', hole: 0, turn: turn() });
+    await current.run(10);
+    expect(await pen).toMatchObject({ ok: true });
+    expect(on.session!.state.p[onSeat].slow).toBe(1);
+    expect(a.session!.state).toEqual(b.session!.state);
+    const again = waiter.client.send({ t: 'slow', hole: 0, turn: turn() });
+    await current.run(10);
+    expect(await again).toMatchObject({ ok: false, code: 'given' });
+    // the player on the clock can't claim against the one waiting
+    const wrong = on.client.send({ t: 'claim', turn: turn() });
+    await current.run(10);
+    expect(await wrong).toMatchObject({ ok: false, code: 'not_waiting' });
+    await current.run(CLOCK.claimMs - CLOCK.penaltyMs);
+    const claim = waiter.client.send({ t: 'claim', turn: turn() });
+    await current.run(10);
+    expect(await claim).toMatchObject({ ok: true });
+    for (const g of [a, b]) expect(g.session!.state.outcome).toMatchObject({ winner: onSeat === 0 ? 1 : 0, how: 'forfeit', margin: 'by forfeit' });
+  });
+
+  it('a stroke made as the penalty goes counts too; a claim made as the other player moves is void', async () => {
+    const { a, b } = await twoPlayers();
+    const { on, waiter } = onClock(a, b);
+    await current.run(CLOCK.graceMs + CLOCK.claimMs);
+    const t = waiter.session!.state.clock.seq;
+    const [pen, hit] = [waiter.client.send({ t: 'slow', hole: 0, turn: t }), on.client.send(strokeA(0, 1, 150))];
+    await current.run(10);
+    expect([(await pen).ok, (await hit).ok]).toEqual([true, true]);
+    const claim = waiter.client.send({ t: 'claim', turn: t }); // meant for the shot just played
+    await current.run(10);
+    expect(await claim).toMatchObject({ ok: false, code: 'moved' });
+    expect(a.session!.state.phase).toBe('playing');
+  });
+
+  it('the clock counts only while the waiting player is in the match: back after a long break, they wait again', async () => {
+    const { code, a, b } = await twoPlayers();
+    const { waiter, waiterSeat } = onClock(a, b);
+    const store = waiter.store;
+    const t = waiter.session!.state.clock.seq;
+    waiter.client.stop(); // the waiting player leaves (closes the game)
+    await current.run(10);
+    expect(current.stored.here.seen[waiterSeat]).toBeGreaterThan(0); // written down as seen when they went
+    await current.run(30 * MIN); // a long break; the object may be evicted meanwhile
+    current.restart();
+    const back = new Game(current, code, keyOf(waiterSeat), store);
+    back.client.start();
+    await current.run(100);
+    expect(back.client.here[waiterSeat]).toBeGreaterThan(current.now - 1000); // their stay starts now
+    const claim = back.client.send({ t: 'claim', turn: t });
+    await current.run(10);
+    const r = await claim;
+    expect(r).toMatchObject({ ok: false, code: 'too_soon' });
+    expect((r as { wait: number }).wait).toBeGreaterThan(4.9 * MIN);
+    await current.run(5 * MIN);
+    const claim2 = back.client.send({ t: 'claim', turn: t });
+    await current.run(10);
+    expect(await claim2).toMatchObject({ ok: true });
+  });
+
+  it('a short absence (another app, a lost signal) does not stop the clock', async () => {
+    const { code, a, b } = await twoPlayers();
+    const { waiter, waiterSeat } = onClock(a, b);
+    const t = waiter.session!.state.clock.seq;
+    await current.run(2 * MIN);
+    waiter.client.stop();
+    await current.run(3 * MIN); // away for three minutes
+    const back = new Game(current, code, keyOf(waiterSeat), waiter.store);
+    back.client.start();
+    await current.run(CLOCK.graceMs + 1000); // five minutes from the move's clock (it starts 15 s after the move)
+    const claim = back.client.send({ t: 'claim', turn: t });
+    await current.run(10);
+    expect(await claim).toMatchObject({ ok: true });
+  });
+
+  it('a game asking over HTTP counts as there (and its stay survives the object restarting)', async () => {
+    current = new FakeNet();
+    const code = await newMatch(current);
+    current.refuseWs = true;
+    const a = new Game(current, code, KEY_A), b = new Game(current, code, KEY_B);
+    a.client.start(); b.client.start();
+    await current.run(8000);
+    void b.client.send({ t: 'join', player: { name: 'kevin', lefty: false } });
+    await current.run(3000);
+    void a.client.send({ t: 'ready', hole: 0 }); void b.client.send({ t: 'ready', hole: 0 });
+    await current.run(3000);
+    const s = a.session!.state;
+    const waiter = gameOf(s.honour === 0 ? 1 : 0, a, b);
+    for (let i = 0; i < 6; i++) { await current.run(MIN); current.restart(); } // evicted between questions
+    const claim = waiter.client.send({ t: 'claim', turn: s.clock.seq });
+    await current.run(3000);
+    expect(await claim).toMatchObject({ ok: true });
+  });
+});
+
+describe('match server: results on the "recent" list', () => {
+  it('a finished match is recorded once, from the server, and listed as "kevin def. charlie ..."', async () => {
+    resetSchemaCache(); resetFeedCache();
+    const { code, a, b } = await twoPlayers();
+    current.db = fakeD1();
+    const report = async () => (await (await current.fetch(`http://x/api/match/${code}/report`, { method: 'POST' })).json()) as { ok: boolean; finished: boolean; recorded: boolean; result?: string };
+    expect(await report()).toMatchObject({ ok: true, finished: false }); // not over yet
+    expect((await current.fetch(`http://x/api/match/${code}/result`)).status).toBe(404); // the object's own route isn't reachable
+    const { waiter } = onClock(a, b);
+    await current.run(CLOCK.graceMs + CLOCK.claimMs);
+    const claimed = waiter.client.send({ t: 'claim', turn: waiter.session!.state.clock.seq });
+    await current.run(10);
+    expect(await claimed).toMatchObject({ ok: true });
+    expect(await report()).toMatchObject({ ok: true, finished: true, recorded: true });
+    expect(await report()).toMatchObject({ recorded: false, result: 'exists' }); // the other game's report changes nothing
+    resetFeedCache();
+    const feed = (await (await handleRecentGet(current.db, new URL('https://x/api/recent'))).json()) as { matches: MatchFeedRow[] };
+    expect(feed.matches).toHaveLength(1);
+    const m = feed.matches[0];
+    const w = waiter === a ? 'charlie' : 'kevin', l = waiter === a ? 'kevin' : 'charlie';
+    expect(matchFeedText(m)).toBe(`${w} def. ${l} by forfeit`);
+    expect(m).toMatchObject({ course: COURSE.json.id, holes: 2, how: 'forfeit' });
+    expect(m).not.toHaveProperty('winner_owner'); // the players' keys stay on the server
+    // a player who hides from the shared lists takes their matches off it too
+    await handleHide(current.db, JSON.stringify({ owner: KEY_B, hidden: true }));
+    const hid = (await (await handleRecentGet(current.db, new URL('https://x/api/recent'))).json()) as { matches: MatchFeedRow[] };
+    expect(hid.matches).toHaveLength(0);
+  });
+
+  it('a name another device holds on the boards is not listed', async () => {
+    resetSchemaCache(); resetFeedCache();
+    const { code, a, b } = await twoPlayers();
+    current.db = fakeD1();
+    // "kevin" is someone else's name on the boards (their round came first)
+    await handlePost(current.db, JSON.stringify({ id: 'r1', course: 'oswego_lake', tee: 'Blue', length: '18', difficulty: 'normal', casual: false, player: 'kevin', owner: 'zzzzyyyyxxxxwwww',
+      date: '2026-10-18T20:00:00Z', gross: 80, toPar: 9, back: 40, scores: [], totals: { strokes: 80, par: 71, toPar: 9, putts: 30, penalties: 0, fairways: 7, fairwayChances: 13, gir: 10, holes: 18, front: 40, back: 40 } }));
+    const loser = gameOf(honourOf(a), a, b);
+    const gave = loser.client.send({ t: 'concede', what: 'match', hole: 0 });
+    await current.run(10);
+    expect(await gave).toMatchObject({ ok: true });
+    const j = await (await current.fetch(`http://x/api/match/${code}/report`, { method: 'POST' })).json();
+    expect(j).toMatchObject({ finished: true, recorded: false, result: 'name' });
+  });
+});
+
+describe('match client: polling less when nothing happens or nobody looks', () => {
+  async function polling() {
+    current = new FakeNet();
+    const code = await newMatch(current);
+    current.refuseWs = true;
+    const a = new Game(current, code, KEY_A);
+    a.client.start();
+    await current.run(8000);
+    expect(a.client.status).toBe('polling');
+    const asks = () => current.sentByClients.length; // (HTTP isn't in there: counted below)
+    void asks;
+    let n = 0;
+    const f = current.fetch;
+    current.fetch = async (url, init) => { if (url.includes('/events')) n++; return f(url, init); };
+    (a.client as unknown as { deps: ClientDeps }).deps.fetch = current.fetch;
+    return { a, count: () => n };
+  }
+
+  it('2 s while things happen, 5 s after two quiet minutes', async () => {
+    const { count } = await polling();
+    const n0 = count();
+    await current.run(MIN);
+    expect(count() - n0).toBeGreaterThanOrEqual(28); // every 2 s
+    await current.run(2 * MIN);
+    const n1 = count();
+    await current.run(MIN);
+    expect(count() - n1).toBeLessThanOrEqual(13); // every 5 s
+    expect(count() - n1).toBeGreaterThanOrEqual(11);
+  });
+
+  it('out of sight: 8 s, once a minute after five minutes, none after half an hour; looking again starts it', async () => {
+    const { a, count } = await polling();
+    current.hidden = true;
+    await current.run(5 * MIN + 10_000);
+    const n1 = count();
+    await current.run(10 * MIN);
+    expect(count() - n1).toBeLessThanOrEqual(11); // once a minute
+    expect(count() - n1).toBeGreaterThanOrEqual(9);
+    await current.run(20 * MIN);
+    const n2 = count();
+    await current.run(30 * MIN);
+    expect(count() - n2).toBe(0); // stopped
+    const dials = current.dials;
+    current.hidden = false;
+    a.client.poke(); // the page is looked at again
+    await current.run(10_000);
+    expect(count() - n2).toBeGreaterThanOrEqual(4);
+    expect(current.dials).toBeGreaterThan(dials); // and a WebSocket is tried again
   });
 });

@@ -1,6 +1,7 @@
 // The match Worker: hosts the MatchRoom Durable Object (one per live match).
 // The Pages site reaches it through its MATCH binding (functions/api/matches.ts,
-// functions/api/match/[[path]].ts); this Worker has no public routes of its own.
+// functions/api/match/[[path]].ts); this Worker has no public routes of its own
+// (in development only, MATCH_DEBUG=1, a route that moves a match's clock on).
 // Deploy: `npm run deploy` here, then bind the Pages project to it
 // (docs/reports/multiplayer_live_match.md, "Setting it up").
 
@@ -18,8 +19,12 @@ function wrap(ws: WebSocket, ctx: DurableObjectState): RoomSocket {
   };
 }
 
-/** The Worker has no bindings of its own. */
-type Env = Record<string, never>;
+interface Env {
+  /** its own Durable Object namespace (wrangler.toml) */
+  MATCH: DurableObjectNamespace;
+  /** '1' only under scripts/match-dev.sh: the tests may move a match's clock on */
+  MATCH_DEBUG?: string;
+}
 
 export class MatchRoom extends DurableObject<Env> {
   private core: MatchRoomCore;
@@ -34,7 +39,6 @@ export class MatchRoom extends DurableObject<Env> {
       storage: {
         get: (k) => st.get(k),
         put: (e) => st.put(e),
-        list: (o) => st.list(o),
         deleteAll: () => st.deleteAll(),
         getAlarm: () => st.getAlarm(),
         setAlarm: (t) => st.setAlarm(t),
@@ -49,6 +53,7 @@ export class MatchRoom extends DurableObject<Env> {
       },
       now: () => Date.now(),
       random: () => crypto.getRandomValues(new Uint32Array(1))[0] / 2 ** 32,
+      debug: env.MATCH_DEBUG === '1',
     };
     this.core = new MatchRoomCore(host);
   }
@@ -68,16 +73,17 @@ export class MatchRoom extends DurableObject<Env> {
   }
 
   async webSocketClose(ws: WebSocket, code: number, reason: string) {
-    this.core.closed(this.socket(ws));
+    const gone = this.core.closed(this.socket(ws)); // who it was is read at once; the rest waits on the storage
     // finish the closing handshake. A browser that closes without a code sends none (1005), and 1005
     // and 1006 can't be sent back: closing with them throws, the reply never goes, and the browser's
     // socket hangs in CLOSING (found by the two-browser test). Answer those with 1000.
     const reply = code >= 1000 && code < 5000 && code !== 1005 && code !== 1006 && code !== 1015 ? code : 1000;
     try { ws.close(reply, reason); } catch { /* already closed */ }
+    await gone;
   }
 
   async webSocketError(ws: WebSocket) {
-    this.core.closed(this.socket(ws));
+    await this.core.closed(this.socket(ws));
   }
 
   async alarm() {
@@ -86,7 +92,12 @@ export class MatchRoom extends DurableObject<Env> {
 }
 
 export default {
-  fetch(): Response {
+  fetch(req: Request, env: Env): Promise<Response> | Response {
+    // development only: POST /debug/<code>/skip?ms=N moves that match's clock on (the move clock's tests)
+    const m = new URL(req.url).pathname.match(/^\/debug\/([a-z0-9]{6})\/skip$/);
+    if (env.MATCH_DEBUG === '1' && m && req.method === 'POST') {
+      return env.MATCH.get(env.MATCH.idFromName(m[1])).fetch(new Request(`https://match/skip${new URL(req.url).search}`, { method: 'POST' }));
+    }
     return new Response('silver swings golf: match rooms (reached through the game site)', { status: 404 });
   },
 };

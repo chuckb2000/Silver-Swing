@@ -1,11 +1,12 @@
 // The card of a live match: each hole's par, both players' scores and who won
-// it, nine by nine, with the match's standing after each hole ("1", "as").
+// it, nine by nine, with the match's standing after each hole ("1", "as"); any
+// extra holes on a line under it.
 
 import Phaser from 'phaser';
 import { cardBlocks } from '../systems/game/lengths';
 import { courseHoleFor } from '../systems/game/round';
 import type { MatchSession } from '../systems/match/session';
-import { statusText } from '../systems/match/rules';
+import { holeNo, isExtra, ordinal, statusText } from '../systems/match/rules';
 import type { Seat } from '../systems/match/types';
 import { COLORS, Panel, txt } from './widgets';
 
@@ -23,7 +24,14 @@ export function matchCard(scene: Phaser.Scene, ms: MatchSession, me: Seat | null
   const names = s.players.map((p, k) => (k === me ? 'you' : p?.name ?? '-').slice(0, 7));
   const rows = ['hole', 'par', names[0], names[1], 'match'];
   const blockH = rowH * rows.length + 4;
-  const th = blockH * blocks.length + 30;
+  // extra holes (the match was all square after the last): one line, "19th (1): 4-4 halved  ·  20th (2): 4-5"
+  const extras = s.results.filter((r) => isExtra(s.cfg, r.hole));
+  const extraLine = extras.map((r) => `${ordinal(r.hole + 1)} (hole ${holeNo(s.cfg, r.hole)}): ${r.strokes[0]}-${r.strokes[1]} ${r.winner === null ? 'halved' : `${names[r.winner]} won`}`).join('  ·  ');
+  // the legend under the card, measured first: a long result ("you won at the 10th") wraps it to a second line
+  const legend = txt(scene, x0, 0, `${statusText(s, me)}  ·  circled: won the hole  ·  match: holes up`, { color: COLORS.dim, maxWidth: tw });
+  const extraTxt = extras.length ? txt(scene, x0, 0, `extra holes (${names[0]}-${names[1]}):  ${extraLine}`, { color: COLORS.white, maxWidth: tw }) : null;
+  const tail = Math.ceil(legend.height) - 10 + (extraTxt ? Math.ceil(extraTxt.height) + 2 : 0);
+  const th = blockH * blocks.length + 30 + Math.max(0, tail);
   const y0 = Math.max(4, Math.round((H - th) / 2) - 6);
   c.add(new Panel(scene, x0 - 6, y0 - 4, tw + 12, th + 8, 0.94));
   c.add(txt(scene, x0, y0, `${ms.course.json.name}  ·  ${s.cfg.tee.toLowerCase()} tees  ·  match play`, { color: COLORS.dim, maxWidth: tw }));
@@ -31,6 +39,7 @@ export function matchCard(scene: Phaser.Scene, ms: MatchSession, me: Seat | null
   const byHole = new Map<number, { strokes: [number, number]; holed: [boolean, boolean]; winner: Seat | null; up: number }>();
   let up = 0;
   for (const r of s.results) {
+    if (isExtra(s.cfg, r.hole)) continue; // on their own line below
     if (r.winner === 0) up++; else if (r.winner === 1) up--;
     byHole.set(s.cfg.holes[r.hole], { strokes: r.strokes, holed: r.holed, winner: r.winner, up });
   }
@@ -84,7 +93,12 @@ export function matchCard(scene: Phaser.Scene, ms: MatchSession, me: Seat | null
     }
     void won;
   });
-  c.add(txt(scene, x0, y0 + 14 + blocks.length * (blockH + 6) - 2, `${statusText(s, me)}  ·  circled: won the hole  ·  match: holes up`, { color: COLORS.dim, maxWidth: tw }));
+  let yEnd = y0 + 14 + blocks.length * (blockH + 6) - 2;
+  if (extraTxt) {
+    c.add(extraTxt.setY(yEnd));
+    yEnd += Math.ceil(extraTxt.height) + 2;
+  }
+  c.add(legend.setY(yEnd));
   c.setData('bottom', y0 + th + 4);
   c.setData('top', y0 - 4);
   return c;

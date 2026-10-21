@@ -26,11 +26,12 @@ import type { LeaderboardEntry } from '../save/entry';
 import { DRILL_BALLS, PUTTING_GREENS, RangeShot } from '../systems/game/practice';
 import type { Club } from '../data/clubs';
 import type { SimResult } from '../systems/physics/sim';
-import { holeLive, other, statusText } from '../systems/match/rules';
+import { clockText, holeLive, holeNo, holesLeft, isExtra, ordinal, other, statusText } from '../systems/match/rules';
+import { CLOCK } from '../systems/match/types';
 import type { HoleResult, Seat } from '../systems/match/types';
 import { matchCard } from '../ui/matchCard';
 import { confirmBox } from '../ui/confirm';
-import { createLiveMatch, forgetMatch, LiveMatch, newMatchConfig } from '../match/live';
+import { ClockView, createLiveMatch, forgetMatch, LiveMatch, newMatchConfig } from '../match/live';
 
 /** The other player's rematch offer, which the server took before this player's: once it has arrived (null after 3 s). */
 async function rematchOffered(live: LiveMatch): Promise<string | null> {
@@ -119,6 +120,21 @@ export class HudScene extends Phaser.Scene {
   private matchLink!: Phaser.GameObjects.BitmapText;
   private matchDots!: Phaser.GameObjects.Graphics;
   private giveBtn!: Button;
+  /** the move clock: a penalty stroke for slow play, and claiming the match, for the player kept waiting */
+  private penBtn!: Button;
+  private claimBtn!: Button;
+  /** where the match bar is (the buttons under it line up there) */
+  private barMid = 0;
+  private barTop = 0;
+  /** the clock whose 3:30 warning has been given (once per shot) */
+  private warnedTurn = -1;
+  /** the clock whose claim has been sounded for the waiting player */
+  private claimSounded = -1;
+  /** the waiting panel's clock line, and whether it offers the claim (drawn again when that changes) */
+  private waitClock: Phaser.GameObjects.BitmapText | null = null;
+  private waitClaim = false;
+  /** when the match bar was last brought up to date (the clock moves on by itself) */
+  private matchAt = 0;
   private watchPanel!: Panel;
   private watchTxt!: Phaser.GameObjects.BitmapText;
   private lastMatchResult: HoleResult | null = null;
@@ -158,6 +174,11 @@ export class HudScene extends Phaser.Scene {
     this.pauseReturn = null;
     this.soundedHole = -1;
     this.waitOnline = '';
+    this.warnedTurn = -1;
+    this.claimSounded = -1;
+    this.waitClock = null;
+    this.waitClaim = false;
+    this.matchAt = 0;
     this.probe = null;
     this.bannerAt = 0;
     this.bannerFor = 0;
@@ -266,11 +287,14 @@ export class HudScene extends Phaser.Scene {
     this.matchLink = txt(this, 0, 0, '', { origin: [0.5, 0], color: COLORS.red });
     // hidden from the tap until the server has the concession (PlayScene.canGivePutt): no second one
     this.giveBtn = new Button(this, 0, 0, 70, 14, 'give putt', () => this.givePutt(), { color: 'grey' });
+    // asked first (a penalty stroke can decide a hole, a claim ends the match)
+    this.penBtn = new Button(this, 0, 0, 78, 14, 'penalty stroke', () => this.askPenalty(), { color: 'grey' });
+    this.claimBtn = new Button(this, 0, 0, 74, 14, 'claim match', () => this.askClaim());
     this.watchPanel = new Panel(this, 0, 0, 180, 18, 0.85);
     this.watchTxt = txt(this, 90, 4, '', { origin: [0.5, 0] });
     this.watchPanel.add(this.watchTxt);
     this.probe = txt(this, 0, 0, '').setVisible(false);
-    this.root.add([bar, this.matchLink, this.giveBtn, this.watchPanel]);
+    this.root.add([bar, this.matchLink, this.giveBtn, this.penBtn, this.claimBtn, this.watchPanel]);
   }
 
   /** The practice ground's panel: change target or green, wind or drill distance, go to the other area. */
@@ -423,7 +447,9 @@ export class HudScene extends Phaser.Scene {
       this.matchNames.setX(Math.round(bw / 2));
       this.matchStatus.setX(Math.round(bw / 2));
       this.matchLink.setPosition(Math.round(bx + bw / 2), top + 27);
-      this.giveBtn.setPosition(Math.round(bx + bw / 2 - 35), top + 38);
+      this.barMid = Math.round(bx + bw / 2);
+      this.barTop = top;
+      this.placeMatchButtons();
       const ww = Math.min(220, W - 16);
       this.watchPanel.resize(ww, 18);
       this.watchPanel.setPosition(Math.round((W - ww) / 2), H - 4 - 18 - (portrait ? 40 : 0));
@@ -445,7 +471,8 @@ export class HudScene extends Phaser.Scene {
     const lieTxt = r.lie ? r.lie.label : '';
     const surf = SURFACE_LABEL[r.surfaceAt()] ?? '';
     setTxt(this.infoLines[0], `par ${r.hole.par}`);
-    setTxt(this.infoLines[1], p.state === 'holed' || p.state === 'replay' || p.state === 'between' || p.state === 'over' ? `${p.state === 'between' || p.state === 'over' ? 'strokes' : 'holed'}: ${r.tally.strokes}` : `shot ${r.tally.strokes + 1}`);
+    // a match's penalty strokes for slow play count in the shot number (the Round doesn't hold them)
+    setTxt(this.infoLines[1], p.state === 'holed' || p.state === 'replay' || p.state === 'between' || p.state === 'over' ? `${p.state === 'between' || p.state === 'over' ? 'strokes' : 'holed'}: ${r.tally.strokes}` : `shot ${r.tally.strokes + p.slowOf(r) + 1}`);
     // with the putter in hand the distance is in feet (or metres), like the putting meter
     setTxt(this.infoLines[2], p.club.kind === 'putter' ? distLabel(d).replace(/(\d)(ft|m)$/, '$1 $2') : `${fmtDist(d)} ${unitLabel()}`);
     // the pin's height above (up arrow) or below (down) the ball, in feet: elevation changes
@@ -526,17 +553,32 @@ export class HudScene extends Phaser.Scene {
       g.fillStyle(on ? 0x6fdc7a : 0x6b737d, 1).fillRect(dx, 6, 3, 3);
     }
     const between = s.phase === 'playing' && !holeLive(s);
-    const where = s.phase !== 'playing' ? '' : between ? `  ·  thru ${s.results.length}` : `  ·  hole ${live.session.holeNumber}`;
+    const hn = live.session.holeNumber;
+    const where = s.phase !== 'playing' ? '' : between ? `  ·  thru ${s.results.length}` : isExtra(s.cfg, s.hole) ? `  ·  ${ordinal(s.hole + 1)}: hole ${hn}` : `  ·  hole ${hn}`;
     setTxt(this.matchStatus, `${statusText(s, me)}${where}`);
     let link = '';
+    let linkColor: number = COLORS.red;
+    const clock = live.clock();
     if (live.status === 'connecting' || live.status === 'offline') link = 'reconnecting...';
     else if (live.status === 'polling') link = 'slow connection';
     else if (live.rebuilding || p.matchBehind()) link = 'catching up...';
     else if (p.commitWait() > 700) link = 'sending...';
-    else if (holeLive(s) && turn === other(me) && !live.online[other(me)]) link = `${p.oppName()}'s game is offline - waiting`;
+    else if (holeLive(s) && turn === other(me) && !live.online[other(me)]) link = `${p.oppName()}'s game is offline${clock && clock.elapsed >= 60_000 ? `  ·  ${clockText(clock.elapsed)}` : ' - waiting'}`;
+    else if (clock) { const l = this.clockLine(clock); if (l) { link = l.text; linkColor = l.color; } }
     setTxt(this.matchLink, link);
+    this.matchLink.setTint(linkColor);
     this.matchLink.setVisible(!!link);
     this.giveBtn.setVisible(p.canGivePutt() && !this.modal).setEnabled(true);
+    const choice = p.clockChoice();
+    this.penBtn.setVisible(choice.penalty && !this.modal).setEnabled(true);
+    this.claimBtn.setVisible(choice.claim && !this.modal && p.state === 'watch').setEnabled(true);
+    this.placeMatchButtons();
+    if (clock) this.clockNotice(clock, choice.claim);
+    if (this.modal === 'mwait') {
+      // the waiting panel's clock, and its claim (drawn again when that comes)
+      if (choice.claim !== this.waitClaim) this.matchWaiting();
+      else if (this.waitClock) setTxt(this.waitClock, clock && clock.waiter === me && clock.elapsed >= 60_000 ? `waiting ${clockText(clock.elapsed)}${choice.claim ? '' : '  ·  claim at 5:00'}` : '');
+    }
     // the line stopped for good (match gone, opened elsewhere, versions differ, out of step): a panel says so
     const stopped = live.status === 'gone' || live.status === 'elsewhere' || live.status === 'version' || !!live.broken;
     if (stopped && this.modal !== 'mlink' && this.modal !== 'pause' && !this.cardLayer) this.showMatchLink();
@@ -554,11 +596,95 @@ export class HudScene extends Phaser.Scene {
     }
   }
 
-  /** "you're 1 up · hole 4" for a banner's second line. */
+  /** "you're 1 up · hole 4" for a banner's second line ("all square · 19th: hole 1" in extra holes). */
   matchLine(): string {
     const live = this.play.match;
     if (!live?.session) return '';
-    return `${statusText(live.session.state, this.play.me)}  ·  hole ${live.session.holeNumber}`;
+    const s = live.session.state;
+    const where = isExtra(s.cfg, s.hole) ? `${ordinal(s.hole + 1)}: hole ${live.session.holeNumber}` : `hole ${live.session.holeNumber}`;
+    return `${statusText(s, this.play.me)}  ·  ${where}`;
+  }
+
+  /** "give putt", "penalty stroke" and "claim match" in a row under the match bar (those showing). */
+  private placeMatchButtons() {
+    if (!this.matchBar) return;
+    const shown = [this.giveBtn, this.penBtn, this.claimBtn].filter((b) => b.visible);
+    const widths = shown.map((b) => (b === this.giveBtn ? 70 : b === this.penBtn ? 78 : 74));
+    const total = widths.reduce((a, b) => a + b, 0) + 4 * Math.max(0, shown.length - 1);
+    let x = Math.round(this.barMid - total / 2);
+    shown.forEach((b, i) => { b.setPosition(x, this.barTop + 38); x += widths[i] + 4; });
+  }
+
+  /**
+   * The move clock under the match bar (CLOCK, developer 2026-10-21): to the
+   * player it waits for, from a minute on, the penalty stroke at 2:00, the
+   * warning from 3:30 and the claim at 5:00; to the waiting player, how long
+   * it has been. Nothing while the waiting player is away (it isn't running).
+   */
+  private clockLine(c: ClockView): { text: string; color: number } | null {
+    const p = this.play;
+    const live = p.match!;
+    if (!live.isHere(c.waiter) || c.elapsed < 60_000) return null;
+    const t = clockText(c.elapsed);
+    const opp = p.oppName().slice(0, 10);
+    if (c.on === p.me) {
+      if (c.elapsed >= CLOCK.claimMs) return { text: `${t}  ·  ${opp} can claim the match`, color: COLORS.red };
+      if (c.elapsed >= CLOCK.warnMs) return { text: `play now: ${clockText(CLOCK.claimMs - c.elapsed)} to a claim`, color: COLORS.red };
+      if (c.kind === 'shot' && !c.slowGiven && c.elapsed >= CLOCK.penaltyMs) return { text: `${t}  ·  penalty stroke possible`, color: COLORS.yellow };
+      return { text: c.kind === 'shot' ? `${t}  ·  ${c.slowGiven ? 'claim at 5:00' : 'penalty at 2:00'}` : `${opp} is on the tee  ·  ${t}`, color: COLORS.white };
+    }
+    if (c.waiter === p.me) return { text: `${c.kind === 'shot' ? `${opp}'s shot` : `${opp} to the tee`}: ${t}`, color: COLORS.white };
+    return null;
+  }
+
+  /** Once per shot: the 3:30 warning to the player on the clock (a banner and a sound), and the claim's sound for the one waiting. */
+  private clockNotice(c: ClockView, claimable: boolean) {
+    const p = this.play;
+    const live = p.match!;
+    if (!live.isHere(c.waiter)) return;
+    if (c.on === p.me && c.elapsed >= CLOCK.warnMs && c.elapsed < CLOCK.claimMs && this.warnedTurn !== c.turn) {
+      this.warnedTurn = c.turn;
+      this.flash('play now', COLORS.red, `${p.oppName()} can claim the match in ${clockText(CLOCK.claimMs - c.elapsed)}`, 2600);
+      sfx('bad');
+    }
+    if (claimable && c.waiter === p.me && this.claimSounded !== c.turn) {
+      this.claimSounded = c.turn;
+      sfx('good');
+    }
+  }
+
+  /** "penalty stroke": asked first (the other player may be slow for a reason; the choice is the waiting player's). */
+  private askPenalty() {
+    const p = this.play;
+    const c = p.match?.clock();
+    if (!c || !p.clockChoice().penalty) return;
+    this.openModal('pause'); // the match waits while the question is up
+    confirmBox(this, this.modalLayer, 'add a penalty stroke?', `${p.oppName()} has taken ${clockText(c.elapsed)} over this shot. The stroke counts on this hole.`, 'not now', 'add it',
+      () => {
+        this.closeModal();
+        if (!p.clockChoice().penalty) this.flash('too late', COLORS.white, `${p.oppName()} has played`, 1400);
+        else p.matchPenalty();
+        p.matchUnheld();
+        this.refresh();
+      }, () => { this.closeModal(); p.matchUnheld(); this.refresh(); });
+  }
+
+  /** "claim match": asked first (it ends the match). */
+  private askClaim() {
+    const p = this.play;
+    const c = p.match?.clock();
+    if (!c || !p.clockChoice().claim) return;
+    const back = this.modal && MATCH_PANELS.includes(this.modal) ? this.redraw : null;
+    this.openModal('pause');
+    const what = c.kind === 'shot' ? "hasn't played on" : "hasn't come to the tee";
+    confirmBox(this, this.modalLayer, 'claim the match?', `${p.oppName()} ${what} for ${clockText(c.elapsed)}. You win the match by forfeit - it can't be undone.`, 'keep waiting', 'claim it',
+      () => {
+        this.closeModal();
+        if (!p.clockChoice().claim) { this.flash('too late', COLORS.white, `${p.oppName()} is back on the match`, 1400); if (back) back(); }
+        else p.matchClaim();
+        p.matchUnheld();
+        this.refresh();
+      }, () => { this.closeModal(); if (back) back(); p.matchUnheld(); this.refresh(); });
   }
 
   private drawMini() {
@@ -609,7 +735,8 @@ export class HudScene extends Phaser.Scene {
   tick() {
     const p = this.play;
     this.drawMeter();
-    if (this.matchBar && (p.state === 'commit' || this.matchLink.visible)) this.refreshMatch();
+    // the clock moves on by itself: the bar is brought up to date a few times a second
+    if (this.matchBar && (p.state === 'commit' || this.time.now - this.matchAt > 250)) { this.matchAt = this.time.now; this.refreshMatch(); }
     if (this.banner.visible) this.placeBanner();
     if (p.state === 'flight') this.drawMiniBall();
     // arrow toward an off-screen ball (kept clear of the HUD panels)
@@ -818,11 +945,13 @@ export class HudScene extends Phaser.Scene {
     const c = this.add.container(Math.round((W - w) / 2), Math.round(this.H - h - 30));
     const pnl = new Panel(this, 0, 0, w, h, 0.86);
     const portrait = this.add.image(8, 10, 'ui', 'portrait').setOrigin(0, 0);
-    const t1 = txt(this, 64, 8, `hole ${r.holeNumber}`, { scale: 2 });
+    const ms = this.play.match?.session;
+    const extra = !!ms && isExtra(ms.state.cfg, r.holeIndex);
+    const t1 = txt(this, 64, 8, extra ? `${ordinal(r.holeIndex + 1)} hole` : `hole ${r.holeNumber}`, { scale: 2 });
     const yd = r.tee.cardYd;
     const ydStr = app.settings.units === 'yd' ? `${yd} yd` : `${Math.round(yd * YD)} m`;
     const t2 = txt(this, 64, 30, `par ${r.hole.par}  ·  ${ydStr}  ·  ${r.cfg.tee.toLowerCase()}`, { color: COLORS.yellow });
-    const t3 = txt(this, 64, 41, `handicap ${r.hole.handicap}  ·  pin ${r.pinLabel()}`, { color: COLORS.dim });
+    const t3 = txt(this, 64, 41, extra ? `hole ${r.holeNumber} again  ·  sudden death` : `handicap ${r.hole.handicap}  ·  pin ${r.pinLabel()}`, { color: extra ? COLORS.yellow : COLORS.dim });
     const wtxt = r.wind.mph < 0.5 ? 'calm' : `wind ${r.wind.mph.toFixed(1)} mph`;
     const live = this.play.match;
     const honour = live?.session ? (live.session.state.honour === this.play.me ? 'your honour' : `${this.play.oppName()}'s honour`) : '';
@@ -1264,16 +1393,24 @@ export class HudScene extends Phaser.Scene {
     const w = Math.min(220, this.W - 12), h = 52;
     const x = Math.round((this.W - w) / 2), y = Math.round(this.H * 0.3);
     const opp = p.oppName();
-    // the tee by its number on the card (a back nine starts at the 10th; "the 2nd tee" was hole 11)
-    const n = s.cfg.holes[Math.min(s.hole, s.cfg.holes.length - 1)];
-    const where = n === 1 ? 'the first tee' : `the ${ordinal(n)} tee`;
+    // the tee by its number on the card (a back nine starts at the 10th; "the 2nd tee" was hole 11); an extra hole by both
+    const n = holeNo(s.cfg, s.hole);
+    const where = `${n === 1 ? 'the first tee' : `the ${ordinal(n)} tee`}${isExtra(s.cfg, s.hole) ? ` for the ${ordinal(s.hole + 1)}` : ''}`;
     const pnl = new Panel(this, x, y, w, h, 0.88);
     const t1 = txt(this, x + w / 2, y + 6, `waiting for ${opp}`, { origin: [0.5, 0], scale: 2, maxWidth: w - 8 });
     if (t1.width > w - 8) t1.setScale(1);
     const t2 = txt(this, x + w / 2, y + 28, live.online[other(p.me)] ? `to come to ${where}` : `${opp}'s game is closed - they'll be back on the match from their title screen`, { origin: [0.5, 0], color: COLORS.dim, maxWidth: w - 10 });
     const t3 = txt(this, x + w / 2, 0, 'esc or menu: leave for now', { origin: [0.5, 0], color: COLORS.dim });
-    this.modalLayer.add([pnl, t1, t2, t3]);
-    const hh = h + Math.max(0, Math.ceil(t2.height) - 10) + 11;
+    // the move clock: how long they have kept this player waiting, and the claim once it can be made
+    this.waitClaim = p.clockChoice().claim;
+    this.waitClock = txt(this, x + w / 2, 0, '', { origin: [0.5, 0], color: COLORS.white });
+    this.modalLayer.add([pnl, t1, t2, t3, this.waitClock]);
+    let hh = h + Math.max(0, Math.ceil(t2.height) - 10) + 11 + 11;
+    this.waitClock.setY(y + 28 + Math.ceil(t2.height) + 2);
+    if (this.waitClaim) {
+      hh += 20;
+      this.modalLayer.add(new Button(this, Math.round(x + w / 2 - 40), y + hh - 13 - 20, 80, 16, 'claim match', () => this.askClaim()));
+    }
     pnl.resize(w, hh);
     t3.setY(y + hh - 13);
     this.refresh();
@@ -1290,21 +1427,24 @@ export class HudScene extends Phaser.Scene {
     this.redraw = () => this.showMatchHole(res);
     const oppName = p.oppName();
     const won = res.winner === me, lost = res.winner === opp;
-    const n = s.cfg.holes[res.hole];
-    const title = res.winner === null ? `hole ${n} halved` : won ? `you win hole ${n}` : `${oppName} wins hole ${n}`;
+    // an extra hole by its place in the match ("the 19th")
+    const name = isExtra(s.cfg, res.hole) ? `the ${ordinal(res.hole + 1)}` : `hole ${holeNo(s.cfg, res.hole)}`;
+    const title = res.winner === null ? `${name} halved` : won ? `you win ${name}` : `${oppName} wins ${name}`;
     // once per hole: the panel is drawn again after a rewatch, a resize or the pause menu
     if (this.soundedHole !== res.hole) {
       this.soundedHole = res.hole;
       if (won) sfx('great'); else if (res.winner === null) sfx('good'); else sfx('bad');
     }
-    const sc = (k: Seat) => (res.holed[k] ? `${res.strokes[k]}` : `${res.strokes[k]}, not holed`);
+    const sc = (k: Seat) => `${res.strokes[k]}${res.slow[k] ? ` (+${res.slow[k]} slow play)` : ''}${res.holed[k] ? '' : ', not holed'}`;
     const line = res.how === 'conceded' ? (won ? `${oppName} conceded it` : 'you conceded it') : `you ${sc(me)}  ·  ${oppName} ${sc(opp)}`;
     const w = Math.min(230, this.W - 12), h = 92;
     const x = Math.round((this.W - w) / 2), y = Math.round(this.H * 0.28);
     const pnl = new Panel(this, x, y, w, h, 0.9);
     const t1 = txt(this, x + w / 2, y + 6, title, { origin: [0.5, 0], scale: 2, color: won ? COLORS.yellow : lost ? COLORS.blue : COLORS.white, maxWidth: w - 8 });
     const t2 = txt(this, x + w / 2, y + 28, line, { origin: [0.5, 0], maxWidth: w - 10 });
-    const t3 = txt(this, x + w / 2, y + 40, `${statusText(s, me)}  ·  ${s.phase === 'finished' ? 'match over' : `${s.cfg.holes.length - s.results.length} to play`}`, { origin: [0.5, 0], color: COLORS.dim });
+    const left = holesLeft(s);
+    const next = s.phase === 'finished' ? 'match over' : left > 0 ? `${left} to play` : 'extra holes: first to win one';
+    const t3 = txt(this, x + w / 2, y + 40, `${statusText(s, me)}  ·  ${next}`, { origin: [0.5, 0], color: COLORS.dim, maxWidth: w - 10 });
     const ready = s.ready[me];
     const nb = new Button(this, x + w - 86, y + h - 22, 80, 16, ready ? 'waiting...' : 'next hole', () => p.matchNextHole());
     nb.setEnabled(!ready);
@@ -1361,7 +1501,9 @@ export class HudScene extends Phaser.Scene {
     const t1 = txt(this, x + w / 2, y + 6, statusText(s, me), { origin: [0.5, 0], scale: 2, color: won ? COLORS.yellow : halved ? COLORS.white : COLORS.blue, maxWidth: w - 8 });
     let wins = 0, losses = 0, halves = 0;
     for (const r of s.results) { if (r.winner === null) halves++; else if (r.winner === me) wins++; else losses++; }
-    const t2 = txt(this, x + w / 2, y + 30, `holes won ${wins}  ·  lost ${losses}  ·  halved ${halves}`, { origin: [0.5, 0], color: COLORS.dim });
+    // won by forfeit: why (the move clock)
+    const why = o?.how === 'forfeit' ? (won ? `${p.oppName()} didn't play on` : "you didn't play on") : `holes won ${wins}  ·  lost ${losses}  ·  halved ${halves}`;
+    const t2 = txt(this, x + w / 2, y + 30, why, { origin: [0.5, 0], color: COLORS.dim });
     this.modalLayer.add([pnl, t1, t2]);
     const theirs = s.rematch && s.rematch.by !== me ? s.rematch.code : null;
     const mine = s.rematch && s.rematch.by === me ? s.rematch.code : null;
@@ -1568,9 +1710,4 @@ function swingLabel(s: number): string {
 
 export { PX_PER_M };
 
-/** 1st, 2nd, 3rd, 4th ... 11th, 12th, 13th, 21st */
-function ordinal(n: number): string {
-  const t = n % 100;
-  if (t >= 11 && t <= 13) return `${n}th`;
-  return `${n}${['th', 'st', 'nd', 'rd'][n % 10] ?? 'th'}`;
-}
+
