@@ -44,7 +44,16 @@ export interface DailyPlan {
  * in the rotation on that day count, so a course added today changes the
  * daily from its first day on, never today's.
  */
-export function dailyPlan(day: string, all: DailyCourse[], roster?: Readonly<Record<string, string>>): DailyPlan | null {
+export interface DailyPick { courseId: string; length: RoundLength; tee?: string }
+
+export function dailyPlan(day: string, all: DailyCourse[], roster?: Readonly<Record<string, string>>, picks?: Readonly<Record<string, DailyPick>>): DailyPlan | null {
+  // a day the developer chose (src/data/dailyRoster.ts DAILY_PICKS), when that course is on offer
+  const pick = picks?.[day];
+  const pc = pick && all.find((c) => c.id === pick.courseId);
+  if (pick && pc) {
+    const tee = pick.tee && pc.teeSets.includes(pick.tee) ? pick.tee : pc.teeSets.includes(pc.defaultTee) ? pc.defaultTee : pc.teeSets[0] ?? pc.defaultTee;
+    return { day, courseId: pc.id, tee, length: pick.length, seed: seedFromString(`daily:${day}`) };
+  }
   const courses = roster ? all.filter((c) => roster[c.id] !== undefined && roster[c.id] <= day) : all;
   if (!courses.length) return null;
   const order = courses.slice().sort((a, b) => hash32(seedFromString(a.id)) - hash32(seedFromString(b.id)) || a.id.localeCompare(b.id));

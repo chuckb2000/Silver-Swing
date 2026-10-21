@@ -620,6 +620,13 @@ notes live in DECISIONS.md.
   `git fetch --depth=300 origin main` gave the base, and per file "take
   main's, re-apply mine" (`git diff <base> HEAD -- <file> | git apply --3way`)
   resolved the desk files that both branches changed.
+- **Look for creeks OSM doesn't map at all.** The first Langdon build missed a
+  creek across hole 7; the developer saw it. A relative-height map of the DEM
+  (height minus a 25 m running median, cells below -0.25 m in red) over the
+  whole course shows every channel at once, mapped or not. Make it in Phase 3
+  and ask about each channel that crosses or runs beside a hole. For one OSM
+  lacks, take the line from the channel itself (`data/langdon/make_creek_line.py`)
+  and run `propose_channels.py --lines=`.
 
 ## 16. Gearhart Golf Links (2026-10-20)
 

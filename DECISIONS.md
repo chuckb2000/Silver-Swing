@@ -378,6 +378,7 @@ The developer was away overnight and asked for the work not to stop for permissi
 - **Tee 7 boxes** are marked by the developer in the tracing desk (the lidar pads are noisy here: tree bases and mounds); the traced hole lines start at first-guess points near the card distance.
 - **OR 551 strip out of bounds:** main's `join_boundary_parts` (Eastmoreland) with `max_gap_m` 60, extended to boundaries mapped as separate features (see Data and pipeline): the two OSM course ways are joined across the 35-58 m strip holding the highway for the game's OB polygon; the strip stays out of bounds on the surface map, with stakes along both parts.
 - **Red barns** (developer): the barn on the left of the 8th fairway (the side away from hole 9; OSM w324295601, 8 m tall) and the event barn by the 18th green (w324295657, the open-sided barn with flower beds south-west of the clubhouse) are drawn in barn red `#a3302a` (`building_colours`), a colour outside the `pnw` palette. The barn on 8 gives free relief (developer), which is what the game does for every building inside the boundary; the card's local rule makes it an integral object. A first guess at the 8th barn (an unmapped building north of the 8th tee) was wrong and is not used.
+- **Creek on hole 7** (developer, 2026-10-20: "a creek on hole 7 that splits the two fairways", missed by the first build): not in OSM, so its line is taken from the lidar DEM channel (`data/langdon/make_creek_line.py`: the largest channel piece more than 0.25 m below the 25 m running median around hole 7, its main axis) and its red penalty area from the channel along that line, as OGC's and Langston's creeks (`propose_channels.py --lines`, new option; `flatten=no`). 267 m, 6.7 m wide, about 0.6 m deep; added through `edits.json`. A shallower dip beside the cart path upstream is left out (it runs along the path into a bunker). Confirmed by the developer (2026-10-20).
 - **Driving range** stays in bounds (developer); OSM's internal out-of-bounds line along the range (w1569564855) is not used.
 - **Merged into main 2026-10-20** (developer: "please merge any unmerged courses") by the design chat, after main had the centred tees and rounded fairways: Langdon rebuilt with them (`make course NAME=langdon`); the same five holes are flags (1 +6.7 %, 3 -4.0 %, 9 +4.7 %, 15 +3.4 %, 17 +4.3 %), total 6,568 yd vs 6,522. The pipeline changes are keyed or touch only a green whose centroid lies off it (Langdon's two 9/18 parts; no other course has one), so the other courses were not rebuilt. The smoke tests page through a state to their course (request 1). Open items stay in data/langdon/report_notes.md.
 
@@ -494,6 +495,7 @@ so a hole resumed after closing the tab lists the strokes since.
 - **`garden`** (Eastmoreland, 2026-10-19; `pipeline/garden.py`): flowering shrubs inside listed OSM polygons outside the course, where the CHM shows the shrub layer (`shrub_min_m`-`shrub_max_m`) and at `understory_density` under taller canopy, on a seeded jittered grid. s05 appends them to the tree list as type `shrub` with a bloom colour drawn from `colours`, and `order_trees()` (s05, and s06b after its tee-shot drops) puts each at an index whose % 8 is its colour, since the game picks the shrub sprite variant from the index; the lidar trees fill the other indices. s10 exports them as `c: 3`; s09b draws them in the putting views with `assets-src/shrubs.py`. Not combinable with `blossom` (both order the list; s05 stops). Other courses: no key, no change.
 - **`join_boundary_parts` with separate features** (Langdon Farms): `common.play_boundary()` returns the union of every boundary feature when the key is set and the course has more than one (Langdon's two `leisure=golf_course` ways either side of OR 551); with one feature (Eastmoreland's multipolygon) or without the key nothing changes.
 - **`building_colours`** (s09; Langdon Farms): `{osm id: "#rrggbb"}` paints those buildings' walls and roof in their own colour (three shades), outside the theme palette. Courses without the key are unchanged.
+- **`propose_channels.py --lines=<file>`** (Langdon Farms; a tool, not a `make course` step): take the stream lines from a proposals file instead of OSM, for a creek OSM doesn't map; its line comes from the DEM channel.
 - **Tracing tools** (Langdon Farms; not `make course` steps): `propose_trace.py` takes Waverley's optional `source`/water/pond changes, plus a per-green `br_delta` (brightness within that of the seed; texture alone ran into the collar: IoU 0.37 -> 0.81 on the OSM hole 1 green), a `cut`/`keep` split for one hole's part of a double green, water now optional, bunkers searched inside every boundary part, and a fairway colour rule (`fairways.rule`: smoothed 2G-R-B, texture and G-R minimums) for a course with no mapped fairways to train the classifier on. `desk_export.py --traced` puts the traced shapes, lines and greens in the desk for holes OSM lacks entirely; trace_spec `desk` names the tee set to mark (`Tee 7`) and the card column beside it; the page labels follow it (Indian Island's data has no such fields and keeps "Blue").
 
 - **`ob_highways`** (s08, course config; Indian Island `["trunk", "trunk_link"]`): roads of these OSM highway values inside the course boundary are painted `ob_road` (out of bounds) instead of rough or cart path, except over water. For a course whose boundary contains a public road that is out of bounds. Without the key nothing changes: Oswego Lake, Highland Links and the three East Potomac courses rebuild byte-identical (all 735 exported files).
@@ -749,3 +751,29 @@ Branch `fix/afternoon-ui`, from the afternoon review of the screens and flow.
   `save/snapshot.ts` `saveStruck`). A reload mid-flight resumes after the stroke: the ball where
   it stops, the relief choice open if it went in water or out of bounds, or the next hole if it
   was holed.
+
+## Height to the pin in the info panel (developer, 2026-10-20)
+
+- Elevation changes carry a lot in the game (the ball lands where its flight meets the ground):
+  10 ft below the tee adds about 6 yd to a driver, 4 to a 7-iron, 3 to a sand wedge, and the same
+  is lost uphill. 107 of 333 holes change more than 16 ft tee to green, and par 3s such as
+  Chambers Bay 9 (85 ft down) and Oswego Lake 8 (83 ft down) play one or two clubs shorter.
+  Of three options (height only; also a "plays like" yardage and club; also a landing marker on
+  the ground) the developer chose the first: the distance line shows an up or down arrow and the
+  pin's height above or below the ball in feet ("178 yd ▼ 84 ft"), hidden when putting and within
+  3 ft. The physics, the club pick and the landing marker are unchanged.
+
+## Sharing a scorecard on a computer (developer, 2026-10-20)
+
+- On a computer, "share" opened the system share window (Windows: contacts, Outlook, Teams...),
+  which was confusing; on a phone the share sheet "works perfectly". Phones and tablets (touch
+  first: `maxTouchPoints > 0` and a coarse pointer) keep the share sheet. A computer now shows the
+  picture in a box with "copy picture" (to paste into a chat or message), "download", "more..."
+  (the system share window, when the browser has one) and "close" (`ui/shareCard.ts`).
+
+## Picking a day's daily by hand (developer, 2026-10-20)
+
+- "Can you make the daily challenge for tomorrow the back 9 at Oswego Lake!" `DAILY_PICKS` in
+  `src/data/dailyRoster.ts` sets a day's course, nine (and optionally tee) by hand; the rotation
+  carries on around it. 2026-10-21: Oswego Lake, back nine, Blue tees. Add a pick before its day
+  starts, never on the day (players would see the daily change).

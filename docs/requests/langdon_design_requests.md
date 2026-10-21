@@ -23,3 +23,7 @@ chats' screenshot scripts do). No game code changes.
 
 **Status:** with Langdon Farms merged, `npm run e2e` fails these two tests;
 the other two pass. Unit tests (396) pass.
+
+**Done (design chat, 2026-10-20):** the smoke tests pick a course with
+`pickCourse()`, which pages through a state's courses until it finds the
+course. With Langdon Farms' creek merged, all 8 browser tests pass on `main`.

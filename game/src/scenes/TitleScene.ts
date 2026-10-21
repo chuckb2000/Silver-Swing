@@ -11,7 +11,7 @@ import { peekSnapshot } from '../save/snapshot';
 import { Button, COLORS, Panel, setTxt, txt } from '../ui/widgets';
 import { confirmDiscard, editName, hasName, resumeRound, snapshotHole, startPractice, startRound, useCourse, withName } from './flow';
 import { DailyPlan, dailyPlan, localDay } from '../systems/game/daily';
-import { DAILY_ROSTER } from '../data/dailyRoster';
+import { DAILY_PICKS, DAILY_ROSTER } from '../data/dailyRoster';
 import { shortName } from '../save/milestones';
 import { update, whenUpdateReady } from '../save/offline';
 import { LoadSuperseded } from '../data/courses';
@@ -247,7 +247,7 @@ export class TitleScene extends MenuScene {
     }
     add(snap ? 'new round' : 'play', () => this.scene.start('courses', { purpose: 'play', from: 'title' }), !!snap);
     // the daily round: today's course, nine holes, the same wind and pins for everyone
-    const plan = dailyPlan(localDay(), app.courses, DAILY_ROSTER);
+    const plan = dailyPlan(localDay(), app.courses, DAILY_ROSTER, DAILY_PICKS);
     const dc = plan && app.courses.find((c) => c.id === plan.courseId);
     if (plan && dc) add(`daily: ${shortName(dc.name)}`, () => this.playDaily(plan), !!snap);
     if (this.dailyNow) { this.dailyNow = false; if (plan && dc) this.playDaily(plan); }

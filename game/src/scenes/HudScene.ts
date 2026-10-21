@@ -42,6 +42,8 @@ export class HudScene extends Phaser.Scene {
   private holeTxt!: Phaser.GameObjects.BitmapText;
   private info!: Panel;
   private infoLines: Phaser.GameObjects.BitmapText[] = [];
+  private elevArrow!: Phaser.GameObjects.Image;
+  private elevTxt!: Phaser.GameObjects.BitmapText;
   // top-right
   private windPanel!: Panel;
   private windArrow!: Phaser.GameObjects.Image;
@@ -141,6 +143,10 @@ export class HudScene extends Phaser.Scene {
       this.infoLines.push(t);
       this.info.add(t);
     }
+    // height of the pin above or below the ball, after the distance (developer, 2026-10-20)
+    this.elevArrow = this.add.image(0, 3 + 2 * 11 + 3, 'ui', 'arrow_down').setOrigin(0, 0).setVisible(false);
+    this.elevTxt = txt(this, 0, 3 + 2 * 11, '', { color: COLORS.dim });
+    this.info.add([this.elevArrow, this.elevTxt]);
     this.windPanel = new Panel(this, 0, 0, 44, 46);
     const wl = txt(this, 22, 2, 'wind', { origin: [0.5, 0], color: COLORS.dim });
     this.windArrow = this.add.image(22, 22, 'ui', 'wind_0');
@@ -331,6 +337,18 @@ export class HudScene extends Phaser.Scene {
     setTxt(this.infoLines[1], p.state === 'holed' || p.state === 'replay' ? `holed: ${r.tally.strokes}` : `shot ${r.tally.strokes + 1}`);
     // with the putter in hand the distance is in feet (or metres), like the putting meter
     setTxt(this.infoLines[2], p.club.kind === 'putter' ? distLabel(d).replace(/(\d)(ft|m)$/, '$1 $2') : `${fmtDist(d)} ${unitLabel()}`);
+    // the pin's height above (up arrow) or below (down) the ball, in feet: elevation changes
+    // how far a shot carries (about 4 yd per 10 ft for a 7-iron); not shown when putting or within 3 ft
+    const dz = (r.course.terrain.z(r.pin.x, r.pin.y) - r.course.terrain.z(r.ball.x, r.ball.y)) / 0.3048;
+    const showElev = p.club.kind !== 'putter' && Math.abs(dz) >= 3 && !r.cfg.practice;
+    this.elevArrow.setVisible(showElev);
+    setTxt(this.elevTxt, showElev ? `${Math.round(Math.abs(dz))} ft` : '');
+    if (showElev) {
+      const x = this.infoLines[2].x + this.infoLines[2].width + 4;
+      this.elevArrow.setFrame(dz > 0 ? 'arrow_up' : 'arrow_down').setX(x);
+      this.elevTxt.setX(x + 7);
+      if (this.elevTxt.x + this.elevTxt.width > 71) setTxt(this.elevTxt, `${Math.round(Math.abs(dz))}ft`); // 3 digits: fits the panel
+    }
     setTxt(this.infoLines[3], r.ball.teedUp ? 'tee' : lieTxt || surf);
     this.infoLines[3].setTint(r.lie && r.penalLie() ? COLORS.yellow : COLORS.green);
     if (r.cfg.practice) {

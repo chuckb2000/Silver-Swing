@@ -12,7 +12,7 @@ import { BirdieRow, fetchBirdieRecords, fetchBoard, fetchDaily, fetchDailyWeek, 
 import { FeedRow, timeAgo } from '../save/feed';
 import { shareRound } from '../ui/shareCard';
 import { addDays, dailyPlan, dayStandings, weekStandings, weekStart } from '../systems/game/daily';
-import { DAILY_ROSTER } from '../data/dailyRoster';
+import { DAILY_PICKS, DAILY_ROSTER } from '../data/dailyRoster';
 import { birdiesIn, EagleEvent, featName } from '../save/feats';
 import { loadEagles } from '../save/store';
 import { lengthLabel, lengthsFor } from './flow';
@@ -188,7 +188,7 @@ export class LeaderboardScene extends MenuScene {
     if (online) tab([['friends', 'friends'], ['device', 'this device']], src, (v) => { source = v as 'friends' | 'device'; });
     tab([['today', 'today'], ['week', 'this week']], dailyWhen, (v) => { dailyWhen = v as 'today' | 'week'; });
     const day = localDay(new Date().toISOString());
-    const plan = dailyPlan(day, app.courses, DAILY_ROSTER);
+    const plan = dailyPlan(day, app.courses, DAILY_ROSTER, DAILY_PICKS);
     const info = plan ? app.courses.find((c) => c.id === plan.courseId) : undefined;
     const first = weekStart(day);
     let list: LeaderboardEntry[] | null = null;
@@ -217,7 +217,7 @@ export class LeaderboardScene extends MenuScene {
       this.root.add(txt(this, x0 + pw / 2, y, `week of ${first.slice(5)}: best five daily rounds, to par`, { origin: [0.5, 0], color: COLORS.dim, maxWidth: pw - 16 }));
       y += 11;
       const weekList = list.filter((e) => e.daily! >= first && e.daily! <= addDays(first, 6));
-      const rows = weekStandings(weekList, 5, (d) => dailyPlan(d, app.courses, DAILY_ROSTER)).map((r, i) => ({ v: [String(i + 1), r.player.slice(0, 12), `${r.days}/7`, toPar(r.toPar)] }));
+      const rows = weekStandings(weekList, 5, (d) => dailyPlan(d, app.courses, DAILY_ROSTER, DAILY_PICKS)).map((r, i) => ({ v: [String(i + 1), r.player.slice(0, 12), `${r.days}/7`, toPar(r.toPar)] }));
       this.table(x0, y0, pw, ph, y, ['#', 'player', 'days', 'to par'], [x0 + 10, x0 + 30, x0 + 110, x0 + 150], rows, 'no daily rounds this week yet');
     }
   }
