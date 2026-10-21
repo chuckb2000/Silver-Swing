@@ -68,7 +68,7 @@ The club website (https://triggs.us/the-course/, retrieved 2026-10-20) gives tot
 - https://triggs.us/wp-content/uploads/2021/03/Triggs-Scorecard-Front.png
 - https://triggs.us/wp-content/uploads/2021/03/Triggs-ScoreCard-Back.png
 
-They don't load from the sandbox. Until they arrive, `scorecard.csv` takes per-hole Blue yardages, pars and stroke index from the OSM hole tags (they add up to 6,588), marked unverified. 1golf.eu lists older totals (Black 6,522, White 6,302, Red 5,392); not used.
+They don't load from the sandbox; the developer added both to the release on 2026-10-20 (Front SHA-256 d39542f2f54ea0c50dbb878378e7e7e0b7884c3f022f17f88c21431eb08cea29, Back bf4d745e2017a4598ea1c3f75c47d14b5d11275cf3437c19dcbb91841ed902d4; not in git, they carry the club's logo). `scorecard.csv` is transcribed from the back: Blue 6,588 72.3/132, White 6,327 71.1/128, Gold 5,499 66.1/124, Red 5,374 71.3/124; every row adds up to its printed total, and OSM's hole tags match the Blue column on every hole. The website's ratings (above) differ from the card's; the card is used. 1golf.eu lists older totals (Black 6,522, White 6,302, Red 5,392); not used.
 
 ## Hand-off
 
@@ -77,3 +77,4 @@ Add the files to the existing release: https://github.com/chuckb2000/silver-swin
 ## Status
 
 - 2026-10-20: OSM in hand (release `data-triggs`); DEM, the nine LAZ tiles and the scorecard images requested.
+- 2026-10-20 evening: rockyweb timed out in the developer's browser (ERR_CONNECTION_TIMED_OUT), and the project's LAZ is not on prd-tnm.s3.amazonaws.com (NoSuchKey; only its browse images are). The lidar comes through the NOAA Data Access Viewer route above instead.
