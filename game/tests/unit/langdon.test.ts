@@ -45,8 +45,8 @@ describe('Langdon Farms Golf Club course data', () => {
     }
   });
 
-  it('measured yardages are within 3% of the card, and the flagged holes (1, 3, 9, 15, 17) within 8%', () => {
-    const flagged = new Set([1, 3, 9, 15, 17]);
+  it('measured yardages are within 3% of the card, and the flagged holes (1, 3, 15, 17) within 8%', () => {
+    const flagged = new Set([1, 3, 15, 17]);
     for (const h of json.holes) {
       const t = h.tees[TEE];
       const off = Math.abs((t.adjYd - t.cardYd) / t.cardYd);

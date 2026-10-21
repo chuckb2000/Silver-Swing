@@ -14,7 +14,7 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 | 6 | 3 | Tee 7 | 115 | 119.4 | +4.4 | +3.8% | flag | 118.0 | +2.6% | pass |
 | 7 | 5 | Tee 7 | 512 | 508.0 | -4.0 | -0.8% | pass | 508.0 | -0.8% | pass |
 | 8 | 4 | Tee 7 | 449 | 440.4 | -8.6 | -1.9% | pass | 440.4 | -1.9% | pass |
-| 9 | 4 | Tee 7 | 409 | 430.5 | +21.5 | +5.2% | flag | 430.5 | +5.2% | flag |
+| 9 | 4 | Tee 7 | 409 | 421.2 | +12.2 | +3.0% | pass | 421.2 | +3.0% | pass |
 | 10 | 4 | Tee 7 | 365 | 358.5 | -6.5 | -1.8% | pass | 358.5 | -1.8% | pass |
 | 11 | 5 | Tee 7 | 607 | 606.1 | -0.9 | -0.2% | pass | 606.1 | -0.2% | pass |
 | 12 | 4 | Tee 7 | 425 | 427.2 | +2.2 | +0.5% | pass | 427.2 | +0.5% | pass |
@@ -23,8 +23,8 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 | 15 | 4 | Tee 7 | 340 | 351.4 | +11.4 | +3.4% | flag | 351.4 | +3.4% | flag |
 | 16 | 4 | Tee 7 | 411 | 407.3 | -3.7 | -0.9% | pass | 407.3 | -0.9% | pass |
 | 17 | 3 | Tee 7 | 204 | 212.8 | +8.8 | +4.3% | flag | 212.8 | +4.3% | flag |
-| 18 | 5 | Tee 7 | 502 | 514.4 | +12.4 | +2.5% | pass | 514.5 | +2.5% | pass |
-| **total** | 71 | | **6522** | **6586** | +64 | +1.0% | | **6585** | +1.0% | |
+| 18 | 5 | Tee 7 | 502 | 501.8 | -0.2 | -0.0% | pass | 501.9 | -0.0% | pass |
+| **total** | 71 | | **6522** | **6564** | +42 | +0.7% | | **6563** | +0.6% | |
 
 ## Open items
 
@@ -38,27 +38,26 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 8. Hole 6 (Tee 7): tee box desk_6_bluetee_0 assigned by the developer (tagged hole=6, tee_set=Tee 7 in edited/course.geojson).
 9. Hole 7 (Tee 7): tee box desk_7_bluetee_0 assigned by the developer (tagged hole=7, tee_set=Tee 7 in edited/course.geojson).
 10. Hole 8 (Tee 7): tee box desk_8_bluetee_0 assigned by the developer (tagged hole=8, tee_set=Tee 7 in edited/course.geojson).
-11. Hole 9 (Tee 7): measured 430 yd vs card 409 (+5.2%) even with the virtual tee at the best spot in its box; accepted for play.
-12. Hole 9 (Tee 7): tee box desk_9_bluetee_0 assigned by the developer (tagged hole=9, tee_set=Tee 7 in edited/course.geojson).
-13. Hole 10 (Tee 7): tee box desk_10_bluetee_0 assigned by the developer (tagged hole=10, tee_set=Tee 7 in edited/course.geojson).
-14. Hole 11 (Tee 7): tee box desk_11_bluetee_0 assigned by the developer (tagged hole=11, tee_set=Tee 7 in edited/course.geojson).
-15. Hole 12 (Tee 7): tee box desk_12_bluetee_0 assigned by the developer (tagged hole=12, tee_set=Tee 7 in edited/course.geojson).
-16. Hole 13 (Tee 7): tee box desk_13_bluetee_0 assigned by the developer (tagged hole=13, tee_set=Tee 7 in edited/course.geojson).
-17. Hole 14 (Tee 7): tee box desk_14_bluetee_0 assigned by the developer (tagged hole=14, tee_set=Tee 7 in edited/course.geojson).
-18. Hole 15 (Tee 7): measured 351 yd vs card 340 (+3.4%) even with the virtual tee at the best spot in its box; accepted for play.
-19. Hole 15 (Tee 7): tee box desk_15_bluetee_0 assigned by the developer (tagged hole=15, tee_set=Tee 7 in edited/course.geojson).
-20. Hole 16 (Tee 7): tee box desk_16_bluetee_0 assigned by the developer (tagged hole=16, tee_set=Tee 7 in edited/course.geojson).
-21. Hole 17 (Tee 7): measured 213 yd vs card 204 (+4.3%) even with the virtual tee at the best spot in its box; accepted for play.
-22. Hole 17 (Tee 7): tee box desk_17_bluetee_0 assigned by the developer (tagged hole=17, tee_set=Tee 7 in edited/course.geojson).
-23. Hole 18 (Tee 7): tee box desk_18_bluetee_0 assigned by the developer (tagged hole=18, tee_set=Tee 7 in edited/course.geojson).
+11. Hole 9 (Tee 7): tee box desk_9_bluetee_0 assigned by the developer (tagged hole=9, tee_set=Tee 7 in edited/course.geojson).
+12. Hole 10 (Tee 7): tee box desk_10_bluetee_0 assigned by the developer (tagged hole=10, tee_set=Tee 7 in edited/course.geojson).
+13. Hole 11 (Tee 7): tee box desk_11_bluetee_0 assigned by the developer (tagged hole=11, tee_set=Tee 7 in edited/course.geojson).
+14. Hole 12 (Tee 7): tee box desk_12_bluetee_0 assigned by the developer (tagged hole=12, tee_set=Tee 7 in edited/course.geojson).
+15. Hole 13 (Tee 7): tee box desk_13_bluetee_0 assigned by the developer (tagged hole=13, tee_set=Tee 7 in edited/course.geojson).
+16. Hole 14 (Tee 7): tee box desk_14_bluetee_0 assigned by the developer (tagged hole=14, tee_set=Tee 7 in edited/course.geojson).
+17. Hole 15 (Tee 7): measured 351 yd vs card 340 (+3.4%) even with the virtual tee at the best spot in its box; accepted for play.
+18. Hole 15 (Tee 7): tee box desk_15_bluetee_0 assigned by the developer (tagged hole=15, tee_set=Tee 7 in edited/course.geojson).
+19. Hole 16 (Tee 7): tee box desk_16_bluetee_0 assigned by the developer (tagged hole=16, tee_set=Tee 7 in edited/course.geojson).
+20. Hole 17 (Tee 7): measured 213 yd vs card 204 (+4.3%) even with the virtual tee at the best spot in its box; accepted for play.
+21. Hole 17 (Tee 7): tee box desk_17_bluetee_0 assigned by the developer (tagged hole=17, tee_set=Tee 7 in edited/course.geojson).
+22. Hole 18 (Tee 7): tee box desk_18_bluetee_0 assigned by the developer (tagged hole=18, tee_set=Tee 7 in edited/course.geojson).
 
 ## Other open items (Langdon Farms Golf Club)
 
 Decisions the developer made on 2026-10-19 are in DECISIONS.md ("Langdon Farms Golf Club"): Tee 7, the routing, all water red, the driving range in bounds, OR 551 out of bounds, the two red barns, free relief from the barn on 8. The items below are the data's gaps and the course chat's calls, each with a recommendation.
 
-1. **Five holes are flags (3-8 %), none over 8 %**: 1 (+6.4 %), 3 (-4.0 %), 9 (+5.2 %), 15 (+3.4 %) and 17 (+4.4 %), measured from the developer's Tee 7 boxes. Total 6,566 yd against 6,522 (+0.7 %). Hole 1 is the largest: the box the developer marked is the OSM `tee=8` box (Tee 8 card 405 yd, measured 396). Recommendation: accept; or move hole 1's Tee 7 box forward about 22 m in the tracing desk if Tee 7 sits in front of it.
+1. **Four holes are flags (3-8 %), none over 8 %**: 1 (+6.7 %), 3 (-4.0 %), 15 (+3.4 %) and 17 (+4.3 %), measured from the developer's Tee 7 boxes; 9 passes (+3.0 %) and 18 matches the card since the 9/18 green was retraced (2026-10-21). Total 6,563 yd against 6,522 (+0.6 %). Hole 1 is the largest: the box the developer marked is the OSM `tee=8` box (Tee 8 card 405 yd, measured 396). Recommendation: accept; or move hole 1's Tee 7 box forward about 22 m in the tracing desk if Tee 7 sits in front of it.
 2. **Hole 9 has no fairway of its own** (developer: the fairway drawn on hole 8 is shared by 8 and 9), so its line has no dogleg bend and runs straight from the tee to its part of the double green. Recommendation: accept.
-3. **Double green 9/18**: one green round the north end of the clubhouse pond. The developer drew it once per hole; both drawings are joined and cut by a north-south line through the pond's north tip (x 714, trace_spec `double_greens` `split`), so 18 plays to the west (left) part and 9 to the east (right) part (developer, 2026-10-20: 18's pin always left of the lake, 9's always right). Every pin position the game picks for each hole lies on its side and inside the hole's far putting view (unit test). The first build gave 18 the north end as well, so the game could put 18's pin east of the pond, outside 18's putting views. The two parts are shaped as separate green models (s07), so the tilt may step where they meet.
+3. **Double green 9/18**: one green round the north end of the clubhouse pond. Traced by the developer as one outline on the tracing desk's 9/18 green page (2026-10-21; 2,348 m², the earlier per-hole drawings took in the collar), cut by a north-south line through the pond's north tip (x 714, trace_spec `double_greens` `split`), so 18 plays to the west (left) part and 9 to the east (right) part (developer, 2026-10-20: 18's pin always left of the lake, 9's always right). Every pin position the game picks for each hole lies on its side and inside the hole's far putting view (unit test). The first build gave 18 the north end as well, so the game could put 18's pin east of the pond, outside 18's putting views. From the 9 side the 18 centre pin is across the pond's tip, so the putt goes round it (unit test). The two parts are shaped as separate green models (s07), so the tilt may step where they meet. Open: the developer's note "a little curtain of fairway 2-7 yards wide around the entire back of 9/18 green complex" is not built yet (the build has the 1.5 m fringe, then rough); the 9/18 page now takes a fairway shape for it.
 4. **Pins**: the centre pins are at the green centres (proposals; OSM maps none); the game adds up to three more per green.
 5. **Every green, fairway, bunker and tee box is traced** from the Oregon Statewide Imagery Program 2024 orthophoto (1 ft) and corrected by the developer in the tracing desk; OSM had only hole 1, ten bunkers, cart paths and two ponds. The OSM hole 1 shapes and five OSM bunkers the developer redrew are dropped in `edits.json`.
 6. **Dogleg bends** come from the developer's fairways (`data/langdon/make_bends.py`, Tualatin's landing-zone rule): holes 2, 4, 5, 7, 8, 11, 12 and 15.
@@ -76,7 +75,7 @@ Tracing desk: https://claude.ai/artifact/G4bThDJVqubcH8TdhBfTFc (`desk_export.py
 ## Playability adjustments
 
 - Hole 6 (Tee 7): measured 119 yd from the tee-box centre vs 115 on the card (+3.8%); moved the virtual tee along the middle of the real tee polygon desk_6_bluetee_0 (on its centre line, at least 2.5 m from its back and front) -> 118.0 yd (real 119.4 yd).
-- Hole 18 (Tee 7): tee shot: a perfect drive at the middle of the fairway clipped a tree near the tee; moved 0.9 m along the middle of the real tee polygon desk_18_bluetee_0 to the nearest clear spot -> 514.5 yd (real 514.4 yd).
+- Hole 18 (Tee 7): tee shot: a perfect drive at the middle of the fairway clipped a tree near the tee; moved 0.9 m along the middle of the real tee polygon desk_18_bluetee_0 to the nearest clear spot -> 501.9 yd (real 501.8 yd).
 
 ## Tree detection (DOGAMI canopy height model)
 
@@ -98,7 +97,6 @@ Tracing desk: https://claude.ai/artifact/G4bThDJVqubcH8TdhBfTFc (`desk_export.py
 | desk_6_green_0 | 6 | 3.5 | 2.5 | 2 | 3.7 | 1.5 |
 | desk_7_green_0 | 7 | 2.6 | 2.5 | 2 | 4.2 | 1.5 |
 | desk_8_green_0 | 8 | 1.7 | 1.7 | 2 | 3.5 | 1.5 |
-| desk_9_green_0 | 9 | 1.7 | 1.7 | 1 | 2.8 | 1.5 |
 | desk_10_green_0 | 10 | 3.2 | 2.5 | 1 | 3.7 | 1.5 |
 | desk_11_green_0 | 11 | 1.3 | 1.3 | 1 | 3.1 | 1.3 |
 | desk_12_green_0 | 12 | 1.8 | 1.8 | 1 | 2.8 | 1.5 |
@@ -107,7 +105,8 @@ Tracing desk: https://claude.ai/artifact/G4bThDJVqubcH8TdhBfTFc (`desk_export.py
 | desk_15_green_0 | 15 | 3.4 | 2.5 | 1 | 4.0 | 1.5 |
 | desk_16_green_0 | 16 | 3.0 | 2.5 | 2 | 5.6 | 1.5 |
 | desk_17_green_0 | 17 | 0.9 | 1.0 | 1 | 2.1 | 1.0 |
-| desk_18_green_0 | 18 | 4.2 | 2.5 | 2 | 3.9 | 1.5 |
+| desk_9_green_0 | 9 | 1.9 | 1.9 | 1 | 3.0 | 1.5 |
+| desk_18_green_0 | 18 | 2.5 | 2.5 | 2 | 4.8 | 1.5 |
 
 # OSM coverage audit
 

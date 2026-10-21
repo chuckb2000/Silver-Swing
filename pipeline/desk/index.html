@@ -219,7 +219,7 @@ function openHole(h) {
   const g = W().features.find(f => f.kind === "bluetee") || W().features.find(f => f.kind === "green"); sel = g ? g.id : null;
   fit(); renderChips(); render(); renderPanel();
   $("note").value = W().note;
-  if (h.areaKind === "green") { status((saved[h.hole] ? "Showing your saved outline. " : "") + "Trace the whole double green as one outline. The dashed cyan line cuts it: hole " + h.split.left + " gets the left side, hole " + h.split.right + " the right."); return; }
+  if (h.areaKind === "green") { status((saved[h.hole] ? "Showing your saved outline. " : "") + "Trace the whole double green as one outline (and any fairway round it with New fairway; the green wins where they overlap). The dashed cyan line cuts the green: hole " + h.split.left + " gets the left side, hole " + h.split.right + " the right."); return; }
   status(saved[h.hole] ? "Showing your saved version of " + NAME(h) + "." : (h.noBlue ? "Showing " + NAME(h) + " as built from OpenStreetMap. Drag points to fix it, then save." : h.editShapes ? "Showing the approved shapes for hole " + h.hole + "." : "Hole " + h.hole + " comes from OpenStreetMap (dashed). Mark its " + TN() + " tee."));
 }
 
@@ -419,7 +419,7 @@ function renderPanel() {
   $("undo").disabled = !W().history.length;
   for (const id of ["newFairway", "newBunker", "newGreen", "newTee", "revert"]) $(id).disabled = !cur.editShapes;
   const greenPage = cur.areaKind === "green";   // a double green's own page (desk_export.py --area double)
-  for (const id of ["newFairway", "newBunker", "newGreen", "newTee"]) $(id).hidden = !!cur.area && !(greenPage && id === "newGreen");
+  for (const id of ["newFairway", "newBunker", "newGreen", "newTee"]) $(id).hidden = !!cur.area && !(greenPage && (id === "newGreen" || id === "newFairway"));
   $("newRange").hidden = !cur.area || greenPage; $("lgRange").hidden = !cur.area || greenPage; $("lgSplit").hidden = !cur.split;
   $("newBlue").hidden = !!cur.noBlue; $("yardHint").hidden = !!cur.noBlue;
   if (!cur.editShapes && sel) { const f = W().features.find(x => x.id === sel); if (f && f.kind !== "bluetee") { $("redraw").disabled = true; $("delShape").disabled = true; } }
