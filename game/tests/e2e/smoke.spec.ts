@@ -328,3 +328,33 @@ test('the offline copy: a played course and the game open with no connection (pl
   await page.waitForFunction(() => window.__game?.scene.isActive('title'), null, { timeout: 60_000 });
   await context.setOffline(false);
 });
+
+test('a reload while the ball is in the air keeps the stroke (developer, 2026-10-20)', async ({ page }) => {
+  test.setTimeout(300_000);
+  await page.goto('/?autoplay');
+  await page.waitForFunction(() => window.__game?.scene.isActive('title'), null, { timeout: 60_000 });
+  await tap(page, 'title', { button: 'play' }, sceneActive, 'courses');
+  await pickCourse(page, 'oregon', 'oswego lake country club');
+  await tap(page, 'setup', { button: 'tee off' }, () => !!document.querySelector('input[placeholder="your name"]'));
+  await page.fill('input[placeholder="your name"]', 'robot');
+  await page.keyboard.press('Enter');
+  await page.waitForFunction(() => window.__game.scene.isActive('play') && window.__game.scene.getScene('play').state === 'intro', null, { timeout: 60_000 });
+  await page.keyboard.press('Space');
+  await page.waitForFunction(() => window.__game.scene.getScene('play').state === 'aim', null, { polling: 100, timeout: 60_000 });
+  // the swing starts once the camera is back on the golfer: try until the ball is in the air
+  for (const t0 = Date.now(); Date.now() - t0 < 60_000;) {
+    const st = await page.evaluate(() => window.__game.scene.getScene('play').state);
+    if (st === 'flight') break;
+    if (st === 'aim') await page.evaluate(() => window.__autoplay.shot(0));
+    await page.waitForTimeout(50);
+  }
+  expect(await page.evaluate(() => window.__game.scene.getScene('play').state)).toBe('flight');
+  const end = await page.evaluate(() => { const s = window.__game.scene.getScene('play').sim; return [s.end.x, s.end.y]; });
+  await page.waitForTimeout(300); // the save is written as the ball leaves the club
+  await page.reload();
+  await page.waitForFunction(() => window.__game?.scene.isActive('title'), null, { timeout: 60_000 });
+  await tap(page, 'title', { button: 'continue round (hole 1)' }, () => window.__game.scene.isActive('play') && window.__game.scene.getScene('play').state === 'aim');
+  const after = await page.evaluate(() => { const r = window.__game.scene.getScene('play').round; return { strokes: r.tally.strokes, shotNo: r.shotNo, x: r.ball.x, y: r.ball.y }; });
+  expect([after.strokes, after.shotNo]).toEqual([1, 1]);
+  expect([after.x, after.y]).toEqual(end);
+});

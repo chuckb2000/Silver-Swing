@@ -646,6 +646,44 @@ export class Round {
     return true;
   }
 
+  /**
+   * Look at the round as it will be once this stroke has come to rest (resolved,
+   * and the hole finished if it was holed), run `fn` on it, then put everything
+   * back. The game saves that state the moment the ball is struck, so closing or
+   * reloading the tab mid-flight can't give the stroke back (developer,
+   * 2026-10-20: "the shot should be locked in and saved the second it's hit").
+   */
+  whenSettled<T>(p: PlannedShot, sim: SimResult, fn: (r: Round, out: Outcome) => T): T {
+    const keep = {
+      tally: { ...this.tally }, scores: this.scores.length, ball: { ...this.ball }, prev: { ...this.prev },
+      shotNo: this.shotNo, lastPower: this.lastPower, lastPuttPower: this.lastPuttPower, pending: this.pending,
+      beforeShot: this.beforeShot, history: this.history.length, strokes: this.strokes.length, lie: this.lie,
+      rng: this.rng.state, mulliganUsed: this.mulliganUsed, shotSeq: this.shotSeq,
+    };
+    try {
+      const out = this.resolve(p, sim);
+      if (out.kind === 'holed' || out.kind === 'gimme') this.finishHole();
+      else if (out.kind === 'max_score') this.finishHole(true);
+      return fn(this, out);
+    } finally {
+      Object.assign(this.tally, keep.tally);
+      this.scores.length = keep.scores;
+      this.ball = keep.ball;
+      this.prev = keep.prev;
+      this.shotNo = keep.shotNo;
+      this.lastPower = keep.lastPower;
+      this.lastPuttPower = keep.lastPuttPower;
+      this.pending = keep.pending;
+      this.beforeShot = keep.beforeShot;
+      this.history.length = keep.history;
+      this.strokes.length = keep.strokes;
+      this.lie = keep.lie;
+      this.rng.state = keep.rng;
+      this.mulliganUsed = keep.mulliganUsed;
+      this.shotSeq = keep.shotSeq;
+    }
+  }
+
   finishHole(maxed = false): HoleScore {
     // casual double-par maximum: picked up at the cap, never above it
     if (maxed) this.tally.strokes = this.hole.par * 2;
