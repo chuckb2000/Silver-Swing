@@ -741,3 +741,11 @@ Folded in from docs/courses/triggs.md at the merge.
 -   **A back tee just past the previous green** can sit outside s06's 25 m search: measuring every box within 200 m of the line start against the card found hole 15's Blue box at 506 vs 508 yd.
 -   **The card's subtitle is the text before the first comma of `location`.** "Mount Pleasant, Providence, ..." would have shown the neighbourhood; use the town first.
 -   **The preliminary build without lidar** (a scratch config with the `laz` key removed, restored by absolute path on exit) let terrain, greens, surfaces and art be checked while the NOAA job ran.
+
+## 22. East Potomac: a tee point needs a box under it (2026-10-20)
+
+- Blue 13 had been lengthened with `extend_start` to reach the card, which put the tee point on
+  open grass. A tee must sit on a tee box: look for the raised pad in the lidar (here 56 x 9 m
+  against the seawall, 28 m off the OSM hole line, matching the NPS 2016 map) and add it as a tee
+  polygon rather than stretching the hole line.
+- One box for several sets: a forced tee's `tee_set` may list them, `"Blue;White"` (s06).
