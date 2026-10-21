@@ -102,7 +102,7 @@ HTTP (all JSON, `cache-control: no-store`):
 | `GET /api/match/<code>/events?since=N` | polling: the log after N (key in the `x-match-key` header, never the address; `x-match-hidden: 1` from a background tab), `more`, `online`, `here`, `now`, `seat` |
 | `POST /api/match/<code>/hello {key, rules}` | polling: the seat, who is there, `here`, `now` |
 | `POST /api/match/<code>/act {key, cid, action, rules}` | polling: a move |
-| `POST /api/match/<code>/report` | a game saw the match end: the Pages Function asks the object for its result (`/result`, not reachable from outside) and puts it on the "recent" list once (D1 table `matches`) |
+| `POST /api/match/<code>/report` | a game saw the match end: the Pages Function asks the object for its result (`/result`, not reachable from outside) and puts it on the "recent" list once (D1 table `matches`; settings "merge names", `/api/merge`, renames and moves a player's matches too) |
 | `GET /api/match/<code>/ws` | the WebSocket |
 
 WebSocket, game to server: `hello {key, since, rules}`, `sync {since}`,
