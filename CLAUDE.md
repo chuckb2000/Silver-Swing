@@ -1478,7 +1478,8 @@ calm (≈60% of holes below half the max). It is seeded per round.
 
 -   **Daily round** (2026-10-20): one course a day, nine holes at Normal,
     fixed by the date and the day's rotation (`src/data/dailyRoster.ts`; a
-    merged course joins the next day); one counted round per player code and day.
+    merged course joins the next day; a day can be picked by hand in
+    `DAILY_PICKS`); one counted round per player code and day.
 
 -   **Later:** local pass-and-play for up to 4 players
 

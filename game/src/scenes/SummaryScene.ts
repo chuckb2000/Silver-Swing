@@ -13,7 +13,7 @@ import { earnedBy, milestonesOf } from '../save/milestones';
 import { milestoneCourses } from '../save/mine';
 import { STATES } from '../data/registry';
 import { dailyPlan, dayStandings } from '../systems/game/daily';
-import { DAILY_ROSTER } from '../data/dailyRoster';
+import { DAILY_PICKS, DAILY_ROSTER } from '../data/dailyRoster';
 import { shareRound } from '../ui/shareCard';
 import { lengthLabel } from './flow';
 import { MenuScene } from './menu';
@@ -55,7 +55,7 @@ export class SummaryScene extends MenuScene {
     const where = e.daily ? (shared ? "in today's daily round" : "in today's daily round on this device") : shared ? 'among friends' : 'on this device';
     // rounds with no name don't go on the boards (developer: nobody as "player"); this one is counted to show where it would be
     const board = e.daily
-      ? dayStandings(pool.filter((b) => b.player !== DEFAULT_NAME || b.id === e.id), e.daily, dailyPlan(e.daily, app.courses, DAILY_ROSTER))
+      ? dayStandings(pool.filter((b) => b.player !== DEFAULT_NAME || b.id === e.id), e.daily, dailyPlan(e.daily, app.courses, DAILY_ROSTER, DAILY_PICKS))
       : pool.filter((b) => b.course === e.course && b.tee === e.tee && b.length === e.length && b.casual === e.casual && (b.player !== DEFAULT_NAME || b.id === e.id));
     if (!e.daily) board.sort(compareRounds);
     const rank = board.findIndex((b) => b.id === e.id) + 1;
