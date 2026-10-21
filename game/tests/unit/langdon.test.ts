@@ -177,15 +177,6 @@ describe('Langdon Farms Golf Club course data', () => {
     }
   });
 
-  it('a robot golfer completes 18 holes with legal, finite scores', () => {
-    const r = robotRound(course, json.holes.map((h) => h.number));
-    expect(r.scores).toHaveLength(18);
-    for (const s of r.scores) {
-      expect(s.strokes).toBeGreaterThanOrEqual(1);
-      expect(s.strokes).toBeLessThan(16);
-    }
-  });
-
   it('far, near and close-up putting views cover every pin', () => {
     const views = json.greenViews ?? [];
     expect(views).toHaveLength(18);

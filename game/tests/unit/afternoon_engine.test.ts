@@ -135,12 +135,23 @@ describe('a ball against a trunk on a steep slope', () => {
 describe('Langdon 9/18: one double green traced as two touching halves', () => {
   const course = loadCourseFiles('langdon');
   const g9 = course.greenPolys.get('desk_9_green_0')!, g18 = course.greenPolys.get('desk_18_green_0')!;
-  /** A spot on the hole-9 half (not on the 18 half), the nearest such to the 18 pin. */
+  /** A spot on the hole-9 half (not on the 18 half), the nearest such to the 18 pin from which
+   *  a straight putt stays dry (the green wraps round the pond's north tip, so the halves meet
+   *  beside the water; course chat, 2026-10-20). */
   const on9Near18 = (() => {
     const pin = course.json.holes[17].pin;
+    const dryLine = (x: number, y: number) => {
+      const n = Math.ceil(Math.hypot(pin[0] - x, pin[1] - y) / 0.25);
+      for (let k = 0; k <= n; k++) {
+        const f = k / n, px = x + (pin[0] - x) * f, py = y + (pin[1] - y) * f;
+        for (const [dx, dy] of [[0, 0], [1.5, 0], [-1.5, 0], [0, 1.5], [0, -1.5]]) if (course.terrain.surface(px + dx, py + dy) === SURF.water) return false;
+      }
+      return true;
+    };
     let best = { x: 0, y: 0 }, bd = Infinity;
     for (let x = g9.minX; x < g9.maxX; x += 0.5) for (let y = g9.minY; y < g9.maxY; y += 0.5) {
       if (!g9.contains(x, y) || g18.contains(x, y) || g9.edgeDistance(x, y) < 1.5 || course.terrain.surface(x, y) !== SURF.green) continue;
+      if (Math.hypot(x - pin[0], y - pin[1]) >= bd || !dryLine(x, y)) continue;
       const d = Math.hypot(x - pin[0], y - pin[1]);
       if (d < bd) { bd = d; best = { x, y }; }
     }
