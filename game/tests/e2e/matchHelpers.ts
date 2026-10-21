@@ -1,5 +1,5 @@
 // Helpers for driving the game in the live match tests (tests/e2e/match.spec.ts).
-import { Page } from '@playwright/test';
+import { Browser, BrowserContext, Page } from '@playwright/test';
 
 /** Screen position (CSS px) of a Button by label, or of a text, in an active scene; null if not there. */
 export const locate = ([scene, label, text]: [string, string | null, string | null]) => {
@@ -61,3 +61,94 @@ export async function fillDialog(page: Page, value: string, button = 'ok') {
 
 export const sceneActive = (page: Page, key: string) => page.evaluate((k) => (window as any).__game.scene.isActive(k), key);
 export const playState = (page: Page) => page.evaluate(() => { const g = (window as any).__game; return g.scene.isActive('play') ? g.scene.getScene('play').state : null; });
+
+// ------------------------------------------------------------ setting up
+
+/** A player's browser, with a switch that cuts its line to the match server (WebSocket and HTTP). */
+export async function player(browser: Browser, tag: string, errors: string[], viewport = { width: 960, height: 540 }) {
+  const ctx = await browser.newContext({ viewport });
+  const page = await ctx.newPage();
+  const net = { down: false, version: false };
+  await watchPage(page, tag, errors, net);
+  return { ctx, page, net };
+}
+
+/** Errors on a page go to `errors`; its match traffic goes through `net` (down: refused; version: told to update). */
+export async function watchPage(page: Page, tag: string, errors: string[], net: { down: boolean; version: boolean }) {
+  page.on('pageerror', (e) => errors.push(`${tag}: ${e.message}`));
+  await page.routeWebSocket(/\/api\/match\//, (ws) => {
+    if (net.version) {
+      ws.send(JSON.stringify({ type: 'error', code: 'version', message: 'the match server is older than this game (the match Worker needs deploying)' }));
+      ws.close({ code: 4012 });
+      return;
+    }
+    if (net.down) ws.close({ code: 1006 }); else ws.connectToServer();
+  });
+  await page.route(/\/api\/match\//, (r) => (net.down ? r.abort('internetdisconnected') : r.continue()));
+}
+
+/** Make a match from the title screen (front nine at Oswego Lake); returns its code. */
+export async function makeMatch(a: Page, name: string, shots?: string): Promise<string> {
+  await a.goto('/?autoplay');
+  await a.waitForFunction(() => (window as any).__game?.scene.isActive('title'), null, { timeout: 90_000 });
+  await tapButton(a, 'title', 'play a friend', 30_000, () => a.evaluate(() => (window as any).__game.scene.isActive('match')));
+  await tapButton(a, 'match', 'start a match', 30_000, async () => (await a.locator('input').count()) > 0);
+  await fillDialog(a, name);
+  await a.waitForFunction(() => (window as any).__game.scene.isActive('courses'), null, { timeout: 30_000 });
+  await a.evaluate(() => (window as any).__game.scene.getScene('courses').choose('oswego_lake'));
+  await a.waitForFunction(() => (window as any).__game.scene.isActive('setup'), null, { timeout: 90_000 });
+  const frontOn = () => a.evaluate(() => {
+    const find = (l: any[]): any => { for (const o of l) { if (o.label?.text === 'front 9') return o; if (o.list) { const f = find(o.list); if (f) return f; } } return null; };
+    return find((window as any).__game.scene.getScene('setup').children.list)?.opts?.color === 'orange';
+  });
+  await tapButton(a, 'setup', 'front 9', 30_000, frontOn);
+  await tapButton(a, 'setup', 'invite a friend', 30_000, () => a.evaluate(() => (window as any).__game.scene.isActive('match')));
+  await a.waitForFunction(() => { const m = (window as any).__game.scene.getScene('match'); return m.sys.isActive() && m.m.mode === 'invite' && m.live?.caughtUp; }, null, { timeout: 60_000 });
+  if (shots) await a.screenshot({ path: shots });
+  return a.evaluate(() => (window as any).__game.scene.getScene('match').m.code);
+}
+
+/** Open a match's link, enter a name and join; both players then wait for the play scene. */
+export async function joinMatch(b: Page, code: string, name: string) {
+  await b.goto(`/?match=${code}&autoplay`);
+  await b.waitForFunction(() => (window as any).__game?.scene.isActive('match') && (window as any).__game.scene.getScene('match').live?.caughtUp, null, { timeout: 90_000 });
+  await tapButton(b, 'match', 'enter your name', 30_000, async () => (await b.locator('input').count()) > 0);
+  await fillDialog(b, name);
+  await tapButton(b, 'match', 'join match', 30_000, () => b.evaluate(() => (window as any).__game.scene.isActive('play') || (window as any).__game.scene.getScene('match').note === 'joining...'));
+}
+
+export const inPlay = (p: Page) => p.waitForFunction(() => (window as any).__game.scene.isActive('play') && (window as any).__game.scene.getScene('play').match?.session, null, { timeout: 90_000 });
+
+/** The match as a game holds it (null outside the play scene). */
+export const matchOf = (p: Page) => p.evaluate(() => {
+  const g = (window as any).__game;
+  if (!g.scene.isActive('play')) return null;
+  const ps = g.scene.getScene('play');
+  const s = ps.match?.session;
+  if (!s) return null;
+  return {
+    state: ps.state as string, seat: ps.match.seat as number | null, seq: s.seq as number, queue: s.queue.length as number, turn: s.turn as number | null,
+    hole: s.state.hole as number, phase: s.state.phase as string, status: ps.match.status as string, modal: g.scene.getScene('hud').modal as string | null,
+    strokes: s.state.p.map((x: any) => x.strokes) as number[], full: JSON.stringify(s.state),
+  };
+});
+
+/** One step of whatever this game is waiting for: a stroke, a drop, the next hole. */
+export async function step(p: Page): Promise<string> {
+  return p.evaluate(() => {
+    const g = (window as any).__game;
+    if (!g.scene.isActive('play')) return 'none';
+    const ps = g.scene.getScene('play');
+    const hud = g.scene.getScene('hud');
+    switch (ps.state) {
+      case 'intro': ps.skipIntro(); return 'intro';
+      case 'aim': (window as any).__autoplay.shot((Math.random() - 0.5) * 2.5); return 'shot';
+      case 'flight': ps.fastForward(); return 'flight';
+      case 'relief': case 'drop': (window as any).__autoplay.step(); return 'relief';
+      case 'between': if (hud.modal === 'mhole') { ps.matchNextHole(); return 'next'; } return 'wait';
+      default: return ps.state;
+    }
+  });
+}
+
+export type { BrowserContext };

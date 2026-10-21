@@ -8,7 +8,7 @@ import { fillDialog, playState, tapButton } from './matchHelpers';
 
 declare global { interface Window { __game: any; __autoplay: any; __golf: any } }
 
-const SHOTS = 'test-results/match';
+const SHOTS = 'shots/match'; // not under test-results/ (Playwright empties that on every run)
 
 /** A player's browser, with a switch that cuts its line to the match server (WebSocket and HTTP). */
 async function player(browser: Browser, tag: string, errors: string[]) {

@@ -26,7 +26,7 @@ import { DRILL_FT, drillSpot, isRangeHole, PracticeLog, rangeShot } from '../sys
 import type { LiveMatch } from '../match/live';
 import type { MeterResult } from '../systems/swing/meter';
 import { encodePath } from '../systems/match/path';
-import { holeLive, other } from '../systems/match/rules';
+import { applyEvent, holeLive, other } from '../systems/match/rules';
 import { Applied, holeSnapOf, MatchSession, plannedOf, restoreHole, shotInfoOf } from '../systems/match/session';
 import { decodePath } from '../systems/match/path';
 import type { Action, HoleResult, HoleSnap, Logged, Seat } from '../systems/match/types';
@@ -1680,6 +1680,9 @@ export class PlayScene extends Phaser.Scene {
    */
   matchSettleView() {
     if (!this.match?.session || this.matchBusy()) return;
+    // nothing is offered while there is more to show: events still queued, or a log the server is known
+    // to have further (a page reloaded as its stroke landed was offered the shot again, then saw it played)
+    if (!this.ms.idle || this.matchBehind()) { if (this.state === 'aim' || this.state === 'watch') this.state = 'idle'; return; }
     const s = this.ms.state, me = this.me;
     if (s.phase === 'finished') { if (this.state !== 'over') this.showMatchOver(); return; }
     if (!holeLive(s)) {
@@ -1715,6 +1718,14 @@ export class PlayScene extends Phaser.Scene {
     this.shownTurn = turn;
   }
 
+  /** Is this game's copy of the match behind the server's log (events on their way)? */
+  matchBehind(): boolean {
+    return !!this.match && this.match.client.serverSeq > this.ms.knownSeq;
+  }
+
+  /** since when this game has known it is behind the server (a resync if the events don't come) */
+  private behindSince = 0;
+
   /** Show the match again from where it stands (a panel over it closed: the line came back). */
   matchReshow() {
     if (!this.match?.session) return;
@@ -1736,6 +1747,11 @@ export class PlayScene extends Phaser.Scene {
     }
     // a move that has waited long for its answer (a lost answer, a server hiccup): sent again, the log asked for
     if (this.state === 'commit' && this.time.now - this.nudgeAt > 8000) { this.nudgeAt = this.time.now; live.client.nudge(); }
+    // the server is known to have more than has come (an event lost on the way): asked for again after 3 s
+    if (this.matchBehind()) {
+      if (!this.behindSince) this.behindSince = this.time.now;
+      else if (this.time.now - this.behindSince > 3000) { this.behindSince = this.time.now; live.client.resync(); }
+    } else this.behindSince = 0;
     const q = live.session.queue;
     if (!q.length) { if (this.state === 'idle') this.matchSettleView(); return; }
     if (this.fading || this.zooming) return;
@@ -2067,16 +2083,33 @@ export class PlayScene extends Phaser.Scene {
   }
 
   /** May this player give the other player their putt now? (their ball on the green, at rest, not in) */
+  /**
+   * On the other player's turn only, as on a real green ("that's good" as they
+   * step up): on this player's own turn a concession could hand over the hole
+   * before they had putted, and crossed with their own stroke.
+   */
   canGivePutt(): boolean {
     if (!this.match?.session || !this.ms.idle || this.concedeCid) return false;
-    if (this.match.seat === null) return false;
-    if (!['aim', 'watch'].includes(this.state)) return false;
+    if (this.match.seat === null || this.state !== 'watch') return false;
     const s = this.ms.state;
     if (!holeLive(s)) return false;
     const o = other(this.me);
+    if (this.ms.turn !== o) return false;
     const p = s.p[o];
     const r = this.ms.rounds[o];
     return !!r && !p.holed && !p.pending && p.strokes > 0 && r.onHoleGreen();
+  }
+
+  /** What giving the putt would do to the hole: the other player wins it, it is halved, or (null) it goes on. */
+  givePuttOutcome(): 'wins' | 'halves' | null {
+    const s = this.ms.state;
+    const o = other(this.me);
+    try {
+      const next = applyEvent(s, { t: 'concede', by: this.me, what: 'stroke', hole: s.hole, strokes: s.p[o].strokes });
+      if (next.results.length === s.results.length) return null;
+      const w = next.results[next.results.length - 1].winner;
+      return w === o ? 'wins' : w === null ? 'halves' : null;
+    } catch { return null; }
   }
 
   private showHoleResult(res: HoleResult) {

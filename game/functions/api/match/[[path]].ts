@@ -1,5 +1,5 @@
 // Cloudflare Pages Function: one live match, /api/match/<code>/<what>
-// (info, events, act, ws: the WebSocket). Handed to the match's Durable Object.
+// (info, events, hello, act, ws: the WebSocket). Handed to the match's Durable Object.
 
 import { MatchEnv, toMatch } from '../../../src/server/matchRoutes';
 

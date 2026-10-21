@@ -81,6 +81,11 @@ export class MatchClient {
   online: [boolean, boolean] = [false, false];
   /** why the line stopped, for a person ('version': what to do about it) */
   problem: string | null = null;
+  /**
+   * The newest entry the server's log is known to have (from its welcome, answers and events). A
+   * game whose session is behind it has events still to come and offers no move until they have.
+   */
+  serverSeq = 0;
   /** the newest event the game has (it tells the client; the client asks for what comes after) */
   since: () => number = () => 0;
   onEvents: (evs: Logged[], caughtUp: boolean) => void = () => {};
@@ -317,10 +322,16 @@ export class MatchClient {
     this.reconnectTimer = this.later(() => { this.reconnectTimer = null; this.connect(); }, base + jitter);
   }
 
+  private seen(seq: unknown) {
+    if (typeof seq === 'number' && Number.isInteger(seq) && seq > this.serverSeq) this.serverSeq = seq;
+  }
+
   private onMessage(raw: string) {
     this.deadline = null; // anything heard: the line is alive
     let m: { type?: string; [k: string]: unknown };
     try { m = JSON.parse(raw); } catch { return; }
+    if (m.type === 'welcome' || m.type === 'ack' || m.type === 'nack') this.seen(m.seq);
+    if (m.type === 'events' && Array.isArray(m.events)) for (const e of m.events) this.seen((e as Logged).seq);
     switch (m.type) {
       case 'pong': return;
       case 'welcome': {
@@ -477,7 +488,7 @@ export class MatchClient {
       if (this.stopped) return;
       if (res.status === 404 || j?.code === 'no_match') { this.gone(); return; }
       if (j?.code === 'version') { this.versionProblem(String(j.message ?? '')); return; }
-      if (j?.type === 'welcome') { this.learnSeat(j.seat); this.setOnline(j.online); }
+      if (j?.type === 'welcome') { this.learnSeat(j.seat); this.setOnline(j.online); this.seen((j as { seq?: unknown }).seq); }
     } catch { /* offline: the next poll tries */ }
   }
 
@@ -491,9 +502,10 @@ export class MatchClient {
       if (this.stopped || !this.polling) return;
       if (res.status === 404) { this.gone(); return; }
       if (res.ok) {
-        const j = (await res.json()) as { events?: Logged[]; more?: boolean; online?: unknown; seat?: unknown };
+        const j = (await res.json()) as { events?: Logged[]; more?: boolean; online?: unknown; seat?: unknown; seq?: unknown };
         if (this.stopped || !this.polling) return;
         this.setStatus('polling');
+        this.seen(j.seq);
         this.learnSeat(j.seat);
         this.setOnline(j.online);
         more = !!j.more;
@@ -514,6 +526,7 @@ export class MatchClient {
         method: 'POST', headers: JSON_HEADERS, body: JSON.stringify({ key: this.key, cid: o.cid, action: o.action, rules: RULES }),
       });
       const j = (await res.json().catch(() => null)) as { type?: string; cid?: string; seq?: number; seat?: unknown; code?: string; message?: string } | null;
+      if (j?.type === 'ack' || j?.type === 'nack') this.seen(j.seq);
       if (j?.type === 'nack' && j.code === 'version') this.versionProblem(String(j.message ?? ''));
       else if (j?.type === 'ack') { this.learnSeat(j.seat); this.answered(o.cid, { ok: true, seq: Number(j.seq) }); answered = true; }
       else if (j?.type === 'nack') { this.answered(o.cid, { ok: false, code: String(j.code), message: String(j.message ?? '') }); answered = true; }

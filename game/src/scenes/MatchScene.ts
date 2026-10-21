@@ -12,7 +12,7 @@ import { saveSettings } from '../save/store';
 import { dialogInput, dialogText, openDialog } from '../ui/domDialog';
 import { askName } from '../ui/nameInput';
 import { Button, COLORS, Panel, setTxt, txt } from '../ui/widgets';
-import { courseVersion, forgetMatch, LiveMatch, matchInfo, MatchInfo, matchLink, myMatches, parseMatchCode } from '../match/live';
+import { courseVersion, flagTab, forgetMatch, LiveMatch, matchInfo, MatchInfo, matchLink, myMatches, parseMatchCode } from '../match/live';
 import { PROTOCOL, RULES } from '../systems/match/types';
 import { lengthOf } from '../systems/game/lengths';
 import { lengthLabel, useCourse } from './flow';
@@ -166,6 +166,8 @@ export class MatchScene extends MenuScene {
       return;
     }
     live.remember();
+    // the friend joined while this tab was in the background (the creator sending the link)
+    if (s.phase === 'playing' && this.m.mode === 'invite') flagTab(`${s.players[1]?.name ?? 'your friend'} joined`);
     if (s.phase === 'waiting') {
       // the friend who just joined: their seat comes a moment before the news of it (the joined event); wait for that
       if (live.seat === 1) return;

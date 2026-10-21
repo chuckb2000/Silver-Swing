@@ -265,7 +265,7 @@ export class HudScene extends Phaser.Scene {
     this.matchBar = bar;
     this.matchLink = txt(this, 0, 0, '', { origin: [0.5, 0], color: COLORS.red });
     // hidden from the tap until the server has the concession (PlayScene.canGivePutt): no second one
-    this.giveBtn = new Button(this, 0, 0, 70, 14, 'give putt', () => { this.play.matchConcede('stroke'); this.refresh(); }, { color: 'grey' });
+    this.giveBtn = new Button(this, 0, 0, 70, 14, 'give putt', () => this.givePutt(), { color: 'grey' });
     this.watchPanel = new Panel(this, 0, 0, 180, 18, 0.85);
     this.watchTxt = txt(this, 90, 4, '', { origin: [0.5, 0] });
     this.watchPanel.add(this.watchTxt);
@@ -515,7 +515,7 @@ export class HudScene extends Phaser.Scene {
     let link = '';
     if (live.status === 'connecting' || live.status === 'offline') link = 'reconnecting...';
     else if (live.status === 'polling') link = 'slow connection';
-    else if (live.rebuilding) link = 'catching up...';
+    else if (live.rebuilding || p.matchBehind()) link = 'catching up...';
     else if (p.commitWait() > 700) link = 'sending...';
     else if (holeLive(s) && turn === other(me) && !live.online[other(me)]) link = `${p.oppName()}'s game is offline - waiting`;
     setTxt(this.matchLink, link);
@@ -1174,6 +1174,16 @@ export class HudScene extends Phaser.Scene {
     match.setEnabled(player && s.phase === 'playing' && p.state !== 'commit');
     const note = txt(this, x + w / 2, y + 110, 'leave for now: continue it from the title', { origin: [0.5, 0], color: COLORS.dim, maxWidth: w - 10 });
     this.modalLayer.add([pnl, t, b1, b2, leave, hole, match, note]);
+  }
+
+  /** "give putt": asked first when it hands the other player the hole (it can't be taken back). */
+  private givePutt() {
+    const p = this.play;
+    if (!p.canGivePutt()) return;
+    if (p.givePuttOutcome() !== 'wins') { p.matchConcede('stroke'); this.refresh(); return; }
+    this.openModal('pause'); // the match waits while the question is up
+    confirmBox(this, this.modalLayer, 'give the putt?', `${p.oppName()} wins the hole with it`, 'let them putt', 'give it',
+      () => { this.closeModal(); p.matchConcede('stroke'); this.refresh(); }, () => { this.closeModal(); this.refresh(); });
   }
 
   /** Close the pause menu: back to the match panel it was opened over, if any. */

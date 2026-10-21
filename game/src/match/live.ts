@@ -8,6 +8,7 @@ import { browserStore, LinkStatus, MatchClient } from '../net/matchClient';
 import { roundPins } from '../systems/game/pins';
 import { courseHoleFor, newSeed } from '../systems/game/round';
 import { MatchSession } from '../systems/match/session';
+import { applyEvent, holeLive, other, resultFor, statusText, toPlay } from '../systems/match/rules';
 import { Action, Logged, MatchConfig, MatchPlayer, PROTOCOL, RULES, Seat } from '../systems/match/types';
 import type { Difficulty } from '../data/difficulty';
 
@@ -86,6 +87,29 @@ export async function matchInfo(code: string): Promise<MatchInfo | null> {
     if (!r.ok) return null;
     return (await r.json()) as MatchInfo;
   } catch { return null; }
+}
+
+// ------------------------------------------------------------ attention
+// A match in a background tab: the game's loop is paused there (the browser
+// stops its frames), but the line still hears the other player. The tab's
+// title says when something needs this player ("● your shot"), and goes back
+// when the tab is looked at again.
+const BASE_TITLE = typeof document !== 'undefined' ? document.title : '';
+let flagged = false;
+
+export function flagTab(text: string) {
+  if (typeof document === 'undefined' || document.visibilityState !== 'hidden') return;
+  document.title = `● ${text} · ${BASE_TITLE}`;
+  if (!flagged) {
+    flagged = true;
+    const back = () => {
+      if (document.visibilityState !== 'visible') return;
+      document.title = BASE_TITLE;
+      flagged = false;
+      document.removeEventListener('visibilitychange', back);
+    };
+    document.addEventListener('visibilitychange', back);
+  }
 }
 
 /** A typed or pasted match code (or a link with one) back to a code, or null. */
@@ -216,6 +240,7 @@ export class LiveMatch {
       this.session = new MatchSession(app.course, this.code, this.seat, []);
     }
     if (!this.session.receive(evs)) this.client.resync();
+    if (this.caughtUp && evs.length) this.attention();
     if (!this.caughtUp && last) {
       try {
         while (this.session.applyNext()) { /* shown at once: it happened before this page opened */ }
@@ -227,6 +252,30 @@ export class LiveMatch {
       this.remember();
     }
     this.changed();
+  }
+
+  private flaggedFor = '';
+
+  /** Something in the events just received needs this player (their turn, a hole's result, the match over): the tab says so. */
+  private attention() {
+    const ms = this.session;
+    if (!ms || this.seat === null || typeof document === 'undefined' || document.visibilityState !== 'hidden') return;
+    let s = ms.state;
+    try { for (const e of ms.queue) s = applyEvent(s, e); } catch { return; } // where the match will stand once shown
+    const me = this.seat;
+    const opp = s.players[other(me)]?.name ?? 'your friend';
+    let key = '', text = '';
+    if (s.phase === 'finished') { key = 'over'; text = statusText(s, me); }
+    else if (s.phase === 'waiting') return;
+    else if (holeLive(s) && toPlay(s) === me) { key = `turn:${s.hole}:${s.p[me].strokes}`; text = 'your shot'; }
+    else if (!holeLive(s) && s.results.length && !s.ready[me]) {
+      const r = s.results[s.results.length - 1];
+      key = `hole:${r.hole}`;
+      text = { won: `you won hole ${s.cfg.holes[r.hole]}`, lost: `${opp} won hole ${s.cfg.holes[r.hole]}`, halved: `hole ${s.cfg.holes[r.hole]} halved` }[resultFor(r, me)];
+    } else if (!holeLive(s) && s.ready[other(me)] && !s.ready[me]) { key = `tee:${s.hole}`; text = `${opp} is on the tee`; }
+    if (!key || key === this.flaggedFor) return;
+    this.flaggedFor = key;
+    flagTab(text);
   }
 
   /** On this device's list of matches (for "continue"), with the key it is played with. */
