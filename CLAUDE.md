@@ -1548,8 +1548,8 @@ local leaderboard stays as the offline copy.
 -   **Handicaps** (developer, 2026-10-20: option 2 of the proposal): a WHS-style
     index (`src/systems/game/handicap.ts`): differential = 113 / slope x
     (adjusted gross - course rating), holes capped at net double bogey (par + 5
-    before an index); two nines make one 18-hole differential; the WHS table for
-    under 20 differentials, best 8 of the latest 20; from 18 holes, with no
+    before an index); two nines make one 18-hole differential; a table for
+    under 20 differentials, best 8 of the latest 20 (2 of 5-7, 3 of 8-10 ...: DECISIONS.md); from 18 holes, with no
     provisional mark. One index per player code (`/api/handicaps` groups by
     code; "my golf" leaves out rounds played as "player"). Normal, non-casual rounds on rated tees only (East
     Potomac Red has no rating). Shown on the leaderboard's "handicap" tab (index,

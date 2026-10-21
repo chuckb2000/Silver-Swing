@@ -833,6 +833,11 @@ Branch `fix/afternoon-ui`, from the afternoon review of the screens and flow.
   counts only this device's rounds.
 - **No provisional mark** (developer, 2026-10-20: "it doesn't matter that a player's handicap is
   provisional"): no star after an index under 54 holes and no note on the board.
+- **A little more of the record counts** (developer, 2026-10-21, after "2 of 7" on the board:
+  "bump those handicap numbers down a smidge ... only count 8 when 20 scores are in"): the
+  lowest 2 of 5-7 differentials, 3 of 8-10, 4 of 11-13, 5 of 14-16, 6 of 17-18, 7 of 19 and 8
+  of 20 (WHS: 1 of 5, 2 of 6-8, 3 of 9-11, 4 of 12-14 ...); no adjustment from 5 (WHS takes
+  1.0 off at 6). 1-4 as WHS.
 
 ## Rounds go up when they finish (developer, 2026-10-20)
 

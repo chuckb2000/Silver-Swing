@@ -9,7 +9,8 @@
 // - A nine counts as half a round: two nines (any two, oldest first) make one
 //   18-hole differential, the sum of their nine-hole differentials (the course
 //   rating halved for a nine; a 9-hole course rated for nine holes is used as is).
-// - The index from the latest 20 differentials, with the WHS table for fewer;
+// - The index from the latest 20 differentials (best 8), with a table for fewer
+//   (WHS's, counting a few more in the middle: TABLE);
 //   with one or two (18 to 45 holes) it is the table's lowest-minus-2.0 rule
 //   (provisional in WHS; not marked in the game, developer 2026-10-20). Rounded to a tenth,
 //   at most 54.0.
@@ -44,10 +45,16 @@ export interface Handicap {
 
 const MAX_INDEX = 54;
 const RECORD = 20;
-/** [how many of the lowest differentials to average, adjustment] for 1..20 differentials (WHS; 1-2: the quick start). */
+/**
+ * [how many of the lowest differentials to average, adjustment] for 1..20 differentials.
+ * WHS for 1-4 (1-2: the quick start) and 19-20; in between a little more of the record
+ * counts than in WHS (developer, 2026-10-21: "bump those handicap numbers down a smidge":
+ * 2 of 5-7, 3 of 8-10, 4 of 11-13, 5 of 14-16, 6 of 17-18), and the best 8 only once
+ * there are 20 ("we want that handicap to be legit").
+ */
 const TABLE: [number, number][] = [
-  [1, -2], [1, -2], [1, -2], [1, -1], [1, 0], [2, -1], [2, 0], [2, 0], [3, 0], [3, 0],
-  [3, 0], [4, 0], [4, 0], [4, 0], [5, 0], [5, 0], [6, 0], [6, 0], [7, 0], [8, 0],
+  [1, -2], [1, -2], [1, -2], [1, -1], [2, 0], [2, 0], [2, 0], [3, 0], [3, 0], [3, 0],
+  [4, 0], [4, 0], [4, 0], [5, 0], [5, 0], [5, 0], [6, 0], [6, 0], [7, 0], [8, 0],
 ];
 
 const round1 = (v: number) => Math.round(v * 10) / 10;

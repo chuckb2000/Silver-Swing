@@ -37,7 +37,9 @@ describe('handicap', () => {
     expect(h.index).toBe(0); // lowest (2.0) minus 2.0
     const d = (v: number) => ({ value: v, date: '', rounds: [] });
     expect(indexOf(Array.from({ length: 20 }, (_, i) => d(i)))!.index).toBe(3.5); // best 8 of 20: 0..7
-    expect(indexOf(Array.from({ length: 6 }, (_, i) => d(10 + i)))!.index).toBe(9.5); // lowest 2 (10, 11) minus 1.0
+    expect(indexOf(Array.from({ length: 6 }, (_, i) => d(10 + i)))!.index).toBe(10.5); // lowest 2 (10, 11)
+    // a few more counted than WHS in the middle (developer, 2026-10-21); the best 8 only at 20
+    expect([5, 7, 8, 10, 11, 13, 14, 16, 17, 18, 19, 20].map((n) => indexOf(Array.from({ length: n }, (_, i) => d(i)))!.counted)).toEqual([2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 8]);
     expect(indexOf(Array.from({ length: 25 }, (_, i) => d(i)))!.of).toBe(20); // the latest 20 only
   });
 
