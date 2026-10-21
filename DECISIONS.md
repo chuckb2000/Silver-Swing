@@ -770,3 +770,10 @@ Branch `fix/afternoon-ui`, from the afternoon review of the screens and flow.
   first: `maxTouchPoints > 0` and a coarse pointer) keep the share sheet. A computer now shows the
   picture in a box with "copy picture" (to paste into a chat or message), "download", "more..."
   (the system share window, when the browser has one) and "close" (`ui/shareCard.ts`).
+
+## Picking a day's daily by hand (developer, 2026-10-20)
+
+- "Can you make the daily challenge for tomorrow the back 9 at Oswego Lake!" `DAILY_PICKS` in
+  `src/data/dailyRoster.ts` sets a day's course, nine (and optionally tee) by hand; the rotation
+  carries on around it. 2026-10-21: Oswego Lake, back nine, Blue tees. Add a pick before its day
+  starts, never on the day (players would see the daily change).

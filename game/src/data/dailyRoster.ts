@@ -1,3 +1,5 @@
+import type { DailyPick } from '../systems/game/daily';
+
 // The daily round's courses and the first day each one is in the rotation
 // (yyyy-mm-dd, the player's own day). A day's course is picked from the
 // courses in the rotation on that day only, so a course merged today never
@@ -31,4 +33,12 @@ export const DAILY_ROSTER: Readonly<Record<string, string>> = {
   chambers_bay: '2026-10-21',
   // merged on 2026-10-20 in the evening
   bandon_dunes: '2026-10-21',
+};
+
+/**
+ * Days the developer picked by hand (yyyy-mm-dd): that day's daily is this course and
+ * nine, whatever the rotation says. Add a day before it starts, never on the day.
+ */
+export const DAILY_PICKS: Readonly<Record<string, DailyPick>> = {
+  '2026-10-21': { courseId: 'oswego_lake', length: 'back' }, // developer, 2026-10-20: "the back 9 at Oswego Lake"
 };

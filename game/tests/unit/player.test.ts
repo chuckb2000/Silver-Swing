@@ -102,7 +102,7 @@ import { mergeRounds, playerStats } from '../../src/save/stats';
 import { feedBadges, timeAgo } from '../../src/save/feed';
 import { D1Like, D1Statement, handleGet, handlePost, handleRecentGet, resetFeedCache, resetSchemaCache } from '../../src/server/scores';
 import { addDays, dailyPlan, dayStandings, weekStandings, weekStart } from '../../src/systems/game/daily';
-import { DAILY_ROSTER } from '../../src/data/dailyRoster';
+import { DAILY_PICKS, DAILY_ROSTER } from '../../src/data/dailyRoster';
 import index from '../../public/courses/index.json';
 import { drillSpot, PracticeLog, rangeShot } from '../../src/systems/game/practice';
 import type { HoleScore } from '../../src/systems/rules/scoring';
@@ -200,6 +200,14 @@ describe('daily round (item 4)', () => {
     const all = (index as { courses: { id: string; holes: number; defaultTee: string; teeSets: string[] }[] }).courses;
     expect(dailyPlan('2026-10-20', all, DAILY_ROSTER)!.courseId).toBe('stone_creek');
     for (const c of all) expect(DAILY_ROSTER[c.id], `${c.id} is in the daily rotation`).toBeDefined();
+  });
+
+  it("a picked day: 2026-10-21 is the back nine at Oswego Lake (developer); the days around it keep the rotation", () => {
+    const all = (index as { courses: { id: string; holes: number; defaultTee: string; teeSets: string[] }[] }).courses;
+    const p = dailyPlan('2026-10-21', all, DAILY_ROSTER, DAILY_PICKS)!;
+    expect([p.courseId, p.length, p.tee]).toEqual(['oswego_lake', 'back', 'Blue']);
+    expect(dailyPlan('2026-10-20', all, DAILY_ROSTER, DAILY_PICKS)).toEqual(dailyPlan('2026-10-20', all, DAILY_ROSTER));
+    expect(dailyPlan('2026-10-22', all, DAILY_ROSTER, DAILY_PICKS)).toEqual(dailyPlan('2026-10-22', all, DAILY_ROSTER));
   });
 
   it('weeks start on Monday; the week board counts the best five days, more days first', () => {
