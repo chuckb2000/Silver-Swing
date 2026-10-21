@@ -1,20 +1,27 @@
 // The game's line to a live match (src/server/matchRoom.ts): a WebSocket that
 // says who it is, catches up from the last event the game has, sends moves
 // and hears everything that happens. It reconnects by itself (a phone that
-// slept, a train tunnel), answers keep-alives, and falls back to asking over
-// HTTP every couple of seconds when a WebSocket can't be had.
+// slept, a train tunnel), checks the line with keep-alives, and falls back to
+// asking over HTTP every couple of seconds when a WebSocket can't be had.
 //
 // A move is kept (in localStorage) from the moment it is made until the server
 // answers it, and sent again after any reconnect or reload: the server knows
 // each move by its id, so a move is never counted twice and never lost once
-// made (developer, 2026-10-20: a stroke is locked in the moment it is hit).
+// made (a stroke is locked in the moment it is hit).
 //
 // No Phaser; the browser parts (WebSocket, fetch, storage, timers) come in
 // through ClientDeps so the tests can drive it.
 
-import { Action, Logged, PING, Seat } from '../systems/match/types';
+import { Action, CLOSE, Logged, PING, RULES, Seat } from '../systems/match/types';
 
-export type LinkStatus = 'connecting' | 'online' | 'offline' | 'polling' | 'gone';
+/**
+ * connecting: no line yet (or getting it back); online: a WebSocket; polling:
+ * asking over HTTP; offline: stopped; gone: the match no longer exists;
+ * elsewhere: the same player opened it in another tab or on another device
+ * (this page waits until it is looked at again); version: this game and the
+ * match server run different rules (a reload, or a deploy, is needed).
+ */
+export type LinkStatus = 'connecting' | 'online' | 'offline' | 'polling' | 'gone' | 'elsewhere' | 'version';
 
 export interface KeyValue {
   get(k: string): string | null;
@@ -32,6 +39,8 @@ export interface ClientDeps {
   clearTimeout?: (h: unknown) => void;
   now?: () => number;
   random?: () => number;
+  /** is the page out of sight (a background tab)? It polls less often and doesn't take the match back from another tab. */
+  hidden?: () => boolean;
 }
 
 /** The parts of a WebSocket used here (the browser's and Node's both fit). */
@@ -50,24 +59,35 @@ export type SendResult = { ok: true; seq: number } | { ok: false; code: string; 
 interface Outgoing { cid: string; action: Action; at: number }
 
 const BACKOFF = [400, 1000, 2000, 4000, 8000, 15000];
-const PING_MS = 15_000;
-const DEAD_MS = 35_000;       // nothing heard for this long: the line is dead, start again
+const CONNECT_MS = 10_000;     // a WebSocket not welcomed by then (a proxy that swallows it) counts as failed
+const TICK_MS = 5_000;         // the keep-alive clock
+const PING_MS = 15_000;        // a keep-alive this often
+const ANSWER_MS = 10_000;      // a keep-alive not answered in this long: the line is dead
+const POKE_ANSWER_MS = 4_000;  // the page came back to view: the line is checked at once, and quickly
 const POLL_MS = 2_000;
-const WS_FAILS_BEFORE_POLL = 3;
-const RETRY_WS_MS = 60_000;   // while polling, try a WebSocket again this often
+const POLL_HIDDEN_MS = 8_000;  // a background tab asks less often (it still counts as there: the server allows 12 s)
+// WebSockets that never worked here (a network that blocks them) give way to HTTP after three tries; ones that
+// did (a phone that lost its signal for a moment) after six, about 15 s of trying
+const FAILS_BEFORE_POLL = 3;
+const FAILS_BEFORE_POLL_SEEN = 6;
+const RETRY_WS_MS = [5_000, 15_000, 30_000, 60_000]; // while polling, a WebSocket is tried again after these
 const CID_CHARS = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz23456789';
+const JSON_HEADERS = { 'content-type': 'application/json' };
 
 export class MatchClient {
   status: LinkStatus = 'offline';
-  /** this game's seat, once the server has said (null: watching) */
+  /** this game's seat, once the server has said (null: watching, or not joined yet; a seat once had is kept) */
   seat: Seat | null = null;
   online: [boolean, boolean] = [false, false];
+  /** why the line stopped, for a person ('version': what to do about it) */
+  problem: string | null = null;
   /** the newest event the game has (it tells the client; the client asks for what comes after) */
   since: () => number = () => 0;
   onEvents: (evs: Logged[], caughtUp: boolean) => void = () => {};
   onStatus: (s: LinkStatus) => void = () => {};
   onPresence: (online: [boolean, boolean]) => void = () => {};
-  onWelcome: (seat: Seat | null, seq: number) => void = () => {};
+  /** the server said which seat this game has */
+  onSeat: (seat: Seat) => void = () => {};
   /** a move refused by the server that no one was waiting for (made before a reload) */
   onRefused: (action: Action, code: string, message: string) => void = () => {};
 
@@ -75,15 +95,21 @@ export class MatchClient {
   private welcomed = false;
   private stopped = true;
   private fails = 0;
-  private everOpened = false;
-  private lastHeard = 0;
   private timers = new Set<unknown>();
-  private pingTimer: unknown = null;
+  private tickTimer: unknown = null;
+  private connectTimer: unknown = null;
+  private reconnectTimer: unknown = null;
   private pollTimer: unknown = null;
   private retryTimer: unknown = null;
+  /** a keep-alive is out: the line is dead if nothing is heard by then */
+  private deadline: number | null = null;
+  private lastPingAt = 0;
   private waiting = new Map<string, (r: SendResult) => void>();
   private outbox: Outgoing[] = [];
   private polling = false;
+  private inFlight = new Set<string>();
+  private everWelcomed = false;
+  private wsRetries = 0;
 
   constructor(readonly code: string, private key: string, private deps: ClientDeps) {
     this.outbox = this.loadOutbox();
@@ -97,8 +123,12 @@ export class MatchClient {
     };
   }
 
+  private hidden(): boolean {
+    try { return !!this.deps.hidden?.(); } catch { return false; }
+  }
+
   private later(f: () => void, ms: number): unknown {
-    const h = this.T.set(() => { this.timers.delete(h); f(); }, ms);
+    const h = this.T.set(() => { this.timers.delete(h); f(); }, Math.max(0, ms));
     this.timers.add(h);
     return h;
   }
@@ -122,7 +152,7 @@ export class MatchClient {
     try {
       const raw = this.deps.store?.get(this.outboxKey);
       const list = raw ? (JSON.parse(raw) as Outgoing[]) : [];
-      return Array.isArray(list) ? list.filter((o) => o && typeof o.cid === 'string' && o.action) : [];
+      return Array.isArray(list) ? list.filter((o) => o && typeof o.cid === 'string' && o.action && typeof o.action === 'object') : [];
     } catch { return []; }
   }
 
@@ -136,6 +166,17 @@ export class MatchClient {
   /** Moves made but not yet answered (made on this page or before a reload). */
   get unanswered(): Action[] {
     return this.outbox.map((o) => o.action);
+  }
+
+  /** The same, with their ids (a page reloaded while a stroke was on its way waits for that stroke). */
+  pendingMoves(): { cid: string; action: Action }[] {
+    return this.outbox.map((o) => ({ cid: o.cid, action: o.action }));
+  }
+
+  /** The answer to a move still waiting for one (made before this page loaded); null if it isn't waiting. */
+  waitFor(cid: string): Promise<SendResult> | null {
+    if (!this.outbox.some((o) => o.cid === cid)) return null;
+    return new Promise<SendResult>((res) => this.waiting.set(cid, res));
   }
 
   private cidCount = 0;
@@ -156,22 +197,47 @@ export class MatchClient {
   }
 
   stop() {
+    this.halt('offline');
+  }
+
+  /** Stop everything (timers, the socket, polling) and say why. */
+  private halt(s: LinkStatus) {
     this.stopped = true;
     for (const h of [...this.timers]) this.cancel(h);
-    this.pingTimer = this.pollTimer = this.retryTimer = null;
+    this.tickTimer = this.connectTimer = this.reconnectTimer = this.pollTimer = this.retryTimer = null;
     this.polling = false;
+    this.deadline = null;
     const ws = this.ws;
     this.ws = null;
     this.welcomed = false;
     if (ws) { ws.onclose = ws.onmessage = ws.onerror = ws.onopen = null; try { ws.close(1000, 'bye'); } catch { /* closed */ } }
-    this.setStatus('offline');
+    this.setStatus(s);
   }
 
   /** The page came back (tab shown, network back): check the line now instead of waiting. */
   poke() {
+    if (this.status === 'elsewhere') { if (!this.hidden()) this.takeBack(); return; }
     if (this.stopped) return;
-    if (this.ws && this.welcomed) { this.sendRaw(PING); return; }
+    if (this.ws && this.welcomed) {
+      // a phone that slept keeps a socket that looks open but is dead: a keep-alive, and a quick verdict
+      this.sendPing(POKE_ANSWER_MS);
+      this.tick(POKE_ANSWER_MS);
+      return;
+    }
+    if (this.polling) { void this.pollOnce(); if (!this.ws) this.connect(); return; } // the network may be back: a WebSocket too
     if (!this.ws) { this.fails = 0; this.connect(); }
+  }
+
+  /** Play the match on this page again (it was opened elsewhere, which now stops). */
+  takeBack() {
+    if (this.status !== 'elsewhere') return;
+    // moves another tab made meanwhile (they share the storage): this page answers for them too
+    const seen = new Set(this.outbox.map((o) => o.cid));
+    for (const o of this.loadOutbox()) if (!seen.has(o.cid)) this.outbox.push(o);
+    this.fails = 0;
+    this.problem = null;
+    this.setStatus('offline');
+    this.start();
   }
 
   private wsUrl(): string {
@@ -181,77 +247,122 @@ export class MatchClient {
 
   private connect() {
     if (this.stopped || this.ws) return;
-    this.setStatus(this.polling ? 'polling' : 'connecting');
+    this.cancel(this.reconnectTimer); this.reconnectTimer = null;
+    if (!this.polling) this.setStatus('connecting');
     let ws: WebSocketLike;
     try { ws = new this.deps.WebSocket(this.wsUrl()); } catch { this.lost(); return; }
     this.ws = ws;
     this.welcomed = false;
+    // a socket that never opens, or opens and never hears the welcome: give up on it
+    this.cancel(this.connectTimer);
+    this.connectTimer = this.later(() => {
+      this.connectTimer = null;
+      if (this.ws === ws && !this.welcomed) this.dropLine(ws, 'no welcome');
+    }, CONNECT_MS);
     ws.onopen = () => {
-      this.everOpened = true;
-      this.lastHeard = this.T.now();
-      ws.send(JSON.stringify({ type: 'hello', key: this.key, since: this.since() }));
+      try { ws.send(JSON.stringify({ type: 'hello', key: this.key, since: this.since(), rules: RULES })); } catch { /* onclose follows */ }
     };
-    ws.onmessage = (e) => this.onMessage(typeof e.data === 'string' ? e.data : String(e.data));
+    ws.onmessage = (e) => { if (this.ws === ws) this.onMessage(typeof e.data === 'string' ? e.data : String(e.data)); };
     ws.onerror = () => { /* onclose follows */ };
     ws.onclose = (e) => {
       if (this.ws !== ws) return;
       this.ws = null;
       this.welcomed = false;
-      this.cancel(this.pingTimer); this.pingTimer = null;
-      if (e?.code === 4004 || e?.code === 4010) { this.gone(); return; }
+      this.deadline = null;
+      this.cancel(this.tickTimer); this.tickTimer = null;
+      this.cancel(this.connectTimer); this.connectTimer = null;
+      const code = e?.code;
+      if (code === CLOSE.noMatch || code === CLOSE.expired) { this.gone(); return; }
+      if (code === CLOSE.replaced) { this.halt('elsewhere'); return; }
+      if (code === CLOSE.version) { this.versionProblem(this.problem ?? 'this game and the match server differ - reload'); return; }
       this.lost();
     };
   }
 
+  /** Close a socket that is no use (dead, or never welcomed) and get another line. */
+  private dropLine(ws: WebSocketLike, reason: string) {
+    if (this.ws !== ws) return;
+    this.ws = null;
+    this.welcomed = false;
+    this.deadline = null;
+    this.cancel(this.tickTimer); this.tickTimer = null;
+    this.cancel(this.connectTimer); this.connectTimer = null;
+    ws.onclose = ws.onmessage = ws.onerror = ws.onopen = null;
+    try { ws.close(4000, reason); } catch { /* gone */ }
+    this.lost();
+  }
+
   private gone() {
-    this.stopped = true;
-    for (const h of [...this.timers]) this.cancel(h);
-    this.setStatus('gone');
+    this.halt('gone');
     for (const [, res] of this.waiting) res({ ok: false, code: 'no_match', message: 'this match no longer exists' });
     this.waiting.clear();
+  }
+
+  /** This game and the server run different rules: nothing more can be played until one is updated. */
+  private versionProblem(message: string) {
+    this.problem = message;
+    this.halt('version'); // moves stay in the outbox: the updated page sends them
   }
 
   /** The WebSocket failed or dropped: try again after a pause, or ask over HTTP. */
   private lost() {
     if (this.stopped) return;
     this.fails++;
-    if (!this.everOpened && this.fails >= WS_FAILS_BEFORE_POLL && !this.polling) { this.startPolling(); return; }
     if (this.polling) return; // polling carries on; a WebSocket is tried again later
+    if (this.fails >= (this.everWelcomed ? FAILS_BEFORE_POLL_SEEN : FAILS_BEFORE_POLL)) { this.startPolling(); return; }
     this.setStatus('connecting');
     const base = BACKOFF[Math.min(this.fails - 1, BACKOFF.length - 1)];
     const jitter = (this.deps.random ?? Math.random)() * 0.3 * base;
-    this.later(() => this.connect(), base + jitter);
+    this.cancel(this.reconnectTimer);
+    this.reconnectTimer = this.later(() => { this.reconnectTimer = null; this.connect(); }, base + jitter);
   }
 
   private onMessage(raw: string) {
-    this.lastHeard = this.T.now();
+    this.deadline = null; // anything heard: the line is alive
     let m: { type?: string; [k: string]: unknown };
     try { m = JSON.parse(raw); } catch { return; }
     switch (m.type) {
       case 'pong': return;
       case 'welcome': {
         this.welcomed = true;
+        this.everWelcomed = true;
         this.fails = 0;
+        this.cancel(this.connectTimer); this.connectTimer = null;
         if (this.polling) this.stopPolling();
-        this.seat = (m.seat as Seat | null) ?? null;
-        this.online = (m.online as [boolean, boolean]) ?? [false, false];
+        this.learnSeat(m.seat);
+        this.setOnline(m.online);
         this.setStatus('online');
-        this.onWelcome(this.seat, Number(m.seq) || 0);
-        this.onPresence(this.online);
-        this.heartbeat();
+        this.lastPingAt = this.T.now();
+        this.tick();
         for (const o of this.outbox) this.sendRaw(JSON.stringify({ type: 'act', cid: o.cid, action: o.action }));
         return;
       }
-      case 'events': this.onEvents((m.events as Logged[]) ?? [], m.last !== false); return;
-      case 'ack': this.answered(String(m.cid), { ok: true, seq: Number(m.seq) }); return;
+      case 'events': this.onEvents(Array.isArray(m.events) ? (m.events as Logged[]) : [], m.last !== false); return;
+      case 'ack': this.learnSeat(m.seat); this.answered(String(m.cid), { ok: true, seq: Number(m.seq) }); return;
       case 'nack': this.answered(String(m.cid), { ok: false, code: String(m.code), message: String(m.message ?? '') }); return;
-      case 'seat': this.seat = (m.seat as Seat | null) ?? null; this.onWelcome(this.seat, Number(m.seq) || 0); return;
-      case 'presence': this.online = (m.online as [boolean, boolean]) ?? this.online; this.onPresence(this.online); return;
+      case 'seat': this.learnSeat(m.seat); return;
+      case 'presence': this.setOnline(m.online); return;
       case 'error':
         if (m.code === 'no_match') this.gone();
+        else if (m.code === 'version') this.versionProblem(String(m.message ?? ''));
         return;
       default:
     }
+  }
+
+  /** The seat the server gave this game (never taken away: a player stays in their match). */
+  private learnSeat(seat: unknown) {
+    if (seat !== 0 && seat !== 1) return;
+    if (this.seat === seat) return;
+    this.seat = seat;
+    this.onSeat(seat);
+  }
+
+  private setOnline(o: unknown) {
+    if (!Array.isArray(o) || o.length !== 2 || typeof o[0] !== 'boolean' || typeof o[1] !== 'boolean') return;
+    if (o[0] === this.online[0] && o[1] === this.online[1]) return;
+    this.online = [o[0], o[1]];
+    this.onPresence(this.online);
   }
 
   private answered(cid: string, r: SendResult) {
@@ -264,24 +375,30 @@ export class MatchClient {
     else if (!r.ok && o) this.onRefused(o.action, r.code, r.message);
   }
 
-  private heartbeat() {
-    this.cancel(this.pingTimer);
-    this.pingTimer = this.later(() => {
-      this.pingTimer = null;
-      if (!this.ws || !this.welcomed) return;
-      if (this.T.now() - this.lastHeard > DEAD_MS) {
-        // the line went quiet (a phone asleep, a dead Wi-Fi): drop it and start again
-        const ws = this.ws;
-        this.ws = null;
-        this.welcomed = false;
-        ws.onclose = ws.onmessage = ws.onerror = ws.onopen = null;
-        try { ws.close(4000, 'no answer'); } catch { /* gone */ }
-        this.lost();
-        return;
-      }
-      this.sendRaw(PING);
-      this.heartbeat();
-    }, PING_MS);
+  private sendPing(answerMs: number) {
+    if (!this.sendRaw(PING)) return;
+    const now = this.T.now();
+    this.lastPingAt = now;
+    this.deadline = this.deadline === null ? now + answerMs : Math.min(this.deadline, now + answerMs);
+  }
+
+  /**
+   * The keep-alive clock. A keep-alive goes every 15 s; the line is dead when
+   * one goes unanswered for 10 s. Judged from when the keep-alive went, not
+   * from the last message: a background tab's timers may run once a minute,
+   * and a quiet line there is not a dead one.
+   */
+  private tick(ms = TICK_MS) {
+    this.cancel(this.tickTimer);
+    this.tickTimer = this.later(() => {
+      this.tickTimer = null;
+      const ws = this.ws;
+      if (!ws || !this.welcomed) return;
+      const now = this.T.now();
+      if (this.deadline !== null && now >= this.deadline) { this.dropLine(ws, 'no answer'); return; }
+      if (this.deadline === null && now - this.lastPingAt >= PING_MS) this.sendPing(ANSWER_MS);
+      this.tick(this.deadline !== null ? Math.max(50, Math.min(TICK_MS, this.deadline - now)) : TICK_MS);
+    }, ms);
   }
 
   private sendRaw(text: string): boolean {
@@ -295,6 +412,13 @@ export class MatchClient {
     else if (this.polling) void this.pollOnce();
   }
 
+  /** A move has waited long for its answer: the unanswered moves go again (each counts once), and the log is asked for. */
+  nudge() {
+    if (this.ws && this.welcomed) for (const o of this.outbox) this.sendRaw(JSON.stringify({ type: 'act', cid: o.cid, action: o.action }));
+    else if (this.polling) for (const o of this.outbox) void this.postAct(o);
+    this.resync();
+  }
+
   // ----------------------------------------------------------------- moves
   /** An id for the next move (to tell its event from the others when it comes back). */
   moveId(): string {
@@ -303,11 +427,12 @@ export class MatchClient {
 
   /** Make a move: kept until the server answers (through any reconnects), then resolved with its place in the log or the reason it was refused. */
   send(action: Action, cid: string = this.newCid()): Promise<SendResult> {
-    this.outbox.push({ cid, action, at: this.T.now() });
+    const o = { cid, action, at: this.T.now() };
+    this.outbox.push(o);
     this.saveOutbox(); // before it goes: a reload a moment later still sends it
     const p = new Promise<SendResult>((res) => this.waiting.set(cid, res));
     if (this.welcomed) this.sendRaw(JSON.stringify({ type: 'act', cid, action }));
-    else if (this.polling) void this.postAct({ cid, action, at: 0 });
+    else if (this.polling) void this.postAct(o);
     return p;
   }
 
@@ -315,9 +440,11 @@ export class MatchClient {
   private startPolling() {
     this.polling = true;
     this.setStatus('polling');
-    for (const o of this.outbox) void this.postAct(o);
+    void this.helloHttp();
     void this.pollOnce();
-    this.retryTimer = this.later(() => this.retryWs(), RETRY_WS_MS);
+    for (const o of this.outbox) void this.postAct(o);
+    this.wsRetries = 0;
+    this.scheduleWsRetry();
   }
 
   private stopPolling() {
@@ -326,39 +453,75 @@ export class MatchClient {
     this.cancel(this.retryTimer); this.retryTimer = null;
   }
 
+  private scheduleWsRetry() {
+    this.cancel(this.retryTimer);
+    this.retryTimer = this.later(() => this.retryWs(), RETRY_WS_MS[Math.min(this.wsRetries++, RETRY_WS_MS.length - 1)]);
+  }
+
   private retryWs() {
     this.retryTimer = null;
     if (this.stopped || !this.polling) return;
-    this.everOpened = false;
     this.connect(); // stays polling until a welcome arrives
-    this.retryTimer = this.later(() => this.retryWs(), RETRY_WS_MS);
+    this.scheduleWsRetry();
+  }
+
+  private url(what: string) {
+    return `${this.deps.base}/api/match/${this.code}/${what}`;
+  }
+
+  /** Over HTTP: which seat this game has, and who is there (the WebSocket's welcome says the same). */
+  private async helloHttp() {
+    try {
+      const res = await this.deps.fetch(this.url('hello'), { method: 'POST', headers: JSON_HEADERS, body: JSON.stringify({ key: this.key, rules: RULES }) });
+      const j = (await res.json().catch(() => null)) as { type?: string; code?: string; message?: string; seat?: unknown; online?: unknown } | null;
+      if (this.stopped) return;
+      if (res.status === 404 || j?.code === 'no_match') { this.gone(); return; }
+      if (j?.code === 'version') { this.versionProblem(String(j.message ?? '')); return; }
+      if (j?.type === 'welcome') { this.learnSeat(j.seat); this.setOnline(j.online); }
+    } catch { /* offline: the next poll tries */ }
   }
 
   private async pollOnce() {
     if (this.stopped || !this.polling) return;
     this.cancel(this.pollTimer); this.pollTimer = null;
+    let more = false;
     try {
-      const res = await this.deps.fetch(`${this.deps.base}/api/match/${this.code}/events?since=${this.since()}`); // the server's answers say no-store
+      // the key in a header, not the address (addresses get logged); the server's answers say no-store
+      const res = await this.deps.fetch(`${this.url('events')}?since=${this.since()}`, { headers: { 'x-match-key': this.key } });
+      if (this.stopped || !this.polling) return;
       if (res.status === 404) { this.gone(); return; }
       if (res.ok) {
-        const j = (await res.json()) as { events?: Logged[] };
+        const j = (await res.json()) as { events?: Logged[]; more?: boolean; online?: unknown; seat?: unknown };
+        if (this.stopped || !this.polling) return;
         this.setStatus('polling');
-        this.onEvents(j.events ?? [], true);
-      }
-    } catch { /* offline: try again */ }
-    if (!this.stopped && this.polling) this.pollTimer = this.later(() => void this.pollOnce(), POLL_MS);
+        this.learnSeat(j.seat);
+        this.setOnline(j.online);
+        more = !!j.more;
+        this.onEvents(Array.isArray(j.events) ? j.events : [], !more);
+        // moves still unanswered (an answer lost on the way): again; each counts once
+        for (const o of this.outbox) void this.postAct(o);
+      } else this.setStatus('connecting');
+    } catch { if (!this.stopped && this.polling) this.setStatus('connecting'); /* offline: try again */ }
+    if (!this.stopped && this.polling) this.pollTimer = this.later(() => void this.pollOnce(), more ? 0 : this.hidden() ? POLL_HIDDEN_MS : POLL_MS);
   }
 
   private async postAct(o: Outgoing) {
+    if (this.inFlight.has(o.cid)) return;
+    this.inFlight.add(o.cid);
+    let answered = false;
     try {
-      const res = await this.deps.fetch(`${this.deps.base}/api/match/${this.code}/act`, {
-        method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ key: this.key, cid: o.cid, action: o.action }),
+      const res = await this.deps.fetch(this.url('act'), {
+        method: 'POST', headers: JSON_HEADERS, body: JSON.stringify({ key: this.key, cid: o.cid, action: o.action, rules: RULES }),
       });
-      const j = (await res.json().catch(() => null)) as { type?: string; cid?: string; seq?: number; code?: string; message?: string } | null;
-      if (j?.type === 'ack') this.answered(o.cid, { ok: true, seq: Number(j.seq) });
-      else if (j?.type === 'nack') this.answered(o.cid, { ok: false, code: String(j.code), message: String(j.message ?? '') });
-      void this.pollOnce();
-    } catch { /* offline: sent again on the next connection */ }
+      const j = (await res.json().catch(() => null)) as { type?: string; cid?: string; seq?: number; seat?: unknown; code?: string; message?: string } | null;
+      if (j?.type === 'nack' && j.code === 'version') this.versionProblem(String(j.message ?? ''));
+      else if (j?.type === 'ack') { this.learnSeat(j.seat); this.answered(o.cid, { ok: true, seq: Number(j.seq) }); answered = true; }
+      else if (j?.type === 'nack') { this.answered(o.cid, { ok: false, code: String(j.code), message: String(j.message ?? '') }); answered = true; }
+      else if (res.status === 404) this.gone();
+    } catch { /* offline: sent again on the next poll or connection */ } finally {
+      this.inFlight.delete(o.cid);
+    }
+    if (answered && this.polling) void this.pollOnce(); // the move's event at once
   }
 }
 

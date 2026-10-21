@@ -30,9 +30,31 @@ import { holeLive, other, statusText } from '../systems/match/rules';
 import type { HoleResult, Seat } from '../systems/match/types';
 import { matchCard } from '../ui/matchCard';
 import { confirmBox } from '../ui/confirm';
-import { createLiveMatch, newMatchConfig } from '../match/live';
+import { createLiveMatch, forgetMatch, LiveMatch, newMatchConfig } from '../match/live';
 
-type Modal = 'relief' | 'drop' | 'card' | 'overview' | 'pause' | 'holed' | 'rewatch' | 'mhole' | 'mwait' | 'mover' | 'mrewatch' | null;
+/** The other player's rematch offer, which the server took before this player's: once it has arrived (null after 3 s). */
+async function rematchOffered(live: LiveMatch): Promise<string | null> {
+  const find = (): string | null => {
+    const ms = live.session;
+    if (!ms) return null;
+    const r = ms.state.rematch;
+    if (r && r.by !== live.seat) return r.code;
+    for (const e of ms.queue) if (e.t === 'rematch' && e.by !== live.seat) return e.code;
+    return null;
+  };
+  for (let i = 0; i < 30; i++) {
+    const c = find();
+    if (c) return c;
+    if (i === 0) live.client.resync();
+    await new Promise((r) => setTimeout(r, 100));
+  }
+  return null;
+}
+
+type Modal = 'relief' | 'drop' | 'card' | 'overview' | 'pause' | 'holed' | 'rewatch' | 'mhole' | 'mwait' | 'mover' | 'mrewatch' | 'mlink' | null;
+
+/** The live match's own panels: the pause menu opens over them, and closing it brings them back. */
+const MATCH_PANELS: Modal[] = ['mhole', 'mwait', 'mover', 'mrewatch'];
 
 export class HudScene extends Phaser.Scene {
   play!: PlayScene;
@@ -100,6 +122,18 @@ export class HudScene extends Phaser.Scene {
   private watchPanel!: Panel;
   private watchTxt!: Phaser.GameObjects.BitmapText;
   private lastMatchResult: HoleResult | null = null;
+  /** the match panel the pause menu was opened over (shown again when it closes) */
+  private pauseReturn: (() => void) | null = null;
+  /** the hole whose result has sounded (a redraw of its panel stays quiet) */
+  private soundedHole = -1;
+  /** who was online when the waiting panel was drawn (it is drawn again when that changes) */
+  private waitOnline = '';
+  /** a text kept for measuring the match bar's names (made once, not every frame) */
+  private probe: Phaser.GameObjects.BitmapText | null = null;
+  /** the banner on screen: when it went up and for how long (a banner that follows waits for it) */
+  private bannerAt = 0;
+  private bannerFor = 0;
+  private queuedFlash: Phaser.Time.TimerEvent | null = null;
 
   constructor() {
     super('hud');
@@ -121,6 +155,13 @@ export class HudScene extends Phaser.Scene {
     this.practiceBox = null;
     this.matchBar = null;
     this.lastMatchResult = null;
+    this.pauseReturn = null;
+    this.soundedHole = -1;
+    this.waitOnline = '';
+    this.probe = null;
+    this.bannerAt = 0;
+    this.bannerFor = 0;
+    this.queuedFlash = null;
     this.play = this.scene.get('play') as PlayScene;
     uiCamera(this.cameras.main);
     this.W = app.view.w;
@@ -223,10 +264,12 @@ export class HudScene extends Phaser.Scene {
     bar.add([this.matchNames, this.matchStatus, this.matchDots]);
     this.matchBar = bar;
     this.matchLink = txt(this, 0, 0, '', { origin: [0.5, 0], color: COLORS.red });
-    this.giveBtn = new Button(this, 0, 0, 70, 14, 'give putt', () => { this.giveBtn.setEnabled(false); this.play.matchConcede('stroke'); }, { color: 'grey' });
+    // hidden from the tap until the server has the concession (PlayScene.canGivePutt): no second one
+    this.giveBtn = new Button(this, 0, 0, 70, 14, 'give putt', () => { this.play.matchConcede('stroke'); this.refresh(); }, { color: 'grey' });
     this.watchPanel = new Panel(this, 0, 0, 180, 18, 0.85);
     this.watchTxt = txt(this, 90, 4, '', { origin: [0.5, 0] });
     this.watchPanel.add(this.watchTxt);
+    this.probe = txt(this, 0, 0, '').setVisible(false);
     this.root.add([bar, this.matchLink, this.giveBtn, this.watchPanel]);
   }
 
@@ -353,8 +396,9 @@ export class HudScene extends Phaser.Scene {
     this.mulliganBtn.setPosition(4, 21 + 48 + 3 + 16);
     this.practiceBox?.setPosition(4, 21 + 48 + 3);
     if (this.matchBar) {
-      // between the hole box (left) and the menu button (right); on a narrow phone, under them
-      const left = 37 + 30 + 4, right = W - 48 - 34 - 4;
+      // between the info panel (left: it starts at y 21, under the bar's bottom, so the bar clears its right
+      // edge at 78) and the menu button (right); on a narrow phone, under them
+      const left = 4 + 74 + 4, right = W - 48 - 34 - 4;
       const bw = Math.min(170, Math.max(110, right - left));
       this.matchBar.resize(bw, 25);
       const top = right - left >= 110 ? 4 : 21 + 48 + 3 + 34;
@@ -449,13 +493,15 @@ export class HudScene extends Phaser.Scene {
     const s = live.session.state;
     const me = p.me;
     const turn = live.session.turn;
-    const nm = (k: Seat) => (k === me ? 'you' : s.players[k]?.name ?? '?');
+    // names cut to fit the bar (two 16-letter names ran past its ends)
+    const nm = (k: Seat) => (k === me ? 'you' : (s.players[k]?.name ?? '?').slice(0, 9));
     const n0 = `${nm(0)}${turn === 0 ? ' <' : ''}`, n1 = `${nm(1)}${turn === 1 ? ' <' : ''}`;
     setTxt(this.matchNames, `  ${n0}      ${n1}`);
     // a dot before each name: green when that player's game is open
     const g = this.matchDots;
     g.clear();
-    const probe = txt(this, 0, 0, `  ${n0}      `);
+    const probe = this.probe!;
+    setTxt(probe, `  ${n0}      `);
     const x0 = Math.round(this.matchNames.x - this.matchNames.width / 2);
     for (const k of [0, 1] as Seat[]) {
       const on = k === me ? live.status === 'online' || live.status === 'polling' : live.online[k];
@@ -463,19 +509,25 @@ export class HudScene extends Phaser.Scene {
       g.fillStyle(0x0b0f13, 1).fillRect(dx - 1, 5, 5, 5);
       g.fillStyle(on ? 0x6fdc7a : 0x6b737d, 1).fillRect(dx, 6, 3, 3);
     }
-    probe.destroy();
     const between = s.phase === 'playing' && !holeLive(s);
     const where = s.phase !== 'playing' ? '' : between ? `  ·  thru ${s.results.length}` : `  ·  hole ${live.session.holeNumber}`;
     setTxt(this.matchStatus, `${statusText(s, me)}${where}`);
     let link = '';
     if (live.status === 'connecting' || live.status === 'offline') link = 'reconnecting...';
     else if (live.status === 'polling') link = 'slow connection';
+    else if (live.rebuilding) link = 'catching up...';
     else if (p.commitWait() > 700) link = 'sending...';
     else if (holeLive(s) && turn === other(me) && !live.online[other(me)]) link = `${p.oppName()}'s game is offline - waiting`;
     setTxt(this.matchLink, link);
     this.matchLink.setVisible(!!link);
-    this.giveBtn.setVisible(p.canGivePutt() && !this.modal);
-    if (this.giveBtn.visible && !this.giveBtn.enabled && p.match?.session?.idle) this.giveBtn.setEnabled(true);
+    this.giveBtn.setVisible(p.canGivePutt() && !this.modal).setEnabled(true);
+    // the line stopped for good (match gone, opened elsewhere, versions differ, out of step): a panel says so
+    const stopped = live.status === 'gone' || live.status === 'elsewhere' || live.status === 'version' || !!live.broken;
+    if (stopped && this.modal !== 'mlink' && this.modal !== 'pause' && !this.cardLayer) this.showMatchLink();
+    else if (!stopped && this.modal === 'mlink') { this.closeModal(); this.play.matchReshow(); }
+    // the waiting panel says whether the other player's game is open: drawn again when that changes
+    const on = live.online.join();
+    if (this.modal === 'mwait' && on !== this.waitOnline) this.matchWaiting();
     const watching = p.state === 'watch';
     this.watchPanel.setVisible(watching && !this.modal);
     if (watching) {
@@ -529,6 +581,8 @@ export class HudScene extends Phaser.Scene {
 
   /** Hide the result banner at once (a panel opens over the course). */
   hideBanner() {
+    this.queuedFlash?.remove();
+    this.queuedFlash = null;
     this.bannerTimer?.remove();
     this.tweens.killTweensOf([this.banner, this.sub]);
     this.banner.setVisible(false);
@@ -653,12 +707,15 @@ export class HudScene extends Phaser.Scene {
     if (this.modal === 'mhole' && (e.key === ' ' || e.key === 'Enter')) { e.preventDefault(); this.play.matchNextHole(); return; }
     if ((e.key === 'c' || e.key === 'C') && (this.modal === 'mhole' || this.modal === 'mover' || this.modal === 'mwait')) { this.toggleCard(); return; }
     if (this.modal === 'mrewatch' && e.key === 'Escape') { e.preventDefault(); this.reshowMatchHole(); return; }
+    // the pause menu over a match panel (Esc, as on the course)
+    if (e.key === 'Escape' && (this.modal === 'mhole' || this.modal === 'mwait' || this.modal === 'mover')) { e.preventDefault(); this.togglePause(); return; }
     if ((e.key === 'c' || e.key === 'C') && this.modal === 'holed') { this.toggleCard(); return; }
     if ((e.key === 'r' || e.key === 'R') && this.modal === 'holed') { this.rewatch(); return; }
     if (this.modal === 'rewatch' && (e.key === 'Escape' || e.key === 'r' || e.key === 'R')) { e.preventDefault(); this.backFromRewatch(); return; }
     if (e.key === 'Escape' || e.key === 'Tab' || e.key === 'm' || e.key === 'M' || e.key === 'c' || e.key === 'C') {
       e.preventDefault();
-      if (this.modal === 'overview' || this.modal === 'pause') this.closeModal();
+      if (this.modal === 'overview') this.closeModal();
+      else if (this.modal === 'pause') this.closePause();
     }
     if ((e.key === ' ' || e.key === 'Enter') && this.modal === 'holed') {
       e.preventDefault();
@@ -668,15 +725,30 @@ export class HudScene extends Phaser.Scene {
 
   // ------------------------------------------------------------------ banners
   flash(s: string, color: number = COLORS.white, subline = '', ms = 1500) {
+    this.queuedFlash?.remove();
+    this.queuedFlash = null;
     setTxt(this.banner, s);
     this.banner.setTint(color).setVisible(true).setAlpha(1).setScale(2);
     setTxt(this.sub, subline);
     this.sub.setVisible(!!subline).setAlpha(1);
     this.bannerTimer?.remove();
     this.tweens.killTweensOf([this.banner, this.sub]);
+    this.bannerAt = this.time.now;
+    this.bannerFor = ms;
     this.bannerTimer = this.time.delayedCall(ms, () => {
       this.tweens.add({ targets: [this.banner, this.sub], alpha: 0, duration: 300 });
     });
+  }
+
+  /**
+   * A banner that follows the one on screen ("your shot" after "kevin holes
+   * out"): shown once that one has had a second, rather than over it.
+   */
+  flashAfter(s: string, color: number = COLORS.white, subline = '', ms = 1500) {
+    const left = this.banner.visible && this.banner.alpha > 0.5 ? this.bannerAt + Math.min(this.bannerFor, 1000) - this.time.now : 0;
+    if (left <= 0) { this.flash(s, color, subline, ms); return; }
+    this.queuedFlash?.remove();
+    this.queuedFlash = this.time.delayedCall(left, () => { this.queuedFlash = null; this.flash(s, color, subline, ms); });
   }
 
   strikeFeedback(st: Strike) {
@@ -866,18 +938,23 @@ export class HudScene extends Phaser.Scene {
   }
 
   togglePause() {
-    if (this.modal === 'pause') { this.closeModal(); return; }
+    if (this.modal === 'pause') { this.closePause(); return; }
     this.play.cancelSwing();
-    if (this.modal) return;
+    if (this.cardLayer) return;
+    // in a match the menu opens over the match's own panels (waiting, a hole's result) and brings them back:
+    // they had no way out to the title (review, item 3)
+    const under = this.modal && MATCH_PANELS.includes(this.modal) && this.play.match ? this.redraw : null;
+    if (this.modal && !under) return;
     this.openModal('pause');
+    this.pauseReturn = under;
     const dim = dimmer(this, 0.6);
     this.modalLayer.add(dim);
-    const w = 150, h = 128;
+    const w = this.play.match ? Math.min(180, this.W - 12) : 150, h = 128; // a match's two half-width buttons need the room
     const x = Math.round((this.W - w) / 2), y = Math.round((this.H - h) / 2);
     const pnl = new Panel(this, x, y, w, h, 0.92);
     const t = txt(this, x + w / 2, y + 6, 'paused', { origin: [0.5, 0], scale: 2 });
-    const b1 = new Button(this, x + 15, y + 30, w - 30, 16, 'resume', () => this.closeModal());
-    const b2 = new Button(this, x + 15, y + 50, w - 30, 16, 'settings', () => { this.closeModal(); this.scene.launch('settings', { from: 'hud' }); this.scene.pause('play'); this.scene.pause('hud'); }, { color: 'grey' });
+    const b1 = new Button(this, x + 15, y + 30, w - 30, 16, 'resume', () => this.closePause());
+    const b2 = new Button(this, x + 15, y + 50, w - 30, 16, 'settings', () => { this.closePause(); this.scene.launch('settings', { from: 'hud' }); this.scene.pause('play'); this.scene.pause('hud'); }, { color: 'grey' });
     if (this.play.match) { this.matchMenu(x, y, w, pnl, t, b1, b2); return; }
     // the round is saved after every shot: this leaves it to continue from the title screen
     if (this.play.round.cfg.practice) {
@@ -1063,29 +1140,80 @@ export class HudScene extends Phaser.Scene {
   }
 
   // ------------------------------------------------------------ live match
+  /**
+   * Does the HUD hold the match's next events back? Under the pause menu and
+   * the card nothing moves on: what happened meanwhile plays once they close
+   * (the pause menu closed by itself when the other player reached the tee).
+   */
+  holdsMatch(): boolean {
+    return this.modal === 'pause' || this.modal === 'mlink' || !!this.cardLayer;
+  }
+
   /** The pause menu in a match: leave it for later, or concede the hole or the match. */
   private matchMenu(x: number, y: number, w: number, pnl: Panel, t: Phaser.GameObjects.BitmapText, b1: Button, b2: Button) {
     const p = this.play;
     const live = p.match!;
     const s = live.session!.state;
     const leave = new Button(this, x + 15, y + 70, w - 30, 16, 'leave for now', () => {
+      this.pauseReturn = null;
       this.closeModal();
       this.scene.stop('play');
       this.scene.start('title');
     }, { color: 'grey' });
-    const canHole = holeLive(s) && p.state !== 'commit';
-    const hole = new Button(this, x + 15, y + 90, Math.floor((w - 34) / 2), 16, 'give up hole', () => {
-      this.closeModal();
-      confirmBox(this, this.modalLayer, 'concede the hole?', `${p.oppName()} wins this hole`, 'keep playing', 'concede', () => p.matchConcede('hole'));
-    }, { color: 'grey' });
+    const player = live.seat !== null;
+    const canHole = player && holeLive(s) && p.state !== 'commit';
+    const half = Math.floor((w - 34) / 2);
+    // the question stays a pause (the match waits under it); "keep playing" goes back to what was there
+    const ask = (title: string, body: string, what: 'hole' | 'match') => {
+      this.openModal('pause');
+      confirmBox(this, this.modalLayer, title, body, 'keep playing', 'concede', () => { this.pauseReturn = null; this.closeModal(); p.matchConcede(what); }, () => this.closePause());
+    };
+    const hole = new Button(this, x + 15, y + 90, half, 16, 'give up hole', () => ask('concede the hole?', `${p.oppName()} wins this hole`, 'hole'), { color: 'grey' });
     hole.setEnabled(canHole);
-    const match = new Button(this, x + 19 + Math.floor((w - 34) / 2), y + 90, Math.floor((w - 34) / 2), 16, 'give up match', () => {
-      this.closeModal();
-      confirmBox(this, this.modalLayer, 'concede the match?', `${p.oppName()} wins the match - it can't be undone`, 'keep playing', 'concede', () => p.matchConcede('match'));
-    }, { color: 'grey' });
-    match.setEnabled(s.phase === 'playing' && p.state !== 'commit');
-    const note = txt(this, x + w / 2, y + 110, 'leave for now: continue it from the title', { origin: [0.5, 0], color: COLORS.dim });
+    const match = new Button(this, x + 19 + half, y + 90, half, 16, 'give up match', () => ask('concede the match?', `${p.oppName()} wins the match - it can't be undone`, 'match'), { color: 'grey' });
+    match.setEnabled(player && s.phase === 'playing' && p.state !== 'commit');
+    const note = txt(this, x + w / 2, y + 110, 'leave for now: continue it from the title', { origin: [0.5, 0], color: COLORS.dim, maxWidth: w - 10 });
     this.modalLayer.add([pnl, t, b1, b2, leave, hole, match, note]);
+  }
+
+  /** Close the pause menu: back to the match panel it was opened over, if any. */
+  closePause() {
+    const back = this.pauseReturn;
+    this.pauseReturn = null;
+    this.closeModal();
+    if (back) back();
+  }
+
+  /** The match's line has stopped for good: why, and what can be done. */
+  private showMatchLink() {
+    const p = this.play;
+    const live = p.match;
+    if (!live) return;
+    this.openModal('mlink');
+    this.redraw = () => this.showMatchLink();
+    this.modalLayer.add(dimmer(this, 0.55));
+    const st = live.status;
+    const title = live.broken ? 'out of step' : st === 'gone' ? 'match ended' : st === 'elsewhere' ? 'playing elsewhere' : 'update needed';
+    const line = live.broken ?? (st === 'gone' ? 'this match no longer exists'
+      : st === 'elsewhere' ? 'this match is open in another tab or on another device'
+        : live.client.problem || 'this game and the match server differ - reload the page');
+    const w = Math.min(230, this.W - 12);
+    const t1 = txt(this, 0, 0, title, { origin: [0.5, 0], scale: 2, color: COLORS.yellow });
+    if (t1.width > w - 8) t1.setScale(1);
+    const t2 = txt(this, 0, 0, line, { origin: [0.5, 0], color: COLORS.dim, maxWidth: w - 12 });
+    const bodyY = 7 + Math.ceil(t1.height) + 5;
+    const h = bodyY + Math.ceil(t2.height) + 8 + 16 + 8;
+    const x = Math.round((this.W - w) / 2), y = Math.round((this.H - h) / 2);
+    t1.setPosition(Math.round(x + w / 2), y + 7);
+    t2.setPosition(Math.round(x + w / 2), y + bodyY);
+    const pnl = new Panel(this, x, y, w, h, 0.92);
+    const toTitle = new Button(this, x + 8, y + h - 24, 60, 16, 'title', () => { this.closeModal(); this.scene.stop('play'); this.scene.start('title'); }, { color: 'grey' });
+    this.modalLayer.add([pnl, t1, t2, toTitle]);
+    if (st === 'elsewhere' && !live.broken) {
+      this.modalLayer.add(new Button(this, x + w - 88, y + h - 24, 80, 16, 'play here', () => live.client.takeBack()));
+    } else if (st === 'version' || live.broken) {
+      this.modalLayer.add(new Button(this, x + w - 88, y + h - 24, 80, 16, 'reload', () => location.reload()));
+    }
   }
 
   /** Waiting for the other player (at the next tee, or the first). */
@@ -1096,15 +1224,22 @@ export class HudScene extends Phaser.Scene {
     const s = live.session.state;
     this.openModal('mwait');
     this.redraw = () => this.matchWaiting();
+    this.waitOnline = live.online.join();
     const w = Math.min(220, this.W - 12), h = 52;
     const x = Math.round((this.W - w) / 2), y = Math.round(this.H * 0.3);
     const opp = p.oppName();
-    const where = s.results.length === 0 ? 'the first tee' : `the ${ordinal(s.hole + 1)} tee`;
+    // the tee by its number on the card (a back nine starts at the 10th; "the 2nd tee" was hole 11)
+    const n = s.cfg.holes[Math.min(s.hole, s.cfg.holes.length - 1)];
+    const where = n === 1 ? 'the first tee' : `the ${ordinal(n)} tee`;
     const pnl = new Panel(this, x, y, w, h, 0.88);
     const t1 = txt(this, x + w / 2, y + 6, `waiting for ${opp}`, { origin: [0.5, 0], scale: 2, maxWidth: w - 8 });
+    if (t1.width > w - 8) t1.setScale(1);
     const t2 = txt(this, x + w / 2, y + 28, live.online[other(p.me)] ? `to come to ${where}` : `${opp}'s game is closed - they'll be back on the match from their title screen`, { origin: [0.5, 0], color: COLORS.dim, maxWidth: w - 10 });
-    this.modalLayer.add([pnl, t1, t2]);
-    if (t2.height > 12) pnl.resize(w, h + t2.height - 10);
+    const t3 = txt(this, x + w / 2, 0, 'esc or menu: leave for now', { origin: [0.5, 0], color: COLORS.dim });
+    this.modalLayer.add([pnl, t1, t2, t3]);
+    const hh = h + Math.max(0, Math.ceil(t2.height) - 10) + 11;
+    pnl.resize(w, hh);
+    t3.setY(y + hh - 13);
     this.refresh();
   }
 
@@ -1121,7 +1256,11 @@ export class HudScene extends Phaser.Scene {
     const won = res.winner === me, lost = res.winner === opp;
     const n = s.cfg.holes[res.hole];
     const title = res.winner === null ? `hole ${n} halved` : won ? `you win hole ${n}` : `${oppName} wins hole ${n}`;
-    if (won) sfx('great'); else if (res.winner === null) sfx('good'); else sfx('bad');
+    // once per hole: the panel is drawn again after a rewatch, a resize or the pause menu
+    if (this.soundedHole !== res.hole) {
+      this.soundedHole = res.hole;
+      if (won) sfx('great'); else if (res.winner === null) sfx('good'); else sfx('bad');
+    }
     const sc = (k: Seat) => (res.holed[k] ? `${res.strokes[k]}` : `${res.strokes[k]}, not holed`);
     const line = res.how === 'conceded' ? (won ? `${oppName} conceded it` : 'you conceded it') : `you ${sc(me)}  ·  ${oppName} ${sc(opp)}`;
     const w = Math.min(230, this.W - 12), h = 92;
@@ -1199,10 +1338,11 @@ export class HudScene extends Phaser.Scene {
       const rb = new Button(this, x + w / 2 - 50, y + 58, 100, 16, 'rematch', async () => {
         rb.setEnabled(false);
         rb.setLabel('making...');
-        const code = await this.makeRematch();
-        if (!code) { if (rb.active) { rb.setEnabled(true); rb.setLabel('rematch'); } return; }
+        const made = await this.makeRematch();
+        if (!made) { if (rb.active) { rb.setEnabled(true); rb.setLabel('rematch'); } return; }
+        if (!this.sys.isActive()) return;
         this.scene.stop('play');
-        this.scene.start('match', { mode: 'invite', code });
+        this.scene.start('match', made.join ? { mode: 'join', code: made.code } : { mode: 'invite', code: made.code });
       });
       this.modalLayer.add(rb);
     }
@@ -1212,17 +1352,28 @@ export class HudScene extends Phaser.Scene {
     this.refresh();
   }
 
-  /** A new match like this one (new wind and pins); the other player is offered it here. */
-  private async makeRematch(): Promise<string | null> {
+  /**
+   * A new match like this one (new wind and pins); the other player is offered
+   * it here. Both asking at once: the server takes the first offer, and the
+   * second player goes to that one (their own new match is left unused).
+   */
+  private async makeRematch(): Promise<{ code: string; join: boolean } | null> {
     const live = this.play.match;
     const s = live?.session?.state;
     if (!live || !s) return null;
+    const me = this.play.me;
     const cfg = await newMatchConfig(s.cfg.tee, s.cfg.holes, s.cfg.difficulty);
-    const r = await createLiveMatch(cfg, { name: app.settings.playerName, lefty: app.settings.lefty });
+    // the player as they are in this match (a different name since would be a different player to the friend)
+    const mine = s.players[me];
+    const r = await createLiveMatch(cfg, { name: mine?.name ?? app.settings.playerName, lefty: mine?.lefty ?? app.settings.lefty });
     if (!r.ok) { this.flash("couldn't make the rematch", COLORS.red, r.message, 1800); return null; }
     // offered on this match's screen (wait a moment for it to go: leaving closes the line)
-    await Promise.race([live.client.send({ t: 'rematch', code: r.code }), new Promise((res) => setTimeout(res, 3000))]);
-    return r.code;
+    const sent = await Promise.race([live.client.send({ t: 'rematch', code: r.code }), new Promise<null>((res) => setTimeout(() => res(null), 3000))]);
+    if (sent && !sent.ok && sent.code === 'rematch_exists') {
+      const theirs = await rematchOffered(live);
+      if (theirs) { forgetMatch(r.code); return { code: theirs, join: true }; }
+    }
+    return { code: r.code, join: false };
   }
 
   continueFromHoled() {

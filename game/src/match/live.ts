@@ -8,13 +8,15 @@ import { browserStore, LinkStatus, MatchClient } from '../net/matchClient';
 import { roundPins } from '../systems/game/pins';
 import { courseHoleFor, newSeed } from '../systems/game/round';
 import { MatchSession } from '../systems/match/session';
-import { Action, Logged, MatchConfig, MatchPlayer, PROTOCOL, Seat } from '../systems/match/types';
+import { Action, Logged, MatchConfig, MatchPlayer, PROTOCOL, RULES, Seat } from '../systems/match/types';
 import type { Difficulty } from '../data/difficulty';
 
 /** What the server tells anyone about a match (its info page). */
 export interface MatchInfo {
   exists: boolean;
   protocol: number;
+  /** the rules the match server runs (types.ts RULES); missing from a server older than the check */
+  rules?: number;
   courseId: string;
   courseVersion: string;
   tee: string;
@@ -62,10 +64,15 @@ export async function newMatchConfig(tee: string, holes: number[], difficulty: D
 }
 
 export async function createLiveMatch(cfg: MatchConfig, player: MatchPlayer): Promise<{ ok: true; code: string } | { ok: false; message: string }> {
+  const key = app.settings.playerKey;
   try {
-    const r = await fetch('api/matches', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ cfg, player, key: app.settings.playerKey }) });
+    const r = await fetch('api/matches', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ cfg, player, key, rules: RULES }) });
     const j = (await r.json().catch(() => ({}))) as { ok?: boolean; code?: string; message?: string; error?: string };
-    if (r.ok && j.ok && j.code) return { ok: true, code: j.code };
+    if (r.ok && j.ok && j.code) {
+      // on this device's list at once, with the key it was made with (a player code changed later doesn't lock it)
+      rememberMatch({ code: j.code, vs: '', courseId: cfg.courseId, at: new Date().toISOString(), key });
+      return { ok: true, code: j.code };
+    }
     return { ok: false, message: j.message ?? j.error ?? `the server said ${r.status}` };
   } catch {
     return { ok: false, message: "can't reach the server - check the connection" };
@@ -95,7 +102,8 @@ export function matchLink(code: string): string {
 }
 
 // ----------------------------------------------------------- my matches
-export interface MyMatch { code: string; vs: string; courseId: string; at: string; done?: boolean }
+/** A match on this device's list. `key`: the player key it is played with (kept: the player code can change in settings). */
+export interface MyMatch { code: string; vs: string; courseId: string; at: string; done?: boolean; key?: string }
 const LIST_KEY = 'golf:matches';
 
 export function myMatches(): MyMatch[] {
@@ -106,8 +114,16 @@ export function myMatches(): MyMatch[] {
 }
 
 export function rememberMatch(m: MyMatch) {
-  const l = [m, ...myMatches().filter((x) => x.code !== m.code)].slice(0, 12);
+  const old = myMatches().find((x) => x.code === m.code);
+  const keep = { ...m, key: m.key ?? old?.key };
+  const l = [keep, ...myMatches().filter((x) => x.code !== m.code)].slice(0, 12);
   try { localStorage.setItem(LIST_KEY, JSON.stringify(l)); } catch { /* blocked */ }
+}
+
+/** The player key this device plays a match with: the one it was made or joined with, else the current one. */
+export function keyFor(code: string): string {
+  const k = myMatches().find((m) => m.code === code)?.key;
+  return typeof k === 'string' && /^[a-z0-9]{8,64}$/.test(k) ? k : app.settings.playerKey;
 }
 
 export function forgetMatch(code: string) {
@@ -117,6 +133,8 @@ export function forgetMatch(code: string) {
 // ------------------------------------------------------------ the match
 export class LiveMatch {
   readonly client: MatchClient;
+  /** the player key this device plays the match with */
+  readonly key: string;
   session: MatchSession | null = null;
   status: LinkStatus = 'offline';
   online: [boolean, boolean] = [false, false];
@@ -125,22 +143,40 @@ export class LiveMatch {
   caughtUp = false;
   /** moves refused after a reload (nobody was waiting for them) */
   refused: { action: Action; code: string; message: string }[] = [];
+  /** bumped when the session is replaced by one rebuilt from the server's log (the play scene starts its view again) */
+  swaps = 0;
+  /** this game can't follow the match (a rebuild failed too): what to tell the player */
+  broken: string | null = null;
+  /** a session being rebuilt from the whole log, shown once it has caught up */
+  private fresh: MatchSession | null = null;
+  private rebuilds = 0;
   private listeners = new Set<() => void>();
   private onVisible = () => { if (document.visibilityState === 'visible') this.client.poke(); };
   private onOnline = () => this.client.poke();
 
   constructor(readonly code: string) {
-    this.client = new MatchClient(code, app.settings.playerKey, { base: '', WebSocket: WebSocket as never, fetch: (u, i) => fetch(u, i), store: browserStore });
-    this.client.since = () => this.session?.knownSeq ?? 0;
+    this.key = keyFor(code);
+    this.client = new MatchClient(code, this.key, {
+      base: '', WebSocket: WebSocket as never, fetch: (u, i) => fetch(u, i), store: browserStore,
+      hidden: () => typeof document !== 'undefined' && document.visibilityState === 'hidden',
+    });
+    this.client.since = () => (this.fresh ?? this.session)?.knownSeq ?? 0;
     this.client.onEvents = (evs, last) => this.onEvents(evs, last);
     this.client.onStatus = (s) => { this.status = s; this.changed(); };
     this.client.onPresence = (o) => { this.online = o; this.changed(); };
-    this.client.onWelcome = (seat) => {
+    this.client.onSeat = (seat) => {
       this.seat = seat;
       if (this.session) this.session.me = seat;
+      if (this.fresh) this.fresh.me = seat;
+      this.remember();
       this.changed();
     };
     this.client.onRefused = (action, code, message) => { this.refused.push({ action, code, message }); this.changed(); };
+  }
+
+  /** Is the session being rebuilt (the play scene waits)? */
+  get rebuilding(): boolean {
+    return !!this.fresh;
   }
 
   start() {
@@ -167,6 +203,13 @@ export class LiveMatch {
   }
 
   private onEvents(evs: Logged[], last: boolean) {
+    if (this.fresh) {
+      // a rebuild: the whole log goes to the new session. Live events that came before its catch-up
+      // leave a gap there and are left out (the catch-up has them); it is shown once caught up
+      this.fresh.receive(evs);
+      if (last && this.fresh.knownSeq > 0) this.finishRebuild();
+      return;
+    }
     if (!this.session) {
       if (!evs.length) return;
       if (!app.course) return; // the match screen loads the course first
@@ -178,6 +221,7 @@ export class LiveMatch {
         while (this.session.applyNext()) { /* shown at once: it happened before this page opened */ }
       } catch (e) {
         console.error('match: could not apply the log', e);
+        this.rebuild();
       }
       this.caughtUp = true;
       this.remember();
@@ -185,19 +229,42 @@ export class LiveMatch {
     this.changed();
   }
 
-  /** On this device's list of matches (for "continue"). */
+  /** On this device's list of matches (for "continue"), with the key it is played with. */
   remember() {
     const s = this.session?.state;
     if (!s || this.seat === null) return;
     const vs = s.players[this.seat === 0 ? 1 : 0]?.name ?? '';
-    rememberMatch({ code: this.code, vs, courseId: s.cfg.courseId, at: new Date().toISOString(), done: s.phase === 'finished' });
+    rememberMatch({ code: this.code, vs, courseId: s.cfg.courseId, at: new Date().toISOString(), done: s.phase === 'finished', key: this.key });
   }
 
-  /** Start again from the server's whole log (the game lost step with it). */
+  /**
+   * The game lost step with the server's log (never expected: both run the
+   * same rules): a new session is built from the whole log behind the one on
+   * screen, and swapped in once it has caught up. Tried twice; after that the
+   * game says it can't follow the match (a reload, which fetches the latest
+   * game, is what helps).
+   */
   rebuild() {
-    if (!app.course) return;
-    this.session = new MatchSession(app.course, this.code, this.seat, []);
-    this.caughtUp = false;
-    this.client.resync();
+    if (!app.course || this.fresh || this.broken) return;
+    if (++this.rebuilds > 2) { this.broken = "this game can't follow the match - reload the page"; this.changed(); return; }
+    this.fresh = new MatchSession(app.course, this.code, this.seat, []);
+    this.changed();
+    this.client.resync(); // since() is the new session's: everything (a reconnect's hello asks the same)
+  }
+
+  private finishRebuild() {
+    const fresh = this.fresh!;
+    this.fresh = null;
+    try {
+      while (fresh.applyNext()) { /* shown at once */ }
+    } catch (e) {
+      console.error('match: the log could not be read', e);
+      this.broken = "this game can't follow the match - reload the page";
+      this.changed();
+      return;
+    }
+    this.session = fresh;
+    this.swaps++;
+    this.changed();
   }
 }

@@ -13,6 +13,7 @@ import { dialogInput, dialogText, openDialog } from '../ui/domDialog';
 import { askName } from '../ui/nameInput';
 import { Button, COLORS, Panel, setTxt, txt } from '../ui/widgets';
 import { courseVersion, forgetMatch, LiveMatch, matchInfo, MatchInfo, matchLink, myMatches, parseMatchCode } from '../match/live';
+import { PROTOCOL, RULES } from '../systems/match/types';
 import { lengthOf } from '../systems/game/lengths';
 import { lengthLabel, useCourse } from './flow';
 import { ensureBg, MenuScene } from './menu';
@@ -86,7 +87,14 @@ export class MatchScene extends MenuScene {
     this.info = info;
     if (!info) { this.busy = false; this.note = "can't reach the server - check the connection and try again"; this.rebuild(); return; }
     if (!info.exists) { this.busy = false; forgetMatch(code); this.note = `no match with the code ${code} (it may have ended)`; this.rebuild(); return; }
-    if (info.protocol !== 1) { this.busy = false; this.note = 'this match was made by another version of the game - reload to update'; this.rebuild(); return; }
+    if (info.protocol !== PROTOCOL) { this.busy = false; this.note = 'this match was made by another version of the game - reload to update'; this.rebuild(); return; }
+    if (info.rules !== undefined && info.rules !== RULES) {
+      // the server and this game would decide moves differently: neither can be played on
+      this.busy = false;
+      this.note = info.rules > RULES ? 'this game is older than the match server - reload to update it' : 'the match server is older than this game (it needs deploying)';
+      this.rebuild();
+      return;
+    }
     if (!app.courses.some((c) => c.id === info.courseId)) { this.busy = false; this.note = "this game doesn't have that course yet - reload to update"; this.rebuild(); return; }
     this.note = 'loading the course...';
     this.rebuild();
@@ -114,12 +122,36 @@ export class MatchScene extends MenuScene {
     live.start();
   }
 
+  /**
+   * What the screen shows, as a key: the line's changes (presence, status) come
+   * often, and a screen rebuilt under a finger loses the tap ("join match"
+   * needed a second tap in the two-browser test). It is rebuilt only when this changes.
+   */
+  private viewKey(): string {
+    const live = this.live;
+    const s = live?.session?.state;
+    return [this.m.mode, this.note, this.busy, live?.caughtUp, live?.seat, live?.status, s?.phase, s?.players.map((p) => p?.name ?? '').join(','),
+      app.settings.playerName, app.settings.lefty].join('|');
+  }
+
+  private drawnKey = '';
+
+  private refreshView() {
+    if (this.viewKey() !== this.drawnKey) this.rebuild();
+  }
+
   /** The match line changed: joined, caught up, the friend arrived... */
   private onLive() {
     const live = this.live;
     if (!live || !this.sys.isActive()) return;
-    if (live.status === 'gone') { this.busy = false; this.note = 'this match no longer exists'; forgetMatch(live.code); this.rebuild(); return; }
-    if (!live.caughtUp || !live.session) { this.rebuild(); return; }
+    if (live.status === 'gone') { this.busy = false; this.note = 'this match no longer exists'; forgetMatch(live.code); this.refreshView(); return; }
+    if (live.status === 'version' || live.status === 'elsewhere' || live.broken) {
+      this.busy = false;
+      this.note = live.broken ?? (live.status === 'elsewhere' ? 'this match is open in another tab or on another device' : live.client.problem ?? 'reload to update');
+      this.refreshView();
+      return;
+    }
+    if (!live.caughtUp || !live.session || live.rebuilding) { this.refreshView(); return; }
     // before the first tee nothing needs playing back: the friend joining, being ready
     try { while (live.session.applyNext()) { /* shown at once */ } } catch (e) { console.error(e); live.rebuild(); return; }
     const s = live.session.state;
@@ -127,14 +159,21 @@ export class MatchScene extends MenuScene {
     if (live.seat === null) {
       // not a player yet: the friend opening the invitation
       if (this.m.mode === 'join' || this.m.mode === 'continue') {
-        if (s.players[1]) { this.busy = false; this.note = 'this match already has two players'; this.rebuild(); return; }
+        if (s.players[1]) { this.busy = false; this.note = 'this match already has two players'; this.refreshView(); return; }
         this.busy = false;
-        this.rebuild(); // shows "join"
+        this.refreshView(); // shows "join"
       }
       return;
     }
     live.remember();
-    if (s.phase === 'waiting') { this.busy = false; this.m = { mode: 'invite', code: live.code }; this.rebuild(); return; }
+    if (s.phase === 'waiting') {
+      // the friend who just joined: their seat comes a moment before the news of it (the joined event); wait for that
+      if (live.seat === 1) return;
+      this.busy = false;
+      this.m = { mode: 'invite', code: live.code };
+      this.refreshView();
+      return;
+    }
     // both players are in: to the first tee (or back to where the match is)
     this.unlisten?.();
     this.unlisten = null;
@@ -147,6 +186,7 @@ export class MatchScene extends MenuScene {
   }
 
   build() {
+    this.drawnKey = this.viewKey();
     const W = app.view.w, H = app.view.h;
     const pw = Math.min(320, W - 12), ph = Math.min(H - 12, 214);
     const x0 = Math.round((W - pw) / 2), y0 = Math.round((H - ph) / 2);

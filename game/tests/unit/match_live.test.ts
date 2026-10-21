@@ -104,9 +104,10 @@ describe.skipIf(!URL0)('live match play over the real server (MATCH_URL)', () =>
     const t0 = Date.now();
     while (games[0].session!.state.phase !== 'finished') {
       if (Date.now() - t0 > 120_000) throw new Error('match took too long');
-      const s = games[0].session!.state;
-      // both games must agree before anyone moves (as the game waits until it has shown everything)
+      // both games must agree before anyone moves (as the game waits until it has shown everything); the
+      // state is read after that (read before, it could be one event old after a reconnect: the wrong player moved)
       await until(() => games.every((g) => g.session!.seq === Math.max(...games.map((h) => h.session!.knownSeq)) && g.session!.idle), 10_000, 'in step');
+      const s = games[0].session!.state;
       if (s.phase === 'playing' && (!s.ready[0] || !s.ready[1])) {
         await Promise.all(([0, 1] as Seat[]).filter((k) => !s.ready[k]).map((k) => games[k].client.send({ t: 'ready', hole: s.hole })));
         continue;
@@ -116,7 +117,7 @@ describe.skipIf(!URL0)('live match play over the real server (MATCH_URL)', () =>
       const a = robotMove(g.session!.rounds[who]!, rng);
       if (a.t === 'relief') drops++;
       const r = await g.client.send(a);
-      expect(r).toMatchObject({ ok: true });
+      expect(r, `move ${moves + 1} by ${who}: ${JSON.stringify(r)} (seq ${games.map((x) => x.session!.seq)})`).toMatchObject({ ok: true });
       moves++;
       // the line drops (a phone locking) twice during the match; the game reconnects and catches up
       if (moves === 5 || moves === 12) {

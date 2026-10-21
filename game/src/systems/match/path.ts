@@ -57,11 +57,30 @@ export function encodePath(sim: SimResult): string {
   return JSON.stringify(d);
 }
 
+const EVENT_TYPES = new Set(['land', 'bounce', 'canopy', 'trunk', 'wall', 'splash', 'holed', 'lipout', 'rest', 'edge']);
+const fin = (v: unknown): v is number => typeof v === 'number' && Number.isFinite(v);
+const xyz = (p: unknown): p is { x: number; y: number; z: number } => !!p && fin((p as { x: unknown }).x) && fin((p as { y: unknown }).y) && fin((p as { z: unknown }).z);
+
+/** A flight event as playback uses it (sounds, the carry banner, the trail), or null if it isn't one. */
+function cleanEvent(e: unknown): SimEvent | null {
+  const o = e as Record<string, unknown> | null;
+  if (!o || typeof o.type !== 'string' || !EVENT_TYPES.has(o.type) || !fin(o.t) || !fin(o.x) || !fin(o.y) || !fin(o.z)) return null;
+  const out: SimEvent = { t: o.t, type: o.type as SimEvent['type'], x: o.x, y: o.y, z: o.z };
+  if (fin(o.surf)) out.surf = o.surf;
+  if (fin(o.speed)) out.speed = o.speed;
+  return out;
+}
+
 /** A sent stroke back as a SimResult for playback (every step filled in), or null if it doesn't read. */
 export function decodePath(text: string): SimResult | null {
+  if (!text) return null; // a stroke from an earlier hole, sent without its flight
   let d: PathData;
   try { d = JSON.parse(text) as PathData; } catch { return null; }
-  if (!d || d.v !== 1 || !Number.isInteger(d.n) || d.n < 1 || d.n > MAX_SAMPLES || typeof d.s !== 'string' || !d.end || !Array.isArray(d.ev)) return null;
+  if (!d || d.v !== 1 || !Number.isInteger(d.n) || d.n < 1 || d.n > MAX_SAMPLES || typeof d.s !== 'string' || !xyz(d.end) || !Array.isArray(d.ev)) return null;
+  if (!fin(d.dur) || d.dur < 0 || !Number.isInteger(d.rest)) return null;
+  if (d.cross !== null && !(d.cross && fin(d.cross.x) && fin(d.cross.y))) return null;
+  if (d.landing !== null && !(xyz(d.landing) && fin(d.landing.t))) return null;
+  const events = d.ev.map(cleanEvent).filter((e): e is SimEvent => e !== null);
   let bytes: Uint8Array;
   try { bytes = fromBase64(d.s); } catch { return null; }
   // kept samples: steps 0, 2, 4 ... and the last step
@@ -80,7 +99,8 @@ export function decodePath(text: string): SimResult | null {
   }
   if (![...samples].every(Number.isFinite)) return null;
   return {
-    samples, n: d.n, end: d.end, restSurface: d.rest, holed: !!d.holed, inWater: !!d.water, waterCross: d.cross ?? null,
-    landing: d.landing ?? null, events: d.ev, duration: d.dur, hitTree: !!d.tree,
+    samples, n: d.n, end: { x: d.end.x, y: d.end.y, z: d.end.z }, restSurface: d.rest, holed: !!d.holed, inWater: !!d.water,
+    waterCross: d.cross ? { x: d.cross.x, y: d.cross.y } : null,
+    landing: d.landing ? { x: d.landing.x, y: d.landing.y, z: d.landing.z, t: d.landing.t } : null, events, duration: d.dur, hitTree: !!d.tree,
   };
 }

@@ -2,7 +2,7 @@
 // concessions and how the match stands, against the USGA rules (3.2, 6.4).
 
 import { describe, expect, it } from 'vitest';
-import { applyEvent, decided, holesLeft, lead, statusText, stateOf, toPlay } from '../../src/systems/match/rules';
+import { applyEvent, cleanAction, decided, holesLeft, lead, MAX_PATH, statusText, stateOf, toPlay } from '../../src/systems/match/rules';
 import { HoleSnap, MatchConfig, MatchError, MatchEvent, MatchState, PROTOCOL, Seat } from '../../src/systems/match/types';
 import type { PendingRelief } from '../../src/systems/game/round';
 
@@ -296,5 +296,70 @@ describe('match play: the match', () => {
     expect(code(() => applyEvent(s, { ...stroke(0, s, 1, 150), hole: 3 } as MatchEvent))).toBe('wrong_hole');
     expect(code(() => applyEvent(s, { ...stroke(0, s, 1, 150), after: { ...snap(0, 1, 150), ball: { x: NaN, y: 0, teedUp: false } } } as MatchEvent))).toBe('bad_snap');
     expect(code(() => applyEvent(s, stroke(0, s, 1, 0, { holed: true, pending: { kind: 'cartpath' } })))).toBe('bad_snap');
+  });
+});
+
+describe('match play: drops and crossed moves (review fixes)', () => {
+  it('a ball in the water or out of bounds is dropped, with its penalty, before it is played again', () => {
+    let s = started(0);
+    s = play(s, (x) => stroke(0, x, 1, 150, { pending: { kind: 'water', cross: { x: 0, y: 0 } } }));
+    expect(toPlay(s)).toBe(0);
+    expect(code(() => applyEvent(s, stroke(0, s, 2, 140)))).toBe('pending'); // no playing it from the water
+    expect(code(() => applyEvent(s, relief(0, s, 1, 150, 0)))).toBe('bad_penalty'); // the drop costs a stroke
+    s = applyEvent(s, relief(0, s, 2, 150, 1));
+    expect(s.p[0].pending).toBeNull();
+    s = applyEvent(s, stroke(1, s, 1, 120)); // the other player tees off: charlie's dropped ball (150) is farther
+    expect(toPlay(s)).toBe(0);
+  });
+
+  it('a cart path ball may be played as it lies (free relief is a choice)', () => {
+    let s = started(0);
+    s = play(s, (x) => stroke(0, x, 1, 150, { pending: { kind: 'cartpath' } }));
+    expect(toPlay(s)).toBe(0);
+    s = applyEvent(s, { t: 'relief', by: 0, hole: 0, after: snap(0, 1, 150), penalty: 0, label: 'as it lies' });
+    expect(s.p[0].pending).toBeNull();
+    s = applyEvent(s, stroke(1, s, 1, 100));
+    expect(toPlay(s)).toBe(0);
+  });
+
+  it('a putt given as it was being struck is void: the stroke stands, not a different putt', () => {
+    let s = started(0);
+    s = play(s, (x) => stroke(0, x, 1, 150), (x) => stroke(1, x, 1, 140), (x) => stroke(0, x, 2, 1), (x) => stroke(1, x, 2, 3));
+    // kevin gives charlie the 1 m putt (charlie has played 2) ...
+    const give: MatchEvent = { t: 'concede', by: 1, what: 'stroke', hole: 0, strokes: 2 };
+    expect(code(() => applyEvent(s, give))).toBe('ok');
+    // ... but charlie's putt (his 3rd) reached the server first and missed: the concession no longer fits
+    const missed = applyEvent(applyEvent(s, stroke(1, s, 3, 1)), stroke(0, applyEvent(s, stroke(1, s, 3, 1)), 3, 0.6));
+    expect(missed.p[0].strokes).toBe(3);
+    expect(code(() => applyEvent(missed, give))).toBe('moved');
+    expect(code(() => applyEvent(missed, { ...give, strokes: 3 } as MatchEvent))).toBe('ok'); // the putt as it lies now can be given
+  });
+});
+
+describe('match play: what the server accepts', () => {
+  const after = snap(0, 1, 150);
+  it('rebuilds each move from its own fields (anything else a game sends is dropped)', () => {
+    const extra = { t: 'stroke', hole: 0, after: { ...after, tally: { ...after.tally, hole: 7, par: 3 }, evil: true }, shot: { ...shot, club: 'dr', hack: 1 }, path: '', cid: 'x', by: 1 };
+    const a = cleanAction(extra)!;
+    expect(a).toEqual({ t: 'stroke', hole: 0, after, shot: { ...shot, club: 'dr' }, path: '' });
+    expect(Object.keys((a as { after: object }).after)).not.toContain('evil');
+    expect(cleanAction({ t: 'join', player: { name: 'sam', lefty: false, key: 'secret' } })).toEqual({ t: 'join', player: { name: 'sam', lefty: false } });
+    expect(cleanAction({ t: 'concede', what: 'stroke', hole: 2, strokes: 4, by: 0 })).toEqual({ t: 'concede', what: 'stroke', hole: 2, strokes: 4 });
+    expect(cleanAction({ t: 'relief', hole: 0, after, penalty: 1, label: 'x'.repeat(80) })).toMatchObject({ label: 'x'.repeat(40) });
+  });
+
+  it('refuses shapes no game makes', () => {
+    expect(cleanAction(null)).toBeNull();
+    expect(cleanAction({ t: 'created', cfg: {} })).toBeNull(); // only the server makes those
+    expect(cleanAction({ t: 'joined', player: { name: 'x', lefty: false }, honour: 0 })).toBeNull();
+    expect(cleanAction({ t: 'ready', hole: -1 })).toBeNull();
+    expect(cleanAction({ t: 'ready', hole: 1.5 })).toBeNull();
+    expect(cleanAction({ t: 'stroke', hole: 0, after: { ...after, ball: { x: 'a', y: 0, teedUp: false } }, shot, path: '' })).toBeNull();
+    expect(cleanAction({ t: 'stroke', hole: 0, after, shot: { ...shot, club: '<script>' }, path: '' })).toBeNull();
+    expect(cleanAction({ t: 'stroke', hole: 0, after, shot, path: 'x'.repeat(MAX_PATH + 1) })).toBeNull();
+    expect(cleanAction({ t: 'stroke', hole: 0, after: { ...after, pending: { kind: 'lava' } }, shot, path: '' })).toBeNull();
+    expect(cleanAction({ t: 'relief', hole: 0, after, penalty: 3, label: 'x' })).toBeNull();
+    expect(cleanAction({ t: 'concede', what: 'everything', hole: 0 })).toBeNull();
+    expect(cleanAction({ t: 'rematch', code: 'BAD CODE' })).toBeNull();
   });
 });

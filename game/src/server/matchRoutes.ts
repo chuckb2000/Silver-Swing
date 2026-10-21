@@ -42,12 +42,12 @@ export async function createMatch(env: MatchEnv, body: string, rand?: () => numb
   return jsonResponse({ ok: false, error: 'busy' }, 503);
 }
 
-/** /api/match/<code>/<what>: info, events, act or ws, handed to the match's object. */
+/** /api/match/<code>/<what>: info, events, hello, act or ws, handed to the match's object. */
 export async function toMatch(env: MatchEnv, req: Request, parts: string[]): Promise<Response> {
   if (!env.MATCH) return jsonResponse(NOT_SET_UP, 503);
   const [code, what = 'info'] = parts;
   if (!isMatchCode(code)) return jsonResponse({ ok: false, error: 'bad_code', message: 'not a match code' }, 400);
-  if (!['info', 'events', 'act', 'ws'].includes(what) || parts.length > 2) return jsonResponse({ ok: false, error: 'not_found' }, 404);
+  if (!['info', 'events', 'hello', 'act', 'ws'].includes(what) || parts.length > 2) return jsonResponse({ ok: false, error: 'not_found' }, 404);
   if (what === 'ws' && req.headers.get('Upgrade')?.toLowerCase() !== 'websocket') return jsonResponse({ ok: false, error: 'upgrade', message: 'a WebSocket is needed' }, 426);
   const stub = env.MATCH.get(env.MATCH.idFromName(code));
   const url = new URL(req.url);

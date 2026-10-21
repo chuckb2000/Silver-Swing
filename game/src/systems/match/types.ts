@@ -9,9 +9,31 @@ import type { PuttStrike, Strike } from '../swing/outcome';
 /** Bumped when the messages change in a way an older game can't read. */
 export const PROTOCOL = 1;
 
+/**
+ * Bumped whenever rules.ts decides anything differently. The match server and
+ * the games must run the same rules, or one accepts a move the other refuses:
+ * a game whose number differs from the server's is told to update (or, if the
+ * server is the older one, that the match server needs deploying).
+ */
+export const RULES = 2;
+
 /** The keep-alive a game sends, and the server's answer (sent without waking the match's object). */
 export const PING = '{"type":"ping"}';
 export const PONG = '{"type":"pong"}';
+
+/** Why the server closed a game's WebSocket (the game acts on these; others mean "connect again"). */
+export const CLOSE = {
+  /** no such match (deleted, or never made) */
+  noMatch: 4004,
+  /** the socket never said who it was */
+  noHello: 4008,
+  /** the match expired and was deleted */
+  expired: 4010,
+  /** the same player opened the match on another tab or device */
+  replaced: 4011,
+  /** the game and the server run different rules (RULES) */
+  version: 4012,
+} as const;
 
 export type Seat = 0 | 1;
 
@@ -73,7 +95,8 @@ export type Action =
   | { t: 'ready'; hole: number }
   | { t: 'stroke'; hole: number; after: HoleSnap; shot: ShotInfo; path: string }
   | { t: 'relief'; hole: number; after: HoleSnap; penalty: number; label: string }
-  | { t: 'concede'; what: ConcedeWhat; hole: number }
+  /** `strokes`: what the other player had played when the putt was given (a stroke that crossed it makes it void) */
+  | { t: 'concede'; what: ConcedeWhat; hole: number; strokes?: number }
   | { t: 'rematch'; code: string };
 
 /** An entry in the match's log, numbered by the server. */

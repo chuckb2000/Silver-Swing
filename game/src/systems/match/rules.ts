@@ -7,7 +7,7 @@
 
 import type { PendingRelief } from '../game/round';
 import {
-  Action, HoleResult, HoleSnap, Logged, MatchConfig, MatchError, MatchEvent, MatchOutcome, MatchPlayer, MatchState, PlayerHole, PROTOCOL, Seat,
+  Action, HoleResult, HoleSnap, Logged, MatchConfig, MatchError, MatchEvent, MatchOutcome, MatchPlayer, MatchState, PlayerHole, PROTOCOL, Seat, ShotInfo,
 } from './types';
 
 export const other = (s: Seat): Seat => (s === 0 ? 1 : 0);
@@ -203,6 +203,8 @@ export function applyEvent(prev: MatchState | null, e: MatchEvent | Logged): Mat
   switch (e.t) {
     case 'stroke': {
       if (toPlay(s) !== by) fail('not_your_turn', "it isn't your turn");
+      // a ball in a penalty area or out of bounds is dropped (with its penalty) before it is played again
+      if (me.pending && (me.pending.kind === 'water' || me.pending.kind === 'ob')) fail('pending', 'take the drop first');
       const a = checkSnap(e.after, s.hole);
       if (a.tally.strokes !== me.strokes + 1) fail('bad_count', 'a stroke counts one');
       s.p[by] = fromSnap(a);
@@ -215,6 +217,7 @@ export function applyEvent(prev: MatchState | null, e: MatchEvent | Logged): Mat
       if (!me.pending && me.strokes === 0) fail('not_started', 'tee off first'); // an unplayable ball is one that has been played
       const pen = e.penalty;
       if (!isCount(pen, 2)) fail('bad_penalty', 'bad penalty');
+      if (me.pending && pen < minPenalty(me.pending)) fail('bad_penalty', 'that relief costs a penalty stroke');
       const a = checkSnap(e.after, s.hole);
       if (a.pending || a.holed) fail('bad_snap', 'a drop leaves the ball at rest');
       if (a.tally.strokes !== me.strokes + pen) fail('bad_count', 'the penalty does not add up');
@@ -232,6 +235,8 @@ export function applyEvent(prev: MatchState | null, e: MatchEvent | Logged): Mat
       if (t.holed) fail('holed', 'the ball is already in the hole');
       if (t.pending) fail('pending', 'a drop has to be taken first');
       if (t.strokes === 0) fail('not_started', 'nothing to concede yet');
+      // given for the putt that was there: a stroke played in the meantime (the moves crossed) voids it
+      if (e.strokes !== undefined && e.strokes !== t.strokes) fail('moved', 'that putt has been played');
       t.strokes += 1;
       t.holed = true;
       t.conceded = true;
@@ -240,6 +245,114 @@ export function applyEvent(prev: MatchState | null, e: MatchEvent | Logged): Mat
     }
     default:
       return fail('bad_event', 'unknown move');
+  }
+}
+
+// -------------------------------------------------- what the server accepts
+/** Most a stroke's flight may weigh (a 45-second simulation is ~45 KB; see path.ts). */
+export const MAX_PATH = 96 * 1024;
+const num = (v: unknown): number | null => (typeof v === 'number' && Number.isFinite(v) ? v : null);
+const int = (v: unknown, lo: number, hi: number): number | null => (Number.isInteger(v) && (v as number) >= lo && (v as number) <= hi ? (v as number) : null);
+const pt = (v: unknown): { x: number; y: number } | null => {
+  const o = v as { x?: unknown; y?: unknown } | null;
+  const x = num(o?.x), y = num(o?.y);
+  return o && x !== null && y !== null ? { x, y } : null;
+};
+const ball = (v: unknown) => {
+  const p = pt(v);
+  return p && typeof (v as { teedUp?: unknown }).teedUp === 'boolean' ? { ...p, teedUp: (v as { teedUp: boolean }).teedUp } : null;
+};
+
+function cleanPending(v: unknown): PendingRelief | null | undefined {
+  if (v === null) return null;
+  const o = v as { kind?: unknown; cross?: unknown; wentOut?: unknown } | null;
+  if (!o || typeof o !== 'object') return undefined;
+  if (o.kind === 'water') { const c = pt(o.cross); return c ? { kind: 'water', cross: c } : undefined; }
+  if (o.kind === 'ob') { const w = o.wentOut === null ? null : pt(o.wentOut); return w === null && o.wentOut !== null ? undefined : { kind: 'ob', wentOut: w }; }
+  if (o.kind === 'wrong_green' || o.kind === 'cartpath') return { kind: o.kind };
+  return undefined;
+}
+
+/** A hole snapshot with only its own fields, each checked (null: not one). */
+export function cleanSnap(v: unknown): HoleSnap | null {
+  const o = v as Record<string, unknown> | null;
+  if (!o || typeof o !== 'object') return null;
+  const t = o.tally as Record<string, unknown> | null;
+  const hole = int(o.hole, 0, 35), shotNo = int(o.shotNo, 0, 99), shotSeq = int(o.shotSeq, 0, 1e6);
+  const strokes = int(t?.strokes, 0, 99), putts = int(t?.putts, 0, 99), penalties = int(t?.penalties, 0, 99);
+  const fairway = t?.fairway === null || typeof t?.fairway === 'boolean' ? (t.fairway as boolean | null) : undefined;
+  const reached = t?.reachedGreenAt === null ? null : int(t?.reachedGreenAt, 0, 99);
+  const b = ball(o.ball), pv = ball(o.prev), pending = cleanPending(o.pending);
+  if (hole === null || shotNo === null || shotSeq === null || strokes === null || putts === null || penalties === null) return null;
+  if (fairway === undefined || (reached === null && t?.reachedGreenAt !== null) || !b || !pv || pending === undefined || typeof o.holed !== 'boolean') return null;
+  return { hole, tally: { strokes, putts, penalties, fairway, reachedGreenAt: reached }, ball: b, prev: pv, shotNo, shotSeq, pending, holed: o.holed };
+}
+
+const str = (v: unknown, max: number): string | null => (typeof v === 'string' && v.length <= max ? v : null);
+
+/** A stroke as sent, with only the fields the other game shows (null: not one). */
+export function cleanShot(v: unknown): ShotInfo | null {
+  const o = v as Record<string, unknown> | null;
+  if (!o || typeof o !== 'object') return null;
+  const club = typeof o.club === 'string' && /^[a-z0-9]{1,8}$/.test(o.club) ? o.club : null;
+  const sp = o.spec as Record<string, unknown> | null;
+  const spec = sp && num(sp.x) !== null && num(sp.y) !== null && num(sp.z) !== null && num(sp.aim) !== null
+    ? { x: sp.x as number, y: sp.y as number, z: sp.z as number, aim: sp.aim as number } : null;
+  const side = (x: unknown) => (x === -1 || x === 0 || x === 1 ? x : null);
+  let strike: ShotInfo['strike'] = null;
+  if (o.strike !== null) {
+    const k = o.strike as Record<string, unknown> | null;
+    const f = ['carry', 'apex', 'hang', 'curveDeg', 'aimOffsetDeg', 'excess', 'loss', 'power'].map((n) => num(k?.[n]));
+    const q = str(k?.quality, 12), sd = side(k?.side);
+    if (!k || f.some((x) => x === null) || !q || sd === null || typeof k.overswing !== 'boolean') return null;
+    strike = { carry: f[0]!, apex: f[1]!, hang: f[2]!, curveDeg: f[3]!, aimOffsetDeg: f[4]!, excess: f[5]!, loss: f[6]!, power: f[7]!, quality: q as never, side: sd, overswing: k.overswing };
+  }
+  let putt: ShotInfo['putt'] = null;
+  if (o.putt !== null) {
+    const k = o.putt as Record<string, unknown> | null;
+    const f = ['dirDeg', 'distMult', 'excess'].map((n) => num(k?.[n]));
+    const q = str(k?.quality, 12), sd = side(k?.side);
+    if (!k || f.some((x) => x === null) || !q || sd === null) return null;
+    putt = { dirDeg: f[0]!, distMult: f[1]!, excess: f[2]!, quality: q as never, side: sd };
+  }
+  const puttDist = o.puttDist === null ? null : num(o.puttDist);
+  const gust = num(o.gustMph), scale = num(o.scale), power = num(o.power);
+  if (!club || !spec || (puttDist === null && o.puttDist !== null) || gust === null || scale === null || power === null) return null;
+  return { club, spec, strike, putt, puttDist, gustMph: gust, scale, power };
+}
+
+/**
+ * A move as a game sent it, rebuilt from its checked fields only (null: not a
+ * move): a modified or buggy game can't slip extra fields into the log, send a
+ * shape the other game can't show, or pose as another kind of entry.
+ */
+export function cleanAction(v: unknown): Action | null {
+  const a = v as Record<string, unknown> | null;
+  if (!a || typeof a !== 'object') return null;
+  const hole = int(a.hole, 0, 35);
+  switch (a.t) {
+    case 'join': {
+      const p = a.player as Record<string, unknown> | null;
+      return p && typeof p.name === 'string' && p.name.length <= 40 && typeof p.lefty === 'boolean' ? { t: 'join', player: { name: p.name, lefty: p.lefty } } : null;
+    }
+    case 'ready': return hole === null ? null : { t: 'ready', hole };
+    case 'stroke': {
+      const after = cleanSnap(a.after), shot = cleanShot(a.shot), path = str(a.path, MAX_PATH);
+      return hole === null || !after || !shot || path === null ? null : { t: 'stroke', hole, after, shot, path };
+    }
+    case 'relief': {
+      const after = cleanSnap(a.after), penalty = int(a.penalty, 0, 2);
+      const label = typeof a.label === 'string' ? a.label.slice(0, 40) : null;
+      return hole === null || !after || penalty === null || label === null ? null : { t: 'relief', hole, after, penalty, label };
+    }
+    case 'concede': {
+      if (a.what !== 'stroke' && a.what !== 'hole' && a.what !== 'match') return null;
+      const strokes = a.strokes === undefined ? undefined : int(a.strokes, 0, 99);
+      if (hole === null || strokes === null) return null;
+      return strokes === undefined ? { t: 'concede', what: a.what, hole } : { t: 'concede', what: a.what, hole, strokes };
+    }
+    case 'rematch': return typeof a.code === 'string' && /^[a-z0-9]{4,12}$/.test(a.code) ? { t: 'rematch', code: a.code } : null;
+    default: return null;
   }
 }
 

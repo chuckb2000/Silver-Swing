@@ -38,7 +38,13 @@ export function holeSnapOf(r: Round, holed = false): HoleSnap {
 /** Put a Round's hole back to a snapshot (the other player's stroke, a move the server refused). */
 export function restoreHole(r: Round, a: HoleSnap) {
   if (r.holeIndex !== a.hole || !r.tally) r.startHole(a.hole);
-  Object.assign(r.tally, structuredClone(a.tally));
+  // field by field: only the tally's own counts (never its hole or par, whatever the snapshot carries)
+  const t = r.tally;
+  t.strokes = a.tally.strokes;
+  t.putts = a.tally.putts;
+  t.penalties = a.tally.penalties;
+  t.fairway = a.tally.fairway;
+  t.reachedGreenAt = a.tally.reachedGreenAt;
   r.ball = { ...a.ball };
   r.prev = { ...a.prev };
   r.shotNo = a.shotNo;

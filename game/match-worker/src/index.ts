@@ -7,12 +7,14 @@
 import { DurableObject } from 'cloudflare:workers';
 import { MatchRoomCore, PING, PONG, RoomHost, RoomSocket, SocketInfo } from '../../src/server/matchRoom';
 
-function wrap(ws: WebSocket): RoomSocket {
+function wrap(ws: WebSocket, ctx: DurableObjectState): RoomSocket {
   return {
     send: (t) => ws.send(t),
     close: (c, r) => ws.close(c, r),
     info: () => (ws.deserializeAttachment() as SocketInfo | null) ?? null,
     setInfo: (i) => ws.serializeAttachment(i),
+    // the last keep-alive the platform answered for us (the object isn't woken for those)
+    pingedAt: () => ctx.getWebSocketAutoResponseTimestamp(ws)?.getTime() ?? null,
   };
 }
 
@@ -41,7 +43,7 @@ export class MatchRoom extends DurableObject<Env> {
         const pair = new WebSocketPair();
         const [client, server] = Object.values(pair);
         ctx.acceptWebSocket(server);
-        if (info) server.serializeAttachment(info);
+        server.serializeAttachment(info); // its opening time: a socket that never says hello is closed after 10 s
         return new Response(null, { status: 101, webSocket: client });
       },
       now: () => Date.now(),
@@ -52,7 +54,7 @@ export class MatchRoom extends DurableObject<Env> {
 
   private socket(ws: WebSocket): RoomSocket {
     let w = this.wrapped.get(ws);
-    if (!w) { w = wrap(ws); this.wrapped.set(ws, w); }
+    if (!w) { w = wrap(ws, this.ctx); this.wrapped.set(ws, w); }
     return w;
   }
 

@@ -8,7 +8,7 @@ import { MatchRoomCore, RoomHost, RoomSocket, RoomStorage, SocketInfo } from '..
 import { createMatch, MatchEnv, newMatchCode, toMatch } from '../../src/server/matchRoutes';
 import { ClientDeps, KeyValue, MatchClient, WebSocketLike } from '../../src/net/matchClient';
 import { MatchSession } from '../../src/systems/match/session';
-import { Action, HoleSnap, Logged, MatchConfig, PING, PONG, PROTOCOL, Seat } from '../../src/systems/match/types';
+import { Action, CLOSE, HoleSnap, Logged, MatchConfig, PING, PONG, PROTOCOL, RULES, Seat } from '../../src/systems/match/types';
 import { loadCourseFiles } from './helpers';
 
 const COURSE = loadCourseFiles('oswego_lake');
@@ -27,8 +27,12 @@ class FakeStorage implements RoomStorage {
   m = new Map<string, unknown>();
   alarm: number | null = null;
   writes = 0;
+  failPuts = 0; // the next writes fail (a storage error)
   async get<T>(k: string) { return structuredClone(this.m.get(k)) as T | undefined; }
-  async put(e: Record<string, unknown>) { for (const [k, v] of Object.entries(e)) { this.m.set(k, structuredClone(v)); this.writes++; } }
+  async put(e: Record<string, unknown>) {
+    if (this.failPuts > 0) { this.failPuts--; throw new Error('storage unavailable'); }
+    for (const [k, v] of Object.entries(e)) { this.m.set(k, structuredClone(v)); this.writes++; }
+  }
   async list<T>(o: { prefix: string; start?: string; limit?: number }) {
     const keys = [...this.m.keys()].filter((k) => k.startsWith(o.prefix) && (!o.start || k >= o.start)).sort().slice(0, o.limit ?? Infinity);
     return new Map(keys.map((k) => [k, structuredClone(this.m.get(k)) as T]));
@@ -42,11 +46,14 @@ class ServerEnd implements RoomSocket {
   inf: SocketInfo | null = null;
   open = true;
   peer: ClientEnd | null = null;
+  /** when the platform last answered a keep-alive on it (Cloudflare's auto-response timestamp) */
+  pinged: number | null = null;
   constructor(private net: FakeNet) {}
   send(t: string) { if (!this.open) throw new Error('closed'); this.net.deliver(() => this.peer?.receive(t)); }
   close(code = 1000) { if (!this.open) return; this.open = false; this.net.deliver(() => this.peer?.closedByServer(code)); }
   info() { return this.inf; }
   setInfo(i: SocketInfo) { this.inf = structuredClone(i); }
+  pingedAt() { return this.pinged; }
 }
 
 /** The game's end: a WebSocket as the browser has it. */
@@ -57,13 +64,18 @@ class ClientEnd implements WebSocketLike {
   onclose: WebSocketLike['onclose'] = null;
   onerror: WebSocketLike['onerror'] = null;
   server: ServerEnd | null = null;
+  /** this line is dead while it looks open (a phone back from sleep): nothing gets through either way */
+  deaf = false;
   constructor(private net: FakeNet, readonly url: string) { net.dial(this); }
   send(d: string) {
     if (this.readyState !== 1) throw new Error('not open');
     this.net.sentByClients.push(d);
     if (this.net.dropNextAct && d.includes('"type":"act"')) { this.net.dropNextAct = false; this.net.deliver(() => this.net.cut(this)); return; }
+    if (this.net.swallowNextAct && d.includes('"type":"act"')) { this.net.swallowNextAct = false; return; } // lost, the line stays up
     const s = this.server!;
-    if (d === PING) { this.net.deliver(() => this.receive(PONG)); return; } // the auto-response
+    if (this.deaf || this.net.deaf) return;
+    if (this.net.swallowHello && d.includes('"type":"hello"')) return; // a proxy that lets the socket open and nothing through
+    if (d === PING) { s.pinged = this.net.now; this.net.deliver(() => this.receive(PONG)); return; } // the auto-response
     this.net.deliver(() => this.net.core.message(s, d));
     if (this.net.cutAfterAct && d.includes('"type":"act"')) { this.net.cutAfterAct = false; this.net.deliver(() => this.net.cut(this), 1); }
   }
@@ -74,7 +86,7 @@ class ClientEnd implements WebSocketLike {
     if (s && s.open) { s.open = false; this.net.deliver(() => this.net.core.closed(s)); }
     this.net.deliver(() => this.onclose?.({ code }));
   }
-  receive(t: string) { if (this.readyState === 1) this.onmessage?.({ data: t }); }
+  receive(t: string) { if (this.readyState === 1 && !this.deaf && !this.net.deaf) this.onmessage?.({ data: t }); }
   closedByServer(code: number) { if (this.readyState === 3) return; this.readyState = 3; this.onclose?.({ code }); }
 }
 
@@ -89,6 +101,13 @@ class FakeNet {
   refuseWs = false;
   dropNextAct = false;   // the next move is lost on the way (and the line goes down)
   cutAfterAct = false;   // the line goes down just after a move reaches the server (its answer is lost)
+  deaf = false;          // every socket looks open and nothing gets through (a phone back from sleep)
+  swallowNextAct = false; // the next move over a WebSocket is lost, and the line stays up
+  swallowHello = false;  // sockets open, but their hello never arrives
+  loseActAnswers = 0;    // the next HTTP moves reach the server, and their answers are lost
+  throttle = 0;          // timers run only on multiples of this (a background tab: once a minute)
+  dials = 0;             // WebSockets opened by the games
+  hidden = false;        // the games' pages are out of sight
   sentByClients: string[] = [];
   host: RoomHost;
   constructor() {
@@ -105,6 +124,7 @@ class FakeNet {
   private pendingServer: ServerEnd | null = null;
   deliver(f: () => void, delay = 0) { this.queue.push({ at: delay, f }); }
   dial(c: ClientEnd) {
+    this.dials++;
     this.deliver(async () => {
       if (this.refuseWs) { c.readyState = 3; c.onclose?.({ code: 1006 }); return; }
       const code = c.url.split('/api/match/')[1].split('/')[0];
@@ -131,7 +151,9 @@ class FakeNet {
   fetch = async (url: string, init?: RequestInit) => {
     const u = new URL(url, 'http://x');
     const parts = u.pathname.replace(/^\/api\/match\//, '').split('/');
-    return toMatch(this.env, new Request(u, init), parts);
+    const res = await toMatch(this.env, new Request(u, init), parts);
+    if (this.loseActAnswers > 0 && parts[1] === 'act') { this.loseActAnswers--; throw new TypeError('network error'); }
+    return res;
   };
   /** Run everything queued (messages, then due timers) until nothing is left before `ms` from now. */
   async run(ms = 0) {
@@ -158,10 +180,16 @@ class FakeNet {
     return {
       base: 'http://x', WebSocket: class { constructor(url: string) { return new ClientEnd(net(), url); } } as unknown as ClientDeps['WebSocket'],
       fetch: this.fetch, store,
-      setTimeout: (f, ms) => { const id = this.nextId++; this.timers.push({ at: this.now + ms, f, id }); return id; },
+      setTimeout: (f, ms) => {
+        const id = this.nextId++;
+        const at = this.throttle ? Math.ceil((this.now + ms) / this.throttle) * this.throttle : this.now + ms;
+        this.timers.push({ at, f, id });
+        return id;
+      },
       clearTimeout: (h) => { this.timers = this.timers.filter((t) => t.id !== h); },
       now: () => this.now,
       random: () => 0.5,
+      hidden: () => this.hidden,
     };
   }
 }
@@ -260,21 +288,26 @@ describe('match server: making and joining a match', () => {
   });
 });
 
+/** A new match on a fresh network, both players in it and at the first tee. */
+async function twoPlayers(holes = 2) {
+  current = new FakeNet();
+  const code = await newMatch(current, holes);
+  const a = new Game(current, code, KEY_A), b = new Game(current, code, KEY_B);
+  a.client.start(); b.client.start();
+  await current.run(10);
+  void b.client.send({ t: 'join', player: { name: 'kevin', lefty: false } });
+  await current.run(10);
+  void a.client.send({ t: 'ready', hole: 0 }); void b.client.send({ t: 'ready', hole: 0 });
+  await current.run(10);
+  return { code, a, b };
+}
+const honourOf = (g: Game) => g.session!.state.honour;
+const gameOf = (seat: Seat, a: Game, b: Game) => (seat === 0 ? a : b);
+/** A game's current WebSocket (the fake's end of it). */
+const endOf = (g: Game) => (g.client as unknown as { ws: ClientEnd | null }).ws!;
+const upgrade = () => new Request('https://match/ws', { headers: { Upgrade: 'websocket' } });
+
 describe('match server: playing over a line that drops', () => {
-  async function twoPlayers(holes = 2) {
-    current = new FakeNet();
-    const code = await newMatch(current, holes);
-    const a = new Game(current, code, KEY_A), b = new Game(current, code, KEY_B);
-    a.client.start(); b.client.start();
-    await current.run(10);
-    void b.client.send({ t: 'join', player: { name: 'kevin', lefty: false } });
-    await current.run(10);
-    void a.client.send({ t: 'ready', hole: 0 }); void b.client.send({ t: 'ready', hole: 0 });
-    await current.run(10);
-    return { code, a, b };
-  }
-  const honourOf = (g: Game) => g.session!.state.honour;
-  const gameOf = (seat: Seat, a: Game, b: Game) => (seat === 0 ? a : b);
 
   it('every move reaches both games once; a refused move is answered with the reason', async () => {
     const { a, b } = await twoPlayers();
@@ -295,7 +328,7 @@ describe('match server: playing over a line that drops', () => {
     const first = gameOf(honourOf(a), a, b), second = first === a ? b : a;
     void first.client.send(strokeA(0, 1, 150));
     await current.run(5);
-    current.cut(current.servers.find((s) => s.open && s.peer === (second.client as unknown as { ws: ClientEnd }).ws)!.peer!);
+    current.cut(endOf(second));
     await current.run(1);
     expect(second.client.status).toBe('connecting');
     expect(first.client.online).toEqual(second === b ? [true, false] : [false, true]); // the other game sees it go
@@ -396,7 +429,9 @@ describe('match server: playing over a line that drops', () => {
     await current.run(50);
     expect(late.session!.state).toEqual(a.session!.state);
     const strokes = late.log.filter((e): e is Extract<Logged, { t: 'stroke' }> => e.t === 'stroke');
-    expect(strokes.every((e) => e.path === '')).toBe(true);
+    // the first hole's flights are left out; the hole just finished keeps them (its result panel's "rewatch")
+    expect(strokes.filter((e) => e.hole === 0).every((e) => e.path === '')).toBe(true);
+    expect(strokes.filter((e) => e.hole === 1 && e.after.tally.strokes === 1).every((e) => e.path.length === 100)).toBe(true);
   });
 
   it('two moves arriving at the same moment are both counted, in turn', async () => {
@@ -420,5 +455,198 @@ describe('match server: playing over a line that drops', () => {
     await current.run(10);
     expect(current.storage.m.size).toBe(0);
     expect(a.client.status).toBe('gone');
+  });
+});
+
+describe('match server: review fixes', () => {
+  it('over HTTP a game learns its seat, counts as there, and sends a move again when its answer is lost', async () => {
+    current = new FakeNet();
+    const code = await newMatch(current);
+    current.refuseWs = true;
+    const a = new Game(current, code, KEY_A), b = new Game(current, code, KEY_B);
+    a.client.start(); b.client.start();
+    await current.run(8000);
+    expect(a.client.status).toBe('polling');
+    expect(a.client.seat).toBe(0); // the HTTP hello
+    const seats: Seat[] = [];
+    b.client.onSeat = (k) => seats.push(k);
+    void b.client.send({ t: 'join', player: { name: 'kevin', lefty: false } });
+    await current.run(3000);
+    expect(b.client.seat).toBe(1); // the move's answer says it
+    expect(seats).toEqual([1]);
+    expect(a.client.online).toEqual([true, true]); // both asking: both there
+    void a.client.send({ t: 'ready', hole: 0 }); void b.client.send({ t: 'ready', hole: 0 });
+    await current.run(3000);
+    const h = honourOf(a);
+    current.loseActAnswers = 1; // the stroke reaches the server; its answer is lost on the way back
+    const p = gameOf(h, a, b).client.send(strokeA(0, 1, 150));
+    await current.run(6000);
+    expect(await p).toMatchObject({ ok: true });
+    expect(a.log.filter((e) => e.t === 'stroke')).toHaveLength(1); // sent again, counted once
+    expect(b.session!.state).toEqual(a.session!.state);
+    // a game that stops asking is soon not "there"
+    a.client.stop();
+    await current.run(15_000);
+    expect(b.client.online).toEqual([false, true]);
+  });
+
+  it('sockets that never say who they are make room for a game', async () => {
+    current = new FakeNet();
+    const code = await newMatch(current);
+    for (let i = 0; i < 12; i++) await current.core.fetch(upgrade()); // twelve that open and say nothing
+    expect(current.host.sockets()).toHaveLength(12);
+    expect((await current.core.fetch(upgrade())).status).toBe(429); // no room yet
+    current.now += 11_000;
+    const a = new Game(current, code, KEY_A);
+    a.client.start();
+    await current.run(10);
+    expect(a.client.status).toBe('online');
+    expect(current.host.sockets()).toHaveLength(1); // the silent ones were closed
+  });
+
+  it('the same player opening the match in another tab takes it over; the first tab waits until it is looked at', async () => {
+    const { code, a, b } = await twoPlayers();
+    const a2 = new Game(current, code, KEY_A, a.store); // the same device (same storage), another tab
+    a2.client.start();
+    await current.run(50);
+    expect(a2.client.status).toBe('online');
+    expect(a.client.status).toBe('elsewhere');
+    const dials = current.dials;
+    await current.run(60_000);
+    expect(current.dials).toBe(dials); // no tug of war
+    current.hidden = true; a.client.poke(); await current.run(50);
+    expect(a.client.status).toBe('elsewhere'); // a background tab doesn't take it back
+    current.hidden = false; a.client.poke(); await current.run(50);
+    expect(a.client.status).toBe('online');
+    expect(a2.client.status).toBe('elsewhere');
+    expect(b.client.online).toEqual([true, true]);
+  });
+
+  it('a game running other rules than the server is told what to do, and stops trying', async () => {
+    current = new FakeNet();
+    const code = await newMatch(current);
+    // the server's side: a hello with newer rules
+    await current.core.fetch(upgrade());
+    const ws = current.servers[current.servers.length - 1];
+    const got: string[] = [];
+    ws.peer = { receive: (t: string) => got.push(t), closedByServer: (c: number) => got.push(`closed ${c}`) } as unknown as ClientEnd;
+    await current.core.message(ws, JSON.stringify({ type: 'hello', key: KEY_A, since: 0, rules: RULES + 1 }));
+    await current.run(5);
+    expect(got[0]).toContain('"code":"version"');
+    expect(got[0]).toContain('needs deploying');
+    expect(got).toContain(`closed ${CLOSE.version}`);
+    const r = await current.fetch(`http://x/api/match/${code}/act`, { method: 'POST', body: JSON.stringify({ key: KEY_A, cid: 'abcdefg', action: { t: 'ready', hole: 0 }, rules: RULES - 1 }) });
+    expect(r.status).toBe(409);
+    expect(await r.json()).toMatchObject({ type: 'nack', code: 'version' });
+    // a game whose rules are older than the server's
+    const orig = current.core.message.bind(current.core);
+    current.core.message = (sock, raw) => orig(sock, typeof raw === 'string' ? raw.replace(`"rules":${RULES}`, `"rules":${RULES - 1}`) : raw);
+    const g = new Game(current, code, KEY_A);
+    g.client.start();
+    await current.run(100);
+    expect(g.client.status).toBe('version');
+    expect(g.client.problem).toContain('reload');
+    const dials = current.dials;
+    await current.run(120_000);
+    expect(current.dials).toBe(dials);
+  });
+
+  it('a line that dies while looking open is found by its keep-alive and opened again, the missed moves caught up', async () => {
+    const { a, b } = await twoPlayers();
+    const first = gameOf(honourOf(a), a, b), second = first === a ? b : a;
+    const dials = current.dials;
+    endOf(second).deaf = true;
+    void first.client.send(strokeA(0, 1, 150)); // made while the other game's line is dead
+    await current.run(31_000);
+    expect(current.dials).toBe(dials + 1);
+    expect(second.client.status).toBe('online');
+    expect(second.session!.state).toEqual(first.session!.state);
+    // back to the page after a sleep: checked at once, found dead within seconds
+    endOf(second).deaf = true;
+    second.client.poke();
+    await current.run(4_500);
+    expect(current.dials).toBe(dials + 2);
+  });
+
+  it('a background tab whose timers run once a minute keeps its line (it is quiet, not dead)', async () => {
+    const { a, b } = await twoPlayers();
+    const dials = current.dials;
+    current.throttle = 60_000;
+    await current.run(5 * 60_000);
+    expect(current.dials).toBe(dials);
+    expect([a.client.status, b.client.status]).toEqual(['online', 'online']);
+  });
+
+  it('a WebSocket that opens and is never answered is given up after 10 s; after three, HTTP', async () => {
+    current = new FakeNet();
+    const code = await newMatch(current);
+    current.swallowHello = true;
+    const a = new Game(current, code, KEY_A);
+    a.client.start();
+    await current.run(9_000);
+    expect(a.client.status).toBe('connecting');
+    await current.run(40_000);
+    expect(a.client.status).toBe('polling');
+    expect(a.client.seat).toBe(0);
+    current.swallowHello = false;
+    await current.run(20_000);
+    expect(a.client.status).toBe('online');
+  });
+
+  it('a move the server could not store is refused with a reason, and can be made again', async () => {
+    const { a, b } = await twoPlayers();
+    const first = gameOf(honourOf(a), a, b);
+    current.storage.failPuts = 1;
+    const p = first.client.send(strokeA(0, 1, 150));
+    await current.run(10);
+    expect(await p).toMatchObject({ ok: false, code: 'server' });
+    expect(a.session!.state.p[honourOf(a)].strokes).toBe(0);
+    const p2 = first.client.send(strokeA(0, 1, 150));
+    await current.run(10);
+    expect(await p2).toMatchObject({ ok: true });
+    expect(b.session!.state).toEqual(a.session!.state);
+  });
+
+  it('a move lost while the line stays up goes again when the game nudges', async () => {
+    const { a, b } = await twoPlayers();
+    const first = gameOf(honourOf(a), a, b);
+    current.swallowNextAct = true;
+    const p = first.client.send(strokeA(0, 1, 150));
+    await current.run(1000);
+    expect(first.client.unanswered).toHaveLength(1); // nothing came back
+    first.client.nudge(); // the play scene does this after 8 s in "sending..."
+    await current.run(10);
+    expect(await p).toMatchObject({ ok: true });
+    expect(b.session!.state.p[honourOf(a)].strokes).toBe(1);
+  });
+
+  it('a joining game hears its seat before the news of the join (it never sees the match as full)', async () => {
+    current = new FakeNet();
+    const code = await newMatch(current);
+    const b = new Game(current, code, KEY_B);
+    const order: string[] = [];
+    const onEvents = b.client.onEvents;
+    b.client.onEvents = (evs, last) => { for (const e of evs) order.push(e.t); onEvents(evs, last); };
+    b.client.onSeat = (k) => order.push(`seat ${k}`);
+    b.client.start();
+    await current.run(10);
+    void b.client.send({ t: 'join', player: { name: 'kevin', lefty: false } });
+    await current.run(10);
+    expect(order).toEqual(['created', 'seat 1', 'joined']);
+  });
+
+  it('a move rebuilt by the server carries only its own fields to the other game', async () => {
+    const { a, b } = await twoPlayers();
+    const first = gameOf(honourOf(a), a, b), second = first === a ? b : a;
+    const dirty = { ...strokeA(0, 1, 150), extra: 'x'.repeat(50), by: honourOf(a) === 0 ? 1 : 0 } as unknown as Action;
+    void first.client.send(dirty);
+    await current.run(10);
+    const ev = second.log[second.log.length - 1] as Logged & { extra?: string };
+    expect(ev.t).toBe('stroke');
+    expect(ev.extra).toBeUndefined();
+    expect('by' in ev && ev.by).toBe(honourOf(a)); // the server says who played it, not the game
+    const bad = first.client.send({ t: 'stroke', hole: 0, after: { nope: 1 }, shot: {}, path: 1 } as unknown as Action);
+    await current.run(10);
+    expect(await bad).toMatchObject({ ok: false, code: 'bad_move' });
   });
 });
