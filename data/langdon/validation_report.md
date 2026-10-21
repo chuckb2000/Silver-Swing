@@ -118,7 +118,7 @@ Tracing desk: https://claude.ai/artifact/G4bThDJVqubcH8TdhBfTFc (`desk_export.py
 | 4 | 4 | yes | yes (4 near) | yes | yes | yes | 3 | 0 |
 | 5 | 4 | yes | yes (4 near) | yes | yes | yes | 2 | 0 |
 | 6 | 3 | yes | yes (3 near) | yes | yes | yes | 1 | 0 |
-| 7 | 5 | yes | yes (3 near) | yes | yes | yes | 2 | 0 |
+| 7 | 5 | yes | yes (3 near) | yes | yes | yes | 2 | 1 |
 | 8 | 4 | yes | yes (4 near) | yes | yes | yes | 4 | 0 |
 | 9 | 4 | yes | yes (3 near) | yes | yes | yes | 2 | 0 |
 | 10 | 4 | yes | yes (4 near) | yes | yes | yes | 2 | 0 |
@@ -152,5 +152,5 @@ Tracing desk: https://claude.ai/artifact/G4bThDJVqubcH8TdhBfTFc (`desk_export.py
 - hole 17: hole line carries handicap=16 (compare with scorecard)
 - hole 18: hole line carries handicap=6 (compare with scorecard)
 
-Totals: 78 tees, 18 greens, 22 fairways, 38 bunkers, 0 water hazards, 18 pins, 16 cart paths, 34 OSM tree points.
+Totals: 78 tees, 18 greens, 22 fairways, 38 bunkers, 1 water hazards, 18 pins, 16 cart paths, 34 OSM tree points.
 

@@ -2173,7 +2173,8 @@ and data/langdon/validation_report.md.
     the tracing desk (`data/langdon/desk/`); DOGAMI bare-earth DTM and canopy
     height model (1 m). Originals in the GitHub release `data-langdon`.
 -   **Water:** the clubhouse pond (9, 18) and the pond between 12 and 13,
-    both red (`red_water_osm`).
+    both red (`red_water_osm`), and the creek on hole 7 between the fairway
+    and the approach (red, from the lidar channel; not in OSM).
 -   **Barns:** the barn on the left of the 8th fairway and the event barn by
     the 18th green are drawn barn red (`building_colours`); free relief, as
     for every building inside the boundary (developer).
