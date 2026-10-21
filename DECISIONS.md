@@ -738,3 +738,14 @@ Branch `fix/afternoon-ui`, from the afternoon review of the screens and flow.
   round's name. Rounds played as "player" (no name) never leave their device.
 - "Once I put my player code in it still had me set my name": entering a player code now takes
   that code's name when the device has none yet.
+
+## A stroke is saved the moment it is struck (developer, 2026-10-20)
+
+- "If you refresh while a ball is in midair/the shot hasn't ended you get to take it again ...
+  The shot should be locked in and saved the second it's hit." The round was saved when the ball
+  came to rest (and with an open relief choice), not before. Now `PlayScene.launch` saves, at the
+  strike, the round as it will be once the stroke has come to rest (`Round.whenSettled` resolves
+  the already-simulated stroke on the round, takes the snapshot and puts every field back;
+  `save/snapshot.ts` `saveStruck`). A reload mid-flight resumes after the stroke: the ball where
+  it stops, the relief choice open if it went in water or out of bounds, or the next hole if it
+  was holed.

@@ -16,7 +16,7 @@ import { SURF } from '../systems/physics/surfaces';
 import { ReliefArea } from '../systems/rules/relief';
 import { FULL_MAX, PART_MAX, SwingMeter } from '../systems/swing/meter';
 import { worldCamera } from '../scale';
-import { saveSnapshot } from '../save/snapshot';
+import { saveSnapshot, saveStruck } from '../save/snapshot';
 import { CameraRig, Rect } from '../ui/cameraRig';
 import { CourseView, DEPTH } from '../ui/courseView';
 import { GreenLayer, GreenView } from '../ui/greenView';
@@ -662,6 +662,8 @@ export class PlayScene extends Phaser.Scene {
     const m = this.meter!.result!;
     this.shot = r.plan(this.club.id, this.aim, m, this.spin, this.scaleArg());
     this.sim = r.simulate(this.shot);
+    // locked in the moment it is hit: a reload mid-flight resumes after this stroke
+    void saveStruck(r, this.shot, this.sim);
     (window as unknown as { __last: unknown }).__last = { shot: this.shot, sim: { landing: this.sim.landing, end: this.sim.end, events: this.sim.events, n: this.sim.n, hitTree: this.sim.hitTree }, meter: m };
     this.state = 'flight';
     this.playT = 0;
