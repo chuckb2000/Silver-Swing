@@ -6,7 +6,9 @@ import { ratingText, teeFor } from '../data/registry';
 import { saveSettings } from '../save/store';
 import { Button, COLORS, Panel, setTxt, txt } from '../ui/widgets';
 import { shortName } from '../save/milestones';
-import { confirmDiscard, editName, hasName, lengthLabel, lengthsFor, RoundLength, startRound, withName } from './flow';
+import { confirmDiscard, editName, hasName, holesFor, lengthLabel, lengthsFor, RoundLength, startRound, withName } from './flow';
+import { createLiveMatch, newMatchConfig } from '../match/live';
+import { askName } from '../ui/nameInput';
 import { MenuScene } from './menu';
 import { myRounds } from '../save/mine';
 import { handicapOf, hcpCourses, indexLabel, ownHcpRounds } from '../systems/game/handicap';
@@ -17,8 +19,23 @@ let length: RoundLength = '18';
 let mine: { at: number; rounds: Promise<{ rounds: import('../save/entry').LeaderboardEntry[] }> } | null = null;
 
 export class SetupScene extends MenuScene {
+  /** Setting up a live match (match play against a friend) instead of a round. */
+  private matchMode = false;
+  private matchNote = '';
+  private making = false;
+
   constructor() {
     super('setup');
+  }
+
+  init(data?: { match?: boolean }) {
+    this.matchMode = !!data?.match;
+    this.matchNote = '';
+    this.making = false;
+  }
+
+  protected back() {
+    this.scene.start(this.matchMode ? 'match' : 'title', this.matchMode ? { mode: 'home' } : undefined);
   }
 
   build() {
@@ -27,8 +44,9 @@ export class SetupScene extends MenuScene {
     const ph = Math.min(H - 12, 208);
     const x0 = Math.round((W - pw) / 2), y0 = Math.round((H - ph) / 2);
     this.root.add(new Panel(this, x0, y0, pw, ph, 0.9));
-    this.root.add(txt(this, x0 + pw / 2, y0 + 6, 'new round', { origin: [0.5, 0], scale: 2 }));
-    if (!app.course) { this.scene.start('courses', { purpose: 'play', from: 'title' }); return; } // a course load failed
+    this.root.add(txt(this, x0 + pw / 2, y0 + 6, this.matchMode ? 'new match' : 'new round', { origin: [0.5, 0], scale: 2 }));
+    const purpose = this.matchMode ? 'match' : 'play';
+    if (!app.course) { this.scene.start('courses', { purpose, from: 'title' }); return; } // a course load failed
     const c = app.course.json;
     const teeName = teeFor(c, app.settings.tees);
     const tee = c.teeSets.find((t) => t.name === teeName) ?? c.teeSets[0];
@@ -41,7 +59,7 @@ export class SetupScene extends MenuScene {
     if (name.width > pw - 86 - 56) setTxt(name, shortName(c.name)); // a phone: "oswego lake" (the full name wrapped onto the tees row)
     if (name.width > pw - 86 - 56) name.setMaxWidth(pw - 86 - 56);
     this.root.add(name);
-    this.root.add(new Button(this, x0 + pw - 54, y, 46, 15, 'change', () => this.scene.start('courses', { purpose: 'play', from: 'setup' }), { color: 'grey' }));
+    this.root.add(new Button(this, x0 + pw - 54, y, 46, 15, 'change', () => this.scene.start('courses', { purpose, from: this.matchMode ? 'match' : 'setup' }), { color: 'grey' }));
     y += 16;
     const bw = Math.floor((pw - 86) / 3);
     row('tees');
@@ -91,7 +109,15 @@ export class SetupScene extends MenuScene {
       normal: 'standard meter and wind',
       pro: 'faster meter, tight sweet spot, no landing preview',
     }[app.settings.difficulty];
-    this.root.add(txt(this, x0 + pw / 2, y, desc, { origin: [0.5, 0], color: COLORS.dim, maxWidth: pw - 12 }));
+    this.root.add(txt(this, x0 + pw / 2, y, this.matchMode ? `${desc} - for both of you` : desc, { origin: [0.5, 0], color: COLORS.dim, maxWidth: pw - 12 }));
+    const by = y0 + ph - 22;
+    this.root.add(new Button(this, x0 + 8, by, 56, 16, 'back', () => this.back(), { color: 'grey' }));
+    if (this.matchMode) {
+      // match play against a friend: the match is made on the server, then the invitation screen
+      if (this.matchNote) this.root.add(txt(this, x0 + pw / 2, y + 12, this.matchNote, { origin: [0.5, 0], color: COLORS.red, maxWidth: pw - 12 }));
+      this.root.add(new Button(this, x0 + pw - 108, by, 100, 16, this.making ? 'making...' : 'invite a friend', () => void this.makeMatch()));
+      return;
+    }
     // the player's handicap (Normal rounds only), filled in once the rounds are counted; no strokes: nobody plays net (developer)
     const hcpTxt = txt(this, x0 + pw / 2, y + 12, '', { origin: [0.5, 0], color: 0x8ec5ff, maxWidth: pw - 12 });
     this.root.add(hcpTxt);
@@ -103,9 +129,31 @@ export class SetupScene extends MenuScene {
       if (!h) setTxt(hcpTxt, app.settings.difficulty === 'normal' ? 'handicap: after 18 holes at normal' : '');
       else setTxt(hcpTxt, `handicap ${indexLabel(h)}${app.settings.difficulty === 'normal' ? '' : '  ·  only normal rounds count'}`);
     });
-    const by = y0 + ph - 22;
-    this.root.add(new Button(this, x0 + 8, by, 56, 16, 'back', () => this.back(), { color: 'grey' }));
     this.root.add(new Button(this, x0 + pw - 98, by, 90, 16, 'tee off', () => this.teeOff()));
+  }
+
+  /** Make the match (a name is needed: the friend sees it), then show its code. */
+  private async makeMatch() {
+    if (this.making) return;
+    if (!hasName()) {
+      askName(this, '', (name) => {
+        if (!name) return;
+        app.settings.playerName = name;
+        void saveSettings(app.settings);
+        if (this.sys.isActive()) void this.makeMatch();
+      }, 'your name for the match', { why: 'your friend sees it on their screen' });
+      return;
+    }
+    this.making = true;
+    this.matchNote = '';
+    this.rebuild();
+    const c = app.course!.json;
+    const cfg = await newMatchConfig(teeFor(c, app.settings.tees), holesFor(length), app.settings.difficulty);
+    const r = await createLiveMatch(cfg, { name: app.settings.playerName, lefty: app.settings.lefty });
+    if (!this.sys.isActive()) return;
+    this.making = false;
+    if (!r.ok) { this.matchNote = `couldn't make the match: ${r.message}`; this.rebuild(); return; }
+    this.scene.start('match', { mode: 'invite', code: r.code });
   }
 
   /**

@@ -66,7 +66,11 @@ export class MatchRoom extends DurableObject<Env> {
 
   async webSocketClose(ws: WebSocket, code: number, reason: string) {
     this.core.closed(this.socket(ws));
-    try { ws.close(code, reason); } catch { /* already closed */ }
+    // finish the closing handshake. A browser that closes without a code sends none (1005), and 1005
+    // and 1006 can't be sent back: closing with them throws, the reply never goes, and the browser's
+    // socket hangs in CLOSING (found by the two-browser test). Answer those with 1000.
+    const reply = code >= 1000 && code < 5000 && code !== 1005 && code !== 1006 && code !== 1015 ? code : 1000;
+    try { ws.close(reply, reason); } catch { /* already closed */ }
   }
 
   async webSocketError(ws: WebSocket) {

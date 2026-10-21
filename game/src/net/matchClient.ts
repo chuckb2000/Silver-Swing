@@ -296,9 +296,13 @@ export class MatchClient {
   }
 
   // ----------------------------------------------------------------- moves
+  /** An id for the next move (to tell its event from the others when it comes back). */
+  moveId(): string {
+    return this.newCid();
+  }
+
   /** Make a move: kept until the server answers (through any reconnects), then resolved with its place in the log or the reason it was refused. */
-  send(action: Action): Promise<SendResult> {
-    const cid = this.newCid();
+  send(action: Action, cid: string = this.newCid()): Promise<SendResult> {
     this.outbox.push({ cid, action, at: this.T.now() });
     this.saveOutbox(); // before it goes: a reload a moment later still sends it
     const p = new Promise<SendResult>((res) => this.waiting.set(cid, res));

@@ -17,12 +17,15 @@ import { update, whenUpdateReady } from '../save/offline';
 import { LoadSuperseded } from '../data/courses';
 import { STALL_MS } from './CourseSelectScene';
 import { ensureBg, MenuScene } from './menu';
+import { liveMatchesAvailable, myMatches } from '../match/live';
 
 const SHOW_MS = 9000;   // each course on screen
 const FADE_MS = 1400;   // cross-fade
 const SHADE = 0.32;     // darkened a little so the menu reads
 
 let order: string[] | null = null; // course views, shuffled once per visit to the site
+/** Live matches on this site (null: not asked yet). */
+let matchesUp: boolean | null = null;
 let at = 0;
 
 interface Shown { img: Phaser.GameObjects.Image; t: number; fromX: number; fromY: number; toX: number; toY: number }
@@ -251,6 +254,14 @@ export class TitleScene extends MenuScene {
     const dc = plan && app.courses.find((c) => c.id === plan.courseId);
     if (plan && dc) add(`daily: ${shortName(dc.name)}`, () => this.playDaily(plan), !!snap);
     if (this.dailyNow) { this.dailyNow = false; if (plan && dc) this.playDaily(plan); }
+    // live match play against a friend, where the site has it (the match Worker bound): matches on this device first
+    if (matchesUp === true) {
+      const open = myMatches().filter((m) => !m.done).length;
+      add(open ? `your matches (${open})` : 'play a friend', () => this.scene.start('match', { mode: 'home' }), !open);
+    } else if (matchesUp === null) {
+      matchesUp = false;
+      void liveMatchesAvailable().then((ok) => { matchesUp = ok; if (ok && this.sys.isActive()) this.rebuild(); });
+    }
     // no name yet: rounds stay on this device, so say so where every visit starts (developer, 2026-10-20)
     if (!hasName() && !app.settings.hideFromBoards) add('set your name for the leaderboard', () => editName(this, () => this.rebuild()), true, COLORS.yellow);
     add2('my golf', () => this.scene.start('mygolf'));

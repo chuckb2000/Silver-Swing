@@ -26,8 +26,13 @@ import type { LeaderboardEntry } from '../save/entry';
 import { DRILL_BALLS, PUTTING_GREENS, RangeShot } from '../systems/game/practice';
 import type { Club } from '../data/clubs';
 import type { SimResult } from '../systems/physics/sim';
+import { holeLive, other, statusText } from '../systems/match/rules';
+import type { HoleResult, Seat } from '../systems/match/types';
+import { matchCard } from '../ui/matchCard';
+import { confirmBox } from '../ui/confirm';
+import { createLiveMatch, newMatchConfig } from '../match/live';
 
-type Modal = 'relief' | 'drop' | 'card' | 'overview' | 'pause' | 'holed' | 'rewatch' | null;
+type Modal = 'relief' | 'drop' | 'card' | 'overview' | 'pause' | 'holed' | 'rewatch' | 'mhole' | 'mwait' | 'mover' | 'mrewatch' | null;
 
 export class HudScene extends Phaser.Scene {
   play!: PlayScene;
@@ -85,6 +90,16 @@ export class HudScene extends Phaser.Scene {
   private practiceA!: Button;
   private practiceB!: Button;
   private practiceStats!: Phaser.GameObjects.BitmapText;
+  // a live match: names and standing at the top, the other player's turn at the bottom
+  private matchBar: Panel | null = null;
+  private matchNames!: Phaser.GameObjects.BitmapText;
+  private matchStatus!: Phaser.GameObjects.BitmapText;
+  private matchLink!: Phaser.GameObjects.BitmapText;
+  private matchDots!: Phaser.GameObjects.Graphics;
+  private giveBtn!: Button;
+  private watchPanel!: Panel;
+  private watchTxt!: Phaser.GameObjects.BitmapText;
+  private lastMatchResult: HoleResult | null = null;
 
   constructor() {
     super('hud');
@@ -104,6 +119,8 @@ export class HudScene extends Phaser.Scene {
     this.bannerTimer = undefined;
     this.redraw = null;
     this.practiceBox = null;
+    this.matchBar = null;
+    this.lastMatchResult = null;
     this.play = this.scene.get('play') as PlayScene;
     uiCamera(this.cameras.main);
     this.W = app.view.w;
@@ -194,6 +211,23 @@ export class HudScene extends Phaser.Scene {
     this.root.add([this.menuBtn, this.cardBtn, this.holeBox, this.info, this.windPanel, this.miniPanel, this.mapBtn, this.aimL, this.aimR, this.aimLabel,
       this.clubPanel, this.clubUp, this.clubDown, this.spinBtn, this.scaleBtn, this.unplayBtn, this.mulliganBtn, this.meterPanel, this.meterRead, this.swingBtn, this.offArrow]);
     if (p.round.cfg.practice) this.buildPractice();
+    if (p.match) this.buildMatch();
+  }
+
+  /** The match bar (top): both names, who is online, the standing; "give putt"; the other player's turn (bottom). */
+  private buildMatch() {
+    const bar = new Panel(this, 0, 0, 150, 25, 0.82);
+    this.matchNames = txt(this, 75, 3, '', { origin: [0.5, 0] });
+    this.matchStatus = txt(this, 75, 13, '', { origin: [0.5, 0], color: COLORS.yellow });
+    this.matchDots = this.add.graphics(); // who is online: a green dot before the name (grey: their game is closed)
+    bar.add([this.matchNames, this.matchStatus, this.matchDots]);
+    this.matchBar = bar;
+    this.matchLink = txt(this, 0, 0, '', { origin: [0.5, 0], color: COLORS.red });
+    this.giveBtn = new Button(this, 0, 0, 70, 14, 'give putt', () => { this.giveBtn.setEnabled(false); this.play.matchConcede('stroke'); }, { color: 'grey' });
+    this.watchPanel = new Panel(this, 0, 0, 180, 18, 0.85);
+    this.watchTxt = txt(this, 90, 4, '', { origin: [0.5, 0] });
+    this.watchPanel.add(this.watchTxt);
+    this.root.add([bar, this.matchLink, this.giveBtn, this.watchPanel]);
   }
 
   /** The practice ground's panel: change target or green, wind or drill distance, go to the other area. */
@@ -318,6 +352,23 @@ export class HudScene extends Phaser.Scene {
     this.unplayBtn.setPosition(4, 21 + 48 + 3);
     this.mulliganBtn.setPosition(4, 21 + 48 + 3 + 16);
     this.practiceBox?.setPosition(4, 21 + 48 + 3);
+    if (this.matchBar) {
+      // between the hole box (left) and the menu button (right); on a narrow phone, under them
+      const left = 37 + 30 + 4, right = W - 48 - 34 - 4;
+      const bw = Math.min(170, Math.max(110, right - left));
+      this.matchBar.resize(bw, 25);
+      const top = right - left >= 110 ? 4 : 21 + 48 + 3 + 34;
+      const bx = right - left >= 110 ? Math.round(left + (right - left - bw) / 2) : Math.round((W - bw) / 2);
+      this.matchBar.setPosition(bx, top);
+      this.matchNames.setX(Math.round(bw / 2));
+      this.matchStatus.setX(Math.round(bw / 2));
+      this.matchLink.setPosition(Math.round(bx + bw / 2), top + 27);
+      this.giveBtn.setPosition(Math.round(bx + bw / 2 - 35), top + 38);
+      const ww = Math.min(220, W - 16);
+      this.watchPanel.resize(ww, 18);
+      this.watchPanel.setPosition(Math.round((W - ww) / 2), H - 4 - 18 - (portrait ? 40 : 0));
+      this.watchTxt.setX(Math.round(ww / 2));
+    }
     this.placeBanner();
     if (this.intro) this.showIntro();
   }
@@ -334,7 +385,7 @@ export class HudScene extends Phaser.Scene {
     const lieTxt = r.lie ? r.lie.label : '';
     const surf = SURFACE_LABEL[r.surfaceAt()] ?? '';
     setTxt(this.infoLines[0], `par ${r.hole.par}`);
-    setTxt(this.infoLines[1], p.state === 'holed' || p.state === 'replay' ? `holed: ${r.tally.strokes}` : `shot ${r.tally.strokes + 1}`);
+    setTxt(this.infoLines[1], p.state === 'holed' || p.state === 'replay' || p.state === 'between' || p.state === 'over' ? `${p.state === 'between' || p.state === 'over' ? 'strokes' : 'holed'}: ${r.tally.strokes}` : `shot ${r.tally.strokes + 1}`);
     // with the putter in hand the distance is in feet (or metres), like the putting meter
     setTxt(this.infoLines[2], p.club.kind === 'putter' ? distLabel(d).replace(/(\d)(ft|m)$/, '$1 $2') : `${fmtDist(d)} ${unitLabel()}`);
     // the pin's height above (up arrow) or below (down) the ball, in feet: elevation changes
@@ -375,7 +426,7 @@ export class HudScene extends Phaser.Scene {
     this.swingBtn.setLabel(c.kind === 'putter' ? 'putt' : 'swing');
     this.unplayBtn.setVisible(aiming && !r.ball.teedUp && r.tally.strokes > 0 && !r.onHoleGreen());
     this.mulliganBtn.setVisible(aiming && r.cfg.settings.mulligans && !r.mulliganUsed && r.shotNo > 0);
-    const showCtl = !['intro', 'holed', 'loading', 'relief', 'drop'].includes(p.state); // not behind the relief / drop panels
+    const showCtl = !['intro', 'holed', 'loading', 'relief', 'drop', 'watch', 'between', 'over', 'idle'].includes(p.state); // not behind the relief / drop panels
     for (const o of [this.aimL, this.aimR, this.aimLabel, this.clubPanel, this.clubUp, this.clubDown, this.swingBtn, this.meterPanel]) o.setVisible(showCtl);
     if (!showCtl) { this.spinBtn.setVisible(false); this.scaleBtn.setVisible(false); this.unplayBtn.setVisible(false); this.mulliganBtn.setVisible(false); }
     // minimap
@@ -387,6 +438,59 @@ export class HudScene extends Phaser.Scene {
     }
     this.drawMini();
     this.refreshPractice();
+    this.refreshMatch();
+  }
+
+  /** The match bar and the other player's turn, kept up to date. */
+  private refreshMatch() {
+    const p = this.play;
+    const live = p.match;
+    if (!this.matchBar || !live?.session) return;
+    const s = live.session.state;
+    const me = p.me;
+    const turn = live.session.turn;
+    const nm = (k: Seat) => (k === me ? 'you' : s.players[k]?.name ?? '?');
+    const n0 = `${nm(0)}${turn === 0 ? ' <' : ''}`, n1 = `${nm(1)}${turn === 1 ? ' <' : ''}`;
+    setTxt(this.matchNames, `  ${n0}      ${n1}`);
+    // a dot before each name: green when that player's game is open
+    const g = this.matchDots;
+    g.clear();
+    const probe = txt(this, 0, 0, `  ${n0}      `);
+    const x0 = Math.round(this.matchNames.x - this.matchNames.width / 2);
+    for (const k of [0, 1] as Seat[]) {
+      const on = k === me ? live.status === 'online' || live.status === 'polling' : live.online[k];
+      const dx = k === 0 ? x0 + 3 : x0 + Math.round(probe.width) + 3 - 9;
+      g.fillStyle(0x0b0f13, 1).fillRect(dx - 1, 5, 5, 5);
+      g.fillStyle(on ? 0x6fdc7a : 0x6b737d, 1).fillRect(dx, 6, 3, 3);
+    }
+    probe.destroy();
+    const between = s.phase === 'playing' && !holeLive(s);
+    const where = s.phase !== 'playing' ? '' : between ? `  ·  thru ${s.results.length}` : `  ·  hole ${live.session.holeNumber}`;
+    setTxt(this.matchStatus, `${statusText(s, me)}${where}`);
+    let link = '';
+    if (live.status === 'connecting' || live.status === 'offline') link = 'reconnecting...';
+    else if (live.status === 'polling') link = 'slow connection';
+    else if (p.commitWait() > 700) link = 'sending...';
+    else if (holeLive(s) && turn === other(me) && !live.online[other(me)]) link = `${p.oppName()}'s game is offline - waiting`;
+    setTxt(this.matchLink, link);
+    this.matchLink.setVisible(!!link);
+    this.giveBtn.setVisible(p.canGivePutt() && !this.modal);
+    if (this.giveBtn.visible && !this.giveBtn.enabled && p.match?.session?.idle) this.giveBtn.setEnabled(true);
+    const watching = p.state === 'watch';
+    this.watchPanel.setVisible(watching && !this.modal);
+    if (watching) {
+      const r = p.round;
+      const d = r.distToPin();
+      const dist = r.onHoleGreen() ? distLabel(d).replace(/(\d)(ft|m)$/, '$1 $2') : `${fmtDist(d)} ${unitLabel()}`;
+      setTxt(this.watchTxt, `${p.oppName()} to play  ·  ${dist}  ·  ${r.ball.teedUp ? 'tee' : r.lie?.label ?? ''}`);
+    }
+  }
+
+  /** "you're 1 up · hole 4" for a banner's second line. */
+  matchLine(): string {
+    const live = this.play.match;
+    if (!live?.session) return '';
+    return `${statusText(live.session.state, this.play.me)}  ·  hole ${live.session.holeNumber}`;
   }
 
   private drawMini() {
@@ -435,6 +539,7 @@ export class HudScene extends Phaser.Scene {
   tick() {
     const p = this.play;
     this.drawMeter();
+    if (this.matchBar && (p.state === 'commit' || this.matchLink.visible)) this.refreshMatch();
     if (this.banner.visible) this.placeBanner();
     if (p.state === 'flight') this.drawMiniBall();
     // arrow toward an off-screen ball (kept clear of the HUD panels)
@@ -545,6 +650,9 @@ export class HudScene extends Phaser.Scene {
 
   onModalKey(e: KeyboardEvent) {
     if (this.modal === 'card' && (e.key === 'c' || e.key === 'C' || e.key === 'Escape' || e.key === ' ' || e.key === 'Enter')) { e.preventDefault(); this.closeCard(); return; }
+    if (this.modal === 'mhole' && (e.key === ' ' || e.key === 'Enter')) { e.preventDefault(); this.play.matchNextHole(); return; }
+    if ((e.key === 'c' || e.key === 'C') && (this.modal === 'mhole' || this.modal === 'mover' || this.modal === 'mwait')) { this.toggleCard(); return; }
+    if (this.modal === 'mrewatch' && e.key === 'Escape') { e.preventDefault(); this.reshowMatchHole(); return; }
     if ((e.key === 'c' || e.key === 'C') && this.modal === 'holed') { this.toggleCard(); return; }
     if ((e.key === 'r' || e.key === 'R') && this.modal === 'holed') { this.rewatch(); return; }
     if (this.modal === 'rewatch' && (e.key === 'Escape' || e.key === 'r' || e.key === 'R')) { e.preventDefault(); this.backFromRewatch(); return; }
@@ -628,7 +736,9 @@ export class HudScene extends Phaser.Scene {
     const t2 = txt(this, 64, 30, `par ${r.hole.par}  ·  ${ydStr}  ·  ${r.cfg.tee.toLowerCase()}`, { color: COLORS.yellow });
     const t3 = txt(this, 64, 41, `handicap ${r.hole.handicap}  ·  pin ${r.pinLabel()}`, { color: COLORS.dim });
     const wtxt = r.wind.mph < 0.5 ? 'calm' : `wind ${r.wind.mph.toFixed(1)} mph`;
-    const t4 = txt(this, 64, 52, `${wtxt}  ·  tap to play`, { color: COLORS.dim });
+    const live = this.play.match;
+    const honour = live?.session ? (live.session.state.honour === this.play.me ? 'your honour' : `${this.play.oppName()}'s honour`) : '';
+    const t4 = txt(this, 64, 52, `${wtxt}  ·  ${honour || 'tap to play'}`, { color: COLORS.dim });
     c.add([pnl, portrait, t1, t2, t3, t4]);
     this.intro = c;
     this.refresh();
@@ -671,15 +781,16 @@ export class HudScene extends Phaser.Scene {
   toggleCard() {
     if (this.cardLayer) { this.closeCard(); return; }
     this.play.cancelSwing();
-    if (this.modal && this.modal !== 'holed') return;
+    if (this.modal && this.modal !== 'holed' && this.modal !== 'mhole' && this.modal !== 'mover' && this.modal !== 'mwait') return;
     this.modalBeforeCard = this.modal;
-    if (this.modal === 'holed') this.modalLayer.setVisible(false);
+    if (this.modal) this.modalLayer.setVisible(false);
     this.modal = 'card';
     const layer = this.add.container(0, 0).setDepth(120);
     const dim = dimmer(this, 0.6);
     dim.on('pointerdown', () => this.closeCard());
     layer.add(dim);
-    const card = scorecard(this, this.play.round, this.W, this.H);
+    const ms = this.play.match?.session;
+    const card = ms ? matchCard(this, ms, this.play.me, this.W, this.H) : scorecard(this, this.play.round, this.W, this.H);
     layer.add(card);
     const below = Math.min(this.H - 14, (card.getData('bottom') as number) + 4);
     layer.add(txt(this, this.W / 2, below, 'tap anywhere to close', { origin: [0.5, 0], color: COLORS.dim }));
@@ -767,6 +878,7 @@ export class HudScene extends Phaser.Scene {
     const t = txt(this, x + w / 2, y + 6, 'paused', { origin: [0.5, 0], scale: 2 });
     const b1 = new Button(this, x + 15, y + 30, w - 30, 16, 'resume', () => this.closeModal());
     const b2 = new Button(this, x + 15, y + 50, w - 30, 16, 'settings', () => { this.closeModal(); this.scene.launch('settings', { from: 'hud' }); this.scene.pause('play'); this.scene.pause('hud'); }, { color: 'grey' });
+    if (this.play.match) { this.matchMenu(x, y, w, pnl, t, b1, b2); return; }
     // the round is saved after every shot: this leaves it to continue from the title screen
     if (this.play.round.cfg.practice) {
       // practice: nothing to save
@@ -950,6 +1062,169 @@ export class HudScene extends Phaser.Scene {
     this.refresh();
   }
 
+  // ------------------------------------------------------------ live match
+  /** The pause menu in a match: leave it for later, or concede the hole or the match. */
+  private matchMenu(x: number, y: number, w: number, pnl: Panel, t: Phaser.GameObjects.BitmapText, b1: Button, b2: Button) {
+    const p = this.play;
+    const live = p.match!;
+    const s = live.session!.state;
+    const leave = new Button(this, x + 15, y + 70, w - 30, 16, 'leave for now', () => {
+      this.closeModal();
+      this.scene.stop('play');
+      this.scene.start('title');
+    }, { color: 'grey' });
+    const canHole = holeLive(s) && p.state !== 'commit';
+    const hole = new Button(this, x + 15, y + 90, Math.floor((w - 34) / 2), 16, 'give up hole', () => {
+      this.closeModal();
+      confirmBox(this, this.modalLayer, 'concede the hole?', `${p.oppName()} wins this hole`, 'keep playing', 'concede', () => p.matchConcede('hole'));
+    }, { color: 'grey' });
+    hole.setEnabled(canHole);
+    const match = new Button(this, x + 19 + Math.floor((w - 34) / 2), y + 90, Math.floor((w - 34) / 2), 16, 'give up match', () => {
+      this.closeModal();
+      confirmBox(this, this.modalLayer, 'concede the match?', `${p.oppName()} wins the match - it can't be undone`, 'keep playing', 'concede', () => p.matchConcede('match'));
+    }, { color: 'grey' });
+    match.setEnabled(s.phase === 'playing' && p.state !== 'commit');
+    const note = txt(this, x + w / 2, y + 110, 'leave for now: continue it from the title', { origin: [0.5, 0], color: COLORS.dim });
+    this.modalLayer.add([pnl, t, b1, b2, leave, hole, match, note]);
+  }
+
+  /** Waiting for the other player (at the next tee, or the first). */
+  matchWaiting() {
+    const p = this.play;
+    const live = p.match;
+    if (!live?.session) return;
+    const s = live.session.state;
+    this.openModal('mwait');
+    this.redraw = () => this.matchWaiting();
+    const w = Math.min(220, this.W - 12), h = 52;
+    const x = Math.round((this.W - w) / 2), y = Math.round(this.H * 0.3);
+    const opp = p.oppName();
+    const where = s.results.length === 0 ? 'the first tee' : `the ${ordinal(s.hole + 1)} tee`;
+    const pnl = new Panel(this, x, y, w, h, 0.88);
+    const t1 = txt(this, x + w / 2, y + 6, `waiting for ${opp}`, { origin: [0.5, 0], scale: 2, maxWidth: w - 8 });
+    const t2 = txt(this, x + w / 2, y + 28, live.online[other(p.me)] ? `to come to ${where}` : `${opp}'s game is closed - they'll be back on the match from their title screen`, { origin: [0.5, 0], color: COLORS.dim, maxWidth: w - 10 });
+    this.modalLayer.add([pnl, t1, t2]);
+    if (t2.height > 12) pnl.resize(w, h + t2.height - 10);
+    this.refresh();
+  }
+
+  /** A hole's result: who won it, the standing, next hole. */
+  showMatchHole(res: HoleResult) {
+    const p = this.play;
+    const live = p.match!;
+    const s = live.session!.state;
+    const me = p.me, opp = other(me);
+    this.lastMatchResult = res;
+    this.openModal('mhole');
+    this.redraw = () => this.showMatchHole(res);
+    const oppName = p.oppName();
+    const won = res.winner === me, lost = res.winner === opp;
+    const n = s.cfg.holes[res.hole];
+    const title = res.winner === null ? `hole ${n} halved` : won ? `you win hole ${n}` : `${oppName} wins hole ${n}`;
+    if (won) sfx('great'); else if (res.winner === null) sfx('good'); else sfx('bad');
+    const sc = (k: Seat) => (res.holed[k] ? `${res.strokes[k]}` : `${res.strokes[k]}, not holed`);
+    const line = res.how === 'conceded' ? (won ? `${oppName} conceded it` : 'you conceded it') : `you ${sc(me)}  ·  ${oppName} ${sc(opp)}`;
+    const w = Math.min(230, this.W - 12), h = 92;
+    const x = Math.round((this.W - w) / 2), y = Math.round(this.H * 0.28);
+    const pnl = new Panel(this, x, y, w, h, 0.9);
+    const t1 = txt(this, x + w / 2, y + 6, title, { origin: [0.5, 0], scale: 2, color: won ? COLORS.yellow : lost ? COLORS.blue : COLORS.white, maxWidth: w - 8 });
+    const t2 = txt(this, x + w / 2, y + 28, line, { origin: [0.5, 0], maxWidth: w - 10 });
+    const t3 = txt(this, x + w / 2, y + 40, `${statusText(s, me)}  ·  ${s.phase === 'finished' ? 'match over' : `${s.cfg.holes.length - s.results.length} to play`}`, { origin: [0.5, 0], color: COLORS.dim });
+    const ready = s.ready[me];
+    const nb = new Button(this, x + w - 86, y + h - 22, 80, 16, ready ? 'waiting...' : 'next hole', () => p.matchNextHole());
+    nb.setEnabled(!ready);
+    const cb = new Button(this, x + 6, y + h - 22, 44, 16, 'card', () => this.toggleCard(), { color: 'grey' });
+    this.modalLayer.add([pnl, t1, t2, t3, nb, cb]);
+    if (live.session!.strokes.some((st) => st.sim)) this.modalLayer.add(new Button(this, x + 54, y + h - 22, 56, 16, 'rewatch', () => this.showMatchRewatch(), { color: 'grey' }));
+    this.refresh();
+  }
+
+  /** Back to the hole's result (from a replay or the list of shots). */
+  reshowMatchHole() {
+    if (this.lastMatchResult) this.showMatchHole(this.lastMatchResult);
+  }
+
+  /** Both players' strokes on the hole, to watch one again. */
+  showMatchRewatch() {
+    const p = this.play;
+    const ms = p.match?.session;
+    if (!ms) return;
+    this.openModal('mrewatch');
+    this.redraw = () => this.showMatchRewatch();
+    const list = ms.strokes.map((st, i) => ({ st, i })).filter((x) => x.st.sim).slice(-14);
+    const two = list.length > 7;
+    const rows = two ? Math.ceil(list.length / 2) : list.length;
+    const w = Math.min(two ? 320 : 220, this.W - 12), bh = 14, gap = 3;
+    const h = 22 + rows * (bh + gap) + 24;
+    const x = Math.round((this.W - w) / 2), y = Math.max(4, Math.round((this.H - h) / 2));
+    this.modalLayer.add([new Panel(this, x, y, w, h, 0.9), txt(this, x + w / 2, y + 6, 'rewatch a shot', { origin: [0.5, 0] })]);
+    const cw = two ? Math.floor((w - 18) / 2) : w - 12;
+    list.forEach(({ st, i }, k) => {
+      const col = two ? Math.floor(k / rows) : 0, row = two ? k % rows : k;
+      const who = st.seat === p.me ? 'you' : p.oppName();
+      const label = `${who}: ${strokeLabel(st.stroke, app.settings.units).replace(/^shot /, '')}`;
+      this.modalLayer.add(new Button(this, x + 6 + col * (cw + 6), y + 20 + row * (bh + gap), cw, bh, label, () => p.startMatchReplay(i), { color: st.stroke.result === 'holed' ? undefined : 'grey' }));
+    });
+    this.modalLayer.add(new Button(this, x + w / 2 - 26, y + h - 20, 52, 14, 'back', () => this.reshowMatchHole(), { color: 'grey' }));
+    this.refresh();
+  }
+
+  /** The match is over: the result, the card, a rematch. */
+  showMatchOver() {
+    const p = this.play;
+    const live = p.match!;
+    const s = live.session!.state;
+    const me = p.me;
+    this.openModal('mover');
+    this.redraw = () => this.showMatchOver();
+    const o = s.outcome;
+    const won = o?.winner === me, halved = o?.winner === null;
+    if (!this.modalLayer.getData('sounded')) { if (won) sfx('great'); else if (halved) sfx('good'); else sfx('bad'); }
+    const w = Math.min(240, this.W - 12), h = 104;
+    const x = Math.round((this.W - w) / 2), y = Math.round(this.H * 0.26);
+    const pnl = new Panel(this, x, y, w, h, 0.92);
+    const t1 = txt(this, x + w / 2, y + 6, statusText(s, me), { origin: [0.5, 0], scale: 2, color: won ? COLORS.yellow : halved ? COLORS.white : COLORS.blue, maxWidth: w - 8 });
+    let wins = 0, losses = 0, halves = 0;
+    for (const r of s.results) { if (r.winner === null) halves++; else if (r.winner === me) wins++; else losses++; }
+    const t2 = txt(this, x + w / 2, y + 30, `holes won ${wins}  ·  lost ${losses}  ·  halved ${halves}`, { origin: [0.5, 0], color: COLORS.dim });
+    this.modalLayer.add([pnl, t1, t2]);
+    const theirs = s.rematch && s.rematch.by !== me ? s.rematch.code : null;
+    const mine = s.rematch && s.rematch.by === me ? s.rematch.code : null;
+    if (theirs) {
+      this.modalLayer.add(txt(this, x + w / 2, y + 44, `${p.oppName()} wants a rematch`, { origin: [0.5, 0], color: COLORS.yellow }));
+      this.modalLayer.add(new Button(this, x + w / 2 - 50, y + 58, 100, 16, 'play the rematch', () => { this.scene.stop('play'); this.scene.start('match', { mode: 'join', code: theirs }); }));
+    } else if (mine) {
+      this.modalLayer.add(txt(this, x + w / 2, y + 48, `rematch offered: code ${mine}`, { origin: [0.5, 0], color: COLORS.dim }));
+    } else {
+      const rb = new Button(this, x + w / 2 - 50, y + 58, 100, 16, 'rematch', async () => {
+        rb.setEnabled(false);
+        rb.setLabel('making...');
+        const code = await this.makeRematch();
+        if (!code) { if (rb.active) { rb.setEnabled(true); rb.setLabel('rematch'); } return; }
+        this.scene.stop('play');
+        this.scene.start('match', { mode: 'invite', code });
+      });
+      this.modalLayer.add(rb);
+    }
+    this.modalLayer.add(new Button(this, x + 6, y + h - 22, 44, 16, 'card', () => this.toggleCard(), { color: 'grey' }));
+    this.modalLayer.add(new Button(this, x + w - 66, y + h - 22, 60, 16, 'title', () => { this.scene.stop('play'); this.scene.start('title'); }, { color: 'grey' }));
+    this.modalLayer.setData('sounded', true);
+    this.refresh();
+  }
+
+  /** A new match like this one (new wind and pins); the other player is offered it here. */
+  private async makeRematch(): Promise<string | null> {
+    const live = this.play.match;
+    const s = live?.session?.state;
+    if (!live || !s) return null;
+    const cfg = await newMatchConfig(s.cfg.tee, s.cfg.holes, s.cfg.difficulty);
+    const r = await createLiveMatch(cfg, { name: app.settings.playerName, lefty: app.settings.lefty });
+    if (!r.ok) { this.flash("couldn't make the rematch", COLORS.red, r.message, 1800); return null; }
+    // offered on this match's screen (wait a moment for it to go: leaving closes the line)
+    await Promise.race([live.client.send({ t: 'rematch', code: r.code }), new Promise((res) => setTimeout(res, 3000))]);
+    return r.code;
+  }
+
   continueFromHoled() {
     if (this.play.state !== 'holed') return;
     this.closeModal();
@@ -1105,3 +1380,10 @@ function swingLabel(s: number): string {
 }
 
 export { PX_PER_M };
+
+/** 1st, 2nd, 3rd, 4th ... 11th, 12th, 13th, 21st */
+function ordinal(n: number): string {
+  const t = n % 100;
+  if (t >= 11 && t <= 13) return `${n}th`;
+  return `${n}${['th', 'st', 'nd', 'rd'][n % 10] ?? 'th'}`;
+}

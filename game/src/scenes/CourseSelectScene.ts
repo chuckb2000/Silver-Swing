@@ -28,7 +28,7 @@ function reloadInto(id: string) {
 }
 import { ensureBg, MenuScene } from './menu';
 
-type Purpose = 'play' | 'board';
+type Purpose = 'play' | 'board' | 'match';
 /** A card: a course, or a place with several courses. */
 interface Tile { art: string; logos: string[]; name: string; sub: string; on: boolean; tap: () => void }
 interface Data { purpose?: Purpose; from?: string; courseId?: string }
@@ -313,7 +313,7 @@ export class CourseSelectScene extends MenuScene {
     this.loadError = '';
     if (this.purpose === 'board') { this.scene.start('leaderboard', { courseId: id }); return; }
     this.current = id;
-    if (app.course?.json.id === id) { this.scene.start('setup'); return; }
+    if (app.course?.json.id === id) { this.scene.start('setup', { match: this.purpose === 'match' }); return; }
     this.busy = true;
     this.stalled = false;
     this.loadFrac = 0;
@@ -339,6 +339,6 @@ export class CourseSelectScene extends MenuScene {
     this.busy = false;
     if (!this.sys.isActive()) return;
     ensureBg(this);
-    this.scene.start('setup');
+    this.scene.start('setup', { match: this.purpose === 'match' });
   }
 }

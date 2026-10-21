@@ -94,7 +94,7 @@ export class MatchSession {
   readonly course: CourseRuntime;
   readonly code: string;
   /** this game's seat (null: watching) */
-  readonly me: Seat | null;
+  me: Seat | null;
   state!: MatchState;
   readonly rounds: [Round | null, Round | null] = [null, null];
   /** events received from the server and not yet shown */
@@ -150,7 +150,9 @@ export class MatchSession {
     const out: Applied = { ev: e, closed: null, started: false, over: s.phase === 'finished' && before?.phase !== 'finished' };
     if (e.t === 'created' || e.t === 'joined') {
       const seat: Seat = e.t === 'created' ? 0 : 1;
-      this.rounds[seat] = new Round(this.course, matchRoundConfig(s.cfg, s.players[seat]!, seat));
+      const r = new Round(this.course, matchRoundConfig(s.cfg, s.players[seat]!, seat));
+      r.startHole(s.hole); // at the first tee (the screens read the ball and the tally before anyone plays)
+      this.rounds[seat] = r;
     }
     const closed = s.results.length > (before?.results.length ?? 0);
     switch (e.t) {
