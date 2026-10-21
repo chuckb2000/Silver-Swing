@@ -70,6 +70,7 @@
     "note": "OSM maps the course as two polygons (the mainland, holes 1-9 and 14-18, and Kingman Island, holes 10-13) with Kingman Lake between them. The game's out-of-bounds line is one polygon, so the lake between the two parts (the part of it inside their convex hull, marsh islands included) joins them and is a red penalty area (developer, 2026-10-19: option A, red for all water)."
   },
   "connect_fairways": true,
+  "merge_touching_fairways": true,
   "green_tiers": [
     {
       "hole": 13,
@@ -90,7 +91,7 @@
     "Elevation and canopy: District of Columbia lidar 1 m DEM and normalized surface model, DC GIS / OCTO (CC BY 4.0)",
     "Scorecard: Langston Golf Course (National Links Trust)"
   ],
-  "notes": "Developer decisions 2026-10-19: Royal (Blue) tees default; hole 10 has a back tee across Kingman Lake on the front-nine side; boundary joined across the lake (option A); every water hazard red; fairways run up to the green on every hole except where water lies between; anacostia theme with murky river water, no blossoms; the driving range is not made out of bounds. Hole 13 has a two-tier green (small low front tier), developer 2026-10-19.",
+  "notes": "Developer decisions 2026-10-19: Royal (Blue) tees default; hole 10 has a back tee across Kingman Lake on the front-nine side; boundary joined across the lake (option A); every water hazard red; fairways run up to the green on every hole except where water lies between; anacostia theme with murky river water, no blossoms; the driving range is not made out of bounds. Hole 13 has a two-tier green (small low front tier), developer 2026-10-19. Touching fairway pieces are merged before their corners are rounded (merge_touching_fairways), developer 2026-10-21: rough was left along the joins of the s02b approaches.",
   "drop_trees": [
     {
       "x": 889.5,
