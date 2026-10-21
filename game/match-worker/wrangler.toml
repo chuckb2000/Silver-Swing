@@ -1,0 +1,14 @@
+# The match Worker (live match play). The Pages project binds to its Durable
+# Object as MATCH (Settings > Bindings > Durable Object > namespace MatchRoom
+# of this Worker). Durable Objects on the free plan must use SQLite storage.
+name = "silver-swings-match"
+main = "src/index.ts"
+compatibility_date = "2026-09-01"
+
+[[durable_objects.bindings]]
+name = "MATCH"
+class_name = "MatchRoom"
+
+[[migrations]]
+tag = "v1"
+new_sqlite_classes = ["MatchRoom"]
