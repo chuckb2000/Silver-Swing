@@ -1,0 +1,17 @@
+{
+ "release": "data-triggs",
+ "note": "build inputs not kept in git; `make fetch NAME=triggs` puts them in place (pipeline/fetch_raw.py). The DEM clip (raw/ri_dem_2022_1m_clip.tif) is in git; the full USGS tile is in the release for reference (DATA_REQUEST.md).",
+ "files": [
+  {
+   "asset": "ri2022_statewide_J1473603.zip",
+   "sha256": "0c15d1f2d063aa9917b6237d558bc8c091708e93f09a21ca9e81ebafce427533",
+   "extract": [
+    "ri2022_statewide_J1473603tR0_C0.laz"
+   ],
+   "to": "raw/laz/",
+   "outputs": {
+    "raw/laz/ri2022_statewide_J1473603tR0_C0.laz": "d739ec2357dbfbecd2244453cac93ec286d882de744ca4e4ba93abd867f711a1"
+   }
+  }
+ ]
+}
