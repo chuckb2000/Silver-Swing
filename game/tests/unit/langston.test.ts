@@ -149,6 +149,37 @@ describe('Langston: the two-tier 13th green', () => {
 });
 
 describe('Langston: playing surfaces and trees', () => {
+  it('no pocket of rough is left inside a fairway (joins of the s02b approaches; developer, 2026-10-21)', () => {
+    const dir = resolve(COURSES_DIR, ID);
+    const png = PNG.sync.read(readFileSync(resolve(dir, 'surface.png')));
+    const ids = (JSON.parse(readFileSync(resolve(dir, 'surface_legend.json'), 'utf8')) as { ids: Record<string, number> }).ids;
+    const W = png.width, H = png.height;
+    const at = (i: number) => png.data[i * 4];
+    const seen = new Uint8Array(W * H);
+    const pockets: string[] = [];
+    const inside = new Set([ids.fairway, ids.green, ids.fringe]);
+    for (let start = 0; start < W * H; start++) {
+      if (seen[start] || at(start) !== ids.rough) continue;
+      // flood one rough patch; keep it if it is small (<= 100 m2) and nearly all its rim is fairway/green
+      const stack = [start];
+      seen[start] = 1;
+      let n = 0, rim = 0, rimIn = 0, sx = 0, sy = 0;
+      while (stack.length) {
+        const k = stack.pop()!;
+        n++; sx += k % W; sy += Math.floor(k / W);
+        const x = k % W, y = Math.floor(k / W);
+        for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) {
+          const nx = x + dx, ny = y + dy;
+          if (nx < 0 || ny < 0 || nx >= W || ny >= H) continue;
+          const q = ny * W + nx;
+          if (at(q) === ids.rough) { if (!seen[q]) { seen[q] = 1; stack.push(q); } } else { rim++; if (inside.has(at(q))) rimIn++; }
+        }
+      }
+      if (n <= 400 && rim > 0 && rimIn / rim > 0.9) pockets.push(`${(sx / n / 2).toFixed(0)},${(H / 2 - sy / n / 2).toFixed(0)}`);
+    }
+    expect(pockets).toEqual([]);
+  });
+
   it('every fairway runs into its green (no rough between fairway and fringe)', () => {
     const S = course.terrain;
     for (const h of json.holes) {
