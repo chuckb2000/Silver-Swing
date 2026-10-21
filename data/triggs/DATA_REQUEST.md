@@ -78,3 +78,10 @@ Add the files to the existing release: https://github.com/chuckb2000/silver-swin
 
 - 2026-10-20: OSM in hand (release `data-triggs`); DEM, the nine LAZ tiles and the scorecard images requested.
 - 2026-10-20 evening: rockyweb timed out in the developer's browser (ERR_CONNECTION_TIMED_OUT), and the project's LAZ is not on prd-tnm.s3.amazonaws.com (NoSuchKey; only its browse images are). The lidar comes through the NOAA Data Access Viewer route above instead.
+- 2026-10-20 21:04: DEM in the release. 21:14: NOAA job `ri2022_statewide_J1473603.zip` in the release. Everything needed is in hand.
+
+## Checks on arrival (runbook 5.5)
+
+- **DEM** `USGS_1M_19_x29y464_RI_Statewide_D22.tif` (396,924,574 bytes, SHA-256 37f94953e6dfd8e6066bffeed055996d0ea362f52085326a4c390c3ae59ea50c): EPSG:26919, 1 m, float32 metres, nodata -999999, none over the world + 100 m. Heights 15.0-61.5 m over the world + 100 m (the Woonasquatucket valley to the south-west at the low end). Clipped to `raw/ri_dem_2022_1m_clip.tif` (1,481 x 1,481 px, in git, SHA-256 42a42856851314c2015159d5a195fc12974521006a2755ac1e2e256318e7343d) with `pipeline/clip_raster.py --epsg 32619 --bbox 295174 4633941 296454 4635221 --margin 100`.
+- **LAZ** `ri2022_statewide_J1473603.zip` (296,374,653 bytes, SHA-256 0c15d1f2d063aa9917b6237d558bc8c091708e93f09a21ca9e81ebafce427533), one file `ri2022_statewide_J1473603tR0_C0.laz` (296,531,723 bytes, SHA-256 d739ec2357dbfbecd2244453cac93ec286d882de744ca4e4ba93abd867f711a1): LAS 1.4, point format 7, 61,992,776 points. CRS NAD83(2011) / Rhode Island (EPSG:6567) in **metres** + NAVD88 metres (not the UTM asked for; s00 reprojects the horizontal from the file's CRS). Classes 1 (25.5 M) and 2 (36.5 M) only. Extent 102,472-104,442 E, 82,839-84,703 N: covers the world + 100 m (102,633-104,156 E, 82,922-84,444 N). GPS times give 30 March 2022: leaf-off.
+- `release.json` lists the zip; `make fetch NAME=triggs` from a clean `raw/` downloads it, checks both hashes and extracts the LAZ to `raw/laz/` (tested 2026-10-20).

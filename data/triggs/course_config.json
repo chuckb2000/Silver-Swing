@@ -1,7 +1,7 @@
 {
   "id": "triggs",
   "name": "Triggs Memorial Golf Course",
-  "location": "Mount Pleasant, Providence, Rhode Island",
+  "location": "Providence, Rhode Island",
   "state": "RI",
   "architects": "Donald Ross (1933 on the club's card; the City of Providence gives 1932 as the opening year)",
   "theme": "seekonk",
@@ -13,17 +13,17 @@
   "dtm": {
     "path": "raw/ri_dem_2022_1m_clip.tif",
     "units": "m",
-    "source": "USGS 3DEP 1 m DEM, project RI_Statewide_D22 (2022 USGS Lidar: RI Statewide, QL1, flown March 2022), tile x29y464; NAD83 / UTM 19N (EPSG:26919), NAVD88 metres; requested 2026-10-20 (GitHub release data-triggs), clipped to the world + 100 m with pipeline/clip_raster.py"
+    "source": "USGS 3DEP 1 m DEM, project RI_Statewide_D22 (2022 USGS Lidar: RI Statewide, QL1, flown March 2022), tile x29y464; NAD83 / UTM 19N (EPSG:26919), NAVD88 metres; downloaded by the developer 2026-10-20 (GitHub release data-triggs), clipped to the world + 100 m with pipeline/clip_raster.py"
   },
   "laz": {
     "paths": [
-      "raw/laz_src/*.laz"
+      "raw/laz/*.laz"
     ],
     "classes": [
       1
     ],
-    "units": "ft",
-    "source": "2022 USGS Lidar: RI Statewide (project RI_Statewide_D22, workunit RI_Statewide_1_D22), QL1, flown March 2022 (leaf-off); NAD83(2011) / Rhode Island State Plane (US ft), NAVD88 (GEOID18) US ft; class 1 (unclassified: vegetation and structures; the project has no vegetation classes); nine tiles 335000-340000 x 270000-275000, requested 2026-10-20 (GitHub release data-triggs)",
+    "units": "m",
+    "source": "2022 USGS Lidar: RI Statewide (project RI_Statewide_D22), QL1, flown 30 March 2022 (leaf-off, from the points' GPS times); NOAA Data Access Viewer job J1473603 (dataset 9981), clipped to the world + ~200 m, classes 1 and 2 only, delivered in NAD83(2011) / Rhode Island (EPSG:6567) metres, NAVD88 metres; class 1 (unclassified: vegetation and structures; the project has no vegetation classes); GitHub release data-triggs",
     "label": "2022 USGS RI statewide lidar, leaf-off",
     "leaf_off": true
   },
