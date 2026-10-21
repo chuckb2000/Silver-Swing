@@ -45,8 +45,8 @@ describe('Langdon Farms Golf Club course data', () => {
     }
   });
 
-  it('measured yardages are within 3% of the card, and the flagged holes (1, 3, 9, 15, 17) within 8%', () => {
-    const flagged = new Set([1, 3, 9, 15, 17]);
+  it('measured yardages are within 3% of the card, and the flagged holes (1, 3, 15, 17) within 8%', () => {
+    const flagged = new Set([1, 3, 15, 17]);
     for (const h of json.holes) {
       const t = h.tees[TEE];
       const off = Math.abs((t.adjYd - t.cardYd) / t.cardYd);
@@ -112,6 +112,15 @@ describe('Langdon Farms Golf Club course data', () => {
     let touching = 0;
     for (let y = 630; y <= 670; y += 0.5) if (g9.contains(SPLIT_X + 0.5, y) && g18.contains(SPLIT_X - 0.5, y)) touching++;
     expect(touching).toBeGreaterThan(10);
+  });
+
+  it('no tree stands in either pond (developer, 2026-10-21: the lidar trees in the pond on 18 are removed)', () => {
+    const t = JSON.parse(readFileSync(resolve(COURSES_DIR, ID, 'trees.json'), 'utf8')) as { x: number[]; y: number[] };
+    for (const id of ['w334609000', 'w334607763']) {
+      const w = course.water.find((x) => x.id === id)!;
+      const wet = t.x.map((x, i) => [x, t.y[i]]).filter(([x, y]) => w.poly.contains(x, y));
+      expect(wet, id).toEqual([]);
+    }
   });
 
   it('the two red barns (8 and 18) stand inside the boundary, so they give free relief', () => {

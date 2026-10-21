@@ -135,25 +135,37 @@ describe('a ball against a trunk on a steep slope', () => {
 describe('Langdon 9/18: one double green traced as two touching halves', () => {
   const course = loadCourseFiles('langdon');
   const g9 = course.greenPolys.get('desk_9_green_0')!, g18 = course.greenPolys.get('desk_18_green_0')!;
-  /** A spot on the hole-9 half (not on the 18 half), the nearest such to the 18 pin from which
-   *  a straight putt stays dry (the green wraps round the pond's north tip, so the halves meet
-   *  beside the water; course chat, 2026-10-20). */
+  const pin18 = course.json.holes[17].pin;
+  /** A straight roll from a to b keeps 1.5 m clear of water. */
+  const dry = (a: { x: number; y: number }, b: { x: number; y: number }) => {
+    const n = Math.ceil(Math.hypot(b.x - a.x, b.y - a.y) / 0.25);
+    for (let k = 0; k <= n; k++) {
+      const f = k / n, px = a.x + (b.x - a.x) * f, py = a.y + (b.y - a.y) * f;
+      for (const [dx, dy] of [[0, 0], [1.5, 0], [-1.5, 0], [0, 1.5], [0, -1.5]]) if (course.terrain.surface(px + dx, py + dy) === SURF.water) return false;
+    }
+    return true;
+  };
+  const onGreen = (g: typeof g9, x: number, y: number) => g.contains(x, y) && g.edgeDistance(x, y) >= 1.5 && course.terrain.surface(x, y) === SURF.green;
+  /** A spot on the hole-9 half (not on the 18 half), the nearest such to the 18 pin. The green
+   *  wraps round the pond's north tip (developer's trace, 2026-10-21), so from there the pin may
+   *  be across the water: `waypoint` is a spot on the 18 half the ball can be putted to dryly
+   *  first, as a player would putt round the pond. */
   const on9Near18 = (() => {
-    const pin = course.json.holes[17].pin;
-    const dryLine = (x: number, y: number) => {
-      const n = Math.ceil(Math.hypot(pin[0] - x, pin[1] - y) / 0.25);
-      for (let k = 0; k <= n; k++) {
-        const f = k / n, px = x + (pin[0] - x) * f, py = y + (pin[1] - y) * f;
-        for (const [dx, dy] of [[0, 0], [1.5, 0], [-1.5, 0], [0, 1.5], [0, -1.5]]) if (course.terrain.surface(px + dx, py + dy) === SURF.water) return false;
-      }
-      return true;
-    };
     let best = { x: 0, y: 0 }, bd = Infinity;
     for (let x = g9.minX; x < g9.maxX; x += 0.5) for (let y = g9.minY; y < g9.maxY; y += 0.5) {
-      if (!g9.contains(x, y) || g18.contains(x, y) || g9.edgeDistance(x, y) < 1.5 || course.terrain.surface(x, y) !== SURF.green) continue;
-      if (Math.hypot(x - pin[0], y - pin[1]) >= bd || !dryLine(x, y)) continue;
-      const d = Math.hypot(x - pin[0], y - pin[1]);
+      if (!onGreen(g9, x, y) || g18.contains(x, y)) continue;
+      const d = Math.hypot(x - pin18[0], y - pin18[1]);
       if (d < bd) { bd = d; best = { x, y }; }
+    }
+    return best;
+  })();
+  const waypoint = (() => {
+    const pin = { x: pin18[0], y: pin18[1] };
+    let best = { x: 0, y: 0 }, bd = Infinity;
+    for (let x = g18.minX; x < g18.maxX; x += 1) for (let y = g18.minY; y < g18.maxY; y += 1) {
+      if (!onGreen(g18, x, y) || g18.edgeDistance(x, y) < 3) continue;
+      const p = { x, y }, d = Math.hypot(x - on9Near18.x, y - on9Near18.y);
+      if (d < bd && dry(on9Near18, p) && dry(p, pin)) { bd = d; best = p; }
     }
     return best;
   })();
@@ -181,10 +193,15 @@ describe('Langdon 9/18: one double green traced as two touching halves', () => {
     expect(r.lie.kind).toBe('green');
     expect(r.autoClub().kind).toBe('putter');
     // putt out (holing out still works) and the green counts as hit in regulation
+    expect(waypoint.x).toBeGreaterThan(0);
     for (let k = 0; k < 8 && r.distToPin() > 0; k++) {
       const scale = r.autoPuttScale();
-      const power = Math.min(1, (r.distToPin() * 1.05 + 0.3) / scale);
-      const plan = r.plan(PUTTER.id, r.defaultAim(PUTTER, scale), meterFor(power, 0, true), 0, scale);
+      // round the pond when the pin is across it: first to the waypoint on the 18 half
+      const to = dry(r.ball, r.pin) ? r.pin : waypoint;
+      const d = Math.hypot(to.x - r.ball.x, to.y - r.ball.y);
+      const power = Math.min(1, (d * (to === r.pin ? 1.05 : 1) + (to === r.pin ? 0.3 : 0)) / scale);
+      const aim = to === r.pin ? r.defaultAim(PUTTER, scale) : Math.atan2(to.y - r.ball.y, to.x - r.ball.x);
+      const plan = r.plan(PUTTER.id, aim, meterFor(power, 0, true), 0, scale);
       const o = r.resolve(plan, r.simulate(plan));
       if (o.kind === 'holed') break;
       expect(o.kind).toBe('rest');

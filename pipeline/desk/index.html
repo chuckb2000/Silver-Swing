@@ -90,7 +90,7 @@ textarea{width:100%;box-sizing:border-box;min-height:70px;resize:vertical;border
       <svg id="svg" aria-label="Aerial photo with traced outlines"></svg>
       <div class="scale" id="scale">20 m<b id="scalebar"></b></div>
       <div class="zoom"><button id="zin" aria-label="Zoom in">+</button><button id="zout" aria-label="Zoom out">−</button><button id="zfit" aria-label="Fit hole">⤢</button></div>
-      <div class="legend"><span><i style="background:var(--green)"></i>green</span><span><i style="background:var(--fairway)"></i>fairway</span><span><i style="background:var(--bunker)"></i>bunker</span><span><i style="background:var(--tee)"></i>tee</span><span><i style="background:var(--bluetee)"></i><b id="legTee" style="font-weight:inherit">Blue tee</b></span><span><i style="background:var(--hole)"></i>line of play → green</span><span><i style="background:transparent;border:1px dashed #fff"></i>other holes / raised lidar pad</span><span><i style="background:var(--ob)"></i>out of bounds</span><span id="lgRange" hidden><i style="background:var(--range)"></i>driving range (out of bounds)</span></div>
+      <div class="legend"><span><i style="background:var(--green)"></i>green</span><span><i style="background:var(--fairway)"></i>fairway</span><span><i style="background:var(--bunker)"></i>bunker</span><span><i style="background:var(--tee)"></i>tee</span><span><i style="background:var(--bluetee)"></i><b id="legTee" style="font-weight:inherit">Blue tee</b></span><span><i style="background:var(--hole)"></i>line of play → green</span><span><i style="background:transparent;border:1px dashed #fff"></i>other holes / raised lidar pad</span><span><i style="background:var(--ob)"></i>out of bounds</span><span id="lgSplit" hidden><i style="background:#22d3ee"></i>split line (dashed)</span><span id="lgRange" hidden><i style="background:var(--range)"></i>driving range (out of bounds)</span></div>
       <div class="drawbar" id="drawbar" hidden><span id="drawmsg">Click to place points</span><button class="btn" id="drawUndo">Undo point</button><button class="btn primary" id="drawDone">Finish</button><button class="btn" id="drawCancel">Cancel</button></div>
     </div>
     <aside>
@@ -176,6 +176,17 @@ function blueInfo(h, feats) {
 }
 const area = poly => { let a = 0; for (let i = 0; i < poly.length; i++) { const [x1, y1] = poly[i], [x2, y2] = poly[(i + 1) % poly.length]; a += x1 * y2 - x2 * y1; } return Math.abs(a / 2); };
 
+function halfPlane(poly, line, s) {   // the part of poly on one side of the line: s = 1 left (of its direction), -1 right
+  const [[ax, ay], [bx, by]] = [line[0], line[line.length - 1]];
+  const sd = ([x, y]) => s * ((bx - ax) * (y - ay) - (by - ay) * (x - ax));
+  const out = [];
+  for (let i = 0; i < poly.length; i++) {
+    const p = poly[i], q = poly[(i + 1) % poly.length], dp = sd(p), dq = sd(q);
+    if (dp >= 0) out.push(p);
+    if ((dp >= 0) !== (dq >= 0)) { const t = dp / (dp - dq); out.push([p[0] + t * (q[0] - p[0]), p[1] + t * (q[1] - p[1])]); }
+  }
+  return out.length >= 3 ? out : [];
+}
 function status(msg, err) { const s = $("status"); s.textContent = msg; s.classList.toggle("err", !!err); }
 
 function ensureWork(h) {
@@ -208,6 +219,7 @@ function openHole(h) {
   const g = W().features.find(f => f.kind === "bluetee") || W().features.find(f => f.kind === "green"); sel = g ? g.id : null;
   fit(); renderChips(); render(); renderPanel();
   $("note").value = W().note;
+  if (h.areaKind === "green") { status((saved[h.hole] ? "Showing your saved outline. " : "") + "Trace the whole double green as one outline (and any fairway round it with New fairway; the green wins where they overlap). The dashed cyan line cuts the green: hole " + h.split.left + " gets the left side, hole " + h.split.right + " the right."); return; }
   status(saved[h.hole] ? "Showing your saved version of " + NAME(h) + "." : (h.noBlue ? "Showing " + NAME(h) + " as built from OpenStreetMap. Drag points to fix it, then save." : h.editShapes ? "Showing the approved shapes for hole " + h.hole + "." : "Hole " + h.hole + " comes from OpenStreetMap (dashed). Mark its " + TN() + " tee."));
 }
 
@@ -231,6 +243,19 @@ function render() {
   el("image", {href: cur.img, x: 0, y: 0, width: cur.w, height: cur.h, preserveAspectRatio: "none"}, svg);
   for (const r of cur.refs) {
     el("polygon", {points: r.poly.map(toPx).map(q => q.join(",")).join(" "), fill: "none", stroke: r.kind === "pad" ? "#f5d0fe" : "rgba(255,255,255,.7)", "stroke-width": 1.1 * k, "stroke-dasharray": r.kind === "pad" ? `${2 * k} ${2 * k}` : `${4 * k} ${3 * k}`, "pointer-events": "none"}, svg);
+  }
+  if (cur.split) {
+    const [[ax, ay], [bx, by]] = [cur.split.line[0], cur.split.line[cur.split.line.length - 1]];
+    const L = Math.hypot(bx - ax, by - ay), ux = (bx - ax) / L, uy = (by - ay) / L, far = 1000;
+    const p0 = toPx([ax - ux * far, ay - uy * far]), p1 = toPx([bx + ux * far, by + uy * far]);
+    el("line", {x1: p0[0], y1: p0[1], x2: p1[0], y2: p1[1], stroke: "#22d3ee", "stroke-width": 2 * k, "stroke-dasharray": `${8 * k} ${5 * k}`, "pointer-events": "none"}, svg);
+    const mid = [(ax + bx) / 2, (ay + by) / 2], off = 6;   // labels 6 m either side of the line
+    for (const [hole, sgn] of [[cur.split.left, 1], [cur.split.right, -1]]) {
+      if (!hole) continue;
+      const q = toPx([mid[0] - uy * off * sgn, mid[1] + ux * off * sgn]);
+      const t = el("text", {x: q[0], y: q[1], fill: "#22d3ee", "font-size": 16 * k, "font-weight": 700, "text-anchor": "middle", stroke: "#000", "stroke-width": 3 * k, "paint-order": "stroke", "pointer-events": "none"}, svg);
+      t.textContent = hole;
+    }
   }
   for (const l of cur.boundary) el("polyline", {points: l.map(toPx).map(q => q.join(",")).join(" "), fill: "none", stroke: "#ff9f1c", "stroke-width": 2 * k, "pointer-events": "none"}, svg);
   // line of play with an arrowhead at the green
@@ -393,8 +418,9 @@ function renderPanel() {
   $("redraw").disabled = !has; $("delShape").disabled = !has; $("delPoint").disabled = !(has && selPt != null);
   $("undo").disabled = !W().history.length;
   for (const id of ["newFairway", "newBunker", "newGreen", "newTee", "revert"]) $(id).disabled = !cur.editShapes;
-  for (const id of ["newFairway", "newBunker", "newGreen", "newTee"]) $(id).hidden = !!cur.area;
-  $("newRange").hidden = !cur.area; $("lgRange").hidden = !cur.area;
+  const greenPage = cur.areaKind === "green";   // a double green's own page (desk_export.py --area double)
+  for (const id of ["newFairway", "newBunker", "newGreen", "newTee"]) $(id).hidden = !!cur.area && !(greenPage && (id === "newGreen" || id === "newFairway"));
+  $("newRange").hidden = !cur.area || greenPage; $("lgRange").hidden = !cur.area || greenPage; $("lgSplit").hidden = !cur.split;
   $("newBlue").hidden = !!cur.noBlue; $("yardHint").hidden = !!cur.noBlue;
   if (!cur.editShapes && sel) { const f = W().features.find(x => x.id === sel); if (f && f.kind !== "bluetee") { $("redraw").disabled = true; $("delShape").disabled = true; } }
   $("save").disabled = !canSave;
@@ -403,6 +429,15 @@ function renderPanel() {
 function renderYard() {
   const dl = $("yard"); dl.textContent = "";
   const row = (k, v, pill) => { const dt = document.createElement("dt"); dt.textContent = k; const dd = document.createElement("dd"); dd.textContent = v; if (pill) { const p = document.createElement("span"); p.className = "pill " + pill; p.textContent = pill; dd.appendChild(p); } dl.append(dt, dd); };
+  if (cur.areaKind === "green") {
+    $("yardTitle").textContent = `${cur.label} · one outline round the pond`;
+    const gs = W().features.filter(f => f.kind === "green");
+    const side = s => gs.reduce((n, f) => n + area(halfPlane(f.poly, cur.split.line, s)), 0);
+    row("Whole green", Math.round(gs.reduce((n, f) => n + area(f.poly), 0)).toLocaleString() + " m²");
+    if (cur.split.left) row(`Hole ${cur.split.left} (left of the line)`, Math.round(side(1)).toLocaleString() + " m²");
+    if (cur.split.right) row(`Hole ${cur.split.right} (right of the line)`, Math.round(side(-1)).toLocaleString() + " m²");
+    return;
+  }
   if (cur.area) {
     $("yardTitle").textContent = `${cur.label || cur.hole} · out of bounds`;
     let a = 0; for (const f of W().features) a += area(f.poly) - (f.holes || []).reduce((s, h) => s + area(h), 0);

@@ -90,5 +90,42 @@
   "join_boundary_parts": {
     "max_gap_m": 60,
     "note": "OR 551 between the two OSM course ways (w30516492 west, w30516571 east), 35-58 m apart; no hole plays across it, a cart path runs under it (developer 2026-10-19): the highway strip stays out of bounds"
-  }
+  },
+  "drop_trees": [
+    {
+      "x": 720.5,
+      "y": 538.5,
+      "reason": "lidar tree inside the clubhouse pond on 18; open water in the OSIP 2024 orthophoto (developer, 2026-10-21: remove the trees in the pond)"
+    },
+    {
+      "x": 742.5,
+      "y": 562.5,
+      "reason": "lidar tree inside the clubhouse pond on 18; open water in the OSIP 2024 orthophoto (developer, 2026-10-21: remove the trees in the pond)"
+    },
+    {
+      "x": 745.5,
+      "y": 562.5,
+      "reason": "lidar tree inside the clubhouse pond on 18; open water in the OSIP 2024 orthophoto (developer, 2026-10-21: remove the trees in the pond)"
+    },
+    {
+      "x": 737.5,
+      "y": 565.5,
+      "reason": "lidar tree inside the clubhouse pond on 18; open water in the OSIP 2024 orthophoto (developer, 2026-10-21: remove the trees in the pond)"
+    },
+    {
+      "x": 740.5,
+      "y": 565.5,
+      "reason": "lidar tree inside the clubhouse pond on 18; open water in the OSIP 2024 orthophoto (developer, 2026-10-21: remove the trees in the pond)"
+    },
+    {
+      "x": 745.5,
+      "y": 566.5,
+      "reason": "lidar tree inside the clubhouse pond on 18; open water in the OSIP 2024 orthophoto (developer, 2026-10-21: remove the trees in the pond)"
+    },
+    {
+      "x": 715.5,
+      "y": 578.5,
+      "reason": "lidar tree inside the clubhouse pond on 18; open water in the OSIP 2024 orthophoto (developer, 2026-10-21: remove the trees in the pond)"
+    }
+  ]
 }

@@ -48,8 +48,9 @@ and data/langdon/validation_report.md.
 -   **Barns:** the barn on the left of the 8th fairway and the event barn by
     the 18th green are drawn barn red (`building_colours`); free relief, as
     for every building inside the boundary (developer).
--   **Trees:** 5,043 from the canopy model (799 on the course), type from
-    crown shape.
+-   **Trees:** 5,036 from the canopy model (736 on the course), type from
+    crown shape. Seven lidar tops inside the clubhouse pond on 18 (open water
+    in the 2024 orthophoto) are removed (`drop_trees`; developer, 2026-10-21).
 -   **Scorecard** (club card, 2/2020, supplied by the developer; identical to
     GolfPass). Tees are named Tee 8 to Tee 1; Tee 7 71.5/133.
 
@@ -59,12 +60,13 @@ and data/langdon/validation_report.md.
   Par     4   4   3   4   4   3   5   4   4   35    4   5   4   3   4   4   4   3   5   36    71
   HCP     13  11  17  9   7   15  3   1   5         12  2   4   18  14  10  8   16  6
   Tee 7   372 368 173 322 403 115 512 449 409 3123  365 607 425 166 379 340 411 204 502 3399  6522
-  Built   397 373 166 331 400 118 508 440 430 3163  358 606 427 165 378 351 407 213 514 3419  6582
+  Built   397 373 166 331 400 118 508 440 421 3154  358 606 427 165 378 351 407 213 502 3407  6561
   -------------------------------------------------------------------------------------
 
 Tee 8 (6,931, 73.7/133), Tee 5 (6,052), Tee 3 (5,246) and Tee 1 (4,190) are
 in scorecard.csv, not built; Tee 6, 4 and 2 are combinations on the card.
 
--   **Default tee:** Tee 7 (developer), the only set built. Holes 1 (+6.4 %),
-    3, 9 (+5.2 %), 15 and 17 are flags; none over 8 %.
+-   **Default tee:** Tee 7 (developer), the only set built. Holes 1 (+6.7 %),
+    3, 15 and 17 are flags; none over 8 %. Hole 9 passes (+3.0 %) since the
+    developer retraced the 9/18 green on 2026-10-21.
 -   **Known open items:** data/langdon/report_notes.md.

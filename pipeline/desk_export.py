@@ -25,6 +25,10 @@ For a course built from OSM (Oregon Golf Club), two options:
                     desk_to_proposed.py replaces them with what the developer saves.
   --area range      adds a "range" page (chip R) with the course's driving range
                     polygon editable (kind "range"), saved as `holes/range`.
+  --area double     adds a page per trace_spec "double_greens" entry with a "split"
+                    line (chip "9/18 green"): the whole shared green as one outline,
+                    the split line as a guide, saved as `holes/9-18`; desk_to_proposed.py
+                    cuts it along the line (Langdon Farms).
 "ortho" in trace_spec.json may be any RGB GeoTIFF on the course EPSG (an
 orthophoto, or a lidar relief picture until one is available).
 """
@@ -55,7 +59,7 @@ def main():
     ap.add_argument("out")
     ap.add_argument("--edit", default="", help="holes whose shapes are editable, e.g. 9-18 or 9,11,12")
     ap.add_argument("--edit-osm", default="", help="holes whose OSM greens/fairways/bunkers are editable (OSM courses)")
-    ap.add_argument("--area", default="", help="extra pages: 'range' = the driving range")
+    ap.add_argument("--area", default="", help="extra pages: 'range' = the driving range, 'double' = each double green with a split line")
     ap.add_argument("--traced", action="store_true",
                     help="start from proposed/traced.geojson: its hole lines and greens where the layout has none, and its "
                          "greens, tees and bunkers (each bunker to its nearest hole line) as the editable shapes of --edit holes "
@@ -218,6 +222,45 @@ def main():
                       "w": crop.width, "h": crop.height, "img": "img/range.jpg", "line": [], "greenCenter": [0, 0],
                       "features": feats, "refs": refs, "boundary": blines, "editShapes": True, "noBlue": True,
                       **({"units": units} if units else {})})
+    # --area double: one page per trace_spec "double_greens" entry with a "split" line (Langdon
+    # Farms 9/18): the whole shared green as one editable outline, cropped close at the photo's full
+    # resolution, with the split line as a guide; desk_to_proposed.py cuts the saved outline along
+    # the line and gives each hole its side (the holes' own pages' greens are then ignored)
+    if "double" in a.area.split(","):
+        for dg in spec.get("double_greens", []):
+            if "split" not in dg:
+                continue
+            ha, hb = dg["holes"]
+            pid = f"{ha}-{hb}"
+            mine_ = g[(g.kind == "green") & g.osm.astype(str).str.match(rf"desk_({ha}|{hb})_green_")]
+            whole = unary_union(list(mine_.geometry))
+            b = whole.buffer(35).bounds
+            bx0 = [max(int(b[0]), 0), max(int(b[1]), 0), min(int(b[2]) + 1, int(world.width)), min(int(b[3]) + 1, int(world.height))]
+            c0, r0 = int(bx0[0] / o.res), int((o.top - bx0[3]) / o.res)
+            c1, r1 = int(bx0[2] / o.res), int((o.top - bx0[1]) / o.res)
+            crop = Image.fromarray(img[r0:r1, c0:c1])  # full resolution
+            fn = f"img/green{ha}_{hb}.jpg"
+            crop.save(out / fn, "JPEG", quality=90)
+            clip = sbox(*bx0)
+            if pid in saved:
+                feats = saved[pid]
+            else:
+                parts = getattr(whole, "geoms", [whole])
+                feats = [{"id": f"double_green_{pid}" + (f":{i}" if i else ""), "kind": "green", "poly": ring(p)} for i, p in enumerate(parts)]
+            refs = [{"kind": r.kind, "poly": ring(r.geometry)} for _, r in g.iterrows()
+                    if r.kind in ("green", "fairway", "bunker", "tee", "water", "lateral_water_hazard", "water_hazard")
+                    and r.geometry.geom_type == "Polygon" and r.geometry.intersects(clip) and r.osm not in set(mine_.osm)]
+            bl = bnd.boundary.intersection(clip.buffer(5))
+            blines = [[[round(x, 1), round(y, 1)] for x, y in ln_.coords] for ln_ in getattr(bl, "geoms", [bl]) if ln_.geom_type == "LineString"]
+            keep = dg["keep"]
+            (sx0, sy0), (sx1, sy1) = dg["split"][0], dg["split"][-1]
+            left = lambda p: (sx1 - sx0) * (p[1] - sy0) - (sy1 - sy0) * (p[0] - sx0) > 0  # noqa: E731
+            sides = {("left" if left(keep[h]) else "right"): h for h in (ha, hb)}
+            holes.append({"hole": pid, "label": f"{ha}/{hb} green", "area": True, "areaKind": "green", "par": 0, "blue": 0, "white": 0,
+                          "box": bx0, "w": crop.width, "h": crop.height, "img": fn, "line": [], "greenCenter": [0, 0],
+                          "features": feats, "refs": refs, "boundary": blines, "editShapes": True, "noBlue": True,
+                          "split": {"line": dg["split"], "left": sides.get("left"), "right": sides.get("right")},
+                          **({"units": units} if units else {})})
     if offered:
         json.dump(offered, open(cdir / "desk_offered.json", "w"), indent=1)
     json.dump(holes, open(out / "holes.json", "w"), separators=(",", ":"))

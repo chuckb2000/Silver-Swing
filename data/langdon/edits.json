@@ -189,10 +189,12 @@
     "desk_15_hole",
     "desk_16_hole",
     "desk_17_hole",
-    "desk_18_hole"
+    "desk_18_hole",
+    "desk_9-18_fairway_0",
+    "desk_9-18_fairway_1"
    ],
    "tags": {},
-   "reason": "the developer's shapes from the tracing desk (2026-10-19): greens, fairways, bunkers, tee boxes and each hole's Tee 7 box, with pins at the green centres and hole lines (back tee -> make_bends.py bends -> green centre); data/langdon/desk/"
+   "reason": "the developer's shapes from the tracing desk (2026-10-19): greens, fairways, bunkers, tee boxes and each hole's Tee 7 box, with pins at the green centres and hole lines (back tee -> make_bends.py bends -> green centre); data/langdon/desk/ The fairway round the back of the 9/18 green (developer, 2026-10-21: 'a little curtain of fairway 2-7 yards wide around the entire back of 9/18 green complex'), traced on the desk's 9/18 page."
   },
   {
    "from": "proposed/channels_lidar.geojson",
