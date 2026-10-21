@@ -193,6 +193,18 @@
    ],
    "tags": {},
    "reason": "the developer's shapes from the tracing desk (2026-10-19): greens, fairways, bunkers, tee boxes and each hole's Tee 7 box, with pins at the green centres and hole lines (back tee -> make_bends.py bends -> green centre); data/langdon/desk/"
+  },
+  {
+   "from": "proposed/channels_lidar.geojson",
+   "ids": [
+    "channel_tr_creek_7"
+   ],
+   "tags": {
+    "penalty": "red",
+    "flatten": "no",
+    "name": "creek on hole 7"
+   },
+   "reason": "The creek on hole 7 that splits the two fairways (developer, 2026-10-20), not in OSM. Its line follows the channel in the lidar DEM (data/langdon/make_creek_line.py: from beside the cart path east of the fairway, about 160 m from the green, down between the fairway and the approach and past the west side of the green); the penalty area is the channel along that line (pipeline/propose_channels.py langdon --lines=proposed/creek_lines.geojson tr_creek_7: 267 m long, 6.7 m wide on average, about 0.6 m deep). Red, as all water here (developer). flatten=no keeps the lidar bed."
   }
  ],
  "tags": [

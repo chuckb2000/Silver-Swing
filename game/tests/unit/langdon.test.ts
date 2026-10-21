@@ -1,6 +1,7 @@
 // Langdon Farms Golf Club: course-specific checks of COURSE_BUILD.md 8.2, plus
 // the developer's points: OR 551 between the two parts of the course is out of
-// bounds, both ponds are red penalty areas, 9 and 18 share one green around the
+// bounds, both ponds and the creek on hole 7 (from the lidar channel) are red
+// penalty areas, 9 and 18 share one green around the
 // clubhouse pond with 9's pin on the east side, and the two barns stand inside
 // the boundary (free relief).
 import { readFileSync } from 'node:fs';
@@ -64,15 +65,18 @@ describe('Langdon Farms Golf Club course data', () => {
     }
   });
 
-  it('both ponds are red penalty areas painted as water', () => {
-    for (const id of ['w334609000', 'w334607763']) {
+  it('both ponds and the creek on hole 7 are red penalty areas painted as water', () => {
+    for (const id of ['w334609000', 'w334607763', 'channel_tr_creek_7']) {
       const w = course.water.find((x) => x.id === id)!;
       expect(w, id).toBeTruthy();
       expect(w.penalty, id).toBe('red');
       const b = w.poly;
       let n = 0, water = 0;
-      for (let x = b.minX; x <= b.maxX; x += 2) for (let y = b.minY; y <= b.maxY; y += 2) {
-        if (!b.contains(x, y)) continue;
+      // points at least 0.75 m inside the outline (the surface map is 0.5 m pixels, and the
+      // creek is only about 6 m wide, so points on its edge fall either side of it)
+      const inside = (x: number, y: number) => [[0, 0], [0.75, 0], [-0.75, 0], [0, 0.75], [0, -0.75]].every(([dx, dy]) => b.contains(x + dx, y + dy));
+      for (let x = b.minX; x <= b.maxX; x += 1) for (let y = b.minY; y <= b.maxY; y += 1) {
+        if (!inside(x, y)) continue;
         n++;
         if (course.terrain.surface(x, y) === SURF.water) water++;
       }

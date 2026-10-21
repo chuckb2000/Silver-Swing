@@ -66,9 +66,10 @@ Decisions the developer made on 2026-10-19 are in DECISIONS.md ("Langdon Farms G
 8. **The driving range is in bounds** (developer) and plays as rough; OSM's internal out-of-bounds line along it (w1569564855) is not used.
 9. **The barns**: the barn on 8 (w324295601) and the event barn by the 18th green (w324295657) are drawn in barn red. Both stand inside the boundary, so the game gives free relief from them (developer's choice; the card's local rule calls the barn on 8 an integral object).
 10. **Trees**: 5,043 from the DOGAMI canopy model (799 on the course), conifer or broadleaf from crown shape only (no leaf-off imagery), p50 19 m, max 60 m. No tree stands in the way of a centre-line drive or of the fairway-middle tee shot on any hole (unit tests), and s06b removed none.
-11. **Ponds**: the clubhouse pond (w334609000, beside 9 and 18) and the pond on the west part (w334607763, between 12 and 13) are red penalty areas (`red_water_osm`; mapped only as `natural=water`). The ponds west of the course near I-5 lie outside the boundary.
+11. **Water**: the clubhouse pond (w334609000, beside 9 and 18) and the pond on the west part (w334607763, between 12 and 13) are red penalty areas (`red_water_osm`; mapped only as `natural=water`). The ponds west of the course near I-5 lie outside the boundary.
 12. **Scorecard**: the club's own card (2/2020), identical to GolfPass hole for hole. Tee 7 rating/slope 71.5/133 from the card (GolfPass: 71.9/132). Tee 8, 5, 3 and 1 are in scorecard.csv, not built.
 13. **Robot rounds** (5 seeds): 62-71, no penalties, no hole over par + 2.
+14. **The creek on hole 7** (developer, 2026-10-20: it splits the two fairways) is not in OSM. Its line comes from the channel in the lidar DEM (`data/langdon/make_creek_line.py`) and the red penalty area from the channel along it (`propose_channels.py --lines`): 267 m from beside the cart path east of the fairway, down between the fairway and the approach and past the west side of the green, 6.7 m wide on average, about 0.6 m deep (`proposed/creek7.jpg`). A second, shallower dip beside the cart path north of it (y 1097-1158, running into a bunker) is left out as a path-side swale. Confirmed by the developer (2026-10-20: "you nailed the creek"); robot rounds (8 seeds) took no penalty on 7.
 
 Tracing desk: https://claude.ai/artifact/G4bThDJVqubcH8TdhBfTFc (`desk_export.py langdon <dir> --edit 1-18 --traced`; saves read back into `data/langdon/desk/`).
 
@@ -118,7 +119,7 @@ Tracing desk: https://claude.ai/artifact/G4bThDJVqubcH8TdhBfTFc (`desk_export.py
 | 4 | 4 | yes | yes (4 near) | yes | yes | yes | 3 | 0 |
 | 5 | 4 | yes | yes (4 near) | yes | yes | yes | 2 | 0 |
 | 6 | 3 | yes | yes (3 near) | yes | yes | yes | 1 | 0 |
-| 7 | 5 | yes | yes (3 near) | yes | yes | yes | 2 | 0 |
+| 7 | 5 | yes | yes (3 near) | yes | yes | yes | 2 | 1 |
 | 8 | 4 | yes | yes (4 near) | yes | yes | yes | 4 | 0 |
 | 9 | 4 | yes | yes (3 near) | yes | yes | yes | 2 | 0 |
 | 10 | 4 | yes | yes (4 near) | yes | yes | yes | 2 | 0 |
@@ -152,5 +153,5 @@ Tracing desk: https://claude.ai/artifact/G4bThDJVqubcH8TdhBfTFc (`desk_export.py
 - hole 17: hole line carries handicap=16 (compare with scorecard)
 - hole 18: hole line carries handicap=6 (compare with scorecard)
 
-Totals: 78 tees, 18 greens, 22 fairways, 38 bunkers, 0 water hazards, 18 pins, 16 cart paths, 34 OSM tree points.
+Totals: 78 tees, 18 greens, 22 fairways, 38 bunkers, 1 water hazards, 18 pins, 16 cart paths, 34 OSM tree points.
 
