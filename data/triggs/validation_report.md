@@ -32,7 +32,7 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 
 ## Other open items (Triggs Memorial)
 
-Built by a course chat on 2026-10-20 with the standing defaults (docs/COURSE_BUILD.md 4.1); the developer went to bed mid-build and asked for questions to wait for the morning. Each item has a recommendation.
+Built by a course chat on 2026-10-20 with the standing defaults (docs/COURSE_BUILD.md 4.1); the developer went to bed mid-build and asked for questions to wait for the morning. The developer accepted every recommendation below on 2026-10-20 (22:29) and approved the logo.
 
 1. **Scorecard ratings differ between the club's own sources.** Per-hole yardages, pars and stroke index come from the club's printed card (triggs.us images, release `data-triggs`); every row adds up to its printed total and OSM's hole tags match the Blue column on every hole. The card prints Blue 72.3/132, White 71.1/128, Gold 66.1/124, Red 71.3/124; the website's course page gives Blue 71.5/129, White 70.5/126, Red 72/124. Built with the printed card's 72.3/132. Recommendation: keep the card.
 2. **Hole 15 Blue tee.** The OSM line starts on a forward box (457 yd). The box 34 m behind it, just past the 14th green (w677173986), measures 506 yd from its centre against the card's 508, but lies outside s06's 25 m search, so `edits.json` tags it `hole=15, tee_set=Blue`. This was the course chat's call (s06's line above says "the developer" for any tagged box). Built 500 yd (-1.6 %). Recommendation: accept.

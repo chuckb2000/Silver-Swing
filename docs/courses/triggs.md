@@ -36,7 +36,8 @@ Blue, the only set built (standing default 4.1: the card has a Blue set).
 
 -   2026-10-20: theme `seekonk`; logo a Rhode Island Red ("a chicken").
 -   2026-10-20: work through the night with the defaults; questions in the morning.
--   Everything else is a standing default (COURSE_BUILD.md 4.1) or a course-chat call listed under open items, waiting for the developer.
+-   2026-10-20 (22:29): accepted every recommendation: the printed card's ratings (Blue 72.3/132), the hole 15 Blue tee behind the 14th green, the three trees removed in front of the 15th tee, course card hole 12; the logo approved ("looks amazing").
+-   Everything else is a standing default (COURSE_BUILD.md 4.1).
 
 ## New pipeline keys or theme
 
@@ -44,7 +45,7 @@ None. No file under `pipeline/` changed, so `make regress` was not needed (COURS
 
 ## Open items
 
-Details in `data/triggs/validation_report.md` ("Other open items").
+All accepted by the developer on 2026-10-20 (22:29); nothing is waiting. Details in `data/triggs/validation_report.md` ("Other open items").
 
 1.  **Ratings:** card 72.3/132 vs website 71.5/129 for Blue. Recommendation: keep the card.
 2.  **Hole 15 Blue tee** is the box behind the 14th green (34 m behind the OSM line start, 506 yd from its centre vs 508), tagged in `edits.json` by the course chat. Recommendation: accept.
