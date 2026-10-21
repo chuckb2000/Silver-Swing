@@ -1,0 +1,77 @@
+{
+  "id": "tpc_boston",
+  "name": "TPC Boston",
+  "location": "Norton, Bristol County, Massachusetts",
+  "state": "MA",
+  "architects": "Arnold Palmer (opened 2002); redesigned by Gil Hanse with Brad Faxon (2007); 18th green rebuilt 2011-12 (tpc.com, Wikipedia)",
+  "theme": "bayside",
+  "epsg": 32619,
+  "osm_sources": [
+    "raw/overpass.geojson"
+  ],
+  "boundary_name": "TPC Boston",
+  "dtm": {
+    "path": "raw/USGS_1M_3DEP_service_tpc_boston.tif",
+    "units": "m",
+    "source": "USGS 3DEP 1 m bare-earth elevation (3DEPElevation ImageServer exportImage, float32, NAD83 / UTM 19N EPSG:26919, 1 m pixels, world + 100 m; the service's 1 m source here is the 2021 USGS Lidar: Central Eastern Massachusetts, flown 20 Mar - 24 Apr 2021); NAVD88 metres; downloaded by the developer 2026-10-21 (GitHub release data-tpc-boston, exportImage.10.tiff)"
+  },
+  "laz": {
+    "paths": [
+      "raw/laz/*.laz"
+    ],
+    "classes": [
+      3,
+      4,
+      5
+    ],
+    "units": "m",
+    "source": "2021 USGS Lidar: Central Eastern Massachusetts (NOAA Data Access Viewer dataset 9777, job J1473646), clipped to the course box, classes 2-6 delivered (3-5 used); NAD83(2011) / Massachusetts Mainland metres, NAVD88 metres; flown early April 2021 (GPS times), leaf-off; ordered by the developer 2026-10-20 (GitHub release data-tpc-boston, ma2021_cent_east_J1473646.zip)",
+    "label": "2021 USGS lidar, leaf-off",
+    "leaf_off": true
+  },
+  "world": {
+    "x0": 314854,
+    "y0": 4648649,
+    "width": 1792,
+    "height": 2304,
+    "note": "OSM course boundary bbox (way 311851822, 1,478 x 2,020 m) + scenery, rounded out to whole 256 m chunks and centred: 1,792 m east-west (157 m each side), 2,304 m north-south (142 m each side). Over the 2,048 m limit (as Oregon Golf Club's 2,304 m); the alternative, 2,048 m, leaves 14 m at each end. Approved by the developer 2026-10-20."
+  },
+  "tee_sets": [
+    {
+      "name": "Black",
+      "playable": true,
+      "rating": 72.1,
+      "slope": 139,
+      "total_yd": 6454
+    },
+    {
+      "name": "Gold",
+      "playable": true,
+      "rating": 74.6,
+      "slope": 144,
+      "total_yd": 6990
+    }
+  ],
+  "default_tee": "Black",
+  "scorecard_source": "The club's 2024 printed scorecard (2024_Scorecard.pdf in GitHub release data-tpc-boston; also tpc.com/boston/wp-content/uploads/sites/20/2024/11/2024_Scorecard.pdf), checked against the rendered card 2026-10-21: every row adds up to its printed total. Par 72 (hole 14 a par 4); Championship 7,282 77.2/154, Gold 6,990 74.6/144, Black 6,454 72.1/139, Blended 6,213 70.9/135 (total only), White 6,035 70.1/132, Blue 5,147 66.1/122 (men). OSM, Wikipedia and Stymie carry the tour card (par 73, hole 14 a par 5, another stroke index); Stymie's Black 72.4/139 and Gold 74.7/145 are not used. Built from the Black and Gold tees, Black the default (developer, 2026-10-20; the card's Blue is the forward set).",
+  "penalty_default": "red",
+  "red_water_osm": [
+    "w1239408943",
+    "w1239419367",
+    "w1239391361",
+    "w1239391362",
+    "w1239391366"
+  ],
+  "driving_range_is_ob": true,
+  "trees_off_fairways_m": 2,
+  "wind_mph": {
+    "minMph": 1,
+    "maxMph": 9
+  },
+  "attribution": [
+    "Map data © OpenStreetMap contributors (ODbL)",
+    "Elevation and trees: U.S. Geological Survey 3D Elevation Program (2021 Central Eastern Massachusetts lidar)",
+    "Scorecard: TPC Boston"
+  ],
+  "notes": "Phase 1 (2026-10-20): standing defaults (COURSE_BUILD.md 4.1): every penalty area red, OSM boundary is OB, range OB, pins at green centres, trees from lidar, wind 1-9 mph (inland New England). Theme bayside (developer: Franklin's theme). Logo: a baby blue pair of lederhosen (developer). The 1.0 ha pond mapped only as natural=water inside the boundary (w1239408943, 98 m from hole 8) is red through red_water_osm (otherwise it would paint as rough). Norton Country Club (way 29897980) lies 74 m west, inside the world: its boundary and hole lines are dropped in edits.json, its surfaces stay as out-of-bounds scenery. Developer 2026-10-20: Black and Gold tees (Black default), the club's 2024 card (par 72, hole 14 a par 4), world 1,792 x 2,304 m. Wetlands inside the boundary mapped only as natural=wetland are red penalty areas through red_water_osm too (course chat 2026-10-21, all water red; otherwise rough): w1239419367 (marsh, 0.14 ha, under hole 11's line), w1239391361/62/66 (swamp and marsh, 0.05-0.08 ha, 11-35 m from holes 4 and 5)."
+}
