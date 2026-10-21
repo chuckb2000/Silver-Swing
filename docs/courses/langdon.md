@@ -48,8 +48,9 @@ and data/langdon/validation_report.md.
 -   **Barns:** the barn on the left of the 8th fairway and the event barn by
     the 18th green are drawn barn red (`building_colours`); free relief, as
     for every building inside the boundary (developer).
--   **Trees:** 5,043 from the canopy model (799 on the course), type from
-    crown shape.
+-   **Trees:** 5,036 from the canopy model (736 on the course), type from
+    crown shape. Seven lidar tops inside the clubhouse pond on 18 (open water
+    in the 2024 orthophoto) are removed (`drop_trees`; developer, 2026-10-21).
 -   **Scorecard** (club card, 2/2020, supplied by the developer; identical to
     GolfPass). Tees are named Tee 8 to Tee 1; Tee 7 71.5/133.
 

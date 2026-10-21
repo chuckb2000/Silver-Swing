@@ -114,6 +114,15 @@ describe('Langdon Farms Golf Club course data', () => {
     expect(touching).toBeGreaterThan(10);
   });
 
+  it('no tree stands in either pond (developer, 2026-10-21: the lidar trees in the pond on 18 are removed)', () => {
+    const t = JSON.parse(readFileSync(resolve(COURSES_DIR, ID, 'trees.json'), 'utf8')) as { x: number[]; y: number[] };
+    for (const id of ['w334609000', 'w334607763']) {
+      const w = course.water.find((x) => x.id === id)!;
+      const wet = t.x.map((x, i) => [x, t.y[i]]).filter(([x, y]) => w.poly.contains(x, y));
+      expect(wet, id).toEqual([]);
+    }
+  });
+
   it('the two red barns (8 and 18) stand inside the boundary, so they give free relief', () => {
     for (const id of ['w324295601', 'w324295657']) {
       const b = json.buildings.find((x) => x.id === id)!;

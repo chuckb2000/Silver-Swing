@@ -33,6 +33,7 @@ import warnings
 
 import geopandas as gpd
 from shapely.geometry import LineString, Polygon
+from shapely.ops import unary_union
 
 from common import World, build_dir, course_dir, course_name_from_argv, load_config
 
@@ -60,9 +61,17 @@ def main():
 
     feats = []
     greens, tees = {}, {}
+    dg_pages = {f"{a}-{b}" for a, b in (dg["holes"] for dg in spec.get("double_greens", []))}
+    dg_saved = {}  # a double green's own page (desk_export.py --area double): its whole outline
     for path in sorted(glob.glob(str(cdir / "desk" / "hole*.json"))):
         d = json.load(open(path))
         k = str(d["hole"])
+        if k in dg_pages:
+            ps = [Polygon(f["poly"], f.get("holes") or []) for f in d["features"] if f["kind"] == "green"]
+            dg_saved[k] = (unary_union([p if p.is_valid else p.buffer(0) for p in ps]), d.get("savedAt", "")[:10])
+            if d.get("note"):
+                print(f"[desk] {k} green note: {d['note']}")
+            continue
         when = d.get("savedAt", "")[:10]
         replaced += offered.get(k, [])
         for f in d["features"]:
@@ -122,6 +131,17 @@ def main():
     from shapely.ops import split as ssplit
     for dg in spec.get("double_greens", []):
         a, b = dg["holes"]
+        page = dg_saved.get(f"{a}-{b}")
+        if page is not None and "split" in dg:
+            # the developer traced the whole green on its own page: that outline replaces both
+            # holes' drawings (their hole pages' greens are ignored)
+            whole, when = page
+            feats = [f for f in feats if not (f["osm"].startswith(f"desk_{a}_green_") or f["osm"].startswith(f"desk_{b}_green_"))]
+            for k in (a, b):
+                feats.append({"osm": f"desk_{k}_green_0", "kind": "green", "geometry": whole,
+                              "tags": {"golf": "green", "hole": k, "source": f"tracing desk (developer), {a}/{b} green page",
+                                       "approved": f"developer {when}"}})
+                greens[k] = whole
         if "split" in dg:
             whole = greens[a].union(greens[b])
             parts = list(ssplit(whole, LineString(dg["split"])).geoms)
