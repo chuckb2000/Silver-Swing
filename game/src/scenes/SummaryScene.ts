@@ -106,6 +106,7 @@ export class SummaryScene extends MenuScene {
       if (!share.active) return;
       share.setEnabled(true);
       if (res === 'saved') share.setLabel('saved');
+      else if (res === 'copied') share.setLabel('copied');
       else if (res === 'failed') share.setLabel('failed');
     }, { color: 'grey' });
     this.root.add(share);

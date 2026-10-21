@@ -760,3 +760,11 @@ Branch `fix/afternoon-ui`, from the afternoon review of the screens and flow.
   the ground) the developer chose the first: the distance line shows an up or down arrow and the
   pin's height above or below the ball in feet ("178 yd ▼ 84 ft"), hidden when putting and within
   3 ft. The physics, the club pick and the landing marker are unchanged.
+
+## Sharing a scorecard on a computer (developer, 2026-10-20)
+
+- On a computer, "share" opened the system share window (Windows: contacts, Outlook, Teams...),
+  which was confusing; on a phone the share sheet "works perfectly". Phones and tablets (touch
+  first: `maxTouchPoints > 0` and a coarse pointer) keep the share sheet. A computer now shows the
+  picture in a box with "copy picture" (to paste into a chat or message), "download", "more..."
+  (the system share window, when the browser has one) and "close" (`ui/shareCard.ts`).
