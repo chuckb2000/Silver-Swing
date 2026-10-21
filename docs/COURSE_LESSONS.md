@@ -11,7 +11,7 @@ island), Langston (2026-10-19, a course in two parts across a lake), Indian
 Island (2026-10-19, half the course traced), Tualatin Country Club
 (2026-10-19, section 9), Eastmoreland (2026-10-19, Portland), Willamette Valley
 (2026-10-19, section 10), Oregon Golf Club (2026-10-19, section 11) and
-Franklin Country Club (2026-10-19, section 12) and Langdon Farms (2026-10-19, section 13, every hole traced). Oswego Lake and Highland Links
+Franklin Country Club (2026-10-19, section 12) and Langdon Farms (2026-10-19, section 15, every hole traced). Oswego Lake and Highland Links
 notes live in DECISIONS.md.
 
 ---
@@ -627,6 +627,14 @@ notes live in DECISIONS.md.
   and ask about each channel that crosses or runs beside a hole. For one OSM
   lacks, take the line from the channel itself (`data/langdon/make_creek_line.py`)
   and run `propose_channels.py --lines=`.
+- **Split a double green the way the holes use it, and check the game's
+  pins.** The game adds up to three pin positions anywhere on a hole's green
+  (`pins.ts`), so a hole's part of a shared green must be only the side that
+  hole plays to: Langdon's first split gave 18 the north end of the pond, the
+  game put an 18 pin on 9's side, outside 18's putting views, and the
+  developer putted blind. Ask which side each hole uses, cut the joined green
+  with a line (trace_spec `double_greens` `split`), and test every spot from
+  `coursePins` against the side and the putting views.
 
 ## 16. Gearhart Golf Links (2026-10-20)
 

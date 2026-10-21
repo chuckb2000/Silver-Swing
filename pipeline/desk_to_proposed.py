@@ -113,20 +113,37 @@ def main():
                 if r.kind == "tee":
                     tees.setdefault(k, []).append(r.geometry)
     # optional (trace_spec "double_greens"): a green shared by two holes, which the developer drew
-    # once per hole (Langdon Farms 9/18): the smaller drawing stays that hole's green and the larger
-    # loses it, so each hole has its own green centre and pin and the two parts make one green
+    # once per hole (Langdon Farms 9/18). With "split" (a line across the green) and "keep" (a point
+    # on each hole's side), both drawings are joined and cut along the line, and each hole gets the
+    # part on its side (developer, 2026-10-20: 18's pin always left of the pond, 9's always right).
+    # Without them the smaller drawing stays that hole's green and the larger loses it. Either way
+    # each hole has its own green centre and pin and the two parts make one green.
+    from shapely.geometry import Point
+    from shapely.ops import split as ssplit
     for dg in spec.get("double_greens", []):
         a, b = dg["holes"]
-        big, small = (a, b) if greens[a].area >= greens[b].area else (b, a)
-        cut = greens[big].difference(greens[small])
-        cut = max(getattr(cut, "geoms", [cut]), key=lambda q: q.area)
-        greens[big] = cut
-        for f in feats:
-            if f["osm"].startswith(f"desk_{big}_green_"):
-                f["geometry"] = cut
-                f["tags"]["double_green"] = f"with hole {small}: its own part (the developer's drawing minus hole {small}'s green)"
-            if f["osm"].startswith(f"desk_{small}_green_"):
-                f["tags"]["double_green"] = f"with hole {big}"
+        if "split" in dg:
+            whole = greens[a].union(greens[b])
+            parts = list(ssplit(whole, LineString(dg["split"])).geoms)
+            new = {}
+            for k in (a, b):
+                kp = Point(dg["keep"][k])
+                new[k] = min(parts, key=lambda q: q.distance(kp))
+            if new[a].equals(new[b]):
+                raise SystemExit(f"[desk] double green {a}/{b}: the split line does not separate the keep points")
+            why = {k: f"with hole {b if k == a else a}: the part on its side of the split line {dg['split']}" for k in (a, b)}
+        else:
+            big, small = (a, b) if greens[a].area >= greens[b].area else (b, a)
+            cut = greens[big].difference(greens[small])
+            new = {big: max(getattr(cut, "geoms", [cut]), key=lambda q: q.area), small: greens[small]}
+            why = {big: f"with hole {small}: its own part (the developer's drawing minus hole {small}'s green)",
+                   small: f"with hole {big}"}
+        for k in (a, b):
+            greens[k] = new[k]
+            for f in feats:
+                if f["osm"].startswith(f"desk_{k}_green_"):
+                    f["geometry"] = new[k]
+                    f["tags"]["double_green"] = why[k]
 
     for k, p in greens.items():
         if any(p.contains(q) for q in osm_pins):
