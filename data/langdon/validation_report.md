@@ -14,7 +14,7 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 | 6 | 3 | Tee 7 | 115 | 119.4 | +4.4 | +3.8% | flag | 118.0 | +2.6% | pass |
 | 7 | 5 | Tee 7 | 512 | 508.0 | -4.0 | -0.8% | pass | 508.0 | -0.8% | pass |
 | 8 | 4 | Tee 7 | 449 | 440.4 | -8.6 | -1.9% | pass | 440.4 | -1.9% | pass |
-| 9 | 4 | Tee 7 | 409 | 428.4 | +19.4 | +4.7% | flag | 428.4 | +4.7% | flag |
+| 9 | 4 | Tee 7 | 409 | 430.5 | +21.5 | +5.2% | flag | 430.5 | +5.2% | flag |
 | 10 | 4 | Tee 7 | 365 | 358.5 | -6.5 | -1.8% | pass | 358.5 | -1.8% | pass |
 | 11 | 5 | Tee 7 | 607 | 606.1 | -0.9 | -0.2% | pass | 606.1 | -0.2% | pass |
 | 12 | 4 | Tee 7 | 425 | 427.2 | +2.2 | +0.5% | pass | 427.2 | +0.5% | pass |
@@ -23,8 +23,8 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 | 15 | 4 | Tee 7 | 340 | 351.4 | +11.4 | +3.4% | flag | 351.4 | +3.4% | flag |
 | 16 | 4 | Tee 7 | 411 | 407.3 | -3.7 | -0.9% | pass | 407.3 | -0.9% | pass |
 | 17 | 3 | Tee 7 | 204 | 212.8 | +8.8 | +4.3% | flag | 212.8 | +4.3% | flag |
-| 18 | 5 | Tee 7 | 502 | 499.7 | -2.3 | -0.4% | pass | 499.8 | -0.4% | pass |
-| **total** | 71 | | **6522** | **6569** | +47 | +0.7% | | **6568** | +0.7% | |
+| 18 | 5 | Tee 7 | 502 | 514.4 | +12.4 | +2.5% | pass | 514.5 | +2.5% | pass |
+| **total** | 71 | | **6522** | **6586** | +64 | +1.0% | | **6585** | +1.0% | |
 
 ## Open items
 
@@ -38,7 +38,7 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 8. Hole 6 (Tee 7): tee box desk_6_bluetee_0 assigned by the developer (tagged hole=6, tee_set=Tee 7 in edited/course.geojson).
 9. Hole 7 (Tee 7): tee box desk_7_bluetee_0 assigned by the developer (tagged hole=7, tee_set=Tee 7 in edited/course.geojson).
 10. Hole 8 (Tee 7): tee box desk_8_bluetee_0 assigned by the developer (tagged hole=8, tee_set=Tee 7 in edited/course.geojson).
-11. Hole 9 (Tee 7): measured 428 yd vs card 409 (+4.7%) even with the virtual tee at the best spot in its box; accepted for play.
+11. Hole 9 (Tee 7): measured 430 yd vs card 409 (+5.2%) even with the virtual tee at the best spot in its box; accepted for play.
 12. Hole 9 (Tee 7): tee box desk_9_bluetee_0 assigned by the developer (tagged hole=9, tee_set=Tee 7 in edited/course.geojson).
 13. Hole 10 (Tee 7): tee box desk_10_bluetee_0 assigned by the developer (tagged hole=10, tee_set=Tee 7 in edited/course.geojson).
 14. Hole 11 (Tee 7): tee box desk_11_bluetee_0 assigned by the developer (tagged hole=11, tee_set=Tee 7 in edited/course.geojson).
@@ -76,7 +76,7 @@ Tracing desk: https://claude.ai/artifact/G4bThDJVqubcH8TdhBfTFc (`desk_export.py
 ## Playability adjustments
 
 - Hole 6 (Tee 7): measured 119 yd from the tee-box centre vs 115 on the card (+3.8%); moved the virtual tee along the middle of the real tee polygon desk_6_bluetee_0 (on its centre line, at least 2.5 m from its back and front) -> 118.0 yd (real 119.4 yd).
-- Hole 18 (Tee 7): tee shot: a perfect drive at the middle of the fairway clipped a tree near the tee; moved 0.9 m along the middle of the real tee polygon desk_18_bluetee_0 to the nearest clear spot -> 499.8 yd (real 499.7 yd).
+- Hole 18 (Tee 7): tee shot: a perfect drive at the middle of the fairway clipped a tree near the tee; moved 0.9 m along the middle of the real tee polygon desk_18_bluetee_0 to the nearest clear spot -> 514.5 yd (real 514.4 yd).
 
 ## Tree detection (DOGAMI canopy height model)
 
@@ -98,7 +98,7 @@ Tracing desk: https://claude.ai/artifact/G4bThDJVqubcH8TdhBfTFc (`desk_export.py
 | desk_6_green_0 | 6 | 3.5 | 2.5 | 2 | 3.7 | 1.5 |
 | desk_7_green_0 | 7 | 2.6 | 2.5 | 2 | 4.2 | 1.5 |
 | desk_8_green_0 | 8 | 1.7 | 1.7 | 2 | 3.5 | 1.5 |
-| desk_9_green_0 | 9 | 2.3 | 2.3 | 1 | 3.4 | 1.5 |
+| desk_9_green_0 | 9 | 1.7 | 1.7 | 1 | 2.8 | 1.5 |
 | desk_10_green_0 | 10 | 3.2 | 2.5 | 1 | 3.7 | 1.5 |
 | desk_11_green_0 | 11 | 1.3 | 1.3 | 1 | 3.1 | 1.3 |
 | desk_12_green_0 | 12 | 1.8 | 1.8 | 1 | 2.8 | 1.5 |
@@ -107,7 +107,7 @@ Tracing desk: https://claude.ai/artifact/G4bThDJVqubcH8TdhBfTFc (`desk_export.py
 | desk_15_green_0 | 15 | 3.4 | 2.5 | 1 | 4.0 | 1.5 |
 | desk_16_green_0 | 16 | 3.0 | 2.5 | 2 | 5.6 | 1.5 |
 | desk_17_green_0 | 17 | 0.9 | 1.0 | 1 | 2.1 | 1.0 |
-| desk_18_green_0 | 18 | 1.3 | 1.3 | 2 | 2.4 | 1.3 |
+| desk_18_green_0 | 18 | 4.2 | 2.5 | 2 | 3.9 | 1.5 |
 
 # OSM coverage audit
 
@@ -121,7 +121,7 @@ Tracing desk: https://claude.ai/artifact/G4bThDJVqubcH8TdhBfTFc (`desk_export.py
 | 6 | 3 | yes | yes (3 near) | yes | yes | yes | 1 | 0 |
 | 7 | 5 | yes | yes (3 near) | yes | yes | yes | 2 | 1 |
 | 8 | 4 | yes | yes (4 near) | yes | yes | yes | 4 | 0 |
-| 9 | 4 | yes | yes (3 near) | yes | yes | yes | 2 | 0 |
+| 9 | 4 | yes | yes (3 near) | - | yes | yes | 1 | 0 |
 | 10 | 4 | yes | yes (4 near) | yes | yes | yes | 2 | 0 |
 | 11 | 5 | yes | yes (5 near) | yes | yes | yes | 2 | 0 |
 | 12 | 4 | yes | yes (5 near) | yes | yes | yes | 6 | 0 |

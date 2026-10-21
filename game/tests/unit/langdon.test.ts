@@ -12,6 +12,7 @@ import { Round } from '../../src/systems/game/round';
 import { Rng } from '../../src/systems/physics/rng';
 import { simulateShot } from '../../src/systems/physics/sim';
 import { isOB, SURF } from '../../src/systems/physics/surfaces';
+import { coursePins } from '../../src/systems/game/pins';
 import { COURSES_DIR, loadCourseFiles, meterFor, registry, robotRound, roundCfg } from './helpers';
 
 const ID = 'langdon';
@@ -84,18 +85,32 @@ describe('Langdon Farms Golf Club course data', () => {
     }
   });
 
-  it('9 and 18 share one green around the clubhouse pond; 9\'s pin is on the east side', () => {
+  it('9 and 18 share one green around the clubhouse pond: every 18 pin left (west) of it, every 9 pin right (east)', () => {
+    // developer, 2026-10-20: "the pin for the 18th hole should always be on the left side of the
+    // lake and the pin for the 9th hole should always be on the right side"; the green is cut by a
+    // north-south line through the pond's north tip (x 714)
+    const SPLIT_X = 714;
     const h9 = json.holes.find((x) => x.number === 9)!;
     const h18 = json.holes.find((x) => x.number === 18)!;
-    expect(h9.greenId).not.toBe(h18.greenId); // one part each, so each hole has its own centre and pin
-    expect(h9.pin[0]).toBeGreaterThan(h18.pin[0] + 20);
-    // the two parts touch: the green runs on from one to the other
+    expect(h9.greenId).not.toBe(h18.greenId); // one part each, so each hole has its own centre and pins
+    const sheets = coursePins(course, json.defaultTee);
+    const views = json.greenViews ?? [];
+    for (const [h, west] of [[h18, true], [h9, false]] as const) {
+      const spots = sheets[json.holes.indexOf(h)];
+      expect(spots.length, `hole ${h.number} pins`).toBeGreaterThan(1);
+      const gv = views.find((v) => v.hole === h.number)!;
+      for (const p of spots) {
+        expect(west ? p.x < SPLIT_X : p.x > SPLIT_X, `hole ${h.number} pin ${p.x.toFixed(0)},${p.y.toFixed(0)}`).toBe(true);
+        // the putting view the game falls back to (120 m) shows every pin, well inside its edge
+        const f = gv.far;
+        expect(p.x > f.x0 + 12 && p.x < f.x0 + f.w - 12 && p.y < f.y1 - 12 && p.y > f.y1 - f.h + 12, `hole ${h.number} far view`).toBe(true);
+      }
+    }
+    // the two parts touch along the split line: the green runs on from one to the other
     const g9 = course.greenPolys.get(h9.greenId)!;
     const g18 = course.greenPolys.get(h18.greenId)!;
     let touching = 0;
-    for (let x = 660; x <= 770; x += 0.5) for (let y = 580; y <= 670; y += 0.5) {
-      if (g9.contains(x, y) && (g18.contains(x + 1, y) || g18.contains(x - 1, y) || g18.contains(x, y + 1) || g18.contains(x, y - 1))) touching++;
-    }
+    for (let y = 630; y <= 670; y += 0.5) if (g9.contains(SPLIT_X + 0.5, y) && g18.contains(SPLIT_X - 0.5, y)) touching++;
     expect(touching).toBeGreaterThan(10);
   });
 

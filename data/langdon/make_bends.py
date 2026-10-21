@@ -40,17 +40,23 @@ def shapes(k, kind):
 
 
 def own_green(spec, k):
-    """The hole's own green; on a double green (trace_spec double_greens) the larger
-    drawing minus the other hole's green, as desk_to_proposed.py cuts it."""
+    """The hole's own green; on a double green (trace_spec double_greens) the part
+    desk_to_proposed.py gives it: with "split", both drawings joined and cut by the
+    split line, the part nearer the hole's "keep" point; else the larger drawing
+    minus the other hole's green."""
+    from shapely.geometry import LineString as _L
+    from shapely.ops import split as _split
     g = shapes(k, "green")[0]
     for dg in spec.get("double_greens", []):
         if k in dg["holes"]:
-            for o in dg["holes"]:
-                if o != k:
-                    other = shapes(o, "green")[0]
-                    if g.area > other.area:
-                        g = g.difference(other)
-                        g = max(getattr(g, "geoms", [g]), key=lambda q: q.area)
+            o = [h for h in dg["holes"] if h != k][0]
+            other = shapes(o, "green")[0]
+            if "split" in dg:
+                parts = list(_split(g.union(other), _L(dg["split"])).geoms)
+                g = min(parts, key=lambda q: q.distance(Point(dg["keep"][k])))
+            elif g.area > other.area:
+                g = g.difference(other)
+                g = max(getattr(g, "geoms", [g]), key=lambda q: q.area)
     return g
 
 
