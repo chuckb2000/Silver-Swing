@@ -1,0 +1,8 @@
+{
+"type": "FeatureCollection",
+"name": "pins_centre",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:EPSG::32610" } },
+"features": [
+{ "type": "Feature", "properties": { "osm": "p_pin_8", "kind": "pin", "tags": { "golf": "pin", "hole": "8", "source": "course chat: the visual centre of the 8th green (the Biarritz, 69 m long); OSM's pin stood 14 m from the centre, outside the close-up putting view's margin" } }, "geometry": { "type": "Point", "coordinates": [ 386936.108429191168398, 4784888.279098367318511 ] } }
+]
+}
