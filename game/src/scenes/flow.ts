@@ -3,6 +3,7 @@
 import Phaser from 'phaser';
 import { app } from '../app';
 import { addToBoard, LeaderboardEntry, loadBoard, saveSettings } from '../save/store';
+import { flushUploads } from '../save/online';
 import { loadCourse, LoadProgress } from '../data/courses';
 import { teeFor } from '../data/registry';
 import { clearSnapshot, peekSnapshot, restoreRound } from '../save/snapshot';
@@ -154,7 +155,10 @@ export async function finishRound(scene: Phaser.Scene) {
   if (r.cfg.daily && !(await loadBoard()).some((b) => b.daily === r.cfg.daily && b.player === entry.player)) entry.daily = r.cfg.daily;
   await addToBoard(entry);
   await clearSnapshot();
-  // sent to the shared leaderboard when the player leaves the summary (they may change the name there first)
+  // a named round goes to the shared leaderboard now (developer, 2026-10-20: a friend's 63 wasn't in
+  // "recent" - it waited for him to leave the summary, and the tab was closed there). A round with no
+  // name waits: it goes up when the player names it on the summary.
+  if (entry.player !== DEFAULT_NAME) void flushUploads();
   scene.scene.stop('hud');
   scene.scene.stop('play');
   scene.scene.start('summary', { entry });
