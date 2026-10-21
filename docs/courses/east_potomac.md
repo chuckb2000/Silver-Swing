@@ -44,7 +44,7 @@ in docs/requests/east_potomac_design_requests.md.
     along Ohio Drive and the seawall (theme flair, species not measured).
     A perfect drive at the middle of the fairway clears the trees near
     every tee (every course build checks this: 7 tees moved within their
-    boxes, 6 trees removed on Blue 9 and 13). Removed at the developer's
+    boxes, 2 trees removed on Blue 9). Removed at the developer's
     request (`drop_trees`): the two trees at the front of the Blue 10 tee
     box, and a 28.5 m, 1.5 m-crown object (probably a pole or a lidar
     artefact) standing in the left side of the Blue 10 fairway, 159 m from
@@ -96,9 +96,11 @@ Red course 1,292.
 (details and recommendations in
 data/east_potomac/validation_report.md)
 
-1.  Blue 13 now plays from the back tee (developer, 2026-10-19).
+1.  Blue 13 plays from its back tee box against the seawall, found in the
+    lidar and on the NPS 2016 map (developer, 2026-10-20: the earlier tee
+    point had no box under it). Blue 362 yd, White 345 (both -2.5 %).
 2.  Blue 15 Blue tee (-8.7 %) and Red course 8 (+9.9 %) are over 8 %,
-    accepted for play by the developer; Blue 6 Blue, Blue 13 White, Red 5
+    accepted for play by the developer; Blue 6 Blue, Red 5
     and Red 6 are flags.
 3.  19 tee boxes come from lidar pads (`edits.json`), approved.
 4.  Forward (Red) tees of the White and Red courses not built.
