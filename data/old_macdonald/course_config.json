@@ -1,0 +1,105 @@
+{
+  "id": "old_macdonald",
+  "name": "Old Macdonald",
+  "location": "Bandon, Coos County, Oregon",
+  "state": "OR",
+  "architects": "Tom Doak and Jim Urbina (2010), after C.B. Macdonald's template holes",
+  "theme": "bandon_dunes",
+  "epsg": 32610,
+  "osm_sources": [
+    "raw/overpass.geojson"
+  ],
+  "boundary_name": "Bandon Dunes Golf Resort",
+  "dtm": {
+    "path": "raw/dogami_dtm_ft.tif",
+    "units": "ft",
+    "source": "DOGAMI lidar DIGITAL_TERRAIN_MODEL_MOSAIC (bare earth): here the OLC South Coast project, which DOGAMI labels 2009 and the USGS data reports date to flights in June-October 2008; exportImage (f=json) at 1 m in EPSG:32610, box x 385950-388150 / y 4782850-4787050 shared by Pacific Dunes, Old Macdonald and Sheep Ranch, downloaded by the developer 2026-10-21 (GitHub release pacific-dunes-data, _ags_5895eba5_2261_4029_9a2a_cf5121494bfb.tif)."
+  },
+  "chm": {
+    "path": "raw/dogami_chm_ft.tif",
+    "units": "ft",
+    "source": "DOGAMI lidar CANOPY_HEIGHT_MODEL_MOSAIC (OLC South Coast, flown 2008), exportImage (f=json) at 1 m in EPSG:32610, same shared box, downloaded by the developer 2026-10-21 (GitHub release pacific-dunes-data, _ags_3c331496_959e_469c_8d52_987562653ff9.tif)",
+    "label": "DOGAMI canopy height model"
+  },
+  "ortho": {
+    "path": "raw/osip2024_05m.tif",
+    "source": "Oregon Statewide Imagery Program 2024 (OSIP_2024_WM), two exportImage JPEG tiles at 0.5 m shared by the three courses (south: x 386100-387980, y 4782960-4784960, release asset exportImage.jpg; north: y 4784960-4786960, sent by the developer in the chat 2026-10-21, upload of the original JPEG pending), stacked, georeferenced from the request boxes and cut to the world + 100 m by make_ortho.py"
+  },
+  "world": {
+    "x0": 386582,
+    "y0": 4783827,
+    "width": 1280,
+    "height": 1792,
+    "note": "provisional: box of the 18 hole lines and their tees, greens, fairways and bunkers (x 386740-387705, y 4784030-4785415 (965 x 1,384 m)) plus at least 120 m of scenery, rounded out to whole 256 m chunks and centred"
+  },
+  "tee_sets": [
+    {
+      "name": "Black",
+      "playable": true,
+      "rating": 74.4,
+      "slope": 134,
+      "total_yd": 6944
+    },
+    {
+      "name": "Green",
+      "playable": false,
+      "rating": 71.4,
+      "slope": 127,
+      "total_yd": 6320
+    },
+    {
+      "name": "Gold",
+      "playable": false,
+      "rating": 67.8,
+      "slope": 117,
+      "total_yd": 5658
+    },
+    {
+      "name": "Orange",
+      "playable": false,
+      "rating": 65.1,
+      "slope": 112,
+      "total_yd": 4985
+    },
+    {
+      "name": "Royal Blue",
+      "playable": false,
+      "rating": 62.6,
+      "slope": 104,
+      "total_yd": 4040
+    }
+  ],
+  "default_tee": "Black",
+  "scorecard_source": "Bandon Dunes Golf Resort club scorecard, undated (Old-MacDonald-Scorecard.webp, GitHub release pacific-dunes-data, sha256 c447df37c353bcd9fa9e75c330988e2cd0230550778715237394fc08022d27d0, read 2026-10-21). Every row adds up to its printed Out/In/Total; men's stroke index 1-18 complete; yardages, pars and stroke index agree with the GolfPass listing. Ratings/slopes are the card's men's figures (women's: Green 77.6/138, Gold 74.1/127, Royal Blue 65.8/107, Orange 70.0/119). The Orange row has its own stroke index (9,13,7,1,17,3,11,15,5 / 10,8,16,18,14,4,6,2,12; OSM's hole `handicap` tags are this row, with 14 for 13), not stored. Hole names on the card: 1 Double Plateau, 2 Eden, 3 Sahara, 4 Hog's Back, 5 Short, 6 Long, 7 Ocean, 8 Biarritz, 9 Cape, 10 Bottle, 11 Road, 12 Redan, 13 Leven, 14 Maiden, 15 Westward Ho, 16 Alps, 17 Littlestone, 18 Punchbowl. Local rules: sand other than raked bunkers is general area; Model Local Rule E-5. The card has no Blue. Built from the Black tees (developer, 2026-10-21): the OSM hole lines start on the tees, and measured from there the course matches the Black card, not Green (the 4.1 default, closest to 6,300 yd).",
+  "penalty_default": "red",
+  "driving_range_is_ob": true,
+  "wind_mph": {
+    "minMph": 8,
+    "maxMph": 16
+  },
+  "trees_off_fairways_m": 2,
+  "attribution": [
+    "Map data © OpenStreetMap contributors (ODbL)",
+    "Elevation and canopy: Oregon Department of Geology and Mineral Industries (DOGAMI) lidar",
+    "Orthophoto: Oregon Statewide Imagery Program 2024 (gorse and tree checks)",
+    "Scorecard: Bandon Dunes Golf Resort (club scorecard)"
+  ],
+  "notes": "Intake 2026-10-21 (built with Pacific Dunes, Old Macdonald and Sheep Ranch together; shared rasters). Standing defaults (COURSE_BUILD.md 4.1), except the tees: Black (developer, 2026-10-21: the tees are at the start of the OSM hole lines, which match the Black card); all water red, OB = the OSM course polygon, trees from lidar; wind 8-16 mph as the developer set for Bandon Dunes; theme bandon_dunes with gorse from the 2024 photo, as at Bandon Dunes.",
+  "lake_level_max_m": 1.3,
+  "cliff_sand_slope_pct": 45,
+  "beach_max_m": 8.0,
+  "tree_type": "conifer",
+  "tree_type_note": "the trees on the bluffs at Bandon are shore pine (and Sitka spruce in the hollows), whose broad wind-flattened crowns the crown-shape rule calls deciduous; the broadleaf scrub is drawn as gorse (as at Bandon Dunes)",
+  "gorse": {
+    "spacing_m": 3.4,
+    "r_min_m": 1.5,
+    "r_max_m": 2.3,
+    "ground": "gorse",
+    "note": "as at Bandon Dunes (developer 2026-10-20): thickets from the OSIP 2024 orthophoto (pipeline/gorse.py); the ground under them is the gorse surface (17)"
+  },
+  "trees_need_ortho": {
+    "v_max": 120,
+    "min_share": 0.1,
+    "note": "the DOGAMI lidar here was flown in 2008, older than parts of the course; lidar trees whose crowns are not dark canopy in the OSIP 2024 photo are dropped"
+  }
+}

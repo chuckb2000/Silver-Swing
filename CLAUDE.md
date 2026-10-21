@@ -452,8 +452,10 @@ DECISIONS.md with the reason.
     `src/systems/game/pins.ts`); the meter has a line at the middle of the green, no
     ghost tick and no display-lag allowance. 376 unit tests and 4 Playwright tests pass.
 
--   **Courses (course chats, 2026-10-18 to 2026-10-20):** nineteen data
-    folders, twenty-one courses on offer (East Potomac is three) in six states;
+-   **Courses (course chats, 2026-10-18 to 2026-10-21):** twenty-three data
+    folders, twenty-five courses on offer (East Potomac is three) in six states;
+    TPC Boston (Norton MA) and Pacific Dunes, Old Macdonald and Sheep Ranch (Bandon OR)
+    merged 2026-10-21;
     Gearhart Golf Links (Gearhart OR), Bandon Trails (Bandon OR, `bandon`
     theme) and Chambers Bay (University Place WA, `puget` theme) merged 2026-10-20. Oregon Golf Club's creek on
     13, 14 and 15 (from the lidar, `course/ogc-creek`) merged 2026-10-20.
@@ -1608,10 +1610,14 @@ files (`game/scripts/course-lists.mjs`). The first course, Oswego Lake, is
 | Indian Island Golf Course | `docs/courses/indian_island.md` |
 | Langdon Farms Golf Club | `docs/courses/langdon.md` |
 | Langston Golf Course | `docs/courses/langston.md` |
+| Old Macdonald | `docs/courses/old_macdonald.md` |
 | Oregon Golf Club | `docs/courses/ogc.md` |
 | Oswego Lake Country Club | `docs/courses/oswego_lake.md` |
+| Pacific Dunes | `docs/courses/pacific_dunes.md` |
+| Sheep Ranch | `docs/courses/sheep_ranch.md` |
 | Stone Creek Golf Club | `docs/courses/stone_creek.md` |
 | Triggs Memorial Golf Course | `docs/courses/triggs.md` |
+| TPC Boston | `docs/courses/tpc_boston.md` |
 | Tualatin Country Club | `docs/courses/tualatin.md` |
 | Wannamoisett Country Club | `docs/courses/wannamoisett.md` |
 | Waverley Country Club | `docs/courses/waverley.md` |

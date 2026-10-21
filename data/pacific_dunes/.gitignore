@@ -1,0 +1,5 @@
+# build inputs kept in the shared GitHub release pacific-dunes-data (Pacific Dunes, Old Macdonald and Sheep Ranch); `make fetch NAME=pacific_dunes` puts them here (release.json)
+raw/dogami_dtm_ft.tif
+raw/dogami_chm_ft.tif
+raw/osip2024_05m.tif
+raw/osip2024_south.jpg

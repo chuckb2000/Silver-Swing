@@ -34,6 +34,11 @@ export const DAILY_ROSTER: Readonly<Record<string, string>> = {
   // merged on 2026-10-20 in the evening
   bandon_dunes: '2026-10-21',
   triggs: '2026-10-21',
+  // merged on 2026-10-21 in the morning
+  tpc_boston: '2026-10-22',
+  pacific_dunes: '2026-10-22',
+  old_macdonald: '2026-10-22',
+  sheep_ranch: '2026-10-22',
 };
 
 /**

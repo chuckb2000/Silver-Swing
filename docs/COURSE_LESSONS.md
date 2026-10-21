@@ -749,3 +749,30 @@ Folded in from docs/courses/triggs.md at the merge.
   against the seawall, 28 m off the OSM hole line, matching the NPS 2016 map) and add it as a tee
   polygon rather than stretching the hole line.
 - One box for several sets: a forced tee's `tee_set` may list them, `"Blue;White"` (s06).
+
+## 23. TPC Boston, Pacific Dunes, Old Macdonald, Sheep Ranch (2026-10-21)
+
+Details in each course's file (`docs/courses/<id>.md`, "Lessons").
+
+- **Check an uploaded GeoTIFF on arrival** (dtype, CRS, value range): an image tool's
+  "compression" turned TPC Boston's DEM into 8-bit JPEG pictures with no georeferencing. The
+  USGS 3DEPElevation ImageServer `exportImage` (float32, 1 m) gives a course area in one request.
+- **A neighbour's `golf=water_hazard` ponds outside the boundary are still yellow penalty areas**
+  (water is checked before out of bounds): redraw them as plain `natural=water`.
+- **Long tee complexes hold several sets**: measure the yardage range inside each box before
+  calling a set missing.
+- **Neighbouring courses can share one set of downloads and one release** (`release.json`); the
+  three Bandon courses did, with no pipeline change. DOGAMI `exportImage` works with `f=json`
+  where `f=image` fails, and `identify` settles the lidar's vintage at a point first.
+- **Sum the OSM lines against every column of the card first.** Old Macdonald's and Sheep Ranch's
+  lines start on the back tees (Black within 3 %); Pacific Dunes' start at forward boxes, with the
+  back boxes 54-76 m off the line (outside s06's 25 m search). A line can even start at the
+  previous green (Sheep Ranch 3).
+- **Lidar that isn't hydro-flattened has no data over the sea**: fill the sea cells joined to the
+  raster's edge with the water-line height (`fill_sea.py`, run by `make fetch`) and let s04's
+  `lake_level_max_m` make them sea. Lidar older than the course (2008 at Bandon) is fine: greens
+  are shaped and tees levelled anyway; `trees_need_ortho` drops trees that are gone.
+- **A double green mapped as one polygon** gets one pin for both holes: split it along the
+  bisector of the two pins (`split_double_greens.py`, as at Langdon Farms).
+- **OSM `handicap` tags can be another row of the card**; s06 uses the card.
+- **A developer's draft release isn't visible to `make fetch`**: ask for it to be published.

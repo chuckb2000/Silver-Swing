@@ -1,0 +1,42 @@
+{
+ "add": [
+  {
+   "from": "proposed/tees_linestart.geojson",
+   "ids": [
+    "p_tee_black_2",
+    "p_tee_black_3",
+    "p_tee_black_4",
+    "p_tee_black_5",
+    "p_tee_black_6",
+    "p_tee_black_7",
+    "p_tee_black_8",
+    "p_tee_black_9",
+    "p_tee_black_10",
+    "p_tee_black_11",
+    "p_tee_black_12",
+    "p_tee_black_13",
+    "p_tee_black_14",
+    "p_tee_black_15",
+    "p_tee_black_17",
+    "p_tee_black_18"
+   ],
+   "reason": "Black tee boxes where OSM maps none: 12 x 8 m boxes on the start of the OSM hole lines (developer, 2026-10-21: the tees are at the start of the lines), except hole 3, whose line starts beside the 2nd green, 52 % beyond the Black card: there the box stands where the Black card distance falls on the line (course chat's call, an open item)"
+  },
+  {
+   "from": "proposed/greens_split.geojson",
+   "ids": [
+    "p_green_3",
+    "p_green_16"
+   ],
+   "reason": "the double green on the point that holes 3 and 16 share (OSM w865788982, one polygon with a pin for each hole), cut into one part per hole by split_double_greens.py (perpendicular bisector of the two OSM pins), so each hole has its own centre, pin and putting views (as at Langdon Farms)"
+  }
+ ],
+ "tags": [],
+ "drop": [
+  {
+   "osm": "w865788982",
+   "reason": "replaced by its two parts (add above)"
+  }
+ ],
+ "extend_start": []
+}
