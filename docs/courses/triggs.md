@@ -4,7 +4,7 @@ Course id: `triggs` (data folder `data/triggs/`), branch `course/triggs`.
 
 ## Build summary
 
-Built by a course chat on 2026-10-20 following docs/COURSE_BUILD.md, with the standing defaults (4.1); the developer chose the `seekonk` theme and the logo subject, then went to bed and asked for questions to wait for the morning. OSM was complete (18 hole lines with par, handicap and `dist`; tees, greens, fairways, bunkers, water, cart paths; no pins). Elevation from the USGS 3DEP 1 m DEM and trees from the 2022 USGS RI statewide lidar (NOAA Data Access Viewer job, leaf-off), both from the same survey as Wannamoisett. Blue tees only. Every hole is within 3 % of the club's printed card after tee moves within their boxes on 7 and 12 (6,529 vs 6,588 yd, -0.9 %). No pipeline change, no new theme. The course's own checks (8.2) ran from a scratch copy of `wannamoisett.test.ts` that is not committed (course chats don't add files under `game/tests/` here); see "Requests" below.
+Built by a course chat on 2026-10-20 following docs/COURSE_BUILD.md, with the standing defaults (4.1); the developer chose the `seekonk` theme and the logo subject, then went to bed and asked for questions to wait for the morning. OSM was complete (18 hole lines with par, handicap and `dist`; tees, greens, fairways, bunkers, water, cart paths; no pins). Elevation from the USGS 3DEP 1 m DEM and trees from the 2022 USGS RI statewide lidar (NOAA Data Access Viewer job, leaf-off), both from the same survey as Wannamoisett. Blue tees only. Every hole is within 3 % of the club's printed card after tee moves within their boxes on 7 and 12 (6,529 vs 6,588 yd, -0.9 %). No pipeline change, no new theme. With `main` merged (2026-10-20 evening): 606 of 607 unit tests and all 8 Playwright tests pass; the one failure is `player.test.ts`'s check that every listed course is in the daily rotation (`src/data/dailyRoster.ts`, added by the design chat after a merge). The course's own checks (8.2) ran from a scratch copy of `wannamoisett.test.ts` (13 of 13 pass) that is not committed, because course chats don't add files under `game/tests/` here; see "Requests" below. Two clean rebuilds gave byte-identical files (215), and a rebuild on the merged tree matched the committed files.
 
 ## Facts
 
@@ -54,7 +54,8 @@ Details in `data/triggs/validation_report.md` ("Other open items").
 
 ## Requests to the design chat
 
--   Add `game/tests/unit/triggs.test.ts`: the scratch copy used here (Wannamoisett's checks with Triggs' par, tee set and nine red penalty areas, plus a perfect drive straight down each hole line) passed 13 of 13. It is in the PR description so it can be committed as is.
+-   Add `triggs` to the daily rotation (`src/data/dailyRoster.ts`) from the day after the merge; until then `player.test.ts` "the real rotation" fails on the course list.
+-   Add `game/tests/unit/triggs.test.ts`: the scratch copy used here (Wannamoisett's checks with Triggs' par, tee set and nine red penalty areas, plus a perfect drive straight down each hole line) passed 13 of 13 (robot rounds of 71, 66 and 66 over three seeds, no penalties). It is in the PR description so it can be committed as is.
 
 ## Lessons
 
