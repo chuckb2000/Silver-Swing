@@ -3,7 +3,7 @@
 import { DatabaseSync } from 'node:sqlite';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { isEntry, LeaderboardEntry } from '../../src/save/entry';
-import { D1Like, D1Statement, handleEaglesGet, handleEaglesPost, handleGet, handleHandicapsGet, handleHide, resetHandicapCache, handleNames, handlePost, handleRecentGet, handleRecordsGet, resetFeedCache, resetSchemaCache } from '../../src/server/scores';
+import { D1Like, D1Statement, handleEaglesGet, handleEaglesPost, handleGet, handleHandicapsGet, handleHide, handleMerge, resetHandicapCache, handleNames, handlePost, handleRecentGet, handleRecordsGet, resetFeedCache, resetSchemaCache } from '../../src/server/scores';
 import { HoleScore } from '../../src/systems/rules/scoring';
 import { isPlayerKey, parseKeyCode } from '../../src/save/identity';
 
@@ -312,5 +312,59 @@ describe('handicap rounds (developer, 2026-10-20)', () => {
     const r = ((await (await handleHandicapsGet(db)).json()) as { rounds: { id: string; player: string }[] }).rounds;
     const by = Object.fromEntries(r.map((x) => [x.id, x.player]));
     expect(by).toEqual({ new: 'charlie', old: 'charlie', pre: 'sam' });
+  });
+});
+
+describe('merging names (developer, 2026-10-21: "played under two names")', () => {
+  let db: D1Like;
+  beforeEach(() => { resetSchemaCache(); resetFeedCache(); resetHandicapCache(); db = fakeD1(); });
+  const pars = [4, 4, 4, 4, 4, 4, 4, 4, 4];
+  const board = async () => ((await (await get(db, 'course=oswego_lake')).json()) as { entries: LeaderboardEntry[] }).entries.map((e) => `${e.id}:${e.player}`).sort();
+  const merge = async (b: unknown) => { const r = await handleMerge(db, JSON.stringify(b)); return { status: r.status, j: (await r.json()) as Record<string, unknown> }; };
+
+  it("one device's two names: every round and eagle goes under the one kept; the other name stays reserved", async () => {
+    await handlePost(db, JSON.stringify([
+      { ...scored('a1', 'chuck', [2, 4, 4, 4, 4, 4, 4, 4, 4], pars), owner: KEY_A },
+      { ...scored('a2', 'charlie', [4, 4, 4, 4, 4, 4, 4, 4, 4], pars), owner: KEY_A },
+      { ...scored('s1', 'sam', [4, 4, 4, 4, 4, 4, 4, 4, 5], pars), owner: KEY_B },
+    ]));
+    expect(await board()).toEqual(['a1:chuck', 'a2:charlie', 's1:sam']);
+    const r = await merge({ owner: KEY_A, into: 'charlie' });
+    expect(r.j).toMatchObject({ ok: true, names: ['charlie', 'chuck'], into: 'charlie', moved: 1 });
+    resetFeedCache();
+    expect(await board()).toEqual(['a1:charlie', 'a2:charlie', 's1:sam']);
+    const eagles = ((await (await handleEaglesGet(db, new URL('http://x/api/eagles'))).json()) as { eagles: { player: string }[] }).eagles.map((e) => e.player);
+    expect(eagles).toEqual(['charlie']); // the eagle on a1 moved with it
+    const recent = ((await (await handleRecentGet(db, new URL('http://x/api/recent'))).json()) as { rounds: { player: string }[] }).rounds.map((x) => x.player);
+    expect(recent.filter((p) => p === 'chuck')).toEqual([]);
+    // "chuck" is still this player's: nobody else can take it
+    expect(await (await handleNames(db, { method: 'GET', url: new URL(`http://x/api/names?name=chuck&owner=${KEY_B}`) })).json()).toMatchObject({ ok: false, result: 'taken' });
+  });
+
+  it("another device's code: its names and rounds join this code first, then merge", async () => {
+    await handlePost(db, JSON.stringify([
+      { ...scored('p1', 'chuckb', [4, 4, 4, 4, 4, 4, 4, 4, 4], pars), owner: KEY_B }, // the phone
+      { ...scored('l1', 'charlie', [5, 4, 4, 4, 4, 4, 4, 4, 4], pars), owner: KEY_A }, // the laptop
+    ]));
+    await handleHide(db, JSON.stringify({ owner: KEY_B, hidden: true }));
+    const r = await merge({ owner: KEY_A, from: KEY_B, into: 'charlie' });
+    expect(r.j).toMatchObject({ ok: true, names: ['charlie', 'chuckb'], moved: 1 });
+    resetFeedCache();
+    expect(await board()).toEqual(['l1:charlie', 'p1:charlie']); // this code's choice (shown) holds for the phone's rounds too
+    const own = ((await (await get(db, `owner=${KEY_A}`)).json()) as { entries: LeaderboardEntry[] }).entries.map((e) => e.id).sort();
+    expect(own).toEqual(['l1', 'p1']); // "my golf" sees both
+    expect(((await (await get(db, `owner=${KEY_B}`)).json()) as { entries: unknown[] }).entries).toEqual([]);
+    const hc = (await (await handleHandicapsGet(db)).json()) as { rounds: { player: string }[] };
+    expect(new Set(hc.rounds.map((x) => x.player))).toEqual(new Set(['charlie'])); // one handicap
+  });
+
+  it('refuses a name or a code that is not the player\'s', async () => {
+    await handlePost(db, JSON.stringify([{ ...scored('s1', 'sam', pars, pars), owner: KEY_B }, { ...scored('a1', 'charlie', pars, pars), owner: KEY_A }]));
+    expect((await merge({ owner: KEY_A, into: 'sam' })).j).toMatchObject({ ok: false, error: 'not_yours' });
+    expect((await merge({ owner: KEY_A, from: 'not-a-code', into: 'charlie' })).status).toBe(400);
+    expect((await merge({ owner: KEY_A, from: 'zzzzyyyyxxxxwwww', into: 'charlie' })).j).toMatchObject({ ok: false, error: 'no_names' });
+    expect((await merge({ into: 'charlie' })).status).toBe(400);
+    resetFeedCache();
+    expect(await board()).toEqual(['a1:charlie', 's1:sam']); // nothing changed
   });
 });

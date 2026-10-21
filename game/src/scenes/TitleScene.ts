@@ -27,6 +27,20 @@ let at = 0;
 
 interface Shown { img: Phaser.GameObjects.Image; t: number; fromX: number; fromY: number; toX: number; toY: number }
 
+/**
+ * The title's footer, in turn every few seconds: the map credit (OpenStreetMap's licence asks for
+ * it; the full credits are in settings) and tips. Each has a shorter form for a narrow phone.
+ */
+const FOOTER: [string, string][] = [
+  ['map data © openstreetmap contributors · credits in settings', 'map data © openstreetmap contributors'],
+  ['played under two names? settings > merge names puts your rounds under one', 'two names? settings > merge names'],
+  ["another device? settings > player code > use another, with this device's code", 'another device? use this player code there'],
+  ['stats, your course passport and milestones are in my golf', 'stats and milestones: my golf'],
+];
+const FOOTER_MS = 6000;
+/** where the footer is in its turn (carries on when the title is shown again; the credit comes first on a fresh start) */
+let footerAt = 0;
+
 export class TitleScene extends MenuScene {
   private shown: Shown[] = [];
   private shade: Phaser.GameObjects.Rectangle | null = null;
@@ -54,7 +68,22 @@ export class TitleScene extends MenuScene {
     whenUpdateReady(() => { if (this.sys.isActive()) this.rebuild(); });
     setVolume(app.settings.volume, app.settings.muted);
     this.input.once('pointerdown', () => { void initAudio(); });
+    // one clock for the footer whatever the menu's builds (a build's own timer outlived it: tips were skipped)
+    this.footer = null;
+    this.time.addEvent({ delay: FOOTER_MS, loop: true, callback: () => { footerAt++; this.showFooter(); } });
     super.create();
+  }
+
+  /** The footer's text object of the menu on screen (null between builds). */
+  private footer: Phaser.GameObjects.BitmapText | null = null;
+
+  /** The footer's line in turn, its short form when the long one doesn't fit. */
+  private showFooter() {
+    const foot = this.footer;
+    if (!foot || !foot.scene) return; // (destroyed with its build)
+    const [long, short] = FOOTER[footerAt % FOOTER.length];
+    setTxt(foot, long);
+    if (foot.width > app.view.w - 14) setTxt(foot, short);
   }
 
   protected back() {
@@ -178,6 +207,7 @@ export class TitleScene extends MenuScene {
   }
 
   async build() {
+    const g = this.gen;
     const W = app.view.w, H = app.view.h;
     const cx = Math.round(W / 2);
     let top = Math.max(8, Math.round(H * 0.14));
@@ -219,7 +249,9 @@ export class TitleScene extends MenuScene {
     if (small) dy -= 9;
     this.root.add(txt(this, cx, top + 66 + dy, 'real courses, rebuilt from map and lidar data', { origin: [0.5, 0], color: COLORS.dim }));
     const snap = await peekSnapshot();
-    if (!this.sys.isActive()) return;
+    // built again meanwhile (a phone turning, an update): that build draws the menu, not this one (two menus,
+    // and two footers turning at once, skipped every other tip)
+    if (!this.isCurrentBuild(g)) return;
     const bw = 124, bh = 17, gap = 21;
     let y = top + 84 + dy;
     let bottom = y;
@@ -268,6 +300,9 @@ export class TitleScene extends MenuScene {
       this.root.add(new Button(this, W - 112, 4, 108, 15, 'update - tap to reload', () => update.apply()));
     }
     this.root.add(new Panel(this, 4, H - 16, W - 8, 12, 0.55));
-    this.root.add(txt(this, cx, H - 15, 'map data © openstreetmap contributors · credits in settings', { origin: [0.5, 0], color: COLORS.dim }));
+    // the footer: the map credit, and tips in turn (developer, 2026-10-21: how to merge scores under two names)
+    this.footer = txt(this, cx, H - 15, '', { origin: [0.5, 0], color: COLORS.dim });
+    this.root.add(this.footer);
+    this.showFooter();
   }
 }

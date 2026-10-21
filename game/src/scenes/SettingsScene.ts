@@ -10,6 +10,8 @@ import { applyScale, uiCamera } from '../scale';
 import { MenuScene } from './menu';
 import { keyCode } from '../save/identity';
 import { askCode } from '../ui/codeInput';
+import { askMerge } from '../ui/mergeNames';
+import { DEFAULT_NAME } from '../save/names';
 import { nameConflicts, syncHidden } from '../save/online';
 
 export class SettingsScene extends MenuScene {
@@ -105,6 +107,13 @@ export class SettingsScene extends MenuScene {
         askCode(this, (k) => {
           if (k && k !== s.playerKey) { s.playerKey = k; nameConflicts.clear(); save(); }
         });
+      }, { color: 'grey' }));
+      y += 17;
+      // played under two names (one device or two): all the rounds under one (developer, 2026-10-21)
+      this.root.add(txt(this, lx, y + 3, 'name', { color: COLORS.dim }));
+      this.root.add(txt(this, vx, y + 3, s.playerName && s.playerName !== DEFAULT_NAME ? s.playerName.slice(0, 16) : '-'));
+      this.root.add(new Button(this, x0 + pw - 70, y, 62, 14, 'merge names', () => {
+        askMerge(this, (changed) => { if (changed) this.rebuild(); });
       }, { color: 'grey' }));
       y += 17;
       // courses kept on this device by the offline copy (player improvements, item 3)

@@ -28,6 +28,7 @@ const NAMES = 'api/names';
 const RECENT = 'api/recent';
 const HIDE = 'api/hide';
 const HANDICAPS = 'api/handicaps';
+const MERGE = 'api/merge';
 let available: Promise<boolean> | null = null;
 let flushing: Promise<number> | null = null;
 
@@ -238,6 +239,23 @@ export async function namesOfKey(key: string): Promise<string[] | null> {
     return Array.isArray(j.names) ? j.names.filter((n): n is string => typeof n === 'string') : null;
   } catch {
     return null;
+  }
+}
+
+/**
+ * Put this player code's rounds under one of its names (settings "merge names"); with `from`, another
+ * device's player code, its names and rounds join this code first. The names the code then holds, and
+ * how many rounds moved.
+ */
+export async function mergeNames(into: string, from?: string): Promise<{ ok: true; names: string[]; moved: number } | { ok: false; message: string }> {
+  if (!(await onlineAvailable())) return { ok: false, message: "the shared board can't be reached - try again when connected" };
+  try {
+    const res = await timed(MERGE, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ owner: app.settings.playerKey, into, from }) }, 15000);
+    const j = (await res.json().catch(() => ({}))) as { ok?: boolean; names?: string[]; moved?: number; message?: string; error?: string };
+    if (res.ok && j.ok) return { ok: true, names: j.names ?? [], moved: j.moved ?? 0 };
+    return { ok: false, message: j.message ?? j.error ?? `the server said ${res.status}` };
+  } catch {
+    return { ok: false, message: "the shared board can't be reached - try again when connected" };
   }
 }
 
