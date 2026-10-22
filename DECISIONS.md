@@ -1042,3 +1042,18 @@ Not merged (the developer will say when). Design note: docs/reports/multiplayer_
   themselves (`openDialog`), and list rows and course cards act only on a press and a release on
   them, the same press (`onTap` in widgets.ts); a release alone no longer counts.
 - tests/e2e/boards.spec.ts checks that the game hears nothing of a click on "close".
+
+## RedTail lands; the stroke-index note names the scorecard (developer, 2026-10-22)
+
+- RedTail Golf Center (PR #39, course chat) merged with: `redtail` in the daily rotation from
+  2026-10-23 (`DAILY_ROSTER`), its course test moved to `game/tests/unit/redtail.test.ts`.
+- s06's open item for an OSM handicap that differs from the card said "the GolfPass stroke index
+  ... (see spec 11.4 item 1); using GolfPass" for every course (Oswego Lake's wording). It now
+  says "the scorecard's stroke index ...; using the scorecard"; the report's header names the
+  card's source. Other courses' reports change wording when they are next rebuilt.
+- Later, from the RedTail chat: s01 could read a closed `golf=cartpath` way as a line unless it
+  is tagged `area=yes` (RedTail's 2.5 km loop became 8.5 ha of cart path; fixed there with
+  `make_edits.py`; needs `make regress`), and s05 could type crowns from an orthophoto (some
+  Douglas firs are drawn as broadleaves). Not done yet.
+- GitHub renamed the repository `chuckb2000/Silver-Swing`; the old name redirects
+  (COURSE_BUILD.md 0.1).

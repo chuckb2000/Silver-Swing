@@ -387,7 +387,7 @@ DECISIONS.md with the reason.
     putting to sign off on feel (M2) and on the open items below (M3
     acceptance).
 
--   **Code and hosting:** private GitHub repo `chuckb2000/silver-swing`
+-   **Code and hosting:** private GitHub repo `chuckb2000/Silver-Swing`
     (default branch `main`). Cloudflare Pages builds and publishes `main`
     on every push and gives other branches preview addresses. The design
     chat works on branches and asks the developer to merge; the
@@ -452,8 +452,10 @@ DECISIONS.md with the reason.
     `src/systems/game/pins.ts`); the meter has a line at the middle of the green, no
     ghost tick and no display-lag allowance. 376 unit tests and 4 Playwright tests pass.
 
--   **Courses (course chats, 2026-10-18 to 2026-10-21):** twenty-three data
-    folders, twenty-five courses on offer (East Potomac is three) in six states;
+-   **Courses (course chats, 2026-10-18 to 2026-10-22):** twenty-four data
+    folders, twenty-six courses on offer (East Potomac is three) in six states;
+    RedTail Golf Center (Beaverton OR; PR #39) merged 2026-10-22, in the daily
+    rotation from 2026-10-23;
     TPC Boston (Norton MA) and Pacific Dunes, Old Macdonald and Sheep Ranch (Bandon OR)
     merged 2026-10-21;
     Gearhart Golf Links (Gearhart OR), Bandon Trails (Bandon OR, `bandon`
@@ -1673,6 +1675,7 @@ files (`game/scripts/course-lists.mjs`). The first course, Oswego Lake, is
 | Oregon Golf Club | `docs/courses/ogc.md` |
 | Oswego Lake Country Club | `docs/courses/oswego_lake.md` |
 | Pacific Dunes | `docs/courses/pacific_dunes.md` |
+| RedTail Golf Center | `docs/courses/redtail.md` |
 | Sheep Ranch | `docs/courses/sheep_ranch.md` |
 | Stone Creek Golf Club | `docs/courses/stone_creek.md` |
 | Triggs Memorial Golf Course | `docs/courses/triggs.md` |

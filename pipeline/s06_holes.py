@@ -264,10 +264,8 @@ def build_layout(name, cfg, lay, g):
         if not osm_par:
             open_items.append(f"Hole {n}: OSM hole line has no par tag; using scorecard par {par}.")
         if "handicap" in h.tags and int(h.tags["handicap"]) != int(card[n]["handicap"]):
-            if lay["shared"]:
-                open_items.append(f"Hole {n}: OSM handicap {h.tags['handicap']} differs from the scorecard stroke index {card[n]['handicap']}; using the scorecard.")
-            else:
-                open_items.append(f"Hole {n}: OSM handicap {h.tags['handicap']} differs from the GolfPass stroke index {card[n]['handicap']} (see spec 11.4 item 1); using GolfPass.")
+            # the scorecard's own source is named at the top of the report (it was GolfPass at Oswego Lake)
+            open_items.append(f"Hole {n}: OSM handicap {h.tags['handicap']} differs from the scorecard's stroke index {card[n]['handicap']}; using the scorecard.")
         tee_records = {}
         for ts in tee_sets:
             target = float(card[n][ts.lower()]) * YD
