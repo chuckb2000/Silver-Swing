@@ -1,0 +1,73 @@
+{
+ "add": [
+  {
+   "from": "proposed/cartpath_loops.geojson",
+   "ids": [
+    "w1206745336_line",
+    "w870641352_line"
+   ],
+   "reason": "golf=cartpath loops mapped as closed ways; the Overpass export made them polygons (an 8.5 ha cart-path area over holes 2-7). Copied back as lines (free relief, drawn as a path)"
+  }
+ ],
+ "drop": [
+  {
+   "osm": "w1206745336",
+   "reason": "replaced by its line copy (add above)"
+  },
+  {
+   "osm": "w870641352",
+   "reason": "replaced by its line copy (add above)"
+  }
+ ],
+ "tags": [
+  {
+   "osm": "w1251788407",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "standing default (COURSE_BUILD.md 4.1): every penalty area red"
+  },
+  {
+   "osm": "w1251788408",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "standing default (COURSE_BUILD.md 4.1): every penalty area red"
+  },
+  {
+   "osm": "w504416577",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "standing default (COURSE_BUILD.md 4.1): every penalty area red"
+  },
+  {
+   "osm": "w504416583",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "standing default (COURSE_BUILD.md 4.1): every penalty area red"
+  },
+  {
+   "osm": "w504416584",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "standing default (COURSE_BUILD.md 4.1): every penalty area red"
+  },
+  {
+   "osm": "w504416586",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "standing default (COURSE_BUILD.md 4.1): every penalty area red"
+  },
+  {
+   "osm": "w68729439",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "standing default (COURSE_BUILD.md 4.1): every penalty area red"
+  }
+ ]
+}

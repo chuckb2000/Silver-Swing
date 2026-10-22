@@ -1,0 +1,55 @@
+{
+  "id": "redtail",
+  "name": "RedTail Golf Center",
+  "location": "Beaverton, Washington County, Oregon",
+  "state": "OR",
+  "architects": "Erv Thoreson (Progress Downs, opened 1968); redesigned by John Zoller (1999)",
+  "theme": "pnw",
+  "epsg": 32610,
+  "osm_sources": [
+    "raw/overpass.geojson"
+  ],
+  "boundary_name": "RedTail Golf Course",
+  "dtm": {
+    "path": "raw/dogami_dtm_ft.tif",
+    "units": "ft",
+    "source": "DOGAMI lidar DIGITAL_TERRAIN_MODEL_MOSAIC (bare earth), exportImage at 1 m in EPSG:32610, box x 516830-518310 / y 5033221-5034701, downloaded by the developer 2026-10-22 (GitHub release redtail-data, exportImage.10.tiff)"
+  },
+  "chm": {
+    "path": "raw/dogami_chm_ft.tif",
+    "units": "ft",
+    "source": "DOGAMI lidar CANOPY_HEIGHT_MODEL_MOSAIC (highest hit minus bare earth), exportImage at 1 m in EPSG:32610, same box, downloaded by the developer 2026-10-22 (GitHub release redtail-data, exportImage.11.tiff)",
+    "label": "DOGAMI canopy height model"
+  },
+  "world": {
+    "x0": 516930,
+    "y0": 5033321,
+    "width": 1280,
+    "height": 1280,
+    "note": "OSM course boundary bbox (920 x 1,021 m, way 156976873) + at least 120 m of scenery, rounded out to whole 256 m chunks and centred (180 m west/east, 130 m south/north)"
+  },
+  "tee_sets": [
+    {
+      "name": "Blue",
+      "playable": true,
+      "rating": 72.6,
+      "slope": 130,
+      "total_yd": 6682
+    }
+  ],
+  "default_tee": "Blue",
+  "scorecard_source": "Club scorecard (Golf ScoreCards Inc., printed 6/2012; scorecard-large.jpg in GitHub release redtail-data), read 2026-10-22. Every row adds up to the printed Out/In/Total. Men's ratings/slopes: Black 74.4/135, Blue 72.6/130, White 70.6/126, Red 67.4/118; Yellow has none. Handicap column = the men's row (Black/Blue/White); the ladies' row (Red/Yellow) differs. golfingrecord.com lists the same Blue yardages at 72.3/128; the developer chose the card's 72.6/130 (2026-10-22). Not checked against a current printed card.",
+  "penalty_default": "red",
+  "driving_range_is_ob": true,
+  "trees_off_fairways_m": 2,
+  "wind_mph": {
+    "minMph": 1,
+    "maxMph": 7
+  },
+  "attribution": [
+    "Map data © OpenStreetMap contributors (ODbL)",
+    "Elevation and canopy height: Oregon Department of Geology and Mineral Industries (DOGAMI) lidar",
+    "Scorecard: RedTail Golf Center (Portland Parks & Recreation)"
+  ],
+  "notes": "Standing defaults (COURSE_BUILD.md 4.1), 2026-10-22: Blue tees; all water red; OB = the OSM course boundary, roads inside it are cart paths, the driving range is OB; pnw theme; inland Pacific Northwest wind 1-7 mph; trees from DOGAMI lidar, trees in fairways or in the way of a centre-line drive removed and listed."
+}
