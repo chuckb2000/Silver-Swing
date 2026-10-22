@@ -6,6 +6,7 @@ import { describe, expect, it } from 'vitest';
 import type { CourseJson } from '../../src/data/course';
 import { isEntry, isRoundLength, LeaderboardEntry } from '../../src/save/entry';
 import { dailyPlan } from '../../src/systems/game/daily';
+import { hcpCourses } from '../../src/systems/game/handicap';
 import { cardBlocks, CourseShape, holeName, isFullRound, lengthLabel, lengthOf, lengthsFor, planFor, shapeOfCourse } from '../../src/systems/game/lengths';
 import { Round } from '../../src/systems/game/round';
 import { totals } from '../../src/systems/rules/scoring';
@@ -70,11 +71,11 @@ describe('round lengths for every size of course', () => {
   });
 
   it('cuts the scorecard into nines, and names a club\'s nines', () => {
-    expect(cardBlocks('all', 13, 13)).toEqual([[1, 9, 'out'], [10, 13, 'in']]);
-    expect(cardBlocks('all', 19, 19)).toEqual([[1, 9, 'out'], [10, 18, 'in'], [19, 19, 'xtra']]);
-    expect(cardBlocks('all', 6, 6)).toEqual([[1, 6, 'tot']]);
-    expect(cardBlocks('nines:white+blue', 18, NINES)).toEqual([[1, 9, 'white'], [10, 18, 'blue']]);
-    expect(cardBlocks('front', 9)).toEqual([[1, 9, 'out']]);
+    expect(cardBlocks('all', range(1, 13), 13)).toEqual([[1, 9, 'out'], [10, 13, 'in']]);
+    expect(cardBlocks('all', range(1, 19), 19)).toEqual([[1, 9, 'out'], [10, 18, 'in'], [19, 19, 'xtra']]);
+    expect(cardBlocks('all', range(1, 6), 6)).toEqual([[1, 6, 'tot']]);
+    expect(cardBlocks('nines:white+blue', range(1, 18), NINES)).toEqual([[1, 9, 'white'], [10, 18, 'blue']]);
+    expect(cardBlocks('front', range(1, 9))).toEqual([[1, 9, 'out']]);
   });
 
   it('shows a club\'s holes by their number in their nine', () => {
@@ -118,6 +119,27 @@ describe('saved rounds and the daily round', () => {
     const club = { id: 'three_nines', holes: 27, defaultTee: 'Blue', teeSets: ['Blue'], nines: NINES.nines };
     const plans = days.map((d) => dailyPlan(d, [club])!);
     expect(new Set(plans.map((p) => p.length))).toEqual(new Set(['nines:red', 'nines:white', 'nines:blue']));
+  });
+
+  it('daily with the rotation roster: a 13-hole course in the roster still sits out', () => {
+    const c18 = { id: 'oswego_lake', holes: 18, defaultTee: 'Blue', teeSets: ['Blue'] };
+    const c9 = { id: 'highland_links', holes: 9, defaultTee: 'Blue', teeSets: ['Blue'] };
+    const small = { id: 'preserve', holes: 13, defaultTee: 'Blue', teeSets: ['Blue'] };
+    const roster = { oswego_lake: '2026-10-01', highland_links: '2026-10-01', preserve: '2026-10-01' };
+    const days = range(1, 28).map((i) => `2026-11-${String(i).padStart(2, '0')}`);
+    for (const d of days) expect(dailyPlan(d, [c18, c9, small], roster)!.courseId).not.toBe('preserve');
+    expect(days.map((d) => dailyPlan(d, [c18, c9, small], roster))).toEqual(days.map((d) => dailyPlan(d, [c18, c9], roster)));
+  });
+
+  it('handicaps leave out courses of 13 or 19 holes and clubs of nines', () => {
+    const rated = { pars: Array(18).fill(4), si: range(1, 18), ratings: { Blue: [70.1, 125] as [number, number] } };
+    const m = hcpCourses([
+      { id: 'eighteen', holes: 18, ...rated },
+      { id: 'preserve', holes: 13, ...rated, pars: Array(13).fill(3), si: range(1, 13) },
+      { id: 'nineteen', holes: 19, ...rated, pars: Array(19).fill(3), si: range(1, 19) },
+      { id: 'three_nines', holes: 27, nines: NINES.nines, ...rated, pars: Array(27).fill(4), si: range(1, 27) },
+    ]);
+    expect([...m.keys()]).toEqual(['eighteen']);
   });
 });
 

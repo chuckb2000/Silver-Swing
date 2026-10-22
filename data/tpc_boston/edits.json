@@ -1,0 +1,413 @@
+{
+ "note": "Edits to the OSM layout for TPC Boston, made by make_edits.py; built into edited/course.geojson by pipeline/merge_edits.py.",
+ "add": [
+  {
+   "from": "proposed/norton_ponds.geojson",
+   "ids": [
+    "w1239463228_water",
+    "w1239463229_water",
+    "w1239463230_water",
+    "w1239463231_water",
+    "w1239463235_water",
+    "w1239463236_water",
+    "w1239463237_water",
+    "w1239463238_water",
+    "w1239463239_water"
+   ],
+   "tags": {},
+   "reason": "Norton Country Club's ponds (golf=water_hazard outside the TPC boundary): copied as plain water so they draw as off-course water and play as out of bounds, not as yellow penalty areas (the game checks water before out of bounds)"
+  },
+  {
+   "from": "proposed/paths_as_cartpaths.geojson",
+   "ids": [
+    "w1239391386_cartpath",
+    "w1239391387_cartpath",
+    "w1239391389_cartpath",
+    "w1239391390_cartpath",
+    "w1239401658_cartpath",
+    "w1239401659_cartpath",
+    "w1239419368_cartpath",
+    "w1239419369_cartpath",
+    "w677940622_cartpath",
+    "w677941159_cartpath",
+    "w677941160_cartpath",
+    "w678009244_cartpath",
+    "w678177225_cartpath",
+    "w678179381_cartpath"
+   ],
+   "tags": {},
+   "reason": "golf=path inside the boundary, not read by s01 (COURSE_LESSONS.md 10): copied as golf=cartpath (free relief, drawn as a path)"
+  },
+  {
+   "from": "proposed/clubhouse_building.geojson",
+   "ids": [
+    "w214907215_building"
+   ],
+   "tags": {},
+   "reason": "the clubhouse is tagged golf=clubhouse + building=yes, which s01 files under the golf key (not drawn, not an obstruction; COURSE_LESSONS.md 14): copied as a building"
+  },
+  {
+   "from": "proposed/pins.geojson",
+   "ids": [
+    "x_pin_1",
+    "x_pin_2",
+    "x_pin_3",
+    "x_pin_4",
+    "x_pin_5",
+    "x_pin_6",
+    "x_pin_7",
+    "x_pin_8",
+    "x_pin_9",
+    "x_pin_10",
+    "x_pin_11",
+    "x_pin_12",
+    "x_pin_13",
+    "x_pin_14",
+    "x_pin_15",
+    "x_pin_16",
+    "x_pin_17",
+    "x_pin_18"
+   ],
+   "tags": {},
+   "reason": "no OSM pin on these holes' greens: a pin at the green's centre (make_edits.py), a proposal as at Franklin; the game adds up to three more pin positions per green"
+  }
+ ],
+ "tags": [
+  {
+   "osm": "r17020275",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "every penalty area is red (developer's standing default, COURSE_BUILD.md 4.1); s10 reads golf=water_hazard as yellow otherwise"
+  },
+  {
+   "osm": "r17021012",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "every penalty area is red (developer's standing default, COURSE_BUILD.md 4.1); s10 reads golf=water_hazard as yellow otherwise"
+  },
+  {
+   "osm": "w1239391342",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "every penalty area is red (developer's standing default, COURSE_BUILD.md 4.1); s10 reads golf=water_hazard as yellow otherwise"
+  },
+  {
+   "osm": "w420917994",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "every penalty area is red (developer's standing default, COURSE_BUILD.md 4.1); s10 reads golf=water_hazard as yellow otherwise"
+  },
+  {
+   "osm": "w421096592",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "every penalty area is red (developer's standing default, COURSE_BUILD.md 4.1); s10 reads golf=water_hazard as yellow otherwise"
+  },
+  {
+   "osm": "w421096599",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "every penalty area is red (developer's standing default, COURSE_BUILD.md 4.1); s10 reads golf=water_hazard as yellow otherwise"
+  },
+  {
+   "osm": "w421116008",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "every penalty area is red (developer's standing default, COURSE_BUILD.md 4.1); s10 reads golf=water_hazard as yellow otherwise"
+  },
+  {
+   "osm": "w421116009",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "every penalty area is red (developer's standing default, COURSE_BUILD.md 4.1); s10 reads golf=water_hazard as yellow otherwise"
+  },
+  {
+   "osm": "w421348472",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "every penalty area is red (developer's standing default, COURSE_BUILD.md 4.1); s10 reads golf=water_hazard as yellow otherwise"
+  },
+  {
+   "osm": "w421662716",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "every penalty area is red (developer's standing default, COURSE_BUILD.md 4.1); s10 reads golf=water_hazard as yellow otherwise"
+  },
+  {
+   "osm": "w677741660",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "every penalty area is red (developer's standing default, COURSE_BUILD.md 4.1); s10 reads golf=water_hazard as yellow otherwise"
+  },
+  {
+   "osm": "w677741685",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "every penalty area is red (developer's standing default, COURSE_BUILD.md 4.1); s10 reads golf=water_hazard as yellow otherwise"
+  },
+  {
+   "osm": "w677741691",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "every penalty area is red (developer's standing default, COURSE_BUILD.md 4.1); s10 reads golf=water_hazard as yellow otherwise"
+  },
+  {
+   "osm": "w677746049",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "every penalty area is red (developer's standing default, COURSE_BUILD.md 4.1); s10 reads golf=water_hazard as yellow otherwise"
+  },
+  {
+   "osm": "w677932776",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "every penalty area is red (developer's standing default, COURSE_BUILD.md 4.1); s10 reads golf=water_hazard as yellow otherwise"
+  },
+  {
+   "osm": "w677934283",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "every penalty area is red (developer's standing default, COURSE_BUILD.md 4.1); s10 reads golf=water_hazard as yellow otherwise"
+  },
+  {
+   "osm": "w678172528",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "every penalty area is red (developer's standing default, COURSE_BUILD.md 4.1); s10 reads golf=water_hazard as yellow otherwise"
+  },
+  {
+   "osm": "w678020189",
+   "set": {
+    "par": "4"
+   },
+   "reason": "hole 14: OSM has the tour card's par 5; the club's 2024 scorecard plays it as a par 4 (developer, 2026-10-20)"
+  },
+  {
+   "osm": "w677741698",
+   "set": {
+    "hole": "6",
+    "tee_set": "Black"
+   },
+   "reason": "hole 6 Black tee (course chat, 2026-10-21): box 29 m beside the line (s06 searches 25 m), 428 yd from its centre against the card's 429; s06 had taken the 455 yd box"
+  },
+  {
+   "osm": "w1239401660",
+   "set": {
+    "hole": "3",
+    "tee_set": "Gold"
+   },
+   "reason": "hole 3 Gold tee (course chat, 2026-10-21): a 42 x 21 m tee complex spanning 147-187 yd, also the Black box (166); its back end holds the Gold 184, and OSM has no separate Gold box (the only other boxes measure 206 and 142 yd)"
+  },
+  {
+   "osm": "w1110722253",
+   "set": {
+    "hole": "16",
+    "tee_set": "Black"
+   },
+   "reason": "hole 16 Black tee (course chat, 2026-10-21): a 60 x 23 m tee complex spanning 90-144 yd; its back end holds the Black 144, and OSM has no separate Black box (the others measure 161, 183 and 250+ yd)"
+  }
+ ],
+ "drop": [
+  {
+   "osm": "w29897980",
+   "reason": "Norton Country Club course boundary (a neighbouring course 74 m west, inside the world box): out of bounds here"
+  },
+  {
+   "osm": "w1239493200",
+   "reason": "hole 18 of Norton Country Club, outside the TPC Boston boundary"
+  },
+  {
+   "osm": "w1239493201",
+   "reason": "hole 17 of Norton Country Club, outside the TPC Boston boundary"
+  },
+  {
+   "osm": "w1239493202",
+   "reason": "hole 16 of Norton Country Club, outside the TPC Boston boundary"
+  },
+  {
+   "osm": "w1239493204",
+   "reason": "hole 14 of Norton Country Club, outside the TPC Boston boundary"
+  },
+  {
+   "osm": "w1239493207",
+   "reason": "hole 13 of Norton Country Club, outside the TPC Boston boundary"
+  },
+  {
+   "osm": "w1239493208",
+   "reason": "hole 12 of Norton Country Club, outside the TPC Boston boundary"
+  },
+  {
+   "osm": "w1239493211",
+   "reason": "hole 11 of Norton Country Club, outside the TPC Boston boundary"
+  },
+  {
+   "osm": "w1239493212",
+   "reason": "hole 10 of Norton Country Club, outside the TPC Boston boundary"
+  },
+  {
+   "osm": "w1239493213",
+   "reason": "hole 9 of Norton Country Club, outside the TPC Boston boundary"
+  },
+  {
+   "osm": "w1239493214",
+   "reason": "hole 8 of Norton Country Club, outside the TPC Boston boundary"
+  },
+  {
+   "osm": "w1239493215",
+   "reason": "hole 7 of Norton Country Club, outside the TPC Boston boundary"
+  },
+  {
+   "osm": "w1239493216",
+   "reason": "hole 6 of Norton Country Club, outside the TPC Boston boundary"
+  },
+  {
+   "osm": "w1239493217",
+   "reason": "hole 5 of Norton Country Club, outside the TPC Boston boundary"
+  },
+  {
+   "osm": "w1239493220",
+   "reason": "hole 2 of Norton Country Club, outside the TPC Boston boundary"
+  },
+  {
+   "osm": "w1239493221",
+   "reason": "hole 1 of Norton Country Club, outside the TPC Boston boundary"
+  },
+  {
+   "osm": "w1239469841",
+   "reason": "Norton Country Club green wholly outside the world box (s07/s09 cannot shape a green off the map)"
+  },
+  {
+   "osm": "w1239469847",
+   "reason": "Norton Country Club green wholly outside the world box (s07/s09 cannot shape a green off the map)"
+  },
+  {
+   "osm": "w1239469848",
+   "reason": "Norton Country Club green wholly outside the world box (s07/s09 cannot shape a green off the map)"
+  },
+  {
+   "osm": "w1239469849",
+   "reason": "Norton Country Club green wholly outside the world box (s07/s09 cannot shape a green off the map)"
+  },
+  {
+   "osm": "w1239469855",
+   "reason": "Norton Country Club green wholly outside the world box (s07/s09 cannot shape a green off the map)"
+  },
+  {
+   "osm": "w1239477230",
+   "reason": "Norton Country Club green wholly outside the world box (s07/s09 cannot shape a green off the map)"
+  },
+  {
+   "osm": "w1239463228",
+   "reason": "Norton Country Club pond, replaced by its plain-water copy (add above)"
+  },
+  {
+   "osm": "w1239463229",
+   "reason": "Norton Country Club pond, replaced by its plain-water copy (add above)"
+  },
+  {
+   "osm": "w1239463230",
+   "reason": "Norton Country Club pond, replaced by its plain-water copy (add above)"
+  },
+  {
+   "osm": "w1239463231",
+   "reason": "Norton Country Club pond, replaced by its plain-water copy (add above)"
+  },
+  {
+   "osm": "w1239463235",
+   "reason": "Norton Country Club pond, replaced by its plain-water copy (add above)"
+  },
+  {
+   "osm": "w1239463236",
+   "reason": "Norton Country Club pond, replaced by its plain-water copy (add above)"
+  },
+  {
+   "osm": "w1239463237",
+   "reason": "Norton Country Club pond, replaced by its plain-water copy (add above)"
+  },
+  {
+   "osm": "w1239463238",
+   "reason": "Norton Country Club pond, replaced by its plain-water copy (add above)"
+  },
+  {
+   "osm": "w1239463239",
+   "reason": "Norton Country Club pond, replaced by its plain-water copy (add above)"
+  },
+  {
+   "osm": "w1239391386",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1239391387",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1239391389",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1239391390",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1239401658",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1239401659",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1239419368",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1239419369",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w677940622",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w677941159",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w677941160",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w678009244",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w678177225",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w678179381",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w214907215",
+   "reason": "replaced by its building copy (add above)"
+  }
+ ]
+}

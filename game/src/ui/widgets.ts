@@ -64,6 +64,9 @@ export interface ButtonOpts {
   scale?: number;
 }
 
+/** How far off a button (game pixels) letting go still counts as a tap on it. */
+export const BUTTON_SLOP = 6;
+
 export class Button extends Phaser.GameObjects.Container {
   bw: number;
   bh: number;
@@ -107,18 +110,43 @@ export class Button extends Phaser.GameObjects.Container {
       this.draw();
       if (opts.onDown) {
         this.fire(p.event?.timeStamp ?? performance.now());
+        return;
       }
+      // the press counts when it is let go on or near the button: a finger or a mouse that slid a little
+      // off a small button lost the tap (developer, 2026-10-22: "occasionally missing clicks"). Let go
+      // well away, it doesn't count (the way to change your mind)
+      const id = p.id, downAt = p.downTime;
+      const up = (q: Phaser.Input.Pointer) => {
+        if (q.id !== id) return;
+        scene.input.off(Phaser.Input.Events.POINTER_UP, up);
+        scene.input.off(Phaser.Input.Events.POINTER_UP_OUTSIDE, up);
+        const was = this.pressed;
+        this.pressed = false;
+        if (!this.active) return; // gone meanwhile (a screen redrawn)
+        this.draw();
+        // the release of this press (a later press means this one was let go where this scene didn't hear it)
+        if (was && q.downTime === downAt && this.enabled && this.near(q)) this.fire(q.event?.timeStamp ?? performance.now());
+      };
+      scene.input.on(Phaser.Input.Events.POINTER_UP, up);
+      scene.input.on(Phaser.Input.Events.POINTER_UP_OUTSIDE, up);
     });
-    this.on('pointerup', (p: Phaser.Input.Pointer) => {
-      if (!this.enabled) return;
-      const was = this.pressed;
-      this.pressed = false;
-      this.draw();
-      if (!opts.onDown && was) this.fire(p.event?.timeStamp ?? performance.now());
-    });
-    this.on('pointerout', () => { if (this.pressed) { this.pressed = false; this.draw(); } });
+    // a swing-style button (it acted on the press): only its look goes back
+    this.on('pointerup', () => { if (opts.onDown && this.pressed) { this.pressed = false; this.draw(); } });
     this.draw();
     scene.add.existing(this);
+  }
+
+  /** Is the pointer on the button, or within a few pixels of it? */
+  near(p: Phaser.Input.Pointer): boolean {
+    const cam = this.scene.cameras.main;
+    const w = p.positionToCamera(cam) as Phaser.Math.Vector2;
+    // as Phaser's own hit test: a fixed (scroll factor 0) object ignores the camera's scroll
+    const x = w.x + cam.scrollX * this.scrollFactorX - cam.scrollX;
+    const y = w.y + cam.scrollY * this.scrollFactorY - cam.scrollY;
+    const m = this.getWorldTransformMatrix();
+    const l = m.applyInverse(x, y);
+    const sx = BUTTON_SLOP / (Math.hypot(m.a, m.b) || 1), sy = BUTTON_SLOP / (Math.hypot(m.c, m.d) || 1);
+    return l.x >= -sx && l.x <= this.bw + sx && l.y >= -sy && l.y <= this.bh + sy;
   }
 
   private fire(time: number) {
@@ -136,6 +164,14 @@ export class Button extends Phaser.GameObjects.Container {
 
   setIcon(frame: string) {
     this.iconImg?.setFrame(frame);
+    return this;
+  }
+
+  /** Orange or grey (drawn again only when it changes). */
+  setColor(c: 'orange' | 'grey') {
+    if ((this.opts.color ?? 'orange') === c) return this;
+    this.opts = { ...this.opts, color: c };
+    this.draw();
     return this;
   }
 

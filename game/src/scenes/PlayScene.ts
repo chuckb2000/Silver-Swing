@@ -16,15 +16,26 @@ import { SURF } from '../systems/physics/surfaces';
 import { ReliefArea } from '../systems/rules/relief';
 import { FULL_MAX, PART_MAX, SwingMeter } from '../systems/swing/meter';
 import { worldCamera } from '../scale';
-import { saveSnapshot } from '../save/snapshot';
+import { saveSnapshot, saveStruck } from '../save/snapshot';
 import { CameraRig, Rect } from '../ui/cameraRig';
 import { CourseView, DEPTH } from '../ui/courseView';
 import { GreenLayer, GreenView } from '../ui/greenView';
 import { COLORS } from '../ui/widgets';
 import type { HudScene } from './HudScene';
 import { DRILL_FT, drillSpot, isRangeHole, PracticeLog, rangeShot } from '../systems/game/practice';
+import type { LiveMatch } from '../match/live';
+import type { MeterResult } from '../systems/swing/meter';
+import { encodePath } from '../systems/match/path';
+import { applyEvent, holeLive, other } from '../systems/match/rules';
+import { Applied, holeSnapOf, MatchSession, plannedOf, restoreHole, shotInfoOf } from '../systems/match/session';
+import { decodePath } from '../systems/match/path';
+import { CLOCK } from '../systems/match/types';
+import type { Action, HoleResult, HoleSnap, Logged, Seat } from '../systems/match/types';
+import type { SendResult } from '../net/matchClient';
 
-export type PlayState = 'loading' | 'intro' | 'aim' | 'swing' | 'flight' | 'settle' | 'relief' | 'drop' | 'holed' | 'replay' | 'done';
+export type PlayState = 'loading' | 'intro' | 'aim' | 'swing' | 'flight' | 'settle' | 'relief' | 'drop' | 'holed' | 'replay' | 'done'
+  // live match play: the other player's turn, a move waiting for the server, between holes, the match over, and "decide what's next"
+  | 'watch' | 'commit' | 'between' | 'over' | 'idle';
 
 /** Replay of the holing shot: once at playing speed, then its last moments slowed down. */
 const REPLAY_SLOW = 0.35;
@@ -46,6 +57,9 @@ const FLIGHT_PLAYBACK = 1.3; // the ball flies this much faster than real time o
 const FADE_RGB = [20, 32, 42] as const;
 
 interface Flyover { pts: { x: number; y: number }[]; cum: number[]; len: number; T: number; ta: number; t: number; hold: number }
+
+/** Texels the aim framing moves up on a portrait screen (its deeper bottom controls, HudScene.layout). */
+const PORTRAIT_LIFT = 24;
 
 export class PlayScene extends Phaser.Scene {
   round!: Round;
@@ -99,6 +113,12 @@ export class PlayScene extends Phaser.Scene {
   private ballHidden = false;
   private holing = false;
   private fading = false;
+  /**
+   * The swing was started (button, space, click) while the camera was still moving to the shot (a cut or
+   * a zoom): the meter starts as soon as it stops, instead of the tap being lost (developer, 2026-10-22:
+   * "the game is occasionally missing clicks").
+   */
+  private queuedTap = false;
   private zooming = false;
   private flagFrame = 0;
   private flagTimer = 0;
@@ -109,13 +129,56 @@ export class PlayScene extends Phaser.Scene {
   /** The practice ground (player improvements, item 5): its tallies and the wind switch. */
   practice: { log: PracticeLog; wind: boolean } | null = null;
   ballOffscreen: { x: number; y: number } | null = null;
+  /** A live match (match play against a friend), or null. */
+  match: LiveMatch | null = null;
+  private otherBall!: Phaser.GameObjects.Image;
+  private otherMark!: Phaser.GameObjects.Image;
+  /** this game's move waiting for the server: its id, the hole as it was before, and (a stroke) its own flight */
+  private pendingCid: string | null = null;
+  private pendingBefore: HoleSnap | null = null;
+  private pendingShot: PlannedShot | null = null;
+  private pendingSim: SimResult | null = null;
+  private commitAt = 0;
+  /** the stroke from the match's log being played back */
+  private matchEv: Extract<Logged, { t: 'stroke' }> | null = null;
+  private shownTurn: Seat | null = null;
+  private matchUnlisten: (() => void) | null = null;
+  private refusedShown = 0;
+  /** the power a stroke was struck with (the feedback line), ours or the other player's */
+  private strikePower = 0;
+  /** the session rebuilds this scene has caught up with (LiveMatch.swaps) */
+  private seenSwaps = 0;
+  /** a "that's good" on its way to the server (the button waits for its answer) */
+  private concedeCid: string | null = null;
+  /** when the move in commit was last sent again (it waited long for an answer) */
+  private nudgeAt = 0;
+  /** this player gave up the hole or the match: nothing is offered until the server has it */
+  private awaitCid: string | null = null;
+  /** a penalty stroke for slow play, or a claim of the match, on its way (the buttons wait for its answer) */
+  private clockCid: string | null = null;
 
   constructor() {
     super('play');
   }
 
-  create(data: { resume?: boolean }) {
+  create(data: { resume?: boolean; match?: boolean }) {
     const course = app.course!;
+    this.match = data?.match && app.match?.session ? app.match : null;
+    this.pendingCid = null;
+    this.pendingBefore = null;
+    this.pendingShot = null;
+    this.pendingSim = null;
+    this.matchEv = null;
+    this.shownTurn = null;
+    this.refusedShown = 0;
+    this.matchReplaying = false;
+    this.introShownFor = -1;
+    this.concedeCid = null;
+    this.awaitCid = null;
+    this.clockCid = null;
+    this.nudgeAt = 0;
+    this.seenSwaps = this.match?.swaps ?? 0;
+    if (this.match) app.round = this.match.session!.activeRound();
     this.round = app.round!;
     this.round.units = app.settings.units;
     this.state = 'loading';
@@ -128,6 +191,7 @@ export class PlayScene extends Phaser.Scene {
     this.fading = false;
     // a scene object is reused from round to round: nothing from the last one carries over
     this.zooming = false;
+    this.queuedTap = false;
     this.drag = null;
     this.preroll = null;
     this.explore = false;
@@ -153,6 +217,9 @@ export class PlayScene extends Phaser.Scene {
     this.marker = this.add.image(0, 0, 'ui', 'landing').setDepth(DEPTH.overlay + 2);
     this.puttTarget = this.add.image(0, 0, 'ui', 'putt_target').setDepth(DEPTH.overlay + 2).setVisible(false);
     this.dropMarker = this.add.image(0, 0, 'ui', 'cross').setDepth(DEPTH.overlay + 3).setVisible(false);
+    // live match: the other player's ball, with a marker in their colour
+    this.otherBall = this.add.image(0, 0, 'ui', 'ball').setOrigin(0.5, 0.5).setVisible(false);
+    this.otherMark = this.add.image(0, 0, 'ui', 'arrow_down').setOrigin(0.5, 1).setDepth(DEPTH.overlay + 1).setVisible(false);
     for (let i = 0; i < 2; i++) this.teeMarkers.push(this.add.image(0, 0, 'ui', 'tee_marker').setOrigin(0.5, 1));
     for (let i = 0; i < 100; i++) this.dots.push(this.add.image(0, 0, 'ui', 'aim_dot').setDepth(DEPTH.overlay).setVisible(false).setAlpha(0.85));
     for (let i = 0; i < 8; i++) this.ticks.push(this.add.image(0, 0, 'ui', 'aim_tick').setDepth(DEPTH.overlay + 1).setVisible(false));
@@ -183,10 +250,17 @@ export class PlayScene extends Phaser.Scene {
       cam.fadeIn(350, ...FADE_RGB);
       void this.green.prepare(this.round.courseHole);
       if (this.practice) this.practiceGo(this.round.holeIndex, false);
+      else if (this.match) this.matchEnter();
       else if (data?.resume) this.resumeShot(); else this.startHoleIntro(false);
     });
     this.scene.launch('hud');
     this.events.once('shutdown', () => this.scene.stop('hud'));
+    // leaving the course ends this page's line to the match (the match goes on: "continue" on the title)
+    this.events.once('shutdown', () => {
+      this.matchUnlisten?.();
+      this.matchUnlisten = null;
+      if (this.match) { this.match.stop(); if (app.match === this.match) app.match = null; this.match = null; }
+    });
   }
 
   // --------------------------------------------------------------- hole flow
@@ -211,6 +285,7 @@ export class PlayScene extends Phaser.Scene {
     }
     this.state = 'intro';
     const r = this.round;
+    if (this.match?.session) this.introShownFor = this.ms.state.hole;
     this.green.forget(r.courseHole);
     void this.green.prepare(r.courseHole);
     this.applyView(null, COURSE);
@@ -236,15 +311,16 @@ export class PlayScene extends Phaser.Scene {
     this.cut(() => {
       this.hud.hideIntro();
       this.intro = null;
+      if (this.match) { this.state = 'idle'; this.matchSettleView(); return; }
       this.beginShot(false, true);
     });
   }
 
-  /** Prepare the next stroke from the ball's current position. */
-  beginShot(fresh: boolean, jump = false) {
+  /** Prepare the next stroke from the ball's current position (`watch`: the other player's stroke, in a live match). */
+  beginShot(fresh: boolean, jump = false, watch = false) {
     const r = this.round;
     void fresh;
-    this.state = 'aim';
+    this.state = watch ? 'watch' : 'aim';
     this.club = r.autoClub();
     this.setScalesFor(this.club);
     this.aim = r.defaultAim(this.club, this.scaleArg());
@@ -269,7 +345,7 @@ export class PlayScene extends Phaser.Scene {
       this.setOverlayVisible(true);
       this.zoomTo(green, level);
       this.hud.refresh();
-      void saveSnapshot(r);
+      if (!this.match) void saveSnapshot(r); // a live match is saved on its server
       return;
     }
     const finish = (snap: boolean) => {
@@ -285,7 +361,7 @@ export class PlayScene extends Phaser.Scene {
     if (changes && !jump) this.cut(() => finish(true));
     else finish(jump);
     this.hud.refresh();
-    void saveSnapshot(r);
+    if (!this.match) void saveSnapshot(r);
   }
 
   isPutting(): boolean {
@@ -392,8 +468,17 @@ export class PlayScene extends Phaser.Scene {
         const f = this.aimFraming();
         this.rig.jump(f.x, f.y);
         this.slopeDirty = true;
+        this.transitionDone();
       },
     });
+  }
+
+  /** A cut or a zoom has finished: a swing tapped during it starts now. */
+  private transitionDone() {
+    if (!this.queuedTap || this.fading || this.zooming) return;
+    this.queuedTap = false;
+    // still the shot it was meant for, and nothing open over it
+    if (this.state === 'aim' && !this.hud.modalOpen()) this.tap(performance.now());
   }
 
   /** Camera zoom level; small sprites keep their on-screen size (1/level scale, pixel exact). */
@@ -415,7 +500,7 @@ export class PlayScene extends Phaser.Scene {
     cam.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, () => {
       fn();
       cam.fadeIn(inMs, ...FADE_RGB);
-      cam.once(Phaser.Cameras.Scene2D.Events.FADE_IN_COMPLETE, () => { this.fading = false; });
+      cam.once(Phaser.Cameras.Scene2D.Events.FADE_IN_COMPLETE, () => { this.fading = false; this.transitionDone(); });
     });
   }
 
@@ -423,6 +508,8 @@ export class PlayScene extends Phaser.Scene {
   private onKey(e: KeyboardEvent) {
     if (this.state === 'loading') return;
     const k = e.key;
+    // T: the chat in a live match (over the match panels too)
+    if ((k === 't' || k === 'T') && !e.repeat && this.match && this.hud.chatAvailable() && this.state !== 'swing') { e.preventDefault(); this.hud.openChat(); return; }
     if (this.hud.modalOpen()) {
       this.hud.onModalKey(e);
       return;
@@ -462,6 +549,11 @@ export class PlayScene extends Phaser.Scene {
     if (this.state === 'flight') { this.fastForward(); return; }
     if (this.state === 'replay') { this.endReplay(); return; }
     if (this.state === 'drop') { this.pickDrop(p); return; }
+    if (this.state === 'watch') {
+      // the other player's turn: drag to look around
+      this.drag = { mode: 'pan', sx: p.x, sy: p.y, cx: this.rig.x, cy: this.rig.y };
+      return;
+    }
     if (this.state === 'aim') {
       const w = this.cameras.main.getWorldPoint(p.x, p.y);
       if (this.nearAimHandle(w.x, w.y)) {
@@ -475,7 +567,7 @@ export class PlayScene extends Phaser.Scene {
   }
 
   private onPointerMove(p: Phaser.Input.Pointer) {
-    if (!this.drag || !p.isDown || this.state !== 'aim') return;
+    if (!this.drag || !p.isDown || (this.state !== 'aim' && this.state !== 'watch')) return;
     if (this.drag.mode === 'aim') {
       const w = this.cameras.main.getWorldPoint(p.x, p.y);
       this.aimAtWorld(w.x, w.y);
@@ -604,7 +696,12 @@ export class PlayScene extends Phaser.Scene {
 
   /** Swing button / space / click: start, power, accuracy. The view stays where it is. */
   tap(ts: number) {
-    if (this.fading || this.zooming) return;
+    if (this.fading || this.zooming) {
+      // the camera is still on its way to the shot: the swing starts when it gets there
+      if (this.state === 'aim') this.queuedTap = true;
+      return;
+    }
+    this.queuedTap = false;
     if (this.state === 'aim') {
       this.drag = null;
       this.pose = 'address';
@@ -657,9 +754,19 @@ export class PlayScene extends Phaser.Scene {
   private launch() {
     const r = this.round;
     const m = this.meter!.result!;
+    if (this.match) { this.matchLaunch(m); return; }
     this.shot = r.plan(this.club.id, this.aim, m, this.spin, this.scaleArg());
     this.sim = r.simulate(this.shot);
+    // locked in the moment it is hit: a reload mid-flight resumes after this stroke
+    void saveStruck(r, this.shot, this.sim);
     (window as unknown as { __last: unknown }).__last = { shot: this.shot, sim: { landing: this.sim.landing, end: this.sim.end, events: this.sim.events, n: this.sim.n, hitTree: this.sim.hitTree }, meter: m };
+    this.strikePower = m.power;
+    this.startFlight();
+  }
+
+  /** The ball is struck (this.shot and this.sim set): the flight plays, after the swing if the golfer is off screen. */
+  private startFlight() {
+    const r = this.round;
     this.state = 'flight';
     this.playT = 0;
     this.evIdx = 0;
@@ -708,11 +815,10 @@ export class PlayScene extends Phaser.Scene {
 
   /** The club meets the ball: sound, strike feedback, and the ball starts moving. */
   private strike() {
-    const m = this.meter!.result!;
     if (this.isPutting()) {
       sfx('putt');
       this.lastStrikeLabel = '';
-      if (this.shot!.putt) this.hud.puttFeedback(this.shot!.putt, m.power);
+      if (this.shot!.putt) this.hud.puttFeedback(this.shot!.putt, this.strikePower);
     } else if (this.shot!.strike) {
       const st = this.shot!.strike;
       sfx('whoosh', 0.7);
@@ -750,9 +856,9 @@ export class PlayScene extends Phaser.Scene {
       const p = flyoverAt(f, f.t);
       this.rig.jump(p.x, p.y);
       if (f.t > f.T + f.hold) this.skipIntro();
-    } else if (this.state === 'aim' || this.state === 'swing' || this.state === 'drop' || this.state === 'relief') {
+    } else if (this.state === 'aim' || this.state === 'swing' || this.state === 'drop' || this.state === 'relief' || this.state === 'watch') {
       if (this.state === 'aim' && !this.hud.modalOpen()) this.keyAim(dt);
-      if (((this.state === 'aim' && !this.explore) || this.state === 'drop' || this.state === 'relief') && !this.zooming) {
+      if ((((this.state === 'aim' || this.state === 'watch') && !this.explore) || this.state === 'drop' || this.state === 'relief') && !this.zooming) {
         const f = this.aimFraming();
         this.rig.target(f.x, f.y);
       }
@@ -770,6 +876,7 @@ export class PlayScene extends Phaser.Scene {
     } else if (this.state === 'settle') {
       if (time > this.holdUntil) this.afterRest();
     }
+    if (this.match) { this.matchPump(); this.drawOtherBall(); }
     if (this.state !== 'intro' && !this.zooming) this.rig.update(dt);
     const cam = this.cameras.main;
     this.view.update(cam, dt);
@@ -784,15 +891,18 @@ export class PlayScene extends Phaser.Scene {
       const want = near ? 0.25 : 1;
       if (Math.abs(this.flag.alpha - want) > 0.01) this.flag.setAlpha(this.flag.alpha + (want - this.flag.alpha) * Math.min(1, dt / 120));
     }
-    // trees in front of the golfer, the ball and (putting) the hole fade out
+    // trees in front of the golfer, the ball and the hole fade out (the hole in the course view too:
+    // six centre pins were hidden behind trees, afternoon review 2026-10-20)
     const pts: { x: number; y: number; depth: number }[] = [];
     if (this.golfer.visible) pts.push({ x: this.golfer.x, y: this.golfer.y - 8 / this.level, depth: this.golfer.y });
     if (this.ball.visible && this.ball.depth < DEPTH.flight) pts.push({ x: this.ball.x, y: this.ball.y, depth: this.ball.y });
     if (this.state === 'drop' && this.dropPoint) { const d = this.px(this.dropPoint.x, this.dropPoint.y); pts.push({ x: d.x, y: d.y, depth: d.y }); }
-    if (this.green.visible) {
-      pts.push({ x: this.cup.x, y: this.cup.y, depth: this.cup.y });
-      this.green.fadeOccluders(pts);
-    } else this.view.fadeOccluders(pts);
+    if (this.cup.visible) pts.push({ x: this.cup.x, y: this.cup.y, depth: this.cup.y });
+    if (this.green.visible) this.green.fadeOccluders(pts);
+    else {
+      if (this.flag.visible) pts.push({ x: this.flag.x, y: this.cup.y - 8, depth: this.cup.y }); // the flag, half way up
+      this.view.fadeOccluders(pts);
+    }
     // off-screen ball arrow for the HUD
     const bp = this.px(r.ball.x, r.ball.y);
     const v = cam.worldView;
@@ -809,8 +919,19 @@ export class PlayScene extends Phaser.Scene {
     this.aimHold(left ? 1 : -1, key.getDuration(), dt, k.SHIFT.isDown);
   }
 
-  /** Spec 10.3: frame ball and target; if they don't fit, look at the target. */
+  /**
+   * Spec 10.3: frame ball and target; if they don't fit, look at the target.
+   * On a portrait screen the controls at the bottom are about 50 texels deeper
+   * than in landscape (the meter sits over the club panel): the framing moves
+   * up by half of that, so the golfer and ball stay clear of them.
+   */
   private aimFraming(): { x: number; y: number } {
+    const f = this.aimFramingRaw();
+    if (this.state === 'drop' || app.view.h <= app.view.w) return f;
+    return { x: f.x, y: f.y + PORTRAIT_LIFT / this.level };
+  }
+
+  private aimFramingRaw(): { x: number; y: number } {
     const r = this.round;
     const b = this.px(r.ball.x, r.ball.y);
     const L = this.level;
@@ -1132,6 +1253,30 @@ export class PlayScene extends Phaser.Scene {
     golfer: { x: number; y: number; frame: string; flip: boolean; alpha: number; visible: boolean };
   } | null = null;
 
+  /** A live match: one of the hole's strokes again (either player's), from its own flight. */
+  private matchReplaying = false;
+  /** the hole (index) whose fly-over this page has shown: not again when both players get there */
+  private introShownFor = -1;
+
+  startMatchReplay(i: number) {
+    const st = this.match?.session?.strokes[i];
+    if (this.state !== 'between' || !st?.sim) return;
+    this.hud.closeModal();
+    this.round = this.ms.rounds[st.seat]!;
+    this.state = 'replay';
+    this.matchReplaying = true;
+    const g = this.golfer;
+    this.replayFrom = { layer: this.green.visible ? this.green.layer : null, level: this.level, stroke: st.stroke,
+      golfer: { x: g.x, y: g.y, frame: g.frame.name, flip: g.flipX, alpha: g.alpha, visible: g.visible } };
+    this.shot = st.shot;
+    this.sim = st.sim;
+    const layer = st.shot.club.kind === 'putter' ? this.greenViewAt(st.stroke.from) : null;
+    const level = layer ? this.green.level(this.round.courseHole, layer) : COURSE;
+    const now = this.green.visible ? this.green.layer : null;
+    if (layer !== now || level !== this.level) this.cut(() => { this.applyView(layer, level); this.replayPass(1); });
+    else this.replayPass(1);
+  }
+
   private replayPass(pass: 1 | 2) {
     const sim = this.sim!;
     this.replaying = { pass };
@@ -1178,6 +1323,19 @@ export class PlayScene extends Phaser.Scene {
   }
 
   private finishReplay(back: typeof this.replayFrom) {
+    if (this.matchReplaying) {
+      // back to the hole's result in the match
+      this.matchReplaying = false;
+      this.state = 'between';
+      if (back) {
+        const g = back.golfer;
+        this.golfer.setFrame(g.frame).setFlipX(g.flip).setPosition(g.x, g.y).setDepth(g.y).setAlpha(g.alpha).setVisible(g.visible);
+      }
+      this.resetBallSprite();
+      this.updateBallSprite(this.round.ball.x, this.round.ball.y, 0);
+      this.hud.reshowMatchHole();
+      return;
+    }
     this.state = 'holed';
     if (back) {
       // the golfer as he was when the ball dropped
@@ -1286,6 +1444,7 @@ export class PlayScene extends Phaser.Scene {
   /** After the ball comes to rest: apply the rules and decide what is next. */
   private afterRest() {
     if (this.practice) { this.practiceAfterShot(); return; }
+    if (this.match) { this.matchFinishStroke(); return; }
     const r = this.round;
     const out = r.resolve(this.shot!, this.sim!);
     this.outcome = out;
@@ -1359,6 +1518,7 @@ export class PlayScene extends Phaser.Scene {
     const a = this.reliefOptions[i];
     if (!a) return;
     if (a.shape === 'point') {
+      if (this.match) { this.matchRelief(a, a.center); return; }
       this.round.applyRelief(a, a.center);
       this.hud.hideRelief();
       this.hud.flash(a.penalty ? `+${a.penalty} penalty` : 'free relief', 0xffd84a);
@@ -1384,6 +1544,7 @@ export class PlayScene extends Phaser.Scene {
   }
 
   playAsItLies() {
+    if (this.match) { this.matchAsItLies(); return; }
     this.round.pending = null;
     this.hud.hideRelief();
     this.reliefArea = null;
@@ -1409,6 +1570,7 @@ export class PlayScene extends Phaser.Scene {
   confirmDrop() {
     if (this.state !== 'drop' || !this.reliefArea || !this.dropPoint || this.fading || this.zooming) return;
     const a = this.reliefArea;
+    if (this.match) { this.matchRelief(a, this.dropPoint); return; }
     this.round.applyRelief(a, this.dropPoint);
     this.reliefGfx.clear();
     this.dropMarker.setVisible(false);
@@ -1437,6 +1599,8 @@ export class PlayScene extends Phaser.Scene {
 
   openUnplayable() {
     if (this.state !== 'aim') return;
+    // a ball on the tee before its first stroke isn't in play yet (Rule 19 needs a ball in play; the U key skipped the button's check)
+    if (this.round.ball.teedUp || this.round.tally.strokes === 0) return;
     const s = this.round.surfaceAt();
     if (s === SURF.water) return;
     this.openRelief(this.round.unplayable(), true, 'unplayable: 1 penalty stroke');
@@ -1471,6 +1635,680 @@ export class PlayScene extends Phaser.Scene {
       const d = this.px(this.dropPoint.x, this.dropPoint.y);
       this.dropMarker.setVisible(true).setPosition(this.snap(d.x), this.snap(d.y));
     }
+  }
+
+  // --------------------------------------------------------------- live match
+  // Match play against a friend (docs/reports/multiplayer_live_match.md). The
+  // match's log (systems/match) decides whose turn it is; each stroke is played
+  // back from the striking game's own flight, and nothing moves on screen until
+  // the server has the move (a move it refuses is taken back).
+
+  private get ms(): MatchSession {
+    return this.match!.session!;
+  }
+
+  /** This game's seat (0 when only watching). */
+  get me(): Seat {
+    return this.match?.seat ?? 0;
+  }
+
+  /** The other player's name, as the HUD shows it. */
+  oppName(): string {
+    return this.ms.state.players[other(this.me)]?.name ?? 'your friend';
+  }
+
+  private matchEnter() {
+    const live = this.match!;
+    this.matchUnlisten = live.listen(() => { if (this.sys.isActive()) this.hud.refresh(); });
+    this.state = 'idle';
+    const s = this.ms.state;
+    if (this.matchResumeCommit()) return;
+    // the first tee: the fly-over while the other player arrives
+    if (s.phase === 'playing' && !holeLive(s) && s.results.length === s.hole) {
+      if (!s.ready[this.me] && s.hole === 0) { this.matchSendReady(); this.round = this.ms.rounds[this.me]!; this.startHoleIntro(false); return; }
+    }
+    this.matchSettleView();
+  }
+
+  /**
+   * A stroke or a drop made just before the page closed (or reloaded) and not
+   * yet answered: it is still on its way (the client sends it again), so the
+   * player waits for it instead of being offered the shot a second time.
+   */
+  private matchResumeCommit(): boolean {
+    const live = this.match!;
+    const s = this.ms.state;
+    if (!holeLive(s) || live.seat === null) return false;
+    // (not one already shown: the catch-up can bring a move's event before its answer)
+    const m = live.client.pendingMoves().find((x) => (x.action.t === 'stroke' || x.action.t === 'relief') && x.action.hole === s.hole && !this.ms.appliedCids.has(x.cid));
+    if (!m) return false;
+    const answer = live.client.waitFor(m.cid);
+    if (!answer) return false;
+    const r = this.ms.rounds[this.me]!;
+    this.round = r;
+    this.pendingCid = m.cid;
+    this.pendingBefore = holeSnapOf(r);
+    this.commitAt = this.time.now;
+    this.nudgeAt = this.time.now;
+    void answer.then((res) => this.matchAnswered(m.cid, m.action, res));
+    this.beginShot(true, true); // the view at the ball, then the backswing while the answer comes
+    this.state = 'commit';
+    this.pose = 'backswing';
+    this.updateGolfer();
+    this.setOverlayVisible(false);
+    this.hud.refresh();
+    return true;
+  }
+
+  /** States that finish what they show before the match moves on. */
+  private matchBusy(): boolean {
+    return ['flight', 'settle', 'loading', 'replay', 'commit', 'intro', 'swing', 'relief', 'drop'].includes(this.state) || this.fading || this.zooming;
+  }
+
+  /**
+   * Show the match as it now stands: whose turn (aim or watch), between holes
+   * (the hole's result, then waiting for the other player), or the match over.
+   */
+  matchSettleView() {
+    if (!this.match?.session || this.matchBusy()) return;
+    // nothing is offered while there is more to show: events still queued, or a log the server is known
+    // to have further (a page reloaded as its stroke landed was offered the shot again, then saw it played)
+    if (!this.ms.idle || this.matchBehind() || this.awaitCid) { if (this.state === 'aim' || this.state === 'watch') this.state = 'idle'; return; }
+    // the pause menu or the card is open: what follows waits until it closes (a menu shut under the finger)
+    if (this.hud.holdsMatch()) { if (this.state !== 'between' && this.state !== 'over') this.state = 'idle'; return; }
+    const s = this.ms.state, me = this.me;
+    if (s.phase === 'finished') { if (this.state !== 'over') this.showMatchOver(); return; }
+    // a hole nobody has played yet and this game hasn't flown over: its fly-over first (however it got here)
+    if (holeLive(s) && this.introShownFor !== s.hole && s.p[0].strokes === 0 && s.p[1].strokes === 0 && !s.p[0].holed && !s.p[1].holed) {
+      this.round = this.ms.rounds[me]!;
+      this.hud.closeModal();
+      this.startHoleIntro(true);
+      return;
+    }
+    if (!holeLive(s)) {
+      const last = s.results[s.results.length - 1] ?? null;
+      if (!s.ready[me]) {
+        if (last && last.hole === s.hole - 1) { if (this.state !== 'between') this.showHoleResult(last); }
+        else { this.matchSendReady(); this.state = 'between'; this.hud.matchWaiting(); }
+      } else { this.state = 'between'; this.hud.matchWaiting(); }
+      return;
+    }
+    const turn = this.ms.turn;
+    if (turn === null) return;
+    const r = this.ms.rounds[turn]!;
+    if (turn === me) {
+      if (this.state === 'aim' && this.round === r) { this.hud.refresh(); return; }
+      // a stroke of this player's still on its way (made before a reload; the catch-up showed the
+      // other player's shot first): wait for it rather than offer the shot again
+      if (this.matchResumeCommit()) return;
+      this.round = r;
+      this.hud.closeModal();
+      this.beginShot(true);
+      if (r.pending) {
+        // a drop the last stroke left (after a reload)
+        const out = r.reliefOutcome(r.pending);
+        if (out.kind !== 'rest') this.showReliefFor(out, false);
+      }
+      // after the banner showing (the other player's "holes out"), not over it
+      if (this.shownTurn !== me) { this.hud.flashAfter('your shot', COLORS.yellow, this.hud.matchLine(), 1300); sfx('good'); }
+    } else {
+      if (this.state === 'watch' && this.round === r) { this.hud.refresh(); return; }
+      this.round = r;
+      this.hud.closeModal();
+      this.beginShot(true, false, true);
+      if (this.shownTurn !== turn) this.hud.flashAfter(`${this.oppName()} to play`, COLORS.blue, this.hud.matchLine(), 1300);
+    }
+    this.shownTurn = turn;
+  }
+
+  /** Is this game's copy of the match behind the server's log (events on their way)? */
+  matchBehind(): boolean {
+    return !!this.match && this.match.client.serverSeq > this.ms.knownSeq;
+  }
+
+  /** since when this game has known it is behind the server (a resync if the events don't come) */
+  private behindSince = 0;
+
+  /** The pause menu or the card closed: what was held back under it is shown now (the next hole began meanwhile...). */
+  matchUnheld() {
+    if (!this.match?.session || this.matchBusy()) return;
+    const s = this.ms.state;
+    const stale = this.state === 'idle'
+      || (this.state === 'between' && (holeLive(s) || s.phase === 'finished'))
+      || (this.state === 'over' && s.phase !== 'finished');
+    if (stale) { this.state = 'idle'; this.matchSettleView(); }
+  }
+
+  /** Show the match again from where it stands (a panel over it closed: the line came back). */
+  matchReshow() {
+    if (!this.match?.session) return;
+    if (this.state === 'relief' || this.state === 'drop') {
+      // a drop being chosen when the panel covered it: opened again from the hole as it stands
+      this.reliefGfx.clear();
+      this.dropMarker.setVisible(false);
+      this.reliefArea = null;
+      this.hud.hideRelief();
+      this.state = 'idle';
+    }
+    if (['between', 'over', 'idle', 'aim', 'watch'].includes(this.state)) { this.state = 'idle'; this.matchSettleView(); }
+  }
+
+  /** Every frame: show the next event from the match when the scene is free to. */
+  private matchPump() {
+    const live = this.match;
+    if (!live?.session) return;
+    // the session was rebuilt from the server's log (this game lost step with it): the view starts again from it
+    if (live.rebuilding) return;
+    if (live.swaps !== this.seenSwaps) { this.seenSwaps = live.swaps; this.matchRestart(); return; }
+    // moves refused after a reload (made, then the page closed before the answer came)
+    if (live.refused.length > this.refusedShown) {
+      const r = live.refused[live.refused.length - 1];
+      this.refusedShown = live.refused.length;
+      this.hud.flash("your last move wasn't counted", COLORS.red, r.message, 2400);
+    }
+    // a move that has waited long for its answer (a lost answer, a server hiccup): sent again, the log asked for
+    if (this.state === 'commit' && this.time.now - this.nudgeAt > 8000) { this.nudgeAt = this.time.now; live.client.nudge(); }
+    // the server is known to have more than has come (an event lost on the way): asked for again after 3 s
+    if (this.matchBehind()) {
+      if (!this.behindSince) this.behindSince = this.time.now;
+      else if (this.time.now - this.behindSince > 3000) { this.behindSince = this.time.now; live.client.resync(); }
+    } else this.behindSince = 0;
+    const q = live.session.queue;
+    if (!q.length) { if (this.state === 'idle') this.matchSettleView(); return; }
+    if (this.fading || this.zooming) return;
+    // nothing moves on under the pause menu or the card: what happened meanwhile plays when they close
+    if (this.hud.holdsMatch()) return;
+    const head = q[0];
+    const st = this.state;
+    if (st === 'commit') {
+      // this game's move came back: on with it. A move of this player's made before it (a "that's good",
+      // "ready") goes first; the other player's move first means this one is refused (its answer follows)
+      if (head.cid === undefined || head.cid !== this.pendingCid) {
+        // the other player's penalty stroke for slow play doesn't stop this stroke: shown, and the stroke follows
+        if (head.t === 'slow') { this.matchApplyBehind(); return; }
+        if (!('by' in head) || head.by !== this.me || head.t === 'stroke' || head.t === 'relief') return;
+        this.matchApplyBehind();
+        return;
+      }
+    } else if (st === 'intro') {
+      if (head.t === 'stroke' || head.t === 'concede') this.skipIntro(); // the other player is on with the hole
+      return;
+    } else if (st === 'swing') {
+      // the other player gave this putt or the hole while it was being struck: the swing stops. Anything
+      // of this player's own (their "that's good" a moment before) waits until the stroke is sent
+      if ((head.t === 'concede' || head.t === 'claim') && head.by !== this.me) this.cancelSwing(); else return;
+    } else if (['flight', 'settle', 'loading', 'replay', 'done'].includes(st)) return;
+    // a long catch-up (back after a while): all but the last few at once, then the scene shows where things are
+    if (q.length > 4 && q[0].cid !== this.pendingCid) {
+      try {
+        while (q.length > 4 && q[0].cid !== this.pendingCid) {
+          const a = this.ms.applyNext();
+          if (a?.ev.cid && a.ev.cid === this.concedeCid) this.concedeCid = null;
+          if (a?.ev.cid && a.ev.cid === this.awaitCid) this.awaitCid = null;
+          if (a?.ev.cid && a.ev.cid === this.clockCid) this.clockCid = null;
+          if (a?.started) this.introShownFor = this.ms.state.hole; // no fly-over for a hole already under way
+        }
+      } catch (e) {
+        console.error('match: catch-up refused locally', e);
+        this.match!.rebuild();
+      }
+      this.hud.closeModal();
+      this.reliefArea = null;
+      this.state = 'idle';
+      return;
+    }
+    if (q[0]?.t === 'stroke') this.matchPlayStroke(q[0] as Extract<Logged, { t: 'stroke' }>);
+    else if (q.length) this.matchApply(false);
+  }
+
+  /** Apply the next event at once (`quiet`: no banners, a catch-up). */
+  private matchApply(quiet: boolean) {
+    const ev = this.ms.queue[0];
+    const mine = !!ev?.cid && ev.cid === this.pendingCid;
+    let applied: Applied | null;
+    try { applied = this.ms.applyNext(); } catch (e) {
+      // out of step with the server (never expected): start again from its log
+      console.error('match: event refused locally', e);
+      this.match!.rebuild();
+      this.state = 'idle';
+      return;
+    }
+    if (!applied) return;
+    if (mine) this.clearPending();
+    if (applied.ev.cid && applied.ev.cid === this.concedeCid) this.concedeCid = null;
+    if (applied.ev.cid && applied.ev.cid === this.clockCid) this.clockCid = null;
+    if (!quiet) this.matchAnnounce(applied, mine);
+    this.matchAfterApplied(applied);
+  }
+
+  /** In commit: one of this player's own moves made before the stroke (a "that's good") is shown; the stroke still waits behind it. */
+  private matchApplyBehind() {
+    let applied: Applied | null;
+    try { applied = this.ms.applyNext(); } catch (e) {
+      console.error('match: event refused locally', e);
+      this.match!.rebuild();
+      return;
+    }
+    if (!applied) return;
+    if (applied.ev.cid && applied.ev.cid === this.concedeCid) this.concedeCid = null;
+    if (applied.ev.cid && applied.ev.cid === this.awaitCid) this.awaitCid = null;
+    if (applied.ev.cid && applied.ev.cid === this.clockCid) this.clockCid = null;
+    this.matchAnnounce(applied, applied.ev.t !== 'slow' || applied.ev.by === this.me);
+    this.hud.refresh(); // the hole may have ended with it: the stroke behind it is refused, and its answer moves the scene on
+  }
+
+  /** The session was rebuilt from the server's log: the view starts again from where the match stands. */
+  private matchRestart() {
+    const live = this.match!;
+    // a move still on its way is kept waiting for (its event, or its refusal, is still to come)
+    const waiting = !!this.pendingCid && !this.ms.appliedCids.has(this.pendingCid) && live.client.pendingMoves().some((m) => m.cid === this.pendingCid);
+    if (!waiting) this.clearPending();
+    this.concedeCid = null;
+    this.awaitCid = null;
+    this.clockCid = null;
+    this.matchEv = null;
+    this.matchReplaying = false;
+    this.replaying = null;
+    this.meter = null;
+    this.intro = null;
+    this.hud.hideIntro();
+    this.hud.closeModal();
+    this.reliefGfx.clear();
+    this.dropMarker.setVisible(false);
+    this.reliefArea = null;
+    this.introShownFor = this.ms.state.hole; // no fly-over for a hole already under way
+    this.shownTurn = null;
+    this.round = this.ms.rounds[this.me] ?? this.ms.activeRound()!;
+    if (waiting) {
+      this.state = 'commit';
+      this.hud.refresh();
+      return;
+    }
+    this.state = 'idle';
+    this.matchSettleView();
+  }
+
+  private clearPending() {
+    this.pendingCid = null;
+    this.pendingBefore = null;
+    this.pendingShot = null;
+    this.pendingSim = null;
+  }
+
+  /** A banner for what just happened (a drop, a conceded putt...). */
+  private matchAnnounce(a: Applied, mine: boolean) {
+    const e = a.ev;
+    const opp = this.oppName();
+    if (e.t === 'relief') {
+      const who = e.by === this.me ? 'you' : opp;
+      if (e.label === 'as it lies') { if (e.by !== this.me) this.hud.flash(`${opp} plays it as it lies`, COLORS.white, '', 1200); }
+      else this.hud.flash(e.by === this.me ? (e.penalty ? `dropped: +${e.penalty}` : 'dropped: free relief') : `${who} drops${e.penalty ? `: +${e.penalty}` : ''}`, 0xffd84a, e.label, 1400);
+    } else if (e.t === 'concede') {
+      if (e.what === 'stroke') {
+        if (e.by === this.me) this.hud.flash(`you gave ${opp} the putt`, COLORS.white, '', 1300);
+        else { this.hud.flash("that's good", COLORS.green, `${opp} gave you the putt`, 1500); sfx('good'); }
+      } else if (e.what === 'hole') this.hud.flash(e.by === this.me ? 'you conceded the hole' : `${opp} conceded the hole`, COLORS.white, '', 1500);
+    } else if (e.t === 'slow') {
+      // a penalty stroke for slow play: counted on the hole (and the hole may have ended with it)
+      const ended = a.closed ? (a.closed.winner === this.me ? '  ·  you win the hole' : '  ·  the hole is lost') : '';
+      if (e.by === this.me) this.hud.flash('penalty stroke added', COLORS.white, `${opp}: slow play${a.closed ? '  ·  you win the hole' : ''}`, 1800);
+      else { this.hud.flash('penalty stroke', COLORS.red, `slow play: ${opp} added a stroke${ended}`, 2200); sfx('bad'); }
+    } else if (e.t === 'rematch' && e.by !== this.me) this.hud.refresh();
+    void mine;
+  }
+
+  /** After any event: a hole that ended, a new hole under way, or just the next turn. */
+  private matchAfterApplied(a: Applied) {
+    if (a.ev.cid && a.ev.cid === this.awaitCid) this.awaitCid = null;
+    // between holes, the other player reaching the next tee changes nothing on this screen (the hole's
+    // result, the list of shots to rewatch): it stays, and the match bar says it
+    if (this.state === 'between' && a.ev.t === 'ready' && !a.started && !a.closed && !a.over) { this.hud.refresh(); return; }
+    // a penalty stroke for slow play changes the count, not the shot: the aim (or the view of the other's) stays
+    if (a.ev.t === 'slow' && !a.closed && !a.over && ['aim', 'swing', 'watch', 'relief', 'drop'].includes(this.state)) { this.hud.refresh(); return; }
+    if (this.hud.holdsMatch()) {
+      // under the pause menu or the card nothing opens or moves: shown once it closes
+      if (!['relief', 'drop', 'between', 'over'].includes(this.state)) this.state = 'idle';
+      return;
+    }
+    if (this.state === 'relief' || this.state === 'drop') {
+      // the hole ended under a drop being chosen (the other player conceded it): the panel goes
+      if (!a.closed && !a.over) return;
+      this.reliefGfx.clear();
+      this.dropMarker.setVisible(false);
+      this.reliefArea = null;
+      this.hud.hideRelief();
+    }
+    if (a.started && this.introShownFor !== this.ms.state.hole) {
+      // both players at the next tee: its fly-over, then the honour plays
+      this.round = this.ms.rounds[this.me]!;
+      this.hud.closeModal();
+      this.startHoleIntro(true);
+      return;
+    }
+    if (this.state !== 'intro') this.state = 'idle';
+    this.matchSettleView();
+  }
+
+  /** Tap 3 in a match: the stroke goes to the server; it is played once the server has it. */
+  private matchLaunch(m: MeterResult) {
+    const r = this.round;
+    const before = holeSnapOf(r);
+    const shot = r.plan(this.club.id, this.aim, m, this.spin, this.scaleArg());
+    const sim = r.simulate(shot);
+    const after = r.whenSettled(shot, sim, (settled, o) => holeSnapOf(settled, o.kind === 'holed'));
+    this.pendingBefore = before;
+    this.pendingShot = shot;
+    this.pendingSim = sim;
+    this.strikePower = m.power;
+    this.matchSend({ t: 'stroke', hole: r.holeIndex, after, shot: shotInfoOf(shot, m.power), path: encodePath(sim) });
+    // the backswing while the server answers (usually a fraction of a second)
+    this.state = 'commit';
+    this.pose = 'backswing';
+    this.updateGolfer();
+    this.setOverlayVisible(false);
+    this.hud.refresh();
+  }
+
+  private matchSend(action: Action): string {
+    const live = this.match!;
+    const cid = live.client.moveId();
+    if (action.t === 'stroke' || action.t === 'relief') { this.pendingCid = cid; this.commitAt = this.time.now; this.nudgeAt = this.time.now; }
+    if (action.t === 'concede' && action.what === 'stroke') this.concedeCid = cid;
+    void live.client.send(action, cid).then((res) => this.matchAnswered(cid, action, res));
+    return cid;
+  }
+
+  /** How long this game's move has waited for the server (ms), for the HUD's "sending..." */
+  commitWait(): number {
+    return this.state === 'commit' ? this.time.now - this.commitAt : 0;
+  }
+
+  private matchAnswered(cid: string, action: Action, res: SendResult) {
+    if (!this.sys.isActive() || !this.match?.session) return;
+    if (cid === this.concedeCid && !res.ok) this.concedeCid = null; // given: cleared when its event is shown
+    if (cid === this.awaitCid && !res.ok) this.awaitCid = null;
+    if (cid === this.clockCid && !res.ok) this.clockCid = null;
+    if (res.ok) {
+      // its event is in the queue (matchPump plays it), or was shown already (a catch-up brought it before
+      // this answer): then nothing more is coming, and waiting for it would wait forever
+      if (cid === this.pendingCid && this.state === 'commit' && this.ms.appliedCids.has(cid)) {
+        this.clearPending();
+        this.state = 'idle';
+        this.matchSettleView();
+      }
+      return;
+    }
+    if (action.t === 'ready' && res.code === 'already_ready') return;
+    if (action.t === 'slow' || action.t === 'claim') {
+      // the other player moved as it was sent, or it was early (the server's clock, or this player was away)
+      const what = action.t === 'slow' ? 'no penalty stroke' : 'not claimed';
+      const why = res.code === 'moved' ? `${this.oppName()} has played` : res.code === 'given' ? 'one has been given for this shot' : res.message;
+      if (res.code !== 'no_match' && res.code !== 'version' && res.code !== 'elsewhere') this.hud.flash(what, COLORS.white, why, 1800);
+      // a claim put the waiting view away while it went: back to it
+      if (action.t === 'claim' && (this.state === 'idle' || this.state === 'between')) { this.state = 'idle'; this.matchSettleView(); }
+      this.hud.refresh();
+      return;
+    }
+    if (action.t === 'concede') {
+      // "moved": the putt was struck as it was given (the moves crossed); it plays out instead
+      if (res.code !== 'no_match' && res.code !== 'moved') this.hud.flash("couldn't concede", COLORS.red, res.message, 1600);
+      this.hud.refresh();
+      return;
+    }
+    if (cid !== this.pendingCid) return;
+    // refused (the other player conceded first, the hole ended...): the ball stays where it was. The game's
+    // own copy of the hole was never changed by the stroke (it is played once the server has it); the
+    // snapshot is put back only while that hole is still being played, as a safeguard
+    const r = this.ms.rounds[this.me];
+    const s = this.ms.state;
+    if (r && this.pendingBefore && holeLive(s) && s.hole === this.pendingBefore.hole && !s.p[this.me].holed) restoreHole(r, this.pendingBefore);
+    this.clearPending();
+    if (res.code !== 'no_match' && res.code !== 'version' && res.code !== 'elsewhere') this.hud.flash("that move didn't count", COLORS.red, res.message, 2000);
+    this.state = 'idle';
+    this.matchSettleView();
+  }
+
+  /** Play a stroke from the match's log: the striking game's own flight, struck where its ball was. */
+  private matchPlayStroke(ev: Extract<Logged, { t: 'stroke' }>) {
+    const mine = !!ev.cid && ev.cid === this.pendingCid;
+    const r = this.ms.rounds[ev.by]!;
+    this.round = r;
+    this.matchEv = ev;
+    this.shot = mine && this.pendingShot ? this.pendingShot : plannedOf(ev.shot);
+    this.sim = mine && this.pendingSim ? this.pendingSim : decodePath(ev.path);
+    this.strikePower = ev.shot.power;
+    this.hud.closeModal();
+    if (!this.sim) { this.state = 'idle'; this.matchFinishStroke(); return; } // a stroke from before this page (no flight): where it ended
+    this.club = this.shot.club;
+    this.aim = this.shot.spec.aim;
+    this.meter = null;
+    if (!mine) { this.pose = 'backswing'; this.updateGolfer(); }
+    const green = this.shot.club.kind === 'putter' ? this.greenViewAt(r.ball) : null;
+    const level = green ? this.green.level(r.courseHole, green) : this.shot.club.kind === 'putter' ? DROP : COURSE;
+    const now = this.green.visible ? this.green.layer : null;
+    const go = () => {
+      if (green !== now || level !== this.level) this.applyView(green, level);
+      this.resetBallSprite();
+      this.placePin();
+      this.updateBallSprite(r.ball.x, r.ball.y, 0);
+      this.updateGolfer();
+      this.startFlight();
+    };
+    this.state = 'loading';
+    if (green !== now || level !== this.level) this.cut(go); else go();
+  }
+
+  /** A stroke has come to rest on screen: the match takes it in, then whatever follows. */
+  private matchFinishStroke() {
+    const ev = this.matchEv;
+    this.matchEv = null;
+    if (!ev || this.ms.queue[0]?.seq !== ev.seq) { this.state = 'idle'; return; }
+    const mine = !!ev.cid && ev.cid === this.pendingCid;
+    let applied: Applied | null;
+    try { applied = this.ms.applyNext(); } catch (e) {
+      console.error('match: stroke refused locally', e);
+      this.match!.rebuild();
+      this.state = 'idle';
+      return;
+    }
+    if (!applied) return;
+    if (mine) this.clearPending();
+    const r = this.ms.rounds[ev.by]!;
+    const who = ev.by === this.me ? null : this.oppName();
+    if (ev.after.holed) {
+      // the score: penalty strokes for slow play count too
+      const n = ev.after.tally.strokes + (applied.closed ? applied.closed.slow[ev.by] : this.ms.state.p[ev.by].slow);
+      if (who) this.hud.flash(`${who} holes out`, COLORS.yellow, `${n} ${n === 1 ? 'stroke' : 'strokes'}`, 1400);
+    } else if (ev.after.pending) {
+      const out = r.reliefOutcome(ev.after.pending);
+      if (!who && out.kind !== 'rest' && !applied.closed) {
+        this.state = 'idle';
+        this.round = r;
+        if (this.hud.holdsMatch()) return; // under the menu: the drop panel opens once it closes (matchSettleView)
+        this.showReliefFor(out, true); // this player's drop: the relief panel
+        return;
+      }
+      if (who) this.hud.flash(out.kind === 'water' ? `${who}: in the water` : out.kind === 'ob' ? `${who}: out of bounds` : `${who}: free relief`, 0x7cc0ff, '', 1400);
+    } else if (this.sim && this.shot) this.hud.restInfo();
+    this.matchAfterApplied(applied);
+  }
+
+  /** This player takes a drop: sent, and shown once the server has it. */
+  private matchRelief(area: ReliefArea, p: { x: number; y: number }) {
+    const r = this.round;
+    const before = holeSnapOf(r);
+    r.applyRelief(area, p);
+    const after = holeSnapOf(r);
+    restoreHole(r, before);
+    this.pendingBefore = before;
+    this.matchSend({ t: 'relief', hole: r.holeIndex, after, penalty: area.penalty, label: area.label });
+    this.reliefGfx.clear();
+    this.dropMarker.setVisible(false);
+    this.reliefArea = null;
+    this.hud.hideRelief();
+    this.state = 'commit';
+    this.hud.refresh();
+  }
+
+  private matchAsItLies() {
+    const r = this.round;
+    if (!r.pending) {
+      // the unplayable panel, closed: nothing to tell the server, back to the shot
+      this.hud.hideRelief();
+      this.reliefArea = null;
+      this.beginShot(false);
+      return;
+    }
+    const before = holeSnapOf(r);
+    this.pendingBefore = before;
+    this.matchSend({ t: 'relief', hole: r.holeIndex, after: { ...before, pending: null }, penalty: 0, label: 'as it lies' });
+    this.reliefArea = null;
+    this.hud.hideRelief();
+    this.state = 'commit';
+    this.hud.refresh();
+  }
+
+  /** Ready for the hole (after its result, or at the first tee). */
+  matchSendReady() {
+    const s = this.ms.state;
+    if (s.phase !== 'playing' || s.ready[this.me]) return;
+    this.matchSend({ t: 'ready', hole: s.hole });
+  }
+
+  /**
+   * Concede the other player's next stroke ("that's good"), the hole or the
+   * match. A putt is given as it lies now: the stroke count goes with it, so
+   * if the other player strikes it at the same moment the server voids the
+   * concession rather than giving a different putt (review, item 7).
+   */
+  matchConcede(what: 'stroke' | 'hole' | 'match') {
+    const s = this.ms.state;
+    if (what === 'stroke') {
+      if (!this.canGivePutt()) return;
+      this.matchSend({ t: 'concede', what, hole: s.hole, strokes: s.p[other(this.me)].strokes });
+      this.hud.refresh();
+      return;
+    }
+    // giving up the hole or the match: no shot is offered until the server has it (a swing straight after
+    // was refused, "that hole is over")
+    this.cancelSwing();
+    this.awaitCid = this.matchSend({ t: 'concede', what, hole: s.hole });
+    if (this.state === 'aim' || this.state === 'watch') this.state = 'idle';
+    this.hud.refresh();
+  }
+
+  /** Penalty strokes for slow play on this round's player on the hole being played (the HUD's "shot n"). */
+  slowOf(r: Round): number {
+    if (!this.match?.session) return 0;
+    const s = this.ms.state;
+    const k: Seat | null = r === this.ms.rounds[0] ? 0 : r === this.ms.rounds[1] ? 1 : null;
+    return k === null || !holeLive(s) ? 0 : s.p[k].slow;
+  }
+
+  /** The move clock, when this player is the one waiting and may act on it: what they can do now. */
+  clockChoice(): { penalty: boolean; claim: boolean } {
+    const live = this.match;
+    const none = { penalty: false, claim: false };
+    if (!live?.session || live.seat === null || this.clockCid || this.awaitCid || this.matchBusy()) return none;
+    if (this.state !== 'watch' && this.state !== 'between') return none;
+    const c = live.clock();
+    if (!c || c.waiter !== this.me || !live.isHere(this.me)) return none;
+    return {
+      penalty: c.kind === 'shot' && !c.slowGiven && c.elapsed >= CLOCK.penaltyMs && this.state === 'watch',
+      claim: c.elapsed >= CLOCK.claimMs,
+    };
+  }
+
+  /** "penalty stroke" (the HUD has asked first): a stroke for slow play on the other player, on this clock. */
+  matchPenalty() {
+    const live = this.match;
+    const c = live?.clock();
+    if (!c || !this.clockChoice().penalty) return;
+    this.clockCid = this.matchSend({ t: 'slow', hole: this.ms.state.hole, turn: c.turn });
+    this.hud.refresh();
+  }
+
+  /** "claim the match" (the HUD has asked first): won by forfeit, the other player having not played on. */
+  matchClaim() {
+    const live = this.match;
+    const c = live?.clock();
+    if (!c || !this.clockChoice().claim) return;
+    this.cancelSwing();
+    this.clockCid = this.matchSend({ t: 'claim', turn: c.turn });
+    this.awaitCid = this.clockCid;
+    if (this.state === 'watch') this.state = 'idle';
+    this.hud.refresh();
+  }
+
+  /** May this player give the other player their putt now? (their ball on the green, at rest, not in) */
+  /**
+   * On the other player's turn only, as on a real green ("that's good" as they
+   * step up): on this player's own turn a concession could hand over the hole
+   * before they had putted, and crossed with their own stroke.
+   */
+  canGivePutt(): boolean {
+    if (!this.match?.session || !this.ms.idle || this.concedeCid) return false;
+    if (this.match.seat === null || this.state !== 'watch') return false;
+    const s = this.ms.state;
+    if (!holeLive(s)) return false;
+    const o = other(this.me);
+    if (this.ms.turn !== o) return false;
+    const p = s.p[o];
+    const r = this.ms.rounds[o];
+    return !!r && !p.holed && !p.pending && p.strokes > 0 && r.onHoleGreen();
+  }
+
+  /** What giving the putt would do to the hole: the other player wins it, it is halved, or (null) it goes on. */
+  givePuttOutcome(): 'wins' | 'halves' | null {
+    const s = this.ms.state;
+    const o = other(this.me);
+    try {
+      const next = applyEvent(s, { t: 'concede', by: this.me, what: 'stroke', hole: s.hole, strokes: s.p[o].strokes });
+      if (next.results.length === s.results.length) return null;
+      const w = next.results[next.results.length - 1].winner;
+      return w === o ? 'wins' : w === null ? 'halves' : null;
+    } catch { return null; }
+  }
+
+  private showHoleResult(res: HoleResult) {
+    this.state = 'between';
+    this.ballHidden = false;
+    this.hud.showMatchHole(res);
+  }
+
+  /** "next hole" on the result panel. */
+  matchNextHole() {
+    if (this.state !== 'between') return;
+    this.matchSendReady();
+    this.hud.matchWaiting();
+  }
+
+  private showMatchOver() {
+    this.state = 'over';
+    this.hud.showMatchOver();
+    this.match?.remember();
+  }
+
+  /** The other player's ball where it lies (not before they tee off, not once it is in the hole). */
+  private drawOtherBall() {
+    const live = this.match;
+    const s = live?.session?.state;
+    let show = false;
+    if (s && holeLive(s) && this.state !== 'intro' && this.state !== 'replay') {
+      const k: Seat = this.round === this.ms.rounds[0] ? 1 : 0;
+      const r = this.ms.rounds[k];
+      if (r && s.p[k].strokes > 0 && !s.p[k].holed) {
+        const p = this.px(r.ball.x, r.ball.y);
+        const L = this.level;
+        show = true;
+        this.otherBall.setVisible(true).setPosition(p.x, p.y).setScale(1 / L).setDepth(p.y + 0.4)
+          .setFrame(this.green.visible ? 'ball_big' : 'ball');
+        const bob = Math.round(Math.sin(this.time.now / 260) * 1.5);
+        this.otherMark.setVisible(true).setScale(1 / L).setPosition(this.snap(p.x), this.snap(p.y - (5 + bob) / L))
+          .setTint(k === this.me ? 0xffd84a : 0x7cc0ff);
+      }
+    }
+    if (!show) { this.otherBall.setVisible(false); this.otherMark.setVisible(false); }
   }
 
   // --------------------------------------------------------------- sprites

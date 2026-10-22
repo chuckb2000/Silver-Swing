@@ -6,10 +6,11 @@
 
 import { isEntry, LeaderboardEntry } from './entry';
 import { EagleEvent, isEagle } from './feats';
-import { FeedRow, isFeedRow } from './feed';
+import { FeedRow, isFeedRow, isMatchFeedRow, MatchFeedRow } from './feed';
 import { DEFAULT_NAME } from './names';
-import { loadBoard, loadEagles, loadUploaded, saveEagles, saveUploaded } from './store';
+import { loadBoard, loadEagles, loadUploaded, saveEagles, saveSettings, saveUploaded } from './store';
 import { app } from '../app';
+import type { HcpRound } from '../systems/game/handicap';
 
 /** fetch with a time limit: a stalled phone connection must not hang a screen (8 s, 15 s for uploads). */
 function timed(url: string, init: RequestInit = {}, ms = 8000): Promise<Response> {
@@ -25,6 +26,9 @@ const EAGLES = 'api/eagles';
 const RECORDS = 'api/records';
 const NAMES = 'api/names';
 const RECENT = 'api/recent';
+const HIDE = 'api/hide';
+const HANDICAPS = 'api/handicaps';
+const MERGE = 'api/merge';
 let available: Promise<boolean> | null = null;
 let flushing: Promise<number> | null = null;
 
@@ -70,14 +74,20 @@ export function fetchDailyWeek(first: string): Promise<LeaderboardEntry[] | null
   return fetchEntries(`week=${first}`);
 }
 
-/** The latest rounds on the shared board (friends' activity; null when unreachable). */
-export async function fetchRecent(limit = 30): Promise<FeedRow[] | null> {
+/** One round on the shared board, for its card (null when unreachable, hidden or gone). */
+export async function fetchRound(id: string): Promise<LeaderboardEntry | null> {
+  const list = await fetchEntries(`id=${encodeURIComponent(id)}`);
+  return list?.find((e) => e.id === id) ?? null;
+}
+
+/** The latest rounds and finished matches on the shared board (friends' activity; null when unreachable). */
+export async function fetchRecent(limit = 30): Promise<{ rounds: FeedRow[]; matches: MatchFeedRow[] } | null> {
   if (!(await onlineAvailable())) return null;
   try {
     const res = await timed(`${RECENT}?limit=${limit}`, { cache: 'no-store' });
     if (!res.ok) return null;
-    const j = (await res.json()) as { rounds?: unknown[] };
-    return (j.rounds ?? []).filter(isFeedRow);
+    const j = (await res.json()) as { rounds?: unknown[]; matches?: unknown[] };
+    return { rounds: (j.rounds ?? []).filter(isFeedRow), matches: (j.matches ?? []).filter(isMatchFeedRow) };
   } catch {
     return null;
   }
@@ -100,15 +110,22 @@ export function flushUploads(): Promise<number> {
   if (!flushing) {
     flushing = (async () => {
       if (!(await onlineAvailable())) return 0;
+      await syncHidden();
       const [all, sent] = await Promise.all([loadBoard(), loadUploaded()]);
-      // a round with no name of its own stays on this device (developer: nobody on the board as "player")
-      const todo = all.filter((e) => !sent.has(e.id) && isEntry(e) && e.player !== DEFAULT_NAME);
+      // a round with no name of its own stays on this device (developer: nobody on the board as "player").
+      // Once, every named round is sent again: rounds sent before player keys get this device's key on
+      // the server, so the player code finds them on another device (developer, 2026-10-20: 5 rounds
+      // on the phone, 9 on the computer). The server ignores rounds it has, apart from that.
+      const resend = !resentForOwner();
+      const todo = all.filter((e) => (resend || !sent.has(e.id)) && isEntry(e) && e.player !== DEFAULT_NAME)
+        .sort((a, b) => Number(sent.has(a.id)) - Number(sent.has(b.id))); // rounds the server hasn't got first
       const owner = app.settings.playerKey;
       let n = 0;
       for (let i = 0; i < todo.length; i += 5) {
         const batch = todo.slice(i, i + 5); // a few per request: the server's free plan allows 50 database queries per request
         try {
-          const res = await timed(API, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(batch.map((e) => ({ ...e, owner }))) }, 15_000);
+          // keepalive: the request finishes even if the tab is closed or the phone locks right after the round
+          const res = await timed(API, { method: 'POST', keepalive: true, headers: { 'content-type': 'application/json' }, body: JSON.stringify(batch.map((e) => ({ ...e, owner }))) }, 15_000);
           if (!res.ok) break;
           const j = (await res.json().catch(() => ({}))) as { taken?: string[] };
           const taken = new Set(j.taken ?? []);
@@ -122,11 +139,20 @@ export function flushUploads(): Promise<number> {
         }
       }
       if (n) await saveUploaded(sent);
+      if (resend && todo.every((e) => sent.has(e.id) || nameConflicts.has(e.player))) markResentForOwner();
       await flushEagles();
       return n;
     })().finally(() => { flushing = null; });
   }
   return flushing;
+}
+
+const RESENT_KEY = 'golf:resent-for-owner-1';
+function resentForOwner(): boolean {
+  try { return localStorage.getItem(RESENT_KEY) === '1'; } catch { return true; } // no storage: don't resend every time
+}
+function markResentForOwner() {
+  try { localStorage.setItem(RESENT_KEY, '1'); } catch { /* next visit tries again */ }
 }
 
 /** Names this device used that another device already holds (its rounds were not added). */
@@ -221,3 +247,60 @@ export async function namesOfKey(key: string): Promise<string[] | null> {
     return null;
   }
 }
+
+/**
+ * Put this player code's rounds under one of its names (settings "merge names"); with `from`, another
+ * device's player code, its names and rounds join this code first. The names the code then holds, and
+ * how many rounds moved.
+ */
+export async function mergeNames(into: string, from?: string): Promise<{ ok: true; names: string[]; moved: number } | { ok: false; message: string }> {
+  if (!(await onlineAvailable())) return { ok: false, message: "the shared board can't be reached - try again when connected" };
+  try {
+    const res = await timed(MERGE, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ owner: app.settings.playerKey, into, from }) }, 15000);
+    const j = (await res.json().catch(() => ({}))) as { ok?: boolean; names?: string[]; moved?: number; message?: string; error?: string };
+    if (res.ok && j.ok) return { ok: true, names: j.names ?? [], moved: j.moved ?? 0 };
+    return { ok: false, message: j.message ?? j.error ?? `the server said ${res.status}` };
+  } catch {
+    return { ok: false, message: "the shared board can't be reached - try again when connected" };
+  }
+}
+
+/**
+ * Tell the server whether this player is hidden from the shared leaderboards
+ * (settings "leaderboards"), when it doesn't know yet: on a change, and before
+ * every upload until it has confirmed. Rounds are still sent while hidden; the
+ * server keeps them out of every shared list, so showing again brings them back.
+ */
+export async function syncHidden(): Promise<boolean> {
+  const s = app.settings;
+  if (!s.playerKey || s.hideSent === s.hideFromBoards) return true;
+  if (!s.hideFromBoards && s.hideSent === null) return true; // never hidden: nothing to tell
+  if (!(await onlineAvailable())) return false;
+  try {
+    const want = s.hideFromBoards;
+    const res = await timed(HIDE, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ owner: s.playerKey, hidden: want }) });
+    if (!res.ok) return false;
+    s.hideSent = want;
+    await saveSettings(s);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+/** Every shown player's latest Normal rounds, for the handicaps board (null when unreachable). */
+export async function fetchHandicapRounds(): Promise<HcpRound[] | null> {
+  if (!(await onlineAvailable())) return null;
+  try {
+    const res = await timed(HANDICAPS, { cache: 'no-store' });
+    if (!res.ok) return null;
+    const j = (await res.json()) as { rounds?: unknown[] };
+    return (j.rounds ?? []).filter((r): r is HcpRound => {
+      const x = r as HcpRound;
+      return !!x && typeof x.id === 'string' && typeof x.course === 'string' && typeof x.player === 'string' && Array.isArray(x.scores);
+    });
+  } catch {
+    return null;
+  }
+}
+

@@ -88,12 +88,11 @@ export function isFullRound(len: RoundLength): boolean {
 
 /**
  * The scorecard's blocks for a round: [first slot, last slot, label of the sum column].
- * Nine holes a block; a club's nines are named.
+ * Only the nines a round plays (a back-nine round showed an empty front nine, afternoon
+ * review 2026-10-20); a 9-hole course twice around shows both; a club's nines are named;
+ * a course of another size is cut into nines ("out", "in", then "xtra" for a 19th).
  */
-export function cardBlocks(len: RoundLength, nSlots: number, shape?: CourseShape | number): (readonly [number, number, string])[] {
-  if (len === 'front') return [[1, 9, 'out']];
-  if (len === 'back') return [[10, 18, 'in']];
-  if (len === '9') return [[1, 9, 'tot']];
+export function cardBlocks(len: RoundLength, slots: number[], shape?: CourseShape | number): (readonly [number, number, string])[] {
   if (len.startsWith('nines:')) {
     const s = shape === undefined ? undefined : shapeOf(shape);
     const ids = len.slice('nines:'.length).split('+');
@@ -106,10 +105,18 @@ export function cardBlocks(len: RoundLength, nSlots: number, shape?: CourseShape
       return b;
     });
   }
-  if (nSlots <= 9) return [[1, nSlots, 'tot']];
-  const out: (readonly [number, number, string])[] = [];
-  for (let a = 1; a <= nSlots; a += 9) out.push([a, Math.min(nSlots, a + 8), a === 1 ? 'out' : a === 10 ? 'in' : 'xtra']);
-  return out;
+  if (len === 'all') {
+    const n = slots.length;
+    if (n <= 9) return [[1, n, 'tot']];
+    const out: (readonly [number, number, string])[] = [];
+    for (let a = 1; a <= n; a += 9) out.push([a, Math.min(n, a + 8), a === 1 ? 'out' : a === 10 ? 'in' : 'xtra']);
+    return out;
+  }
+  if (len === '9') return [[1, 9, 'tot']];
+  const front = slots.some((h) => h <= 9), back = slots.some((h) => h >= 10);
+  if (front && !back) return [[1, 9, 'out']];
+  if (back && !front) return [[10, 18, 'in']];
+  return [[1, 9, 'out'], [10, 18, 'in']];
 }
 
 /**

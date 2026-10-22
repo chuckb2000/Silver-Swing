@@ -20,7 +20,7 @@ import numpy as np
 from PIL import Image
 from shapely.geometry import MultiPolygon, Polygon
 
-from common import build_dir, course_dir, course_name_from_argv, game_boundary, layout_dir, layouts, load_config, out_dir, play_boundary, PX_PER_M, rnd, ROOT, SURF, World, write_json
+from common import build_dir, course_dir, course_name_from_argv, game_boundary, GORSE_SURF, surf_ids, layout_dir, layouts, load_config, out_dir, play_boundary, PX_PER_M, rnd, ROOT, SURF, World, write_json
 
 warnings.filterwarnings("ignore")
 
@@ -59,7 +59,7 @@ def schematic(surf_blocks_mode, P):
         SURF["green"]: "#86d667", SURF["tee"]: "#79c95c", SURF["bunker"]: "#eadcb3", SURF["water"]: "#3e72a3",
         SURF["cartpath"]: "#a79f8e", SURF["woods"]: "#2c5a33", SURF["ob_road"]: "#6a6b72", SURF["ob_water"]: "#3e72a3",
         SURF["ob_woods"]: "#294c2f", SURF["ob_building"]: "#8a6a58", SURF["building"]: "#9a5a48", SURF["range"]: "#73b15a",
-        SURF["ob_sand"]: "#eadcb3",
+        SURF["ob_sand"]: "#eadcb3", GORSE_SURF: "#5c6a2c",
     }
     col.update({SURF[k]: v for k, v in MINIMAP.items()})
     lut = np.zeros((32, 3), np.uint8)
@@ -378,7 +378,7 @@ def main():
             "greenViews": green_views,
             "wind": cfg.get("wind_mph", {"minMph": 1, "maxMph": 7}),
             "height": {"file": pre + "height.png", "meta": "height.json"},
-            "surface": {"file": pre + "surface.png", "ids": SURF, "obIds": [v for k, v in SURF.items() if k.startswith("ob") or k == "range"]},
+            "surface": {"file": pre + "surface.png", "ids": surf_ids(cfg), "obIds": [v for k, v in SURF.items() if k.startswith("ob") or k == "range"]},
             "trees": {"file": "trees.json"},
             "maps": {"overview": pre + "maps/overview_2m.png", "overviewMPerPx": 2, "holes": minimaps},
         }

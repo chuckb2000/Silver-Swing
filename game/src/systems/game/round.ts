@@ -8,15 +8,15 @@ import { chipRelease, firstBounceK, puttSpeedFor } from '../physics/calibrate';
 import { Rng } from '../physics/rng';
 import { ShotSpec, SimResult, simulateShot } from '../physics/sim';
 import { isOB, isWater, SURF } from '../physics/surfaces';
-import { Polygon } from '../physics/terrain';
-import { clubAllowed, Lie, lieModsFor, makeLie, spinEffect } from '../rules/lie';
+import { Polygon, Terrain } from '../physics/terrain';
+import { clubAllowed, Lie, lieIsPenal, lieModsFor, makeLie, SPIN_CLEAN, spinEffect, spinFor } from '../rules/lie';
 import { CourseCtx, freeReliefArea, obOptions, penaltyAreaOptions, ReliefArea, unplayableOptions, validDrop } from '../rules/relief';
 import { HoleScore, HoleTally } from '../rules/scoring';
 import { MeterResult } from '../swing/meter';
 import { coursePins, pinLabel as spotLabel } from './pins';
 import { holeName, shapeOfCourse } from './lengths';
 import type { RoundLength } from '../../save/entry';
-import { PuttStrike, puttStrikeFrom, Strike, strikeFrom } from '../swing/outcome';
+import { PuttStrike, puttStrikeFrom, shotCarry, Strike, strikeFrom } from '../swing/outcome';
 
 export interface RoundSettings {
   difficulty: Difficulty;
@@ -50,6 +50,20 @@ export interface RoundConfig {
 }
 
 export interface BallPos { x: number; y: number; teedUp: boolean }
+
+/** The state before the last stroke: everything a mulligan (casual) rewinds. */
+export interface BeforeShot {
+  tally: { strokes: number; putts: number; penalties: number; fairway: boolean | null; reachedGreenAt: number | null };
+  shotNo: number; ball: BallPos; prev: BallPos; history: number;
+}
+
+/**
+ * The longest stretch of dry out-of-bounds ground (m) a ball may cross on its way
+ * into a penalty area beyond the boundary (Round Lake, Neacoxie Creek) and still
+ * be in that penalty area: the bank between the boundary line and the water.
+ * Farther, it went out of bounds first. (tune; banks measured 0-20 m.)
+ */
+export const WATER_BANK_M = 20;
 
 export type Outcome =
   | { kind: 'rest' }
@@ -99,9 +113,12 @@ export interface PlannedShot {
 /**
  * Putter scales (the putting meter's 100 %), chosen so the 25/50/75/100 %
  * marks are whole numbers in the player's units: feet with yards, metres with metres.
+ * A scale is a distance, not a power: 100 % of it rolls that far on a flat
+ * green (puttSpeedFor), so the stimp-10 calibration holds at every scale.
+ * 120 and 160 ft (36 and 48 m) reach the far corners of big greens (afternoon review, 2026-10-20).
  */
-export const PUTT_SCALES_FT = [12, 24, 48, 80];
-export const PUTT_SCALES_M = [4, 8, 16, 24];
+export const PUTT_SCALES_FT = [12, 24, 48, 80, 120, 160];
+export const PUTT_SCALES_M = [4, 8, 16, 24, 36, 48];
 export const FT = 0.3048;
 export function puttScales(units: 'yd' | 'm'): number[] {
   return units === 'm' ? PUTT_SCALES_M : PUTT_SCALES_FT.map((f) => f * FT);
@@ -138,7 +155,8 @@ export class Round {
   mulliganUsed = false;
   /** the relief choice the last stroke left open (null once the ball is dropped or played) */
   pending: PendingRelief | null = null;
-  private beforeShot: { tally: { strokes: number; putts: number; penalties: number; fairway: boolean | null; reachedGreenAt: number | null }; shotNo: number; ball: BallPos; prev: BallPos; history: number } | null = null;
+  /** What a mulligan rewinds to (saved with the round, so a resumed round's mulligan also takes back the penalty). */
+  beforeShot: BeforeShot | null = null;
   history: { x: number; y: number }[] = [];
   shotSeq = 0;
   /** The last stroke simulated this hole, kept so it can be played back exactly (replay). */
@@ -179,12 +197,18 @@ export class Round {
     return best && d < 0.5 ? spotLabel(best) : 'middle';
   }
   get holeGreen(): Polygon { return this.course.greenPolys.get(this.hole.greenId)!; }
+  /** The hole's putting surface: its green and any green touching it (a double green traced as two halves). */
+  get holeGreens(): Polygon[] {
+    return [this.holeGreen, ...(greenPartners(this.course).get(this.hole.greenId) ?? []).map((id) => this.course.greenPolys.get(id)!)];
+  }
   get finished(): boolean { return this.holeIndex >= this.cfg.holes.length; }
   get isLastHole(): boolean { return this.holeIndex === this.cfg.holes.length - 1; }
 
   courseCtx(): CourseCtx {
     const others: Polygon[] = [];
-    for (const [id, p] of this.course.greenPolys) if (id !== this.hole.greenId) others.push(p);
+    // the other half of a shared green is not a wrong green (Langdon 9/18)
+    const partners = greenPartners(this.course).get(this.hole.greenId) ?? [];
+    for (const [id, p] of this.course.greenPolys) if (id !== this.hole.greenId && !partners.includes(id)) others.push(p);
     return { terrain: this.course.terrain, boundary: this.course.boundary, hole: this.pin, holeGreen: this.holeGreen, otherGreens: others };
   }
 
@@ -213,16 +237,21 @@ export class Round {
   }
 
   onHoleGreen(p: { x: number; y: number } = this.ball): boolean {
-    return this.holeGreen.contains(p.x, p.y);
+    return this.holeGreens.some((g) => g.contains(p.x, p.y));
   }
 
   refreshLie() {
     const t = this.course.terrain;
     const s = t.surface(this.ball.x, this.ball.y);
     const canopy = this.course.obstacles.canopyOverhead(this.ball.x, this.ball.y);
-    const edge = this.holeGreen.contains(this.ball.x, this.ball.y) ? 0 : this.holeGreen.edgeDistance(this.ball.x, this.ball.y);
+    const edge = this.onHoleGreen() ? 0 : Math.min(...this.holeGreens.map((g) => g.edgeDistance(this.ball.x, this.ball.y)));
     const r = this.rng.fork(9000 + this.holeNumber * 100 + this.shotNo);
     this.lie = makeLie({ surface: s, teedUp: this.ball.teedUp, distToGreenEdge: edge, canopyBase: canopy ? canopy.base : null }, r);
+  }
+
+  /** The lie costs something (rough, punch, gorse, bunkers...): the info panel shows it in yellow. */
+  penalLie(): boolean {
+    return lieIsPenal(this.lie);
   }
 
   allowedClubs(): Club[] {
@@ -238,7 +267,8 @@ export class Round {
     for (const c of this.allowedClubs()) {
       if (c.kind === 'putter') continue;
       const err = Math.abs(this.fullCarry(c) - d);
-      if (err < bestErr) { bestErr = err; best = c; }
+      // in gorse every club carries the same capped distance: take the shortest (a wedge to hack out)
+      if (err < bestErr || (this.lie.carryCap !== undefined && err <= bestErr + 1e-9)) { bestErr = err; best = c; }
     }
     return best;
   }
@@ -251,18 +281,25 @@ export class Round {
 
   /** Carry of a 100% perfect shot with this club from the current lie (flat, calm). */
   fullCarry(c: Club): number {
+    return this.carryFor(c, 1, 1);
+  }
+
+  /**
+   * Carry of a perfect strike with this club at a swing length and meter power
+   * (flat, calm): outcome.ts shotCarry, the same number the strike flies. The
+   * club's carry label and the meter readout show this (gorse caps it).
+   */
+  carryFor(c: Club, scale = 1, power = 1): number {
     if (c.kind === 'putter') return 0;
-    const m = lieModsFor(this.lie, c);
-    return c.carryM * m.distMult * (m.splash ? 0.45 : 1);
+    return shotCarry(c, lieModsFor(this.lie, c), scale, power);
   }
 
   /** Smallest swing length whose 100 % comfortably covers the distance to the pin. */
   autoSwingScale(c: Club): number {
     if (c.kind === 'putter') return this.autoPuttScale();
-    const full = this.fullCarry(c);
     const want = this.distToPin() * 1.15;
-    if (full <= want) return 1;
-    for (const sc of [...SWING_SCALES].reverse()) if (full * sc >= want) return sc;
+    if (this.carryFor(c, 1) <= want) return 1;
+    for (const sc of [...SWING_SCALES].reverse()) if (this.carryFor(c, sc) >= want) return sc;
     return 1;
   }
 
@@ -277,7 +314,7 @@ export class Round {
   /** Aim along the hole: at the pin when in range, else down the centre line. */
   lineAim(c: Club, scale = 1): number {
     const b = this.ball;
-    const carry = c.kind === 'putter' ? Infinity : this.fullCarry(c) * scale;
+    const carry = c.kind === 'putter' ? Infinity : this.carryFor(c, scale);
     const d = this.distToPin();
     if (carry >= d * 0.92) return Math.atan2(this.pin.y - b.y, this.pin.x - b.x);
     const line = this.tee.centerline;
@@ -313,8 +350,9 @@ export class Round {
     const b = this.ball;
     const z = this.groundZ() + (b.teedUp ? TEE_HEIGHT : 0);
     const sEff = spinEffect(this.lie);
-    const spinScaled = spin * (spin < 0 ? sEff : 1);
-    const spinBack = spin < 0 && isWedge(c) && sEff === 1 && strike.power > 0.6 ? 2.0 * Math.min(1, (strike.power - 0.6) / 0.4) : 0;
+    const spinScaled = spinFor(this.lie, spin); // gorse: no spin either way
+    // a wedge from a clean lie may spin back, up to 1 m (was 2 m before spin was halved, 2026-10-20)
+    const spinBack = spin < 0 && isWedge(c) && sEff >= SPIN_CLEAN && strike.power > 0.6 ? 1.0 * Math.min(1, (strike.power - 0.6) / 0.4) : 0;
     // short swings release a little (not out of a bunker, where the ball stops)
     const bunker = this.lie.kind === 'greenside_bunker' || this.lie.kind === 'fairway_bunker';
     const release = bunker || c.carryM <= 0 ? 1 : chipRelease(strike.carry / c.carryM);
@@ -348,15 +386,18 @@ export class Round {
    * tree on screen (it would look like an aim at the tree).
    */
   private lineClear(c: Club, aim: number, scale: number): boolean {
-    const spec = this.flightSpec(c, aim, this.perfectStrike(c, scale), 0, { vx: 0, vy: 0 });
+    // in the hole's steady wind (no gust): a line that is clear only in calm air is not offered
+    const spec = this.flightSpec(c, aim, this.perfectStrike(c, scale), 0, { vx: this.wind.vx, vy: this.wind.vy });
     const sim = simulateShot(this.course.terrain, this.course.obstacles, spec, new AlwaysRng(1));
     if (sim.holed) return true;
     const s = sim.restSurface;
     // the landing marker must not sit behind a tree on screen either
     const land = sim.landing;
     if (land && this.course.obstacles.hidesPoint(land.x, land.y)) return false;
+    const end = sim.end;
     return !sim.hitTree && !sim.inWater && !isWater(s) && !isOB(s) && s !== SURF.woods && s !== SURF.building
-      && this.course.boundary.contains(sim.end.x, sim.end.y);
+      && this.course.boundary.contains(end.x, end.y)
+      && !this.courseCtx().otherGreens.some((g) => g.contains(end.x, end.y)); // nor on a wrong green
   }
 
   /**
@@ -368,7 +409,7 @@ export class Round {
   defaultAim(c: Club, scale = this.autoSwingScale(c)): number {
     const base = this.lineAim(c, scale);
     if (c.kind === 'putter') return base;
-    const key = `${this.holeNumber}:${this.ball.x.toFixed(2)},${this.ball.y.toFixed(2)}:${c.id}:${scale}:${this.lie.kind}`;
+    const key = `${this.holeNumber}:${this.ball.x.toFixed(2)},${this.ball.y.toFixed(2)}:${c.id}:${scale}:${this.lie.kind}:${this.wind.vx.toFixed(3)},${this.wind.vy.toFixed(3)}`;
     const hit = this.aimCache.get(key);
     if (hit !== undefined) return hit;
     let aim = base;
@@ -438,7 +479,7 @@ export class Round {
     if (l && l.shot === p) {
       const rs = sim.restSurface;
       const result = sim.holed ? 'holed'
-        : (sim.inWater || isWater(rs)) && !isOB(rs) ? 'water'
+        : (sim.inWater || isWater(rs)) && !isOB(rs) ? ('ob' in this.waterRef(sim) ? 'ob' : 'water')
         : isOB(rs) || !this.course.boundary.contains(sim.end.x, sim.end.y) ? 'ob' : 'rest';
       this.strokes.push({ ...l, n, from, to: { x: sim.end.x, y: sim.end.y }, result });
     }
@@ -472,8 +513,11 @@ export class Round {
     const capped = () => this.cfg.settings.maxDoublePar && this.tally.strokes + 1 >= this.hole.par * 2; // a drop would reach the cap
     // water outside the course (a river or lake beyond the boundary, surface ob_water) is out of bounds, not a penalty area
     if ((sim.inWater || isWater(s)) && !isOB(s)) {
+      const ref = this.waterRef(sim);
       if (capped()) return { kind: 'max_score' };
-      return this.open({ kind: 'water', cross: sim.waterCross ?? { x: this.prev.x, y: this.prev.y } });
+      // into water beyond the boundary across a wide strip of out-of-bounds ground: out of bounds first
+      if ('ob' in ref) return this.open({ kind: 'ob', wentOut: ref.ob });
+      return this.open({ kind: 'water', cross: ref.cross });
     }
     if (isOB(s) || !this.course.boundary.contains(end.x, end.y)) {
       if (capped()) return { kind: 'max_score' };
@@ -501,6 +545,18 @@ export class Round {
     return { kind: 'rest' };
   }
 
+  /** The water polygon (penalty area) at a point, if any. */
+  private waterAt(p: { x: number; y: number }) {
+    return this.course.water.find((w) => w.poly.contains(p.x, p.y)) ?? null;
+  }
+
+  /** Rule 17 reference point of a stroke that ended in water (waterReference), or out of bounds first. */
+  private waterRef(sim: SimResult): { cross: { x: number; y: number } } | { ob: { x: number; y: number } | null } {
+    const w = this.waterAt(sim.end);
+    return waterReference(sim, this.course.terrain, this.course.boundary, w ? w.poly : null)
+      ?? { cross: sim.waterCross ?? { x: this.prev.x, y: this.prev.y } };
+  }
+
   /** Leave a relief choice open and return its options (none to offer: the ball is just at rest). */
   private open(p: PendingRelief): Outcome {
     const o = this.reliefOutcome(p);
@@ -518,7 +574,7 @@ export class Round {
     const prev = { x: this.prev.x, y: this.prev.y };
     switch (p.kind) {
       case 'water': {
-        const wpoly = this.course.water.find((w) => w.poly.contains(end.x, end.y)) ?? null;
+        const wpoly = this.waterAt(end);
         const pen = wpoly ? wpoly.penalty : 'red';
         return { kind: 'water', penalty: pen, options: penaltyAreaOptions(ctx, pen, prev, p.cross, wpoly ? wpoly.poly : null) };
       }
@@ -599,6 +655,44 @@ export class Round {
     return true;
   }
 
+  /**
+   * Look at the round as it will be once this stroke has come to rest (resolved,
+   * and the hole finished if it was holed), run `fn` on it, then put everything
+   * back. The game saves that state the moment the ball is struck, so closing or
+   * reloading the tab mid-flight can't give the stroke back (developer,
+   * 2026-10-20: "the shot should be locked in and saved the second it's hit").
+   */
+  whenSettled<T>(p: PlannedShot, sim: SimResult, fn: (r: Round, out: Outcome) => T): T {
+    const keep = {
+      tally: { ...this.tally }, scores: this.scores.length, ball: { ...this.ball }, prev: { ...this.prev },
+      shotNo: this.shotNo, lastPower: this.lastPower, lastPuttPower: this.lastPuttPower, pending: this.pending,
+      beforeShot: this.beforeShot, history: this.history.length, strokes: this.strokes.length, lie: this.lie,
+      rng: this.rng.state, mulliganUsed: this.mulliganUsed, shotSeq: this.shotSeq,
+    };
+    try {
+      const out = this.resolve(p, sim);
+      if (out.kind === 'holed' || out.kind === 'gimme') this.finishHole();
+      else if (out.kind === 'max_score') this.finishHole(true);
+      return fn(this, out);
+    } finally {
+      Object.assign(this.tally, keep.tally);
+      this.scores.length = keep.scores;
+      this.ball = keep.ball;
+      this.prev = keep.prev;
+      this.shotNo = keep.shotNo;
+      this.lastPower = keep.lastPower;
+      this.lastPuttPower = keep.lastPuttPower;
+      this.pending = keep.pending;
+      this.beforeShot = keep.beforeShot;
+      this.history.length = keep.history;
+      this.strokes.length = keep.strokes;
+      this.lie = keep.lie;
+      this.rng.state = keep.rng;
+      this.mulliganUsed = keep.mulliganUsed;
+      this.shotSeq = keep.shotSeq;
+    }
+  }
+
   finishHole(maxed = false): HoleScore {
     // casual double-par maximum: picked up at the cap, never above it
     if (maxed) this.tally.strokes = this.hole.par * 2;
@@ -616,6 +710,77 @@ export class Round {
     this.startHole(this.holeIndex + 1);
     return true;
   }
+}
+
+/**
+ * Rule 17 reference point of a ball in a penalty area, from the stroke's samples:
+ * the last sample that is dry by both the surface map and the penalty area's
+ * polygon (`poly`, the one relief drops must stay out of, so the two agree:
+ * the outline can be wider than the mapped water) and inside the boundary.
+ * A ball resting in water beyond the boundary that crossed more than
+ * WATER_BANK_M of out-of-bounds ground first is out of bounds (`ob`: where it
+ * went out). Null when every sample is wet (no reference in the samples).
+ */
+export function waterReference(sim: SimResult, terrain: Terrain, boundary: Polygon, poly: Polygon | null):
+  { cross: { x: number; y: number } } | { ob: { x: number; y: number } | null } | null {
+  const s = sim.samples;
+  const X = (k: number) => s[k * 3], Y = (k: number) => s[k * 3 + 1];
+  const wet = (k: number) => isWater(terrain.surface(X(k), Y(k))) || (!!poly && poly.contains(X(k), Y(k)));
+  let i = sim.n - 1;
+  while (i >= 0 && wet(i)) i--;
+  if (i < 0) return null;
+  // back to the last dry sample in bounds, measuring the out-of-bounds stretch on the way
+  let j = i, run = 0;
+  while (j >= 0 && (wet(j) || !boundary.contains(X(j), Y(j)))) {
+    if (j > 0) run += Math.hypot(X(j) - X(j - 1), Y(j) - Y(j - 1));
+    j--;
+  }
+  if (j < 0) return { ob: null };
+  const ref = { x: X(j), y: Y(j) };
+  if (j < i && !boundary.contains(sim.end.x, sim.end.y) && run > WATER_BANK_M) return { ob: ref };
+  return { cross: ref };
+}
+
+/** Greens whose outlines are closer than this (m) are one putting surface. */
+export const SHARED_GREEN_GAP = 0.5;
+const partnerCache = new WeakMap<CourseRuntime, Map<string, string[]>>();
+
+/**
+ * Greens that touch (gap under SHARED_GREEN_GAP): a double green traced as one
+ * green per hole (Langdon 9/18). For each green id, the ids of the greens it
+ * shares a putting surface with; landing on the other half is just on the green,
+ * not a wrong green. Computed once per course.
+ */
+export function greenPartners(course: CourseRuntime): Map<string, string[]> {
+  const hit = partnerCache.get(course);
+  if (hit) return hit;
+  const out = new Map<string, string[]>();
+  const list = [...course.greenPolys];
+  for (let i = 0; i < list.length; i++) {
+    for (let j = i + 1; j < list.length; j++) {
+      const [ia, a] = list[i], [ib, b] = list[j];
+      if (polygonGap(a, b) >= SHARED_GREEN_GAP) continue;
+      out.set(ia, [...(out.get(ia) ?? []), ib]);
+      out.set(ib, [...(out.get(ib) ?? []), ia]);
+    }
+  }
+  partnerCache.set(course, out);
+  return out;
+}
+
+/** Shortest distance between two polygon outlines (0 when they overlap); Infinity when far apart. */
+function polygonGap(a: Polygon, b: Polygon): number {
+  const g = SHARED_GREEN_GAP;
+  if (a.minX > b.maxX + g || b.minX > a.maxX + g || a.minY > b.maxY + g || b.minY > a.maxY + g) return Infinity;
+  let d = Infinity;
+  for (const [p, q] of [[a, b], [b, a]] as const) {
+    for (let i = 0; i < p.xs.length; i++) {
+      const x = p.xs[i], y = p.ys[i];
+      if (q.contains(x, y)) return 0;
+      d = Math.min(d, q.edgeDistance(x, y));
+    }
+  }
+  return d;
 }
 
 /** Last sampled point inside the boundary (where the ball went out). */

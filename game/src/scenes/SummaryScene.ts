@@ -12,7 +12,8 @@ import { claimName, fetchBoard, fetchDaily, flushUploads } from '../save/online'
 import { earnedBy, milestonesOf } from '../save/milestones';
 import { milestoneCourses } from '../save/mine';
 import { STATES } from '../data/registry';
-import { dayStandings } from '../systems/game/daily';
+import { dailyPlan, dayStandings } from '../systems/game/daily';
+import { DAILY_PICKS, DAILY_ROSTER } from '../data/dailyRoster';
 import { shareRound } from '../ui/shareCard';
 import { lengthLabel, shapeById } from './flow';
 import { MenuScene } from './menu';
@@ -35,7 +36,8 @@ export class SummaryScene extends MenuScene {
     const r = app.round!;
     this.root.add(txt(this, W / 2, 4, `round complete  ·  ${e.gross} (${toPar(e.toPar)})`, { origin: [0.5, 0], scale: 2, color: COLORS.yellow }));
     if (W >= 400) this.root.add(this.add.image(6, 4, 'ui', 'portrait').setOrigin(0, 0));
-    this.root.add(scorecard(this, r, W, H - 30));
+    const card = scorecard(this, r, W, H - 30);
+    this.root.add(card);
     // milestones this round earned (first birdie, broke 90 at ..., every oregon course played)
     const local = await loadBoard();
     if (!this.sys.isActive()) return;
@@ -53,7 +55,7 @@ export class SummaryScene extends MenuScene {
     const where = e.daily ? (shared ? "in today's daily round" : "in today's daily round on this device") : shared ? 'among friends' : 'on this device';
     // rounds with no name don't go on the boards (developer: nobody as "player"); this one is counted to show where it would be
     const board = e.daily
-      ? dayStandings(pool.filter((b) => b.player !== DEFAULT_NAME || b.id === e.id), e.daily)
+      ? dayStandings(pool.filter((b) => b.player !== DEFAULT_NAME || b.id === e.id), e.daily, dailyPlan(e.daily, app.courses, DAILY_ROSTER, DAILY_PICKS))
       : pool.filter((b) => b.course === e.course && b.tee === e.tee && b.length === e.length && b.casual === e.casual && (b.player !== DEFAULT_NAME || b.id === e.id));
     if (!e.daily) board.sort(compareRounds);
     const rank = board.findIndex((b) => b.id === e.id) + 1;
@@ -64,22 +66,33 @@ export class SummaryScene extends MenuScene {
     // a name another device holds: the round can't go on the shared board under it (say so, rather than a rank it won't get)
     const taken = shared && e.player !== DEFAULT_NAME && (await claimName(e.player)) === 'taken';
     if (!this.sys.isActive()) return;
-    const note = e.player === DEFAULT_NAME
+    const hidden = app.settings.hideFromBoards;
+    const note = hidden
+      ? 'you are hidden from the shared leaderboards (settings) - this round stays on your own boards'
+      : e.player === DEFAULT_NAME
       ? `enter your name to put this round on the leaderboard (it would be #${rank} of ${board.length} ${where})`
       : taken
         ? `another device has the name ${e.player}: tap the name to change it, or to enter that device's player code`
         : rank === 0
           ? 'a second go at the daily round: it goes on the course board, not the daily one'
           : `${e.casual ? 'casual round  ·  ' : ''}#${rank} of ${board.length} ${where} (${lengthLabel(e.length, shapeById(e.course))})${pb ? '  ·  new personal best!' : ''}`;
-    this.rankLine = rank > 0 && e.player !== DEFAULT_NAME && !taken ? `#${rank} of ${board.length} ${where}` : '';
+    this.rankLine = !hidden && rank > 0 && e.player !== DEFAULT_NAME && !taken ? `#${rank} of ${board.length} ${where}` : '';
     const noteTxt = txt(this, W / 2, H - 38, note, { origin: [0.5, 0], color: taken ? COLORS.red : pb ? COLORS.yellow : COLORS.dim, maxWidth: W - 12 });
     if (noteTxt.height > 12) noteTxt.y = H - 30 - noteTxt.height; // wrapped on a narrow screen: keep it above the buttons
     this.root.add(noteTxt);
-    // the name on the leaderboard: easy to miss at the start, so it can be set here before the round is sent
+    // the name on the leaderboard: easy to miss at the start, so it can be set here before the round is sent.
+    // Right over the note that explains it (afternoon review: at the top right it covered the end of the
+    // title on a desktop, and on a phone it sat on a two-line note)
     const unnamed = e.player === DEFAULT_NAME || taken;
-    const nw = 104;
-    const nx = W >= 400 ? W - nw - 6 : Math.round(W / 2 - nw / 2), ny = W >= 400 ? 4 : H - 56;
-    this.root.add(new Button(this, nx, ny, nw, 16, e.player === DEFAULT_NAME ? 'enter your name' : `name: ${e.player}`, () => this.rename(), { color: unnamed ? 'orange' : 'grey' }));
+    const label = e.player === DEFAULT_NAME ? 'enter your name' : `name: ${e.player}`;
+    const probe = txt(this, 0, 0, label);
+    const nw = Math.min(W - 12, Math.max(104, Math.ceil(probe.width) + 12));
+    probe.destroy();
+    const ny = Math.round(noteTxt.y) - 20;
+    this.root.add(new Button(this, Math.round(W / 2 - nw / 2), ny, nw, 16, label, () => this.rename(), { color: unnamed ? 'orange' : 'grey' }));
+    // a short screen: the card moves up (not past the title) to clear the name button
+    const over = (card.getData('bottom') as number) + 3 - ny;
+    if (over > 0) card.y -= Math.min(over, Math.max(0, (card.getData('top') as number) - (earned.length ? 36 : 24)));
     // leaving the summary sends the round to the shared leaderboard
     const leave = (to: string) => { void flushUploads(); this.scene.start(to, to === 'leaderboard' ? (e.daily ? { view: 'daily' } : { courseId: e.course }) : undefined); };
     const bw = Math.min(84, Math.floor((W - 20) / 4)); // four buttons fit a narrow phone
@@ -93,6 +106,7 @@ export class SummaryScene extends MenuScene {
       if (!share.active) return;
       share.setEnabled(true);
       if (res === 'saved') share.setLabel('saved');
+      else if (res === 'copied') share.setLabel('copied');
       else if (res === 'failed') share.setLabel('failed');
     }, { color: 'grey' });
     this.root.add(share);

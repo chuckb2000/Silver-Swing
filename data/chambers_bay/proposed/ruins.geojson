@@ -1,0 +1,210 @@
+{
+ "type": "FeatureCollection",
+ "features": [
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       -122.580601,
+       47.2029033
+      ],
+      [
+       -122.5805501,
+       47.2030574
+      ],
+      [
+       -122.5805787,
+       47.2030617
+      ],
+      [
+       -122.5806296,
+       47.2029077
+      ],
+      [
+       -122.580601,
+       47.2029033
+      ]
+     ]
+    ]
+   },
+   "properties": {
+    "osm": "ruins_w1180342941",
+    "kind": "building",
+    "tags": {
+     "building": "ruins",
+     "historic": "ruins",
+     "ruins": "industrial",
+     "source": "OSM w1180342941 (historic=ruins), added as a building by the course chat; height = the 2020 lidar's 90th-percentile height over the footprint",
+     "height": "7.6"
+    }
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       -122.5804449,
+       47.2028675
+      ],
+      [
+       -122.580408,
+       47.2028622
+      ],
+      [
+       -122.580352,
+       47.2030444
+      ],
+      [
+       -122.5803889,
+       47.2030496
+      ],
+      [
+       -122.5804449,
+       47.2028675
+      ]
+     ]
+    ]
+   },
+   "properties": {
+    "osm": "ruins_w1180342942",
+    "kind": "building",
+    "tags": {
+     "building": "ruins",
+     "historic": "ruins",
+     "ruins": "industrial",
+     "source": "OSM w1180342942 (historic=ruins), added as a building by the course chat; height = the 2020 lidar's 90th-percentile height over the footprint",
+     "height": "8.7"
+    }
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       -122.5802336,
+       47.2028495
+      ],
+      [
+       -122.5801884,
+       47.2030022
+      ],
+      [
+       -122.580223,
+       47.203007
+      ],
+      [
+       -122.5802681,
+       47.2028542
+      ],
+      [
+       -122.5802336,
+       47.2028495
+      ]
+     ]
+    ]
+   },
+   "properties": {
+    "osm": "ruins_w1180342943",
+    "kind": "building",
+    "tags": {
+     "building": "ruins",
+     "historic": "ruins",
+     "ruins": "industrial",
+     "source": "OSM w1180342943 (historic=ruins), added as a building by the course chat; height = the 2020 lidar's 90th-percentile height over the footprint",
+     "height": "8.3"
+    }
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       -122.5797971,
+       47.2027884
+      ],
+      [
+       -122.5797635,
+       47.2027838
+      ],
+      [
+       -122.5797189,
+       47.2029361
+      ],
+      [
+       -122.5797525,
+       47.2029406
+      ],
+      [
+       -122.5797971,
+       47.2027884
+      ]
+     ]
+    ]
+   },
+   "properties": {
+    "osm": "ruins_w1180342944",
+    "kind": "building",
+    "tags": {
+     "building": "ruins",
+     "historic": "ruins",
+     "ruins": "industrial",
+     "source": "OSM w1180342944 (historic=ruins), added as a building by the course chat; height = the 2020 lidar's 90th-percentile height over the footprint",
+     "height": "8.6"
+    }
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       -122.5793966,
+       47.202891
+      ],
+      [
+       -122.579451,
+       47.2027362
+      ],
+      [
+       -122.5794125,
+       47.2027299
+      ],
+      [
+       -122.579358,
+       47.2028847
+      ],
+      [
+       -122.5793966,
+       47.202891
+      ]
+     ]
+    ]
+   },
+   "properties": {
+    "osm": "ruins_w1180342945",
+    "kind": "building",
+    "tags": {
+     "building": "ruins",
+     "historic": "ruins",
+     "ruins": "industrial",
+     "source": "OSM w1180342945 (historic=ruins), added as a building by the course chat; height = the 2020 lidar's 90th-percentile height over the footprint",
+     "height": "8.9"
+    }
+   }
+  }
+ ]
+}

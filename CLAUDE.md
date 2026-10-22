@@ -452,9 +452,18 @@ DECISIONS.md with the reason.
     `src/systems/game/pins.ts`); the meter has a line at the middle of the green, no
     ghost tick and no display-lag allowance. 376 unit tests and 4 Playwright tests pass.
 
--   **Courses (course chats, 2026-10-18 to 2026-10-20):** fifteen data
-    folders, seventeen courses on offer (East Potomac is three) in five states;
-    Gearhart Golf Links (Gearhart OR) merged 2026-10-20.
+-   **Courses (course chats, 2026-10-18 to 2026-10-21):** twenty-three data
+    folders, twenty-five courses on offer (East Potomac is three) in six states;
+    TPC Boston (Norton MA) and Pacific Dunes, Old Macdonald and Sheep Ranch (Bandon OR)
+    merged 2026-10-21;
+    Gearhart Golf Links (Gearhart OR), Bandon Trails (Bandon OR, `bandon`
+    theme) and Chambers Bay (University Place WA, `puget` theme) merged 2026-10-20. Oregon Golf Club's creek on
+    13, 14 and 15 (from the lidar, `course/ogc-creek`) merged 2026-10-20.
+    Chambers Bay's trees from the 2020 lidar (`course/chambers_bay`) and East
+    Potomac's fairway joins and Blue 10 object (`fix/east-potomac-tree`) merged
+    2026-10-20. Bandon Dunes (Bandon OR, `bandon_dunes` theme, penal gorse on
+    surface 17; PR #17) merged 2026-10-20; in the daily rotation from 2026-10-21. Triggs Memorial (Providence RI,
+    `seekonk` theme; PR #21) merged 2026-10-20; in the daily rotation from 2026-10-21.
     Each course's build history, facts and open items are in
     `docs/courses/<id>.md` (section 11).
 
@@ -524,14 +533,89 @@ DECISIONS.md with the reason.
     merged 2026-10-20: course chats draw their own logos
     (`assets-src/course_logos/<id>.py`), themes and theme bushes (gorse:
     `shrubs_<theme>`), `build_assets.py --theme`, `regress --since` picks the
-    affected courses. Unmerged, ready: `design/hole-counts` (13/19-hole courses,
-    clubs of three nines). Cross-country golf: report only
+    affected courses. `design/hole-counts` (13/19-hole courses played all at
+    once, clubs of three nines) merged 2026-10-22 (developer); live matches take
+    13 or 19 holes but not a club's nines yet. Cross-country golf: report only
     (`design/cross-country`), not to be built yet (developer).
 
--   **Next task:** Langston's committed files predate a rebuild: a fresh
-    build keeps one tree 19 m from the 10th Royal tee that the committed build
-    removed (every other course rebuilds unchanged, 2026-10-20); recommended:
-    list it in Langston's `drop_trees`. Item 1 of the player improvements (swing coach) is on
+-   **Gorse (design chat, 2026-10-20):** branch `design/gorse`, merged
+    2026-10-20: surface 17 `gorse` (course_config `"gorse": {"ground":
+    "gorse"}`), a lie that carries 20-50 yd (drawn per lie), a green zone
+    0.3x normal, a thin yellow band, curve x1.8, no spin, no driver or putter;
+    a ball landing in it stops dead. Punch shots under a canopy now say
+    "punch". DECISIONS.md "Gorse plays penal; punch shots say so". Bandon
+    Dunes must switch its gorse ground to `gorse` and rename its theme (Bandon
+    Trails owns `bandon`).
+
+-   **Langston tree (2026-10-20):** the tree 19 m from the 10th Royal tee is
+    in Langston's `drop_trees` (developer: remove it); `fix/langston-tree`
+    merged 2026-10-20. Every course now rebuilds to its committed files.
+
+-   **Daily fix (design chat, 2026-10-20):** the daily course is picked from
+    the courses in the rotation that day (`src/data/dailyRoster.ts`), so a
+    course merged today no longer changes today's daily; the design chat adds
+    each merged course from the next day. Long daily names and Chambers Bay's
+    card line stay inside their boxes. DECISIONS.md "The daily course stays
+    put for the day".
+
+-   **Afternoon review (design chat, 2026-10-20):** branch `design/afternoon`
+    (with `hotfix/build`): a second review before friends play
+    (docs/reports/afternoon_review.md) and its fixes; settings trimmed to hand,
+    difficulty, sound, pixel size, casual rules and player code (yards, no
+    latency offset, stroke-and-distance OB); course cards rotate four greens
+    (`assets-src/course_cards.py`, `cards/<id>.json` `"holes"`); spin halved and
+    cut to a twentieth from rough, trees and sand; clearer name entry; a
+    "hide me" setting for the shared leaderboards (D1 schema 4, migrates itself).
+
+-   **Merge names (design chat, 2026-10-21):** branch `design/merge-names`,
+    merged 2026-10-21 (PR #31): settings "merge names" puts a player's rounds
+    and eagles under one name (`/api/merge`, `src/ui/mergeNames.ts`), also from
+    another device's player code; the other names stay reserved for the
+    player. The title's OSM line rotates with short tips. No schema change.
+    DECISIONS.md "Merging names, and tips under the title".
+
+-   **Live match play (design chat, 2026-10-20/21):** branch
+    `design/multiplayer`, merged 2026-10-21 (developer: "merge"; played on an
+    iPhone on the branch preview first). Two players, match play by link or
+    6-letter code: one Durable Object per match in the Worker
+    `silver-swings-match` (`game/match-worker`, built by Cloudflare from GitHub),
+    reached through the Pages Functions as the binding `MATCH`; the same rules
+    (`src/systems/match/rules.ts`) on the server and both games. A move clock
+    (penalty stroke from 2:00, warning at 3:30, claim at 5:00, both the waiting
+    player's call; it runs whoever is in the match), extra holes for a tie,
+    results on the leaderboard's "recent" list (D1 table `matches`, schema 5,
+    migrates itself); matches don't count on boards, handicaps or "my golf".
+    Without the `MATCH` binding the title doesn't offer matches. Design note:
+    docs/reports/multiplayer_live_match.md (setup in section 7); DECISIONS.md
+    "Live match play".
+
+-   **Chat in live matches (design chat, 2026-10-22):** branch `design/chat`,
+    merged 2026-10-22 (developer: "merge"). Typed messages (the developer's
+    choice), a chat button under the menu button (T on a keyboard), an HTML
+    panel, a note under the match bar for a new message, a "press t to chat"
+    line when a match starts; nothing shows while a player is hitting (developer).
+    Kept with the match (storage key `c`, latest 100, 400 per match), filtered
+    like names (`cleanChat`). DECISIONS.md "Chat in live matches".
+
+-   **Scorecards from the daily and recent lists (design chat, 2026-10-22):**
+    branch `design/card-taps`, merged 2026-10-22
+    (developer: "merge"): a tap on a round there shows its card
+    (`/api/scores?id=` for "recent"); "this week" lists a player's rounds.
+    DECISIONS.md "Scorecards from the daily and recent lists".
+
+-   **Missed clicks (design chat, 2026-10-22):** branch `fix/missed-clicks`,
+    merged 2026-10-22 (developer: "merge everything"): a swing tapped during a camera cut or zoom starts when the camera
+    arrives (it was dropped); a button let go within 6 game px of its edge still
+    counts. DECISIONS.md "Missed clicks".
+
+-   **Logos ahead of their courses (design chat, 2026-10-22):** the Muni
+    (`lake_oswego_muni`, a sailboat), RedTail (`redtail`, a fox), Shorty's
+    (`shortys`, a spotted fawn) and Bandon Preserve (`bandon_preserve`, salal),
+    merged 2026-10-22; the developer chose these over the course chats' own. The
+    ids are assumed: a course built under another id renames its two files.
+    DECISIONS.md "Logos for the Muni and RedTail", "Logos for Shorty's and the Preserve".
+
+-   **Next task:** Item 1 of the player improvements (swing coach) is on
     `design/coach`, unmerged. Also: the third playtest (putting, yellow
     misses), the club's printed scorecard and the hole 3 Blue tee box. New
     courses: a separate chat following docs/COURSE_BUILD.md; after each one
@@ -1254,6 +1338,11 @@ by √power, so partial shots fly lower.
 
     -   From rough, backspin is limited to 30% effect (\"flyer\").
 
+    -   **Spin strength** (developer, 2026-10-20: too powerful): the ball
+        gets half the chosen spin (top or back) from a clean lie, a
+        twentieth from rough, under trees or a bunker, none from gorse
+        (`rules/lie.ts` `spinEffect`); a wedge spins back at most 1 m.
+
 -   **Slope:** add g × sinθ along the downhill gradient of the heightmap
     during roll. The ball stops when speed \< 0.05 m/s **and** the slope
     pull \< static friction (green ≈ 0.05 g, fairway ≈ 0.08 g).
@@ -1304,8 +1393,8 @@ by √power, so partial shots fly lower.
                                                        chipping allowed
   -------------------------------------------------------------------------
 
-The info panel always shows the current lie and its effect, e.g. \"rough
-−15%\".
+The info panel always shows the current lie by name, e.g. \"rough\"
+(no percentages: developer, 2026-10-20).
 
 **7.5 Cup**
 
@@ -1440,7 +1529,12 @@ calm (≈60% of holes below half the max). It is seeded per round.
     (`data/practice`, not on the course list), nothing scored or saved.
 
 -   **Daily round** (2026-10-20): one course a day, nine holes at Normal,
-    fixed by the date; one counted round per player code and day.
+    fixed by the date and the day's rotation (`src/data/dailyRoster.ts`; a
+    merged course joins the next day; a day can be picked by hand in
+    `DAILY_PICKS`); one counted round per player code and day.
+
+-   **Live match play** (2026-10-21): two players on their own devices, match
+    play (section 0; docs/reports/multiplayer_live_match.md).
 
 -   **Later:** local pass-and-play for up to 4 players
 
@@ -1498,8 +1592,29 @@ local leaderboard stays as the offline copy.
 -   **Round in progress:** auto-saved after every shot so a closed tab
     can be resumed.
 
--   **Settings:** handedness, difficulty, units (yd/m), latency offset,
-    master volume/mute.
+-   **Hide me** (developer, 2026-10-20): settings "leaderboards: show me / hide
+    me". A hidden player's rounds and eagles are still sent and kept, but the
+    server leaves them out of every shared list (course boards, daily, eagles,
+    most birdies, activity; `hidden` table, `/api/hide`); "show me" brings them
+    all back. This device's own board and "my golf" keep them, and the game
+    stops asking a hidden player for a name.
+
+-   **Handicaps** (developer, 2026-10-20: option 2 of the proposal): a WHS-style
+    index (`src/systems/game/handicap.ts`): differential = 113 / slope x
+    (adjusted gross - course rating), holes capped at net double bogey (par + 5
+    before an index); two nines make one 18-hole differential; a table for
+    under 20 differentials, best 8 of the latest 20 (2 of 5-7, 3 of 8-10 ...: DECISIONS.md); from 18 holes, with no
+    provisional mark. One index per player code (`/api/handicaps` groups by
+    code; "my golf" leaves out rounds played as "player"). Normal, non-casual rounds on rated tees only (East
+    Potomac Red has no rating). Shown on the leaderboard's "handicap" tab (index,
+    differentials counted, change in a week; `/api/handicaps`; a player is listed
+    from 27 holes: three nines or an 18 and a nine), in "my golf" and on
+    the new-round screen. No net scores and no strokes shown anywhere: nobody plays
+    net (developer).
+
+-   **Settings:** handedness, difficulty, master volume/mute, pixel size,
+    leaderboards (show me / hide me), casual rules, player code. Yards only, no latency offset, stroke-and-distance
+    OB (developer, 2026-10-20: those three are no longer settings).
 
 -   **Export/import:** the leaderboard as JSON, as a backup.
 
@@ -1536,6 +1651,9 @@ files (`game/scripts/course-lists.mjs`). The first course, Oswego Lake, is
 
 | Course | File |
 |---|---|
+| Bandon Dunes | `docs/courses/bandon_dunes.md` |
+| Bandon Trails | `docs/courses/bandon_trails.md` |
+| Chambers Bay | `docs/courses/chambers_bay.md` |
 | East Potomac Golf Links (Blue, White and Red courses) | `docs/courses/east_potomac.md` |
 | Eastmoreland Golf Course | `docs/courses/eastmoreland.md` |
 | Franklin Country Club | `docs/courses/franklin.md` |
@@ -1544,9 +1662,14 @@ files (`game/scripts/course-lists.mjs`). The first course, Oswego Lake, is
 | Indian Island Golf Course | `docs/courses/indian_island.md` |
 | Langdon Farms Golf Club | `docs/courses/langdon.md` |
 | Langston Golf Course | `docs/courses/langston.md` |
+| Old Macdonald | `docs/courses/old_macdonald.md` |
 | Oregon Golf Club | `docs/courses/ogc.md` |
 | Oswego Lake Country Club | `docs/courses/oswego_lake.md` |
+| Pacific Dunes | `docs/courses/pacific_dunes.md` |
+| Sheep Ranch | `docs/courses/sheep_ranch.md` |
 | Stone Creek Golf Club | `docs/courses/stone_creek.md` |
+| Triggs Memorial Golf Course | `docs/courses/triggs.md` |
+| TPC Boston | `docs/courses/tpc_boston.md` |
 | Tualatin Country Club | `docs/courses/tualatin.md` |
 | Wannamoisett Country Club | `docs/courses/wannamoisett.md` |
 | Waverley Country Club | `docs/courses/waverley.md` |

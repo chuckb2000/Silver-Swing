@@ -2,7 +2,8 @@
 // can be resumed exactly where it was.
 
 import { app } from '../app';
-import { PendingRelief, Round, RoundConfig } from '../systems/game/round';
+import { BeforeShot, PendingRelief, PlannedShot, Round, RoundConfig } from '../systems/game/round';
+import type { SimResult } from '../systems/physics/sim';
 import { HoleScore } from '../systems/rules/scoring';
 import { clearRoundInProgress, loadRoundInProgress, saveRoundInProgress } from './store';
 
@@ -23,19 +24,37 @@ interface Snapshot {
   betweenHoles: boolean;
   /** a relief choice still open (water, out of bounds...): reopened on resume, so closing the tab never replays a stroke */
   pending?: PendingRelief | null;
+  /** the state before the last stroke, so a mulligan after a resume also takes back its penalty (casual) */
+  beforeShot?: BeforeShot | null;
   savedAt: string;
 }
 
 export async function saveSnapshot(r: Round): Promise<void> {
   if (r.cfg.practice) return; // the practice ground is never resumed
+  await saveRoundInProgress(snapshotOf(r));
+}
+
+/**
+ * Save the round as it will be once this stroke comes to rest, the moment the
+ * ball is struck: a tab closed or reloaded mid-flight resumes after the stroke
+ * (with its relief choice open, or the hole finished), never before it.
+ */
+export async function saveStruck(r: Round, p: PlannedShot, sim: SimResult): Promise<void> {
+  if (r.cfg.practice) return;
+  await saveRoundInProgress(r.whenSettled(p, sim, (settled) => snapshotOf(settled)));
+}
+
+/** What a round in progress saves (structured copies: the round is changed afterwards). */
+export function snapshotOf(r: Round): Snapshot {
   const betweenHoles = r.scores.length > 0 && r.scores[r.scores.length - 1].hole === r.holeNumber;
   const s: Snapshot = {
     v: 1, cfg: r.cfg, holeIndex: r.holeIndex, scores: r.scores,
     tally: { strokes: r.tally.strokes, putts: r.tally.putts, penalties: r.tally.penalties, fairway: r.tally.fairway, reachedGreenAt: r.tally.reachedGreenAt },
     ball: r.ball, prev: r.prev, shotNo: r.shotNo, lastPower: r.lastPower, lastPuttPower: r.lastPuttPower,
-    mulliganUsed: r.mulliganUsed, history: r.history, shotSeq: r.shotSeq, betweenHoles, pending: betweenHoles ? null : r.pending, savedAt: new Date().toISOString(),
+    mulliganUsed: r.mulliganUsed, history: r.history, shotSeq: r.shotSeq, betweenHoles, pending: betweenHoles ? null : r.pending,
+    beforeShot: betweenHoles ? null : r.beforeShot, savedAt: new Date().toISOString(),
   };
-  await saveRoundInProgress(s);
+  return structuredClone(s);
 }
 
 export async function peekSnapshot(): Promise<{ cfg: RoundConfig; holeIndex: number; scores: HoleScore[]; savedAt: string; betweenHoles: boolean } | null> {
@@ -74,6 +93,7 @@ export async function restoreRound(): Promise<{ round: Round; betweenHoles: bool
   r.history = s.history;
   r.shotSeq = s.shotSeq;
   r.pending = s.pending ?? null;
+  r.beforeShot = s.beforeShot ?? null;
   r.refreshLie();
   return { round: r, betweenHoles: false };
 }

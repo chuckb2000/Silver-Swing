@@ -19,6 +19,7 @@ export const SURF = {
   building: 14,
   range: 15,
   obSand: 16, // beach / dune sand outside the boundary (Highland Links)
+  gorse: 17,  // under gorse thickets inside the course (Bandon Dunes): a penal lie (rules/lie.ts)
 } as const;
 
 export type SurfaceId = (typeof SURF)[keyof typeof SURF];
@@ -46,6 +47,8 @@ const BUNKER = M(0.0, 0.05, 8.0, 1.0, 'bunker');
 const PATH = M(0.5, 0.8, 0.6, 0.06, 'cart path');
 const LAWN = M(0.14, 0.4, 3.0, 0.25, 'out of bounds');
 const WATER = M(0, 0, 50, 1, 'water');
+// gorse: the ball dies where it lands in the thicket (developer, 2026-10-20: "extremely penal")
+const GORSE = M(0.04, 0.12, 9.0, 0.9, 'gorse');
 
 const TABLE: Material[] = [];
 TABLE[SURF.ob] = LAWN;
@@ -65,6 +68,7 @@ TABLE[SURF.obBuilding] = PATH;
 TABLE[SURF.building] = PATH;
 TABLE[SURF.range] = FAIRWAY;
 TABLE[SURF.obSand] = BUNKER;
+TABLE[SURF.gorse] = GORSE;
 
 export function material(id: number): Material {
   return TABLE[id] ?? ROUGH;
@@ -96,4 +100,5 @@ export const SURFACE_LABEL: Record<number, string> = {
   [SURF.building]: 'building',
   [SURF.range]: 'driving range (ob)',
   [SURF.obSand]: 'out of bounds',
+  [SURF.gorse]: 'gorse',
 };

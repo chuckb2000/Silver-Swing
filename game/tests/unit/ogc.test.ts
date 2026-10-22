@@ -65,6 +65,27 @@ describe('Oregon Golf Club course data', () => {
     expect(course.water.find((w) => w.id === 'w865546390')?.penalty).toBe('red');
   });
 
+  it('the creek on 13, 14 and 15 is three red penalty areas from the lidar channel (developer, 2026-10-20)', () => {
+    for (const id of ['channel_w984705476', 'channel_w866033745', 'channel_w984705479']) {
+      expect(course.water.find((w) => w.id === id)?.penalty, id).toBe('red');
+    }
+    // it crosses the 13th and 15th hole lines (in front of 13's green, between 15's fairway and green)
+    const crosses = (n: number) => {
+      const h = json.holes.find((x) => x.number === n)!;
+      const pts = h.tees.Blue.centerline;
+      for (let k = 1; k < pts.length; k++) {
+        const [ax, ay] = pts[k - 1], [bx, by] = pts[k];
+        const steps = Math.ceil(Math.hypot(bx - ax, by - ay) * 4);
+        for (let s = 0; s <= steps; s++) {
+          if (course.terrain.surface(ax + ((bx - ax) * s) / steps, ay + ((by - ay) * s) / steps) === SURF.water) return true;
+        }
+      }
+      return false;
+    };
+    expect(crosses(13)).toBe(true);
+    expect(crosses(15)).toBe(true);
+  });
+
   it('the driving range (target greens P3-P9) is out of bounds and its targets are not greens', () => {
     // centroids of the seven OSM target greens, local metres
     const targets = [[1025, 1236], [819, 1246], [848, 1201], [898, 1253], [910, 1220], [957, 1265], [985, 1227]];

@@ -1,0 +1,132 @@
+{
+ "note": "Edits to the OSM layout for Triggs Memorial. Built into edited/course.geojson by pipeline/merge_edits.py (run by make course).",
+ "add": [
+  {
+   "from": "proposed/pins.geojson",
+   "ids": [
+    "pin_01",
+    "pin_02",
+    "pin_03",
+    "pin_04",
+    "pin_05",
+    "pin_06",
+    "pin_07",
+    "pin_08",
+    "pin_09",
+    "pin_10",
+    "pin_11",
+    "pin_12",
+    "pin_13",
+    "pin_14",
+    "pin_15",
+    "pin_16",
+    "pin_17",
+    "pin_18"
+   ],
+   "reason": "OSM maps no golf=pin; one pin at the centre of each green (data/triggs/propose_pins.py), the standing default (COURSE_BUILD.md 4.1)"
+  }
+ ],
+ "tags": [
+  {
+   "osm": "w676926137",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "every penalty area red (standing default, COURSE_BUILD.md 4.1); s10 would otherwise export golf=water_hazard as yellow"
+  },
+  {
+   "osm": "w677173975",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "every penalty area red (standing default, COURSE_BUILD.md 4.1); s10 would otherwise export golf=water_hazard as yellow"
+  },
+  {
+   "osm": "w677193855",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "every penalty area red (standing default, COURSE_BUILD.md 4.1); s10 would otherwise export golf=water_hazard as yellow"
+  },
+  {
+   "osm": "w1551632005",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "every penalty area red (standing default, COURSE_BUILD.md 4.1); s10 would otherwise export golf=water_hazard as yellow"
+  },
+  {
+   "osm": "w1551632006",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "every penalty area red (standing default, COURSE_BUILD.md 4.1); s10 would otherwise export golf=water_hazard as yellow"
+  },
+  {
+   "osm": "w1551631984",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "every penalty area red (standing default, COURSE_BUILD.md 4.1); s10 would otherwise export golf=water_hazard as yellow"
+  },
+  {
+   "osm": "w1551631985",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "every penalty area red (standing default, COURSE_BUILD.md 4.1); s10 would otherwise export golf=water_hazard as yellow"
+  },
+  {
+   "osm": "w1551632009",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "every penalty area red (standing default, COURSE_BUILD.md 4.1); s10 would otherwise export golf=water_hazard as yellow"
+  },
+  {
+   "osm": "w1551632011",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "every penalty area red (standing default, COURSE_BUILD.md 4.1); s10 would otherwise export golf=water_hazard as yellow"
+  },
+  {
+   "osm": "w677173986",
+   "set": {
+    "hole": "15",
+    "tee_set": "Blue"
+   },
+   "reason": "hole 15 Blue tee: the box 34 m behind the OSM line start (just past the 14th green), outside s06's 25 m search; it measures 506 yd against the card's 508 (the line start box measures 457, -9.4 %). Course chat's call (COURSE_LESSONS.md 11, 20)"
+  }
+ ],
+ "drop": [
+  {
+   "osm": "w185319906",
+   "reason": "the Button Hole short course's boundary (leisure=golf_course), south of Triggs and outside the world; the pipeline takes every golf_course polygon as a boundary (COURSE_LESSONS.md 16)"
+  },
+  {
+   "osm": "r19086088",
+   "reason": "Button Hole fairway, outside the world"
+  },
+  {
+   "osm": "w1152670393",
+   "reason": "Button Hole fairway, outside the world"
+  },
+  {
+   "osm": "w678800091",
+   "reason": "Button Hole bunker, outside the world"
+  },
+  {
+   "osm": "w1219924392",
+   "reason": "Button Hole tee, outside the world"
+  },
+  {
+   "osm": "w1152670391",
+   "reason": "Button Hole green, outside the world (s09 fails on a green beyond the world edge, COURSE_LESSONS.md 20)"
+  },
+  {
+   "osm": "w1219924397",
+   "reason": "Button Hole driving range, outside the world"
+  }
+ ]
+}

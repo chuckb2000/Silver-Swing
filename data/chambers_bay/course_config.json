@@ -1,0 +1,77 @@
+{
+  "id": "chambers_bay",
+  "name": "Chambers Bay",
+  "location": "University Place, Pierce County, Washington",
+  "state": "WA",
+  "architects": "Robert Trent Jones Jr., with Bruce Charlton (on site) and Jay Blasi (project architect), 2007 (thefriedegg.com)",
+  "theme": "puget",
+  "epsg": 32610,
+  "osm_sources": [
+    "raw/overpass.geojson"
+  ],
+  "boundary_name": "Chambers Bay Golf Course",
+  "dtm": {
+    "path": "raw/usgs_dem_2020_1m_clip.tif",
+    "units": "m",
+    "source": "USGS 3DEP 1 m DEM, project WA_PierceCounty_2020_A20 (2020 Lidar: Pierce County, WA, flown 10 Apr - 4 Jun 2020), tile x53y523 (published 2021-06-13), clipped to the world + 100 m by pipeline/clip_raster.py (release.json); EPSG:26910 (NAD83 / UTM 10N), NAVD88 metres; downloaded by the developer 2026-10-20 (GitHub release chambers-bay-data)"
+  },
+  "laz": {
+    "paths": [
+      "raw/laz/*.laz"
+    ],
+    "classes": [
+      1
+    ],
+    "units": "ft",
+    "source": "2020 Lidar: Pierce County, WA (NOAA Data Access Viewer dataset 9343, job J1472993), flown from 10 April 2020 (GPS times; project 10 Apr - 4 Jun 2020); NAD83(2011) / Washington South (EPSG:6598, metres), NAVD88 US survey feet; clipped to the world + 100 m by data/chambers_bay/make_laz.py; class 1 (unclassified: vegetation and structures; the project has no vegetation classes); ordered by the developer 2026-10-20 (GitHub release chambers-bay-data)",
+    "label": "2020 USGS lidar",
+    "leaf_off": false
+  },
+  "world": {
+    "x0": 531519,
+    "y0": 5227314,
+    "width": 1280,
+    "height": 1792,
+    "note": "OSM course boundary bbox (917 x 1,301 m, UTM 10N) + scenery, rounded out to whole 256 m chunks and centred: 1,280 m east-west (182 m each side), 1,792 m north-south (246 m each side)"
+  },
+  "lake_level_max_m": -1.2,
+  "tee_sets": [
+    {
+      "name": "Blue",
+      "playable": true,
+      "rating": 72.4,
+      "slope": 134,
+      "total_yd": 6748
+    }
+  ],
+  "default_tee": "Blue",
+  "scorecard_source": "Club scorecard PDF (Golf ScoreCards Inc., 10/2025, Chambers-Bay-Scorecard-10-2.pdf, supplied by the developer in the release chambers-bay-data, 2026-10-20). Every tee row adds up to its printed total. Built from the Blue tees only (COURSE_BUILD 4.1 default).",
+  "penalty_default": "red",
+  "driving_range_is_ob": true,
+  "wind_mph": {
+    "minMph": 3,
+    "maxMph": 14
+  },
+  "trees_off_fairways_m": 2,
+  "attribution": [
+    "Map data © OpenStreetMap contributors (ODbL)",
+    "Elevation and trees: U.S. Geological Survey 3D Elevation Program (2020 Pierce County, WA lidar)",
+    "Imagery for tee placement: USDA National Agriculture Imagery Program",
+    "Scorecard: Chambers Bay club card (Golf ScoreCards Inc., 10/2025)"
+  ],
+  "notes": "Phase 1 decisions (developer, 2026-10-20): Blue tees only; all water red (none mapped on the course); OB = the OSM boundary (BNSF railway, beach and Puget Sound outside it); trails and cart paths inside give free relief; the wetland inside the boundary (w582088908) stays woods, as the pipeline draws it; new theme 'puget' (the developer: coastal would be slightly off); wind 'pumped up a bit' to the open-coast 3-14 mph; the card and title images may be committed. First built without the lidar (developer 2026-10-20, option a); rebuilt with it the same day once the NOAA job arrived.",
+  "tree_types_osm": true,
+  "drop_trees": [
+    {
+      "x": 756.5,
+      "y": 804.5,
+      "reason": "course chat 2026-10-20: not a tree - a single 6.9 m lidar spike (crown radius 1.1 m) on the cart path left of hole 7's fairway; the NAIP photo shows no tree there (a pole or sign)"
+    },
+    {
+      "x": 849.5,
+      "y": 467.5,
+      "reason": "course chat 2026-10-20: not a tree - the roof of the halfway house by the 1st tee (8.2 m), which OSM doesn't map as a building"
+    }
+  ],
+  "not_trees_areas": "proposed/not_trees.geojson"
+}

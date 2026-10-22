@@ -13,7 +13,7 @@ The developer was away overnight and asked for the work not to stop for permissi
   - The original speed is the spec's trip time: 1.2 / 1.0 / 0.8 s per 100 % on Easy / Normal / Pro. The starting speeds stay 2.0 / 1.6 / 1.25 s.
   - After tap 2 the cursor comes back at the speed it had at tap 2.
   - **Peak speed halved back** (developer, 2026-10-20 playtest: "the meter gets going a little too fast now ... split the difference"): the speed at 100 % is now halfway between the old constant speed and the spec's, 1.6 / 1.3 / 1.0 s per 100 % on Easy / Normal / Pro (was 1.2 / 1.0 / 0.8). The starting speeds are unchanged.
-  - At Normal, a full swing reaches 100 % in 1.25 s (it was 1.6 s). A 30 % chip comes back at 74 % of a full swing's return speed.
+  - With these speeds a full swing reaches 100 % in 1.44 s on Normal (1.79 s Easy, 1.12 s Pro; a constant meter at the starting speed took 1.6 s on Normal), and a 30 % chip comes back at 87 % of a full swing's return speed (86 % on Easy and Pro). Recomputed from `src/data/difficulty.ts` in the afternoon review, 2026-10-20 (the note had said 1.25 s and 74 %, the figures before the peak speed was halved back).
   - `SwingMeter.tapTimes` gives the robot golfer exact tap times.
 - **Only the dead centre of the green zone goes straight** (developer). Inside the zone, a tap off centre curves the ball that way, in proportion to the offset. At the zone's edge the curve is 0.4 × the club's curve factor: a driver curves 0.8°, about 3 yd, half the smallest yellow miss. Putts start up to 0.25° off line at the edge.
   - The inner 30 % of the zone still says "perfect".
@@ -66,7 +66,7 @@ The developer was away overnight and asked for the work not to stop for permissi
   - **Cost to yardage:** 11 holes went from pass to flag (3-8 %): East Potomac Blue 5, 9, 16 and 11 White; Langston 2 Royal, 13 White and 14 White; Indian Island 1 and 5; Waverley 6 and 11.
   - **Over 8 %:** only holes the developer accepted earlier.
     - Tualatin 10 from the back tee is now +8.3 % (was +7.0 %): the tee moved 2.5 m back onto the box's centre line. Accepted by the developer (2026-10-20).
-    - The others: East Potomac Blue 15 and Red 8, Langston 6 Royal, Tualatin 8, Eastmoreland 17 White and Waverley 17.
+    - The others: East Potomac Blue 15 and Red 8, Langston 6 Royal, Tualatin 8, Eastmoreland 17 White and Waverley 17 (Waverley 17's tee moved back by the developer on 2026-10-21: now -3.2 %, a flag).
 - **Rounded fairway corners** (developer: "jagged corner should be removed from the fairway ... even if the OSM was jagged"). Fairway outlines are smoothed (resampled every 0.5 m, Gaussian with σ = 4 m along the outline) before rasterising. Each fairway keeps its original shape within 2 m of a green, so approaches still meet the green. A smoothing that changes a fairway's area by over 10 % is skipped. Edges move at most 3.2 m (Langston, Indian Island, Oswego Lake, Franklin measured), inside the spec's 5 m per side for surface edges. σ = 6 m would round more but reaches 4.8 m.
 - **Langston 16 and 17:** the three lidar trees standing in those fairways are removed (`drop_trees`).
 - **East Potomac Blue 10:** the two lidar trees at the front of the tee box are removed (`drop_trees`). They drew over the box beside the aim line. The rest of the row along the cart path stays.
@@ -210,6 +210,7 @@ The developer was away overnight and asked for the work not to stop for permissi
 - **Ten tee boxes from the lidar** (course chat): OSM maps one box per hole, mostly the White tees. `propose_tees.py --wide=5,6,10` (new option: also search 250 m around the line start of the listed holes); pads within 8 % added through `edits.json`. Approved by the developer (2026-10-19: "i trust you finding the tee boxes from the lidar"). Royal 6 has no pad (the one candidate is an OSM bunker) and plays 351 yd vs 398 from the White box, accepted by the developer ("Let's stick with the 351 yd hole 6").
 - **The creek on 3 is a penalty area from the lidar** (course chat; to confirm): OSM has only stream lines. New tool `propose_channels.py` follows each line and keeps the cells within 5 m of it that lie over 0.25 m below a 25 m running median of the DEM (about 4 m wide, 0.3-0.5 m deep). Tagged `flatten=no` (new s04 rule) because the bed falls 4 m; flattening it like a pond cut a 3 m trench.
 - **Fairways run up to the greens** (developer: "the fairway is up to the hole on every hole (except holes like the par 3 where you hit over water)"): `connect_fairways: true`, 16 approaches; the par-3 4th and 13th have no fairway.
+- **No rough left along the fairway joins** (developer, 2026-10-21: "there's left over residual rough in the fairways from when we made the fairways meet the green"). Since the rounded fairway corners (2026-10-20), s08 rounded each s02b approach and the fairway it extends on their own, so both pulled in at the shared edge and left a line of rough and notches: 108 pockets, 122 m2. `merge_touching_fairways: true` (East Potomac's fix, 2026-10-20) merges them before rounding: 3 single-pixel specks left (1 m2), as on courses without approaches. Config only; yardages, trees and `course.json` unchanged. Course test added (fails on the old map with 79 pockets).
 - **Hole 13 two-tier green** (developer: "the front little bit of the green is like 4 or 5 feet below the back of the green. The back portion is bigger"). `green_tiers` now also takes `low_side` front/back (the step runs across the line of play) and `line_frac` (where the step sits, as a share of the green's depth from the low edge): hole 13 has a 1.37 m (4.5 ft) step over 5 m at 30 % of the depth, so the back tier holds about two thirds of the green. `pin: upper_tier` (s06) moves the pin from the OSM pin, which sat on the step, to the middle of the back tier. Pipeline only: the game's tier term already takes any line.
 - **Trees on Kingman Lake's islands stay** (s05): trees inside a `join_boundary` penalty area are kept (open water has no canopy, so what the lidar finds there stands on the islands and banks); dropping them removed about 440 trees and left the islands bare. Trees over the creek channel (tag `flatten=no`) stay too: it runs under the woods.
 - **New `anacostia` theme** (developer: "I'm super excited about the new anacostia theme. Remember that the Anacostia River is, unfortunately, not super blue"; no cherry blossoms as at East Potomac). Palette: the potomac turf with murky olive-green water (W0-W2 `#2e4436` `#435b46` `#7f9378`, minimap `#4c6450`). Trees (`assets-src/trees_anacostia.py`): loblolly / Virginia pine on the flat-topped pitch-pine shape, oak, sycamore and willow on the rounded shape, recoloured. Every other sprite sheet is byte-identical.
@@ -316,6 +317,7 @@ The developer was away overnight and asked for the work not to stop for permissi
 - **Hole 16 White tee** (course chat, for review): box w865842632 (377 yd vs 383) lies 30 m off the OSM line, outside s06's search corridor, so it is assigned by tag in `edits.json`.
 - **Power lines are not trees** (course chat): the DOGAMI canopy model holds the transmission lines across the course and the river; `remove_wires` (below) takes them out before the tree search.
 - **Course card:** hole 8's green (creek, ponds, firs), the course chat's pick for the developer to confirm.
+- **The creek on 13, 14 and 15** (developer, 2026-10-20: it runs in front of the 13th green, up the right side of 14 and between the 15th fairway and green, and was missing from the game). OSM maps it only as three stream lines (w984705476, w866033745, w984705479), which the pipeline does not build. `propose_channels.py` (Langston's tool, unchanged) traced the channel the lidar DTM shows along them: 4.7-7.1 m wide, about 0.5 m deep, 4,160 m2 in all. It is three red penalty areas in `edits.json`, tagged `flatten=no` because the bed falls 47 m from the 15th tee to the boundary east of the 13th green. It touches no green, tee or bunker and under 2 m2 of fairway edge. Upstream the creek continues into a ravine that is already out of bounds. Only the water changed: yardages, tees, trees and heights are as before. For the developer to confirm in the game.
 - **Data:** OSM from the developer's Overpass Turbo export; DOGAMI bare-earth DTM and canopy height model exported at 1 m in EPSG:32610 (`exportImage.6/7.tiff` in release `ogc-data`, identified by their values: 57-730 ft ground, 0-277 ft canopy); scorecard from GolfPass.
 
 ## Franklin Country Club (developer and course chat, 2026-10-19)
@@ -347,6 +349,11 @@ The developer was away overnight and asked for the work not to stop for permissi
 - **Hole 11's green slopes hard back to front** (developer): `green_tilt` caps it at 3.5 % (not 2.5 %) with no random undulations; the lidar plane tilts 6.5 %.
 - **Theme `pnw_club`** (developer: "like pnw but make it a touch nicer: the sand just a smidge whiter. This is the nicest course in Portland"): the pnw palette with the mown turf (G5-G9) 6 % more saturated and 3 % brighter and whiter bunker sand (S0-S2); rough, woods, water and trees as pnw (tree sheet `trees_pnw_club`, identical to pnw's). Side-by-side: `data/waverley/proposed/theme_side_by_side.png`.
 - **Trees:** 7,852 from the DOGAMI canopy height model (860 inside the course), types from crown shape (leaf-on flight); one removed on hole 18's tee shot (s06b).
+- **Developer's fixes, 2026-10-21** (branch `course/waverley-tees`):
+  - **Hole 10:** three trees in front of the tee removed ("trees right in front of the tee on the 10th hole... I would love them removed"; `drop_trees`). The lidar canopy model has them (22-23 m), the OSIP 2024 photo shows grass there. The tee no longer needs moving in its box.
+  - **Hole 14's Blue tee** redrawn by the developer in the desk ("that's not where the tee is"): 137 yd, on the card. The game had used the course chat's traced box (278 m2, overlapping the trees beside the 17th green), because the earlier save marked no Blue tee. The traced bunker by the old box (`tr_bunker_53`) was dropped with it. s06b removes one 24 m tree 40 m out on the new tee shot (developer: "we can remove trees if we have to").
+  - **Hole 17's Blue tee** moved back by the developer "to more closely reflect the real course": 475 yd vs 490 (-3.2 %, a flag), replacing the accepted 409 yd.
+  - The rebuild under the current main pipeline also drops one tree on hole 3's tee shot (s06b: 28.8 m, 51.1 m out).
 - **Course card:** hole 11, the green beside the pond (course chat's pick, developer to confirm).
 - **Data:** OSM (developer's Overpass export), DOGAMI DTM and canopy height model, OSIP 2024 orthoimagery, the club website's scorecard. Originals in the GitHub release `waverley-data` (SHA-256 in `data/waverley/DATA_REQUEST.md`).
 
@@ -373,10 +380,13 @@ The developer was away overnight and asked for the work not to stop for permissi
 - **Driving range in bounds** (developer: too hard to map otherwise): `driving_range_is_ob: false`, so it plays as rough.
 - **Every hole traced:** OSM has the boundary, 12 bunkers, cart paths and two ponds, but no hole lines, tees, fairways, greens or pins (docs/COURSE_TRACING.md).
 - **Routing** (developer, 2026-10-19, on `data/langdon/proposed/greens_labelled.jpg`): 1 I (in OSM), 2 D, 3 C, 4 A, 5 B, 6 F, 7 J, 8 P, 10 W, 11 R, 12 T, 13 V, 14 S, 15 X, 16 N, 17 Q; 9 and 18 share one double green that wraps around the north end of the clubhouse pond. E and G are nursery greens (spare turf), H and O are fairway, Y is a tee box (hole 10's, by the card distance), U is nothing. Each candidate hole checked against the card: the next tee lies by the previous green at about the card distance.
-- **Double green 9/18:** traced as two greens, one per hole (9 on the east side of the pond, 18 at its north end), so each hole has its own green centre and pin; the developer joins or adjusts them in the tracing desk.
+- **Double green 9/18:** one green round the north end of the clubhouse pond. Developer, 2026-10-20: "the pin for the 18th hole should always be on the left side of the lake and the pin for the 9th hole should always be on the right side" (the first split gave 18 the north end, so the game put an 18 pin east of the pond, outside 18's putting views: putting blind). Now both drawings are joined and cut by a north-south line through the pond's north tip (x 714; trace_spec `double_greens` `split` + `keep`, `desk_to_proposed.py`): 18 gets the west part, 9 the east part, each with its own centre and pins. 18 measures 514 yd (+2.5 %), 9 430 yd (+5.2 %, flag). A unit test checks every pin the game picks.
+- **Trees in the pond on 18 removed** (developer, 2026-10-21: "there are trees in the pond on 18, those should be removed"): seven DOGAMI canopy tops inside the clubhouse pond (OSM `natural=water`, which s05 does not exclude, unlike golf water hazards), where the OSIP 2024 orthophoto shows open water, are in `drop_trees`. The trees on the banks stay. Changing s05 to drop trees in every `natural=water` would change other courses (Langston keeps trees on Kingman Lake's islands), so it is per course.
+- **A tracing page for the 9/18 green** (developer, 2026-10-21: retrace both greens): `desk_export.py --area double` adds a "9/18 green" page to the tracing desk with the whole green as one outline at the photo's full resolution and the split line (x 714) drawn as a guide, with the area on each side. `desk_to_proposed.py` uses that page's outline for both holes (the hole pages' greens are then ignored) and cuts it along the line as before. Other courses have no `double_greens` and are unaffected. The developer traced it the same day (2,348 m², against 3,656 m² for the earlier per-hole drawings, which took in the collar): 9 now measures 421 yd (+3.0 %, pass), 18 502 yd (card 502). From the 9 side the 18 centre pin is across the pond's tip, so the design chat's 9/18 engine test putts round it via a dry spot on the 18 side. The page also takes a fairway shape: the developer traced the curtain of fairway 2-7 yd wide round the back of the green there (two pieces, each given to the hole whose side it lies on; their ids are listed in `edits.json`).
 - **Tee 7 boxes** are marked by the developer in the tracing desk (the lidar pads are noisy here: tree bases and mounds); the traced hole lines start at first-guess points near the card distance.
 - **OR 551 strip out of bounds:** main's `join_boundary_parts` (Eastmoreland) with `max_gap_m` 60, extended to boundaries mapped as separate features (see Data and pipeline): the two OSM course ways are joined across the 35-58 m strip holding the highway for the game's OB polygon; the strip stays out of bounds on the surface map, with stakes along both parts.
 - **Red barns** (developer): the barn on the left of the 8th fairway (the side away from hole 9; OSM w324295601, 8 m tall) and the event barn by the 18th green (w324295657, the open-sided barn with flower beds south-west of the clubhouse) are drawn in barn red `#a3302a` (`building_colours`), a colour outside the `pnw` palette. The barn on 8 gives free relief (developer), which is what the game does for every building inside the boundary; the card's local rule makes it an integral object. A first guess at the 8th barn (an unmapped building north of the 8th tee) was wrong and is not used.
+- **Creek on hole 7** (developer, 2026-10-20: "a creek on hole 7 that splits the two fairways", missed by the first build): not in OSM, so its line is taken from the lidar DEM channel (`data/langdon/make_creek_line.py`: the largest channel piece more than 0.25 m below the 25 m running median around hole 7, its main axis) and its red penalty area from the channel along that line, as OGC's and Langston's creeks (`propose_channels.py --lines`, new option; `flatten=no`). 267 m, 6.7 m wide, about 0.6 m deep; added through `edits.json`. A shallower dip beside the cart path upstream is left out (it runs along the path into a bunker). Confirmed by the developer (2026-10-20).
 - **Driving range** stays in bounds (developer); OSM's internal out-of-bounds line along the range (w1569564855) is not used.
 - **Merged into main 2026-10-20** (developer: "please merge any unmerged courses") by the design chat, after main had the centred tees and rounded fairways: Langdon rebuilt with them (`make course NAME=langdon`); the same five holes are flags (1 +6.7 %, 3 -4.0 %, 9 +4.7 %, 15 +3.4 %, 17 +4.3 %), total 6,568 yd vs 6,522. The pipeline changes are keyed or touch only a green whose centroid lies off it (Langdon's two 9/18 parts; no other course has one), so the other courses were not rebuilt. The smoke tests page through a state to their course (request 1). Open items stay in data/langdon/report_notes.md.
 
@@ -462,7 +472,28 @@ so a hole resumed after closing the tab lists the strokes since.
   Island (`data/indian_island/make_laz.py` reproduces the clipped tiles
   byte for byte) and Wannamoisett; the other courses keep every input in git.
 
-## Courses of 13 and 19 holes, and clubs of three nines (developer, 2026-10-20; branch `design/hole-counts`, not merged)
+## Gorse plays penal; punch shots say so (developer, 2026-10-20)
+
+- **Gorse** is its own surface (id 17, in bounds) and lie. The developer asked for
+  "only 20-50 yards out of it" and "very small sweet spot and lots of red":
+  every shot from gorse carries at most a distance drawn between 20 and 50 yd for
+  that lie (not shown: the label just says "gorse"), lower and quicker; the green zone is 30 %
+  of normal and the yellow band 0.35 % of bar instead of 1.2, so most taps are red;
+  misses curve 1.8 x as much; no spin, no driver, no putter; the club picked for
+  you is the shortest (a wedge to hack out). A ball landing in gorse stops almost
+  where it lands. Numbers in `rules/lie.ts` `GORSE`.
+- **Pipeline:** `course_config.json` `"gorse": {"ground": "gorse"}` paints the
+  ground under the thickets (pipeline/gorse.py, Bandon Dunes) as surface 17;
+  courses without it export exactly the ids they had (`surf_ids`). Oswego Lake,
+  Highland Links and Eastmoreland rebuild unchanged.
+- **Punch:** under a canopy the apex was always capped automatically (spec 7.4);
+  the lie now reads "punch" there so the player can see it.
+- **No percentages on lie labels** (developer, 2026-10-20: "cleaner and clear
+  from the fact that your shot doesn't go as far"): the info panel shows the
+  lie's name only ("rough", "rough flyer", "punch", "gorse"); the penalties
+  themselves are unchanged.
+
+## Courses of 13 and 19 holes, and clubs of three nines (developer, 2026-10-20; branch `design/hole-counts`, merged 2026-10-22)
 
 - **Any size.** A course of N holes that isn't 9 or 18 offers "N holes"
   (`'all'`), played all at once; a 19-hole par-3 course too (developer: no
@@ -483,6 +514,13 @@ so a hole resumed after closing the tab lists the strokes since.
 - **Stats and milestones**: two nines count as a full round; 13- and 19-hole
   rounds count as rounds but not in the 18- or 9-hole averages or the
   "broke 80 / 40" milestones.
+- **Merged with what came since (2026-10-22, developer: "please merge the 13 and 19 hole courses
+  support"):** the scorecard shows only the nines a round plays (`cardBlocks(length, slots,
+  shape)`); live matches take a course of 13 or 19 holes played all at once (the server takes up
+  to 19 holes a match, and extra holes after them), not a club's pairs of nines yet (the new-match
+  screen says so); handicaps count courses of 9 or 18 holes only (a 13- or 19-hole course has no
+  rating for a nine or an 18; a club of nines is rated per pair, which the list doesn't keep); the
+  daily rotation roster leaves out a course without a nine even when it is listed.
 
 ## Data and pipeline
 
@@ -494,6 +532,7 @@ so a hole resumed after closing the tab lists the strokes since.
 - **`garden`** (Eastmoreland, 2026-10-19; `pipeline/garden.py`): flowering shrubs inside listed OSM polygons outside the course, where the CHM shows the shrub layer (`shrub_min_m`-`shrub_max_m`) and at `understory_density` under taller canopy, on a seeded jittered grid. s05 appends them to the tree list as type `shrub` with a bloom colour drawn from `colours`, and `order_trees()` (s05, and s06b after its tee-shot drops) puts each at an index whose % 8 is its colour, since the game picks the shrub sprite variant from the index; the lidar trees fill the other indices. s10 exports them as `c: 3`; s09b draws them in the putting views with `assets-src/shrubs.py`. Not combinable with `blossom` (both order the list; s05 stops). Other courses: no key, no change.
 - **`join_boundary_parts` with separate features** (Langdon Farms): `common.play_boundary()` returns the union of every boundary feature when the key is set and the course has more than one (Langdon's two `leisure=golf_course` ways either side of OR 551); with one feature (Eastmoreland's multipolygon) or without the key nothing changes.
 - **`building_colours`** (s09; Langdon Farms): `{osm id: "#rrggbb"}` paints those buildings' walls and roof in their own colour (three shades), outside the theme palette. Courses without the key are unchanged.
+- **`propose_channels.py --lines=<file>`** (Langdon Farms; a tool, not a `make course` step): take the stream lines from a proposals file instead of OSM, for a creek OSM doesn't map; its line comes from the DEM channel.
 - **Tracing tools** (Langdon Farms; not `make course` steps): `propose_trace.py` takes Waverley's optional `source`/water/pond changes, plus a per-green `br_delta` (brightness within that of the seed; texture alone ran into the collar: IoU 0.37 -> 0.81 on the OSM hole 1 green), a `cut`/`keep` split for one hole's part of a double green, water now optional, bunkers searched inside every boundary part, and a fairway colour rule (`fairways.rule`: smoothed 2G-R-B, texture and G-R minimums) for a course with no mapped fairways to train the classifier on. `desk_export.py --traced` puts the traced shapes, lines and greens in the desk for holes OSM lacks entirely; trace_spec `desk` names the tee set to mark (`Tee 7`) and the card column beside it; the page labels follow it (Indian Island's data has no such fields and keeps "Blue").
 
 - **`ob_highways`** (s08, course config; Indian Island `["trunk", "trunk_link"]`): roads of these OSM highway values inside the course boundary are painted `ob_road` (out of bounds) instead of rough or cart path, except over water. For a course whose boundary contains a public road that is out of bounds. Without the key nothing changes: Oswego Lake, Highland Links and the three East Potomac courses rebuild byte-identical (all 735 exported files).
@@ -572,3 +611,421 @@ so a hole resumed after closing the tab lists the strokes since.
 
 - TypeScript 6.0.3, Vite 8, Vitest 5, Phaser 3.90.0, Playwright 1.56.0 (matches the preinstalled Chromium build).
 - `window.__autoplay` (src/dev/autoplay.ts) is a robot golfer used by the Playwright smoke test; it drives the real input path (`PlayScene.tap` with timestamps).
+
+## Afternoon review fixes: engine (2026-10-20)
+
+From the afternoon review; branch `fix/afternoon-engine`. Tests:
+`tests/unit/afternoon_engine.test.ts`, `tests/unit/afternoon_snapshot.test.ts`.
+
+- **Water beyond the boundary** (Round Lake at Bandon Trails 7, Neacoxie Creek at
+  Gearhart 5-8: red penalty areas by the developer's choice). The reference point
+  for relief was the last sample off the water, usually on the out-of-bounds bank
+  between the boundary line and the water, so back-on-the-line and lateral drops had
+  no valid spot. The reference is now the last dry sample inside the boundary
+  (`round.ts waterReference`). A ball that crossed more than `WATER_BANK_M` (20 m,
+  tune; the banks measure 0-20 m) of out-of-bounds ground before reaching water beyond
+  the boundary went out of bounds first: stroke and distance, the OB banner. Every
+  tee shot into that water at Gearhart 6 and Bandon Trails 7 now gets its drops.
+- **Same notion of water for the reference and the drop check:** the reference point
+  is the last sample that is off the mapped water *and* outside the penalty area's
+  polygon (the outline can be wider than the mapped water). Lateral drops at Stone
+  Creek 4 that had no valid spot now have one.
+- **A ball against a trunk on a steep slope** rolled into the trunk, bounced back and
+  repeated until the 45 s cap (Eastmoreland 13). A rolling ball that meets a trunk
+  slower than 0.3 m/s (`sim.ts TRUNK_REST_SPEED`) now stops against it.
+- **Touching greens are one putting surface** (Langdon's 9/18 double green, traced as
+  two halves 0.00 m apart). Greens less than 0.5 m apart (`greenPartners`) are not
+  each other's wrong green: an approach to 18 on the hole-9 half is on the green
+  (putter, putts and green in regulation count; holing out unchanged). Langdon's are
+  the only touching greens on any hole. The putting view needs no change: a ball
+  outside the hole's view window gets the course view, as before.
+- **Longer putter settings:** 120 and 160 ft (36 and 48 m) after 80 ft (24 m), so the
+  far corners of big greens (Langdon, Chambers Bay, Bandon Trails) can be putted from;
+  the automatic setting picks them. A setting is a distance, not a power (100 % of it
+  rolls that far on a flat stimp-10 green), so the putt calibration is unchanged. The
+  farthest half of Langdon's double green from the other pin (up to about 90 m) still
+  needs a chip.
+- **Gorse carry, one formula:** carry = min(club x lie x power factor(power x swing
+  length), cap) (`outcome.ts shotCarry`), for the strike, the club's carry label, the
+  meter readout and the automatic swing length (the labels had shown cap x swing x
+  power, and the swing length was chosen from it).
+- **Gorse looks and plays like a bad lie:** the info panel's lie is yellow for rough,
+  punch, gorse and bunkers, or any lie that costs distance (`lie.ts lieIsPenal`; it was
+  yellow only below full distance, so gorse and a rough flyer showed green); no topspin
+  from gorse either (`spinFor`).
+- **Meter readout** uses the overswing power factor (110 % reads +8 %, not +10 %).
+- **A mulligan after a resume** takes back the penalty too: the state before the last
+  stroke is saved in the round snapshot (`beforeShot`). Rounds saved before this keep
+  the old behaviour (the stroke only) for that one shot.
+- **Default aim in the wind:** the clear-line check now flies the perfect shot in the
+  hole's steady wind (no gust) and also rejects a line that finishes on a wrong green.
+  It still only turns the aim up to 16 degrees: into some winds no driver line on
+  Eastmoreland 14 clears the creek, and the club is still the player's choice.
+
+## The daily course stays put for the day (developer, 2026-10-20)
+
+- The developer played the daily at Stone Creek in the morning; by the
+  afternoon it showed East Potomac Red. The day's course was picked from the
+  whole course list, so each course merged that day (Gearhart, Bandon Trails,
+  Chambers Bay) moved it. Now only the courses in the daily rotation on that
+  day count (`src/data/dailyRoster.ts`: course id and first day). The sixteen
+  courses of 2026-10-20 start that day (so 2026-10-20 is Stone Creek again);
+  the three merged that afternoon start 2026-10-21. When a course is merged,
+  the design chat adds it from the next day (docs/COURSE_BUILD.md section 0).
+  A course not listed is never the daily; a unit test checks every course is.
+- **Text that ran out of its box:** the title's daily button now grows to fit
+  the course name ("daily: east potomac red course"), and a course card's
+  second line keeps to one line, dropping the town when it doesn't fit
+  (Chambers Bay: "18 holes · par 72").
+
+## Afternoon review fixes: screens (2026-10-20)
+
+Branch `fix/afternoon-ui`, from the afternoon review of the screens and flow.
+
+- **A round in progress is never thrown away without asking.** "tee off" on
+  the new-round screen and the daily round (title, and the leaderboard's new
+  "play today's round" on an empty day board) ask "you have a round in
+  progress at <course>, hole N - start a new one and lose it?" (keep it /
+  start new), in the style of the round menu's "quit this round?"
+  (`ui/confirm.ts`, `flow.confirmDiscard`).
+- **The name is obvious (developer: "it should be more obvious that players
+  need to enter their name").** Without one the title shows "set your name for
+  the leaderboard" (yellow, under play and the daily), the new-round screen's
+  name row is orange ("your name: tap to enter it · for the boards"), and a new
+  round or the daily asks once, with the reason ("rounds without a name stay on
+  this device and never reach the shared boards") and a "skip" button. Skipped
+  once, it is not asked again on that visit; "player" still plays. The summary's
+  name button is orange while there is none.
+- **Update offer only for an old page.** The page loads network-first, so after
+  a deploy it is already new: the waiting worker now takes over quietly when the
+  running bundle (index.html's module script) is the one the site serves, and
+  the page fetches its files again so the new worker keeps them for offline
+  play. Only a page older than the site (opened offline) is offered "update -
+  tap to reload".
+- **Layout:** the summary's name button sits over the note that explains it (it
+  covered the end of the title on a desktop and sat on a two-line note on a
+  phone), and the card moves up to clear it on a short screen; the scorecard's
+  stats line wraps between items ("gir 6/9" stays together) and the panel grows
+  with it (also on the share picture); phone scorecard cells are 19 texels (17:
+  three-digit yardages touched); a long title menu moves up to clear the footer;
+  the yes/no title no longer wraps into its text; the empty eagles / birdies
+  boards say so under the column headers; on a phone the title's lines close up
+  under the 1x course count.
+- **In a round:** the relief and drop panels refresh the HUD (it showed the
+  stroke before) and hide the shot controls; "back on the line outside the
+  bunker" lost "(2 strokes)" (the button adds "(+2)"); the result banner moves
+  to the top in a putting view (it covered the cup or golfer); a panel over the
+  course (hole complete, menu, map) hides the banner; an approach that ends on
+  the green reports its length in yards ("185 ft" for a 63-yd wedge), what is
+  left in feet; the carry banner says "yd"; the off-screen ball arrow sits at
+  the nearest point of the free screen edge, the right edge under the mini-map
+  included (it floated mid-fairway); on a portrait screen the aim framing moves
+  up 24 texels (its bottom controls are deeper); trees in front of the cup and
+  flag fade in the course view too (six default pins were hidden); a back-nine
+  round's card shows only the back nine; "pitching w" is "p wedge"
+  ("pitching wedge" fills the club panel edge to edge and runs out of the
+  two-column rewatch buttons).
+- **Daily boards keep the day's own course:** rounds tagged with a day but
+  played on another course (a daily started before the day's rotation was
+  fixed) are left off that day's and the week's boards (`playsPlan`).
+
+## Settings trimmed, rotating course cards, softer spin (developer, 2026-10-20)
+
+- **Settings:** units, input latency and the OB rule are gone ("no one is going to
+  mess around with input latency, they shouldn't have an option what OB rules to
+  play, everyone is going to be using yards"). Saved settings are forced to yards,
+  0 ms and stroke and distance when loaded (`save/store.ts`); the engine keeps the
+  options for tests.
+- **Course cards rotate up to four greens** ("so much water because it seems like
+  the water hole got picked for every course"): `assets-src/course_cards.py` writes
+  a strip of 208 x 128 frames per course. The course's own green ("hole" in
+  `assets-src/cards/<id>.json`) comes first, then the three greens with the most sand
+  and trees around them, at most one more where water fills the view, no
+  neighbouring holes while others are left, and none whose flag a tree hides (checked
+  on the rendered card). A course chat can list its own: `"holes": [n, ...]`. The
+  card shows one frame at a time, changing every 30 s, neighbours 15 s apart (was 3 s: "they should change like every 30"). The title
+  screen views still use "hole". Wide screens now show two rows of cards.
+- **Spin** ("backspin and front spin are too powerful: their effectiveness should be
+  cut down like 50% from currently and like 95% when you're hitting out of the rough
+  or sand"): `spinEffect` gives 0.5 of the chosen spin from a clean lie and 0.05 from
+  rough, under trees and both kinds of bunker (rough was 0.3, backspin only; topspin
+  was full everywhere); gorse none. A wedge spins back at most 1 m (was 2 m) and only
+  from a clean lie.
+
+## Hide me from the leaderboards (developer, 2026-10-20)
+
+- "There should be a setting to hide yourself from all leaderboards." Settings has
+  "leaderboards: show me / hide me". Rounds and eagles are still uploaded (so "my
+  golf" on another device with the player code still has them, and showing again
+  needs no re-upload); the server keeps a `hidden` table of player keys and every
+  shared list leaves those keys' rows out: course boards, the daily day and week,
+  recent eagles, most birdies, friends' activity, and the record badges in the
+  activity feed. The choice is sent on change and retried before each upload until
+  the server confirms (`save/online.ts` `syncHidden`). This device's own board still
+  shows the player's rounds. A hidden player isn't asked for a name, and the summary
+  says the round stays off the shared boards. D1 schema 4 adds the table by itself.
+
+
+## Player codes bring their rounds and name (developer, 2026-10-20)
+
+- "I put my player code in on my phone and it only has 5 rounds, compared to 9 rounds on the
+  computer." A device's rounds reach another device through the player code only when the
+  server stored them with that code. Rounds sent before player keys existed (2026-10-19), or
+  before a device had one, were stored without it, so "my golf" on the phone couldn't find
+  them. Now every copy of the game sends its named rounds once more (`golf:resent-for-owner-1`),
+  and the server gives a stored round with no key the sender's key when the sender holds the
+  round's name. Rounds played as "player" (no name) never leave their device.
+- "Once I put my player code in it still had me set my name": entering a player code now takes
+  that code's name when the device has none yet.
+
+## A stroke is saved the moment it is struck (developer, 2026-10-20)
+
+- "If you refresh while a ball is in midair/the shot hasn't ended you get to take it again ...
+  The shot should be locked in and saved the second it's hit." The round was saved when the ball
+  came to rest (and with an open relief choice), not before. Now `PlayScene.launch` saves, at the
+  strike, the round as it will be once the stroke has come to rest (`Round.whenSettled` resolves
+  the already-simulated stroke on the round, takes the snapshot and puts every field back;
+  `save/snapshot.ts` `saveStruck`). A reload mid-flight resumes after the stroke: the ball where
+  it stops, the relief choice open if it went in water or out of bounds, or the next hole if it
+  was holed.
+
+## Height to the pin in the info panel (developer, 2026-10-20)
+
+- Elevation changes carry a lot in the game (the ball lands where its flight meets the ground):
+  10 ft below the tee adds about 6 yd to a driver, 4 to a 7-iron, 3 to a sand wedge, and the same
+  is lost uphill. 107 of 333 holes change more than 16 ft tee to green, and par 3s such as
+  Chambers Bay 9 (85 ft down) and Oswego Lake 8 (83 ft down) play one or two clubs shorter.
+  Of three options (height only; also a "plays like" yardage and club; also a landing marker on
+  the ground) the developer chose the first: the distance line shows an up or down arrow and the
+  pin's height above or below the ball in feet ("178 yd ▼ 84 ft"), hidden when putting and within
+  3 ft. The physics, the club pick and the landing marker are unchanged.
+
+## Sharing a scorecard on a computer (developer, 2026-10-20)
+
+- On a computer, "share" opened the system share window (Windows: contacts, Outlook, Teams...),
+  which was confusing; on a phone the share sheet "works perfectly". Phones and tablets (touch
+  first: `maxTouchPoints > 0` and a coarse pointer) keep the share sheet. A computer now shows the
+  picture in a box with "copy picture" (to paste into a chat or message), "download", "more..."
+  (the system share window, when the browser has one) and "close" (`ui/shareCard.ts`).
+
+## Picking a day's daily by hand (developer, 2026-10-20)
+
+- "Can you make the daily challenge for tomorrow the back 9 at Oswego Lake!" `DAILY_PICKS` in
+  `src/data/dailyRoster.ts` sets a day's course, nine (and optionally tee) by hand; the rotation
+  carries on around it. 2026-10-21: Oswego Lake, back nine, Blue tees. Add a pick before its day
+  starts, never on the day (players would see the daily change).
+
+## Handicaps (developer, 2026-10-20)
+
+- Of four proposals the developer chose "WHS with a quick start", Normal rounds only for the
+  shared index, and no net scores on the leaderboards; East Potomac Red (a par-3 course, no
+  rating) doesn't count.
+- `src/systems/game/handicap.ts`, pure: score differential = 113 / slope x (adjusted gross -
+  course rating); each hole capped at net double bogey (par + 2 + strokes received by stroke
+  index), or par + 5 before the player has an index; a nine is half a round, and two nines
+  (oldest first, any courses) make one 18-hole differential, the sum of their nine-hole
+  differentials (course rating halved; East Potomac White's 31.0 is already a nine-hole rating,
+  Highland Links' 67.2 is for 18); index from the latest 20 differentials with the WHS table (3:
+  lowest - 2.0 ... 20: best 8), and with 1 or 2 differentials the same lowest - 2.0 (provisional
+  in WHS, not marked: see below); rounded to a tenth, at most 54.0. Rounds are taken in date order and
+  each one's cap uses the index before it. Playing Conditions Calculation and the 2024
+  expected-score treatment of a lone nine are left out (a lone nine waits for a partner).
+- The course list carries each hole's par and stroke index and each tee's rating and slope
+  (`scripts/course-lists.mjs`). `/api/handicaps` sends each shown player's latest 40 Normal,
+  non-casual rounds cut to what the index needs (one query over the latest 3,000 rounds, kept a
+  minute); the game works the indexes out. Leaderboard tab "handicap" (index, differentials
+  counted of the record, change since a week ago), "my golf" tile, and the new-round screen
+  ("handicap 3.6 · 3 strokes on these tees").
+
+## Handicaps (developer, 2026-10-20)
+
+- Of four proposals the developer chose "WHS with a quick start", Normal rounds only for the
+  shared index, no net scores on the leaderboards, and no strokes shown ("no one is playing net
+  golf"); East Potomac Red (a par-3 course, no rating) doesn't count.
+- `src/systems/game/handicap.ts`, pure: score differential = 113 / slope x (adjusted gross -
+  course rating); each hole capped at net double bogey (par + 2 + strokes received by stroke
+  index), or par + 5 before the player has an index; a nine is half a round, and two nines
+  (oldest first, any courses) make one 18-hole differential, the sum of their nine-hole
+  differentials (course rating halved; East Potomac White's 31.0 is already a nine-hole rating,
+  Highland Links' 67.2 is for 18); index from the latest 20 differentials with the WHS table (3:
+  lowest - 2.0 ... 20: best 8), and with 1 or 2 differentials the same lowest - 2.0 (provisional
+  in WHS, not marked: see below); rounded to a tenth, at most 54.0. Rounds are taken in date order and
+  each one's cap uses the index before it. The Playing Conditions Calculation and the 2024
+  expected-score treatment of a lone nine are left out (a lone nine waits for a partner).
+- The course list carries each hole's par and stroke index and each tee's rating and slope
+  (`scripts/course-lists.mjs`). `/api/handicaps` sends each shown player's latest 40 Normal,
+  non-casual rounds cut to what the index needs (one query over the latest 3,000 rounds, kept a
+  minute); the game works the indexes out. Leaderboard tab "handicap" (index, differentials
+  counted of the record, change since a week ago), a "my golf" tile, and "handicap 3.6" on the
+  new-round screen.
+- **The handicap board needs 27 holes** (developer, 2026-10-20: "otherwise there will be lots of
+  one off players that only played one round then never came back"): a player is listed once
+  their counting rounds add up to three nines or an 18 and a nine (`BOARD_MIN_HOLES`). Their own
+  index still starts at 18 holes ("my golf", the new-round screen).
+- **One index per player, everywhere** (developer, 2026-10-20: "my golf" and the board showed
+  different numbers). `/api/handicaps` groups rounds by player code, under the name of the code's
+  latest round (rounds from before player codes stay grouped by name), as "my golf" already did;
+  and "my golf" and the new-round screen leave out rounds played as "player" once the player has
+  a name, since those never reach the board (`ownHcpRounds`). The board's "this device" tab still
+  counts only this device's rounds.
+- **No provisional mark** (developer, 2026-10-20: "it doesn't matter that a player's handicap is
+  provisional"): no star after an index under 54 holes and no note on the board.
+- **A little more of the record counts** (developer, 2026-10-21, after "2 of 7" on the board:
+  "bump those handicap numbers down a smidge ... only count 8 when 20 scores are in"): the
+  lowest 2 of 5-7 differentials, 3 of 8-10, 4 of 11-13, 5 of 14-16, 6 of 17-18, 7 of 19 and 8
+  of 20 (WHS: 1 of 5, 2 of 6-8, 3 of 9-11, 4 of 12-14 ...); no adjustment from 5 (WHS takes
+  1.0 off at 6). 1-4 as WHS.
+
+## Rounds go up when they finish (developer, 2026-10-20)
+
+- A friend's 63 at Oswego Lake (finished by 10:16 pm) wasn't in "recent": a finished round was sent only
+  when the player left the summary, at the next start-up or when a leaderboard opened, so a tab closed on
+  the summary kept it on the device. Now a named round is sent as soon as it finishes (an unnamed one
+  still waits for its name on the summary), uploads use `keepalive` so they finish if the tab closes,
+  every hide of the page (tab closed, app switched, phone locked) sends anything still waiting, and
+  rounds the server lacks go before the one-time resend of older ones.
+
+## Live match play: the clock, extra holes, results (developer, 2026-10-21; branch design/multiplayer)
+
+Not merged (the developer will say when). Design note: docs/reports/multiplayer_live_match.md.
+
+- **Match rounds don't count towards handicaps** (developer). Nor the course boards, "my golf"
+  or the eagles: a match is not a round on the leaderboards.
+- **A tied match goes to extra holes, the only way it ends** (developer: "Let's do extra holes as
+  the only option"). Sudden death in the round's order (Rule 3.2a(4)): the 19th is the round's
+  first hole with its pin, and so on, until a hole is won ("charlie won at the 19th"). The wind
+  drifts on from hole to hole. After 36 extra holes, all halved, the match is halved: a limit
+  nobody will reach, kept so the match's record and the scorecard stay bounded.
+- **The move clock** (developer: stop "someone from just quitting on the last hole"; "5 minutes",
+  "love the waiting player decides bit", "give the warning at 3:30", "a penalty stroke assessed at
+  two minutes (that the waiting player) can decide not to enforce"). Per shot, on the server's time,
+  starting 15 s after the move before (time to watch the ball):
+  - 2:00: the waiting player may add one penalty stroke for slow play (Rule 5.6a), asked first. It
+    is kept apart from the player's own count, so a stroke struck as the penalty goes still counts;
+    a penalty sent after the shot was played is void ("moved"). It can decide a hole.
+  - 3:30: the player on the clock gets a banner, a sound and a red line under the match bar.
+  - 5:00: the waiting player may claim the match (won by forfeit), asked first.
+  - Between holes (one player at the next tee, the other not) only the claim applies: a penalty
+    stroke needs a hole to count on.
+  - The clock runs whether or not either player is in the match (developer, 2026-10-21: "have the
+    move clock run while the waiting player is away"). A first version stopped it while the
+    waiting player was away more than 5 minutes; that rule is gone, and with it the record of who
+    was there when (nothing is stored when a player comes or goes).
+- **Results on "recent"** (developer: "kevin def. charlie 3&2 and then the course and date"). A game
+  that sees its match end reports it; the site takes the result from the match's own server and
+  lists it once ("kevin def. charlie at the 19th", "by forfeit", "(conceded)"). Names must be their
+  players' on the boards, and a hidden player's matches stay off.
+- **Quota** (developer: "I'm concerned with other traffic"): the whole match is one stored record,
+  written once per move (it was three writes, plus an alarm each move), so the Durable Objects'
+  100,000 writes a day allow about 450 full matches; HTTP polling (only when WebSockets fail) slows
+  to 5 s after two quiet minutes, 8 s in a background tab, once a minute after 5 minutes out of
+  sight, and stops after 30 minutes out of sight until the page is looked at again.
+- **Merged names** (main's "merge names", merged into this branch 2026-10-21): a merge also moves
+  the player's finished matches, so "recent" says the kept name, and a code merged in brings its
+  matches (and "hide me" covers them).
+
+## Merging names, and tips under the title (developer, 2026-10-21)
+
+- "How to merge your scores if you've played under two names? And if that's not possible to merge
+  them can you make it possible": it wasn't (only the handicap and "my golf" joined a player
+  code's names; the boards and "recent" kept each name apart). Settings has a "name" row with
+  **merge names**: the names this player code holds on the shared boards, to pick the one to
+  keep, and an optional box for another device's player code, whose names, rounds and eagles join
+  this code first (knowing a code is the proof, as for "use another"). The server
+  (`/api/merge`, `handleMerge`) moves every round and eagle under the other names (and old rounds
+  under them stored without a code) to the kept name, in its stored copy too; this device's own
+  board and eagles follow (`renameAllLocal`). The other names stay this player's, so nobody else
+  can take them up. Asked twice (the first tap says what will happen). The other device is told to
+  use this player code; until it does, its next rounds meet "that name is taken - it's mine".
+- The title's footer turns every 6 s between the map credit (first, as OpenStreetMap's licence asks;
+  the full credits stay in settings) and three tips: merging names, a player code on another device,
+  and "my golf". Each has a shorter form for a narrow phone.
+
+## Chat in live matches (developer, 2026-10-22; branch design/chat)
+
+- "Can you look into building a chat feature for the multiplayer": typed messages only (the
+  developer's choice, over one-tap phrases or both). A chat button under the menu button in a
+  match, also over the match panels (between holes is when players talk); T opens it on a
+  keyboard. The panel is an HTML dialog (a real input: a phone's keyboard, emoji), with the
+  history, a box and "send"; the other player's messages appear as they come.
+- "I don't want the chat to distract players while they're hitting": while this player aims,
+  swings, has a stroke on its way or in the air, or a drop to take, a new message shows nothing:
+  no note, no sound, no count. It shows once the shot is over (the other player's turn, or
+  between holes). Opening the panel stays the player's own choice (it stops a swing in progress,
+  like the menu).
+- A new message otherwise: a note under the match bar for 6 s (tap it to open the chat), a soft
+  sound, and the count on the chat button, which turns orange; a background tab's title says it.
+- "Can you put a little thing up at the start of the round that says press T to open chat":
+  when a match's first hole starts (both players in, nothing played yet), a yellow line under the
+  match bar for 8 s: "press t (or tap chat) to chat with <name>", or on a phone "tap chat (top
+  right) to talk to <name>". Once per match on a device, and never again once the player has
+  opened the chat.
+- Filtered like names: each word the name filter refuses becomes stars (also a word spelt out in
+  single letters). The server does it, so both players see the same text.
+- Kept with the match on the server (its own storage key: one write per message, apart from the
+  moves' record): the latest 100, at most 400 in a match, 5 per player in 10 s. A game coming back
+  gets what it missed; what was read is kept per match on the device. Not for watchers.
+- Quota: a message is one Durable Object write and one incoming WebSocket message (1/20 of a
+  request); a chatty match of 50 messages adds about a quarter to its writes.
+- A test found on main: online.test.ts's "hide me" test posted daily rounds dated 2026-10-20, which
+  the server stops taking two days on; it uses today's date now.
+
+## Scorecards from the daily and recent lists (developer, 2026-10-22; branch design/card-taps)
+
+- "View people's scorecards when you click on their score on the daily and recents page like you
+  can if you click on their score on the leaderboard": a tap on a round on "daily: today" and on
+  "recent" shows its card, as on the course boards (the same picture, with copy / download on a
+  computer and the share sheet on a phone). The card's box says whose it is ("sam's scorecard";
+  it said "your scorecard" for anyone's).
+- "Daily: this week" lists players, not rounds: a tap on one lists their daily rounds of the week
+  (day, course, score) to pick one.
+- The "recent" list carries scores only, so the card is fetched on the tap (`/api/scores?id=`, a
+  hidden player's round isn't given). Matches on "recent" have no card (the server keeps their
+  result, not the holes).
+- The card's pictures (course art, logos) load through the scene's loader, which ignores a start
+  while it is busy: the card now waits for it, and never longer than 8 s (a card without its art
+  rather than none).
+
+
+## Logos for the Muni and RedTail (developer, 2026-10-22)
+
+- "Can you make two logos: a sailboat for the muni and a fox for redtail golf course", then "let's
+  use your sailboat logo and fox logo" (the course chats had drawn their own to compare). The
+  design chat's drawings are the ones to use:
+  - `assets-src/course_logos/lake_oswego_muni.py`: a sailboat on the lake, white sails, a red hull
+    with a white stripe, an orange pennant;
+  - `assets-src/course_logos/redtail.py`: a red fox sitting in profile, its tail curled round
+    behind with a white tip, black socks, white chin and bib.
+- The course chats take these two files and their PNGs (`game/public/sprites/logos/<id>.png`) in
+  place of their own. RedTail's course id is assumed to be `redtail`; if its chat builds it under
+  another id, the two files are renamed to that id.
+
+## Missed clicks (developer, 2026-10-22; branch fix/missed-clicks)
+
+- "The game is occasionally missing clicks, it could be a hardware problem but can you look and see
+  if there's anything that would cause that." Two causes in the game, both fixed:
+  - **A swing tapped during a camera move was dropped.** The camera cuts (a fade, about 0.4 s) or
+    zooms (the putting views, about 0.5 s) to a new shot, and the swing button is live and looks
+    ready during it, but `PlayScene.tap` ignored taps until the move had finished. The tap is now
+    kept and the meter starts when the camera gets there (only if it is still the same shot and
+    nothing is open over it).
+  - **A button let go a little off its edge didn't count.** Buttons act on release (all but the
+    swing button, which acts on the press), and a press that slid off the button before the release
+    was cancelled: a finger rolling on a phone or a mouse moving while clicking a small button
+    (chat, map, menu, the club arrows) lost the click. A release within 6 game pixels of the button
+    now counts; let go well away, it still doesn't (the way to change your mind).
+- Not changed: a button made when a screen is redrawn takes input from the game's next frame
+  (Phaser), about 16 ms; on a slow device right after a screen change a click can still be early.
+- tests/e2e/clicks.spec.ts covers both; both tests fail on the old code.
+
+## Logos for Shorty's and the Preserve (developer, 2026-10-22)
+
+- "We'll need a logo for shorty's in bandon which is being made, maybe some kind of baby elk or
+  deer? and maybe a salal plant for the preserve":
+  - `assets-src/course_logos/shortys.py`: a spotted fawn (a young elk or deer) standing in dune
+    grass, facing left;
+  - `assets-src/course_logos/bandon_preserve.py`: a sprig of salal, broad glossy leaves on a red
+    stem with a drooping stalk of pink-white bells, in a tuft of moss.
+- The course ids `shortys` and `bandon_preserve` are assumed; if a course chat builds either under
+  another id, its two files (script and PNG) are renamed to that id, and its chat uses these in
+  place of a logo of its own.

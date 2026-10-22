@@ -80,6 +80,32 @@ export function tidyName(raw: string): string {
   return plain.trim().replace(/[^a-z0-9 .'-]/g, '').replace(/\s+/g, ' ').slice(0, 16).trim();
 }
 
+// characters that never belong in a chat message: controls, zero-width and direction marks (text that reads backwards)
+const CHAT_JUNK = /[\u0000-\u001f\u007f-\u009f\u00ad\u200b-\u200f\u2028-\u202e\u2060-\u206f\ufeff]/g;
+
+/**
+ * A chat message as it is kept and shown (live match chat, developer
+ * 2026-10-22): control characters and runs of spaces out, at most `max`
+ * characters, and each word the name filter wouldn't allow turned into stars,
+ * including a word spelt out in single letters ("f u c k"). Case, emoji and
+ * punctuation stay. '' when nothing is left.
+ */
+export function cleanChat(raw: string, max = 200): string {
+  const plain = Array.from(raw.normalize('NFC').replace(CHAT_JUNK, ' ').replace(/\s+/g, ' ').trim()).slice(0, max).join('').trim();
+  if (!plain) return '';
+  const words = plain.split(' ');
+  const bad = words.map((w) => !nameAllowed(w));
+  // single letters in a row: judged joined up as well
+  const single = (w: string) => w.replace(/[^\p{L}\p{N}@$!|]/gu, '').length === 1;
+  for (let i = 0; i < words.length; i++) {
+    let j = i;
+    while (j < words.length && single(words[j])) j++;
+    if (j - i >= 3 && !nameAllowed(words.slice(i, j).join(''))) for (let k = i; k < j; k++) bad[k] = true;
+    if (j > i) i = j - 1;
+  }
+  return words.map((w, i) => (bad[i] ? '*'.repeat(Math.min(8, Array.from(w).length)) : w)).join(' ');
+}
+
 /** The name to show or store: tidied, and the default if it is empty or not allowed. */
 export function boardName(raw: string): string {
   const t = tidyName(raw);

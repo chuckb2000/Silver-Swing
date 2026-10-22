@@ -3,6 +3,11 @@ streams that OSM maps only as lines (waterway=stream), from the channel the
 bare-earth DEM shows along them.
 
     python3 propose_channels.py <course> <osm id> [<osm id> ...]     (after s00-s02)
+    python3 propose_channels.py <course> --lines=proposed/<file>.geojson <id> [...]
+
+--lines: take the lines from that file (WGS84, an `osm` id per line) instead of
+the course's OSM data, for a creek OSM doesn't map (Langdon Farms hole 7, whose
+line comes from the DEM channel, data/langdon/make_creek_line.py).
 
 Along each line, cells within SEARCH m of it that lie more than DEPTH m below
 the running median of the DEM (MEDIAN m window) are the channel; the channel is
@@ -40,7 +45,8 @@ MIN_HALF = 1.0   # m: the proposal always covers the line +- this
 
 def main():
     name = course_name_from_argv()
-    ids = sys.argv[2:]
+    ids = [a for a in sys.argv[2:] if not a.startswith("--lines=")]
+    lines_file = next((a.split("=", 1)[1] for a in sys.argv[2:] if a.startswith("--lines=")), None)
     if not ids:
         raise SystemExit("usage: propose_channels.py <course> <osm id> [...]")
     cfg = load_config(name)
@@ -51,6 +57,10 @@ def main():
         t = r.transform
     rel = dtm - ndimage.median_filter(dtm, size=MEDIAN)
     g = gpd.read_file(bdir / "course_local.geojson")
+    if lines_file:
+        lf = gpd.read_file(cdir / lines_file).to_crs(world.epsg)
+        lf["geometry"] = lf.geometry.translate(-world.x0, -world.y0)
+        g = lf
     rows = []
     for oid in ids:
         sel = g[g.osm == oid]
@@ -73,7 +83,7 @@ def main():
         width = poly.area / max(line.length, 1.0)
         rows.append({"osm": f"channel_{oid}", "kind": "lateral_water_hazard",
                      "tags": {"golf": "lateral_water_hazard", "penalty": "red", "proposed": "yes",
-                              "source": f"lidar bare-earth DEM channel along OSM {oid} (propose_channels.py)",
+                              "source": f"lidar bare-earth DEM channel along {'the line' if lines_file else 'OSM'} {oid} (propose_channels.py)",
                               "lidar_mean_width_m": f"{width:.1f}", "lidar_median_depth_m": f"{depth:.2f}"},
                      "geometry": poly})
         print(f"  channel_{oid}: line {line.length:.0f} m, channel {poly.area:.0f} m2, mean width {width:.1f} m, median depth {depth:.2f} m")

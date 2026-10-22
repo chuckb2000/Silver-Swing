@@ -32,7 +32,9 @@ and data/langdon/validation_report.md.
 -   **Layout:** two parts either side of OR 551 (holes 10-15 west of it,
     the rest east), joined by a cart path under the highway; the highway
     strip is out of bounds. 9 and 18 share one green wrapped round the north
-    end of the clubhouse pond (9 on the east side). The driving range plays
+    end of the clubhouse pond, cut through the pond's north tip: 18 plays to
+    the west (left) side and 9 to the east (right) side, every pin included
+    (developer, 2026-10-20). The driving range plays
     in bounds, as rough (developer).
 -   **Data:** OSM (the developer's Overpass export: boundary, hole 1, ten
     bunkers, cart paths, ponds); every other green, fairway, bunker and tee
@@ -41,12 +43,14 @@ and data/langdon/validation_report.md.
     the tracing desk (`data/langdon/desk/`); DOGAMI bare-earth DTM and canopy
     height model (1 m). Originals in the GitHub release `data-langdon`.
 -   **Water:** the clubhouse pond (9, 18) and the pond between 12 and 13,
-    both red (`red_water_osm`).
+    both red (`red_water_osm`), and the creek on hole 7 between the fairway
+    and the approach (red, from the lidar channel; not in OSM; developer confirmed 2026-10-20).
 -   **Barns:** the barn on the left of the 8th fairway and the event barn by
     the 18th green are drawn barn red (`building_colours`); free relief, as
     for every building inside the boundary (developer).
--   **Trees:** 5,043 from the canopy model (799 on the course), type from
-    crown shape.
+-   **Trees:** 5,036 from the canopy model (736 on the course), type from
+    crown shape. Seven lidar tops inside the clubhouse pond on 18 (open water
+    in the 2024 orthophoto) are removed (`drop_trees`; developer, 2026-10-21).
 -   **Scorecard** (club card, 2/2020, supplied by the developer; identical to
     GolfPass). Tees are named Tee 8 to Tee 1; Tee 7 71.5/133.
 
@@ -56,12 +60,13 @@ and data/langdon/validation_report.md.
   Par     4   4   3   4   4   3   5   4   4   35    4   5   4   3   4   4   4   3   5   36    71
   HCP     13  11  17  9   7   15  3   1   5         12  2   4   18  14  10  8   16  6
   Tee 7   372 368 173 322 403 115 512 449 409 3123  365 607 425 166 379 340 411 204 502 3399  6522
-  Built   396 373 166 330 400 117 508 440 428 3158  358 606 427 165 378 351 407 213 500 3405  6563
+  Built   397 373 166 331 400 118 508 440 421 3154  358 606 427 165 378 351 407 213 502 3407  6561
   -------------------------------------------------------------------------------------
 
 Tee 8 (6,931, 73.7/133), Tee 5 (6,052), Tee 3 (5,246) and Tee 1 (4,190) are
 in scorecard.csv, not built; Tee 6, 4 and 2 are combinations on the card.
 
--   **Default tee:** Tee 7 (developer), the only set built. Holes 1 (+6.4 %),
-    3, 9, 15 and 17 are flags; none over 8 %.
+-   **Default tee:** Tee 7 (developer), the only set built. Holes 1 (+6.7 %),
+    3, 15 and 17 are flags; none over 8 %. Hole 9 passes (+3.0 %) since the
+    developer retraced the 9/18 green on 2026-10-21.
 -   **Known open items:** data/langdon/report_notes.md.

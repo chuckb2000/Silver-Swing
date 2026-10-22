@@ -16,6 +16,9 @@ import { LoadSuperseded } from '../data/courses';
 
 /** No progress for this long while a course loads: offer a reload (which then opens the course). */
 export const STALL_MS = 20_000;
+/** Width of one green in a card strip (assets-src/course_cards.py CARD_W), and how long each shows. */
+const CARD_FRAME_W = 208;
+const FLIP_MS = 15_000; // each card changes every 30 s, neighbours 15 s apart (developer, 2026-10-20: 3 s was too quick)
 export const OPEN_COURSE_KEY = 'golf:open-course';
 
 /** Reload the page and open this course straight away (what a player did by hand when a load hung). */
@@ -25,7 +28,7 @@ function reloadInto(id: string) {
 }
 import { ensureBg, MenuScene } from './menu';
 
-type Purpose = 'play' | 'board';
+type Purpose = 'play' | 'board' | 'match';
 /** A card: a course, or a place with several courses. */
 interface Tile { art: string; logos: string[]; name: string; sub: string; on: boolean; tap: () => void }
 interface Data { purpose?: Purpose; from?: string; courseId?: string }
@@ -51,6 +54,10 @@ export class CourseSelectScene extends MenuScene {
   }
   /** Fills for card art and logos still loading (run when they arrive; reset on every build). */
   private waiting: (() => void)[] = [];
+  /** The cards' greens take turns (sprites/cards/<id>.png is a strip of CARD_FRAME_W frames). */
+  private flips: (() => void)[] = [];
+  private flipTick = 0;
+  private flipTimer?: Phaser.Time.TimerEvent;
 
   constructor() {
     super('courses');
@@ -82,6 +89,9 @@ export class CourseSelectScene extends MenuScene {
 
   build() {
     this.waiting = [];
+    this.flips = [];
+    this.flipTimer?.remove();
+    this.flipTimer = this.time.addEvent({ delay: FLIP_MS, loop: true, callback: () => { this.flipTick++; for (const f of this.flips) f(); } });
     const W = app.view.w, H = app.view.h;
     const pw = Math.min(470, W - 8), ph = H - 8;
     const x0 = Math.round((W - pw) / 2), y0 = 4;
@@ -166,7 +176,8 @@ export class CourseSelectScene extends MenuScene {
     const gap = 8;
     const cols = pw >= 400 ? 3 : 2;
     const cw = Math.min(208, Math.floor((pw - 16 - (cols - 1) * gap) / cols));
-    const ch = Math.min(128, Math.round(cw * 0.66));
+    // at least two rows when the panel allows (a wide 270-texel screen showed one row of three)
+    const ch = Math.max(72, Math.min(128, Math.round(cw * 0.66), Math.floor((ph - 60 - gap) / 2)));
     const top = y0 + 30;
     const rows = Math.max(1, Math.floor((ph - 30 - 30 + gap) / (ch + gap)));
     const perPage = cols * rows;
@@ -190,13 +201,20 @@ export class CourseSelectScene extends MenuScene {
     const ck = `card_${t.art}`;
     const art = this.add.container(0, 0);
     this.root.add(art);
+    const slot = this.flips.length; // cards change at different moments
     const fillArt = () => {
       if (!art.active || !this.textures.exists(ck)) return;
       const src = this.textures.get(ck).getSourceImage() as HTMLImageElement;
-      // the middle of the card art (the green sits there), one art pixel per texel
-      const cx = Math.max(0, Math.round((src.width - w) / 2)), cy = Math.max(0, Math.round((src.height - h) / 2) - 6);
-      art.add(this.add.image(x - cx, y - cy, ck).setOrigin(0, 0).setCrop(cx, cy, Math.min(w, src.width), Math.min(h, src.height)));
+      // a strip of greens, one frame at a time (an older single picture is one frame)
+      const n = src.width >= CARD_FRAME_W * 1.5 ? Math.max(1, Math.round(src.width / CARD_FRAME_W)) : 1;
+      const fw = n > 1 ? CARD_FRAME_W : src.width;
+      const k = n > 1 ? Math.floor((this.flipTick + (slot % 2)) / 2) % n : 0; // every 2 ticks, neighbours in turn
+      // the middle of the frame (the green sits there), one art pixel per texel
+      const cx = k * fw + Math.max(0, Math.round((fw - w) / 2)), cy = Math.max(0, Math.round((src.height - h) / 2) - 6);
+      art.removeAll(true);
+      art.add(this.add.image(x - cx, y - cy, ck).setOrigin(0, 0).setCrop(cx, cy, Math.min(w, fw), Math.min(h, src.height)));
     };
+    this.flips.push(fillArt);
     if (this.textures.exists(ck)) fillArt(); else this.waiting.push(fillArt);
     // name strip
     const strip = 22;
@@ -213,7 +231,19 @@ export class CourseSelectScene extends MenuScene {
       }
     }
     this.root.add(name);
-    this.root.add(txt(this, x + 4, y + h - strip + 12, t.sub, { color: COLORS.dim, maxWidth: w - 8 }));
+    // one line, inside the strip (University Place ran onto a second line, out of the card):
+    // the whole line, else without the town, else cut short
+    const sub = txt(this, x + 4, y + h - strip + 12, t.sub, { color: COLORS.dim });
+    const fitSub = (s: string) => { setTxt(sub, s); return sub.width <= w - 8; };
+    if (!fitSub(t.sub)) {
+      const parts = t.sub.split(' · ');
+      if (parts.length < 2 || !fitSub(parts.slice(1).join(' · '))) {
+        let s = parts.length < 2 ? t.sub : parts.slice(1).join(' · ');
+        while (s.length > 3 && !fitSub(`${s}...`)) s = s.slice(0, -1).trimEnd();
+        fitSub(`${s}...`);
+      }
+    }
+    this.root.add(sub);
     // logo (the first of t.logos that exists, e.g. the course's own, else its place's), or a lettered badge
     const logo = this.add.container(0, 0);
     this.root.add(logo);
@@ -283,7 +313,7 @@ export class CourseSelectScene extends MenuScene {
     this.loadError = '';
     if (this.purpose === 'board') { this.scene.start('leaderboard', { courseId: id }); return; }
     this.current = id;
-    if (app.course?.json.id === id) { this.scene.start('setup'); return; }
+    if (app.course?.json.id === id) { this.scene.start('setup', { match: this.purpose === 'match' }); return; }
     this.busy = true;
     this.stalled = false;
     this.loadFrac = 0;
@@ -309,6 +339,6 @@ export class CourseSelectScene extends MenuScene {
     this.busy = false;
     if (!this.sys.isActive()) return;
     ensureBg(this);
-    this.scene.start('setup');
+    this.scene.start('setup', { match: this.purpose === 'match' });
   }
 }

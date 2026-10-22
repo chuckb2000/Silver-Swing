@@ -39,7 +39,7 @@ Two chats work on this repository.
 | `docs/courses/<course>.md` | course chat | write it: facts, scorecard, the developer's calls, open items, new config keys, lessons (section 9) |
 | `assets-src/cards/<course>.json` | course chat | write it (section 12) |
 | `game/public/courses/index.json`, `game/public/sprites/title/index.json` | nobody | generated from the courses' `course.json` files at every build (`game/scripts/course-lists.mjs`); not in git |
-| `CLAUDE.md`, `DECISIONS.md`, `docs/COURSE_LESSONS.md` | design chat | read only. The design chat adds the course's line to `CLAUDE.md` and folds its lessons into `COURSE_LESSONS.md` after the merge |
+| `CLAUDE.md`, `DECISIONS.md`, `docs/COURSE_LESSONS.md` | design chat | read only. The design chat adds the course's line to `CLAUDE.md`, folds its lessons into `COURSE_LESSONS.md` and adds the course to the daily rotation (`game/src/data/dailyRoster.ts`, from the next day) after the merge |
 | `assets-src/course_logos/<course>.py`, `game/public/sprites/logos/<course>.png` | course chat | draw the course's logo (section 12) |
 | `assets-src/logos.py` | design chat | read only (its helpers are imported by course logos) |
 
@@ -236,6 +236,8 @@ Known Oswego-specific code, with the fix:
   "connect_fairways": false,            // optional, only where OSM is wrong: s02b runs the fairway up to the green
                                         // (true = every hole, or a list of holes); see COURSE_LESSONS.md 3
   "trees_off_fairways_m": null,         // optional: drop trees whose top is this far (m) inside a fairway (check the course first)
+  "merge_touching_fairways": false,     // optional: merge fairway pieces that touch (s02b approaches, OSM fairways drawn edge to edge)
+                                        // before s08 rounds them, so no line of rough is left along the join (East Potomac)
   "join_boundary": {"water_osm": ["r123"], "penalty": "red"},
                                         // optional: a boundary mapped in several parts with water between them
                                         // (Langston): that water, inside the parts' convex hull, becomes penalty

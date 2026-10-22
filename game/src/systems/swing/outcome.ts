@@ -9,6 +9,12 @@ export interface LieMods {
   distMult: number;
   windowMult: number;
   splash?: boolean; // greenside bunker splash with a wedge
+  /** gorse: no shot carries farther than this (m) */
+  carryCap?: number;
+  /** gorse: a narrower yellow band (% of bar) */
+  goodBand?: number;
+  /** gorse: misses curve more */
+  curveMult?: number;
 }
 
 export type StrikeQuality = 'perfect' | 'great' | 'good' | 'hook' | 'slice';
@@ -55,12 +61,24 @@ export const IN_ZONE_PUTT_DEG = 0.25;
  * outside the perfect zone. A miss in the yellow band curves noticeably
  * (playtest: "yellow should be a smidge more penal"); red misses are as before.
  */
-export function missCurve(excess: number): number {
+export function missCurve(excess: number, band = GOOD_BAND): number {
   if (excess <= 0) return 0;
-  return Math.max(excess, 0.9 + 0.75 * Math.min(excess, GOOD_BAND));
+  return Math.max(excess, 0.9 + 0.75 * Math.min(excess, band));
 }
 
 export const powerFactor = (p: number) => (p <= 1 ? p : 1 + 0.08 * Math.min(1, (p - 1) / 0.1));
+
+/**
+ * Nominal carry (m, flat and calm, before any miss) of a club from a lie at a
+ * swing length and meter power: club carry x lie x power factor of
+ * (power x swing length), never past the lie's carry cap (gorse). The strike,
+ * the club's carry label, the meter readout and the automatic swing length all
+ * use this, so they agree.
+ */
+export function shotCarry(club: Club, lie: LieMods, swingScale = 1, power = 1): number {
+  const full = club.carryM * powerFactor(power * swingScale) * (lie.splash ? 0.45 : 1) * lie.distMult;
+  return lie.carryCap !== undefined ? Math.min(full, lie.carryCap) : full;
+}
 
 export function perfectHalfWidth(base: number, club: Club, lie: LieMods, overswing: boolean): number {
   return base * lie.windowMult * club.windowMult * (overswing ? 0.5 : 1);
@@ -78,11 +96,15 @@ export function strikeFrom(m: MeterResult, club: Club, lie: LieMods, perfectZone
   const p = m.power * swingScale;
   const pf = powerFactor(p);
   const overswing = p > 1.0001;
-  const splashMult = lie.splash ? 0.45 : 1;
-  const baseCarry = club.carryM * pf * splashMult * lie.distMult;
-  const flightScale = Math.sqrt(Math.min(pf, 1.08));
+  const uncapped = shotCarry(club, { ...lie, carryCap: undefined }, swingScale, m.power);
+  const baseCarry = shotCarry(club, lie, swingScale, m.power);
+  let flightScale = Math.sqrt(Math.min(pf, 1.08));
+  // gorse: the club can't get through - the ball comes out short, lower and sooner
+  if (baseCarry < uncapped) flightScale *= Math.sqrt(baseCarry / uncapped);
   let apex = club.apexM * flightScale;
   const hang = club.hangS * flightScale;
+  const band = lie.goodBand ?? GOOD_BAND;
+  const curveMult = lie.curveMult ?? 1;
   const half = perfectHalfWidth(perfectZone, club, lie, overswing);
   const offset = m.offset;
   const excess = Math.max(0, Math.abs(offset) - half);
@@ -91,12 +113,12 @@ export function strikeFrom(m: MeterResult, club: Club, lie: LieMods, perfectZone
   const swingMult = overswing ? 2 : 1;
   const curveDeg = side === 0 ? 0
     : excess === 0 ? side * IN_ZONE_CURVE * inZone * club.curveFactor * swingMult
-      : side * Math.min(25, missCurve(excess) * club.curveFactor * swingMult);
+      : side * Math.min(25 * curveMult, missCurve(excess, band) * club.curveFactor * swingMult * curveMult);
   const loss = excess === 0 ? 0 : Math.min(0.15, 0.05 + 0.01 * excess);
   if (lie.splash) apex *= 0.9;
   let quality: StrikeQuality = inZone <= PERFECT_CORE ? 'perfect' : 'great';
   if (excess > 0) {
-    if (excess < GOOD_BAND) quality = 'good';
+    if (excess < band) quality = 'good';
     else quality = missWord(side, true, lefty) as 'hook' | 'slice';
   }
   return { carry: baseCarry * (1 - loss), apex, hang, curveDeg, aimOffsetDeg: 0, quality, side, excess, loss, power: p, overswing };

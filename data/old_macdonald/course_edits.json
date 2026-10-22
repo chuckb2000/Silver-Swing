@@ -1,0 +1,52 @@
+{
+ "add": [
+  {
+   "from": "proposed/tees_linestart.geojson",
+   "ids": [
+    "p_tee_black_1",
+    "p_tee_black_2",
+    "p_tee_black_4",
+    "p_tee_black_6",
+    "p_tee_black_7",
+    "p_tee_black_8",
+    "p_tee_black_9",
+    "p_tee_black_10",
+    "p_tee_black_11",
+    "p_tee_black_12",
+    "p_tee_black_13",
+    "p_tee_black_14",
+    "p_tee_black_15",
+    "p_tee_black_16",
+    "p_tee_black_17"
+   ],
+   "reason": "Black tee boxes where OSM maps none: 12 x 8 m boxes on the start of the OSM hole lines (developer, 2026-10-21: the tees are at the start of the lines), except holes 1 and 13, whose lines measure 16-17 % beyond the Black card from their start: there the box stands where the Black card distance falls on the line (course chat's call, an open item)"
+  },
+  {
+   "from": "proposed/greens_split.geojson",
+   "ids": [
+    "p_green_5",
+    "p_green_10"
+   ],
+   "reason": "the green holes 5 and 10 share (OSM w697052065, one polygon with a pin for each hole), cut into one part per hole by split_double_greens.py (perpendicular bisector of the two OSM pins), so each hole has its own centre, pin and putting views (as at Langdon Farms)"
+  },
+  {
+   "from": "proposed/pins_centre.geojson",
+   "ids": [
+    "p_pin_8"
+   ],
+   "reason": "hole 8 (Biarritz, a 69 m green): the centre pin at the green's visual centre; OSM's pin was 16 m off it, outside the close-up putting view's margin (the game adds three more pins round the green)"
+  }
+ ],
+ "tags": [],
+ "drop": [
+  {
+   "osm": "w697052065",
+   "reason": "replaced by its two parts (add above)"
+  },
+  {
+   "osm": "n6556491710",
+   "reason": "hole 8's OSM pin, replaced by the centre pin (add above)"
+  }
+ ],
+ "extend_start": []
+}

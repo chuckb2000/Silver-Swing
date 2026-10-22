@@ -11,7 +11,7 @@ island), Langston (2026-10-19, a course in two parts across a lake), Indian
 Island (2026-10-19, half the course traced), Tualatin Country Club
 (2026-10-19, section 9), Eastmoreland (2026-10-19, Portland), Willamette Valley
 (2026-10-19, section 10), Oregon Golf Club (2026-10-19, section 11) and
-Franklin Country Club (2026-10-19, section 12) and Langdon Farms (2026-10-19, section 13, every hole traced). Oswego Lake and Highland Links
+Franklin Country Club (2026-10-19, section 12) and Langdon Farms (2026-10-19, section 15, every hole traced). Oswego Lake and Highland Links
 notes live in DECISIONS.md.
 
 ---
@@ -620,6 +620,21 @@ notes live in DECISIONS.md.
   `git fetch --depth=300 origin main` gave the base, and per file "take
   main's, re-apply mine" (`git diff <base> HEAD -- <file> | git apply --3way`)
   resolved the desk files that both branches changed.
+- **Look for creeks OSM doesn't map at all.** The first Langdon build missed a
+  creek across hole 7; the developer saw it. A relative-height map of the DEM
+  (height minus a 25 m running median, cells below -0.25 m in red) over the
+  whole course shows every channel at once, mapped or not. Make it in Phase 3
+  and ask about each channel that crosses or runs beside a hole. For one OSM
+  lacks, take the line from the channel itself (`data/langdon/make_creek_line.py`)
+  and run `propose_channels.py --lines=`.
+- **Split a double green the way the holes use it, and check the game's
+  pins.** The game adds up to three pin positions anywhere on a hole's green
+  (`pins.ts`), so a hole's part of a shared green must be only the side that
+  hole plays to: Langdon's first split gave 18 the north end of the pond, the
+  game put an 18 pin on 9's side, outside 18's putting views, and the
+  developer putted blind. Ask which side each hole uses, cut the joined green
+  with a line (trace_spec `double_greens` `split`), and test every spot from
+  `coursePins` against the side and the putting views.
 
 ## 16. Gearhart Golf Links (2026-10-20)
 
@@ -647,3 +662,126 @@ Folded in from docs/courses/gearhart.md at the merge.
 -   **Playwright ignores specs inside its own output folder** (`test-results/`)
     and wipes it at the start of a run; keep a throwaway look script under
     `playwright-report/` (also git-ignored) with its own config.
+
+## 17. Bandon Trails (2026-10-20)
+
+Folded in from docs/courses/bandon_trails.md at the merge.
+
+-   **A resort export holds every course in the box.** The pipeline takes every
+    `leisure=golf_course` and every `golf=hole` it finds, so the neighbours' boundaries
+    and hole lines must be dropped (`make_edits.py` does it by name and checks each
+    line lies outside the boundary). Their greens off the map must go too, or s09 fails.
+-   **Overpass exports made with metadata on** carry @user/@uid/@timestamp per feature;
+    strip them before s01 (they would become OSM tags).
+-   **Long shared tee complexes measure badly from the centre.** Four holes were over 8 %
+    from the box centres and within 3 % once s06 moved the tee along the box. Read the
+    adjusted column before calling a FAIL.
+-   **On a coastal conifer course the "deciduous" crowns are pines.** A theme can draw
+    the broad-crown class as shore pine; say so as a drawing choice.
+-   **The 2024 orthophoto settles the lidar's age** when the mosaic gives no year:
+    overlay the crowns on photo crops.
+-   **`golf=path`** is still not read by s01 (COURSE_LESSONS.md 10); `make_edits.py`
+    copies it as a cart path with a new id (dropping by id would otherwise remove the copy).
+
+## 18. Chambers Bay (2026-10-20)
+
+Folded in from docs/courses/chambers_bay.md at the merge (lidar rebuild folded in the same day).
+
+-   **Look at the lidar's "trees" on a treeless course before trusting them.** Of 32 crowns inside the boundary, 2 were structures; outside it a parked freight train made 166 identical 4.7 m crowns along the track, and the mine ruins 17 more. Equal heights in a straight line are a vehicle or a structure. Drop them with `not_trees_areas` (a GeoJSON of areas whose crowns aren't trees).
+-   **OSM tags the pipeline doesn't read can still be used:** `historic=ruins` polygons became buildings through a `proposed/` file and `edits.json`; OSM `natural=tree` points with `leaf_type` can set a lidar tree's type (`tree_types_osm`).
+-   **Ask what the lidar buys before waiting for it.** Here the DEM gave every elevation and the course has one tree in play; the point cloud only changes scenery outside the boundary, so the course was finished on the OSM tree fallback and the lidar becomes a one-step rebuild. A NOAA Data Access Viewer job can take hours.
+
+-   **A complete-looking OSM course can still lack the middle tees.** Chambers Bay's OSM maps the tips (the 2015 U.S. Open tees) and some forward boxes. On four holes no box was near the Blue card. Measure every box near each hole against every column of the card first (here 4729 = Black 295, 4730 = Sand 253 on 12), so the missing set is clear before asking.
+-   **Measure off-line boxes the way s06 does** (`path_from`: straight from the tee to the next bend). Adding the sideways offset to the along-line distance put hole 3's White box (126 yd) at 149 and made it look like the Blue tee.
+-   **On a links course, place a missing tee where the card distance crosses the line on mown grass.** A contour of s06's own distance over the photo, plus a green-pixel test away from paths and sand, found the spot on 3, 12 and 15 in one pass; where it fell in waste sand (11), say so instead of placing a tee there.
+-   **The USDA NAIP ImageServer (gis.apfo.usda.gov) reset the developer's connection;** the same NAIP from `imagery.nationalmap.gov/arcgis/rest/services/USGSNAIPImagery/ImageServer/exportImage` (JPEG, up to 4,000 px) worked at once. Pierce County's own orthophotos are vendor-licensed.
+-   **A long, narrow tee strip has a centre ridge only at its wide end,** so s06's tee move (which stays on the ridge) can overshoot the card (hole 13: 521 vs 500). Accept it as a flag or ask the design chat; don't hand-place the tee.
+-   **Big practice ranges can be mapped as `golf=fairway`.** List every fairway, green and tee farther than 15 m from any hole line; the 3 ha "fairway" east of 7 and 10 was the range (striped hitting areas on the photo).
+-   **Scratch runs that edit the config must restore it with an absolute path.** A `trap` that copied a relative path after the script had changed directory left the config without its `laz` key.
+-   **Hydro-flattened sea** sits at one value (-1.49 m here); `lake_level_max_m` just above it turns the sound into water without touching the beach.
+
+## 19. East Potomac: fairway joins (2026-10-20)
+
+-   **Rounded fairway corners pull in at every join.** s08 rounds each fairway piece on its own, so an s02b approach and the fairway it extends, or two OSM fairways drawn edge to edge, each pull back from the shared edge and leave a line of rough and small notches (East Potomac: 161 pockets, 189 m2). Set `merge_touching_fairways` where the fairways come in pieces, and check a course with many s02b approaches for rough slivers inside the fairways.
+
+## 20. Bandon Dunes (2026-10-20)
+
+Folded in from docs/courses/bandon_dunes.md at the merge.
+
+-   **Resort polygons hold several courses.** Drop the other courses'
+    `golf=hole` lines and course polygons in `edits.json`, keep their
+    surfaces, and drop their greens outside the world. s09 crashed on a
+    green beyond the world edge (negative raster size).
+-   **Old lidar, new course.** The DOGAMI South Coast lidar predates parts
+    of the resort. Comparing tree crowns with a recent photo
+    (`trees_need_ortho`) removed 407 trees standing on what are now greens
+    and fairways of the Preserve.
+-   **Shrubs under 4 m are invisible to the tree finder.** The thickets
+    that define this course had to come from the photo. A simple colour
+    rule (dark, blue-green, textured) separated them from the fescue cleanly
+    in the late-summer OSIP image.
+-   **The crown-shape rule misreads coastal pines** (86 % "deciduous"):
+    wind-sheared shore pines are broad and flat. Look at the photo before
+    trusting the split.
+-   **A mapped beach that starts outside the world gives s08 nothing to
+    grow from.** Propose the beach from the DEM instead (`make_beach.py`).
+-   **Tee boxes beside the line.** s06 looks 25 m either side of the hole
+    line. Boxes 26-33 m out (holes 2 and 3) and a tee complex 100 m from a
+    misdrawn line start (hole 11) needed `hole`/`tee_set` tags. Measuring
+    every box within 160 m against the card found them in one pass.
+-   **A sprite outline that uses `np.roll`** wraps a solid bottom row onto
+    the top row (a stray line above every gorse bush). Pad before rolling.
+
+## 21. Triggs Memorial (2026-10-20)
+
+Folded in from docs/courses/triggs.md at the merge.
+
+-   **NOAA's Data Access Viewer can ignore the requested projection.** The job came back in RI State Plane metres (EPSG:6567), not UTM 19N; read the LAZ header before the first s00 run. s00 reprojects the horizontal from the file's CRS, so only the vertical units need setting in the config.
+-   **rockyweb.usgs.gov can time out in the developer's browser,** and a project's LAZ is not always on prd-tnm.s3.amazonaws.com (only its browse images were). Offer the NOAA viewer job from the start: one clipped zip instead of nine tiles.
+-   **A back tee just past the previous green** can sit outside s06's 25 m search: measuring every box within 200 m of the line start against the card found hole 15's Blue box at 506 vs 508 yd.
+-   **The card's subtitle is the text before the first comma of `location`.** "Mount Pleasant, Providence, ..." would have shown the neighbourhood; use the town first.
+-   **The preliminary build without lidar** (a scratch config with the `laz` key removed, restored by absolute path on exit) let terrain, greens, surfaces and art be checked while the NOAA job ran.
+
+## 22. East Potomac: a tee point needs a box under it (2026-10-20)
+
+- Blue 13 had been lengthened with `extend_start` to reach the card, which put the tee point on
+  open grass. A tee must sit on a tee box: look for the raised pad in the lidar (here 56 x 9 m
+  against the seawall, 28 m off the OSM hole line, matching the NPS 2016 map) and add it as a tee
+  polygon rather than stretching the hole line.
+- One box for several sets: a forced tee's `tee_set` may list them, `"Blue;White"` (s06).
+
+## 23. TPC Boston, Pacific Dunes, Old Macdonald, Sheep Ranch (2026-10-21)
+
+Details in each course's file (`docs/courses/<id>.md`, "Lessons").
+
+- **Check an uploaded GeoTIFF on arrival** (dtype, CRS, value range): an image tool's
+  "compression" turned TPC Boston's DEM into 8-bit JPEG pictures with no georeferencing. The
+  USGS 3DEPElevation ImageServer `exportImage` (float32, 1 m) gives a course area in one request.
+- **A neighbour's `golf=water_hazard` ponds outside the boundary are still yellow penalty areas**
+  (water is checked before out of bounds): redraw them as plain `natural=water`.
+- **Long tee complexes hold several sets**: measure the yardage range inside each box before
+  calling a set missing.
+- **Neighbouring courses can share one set of downloads and one release** (`release.json`); the
+  three Bandon courses did, with no pipeline change. DOGAMI `exportImage` works with `f=json`
+  where `f=image` fails, and `identify` settles the lidar's vintage at a point first.
+- **Sum the OSM lines against every column of the card first.** Old Macdonald's and Sheep Ranch's
+  lines start on the back tees (Black within 3 %); Pacific Dunes' start at forward boxes, with the
+  back boxes 54-76 m off the line (outside s06's 25 m search). A line can even start at the
+  previous green (Sheep Ranch 3).
+- **Lidar that isn't hydro-flattened has no data over the sea**: fill the sea cells joined to the
+  raster's edge with the water-line height (`fill_sea.py`, run by `make fetch`) and let s04's
+  `lake_level_max_m` make them sea. Lidar older than the course (2008 at Bandon) is fine: greens
+  are shaped and tees levelled anyway; `trees_need_ortho` drops trees that are gone.
+- **A double green mapped as one polygon** gets one pin for both holes: split it along the
+  bisector of the two pins (`split_double_greens.py`, as at Langdon Farms).
+- **OSM `handicap` tags can be another row of the card**; s06 uses the card.
+- **A developer's draft release isn't visible to `make fetch`**: ask for it to be published.
+
+## 24. Langdon Farms: trees in a pond, a double green traced whole (2026-10-21)
+
+- **s05 drops lidar trees in golf water hazards, not in plain `natural=water`.** Canopy tops in a
+  pond mapped as `natural=water` stay unless listed in `drop_trees`; check ponds against the photo
+  (Langston keeps trees on its lake islands, so this stays per course).
+- **Trace a double green as one outline** (`desk_export.py --area double`: a page with the whole
+  green and the split line as a guide); `desk_to_proposed.py` cuts it for both holes. Per-hole
+  drawings had taken in the collar (3,656 m² against 2,348 m² traced whole).

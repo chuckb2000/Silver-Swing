@@ -1,0 +1,36 @@
+{
+  "name": "Bandon Dunes (Oregon coast dunes and gorse)",
+  "note": "Course theme palette (<= 32 colours; same keys as pnw.json plus F0-F2). Bandon Dunes on its bluff above the Pacific: firm golden-lime fescue fairways and greens, tawny dune-grass rough, dark gorse and shore pine, tan sand, a deep blue-teal ocean and a pale grey-tan beach. From the developer's photos (GitHub release bandon-dunes-data) and the OSIP 2024 orthophoto. Shadows are a 35% black overlay on top of these.",
+  "colors": {
+    "G0": "#18291c", "G1": "#253c22", "G2": "#36512a", "G3": "#556e33",
+    "G4": "#788c3c", "G5": "#8ea144", "G6": "#a2b34d", "G7": "#b5c55b",
+    "G8": "#c8d56e", "G9": "#dde79a",
+    "L0": "#6c6f3e", "L1": "#82864a", "L2": "#989b57",
+    "S0": "#b29a6c", "S1": "#d6c293", "S2": "#ebdfba",
+    "W0": "#123a5e", "W1": "#1c5584", "W2": "#5a97c4",
+    "K0": "#26272d", "K1": "#55565d", "K2": "#7d7e86", "K3": "#b5ad9a", "K4": "#dbd3c1",
+    "B0": "#3f2c1e", "B1": "#634631", "B2": "#86664a",
+    "R0": "#5b5e66", "WH": "#f6f6f2",
+    "F0": "#857643", "F1": "#a08f56", "F2": "#b8a76c"
+  },
+  "lut": {
+    "rough": ["F0", "F1", "F2", "F2"]
+  },
+  "aliases": {
+    "TUFT": "G3"
+  },
+  "minimap": {
+    "ob": "#82864a", "rough": "#a08f56", "woods": "#253c22", "ob_woods": "#253c22",
+    "water": "#1c5584", "ob_water": "#1c5584", "bunker": "#d6c293", "ob_sand": "#ebdfba"
+  },
+  "minimap_trees": {
+    "conifer": ["#13261b", "#2b4c33"],
+    "deciduous": ["#25391f", "#466330"],
+    "shrub": ["#2c4224", "#c9a826"]
+  },
+  "trees": {
+    "conifer": "trees_bandon_dunes:shore_pine",
+    "deciduous": "trees_bandon_dunes:gorse",
+    "shrub": "trees_bandon_dunes:gorse_bush"
+  }
+}

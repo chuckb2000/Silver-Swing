@@ -3,7 +3,8 @@
 // Kept free of Phaser and browser APIs so it can be unit-tested.
 
 import { DEFAULT_NAME, nameAllowed, tidyName } from '../save/names';
-import { feedBadges, FeedRow } from '../save/feed';
+import { feedBadges, FeedRow, MatchFeedRow } from '../save/feed';
+import type { MatchResult } from './matchRoom';
 import { isEntry, LeaderboardEntry, MAX_ROUND_HOLES } from '../save/entry';
 import { birdiesIn, EagleEvent, eaglesIn, isEagle } from '../save/feats';
 
@@ -53,10 +54,35 @@ const SCHEMA = [
   )`,
   'CREATE INDEX IF NOT EXISTS eagles_received ON eagles (received)',
   'CREATE TABLE IF NOT EXISTS meta (k TEXT PRIMARY KEY, v TEXT)',
+  // players who chose "hide me from the leaderboards" (developer, 2026-10-20): their rounds and
+  // eagles are kept but left out of every shared list, so showing them again brings them all back
+  'CREATE TABLE IF NOT EXISTS hidden (owner TEXT PRIMARY KEY, since TEXT NOT NULL)',
+  // finished live matches, for the "recent" list (developer, 2026-10-21: "kevin def. charlie 3&2", the course
+  // and the date). Not rounds: no board, handicap or "my golf" counts them
+  `CREATE TABLE IF NOT EXISTS matches (
+    code TEXT PRIMARY KEY,
+    course TEXT NOT NULL,
+    tee TEXT NOT NULL,
+    holes INTEGER NOT NULL,
+    played INTEGER NOT NULL,
+    winner TEXT NOT NULL,
+    loser TEXT NOT NULL,
+    winner_owner TEXT,
+    loser_owner TEXT,
+    margin TEXT NOT NULL,
+    how TEXT NOT NULL,
+    date TEXT NOT NULL,
+    received TEXT NOT NULL
+  )`,
+  'CREATE INDEX IF NOT EXISTS matches_received ON matches (received)',
 ];
 
+/** Rows of players who haven't hidden themselves (rounds and eagles both have `owner`). */
+const SHOWN = '(owner IS NULL OR owner NOT IN (SELECT owner FROM hidden))';
+const shownAs = (t: string) => `(${t}.owner IS NULL OR ${t}.owner NOT IN (SELECT owner FROM hidden))`;
+
 /** Bumped when SCHEMA or ROUND_COLUMNS change: a database at this version skips the setup. */
-const SCHEMA_VERSION = '3';
+const SCHEMA_VERSION = '5';
 /** Old rounds counted per request (Cloudflare's free plan allows 50 database queries per request). */
 const BACKFILL_ROWS = 10;
 
@@ -262,7 +288,7 @@ async function dailyCounts(db: D1Like, e: LeaderboardEntry, owner: string | null
   return !results.length;
 }
 
-/** GET /api/scores?ping=1, ?course=<id>, ?owner=<player key>, ?daily=<day> or ?week=<first day> */
+/** GET /api/scores?ping=1, ?course=<id>, ?owner=<player key>, ?daily=<day>, ?week=<first day> or ?id=<round id> */
 export async function handleGet(db: D1Like | undefined, url: URL): Promise<Response> {
   if (!db) return json({ ok: false, error: 'no database bound (DB)' }, 503);
   await prepareDb(db);
@@ -270,22 +296,27 @@ export async function handleGet(db: D1Like | undefined, url: URL): Promise<Respo
   const owner = url.searchParams.get('owner');
   const daily = url.searchParams.get('daily');
   const week = url.searchParams.get('week');
+  const id = url.searchParams.get('id');
   const course = url.searchParams.get('course') ?? '';
   let stmt: D1Statement;
-  if (owner !== null) {
+  if (id !== null) {
+    // one round, for its card (a tap on the "recent" list, developer 2026-10-22); a hidden player's isn't given
+    if (!id || id.length > 120) return json({ error: 'id required' }, 400);
+    stmt = db.prepare(`SELECT data FROM rounds WHERE id = ? AND ${SHOWN} LIMIT 1`).bind(id);
+  } else if (owner !== null) {
     // a player's own rounds, from every device with the player code ("my golf"): the key is private
     if (!ownerOf(owner)) return json({ error: 'owner required' }, 400);
     stmt = db.prepare('SELECT data FROM rounds WHERE owner = ? ORDER BY date DESC LIMIT ?').bind(owner, MAX_RETURN);
   } else if (daily !== null) {
     if (!isDay(daily)) return json({ error: 'daily=yyyy-mm-dd' }, 400);
-    stmt = db.prepare('SELECT data FROM rounds WHERE daily = ? ORDER BY gross ASC, back ASC, date ASC LIMIT ?').bind(daily, MAX_RETURN);
+    stmt = db.prepare(`SELECT data FROM rounds WHERE daily = ? AND ${SHOWN} ORDER BY gross ASC, back ASC, date ASC LIMIT ?`).bind(daily, MAX_RETURN);
   } else if (week !== null) {
     // the seven daily rounds from this day on (the week's board: best five of seven, worked out by the game)
     if (!isDay(week)) return json({ error: 'week=yyyy-mm-dd' }, 400);
-    stmt = db.prepare('SELECT data FROM rounds WHERE daily >= ? AND daily <= ? ORDER BY daily ASC, gross ASC LIMIT ?').bind(week, addDays(week, 6), MAX_RETURN);
+    stmt = db.prepare(`SELECT data FROM rounds WHERE daily >= ? AND daily <= ? AND ${SHOWN} ORDER BY daily ASC, gross ASC LIMIT ?`).bind(week, addDays(week, 6), MAX_RETURN);
   } else {
     if (!course || course.length > 64) return json({ error: 'course required' }, 400);
-    stmt = db.prepare('SELECT data FROM rounds WHERE course = ? ORDER BY gross ASC, back ASC, date ASC LIMIT ?').bind(course, MAX_RETURN);
+    stmt = db.prepare(`SELECT data FROM rounds WHERE course = ? AND ${SHOWN} ORDER BY gross ASC, back ASC, date ASC LIMIT ?`).bind(course, MAX_RETURN);
   }
   const { results } = await stmt.all<{ data: string }>();
   const entries: LeaderboardEntry[] = [];
@@ -335,7 +366,16 @@ export async function handlePost(db: D1Like | undefined, body: string): Promise<
   for (const raw of list) {
     try {
       if (!isEntry(raw) || !validScores(raw)) { rejected++; continue; }
-      if (have.has(raw.id)) continue;
+      if (have.has(raw.id)) {
+        // a round stored before it carried a player key (or before keys existed): it takes the
+        // sender's key when the sender holds its name, so "my golf" on another device finds it
+        const o = ownerOf((raw as { owner?: unknown }).owner);
+        if (o) {
+          await db.prepare('UPDATE rounds SET owner = ? WHERE id = ? AND owner IS NULL AND player IN (SELECT name FROM names WHERE owner = ?)')
+            .bind(o, raw.id, o).run();
+        }
+        continue;
+      }
       const { owner: rawOwner, ...e } = raw as LeaderboardEntry & { owner?: unknown };
       const c = await claim(e.player, rawOwner);
       if (c === 'taken' || c === 'too_many') { taken.push(e.id); continue; }
@@ -365,7 +405,7 @@ export async function handleEaglesGet(db: D1Like | undefined, url: URL): Promise
   await prepareDb(db);
   const limit = Math.max(1, Math.min(MAX_LIST, Number(url.searchParams.get('limit')) || 30));
   const course = url.searchParams.get('course');
-  const sql = `SELECT id, round, player, course, hole, par, strokes, tee, difficulty, date FROM eagles${course ? ' WHERE course = ?' : ''} ORDER BY received DESC, date DESC LIMIT ?`;
+  const sql = `SELECT id, round, player, course, hole, par, strokes, tee, difficulty, date FROM eagles WHERE ${SHOWN}${course ? ' AND course = ?' : ''} ORDER BY received DESC, date DESC LIMIT ?`;
   const stmt = course ? db.prepare(sql).bind(course, limit * 2) : db.prepare(sql).bind(limit * 2);
   const { results } = await stmt.all<EagleEvent>();
   const eagles: EagleEvent[] = [];
@@ -417,7 +457,7 @@ export async function handleRecordsGet(db: D1Like | undefined, url: URL): Promis
   if (kind !== 'birdies') return json({ error: 'unknown kind' }, 400);
   const limit = Math.max(1, Math.min(MAX_LIST, Number(url.searchParams.get('limit')) || 20));
   const course = url.searchParams.get('course');
-  const sql = `SELECT id, player, course, birdies, length, data, date FROM rounds WHERE birdies > 0 AND casual = 0${course ? ' AND course = ?' : ''} ORDER BY birdies DESC, date ASC LIMIT ?`;
+  const sql = `SELECT id, player, course, birdies, length, data, date FROM rounds WHERE birdies > 0 AND casual = 0 AND ${SHOWN}${course ? ' AND course = ?' : ''} ORDER BY birdies DESC, date ASC LIMIT ?`;
   const stmt = course ? db.prepare(sql).bind(course, limit * 2) : db.prepare(sql).bind(limit * 2);
   const { results } = await stmt.all<{ id: string; player: string; course: string; birdies: number; length: string; data: string; date: string }>();
   const rows: BirdieRecord[] = [];
@@ -457,7 +497,7 @@ export async function handleNames(db: D1Like | undefined, req: { method: string;
   return json({ ok: free, result: free ? 'ok' : 'taken' });
 }
 
-let feedCache: { at: number; limit: number; body: { rounds: FeedRow[] } } | null = null;
+let feedCache: { at: number; limit: number; body: { rounds: FeedRow[]; matches: MatchFeedRow[] } } | null = null;
 const FEED_CACHE_MS = 30_000;
 
 /** For tests: forget the cached feed. */
@@ -472,13 +512,13 @@ export async function handleRecentGet(db: D1Like | undefined, url: URL): Promise
   if (!db) return json({ ok: false, error: 'no database bound (DB)' }, 503);
   const limit = Math.max(1, Math.min(MAX_LIST, Number(url.searchParams.get('limit')) || 30));
   if (feedCache && feedCache.limit >= limit && Date.now() - feedCache.at < FEED_CACHE_MS) {
-    return json({ rounds: feedCache.body.rounds.slice(0, limit) });
+    return json({ rounds: feedCache.body.rounds.slice(0, limit), matches: feedCache.body.matches.slice(0, limit) });
   }
   await prepareDb(db);
   const { results } = await db.prepare(`SELECT r.id, r.player, r.course, r.length, r.tee, r.gross, r.casual, r.date, r.received, r.daily, r.data,
-      (SELECT MIN(p.gross) FROM rounds p WHERE p.course = r.course AND p.length = r.length AND p.tee IS r.tee AND p.casual = 0 AND p.received < r.received) AS prev_record,
+      (SELECT MIN(p.gross) FROM rounds p WHERE p.course = r.course AND p.length = r.length AND p.tee IS r.tee AND p.casual = 0 AND p.received < r.received AND ${shownAs('p')}) AS prev_record,
       (SELECT MIN(p.gross) FROM rounds p WHERE p.course = r.course AND p.length = r.length AND p.tee IS r.tee AND p.casual = 0 AND p.player = r.player AND p.received < r.received) AS prev_best
-    FROM rounds r ORDER BY r.received DESC, r.date DESC LIMIT ?`).bind(limit * 2).all<{
+    FROM rounds r WHERE ${shownAs('r')} ORDER BY r.received DESC, r.date DESC LIMIT ?`).bind(limit * 2).all<{
       id: string; player: string; course: string; length: string; tee: string | null; gross: number; casual: number | null; date: string;
       received: string; daily: string | null; data: string; prev_record: number | null; prev_best: number | null;
     }>();
@@ -495,6 +535,162 @@ export async function handleRecentGet(db: D1Like | undefined, url: URL): Promise
       ...feedBadges(r.gross, casual, r.prev_best, r.prev_record),
     });
   }
-  feedCache = { at: Date.now(), limit, body: { rounds: rows } };
-  return json({ rounds: rows });
+  const matches = await recentMatches(db, limit);
+  feedCache = { at: Date.now(), limit, body: { rounds: rows, matches } };
+  return json({ rounds: rows, matches });
 }
+
+/** The latest finished matches, neither player hidden, under names still allowed. */
+async function recentMatches(db: D1Like, limit: number): Promise<MatchFeedRow[]> {
+  const { results } = await db.prepare(`SELECT code, course, tee, holes, played, winner, loser, margin, how, date, received FROM matches
+    WHERE (winner_owner IS NULL OR winner_owner NOT IN (SELECT owner FROM hidden)) AND (loser_owner IS NULL OR loser_owner NOT IN (SELECT owner FROM hidden))
+    ORDER BY received DESC LIMIT ?`).bind(limit).all<MatchFeedRow>();
+  const out: MatchFeedRow[] = [];
+  for (const m of results) {
+    const w = boardableName(m.winner), l = boardableName(m.loser);
+    if (w && l) out.push({ ...m, winner: w, loser: l });
+  }
+  return out;
+}
+
+const MARGIN = /^(\d{1,2}&\d{1,2}|\d{1,2} up|at the \d{1,3}(st|nd|rd|th)|by forfeit|conceded)$/;
+
+/**
+ * A finished live match, from the match's own server (src/server/matchRoutes.ts
+ * reportMatch), onto the "recent" list once. Each name must be its player's on
+ * the boards (as for rounds); 'exists' when it is there already.
+ */
+export async function recordMatch(db: D1Like, code: string, r: MatchResult): Promise<'ok' | 'exists' | 'name' | 'invalid'> {
+  if (!/^[a-z0-9]{4,12}$/.test(code) || (r.winner !== 0 && r.winner !== 1) || !Array.isArray(r.players) || !Array.isArray(r.owners)) return 'invalid';
+  if (typeof r.margin !== 'string' || !MARGIN.test(r.margin) || !['holes', 'extra', 'conceded', 'forfeit'].includes(r.how)) return 'invalid';
+  if (!int(r.holes, 1, 18) || !int(r.played, 0, 99) || typeof r.courseId !== 'string' || r.courseId.length > 64 || typeof r.tee !== 'string' || r.tee.length > 40) return 'invalid';
+  await prepareDb(db);
+  const { results: have } = await db.prepare('SELECT code FROM matches WHERE code = ?').bind(code).all<{ code: string }>();
+  if (have.length) return 'exists';
+  const names: string[] = [];
+  for (const k of [0, 1]) {
+    const name = boardableName(r.players[k]);
+    if (!name || (await claimName(db, name, r.owners[k])) !== 'ok') return 'name';
+    names.push(name);
+  }
+  const w = r.winner, l = 1 - r.winner;
+  const now = new Date();
+  await db.prepare('INSERT OR IGNORE INTO matches (code, course, tee, holes, played, winner, loser, winner_owner, loser_owner, margin, how, date, received) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)')
+    .bind(code, r.courseId, r.tee, r.holes, r.played, names[w], names[l], ownerOf(r.owners[w]), ownerOf(r.owners[l]), r.margin, r.how, sane(r.date, now), now.toISOString())
+    .run();
+  feedCache = null;
+  return 'ok';
+}
+
+/**
+ * POST /api/hide with `{ owner, hidden }`: hide this player code's rounds and eagles
+ * from every shared list (settings "leaderboards: hidden"), or show them again.
+ * The rounds stay stored ("my golf" still finds them under the player code).
+ */
+export async function handleHide(db: D1Like | undefined, body: string): Promise<Response> {
+  if (!db) return json({ ok: false, error: 'no database bound (DB)' }, 503);
+  let owner: unknown, hidden: unknown;
+  try { ({ owner, hidden } = JSON.parse(body) as { owner?: unknown; hidden?: unknown }); } catch { return json({ error: 'not json' }, 400); }
+  const o = ownerOf(owner);
+  if (!o || typeof hidden !== 'boolean') return json({ error: 'owner and hidden required' }, 400);
+  await prepareDb(db);
+  if (hidden) await db.prepare('INSERT OR IGNORE INTO hidden (owner, since) VALUES (?, ?)').bind(o, new Date().toISOString()).run();
+  else await db.prepare('DELETE FROM hidden WHERE owner = ?').bind(o).run();
+  feedCache = null;
+  hcpCache = null;
+  return json({ ok: true, hidden });
+}
+
+/**
+ * POST /api/merge with `{ owner, into, from? }`: one player under one name (developer, 2026-10-21:
+ * "how to merge your scores if you've played under two names"). With `from`, another device's
+ * player code (knowing it is the proof, as for "use another" in settings), that code's names,
+ * rounds and eagles become this code's first. Then every round and eagle under this code's other
+ * names (and old rounds under them stored without a code) goes under `into`, one of this code's
+ * names. The other names stay this code's, so nobody else can take them up.
+ */
+export async function handleMerge(db: D1Like | undefined, body: string): Promise<Response> {
+  if (!db) return json({ ok: false, error: 'no database bound (DB)' }, 503);
+  let owner: unknown, into: unknown, from: unknown;
+  try { ({ owner, into, from } = JSON.parse(body) as { owner?: unknown; into?: unknown; from?: unknown }); } catch { return json({ error: 'not json' }, 400); }
+  const o = ownerOf(owner);
+  if (!o) return json({ ok: false, error: 'owner required' }, 400);
+  let f: string | null = null;
+  if (from !== undefined && from !== null && from !== '') {
+    f = ownerOf(from);
+    if (!f) return json({ ok: false, error: 'bad_code', message: 'that is not a player code' }, 400);
+    if (f === o) f = null;
+  }
+  await prepareDb(db);
+  if (f) {
+    const { results: theirs } = await db.prepare('SELECT name FROM names WHERE owner = ?').bind(f).all<{ name: string }>();
+    if (!theirs.length) return json({ ok: false, error: 'no_names', message: 'no names use that code' }, 404);
+    await db.prepare('UPDATE names SET owner = ? WHERE owner = ?').bind(o, f).run();
+    await db.prepare('UPDATE rounds SET owner = ? WHERE owner = ?').bind(o, f).run();
+    await db.prepare('UPDATE eagles SET owner = ? WHERE owner = ?').bind(o, f).run();
+    await db.prepare('UPDATE matches SET winner_owner = ? WHERE winner_owner = ?').bind(o, f).run();
+    await db.prepare('UPDATE matches SET loser_owner = ? WHERE loser_owner = ?').bind(o, f).run();
+    await db.prepare('DELETE FROM hidden WHERE owner = ?').bind(f).run(); // this code's choice stands
+  }
+  const { results } = await db.prepare('SELECT name FROM names WHERE owner = ? ORDER BY name').bind(o).all<{ name: string }>();
+  const names = results.map((r) => r.name);
+  const keep = boardableName(into);
+  if (!keep || !names.includes(keep)) return json({ ok: false, error: 'not_yours', message: 'keep one of this code\'s names', names }, 400);
+  const others = names.filter((n) => n !== keep);
+  let moved = 0;
+  if (others.length) {
+    const qs = others.map(() => '?').join(', ');
+    // the round's stored copy says its player too (the boards read it)
+    const r = (await db.prepare(`UPDATE rounds SET player = ?, owner = ?, data = json_set(data, '$.player', ?) WHERE player IN (${qs}) AND (owner = ? OR owner IS NULL)`)
+      .bind(keep, o, keep, ...others, o).run()) as { meta?: { changes?: number }; changes?: number };
+    moved = r?.meta?.changes ?? r?.changes ?? 0;
+    await db.prepare(`UPDATE eagles SET player = ?, owner = ? WHERE player IN (${qs}) AND (owner = ? OR owner IS NULL)`).bind(keep, o, ...others, o).run();
+    // finished matches on "recent" say the kept name too
+    await db.prepare(`UPDATE matches SET winner = ?, winner_owner = ? WHERE winner IN (${qs}) AND (winner_owner = ? OR winner_owner IS NULL)`).bind(keep, o, ...others, o).run();
+    await db.prepare(`UPDATE matches SET loser = ?, loser_owner = ? WHERE loser IN (${qs}) AND (loser_owner = ? OR loser_owner IS NULL)`).bind(keep, o, ...others, o).run();
+  }
+  feedCache = null;
+  hcpCache = null;
+  return json({ ok: true, names, into: keep, moved });
+}
+
+let hcpCache: { at: number; body: unknown } | null = null;
+const HCP_CACHE_MS = 60_000;
+const HCP_SCAN = 3000;   // the latest rounds looked at
+const HCP_PER_PLAYER = 40; // a player's latest Normal rounds sent (20 differentials, even all nines)
+
+/** For tests: forget the cached handicap rounds. */
+export function resetHandicapCache() { hcpCache = null; }
+
+/**
+ * GET /api/handicaps: each shown player's latest Normal, non-casual rounds, cut down
+ * to what a handicap needs (src/systems/game/handicap.ts works the index out in the
+ * game, which has the course ratings). One query; kept for a minute.
+ */
+export async function handleHandicapsGet(db: D1Like | undefined): Promise<Response> {
+  if (!db) return json({ ok: false, error: 'no database bound (DB)' }, 503);
+  if (hcpCache && Date.now() - hcpCache.at < HCP_CACHE_MS) return json(hcpCache.body);
+  await prepareDb(db);
+  const { results } = await db.prepare(`SELECT player, owner, data FROM rounds WHERE casual = 0 AND ${SHOWN} ORDER BY date DESC LIMIT ?`).bind(HCP_SCAN).all<{ player: string; owner: string | null; data: string }>();
+  // one handicap per player code, under the name of its latest round: a player who changed their
+  // name, or played under two, has one index here and in "my golf" (developer, 2026-10-20: the two
+  // differed). Rounds sent before player codes are grouped by name.
+  const by = new Map<string, { name: string; list: unknown[] }>();
+  for (const r of results) {
+    const name = boardableName(r.player);
+    if (!name) continue;
+    let e: LeaderboardEntry;
+    try { e = JSON.parse(r.data) as LeaderboardEntry; } catch { continue; }
+    if (!isEntry(e) || e.difficulty !== 'normal' || e.casual) continue;
+    const key = r.owner ? `o:${r.owner}` : `n:${name}`;
+    const g = by.get(key) ?? { name, list: [] }; // newest first: the first round's name is the latest
+    if (g.list.length >= HCP_PER_PLAYER) continue;
+    g.list.push({ id: e.id, course: e.course, tee: e.tee, difficulty: e.difficulty, casual: false, player: g.name, date: e.date,
+      scores: e.scores.map((h) => ({ hole: h.hole, par: h.par, strokes: h.strokes })) });
+    by.set(key, g);
+  }
+  const body = { rounds: [...by.values()].flatMap((g) => g.list) };
+  hcpCache = { at: Date.now(), body };
+  return json(body);
+}
+

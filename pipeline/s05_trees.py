@@ -325,6 +325,12 @@ def remove_wires(chm, rule):
                  "skeleton_m": int(skel[ok[1:]].sum())}
 
 
+def inside_mask(boundary, shape):
+    """The boundary on the 1 m grid (rows south->north), for the report."""
+    tr = Affine(1, 0, 0, 0, 1, 0)
+    return rasterize([(boundary, 1)], out_shape=shape, transform=tr, fill=0, dtype="uint8").astype(bool)
+
+
 def main():
     name = course_name_from_argv()
     cfg = load_config(name)
@@ -438,13 +444,58 @@ def main():
         t_ = trees.pop(k)
         removed.append({"x": t_["x"], "y": t_["y"], "h": t_["h"], "r": t_["r"], "type": t_["type"], "reason": d["reason"]})
 
+    # optional (course_config.json trees_need_ortho, pipeline/gorse.py): drop lidar trees the
+    # newer orthophoto doesn't show (the lidar is older than parts of the course)
+    gone = []
+    if cfg.get("trees_need_ortho"):
+        from gorse import missing_in_ortho
+        miss = missing_in_ortho(cfg, world, trees)
+        gone = [t_ for t_, m in zip(trees, miss) if m]
+        trees = [t_ for t_, m in zip(trees, miss) if not m]
     type_method = "Conifer vs deciduous is inferred from crown shape only (no leaf-off imagery); see build/trees_preview.png."
     leaf = leaf_off_shares(name, cfg, world, trees)
     if leaf is not None:
         type_method = leaf
+    # optional (course_config.json tree_type): every lidar tree is of this type (Bandon Dunes:
+    # the trees are shore pines, whose broad, wind-flattened crowns the shape rule calls deciduous)
+    if cfg.get("tree_type"):
+        for t_ in trees:
+            t_["type"] = cfg["tree_type"]
+        type_method = (f"Every lidar tree is typed {cfg['tree_type']} (course_config tree_type: "
+                       f"{cfg.get('tree_type_note', 'set for this course')}).")
     if any(t_.get("roof") for t_ in trees):
         dropped["roof"] = sum(1 for t_ in trees if t_.get("roof"))
         trees = [t_ for t_ in trees if not t_.get("roof")]
+    # optional (course_config.json not_trees_areas: a GeoJSON file in data/<id>/, WGS84;
+    # Chambers Bay's railway, where a train stood when the lidar was flown): crowns whose top
+    # lies in these areas are not trees and are dropped. Without the key: nothing.
+    if cfg.get("not_trees_areas") and trees:
+        from shapely import contains_xy
+        from shapely.affinity import translate
+        from shapely.ops import unary_union
+        from common import course_dir
+        na = gpd.read_file(course_dir(name) / cfg["not_trees_areas"]).to_crs(cfg["epsg"])
+        area = unary_union([translate(gm, -world.x0, -world.y0) for gm in na.geometry if gm is not None])
+        inside = contains_xy(area, np.array([t_["x"] for t_ in trees]), np.array([t_["y"] for t_ in trees]))
+        dropped["not_trees_area"] = int(inside.sum())
+        trees = [t_ for t_, k in zip(trees, inside) if not k]
+    # optional (course_config.json tree_types_osm: true; Chambers Bay's Lone Fir): a lidar
+    # tree within 4 m of an OSM natural=tree point tagged leaf_type=needleleaved|broadleaved
+    # takes that type instead of the crown-shape or leaf-off guess. Without the key: nothing.
+    if cfg.get("tree_types_osm") and trees:
+        osm_type = {"needleleaved": "conifer", "broadleaved": "deciduous"}
+        txy = np.array([[t_["x"], t_["y"]] for t_ in trees])
+        retyped = 0
+        for _, ot in g[g.kind == "tree"].iterrows():
+            want = osm_type.get((ot.tags or {}).get("leaf_type"))
+            if not want:
+                continue
+            d = np.hypot(txy[:, 0] - ot.geometry.x, txy[:, 1] - ot.geometry.y)
+            k = int(np.argmin(d))
+            if d[k] < 4 and trees[k]["type"] != want:
+                trees[k]["type"] = want
+                retyped += 1
+        type_method += f" {retyped} tree(s) typed from OSM leaf_type (tree_types_osm)."
     species_note = None
     # flowering shrubs of a garden beside the course (`garden`, pipeline/garden.py): each
     # bush has a bloom colour, and order_trees() (below, and again in s06b) puts it at an
@@ -457,6 +508,17 @@ def main():
         shrubs = shrub_trees(cfg, g, chm)
         trees = trees + shrubs
         n_shrubs = len(shrubs)
+    # gorse thickets from the orthophoto (`gorse`, pipeline/gorse.py; Bandon Dunes): bushes of
+    # type "shrub" (c: 3), drawn from the theme's own bush sheet
+    n_gorse = 0
+    from gorse import enabled as gorse_enabled
+    if gorse_enabled(cfg):
+        from gorse import gorse_area, gorse_bushes
+        g_area = gorse_area(cfg, world, g, chm)
+        np.save(build_dir(name) / "gorse_mask.npy", g_area)
+        bushes = gorse_bushes(cfg, g_area, chm, trees, boundary)
+        trees = trees + bushes
+        n_gorse = len(bushes)
     # s06 places the tees against these trees and s06b drops the ones still in the
     # way of a tee shot, then orders the list again (cherry slots)
     write_json(build_dir(name) / "trees_all.json", [dict(t_) for t_ in trees])
@@ -466,7 +528,7 @@ def main():
         trees, species_note = assign_blossoms(trees, cfg["blossom"], boundary, water_cells, bmask)
 
     # OSM natural=tree cross-check (lidar trees only: garden shrubs are not counted)
-    rt = [t_ for t_ in trees if t_["type"] != "shrub"] if n_shrubs else trees
+    rt = [t_ for t_ in trees if t_["type"] != "shrub"] if (n_shrubs or n_gorse) else trees
     osm_trees = g[g.kind == "tree"]
     tx = np.array([[t_["x"], t_["y"]] for t_ in rt])
     matched = 0
@@ -495,9 +557,18 @@ def main():
                            f"drawn from sprites/shrubs.png; colours {colour_counts(trees)}"
                            + (f", {misplaced} not in their colour's slot" if misplaced else "")
                            + "; positions from the lidar shrub layer, species and colours flair, not surveyed")
+    if n_gorse:
+        stats["gorse"] = n_gorse
+        stats["gorse_note"] = (f"{n_gorse} gorse bushes (trees.json c: 3, drawn from the theme's bush sheet) over "
+                               f"{int(g_area.sum())} m2 of scrub classified in the orthophoto ({int((g_area & inside_mask(boundary, g_area.shape)).sum())} m2 "
+                               "inside the boundary); positions from the photo, heights from the CHM where it sees the shrub layer; "
+                               "species and bloom are flair, not surveyed")
     if species_note:
         stats["cherry"] = int(sum(t_["type"] == "cherry" for t_ in trees))
         stats["blossom"] = species_note
+    if gone:
+        stats["not_in_ortho"] = (f"{len(gone)} lidar trees dropped: their crowns are not dark canopy in the "
+                                 "orthophoto (trees_need_ortho; the lidar is older than parts of the course)")
     if removed:
         stats["removed_by_developer"] = removed
     if wires is not None:
@@ -510,6 +581,11 @@ def main():
         # leave a patch of woods where the tree stood
         jj, ii = np.mgrid[0:chm.shape[0], 0:chm.shape[1]]
         for t_ in removed:
+            chm[np.hypot(ii + 0.5 - t_["x"], jj + 0.5 - t_["y"]) <= t_["r"] + 1.0] = 0
+    if gone:
+        # likewise under the lidar trees the orthophoto doesn't show (trees_need_ortho)
+        jj, ii = np.mgrid[0:chm.shape[0], 0:chm.shape[1]]
+        for t_ in gone:
             chm[np.hypot(ii + 0.5 - t_["x"], jj + 0.5 - t_["y"]) <= t_["r"] + 1.0] = 0
     np.save(bdir / "chm_local.npy", chm.astype(np.float32))
 

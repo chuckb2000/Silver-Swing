@@ -1,0 +1,30 @@
+{
+ "release": "bandon-dunes-data",
+ "note": "build inputs not kept in git; `make fetch NAME=bandon_dunes` puts them in place (pipeline/fetch_raw.py)",
+ "files": [
+  {
+   "asset": "exportImage.18.tiff",
+   "sha256": "a4434ebf6b64cceec23e04dd18bce248ac931d3251ecaa8f8c5c4bff4f63b34b",
+   "run": "cp {file} data/bandon_dunes/raw/dogami_dtm_ft.tif",
+   "outputs": {
+    "raw/dogami_dtm_ft.tif": "a4434ebf6b64cceec23e04dd18bce248ac931d3251ecaa8f8c5c4bff4f63b34b"
+   }
+  },
+  {
+   "asset": "exportImage.19.tiff",
+   "sha256": "d0e4f77c5338b465796ef31a347311189c462730488ff4515b436b338bb6c29a",
+   "run": "cp {file} data/bandon_dunes/raw/dogami_chm_ft.tif",
+   "outputs": {
+    "raw/dogami_chm_ft.tif": "d0e4f77c5338b465796ef31a347311189c462730488ff4515b436b338bb6c29a"
+   }
+  },
+  {
+   "asset": "exportImage.jpg",
+   "sha256": "66180351fab43685c587b9e281cc83cb1247c9428db949b937e6f42b1120c545",
+   "run": "python3 data/bandon_dunes/make_ortho.py {file}",
+   "outputs": {
+    "raw/osip2024_05m.tif": "23eb2836a17b96edcf69a1af5b033ff6fcadf72e7ad08e70df9191d86079f614"
+   }
+  }
+ ]
+}

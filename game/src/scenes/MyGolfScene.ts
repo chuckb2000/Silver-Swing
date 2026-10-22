@@ -10,6 +10,7 @@ import { milestonesOf, shortName } from '../save/milestones';
 import { milestoneCourses, myRounds } from '../save/mine';
 import { DEFAULT_NAME } from '../save/names';
 import { playerStats } from '../save/stats';
+import { handicapOf, hcpCourses, indexLabel, ownHcpRounds } from '../systems/game/handicap';
 import { toPar } from '../systems/rules/scoring';
 import { ensureImages } from '../ui/shareCard';
 import { Button, COLORS, Panel, txt } from '../ui/widgets';
@@ -76,11 +77,14 @@ export class MyGolfScene extends MenuScene {
     }
     const pct = (v: number | null) => (v === null ? '-' : `${Math.round(v)}%`);
     const one = (v: number | null) => (v === null ? '-' : v.toFixed(1));
+    // the handicap (Normal rounds under a name, as on the board)
+    const hcp = handicapOf(ownHcpRounds(this.rounds!, app.settings.playerName, DEFAULT_NAME), hcpCourses(app.courses));
     const boxes: [string, string][] = [
+      ['handicap', hcp ? indexLabel(hcp) : '-'],
       ['rounds', String(st.rounds)], ['fairways', pct(st.fairwayPct)], ['greens in reg.', pct(st.girPct)],
       ['putts / 18', one(st.puttsPer18)], ['penalties / 18', one(st.penaltiesPer18)],
     ];
-    const bw = Math.floor((pw - 16 - 4 * 4) / 5);
+    const bw = Math.floor((pw - 16 - 4 * (boxes.length - 1)) / boxes.length);
     boxes.forEach(([lab, v], i) => {
       const bx = x0 + 8 + i * (bw + 4);
       this.root.add(new Panel(this, bx, y, bw, 30, 0.6));

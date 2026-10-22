@@ -19,7 +19,7 @@ from rasterio.features import rasterize
 from scipy import ndimage
 from shapely.ops import unary_union
 
-from common import build_dir, course_name_from_argv, load_config, play_boundary, PX_PER_M, round_corners, SURF, World, write_json
+from common import build_dir, course_name_from_argv, GORSE_SURF, load_config, play_boundary, PX_PER_M, round_corners, SURF, surf_ids, uses_gorse_ground, World, write_json
 
 warnings.filterwarnings("ignore")
 
@@ -36,7 +36,7 @@ def course_layers(g, roads, cfg):
     """
     greens = list(g[g.kind == "green"].geometry)
     fringe = [geom.buffer(1.5).difference(geom) for geom in greens]
-    fairways = smooth_fairways(g)
+    fairways = smooth_fairways(g, cfg)
     paths = [r.geometry.buffer(1.2, cap_style=1) for _, r in g[g.kind == "cartpath"].iterrows()]
     layers = [
         (fairways, SURF["fairway"]),
@@ -58,14 +58,26 @@ def course_layers(g, roads, cfg):
     return layers
 
 
-def smooth_fairways(g):
+def smooth_fairways(g, cfg=None):
     """The fairways with smooth, rounded outlines (common.round_corners; developer,
     2026-10-19), still touching every green they touched: within 2 m of a green
-    the original outline is kept, so an approach never pulls back from the collar."""
+    the original outline is kept, so an approach never pulls back from the collar.
+
+    Optional (course_config.json "merge_touching_fairways": true): fairway pieces
+    that touch (an s02b approach and the fairway it extends, or two OSM fairways
+    drawn edge to edge) are merged before rounding. Rounded one at a time, each
+    piece pulls in at the shared edge and leaves a line of rough and small notches
+    along the join (East Potomac, developer 2026-10-20). Without the key nothing
+    changes."""
     greens = [geom for geom in g[g.kind == "green"].geometry if geom is not None]
     near_greens = unary_union([geom.buffer(2.0) for geom in greens]) if greens else None
     out = []
-    for geom in g[g.kind == "fairway"].geometry:
+    geoms = [geom for geom in g[g.kind == "fairway"].geometry if geom is not None and not geom.is_empty]
+    if (cfg or {}).get("merge_touching_fairways") and geoms:
+        # close hairline gaps (< 0.2 m) between pieces drawn edge to edge, then one polygon per merged piece
+        merged = unary_union([geom.buffer(0.1, join_style=2) for geom in geoms]).buffer(-0.1, join_style=2)
+        geoms = [p for p in getattr(merged, "geoms", [merged]) if p.geom_type == "Polygon" and p.area > 0.5]
+    for geom in geoms:
         if geom is None or geom.is_empty:
             continue
         r = round_corners(geom)
@@ -185,6 +197,14 @@ def main():
     sizes = ndimage.sum(can_in, lab, range(1, n + 1))
     woods_in = np.isin(lab, 1 + np.where(sizes > 150 * PX_PER_M * PX_PER_M)[0])
     course[woods_in] = SURF["woods"]
+    # optional (course_config.json gorse.ground = "gorse"; the thickets from pipeline/gorse.py):
+    # the ground under the gorse is the gorse surface inside the course (a penal lie in the
+    # game) and ob_woods outside; mapped fairways, greens, tees and bunkers still win
+    if uses_gorse_ground(cfg):
+        gm = np.load(bdir / "gorse_mask.npy")  # 1 m, rows south->north
+        gm = np.kron(np.flipud(gm), np.ones((PX_PER_M, PX_PER_M), bool))[:H, :W]
+        course[gm] = GORSE_SURF
+        surf[gm & ~inside & (surf == SURF["ob"])] = SURF["ob_woods"]
     for geoms, value in course_layers(g, roads, cfg):
         paint(course, geoms, value)
     surf[inside] = course[inside]
@@ -201,10 +221,11 @@ def main():
         surf[obr & (surf != SURF["water"])] = SURF["ob_road"]
 
     np.save(bdir / "surface.npy", surf)
-    counts = {k: int((surf == v).sum()) for k, v in SURF.items()}
+    ids = surf_ids(cfg)
+    counts = {k: int((surf == v).sum()) for k, v in ids.items()}
     legend = {
         "pixel_m": 1 / PX_PER_M, "width": W, "height": H, "row0": "north",
-        "ids": SURF,
+        "ids": ids,
         "ob_ids": [v for k, v in SURF.items() if k.startswith("ob") or k == "range"],
         "area_m2": {k: round(c / (PX_PER_M * PX_PER_M)) for k, c in counts.items()},
     }

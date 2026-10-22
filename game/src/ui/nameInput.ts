@@ -14,13 +14,22 @@ import { saveSettings } from '../save/store';
 import { askCode } from './codeInput';
 import { dialogInput, dialogText, openDialog } from './domDialog';
 
+export interface NameAskOpts {
+  /** a line under the title: why the name is asked for */
+  why?: string;
+  /** the back-out button (default "cancel"; "skip" before a round) */
+  skip?: string;
+}
+
 /** Ask for a name; `done` gets the new name, or null if the player backed out. */
-export function askName(scene: Phaser.Scene, current: string, done: (name: string | null) => void, title = 'name for the leaderboard') {
+export function askName(scene: Phaser.Scene, current: string, done: (name: string | null) => void, title = 'name for the leaderboard', o: NameAskOpts = {}) {
   const dlg = openDialog(scene, 270, () => done(null));
   const input = dialogInput(16, 'your name', current === DEFAULT_NAME ? '' : current);
   const msg = dialogText('', '#ff7a6a', 13);
-  dlg.box.append(dialogText(title), input, msg);
-  const [ok, cancel, mine] = dlg.buttons(['ok', 'cancel', "it's mine"]);
+  dlg.box.append(dialogText(title));
+  if (o.why) dlg.box.append(dialogText(o.why, '#9fb0bd', 13));
+  dlg.box.append(input, msg);
+  const [ok, cancel, mine] = dlg.buttons(['ok', o.skip ?? 'cancel', "it's mine"]);
   mine.style.display = 'none';
   try { input.focus(); } catch { /* the player taps the box instead (iOS) */ }
   let busy = false;
@@ -66,7 +75,7 @@ export function askName(scene: Phaser.Scene, current: string, done: (name: strin
         nameConflicts.clear();
         void saveSettings(app.settings);
       }
-      askName(scene, name, done, title);
+      askName(scene, name, done, title, o);
     });
   });
   input.addEventListener('input', () => { msg.textContent = ''; mine.style.display = 'none'; });

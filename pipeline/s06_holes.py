@@ -214,6 +214,8 @@ def build_layout(name, cfg, lay, g):
     # box that clearly belongs to one hole is not reused for its neighbour.
     # A tee polygon tagged hole=<n> and tee_set=<name> in edited/course.geojson
     # is that hole's tee for that set (the developer's call), whatever its distance.
+    # tee_set may name several sets separated by ";" ("Blue;White": one box for both;
+    # East Potomac 13). A single name works as before.
     from scipy.optimize import linear_sum_assignment
     tee_idx = list(tees.index)
     assign = {}
@@ -221,7 +223,8 @@ def build_layout(name, cfg, lay, g):
     for ti in tee_idx:
         tg = tees.loc[ti].tags
         if tg.get("hole") and tg.get("tee_set") and (not lay["shared"] or tg.get("layout") == lay["id"]):
-            forced[(int(tg["hole"]), tg["tee_set"])] = ti
+            for ts_ in str(tg["tee_set"]).split(";"):
+                forced[(int(tg["hole"]), ts_.strip())] = ti
     for ts in tee_sets:
         cost = np.full((len(hole_list), len(tee_idx)), 1e6)
         taken = {ti for (n_, ts_), ti in forced.items() if ts_ == ts}

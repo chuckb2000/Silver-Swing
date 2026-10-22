@@ -3,7 +3,7 @@
 import { DatabaseSync } from 'node:sqlite';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { isEntry, LeaderboardEntry } from '../../src/save/entry';
-import { D1Like, D1Statement, handleEaglesGet, handleEaglesPost, handleGet, handleNames, handlePost, handleRecordsGet, resetSchemaCache } from '../../src/server/scores';
+import { D1Like, D1Statement, handleEaglesGet, handleEaglesPost, handleGet, handleHandicapsGet, handleHide, handleMerge, recordMatch, resetHandicapCache, handleNames, handlePost, handleRecentGet, handleRecordsGet, resetFeedCache, resetSchemaCache } from '../../src/server/scores';
 import { HoleScore } from '../../src/systems/rules/scoring';
 import { isPlayerKey, parseKeyCode } from '../../src/save/identity';
 
@@ -231,5 +231,184 @@ describe('player codes and resent rounds (review 2026-10-20)', () => {
     expect(isPlayerKey('abcdefghjklmnpqr')).toBe(false);
     expect(parseKeyCode('ABCD-EFGH-JKMN-PQRS')).toBe('abcdefghjkmnpqrs');
     expect(parseKeyCode('abcd-efgh-jkmn-pqr0')).toBeNull();
+  });
+});
+
+describe('hide me from the leaderboards (developer, 2026-10-20)', () => {
+  let db: D1Like;
+  beforeEach(() => { resetSchemaCache(); resetFeedCache(); db = fakeD1(); });
+
+  it("keeps a hidden player's rounds and eagles off every shared list, and brings them back when shown", async () => {
+    const pars = [4, 4, 4, 4, 4, 4, 4, 4, 4];
+    // today's daily (the server takes a daily round only around its day: a fixed date failed two days on)
+    const day = new Date().toISOString().slice(0, 10);
+    const mine = { ...scored('m1', 'charlie', [2, 3, 4, 4, 4, 4, 4, 4, 4], pars), owner: KEY_A, daily: day };
+    const theirs = { ...scored('t1', 'sam', [3, 4, 4, 4, 4, 4, 4, 4, 4], pars), owner: KEY_B, daily: day };
+    await handlePost(db, JSON.stringify([mine, theirs]));
+    const ids = async () => {
+      resetFeedCache();
+      const course = ((await (await get(db, 'course=oswego_lake')).json()) as { entries: LeaderboardEntry[] }).entries.map((e) => e.id);
+      const daily = ((await (await get(db, `daily=${day}`)).json()) as { entries: LeaderboardEntry[] }).entries.map((e) => e.id);
+      const eagles = ((await (await handleEaglesGet(db, new URL('http://x/api/eagles'))).json()) as { eagles: { player: string }[] }).eagles.map((e) => e.player);
+      const records = ((await (await handleRecordsGet(db, new URL('http://x/api/records?kind=birdies'))).json()) as { records: { id: string }[] }).records.map((r) => r.id);
+      const recent = ((await (await handleRecentGet(db, new URL('http://x/api/recent'))).json()) as { rounds: { id: string }[] }).rounds.map((r) => r.id);
+      const own = ((await (await get(db, `owner=${KEY_A}`)).json()) as { entries: LeaderboardEntry[] }).entries.map((e) => e.id);
+      return { course, daily, eagles, records, recent, own };
+    };
+    const before = await ids();
+    expect(before.course).toContain('m1');
+    expect(before.eagles).toContain('charlie');
+    expect(await (await handleHide(db, JSON.stringify({ owner: KEY_A, hidden: true }))).json()).toEqual({ ok: true, hidden: true });
+    const hid = await ids();
+    for (const list of [hid.course, hid.daily, hid.records, hid.recent]) { expect(list).not.toContain('m1'); expect(list).toContain('t1'); }
+    expect(hid.eagles).not.toContain('charlie');
+    expect(hid.own).toEqual(['m1']); // "my golf" still finds them
+    await handleHide(db, JSON.stringify({ owner: KEY_A, hidden: false }));
+    expect((await ids()).course).toContain('m1');
+    expect((await handleHide(db, JSON.stringify({ owner: 'x', hidden: true }))).status).toBe(400);
+  });
+});
+
+describe('older rounds join their player code (developer, 2026-10-20: 5 rounds on the phone, 9 on the computer)', () => {
+  let db: D1Like;
+  beforeEach(() => { resetSchemaCache(); db = fakeD1(); });
+
+  it('a round stored without a key takes the key of the device that holds its name when sent again', async () => {
+    await handlePost(db, JSON.stringify([entry('old', 74, 'charlie')]));              // before player keys
+    await handlePost(db, JSON.stringify([{ ...entry('new', 73, 'charlie'), owner: KEY_A }])); // charlie is now KEY_A's
+    const own = async (k: string) => ((await (await get(db, `owner=${k}`)).json()) as { entries: LeaderboardEntry[] }).entries.map((e) => e.id).sort();
+    expect(await own(KEY_A)).toEqual(['new']);
+    await handlePost(db, JSON.stringify([{ ...entry('old', 74, 'charlie'), owner: KEY_B }])); // not B's name: no change
+    expect(await own(KEY_B)).toEqual([]);
+    await handlePost(db, JSON.stringify([{ ...entry('old', 74, 'charlie'), owner: KEY_A }]));
+    expect(await own(KEY_A)).toEqual(['new', 'old']);
+  });
+});
+
+describe('handicap rounds (developer, 2026-10-20)', () => {
+  let db: D1Like;
+  beforeEach(() => { resetSchemaCache(); resetFeedCache(); resetHandicapCache(); db = fakeD1(); });
+
+  it("sends each shown player's Normal, non-casual rounds, cut down", async () => {
+    await handlePost(db, JSON.stringify([
+      { ...entry('n1', 80, 'charlie'), owner: KEY_A },
+      { ...entry('e1', 70, 'charlie'), difficulty: 'easy', owner: KEY_A },
+      { ...entry('c1', 70, 'charlie'), casual: true, owner: KEY_A },
+      { ...entry('n2', 85, 'sam'), owner: KEY_B },
+    ]));
+    const got = async () => { resetHandicapCache(); return ((await (await handleHandicapsGet(db)).json()) as { rounds: { id: string; player: string; scores: unknown[]; totals?: unknown }[] }).rounds; };
+    const r = await got();
+    expect(r.map((x) => x.id).sort()).toEqual(['n1', 'n2']);
+    expect(r[0].totals).toBeUndefined();
+    await handleHide(db, JSON.stringify({ owner: KEY_B, hidden: true }));
+    expect((await got()).map((x) => x.id)).toEqual(['n1']);
+  });
+
+  it('puts a player code\'s rounds under one name, its latest (my golf showed a different index)', async () => {
+    await handlePost(db, JSON.stringify([
+      { ...entry('old', 80, 'charlieb'), date: '2026-10-20T01:00:00.000Z', owner: KEY_A },
+      { ...entry('new', 78, 'charlie'), date: '2026-10-21T01:00:00.000Z', owner: KEY_A },
+      { ...entry('pre', 82, 'sam'), date: '2026-10-19T01:00:00.000Z' }, // before player codes: by name
+    ]));
+    resetHandicapCache();
+    const r = ((await (await handleHandicapsGet(db)).json()) as { rounds: { id: string; player: string }[] }).rounds;
+    const by = Object.fromEntries(r.map((x) => [x.id, x.player]));
+    expect(by).toEqual({ new: 'charlie', old: 'charlie', pre: 'sam' });
+  });
+});
+
+describe('merging names (developer, 2026-10-21: "played under two names")', () => {
+  let db: D1Like;
+  beforeEach(() => { resetSchemaCache(); resetFeedCache(); resetHandicapCache(); db = fakeD1(); });
+  const pars = [4, 4, 4, 4, 4, 4, 4, 4, 4];
+  const board = async () => ((await (await get(db, 'course=oswego_lake')).json()) as { entries: LeaderboardEntry[] }).entries.map((e) => `${e.id}:${e.player}`).sort();
+  const merge = async (b: unknown) => { const r = await handleMerge(db, JSON.stringify(b)); return { status: r.status, j: (await r.json()) as Record<string, unknown> }; };
+
+  it("one device's two names: every round and eagle goes under the one kept; the other name stays reserved", async () => {
+    await handlePost(db, JSON.stringify([
+      { ...scored('a1', 'chuck', [2, 4, 4, 4, 4, 4, 4, 4, 4], pars), owner: KEY_A },
+      { ...scored('a2', 'charlie', [4, 4, 4, 4, 4, 4, 4, 4, 4], pars), owner: KEY_A },
+      { ...scored('s1', 'sam', [4, 4, 4, 4, 4, 4, 4, 4, 5], pars), owner: KEY_B },
+    ]));
+    expect(await board()).toEqual(['a1:chuck', 'a2:charlie', 's1:sam']);
+    const r = await merge({ owner: KEY_A, into: 'charlie' });
+    expect(r.j).toMatchObject({ ok: true, names: ['charlie', 'chuck'], into: 'charlie', moved: 1 });
+    resetFeedCache();
+    expect(await board()).toEqual(['a1:charlie', 'a2:charlie', 's1:sam']);
+    const eagles = ((await (await handleEaglesGet(db, new URL('http://x/api/eagles'))).json()) as { eagles: { player: string }[] }).eagles.map((e) => e.player);
+    expect(eagles).toEqual(['charlie']); // the eagle on a1 moved with it
+    const recent = ((await (await handleRecentGet(db, new URL('http://x/api/recent'))).json()) as { rounds: { player: string }[] }).rounds.map((x) => x.player);
+    expect(recent.filter((p) => p === 'chuck')).toEqual([]);
+    // "chuck" is still this player's: nobody else can take it
+    expect(await (await handleNames(db, { method: 'GET', url: new URL(`http://x/api/names?name=chuck&owner=${KEY_B}`) })).json()).toMatchObject({ ok: false, result: 'taken' });
+  });
+
+  it("another device's code: its names and rounds join this code first, then merge", async () => {
+    await handlePost(db, JSON.stringify([
+      { ...scored('p1', 'chuckb', [4, 4, 4, 4, 4, 4, 4, 4, 4], pars), owner: KEY_B }, // the phone
+      { ...scored('l1', 'charlie', [5, 4, 4, 4, 4, 4, 4, 4, 4], pars), owner: KEY_A }, // the laptop
+    ]));
+    await handleHide(db, JSON.stringify({ owner: KEY_B, hidden: true }));
+    const r = await merge({ owner: KEY_A, from: KEY_B, into: 'charlie' });
+    expect(r.j).toMatchObject({ ok: true, names: ['charlie', 'chuckb'], moved: 1 });
+    resetFeedCache();
+    expect(await board()).toEqual(['l1:charlie', 'p1:charlie']); // this code's choice (shown) holds for the phone's rounds too
+    const own = ((await (await get(db, `owner=${KEY_A}`)).json()) as { entries: LeaderboardEntry[] }).entries.map((e) => e.id).sort();
+    expect(own).toEqual(['l1', 'p1']); // "my golf" sees both
+    expect(((await (await get(db, `owner=${KEY_B}`)).json()) as { entries: unknown[] }).entries).toEqual([]);
+    const hc = (await (await handleHandicapsGet(db)).json()) as { rounds: { player: string }[] };
+    expect(new Set(hc.rounds.map((x) => x.player))).toEqual(new Set(['charlie'])); // one handicap
+  });
+
+  it('finished matches on "recent" follow the merge (names and codes)', async () => {
+    const KEY_C = 'cccccccccccccccc';
+    await handlePost(db, JSON.stringify([
+      { ...scored('a1', 'chuck', pars, pars), owner: KEY_A },
+      { ...scored('a2', 'charlie', pars, pars), owner: KEY_A },
+      { ...scored('p1', 'chuckb', pars, pars), owner: KEY_C }, // the phone
+      { ...scored('s1', 'sam', pars, pars), owner: KEY_B },
+    ]));
+    const match = (code: string, players: [string, string], owners: [string, string]) => recordMatch(db, code, {
+      finished: true, courseId: 'oswego_lake', tee: 'blue', holes: 9, played: 8, winner: 0, players, owners, margin: '2&1', how: 'holes', date: '2026-10-21T15:00:00Z',
+    });
+    expect(await match('mmmm01', ['chuck', 'sam'], [KEY_A, KEY_B])).toBe('ok');
+    expect(await match('mmmm02', ['sam', 'chuckb'], [KEY_B, KEY_C])).toBe('ok');
+    expect((await merge({ owner: KEY_A, from: KEY_C, into: 'charlie' })).j).toMatchObject({ ok: true });
+    resetFeedCache();
+    const m = ((await (await handleRecentGet(db, new URL('http://x/api/recent'))).json()) as { matches: { code: string; winner: string; loser: string }[] }).matches;
+    expect(Object.fromEntries(m.map((x) => [x.code, `${x.winner} def. ${x.loser}`]))).toEqual({ mmmm01: 'charlie def. sam', mmmm02: 'sam def. charlie' });
+    // and they go with the player when hidden (the phone's match is this code's now)
+    await handleHide(db, JSON.stringify({ owner: KEY_A, hidden: true }));
+    resetFeedCache();
+    expect(((await (await handleRecentGet(db, new URL('http://x/api/recent'))).json()) as { matches: unknown[] }).matches).toEqual([]);
+  });
+
+  it('refuses a name or a code that is not the player\'s', async () => {
+    await handlePost(db, JSON.stringify([{ ...scored('s1', 'sam', pars, pars), owner: KEY_B }, { ...scored('a1', 'charlie', pars, pars), owner: KEY_A }]));
+    expect((await merge({ owner: KEY_A, into: 'sam' })).j).toMatchObject({ ok: false, error: 'not_yours' });
+    expect((await merge({ owner: KEY_A, from: 'not-a-code', into: 'charlie' })).status).toBe(400);
+    expect((await merge({ owner: KEY_A, from: 'zzzzyyyyxxxxwwww', into: 'charlie' })).j).toMatchObject({ ok: false, error: 'no_names' });
+    expect((await merge({ into: 'charlie' })).status).toBe(400);
+    resetFeedCache();
+    expect(await board()).toEqual(['a1:charlie', 's1:sam']); // nothing changed
+  });
+});
+
+describe('one round for its card (developer, 2026-10-22: tap a score on "recent")', () => {
+  it('gives the round with that id, not a hidden player\'s, and nothing for an unknown id', async () => {
+    resetSchemaCache(); resetFeedCache();
+    const db = fakeD1();
+    const pars = [4, 4, 4, 4, 4, 4, 4, 4, 4];
+    await handlePost(db, JSON.stringify([
+      { ...scored('r1', 'charlie', [3, 4, 4, 4, 4, 4, 4, 4, 5], pars), owner: KEY_A },
+      { ...scored('r2', 'sam', [4, 4, 4, 4, 4, 4, 4, 4, 4], pars), owner: KEY_B },
+    ]));
+    const one = async (id: string) => ((await (await get(db, `id=${encodeURIComponent(id)}`)).json()) as { entries: LeaderboardEntry[] }).entries;
+    const r1 = await one('r1');
+    expect(r1.map((e) => [e.id, e.player, e.scores.length])).toEqual([['r1', 'charlie', 9]]);
+    expect(await one('nope')).toEqual([]);
+    await handleHide(db, JSON.stringify({ owner: KEY_B, hidden: true }));
+    expect(await one('r2')).toEqual([]);
+    expect((await get(db, 'id=')).status).toBe(400);
   });
 });

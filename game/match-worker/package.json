@@ -1,0 +1,16 @@
+{
+  "name": "silver-swings-match",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Live match play: the Durable Object that runs each match (deployed as its own Worker; the Pages site binds to it).",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^5.20261006.1",
+    "typescript": "^6.0.3",
+    "wrangler": "4.149.0"
+  }
+}

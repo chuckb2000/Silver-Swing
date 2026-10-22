@@ -74,7 +74,7 @@ Decisions the developer made on 2026-10-19 are in DECISIONS.md ("Oregon Golf Clu
    Lidar shows no raised pads for these tees (the course's tees are cut into the hillside).
 6. **Power lines removed from the canopy model** (`remove_wires`): the BPA transmission lines across the middle of the course and over the Willamette, and the distribution lines along the roads, were picked up as rows of thin 20-30 m "trees" and as 70-82 m "conifers" where the lines cross the river. 42 wire networks (about 9.5 km of conductor) were taken out before the tree search; 1,254 false trees went with them. The tallest tree is now 59 m (riverside firs). Short pieces of wire over a crown (under 40 m) can remain; none was found near play.
 7. **Tree types are inferred from crown shape** (DOGAMI canopy height model, no leaf-off imagery): 46 % conifers inside the course, 96 % of trees over 30 m. The photos show Douglas fir lining the fairways with oaks and maples between, which matches.
-8. **Water:** every hazard is red (developer), including the pond OSM tags yellow (w865546390). W7 and W8 lie partly outside the boundary; that part is out of bounds, as the boundary is (developer, 2026-10-19). The Willamette and its islands are off-course water, out of bounds. Two lidar trees standing in hazards (hole 8 ponds, Hershiser Reservoir) were dropped.
+8. **Water:** every hazard is red (developer), including the pond OSM tags yellow (w865546390). The creek in front of the 13th green, up the right side of 14 and between the 15th fairway and green (developer, 2026-10-20) is OSM stream lines only; its penalty areas follow the lidar channel along them (`propose_channels.py`, `proposed/channels_lidar.png`; 4.7-7.1 m wide, bed kept as surveyed with `flatten=no`). W7 and W8 lie partly outside the boundary; that part is out of bounds, as the boundary is (developer, 2026-10-19). The Willamette and its islands are off-course water, out of bounds. Two lidar trees standing in hazards (hole 8 ponds, Hershiser Reservoir) were dropped.
 9. **World 1,280 x 2,304 m** (developer approved going past 2,048 m, and the load time). Checked in the game (headless Chromium, software WebGL, 2 CPUs): choosing the course to the hole-1 intro takes 5.0-6.5 s against 3.1-3.2 s for Oswego Lake (1,536 x 1,024 m) and 4.2-4.3 s for Langston (1,536 x 1,536 m); the JS heap after garbage collection is 44 MB (Langston 39, Oswego Lake 31); the export is 10.9 MB (Langston 10.6). All 18 holes played in the browser with no page errors.
 10. **Greens:** tilt clamped to 2.5 % on 8 greens; the steepest spot is 5.2 % (holes 4 and 13), inside Oswego Lake's range (up to 6.2 %). No pin area is over 1.5 %.
 11. **Practice greens** P1-P2 (short-game area) and P10-P11 (beside the clubhouse) are wrong greens (relief required).
@@ -143,9 +143,9 @@ Decisions the developer made on 2026-10-19 are in DECISIONS.md ("Oregon Golf Clu
 | 10 | 4 | yes | yes (3 near) | yes | yes | yes | 2 | 0 |
 | 11 | 4 | yes | yes (4 near) | yes | yes | yes | 3 | 0 |
 | 12 | 3 | yes | yes (4 near) | yes | yes | yes | 3 | 0 |
-| 13 | 5 | yes | yes (3 near) | yes | yes | yes | 0 | 0 |
-| 14 | 4 | yes | yes (3 near) | yes | yes | yes | 0 | 0 |
-| 15 | 5 | yes | yes (3 near) | yes | yes | yes | 2 | 0 |
+| 13 | 5 | yes | yes (3 near) | yes | yes | yes | 0 | 1 |
+| 14 | 4 | yes | yes (3 near) | yes | yes | yes | 0 | 2 |
+| 15 | 5 | yes | yes (3 near) | yes | yes | yes | 2 | 3 |
 | 16 | 4 | yes | yes (2 near) | yes | yes | yes | 3 | 0 |
 | 17 | 3 | yes | yes (3 near) | yes | yes | yes | 1 | 0 |
 | 18 | 4 | yes | yes (1 near) | yes | yes | yes | 1 | 0 |
@@ -175,5 +175,5 @@ Decisions the developer made on 2026-10-19 are in DECISIONS.md ("Oregon Golf Clu
 - green w984701643 at (733, 1325) is not the end of any hole line (practice green?) -> treated as a wrong green
 - green w984701644 at (727, 1299) is not the end of any hole line (practice green?) -> treated as a wrong green
 
-Totals: 69 tees, 22 greens, 24 fairways, 34 bunkers, 8 water hazards, 18 pins, 46 cart paths, 0 OSM tree points.
+Totals: 69 tees, 22 greens, 24 fairways, 34 bunkers, 11 water hazards, 18 pins, 46 cart paths, 0 OSM tree points.
 

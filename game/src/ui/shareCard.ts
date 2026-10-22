@@ -2,8 +2,8 @@
 // of a finished round - the course's card art and logo, the date, tees and
 // level, the score and the scorecard with birdie circles and bogey squares.
 // Drawn in texels with the game's own font and widgets, then scaled up 4x
-// without smoothing so it stays pixel-crisp. Phones get the share sheet,
-// everything else a download.
+// without smoothing so it stays pixel-crisp. Phones get the share sheet; a
+// computer gets the picture in a box with copy, download and close.
 
 import Phaser from 'phaser';
 import { app, GAME_NAME } from '../app';
@@ -12,6 +12,7 @@ import { cardBlocks, lengthLabel, shapeOfCourse } from '../systems/game/lengths'
 import { toPar } from '../systems/rules/scoring';
 import { cardOfEntry, scorecardOf } from '../scenes/HudScene';
 import { COLORS, txt } from './widgets';
+import { dialogText, openDialog } from './domDialog';
 
 export const SHARE_W = 270, SHARE_H = 338; // texels; x4 = 1080 x 1350 (the last half texel is cut)
 const SCALE = 4;
@@ -22,9 +23,18 @@ export function ensureImages(scene: Phaser.Scene, want: [string, string][]): Pro
   const todo = want.filter(([k]) => !scene.textures.exists(k));
   if (!todo.length) return Promise.resolve();
   return new Promise((resolve) => {
-    for (const [k, url] of todo) scene.load.image(k, url);
-    scene.load.once(Phaser.Loader.Events.COMPLETE, () => resolve());
-    scene.load.start();
+    let done = false;
+    const finish = () => { if (!done) { done = true; resolve(); } };
+    const go = () => {
+      for (const [k, url] of todo) if (!scene.textures.exists(k)) scene.load.image(k, url);
+      scene.load.once(Phaser.Loader.Events.COMPLETE, finish);
+      scene.load.start();
+    };
+    // the scene's loader busy with something else: ours go when it has finished (start() is ignored meanwhile)
+    if (scene.load.isLoading()) scene.load.once(Phaser.Loader.Events.COMPLETE, go);
+    else go();
+    // never waits for ever: a card without its art is better than no card
+    setTimeout(finish, 8000);
   });
 }
 
@@ -50,7 +60,7 @@ export async function shareImage(scene: Phaser.Scene, e: LeaderboardEntry, rank 
   box.add(txt(scene, W / 2, 4, GAME_NAME.toLowerCase(), { origin: [0.5, 0], color: COLORS.dim }));
   // the course's card art (the middle of it: the signature green), with its logo
   const shape = info ? shapeOfCourse(info) : undefined;
-  const nines = cardBlocks(e.length, e.scores.length, shape).length;
+  const nines = cardBlocks(e.length, e.scores.map((x) => x.hole), shape).length;
   const artH = nines >= 3 ? 52 : nines === 2 ? 92 : 132;
   const ax = Math.round((W - 208) / 2), ay = 15;
   const frame = scene.add.graphics();
@@ -103,20 +113,16 @@ export async function shareImage(scene: Phaser.Scene, e: LeaderboardEntry, rank 
 }
 
 /** Share the picture (phone share sheet) or download it. */
-export async function shareRound(scene: Phaser.Scene, e: LeaderboardEntry, rank = ''): Promise<'shared' | 'saved' | 'failed'> {
-  const blob = await shareImage(scene, e, rank);
-  if (!blob) return 'failed';
-  const file = `silver-swings-${e.course}-${e.date.slice(0, 10)}.png`;
-  const nav = navigator as Navigator & { canShare?: (d: ShareData) => boolean };
+/** A phone or tablet (touch first): the system share sheet suits it (developer: "it works perfectly on the phone"). */
+function touchDevice(): boolean {
   try {
-    const f = new File([blob], file, { type: 'image/png' });
-    if (nav.share && nav.canShare?.({ files: [f] })) {
-      await nav.share({ files: [f], title: GAME_NAME, text: `${e.player}: ${e.gross} (${toPar(e.toPar)}) at ${app.courses.find((c) => c.id === e.course)?.name ?? e.course}` });
-      return 'shared';
-    }
-  } catch (err) {
-    if ((err as { name?: string })?.name === 'AbortError') return 'shared'; // the player closed the share sheet
+    return navigator.maxTouchPoints > 0 && window.matchMedia('(pointer: coarse)').matches;
+  } catch {
+    return false;
   }
+}
+
+function download(blob: Blob, file: string) {
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
@@ -125,5 +131,81 @@ export async function shareRound(scene: Phaser.Scene, e: LeaderboardEntry, rank 
   a.click();
   a.remove();
   setTimeout(() => URL.revokeObjectURL(url), 5000);
-  return 'saved';
+}
+
+export type ShareResult = 'shared' | 'copied' | 'saved' | 'closed' | 'failed';
+
+export async function shareRound(scene: Phaser.Scene, e: LeaderboardEntry, rank = ''): Promise<ShareResult> {
+  const blob = await shareImage(scene, e, rank);
+  if (!blob) return 'failed';
+  const file = `silver-swings-${e.course}-${e.date.slice(0, 10)}.png`;
+  const text = `${e.player}: ${e.gross} (${toPar(e.toPar)}) at ${app.courses.find((c) => c.id === e.course)?.name ?? e.course}`;
+  const nav = navigator as Navigator & { canShare?: (d: ShareData) => boolean };
+  const f = new File([blob], file, { type: 'image/png' });
+  const canSheet = !!nav.share && !!nav.canShare?.({ files: [f] });
+  const sheet = async (): Promise<ShareResult> => {
+    try {
+      await nav.share({ files: [f], title: GAME_NAME, text });
+      return 'shared';
+    } catch (err) {
+      return (err as { name?: string })?.name === 'AbortError' ? 'closed' : 'failed'; // closed the sheet
+    }
+  };
+  if (touchDevice()) {
+    // phones and tablets: the share sheet, as before
+    if (canSheet) { const r = await sheet(); return r === 'closed' ? 'shared' : r === 'failed' ? (download(blob, file), 'saved') : r; }
+    download(blob, file);
+    return 'saved';
+  }
+  // a computer (developer, 2026-10-20: the system share window was confusing there): the
+  // picture in a box with "copy picture" (paste it into a chat), "download" and "close";
+  // the system share window stays one button away when the browser has one
+  return new Promise<ShareResult>((resolve) => {
+    const url = URL.createObjectURL(blob);
+    let done = false;
+    const finish = (r: ShareResult) => {
+      if (done) return;
+      done = true;
+      if (!dlg.closed) dlg.close();
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+      resolve(r);
+    };
+    const dlg = openDialog(scene, 380, () => finish('closed'));
+    const img = document.createElement('img');
+    img.src = url;
+    img.alt = 'scorecard picture';
+    Object.assign(img.style, { display: 'block', margin: '6px auto', maxWidth: '100%', maxHeight: 'min(52vh, 420px)', imageRendering: 'pixelated', border: '2px solid #2a3640' } as CSSStyleDeclaration);
+    const msg = dialogText('', '#9fb0bd', 13);
+    // someone else's round (from the boards) says whose it is
+    const mine = e.player === app.settings.playerName;
+    dlg.box.append(dialogText(mine ? 'your scorecard' : `${e.player}'s scorecard`, '#f6f6f2', 15), img, msg);
+    const clip = navigator.clipboard as (Clipboard & { write?: (items: ClipboardItem[]) => Promise<void> }) | undefined;
+    const canCopy = !!clip?.write && typeof ClipboardItem !== 'undefined';
+    const labels = [...(canCopy ? ['copy picture'] : []), 'download', ...(canSheet ? ['more...'] : []), 'close'];
+    const btns = dlg.buttons(labels);
+    const byLabel = (l: string) => btns[labels.indexOf(l)];
+    let result: ShareResult = 'closed';
+    if (canCopy) byLabel('copy picture').addEventListener('click', async () => {
+      try {
+        await clip!.write!([new ClipboardItem({ 'image/png': blob })]);
+        msg.style.color = '#8fd18f';
+        msg.textContent = 'copied - paste it into a message or a chat';
+        result = 'copied';
+      } catch {
+        msg.style.color = '#ff7a6a';
+        msg.textContent = "this browser won't copy pictures - use download";
+      }
+    });
+    byLabel('download').addEventListener('click', () => {
+      download(blob, file);
+      msg.style.color = '#8fd18f';
+      msg.textContent = `saved to your downloads as ${file}`;
+      if (result === 'closed') result = 'saved';
+    });
+    if (canSheet) byLabel('more...').addEventListener('click', async () => {
+      const r = await sheet();
+      if (r === 'shared') finish('shared');
+    });
+    byLabel('close').addEventListener('click', () => finish(result));
+  });
 }

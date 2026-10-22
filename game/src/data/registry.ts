@@ -12,6 +12,10 @@ export interface CourseInfo {
   defaultTee: string;
   totalYd: number;
   teeSets: string[];
+  /** each hole's par and stroke index, and each rated tee's [course rating, slope] (handicaps) */
+  pars?: number[];
+  si?: number[];
+  ratings?: Record<string, [number, number]>;
   state?: string;     // postal code (MA, OR); optional - read from the location otherwise
   /** several courses at one place (East Potomac Blue / White / Red): the place's id, name and this course's name in it */
   group?: string;

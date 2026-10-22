@@ -391,7 +391,27 @@
     "9",
     "18"
    ],
-   "note": "developer 2026-10-19: one green around the north end of the clubhouse pond shared by 9 and 18; hole 9 plays to the east side (the side nearer the 8th tee), 18 to the north-west. Hole 18 keeps the green the developer drew for it; hole 9's is the rest of its drawing."
+   "split": [
+    [
+     714.0,
+     600.0
+    ],
+    [
+     714.0,
+     700.0
+    ]
+   ],
+   "keep": {
+    "18": [
+     680.0,
+     612.0
+    ],
+    "9": [
+     750.0,
+     625.0
+    ]
+   },
+   "note": "developer 2026-10-19: one green around the north end of the clubhouse pond shared by 9 and 18; developer 2026-10-20: 18's pin always on the left (west) side of the pond, 9's always on the right (east) side. Both drawings are joined and cut by a north-south line through the pond's north tip (x 714): 18 gets the west part, 9 the east part."
   }
  ]
 }

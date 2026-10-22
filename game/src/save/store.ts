@@ -28,6 +28,8 @@ export interface Settings {
   courseId: string;  // last course chosen on the new-round screen
   tees: Record<string, string>; // tee set last chosen, per course id
   playerKey: string; // this device's private key for its names on the shared boards (save/identity.ts)
+  hideFromBoards: boolean; // keep this player off every shared leaderboard (server /api/hide; developer, 2026-10-20)
+  hideSent: boolean | null; // the hide choice the server last confirmed (null: never sent)
 }
 
 export const DEFAULT_SETTINGS: Settings = {
@@ -35,6 +37,8 @@ export const DEFAULT_SETTINGS: Settings = {
   e5: false, gimmes: false, maxDoublePar: false, mulligans: false, viewScale: 0, playerName: 'player', showTips: true, courseId: '',
   tees: {},
   playerKey: '',
+  hideFromBoards: false,
+  hideSent: null,
 };
 
 const mem = new Map<string, unknown>();
@@ -89,6 +93,10 @@ export async function loadSettings(): Promise<Settings> {
   const s = await read<Partial<Settings>>('settings');
   const out = { ...DEFAULT_SETTINGS, ...(s ?? {}) };
   if (!out.tees || typeof out.tees !== 'object') out.tees = {};
+  // no longer settings (developer, 2026-10-20): yards, no latency offset, stroke-and-distance OB
+  out.units = 'yd';
+  out.latencyMs = 0;
+  out.e5 = false;
   if (!isPlayerKey(out.playerKey)) {
     out.playerKey = newPlayerKey();
     await write('settings', out);
@@ -174,6 +182,23 @@ export async function recordEagle(e: EagleEvent): Promise<void> {
   const all = (await loadEagles()).filter((x) => x.id !== e.id);
   all.push({ ...e, sent: false });
   await saveEagles(all);
+}
+
+/**
+ * A player's names merged into one (settings "merge names"): this device's rounds and eagles under
+ * any of `names` go under `into` too (the shared board has already moved them). Returns how many rounds.
+ */
+export async function renameAllLocal(names: string[], into: string): Promise<number> {
+  const from = new Set(names.filter((n) => n !== into));
+  const all = await loadBoard();
+  let n = 0;
+  for (const e of all) if (from.has(e.player)) { e.player = into; n++; }
+  if (n) await write('leaderboard', all);
+  const eagles = await loadEagles();
+  let m = 0;
+  for (const e of eagles) if (from.has(e.player)) { e.player = into; m++; }
+  if (m) await saveEagles(eagles);
+  return n;
 }
 
 /** A round's player name changed: its eagles not yet sent follow it. */

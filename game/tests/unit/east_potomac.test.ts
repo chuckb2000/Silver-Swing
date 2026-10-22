@@ -18,7 +18,8 @@ const LAYOUTS = ['east_potomac_blue', 'east_potomac_white', 'east_potomac_red'];
 // holes accepted outside 3% until the developer decides (data/east_potomac/validation_report.md)
 const YARDAGE_EXCEPTIONS: Record<string, string[]> = {
   // 5, 9, 16 Blue and 11 White: flags since the tees centred on their boxes (design chat, 2026-10-20; DECISIONS.md "Overnight requests")
-  east_potomac_blue: ['5 Blue', '6 Blue', '9 Blue', '11 White', '13 White', '15 Blue', '16 Blue'],
+  // 13 White passes from the seawall tee box (2026-10-20)
+  east_potomac_blue: ['5 Blue', '6 Blue', '9 Blue', '11 White', '15 Blue', '16 Blue'],
   east_potomac_white: [],
   east_potomac_red: ['5 White', '6 White', '8 White'],
 };
@@ -48,6 +49,37 @@ describe('East Potomac: one world, three courses', () => {
   it('no two layouts use the same green', () => {
     const used = jsons.flatMap((j) => j.holes.map((h) => h.greenId));
     expect(new Set(used).size).toBe(used.length);
+  });
+
+  it('no pocket of rough is left inside a fairway (joins of touching fairway pieces; developer, 2026-10-20)', () => {
+    const dir = resolve(COURSES_DIR, 'east_potomac');
+    const png = PNG.sync.read(readFileSync(resolve(dir, 'surface.png')));
+    const ids = (JSON.parse(readFileSync(resolve(dir, 'surface_legend.json'), 'utf8')) as { ids: Record<string, number> }).ids;
+    const W = png.width, H = png.height;
+    const at = (i: number) => png.data[i * 4];
+    const seen = new Uint8Array(W * H);
+    const pockets: string[] = [];
+    const inside = new Set([ids.fairway, ids.green, ids.fringe]);
+    for (let start = 0; start < W * H; start++) {
+      if (seen[start] || at(start) !== ids.rough) continue;
+      // flood one rough patch; keep it if it is small (<= 100 m2) and nearly all its rim is fairway/green
+      const stack = [start];
+      seen[start] = 1;
+      let n = 0, rim = 0, rimIn = 0, sx = 0, sy = 0;
+      while (stack.length) {
+        const k = stack.pop()!;
+        n++; sx += k % W; sy += Math.floor(k / W);
+        const x = k % W, y = Math.floor(k / W);
+        for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) {
+          const nx = x + dx, ny = y + dy;
+          if (nx < 0 || ny < 0 || nx >= W || ny >= H) continue;
+          const q = ny * W + nx;
+          if (at(q) === ids.rough) { if (!seen[q]) { seen[q] = 1; stack.push(q); } } else { rim++; if (inside.has(at(q))) rimIn++; }
+        }
+      }
+      if (n <= 400 && rim > 0 && rimIn / rim > 0.9) pockets.push(`${(sx / n / 2).toFixed(0)},${(2048 - sy / n / 2).toFixed(0)}`);
+    }
+    expect(pockets).toEqual([]);
   });
 
   it('has flowering cherries, on the variant-2 sprite slots, along the shore outside the course', () => {
@@ -106,6 +138,20 @@ for (const id of LAYOUTS) {
         const first = seq.find((v) => v !== SURF.green && v !== SURF.fringe);
         expect([SURF.fairway, SURF.bunker, SURF.cartpath], `hole ${h.number}`).toContain(first);
       }
+    });
+
+    if (id === 'east_potomac_blue') it('13 plays from its tee box against the seawall (developer, 2026-10-20)', () => {
+      const h = json.holes.find((x) => x.number === 13)!;
+      for (const ts of tees) {
+        const t = h.tees[ts];
+        expect(course.terrain.surface(t.x, t.y), `13 ${ts}`).toBe(SURF.tee);
+        expect(Math.hypot(t.x - 681.9, t.y - 711.8), `13 ${ts}`).toBeLessThan(30);
+      }
+    });
+
+    it('the object in the left side of the Blue 10 fairway is gone (developer, 2026-10-20)', () => {
+      const near = course.obstacles.trees.filter((x) => Math.hypot(x.x - 585.5, x.y - 1269.5) < 2);
+      expect(near).toEqual([]);
     });
 
     it('no tree stands inside a fairway', () => {

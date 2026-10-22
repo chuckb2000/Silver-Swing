@@ -1,6 +1,6 @@
 // Leaderboard names: banned words and the usual ways around the list.
 import { describe, expect, it } from 'vitest';
-import { boardName, nameAllowed, tidyName } from '../../src/save/names';
+import { boardName, cleanChat, nameAllowed, tidyName } from '../../src/save/names';
 
 describe('nameAllowed', () => {
   it('refuses swearing and slurs, spelled with look-alikes, spaces, dots or repeated letters', () => {
@@ -23,5 +23,25 @@ describe('boardName', () => {
     expect(boardName('Charlie')).toBe('charlie');
     expect(boardName('   ')).toBe('player');
     expect(boardName('F U C K')).toBe('player');
+  });
+});
+
+describe('cleanChat (live match chat, developer 2026-10-22)', () => {
+  it('keeps an ordinary message as typed: case, punctuation, numbers, emoji', () => {
+    expect(cleanChat('Nice putt! 3&2 to you 🏌️')).toBe('Nice putt! 3&2 to you 🏌️');
+    expect(cleanChat("that's a class shot, Dickson")).toBe("that's a class shot, Dickson");
+  });
+  it('tidies spaces and controls, cuts long messages, and gives nothing for nothing', () => {
+    expect(cleanChat('  good \n\n  game\t ')).toBe('good game');
+    expect(cleanChat('a‮b​c')).toBe('a b c');
+    expect(Array.from(cleanChat('x'.repeat(500))).length).toBe(200);
+    expect(cleanChat('   \n ')).toBe('');
+  });
+  it('stars the words the name filter refuses, look-alikes and spelt-out ones too', () => {
+    expect(cleanChat('what the fuck was that')).toBe('what the **** was that');
+    expect(cleanChat('sh!t shot')).toBe('**** shot');
+    expect(cleanChat('f u c k off')).toBe('* * * * off');
+    expect(cleanChat('you ass')).toBe('you ***');
+    expect(cleanChat('a b c d')).toBe('a b c d'); // single letters that spell nothing
   });
 });
