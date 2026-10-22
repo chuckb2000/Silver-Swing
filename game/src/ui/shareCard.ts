@@ -23,9 +23,18 @@ export function ensureImages(scene: Phaser.Scene, want: [string, string][]): Pro
   const todo = want.filter(([k]) => !scene.textures.exists(k));
   if (!todo.length) return Promise.resolve();
   return new Promise((resolve) => {
-    for (const [k, url] of todo) scene.load.image(k, url);
-    scene.load.once(Phaser.Loader.Events.COMPLETE, () => resolve());
-    scene.load.start();
+    let done = false;
+    const finish = () => { if (!done) { done = true; resolve(); } };
+    const go = () => {
+      for (const [k, url] of todo) if (!scene.textures.exists(k)) scene.load.image(k, url);
+      scene.load.once(Phaser.Loader.Events.COMPLETE, finish);
+      scene.load.start();
+    };
+    // the scene's loader busy with something else: ours go when it has finished (start() is ignored meanwhile)
+    if (scene.load.isLoading()) scene.load.once(Phaser.Loader.Events.COMPLETE, go);
+    else go();
+    // never waits for ever: a card without its art is better than no card
+    setTimeout(finish, 8000);
   });
 }
 
@@ -166,7 +175,9 @@ export async function shareRound(scene: Phaser.Scene, e: LeaderboardEntry, rank 
     img.alt = 'scorecard picture';
     Object.assign(img.style, { display: 'block', margin: '6px auto', maxWidth: '100%', maxHeight: 'min(52vh, 420px)', imageRendering: 'pixelated', border: '2px solid #2a3640' } as CSSStyleDeclaration);
     const msg = dialogText('', '#9fb0bd', 13);
-    dlg.box.append(dialogText('your scorecard', '#f6f6f2', 15), img, msg);
+    // someone else's round (from the boards) says whose it is
+    const mine = e.player === app.settings.playerName;
+    dlg.box.append(dialogText(mine ? 'your scorecard' : `${e.player}'s scorecard`, '#f6f6f2', 15), img, msg);
     const clip = navigator.clipboard as (Clipboard & { write?: (items: ClipboardItem[]) => Promise<void> }) | undefined;
     const canCopy = !!clip?.write && typeof ClipboardItem !== 'undefined';
     const labels = [...(canCopy ? ['copy picture'] : []), 'download', ...(canSheet ? ['more...'] : []), 'close'];

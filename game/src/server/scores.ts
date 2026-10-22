@@ -288,7 +288,7 @@ async function dailyCounts(db: D1Like, e: LeaderboardEntry, owner: string | null
   return !results.length;
 }
 
-/** GET /api/scores?ping=1, ?course=<id>, ?owner=<player key>, ?daily=<day> or ?week=<first day> */
+/** GET /api/scores?ping=1, ?course=<id>, ?owner=<player key>, ?daily=<day>, ?week=<first day> or ?id=<round id> */
 export async function handleGet(db: D1Like | undefined, url: URL): Promise<Response> {
   if (!db) return json({ ok: false, error: 'no database bound (DB)' }, 503);
   await prepareDb(db);
@@ -296,9 +296,14 @@ export async function handleGet(db: D1Like | undefined, url: URL): Promise<Respo
   const owner = url.searchParams.get('owner');
   const daily = url.searchParams.get('daily');
   const week = url.searchParams.get('week');
+  const id = url.searchParams.get('id');
   const course = url.searchParams.get('course') ?? '';
   let stmt: D1Statement;
-  if (owner !== null) {
+  if (id !== null) {
+    // one round, for its card (a tap on the "recent" list, developer 2026-10-22); a hidden player's isn't given
+    if (!id || id.length > 120) return json({ error: 'id required' }, 400);
+    stmt = db.prepare(`SELECT data FROM rounds WHERE id = ? AND ${SHOWN} LIMIT 1`).bind(id);
+  } else if (owner !== null) {
     // a player's own rounds, from every device with the player code ("my golf"): the key is private
     if (!ownerOf(owner)) return json({ error: 'owner required' }, 400);
     stmt = db.prepare('SELECT data FROM rounds WHERE owner = ? ORDER BY date DESC LIMIT ?').bind(owner, MAX_RETURN);

@@ -588,6 +588,11 @@ DECISIONS.md with the reason.
     docs/reports/multiplayer_live_match.md (setup in section 7); DECISIONS.md
     "Live match play".
 
+-   **Scorecards from the daily and recent lists (design chat, 2026-10-22):**
+    branch `design/card-taps`, unmerged: a tap on a round there shows its card
+    (`/api/scores?id=` for "recent"); "this week" lists a player's rounds.
+    DECISIONS.md "Scorecards from the daily and recent lists".
+
 -   **Next task:** Item 1 of the player improvements (swing coach) is on
     `design/coach`, unmerged. Also: the third playtest (putting, yellow
     misses), the club's printed scorecard and the hole 3 Blue tee box. New

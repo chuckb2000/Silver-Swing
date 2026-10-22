@@ -74,6 +74,12 @@ export function fetchDailyWeek(first: string): Promise<LeaderboardEntry[] | null
   return fetchEntries(`week=${first}`);
 }
 
+/** One round on the shared board, for its card (null when unreachable, hidden or gone). */
+export async function fetchRound(id: string): Promise<LeaderboardEntry | null> {
+  const list = await fetchEntries(`id=${encodeURIComponent(id)}`);
+  return list?.find((e) => e.id === id) ?? null;
+}
+
 /** The latest rounds and finished matches on the shared board (friends' activity; null when unreachable). */
 export async function fetchRecent(limit = 30): Promise<{ rounds: FeedRow[]; matches: MatchFeedRow[] } | null> {
   if (!(await onlineAvailable())) return null;
