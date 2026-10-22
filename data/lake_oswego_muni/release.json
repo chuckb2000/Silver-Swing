@@ -1,7 +1,15 @@
 {
  "release": "muni-data",
- "note": "build inputs; the clipped rasters, the orthophoto mosaic and the Overpass export are also committed in raw/ (all small), so `make fetch NAME=lake_oswego_muni` only restores a missing or changed one (pipeline/fetch_raw.py). DOGAMI exportImage.12 = canopy height (feet; .13 is the same file), muni.25-28.jpg = OSIP 2024 quarters NW, NE, SW, SE (mosaicked into raw/osip2024_032m.tif by `prepare_raw.py ortho`, committed), export.geojson = Overpass export of the second box (2026-10-22). The bare-earth DTM of the second box is still to come.",
+ "note": "build inputs; the clipped rasters, the orthophoto mosaic and the Overpass export are also committed in raw/ (all small), so `make fetch NAME=lake_oswego_muni` only restores a missing or changed one (pipeline/fetch_raw.py). more.data.tiff = DOGAMI bare earth (feet); exportImage.12 = canopy height (feet; .13 is the same file), muni.25-28.jpg = OSIP 2024 quarters NW, NE, SW, SE (mosaicked into raw/osip2024_032m.tif by `prepare_raw.py ortho`, committed), export.geojson = Overpass export of the second box (2026-10-22). more.data.tiff = DOGAMI bare earth (feet), second box.",
  "files": [
+  {
+   "asset": "more.data.tiff",
+   "sha256": "4991b2755c1fcf755583620d597b852f7237c7fd36dd7a063319b17176e8d567",
+   "run": "python3 data/lake_oswego_muni/prepare_raw.py clip {file} raw/dogami_dtm_ft.tif",
+   "outputs": {
+    "raw/dogami_dtm_ft.tif": "326b1fccd5f76917cef2cbe1ac24761b53b9dca627980da2bbaf031ffb6703ca"
+   }
+  },
   {
    "asset": "exportImage.12.tiff",
    "sha256": "a6a2a9408bc66265ed54f4c54f1363db944f6257c2623d0e1e588f1dbc49a3b7",

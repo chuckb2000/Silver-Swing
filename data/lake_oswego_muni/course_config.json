@@ -13,7 +13,7 @@
   "dtm": {
     "path": "raw/dogami_dtm_ft.tif",
     "units": "ft",
-    "source": "DOGAMI lidar DIGITAL_TERRAIN_MODEL_MOSAIC (bare earth; OLC Metro 3DEP 2019 at this point), exportImage at 1 m in EPSG:32610, box x 523184-525184 / y 5026322-5028322, clipped to the world + 100 m by prepare_raw.py"
+    "source": "DOGAMI lidar DIGITAL_TERRAIN_MODEL_MOSAIC (bare earth; OLC Metro 3DEP 2019 at this point), exportImage at 1 m in EPSG:32610, box x 523184-525184 / y 5026322-5028322, clipped to the world + 100 m by prepare_raw.py (GitHub release muni-data, more.data.tiff)"
   },
   "chm": {
     "path": "raw/dogami_chm_ft.tif",

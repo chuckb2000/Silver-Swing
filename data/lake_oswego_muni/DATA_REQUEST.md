@@ -123,7 +123,8 @@ Rename them `osip_nw.jpg`, `osip_ne.jpg`, `osip_sw.jpg`, `osip_se.jpg` if you ca
 |---|---|---|---|
 | `export.geojson` | bc0f2288e6dc9f32 | Overpass export, second box | `raw/overpass.geojson`. Contents: the city's golf property (way 60087783, `leisure=golf_course`, 424 x 518 m, includes the aquatics center) and the old driving range (way 424601504); no other golf features |
 | `exportImage.12.tiff` | a6a2a9408bc66265 | DOGAMI canopy height (ft), second box | clipped to `raw/dogami_chm_ft.tif` |
-| `exportImage.13.tiff` | a6a2a9408bc66265 | same file as .12 | not used; the second-box DTM is missing (asked again 2026-10-22) |
+| `exportImage.13.tiff` | a6a2a9408bc66265 | same file as .12 | not used |
+| `more.data.tiff` | 4991b2755c1fcf75 | DOGAMI bare-earth DTM (ft), second box (100-722 ft) | clipped to `raw/dogami_dtm_ft.tif` |
 | `exportImage.10.tiff` | 812a521d1a801671 | DOGAMI DTM (ft), first box | not used (misses the course) |
 | `exportImage.11.tiff` | 469dd5f845f5cb3c | DOGAMI canopy height (ft), first box | not used |
 | `muni.25.jpg` | 62180aa5aa8ba200 | OSIP 2024 north-west quarter | `raw/osip_src/`, mosaicked into `raw/osip2024_032m.tif` |
