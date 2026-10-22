@@ -64,6 +64,21 @@ export interface ButtonOpts {
   scale?: number;
 }
 
+/**
+ * A tap on an interactive object (a list row, a course card): a press and a release on it, the
+ * same press. A release alone (a press made elsewhere, a dialog's button over it) isn't one
+ * (developer, 2026-10-22: closing a card opened the card of the row under the button).
+ */
+export function onTap(o: Phaser.GameObjects.GameObject, fn: () => void): void {
+  let downAt = -1;
+  o.on('pointerdown', (p: Phaser.Input.Pointer) => { downAt = p.downTime; });
+  o.on('pointerup', (p: Phaser.Input.Pointer) => {
+    if (downAt < 0 || p.downTime !== downAt) return;
+    downAt = -1;
+    fn();
+  });
+}
+
 /** How far off a button (game pixels) letting go still counts as a tap on it. */
 export const BUTTON_SLOP = 6;
 

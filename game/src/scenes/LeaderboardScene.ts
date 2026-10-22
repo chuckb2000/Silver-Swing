@@ -21,7 +21,7 @@ import { shapeOfCourse } from '../systems/game/lengths';
 import { askImport, showBackup } from '../ui/backup';
 import { compareRounds, toPar } from '../systems/rules/scoring';
 import { teeFor } from '../data/registry';
-import { Button, COLORS, dimmer, Panel, txt } from '../ui/widgets';
+import { Button, COLORS, dimmer, onTap, Panel, txt } from '../ui/widgets';
 import { MenuScene } from './menu';
 import { DEFAULT_NAME } from '../save/names';
 
@@ -144,7 +144,7 @@ export class LeaderboardScene extends MenuScene {
       vals.forEach((v, j) => { if (cols[j] >= 0) this.root.add(txt(this, cols[j], yy, v, { color: j === 1 && pb ? COLORS.yellow : COLORS.white })); });
       // tap a round to share its card (player improvements, item 2)
       const zone = this.add.zone(x0 + 6, yy - 1, pw - 12, lineH).setOrigin(0, 0).setInteractive({ useHandCursor: true });
-      zone.on('pointerup', () => { void shareRound(this, e, `#${i + 1} of ${rows.length} ${src === 'friends' ? 'among friends' : 'on this device'}`); });
+      onTap(zone, () => { void shareRound(this, e, `#${i + 1} of ${rows.length} ${src === 'friends' ? 'among friends' : 'on this device'}`); });
       this.root.add(zone);
     });
     const by = y0 + ph - 20;
@@ -181,7 +181,7 @@ export class LeaderboardScene extends MenuScene {
       const yy = listTop + (k + 1) * lineH;
       if (r.tap) {
         const zone = this.add.zone(x0 + 6, yy - 1, pw - 12, lineH).setOrigin(0, 0).setInteractive({ useHandCursor: true });
-        zone.on('pointerup', r.tap);
+        onTap(zone, r.tap);
         this.root.add(zone);
       }
       if (r.span) {

@@ -1029,3 +1029,15 @@ Not merged (the developer will say when). Design note: docs/reports/multiplayer_
 - The course ids `shortys` and `bandon_preserve` are assumed; if a course chat builds either under
   another id, its two files (script and PNG) are renamed to that id, and its chat uses these in
   place of a logo of its own.
+
+## Closing a card no longer opens the one under it (developer, 2026-10-22; branch fix/dialog-clickthrough)
+
+- "When I click close after clicking on someone's scorecard on recent it opens the scorecard under
+  the close button and then gets stuck." Phaser listens for presses and releases on the whole
+  window, not only on its canvas, so a click on a dialog's button also reached the game under it:
+  the list row under "close" took the release as a tap and opened its card, whose "close" did the
+  same, and so on.
+- The HTML dialogs (cards, chat, names, merging names) keep their presses and releases to
+  themselves (`openDialog`), and list rows and course cards act only on a press and a release on
+  them, the same press (`onTap` in widgets.ts); a release alone no longer counts.
+- tests/e2e/boards.spec.ts checks that the game hears nothing of a click on "close".

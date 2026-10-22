@@ -608,6 +608,12 @@ DECISIONS.md with the reason.
     arrives (it was dropped); a button let go within 6 game px of its edge still
     counts. DECISIONS.md "Missed clicks".
 
+-   **Closing a card (design chat, 2026-10-22):** branch
+    `fix/dialog-clickthrough`, unmerged: "close" on a card from the recent list
+    opened the card under it (Phaser hears the whole window); the HTML dialogs
+    keep their clicks, and rows need a press and a release. DECISIONS.md
+    "Closing a card no longer opens the one under it".
+
 -   **Logos ahead of their courses (design chat, 2026-10-22):** the Muni
     (`lake_oswego_muni`, a sailboat), RedTail (`redtail`, a fox), Shorty's
     (`shortys`, a spotted fawn) and Bandon Preserve (`bandon_preserve`, salal),
