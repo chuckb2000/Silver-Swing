@@ -1,0 +1,30 @@
+{
+ "release": "bandon-par-threes-data",
+ "note": "build inputs not kept in git, shared by Shorty's and Bandon Preserve (one release for both); `make fetch NAME=bandon_preserve` puts them in place (pipeline/fetch_raw.py). exportImage.12.tiff = DOGAMI bare-earth DTM (ft), exportImage.13.tiff = DOGAMI canopy height model (ft), exportImage.jpg = OSIP 2024 0.5 m orthophoto (JPEG, corners = the bbox x 386050-387300, y 4780850-4782700, EPSG:32610). The scorecards and the 2023 routing map are in the same release (look-only).",
+ "files": [
+  {
+   "asset": "exportImage.12.tiff",
+   "sha256": "3dd483a8e85d80cf7320b9854df1478f8e47e75dad6b70f46686036bd548872b",
+   "run": "cp {file} data/bandon_preserve/raw/dogami_dtm_ft.tif",
+   "outputs": {
+    "raw/dogami_dtm_ft.tif": "3dd483a8e85d80cf7320b9854df1478f8e47e75dad6b70f46686036bd548872b"
+   }
+  },
+  {
+   "asset": "exportImage.13.tiff",
+   "sha256": "e55b014239ddb0fc9135a05fd35f0035e8f1341cf94703b978f40de674009575",
+   "run": "cp {file} data/bandon_preserve/raw/dogami_chm_ft.tif",
+   "outputs": {
+    "raw/dogami_chm_ft.tif": "e55b014239ddb0fc9135a05fd35f0035e8f1341cf94703b978f40de674009575"
+   }
+  },
+  {
+   "asset": "exportImage.jpg",
+   "sha256": "d043496cd610b9feb67766f7e8e127ddf40027f11459ac2788cad38b362331c8",
+   "run": "python3 data/bandon_preserve/make_ortho.py {file}",
+   "outputs": {
+    "raw/osip2024_05m.tif": "2ef5f6b81752419eef8870d051b494d0dfc04a0cb293f7ba8e84c2fed5ebce3c"
+   }
+  }
+ ]
+}
