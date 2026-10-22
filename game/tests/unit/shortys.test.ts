@@ -45,10 +45,12 @@ describe("Shorty's course data", () => {
     }
   });
 
-  it('measured yardages are within 3% of the card, the flags (4, 15) within 8%', () => {
+  it('measured yardages are within 3% of the card, the flags (4, 15) within 8%, hole 3 as the developer chose', () => {
     const flags = new Set([4, 15]);
     for (const h of json.holes) {
       const t = h.tees[TEE];
+      // hole 3: the developer's box (2026-10-22) is about 69 yd against 85 on the card
+      if (h.number === 3) { expect(t.adjYd, 'hole 3').toBeGreaterThan(62); expect(t.adjYd, 'hole 3').toBeLessThan(75); continue; }
       expect(Math.abs((t.adjYd - t.cardYd) / t.cardYd), `hole ${h.number}`).toBeLessThanOrEqual(flags.has(h.number) ? 0.08 : 0.03);
     }
   });
