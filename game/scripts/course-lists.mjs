@@ -15,7 +15,8 @@ export const PUBLIC = resolve(HERE, '..', 'public');
 
 /** The course-list entry of one course.json (what the course screen and the registry need). */
 export function entryOf(c) {
-  const tees = c.teeSets ?? [];
+  // the longest tees first (developer, 2026-10-22: Wannamoisett listed Blue left of the longer Black)
+  const tees = [...(c.teeSets ?? [])].sort((a, b) => (b.totalYd ?? 0) - (a.totalYd ?? 0));
   const def = tees.find((t) => t.name === c.defaultTee) ?? tees[0] ?? { totalYd: 0 };
   const e = {
     id: c.id, name: c.name, location: c.location, state: c.state, theme: c.theme,

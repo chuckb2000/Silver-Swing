@@ -173,6 +173,8 @@ export async function loadCourse(scene: Phaser.Scene, id: string, progress?: Loa
   alive();
   if (failed.length) throw new Error(`course ${id}: could not load ${failed.join(', ')}`);
   const json = scene.cache.json.get('course') as CourseJson;
+  // the tee buttons go longest first, left to right (developer, 2026-10-22: Wannamoisett showed Blue left of the longer Black)
+  json.teeSets = [...json.teeSets].sort((a, b) => b.totalYd - a.totalYd);
   const hmeta = scene.cache.json.get('heightMeta') as HeightMeta;
   const trees = scene.cache.json.get('treeData') as TreeArrays;
   const theme = json.theme || 'pnw';

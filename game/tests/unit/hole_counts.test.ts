@@ -221,3 +221,14 @@ describe('whole rounds on courses of other sizes (robot golfer)', () => {
     expect(r.scores[0].par).toBe(c.json.holes[18].par);
   }, 60_000);
 });
+
+describe('a course of 14 holes (developer, 2026-10-22: "do we support a 14 hole course?")', () => {
+  it('is played all at once, on a card of a nine and five', () => {
+    expect(lengthsFor(14)).toEqual(['all']);
+    expect(lengthLabel('all', 14)).toBe('14 holes');
+    expect(planFor('all', 14)).toEqual({ slots: Array.from({ length: 14 }, (_, i) => i + 1), courseHoles: Array.from({ length: 14 }, (_, i) => i + 1) });
+    expect(cardBlocks('all', Array.from({ length: 14 }, (_, i) => i + 1), 14)).toEqual([[1, 9, 'out'], [10, 14, 'in']]);
+    expect(lengthOf(Array.from({ length: 14 }, (_, i) => i + 1), 14)).toBe('all');
+    expect(isFullRound('all')).toBe(false);
+  });
+});
