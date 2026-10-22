@@ -387,7 +387,7 @@ DECISIONS.md with the reason.
     putting to sign off on feel (M2) and on the open items below (M3
     acceptance).
 
--   **Code and hosting:** private GitHub repo `chuckb2000/silver-swing`
+-   **Code and hosting:** private GitHub repo `chuckb2000/Silver-Swing`
     (default branch `main`). Cloudflare Pages builds and publishes `main`
     on every push and gives other branches preview addresses. The design
     chat works on branches and asks the developer to merge; the
@@ -452,8 +452,10 @@ DECISIONS.md with the reason.
     `src/systems/game/pins.ts`); the meter has a line at the middle of the green, no
     ghost tick and no display-lag allowance. 376 unit tests and 4 Playwright tests pass.
 
--   **Courses (course chats, 2026-10-18 to 2026-10-21):** twenty-three data
-    folders, twenty-five courses on offer (East Potomac is three) in six states;
+-   **Courses (course chats, 2026-10-18 to 2026-10-22):** twenty-five data
+    folders, twenty-seven courses on offer (East Potomac is three) in six states;
+    RedTail Golf Center (Beaverton OR; PR #39) and The Muni (Lake Oswego OR, nine
+    holes; PR #42) merged 2026-10-22, in the daily rotation from 2026-10-23;
     TPC Boston (Norton MA) and Pacific Dunes, Old Macdonald and Sheep Ranch (Bandon OR)
     merged 2026-10-21;
     Gearhart Golf Links (Gearhart OR), Bandon Trails (Bandon OR, `bandon`
@@ -533,8 +535,10 @@ DECISIONS.md with the reason.
     merged 2026-10-20: course chats draw their own logos
     (`assets-src/course_logos/<id>.py`), themes and theme bushes (gorse:
     `shrubs_<theme>`), `build_assets.py --theme`, `regress --since` picks the
-    affected courses. Unmerged, ready: `design/hole-counts` (13/19-hole courses,
-    clubs of three nines). Cross-country golf: report only
+    affected courses. `design/hole-counts` (13/19-hole courses played all at
+    once, clubs of three nines) merged 2026-10-22 (developer); live matches are
+    played on every course, a club's nines included (`MatchConfig.courseHoles`).
+    Cross-country golf: report only
     (`design/cross-country`), not to be built yet (developer).
 
 -   **Gorse (design chat, 2026-10-20):** branch `design/gorse`, merged
@@ -606,6 +610,12 @@ DECISIONS.md with the reason.
     merged 2026-10-22 (developer: "merge everything"): a swing tapped during a camera cut or zoom starts when the camera
     arrives (it was dropped); a button let go within 6 game px of its edge still
     counts. DECISIONS.md "Missed clicks".
+
+-   **Closing a card (design chat, 2026-10-22):** branch
+    `fix/dialog-clickthrough`, unmerged: "close" on a card from the recent list
+    opened the card under it (Phaser hears the whole window); the HTML dialogs
+    keep their clicks, and rows need a press and a release. DECISIONS.md
+    "Closing a card no longer opens the one under it".
 
 -   **Logos ahead of their courses (design chat, 2026-10-22):** the Muni
     (`lake_oswego_muni`, a sailboat), RedTail (`redtail`, a fox), Shorty's
@@ -1661,10 +1671,12 @@ files (`game/scripts/course-lists.mjs`). The first course, Oswego Lake, is
 | Indian Island Golf Course | `docs/courses/indian_island.md` |
 | Langdon Farms Golf Club | `docs/courses/langdon.md` |
 | Langston Golf Course | `docs/courses/langston.md` |
+| The Muni (Lake Oswego) | `docs/courses/lake_oswego_muni.md` |
 | Old Macdonald | `docs/courses/old_macdonald.md` |
 | Oregon Golf Club | `docs/courses/ogc.md` |
 | Oswego Lake Country Club | `docs/courses/oswego_lake.md` |
 | Pacific Dunes | `docs/courses/pacific_dunes.md` |
+| RedTail Golf Center | `docs/courses/redtail.md` |
 | Sheep Ranch | `docs/courses/sheep_ranch.md` |
 | Stone Creek Golf Club | `docs/courses/stone_creek.md` |
 | Triggs Memorial Golf Course | `docs/courses/triggs.md` |

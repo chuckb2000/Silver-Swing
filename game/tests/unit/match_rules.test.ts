@@ -2,6 +2,7 @@
 // concessions and how the match stands, against the USGA rules (3.2, 6.4).
 
 import { describe, expect, it } from 'vitest';
+import { matchRoundConfig } from '../../src/systems/match/session';
 import { applyEvent, cleanAction, clockText, decided, holeNo, holesLeft, isExtra, lead, MAX_PATH, ordinal, pinOf, statusText, stateOf, toPlay, waitingOn } from '../../src/systems/match/rules';
 import { CLOCK, HoleSnap, Logged, MatchConfig, MatchError, MatchEvent, MatchState, MAX_EXTRA, PROTOCOL, Seat } from '../../src/systems/match/types';
 import type { PendingRelief } from '../../src/systems/game/round';
@@ -401,8 +402,8 @@ describe('match play: what the server accepts', () => {
     expect(cleanAction({ t: 'claim', turn: 0 })).toBeNull();
     expect(cleanAction({ t: 'slow', hole: 2, turn: 7, by: 1 })).toEqual({ t: 'slow', hole: 2, turn: 7 });
     expect(cleanAction({ t: 'claim', turn: 7, hole: 3 })).toEqual({ t: 'claim', turn: 7 });
-    expect(cleanAction({ t: 'ready', hole: 53 })).toEqual({ t: 'ready', hole: 53 }); // extra holes
-    expect(cleanAction({ t: 'ready', hole: 54 })).toBeNull();
+    expect(cleanAction({ t: 'ready', hole: 54 })).toEqual({ t: 'ready', hole: 54 }); // extra holes (after a 19-hole course's 19)
+    expect(cleanAction({ t: 'ready', hole: 55 })).toBeNull();
   });
 });
 
@@ -420,6 +421,26 @@ describe('match play: the settings a match is made with', () => {
     expect(code(() => made({ ...cfg(), startedAt: 'yesterday' }))).toBe('bad_config');
     expect(code(() => made({ ...cfg(), courseVersion: '' }))).toBe('bad_config');
     expect(code(() => made({ ...cfg(), holes: [0] , pins: [PIN] }))).toBe('bad_config');
+    expect(code(() => made(cfg(20)))).toBe('bad_config');
+  });
+  it("keep a club's nines: the course hole of each scorecard hole and the length (developer, 2026-10-22: matches on every course)", () => {
+    const ch = [19, 20, 21, 22, 23, 24, 25, 26, 27, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+    const s = made({ ...cfg(18), courseHoles: ch, length: 'nines:blue+red' });
+    expect(s.cfg.courseHoles).toEqual(ch);
+    expect(s.cfg.length).toBe('nines:blue+red');
+    expect(code(() => made({ ...cfg(18), courseHoles: ch.slice(1) }))).toBe('bad_config');
+    expect(code(() => made({ ...cfg(18), courseHoles: ch.map(() => 0) }))).toBe('bad_config');
+    expect(code(() => made({ ...cfg(18), length: 'nines:<b>' }))).toBe('bad_config');
+    const r = matchRoundConfig(s.cfg, { name: 'a', lefty: false }, 0);
+    expect(r.courseHoles!.slice(0, 18)).toEqual(ch);
+    expect(r.courseHoles![18]).toBe(19); // an extra hole: the round's first hole again
+    expect(r.length).toBe('nines:blue+red');
+    expect(matchRoundConfig(cfg(18), { name: 'a', lefty: false }, 0).courseHoles).toBeUndefined();
+  });
+  it('take a course of 13 or 19 holes played all at once (hole counts, 2026-10-22)', () => {
+    expect(made(cfg(13)).cfg.holes).toHaveLength(13);
+    expect(made(cfg(19)).cfg.holes).toHaveLength(19);
+    expect(holesLeft(made(cfg(19)))).toBe(19);
   });
 });
 

@@ -20,7 +20,7 @@ import { uiCamera } from '../scale';
 import type { PlayScene } from './PlayScene';
 import { finishRound } from './flow';
 import { courseHoleFor } from '../systems/game/round';
-import { cardBlocks } from '../systems/game/lengths';
+import { cardBlocks, holeName, lengthOf, shapeOfCourse } from '../systems/game/lengths';
 import { strokeLabel } from '../systems/game/strokes';
 import type { LeaderboardEntry } from '../save/entry';
 import { DRILL_BALLS, PUTTING_GREENS, RangeShot } from '../systems/game/practice';
@@ -624,7 +624,7 @@ export class HudScene extends Phaser.Scene {
     const r = p.round;
     const aiming = p.state === 'aim';
     const swinging = p.state === 'swing';
-    setTxt(this.holeTxt, String(r.holeNumber));
+    setTxt(this.holeTxt, String(r.holeName.num));
     const d = r.distToPin();
     const lieTxt = r.lie ? r.lie.label : '';
     const surf = SURFACE_LABEL[r.surfaceAt()] ?? '';
@@ -1125,7 +1125,7 @@ export class HudScene extends Phaser.Scene {
     const portrait = this.add.image(8, 10, 'ui', 'portrait').setOrigin(0, 0);
     const ms = this.play.match?.session;
     const extra = !!ms && isExtra(ms.state.cfg, r.holeIndex);
-    const t1 = txt(this, 64, 8, extra ? `${ordinal(r.holeIndex + 1)} hole` : `hole ${r.holeNumber}`, { scale: 2 });
+    const t1 = txt(this, 64, 8, extra ? `${ordinal(r.holeIndex + 1)} hole` : holeTitle(r), { scale: 2 });
     const yd = r.tee.cardYd;
     const ydStr = app.settings.units === 'yd' ? `${yd} yd` : `${Math.round(yd * YD)} m`;
     const t2 = txt(this, 64, 30, `par ${r.hole.par}  ·  ${ydStr}  ·  ${r.cfg.tee.toLowerCase()}`, { color: COLORS.yellow });
@@ -1256,7 +1256,7 @@ export class HudScene extends Phaser.Scene {
       g.lineStyle(1, 0xffd84a, 0.9).lineBetween(b.x, b.y, e.x, e.y);
       g.strokeCircle(e.x, e.y, 2);
     }
-    const head = txt(this, this.W / 2, 4, `hole ${r.holeNumber}  ·  par ${r.hole.par}  ·  ${fmtDist(r.distToPin())} ${unitLabel()} to the pin`, { origin: [0.5, 0] });
+    const head = txt(this, this.W / 2, 4, `${holeTitle(r)}  ·  par ${r.hole.par}  ·  ${fmtDist(r.distToPin())} ${unitLabel()} to the pin`, { origin: [0.5, 0] });
     const foot = txt(this, this.W / 2, this.H - 13, 'tap or press tab to close', { origin: [0.5, 0], color: COLORS.dim });
     this.modalLayer.add([img, frame, g, head, foot]);
   }
@@ -1718,7 +1718,7 @@ export class HudScene extends Phaser.Scene {
     const s = live?.session?.state;
     if (!live || !s) return null;
     const me = this.play.me;
-    const cfg = await newMatchConfig(s.cfg.tee, s.cfg.holes, s.cfg.difficulty);
+    const cfg = await newMatchConfig(s.cfg.tee, { holes: s.cfg.holes, courseHoles: s.cfg.courseHoles, length: s.cfg.length }, s.cfg.difficulty);
     // the player as they are in this match (a different name since would be a different player to the friend)
     const mine = s.players[me];
     const r = await createLiveMatch(cfg, { name: mine?.name ?? app.settings.playerName, lefty: mine?.lefty ?? app.settings.lefty });
@@ -1751,17 +1751,30 @@ export interface CardData {
   blocks: (readonly [number, number, string])[];
   hole: (slot: number) => { par: number; yd: number | null };
   scores: HoleScore[];
+  /** the number shown for a slot (a club's nines: 1-9 in each nine), the slot itself if absent */
+  label?: (slot: number) => string;
+}
+
+/** "hole 12", or at a club of nines "white 3". */
+export function holeTitle(r: import('../systems/game/round').Round): string {
+  const n = r.holeName;
+  return n.nine ? `${n.nine} ${n.num}` : `hole ${n.num}`;
 }
 
 /** The card of a round being played (or just finished). */
 export function cardOfRound(r: import('../systems/game/round').Round): CardData {
   const holes = r.course.json.holes;
   const nCourse = holes.length;
+  const shape = shapeOfCourse(r.course.json);
+  const len = r.cfg.length ?? lengthOf(r.cfg.holes, nCourse);
+  const first = r.cfg.holes[0] ?? 1;
+  const ch = (h: number) => r.cfg.courseHoles?.[h - first] ?? courseHoleFor(h, nCourse);
   return {
     title: `${r.course.json.name}  ·  ${r.cfg.tee.toLowerCase()} tees  ·  ${r.cfg.playerName}`,
-    blocks: cardBlocks(r.cfg.holes, nCourse),
-    hole: (h) => { const hj = holes[courseHoleFor(h, nCourse) - 1]; return { par: hj.par, yd: hj.tees[r.cfg.tee]?.cardYd ?? 0 }; },
+    blocks: cardBlocks(len, r.cfg.holes, shape),
+    hole: (h) => { const hj = holes[ch(h) - 1]; return { par: hj.par, yd: hj.tees[r.cfg.tee]?.cardYd ?? 0 }; },
     scores: r.scores,
+    ...(shape.nines ? { label: (h: number) => String(holeName(h, ch(h), shape).num) } : {}),
   };
 }
 
@@ -1770,17 +1783,20 @@ export function cardOfRound(r: import('../systems/game/round').Round): CardData 
  * Yards need the course's own data (`holes`, when it is the loaded course).
  */
 export function cardOfEntry(e: LeaderboardEntry, courseName: string, holes: import('../data/course').HoleJson[] | null): CardData {
-  const blocks: (readonly [number, number, string])[] = e.length === 'front' ? [[1, 9, 'out']] : e.length === 'back' ? [[10, 18, 'in']]
-    : e.length === '9' ? [[1, 9, 'tot']] : [[1, 9, 'out'], [10, 18, 'in']];
+  const info = app.courses.find((c) => c.id === e.course);
+  const shape = info ? shapeOfCourse(info) : undefined;
+  const blocks = cardBlocks(e.length, e.scores.map((x) => x.hole), shape);
   const by = new Map(e.scores.map((s) => [s.hole, s]));
+  const ch = (h: number) => e.holes?.[h - 1] ?? (holes ? courseHoleFor(h, holes.length) : h);
   return {
     title: `${courseName}  ·  ${e.tee.toLowerCase()} tees  ·  ${e.player}`,
     blocks,
     hole: (h) => {
-      const hj = holes ? holes[courseHoleFor(h, holes.length) - 1] : null;
+      const hj = holes ? holes[ch(h) - 1] ?? null : null;
       return { par: by.get(h)?.par ?? hj?.par ?? 0, yd: hj ? hj.tees[e.tee]?.cardYd ?? null : null };
     },
     scores: e.scores,
+    ...(shape?.nines ? { label: (h: number) => String(holeName(h, ch(h), shape).num) } : {}),
   };
 }
 
@@ -1839,7 +1855,7 @@ export function scorecardOf(scene: Phaser.Scene, d: CardData, W: number, H: numb
       const cx = x0 + labelW + (h - a) * cellW + cellW / 2;
       sumPar += hj.par;
       if (hj.yd === null) ydKnown = false; else sumYd += hj.yd;
-      c.add(txt(scene, cx, yb + 1, String(h), { origin: [0.5, 0] }));
+      c.add(txt(scene, cx, yb + 1, d.label ? d.label(h) : String(h), { origin: [0.5, 0] }));
       if (showYd) c.add(txt(scene, cx, yb + rowH + 1, hj.yd === null ? '-' : String(hj.yd), { origin: [0.5, 0], color: COLORS.dim }));
       c.add(txt(scene, cx, yb + rowH * parRow + 1, String(hj.par), { origin: [0.5, 0] }));
       const s = byHole.get(h);

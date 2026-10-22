@@ -26,6 +26,8 @@ export function matchRoundConfig(cfg: MatchConfig, p: MatchPlayer, seat: Seat): 
     // one round id per player (eagles and the like are keyed by it); the seed (wind, lies) is shared
     startedAt: seat === 0 ? cfg.startedAt : cfg.startedAt.replace(/Z$/, '1Z'),
     pins: all.map((i) => cfg.pins[i % n]),
+    ...(cfg.courseHoles ? { courseHoles: all.map((i) => cfg.courseHoles![i % n]) } : {}),
+    ...(cfg.length ? { length: cfg.length } : {}),
   };
 }
 
@@ -252,6 +254,7 @@ export class MatchSession {
 
   /** The course's own hole being played. */
   get courseHole(): number {
-    return courseHoleFor(this.holeNumber, this.course.json.holes.length);
+    const cfg = this.state.cfg;
+    return cfg.courseHoles?.[this.state.hole % cfg.holes.length] ?? courseHoleFor(this.holeNumber, this.course.json.holes.length);
   }
 }

@@ -3,9 +3,21 @@
 
 import type { HoleScore, RoundTotals } from '../systems/rules/scoring';
 
-/** 18-hole courses: all 18, front or back nine. 9-hole courses: 9 holes, or twice around (18). */
-export type RoundLength = '18' | 'front' | 'back' | '9' | '9x2';
-export const ROUND_LENGTHS: RoundLength[] = ['18', 'front', 'back', '9', '9x2'];
+/**
+ * 18-hole courses: all 18, front or back nine. 9-hole courses: 9 holes, or
+ * twice around (18). Other sizes (13, 19 holes): 'all'. A club of three or
+ * more nines: `nines:<a>+<b>` (two nines) or `nines:<a>` (one), by nine id.
+ */
+export type RoundLength = '18' | 'front' | 'back' | '9' | '9x2' | 'all' | `nines:${string}`;
+export const ROUND_LENGTHS: RoundLength[] = ['18', 'front', 'back', '9', '9x2', 'all'];
+
+/** A round length from storage or the network. */
+export function isRoundLength(v: unknown): v is RoundLength {
+  return typeof v === 'string' && (ROUND_LENGTHS.includes(v as RoundLength) || /^nines:[a-z0-9_]{1,16}(\+[a-z0-9_]{1,16})?$/.test(v));
+}
+
+/** Most holes a round can have (two nines, a 19-hole course, 18 holes twice around). */
+export const MAX_ROUND_HOLES = 27;
 
 export interface LeaderboardEntry {
   id: string;
@@ -23,6 +35,8 @@ export interface LeaderboardEntry {
   totals: RoundTotals;
   /** the daily round of this day (yyyy-mm-dd), when it counted for the daily board */
   daily?: string;
+  /** the course hole of each scorecard slot, when it isn't the slot itself (a club's nines) */
+  holes?: number[];
 }
 
 const str = (v: unknown, max: number) => typeof v === 'string' && v.length > 0 && v.length <= max;
@@ -32,12 +46,14 @@ export function isEntry(e: unknown): e is LeaderboardEntry {
   const x = e as Partial<LeaderboardEntry> | null;
   return !!x && typeof x === 'object'
     && str(x.id, 120) && str(x.course, 64) && str(x.tee, 32)
-    && ROUND_LENGTHS.includes(x.length as RoundLength)
+    && isRoundLength(x.length)
     && str(x.difficulty, 16) && typeof x.casual === 'boolean'
     && str(x.player, 40) && str(x.date, 40)
     && Number.isFinite(x.gross) && Number.isFinite(x.toPar)
     && (x.back === null || x.back === undefined || Number.isFinite(x.back))
-    && Array.isArray(x.scores) && x.scores.length <= 18
+    && Array.isArray(x.scores) && x.scores.length <= MAX_ROUND_HOLES
     && !!x.totals && typeof x.totals === 'object'
-    && (x.daily === undefined || (typeof x.daily === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(x.daily)));
+    && (x.daily === undefined || (typeof x.daily === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(x.daily)))
+    && (x.holes === undefined || (Array.isArray(x.holes) && x.holes.length <= MAX_ROUND_HOLES
+      && x.holes.every((h) => Number.isInteger(h) && h >= 1 && h <= 99)));
 }

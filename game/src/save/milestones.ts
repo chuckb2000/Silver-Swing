@@ -4,6 +4,7 @@
 // the list is the same on every device that has the rounds. Pure.
 
 import type { LeaderboardEntry } from './entry';
+import { isFullRound } from '../systems/game/lengths';
 
 export interface Milestone {
   key: string;      // unique per player: 'birdie', 'birdie:<course>', 'break:<course>:80', 'state:OR', ...
@@ -25,7 +26,7 @@ export function shortName(name: string): string {
   return name.replace(/ (golf|country) club$| golf (course|links)$| golf links$/i, '').toLowerCase();
 }
 
-const isEighteen = (e: LeaderboardEntry) => e.length === '18' || e.length === '9x2';
+const isEighteen = (e: LeaderboardEntry) => isFullRound(e.length);
 
 /**
  * Every milestone in a player's rounds, in the order they were earned. Casual
@@ -63,7 +64,7 @@ export function milestonesOf(rounds: LeaderboardEntry[], courses: MilestoneCours
       add(`birdie:${e.course}`, `first birdie at ${at}`, e, e.course, true);
     }
     // a whole round only (the summary is reached after the last hole)
-    const full = holes.length === e.scores.length && holes.length >= 9;
+    const full = holes.length === e.scores.length && (isEighteen(e) || holes.length === 9); // breaking 40 is for nine holes, not 13
     if (full) {
       const marks = isEighteen(e) ? BREAK_18 : BREAK_9;
       const nine = isEighteen(e) ? '' : ' on nine';

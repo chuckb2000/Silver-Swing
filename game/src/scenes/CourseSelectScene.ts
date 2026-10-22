@@ -10,7 +10,7 @@
 import Phaser from 'phaser';
 import { app } from '../app';
 import { courseEntries, coursesByState, CourseInfo, stateOf } from '../data/registry';
-import { Button, COLORS, Panel, setTxt, txt } from '../ui/widgets';
+import { Button, COLORS, onTap, Panel, setTxt, txt } from '../ui/widgets';
 import { useCourse } from './flow';
 import { LoadSuperseded } from '../data/courses';
 
@@ -258,7 +258,7 @@ export class CourseSelectScene extends MenuScene {
     if (!this.textures.exists(`logo_${t.logos[0]}`)) this.waiting.push(fillLogo);
     // the whole card is the button
     const zone = this.add.zone(x, y, w, h).setOrigin(0, 0).setInteractive({ useHandCursor: true });
-    zone.on('pointerup', t.tap);
+    onTap(zone, t.tap);
     this.root.add(zone);
   }
 

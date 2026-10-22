@@ -3,7 +3,7 @@
 // extra holes on a line under it.
 
 import Phaser from 'phaser';
-import { cardBlocks } from '../systems/game/lengths';
+import { cardBlocks, holeName, lengthOf, shapeOfCourse } from '../systems/game/lengths';
 import { courseHoleFor } from '../systems/game/round';
 import type { MatchSession } from '../systems/match/session';
 import { holeNo, isExtra, ordinal, statusText } from '../systems/match/rules';
@@ -15,7 +15,10 @@ export function matchCard(scene: Phaser.Scene, ms: MatchSession, me: Seat | null
   const s = ms.state;
   const holes = ms.course.json.holes;
   const n = holes.length;
-  const blocks = cardBlocks(s.cfg.holes, n);
+  const shape = shapeOfCourse(ms.course.json);
+  const blocks = cardBlocks(s.cfg.length ?? lengthOf(s.cfg.holes, n), s.cfg.holes, shape);
+  // the course hole of a scorecard hole (a club's nines: not the usual one)
+  const courseHoleOf = (h: number) => s.cfg.courseHoles?.[s.cfg.holes.indexOf(h)] ?? courseHoleFor(h, n);
   const cellW = W < 330 ? 19 : 21;
   const labelW = 46, sumW = 24;
   const tw = labelW + cellW * 9 + sumW + 2;
@@ -55,10 +58,10 @@ export function matchCard(scene: Phaser.Scene, ms: MatchSession, me: Seat | null
     const won: [number, number] = [0, 0];
     const sum: [number, number] = [0, 0];
     for (let h = a; h <= b; h++) {
-      const hj = holes[courseHoleFor(h, n) - 1];
+      const hj = holes[courseHoleOf(h) - 1];
       const cx = x0 + labelW + (h - a) * cellW + cellW / 2;
       sumPar += hj.par;
-      c.add(txt(scene, cx, yb + 1, String(h), { origin: [0.5, 0] }));
+      c.add(txt(scene, cx, yb + 1, String(holeName(h, courseHoleOf(h), shape).num), { origin: [0.5, 0] }));
       c.add(txt(scene, cx, yb + rowH + 1, String(hj.par), { origin: [0.5, 0], color: COLORS.dim }));
       const res = byHole.get(h);
       if (!res) continue;

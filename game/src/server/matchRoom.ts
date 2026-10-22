@@ -127,7 +127,7 @@ export interface MatchResult {
   finished: true;
   courseId: string;
   tee: string;
-  /** holes in the round (9 or 18) */
+  /** holes in the round (9, 18, or a course of 13 or 19 played all at once) */
   holes: number;
   /** holes played (19: won at the 19th) */
   played: number;
@@ -341,6 +341,7 @@ export class MatchRoomCore {
     const c = s.cfg;
     return jsonResponse({
       exists: true, protocol: c.protocol, rules: RULES, courseId: c.courseId, courseVersion: c.courseVersion, tee: c.tee, holes: c.holes, difficulty: c.difficulty,
+      ...(c.length ? { length: c.length } : {}),
       players: s.players.map((p) => (p ? p.name : null)), phase: s.phase, status: statusText(s), seq: s.seq, online: this.online(),
     });
   }

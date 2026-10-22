@@ -1,0 +1,96 @@
+{
+ "add": [
+  {
+   "from": "proposed/approved.geojson",
+   "ids": [
+    "desk_1_green_0",
+    "desk_1_bluetee_0",
+    "desk_1_fairway_0",
+    "desk_2_tee_0",
+    "desk_2_bluetee_0",
+    "desk_2_green_0",
+    "desk_3_tee_0",
+    "desk_3_bluetee_0",
+    "desk_3_green_0",
+    "desk_3_fairway_0",
+    "desk_4_green_0",
+    "desk_4_tee_0",
+    "desk_4_bluetee_0",
+    "desk_4_fairway_0",
+    "desk_4_bunker_0",
+    "desk_5_tee_0",
+    "desk_5_bluetee_0",
+    "desk_5_green_0",
+    "desk_5_fairway_0",
+    "desk_6_tee_0",
+    "desk_6_bluetee_0",
+    "desk_6_green_0",
+    "desk_7_tee_0",
+    "desk_7_bluetee_0",
+    "desk_7_green_0",
+    "desk_7_fairway_0",
+    "desk_7_bunker_0",
+    "desk_8_green_0",
+    "desk_8_tee_0",
+    "desk_8_bluetee_0",
+    "desk_8_fairway_0",
+    "desk_8_bunker_0",
+    "desk_9_bunker_0",
+    "desk_9_bunker_1",
+    "desk_9_green_0",
+    "desk_9_fairway_0",
+    "desk_9_tee_0",
+    "desk_9_bluetee_0",
+    "desk_range_range_0",
+    "desk_1_pin",
+    "desk_2_pin",
+    "desk_3_pin",
+    "desk_4_pin",
+    "desk_5_pin",
+    "desk_6_pin",
+    "desk_7_pin",
+    "desk_8_pin",
+    "desk_9_pin",
+    "desk_1_hole",
+    "desk_2_hole",
+    "desk_3_hole",
+    "desk_4_hole",
+    "desk_5_hole",
+    "desk_6_hole",
+    "desk_7_hole",
+    "desk_8_hole",
+    "desk_9_hole"
+   ],
+   "reason": "the developer's shapes from the tracing desk (2026-10-22): greens, fairways, bunkers, tee boxes, each hole's Black tee and the driving range, with pins at the green centres and hole lines (Black tee -> green centre); data/lake_oswego_muni/desk/. OSM does not map the 2025 nine."
+  },
+  {
+   "from": "proposed/boundary.geojson",
+   "ids": [
+    "prop_boundary"
+   ],
+   "reason": "the course's out-of-bounds line: OSM way 60087783 (the city's whole golf property) cut along the north side of the aquatics center, as the city's course map draws it (make_boundary.py); approved by the developer 2026-10-22"
+  },
+  {
+   "from": "proposed/channels_lidar.geojson",
+   "ids": [
+    "channel_tr_creek_2"
+   ],
+   "tags": {
+    "flatten": "no"
+   },
+   "reason": "the stream between hole 2's tee and green (developer's desk note, 2026-10-22: a water hazard running between the tee and the green, from the lidar if possible). OSM maps the stream only north of the course. Its line follows the channel in the 2019 lidar DEM (make_creek_line.py); the penalty area is the channel along it (pipeline/propose_channels.py lake_oswego_muni --lines=proposed/creek_lines.geojson tr_creek_2: 212 m long, 6.6 m wide on average, 0.44 m deep). Red, as all water by default. flatten=no keeps the lidar bed."
+  }
+ ],
+ "drop": [
+  {
+   "osm": "w60087783",
+   "reason": "OSM's golf property outline (includes the aquatics center); replaced by prop_boundary"
+  },
+  {
+   "osm": "w424601504",
+   "reason": "OSM's old driving range; replaced by the developer's range from the desk (desk_range_range_0), which runs north to the property line"
+  }
+ ],
+ "tags": [],
+ "extend_start": []
+}

@@ -1,0 +1,114 @@
+{
+  "id": "lake_oswego_muni",
+  "name": "The Muni",
+  "location": "Lake Oswego, Clackamas County, Oregon",
+  "state": "OR",
+  "architects": "Dan Hixson (2025, new nine on part of the city's 1960s 18-hole par-3 course)",
+  "theme": "pnw",
+  "epsg": 32610,
+  "osm_sources": [
+    "raw/overpass.geojson"
+  ],
+  "boundary_name": "Lake Oswego Golf Course",
+  "dtm": {
+    "path": "raw/dogami_dtm_ft.tif",
+    "units": "ft",
+    "source": "DOGAMI lidar DIGITAL_TERRAIN_MODEL_MOSAIC (bare earth; OLC Metro 3DEP 2019 at this point), exportImage at 1 m in EPSG:32610, box x 523184-525184 / y 5026322-5028322, clipped to the world + 100 m by prepare_raw.py (GitHub release muni-data, more.data.tiff)"
+  },
+  "chm": {
+    "path": "raw/dogami_chm_ft.tif",
+    "units": "ft",
+    "source": "DOGAMI lidar CANOPY_HEIGHT_MODEL_MOSAIC (highest hit minus bare earth; OLC Metro 3DEP 2019), exportImage at 1 m in EPSG:32610, same box, clipped to the world + 100 m by prepare_raw.py (GitHub release muni-data, exportImage.12.tiff)",
+    "label": "DOGAMI canopy height model"
+  },
+  "ortho": {
+    "path": "raw/osip2024_032m.tif",
+    "source": "Oregon Statewide Imagery Program 2024 (1 ft, summer 2024), four exportImage JPEG quarters from imagery.oregonexplorer.info OSIP_2024_WM, placed by their request bboxes and mosaicked to 0.32 m on the world by prepare_raw.py (GitHub release muni-data, muni.25-28.jpg)"
+  },
+  "world": {
+    "x0": 524034,
+    "y0": 5026969,
+    "width": 768,
+    "height": 768,
+    "note": "OSM course boundary (way 60087783, the city's golf property) bbox 424 x 518 m in UTM 10N, centred in 768 x 768 m (whole 256 m chunks): ~170 m of scenery east and west, ~125 m north and south"
+  },
+  "tee_sets": [
+    {
+      "name": "Black",
+      "playable": true,
+      "rating": 29.0,
+      "slope": 86,
+      "total_yd": 1599
+    },
+    {
+      "name": "White",
+      "playable": false,
+      "rating": 28.5,
+      "slope": 85,
+      "total_yd": 1446
+    }
+  ],
+  "default_tee": "Black",
+  "scorecard_source": "GolfPass course page (yardages, pars, men's stroke index), retrieved 2026-10-22, unverified: the city publishes no card (developer). Black 1,599 matches the Lake Oswego Review (2025); the Review gives hole 5 as 302 yd against GolfPass 309. Ratings (men's) from oregoncourses.com, unverified. Black is built (the longer of two sets; the card has no Blue); White is listed, not playable",
+  "penalty_default": "red",
+  "driving_range_is_ob": true,
+  "wind_mph": {
+    "minMph": 1,
+    "maxMph": 7
+  },
+  "trees_off_fairways_m": 2,
+  "attribution": [
+    "Map data © OpenStreetMap contributors (ODbL)",
+    "Elevation and canopy: Oregon Department of Geology and Mineral Industries (DOGAMI) lidar",
+    "Imagery: Oregon Statewide Imagery Program (OSIP) 2024",
+    "Scorecard: GolfPass"
+  ],
+  "notes": "Standing defaults (COURSE_BUILD.md 4.1) used without asking: Black tees only, all water red, boundary OB with the range OB, pins at green centres, lidar trees with fairway and tee-shot trees removed, pnw theme, wind 1-7 mph. OSM maps the city's golf property and the range only (the 2025 nine is not mapped): every hole is traced from the OSIP 2024 photo and corrected by the developer in the tracing desk. Hole identity from the 2021 site plan and the course map (look only).",
+  "trees_need_ortho": {
+    "v_max": 120,
+    "min_share": 0.1,
+    "note": "the 2019 lidar predates the 2023-25 rebuild (about 160 trees removed): lidar crowns that are not dark canopy on the OSIP 2024 photo are dropped (pipeline/gorse.py missing_in_ortho)"
+  },
+  "drop_trees": [
+    {
+      "x": 319.5,
+      "y": 451.5,
+      "reason": "developer 2026-10-22, tree tracer: remove (broadleaf 20.4 m, near hole 7)"
+    },
+    {
+      "x": 461.5,
+      "y": 528.5,
+      "reason": "developer 2026-10-22, tree tracer: remove (broadleaf 6.9 m, near hole 1)"
+    },
+    {
+      "x": 444.5,
+      "y": 540.5,
+      "reason": "developer 2026-10-22, tree tracer: remove (broadleaf 9.1 m, near hole 1)"
+    },
+    {
+      "x": 385.5,
+      "y": 381.5,
+      "reason": "developer 2026-10-22, tree tracer: remove (broadleaf 19.0 m, near hole 9)"
+    },
+    {
+      "x": 364.5,
+      "y": 397.5,
+      "reason": "developer 2026-10-22, tree tracer: remove (broadleaf 14.2 m, near hole 9)"
+    },
+    {
+      "x": 280.5,
+      "y": 365.5,
+      "reason": "developer 2026-10-22, tree tracer: remove (broadleaf 16.8 m, near hole 8)"
+    },
+    {
+      "x": 459.5,
+      "y": 388.5,
+      "reason": "developer 2026-10-22, tree tracer: remove (conifer 30.8 m, near hole 1)"
+    },
+    {
+      "x": 320.5,
+      "y": 547.5,
+      "reason": "developer 2026-10-22, tree tracer: remove (broadleaf 25.5 m, near hole 2)"
+    }
+  ]
+}

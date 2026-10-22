@@ -25,6 +25,7 @@ export function entryOf(c) {
     ratings: Object.fromEntries(tees.filter((t) => t.rating > 0 && t.slope > 0).map((t) => [t.name, [t.rating, t.slope]])),
   };
   if (c.group) Object.assign(e, { group: c.group, groupName: c.groupName, layout: c.layout });
+  if (c.nines) e.nines = c.nines; // a club of three or more nines: the rounds it offers
   return e;
 }
 

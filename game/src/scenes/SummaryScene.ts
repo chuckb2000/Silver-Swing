@@ -15,7 +15,7 @@ import { STATES } from '../data/registry';
 import { dailyPlan, dayStandings } from '../systems/game/daily';
 import { DAILY_PICKS, DAILY_ROSTER } from '../data/dailyRoster';
 import { shareRound } from '../ui/shareCard';
-import { lengthLabel } from './flow';
+import { lengthLabel, shapeById } from './flow';
 import { MenuScene } from './menu';
 
 export class SummaryScene extends MenuScene {
@@ -75,7 +75,7 @@ export class SummaryScene extends MenuScene {
         ? `another device has the name ${e.player}: tap the name to change it, or to enter that device's player code`
         : rank === 0
           ? 'a second go at the daily round: it goes on the course board, not the daily one'
-          : `${e.casual ? 'casual round  ·  ' : ''}#${rank} of ${board.length} ${where} (${lengthLabel(e.length)})${pb ? '  ·  new personal best!' : ''}`;
+          : `${e.casual ? 'casual round  ·  ' : ''}#${rank} of ${board.length} ${where} (${lengthLabel(e.length, shapeById(e.course))})${pb ? '  ·  new personal best!' : ''}`;
     this.rankLine = !hidden && rank > 0 && e.player !== DEFAULT_NAME && !taken ? `#${rank} of ${board.length} ${where}` : '';
     const noteTxt = txt(this, W / 2, H - 38, note, { origin: [0.5, 0], color: taken ? COLORS.red : pb ? COLORS.yellow : COLORS.dim, maxWidth: W - 12 });
     if (noteTxt.height > 12) noteTxt.y = H - 30 - noteTxt.height; // wrapped on a narrow screen: keep it above the buttons
