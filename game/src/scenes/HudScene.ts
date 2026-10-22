@@ -973,8 +973,10 @@ export class HudScene extends Phaser.Scene {
     }
     const good = half + (putt ? GOOD_BAND : lieModsFor(r.lie, p.club).goodBand ?? GOOD_BAND); // gorse: a sliver of yellow
     g.fillStyle(0xd23b2b, 1).fillRect(X(-ZONE_REACH), y0, X(ZONE_REACH) - X(-ZONE_REACH), h);
-    g.fillStyle(0xf2c23a, 1).fillRect(X(-good), y0, Math.max(1, X(good) - X(-good)), h);
-    g.fillStyle(0x4cd25c, 1).fillRect(X(-half), y0, Math.max(1, X(half) - X(-half)), h);
+    // each band covers the pixels from its left edge to its right edge, both included: the cursor is drawn on
+    // the rounded pixel of its position, so a tap shows inside a band exactly when it counts inside it
+    g.fillStyle(0xf2c23a, 1).fillRect(X(-good), y0, X(good) - X(-good) + 1, h);
+    g.fillStyle(0x4cd25c, 1).fillRect(X(-half), y0, X(half) - X(-half) + 1, h);
     // a dark line through the middle of the green, top to bottom of the bar: the perfect spot (developer)
     g.fillStyle(0x1f5a28, 1).fillRect(X(0), y0, 1, h);
     // ticks
@@ -989,6 +991,7 @@ export class HudScene extends Phaser.Scene {
     if (m && (p.state === 'swing' || p.state === 'flight')) {
       const now = performance.now();
       const pos = Math.max(lo, Math.min(max, m.position(now)));
+      m.drawn(now); // a tap counts where the cursor is drawn now (what the player sees)
       if (m.phase === 'accuracy' || m.phase === 'done') {
         g.fillStyle(0xffffff, 1).fillRect(X(Math.min(max, m.power)) - 1, y0 - 3, 3, 2);
       }

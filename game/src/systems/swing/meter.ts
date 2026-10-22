@@ -15,12 +15,22 @@
 // After tap 2 it comes back at the speed it had when tap 2 was made, so short
 // shots are slow and easy to time and full swings are harder, as in golf.
 //
+// What you see is what you get (developer, 2026-10-22: "it is not registering
+// exactly where i click... usually in my favor"): a tap counts where the cursor
+// was last drawn before it (the screen tells the meter each time it draws it,
+// `drawn`), not where the cursor had moved on to by the tap's own time - the
+// screen shows the cursor a frame or two late, so that ran a tap ahead of what
+// the player saw, by about 2 % of the bar on a full swing. With no frame drawn
+// in the last 50 ms (a stalled screen, or a scripted tap) the tap's time counts.
+//
 // Pure logic driven by input timestamps (ms, the same clock as performance.now()).
 
 export const FULL_MAX = 110;    // full swings can overswing to 110 %
 export const PART_MAX = 100;    // putts and partial swings stop at 100 %
 export const ZONE_REACH = 15;   // the bar runs 15 % left of the zone centre
 export const LATE_POWER_TAP_MS = 150;
+/** A frame drawn longer ago than this before a tap isn't what the player saw: the tap's own time counts. */
+export const DRAWN_WITHIN_MS = 50;
 
 export type MeterPhase = 'idle' | 'power' | 'accuracy' | 'done';
 
@@ -49,6 +59,8 @@ export class SwingMeter {
   private powerPos = 0;
   private maxed = false;
   result: MeterResult | null = null;
+  /** when the cursor was last drawn (a few, newest last) */
+  private draws: number[] = [];
 
   /**
    * @param secondsPer100 the starting speed, as the time 100 % of the bar would take at it
@@ -105,6 +117,27 @@ export class SwingMeter {
     return [t2, t2 + (powerPct - tapPct) / this.speedAt(powerPct)];
   }
 
+  /** The screen drew the cursor at time `now` (call it with the time the position was taken for). */
+  drawn(now: number) {
+    const d = this.draws;
+    if (d.length && now <= d[d.length - 1]) return;
+    d.push(now);
+    if (d.length > 8) d.shift();
+  }
+
+  /**
+   * When a tap at `t` counts: the last time the cursor was drawn, at or before it and after `from`
+   * (the start of this run of the cursor), if that was within DRAWN_WITHIN_MS; else `t` itself.
+   */
+  private seenAt(t: number, from: number): number {
+    for (let i = this.draws.length - 1; i >= 0; i--) {
+      const d = this.draws[i];
+      if (d > t) continue;
+      return d > from && t - d <= DRAWN_WITHIN_MS ? d : t;
+    }
+    return t;
+  }
+
   /** Time of the first tap (cursor start). */
   get startedAt(): number {
     return this.t0;
@@ -134,7 +167,8 @@ export class SwingMeter {
     }
     if (this.phase === 'power') {
       if (t <= this.t0) return this.phase; // the start tap delivered twice, or a tap inside the latency allowance
-      const pos = this.outAt(t - this.t0);
+      const seen = this.seenAt(t, this.t0);
+      const pos = this.outAt(seen - this.t0);
       if (pos >= this.max) {
         // tapped just as (or after) the cursor reached the end: maximum power
         this.turnAtEnd();
@@ -142,7 +176,7 @@ export class SwingMeter {
       }
       this.powerPos = Math.max(0, pos);
       this.vBack = this.speedAt(this.powerPos);
-      this.t2 = t;
+      this.t2 = seen; // the cursor turns back from where it was seen, so it carries on smoothly
       this.phase = 'accuracy';
       return this.phase;
     }
@@ -150,7 +184,7 @@ export class SwingMeter {
       if (t <= this.t2 && !this.maxed) return this.phase; // the power tap delivered twice
       // the cursor turned by itself and the player was a moment late with tap 2
       if (this.maxed && t - this.t2 < LATE_POWER_TAP_MS) return this.phase;
-      const pos = this.powerPos - (t - this.t2) * this.vBack;
+      const pos = this.powerPos - (this.seenAt(t, this.t2) - this.t2) * this.vBack;
       if (pos <= -ZONE_REACH) {
         this.finish(-ZONE_REACH, true);
       } else {
