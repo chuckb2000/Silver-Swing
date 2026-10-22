@@ -911,3 +911,33 @@ Not merged (the developer will say when). Design note: docs/reports/multiplayer_
 - The title's footer turns every 6 s between the map credit (first, as OpenStreetMap's licence asks;
   the full credits stay in settings) and three tips: merging names, a player code on another device,
   and "my golf". Each has a shorter form for a narrow phone.
+
+## Chat in live matches (developer, 2026-10-22; branch design/chat)
+
+- "Can you look into building a chat feature for the multiplayer": typed messages only (the
+  developer's choice, over one-tap phrases or both). A chat button under the menu button in a
+  match, also over the match panels (between holes is when players talk); T opens it on a
+  keyboard. The panel is an HTML dialog (a real input: a phone's keyboard, emoji), with the
+  history, a box and "send"; the other player's messages appear as they come.
+- "I don't want the chat to distract players while they're hitting": while this player aims,
+  swings, has a stroke on its way or in the air, or a drop to take, a new message shows nothing:
+  no note, no sound, no count. It shows once the shot is over (the other player's turn, or
+  between holes). Opening the panel stays the player's own choice (it stops a swing in progress,
+  like the menu).
+- A new message otherwise: a note under the match bar for 6 s (tap it to open the chat), a soft
+  sound, and the count on the chat button, which turns orange; a background tab's title says it.
+- "Can you put a little thing up at the start of the round that says press T to open chat":
+  when a match's first hole starts (both players in, nothing played yet), a yellow line under the
+  match bar for 8 s: "press t (or tap chat) to chat with <name>", or on a phone "tap chat (top
+  right) to talk to <name>". Once per match on a device, and never again once the player has
+  opened the chat.
+- Filtered like names: each word the name filter refuses becomes stars (also a word spelt out in
+  single letters). The server does it, so both players see the same text.
+- Kept with the match on the server (its own storage key: one write per message, apart from the
+  moves' record): the latest 100, at most 400 in a match, 5 per player in 10 s. A game coming back
+  gets what it missed; what was read is kept per match on the device. Not for watchers.
+- Quota: a message is one Durable Object write and one incoming WebSocket message (1/20 of a
+  request); a chatty match of 50 messages adds about a quarter to its writes.
+- A test found on main: online.test.ts's "hide me" test posted daily rounds dated 2026-10-20, which
+  the server stops taking two days on; it uses today's date now.
+

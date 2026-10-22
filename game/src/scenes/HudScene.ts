@@ -28,9 +28,10 @@ import type { Club } from '../data/clubs';
 import type { SimResult } from '../systems/physics/sim';
 import { clockText, holeLive, holeNo, holesLeft, isExtra, ordinal, other, statusText } from '../systems/match/rules';
 import { CLOCK } from '../systems/match/types';
-import type { HoleResult, Seat } from '../systems/match/types';
+import type { ChatMsg, HoleResult, Seat } from '../systems/match/types';
 import { matchCard } from '../ui/matchCard';
 import { confirmBox } from '../ui/confirm';
+import { openChat } from '../ui/chatPanel';
 import { ClockView, createLiveMatch, forgetMatch, LiveMatch, newMatchConfig } from '../match/live';
 
 /** The other player's rematch offer, which the server took before this player's: once it has arrived (null after 3 s). */
@@ -146,6 +147,24 @@ export class HudScene extends Phaser.Scene {
   private waitOnline = '';
   /** a text kept for measuring the match bar's names (made once, not every frame) */
   private probe: Phaser.GameObjects.BitmapText | null = null;
+  /**
+   * Chat (developer, 2026-10-22): a button under the menu button with the
+   * number of unread messages, and a note under the match bar when one comes.
+   * Above the match panels (between holes is when players talk), below the card.
+   */
+  private chatLayer: Phaser.GameObjects.Container | null = null;
+  private chatBtn!: Button;
+  private chatBadge!: Phaser.GameObjects.Container;
+  private chatBadgeTxt!: Phaser.GameObjects.BitmapText;
+  private chatNote!: Panel;
+  private chatNoteTxt!: Phaser.GameObjects.BitmapText;
+  private chatNoteTimer: Phaser.Time.TimerEvent | null = null;
+  /** the chat panel is open */
+  private chatting = false;
+  /** a message that came during this player's shot: shown once the shot is over (developer: no distraction while hitting) */
+  private heldNote: ChatMsg | null = null;
+  /** the "press T to chat" hint has been considered on this page */
+  private chatHinted = false;
   /** the banner on screen: when it went up and for how long (a banner that follows waits for it) */
   private bannerAt = 0;
   private bannerFor = 0;
@@ -180,6 +199,11 @@ export class HudScene extends Phaser.Scene {
     this.waitClaim = false;
     this.matchAt = 0;
     this.probe = null;
+    this.chatLayer = null;
+    this.chatNoteTimer = null;
+    this.chatting = false;
+    this.heldNote = null;
+    this.chatHinted = false;
     this.bannerAt = 0;
     this.bannerFor = 0;
     this.queuedFlash = null;
@@ -295,6 +319,139 @@ export class HudScene extends Phaser.Scene {
     this.watchPanel.add(this.watchTxt);
     this.probe = txt(this, 0, 0, '').setVisible(false);
     this.root.add([bar, this.matchLink, this.giveBtn, this.penBtn, this.claimBtn, this.watchPanel]);
+    this.buildChat();
+  }
+
+  private buildChat() {
+    const live = this.play.match!;
+    const layer = this.add.container(0, 0).setDepth(110);
+    this.chatBtn = new Button(this, 0, 0, 30, 14, 'chat', () => this.openChat(), { color: 'grey' });
+    const badge = this.add.container(0, 0);
+    const dot = this.add.graphics();
+    dot.fillStyle(0x1c140f, 1).fillRect(0, 0, 12, 10).fillStyle(0xd8402e, 1).fillRect(1, 1, 10, 8);
+    this.chatBadgeTxt = txt(this, 6, 1, '', { origin: [0.5, 0] });
+    badge.add([dot, this.chatBadgeTxt]);
+    this.chatBadge = badge.setVisible(false);
+    this.chatNote = new Panel(this, 0, 0, 200, 16, 0.9);
+    this.chatNoteTxt = txt(this, 6, 4, '', { color: COLORS.white });
+    this.chatNote.add(this.chatNoteTxt);
+    this.chatNote.setSize(200, 16).setInteractive(new Phaser.Geom.Rectangle(0, 0, 200, 16), Phaser.Geom.Rectangle.Contains);
+    this.chatNote.on('pointerdown', () => this.openChat());
+    this.chatNote.setVisible(false);
+    layer.add([this.chatBtn, badge, this.chatNote]);
+    this.chatLayer = layer;
+    const off = live.onChatNews((m) => this.chatArrived(m));
+    this.events.once('shutdown', off);
+  }
+
+  /** Can the chat open now (a match with two players, on a server that has chat)? */
+  chatAvailable(): boolean {
+    return !!this.play.match?.chatReady && !this.chatting;
+  }
+
+  /** The chat panel (a swing in progress stops first: the meter mustn't run out under it). */
+  openChat() {
+    const live = this.play.match;
+    if (!live || !this.chatAvailable()) return;
+    this.play.cancelSwing();
+    this.hideChatNote();
+    this.chatting = true;
+    try { localStorage.setItem('golf:chat:used', '1'); } catch { /* blocked */ } // found it: no more hints
+    openChat(this, live, this.play.me, () => { this.chatting = false; if (this.sys.isActive()) this.refresh(); });
+    this.refresh();
+  }
+
+  /**
+   * Is this player hitting: aiming, swinging, their stroke on its way or in
+   * the air, a drop to take? Chat keeps quiet then (developer, 2026-10-22: "i
+   * don't want the chat to distract players while they're hitting"): no note,
+   * no sound, no count, until the ball has stopped and the turn has passed.
+   */
+  private hitting(): boolean {
+    const p = this.play;
+    const ms = p.match?.session;
+    if (!ms) return false;
+    if (['aim', 'swing', 'commit', 'relief', 'drop'].includes(p.state)) return true;
+    return (p.state === 'flight' || p.state === 'settle') && p.round === ms.rounds[p.me];
+  }
+
+  /** A message from the other player while the panel is shut: a note under the match bar for a few seconds, and a sound (held while hitting). */
+  private chatArrived(m: ChatMsg) {
+    if (!this.chatLayer || this.chatting || !this.sys.isActive()) return;
+    if (this.hitting()) { this.heldNote = m; this.refresh(); return; }
+    this.showChatNote(m);
+  }
+
+  private showChatNote(m: ChatMsg) {
+    if (!this.chatLayer) return;
+    const who = (this.play.oppName() || 'your friend').slice(0, 12);
+    // the pixel font has plain letters only (emoji and the like are left out here; the panel shows them)
+    const text = `${who}: ${m.text}`.replace(/[^\x20-\x7e]/g, '').replace(/\s+/g, ' ').trim();
+    const w = Math.min(260, this.W - 16);
+    const max = Math.floor((w - 12) / 5) * 2 - 3; // two lines of text
+    setTxt(this.chatNoteTxt, text.length > max ? `${text.slice(0, max)}...` : text);
+    this.chatNoteTxt.setMaxWidth(w - 12).setTint(COLORS.white);
+    const h = Math.round(this.chatNoteTxt.height) + 8;
+    this.chatNote.resize(w, h, 0.9);
+    this.chatNote.setSize(w, h);
+    (this.chatNote.input!.hitArea as Phaser.Geom.Rectangle).setTo(0, 0, w, h);
+    this.placeChatNote();
+    this.chatNote.setVisible(true);
+    sfx('tick', 1.4);
+    this.chatNoteTimer?.remove();
+    this.chatNoteTimer = this.time.delayedCall(6000, () => this.hideChatNote());
+    this.refresh();
+  }
+
+  /** The hint is shown once per match, and not at all once the player has opened the chat. */
+  private chatHintDue(code: string): boolean {
+    try {
+      if (localStorage.getItem('golf:chat:used')) return false;
+      const key = `golf:match:${code}:chathint`;
+      if (localStorage.getItem(key)) return false;
+      localStorage.setItem(key, '1');
+      return true;
+    } catch { return true; }
+  }
+
+  /** "press t to chat with kevin" (on a phone: "tap chat"), in the note's place under the match bar, a little longer. */
+  private showChatHint() {
+    const who = (this.play.oppName() || 'your friend').slice(0, 12);
+    let touch = false;
+    try { touch = navigator.maxTouchPoints > 0 && window.matchMedia('(pointer: coarse)').matches; } catch { /* a computer */ }
+    const text = touch ? `tap chat (top right) to talk to ${who}` : `press t (or tap chat) to chat with ${who}`;
+    const w = Math.min(260, this.W - 16);
+    setTxt(this.chatNoteTxt, text);
+    this.chatNoteTxt.setMaxWidth(w - 12).setTint(COLORS.yellow);
+    const h = Math.round(this.chatNoteTxt.height) + 8;
+    this.chatNote.resize(w, h, 0.9);
+    this.chatNote.setSize(w, h);
+    (this.chatNote.input!.hitArea as Phaser.Geom.Rectangle).setTo(0, 0, w, h);
+    this.placeChatNote();
+    this.chatNote.setVisible(true);
+    this.chatNoteTimer?.remove();
+    this.chatNoteTimer = this.time.delayedCall(8000, () => this.hideChatNote());
+  }
+
+  private hideChatNote() {
+    this.chatNoteTimer?.remove();
+    this.chatNoteTimer = null;
+    if (this.chatLayer) this.chatNote.setVisible(false);
+  }
+
+  /** The chat button under the menu button; the note under the match bar (and its buttons). */
+  private placeChat() {
+    if (!this.chatLayer) return;
+    const x = this.W - 48 - 34, y = 20;
+    this.chatBtn.setPosition(x, y);
+    this.chatBadge.setPosition(x - 6, y - 5); // on the corner, clear of the label
+    this.placeChatNote();
+  }
+
+  private placeChatNote() {
+    if (!this.chatLayer) return;
+    const w = this.chatNote.pw;
+    this.chatNote.setPosition(Math.round(Math.max(4, Math.min(this.W - 4 - w, this.barMid - w / 2))), this.barTop + 55);
   }
 
   /** The practice ground's panel: change target or green, wind or drill distance, go to the other area. */
@@ -454,6 +611,7 @@ export class HudScene extends Phaser.Scene {
       this.watchPanel.resize(ww, 18);
       this.watchPanel.setPosition(Math.round((W - ww) / 2), H - 4 - 18 - (portrait ? 40 : 0));
       this.watchTxt.setX(Math.round(ww / 2));
+      this.placeChat();
     }
     this.placeBanner();
     if (this.intro) this.showIntro();
@@ -569,6 +727,29 @@ export class HudScene extends Phaser.Scene {
     this.matchLink.setTint(linkColor);
     this.matchLink.setVisible(!!link);
     this.giveBtn.setVisible(p.canGivePutt() && !this.modal).setEnabled(true);
+    if (this.chatLayer) {
+      const ready = live.chatReady && !this.cardLayer;
+      this.chatBtn.setVisible(ready).setEnabled(true);
+      const n = live.chatUnread;
+      // nothing new shows while this player is hitting; what came meanwhile shows when the shot is over
+      const quiet = this.hitting();
+      const flag = ready && n > 0 && !this.chatting && !quiet;
+      this.chatBadge.setVisible(flag);
+      setTxt(this.chatBadgeTxt, n > 9 ? '+' : String(n));
+      this.chatBtn.setColor(flag ? 'orange' : 'grey');
+      if (!ready || quiet) this.hideChatNote();
+      // once per match, until the player has found the chat: how to open it (developer, 2026-10-22: "otherwise
+      // I don't think people will figure it out"); not while hitting, and not over a message
+      if (ready && !quiet && !this.chatHinted && !this.chatting && !this.heldNote) {
+        this.chatHinted = true;
+        if (n === 0 && this.chatHintDue(live.code)) this.showChatHint();
+      }
+      if (ready && !quiet && this.heldNote) {
+        const m = this.heldNote;
+        this.heldNote = null;
+        if (!this.chatting && m.id > 0 && live.chatUnread > 0) this.showChatNote(m);
+      }
+    }
     const choice = p.clockChoice();
     this.penBtn.setVisible(choice.penalty && !this.modal).setEnabled(true);
     this.claimBtn.setVisible(choice.claim && !this.modal && p.state === 'watch').setEnabled(true);

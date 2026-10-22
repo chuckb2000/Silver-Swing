@@ -492,6 +492,8 @@ export class PlayScene extends Phaser.Scene {
   private onKey(e: KeyboardEvent) {
     if (this.state === 'loading') return;
     const k = e.key;
+    // T: the chat in a live match (over the match panels too)
+    if ((k === 't' || k === 'T') && !e.repeat && this.match && this.hud.chatAvailable() && this.state !== 'swing') { e.preventDefault(); this.hud.openChat(); return; }
     if (this.hud.modalOpen()) {
       this.hud.onModalKey(e);
       return;

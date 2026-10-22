@@ -12,10 +12,15 @@
 // each move by its id, so a move is never counted twice and never lost once
 // made (a stroke is locked in the moment it is hit).
 //
+// Chat (developer, 2026-10-22) goes on the same line: a message is sent until
+// the server answers it (each counts once), and a game that comes back asks
+// for the messages after the newest it has. Unlike moves, messages waiting to
+// go are not kept over a reload.
+//
 // No Phaser; the browser parts (WebSocket, fetch, storage, timers) come in
 // through ClientDeps so the tests can drive it.
 
-import { Action, CLOSE, Logged, PING, RULES, Seat } from '../systems/match/types';
+import { Action, ChatMsg, CLOSE, Logged, PING, RULES, Seat } from '../systems/match/types';
 
 /**
  * connecting: no line yet (or getting it back); online: a WebSocket; polling:
@@ -61,6 +66,15 @@ export interface WebSocketLike {
 export type SendResult = { ok: true; seq: number } | { ok: false; code: string; message: string; wait?: number };
 
 interface Outgoing { cid: string; action: Action; at: number }
+
+/** A chat message sent: its number on the server, or why it wasn't taken. */
+export type SayResult = { ok: true; id: number } | { ok: false; code: string; message: string };
+
+/** A chat message from the server, checked. */
+function isChatMsg(m: unknown): m is ChatMsg {
+  const c = m as ChatMsg | null;
+  return !!c && Number.isInteger(c.id) && c.id > 0 && (c.by === 0 || c.by === 1) && typeof c.text === 'string' && typeof c.at === 'string';
+}
 
 const BACKOFF = [400, 1000, 2000, 4000, 8000, 15000];
 const CONNECT_MS = 10_000;     // a WebSocket not welcomed by then (a proxy that swallows it) counts as failed
@@ -109,6 +123,15 @@ export class MatchClient {
   offset = 0;
   /** the server said the time (the move clock is shown on it) */
   onClock: () => void = () => {};
+  /** the chat this game has, oldest first */
+  chat: ChatMsg[] = [];
+  /** the match server has chat (an older one doesn't) */
+  chatOn = false;
+  /** new chat messages (`caughtUp`: this game has every message there is, after them) */
+  onChat: (fresh: ChatMsg[], caughtUp: boolean) => void = () => {};
+  /** messages waiting for the server's answer (this page only) */
+  private chatOut: { cid: string; text: string }[] = [];
+  private chatWaiting = new Map<string, (r: SayResult) => void>();
 
   private ws: WebSocketLike | null = null;
   private welcomed = false;
@@ -245,6 +268,7 @@ export class MatchClient {
   /** Stop everything (timers, the socket, polling) and say why. */
   private halt(s: LinkStatus) {
     this.stopped = true;
+    if (s === 'elsewhere' || s === 'version') this.failChat(s, s === 'elsewhere' ? 'the match is open elsewhere' : 'reload to update');
     for (const h of [...this.timers]) this.cancel(h);
     this.tickTimer = this.connectTimer = this.reconnectTimer = this.pollTimer = this.retryTimer = null;
     this.polling = false;
@@ -311,7 +335,7 @@ export class MatchClient {
       if (this.ws === ws && !this.welcomed) this.dropLine(ws, 'no welcome');
     }, CONNECT_MS);
     ws.onopen = () => {
-      try { ws.send(JSON.stringify({ type: 'hello', key: this.key, since: this.since(), rules: RULES })); } catch { /* onclose follows */ }
+      try { ws.send(JSON.stringify({ type: 'hello', key: this.key, since: this.since(), rules: RULES, chat: this.chatLast() })); } catch { /* onclose follows */ }
     };
     ws.onmessage = (e) => { if (this.ws === ws) this.onMessage(typeof e.data === 'string' ? e.data : String(e.data)); };
     ws.onerror = () => { /* onclose follows */ };
@@ -347,6 +371,7 @@ export class MatchClient {
     this.halt('gone');
     for (const [, res] of this.waiting) res({ ok: false, code: 'no_match', message: 'this match no longer exists' });
     this.waiting.clear();
+    this.failChat('no_match', 'this match no longer exists');
   }
 
   /** This game and the server run different rules: nothing more can be played until one is updated. */
@@ -396,6 +421,11 @@ export class MatchClient {
         this.lastPingAt = this.whoAt = this.T.now();
         this.tick();
         for (const o of this.outbox) this.sendRaw(JSON.stringify({ type: 'act', cid: o.cid, action: o.action }));
+        this.chatOn = m.chat === true;
+        if (!this.chatOn) this.failChat('unavailable', 'chat needs the match server updated');
+        // nothing newer than what this game has (the server's catch-up follows anyway): later messages are news
+        if (this.chatOn && typeof m.chatN === 'number' && m.chatN <= this.chatLast()) this.chatSynced = true;
+        for (const c of this.chatOut) this.sendRaw(JSON.stringify({ type: 'say', cid: c.cid, text: c.text }));
         return;
       }
       case 'events': this.onEvents(Array.isArray(m.events) ? (m.events as Logged[]) : [], m.last !== false); return;
@@ -403,9 +433,13 @@ export class MatchClient {
       case 'nack': this.answered(String(m.cid), nackOf(m as { code?: unknown; message?: unknown; wait?: unknown })); return;
       case 'seat': this.learnSeat(m.seat); return;
       case 'presence': this.setOnline(m.online); return;
+      case 'chat': this.takeChat(m.msgs, m.n); return;
+      case 'said': this.chatAnswered(String(m.cid), { ok: true, id: Number(m.id) }); return;
+      case 'unsaid': this.chatAnswered(String(m.cid), { ok: false, code: String(m.code), message: String(m.message ?? '') }); return;
       case 'error':
         if (m.code === 'no_match') this.gone();
         else if (m.code === 'version') this.versionProblem(String(m.message ?? ''));
+        else if (m.code === 'unknown') this.failChat('unavailable', 'chat needs the match server updated'); // a server without chat
         return;
       default:
     }
@@ -472,7 +506,7 @@ export class MatchClient {
 
   /** Ask again for everything after `since` (the game found a gap). */
   resync() {
-    if (this.ws && this.welcomed) this.sendRaw(JSON.stringify({ type: 'sync', since: this.since() }));
+    if (this.ws && this.welcomed) this.sendRaw(JSON.stringify({ type: 'sync', since: this.since(), chat: this.chatLast() }));
     else if (this.polling) void this.pollOnce();
   }
 
@@ -505,6 +539,75 @@ export class MatchClient {
     if (this.welcomed) this.sendRaw(JSON.stringify({ type: 'act', cid, action }));
     else if (this.polling) void this.postAct(o);
     return p;
+  }
+
+  // ------------------------------------------------------------------ chat
+  /** The newest message this game has (0: none). */
+  chatLast(): number {
+    return this.chat.length ? this.chat[this.chat.length - 1].id : 0;
+  }
+
+  /** Messages from the server: the ones this game didn't have are added, in order. */
+  private takeChat(raw: unknown, n: unknown) {
+    const have = new Set(this.chat.map((c) => c.id));
+    const fresh = (Array.isArray(raw) ? raw : []).filter(isChatMsg).filter((c) => !have.has(c.id) && (have.add(c.id), true));
+    if (fresh.length) {
+      this.chat = [...this.chat, ...fresh].sort((a, b) => a.id - b.id).slice(-200);
+      this.lastNews = this.T.now();
+    }
+    const caughtUp = this.chatLast() >= (typeof n === 'number' ? n : 0);
+    // (a poll with nothing new says nothing, once the first catch-up is in)
+    if (fresh.length || (caughtUp && !this.chatSynced)) this.onChat(fresh, caughtUp);
+    if (caughtUp) this.chatSynced = true;
+  }
+
+  /** the first catch-up of the chat is in (later messages are news) */
+  chatSynced = false;
+
+  /** Send a chat message: until the server answers (through reconnects, not a reload), then its number or why not. */
+  say(text: string): Promise<SayResult> {
+    if (this.status === 'gone' || this.status === 'elsewhere' || this.status === 'version') {
+      return Promise.resolve({ ok: false, code: this.status, message: this.status === 'gone' ? 'this match no longer exists' : this.status === 'elsewhere' ? 'the match is open elsewhere' : 'reload to update' });
+    }
+    if (this.welcomed && !this.chatOn) return Promise.resolve({ ok: false, code: 'unavailable', message: 'chat needs the match server updated' });
+    const c = { cid: this.newCid(), text };
+    this.chatOut.push(c);
+    this.lastNews = this.T.now();
+    const p = new Promise<SayResult>((res) => this.chatWaiting.set(c.cid, res));
+    if (this.welcomed) this.sendRaw(JSON.stringify({ type: 'say', cid: c.cid, text }));
+    else if (this.polling) void this.postSay(c);
+    return p;
+  }
+
+  private chatAnswered(cid: string, r: SayResult) {
+    this.chatOut = this.chatOut.filter((c) => c.cid !== cid);
+    const res = this.chatWaiting.get(cid);
+    this.chatWaiting.delete(cid);
+    res?.(r);
+  }
+
+  /** Every message waiting is refused (the line stopped for good, or the server has no chat). */
+  private failChat(code: string, message: string) {
+    const out = this.chatOut;
+    this.chatOut = [];
+    for (const c of out) this.chatAnswered(c.cid, { ok: false, code, message });
+  }
+
+  private chatInFlight = new Set<string>();
+
+  private async postSay(c: { cid: string; text: string }) {
+    if (this.chatInFlight.has(c.cid)) return;
+    this.chatInFlight.add(c.cid);
+    try {
+      const res = await this.deps.fetch(this.url('say'), { method: 'POST', headers: JSON_HEADERS, body: JSON.stringify({ key: this.key, cid: c.cid, text: c.text }) });
+      if (res.status === 404) { this.failChat('unavailable', 'chat needs the match server updated'); return; }
+      const j = (await res.json().catch(() => null)) as { type?: string; id?: number; code?: string; message?: string } | null;
+      if (j?.type === 'said') this.chatAnswered(c.cid, { ok: true, id: Number(j.id) });
+      else if (j?.type === 'unsaid') this.chatAnswered(c.cid, { ok: false, code: String(j.code), message: String(j.message ?? '') });
+    } catch { /* offline: sent again on the next poll or connection */ } finally {
+      this.chatInFlight.delete(c.cid);
+    }
+    if (this.polling) void this.pollOnce(); // the message itself, at once
   }
 
   // ------------------------------------------------------------ HTTP polling
@@ -553,6 +656,7 @@ export class MatchClient {
         this.setOnline(j.online);
         this.seen((j as { seq?: unknown }).seq);
         this.learnClock((j as { now?: unknown }).now);
+        this.chatOn = (j as { chat?: unknown }).chat === true;
       }
     } catch { /* offline: the next poll tries */ }
   }
@@ -566,11 +670,11 @@ export class MatchClient {
       // background tab says so: it asks once a minute and still counts as there
       const headers: Record<string, string> = { 'x-match-key': this.key };
       if (this.hidden()) headers['x-match-hidden'] = '1';
-      const res = await this.deps.fetch(`${this.url('events')}?since=${this.since()}`, { headers });
+      const res = await this.deps.fetch(`${this.url('events')}?since=${this.since()}&chat=${this.chatLast()}`, { headers });
       if (this.stopped || !this.polling) return;
       if (res.status === 404) { this.gone(); return; }
       if (res.ok) {
-        const j = (await res.json()) as { events?: Logged[]; more?: boolean; online?: unknown; seat?: unknown; seq?: unknown; now?: unknown };
+        const j = (await res.json()) as { events?: Logged[]; more?: boolean; online?: unknown; seat?: unknown; seq?: unknown; now?: unknown; chat?: unknown; chatN?: unknown };
         if (this.stopped || !this.polling) return;
         this.setStatus('polling');
         this.seen(j.seq);
@@ -581,8 +685,10 @@ export class MatchClient {
         const evs = Array.isArray(j.events) ? j.events : [];
         if (evs.length) this.lastNews = this.T.now();
         this.onEvents(evs, !more);
+        if (typeof j.chatN === 'number') { this.chatOn = true; this.takeChat(j.chat, j.chatN); }
         // moves still unanswered (an answer lost on the way): again; each counts once
         for (const o of this.outbox) void this.postAct(o);
+        for (const c of this.chatOut) void this.postSay(c);
       } else this.setStatus('connecting');
     } catch { if (!this.stopped && this.polling) this.setStatus('connecting'); /* offline: try again */ }
     if (this.stopped || !this.polling) return;
