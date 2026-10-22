@@ -77,7 +77,7 @@
     "Orthophoto: Oregon Statewide Imagery Program 2024 (gorse, tree and tee checks)",
     "Scorecard: Bandon Dunes Golf Resort (club scorecard)"
   ],
-  "notes": "Intake 2026-10-22 (built with Bandon Preserve from shared downloads, release bandon-par-threes-data). Standing defaults (COURSE_BUILD.md 4.1): back tees (no Blue), all water red, OB = the OSM course polygon, trees from lidar with trees_off_fairways_m 2; wind 8-16 mph as the developer set for Bandon Dunes; theme bandon_dunes with gorse from the 2024 photo, as at Bandon Dunes.",
+  "notes": "Intake 2026-10-22 (built with Bandon Preserve from shared downloads, release bandon-par-threes-data). Standing defaults (COURSE_BUILD.md 4.1): back tees (no Blue), all water red, OB = the OSM course polygon, trees from lidar with trees_off_fairways_m 2; wind 8-16 mph as the developer set for Bandon Dunes; theme bandon_dunes with gorse from the 2024 photo, as at Bandon Dunes. Fairways run up to every green and touching fairway pieces are merged before rounding (connect_fairways, merge_touching_fairways; developer 2026-10-22: no slivers of rough between fairway and green, as at East Potomac and Langdon).",
   "tree_type": "conifer",
   "tree_type_note": "the trees on the bluffs at Bandon are shore pine (and Sitka spruce in the hollows), whose broad wind-flattened crowns the crown-shape rule calls deciduous; the broadleaf scrub is drawn as gorse (as at Bandon Dunes)",
   "gorse": {
@@ -91,5 +91,7 @@
     "v_max": 120,
     "min_share": 0.1,
     "note": "the DOGAMI lidar here was flown in 2008, older than parts of the course; lidar trees whose crowns are not dark canopy in the OSIP 2024 photo are dropped"
-  }
+  },
+  "connect_fairways": true,
+  "merge_touching_fairways": true
 }

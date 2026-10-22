@@ -178,8 +178,59 @@ def mark(out_dir):
     print(f"[desk_prep] {CID}: Back tee marked on {sum(any(f['kind'] == 'bluetee' for f in h['features']) for h in holes)} of {len(holes)} holes")
 
 
+def approve():
+    """The developer approved the desk as shown, with no edits (2026-10-22: "they all look good"):
+    write proposed/approved.geojson from the proposals (the whole turf, not the desk's per-hole
+    pieces; the approved new green; one Back tee per hole, tagged hole + tee_set=Back so s06 uses
+    it, copied where two holes share a mapped box) and put it in course_edits.json."""
+    import datetime
+    if list((HERE / "desk").glob("hole*.json")):
+        raise SystemExit("[approve] the desk has saves in data/<id>/desk/: read them in instead")
+    when = datetime.date(2026, 10, 22).isoformat()
+    tr = gpd.read_file(HERE / "proposed" / "traced.geojson").to_crs(EPSG)
+    tr["tags"] = tr["tags"].apply(lambda t: t if isinstance(t, dict) else json.loads(t))
+    feats = []
+    for _, r in tr[tr.kind == "tee"].iterrows():
+        n = r.tags["hole"]
+        feats.append({"osm": f"a_tee_back_{n}", "kind": "tee", "geometry": r.geometry,
+                      "tags": {**{k: v for k, v in r.tags.items() if k not in ("assigned_by",)}, "golf": "tee", "hole": n,
+                               "tee_set": "Back", "approved": f"developer {when} (tracing desk, as shown)"}})
+    for _, r in tr[tr.kind == "green"].iterrows():
+        feats.append({"osm": f"a_green_{r.tags['hole']}", "kind": "green", "geometry": r.geometry,
+                      "tags": {**r.tags, "approved": f"developer {when} (tracing desk, as shown)"}})
+    fw = gpd.read_file(HERE / "proposed" / "fairways.geojson").to_crs(EPSG)
+    fw["tags"] = fw["tags"].apply(lambda t: t if isinstance(t, dict) else json.loads(t))
+    for _, r in fw.iterrows():
+        feats.append({"osm": f"a_{r.osm[2:]}", "kind": "fairway", "geometry": r.geometry,
+                      "tags": {**r.tags, "approved": f"developer {when} (tracing desk, as shown)"}})
+    if (HERE / "proposed" / "pins.geojson").exists():
+        pins = gpd.read_file(HERE / "proposed" / "pins.geojson").to_crs(EPSG)
+        pins["tags"] = pins["tags"].apply(lambda t: t if isinstance(t, dict) else json.loads(t))
+        for _, r in pins.iterrows():
+            feats.append({"osm": f"a_pin_{r.tags['ref']}", "kind": "pin", "geometry": r.geometry, "tags": r.tags})
+    out = gpd.GeoDataFrame(feats, geometry="geometry", crs=f"EPSG:{EPSG}")
+    out["tags"] = out.tags.apply(json.dumps)
+    out[["osm", "kind", "tags", "geometry"]].to_file(HERE / "proposed" / "approved.geojson", driver="GeoJSON")
+    ce_p = HERE / "course_edits.json"
+    ce = json.load(open(ce_p))
+    ce["add"] = [a for a in ce["add"] if a["from"] != "proposed/approved.geojson"] + [{
+        "from": "proposed/approved.geojson", "ids": sorted(f["osm"] for f in feats),
+        "reason": f"approved by the developer {when} in the tracing desk, as shown: the mown turf as fairway, one Back tee per hole"
+                  + (", hole 2's traced green and a centre pin per green" if CID == "shortys" else "")
+                  + " (desk_prep.py --approve)"}]
+    for a in ce["add"]:
+        a["reason"] = a["reason"].replace("PROPOSAL, shown in the tracing desk 2026-10-22", f"approved by the developer {when}")
+    ce_p.write_text(json.dumps(ce, indent=1) + "\n")
+    kinds = {}
+    for f in feats:
+        kinds[f["kind"]] = kinds.get(f["kind"], 0) + 1
+    print(f"[approve] {CID}: proposed/approved.geojson {kinds}")
+
+
 if __name__ == "__main__":
     if len(sys.argv) > 2 and sys.argv[1] == "--mark":
         mark(sys.argv[2])
+    elif len(sys.argv) > 1 and sys.argv[1] == "--approve":
+        approve()
     else:
         prep()

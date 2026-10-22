@@ -9,7 +9,7 @@ it, and no fairway is mapped. OSM's golf=rough polygons inside it are the
 native patches. So, for the developer to approve (COURSE_BUILD.md 1.1):
 
 - fairways.geojson: the mown turf, i.e. the OSM boundary polygon minus OSM's
-  rough, greens, bunkers, tees and buildings (geometry from OSM, nothing
+  rough (the native patches) and buildings (geometry from OSM, nothing
   traced);
 - tees.geojson: a back-tee box (10 x 6 m, along the line of play) for each
   hole with no mapped box that reaches the Back card, centred where the card
@@ -115,11 +115,13 @@ def main():
     holes = holes_of(g)
 
     # --- fairways: the mown turf inside the OSM polygon
-    cut = unary_union([*g[g.kind.isin(["rough", "green", "bunker", "tee", "building"])].geometry])
+    # greens, bunkers and tees paint over the fairway (s08 priority); cutting them left rings of
+    # rough round them once s08 rounded the fairway's corners (developer 2026-10-22: no slivers)
+    cut = unary_union([*g[g.kind.isin(["rough", "building"])].geometry])
     turf = bnd.difference(cut)
     parts = [p for p in getattr(turf, "geoms", [turf]) if p.geom_type == "Polygon" and p.area >= 30]
     fw = [{"osm": f"p_fairway_{i + 1}", "kind": "fairway", "geometry": p,
-           "tags": {"golf": "fairway", "source": "the mown turf: OSM's Bandon Preserve boundary (w674855473) minus OSM rough, greens, bunkers, tees and buildings"}}
+           "tags": {"golf": "fairway", "source": "the mown turf: OSM's Bandon Preserve boundary (w674855473) minus OSM rough and buildings (greens, bunkers and tees paint over it)"}}
           for i, p in enumerate(sorted(parts, key=lambda p: (-p.area)))]
     save(fw, "fairways.geojson")
     print(f"[proposals] fairways: {len(fw)} parts, {sum(f['geometry'].area for f in fw):.0f} m2 "

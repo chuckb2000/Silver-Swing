@@ -20,7 +20,7 @@ both). For the developer to approve (COURSE_BUILD.md 1.1):
   texture, as propose_trace.py's fairway model) trained on the Preserve's mown
   turf next door (positives: the OSM Bandon Preserve polygon minus its rough,
   greens, bunkers and tees; negatives: the dunes round it and its rough
-  patches), applied inside Shorty's boundary; greens, tees and bunkers cut out.
+  patches), applied inside Shorty's boundary; buildings and parking cut out (greens, tees and bunkers paint over it).
 """
 from __future__ import annotations
 
@@ -157,8 +157,10 @@ def main():
     P = ndimage.gaussian_filter(clf.predict_proba(F)[:, 1].reshape(H, W).astype(np.float32), 3)
     m = (P > FW_PROB) & msk([bnd])
     m = ndimage.binary_closing(ndimage.binary_opening(m, iterations=3), iterations=3)
-    cut = unary_union([*g[g.kind.isin(["green", "tee", "bunker", "building", "cartpath", "parking"])].geometry,
-                       *hole_green.values()]).buffer(0.5)
+    # only what is not turf is cut out: greens, tees and bunkers paint over the fairway (s08
+    # priority), and cutting them left rings of rough round every tee once s08 rounded the
+    # fairway's corners (developer 2026-10-22: no slivers of rough)
+    cut = unary_union([*g[g.kind.isin(["building", "parking"])].geometry])
     fw = []
     for geom, _ in shapes(m.astype("uint8"), mask=m, transform=tr):
         p = Polygon(shape(geom).exterior)
