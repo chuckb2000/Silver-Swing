@@ -32,6 +32,8 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 
 ## Other open items (The Muni)
 
+All accepted as built by the developer on 2026-10-22 ("let's leave it all as is").
+
 The developer's calls of 2026-10-22 are in `docs/courses/lake_oswego_muni.md`. OSM does not map the 2025 nine: every green, fairway, bunker, tee box and the driving range were traced (greens by the course chat from the OSIP 2024 photo, everything corrected or drawn by the developer in the tracing desk, `data/lake_oswego_muni/desk/`).
 
 1. **Scorecard:** GolfPass (unverified; the city publishes no card, developer). Black 1,599 matches the Lake Oswego Review; the Review gives hole 5 as 302 yd, GolfPass 309. Ratings (men's) from oregoncourses.com, unverified. White (1,446) is listed, not built. Recommendation: keep until a printed card turns up.
