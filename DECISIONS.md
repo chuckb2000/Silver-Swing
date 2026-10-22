@@ -970,3 +970,15 @@ Not merged (the developer will say when). Design note: docs/reports/multiplayer_
 - The course chats take these two files and their PNGs (`game/public/sprites/logos/<id>.png`) in
   place of their own. RedTail's course id is assumed to be `redtail`; if its chat builds it under
   another id, the two files are renamed to that id.
+
+## Logos for Shorty's and the Preserve (developer, 2026-10-22)
+
+- "We'll need a logo for shorty's in bandon which is being made, maybe some kind of baby elk or
+  deer? and maybe a salal plant for the preserve":
+  - `assets-src/course_logos/shortys.py`: a spotted fawn (a young elk or deer) standing in dune
+    grass, facing left;
+  - `assets-src/course_logos/bandon_preserve.py`: a sprig of salal, broad glossy leaves on a red
+    stem with a drooping stalk of pink-white bells, in a tuft of moss.
+- The course ids `shortys` and `bandon_preserve` are assumed; if a course chat builds either under
+  another id, its two files (script and PNG) are renamed to that id, and its chat uses these in
+  place of a logo of its own.
