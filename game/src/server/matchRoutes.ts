@@ -74,10 +74,10 @@ export async function toMatch(env: MatchEnv, req: Request, parts: string[]): Pro
     return req.method === 'POST' ? reportMatch(env, code) : jsonResponse({ ok: false, error: 'method' }, 405);
   }
   // (the object's own "result", "create" and the development "skip" aren't reachable from here)
-  if (!['info', 'events', 'hello', 'act', 'ws'].includes(what) || parts.length > 2) return jsonResponse({ ok: false, error: 'not_found' }, 404);
+  if (!['info', 'events', 'hello', 'act', 'say', 'ws'].includes(what) || parts.length > 2) return jsonResponse({ ok: false, error: 'not_found' }, 404);
   if (what === 'ws' && req.headers.get('Upgrade')?.toLowerCase() !== 'websocket') return jsonResponse({ ok: false, error: 'upgrade', message: 'a WebSocket is needed' }, 426);
   const stub = env.MATCH.get(env.MATCH.idFromName(code));
   const url = new URL(req.url);
-  // the object only sees its own path (its storage is the match): /info, /events, /act, /ws
+  // the object only sees its own path (its storage is the match): /info, /events, /act, /say (chat), /ws
   return stub.fetch(new Request(`https://match/${what}${url.search}`, req));
 }

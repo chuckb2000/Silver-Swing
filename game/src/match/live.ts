@@ -4,12 +4,12 @@
 // session; everything here is plumbing.
 
 import { app } from '../app';
-import { browserStore, LinkStatus, MatchClient } from '../net/matchClient';
+import { browserStore, LinkStatus, MatchClient, SayResult } from '../net/matchClient';
 import { roundPins } from '../systems/game/pins';
 import { courseHoleFor, newSeed } from '../systems/game/round';
 import { MatchSession } from '../systems/match/session';
 import { applyEvent, clockText, holeLive, holeNo, other, resultFor, statusText, toPlay, waitingOn } from '../systems/match/rules';
-import { Action, CLOCK, Logged, MatchConfig, MatchPlayer, PROTOCOL, RULES, Seat } from '../systems/match/types';
+import { Action, ChatMsg, CLOCK, Logged, MatchConfig, MatchPlayer, PROTOCOL, RULES, Seat } from '../systems/match/types';
 import type { Difficulty } from '../data/difficulty';
 
 /** What the server tells anyone about a match (its info page). */
@@ -110,6 +110,15 @@ export function flagTab(text: string) {
     };
     document.addEventListener('visibilitychange', back);
   }
+}
+
+/** The newest chat message seen on this device, per match. */
+function readMark(code: string): number {
+  try { return Number(localStorage.getItem(`golf:match:${code}:chatread`)) || 0; } catch { return 0; }
+}
+
+function writeMark(code: string, id: number) {
+  try { localStorage.setItem(`golf:match:${code}:chatread`, String(id)); } catch { /* blocked */ }
 }
 
 /** A typed or pasted match code (or a link with one) back to a code, or null. */
@@ -221,6 +230,13 @@ export class LiveMatch {
   private onOnline = () => this.client.poke();
   private clockTimer: ReturnType<typeof setInterval> | null = null;
   private reported = false;
+  /** messages from the other player this device hasn't seen (the chat panel open counts as seen) */
+  chatUnread = 0;
+  /** the chat panel is open (new messages are read as they come) */
+  chatOpen = false;
+  /** the newest message seen on this device (kept per match: a reload doesn't bring old ones up again) */
+  private chatRead = 0;
+  private chatNews = new Set<(m: ChatMsg) => void>();
 
   constructor(readonly code: string) {
     this.key = keyFor(code);
@@ -241,6 +257,8 @@ export class LiveMatch {
     };
     this.client.onRefused = (action, code, message) => { this.refused.push({ action, code, message }); this.changed(); };
     this.client.onClock = () => this.changed();
+    this.chatRead = readMark(code);
+    this.client.onChat = (fresh) => this.onChat(fresh);
   }
 
   /** Is the session being rebuilt (the play scene waits)? */
@@ -305,6 +323,48 @@ export class LiveMatch {
     if (key === this.clockFlag) return;
     this.clockFlag = key;
     flagTab(text);
+  }
+
+  // ------------------------------------------------------------------ chat
+  /** The chat this game has, oldest first. */
+  get chat(): ChatMsg[] {
+    return this.client.chat;
+  }
+
+  /** Does the match server have chat (and is there someone to talk to)? */
+  get chatReady(): boolean {
+    return this.client.chatOn && !!this.session?.state.players[1];
+  }
+
+  say(text: string): Promise<SayResult> {
+    return this.client.say(text);
+  }
+
+  /** A new message from the other player, as it comes (not the ones caught up on when the page opens). */
+  onChatNews(f: (m: ChatMsg) => void): () => void {
+    this.chatNews.add(f);
+    return () => this.chatNews.delete(f);
+  }
+
+  /** Everything up to the newest message has been seen. */
+  markChatRead() {
+    const last = this.client.chatLast();
+    if (last > this.chatRead) { this.chatRead = last; writeMark(this.code, last); }
+    if (this.chatUnread) { this.chatUnread = 0; this.changed(); }
+  }
+
+  private onChat(fresh: ChatMsg[]) {
+    const news = this.client.chatSynced; // the first catch-up of a page is history; after it (a reconnect too) it is news
+    if (this.chatOpen) this.markChatRead();
+    const mine = this.seat;
+    this.chatUnread = this.client.chat.filter((m) => m.by !== mine && m.id > this.chatRead).length;
+    const last = [...fresh].reverse().find((m) => m.by !== mine && m.id > this.chatRead);
+    if (news && last && !this.chatOpen) {
+      for (const f of [...this.chatNews]) { try { f(last); } catch (e) { console.error(e); } }
+      const who = this.session?.state.players[last.by]?.name ?? 'your friend';
+      flagTab(`${who}: ${last.text}`.slice(0, 60));
+    }
+    this.changed();
   }
 
   /** The match is over: its result goes on the leaderboard's "recent" list (once per page; the match list tries again). */
