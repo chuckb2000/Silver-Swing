@@ -5,7 +5,7 @@
 import { DEFAULT_NAME, nameAllowed, tidyName } from '../save/names';
 import { feedBadges, FeedRow, MatchFeedRow } from '../save/feed';
 import type { MatchResult } from './matchRoom';
-import { isEntry, LeaderboardEntry } from '../save/entry';
+import { isEntry, LeaderboardEntry, MAX_ROUND_HOLES } from '../save/entry';
 import { birdiesIn, EagleEvent, eaglesIn, isEagle } from '../save/feats';
 
 /** The parts of Cloudflare's D1 API used here. */
@@ -179,8 +179,8 @@ async function backfill(db: D1Like) {
   }
 }
 
-/** Scorecard slot -> the course's hole (a 9-hole course played twice round). */
-const slotToHole = (e: LeaderboardEntry) => (slot: number) => (e.length === '9x2' ? ((slot - 1) % 9) + 1 : slot);
+/** Scorecard slot -> the course's hole (a 9-hole course played twice round; a club's nines carry their holes). */
+const slotToHole = (e: LeaderboardEntry) => (slot: number) => e.holes?.[slot - 1] ?? (e.length === '9x2' ? ((slot - 1) % 9) + 1 : slot);
 
 async function insertEagle(db: D1Like, ev: EagleEvent, owner: string | null, received: string): Promise<number> {
   const res = (await db
@@ -252,7 +252,7 @@ const int = (v: unknown, lo: number, hi: number) => Number.isInteger(v) && (v as
 
 /** A round's scores as the game writes them (nothing else gets stored). */
 export function validScores(e: LeaderboardEntry): boolean {
-  return e.scores.every((s) => !!s && int(s.hole, 1, 18) && int(s.par, 3, 6) && int(s.strokes, 0, 40)
+  return e.scores.every((s) => !!s && int(s.hole, 1, MAX_ROUND_HOLES) && int(s.par, 3, 6) && int(s.strokes, 0, 40)
     && int(s.putts, 0, 40) && int(s.penalties, 0, 40));
 }
 
@@ -281,7 +281,7 @@ function addDays(day: string, n: number): string {
  * settings, and a day near today. Anything else is an ordinary round.
  */
 async function dailyCounts(db: D1Like, e: LeaderboardEntry, owner: string | null, now: Date): Promise<boolean> {
-  if (!e.daily || !isDay(e.daily) || !owner || e.casual || e.difficulty !== 'normal' || !['front', 'back', '9'].includes(e.length)) return false;
+  if (!e.daily || !isDay(e.daily) || !owner || e.casual || e.difficulty !== 'normal' || !(['front', 'back', '9'].includes(e.length) || /^nines:[a-z0-9_]+$/.test(e.length))) return false;
   const t = Date.parse(`${e.daily}T12:00:00Z`);
   if (Math.abs(t - now.getTime()) > 2 * 86_400_000) return false;
   const { results } = await db.prepare('SELECT id FROM rounds WHERE daily = ? AND owner = ? LIMIT 1').bind(e.daily, owner).all<{ id: string }>();

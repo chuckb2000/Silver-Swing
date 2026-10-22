@@ -62,10 +62,10 @@ describe("the daily boards keep only the day's own course", () => {
 
 describe('a round\'s scorecard shows the nines it plays', () => {
   it('front, back, 18, and a 9-hole course once or twice around', () => {
-    expect(cardBlocks(holesFor('front'), 18)).toEqual([[1, 9, 'out']]);
-    expect(cardBlocks(holesFor('back'), 18)).toEqual([[10, 18, 'in']]);
-    expect(cardBlocks(holesFor('18'), 18)).toEqual([[1, 9, 'out'], [10, 18, 'in']]);
-    expect(cardBlocks(holesFor('9'), 9)).toEqual([[1, 9, 'tot']]);
-    expect(cardBlocks(holesFor('9x2'), 9)).toEqual([[1, 9, 'out'], [10, 18, 'in']]);
+    expect(cardBlocks('front', holesFor('front'), 18)).toEqual([[1, 9, 'out']]);
+    expect(cardBlocks('back', holesFor('back'), 18)).toEqual([[10, 18, 'in']]);
+    expect(cardBlocks('18', holesFor('18'), 18)).toEqual([[1, 9, 'out'], [10, 18, 'in']]);
+    expect(cardBlocks('9', holesFor('9'), 9)).toEqual([[1, 9, 'tot']]);
+    expect(cardBlocks('9x2', holesFor('9x2'), 9)).toEqual([[1, 9, 'out'], [10, 18, 'in']]);
   });
 });

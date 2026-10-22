@@ -533,8 +533,9 @@ DECISIONS.md with the reason.
     merged 2026-10-20: course chats draw their own logos
     (`assets-src/course_logos/<id>.py`), themes and theme bushes (gorse:
     `shrubs_<theme>`), `build_assets.py --theme`, `regress --since` picks the
-    affected courses. Unmerged, ready: `design/hole-counts` (13/19-hole courses,
-    clubs of three nines). Cross-country golf: report only
+    affected courses. `design/hole-counts` (13/19-hole courses played all at
+    once, clubs of three nines) merged 2026-10-22 (developer); live matches take
+    13 or 19 holes but not a club's nines yet. Cross-country golf: report only
     (`design/cross-country`), not to be built yet (developer).
 
 -   **Gorse (design chat, 2026-10-20):** branch `design/gorse`, merged

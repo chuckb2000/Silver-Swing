@@ -493,6 +493,35 @@ so a hole resumed after closing the tab lists the strokes since.
   lie's name only ("rough", "rough flyer", "punch", "gorse"); the penalties
   themselves are unchanged.
 
+## Courses of 13 and 19 holes, and clubs of three nines (developer, 2026-10-20; branch `design/hole-counts`, merged 2026-10-22)
+
+- **Any size.** A course of N holes that isn't 9 or 18 offers "N holes"
+  (`'all'`), played all at once; a 19-hole par-3 course too (developer: no
+  first 18 or nines on a 19-hole course). The card cuts
+  any round into nines ("out", "in", then "xtra" for a 19th).
+- **Three or more nines** (`course.json` `nines`, from `course_config.json`
+  via s10): rounds of two nines in rotation (a+b, b+c, c+a) and of one nine,
+  stored as `nines:<a>+<b>` / `nines:<a>`. A round keeps the course hole of
+  each slot (`RoundConfig.courseHoles`, `LeaderboardEntry.holes`) only when it
+  differs from the usual one, so every existing round, snapshot and board is
+  unchanged. Slots are 1-18 for the card and countback; holes are shown by
+  their number in their nine ("white 3").
+- **Boards and the server**: lengths are checked by pattern; up to 27 holes a
+  round; an eagle at a club of nines is listed on the course hole it was made on.
+- **Daily round**: a club of nines plays one of its nines (by the date); a
+  course without a nine (13 or 19 holes) is left out of the rotation, so adding one
+  doesn't shift the existing rotation.
+- **Stats and milestones**: two nines count as a full round; 13- and 19-hole
+  rounds count as rounds but not in the 18- or 9-hole averages or the
+  "broke 80 / 40" milestones.
+- **Merged with what came since (2026-10-22, developer: "please merge the 13 and 19 hole courses
+  support"):** the scorecard shows only the nines a round plays (`cardBlocks(length, slots,
+  shape)`); live matches take a course of 13 or 19 holes played all at once (the server takes up
+  to 19 holes a match, and extra holes after them), not a club's pairs of nines yet (the new-match
+  screen says so); handicaps count courses of 9 or 18 holes only (a 13- or 19-hole course has no
+  rating for a nine or an 18; a club of nines is rated per pair, which the list doesn't keep); the
+  daily rotation roster leaves out a course without a nine even when it is listed.
+
 ## Data and pipeline
 
 - **Waverley pipeline additions** (course chat, 2026-10-19), each behind a key or option no other course uses, so every existing course rebuilds as committed: `green_tilt` in `course_config.json` (s07: a per-hole tilt cap and undulation count for a green known to be steep); course-chat tools: `propose_trace.py` spec keys `source`, `water.name`, `water.hazard_why`, `bunkers.max_exg`, a green `ellipse` (placed by eye where tree shadow hides the green), the inlet pond only with `pond_seed`, the fairway classifier only when holes are listed (Indian Island's proposals come out identical); `desk_export.py --traced` (start the desk from `proposed/traced.geojson` when OSM has no holes); `desk_to_proposed.py --traced-fallback` (a hole with no desk save keeps the traced shapes, tagged `approved=pending`).

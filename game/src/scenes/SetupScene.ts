@@ -6,8 +6,9 @@ import { ratingText, teeFor } from '../data/registry';
 import { saveSettings } from '../save/store';
 import { Button, COLORS, Panel, setTxt, txt } from '../ui/widgets';
 import { shortName } from '../save/milestones';
-import { confirmDiscard, editName, hasName, holesFor, lengthLabel, lengthsFor, RoundLength, startRound, withName } from './flow';
+import { confirmDiscard, editName, hasName, lengthLabel, lengthsFor, RoundLength, startRound, withName } from './flow';
 import { createLiveMatch, newMatchConfig } from '../match/live';
+import { planFor, shapeOfCourse } from '../systems/game/lengths';
 import { askName } from '../ui/nameInput';
 import { MenuScene } from './menu';
 import { myRounds } from '../save/mine';
@@ -80,11 +81,16 @@ export class SetupScene extends MenuScene {
       y += 18;
     }
     row('round');
-    const options = lengthsFor(c.holes.length);
+    const shape = shapeOfCourse(c);
+    // a match plays the course's own holes in order: not a club's pairs of nines (yet)
+    const options = lengthsFor(shape).filter((k) => !this.matchMode || !k.startsWith('nines:'));
+    const noMatch = this.matchMode && !options.length;
     if (!options.includes(length)) length = options[0];
-    const lens: [RoundLength, string][] = options.map((k) => [k, lengthLabel(k)]);
+    const lens: [RoundLength, string][] = options.map((k) => [k, lengthLabel(k, shape)]);
+    // three to a row (a club of nines: its three pairs, then each nine alone)
     lens.forEach(([k, lab], i) => {
-      this.root.add(new Button(this, vx + i * (bw + 2), y, bw, 15, lab, () => { length = k; this.rebuild(); }, { color: length === k ? 'orange' : 'grey' }));
+      if (i > 0 && i % 3 === 0) y += 17;
+      this.root.add(new Button(this, vx + (i % 3) * (bw + 2), y, bw, 15, lab, () => { length = k; this.rebuild(); }, { color: length === k ? 'orange' : 'grey' }));
     });
     y += 19;
     row('difficulty');
@@ -114,6 +120,7 @@ export class SetupScene extends MenuScene {
     this.root.add(new Button(this, x0 + 8, by, 56, 16, 'back', () => this.back(), { color: 'grey' }));
     if (this.matchMode) {
       // match play against a friend: the match is made on the server, then the invitation screen
+      if (noMatch) { this.root.add(txt(this, x0 + pw / 2, y + 12, 'matches aren\'t played at a club of nines yet: choose another course', { origin: [0.5, 0], color: COLORS.yellow, maxWidth: pw - 12 })); return; }
       if (this.matchNote) this.root.add(txt(this, x0 + pw / 2, y + 12, this.matchNote, { origin: [0.5, 0], color: COLORS.red, maxWidth: pw - 12 }));
       this.root.add(new Button(this, x0 + pw - 108, by, 100, 16, this.making ? 'making...' : 'invite a friend', () => void this.makeMatch()));
       return;
@@ -148,7 +155,7 @@ export class SetupScene extends MenuScene {
     this.matchNote = '';
     this.rebuild();
     const c = app.course!.json;
-    const cfg = await newMatchConfig(teeFor(c, app.settings.tees), holesFor(length), app.settings.difficulty);
+    const cfg = await newMatchConfig(teeFor(c, app.settings.tees), planFor(length, shapeOfCourse(c)).slots, app.settings.difficulty);
     const r = await createLiveMatch(cfg, { name: app.settings.playerName, lefty: app.settings.lefty });
     if (!this.sys.isActive()) return;
     this.making = false;

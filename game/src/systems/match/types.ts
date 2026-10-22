@@ -40,8 +40,8 @@ export const CLOCK = {
  * many the match is halved, a limit nobody will reach (every hole halved).
  */
 export const MAX_EXTRA = 36;
-/** hole indexes a match can reach: 18 and the extra holes */
-export const MAX_HOLES = 18 + MAX_EXTRA;
+/** hole indexes a match can reach: up to 19 (a 19-hole course) and the extra holes */
+export const MAX_HOLES = 19 + MAX_EXTRA;
 
 /** The keep-alive a game sends, and the server's answer (sent without waking the match's object). */
 export const PING = '{"type":"ping"}';

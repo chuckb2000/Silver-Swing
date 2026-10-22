@@ -73,7 +73,7 @@ function checkConfig(c: unknown): MatchConfig {
   if (!x || x.protocol !== PROTOCOL) fail('protocol', 'this match was made by another version of the game');
   const id = (v: unknown, max: number) => typeof v === 'string' && v.length >= 1 && v.length <= max && /^[A-Za-z0-9_.\-/ ]+$/.test(v);
   if (!id(x.courseId, 40) || !id(x.tee, 40)) fail('bad_config', 'no course or tees');
-  if (!Array.isArray(x.holes) || x.holes.length < 1 || x.holes.length > 18 || !x.holes.every((h) => isCount(h, 36) && h >= 1)) fail('bad_config', 'bad holes');
+  if (!Array.isArray(x.holes) || x.holes.length < 1 || x.holes.length > 19 || !x.holes.every((h) => isCount(h, 36) && h >= 1)) fail('bad_config', 'bad holes');
   const coord = (v: unknown) => isNum(v) && Math.abs(v) < 1e6;
   if (!Array.isArray(x.pins) || x.pins.length !== x.holes.length || !x.pins.every((p) => Array.isArray(p) && coord(p[0]) && coord(p[1]))) fail('bad_config', 'bad pins');
   if (!['easy', 'normal', 'pro'].includes(x.difficulty) || !isCount(x.seed, 2 ** 32)) fail('bad_config', 'bad settings');
