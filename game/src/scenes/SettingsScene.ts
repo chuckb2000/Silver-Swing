@@ -95,6 +95,8 @@ export class SettingsScene extends MenuScene {
     } else {
       // off every shared leaderboard (friends, daily, eagles, records, activity); this device's own board keeps them
       choice('leaderboards', 'hideFromBoards', [[false, 'show me'], [true, 'hide me']]);
+      // someone looking for a match ("open to a challenge"): a popup, or only the line on the title screen
+      choice('challenges', 'challengePopups', [[true, 'show a note'], [false, 'title only']]);
       this.root.add(txt(this, lx, y + 3, 'casual rules', { color: COLORS.dim }));
       ([['gimmes', 'gimmes'], ['maxDoublePar', 'max 2x par'], ['mulligans', 'mulligan']] as [keyof Settings, string][]).forEach(([k, lab], i) => {
         this.root.add(new Button(this, vx + i * (bw + 2), y, bw, 14, lab, () => { (s[k] as boolean) = !s[k]; save(); }, { color: s[k] ? 'orange' : 'grey' }));

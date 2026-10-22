@@ -18,10 +18,13 @@ import { PROTOCOL, RULES } from '../systems/match/types';
 import { lengthOf } from '../systems/game/lengths';
 import { hasName, lengthLabel, shapeById, useCourse } from './flow';
 import { ensureBg, MenuScene } from './menu';
+import { lobby } from '../match/challenge';
+import { handleReplies } from '../ui/challengeUi';
 
 type Mode =
   | { mode: 'home' }
-  | { mode: 'invite'; code: string }
+  /** challenge: the match was offered to a player looking for one ("open to a challenge"), who accepts it or not */
+  | { mode: 'invite'; code: string; challenge?: { to: string } }
   /** auto: joined at once (a rematch the player chose; their name and hand are known) */
   | { mode: 'join'; code: string; auto?: boolean }
   | { mode: 'continue'; code: string };
@@ -61,6 +64,7 @@ export class MatchScene extends MenuScene {
     this.busy = false;
     this.info = null;
     this.live = null;
+    this.challengeAnswer = '';
   }
 
   create(data?: unknown) {
@@ -73,6 +77,18 @@ export class MatchScene extends MenuScene {
       this.live = null;
     });
     if (this.m.mode !== 'home') void this.open(this.m.code);
+    // a challenge's answer comes here while this screen waits for it (else as a popup)
+    if (this.m.mode === 'invite' && this.m.challenge) {
+      const code = this.m.code, to = this.m.challenge.to;
+      handleReplies((e) => {
+        if (!this.sys.isActive() || e.offer?.code !== code) return false;
+        this.challengeAnswer = e.accepted ? `${to} accepted - starting...` : `${to} ${e.why === 'taken' ? 'is playing someone else' : e.why === 'declined' ? 'said not now' : 'is no longer looking'}`;
+        if (!e.accepted) { this.live?.stop(); this.live = null; }
+        this.rebuild();
+        return true;
+      });
+      this.events.once('shutdown', () => handleReplies(null));
+    }
   }
 
   protected back() {
@@ -133,7 +149,7 @@ export class MatchScene extends MenuScene {
   private viewKey(): string {
     const live = this.live;
     const s = live?.session?.state;
-    return [this.m.mode, this.note, this.busy, live?.caughtUp, live?.seat, live?.status, s?.phase, s?.players.map((p) => p?.name ?? '').join(','),
+    return [this.m.mode, this.note, this.busy, this.challengeAnswer, live?.caughtUp, live?.seat, live?.status, s?.phase, s?.players.map((p) => p?.name ?? '').join(','),
       app.settings.playerName, app.settings.lefty].join('|');
   }
 
@@ -176,7 +192,7 @@ export class MatchScene extends MenuScene {
       // the friend who just joined: their seat comes a moment before the news of it (the joined event); wait for that
       if (live.seat === 1) return;
       this.busy = false;
-      this.m = { mode: 'invite', code: live.code };
+      this.m = { mode: 'invite', code: live.code, ...(this.m.mode === 'invite' && this.m.challenge ? { challenge: this.m.challenge } : {}) };
       this.refreshView();
       return;
     }
@@ -199,7 +215,7 @@ export class MatchScene extends MenuScene {
     this.root.add(new Panel(this, x0, y0, pw, ph, 0.9));
     const cx = x0 + pw / 2;
     const by = y0 + ph - 22;
-    const title = this.m.mode === 'invite' ? 'match made' : this.m.mode === 'home' ? 'play a friend' : 'match play';
+    const title = this.m.mode === 'invite' ? (this.m.challenge ? 'challenge offered' : 'match made') :this.m.mode === 'home' ? 'play a friend' : 'match play';
     this.root.add(txt(this, cx, y0 + 6, title, { origin: [0.5, 0], scale: 2 }));
     this.root.add(new Button(this, x0 + 8, by, 56, 16, 'back', () => this.back(), { color: 'grey' }));
     const note = txt(this, cx, by - 16, this.note, { origin: [0.5, 0], color: COLORS.dim, maxWidth: pw - 16 }).setName('note');
@@ -271,12 +287,32 @@ export class MatchScene extends MenuScene {
     cancel.addEventListener('click', () => dlg.close());
   }
 
+  /** the answer to this screen's challenge, when it has come */
+  private challengeAnswer = '';
+
   private buildInvite(x0: number, y: number, pw: number, by: number) {
     const cx = x0 + pw / 2;
     const code = this.m.mode === 'invite' ? this.m.code : '';
     const s = this.live?.session?.state;
     if (s) this.root.add(txt(this, cx, y, matchLine(s.cfg), { origin: [0.5, 0], color: 0x8ec5ff, maxWidth: pw - 16 }));
     y += 16;
+    const challenge = this.m.mode === 'invite' ? this.m.challenge : undefined;
+    if (challenge) {
+      // offered to a player looking for a match: they accept (join) or not; no code to send
+      this.root.add(txt(this, cx, y, `your match went to ${challenge.to}`, { origin: [0.5, 0], scale: 2, maxWidth: pw - 16 }));
+      y += 30;
+      const waiting = this.challengeAnswer || (this.live?.caughtUp ? `waiting for ${challenge.to} to accept...` : this.note || 'connecting...');
+      this.root.add(txt(this, cx, y, waiting, { origin: [0.5, 0], color: this.challengeAnswer && !this.challengeAnswer.includes('accepted') ? COLORS.yellow : COLORS.white, maxWidth: pw - 16 }));
+      if (!this.challengeAnswer) {
+        this.root.add(new Button(this, x0 + pw - 108, by, 100, 16, 'take it back', () => {
+          const o = lobby.sent.find((x) => x.code === code);
+          if (o) lobby.withdraw(o.id);
+          forgetMatch(code);
+          this.scene.start('title');
+        }, { color: 'grey' }));
+      }
+      return;
+    }
     this.root.add(txt(this, cx, y, 'send this code (or the link) to your friend', { origin: [0.5, 0], color: COLORS.dim }));
     y += 13;
     this.root.add(txt(this, cx, y, code, { origin: [0.5, 0], scale: 3, color: COLORS.yellow }));

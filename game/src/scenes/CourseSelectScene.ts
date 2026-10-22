@@ -31,7 +31,8 @@ import { ensureBg, MenuScene } from './menu';
 type Purpose = 'play' | 'board' | 'match';
 /** A card: a course, or a place with several courses. */
 interface Tile { art: string; logos: string[]; name: string; sub: string; on: boolean; tap: () => void }
-interface Data { purpose?: Purpose; from?: string; courseId?: string }
+/** pick: load `courseId` at once and go on (a challenge on a set course: no choosing) */
+interface Data { purpose?: Purpose; from?: string; courseId?: string; pick?: boolean }
 
 let view: 'states' | 'courses' | 'group' = 'states';
 let stateSel = '';
@@ -63,7 +64,18 @@ export class CourseSelectScene extends MenuScene {
     super('courses');
   }
 
+  /** a course to load at once (Data.pick) */
+  private autoPick: string | null = null;
+
+  create(data?: unknown) {
+    super.create(data);
+    const id = this.autoPick;
+    this.autoPick = null;
+    if (id && app.courses.some((c) => c.id === id)) void this.choose(id);
+  }
+
   init(data: Data) {
+    this.autoPick = data.pick && data.courseId ? data.courseId : null;
     this.purpose = data.purpose ?? 'play';
     this.from = data.from ?? (this.purpose === 'board' ? 'leaderboard' : 'title');
     this.current = data.courseId ?? app.course?.json.id ?? '';

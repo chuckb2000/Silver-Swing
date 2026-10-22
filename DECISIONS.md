@@ -1057,3 +1057,48 @@ Not merged (the developer will say when). Design note: docs/reports/multiplayer_
   Douglas firs are drawn as broadleaves). Not done yet.
 - GitHub renamed the repository `chuckb2000/Silver-Swing`; the old name redirects
   (COURSE_BUILD.md 0.1).
+
+## Open to a challenge (developer, 2026-10-22; branch design/challenge)
+
+- "An 'open to a challenge' button next to 'play a friend' ... it would send a popup to everyone
+  online's screens saying you're looking for someone to play against. You could choose what
+  course you want to play or leave it blank and people could propose a course to you. Then
+  they'll send the offer back to you and you can accept it or decline it. It would also stay up
+  for like 15 minutes on the main page."
+- **The lobby:** one Durable Object, the match Worker's object named `lobby` (a match code is six
+  letters: it can't be one), reached at `/api/lobby/ws` and `/api/lobby/list` through the same
+  `MATCH` binding, so nothing needs setting up on Cloudflare. Every open game keeps a WebSocket to
+  it (hibernating; keep-alives answered without waking it). It keeps the open posts and the offers
+  to them in one stored record, written on each change (`src/server/lobby.ts`;
+  `src/systems/match/lobby.ts` has the messages).
+- **Posting:** the title's "open to a challenge" asks for a name if there is none, then a course
+  or "any course (they choose)". The post stays 15 minutes; one per player (a new one replaces
+  it, at most every 20 s); the button then reads "looking: 12 min", or "1 offer for you" (tap: the
+  offers, accept or not now each, and stop looking).
+- **No popups, and the menu never moves** (developer, 2026-10-22: "the charlie wants a match button
+  is gigantic ... buttons shouldn't be adding and losing buttons willy nilly"; "i don't want full
+  screen pop ups at any point ... it should just show up for like a little bit and then go away"):
+  - a **note** at the top of the screen (`src/ui/toast.ts`): nothing greyed out or blocked, gone
+    after 7 s (a post, a "not now") or 12 s (an offer, an acceptance); a tap on it opens what it is
+    about. One at a time; while a player is hitting they wait (in a round, for the hole to end; in a
+    live match, someone else's post waits until it's over).
+  - the title lists the others looking in a **box beside the menu** (name, minutes left, course; a
+    tap: play them, or not now), placed clear of every button: beside the rows it fits next to, under
+    the menu on a narrow phone, else a small "N looking for a match" tag in the top corner; "+ N
+    more" opens the whole list. The "open to a challenge" button changes its label in place; the
+    lobby never rebuilds the menu.
+  - Settings "challenges: show a note / title only" turns the notes for posts off (the title still
+    lists them).
+- **Offering:** "play" (or "choose a course") goes to the new-match screen on that course
+  ("challenge charlie"); "offer to charlie" makes the live match as "invite a friend" does and
+  sends its code to the poster with the match line; the screen then waits ("challenge offered":
+  "your match went to charlie", "take it back"). At most three offers out at once, one per post.
+- **Answering:** the poster gets a note ("kevin offers you a match", the course, "front 9 · blue
+  tees · normal"); a tap on it, or on the "1 offer for you" button: accept / not now. Accepting
+  joins the match straight away (both on the first tee); the first offer accepted wins and the
+  others hear "is playing someone else". Declined, withdrawn or a post that ends: the offer's match
+  is forgotten on the offerer's device.
+- Keys never leave the lobby; names are checked like the boards' (`tidyName`, `nameAllowed`, not
+  "player").
+- Tests: tests/unit/lobby.test.ts and lobby_client.test.ts; tests/e2e/match_challenge.spec.ts
+  (two browsers, under wrangler).
