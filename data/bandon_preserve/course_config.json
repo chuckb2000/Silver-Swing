@@ -13,17 +13,17 @@
   "dtm": {
     "path": "raw/dogami_dtm_ft.tif",
     "units": "ft",
-    "source": "DOGAMI lidar DIGITAL_TERRAIN_MODEL_MOSAIC (bare earth), probably the OLC South Coast project flown 2008 (as for the other Bandon courses; to confirm on arrival), exportImage at 1 m in EPSG:32610, box x 386050-387300 / y 4780850-4782700 shared by Shorty's and Bandon Preserve (GitHub release bandon-par-threes-data). PENDING: requested 2026-10-22."
+    "source": "DOGAMI lidar DIGITAL_TERRAIN_MODEL_MOSAIC (bare earth), probably the OLC South Coast project flown 2008 (as for the other Bandon courses; to confirm on arrival), exportImage at 1 m in EPSG:32610, box x 386050-387300 / y 4780850-4782700 shared by Shorty's and Bandon Preserve (GitHub release bandon-par-threes-data). Downloaded by the developer 2026-10-22: exportImage.12.tiff (1,250 x 1,850, float32, feet, no nodata)."
   },
   "chm": {
     "path": "raw/dogami_chm_ft.tif",
     "units": "ft",
-    "source": "DOGAMI lidar CANOPY_HEIGHT_MODEL_MOSAIC, same project and shared box (GitHub release bandon-par-threes-data). PENDING: requested 2026-10-22.",
+    "source": "DOGAMI lidar CANOPY_HEIGHT_MODEL_MOSAIC, same project and shared box (GitHub release bandon-par-threes-data). Downloaded by the developer 2026-10-22: exportImage.13.tiff (feet, 0-120 ft).",
     "label": "DOGAMI canopy height model"
   },
   "ortho": {
     "path": "raw/osip2024_05m.tif",
-    "source": "Oregon Statewide Imagery Program 2024 (OSIP_2024_WM), one exportImage JPEG at 0.5 m, box x 386050-387300 / y 4780850-4782700, shared by Shorty's and Bandon Preserve (GitHub release bandon-par-threes-data). PENDING: requested 2026-10-22."
+    "source": "Oregon Statewide Imagery Program 2024 (OSIP_2024_WM), one exportImage JPEG at 0.5 m, box x 386050-387300 / y 4780850-4782700, shared by Shorty's and Bandon Preserve (GitHub release bandon-par-threes-data). Downloaded by the developer 2026-10-22: exportImage.jpg (2,500 x 3,700 px), georeferenced from the request bbox by make_ortho.py."
   },
   "world": {
     "x0": 386157,
@@ -49,7 +49,7 @@
     }
   ],
   "default_tee": "Back",
-  "scorecard_source": "PROVISIONAL, unverified: GolfPass (https://www.golfpass.com/courses/32096-bandon-preserve/scorecard-and-layout, retrieved 2026-10-22), Back and Front yardages, par 3 on every hole; golfingrecord.com gives the same yardages. Stroke index differs between the two (GolfPass 13,15,3,5,1,17,7,11,9,8,2,18,6, not a 1-13 set; golfingrecord 1,3,5,...); GolfPass's is stored until the resort's card arrives (requested 2026-10-22). No rating (par-3 course, stored 0). Built from the Back tees (no Blue; the longest set).",
+  "scorecard_source": "Bandon Dunes Golf Resort scorecard, undated (BPScorecard.jpg, GitHub release bandon-par-threes-data, sha256 636ac69e4ab9e01eab7ddbe8f21ad31bb6f9cc5a3937b4ac48d123456eda8ec3, read 2026-10-22). Back and Front columns, both adding up to their printed totals (1,609 / 1,121); the same yardages as GolfPass and golfingrecord.com. No par row (13 par 3s) and no stroke index, so handicap is stored as 0 (open item; GolfPass's 13,15,3,5,1,17,7,11,9,8,2,18,6 is not a 1-13 set and is not used). No rating. Yardages are to the centre of the green (card). Built from the Back tees (no Blue; the longest set). Card note: environmentally sensitive areas (red stakes, green tops) are mandatory relief without penalty; not modelled.",
   "penalty_default": "red",
   "driving_range_is_ob": true,
   "wind_mph": {
@@ -61,7 +61,7 @@
     "Map data © OpenStreetMap contributors (ODbL)",
     "Elevation and canopy: Oregon Department of Geology and Mineral Industries (DOGAMI) lidar",
     "Orthophoto: Oregon Statewide Imagery Program 2024 (gorse, tree and tee checks)",
-    "Scorecard: GolfPass (unverified)"
+    "Scorecard: Bandon Dunes Golf Resort (club scorecard)"
   ],
   "notes": "Intake 2026-10-22 (built with Shorty's from shared downloads, release bandon-par-threes-data). Standing defaults (COURSE_BUILD.md 4.1): back tees (no Blue), all water red, OB = the OSM course polygon, trees from lidar with trees_off_fairways_m 2; wind 8-16 mph as the developer set for Bandon Dunes; theme bandon_dunes with gorse from the 2024 photo, as at Bandon Dunes. Provisional until the rasters arrive; lake_level_max_m / cliff keys copied from Old Macdonald, to be checked against this DTM.",
   "lake_level_max_m": 1.3,
