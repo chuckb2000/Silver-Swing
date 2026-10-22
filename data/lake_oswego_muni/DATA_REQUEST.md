@@ -115,3 +115,10 @@ Rename them `osip_nw.jpg`, `osip_ne.jpg`, `osip_sw.jpg`, `osip_se.jpg` if you ca
 ## Received
 
 (filled in when the files arrive: asset, SHA-256, use)
+
+- 2026-10-22, lidar date (step 3, pasted by the developer): at the box centre
+  (x 526375, y 5027442) the DOGAMI mosaic's top source is
+  `OLC_METRO_3DEP_2019_BARE_EARTH_FEET_OGIC_2011` (Metro 3DEP 2019, feet), over
+  Metro 2014, Willamette Valley 2009 and older. Ground 462.9 ft there. The lidar
+  is about four years older than the 2023-25 rebuild: its canopy still holds the
+  removed trees, and its ground shows the old par-3 course's grades.
