@@ -13,12 +13,12 @@
   "dtm": {
     "path": "raw/dogami_dtm_ft.tif",
     "units": "ft",
-    "source": "DOGAMI lidar DIGITAL_TERRAIN_MODEL_MOSAIC (bare earth), exportImage at 1 m in EPSG:32610, box x 516830-518310 / y 5033221-5034701 (GitHub release redtail-data); pending"
+    "source": "DOGAMI lidar DIGITAL_TERRAIN_MODEL_MOSAIC (bare earth), exportImage at 1 m in EPSG:32610, box x 516830-518310 / y 5033221-5034701, downloaded by the developer 2026-10-22 (GitHub release redtail-data, exportImage.10.tiff)"
   },
   "chm": {
     "path": "raw/dogami_chm_ft.tif",
     "units": "ft",
-    "source": "DOGAMI lidar CANOPY_HEIGHT_MODEL_MOSAIC (highest hit minus bare earth), exportImage at 1 m in EPSG:32610, same box (GitHub release redtail-data); pending",
+    "source": "DOGAMI lidar CANOPY_HEIGHT_MODEL_MOSAIC (highest hit minus bare earth), exportImage at 1 m in EPSG:32610, same box, downloaded by the developer 2026-10-22 (GitHub release redtail-data, exportImage.11.tiff)",
     "label": "DOGAMI canopy height model"
   },
   "world": {
@@ -38,7 +38,7 @@
     }
   ],
   "default_tee": "Blue",
-  "scorecard_source": "Club scorecard (Golf ScoreCards Inc., printed 6/2012; scorecard-large.jpg in GitHub release redtail-data), read 2026-10-22. Every row adds up to the printed Out/In/Total. Men's ratings/slopes: Black 74.4/135, Blue 72.6/130, White 70.6/126, Red 67.4/118; Yellow has none. Handicap column = the men's row (Black/Blue/White); the ladies' row (Red/Yellow) differs. Not checked against a current card.",
+  "scorecard_source": "Club scorecard (Golf ScoreCards Inc., printed 6/2012; scorecard-large.jpg in GitHub release redtail-data), read 2026-10-22. Every row adds up to the printed Out/In/Total. Men's ratings/slopes: Black 74.4/135, Blue 72.6/130, White 70.6/126, Red 67.4/118; Yellow has none. Handicap column = the men's row (Black/Blue/White); the ladies' row (Red/Yellow) differs. golfingrecord.com lists the same Blue yardages at 72.3/128; the developer chose the card's 72.6/130 (2026-10-22). Not checked against a current printed card.",
   "penalty_default": "red",
   "driving_range_is_ob": true,
   "trees_off_fairways_m": 2,

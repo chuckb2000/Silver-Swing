@@ -1,0 +1,30 @@
+{
+ "release": "redtail-data",
+ "note": "build inputs not kept in git; `make fetch NAME=redtail` puts them in place (pipeline/fetch_raw.py). exportImage.10 = DOGAMI bare-earth DTM (ft), exportImage.11 = DOGAMI canopy height model (ft), both 1 m, EPSG:32610, box x 516830-518310 / y 5033221-5034701; exportImage.jpg = OSIP 2024 0.5 m orthophoto (JPEG, corners = the same box; look-only checks)",
+ "files": [
+  {
+   "asset": "exportImage.10.tiff",
+   "sha256": "c4595048b70299b80cab1ce5e4913b3eeffd0d874ac4ef607d0ee15afd9f3d13",
+   "run": "cp {file} data/redtail/raw/dogami_dtm_ft.tif",
+   "outputs": {
+    "raw/dogami_dtm_ft.tif": "c4595048b70299b80cab1ce5e4913b3eeffd0d874ac4ef607d0ee15afd9f3d13"
+   }
+  },
+  {
+   "asset": "exportImage.11.tiff",
+   "sha256": "b2c2244a13f5004a6ca09d5ef16d39f3fb2f0da15aeceabecb8ff790ede316a1",
+   "run": "cp {file} data/redtail/raw/dogami_chm_ft.tif",
+   "outputs": {
+    "raw/dogami_chm_ft.tif": "b2c2244a13f5004a6ca09d5ef16d39f3fb2f0da15aeceabecb8ff790ede316a1"
+   }
+  },
+  {
+   "asset": "exportImage.jpg",
+   "sha256": "e0f3a9515124340d032acc16c69604217ce50893adbb6420a6ac08325930d5d6",
+   "run": "cp {file} data/redtail/raw/osip2024_05m.jpg",
+   "outputs": {
+    "raw/osip2024_05m.jpg": "e0f3a9515124340d032acc16c69604217ce50893adbb6420a6ac08325930d5d6"
+   }
+  }
+ ]
+}
