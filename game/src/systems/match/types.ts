@@ -63,6 +63,35 @@ export const CLOSE = {
 
 export type Seat = 0 | 1;
 
+/**
+ * Chat between the two players (developer, 2026-10-22: typed messages only).
+ * Not part of the match's log: the rules never see it. The server keeps the
+ * latest messages with the match, numbered, and filters each one like a name.
+ */
+export interface ChatMsg {
+  /** 1, 2, 3 ... in the order the server took them */
+  id: number;
+  by: Seat;
+  text: string;
+  /** when the server took it (ISO) */
+  at: string;
+  /** the sending game's id for it (a message sent twice counts once) */
+  cid: string;
+}
+
+export const CHAT = {
+  /** characters in a message (longer is cut) */
+  maxLen: 200,
+  /** messages the server keeps with the match (a game catching up sees these) */
+  keep: 100,
+  /** messages in a whole match: each one is a storage write, from the same daily allowance as the moves */
+  maxPerMatch: 400,
+  /** at most this many messages from one player ... */
+  burst: 5,
+  /** ... in this long */
+  burstMs: 10_000,
+} as const;
+
 /** What the other player sees of a player (their private key stays on the server). */
 export interface MatchPlayer {
   name: string;

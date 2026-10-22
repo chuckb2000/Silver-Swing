@@ -11,7 +11,7 @@ import { D1Like, D1Statement, handleHide, handlePost, handleRecentGet, resetFeed
 import { ClientDeps, KeyValue, MatchClient, WebSocketLike } from '../../src/net/matchClient';
 import { MatchSession } from '../../src/systems/match/session';
 import { waitingOn } from '../../src/systems/match/rules';
-import { Action, CLOCK, CLOSE, HoleSnap, Logged, MatchConfig, MatchState, PING, PONG, PROTOCOL, RULES, Seat } from '../../src/systems/match/types';
+import { Action, CHAT, CLOCK, CLOSE, HoleSnap, Logged, MatchConfig, MatchState, PING, PONG, PROTOCOL, RULES, Seat } from '../../src/systems/match/types';
 import { matchFeedText, MatchFeedRow } from '../../src/save/feed';
 import { loadCourseFiles } from './helpers';
 
@@ -1003,5 +1003,121 @@ describe('match client: polling less when nothing happens or nobody looks', () =
     await current.run(10_000);
     expect(count() - n2).toBeGreaterThanOrEqual(4);
     expect(current.dials).toBeGreaterThan(dials); // and a WebSocket is tried again
+  });
+});
+
+describe('match server: chat (developer, 2026-10-22: typed messages)', () => {
+  const texts = (g: Game) => g.client.chat.map((c) => `${c.by}:${c.text}`);
+
+  it('a message reaches both players, numbered and filtered; it is one storage write, apart from the match', async () => {
+    const { a, b } = await twoPlayers();
+    // b said hello before it joined (no chat then): it has the catch-up now, so what comes is news
+    expect(a.client.chatSynced && b.client.chatSynced).toBe(true);
+    let news: string[] = [];
+    b.client.onChat = (fresh) => { news.push(...fresh.map((c) => c.text)); };
+    const w0 = current.storage.writes;
+    const sent = a.client.say('nice   drive, what the fuck  ');
+    await current.run(10);
+    expect(await sent).toMatchObject({ ok: true, id: 1 });
+    expect(texts(a)).toEqual(['0:nice drive, what the ****']);
+    expect(texts(b)).toEqual(['0:nice drive, what the ****']);
+    expect(news).toEqual(['nice drive, what the ****']);
+    expect(current.storage.writes - w0).toBe(1); // the message only (key "c"); the match's record is untouched
+    expect(current.stored.log.some((e) => (e as { t: string }).t === 'chat')).toBe(false);
+    const reply = b.client.say('thanks');
+    await current.run(10);
+    expect(await reply).toMatchObject({ ok: true, id: 2 });
+    expect(texts(a)).toEqual(['0:nice drive, what the ****', '1:thanks']);
+    news = [];
+  });
+
+  it('refuses an empty message, a burst, and a message from someone not in the match; a lost answer counts once', async () => {
+    const { code, a, b } = await twoPlayers();
+    expect(await (async () => { const r = a.client.say('   '); await current.run(10); return r; })()).toMatchObject({ ok: false, code: 'empty' });
+    const burst = [1, 2, 3, 4, 5, 6].map((i) => a.client.say(`msg ${i}`));
+    await current.run(10);
+    const rs = await Promise.all(burst);
+    expect(rs.filter((r) => r.ok)).toHaveLength(5);
+    expect(rs[5]).toMatchObject({ ok: false, code: 'too_fast' });
+    await current.run(11_000);
+    expect(await (async () => { const r = a.client.say('again'); await current.run(10); return r; })()).toMatchObject({ ok: true });
+    // a third person opening the link: can't chat, and hears none of it
+    const c = new Game(current, code, KEY_C);
+    c.client.start();
+    await current.run(100);
+    expect(c.client.chat).toEqual([]);
+    expect(await current.core.say(KEY_C, 'abcdefgh', 'hello')).toMatchObject({ type: 'unsaid', code: 'not_player' });
+    // the same message twice (its answer lost): one message
+    const n = b.client.chat.length;
+    const r1 = await current.core.say(KEY_B, 'samecid1', 'hi');
+    const r2 = await current.core.say(KEY_B, 'samecid1', 'hi');
+    expect(r1).toMatchObject({ type: 'said' });
+    expect(r2).toEqual(r1);
+    await current.run(10);
+    expect(b.client.chat.length).toBe(n + 1);
+  });
+
+  it('a game that comes back (and an object restarted from storage) gets the messages it missed, once', async () => {
+    const { code, a, b } = await twoPlayers();
+    void a.client.say('first');
+    await current.run(10);
+    const store = b.store;
+    b.client.stop();
+    void a.client.say('while you were away');
+    void a.client.say('and again');
+    await current.run(10);
+    current.restart(); // evicted meanwhile
+    const back = new Game(current, code, KEY_B, store);
+    back.client.chat = [...b.client.chat]; // what this page had (a new page starts empty, and gets all three)
+    let fresh: string[] = [];
+    let caught = false;
+    back.client.onChat = (f, c) => { fresh.push(...f.map((m) => m.text)); caught = c; };
+    back.client.start();
+    await current.run(100);
+    expect(fresh).toEqual(['while you were away', 'and again']);
+    expect(caught).toBe(true);
+    expect(texts(back)).toEqual(['0:first', '0:while you were away', '0:and again']);
+    fresh = [];
+    const page = new Game(current, code, KEY_B, new MemStore());
+    page.client.start();
+    await current.run(100);
+    expect(texts(page)).toEqual(['0:first', '0:while you were away', '0:and again']);
+  });
+
+  it('over HTTP (WebSockets refused) messages go both ways', async () => {
+    current = new FakeNet();
+    const code = await newMatch(current);
+    current.refuseWs = true;
+    const a = new Game(current, code, KEY_A), b = new Game(current, code, KEY_B);
+    a.client.start(); b.client.start();
+    await current.run(8000);
+    void b.client.send({ t: 'join', player: { name: 'kevin', lefty: false } });
+    await current.run(3000);
+    expect(a.client.status).toBe('polling');
+    const r = b.client.say('can you hear me');
+    await current.run(3000);
+    expect(await r).toMatchObject({ ok: true, id: 1 });
+    expect(texts(a)).toEqual(['1:can you hear me']);
+    expect(a.client.chatOn).toBe(true);
+  });
+
+  it('a message the storage fails to keep is refused and goes nowhere; the chat is capped per match', async () => {
+    const { a, b } = await twoPlayers();
+    current.storage.failPuts = 1;
+    const r = a.client.say('lost');
+    await current.run(10);
+    expect(await r).toMatchObject({ ok: false, code: 'server' });
+    expect(b.client.chat).toEqual([]);
+    // the cap: as if the match had had its fill
+    current.storage.m.set('c', { msgs: [], n: CHAT.maxPerMatch });
+    current.restart();
+    expect(await current.core.say(KEY_A, 'abcdefgh', 'one more')).toMatchObject({ type: 'unsaid', code: 'full' });
+  });
+
+  it('a server without chat: a message fails at once instead of waiting', async () => {
+    const { a } = await twoPlayers();
+    a.client.chatOn = false; // as the welcome of an older server leaves it
+    (a.client as unknown as { welcomed: boolean }).welcomed = true;
+    expect(await a.client.say('hello?')).toMatchObject({ ok: false, code: 'unavailable' });
   });
 });

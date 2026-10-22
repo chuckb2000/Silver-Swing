@@ -139,6 +139,14 @@ export class Button extends Phaser.GameObjects.Container {
     return this;
   }
 
+  /** Orange or grey (drawn again only when it changes). */
+  setColor(c: 'orange' | 'grey') {
+    if ((this.opts.color ?? 'orange') === c) return this;
+    this.opts = { ...this.opts, color: c };
+    this.draw();
+    return this;
+  }
+
   setEnabled(on: boolean) {
     this.enabled = on;
     this.setAlpha(on ? 1 : 0.45);

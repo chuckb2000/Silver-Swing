@@ -240,13 +240,15 @@ describe('hide me from the leaderboards (developer, 2026-10-20)', () => {
 
   it("keeps a hidden player's rounds and eagles off every shared list, and brings them back when shown", async () => {
     const pars = [4, 4, 4, 4, 4, 4, 4, 4, 4];
-    const mine = { ...scored('m1', 'charlie', [2, 3, 4, 4, 4, 4, 4, 4, 4], pars), owner: KEY_A, daily: '2026-10-20' };
-    const theirs = { ...scored('t1', 'sam', [3, 4, 4, 4, 4, 4, 4, 4, 4], pars), owner: KEY_B, daily: '2026-10-20' };
+    // today's daily (the server takes a daily round only around its day: a fixed date failed two days on)
+    const day = new Date().toISOString().slice(0, 10);
+    const mine = { ...scored('m1', 'charlie', [2, 3, 4, 4, 4, 4, 4, 4, 4], pars), owner: KEY_A, daily: day };
+    const theirs = { ...scored('t1', 'sam', [3, 4, 4, 4, 4, 4, 4, 4, 4], pars), owner: KEY_B, daily: day };
     await handlePost(db, JSON.stringify([mine, theirs]));
     const ids = async () => {
       resetFeedCache();
       const course = ((await (await get(db, 'course=oswego_lake')).json()) as { entries: LeaderboardEntry[] }).entries.map((e) => e.id);
-      const daily = ((await (await get(db, 'daily=2026-10-20')).json()) as { entries: LeaderboardEntry[] }).entries.map((e) => e.id);
+      const daily = ((await (await get(db, `daily=${day}`)).json()) as { entries: LeaderboardEntry[] }).entries.map((e) => e.id);
       const eagles = ((await (await handleEaglesGet(db, new URL('http://x/api/eagles'))).json()) as { eagles: { player: string }[] }).eagles.map((e) => e.player);
       const records = ((await (await handleRecordsGet(db, new URL('http://x/api/records?kind=birdies'))).json()) as { records: { id: string }[] }).records.map((r) => r.id);
       const recent = ((await (await handleRecentGet(db, new URL('http://x/api/recent'))).json()) as { rounds: { id: string }[] }).rounds.map((r) => r.id);
