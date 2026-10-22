@@ -785,3 +785,50 @@ Details in each course's file (`docs/courses/<id>.md`, "Lessons").
 - **Trace a double green as one outline** (`desk_export.py --area double`: a page with the whole
   green and the split line as a guide); `desk_to_proposed.py` cuts it for both holes. Per-hole
   drawings had taken in the collar (3,656 m² against 2,348 m² traced whole).
+
+## 25. RedTail Golf Center (2026-10-22)
+
+- **A closed cart-path way becomes an area.** osmtogeojson (Overpass Turbo's export) turns a
+  closed `golf=cartpath` way into a polygon, and s01 reads it as a cart-path area: one loop round
+  six holes became 8.5 ha of cart path. Plot every kind on the overview before s04 and check
+  cart-path polygons by area; `make_edits.py` turns them back into lines.
+- **Check `main` for the course's logo before drawing one** (COURSE_BUILD.md 12): fetch `main`
+  (DECISIONS.md, `assets-src/course_logos/`) right before drawing.
+- **The centre-line tree test is stricter than the standing default.** It flags real edge trees
+  where OSM draws the hole line along the fairway's edge; s06b's fairway-middle test is the one
+  the defaults ask for. Look at the photo before removing trees.
+- **A new course fails `player.test.ts`** until it is in `DAILY_ROSTER`; say so in the PR (the
+  design chat adds it).
+- **The in-game look runs at about 50 s a hole** (5 views) with nothing else running; start it in
+  the background.
+
+## 26. The Muni, Lake Oswego (2026-10-22)
+
+- **Find the course on a map before writing the data request.** A guessed box 2 km off cost a
+  full download; a landmark beside the course with published coordinates placed the second.
+- **Hash every release asset on arrival.** Two identical uploads (`exportImage.12` and `.13`)
+  hid a DTM that was never downloaded.
+- **A grow-in photo shows greens but not fairways.** Propose no fairways and let the developer
+  draw them rather than tuning a colour rule.
+- **Lidar from before a rebuild has the old course's tee pads.** Skip `propose_tees.py`; place
+  provisional tees at the card distance and let the developer mark the real ones.
+- **A tree tracer settles tree questions in one pass** (`data/lake_oswego_muni/tree_desk/`):
+  every lidar crown over the photo, click to mark, saved to the artifact database, turned into
+  `drop_trees` entries. It can serve other courses.
+- **A shadow can keep a gone tree.** `trees_need_ortho` reads a neighbour's long shadow as canopy;
+  show the result over the photo rather than trusting the filter.
+
+## 27. Shorty's and Bandon Preserve (2026-10-22)
+
+- **A course outline can be the mown turf.** The Preserve's `leisure=golf_course` polygon traces
+  the turf: most tees and every dune were out of bounds, and its interior is the fairway OSM never
+  mapped. Check what the boundary covers before using it as out of bounds.
+- **Don't cut greens, tees and bunkers out of a proposed fairway.** They paint over it anyway
+  (s08 priority), and once s08 rounds the fairway's corners every cut leaves a ring of rough
+  (139 pockets until the cuts went).
+- **Show OSM's own shapes solid in the desk.** Dashed references read as "still to trace";
+  `desk_prep.py --mark` moves each hole's own greens, bunkers and tees into its shapes.
+- **A neighbour's turf trains the fairway classifier.** With no fairway mapped at Shorty's, the
+  Preserve's mapped turf next door (same grass, same photo) gave 0.99 holdout accuracy.
+- **A course polygon can cut a green.** A perfect tee shot on 15 ended out of bounds where the OSM
+  line crossed the green. Grow the boundary round every green and run the course test early.

@@ -34,7 +34,7 @@ describe('course registry', () => {
         expect(json.id).toBe(info.id);
         expect(json.name).toBe(info.name);
         expect(json.holes.length).toBe(info.holes);
-        expect([9, 18]).toContain(info.holes);
+        expect(info.holes).toBeGreaterThan(0);
         expect(json.par).toBe(info.par);
         expect(json.defaultTee).toBe(info.defaultTee);
         expect(json.attribution.length).toBeGreaterThan(0);

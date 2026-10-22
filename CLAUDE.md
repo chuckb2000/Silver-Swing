@@ -452,8 +452,10 @@ DECISIONS.md with the reason.
     `src/systems/game/pins.ts`); the meter has a line at the middle of the green, no
     ghost tick and no display-lag allowance. 376 unit tests and 4 Playwright tests pass.
 
--   **Courses (course chats, 2026-10-18 to 2026-10-22):** twenty-five data
-    folders, twenty-seven courses on offer (East Potomac is three) in six states;
+-   **Courses (course chats, 2026-10-18 to 2026-10-22):** twenty-seven data
+    folders, twenty-nine courses on offer (East Potomac is three) in six states;
+    Shorty's (19 par 3s) and Bandon Preserve (13 par 3s), Bandon OR, merged
+    2026-10-22 (PR #47), in the rotation from 2026-10-23 (no nine for the daily);
     RedTail Golf Center (Beaverton OR; PR #39) and The Muni (Lake Oswego OR, nine
     holes; PR #42) merged 2026-10-22, in the daily rotation from 2026-10-23;
     TPC Boston (Norton MA) and Pacific Dunes, Old Macdonald and Sheep Ranch (Bandon OR)
@@ -619,7 +621,8 @@ DECISIONS.md with the reason.
 
 -   **Logos ahead of their courses (design chat, 2026-10-22):** the Muni
     (`lake_oswego_muni`, a sailboat), RedTail (`redtail`, a fox), Shorty's
-    (`shortys`, a spotted fawn) and Bandon Preserve (`bandon_preserve`, salal),
+    (`shortys`, a spotted fawn) and Bandon Preserve (`bandon_preserve`, salal; since
+    replaced by the course chat's western snowy plover, developer's call 2026-10-22),
     merged 2026-10-22; the developer chose these over the course chats' own. The
     ids are assumed: a course built under another id renames its two files.
     DECISIONS.md "Logos for the Muni and RedTail", "Logos for Shorty's and the Preserve".
@@ -1661,6 +1664,7 @@ files (`game/scripts/course-lists.mjs`). The first course, Oswego Lake, is
 | Course | File |
 |---|---|
 | Bandon Dunes | `docs/courses/bandon_dunes.md` |
+| Bandon Preserve (13 holes) | `docs/courses/bandon_preserve.md` |
 | Bandon Trails | `docs/courses/bandon_trails.md` |
 | Chambers Bay | `docs/courses/chambers_bay.md` |
 | East Potomac Golf Links (Blue, White and Red courses) | `docs/courses/east_potomac.md` |
@@ -1678,6 +1682,7 @@ files (`game/scripts/course-lists.mjs`). The first course, Oswego Lake, is
 | Pacific Dunes | `docs/courses/pacific_dunes.md` |
 | RedTail Golf Center | `docs/courses/redtail.md` |
 | Sheep Ranch | `docs/courses/sheep_ranch.md` |
+| Shorty's (19 holes) | `docs/courses/shortys.md` |
 | Stone Creek Golf Club | `docs/courses/stone_creek.md` |
 | Triggs Memorial Golf Course | `docs/courses/triggs.md` |
 | TPC Boston | `docs/courses/tpc_boston.md` |

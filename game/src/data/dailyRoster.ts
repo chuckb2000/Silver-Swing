@@ -42,6 +42,9 @@ export const DAILY_ROSTER: Readonly<Record<string, string>> = {
   // merged on 2026-10-22
   redtail: '2026-10-23',
   lake_oswego_muni: '2026-10-23',
+  // merged on 2026-10-22 in the afternoon (13 and 19 holes: in the list, no nine to play)
+  shortys: '2026-10-23',
+  bandon_preserve: '2026-10-23',
 };
 
 /**
