@@ -10,6 +10,7 @@ import {
   Action, CLOCK, HoleResult, HoleSnap, Logged, MatchConfig, MatchError, MatchEvent, MatchOutcome, MatchPlayer, MatchState, MAX_EXTRA, MAX_HOLES,
   PlayerHole, PROTOCOL, Seat, ShotInfo,
 } from './types';
+import { isRoundLength } from '../../save/entry';
 
 export const other = (s: Seat): Seat => (s === 0 ? 1 : 0);
 
@@ -79,9 +80,14 @@ function checkConfig(c: unknown): MatchConfig {
   if (!['easy', 'normal', 'pro'].includes(x.difficulty) || !isCount(x.seed, 2 ** 32)) fail('bad_config', 'bad settings');
   if (typeof x.startedAt !== 'string' || x.startedAt.length > 40 || Number.isNaN(Date.parse(x.startedAt))) fail('bad_config', 'bad start time');
   if (!id(x.courseVersion, 64)) fail('bad_config', 'no course version');
+  if (x.courseHoles !== undefined && (!Array.isArray(x.courseHoles) || x.courseHoles.length !== x.holes.length
+    || !x.courseHoles.every((h) => isCount(h, 36) && h >= 1))) fail('bad_config', 'bad course holes');
+  if (x.length !== undefined && !isRoundLength(x.length)) fail('bad_config', 'bad round length');
   return {
     protocol: PROTOCOL, courseId: x.courseId, courseVersion: x.courseVersion, tee: x.tee, holes: [...x.holes], difficulty: x.difficulty,
     seed: x.seed, pins: x.pins.map((p) => [p[0], p[1]] as [number, number]), startedAt: x.startedAt,
+    ...(x.courseHoles ? { courseHoles: [...x.courseHoles] } : {}),
+    ...(x.length ? { length: x.length } : {}),
   };
 }
 

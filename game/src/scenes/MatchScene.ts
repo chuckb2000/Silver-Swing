@@ -8,6 +8,7 @@ import Phaser from 'phaser';
 import { app } from '../app';
 import { shortName } from '../save/milestones';
 import { DEFAULT_NAME } from '../save/names';
+import type { RoundLength } from '../save/entry';
 import { saveSettings } from '../save/store';
 import { dialogInput, dialogText, openDialog } from '../ui/domDialog';
 import { askName } from '../ui/nameInput';
@@ -34,9 +35,9 @@ export function playMatch(scene: Phaser.Scene, live: LiveMatch) {
 }
 
 /** "oswego lake · 18 holes · blue tees · normal" */
-function matchLine(i: { courseId: string; holes: number[]; tee: string; difficulty: string }): string {
+function matchLine(i: { courseId: string; holes: number[]; length?: RoundLength; tee: string; difficulty: string }): string {
   const c = app.courses.find((k) => k.id === i.courseId);
-  const len = lengthLabel(lengthOf(i.holes, c?.holes ?? 18), shapeById(i.courseId));
+  const len = lengthLabel(i.length ?? lengthOf(i.holes, c?.holes ?? 18), shapeById(i.courseId));
   return `${c ? shortName(c.name) : i.courseId}  ·  ${len}  ·  ${i.tee.toLowerCase()} tees  ·  ${i.difficulty}`;
 }
 

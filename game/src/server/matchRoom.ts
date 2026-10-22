@@ -341,6 +341,7 @@ export class MatchRoomCore {
     const c = s.cfg;
     return jsonResponse({
       exists: true, protocol: c.protocol, rules: RULES, courseId: c.courseId, courseVersion: c.courseVersion, tee: c.tee, holes: c.holes, difficulty: c.difficulty,
+      ...(c.length ? { length: c.length } : {}),
       players: s.players.map((p) => (p ? p.name : null)), phase: s.phase, status: statusText(s), seq: s.seq, online: this.online(),
     });
   }
