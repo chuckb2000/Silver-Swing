@@ -30,6 +30,7 @@ export interface Settings {
   playerKey: string; // this device's private key for its names on the shared boards (save/identity.ts)
   hideFromBoards: boolean; // keep this player off every shared leaderboard (server /api/hide; developer, 2026-10-20)
   hideSent: boolean | null; // the hide choice the server last confirmed (null: never sent)
+  challengePopups: boolean; // show a note when someone is looking for a match ("open to a challenge"; developer, 2026-10-22)
 }
 
 export const DEFAULT_SETTINGS: Settings = {
@@ -39,6 +40,7 @@ export const DEFAULT_SETTINGS: Settings = {
   playerKey: '',
   hideFromBoards: false,
   hideSent: null,
+  challengePopups: true,
 };
 
 const mem = new Map<string, unknown>();

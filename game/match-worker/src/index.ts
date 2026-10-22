@@ -7,6 +7,7 @@
 
 import { DurableObject } from 'cloudflare:workers';
 import { MatchRoomCore, PING, PONG, RoomHost, RoomSocket, SocketInfo } from '../../src/server/matchRoom';
+import { LobbyCore, LobbyInfo, LobbySocket } from '../../src/server/lobby';
 
 function wrap(ws: WebSocket, ctx: DurableObjectState): RoomSocket {
   return {
@@ -19,6 +20,9 @@ function wrap(ws: WebSocket, ctx: DurableObjectState): RoomSocket {
   };
 }
 
+/** A socket of the lobby ("open to a challenge"), not of a match: its attachment says so. */
+const isLobby = (ws: WebSocket) => (ws.deserializeAttachment() as { lobby?: boolean } | null)?.lobby === true;
+
 interface Env {
   /** its own Durable Object namespace (wrangler.toml) */
   MATCH: DurableObjectNamespace;
@@ -29,6 +33,8 @@ interface Env {
 export class MatchRoom extends DurableObject<Env> {
   private core: MatchRoomCore;
   private wrapped = new WeakMap<WebSocket, RoomSocket>();
+  /** the object named "lobby" is the challenge lobby (src/server/lobby.ts), made on its first use */
+  private lobbyCore: LobbyCore | null = null;
 
   constructor(ctx: DurableObjectState, env: Env) {
     super(ctx, env);
@@ -64,16 +70,39 @@ export class MatchRoom extends DurableObject<Env> {
     return w;
   }
 
+  private lobby(): LobbyCore {
+    if (!this.lobbyCore) {
+      const ctx = this.ctx, st = ctx.storage;
+      this.lobbyCore = new LobbyCore({
+        storage: { get: (k) => st.get(k), put: (e) => st.put(e) },
+        sockets: () => ctx.getWebSockets().filter(isLobby).map((w) => this.socket(w) as unknown as LobbySocket),
+        accept: (info: LobbyInfo) => {
+          const pair = new WebSocketPair();
+          const [client, server] = Object.values(pair);
+          ctx.acceptWebSocket(server);
+          server.serializeAttachment(info);
+          return new Response(null, { status: 101, webSocket: client });
+        },
+        now: () => Date.now(),
+        random: () => crypto.getRandomValues(new Uint32Array(1))[0] / 2 ** 32,
+      });
+    }
+    return this.lobbyCore;
+  }
+
   fetch(req: Request): Promise<Response> {
+    if (new URL(req.url).pathname.startsWith('/lobby/')) return this.lobby().fetch(req);
     return this.core.fetch(req);
   }
 
   async webSocketMessage(ws: WebSocket, message: string | ArrayBuffer) {
+    if (isLobby(ws)) { await this.lobby().message(this.socket(ws) as unknown as LobbySocket, message); return; }
     await this.core.message(this.socket(ws), message);
   }
 
   async webSocketClose(ws: WebSocket, code: number, reason: string) {
-    const gone = this.core.closed(this.socket(ws)); // who it was is read at once; the rest waits on the storage
+    const lobby = isLobby(ws);
+    const gone = lobby ? this.lobby().closed(this.socket(ws) as unknown as LobbySocket) : this.core.closed(this.socket(ws)); // who it was is read at once; the rest waits on the storage
     // finish the closing handshake. A browser that closes without a code sends none (1005), and 1005
     // and 1006 can't be sent back: closing with them throws, the reply never goes, and the browser's
     // socket hangs in CLOSING (found by the two-browser test). Answer those with 1000.
@@ -83,6 +112,7 @@ export class MatchRoom extends DurableObject<Env> {
   }
 
   async webSocketError(ws: WebSocket) {
+    if (isLobby(ws)) { await this.lobby().closed(this.socket(ws) as unknown as LobbySocket); return; }
     await this.core.closed(this.socket(ws));
   }
 

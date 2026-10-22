@@ -5,6 +5,7 @@
 
 import { isMatchCode, jsonResponse, MatchResult } from './matchRoom';
 import { D1Like, recordMatch } from './scores';
+import { LOBBY_NAME } from '../systems/match/lobby';
 
 /** The parts of a Durable Object namespace binding used here. */
 export interface MatchNamespace {
@@ -80,4 +81,18 @@ export async function toMatch(env: MatchEnv, req: Request, parts: string[]): Pro
   const url = new URL(req.url);
   // the object only sees its own path (its storage is the match): /info, /events, /act, /say (chat), /ws
   return stub.fetch(new Request(`https://match/${what}${url.search}`, req));
+}
+
+/**
+ * /api/lobby/<what>: the challenge lobby (src/server/lobby.ts), the match
+ * Worker's object named "lobby": ws (the WebSocket every open game keeps) and
+ * list (the open posts, for a game without a WebSocket).
+ */
+export async function toLobby(env: MatchEnv, req: Request, parts: string[]): Promise<Response> {
+  if (!env.MATCH) return jsonResponse(NOT_SET_UP, 503);
+  const [what = 'list'] = parts;
+  if (!['ws', 'list'].includes(what) || parts.length > 1) return jsonResponse({ ok: false, error: 'not_found' }, 404);
+  if (what === 'ws' && req.headers.get('Upgrade')?.toLowerCase() !== 'websocket') return jsonResponse({ ok: false, error: 'upgrade', message: 'a WebSocket is needed' }, 426);
+  const stub = env.MATCH.get(env.MATCH.idFromName(LOBBY_NAME));
+  return stub.fetch(new Request(`https://match/lobby/${what}`, req));
 }

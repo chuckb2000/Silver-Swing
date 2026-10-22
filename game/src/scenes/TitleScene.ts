@@ -8,7 +8,7 @@ import { app, GAME_NAME } from '../app';
 import { coursesByState } from '../data/registry';
 import { initAudio, setVolume } from '../audio/sfx';
 import { peekSnapshot } from '../save/snapshot';
-import { Button, COLORS, Panel, setTxt, txt } from '../ui/widgets';
+import { Button, COLORS, onTap, Panel, setTxt, txt } from '../ui/widgets';
 import { confirmDiscard, editName, hasName, resumeRound, snapshotHole, startPractice, startRound, useCourse, withName } from './flow';
 import { DailyPlan, dailyPlan, localDay } from '../systems/game/daily';
 import { DAILY_PICKS, DAILY_ROSTER } from '../data/dailyRoster';
@@ -18,6 +18,9 @@ import { LoadSuperseded } from '../data/courses';
 import { STALL_MS } from './CourseSelectScene';
 import { ensureBg, MenuScene } from './menu';
 import { liveMatchesAvailable, myMatches } from '../match/live';
+import { lobby, startLobby } from '../match/challenge';
+import { allPostsDialog, courseLabel, installChallengePopups, myPostDialog, openToChallenge, postDialog } from '../ui/challengeUi';
+import { minutesLeft } from '../systems/match/lobby';
 
 const SHOW_MS = 9000;   // each course on screen
 const FADE_MS = 1400;   // cross-fade
@@ -27,6 +30,9 @@ let order: string[] | null = null; // course views, shuffled once per visit to t
 /** Live matches on this site (null: not asked yet). */
 let matchesUp: boolean | null = null;
 let at = 0;
+
+/** A row of the title's menu: its top and bottom, and how far right it reaches. */
+interface Row { top: number; bottom: number; right: number }
 
 interface Shown { img: Phaser.GameObjects.Image; t: number; fromX: number; fromY: number; toX: number; toY: number }
 
@@ -41,6 +47,14 @@ const FOOTER: [string, string][] = [
   ['stats, your course passport and milestones are in my golf', 'stats and milestones: my golf'],
 ];
 const FOOTER_MS = 6000;
+
+/** A line cut to `w` pixels, ending '..' where it was cut. */
+function fit(t: Phaser.GameObjects.BitmapText, w: number, s: string): Phaser.GameObjects.BitmapText {
+  if (t.width <= w) return t;
+  let n = s.length;
+  while (n > 1 && t.width > w) setTxt(t, `${s.slice(0, --n).trimEnd()}..`);
+  return t;
+}
 /** where the footer is in its turn (carries on when the title is shown again; the credit comes first on a fresh start) */
 let footerAt = 0;
 
@@ -74,7 +88,139 @@ export class TitleScene extends MenuScene {
     // one clock for the footer whatever the menu's builds (a build's own timer outlived it: tips were skipped)
     this.footer = null;
     this.time.addEvent({ delay: FOOTER_MS, loop: true, callback: () => { footerAt++; this.showFooter(); } });
+    // who is looking for a match (open to a challenge): the menu shows it, and changes with it
+    const off = lobby.onChange(() => this.lobbyChanged());
+    this.events.once('shutdown', off);
+    this.time.addEvent({ delay: 20_000, loop: true, callback: () => this.lobbyChanged() }); // the minutes left
     super.create();
+  }
+
+  /**
+   * The lobby never moves the menu (developer, 2026-10-22: buttons coming and going whenever someone
+   * wants a match throws people off): "open to a challenge" changes its own label in place, and the
+   * others looking for a match are listed in a box to the side (below the menu on a narrow screen).
+   */
+  private chButton: Button | null = null;
+  private lobbyBox: Phaser.GameObjects.Container | null = null;
+  /** The menu's rows (set by each build: where the box may go), and what the box shows, as a key: redrawn only when that changes. */
+  private menuRows: { rows: Row[]; top: number; floor: number } | null = null;
+  private drawnLobby = '';
+
+  private othersLooking() {
+    return lobby.ready ? lobby.openPosts().filter((p) => p.id !== lobby.mine).sort((a, b) => b.at - a.at) : [];
+  }
+
+  private lobbyKey(): string {
+    const t = lobby.lobbyNow();
+    return this.othersLooking().map((p) => `${p.id}:${minutesLeft(p, t)}`).join('|');
+  }
+
+  private lobbyChanged() {
+    if (!this.sys.isActive() || matchesUp !== true) return;
+    this.setChallengeButton();
+    if (this.lobbyKey() !== this.drawnLobby) this.drawLobbyBox();
+  }
+
+  /**
+   * Where the box goes: beside the menu, clear of every row (the wide "play a friend" row may leave room
+   * only beside the rows under it), else under the menu; the first place with room for `need`, else the
+   * roomiest with at least `least`. Null: no room anywhere.
+   */
+  private lobbyPlace(need: number, least: number): { x: number; y: number; w: number; h: number } | null {
+    const m = this.menuRows!;
+    const W = app.view.w, cx = Math.round(W / 2);
+    const places: { x: number; y: number; w: number; h: number }[] = [];
+    const last = Math.max(m.top, ...m.rows.map((r) => r.bottom));
+    for (const w of [124, 108, 92]) {
+      const x = W - 6 - w;
+      if (x < cx + 24) continue;
+      const blocks = m.rows.filter((r) => r.right + 8 > x).sort((a, b) => a.top - b.top);
+      let y = m.top;
+      for (const b of blocks) {
+        if (b.top - 4 > y) places.push({ x, y, w, h: b.top - 4 - y });
+        y = Math.max(y, b.bottom + 4);
+      }
+      if (m.floor > y && y < last) places.push({ x, y, w, h: m.floor - y }); // (wholly under the menu: centred, below)
+    }
+    const under = last + 8;
+    const uw = Math.min(W - 12, 200);
+    places.push({ x: Math.round(cx - uw / 2), y: under, w: uw, h: m.floor - under });
+    const fits = places.find((p) => p.h >= need);
+    if (fits) return fits;
+    const best = places.reduce((a, b) => (b.h > a.h ? b : a));
+    return best.h >= least ? best : null;
+  }
+
+  /** No room for the box: a small tag in the top corner (tap: everyone looking). */
+  private lobbyTag(n: number) {
+    const W = app.view.w;
+    const label = `${n} looking for a match`;
+    const t = txt(this, 0, 0, label, { color: COLORS.yellow });
+    const w = Math.ceil(t.width) + 10, h = 12;
+    const x = W - 6 - w, y = update.ready ? 22 : 4;
+    const box = this.add.container(x, y);
+    t.setPosition(5, 2);
+    const z = this.add.zone(0, 0, w, h).setOrigin(0, 0).setInteractive({ useHandCursor: true });
+    onTap(z, () => allPostsDialog(this.game));
+    box.add([new Panel(this, 0, 0, w, h, 0.75), t, z]);
+    this.root.add(box);
+    this.lobbyBox = box;
+  }
+
+  /** "open to a challenge", or this player's own post with its minutes left. */
+  private setChallengeButton() {
+    const b = this.chButton;
+    if (!b || !b.active) return;
+    const mine = lobby.mine ? lobby.posts.find((p) => p.id === lobby.mine) : undefined;
+    const n = lobby.offers.length;
+    // offers to answer: they wait here once their note has gone (a tap: accept or not now, each)
+    b.setLabel(!mine ? 'open to a challenge' : n ? `${n} offer${n > 1 ? 's' : ''} for you` : `looking: ${minutesLeft(mine, lobby.lobbyNow())} min`);
+    b.setColor(mine ? 'orange' : 'grey');
+  }
+
+  /** The box of others looking for a match: a row each (a tap: play them, or not now), "+ N more" for the rest. */
+  private drawLobbyBox() {
+    this.lobbyBox?.destroy(true);
+    this.lobbyBox = null;
+    const posts = this.othersLooking();
+    this.drawnLobby = this.lobbyKey();
+    if (!this.menuRows || !posts.length) return;
+    const pad = 4, headH = 12, rowH = 21, moreH = 12;
+    const a = this.lobbyPlace(pad * 2 + headH + posts.length * rowH, pad * 2 + headH + moreH);
+    if (!a) { this.lobbyTag(posts.length); return; }
+    const fitRows = Math.floor((a.h - pad * 2 - headH) / rowH);
+    const shown = posts.length <= fitRows ? posts.length : Math.max(0, Math.floor((a.h - pad * 2 - headH - moreH) / rowH));
+    const more = posts.length - shown;
+    const h = pad * 2 + headH + shown * rowH + (more ? moreH : 0);
+    const box = this.add.container(a.x, a.y);
+    box.add(new Panel(this, 0, 0, a.w, h, 0.75));
+    const t = lobby.lobbyNow();
+    const iw = a.w - pad * 2 - 4;
+    box.add(fit(txt(this, pad + 2, pad, 'looking for a match', { color: COLORS.dim }), iw, 'looking for a match'));
+    const row = (y: number, rh: number, go: () => void) => {
+      const hi = this.add.rectangle(pad, y, a.w - pad * 2, rh, 0xffffff, 0).setOrigin(0, 0);
+      const z = this.add.zone(0, y - 1, a.w, rh + 2).setOrigin(0, 0).setInteractive({ useHandCursor: true });
+      z.on('pointerover', () => hi.setFillStyle(0xffffff, 0.1));
+      z.on('pointerout', () => hi.setFillStyle(0xffffff, 0));
+      onTap(z, go);
+      box.add([hi, z]);
+    };
+    let y = pad + headH;
+    for (const p of posts.slice(0, shown)) {
+      row(y, rowH - 1, () => postDialog(this.game, p));
+      const mins = txt(this, a.w - pad - 2, y + 1, `${minutesLeft(p, t)} min`, { origin: [1, 0], color: COLORS.dim });
+      box.add([fit(txt(this, pad + 2, y + 1, p.by, { color: COLORS.yellow }), iw - mins.width - 6, p.by), mins]);
+      const course = courseLabel(p.course);
+      box.add(fit(txt(this, pad + 2, y + 10, course), iw, course));
+      y += rowH;
+    }
+    if (more) {
+      row(y, moreH - 1, () => allPostsDialog(this.game));
+      const line = shown ? `+ ${more} more` : `${more} looking - tap to see`;
+      box.add(fit(txt(this, pad + 2, y + 1, line), iw, line));
+    }
+    this.root.add(box);
+    this.lobbyBox = box;
   }
 
   /** The footer's text object of the menu on screen (null between builds). */
@@ -211,6 +357,11 @@ export class TitleScene extends MenuScene {
 
   async build() {
     const g = this.gen;
+    // the last build's lobby parts are gone with it (root emptied): nothing draws into them meanwhile
+    this.chButton = null;
+    this.lobbyBox?.destroy(true);
+    this.lobbyBox = null;
+    this.menuRows = null;
     const W = app.view.w, H = app.view.h;
     const cx = Math.round(W / 2);
     let top = Math.max(8, Math.round(H * 0.14));
@@ -257,13 +408,16 @@ export class TitleScene extends MenuScene {
     if (!this.isCurrentBuild(g)) return;
     const bw = 124, bh = 17, gap = 21;
     let y = top + 84 + dy;
+    const menuTop = y;
     let bottom = y;
+    const rows: Row[] = []; // where the menu is (the lobby's box goes beside it)
     const add = (label: string, cb: () => void, grey = false, textColor?: number) => {
       // wide enough for its label (a long daily course name ran out of the button)
       const probe = txt(this, 0, 0, label);
       const w = Math.min(W - 8, Math.max(bw, Math.ceil(probe.width) + 12));
       probe.destroy();
       this.root.add(new Button(this, Math.round(cx - w / 2), y, w, bh, label, cb, { color: grey ? 'grey' : 'orange', textColor }));
+      rows.push({ top: y, bottom: y + bh, right: Math.round(cx - w / 2) + w });
       bottom = y + bh;
       y += gap;
     };
@@ -272,6 +426,7 @@ export class TitleScene extends MenuScene {
     let col = 0;
     const add2 = (label: string, cb: () => void) => {
       this.root.add(new Button(this, cx - sw - sgap / 2 + col * (sw + sgap), y, sw, bh - 1, label, cb, { color: 'grey' }));
+      if (!col) rows.push({ top: y, bottom: y + bh - 1, right: cx + sw + sgap / 2 });
       bottom = y + bh - 1;
       col ^= 1;
       if (!col) y += gap - 2;
@@ -288,8 +443,26 @@ export class TitleScene extends MenuScene {
     if (this.dailyNow) { this.dailyNow = false; if (plan && dc) this.playDaily(plan); }
     // live match play against a friend, where the site has it (the match Worker bound): matches on this device first
     if (matchesUp === true) {
+      void startLobby();
+      installChallengePopups(this.game);
       const open = myMatches().filter((m) => !m.done).length;
-      add(open ? `your matches (${open})` : 'play a friend', () => this.scene.start('match', { mode: 'home' }), !open);
+      const friend = open ? `your matches (${open})` : 'play a friend';
+      // next to it: open to a challenge (developer, 2026-10-22), or this player's own post (its label changes in place)
+      const chGo = () => (lobby.mine ? myPostDialog(this, () => this.lobbyChanged()) : openToChallenge(this, () => this.lobbyChanged()));
+      const pw2 = 124, gap2 = 4;
+      if (W >= pw2 * 2 + gap2 + 8) {
+        this.root.add(new Button(this, Math.round(cx - pw2 - gap2 / 2), y, pw2, bh, friend, () => this.scene.start('match', { mode: 'home' }), { color: open ? 'orange' : 'grey' }));
+        this.chButton = new Button(this, Math.round(cx + gap2 / 2), y, pw2, bh, 'open to a challenge', chGo, { color: 'grey' });
+        this.root.add(this.chButton);
+        rows.push({ top: y, bottom: y + bh, right: Math.round(cx + gap2 / 2) + pw2 });
+        bottom = y + bh;
+        y += gap;
+      } else {
+        add(friend, () => this.scene.start('match', { mode: 'home' }), !open);
+        add('open to a challenge', chGo, true);
+        this.chButton = this.root.list[this.root.list.length - 1] as Button;
+      }
+      this.setChallengeButton();
     } else if (matchesUp === null) {
       matchesUp = false;
       void liveMatchesAvailable().then((ok) => { matchesUp = ok; if (ok && this.sys.isActive()) this.rebuild(); });
@@ -302,9 +475,15 @@ export class TitleScene extends MenuScene {
     add2('settings', () => this.scene.start('settings', { from: 'title' }));
     // a long menu (a round to continue, the daily, the name) on a short screen: everything moves up to clear the footer
     const over = bottom - (H - 19);
+    let lift = 0;
     if (over > 0) {
-      const lift = Math.min(over, Math.max(0, top - 20));
+      lift = Math.min(over, Math.max(0, top - 20));
       for (const o of this.root.list as unknown as { y: number }[]) o.y -= lift;
+    }
+    if (matchesUp === true) {
+      // the box of others looking for a match: beside the menu where there's room, else under it (lobbyPlace)
+      this.menuRows = { rows: rows.map((r) => ({ ...r, top: r.top - lift, bottom: r.bottom - lift })), top: menuTop - lift, floor: H - 21 };
+      this.drawLobbyBox();
     }
     if (update.ready) {
       // a new version of the game has arrived (offline copy): one tap to start it

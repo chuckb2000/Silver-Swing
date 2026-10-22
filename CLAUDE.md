@@ -614,7 +614,7 @@ DECISIONS.md with the reason.
     counts. DECISIONS.md "Missed clicks".
 
 -   **Closing a card (design chat, 2026-10-22):** branch
-    `fix/dialog-clickthrough`, unmerged: "close" on a card from the recent list
+    `fix/dialog-clickthrough`, merged 2026-10-22 (PR #40): "close" on a card from the recent list
     opened the card under it (Phaser hears the whole window); the HTML dialogs
     keep their clicks, and rows need a press and a release. DECISIONS.md
     "Closing a card no longer opens the one under it".
@@ -626,6 +626,16 @@ DECISIONS.md with the reason.
     merged 2026-10-22; the developer chose these over the course chats' own. The
     ids are assumed: a course built under another id renames its two files.
     DECISIONS.md "Logos for the Muni and RedTail", "Logos for Shorty's and the Preserve".
+
+-   **Open to a challenge (design chat, 2026-10-22):** branch `design/challenge`,
+    unmerged: a title button next to "play a friend" to say you're looking for a
+    match (a course or any course, 15 minutes), a short note at the top of every
+    other open game (no popups, nothing greyed out; never while hitting; settings
+    can make it title-only) and a box beside the title menu (the menu never
+    moves), offers made as live matches and sent to the poster, who accepts
+    (joins) or not. The lobby is the
+    match Worker's object named `lobby` (`src/server/lobby.ts`), reached through the
+    same `MATCH` binding. DECISIONS.md "Open to a challenge".
 
 -   **Next task:** Item 1 of the player improvements (swing coach) is on
     `design/coach`, unmerged. Also: the third playtest (putting, yellow

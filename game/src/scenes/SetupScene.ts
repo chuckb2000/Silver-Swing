@@ -8,6 +8,7 @@ import { Button, COLORS, Panel, setTxt, txt } from '../ui/widgets';
 import { shortName } from '../save/milestones';
 import { confirmDiscard, editName, hasName, lengthLabel, lengthsFor, RoundLength, startRound, withName } from './flow';
 import { createLiveMatch, newMatchConfig } from '../match/live';
+import { currentOffering, lobby, setOffering } from '../match/challenge';
 import { planFor, shapeOfCourse } from '../systems/game/lengths';
 import { askName } from '../ui/nameInput';
 import { MenuScene } from './menu';
@@ -36,6 +37,8 @@ export class SetupScene extends MenuScene {
   }
 
   protected back() {
+    // a challenge being answered goes back to the title (where it came from), and is let go
+    if (this.matchMode && currentOffering()) { setOffering(null); this.scene.start('title'); return; }
     this.scene.start(this.matchMode ? 'match' : 'title', this.matchMode ? { mode: 'home' } : undefined);
   }
 
@@ -45,7 +48,9 @@ export class SetupScene extends MenuScene {
     const ph = Math.min(H - 12, 208);
     const x0 = Math.round((W - pw) / 2), y0 = Math.round((H - ph) / 2);
     this.root.add(new Panel(this, x0, y0, pw, ph, 0.9));
-    this.root.add(txt(this, x0 + pw / 2, y0 + 6, this.matchMode ? 'new match' : 'new round', { origin: [0.5, 0], scale: 2 }));
+    // answering someone's challenge: the match is offered to them (src/match/challenge.ts)
+    const offering = this.matchMode ? currentOffering() : null;
+    this.root.add(txt(this, x0 + pw / 2, y0 + 6, offering ? `challenge ${offering.to}` : this.matchMode ? 'new match' : 'new round', { origin: [0.5, 0], scale: 2, maxWidth: pw - 12 }));
     const purpose = this.matchMode ? 'match' : 'play';
     if (!app.course) { this.scene.start('courses', { purpose, from: 'title' }); return; } // a course load failed
     const c = app.course.json;
@@ -60,7 +65,8 @@ export class SetupScene extends MenuScene {
     if (name.width > pw - 86 - 56) setTxt(name, shortName(c.name)); // a phone: "oswego lake" (the full name wrapped onto the tees row)
     if (name.width > pw - 86 - 56) name.setMaxWidth(pw - 86 - 56);
     this.root.add(name);
-    this.root.add(new Button(this, x0 + pw - 54, y, 46, 15, 'change', () => this.scene.start('courses', { purpose, from: this.matchMode ? 'match' : 'setup' }), { color: 'grey' }));
+    // (a challenge on a set course: that course; one on any course: the challenger's choice)
+    if (!offering?.course) this.root.add(new Button(this, x0 + pw - 54, y, 46, 15, 'change', () => this.scene.start('courses', { purpose, from: this.matchMode ? 'match' : 'setup' }), { color: 'grey' }));
     y += 16;
     const bw = Math.floor((pw - 86) / 3);
     row('tees');
@@ -119,7 +125,8 @@ export class SetupScene extends MenuScene {
     if (this.matchMode) {
       // match play against a friend: the match is made on the server, then the invitation screen
       if (this.matchNote) this.root.add(txt(this, x0 + pw / 2, y + 12, this.matchNote, { origin: [0.5, 0], color: COLORS.red, maxWidth: pw - 12 }));
-      this.root.add(new Button(this, x0 + pw - 108, by, 100, 16, this.making ? 'making...' : 'invite a friend', () => void this.makeMatch()));
+      const label = offering ? `offer to ${offering.to.slice(0, 10)}` : 'invite a friend';
+      this.root.add(new Button(this, x0 + pw - 108, by, 100, 16, this.making ? 'making...' : label, () => void this.makeMatch()));
       return;
     }
     // the player's handicap (Normal rounds only), filled in once the rounds are counted; no strokes: nobody plays net (developer)
@@ -158,6 +165,17 @@ export class SetupScene extends MenuScene {
     if (!this.sys.isActive()) return;
     this.making = false;
     if (!r.ok) { this.matchNote = `couldn't make the match: ${r.message}`; this.rebuild(); return; }
+    const offering = currentOffering();
+    setOffering(null);
+    if (offering) {
+      // the challenge: the match goes to the poster, who accepts (joins it) or not
+      const line = `${lengthLabel(length, shapeOfCourse(c)).toLowerCase()}  ·  ${teeFor(c, app.settings.tees).toLowerCase()} tees  ·  ${app.settings.difficulty}`;
+      if (lobby.offer(app.settings.playerName, offering.post, r.code, c.id, line)) {
+        this.scene.start('match', { mode: 'invite', code: r.code, challenge: { to: offering.to } });
+        return;
+      }
+      // the lobby out of reach: an ordinary invitation (its code can still be sent)
+    }
     this.scene.start('match', { mode: 'invite', code: r.code });
   }
 

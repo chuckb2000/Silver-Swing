@@ -16,6 +16,11 @@ export interface DomDialog {
   readonly closed: boolean;
 }
 
+/** Is one of these dialogs open now (a popup waits for it to close)? */
+export function dialogOpen(): boolean {
+  return current !== null;
+}
+
 export function openDialog(scene: Phaser.Scene, width: number, onCancel: () => void): DomDialog {
   current?.cancel();
   const back = document.createElement('div');
