@@ -10,12 +10,16 @@
 // a match is about 200 moves. Flights are kept for the hole being played and
 // the one before (catch-up and "rewatch"); older strokes keep where they went.
 //
+// Chat between the players (developer, 2026-10-22) is kept apart from the
+// log, under its own key ("c": the latest CHAT.keep messages), one write per
+// message; the rules never see it. Each message is filtered like a name.
+//
 // Written against the small interfaces below so it runs in the unit tests
 // with fakes; game/match-worker/src/index.ts fits it to Cloudflare's API.
 
-import { DEFAULT_NAME, nameAllowed, tidyName } from '../save/names';
+import { cleanChat, DEFAULT_NAME, nameAllowed, tidyName } from '../save/names';
 import { applyEvent, cleanAction, clockText, eventOf, statusText } from '../systems/match/rules';
-import { Action, CLOCK, CLOSE, Logged, MatchConfig, MatchError, MatchPlayer, MatchState, PING, PONG, PROTOCOL, RULES, Seat } from '../systems/match/types';
+import { Action, CHAT, ChatMsg, CLOCK, CLOSE, Logged, MatchConfig, MatchError, MatchPlayer, MatchState, PING, PONG, PROTOCOL, RULES, Seat } from '../systems/match/types';
 
 /** The parts of a Durable Object's storage used here (its key-value API). */
 export interface RoomStorage {
@@ -109,6 +113,15 @@ interface Stored {
   log: Logged[];
 }
 
+/** The chat as it is stored (key "c"): the latest messages, and how many there have been. */
+interface StoredChat {
+  msgs: ChatMsg[];
+  n: number;
+}
+
+const NO_CHAT: StoredChat = { msgs: [], n: 0 };
+const isCid = (c: unknown): c is string => typeof c === 'string' && /^[A-Za-z0-9_-]{4,40}$/.test(c);
+
 /** A finished match as the site's leaderboard keeps it (the "recent" list; functions/api/match/[[path]].ts "report"). */
 export interface MatchResult {
   finished: true;
@@ -129,13 +142,17 @@ export interface MatchResult {
 }
 
 export type Reply =
-  | { type: 'welcome'; protocol: number; rules: number; seat: Seat | null; seq: number; online: [boolean, boolean]; now: number }
+  | { type: 'welcome'; protocol: number; rules: number; seat: Seat | null; seq: number; online: [boolean, boolean]; now: number; chat: true; chatN: number }
   | { type: 'events'; events: Logged[]; last: boolean }
   | { type: 'ack'; cid: string; seq: number; seat: Seat | null; now: number }
   | { type: 'nack'; cid: string; code: string; message: string; seq: number; now: number; wait?: number }
   | { type: 'presence'; online: [boolean, boolean]; now: number }
   | { type: 'seat'; seat: Seat }
-  | { type: 'error'; code: string; message: string };
+  | { type: 'error'; code: string; message: string }
+  /** chat messages after the ones a game has (on hello and sync), or a new one (to both players); `n`: the newest there is */
+  | { type: 'chat'; msgs: ChatMsg[]; n: number }
+  | { type: 'said'; cid: string; id: number }
+  | { type: 'unsaid'; cid: string; code: string; message: string };
 
 export class MatchRoomCore {
   private state: MatchState | null | undefined = undefined; // undefined: not read yet
@@ -149,6 +166,9 @@ export class MatchRoomCore {
   private pollWindow: [number, number] = [POLLED_MS, POLLED_MS];
   /** who was there in the last presence sent to everyone */
   private lastOnline = '';
+  private chat: StoredChat = NO_CHAT;
+  /** when each player's latest messages came (kept in memory: a limit on bursts, not a record) */
+  private chatTimes: [number[], number[]] = [[], []];
   /** development only: how far the match's clock has been moved on */
   private skew = 0;
   /**
@@ -183,6 +203,8 @@ export class MatchRoomCore {
           this.state = m?.state ?? null;
           this.keys = m?.keys ?? null;
           this.log = m?.log ?? [];
+          const c = m ? await this.host.storage.get<StoredChat>('c') : undefined;
+          this.chat = c && Array.isArray(c.msgs) && typeof c.n === 'number' ? c : NO_CHAT;
           this.cids = new Map();
           for (const e of this.log) if (e.cid) this.cids.set(`${authorOf(e)}:${e.cid}`, e.seq);
           return this.state;
@@ -279,6 +301,7 @@ export class MatchRoomCore {
       if (req.method === 'GET' && path === 'events') return await this.eventsHttp(url, req.headers.get('x-match-key'), req.headers.get('x-match-hidden') === '1');
       if (req.method === 'POST' && path === 'hello') return await this.helloHttp(await req.text());
       if (req.method === 'POST' && path === 'act') return await this.actHttp(await req.text());
+      if (req.method === 'POST' && path === 'say') return await this.sayHttp(await req.text());
       if (req.method === 'POST' && path === 'skip' && this.host.debug) return await this.serial(() => this.skip(url));
       return jsonResponse({ error: 'not found' }, 404);
     } catch (e) {
@@ -306,6 +329,7 @@ export class MatchRoomCore {
     this.keys = [b.key, null];
     this.log = [{ ...ev, cfg: s.cfg } as Logged];
     this.cids = new Map();
+    this.chat = NO_CHAT;
     await this.save();
     await this.keepFor(LIVE_DAYS);
     return jsonResponse({ ok: true, seq: 1 });
@@ -359,7 +383,9 @@ export class MatchRoomCore {
     const since = Math.max(0, Number(url.searchParams.get('since') ?? 0) | 0);
     const events = this.eventsSince(since, 400);
     const more = events.length > 0 && events[events.length - 1].seq < s.seq;
-    return jsonResponse({ events, more, seq: s.seq, online: this.online(), now: this.clock(), seat });
+    // the chat after the game's newest message (players only)
+    const chat = seat !== null ? this.chatSince(Math.max(0, Number(url.searchParams.get('chat') ?? 0) | 0)) : [];
+    return jsonResponse({ events, more, seq: s.seq, online: this.online(), now: this.clock(), seat, chat, chatN: this.chat.n });
   }
 
   /** A game asked over HTTP: it is there for a while (nothing is stored); the others hear when that changes who is. */
@@ -383,7 +409,7 @@ export class MatchRoomCore {
     if (!isKey(b.key)) return jsonResponse({ type: 'error', code: 'key', message: 'no player key' }, 400);
     const seat = this.seatOf(b.key);
     if (seat !== null) await this.polledBy(seat);
-    const r: Reply = { type: 'welcome', protocol: PROTOCOL, rules: RULES, seat, seq: s.seq, online: this.online(), now: this.clock() };
+    const r: Reply = { type: 'welcome', protocol: PROTOCOL, rules: RULES, seat, seq: s.seq, online: this.online(), now: this.clock(), chat: true, chatN: this.chat.n };
     return jsonResponse(r);
   }
 
@@ -400,6 +426,21 @@ export class MatchRoomCore {
     // a player who joined over HTTP is here from now
     if (r.type === 'ack' && seat === null && r.seat === 1) await this.polledBy(1);
     return jsonResponse(r, r.type === 'ack' ? 200 : 409);
+  }
+
+  private async sayHttp(body: string): Promise<Response> {
+    if (body.length > 4096) return jsonResponse({ type: 'error', code: 'too_big', message: 'message too big' }, 413);
+    let b: { key?: string; cid?: string; text?: string };
+    try { b = JSON.parse(body); } catch { return jsonResponse({ type: 'error', code: 'bad_json', message: 'bad message' }, 400); }
+    if (!isKey(b.key)) return jsonResponse({ type: 'error', code: 'key', message: 'no player key' }, 400);
+    await this.load();
+    const seat = this.seatOf(b.key);
+    if (seat !== null) await this.polledBy(seat);
+    let r: Reply;
+    try { r = await this.say(b.key, b.cid, b.text); } catch {
+      r = { type: 'unsaid', cid: String(b.cid ?? ''), code: 'server', message: 'not sent - try again' };
+    }
+    return jsonResponse(r, r.type === 'said' ? 200 : 409);
   }
 
   // ------------------------------------------------------------ WebSocket
@@ -425,13 +466,13 @@ export class MatchRoomCore {
   async message(ws: RoomSocket, raw: string | ArrayBuffer): Promise<void> {
     if (typeof raw !== 'string') return;
     if (raw.length > MAX_MESSAGE) { this.send(ws, { type: 'error', code: 'too_big', message: 'move too big' }); return; }
-    let m: { type?: string; key?: string; since?: number; cid?: string; action?: Action; rules?: number };
+    let m: { type?: string; key?: string; since?: number; chat?: number; cid?: string; action?: Action; rules?: number; text?: string };
     try { m = JSON.parse(raw); } catch { this.send(ws, { type: 'error', code: 'bad_json', message: 'bad message' }); return; }
     if (m.type === 'ping') { ws.send(PONG); return; } // the auto-response normally answers it
     try {
       const s = await this.load();
       if (!s) { this.send(ws, { type: 'error', code: 'no_match', message: 'this match no longer exists' }); this.drop(ws, CLOSE.noMatch, 'no match'); return; }
-      if (m.type === 'hello') { await this.hello(ws, m.key, m.since, m.rules); return; }
+      if (m.type === 'hello') { await this.hello(ws, m.key, m.since, m.rules, m.chat); return; }
       const who = ws.info();
       if (!who?.key) { this.send(ws, { type: 'error', code: 'hello', message: 'say hello first' }); return; }
       ws.setInfo({ ...who, at: this.host.now() }); // heard from
@@ -442,7 +483,14 @@ export class MatchRoomCore {
         if (p.type === 'presence' && p.online.join() !== this.lastOnline) this.broadcast(p, ws);
         return;
       }
-      if (m.type === 'sync') { await this.serial(async () => this.catchUp(ws, Math.max(0, Number(m.since) | 0))); return; }
+      if (m.type === 'sync') {
+        await this.serial(async () => {
+          await this.catchUp(ws, Math.max(0, Number(m.since) | 0));
+          if (m.chat !== undefined && who.seat !== null) this.sendChat(ws, Math.max(0, Number(m.chat) | 0));
+        });
+        return;
+      }
+      if (m.type === 'say') { this.send(ws, await this.say(who.key, m.cid, m.text)); return; }
       if (m.type === 'act') {
         const joining = m.action?.t === 'join';
         // a joining game learns its seat before the news of it (else it thinks the match is full)
@@ -451,18 +499,22 @@ export class MatchRoomCore {
           this.send(ws, { type: 'seat', seat: 1 });
         } : undefined);
         this.send(ws, r);
-        if (joining && r.type === 'ack') this.broadcast(this.presence());
+        if (joining && r.type === 'ack') {
+          this.broadcast(this.presence());
+          this.sendChat(ws, 0); // a game that said hello before it joined has had no chat yet
+        }
         return;
       }
       this.send(ws, { type: 'error', code: 'unknown', message: 'unknown message' });
     } catch (e) {
       // the move (if it was one) didn't go in: say so, so the game doesn't wait on it
       if (m.type === 'act') this.send(ws, { type: 'nack', cid: String(m.cid ?? ''), code: 'server', message: 'the server had a problem - try again', seq: this.state?.seq ?? 0, now: this.clock() });
+      else if (m.type === 'say') this.send(ws, { type: 'unsaid', cid: String(m.cid ?? ''), code: 'server', message: 'not sent - try again' });
       else this.send(ws, { type: 'error', code: 'server', message: String(e) });
     }
   }
 
-  private async hello(ws: RoomSocket, key: unknown, since: unknown, rules: unknown) {
+  private async hello(ws: RoomSocket, key: unknown, since: unknown, rules: unknown, chat?: unknown) {
     if (!isKey(key)) { this.send(ws, { type: 'error', code: 'key', message: 'no player key' }); return; }
     const v = versionProblem(rules);
     if (v) { this.send(ws, { type: 'error', code: 'version', message: v }); this.drop(ws, CLOSE.version, 'version'); return; }
@@ -476,8 +528,9 @@ export class MatchRoomCore {
       }
       ws.setInfo({ key, seat, at: this.host.now() });
       const p = this.presence();
-      this.send(ws, { type: 'welcome', protocol: PROTOCOL, rules: RULES, seat, seq: s.seq, online: this.online(), now: this.clock() });
+      this.send(ws, { type: 'welcome', protocol: PROTOCOL, rules: RULES, seat, seq: s.seq, online: this.online(), now: this.clock(), chat: true, chatN: this.chat.n });
       await this.catchUp(ws, Math.max(0, Number(since) | 0));
+      if (seat !== null) this.sendChat(ws, Math.max(0, Number(chat ?? 0) | 0));
       this.broadcast(p, ws);
     });
   }
@@ -502,6 +555,57 @@ export class MatchRoomCore {
     this.keys = null;
     this.log = [];
     this.cids = new Map();
+    this.chat = NO_CHAT;
+  }
+
+  // ------------------------------------------------------------------ chat
+  /**
+   * A message from the player with this key: filtered, numbered, stored and
+   * sent to both players; or refused (empty, too many too fast, the match's
+   * chat full). The same message sent twice (a lost answer) counts once.
+   */
+  say(key: string, cid: unknown, text: unknown): Promise<Reply> {
+    return this.serial(() => this.sayNow(key, cid, text));
+  }
+
+  private async sayNow(key: string, cid: unknown, raw: unknown): Promise<Reply> {
+    const no = (code: string, message: string): Reply => ({ type: 'unsaid', cid: String(cid ?? ''), code, message });
+    if (!isCid(cid)) return no('cid', 'no message id');
+    const s = await this.load();
+    if (!s) return no('no_match', 'this match no longer exists');
+    const by = this.seatOf(key);
+    if (by === null) return no('not_player', 'only the two players can chat');
+    const dup = this.chat.msgs.find((m) => m.by === by && m.cid === cid);
+    if (dup) return { type: 'said', cid, id: dup.id };
+    const text = typeof raw === 'string' ? cleanChat(raw.slice(0, 4 * CHAT.maxLen), CHAT.maxLen) : '';
+    if (!text) return no('empty', 'nothing to send');
+    if (this.chat.n >= CHAT.maxPerMatch) return no('full', "this match's chat is full");
+    const now = this.host.now();
+    const recent = this.chatTimes[by].filter((t) => now - t < CHAT.burstMs);
+    if (recent.length >= CHAT.burst) return no('too_fast', 'slow down a moment');
+    const msg: ChatMsg = { id: this.chat.n + 1, by, text, at: new Date(this.clock()).toISOString(), cid };
+    const next: StoredChat = { msgs: [...this.chat.msgs, msg].slice(-CHAT.keep), n: msg.id };
+    await this.host.storage.put({ c: next }); // not stored: refused (the game says so; nothing was sent)
+    this.chat = next;
+    recent.push(now);
+    this.chatTimes[by] = recent;
+    const out = JSON.stringify({ type: 'chat', msgs: [msg], n: next.n } satisfies Reply);
+    for (const ws of this.live()) {
+      const i = ws.info();
+      if (!i?.key || i.seat === null) continue; // the two players only
+      try { ws.send(out); } catch { /* closed */ }
+    }
+    return { type: 'said', cid, id: msg.id };
+  }
+
+  /** The kept messages after `since`. */
+  private chatSince(since: number): ChatMsg[] {
+    return this.chat.msgs.filter((m) => m.id > since);
+  }
+
+  /** A game's catch-up of the chat (sent even when there is nothing new: it says the game is up to date). */
+  private sendChat(ws: RoomSocket, since: number) {
+    this.send(ws, { type: 'chat', msgs: this.chatSince(since), n: this.chat.n });
   }
 
   // ----------------------------------------------------------------- moves

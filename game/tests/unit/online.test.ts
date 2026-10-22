@@ -240,13 +240,15 @@ describe('hide me from the leaderboards (developer, 2026-10-20)', () => {
 
   it("keeps a hidden player's rounds and eagles off every shared list, and brings them back when shown", async () => {
     const pars = [4, 4, 4, 4, 4, 4, 4, 4, 4];
-    const mine = { ...scored('m1', 'charlie', [2, 3, 4, 4, 4, 4, 4, 4, 4], pars), owner: KEY_A, daily: '2026-10-20' };
-    const theirs = { ...scored('t1', 'sam', [3, 4, 4, 4, 4, 4, 4, 4, 4], pars), owner: KEY_B, daily: '2026-10-20' };
+    // today's daily (the server takes a daily round only around its day: a fixed date failed two days on)
+    const day = new Date().toISOString().slice(0, 10);
+    const mine = { ...scored('m1', 'charlie', [2, 3, 4, 4, 4, 4, 4, 4, 4], pars), owner: KEY_A, daily: day };
+    const theirs = { ...scored('t1', 'sam', [3, 4, 4, 4, 4, 4, 4, 4, 4], pars), owner: KEY_B, daily: day };
     await handlePost(db, JSON.stringify([mine, theirs]));
     const ids = async () => {
       resetFeedCache();
       const course = ((await (await get(db, 'course=oswego_lake')).json()) as { entries: LeaderboardEntry[] }).entries.map((e) => e.id);
-      const daily = ((await (await get(db, 'daily=2026-10-20')).json()) as { entries: LeaderboardEntry[] }).entries.map((e) => e.id);
+      const daily = ((await (await get(db, `daily=${day}`)).json()) as { entries: LeaderboardEntry[] }).entries.map((e) => e.id);
       const eagles = ((await (await handleEaglesGet(db, new URL('http://x/api/eagles'))).json()) as { eagles: { player: string }[] }).eagles.map((e) => e.player);
       const records = ((await (await handleRecordsGet(db, new URL('http://x/api/records?kind=birdies'))).json()) as { records: { id: string }[] }).records.map((r) => r.id);
       const recent = ((await (await handleRecentGet(db, new URL('http://x/api/recent'))).json()) as { rounds: { id: string }[] }).rounds.map((r) => r.id);
@@ -389,5 +391,24 @@ describe('merging names (developer, 2026-10-21: "played under two names")', () =
     expect((await merge({ into: 'charlie' })).status).toBe(400);
     resetFeedCache();
     expect(await board()).toEqual(['a1:charlie', 's1:sam']); // nothing changed
+  });
+});
+
+describe('one round for its card (developer, 2026-10-22: tap a score on "recent")', () => {
+  it('gives the round with that id, not a hidden player\'s, and nothing for an unknown id', async () => {
+    resetSchemaCache(); resetFeedCache();
+    const db = fakeD1();
+    const pars = [4, 4, 4, 4, 4, 4, 4, 4, 4];
+    await handlePost(db, JSON.stringify([
+      { ...scored('r1', 'charlie', [3, 4, 4, 4, 4, 4, 4, 4, 5], pars), owner: KEY_A },
+      { ...scored('r2', 'sam', [4, 4, 4, 4, 4, 4, 4, 4, 4], pars), owner: KEY_B },
+    ]));
+    const one = async (id: string) => ((await (await get(db, `id=${encodeURIComponent(id)}`)).json()) as { entries: LeaderboardEntry[] }).entries;
+    const r1 = await one('r1');
+    expect(r1.map((e) => [e.id, e.player, e.scores.length])).toEqual([['r1', 'charlie', 9]]);
+    expect(await one('nope')).toEqual([]);
+    await handleHide(db, JSON.stringify({ owner: KEY_B, hidden: true }));
+    expect(await one('r2')).toEqual([]);
+    expect((await get(db, 'id=')).status).toBe(400);
   });
 });

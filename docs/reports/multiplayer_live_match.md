@@ -99,20 +99,37 @@ HTTP (all JSON, `cache-control: no-store`):
 | `GET /api/matches?ping=1` | live matches set up here? (503 without the MATCH binding: the title hides "play a friend") |
 | `POST /api/matches {cfg, player, key, rules}` | a new match; returns its code |
 | `GET /api/match/<code>/info` | anyone: course, players, phase, status line, rules |
-| `GET /api/match/<code>/events?since=N` | polling: the log after N (key in the `x-match-key` header, never the address; `x-match-hidden: 1` from a background tab), `more`, `online`, `now`, `seat` |
+| `GET /api/match/<code>/events?since=N&chat=M` | polling: the log after N (key in the `x-match-key` header, never the address; `x-match-hidden: 1` from a background tab), `more`, `online`, `now`, `seat`; for a player, `chat` (the messages after M) and `chatN` |
 | `POST /api/match/<code>/hello {key, rules}` | polling: the seat, who is there, `now` |
 | `POST /api/match/<code>/act {key, cid, action, rules}` | polling: a move |
+| `POST /api/match/<code>/say {key, cid, text}` | polling: a chat message (`said {cid, id}` or `unsaid {cid, code, message}`) |
 | `POST /api/match/<code>/report` | a game saw the match end: the Pages Function asks the object for its result (`/result`, not reachable from outside) and puts it on the "recent" list once (D1 table `matches`; settings "merge names", `/api/merge`, renames and moves a player's matches too) |
 | `GET /api/match/<code>/ws` | the WebSocket |
 
-WebSocket, game to server: `hello {key, since, rules}`, `sync {since}`,
-`act {cid, action}`, `who` (every 30 s), and the keep-alive `{"type":"ping"}`.
-Server to game: `welcome {protocol, rules, seat, seq, online, now}`,
+WebSocket, game to server: `hello {key, since, rules, chat}`, `sync {since, chat}`,
+`act {cid, action}`, `say {cid, text}`, `who` (every 30 s), and the keep-alive `{"type":"ping"}`.
+Server to game: `welcome {protocol, rules, seat, seq, online, now, chat, chatN}`,
 `events {events, last}` (catch-up in batches of 40), `ack {cid, seq, seat,
 now}`, `nack {cid, code, message, seq, now, wait?}` (`wait`: a penalty or
 claim made too early, ms to go), `presence {online, now}`, `seat
-{seat}`, `error {code, message}`, `pong`. `now` is the server's clock (the
-games show the move clock from it).
+{seat}`, `error {code, message}`, `pong`, and for chat `chat {msgs, n}`
+(the catch-up after hello, sync or joining, and each new message, to the two
+players only), `said {cid, id}`, `unsaid {cid, code, message}`. `now` is the
+server's clock (the games show the move clock from it).
+
+**Chat** (developer, 2026-10-22: typed messages only). Not part of the log:
+the rules never see it. The object keeps the latest `CHAT.keep` (100) messages
+under their own storage key `c` (`{msgs, n}`), one write per message; at most
+`CHAT.maxPerMatch` (400) in a match and `CHAT.burst` (5) per player in 10 s.
+Each message is cut to 200 characters and filtered like a name
+(`save/names.ts` `cleanChat`: words the name filter refuses become stars).
+The same message sent twice (an answer lost) counts once (`cid`). A game
+sends a message until it is answered, through reconnects but not a reload. The
+game shows it in an HTML panel (`ui/chatPanel.ts`); a new one from the other
+player is a note under the match bar with a count on the chat button, held
+while this player is hitting (aim, swing, their stroke on its way or in the
+air, a drop) until the shot is over. What was read is kept per match on the
+device. A third person on the link neither reads nor writes.
 
 Development only (`scripts/match-dev.sh`, `MATCH_DEBUG=1`): `POST
 localhost:8787/debug/<code>/skip?ms=N` moves a match's clock on, for the
