@@ -81,6 +81,7 @@ Black, the only set built: the card has no Blue and Black is the longer set
     desk; the stream on hole 2 from the lidar; the out-of-bounds proposal ("looks
     good"); 8 trees removed in the tree tracer.
 -   2026-10-22: the logo is the design chat's sailboat (`design/logos-muni-redtail`).
+-   2026-10-22: hole 1's tee box added in the desk after the first build (83 m2 around the Black tee; yardage unchanged, 247 yd).
 -   2026-10-22: every open item left as built ("let's leave it all as is"): the GolfPass card, hole 8 at -3.3 %, the stream red, crown-shape tree types, the 2019 ground, the three steeper small greens, the practice green unmapped, card hole 4.
 
 ## New pipeline keys or theme

@@ -79,7 +79,7 @@ The developer's calls of 2026-10-22 are in `docs/courses/lake_oswego_muni.md`. O
 
 | hole | par (OSM) | hole line | tee at line start | fairway | green | pin | bunkers <40 m | water <40 m |
 |---|---|---|---|---|---|---|---|---|
-| 1 | 4 | yes | yes (1 near) | yes | yes | yes | 1 | 0 |
+| 1 | 4 | yes | yes (2 near) | yes | yes | yes | 1 | 0 |
 | 2 | 3 | yes | yes (2 near) | - | yes | yes | 0 | 1 |
 | 3 | 3 | yes | yes (3 near) | yes | yes | yes | 1 | 1 |
 | 4 | 3 | yes | yes (2 near) | yes | yes | yes | 1 | 0 |
@@ -101,5 +101,5 @@ The developer's calls of 2026-10-22 are in `docs/courses/lake_oswego_muni.md`. O
 - hole 8: hole line carries handicap=9 (compare with scorecard)
 - hole 9: hole line carries handicap=17 (compare with scorecard)
 
-Totals: 17 tees, 9 greens, 7 fairways, 5 bunkers, 1 water hazards, 9 pins, 0 cart paths, 13 OSM tree points.
+Totals: 18 tees, 9 greens, 7 fairways, 5 bunkers, 1 water hazards, 9 pins, 0 cart paths, 13 OSM tree points.
 

@@ -1,0 +1,4 @@
+# build inputs kept in the GitHub release bandon-par-threes-data; `make fetch NAME=shortys` puts them here (release.json)
+raw/dogami_dtm_ft.tif
+raw/dogami_chm_ft.tif
+raw/osip2024_05m.tif

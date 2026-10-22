@@ -1,0 +1,9 @@
+{
+ "note": "Desk settings only (Shorty's and Bandon Preserve are OSM courses; their proposals come from make_proposals.py, put in proposed/traced.geojson by desk_prep.py).",
+ "ortho": "raw/osip2024_05m.tif",
+ "desk": {
+  "tee": "Back",
+  "ref": "Front",
+  "photo": "OSIP 2024 orthophoto"
+ }
+}

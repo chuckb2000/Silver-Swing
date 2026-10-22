@@ -1,0 +1,9 @@
+{
+"type": "FeatureCollection",
+"name": "paths_as_cartpaths",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+"features": [
+{ "type": "Feature", "properties": { "osm": "w832462832_cartpath", "kind": "cartpath", "tags": { "foot": "designated", "golf": "cartpath", "highway": "path", "was": "golf=path" } }, "geometry": { "type": "LineString", "coordinates": [ [ -124.390842, 43.1855225 ], [ -124.3908702, 43.185675 ], [ -124.3909198, 43.1857122 ], [ -124.3909989, 43.1857366 ], [ -124.3910713, 43.1857552 ], [ -124.3911598, 43.1857589 ], [ -124.3913087, 43.1857836 ], [ -124.3913543, 43.1858041 ], [ -124.391358, 43.1858189 ] ] } },
+{ "type": "Feature", "properties": { "osm": "w832462833_cartpath", "kind": "cartpath", "tags": { "foot": "designated", "golf": "cartpath", "highway": "path", "was": "golf=path" } }, "geometry": { "type": "LineString", "coordinates": [ [ -124.3909989, 43.1857366 ], [ -124.3910271, 43.1856437 ] ] } }
+]
+}

@@ -1,0 +1,39 @@
+{
+ "add": [
+  {
+   "from": "proposed/boundary.geojson",
+   "ids": [
+    "p_boundary"
+   ],
+   "reason": "OSM's Bandon Preserve polygon (w674855473) traces only the mown turf: holes 4-13 tee off outside it and the dunes between holes would be out of bounds. Grown to take in the tees and the dunes between the holes (make_proposals.py); approved by the developer 2026-10-22"
+  },
+  {
+   "from": "proposed/approved.geojson",
+   "ids": [
+    "a_fairway_1",
+    "a_tee_back_1",
+    "a_tee_back_10",
+    "a_tee_back_11",
+    "a_tee_back_12",
+    "a_tee_back_13",
+    "a_tee_back_2",
+    "a_tee_back_3",
+    "a_tee_back_4",
+    "a_tee_back_5",
+    "a_tee_back_6",
+    "a_tee_back_7",
+    "a_tee_back_8",
+    "a_tee_back_9"
+   ],
+   "reason": "approved by the developer 2026-10-22 in the tracing desk, as shown: the mown turf as fairway, one Back tee per hole (desk_prep.py --approve)"
+  }
+ ],
+ "tags": [],
+ "drop": [
+  {
+   "osm": "w674855473",
+   "reason": "replaced by the grown boundary (add above); its area is kept as the mown turf (fairway proposals)"
+  }
+ ],
+ "extend_start": []
+}
