@@ -1,0 +1,56 @@
+{
+  "id": "rock_creek",
+  "name": "Rock Creek Park Golf",
+  "location": "Washington, District of Columbia",
+  "state": "DC",
+  "architects": "William S. Flynn (nine holes 1923, eighteen 1926); holes 3-8 rerouted by William F. Gordon after Military Road was widened (1957-58) (NPS, NCPC, cultural-landscapes.org)",
+  "theme": "piedmont",
+  "epsg": 32618,
+  "osm_sources": [
+    "raw/overpass.geojson"
+  ],
+  "boundary_name": "Rock Creek Park Public Golf Course",
+  "dtm": {
+    "path": "raw/dc_dem_1m_clip.tif",
+    "units": "m",
+    "source": "District of Columbia (OCTO / DC GIS) lidar bare-earth DEM, 1 m, NAD83(HARN) / Maryland State Plane (EPSG:2804), metres; DC-wide file DC.TIF.2.tif from the developer (GitHub release data-washington-dc), clipped to the world + 100 m with pipeline/clip_raster.py"
+  },
+  "chm": {
+    "path": "raw/dc_ndsm_1m_clip.tif",
+    "units": "m",
+    "source": "District of Columbia (OCTO / DC GIS) lidar normalized digital surface model (height above ground), 1 m, EPSG:2804, metres, water = -5; DC-wide file DC.TIF.1.tif from the developer (GitHub release data-washington-dc), clipped with pipeline/clip_raster.py",
+    "label": "DC lidar normalized surface model"
+  },
+  "world": {
+    "x0": 322501,
+    "y0": 4314530,
+    "width": 1280,
+    "height": 1024,
+    "note": "bbox of the OSM course boundary (826 x 779 m) + scenery, rounded out to whole 256 m chunks and centred: 1,280 m east-west (~227 m each side; Rock Creek and Beach Drive to the west, 16th Street to the east), 1,024 m north-south (~122 m each side; Military Road to the south)"
+  },
+  "tee_sets": [
+    {
+      "name": "White",
+      "playable": true,
+      "rating": 0,
+      "slope": 0,
+      "total_yd": 3786
+    }
+  ],
+  "default_tee": "White",
+  "scorecard_source": "Printed course card (photo from the developer, 2026-10-22): 14 holes, par 50, White / Red / Yellow. Front nine and the 'back five' (the original 10, 11, 15, 17 and 18, played as 10-14 since the back nine's 12, 13, 14 and 16 closed in 2015). No rating or slope published. Conflicts on the card: the Red total is printed 3623 but the holes add to 3523 (front 2116 + back 1407); stroke index 8 appears twice (holes 2 and 14) and 6 not at all. GolfPass lists the same front nine.",
+  "penalty_default": "red",
+  "driving_range_is_ob": true,
+  "trees_off_fairways_m": 2,
+  "wind_mph": {
+    "minMph": 2,
+    "maxMph": 10
+  },
+  "attribution": [
+    "Map data © OpenStreetMap contributors (ODbL)",
+    "Elevation and canopy: District of Columbia lidar 1 m DEM and normalized surface model, DC GIS / OCTO (CC BY 4.0)",
+    "Imagery for tracing: District of Columbia Orthophoto 2023, DC GIS / OCTO (CC BY 4.0)",
+    "Scorecard: Rock Creek Park Golf (National Links Trust)"
+  ],
+  "notes": "Built 2026-10-22 by a course chat. Standing defaults (COURSE_BUILD.md 4.1): White tees (no Blue on the card), all water red, OSM boundary as out of bounds, trees from lidar with fairway and tee-shot clearing, DC wind 2-10 mph. Theme piedmont, mid-autumn (developer, 2026-10-22). The 14-hole layout predates the 2024- renovation by National Links Trust; the lidar and the May 2023 orthophoto show it as built."
+}

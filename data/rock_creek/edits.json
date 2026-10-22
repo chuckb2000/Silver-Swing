@@ -1,0 +1,196 @@
+{
+ "add": [
+  {
+   "from": "proposed/holes.geojson",
+   "ids": [
+    "x_hole_1",
+    "x_hole_2",
+    "x_hole_3",
+    "x_hole_4",
+    "x_hole_5",
+    "x_hole_6",
+    "x_hole_7",
+    "x_hole_8",
+    "x_hole_9",
+    "x_hole_10",
+    "x_hole_11",
+    "x_hole_12",
+    "x_hole_13",
+    "x_hole_14",
+    "x_pin_1",
+    "x_pin_2",
+    "x_pin_3",
+    "x_pin_4",
+    "x_pin_5",
+    "x_pin_6",
+    "x_pin_7",
+    "x_pin_8",
+    "x_pin_9",
+    "x_pin_10",
+    "x_pin_11",
+    "x_pin_12",
+    "x_pin_13",
+    "x_pin_14",
+    "x_clubhouse",
+    "x_tee_2",
+    "x_tee_5",
+    "x_tee_14"
+   ],
+   "tags": {},
+   "reason": "14 hole lines, a pin per hole and the clubhouse as a building (data/rock_creek/make_holes.py; routing in proposed/routing_proposal.jpg). OSM's 9 hole lines carry no number or par and cover only 9 of the 14 holes. Tee boxes for holes 2, 5 and 14 as the developer marked them on the photo (2026-10-22)."
+  },
+  {
+   "from": "proposed/tees_lidar.geojson",
+   "ids": [
+    "lidar_tee_84",
+    "lidar_tee_56",
+    "lidar_tee_74",
+    "lidar_tee_16"
+   ],
+   "tags": {},
+   "reason": "raised flat pads in the DC lidar DEM at the starts of holes 4, 6, 9/11 and 12 (pipeline/propose_tees.py --wide); each within 8 % of the White card: 4 163/173, 6 341/360, 9 337/330 and 11 158/160 (one pad beside the 10th green), 12 409/400. OSM maps no tee there."
+  },
+  {
+   "from": "proposed/traced.geojson",
+   "ids": [
+    "tr_fairway_8_0"
+   ],
+   "tags": {},
+   "reason": "hole 8's fairway between the tee and OSM fairway w915595742: the mown stripes on the DC 2023 orthophoto (fairway classifier, propose_trace.py; the GolfDC course map shows 8's fairway running from the tee to the green). The other traced pieces were rough or other holes' fairways and are not used."
+  },
+  {
+   "from": "proposed/channels_lidar.geojson",
+   "ids": [
+    "channel_w1177950224",
+    "channel_w1177950225",
+    "channel_w986741083"
+   ],
+   "tags": {
+    "golf": "lateral_water_hazard",
+    "penalty": "red",
+    "flatten": "no"
+   },
+   "reason": "streams OSM maps only as lines, as red penalty areas from the lidar channel (propose_channels.py; standing default: all water red): the stream left of the 14th (old 18; the 'Stream' on the 1927 plan), the one across the front of the 13th green (old 17, by the wetland) and the one in the closed north-west"
+  }
+ ],
+ "drop": [
+  {
+   "osm": "w1025695264",
+   "reason": "OSM hole line without ref or par; replaced by make_holes.py's numbered line"
+  },
+  {
+   "osm": "w1025695265",
+   "reason": "OSM hole line without ref or par; replaced by make_holes.py's numbered line"
+  },
+  {
+   "osm": "w1025695266",
+   "reason": "OSM hole line without ref or par; replaced by make_holes.py's numbered line"
+  },
+  {
+   "osm": "w1025695267",
+   "reason": "OSM hole line without ref or par; replaced by make_holes.py's numbered line"
+  },
+  {
+   "osm": "w1025695268",
+   "reason": "OSM hole line without ref or par; replaced by make_holes.py's numbered line"
+  },
+  {
+   "osm": "w1025695269",
+   "reason": "OSM hole line without ref or par; replaced by make_holes.py's numbered line"
+  },
+  {
+   "osm": "w1025695270",
+   "reason": "OSM hole line without ref or par; replaced by make_holes.py's numbered line"
+  },
+  {
+   "osm": "w1025695271",
+   "reason": "OSM hole line without ref or par; replaced by make_holes.py's numbered line"
+  },
+  {
+   "osm": "w1025695272",
+   "reason": "OSM hole line without ref or par; replaced by make_holes.py's numbered line"
+  },
+  {
+   "osm": "n9456830192",
+   "reason": "OSM pin; replaced by one pin per hole from make_holes.py (the same point where the OSM pin is on that hole's green)"
+  },
+  {
+   "osm": "n9456830194",
+   "reason": "OSM pin; replaced by one pin per hole from make_holes.py (the same point where the OSM pin is on that hole's green)"
+  },
+  {
+   "osm": "n9456830196",
+   "reason": "OSM pin; replaced by one pin per hole from make_holes.py (the same point where the OSM pin is on that hole's green)"
+  },
+  {
+   "osm": "n9456830199",
+   "reason": "OSM pin; replaced by one pin per hole from make_holes.py (the same point where the OSM pin is on that hole's green)"
+  },
+  {
+   "osm": "n9456830202",
+   "reason": "OSM pin; replaced by one pin per hole from make_holes.py (the same point where the OSM pin is on that hole's green)"
+  },
+  {
+   "osm": "n9456830204",
+   "reason": "OSM pin; replaced by one pin per hole from make_holes.py (the same point where the OSM pin is on that hole's green)"
+  },
+  {
+   "osm": "n9456830206",
+   "reason": "OSM pin; replaced by one pin per hole from make_holes.py (the same point where the OSM pin is on that hole's green)"
+  },
+  {
+   "osm": "n9456830208",
+   "reason": "OSM pin; replaced by one pin per hole from make_holes.py (the same point where the OSM pin is on that hole's green)"
+  },
+  {
+   "osm": "n9456830211",
+   "reason": "OSM pin; replaced by one pin per hole from make_holes.py (the same point where the OSM pin is on that hole's green)"
+  },
+  {
+   "osm": "w71455383",
+   "reason": "golf=clubhouse is not drawn by s01; re-added as a building (x_clubhouse)"
+  },
+  {
+   "osm": "r12431635",
+   "reason": "fairway of old hole 14, closed since 2015 (NCPC 2023); not in the 14-hole routing, so rough"
+  },
+  {
+   "osm": "w915922531",
+   "reason": "fairway of old hole 16, closed since 2015; rough"
+  },
+  {
+   "osm": "w253129257",
+   "reason": "green of old hole 12, closed since 2015 (overgrown meadow on the 2023 photo)"
+  },
+  {
+   "osm": "w253129258",
+   "reason": "green of old hole 13, closed since 2015"
+  },
+  {
+   "osm": "w915922534",
+   "reason": "green of old hole 14, closed since 2015"
+  },
+  {
+   "osm": "w253126384",
+   "reason": "green of old hole 16, closed since 2015; beside the 12th and 13th tees, so it would otherwise be a wrong green in play"
+  }
+ ],
+ "tags": [
+  {
+   "osm": "w986689208",
+   "set": {
+    "hole": "1",
+    "tee_set": "White"
+   },
+   "reason": "the 1st tee by the car park (GolfDC course map); its centroid measures 258 yd against the card's 302, so s06 would skip it; tagged so the tee sits in the box, moved toward its east end (course chat)"
+  },
+  {
+   "osm": "w986689198",
+   "set": {
+    "hole": "3",
+    "tee_set": "White"
+   },
+   "reason": "the 3rd tee (OSM line w1025695272 starts on it); its centroid measures 141 yd against 160, its west end 160 yd: tagged so s06 moves the tee back along the box (course chat)"
+  }
+ ]
+}

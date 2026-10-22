@@ -1,0 +1,27 @@
+{
+ "note": "Rock Creek (course chat, 2026-10-22). OSM maps every green and most tees; the fairways of holes 1, 2, 6, 8, 9 and 10 are missing or partial. Only fairways are traced here (classifier trained on the course's own OSM fairways), along the hole lines from make_holes.py. Local metres, world origin (322501, 4314530).",
+ "ortho": "build/ortho_2023.tif",
+ "source": "traced (course chat) from the District of Columbia Orthophoto 2023 (DC GIS, flown May 2023)",
+ "greens": {},
+ "tees": [],
+ "holes": {},
+ "fairways": {
+  "holes": [
+   "1",
+   "2",
+   "6",
+   "8"
+  ],
+  "corridor_m": 20,
+  "prob": 0.6,
+  "min_area_m2": 250
+ },
+ "bunkers": {
+  "near_m": 0,
+  "min_area_m2": 1000000000.0,
+  "max_area_m2": 0,
+  "min_z_m": 0,
+  "min_brightness": 999,
+  "min_compactness": 1
+ }
+}

@@ -1,0 +1,24 @@
+{
+ "release": "data-washington-dc",
+ "note": "Build inputs that aren't kept in git; `make fetch NAME=rock_creek` puts them in place (pipeline/fetch_raw.py). The two DEM clips are also committed (4-6 MB, as for East Potomac and Langston), so their entries are skipped unless a clip is missing; they re-cut the clips from the DC-wide rasters. The orthophoto is used only by the tracing tools (make_ortho.py, pipeline/propose_trace.py), not by `make course`.",
+ "files": [
+  {
+   "asset": "DC.TIF.2.tif",
+   "sha256": "4f4ae806e29e46f69090c583c176dea17f551aaab55864b08d584e39ad695365",
+   "run": "python3 pipeline/clip_raster.py {file} data/rock_creek/raw/dc_dem_1m_clip.tif --epsg 32618 --bbox 322501 4314530 323781 4315554",
+   "outputs": {"raw/dc_dem_1m_clip.tif": "271b0b9fa15aca9a57a1b961be8bc24ad9b9c5ba4bdb779a79247683d488c658"}
+  },
+  {
+   "asset": "DC.TIF.1.tif",
+   "sha256": "e6cd1ae61b400c77e695eaf9ad35e4c3509159add7efbd9faf946658ce51eb1a",
+   "run": "python3 pipeline/clip_raster.py {file} data/rock_creek/raw/dc_ndsm_1m_clip.tif --epsg 32618 --bbox 322501 4314530 323781 4315554",
+   "outputs": {"raw/dc_ndsm_1m_clip.tif": "8adab7d8b32b91f28198cc275f7659e43af090707cc544afa05865b0157114bc"}
+  },
+  {
+   "asset": "export.jpg",
+   "sha256": "80a3a7f798e82879daf993076048c69f5623059fcbb0ea37bcf15e06ea37a149",
+   "run": "cp {file} data/rock_creek/raw/rc_ortho_2023.jpg",
+   "outputs": {"raw/rc_ortho_2023.jpg": "80a3a7f798e82879daf993076048c69f5623059fcbb0ea37bcf15e06ea37a149"}
+  }
+ ]
+}

@@ -1,0 +1,31 @@
+{
+  "name": "Piedmont (Rock Creek Park, Washington DC, mid-autumn)",
+  "note": "Course theme palette (<= 32 colours; same keys as pnw.json plus F0-F2). Rock Creek Park Golf: an upland Piedmont hardwood course in mid-autumn (developer, 2026-10-22: 'piedmont theme with mid autumn'). Not the riverside potomac (cherries) or the marshy anacostia: cool-season turf still green, a shade cooler than late summer; tan local sand; a brown-grey creek over stones; asphalt paths. F0-F2 are leaf litter on the forest floor (woods and the woods outside the course), shown between the crowns. Trees in assets-src/trees_piedmont.py: tulip poplars (the lidar's narrow-crown class), oaks, red and sugar maples and beech, about four in ten showing autumn colour. Shadows are a 35% black overlay on top of these.",
+  "colors": {
+    "G0": "#1b3523", "G1": "#244a2c", "G2": "#2e6133", "G3": "#3a7538",
+    "G4": "#478a3e", "G5": "#559c45", "G6": "#63ad4d", "G7": "#73bc57",
+    "G8": "#84c964", "G9": "#a6d985",
+    "L0": "#56743b", "L1": "#67873f", "L2": "#7a9a49",
+    "S0": "#bfa77c", "S1": "#dccaa0", "S2": "#efe4c7",
+    "W0": "#3a4a43", "W1": "#4e6158", "W2": "#87998a",
+    "K0": "#26272d", "K1": "#53545c", "K2": "#7a7b83", "K3": "#aea896", "K4": "#d4cdbb",
+    "B0": "#46301f", "B1": "#6d4a31", "B2": "#8c5a40",
+    "R0": "#4b586a", "WH": "#f6f6f2",
+    "F0": "#3e3a1f", "F1": "#5b4a26", "F2": "#7a5f30"
+  },
+  "lut": {
+    "woods": ["F0", "F1", "G2", "F2"],
+    "ob_woods": ["F0", "F0", "F1", "G1"]
+  },
+  "minimap": {
+    "water": "#56695e", "ob_water": "#56695e"
+  },
+  "minimap_trees": {
+    "conifer": ["#7a5a18", "#c99a2c"],
+    "deciduous": ["#3d5a22", "#6f8a37"]
+  },
+  "trees": {
+    "conifer": "trees_piedmont:tulip_poplar",
+    "deciduous": "trees_piedmont:broadleaf"
+  }
+}
