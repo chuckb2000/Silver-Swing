@@ -1,5 +1,5 @@
 {
- "note": "The Muni (Lake Oswego) trace, course chat 2026-10-22. OSM maps only the city's golf property and the old driving range; the 2025 nine is not mapped. Green seeds picked by eye on the OSIP 2024 orthophoto (raw/osip2024_032m.tif; summer 2024, the new greens grown in). Hole identity from the 2021 site plan (release muni-data, LOGC_SITE.PLAN_5-19-21.pdf) and the city's course map (Screenshot 2026-10-22 122955), both look only; the plan was fitted to the greens by an affine (residuals 5-15 m). Each hole's provisional tee point lies the Black card distance back from the green towards the plan's tee. No tee pads from the DEM: the 2019 lidar predates the rebuild and shows the old par-3 course's tees. The practice putting green south of 9 (about 353, 321) is not a hole. Local metres, world origin (524034, 5026969), EPSG:32610.",
+ "note": "The Muni (Lake Oswego) trace, course chat 2026-10-22. OSM maps only the city's golf property and the old driving range; the 2025 nine is not mapped. Green seeds picked by eye on the OSIP 2024 orthophoto (raw/osip2024_032m.tif; summer 2024, the new greens grown in). Hole identity from the 2021 site plan (release muni-data, LOGC_SITE.PLAN_5-19-21.pdf) and the city's course map (Screenshot 2026-10-22 122955), both look only; the plan was fitted to the greens by an affine (residuals 5-15 m). Each hole's provisional tee point lies the Black card distance back from the green towards the plan's tee. No tee pads from the DEM: the 2019 lidar predates the rebuild and shows the old par-3 course's tees. The practice putting green south of 9 (about 353, 321) is not a hole. Local metres, world origin (524034, 5026969), EPSG:32610. Hole 1's tee point is the turf patch west of the clubhouse (photo; the course map's tee rectangle is there). No fairways are proposed: the 2024 grow-in photo doesn't separate fairway from rough (a colour rule picked random patches), so the developer draws them in the desk.",
  "source": "traced (course chat) from the Oregon Statewide Imagery Program 2024 orthophoto (1 ft)",
  "ortho": "raw/osip2024_032m.tif",
  "greens": {
@@ -12,10 +12,17 @@
   },
   "2": {
    "seed": [
-    263,
-    531
+    262,
+    530
    ],
-   "t": 3.0
+   "ellipse": [
+    262,
+    530,
+    9.5,
+    7.5,
+    10
+   ],
+   "why": "green half in tree shadow on the orthophoto, which the texture trace cannot follow"
   },
   "3": {
    "seed": [
@@ -33,10 +40,17 @@
   },
   "5": {
    "seed": [
-    412,
-    579
+    413,
+    580
    ],
-   "t": 3.0
+   "ellipse": [
+    413,
+    580.5,
+    11,
+    7,
+    0
+   ],
+   "why": "south half in tree shadow on the orthophoto, which the texture trace cannot follow"
   },
   "6": {
    "seed": [
@@ -73,8 +87,8 @@
    "par": 4,
    "handicap": 11,
    "tee": [
-    478.5,
-    369.9
+    464.0,
+    370.0
    ],
    "bends": []
   },
@@ -152,11 +166,7 @@
   }
  },
  "fairways": {
-  "holes": [
-   "1",
-   "5",
-   "8"
-  ],
+  "holes": [],
   "corridor_m": 30,
   "prob": 0.5,
   "min_area_m2": 150,
