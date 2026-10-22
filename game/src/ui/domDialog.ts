@@ -56,6 +56,12 @@ export function openDialog(scene: Phaser.Scene, width: number, onCancel: () => v
   const me = { cancel };
   current = me;
   back.addEventListener('pointerdown', (e) => { e.preventDefault(); cancel(); });
+  // a press or a release on the dialog stays in it: Phaser also listens on the window and took one as a
+  // tap on the game underneath (developer, 2026-10-22: "close" on a card from the recent list opened the
+  // card of the round under the button, again and again)
+  for (const el of [back, box]) {
+    for (const t of ['mousedown', 'mouseup', 'pointerdown', 'pointerup', 'touchstart', 'touchend'] as const) el.addEventListener(t, (e) => e.stopPropagation());
+  }
   scene.events.once(Phaser.Scenes.Events.SHUTDOWN, cancel);
   return {
     box,

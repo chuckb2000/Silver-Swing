@@ -81,7 +81,19 @@ test('daily board: a tap on a score shows its card; on this week, a player\'s ro
   await clickText(page, 'sam', () => dialogSays(page, "sam's scorecard"));
   await page.waitForFunction(() => !!document.querySelector('img[alt="scorecard picture"]'), null, { timeout: 30_000 });
   await page.screenshot({ path: 'shots/boards-daily-card.png' });
+  // "close" stays in the dialog: the game underneath hears neither the press nor the release (developer,
+  // 2026-10-22: closing a card from the recent list opened the card of the row under the button, again and again)
+  await page.evaluate(() => {
+    const w = window as any;
+    w.__heard = 0;
+    const lb = window.__game.scene.getScene('leaderboard');
+    // a press or release off the canvas comes as "...outside", and objects under it still get theirs
+    for (const ev of ['pointerdown', 'pointerup', 'pointerdownoutside', 'pointerupoutside', 'gameobjectdown', 'gameobjectup']) lb.input.on(ev, () => { w.__heard++; });
+  });
   await page.getByRole('button', { name: 'close' }).click();
+  await page.waitForTimeout(1500);
+  expect(await page.evaluate(() => (window as any).__heard)).toBe(0);
+  expect(await page.evaluate(() => !!document.querySelector('img[alt="scorecard picture"]'))).toBe(false);
   // this week: kim's rounds to choose from, then the card
   await tapButton(page, 'leaderboard', 'this week', 30_000, async () => (await textOn(page, "tap a player to see their week's cards")) !== null);
   await clickText(page, 'kim', () => leaderboardSays(page, "kim's daily rounds this week"));
