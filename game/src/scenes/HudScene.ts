@@ -1129,7 +1129,7 @@ export class HudScene extends Phaser.Scene {
     const yd = r.tee.cardYd;
     const ydStr = app.settings.units === 'yd' ? `${yd} yd` : `${Math.round(yd * YD)} m`;
     const t2 = txt(this, 64, 30, `par ${r.hole.par}  ·  ${ydStr}  ·  ${r.cfg.tee.toLowerCase()}`, { color: COLORS.yellow });
-    const t3 = txt(this, 64, 41, extra ? `hole ${r.holeNumber} again  ·  sudden death` : `handicap ${r.hole.handicap}  ·  pin ${r.pinLabel()}`, { color: extra ? COLORS.yellow : COLORS.dim });
+    const t3 = txt(this, 64, 41, extra ? `hole ${r.holeNumber} again  ·  sudden death` : `${r.hole.handicap ? `handicap ${r.hole.handicap}  ·  ` : ""}pin ${r.pinLabel()}`, { color: extra ? COLORS.yellow : COLORS.dim });
     const wtxt = r.wind.mph < 0.5 ? 'calm' : `wind ${r.wind.mph.toFixed(1)} mph`;
     const live = this.play.match;
     const honour = live?.session ? (live.session.state.honour === this.play.me ? 'your honour' : `${this.play.oppName()}'s honour`) : '';

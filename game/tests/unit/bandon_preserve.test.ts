@@ -1,8 +1,7 @@
 // Bandon Preserve: course-specific checks of COURSE_BUILD.md 8.2 (built 2026-10-22 with
 // Shorty's, one set of downloads): the 13 par 3s of Bandon Preserve (Coore & Crenshaw, 2012), the Back tees the developer approved in the desk, the boundary grown to the dunes, all fairways run up to their greens
 // with no rough between (developer, 2026-10-22), wind 8-16 mph as at Bandon Dunes, gorse and shore pines.
-// Kept in data/bandon_preserve/tests/ (the course chat writes only in its own folders); the design chat may
-// move it to game/tests/unit/.
+// Moved here from the course chat's data/bandon_preserve/tests/ by the design chat (2026-10-22).
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
@@ -47,7 +46,7 @@ describe('Bandon Preserve course data', () => {
   });
 
   it('measured yardages are within 3% of the card, every hole', () => {
-    const flags = new Set([]);
+    const flags = new Set<number>([]);
     for (const h of json.holes) {
       const t = h.tees[TEE];
       expect(Math.abs((t.adjYd - t.cardYd) / t.cardYd), `hole ${h.number}`).toBeLessThanOrEqual(flags.has(h.number) ? 0.08 : 0.03);
@@ -55,7 +54,7 @@ describe('Bandon Preserve course data', () => {
   });
 
   it('the fairway runs up to every green: walking back from the green, past the fringe comes fairway or sand, never rough (developer, 2026-10-22)', () => {
-    const noFairway = new Set([]);
+    const noFairway = new Set<number>([]);
     const bad: string[] = [];
     for (const h of json.holes) {
       if (noFairway.has(h.number)) continue;

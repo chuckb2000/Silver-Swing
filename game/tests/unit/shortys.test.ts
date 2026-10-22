@@ -1,8 +1,7 @@
 // Shorty's: course-specific checks of COURSE_BUILD.md 8.2 (built 2026-10-22 with
 // Bandon Preserve, one set of downloads): the 19 par 3s of Shorty's (Whitman, Axland & Cutten, 2024), the double greens of 6/18 and 9/13 split per hole, hole 2's traced green, all fairways run up to their greens
 // with no rough between (developer, 2026-10-22), wind 8-16 mph as at Bandon Dunes, gorse and shore pines.
-// Kept in data/shortys/tests/ (the course chat writes only in its own folders); the design chat may
-// move it to game/tests/unit/.
+// Moved here from the course chat's data/shortys/tests/ by the design chat (2026-10-22).
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
