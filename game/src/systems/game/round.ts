@@ -14,6 +14,8 @@ import { CourseCtx, freeReliefArea, obOptions, penaltyAreaOptions, ReliefArea, u
 import { HoleScore, HoleTally } from '../rules/scoring';
 import { MeterResult } from '../swing/meter';
 import { coursePins, pinLabel as spotLabel } from './pins';
+import { holeName, shapeOfCourse } from './lengths';
+import type { RoundLength } from '../../save/entry';
 import { PuttStrike, puttStrikeFrom, shotCarry, Strike, strikeFrom } from '../swing/outcome';
 
 export interface RoundSettings {
@@ -40,6 +42,11 @@ export interface RoundConfig {
   daily?: string;
   /** The practice ground (practice.ts): nothing is scored or saved. */
   practice?: boolean;
+  /** The course hole of each slot in `holes`, when it isn't the slot itself or the slot
+   *  around a 9-hole course (a club's nines: lengths.ts planFor). */
+  courseHoles?: number[];
+  /** The round's length (lengths.ts); rounds saved before it was kept work it out from `holes`. */
+  length?: RoundLength;
 }
 
 export interface BallPos { x: number; y: number; teedUp: boolean }
@@ -172,7 +179,9 @@ export class Round {
   /** The hole's number on the scorecard (10-18 for the second time around a 9-hole course). */
   get holeNumber(): number { return this.cfg.holes[this.holeIndex]; }
   /** The course's own hole being played (a 9-hole course played twice repeats 1-9). */
-  get courseHole(): number { return courseHoleFor(this.holeNumber, this.course.json.holes.length); }
+  get courseHole(): number { return this.cfg.courseHoles?.[this.holeIndex] ?? courseHoleFor(this.holeNumber, this.course.json.holes.length); }
+  /** How the hole is shown: its slot, or at a club of nines its number in the nine and the nine's name. */
+  get holeName(): { num: number; nine?: string } { return holeName(this.holeNumber, this.courseHole, shapeOfCourse(this.course.json)); }
   get hole(): HoleJson { return this.course.json.holes[this.courseHole - 1]; }
   get tee(): TeeJson { return this.hole.tees[this.cfg.tee] ?? Object.values(this.hole.tees)[0]; }
   get pin(): { x: number; y: number } {

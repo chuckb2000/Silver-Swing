@@ -533,8 +533,9 @@ DECISIONS.md with the reason.
     merged 2026-10-20: course chats draw their own logos
     (`assets-src/course_logos/<id>.py`), themes and theme bushes (gorse:
     `shrubs_<theme>`), `build_assets.py --theme`, `regress --since` picks the
-    affected courses. Unmerged, ready: `design/hole-counts` (13/19-hole courses,
-    clubs of three nines). Cross-country golf: report only
+    affected courses. `design/hole-counts` (13/19-hole courses played all at
+    once, clubs of three nines) merged 2026-10-22 (developer); live matches take
+    13 or 19 holes but not a club's nines yet. Cross-country golf: report only
     (`design/cross-country`), not to be built yet (developer).
 
 -   **Gorse (design chat, 2026-10-20):** branch `design/gorse`, merged
@@ -601,6 +602,18 @@ DECISIONS.md with the reason.
     (developer: "merge"): a tap on a round there shows its card
     (`/api/scores?id=` for "recent"); "this week" lists a player's rounds.
     DECISIONS.md "Scorecards from the daily and recent lists".
+
+-   **Missed clicks (design chat, 2026-10-22):** branch `fix/missed-clicks`,
+    merged 2026-10-22 (developer: "merge everything"): a swing tapped during a camera cut or zoom starts when the camera
+    arrives (it was dropped); a button let go within 6 game px of its edge still
+    counts. DECISIONS.md "Missed clicks".
+
+-   **Logos ahead of their courses (design chat, 2026-10-22):** the Muni
+    (`lake_oswego_muni`, a sailboat), RedTail (`redtail`, a fox), Shorty's
+    (`shortys`, a spotted fawn) and Bandon Preserve (`bandon_preserve`, salal),
+    merged 2026-10-22; the developer chose these over the course chats' own. The
+    ids are assumed: a course built under another id renames its two files.
+    DECISIONS.md "Logos for the Muni and RedTail", "Logos for Shorty's and the Preserve".
 
 -   **Next task:** Item 1 of the player improvements (swing coach) is on
     `design/coach`, unmerged. Also: the third playtest (putting, yellow

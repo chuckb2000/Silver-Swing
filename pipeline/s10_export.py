@@ -117,6 +117,26 @@ def render_map(surf, z_px, trees, world, f, region=None):
     return img
 
 
+def nines_of(spec, numbers: list[int]):
+    """course_config.json "nines" (optional; a club of three or more nines):
+    [{"id": "red", "name": "Red", "holes": [1, 9]}, ...] with "holes" a first-last
+    range or a list of the course's hole numbers. Every hole in exactly one nine."""
+    if not spec:
+        return None
+    import re
+    out = []
+    for n in spec:
+        hs = n["holes"]
+        hs = list(range(hs[0], hs[1] + 1)) if len(hs) == 2 and hs[1] - hs[0] > 1 else list(hs)
+        if not re.fullmatch(r"[a-z0-9_]{1,16}", n["id"]):
+            raise SystemExit(f"[s10] nine id {n['id']!r}: lower-case letters, digits and _ only (at most 16)")
+        out.append({"id": n["id"], "name": n.get("name", n["id"]), "holes": hs})
+    flat = [h for n in out for h in n["holes"]]
+    if len(out) < 3 or sorted(flat) != sorted(numbers) or len(set(flat)) != len(flat):
+        raise SystemExit(f"[s10] nines must be three or more and cover every hole once: {flat} vs {numbers}")
+    return out
+
+
 def theme_has_shrubs(theme: str) -> bool:
     """Does the theme draw its own bushes (palettes/<theme>.json "trees": {"shrub": ...})?"""
     pal = ROOT / "assets-src" / "palettes" / f"{theme}.json"
@@ -364,6 +384,9 @@ def main():
         }
         if shared:
             course.update({"group": cfg["id"], "groupName": cfg["name"], "layout": lay.get("short") or lay["name"]})
+        nines = nines_of(lay.get("nines") if shared else cfg.get("nines"), [h["number"] for h in holes])
+        if nines:
+            course["nines"] = nines  # a club of three or more nines: the game offers each pair and each nine
         if theme_has_shrubs(cfg["theme"]):
             course["shrubs"] = f"shrubs_{cfg['theme']}"  # trees.json c: 3 drawn from the theme's own bushes (gorse)
         if cfg.get("practice"):

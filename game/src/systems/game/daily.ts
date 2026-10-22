@@ -5,6 +5,7 @@
 import type { LeaderboardEntry, RoundLength } from '../../save/entry';
 import { hash32, seedFromString } from '../physics/rng';
 import { compareRounds } from '../rules/scoring';
+import type { Nine } from './lengths';
 
 /** The calendar day (yyyy-mm-dd) in the player's own time zone. */
 export function localDay(d: Date = new Date()): string {
@@ -27,7 +28,7 @@ export function weekStart(day: string): string {
   return addDays(day, -dow);
 }
 
-export interface DailyCourse { id: string; holes: number; defaultTee: string; teeSets: string[] }
+export interface DailyCourse { id: string; holes: number; defaultTee: string; teeSets: string[]; nines?: Nine[] }
 
 export interface DailyPlan {
   day: string;
@@ -40,9 +41,10 @@ export interface DailyPlan {
 /**
  * The day's round. Courses take turns in a fixed shuffled order (by a hash of
  * the id); an 18-hole course plays its front nine on even days and its back
- * nine on odd ones. With a roster (src/data/dailyRoster.ts), only the courses
- * in the rotation on that day count, so a course added today changes the
- * daily from its first day on, never today's.
+ * nine on odd ones, a club of three nines one of its nines. With a roster
+ * (src/data/dailyRoster.ts), only the courses in the rotation on that day
+ * count, so a course added today changes the daily from its first day on,
+ * never today's. A course of 13 or 19 holes has no nine and isn't in it.
  */
 export interface DailyPick { courseId: string; length: RoundLength; tee?: string }
 
@@ -54,13 +56,17 @@ export function dailyPlan(day: string, all: DailyCourse[], roster?: Readonly<Rec
     const tee = pick.tee && pc.teeSets.includes(pick.tee) ? pick.tee : pc.teeSets.includes(pc.defaultTee) ? pc.defaultTee : pc.teeSets[0] ?? pc.defaultTee;
     return { day, courseId: pc.id, tee, length: pick.length, seed: seedFromString(`daily:${day}`) };
   }
-  const courses = roster ? all.filter((c) => roster[c.id] !== undefined && roster[c.id] <= day) : all;
+  // nine holes: a course of 9 or 18, or a club's nines; a course of 13 or 19 holes has no nine
+  const nineable = all.filter((c) => c.holes === 9 || c.holes === 18 || (c.nines?.length ?? 0) >= 3);
+  const courses = roster ? nineable.filter((c) => roster[c.id] !== undefined && roster[c.id] <= day) : nineable;
   if (!courses.length) return null;
   const order = courses.slice().sort((a, b) => hash32(seedFromString(a.id)) - hash32(seedFromString(b.id)) || a.id.localeCompare(b.id));
   const n = dayNumber(day);
   const c = order[((n % order.length) + order.length) % order.length];
   const tee = c.teeSets.includes(c.defaultTee) ? c.defaultTee : c.teeSets[0] ?? c.defaultTee;
-  const length: RoundLength = c.holes === 9 ? '9' : n % 2 === 0 ? 'front' : 'back';
+  const nines = (c.nines?.length ?? 0) >= 3 ? c.nines! : null;
+  const length: RoundLength = nines ? `nines:${nines[((n % nines.length) + nines.length) % nines.length].id}`
+    : c.holes === 9 ? '9' : n % 2 === 0 ? 'front' : 'back';
   return { day, courseId: c.id, tee, length, seed: seedFromString(`daily:${day}`) };
 }
 

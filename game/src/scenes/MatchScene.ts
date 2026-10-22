@@ -15,7 +15,7 @@ import { Button, COLORS, Panel, setTxt, txt } from '../ui/widgets';
 import { courseVersion, flagTab, forgetMatch, LiveMatch, matchInfo, MatchInfo, matchLink, myMatches, parseMatchCode, reportMatch } from '../match/live';
 import { PROTOCOL, RULES } from '../systems/match/types';
 import { lengthOf } from '../systems/game/lengths';
-import { hasName, lengthLabel, useCourse } from './flow';
+import { hasName, lengthLabel, shapeById, useCourse } from './flow';
 import { ensureBg, MenuScene } from './menu';
 
 type Mode =
@@ -36,7 +36,7 @@ export function playMatch(scene: Phaser.Scene, live: LiveMatch) {
 /** "oswego lake · 18 holes · blue tees · normal" */
 function matchLine(i: { courseId: string; holes: number[]; tee: string; difficulty: string }): string {
   const c = app.courses.find((k) => k.id === i.courseId);
-  const len = lengthLabel(lengthOf(i.holes, c?.holes ?? 18));
+  const len = lengthLabel(lengthOf(i.holes, c?.holes ?? 18), shapeById(i.courseId));
   return `${c ? shortName(c.name) : i.courseId}  ·  ${len}  ·  ${i.tee.toLowerCase()} tees  ·  ${i.difficulty}`;
 }
 
