@@ -33,8 +33,6 @@ the error text.
 ### 0. OSM, and a check of the box (Overpass Turbo, save as `overpass.geojson`)
 
 Open https://overpass-turbo.eu, replace the text on the left with this, click
-**Run**. Before exporting, look at the map: the course (south-west of Lakeridge
-High School area, beside the aquatics center) should sit well inside the shaded
 **Run**. Before exporting, look at the map: the course and the aquatics center
 should sit well inside the shaded box. If they don't, stop and send the course's
 coordinates (right-click it in any map, copy lat/lon); the links below will be
