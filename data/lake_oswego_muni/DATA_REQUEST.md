@@ -117,7 +117,27 @@ Rename them `osip_nw.jpg`, `osip_ne.jpg`, `osip_sw.jpg`, `osip_se.jpg` if you ca
 
 ## Received
 
-(filled in when the files arrive: asset, SHA-256, use)
+2026-10-22, release `muni-data`:
+
+| Release asset (`muni-data`) | SHA-256 (first 16) | What it is | Use |
+|---|---|---|---|
+| `export.geojson` | bc0f2288e6dc9f32 | Overpass export, second box | `raw/overpass.geojson`. Contents: the city's golf property (way 60087783, `leisure=golf_course`, 424 x 518 m, includes the aquatics center) and the old driving range (way 424601504); no other golf features |
+| `exportImage.12.tiff` | a6a2a9408bc66265 | DOGAMI canopy height (ft), second box | clipped to `raw/dogami_chm_ft.tif` |
+| `exportImage.13.tiff` | a6a2a9408bc66265 | same file as .12 | not used; the second-box DTM is missing (asked again 2026-10-22) |
+| `exportImage.10.tiff` | 812a521d1a801671 | DOGAMI DTM (ft), first box | not used (misses the course) |
+| `exportImage.11.tiff` | 469dd5f845f5cb3c | DOGAMI canopy height (ft), first box | not used |
+| `muni.25.jpg` | 62180aa5aa8ba200 | OSIP 2024 north-west quarter | `raw/osip_src/`, mosaicked into `raw/osip2024_032m.tif` |
+| `muni.26.jpg` | 00d6d5e84f7eea55 | OSIP 2024 north-east quarter | as above |
+| `muni.27.jpg` | 874efd970844f4c5 | OSIP 2024 south-west quarter | as above |
+| `muni.28.jpg` | 8b021f2f073b89ab | OSIP 2024 south-east quarter | as above |
+| `muni.21.jpg` | 380926e3a4da8cea | OSIP 2024 quarter, first box | not used |
+| `muni.24.jpg` | 5bdfd6cab4a2457a | OSIP 2024 quarter, first box | not used |
+| `exportImage.jpg` | 471f999a8467dc53 | OSIP 2024 quarter, first box | not used |
+| `map.2.osm` | e0fa70024575a6c8 | openstreetmap.org export | not used (the Overpass GeoJSON is preferred) |
+| `LOGC_SITE.PLAN_5-19-21.pdf` | de5c1b3214ec9818 | the course's 2021 site plan (routing, tees, 9-hole card 1,610 yd) | hole identity only (look only) |
+| `Screenshot.2026-10-22.122955.png` | 94bdcb934f93e060 | the city's course map | hole identity only (look only) |
+| `Screenshot.2026-10-22.1212*.png (6)` | see release | Google Earth historical imagery, Sep 2025 to Aug 2026 | look only so far; tracing from them would be tagged `source=google` |
+
 
 - 2026-10-22, lidar date (step 3, pasted by the developer): at the box centre
   (x 526375, y 5027442, the first box; Metro 2019 covers the whole metro area) the DOGAMI mosaic's top source is
