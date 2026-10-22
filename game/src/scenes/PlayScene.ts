@@ -113,6 +113,12 @@ export class PlayScene extends Phaser.Scene {
   private ballHidden = false;
   private holing = false;
   private fading = false;
+  /**
+   * The swing was started (button, space, click) while the camera was still moving to the shot (a cut or
+   * a zoom): the meter starts as soon as it stops, instead of the tap being lost (developer, 2026-10-22:
+   * "the game is occasionally missing clicks").
+   */
+  private queuedTap = false;
   private zooming = false;
   private flagFrame = 0;
   private flagTimer = 0;
@@ -185,6 +191,7 @@ export class PlayScene extends Phaser.Scene {
     this.fading = false;
     // a scene object is reused from round to round: nothing from the last one carries over
     this.zooming = false;
+    this.queuedTap = false;
     this.drag = null;
     this.preroll = null;
     this.explore = false;
@@ -461,8 +468,17 @@ export class PlayScene extends Phaser.Scene {
         const f = this.aimFraming();
         this.rig.jump(f.x, f.y);
         this.slopeDirty = true;
+        this.transitionDone();
       },
     });
+  }
+
+  /** A cut or a zoom has finished: a swing tapped during it starts now. */
+  private transitionDone() {
+    if (!this.queuedTap || this.fading || this.zooming) return;
+    this.queuedTap = false;
+    // still the shot it was meant for, and nothing open over it
+    if (this.state === 'aim' && !this.hud.modalOpen()) this.tap(performance.now());
   }
 
   /** Camera zoom level; small sprites keep their on-screen size (1/level scale, pixel exact). */
@@ -484,7 +500,7 @@ export class PlayScene extends Phaser.Scene {
     cam.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, () => {
       fn();
       cam.fadeIn(inMs, ...FADE_RGB);
-      cam.once(Phaser.Cameras.Scene2D.Events.FADE_IN_COMPLETE, () => { this.fading = false; });
+      cam.once(Phaser.Cameras.Scene2D.Events.FADE_IN_COMPLETE, () => { this.fading = false; this.transitionDone(); });
     });
   }
 
@@ -680,7 +696,12 @@ export class PlayScene extends Phaser.Scene {
 
   /** Swing button / space / click: start, power, accuracy. The view stays where it is. */
   tap(ts: number) {
-    if (this.fading || this.zooming) return;
+    if (this.fading || this.zooming) {
+      // the camera is still on its way to the shot: the swing starts when it gets there
+      if (this.state === 'aim') this.queuedTap = true;
+      return;
+    }
+    this.queuedTap = false;
     if (this.state === 'aim') {
       this.drag = null;
       this.pose = 'address';

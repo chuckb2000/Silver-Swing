@@ -602,6 +602,11 @@ DECISIONS.md with the reason.
     (`/api/scores?id=` for "recent"); "this week" lists a player's rounds.
     DECISIONS.md "Scorecards from the daily and recent lists".
 
+-   **Missed clicks (design chat, 2026-10-22):** branch `fix/missed-clicks`,
+    unmerged: a swing tapped during a camera cut or zoom starts when the camera
+    arrives (it was dropped); a button let go within 6 game px of its edge still
+    counts. DECISIONS.md "Missed clicks".
+
 -   **Next task:** Item 1 of the player improvements (swing coach) is on
     `design/coach`, unmerged. Also: the third playtest (putting, yellow
     misses), the club's printed scorecard and the hole 3 Blue tee box. New
