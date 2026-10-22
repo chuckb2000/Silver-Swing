@@ -51,8 +51,10 @@ design chat. Keep building everything that doesn't depend on it.
 
 ### 0.1 Sharing the code between chats
 
-The repository is **`chuckb2000/silver-swing`** on GitHub (private; default
-branch `main`). Attach it to the session and clone it. Work on a branch named
+The repository is **`chuckb2000/Silver-Swing`** on GitHub (private; default
+branch `main`; GitHub renamed it from `silver-swing`, which still redirects: an
+older clone can switch with `git remote set-url origin
+https://github.com/chuckb2000/Silver-Swing.git`). Attach it to the session and clone it. Work on a branch named
 `course/<id>`, push it, and open a pull request into `main`; the developer
 merges it. Before starting and before handing off, fetch `main` and rebase on
 it. Never push to `main` yourself.
