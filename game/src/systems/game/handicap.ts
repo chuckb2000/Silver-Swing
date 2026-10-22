@@ -163,10 +163,13 @@ export function ownHcpRounds<T extends HcpRound>(rounds: T[], playerName: string
 }
 
 /** The handicap view of the course list (courses without ratings drop out). */
-export function hcpCourses(list: { id: string; holes: number; pars?: number[]; si?: number[]; ratings?: Record<string, [number, number]> }[]): Map<string, HcpCourse> {
+export function hcpCourses(list: { id: string; holes: number; nines?: unknown[]; pars?: number[]; si?: number[]; ratings?: Record<string, [number, number]> }[]): Map<string, HcpCourse> {
   const m = new Map<string, HcpCourse>();
   for (const c of list) {
     if (!c.pars || !c.si || !c.ratings || !Object.keys(c.ratings).length) continue;
+    // only courses of 9 or 18 holes: a 13- or 19-hole course has no rating for a nine or an 18, and a
+    // club of three nines is rated per pair of nines, which the course list doesn't keep (yet)
+    if ((c.holes !== 9 && c.holes !== 18) || (c.nines?.length ?? 0) >= 3) continue;
     m.set(c.id, { id: c.id, holes: c.holes, pars: c.pars, si: c.si, ratings: c.ratings });
   }
   return m;

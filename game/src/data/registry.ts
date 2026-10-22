@@ -5,7 +5,9 @@ export interface CourseInfo {
   name: string;
   location: string;
   theme: string;
-  holes: number;      // 9 or 18
+  holes: number;      // 9 or 18 (or 13, 19, 27...)
+  /** a club of three or more nines (course.json `nines`) */
+  nines?: { id: string; name: string; holes: number[] }[];
   par: number;
   defaultTee: string;
   totalYd: number;

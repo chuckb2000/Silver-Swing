@@ -3,7 +3,7 @@
 // extra holes on a line under it.
 
 import Phaser from 'phaser';
-import { cardBlocks } from '../systems/game/lengths';
+import { cardBlocks, lengthOf } from '../systems/game/lengths';
 import { courseHoleFor } from '../systems/game/round';
 import type { MatchSession } from '../systems/match/session';
 import { holeNo, isExtra, ordinal, statusText } from '../systems/match/rules';
@@ -15,7 +15,7 @@ export function matchCard(scene: Phaser.Scene, ms: MatchSession, me: Seat | null
   const s = ms.state;
   const holes = ms.course.json.holes;
   const n = holes.length;
-  const blocks = cardBlocks(s.cfg.holes, n);
+  const blocks = cardBlocks(lengthOf(s.cfg.holes, n), s.cfg.holes, n);
   const cellW = W < 330 ? 19 : 21;
   const labelW = 46, sumW = 24;
   const tw = labelW + cellW * 9 + sumW + 2;

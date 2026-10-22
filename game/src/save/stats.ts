@@ -4,6 +4,7 @@
 // on the shared board).
 
 import type { LeaderboardEntry } from './entry';
+import { isFullRound } from '../systems/game/lengths';
 import { compareRounds } from '../systems/rules/scoring';
 
 export interface CourseStats {
@@ -27,7 +28,7 @@ export interface PlayerStats {
   courses: CourseStats[];
 }
 
-const is18 = (e: LeaderboardEntry) => e.length === '18' || e.length === '9x2';
+const is18 = (e: LeaderboardEntry) => isFullRound(e.length);
 const avg = (v: number[]) => (v.length ? v.reduce((a, b) => a + b, 0) / v.length : null);
 
 /** Rounds of one player, each once (the same round from this device and the shared board). */
@@ -56,8 +57,9 @@ export function playerStats(all: LeaderboardEntry[], recentN = 10): PlayerStats 
     byCourse.get(e.course)!.push(e);
   }
   const courses: CourseStats[] = [...byCourse.entries()].map(([course, list]) => {
-    const r18 = list.filter(is18), r9 = list.filter((e) => !is18(e));
-    const best = (r18.length ? r18 : r9).slice().sort(compareRounds)[0] ?? null;
+    // other sizes (13 or 19 holes) count in "rounds" and the best of last resort, not in the averages
+    const r18 = list.filter(is18), r9 = list.filter((e) => !is18(e) && e.scores.length === 9);
+    const best = (r18.length ? r18 : r9.length ? r9 : list).slice().sort(compareRounds)[0] ?? null;
     return {
       course, rounds: list.length,
       avg18: avg(r18.map((e) => e.gross)), avg9: avg(r9.map((e) => e.gross)),

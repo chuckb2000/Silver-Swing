@@ -50,6 +50,8 @@ export interface CourseJson {
   maps: { overview: string; overviewMPerPx: number; holes: MinimapJson[] };
   wind?: { minMph: number; maxMph: number };
   greenViews?: GreenViewJson[];
+  /** a club of three or more nines: each nine's id, name and course holes (lengths.ts) */
+  nines?: { id: string; name: string; holes: number[] }[];
   /** the theme's own bush sheet for trees.json c: 3 (gorse and the like), instead of the flowering shrubs */
   shrubs?: string;
 }

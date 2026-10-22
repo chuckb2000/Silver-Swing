@@ -19,16 +19,28 @@ import { shortName } from '../save/milestones';
 
 export { holesFor, lengthLabel, lengthOf, lengthsFor } from '../systems/game/lengths';
 export type { RoundLength } from '../save/entry';
-import { holesFor, lengthOf } from '../systems/game/lengths';
+import { lengthOf, planFor, shapeOfCourse } from '../systems/game/lengths';
 import type { RoundLength } from '../save/entry';
+
+/** A listed course's shape (holes, nines) for round-length labels, if it is on the list. */
+export function shapeById(id: string) {
+  const c = app.courses.find((x) => x.id === id);
+  return c ? shapeOfCourse(c) : undefined;
+}
 
 /** Start a round on the current course; `daily` fixes everything but the hand from the date (daily round). */
 export function startRound(scene: Phaser.Scene, len: RoundLength, daily?: DailyPlan) {
   const s = app.settings;
+  const length = daily ? daily.length : len;
+  const plan = planFor(length, shapeOfCourse(app.course!.json));
+  const n = app.course!.json.holes.length;
   const cfg: RoundConfig = {
     courseId: app.course!.json.id,
     tee: daily ? daily.tee : teeFor(app.course!.json, s.tees),
-    holes: holesFor(daily ? daily.length : len),
+    holes: plan.slots,
+    length,
+    // the course hole of each slot, only where it isn't the usual one (a club's nines)
+    ...(plan.slots.some((h, i) => plan.courseHoles[i] !== courseHoleFor(h, n)) ? { courseHoles: plan.courseHoles } : {}),
     playerName: s.playerName || 'player',
     seed: daily ? daily.seed : newSeed(),
     settings: daily
@@ -38,8 +50,7 @@ export function startRound(scene: Phaser.Scene, len: RoundLength, daily?: DailyP
     ...(daily ? { daily: daily.day } : {}),
   };
   // a pin for every hole, mixed front / middle / back and easy / medium / hard (pins.ts)
-  const n = app.course!.json.holes.length;
-  cfg.pins = roundPins(app.course!, cfg.tee, cfg.holes.map((h) => courseHoleFor(h, n)), cfg.seed);
+  cfg.pins = roundPins(app.course!, cfg.tee, plan.courseHoles, cfg.seed);
   app.round = new Round(app.course!, cfg);
   app.round.startHole(0);
   void clearSnapshot();
@@ -140,7 +151,7 @@ export async function finishRound(scene: Phaser.Scene) {
     id: roundId(r.cfg),
     course: r.cfg.courseId,
     tee: r.cfg.tee,
-    length: lengthOf(r.cfg.holes, r.course.json.holes.length),
+    length: r.cfg.length ?? lengthOf(r.cfg.holes, r.course.json.holes.length),
     difficulty: r.cfg.settings.difficulty,
     casual: isCasual(r.cfg.settings),
     player: r.cfg.playerName,
@@ -150,6 +161,7 @@ export async function finishRound(scene: Phaser.Scene) {
     back: tot.back,
     scores: r.scores,
     totals: tot,
+    ...(r.cfg.courseHoles ? { holes: r.cfg.courseHoles } : {}),
   };
   // the daily round counts once a day: a second go on this device is an ordinary round (the server checks the player code too)
   if (r.cfg.daily && !(await loadBoard()).some((b) => b.daily === r.cfg.daily && b.player === entry.player)) entry.daily = r.cfg.daily;

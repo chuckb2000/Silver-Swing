@@ -89,6 +89,17 @@ test('a swing tapped while the camera is still moving to the shot starts when th
   const b = await buttonBox(page, 'hud', 'swing');
   await settle(page);
 
+  // count the meter's starts (a slow test machine can see a swing come and go between two looks)
+  await page.evaluate(() => {
+    const ps = window.__game.scene.getScene('play'), w = window as any;
+    const start = ps.startMeter.bind(ps);
+    w.__meters = 0;
+    ps.startMeter = (ts: number) => { w.__meters++; return start(ts); };
+  });
+  const playState = () => page.evaluate(() => {
+    const ps = window.__game.scene.getScene('play');
+    return { state: ps.state, fading: ps.fading, zooming: ps.zooming, queued: ps.queuedTap, modal: ps.hud.modalOpen(), meters: (window as any).__meters };
+  });
   // a slow camera cut (as between practice stations, held long enough to tap in it)
   await page.evaluate(() => window.__game.scene.getScene('play').cut(() => {}, 1500, 1500));
   expect(await page.evaluate(() => window.__game.scene.getScene('play').fading)).toBe(true);
@@ -97,11 +108,16 @@ test('a swing tapped while the camera is still moving to the shot starts when th
   await page.waitForFunction(() => window.__game.scene.getScene('play').queuedTap === true, null, { timeout: 10_000 });
   expect(await page.evaluate(() => window.__game.scene.getScene('play').state)).toBe('aim');
   // the cut ends: the meter starts
-  await page.waitForFunction(() => window.__game.scene.getScene('play').state === 'swing', null, { timeout: 20_000 });
+  await page.waitForFunction(() => (window as any).__meters === 1, null, { timeout: 20_000 })
+    .catch(async (e) => { throw new Error(`the meter didn't start after the cut: ${JSON.stringify(await playState())} (${e})`); });
   expect(await page.evaluate(() => window.__game.scene.getScene('play').queuedTap)).toBe(false);
 
-  // the same with the space bar, during a zoom
+  // the same with the space bar, during a zoom (back to aiming first: the swing may have gone on its own)
   await page.evaluate(() => window.__game.scene.getScene('play').cancelSwing());
+  await page.waitForFunction(() => {
+    const ps = window.__game.scene.getScene('play');
+    return ps.state === 'aim' && !ps.fading && !ps.zooming;
+  }, null, { timeout: 60_000 });
   await page.evaluate(() => { window.__game.scene.getScene('play').zooming = true; });
   await page.keyboard.press('Space');
   await page.waitForFunction(() => window.__game.scene.getScene('play').queuedTap === true, null, { timeout: 10_000 });

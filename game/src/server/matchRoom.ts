@@ -127,7 +127,7 @@ export interface MatchResult {
   finished: true;
   courseId: string;
   tee: string;
-  /** holes in the round (9 or 18) */
+  /** holes in the round (9, 18, or a course of 13 or 19 played all at once) */
   holes: number;
   /** holes played (19: won at the 19th) */
   played: number;

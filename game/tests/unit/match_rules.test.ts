@@ -401,8 +401,8 @@ describe('match play: what the server accepts', () => {
     expect(cleanAction({ t: 'claim', turn: 0 })).toBeNull();
     expect(cleanAction({ t: 'slow', hole: 2, turn: 7, by: 1 })).toEqual({ t: 'slow', hole: 2, turn: 7 });
     expect(cleanAction({ t: 'claim', turn: 7, hole: 3 })).toEqual({ t: 'claim', turn: 7 });
-    expect(cleanAction({ t: 'ready', hole: 53 })).toEqual({ t: 'ready', hole: 53 }); // extra holes
-    expect(cleanAction({ t: 'ready', hole: 54 })).toBeNull();
+    expect(cleanAction({ t: 'ready', hole: 54 })).toEqual({ t: 'ready', hole: 54 }); // extra holes (after a 19-hole course's 19)
+    expect(cleanAction({ t: 'ready', hole: 55 })).toBeNull();
   });
 });
 
@@ -420,6 +420,12 @@ describe('match play: the settings a match is made with', () => {
     expect(code(() => made({ ...cfg(), startedAt: 'yesterday' }))).toBe('bad_config');
     expect(code(() => made({ ...cfg(), courseVersion: '' }))).toBe('bad_config');
     expect(code(() => made({ ...cfg(), holes: [0] , pins: [PIN] }))).toBe('bad_config');
+    expect(code(() => made(cfg(20)))).toBe('bad_config');
+  });
+  it('take a course of 13 or 19 holes played all at once (hole counts, 2026-10-22)', () => {
+    expect(made(cfg(13)).cfg.holes).toHaveLength(13);
+    expect(made(cfg(19)).cfg.holes).toHaveLength(19);
+    expect(holesLeft(made(cfg(19)))).toBe(19);
   });
 });
 
