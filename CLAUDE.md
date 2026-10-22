@@ -603,9 +603,16 @@ DECISIONS.md with the reason.
     DECISIONS.md "Scorecards from the daily and recent lists".
 
 -   **Missed clicks (design chat, 2026-10-22):** branch `fix/missed-clicks`,
-    unmerged: a swing tapped during a camera cut or zoom starts when the camera
+    merged 2026-10-22 (developer: "merge everything"): a swing tapped during a camera cut or zoom starts when the camera
     arrives (it was dropped); a button let go within 6 game px of its edge still
     counts. DECISIONS.md "Missed clicks".
+
+-   **Logos ahead of their courses (design chat, 2026-10-22):** the Muni
+    (`lake_oswego_muni`, a sailboat), RedTail (`redtail`, a fox), Shorty's
+    (`shortys`, a spotted fawn) and Bandon Preserve (`bandon_preserve`, salal),
+    merged 2026-10-22; the developer chose these over the course chats' own. The
+    ids are assumed: a course built under another id renames its two files.
+    DECISIONS.md "Logos for the Muni and RedTail", "Logos for Shorty's and the Preserve".
 
 -   **Next task:** Item 1 of the player improvements (swing coach) is on
     `design/coach`, unmerged. Also: the third playtest (putting, yellow
