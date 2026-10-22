@@ -1,0 +1,41 @@
+{
+ "add": [
+  {
+   "from": "proposed/greens_split.geojson",
+   "ids": [
+    "p_green_6",
+    "p_green_18",
+    "p_green_9",
+    "p_green_13"
+   ],
+   "reason": "the double greens of holes 6/18 (w1547559707) and 9/13 (w1547581185), cut by the perpendicular bisector of the two holes' OSM line ends (make_proposals.py), so each hole has its own centre, pin and putting views; PROPOSAL, shown in the tracing desk 2026-10-22"
+  }
+ ],
+ "tags": [
+  {
+   "osm": "w1547585702",
+   "set": {
+    "par": "3"
+   },
+   "reason": "hole 5's OSM line has no par; every hole at Shorty's is a par 3 (First Call Golf 2024-05-11, GCA; the card lists 19 holes of 51-161 yd)"
+  },
+  {
+   "osm": "w1547585704",
+   "set": {
+    "par": "3"
+   },
+   "reason": "hole 7's OSM line says par 4; every hole at Shorty's is a par 3 (114 yd from the back tee)"
+  }
+ ],
+ "drop": [
+  {
+   "osm": "w1547559707",
+   "reason": "replaced by its two parts (add above)"
+  },
+  {
+   "osm": "w1547581185",
+   "reason": "replaced by its two parts (add above)"
+  }
+ ],
+ "extend_start": []
+}

@@ -63,9 +63,7 @@
     "Orthophoto: Oregon Statewide Imagery Program 2024 (gorse, tree and tee checks)",
     "Scorecard: Bandon Dunes Golf Resort (club scorecard)"
   ],
-  "notes": "Intake 2026-10-22 (built with Shorty's from shared downloads, release bandon-par-threes-data). Standing defaults (COURSE_BUILD.md 4.1): back tees (no Blue), all water red, OB = the OSM course polygon, trees from lidar with trees_off_fairways_m 2; wind 8-16 mph as the developer set for Bandon Dunes; theme bandon_dunes with gorse from the 2024 photo, as at Bandon Dunes. Provisional until the rasters arrive; lake_level_max_m / cliff keys copied from Old Macdonald, to be checked against this DTM.",
-  "lake_level_max_m": 1.3,
-  "cliff_sand_slope_pct": 45,
+  "notes": "Intake 2026-10-22 (built with Shorty's from shared downloads, release bandon-par-threes-data). Standing defaults (COURSE_BUILD.md 4.1): back tees (no Blue), all water red, OB = the OSM course polygon, trees from lidar with trees_off_fairways_m 2; wind 8-16 mph as the developer set for Bandon Dunes; theme bandon_dunes with gorse from the 2024 photo, as at Bandon Dunes.",
   "tree_type": "conifer",
   "tree_type_note": "the trees on the bluffs at Bandon are shore pine (and Sitka spruce in the hollows), whose broad wind-flattened crowns the crown-shape rule calls deciduous; the broadleaf scrub is drawn as gorse (as at Bandon Dunes)",
   "gorse": {

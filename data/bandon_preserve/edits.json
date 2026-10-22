@@ -1,0 +1,262 @@
+{
+ "note": "Edits to the OSM layout for Bandon Preserve, written by make_edits.py (generic resort edits, then course_edits.json); built into edited/course.geojson by pipeline/merge_edits.py.",
+ "add": [
+  {
+   "from": "proposed/paths_as_cartpaths.geojson",
+   "ids": [
+    "w832462832_cartpath",
+    "w832462833_cartpath"
+   ],
+   "reason": "2 golf=path ways inside the boundary, not read by s01: copied as golf=cartpath (free relief, drawn as paths)"
+  },
+  {
+   "from": "proposed/boundary.geojson",
+   "ids": [
+    "p_boundary"
+   ],
+   "reason": "OSM's Bandon Preserve polygon (w674855473) traces only the mown turf: holes 4-13 tee off outside it and the dunes between holes would be out of bounds. Grown to take in the tees and the dunes between the holes (make_proposals.py); PROPOSAL, shown in the tracing desk 2026-10-22"
+  }
+ ],
+ "tags": [
+  {
+   "osm": "w266664506",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "Round Lake (golf=lateral_water_hazard): every penalty area red (standing default)"
+  },
+  {
+   "osm": "w675560578",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "unnamed (golf=lateral_water_hazard): every penalty area red (standing default)"
+  },
+  {
+   "osm": "w675560579",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "unnamed (golf=lateral_water_hazard): every penalty area red (standing default)"
+  }
+ ],
+ "drop": [
+  {
+   "osm": "w1540940976",
+   "reason": "Shortys (leisure=golf_course): another course of the resort; the out-of-bounds line is this course's own polygon"
+  },
+  {
+   "osm": "w362513476",
+   "reason": "Bandon Trails (leisure=golf_course): another course of the resort; the out-of-bounds line is this course's own polygon"
+  },
+  {
+   "osm": "w362513477",
+   "reason": "Bandon Dunes Golf Resort (Bandon Dunes, Pacific Dunes and Old Macdonald) (leisure=golf_course): another course of the resort; the out-of-bounds line is this course's own polygon"
+  },
+  {
+   "osm": "w1111086161",
+   "reason": "Bandon Trails Hole 1 (ref 1): another course's hole line; its surfaces stay as mapped"
+  },
+  {
+   "osm": "w1547585702",
+   "reason": "an unnamed line (ref 5): another course's hole line; its surfaces stay as mapped"
+  },
+  {
+   "osm": "w1547585703",
+   "reason": "an unnamed line (ref 6): another course's hole line; its surfaces stay as mapped"
+  },
+  {
+   "osm": "w1547585704",
+   "reason": "an unnamed line (ref 7): another course's hole line; its surfaces stay as mapped"
+  },
+  {
+   "osm": "w1547585705",
+   "reason": "an unnamed line (ref 8): another course's hole line; its surfaces stay as mapped"
+  },
+  {
+   "osm": "w1547585706",
+   "reason": "an unnamed line (ref 9): another course's hole line; its surfaces stay as mapped"
+  },
+  {
+   "osm": "w1547585707",
+   "reason": "an unnamed line (ref 10): another course's hole line; its surfaces stay as mapped"
+  },
+  {
+   "osm": "w1547585708",
+   "reason": "an unnamed line (ref 11): another course's hole line; its surfaces stay as mapped"
+  },
+  {
+   "osm": "w1547585709",
+   "reason": "an unnamed line (ref 12): another course's hole line; its surfaces stay as mapped"
+  },
+  {
+   "osm": "w1547585710",
+   "reason": "an unnamed line (ref 13): another course's hole line; its surfaces stay as mapped"
+  },
+  {
+   "osm": "w1547585711",
+   "reason": "an unnamed line (ref 14): another course's hole line; its surfaces stay as mapped"
+  },
+  {
+   "osm": "w1547585713",
+   "reason": "an unnamed line (ref 15): another course's hole line; its surfaces stay as mapped"
+  },
+  {
+   "osm": "w1547585714",
+   "reason": "an unnamed line (ref 16): another course's hole line; its surfaces stay as mapped"
+  },
+  {
+   "osm": "w1547585715",
+   "reason": "an unnamed line (ref 17): another course's hole line; its surfaces stay as mapped"
+  },
+  {
+   "osm": "w1547585716",
+   "reason": "an unnamed line (ref 18): another course's hole line; its surfaces stay as mapped"
+  },
+  {
+   "osm": "w674855474",
+   "reason": "Bandon Trails Hole 18 (ref 18): another course's hole line; its surfaces stay as mapped"
+  },
+  {
+   "osm": "w675015133",
+   "reason": "Bandon Trails Hole 2 (ref 2): another course's hole line; its surfaces stay as mapped"
+  },
+  {
+   "osm": "w675062692",
+   "reason": "Bandon Trails Hole 6 (ref 6): another course's hole line; its surfaces stay as mapped"
+  },
+  {
+   "osm": "w675497579",
+   "reason": "Bandon Trails Hole 3 (ref 3): another course's hole line; its surfaces stay as mapped"
+  },
+  {
+   "osm": "w675499035",
+   "reason": "Bandon Trails Hole 4 (ref 4): another course's hole line; its surfaces stay as mapped"
+  },
+  {
+   "osm": "w675531739",
+   "reason": "Bandon Trails Hole 5 (ref 5): another course's hole line; its surfaces stay as mapped"
+  },
+  {
+   "osm": "w675531781",
+   "reason": "Bandon Trails Hole 7 (ref 7): another course's hole line; its surfaces stay as mapped"
+  },
+  {
+   "osm": "w675560584",
+   "reason": "Bandon Trails Hole 11 (ref 11): another course's hole line; its surfaces stay as mapped"
+  },
+  {
+   "osm": "w675667290",
+   "reason": "Bandon Trails Hole 16 (ref 16): another course's hole line; its surfaces stay as mapped"
+  },
+  {
+   "osm": "w675667303",
+   "reason": "Bandon Trails Hole 17 (ref 17): another course's hole line; its surfaces stay as mapped"
+  },
+  {
+   "osm": "w676390138",
+   "reason": "Bandon Dunes Hole 10 (ref 10): another course's hole line; its surfaces stay as mapped"
+  },
+  {
+   "osm": "w676390154",
+   "reason": "Bandon Dunes Hole 11 (ref 11): another course's hole line; its surfaces stay as mapped"
+  },
+  {
+   "osm": "w676398216",
+   "reason": "Bandon Dunes Hole 13 (ref 13): another course's hole line; its surfaces stay as mapped"
+  },
+  {
+   "osm": "w676398258",
+   "reason": "Bandon Dunes Hole 14 (ref 14): another course's hole line; its surfaces stay as mapped"
+  },
+  {
+   "osm": "w676400567",
+   "reason": "Bandon Dunes Hole 15 (ref 15): another course's hole line; its surfaces stay as mapped"
+  },
+  {
+   "osm": "w676407818",
+   "reason": "Bandon Dunes Hole 16 (ref 16): another course's hole line; its surfaces stay as mapped"
+  },
+  {
+   "osm": "w676412407",
+   "reason": "Bandon Dunes Hole 17 (ref 17): another course's hole line; its surfaces stay as mapped"
+  },
+  {
+   "osm": "w676412460",
+   "reason": "Bandon Dunes Hole 18 (ref 18): another course's hole line; its surfaces stay as mapped"
+  },
+  {
+   "osm": "w1547559701",
+   "reason": "another course's green wholly outside the world box (s07/s09 cannot shape a green off the map)"
+  },
+  {
+   "osm": "w1547559707",
+   "reason": "another course's green wholly outside the world box (s07/s09 cannot shape a green off the map)"
+  },
+  {
+   "osm": "w1547578366",
+   "reason": "another course's green wholly outside the world box (s07/s09 cannot shape a green off the map)"
+  },
+  {
+   "osm": "w1547581182",
+   "reason": "another course's green wholly outside the world box (s07/s09 cannot shape a green off the map)"
+  },
+  {
+   "osm": "w1547581185",
+   "reason": "another course's green wholly outside the world box (s07/s09 cannot shape a green off the map)"
+  },
+  {
+   "osm": "w1547581190",
+   "reason": "another course's green wholly outside the world box (s07/s09 cannot shape a green off the map)"
+  },
+  {
+   "osm": "w1547584770",
+   "reason": "another course's green wholly outside the world box (s07/s09 cannot shape a green off the map)"
+  },
+  {
+   "osm": "w1547584777",
+   "reason": "another course's green wholly outside the world box (s07/s09 cannot shape a green off the map)"
+  },
+  {
+   "osm": "w1547584783",
+   "reason": "another course's green wholly outside the world box (s07/s09 cannot shape a green off the map)"
+  },
+  {
+   "osm": "w1547585712",
+   "reason": "another course's green wholly outside the world box (s07/s09 cannot shape a green off the map)"
+  },
+  {
+   "osm": "w675015127",
+   "reason": "another course's green wholly outside the world box (s07/s09 cannot shape a green off the map)"
+  },
+  {
+   "osm": "w675096156",
+   "reason": "another course's green wholly outside the world box (s07/s09 cannot shape a green off the map)"
+  },
+  {
+   "osm": "w675560582",
+   "reason": "another course's green wholly outside the world box (s07/s09 cannot shape a green off the map)"
+  },
+  {
+   "osm": "w675667288",
+   "reason": "another course's green wholly outside the world box (s07/s09 cannot shape a green off the map)"
+  },
+  {
+   "osm": "w888289376",
+   "reason": "another course's green wholly outside the world box (s07/s09 cannot shape a green off the map)"
+  },
+  {
+   "osm": "w832462832",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w832462833",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w674855473",
+   "reason": "replaced by the grown boundary (add above); its area is kept as the mown turf (fairway proposals)"
+  }
+ ],
+ "extend_start": []
+}
