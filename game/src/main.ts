@@ -15,6 +15,7 @@ import { MatchScene } from './scenes/MatchScene';
 import { applyScale, computeLayout, setLayout } from './scale';
 import { installAutoplay } from './dev/autoplay';
 import { registerOffline } from './save/offline';
+import { installMusic } from './audio/music';
 
 const layout = computeLayout();
 setLayout(layout);
@@ -46,3 +47,5 @@ game.events.once('ready', () => applyScale(game));
 // the robot golfer is for the tests only (page address ?autoplay); not a way for anyone to post rounds
 if (import.meta.env.DEV || new URLSearchParams(window.location.search).has('autoplay')) installAutoplay(game);
 registerOffline();
+// the music: from the first tap or key, in the menus and in rounds
+installMusic();
