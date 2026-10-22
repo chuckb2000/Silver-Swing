@@ -624,6 +624,11 @@ DECISIONS.md with the reason.
     ids are assumed: a course built under another id renames its two files.
     DECISIONS.md "Logos for the Muni and RedTail", "Logos for Shorty's and the Preserve".
 
+-   **A finished match's card (design chat, 2026-10-22):** branch
+    `fix/match-card`, unmerged: a finished match on "your matches" shows its card
+    (`matchCardOf` from the match's log and the course list) instead of loading
+    the course. DECISIONS.md "A finished match opens its card".
+
 -   **Next task:** Item 1 of the player improvements (swing coach) is on
     `design/coach`, unmerged. Also: the third playtest (putting, yellow
     misses), the club's printed scorecard and the hole 3 Blue tee box. New

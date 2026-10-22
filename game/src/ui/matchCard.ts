@@ -3,19 +3,27 @@
 // extra holes on a line under it.
 
 import Phaser from 'phaser';
-import { cardBlocks, holeName, lengthOf, shapeOfCourse } from '../systems/game/lengths';
+import { cardBlocks, CourseShape, holeName, lengthOf, shapeOfCourse } from '../systems/game/lengths';
 import { courseHoleFor } from '../systems/game/round';
 import type { MatchSession } from '../systems/match/session';
 import { holeNo, isExtra, ordinal, statusText } from '../systems/match/rules';
-import type { Seat } from '../systems/match/types';
+import type { MatchState, Seat } from '../systems/match/types';
 import { COLORS, Panel, txt } from './widgets';
 
+/** What the card needs of the course: its name, each course hole's par, and its shape (a club's nines). */
+export interface CardCourse { name: string; pars: number[]; shape: CourseShape }
+
+/** The card of the match being played (its course loaded). */
 export function matchCard(scene: Phaser.Scene, ms: MatchSession, me: Seat | null, W: number, H: number): Phaser.GameObjects.Container {
+  const j = ms.course.json;
+  return matchCardOf(scene, ms.state, { name: j.name, pars: j.holes.map((h) => h.par), shape: shapeOfCourse(j) }, me, W, H);
+}
+
+/** The card of a match from its state alone (a finished match on the list: no course to load). */
+export function matchCardOf(scene: Phaser.Scene, s: MatchState, course: CardCourse, me: Seat | null, W: number, H: number): Phaser.GameObjects.Container {
   const c = scene.add.container(0, 0);
-  const s = ms.state;
-  const holes = ms.course.json.holes;
-  const n = holes.length;
-  const shape = shapeOfCourse(ms.course.json);
+  const n = course.pars.length;
+  const shape = course.shape;
   const blocks = cardBlocks(s.cfg.length ?? lengthOf(s.cfg.holes, n), s.cfg.holes, shape);
   // the course hole of a scorecard hole (a club's nines: not the usual one)
   const courseHoleOf = (h: number) => s.cfg.courseHoles?.[s.cfg.holes.indexOf(h)] ?? courseHoleFor(h, n);
@@ -37,7 +45,7 @@ export function matchCard(scene: Phaser.Scene, ms: MatchSession, me: Seat | null
   const th = blockH * blocks.length + 30 + Math.max(0, tail);
   const y0 = Math.max(4, Math.round((H - th) / 2) - 6);
   c.add(new Panel(scene, x0 - 6, y0 - 4, tw + 12, th + 8, 0.94));
-  c.add(txt(scene, x0, y0, `${ms.course.json.name}  ·  ${s.cfg.tee.toLowerCase()} tees  ·  match play`, { color: COLORS.dim, maxWidth: tw }));
+  c.add(txt(scene, x0, y0, `${course.name}  ·  ${s.cfg.tee.toLowerCase()} tees  ·  match play`, { color: COLORS.dim, maxWidth: tw }));
   // the result and the standing after each hole, by scorecard hole number
   const byHole = new Map<number, { strokes: [number, number]; holed: [boolean, boolean]; winner: Seat | null; up: number }>();
   let up = 0;
@@ -58,11 +66,11 @@ export function matchCard(scene: Phaser.Scene, ms: MatchSession, me: Seat | null
     const won: [number, number] = [0, 0];
     const sum: [number, number] = [0, 0];
     for (let h = a; h <= b; h++) {
-      const hj = holes[courseHoleOf(h) - 1];
+      const par = course.pars[courseHoleOf(h) - 1] ?? 0;
       const cx = x0 + labelW + (h - a) * cellW + cellW / 2;
-      sumPar += hj.par;
+      sumPar += par;
       c.add(txt(scene, cx, yb + 1, String(holeName(h, courseHoleOf(h), shape).num), { origin: [0.5, 0] }));
-      c.add(txt(scene, cx, yb + rowH + 1, String(hj.par), { origin: [0.5, 0], color: COLORS.dim }));
+      c.add(txt(scene, cx, yb + rowH + 1, String(par), { origin: [0.5, 0], color: COLORS.dim }));
       const res = byHole.get(h);
       if (!res) continue;
       lastUp = res.up;

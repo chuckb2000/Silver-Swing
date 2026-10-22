@@ -98,6 +98,25 @@ export async function matchInfo(code: string): Promise<MatchInfo | null> {
   } catch { return null; }
 }
 
+/**
+ * A match's whole log over HTTP (anyone may read it; flights included), for the
+ * card of a finished match: null when the server can't be reached or it's gone.
+ */
+export async function matchLog(code: string): Promise<Logged[] | null> {
+  const out: Logged[] = [];
+  try {
+    for (let since = 0, round = 0; round < 50; round++) {
+      const r = await fetch(`api/match/${code}/events?since=${since}`);
+      if (!r.ok) return null;
+      const j = (await r.json()) as { events: Logged[]; more: boolean };
+      out.push(...j.events);
+      if (!j.more || !j.events.length) return out;
+      since = j.events[j.events.length - 1].seq;
+    }
+    return out;
+  } catch { return null; }
+}
+
 // ------------------------------------------------------------ attention
 // A match in a background tab: the game's loop is paused there (the browser
 // stops its frames), but the line still hears the other player. The tab's

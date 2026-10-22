@@ -1057,3 +1057,12 @@ Not merged (the developer will say when). Design note: docs/reports/multiplayer_
   Douglas firs are drawn as broadleaves). Not done yet.
 - GitHub renamed the repository `chuckb2000/Silver-Swing`; the old name redirects
   (COURSE_BUILD.md 0.1).
+
+## A finished match opens its card (developer, 2026-10-22; branch fix/match-card)
+
+- "When you click on your past match that's been completed it like reopens the course... if a
+  match has been completed it should just open the card." A finished match on "your matches"
+  now shows its card over the list: the match's log over HTTP (`matchLog`), its state
+  (`stateOf`), and the pars from the course list (`matchCardOf`, the same card as in a match),
+  with nothing loaded and no line to the match. A match still being played opens as before.
+- tests/e2e/match_card.spec.ts (two browsers, under wrangler).

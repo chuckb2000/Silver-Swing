@@ -13,7 +13,10 @@ import { saveSettings } from '../save/store';
 import { dialogInput, dialogText, openDialog } from '../ui/domDialog';
 import { askName } from '../ui/nameInput';
 import { Button, COLORS, Panel, setTxt, txt } from '../ui/widgets';
-import { courseVersion, flagTab, forgetMatch, LiveMatch, matchInfo, MatchInfo, matchLink, myMatches, parseMatchCode, reportMatch } from '../match/live';
+import { courseVersion, flagTab, forgetMatch, LiveMatch, matchInfo, MatchInfo, matchLink, matchLog, MyMatch, myMatches, parseMatchCode, reportMatch } from '../match/live';
+import { matchCardOf } from '../ui/matchCard';
+import { stateOf } from '../systems/match/rules';
+import { shapeOfCourse } from '../systems/game/lengths';
 import { PROTOCOL, RULES } from '../systems/match/types';
 import { lengthOf } from '../systems/game/lengths';
 import { hasName, lengthLabel, shapeById, useCourse } from './flow';
@@ -61,6 +64,7 @@ export class MatchScene extends MenuScene {
     this.busy = false;
     this.info = null;
     this.live = null;
+    this.cardLayer = null;
   }
 
   create(data?: unknown) {
@@ -76,6 +80,7 @@ export class MatchScene extends MenuScene {
   }
 
   protected back() {
+    if (this.cardLayer) { this.cardLayer.destroy(true); this.cardLayer = null; return; }
     if (this.m.mode !== 'home') { this.scene.start('match', { mode: 'home' }); return; }
     this.scene.start('title');
   }
@@ -226,7 +231,9 @@ export class MatchScene extends MenuScene {
       const info = this.infos.get(m.code);
       const status = !info ? '...' : info === 'unreachable' ? "can't reach the server" : !info.exists ? 'ended' : info.status;
       const label = `${m.vs ? `vs ${m.vs}` : 'waiting for a friend'}  ·  ${c ? shortName(c.name) : m.courseId}  ·  ${status}`;
-      this.root.add(new Button(this, x0 + 8, y, pw - 40, 15, label, () => this.scene.start('match', { mode: 'continue', code: m.code }), { color: m.done ? 'grey' : 'orange' }));
+      // a finished match: its card, without loading the course (developer, 2026-10-22: "it should just open the card")
+      const done = m.done || (!!info && info !== 'unreachable' && info.exists && info.phase === 'finished');
+      this.root.add(new Button(this, x0 + 8, y, pw - 40, 15, label, () => (done ? void this.showCard(m) : this.scene.start('match', { mode: 'continue', code: m.code })), { color: done ? 'grey' : 'orange' }));
       this.root.add(new Button(this, x0 + pw - 28, y, 20, 15, 'x', () => { forgetMatch(m.code); this.rebuild(); }, { color: 'grey' }));
       y += 18;
       if (info === undefined) {
@@ -239,6 +246,39 @@ export class MatchScene extends MenuScene {
         });
       }
     }
+  }
+
+  private cardLayer: Phaser.GameObjects.Container | null = null;
+
+  /** A finished match's card over the list: its log from the server, the course's pars from the course list. */
+  private async showCard(m: MyMatch) {
+    if (this.busy || this.cardLayer) return;
+    this.busy = true;
+    this.note = 'getting the card...';
+    this.showNote();
+    const log = await matchLog(m.code);
+    if (!this.sys.isActive()) return;
+    this.busy = false;
+    const s = log ? stateOf(log) : null;
+    const c = s ? app.courses.find((k) => k.id === s.cfg.courseId) : undefined;
+    if (!s || !c?.pars) {
+      this.note = !log ? "can't reach the server - try again" : !s ? 'that match no longer exists' : "this game doesn't have that course yet - reload to update";
+      this.showNote();
+      return;
+    }
+    this.note = '';
+    this.showNote();
+    // which side is this player: the one not named as the other player
+    const me = s.players[0]?.name === m.vs ? 1 : s.players[1]?.name === m.vs ? 0 : null;
+    const W = app.view.w, H = app.view.h;
+    const layer = this.add.container(0, 0).setDepth(50);
+    const close = () => { layer.destroy(true); this.cardLayer = null; };
+    layer.add(this.add.rectangle(0, 0, W, H, 0x05080b, 0.75).setOrigin(0, 0).setInteractive().on('pointerdown', close));
+    const card = matchCardOf(this, s, { name: c.name, pars: c.pars, shape: shapeOfCourse(c) }, me, W, H - 22);
+    layer.add(card);
+    const bottom = Math.min(H - 20, (card.getData('bottom') as number) + 4);
+    layer.add(new Button(this, Math.round(W / 2 - 30), bottom, 60, 16, 'close', close, { color: 'grey' }));
+    this.cardLayer = layer;
   }
 
   private startNew() {
