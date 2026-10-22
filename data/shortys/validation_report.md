@@ -51,6 +51,22 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 20. Hole 18 (Back): tee box a_tee_back_18 assigned by the developer (tagged hole=18, tee_set=Back in edited/course.geojson).
 21. Hole 19 (Back): tee box a_tee_back_19 assigned by the developer (tagged hole=19, tee_set=Back in edited/course.geojson).
 
+## Other open items (Shorty's)
+
+Built 2026-10-22 together with Bandon Preserve (shared downloads, GitHub release bandon-par-threes-data). Standing defaults (COURSE_BUILD.md 4.1): Back tees (no Blue; the longest set), all water red, out of bounds = the course polygon, trees from lidar with `trees_off_fairways_m` 2; wind 8-16 mph and the `bandon_dunes` theme with gorse, as the developer set for Bandon Dunes. The developer approved the tracing desk as shown (2026-10-22) and asked for no rough between fairway and green (`connect_fairways`, `merge_touching_fairways`, as at East Potomac and Langston). The items below are the course chat's calls, each with a recommendation.
+
+1. **Stroke index.** The resort's card (2024-03-13) prints no handicap row, so every hole stores 0 and the hole intro reads "handicap 0". Recommendation: ask the design chat to hide that line when the handicap is 0 (no invented order).
+2. **Pars.** The card prints no par row; all 19 holes are par 3 (First Call Golf, GCA). OSM tagged hole 7 par 4 and hole 5 without a par; both retagged par 3.
+3. **The mown turf** is drawn as fairway from the 2024 photo (a pixel classifier trained on the Preserve's mapped turf; OSM maps no fairway here). Approved in the desk.
+4. **Hole 2's green** is traced from the photo (OSM has none). Approved in the desk.
+5. **Double greens 6/18 and 9/13** are cut along the perpendicular bisector of the two holes' OSM line ends, so each hole has its own centre, pin and putting views. Recommendation: confirm in play.
+6. **Hole 15:** OSM's course polygon crossed the 15th green, so its back half was out of bounds. The boundary now takes in every green and 12 m round it (408 m2 more, all behind 15). Recommendation: keep.
+7. **Hole 7 has no fairway:** the photo shows native dune between its tee and green, and the nearest turf is 81 m from the green, beyond `connect_fairways`' 60 m reach. Hole 15's shot carries a dune; its fairway curls round to the green. Both are as on the ground.
+8. **Flags after the tee moves:** hole 4 83 yd against 80 (+3.5 %) and hole 15 49 against 51 (-3.4 %), the best spots in their boxes. Recommendation: accept.
+9. **Hole 12's Back tee** is one long strip OSM maps for all three tee sets (84-143 yd); the virtual tee slides to its back end (130 yd against 133).
+10. **The lidar was flown in 2008, before Shorty's was built (2023-24).** The ground is the pre-construction dunes: greens are shaped by script and tees levelled anyway (developer: accepted). 349 lidar trees not seen in the 2024 photo were dropped (`trees_need_ortho`).
+11. **Neighbours' water.** Round Lake and the two Bandon Trails ponds lie outside the boundary; they are plain water (out of bounds), not penalty areas.
+
 ## Playability adjustments
 
 - Hole 1 (Back): measured 114 yd from the tee-box centre vs 119 on the card (-4.5%); moved the virtual tee along the middle of the real tee polygon a_tee_back_1 (on its centre line, at least 2.5 m from its back and front) -> 116.2 yd (real 113.7 yd).
@@ -66,7 +82,7 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 
 - 5561 trees detected in the world extent (27 inside the course), 5561 conifers / 0 deciduous; median height 8.3 m, max 28.9 m.
 - Dropped: 3 tops on building footprints, 0 over the lake, 1 tiny crowns.
-- Dropped on playing surfaces (spec 5.4): 31 -> green w1547558451 (7.4 m), fairway a_fairway_17 (5.8 m), fairway a_fairway_8 (5.2 m), tee w1547578367 (4.9 m), fairway a_fairway_21 (4.7 m), green w1547584758 (8.1 m), green w1547584758 (6.5 m), green w833234950 (6.1 m), bunker w888365891 (4.5 m), bunker w888365891 (4.7 m), green w833094299 (5.1 m), bunker w888365891 (5.0 m), bunker w888365891 (6.1 m), green w853761988 (6.6 m), green w833234958 (6.0 m), green w853761988 (9.8 m), green w833234958 (5.5 m), green w853761988 (7.3 m), green w853761988 (6.8 m), green w833234958 (5.1 m), green w853761988 (7.5 m), bunker w888354050 (6.8 m), green w833234958 (6.6 m), green w853761988 (6.0 m), green w853761988 (7.4 m), green w833234958 (5.3 m), green w853761988 (6.7 m), bunker w888365890 (5.9 m), bunker w888365896 (5.9 m), tee w833092159 (4.7 m), green w853761989 (6.0 m)
+- Dropped on playing surfaces (spec 5.4): 32 -> green w1547558451 (7.4 m), fairway a_fairway_15 (5.8 m), fairway a_fairway_15 (6.6 m), fairway a_fairway_9 (5.2 m), tee w1547578367 (4.9 m), fairway a_fairway_10 (4.7 m), green w1547584758 (8.1 m), green w1547584758 (6.5 m), green w833234950 (6.1 m), bunker w888365891 (4.5 m), bunker w888365891 (4.7 m), green w833094299 (5.1 m), bunker w888365891 (5.0 m), bunker w888365891 (6.1 m), green w853761988 (6.6 m), green w833234958 (6.0 m), green w853761988 (9.8 m), green w833234958 (5.5 m), green w853761988 (7.3 m), green w853761988 (6.8 m), green w833234958 (5.1 m), green w853761988 (7.5 m), bunker w888354050 (6.8 m), green w833234958 (6.6 m), green w853761988 (6.0 m), green w853761988 (7.4 m), green w833234958 (5.3 m), green w853761988 (6.7 m), bunker w888365890 (5.9 m), bunker w888365896 (5.9 m), tee w833092159 (4.7 m), green w853761989 (6.0 m)
 - OSM natural=tree points matched by a detected tree within 4 m: 0 of 11.
 - Every lidar tree is typed conifer (course_config tree_type: the trees on the bluffs at Bandon are shore pine (and Sitka spruce in the hollows), whose broad wind-flattened crowns the crown-shape rule calls deciduous; the broadleaf scrub is drawn as gorse (as at Bandon Dunes)).
 
@@ -164,5 +180,5 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 - green w888289372 at (697, 233) is not the end of any hole line (practice green?) -> treated as a wrong green
 - green w888289376 at (780, 777) is not the end of any hole line (practice green?) -> treated as a wrong green
 
-Totals: 125 tees, 40 greens, 69 fairways, 226 bunkers, 3 water hazards, 51 pins, 64 cart paths, 11 OSM tree points.
+Totals: 125 tees, 40 greens, 60 fairways, 226 bunkers, 0 water hazards, 51 pins, 64 cart paths, 11 OSM tree points.
 

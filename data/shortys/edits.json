@@ -14,6 +14,22 @@
    "reason": "6 golf=path ways inside the boundary, not read by s01: copied as golf=cartpath (free relief, drawn as paths)"
   },
   {
+   "from": "proposed/water_outside.geojson",
+   "ids": [
+    "w266664506_water",
+    "w675560578_water",
+    "w675560579_water"
+   ],
+   "reason": "3 neighbouring courses' penalty areas outside this boundary (Round Lake and the Bandon Trails ponds): redrawn as plain natural=water, so a ball there is out of bounds, not in a penalty area"
+  },
+  {
+   "from": "proposed/boundary.geojson",
+   "ids": [
+    "p_boundary"
+   ],
+   "reason": "OSM's Shorty's polygon (w1540940976) cuts across the 15th green, so its back half and the ground behind it were out of bounds; grown to take in every green and 12 m round it (make_proposals.py; course chat 2026-10-22, after the course test found a perfect tee shot on 15 ending out of bounds)"
+  },
+  {
    "from": "proposed/greens_split.geojson",
    "ids": [
     "p_green_6",
@@ -87,27 +103,6 @@
   }
  ],
  "tags": [
-  {
-   "osm": "w266664506",
-   "set": {
-    "penalty": "red"
-   },
-   "reason": "Round Lake (golf=lateral_water_hazard): every penalty area red (standing default)"
-  },
-  {
-   "osm": "w675560578",
-   "set": {
-    "penalty": "red"
-   },
-   "reason": "unnamed (golf=lateral_water_hazard): every penalty area red (standing default)"
-  },
-  {
-   "osm": "w675560579",
-   "set": {
-    "penalty": "red"
-   },
-   "reason": "unnamed (golf=lateral_water_hazard): every penalty area red (standing default)"
-  },
   {
    "osm": "w1547585702",
    "set": {
@@ -361,12 +356,28 @@
    "reason": "replaced by its golf=cartpath copy (add above)"
   },
   {
+   "osm": "w266664506",
+   "reason": "replaced by its natural=water copy (add above)"
+  },
+  {
+   "osm": "w675560578",
+   "reason": "replaced by its natural=water copy (add above)"
+  },
+  {
+   "osm": "w675560579",
+   "reason": "replaced by its natural=water copy (add above)"
+  },
+  {
    "osm": "w1547559707",
    "reason": "replaced by its two parts (add above)"
   },
   {
    "osm": "w1547581185",
    "reason": "replaced by its two parts (add above)"
+  },
+  {
+   "osm": "w1540940976",
+   "reason": "replaced by the grown boundary (add above)"
   }
  ],
  "extend_start": []

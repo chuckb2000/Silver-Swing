@@ -14,6 +14,8 @@ both). For the developer to approve (COURSE_BUILD.md 1.1):
 - green2.geojson: hole 2's green traced from the 2024 photo
   (pipeline/propose_trace.py's trace_green + green_shape, seeded at the line's
   end; t and br_delta calibrated on Shorty's 17 mapped greens: median IoU 0.71);
+- boundary.geojson: the OSM polygon grown to take in every hole's green and 12 m
+  round it (OSM's line crosses the 15th green);
 - pins.geojson: a centre pin on each hole's green (its centroid, moved inside
   if needed);
 - fairways.geojson: the mown turf, from a pixel classifier (photo colour and
@@ -126,6 +128,13 @@ def main():
                      "tags": {"golf": "pin", "ref": str(n), "source": "the centre of the hole's green (OSM maps no pins at Shorty's)"}})
     save(pins, "pins.geojson")
 
+    gb = grown_boundary(g, bnd, hole_green, lines, greens)
+    save([{"osm": "p_boundary", "kind": "boundary", "geometry": gb,
+           "tags": {"leisure": "golf_course", "name": "Shortys", "operator": "Bandon Dunes Golf Resort",
+                    "source": "OSM w1540940976 grown to take in every hole's green and 12 m round it (it cut across the 15th green), "
+                              "minus the Bandon Preserve, Bandon Trails and resort polygons"}}], "boundary.geojson")
+    print(f"[proposals] boundary: {gb.area:.0f} m2 (OSM {bnd.area:.0f} m2)")
+
     # --- mown turf, trained on the Preserve's
     with rasterio.open(HERE / "raw" / "osip2024_05m.tif") as r:
         rgb = np.transpose(r.read().astype(np.float32), (1, 2, 0))
@@ -175,6 +184,24 @@ def main():
            "tags": {"golf": "fairway", "source": "mown turf from the OSIP 2024 photo: a pixel classifier trained on Bandon Preserve's mapped turf (course chat, 2026-10-22)"}}
           for i, p in enumerate(fw)], "fairways.geojson")
     print(f"[proposals] fairways: {len(fw)} parts, {sum(p.area for p in fw):.0f} m2 inside a {bnd.area:.0f} m2 boundary")
+
+
+def grown_boundary(g, bnd, hole_green, lines, greens):
+    """OSM's Shorty's polygon cuts across the 15th green (its back half and everything behind it
+    were out of bounds): the boundary takes in every hole's green and 12 m round it, as the
+    Preserve's grown boundary does, minus the neighbouring courses' polygons."""
+    gs = []
+    for n, L in lines.items():
+        gp = hole_green.get(n)
+        if gp is None:
+            gp = greens.geometry.iloc[int(np.argmin(greens.distance(Point(L.coords[-1]))))]
+        gs.append(gp.buffer(12, join_style=1))
+    grown = unary_union([bnd, *gs])
+    for o in ("w674855473", "w362513476", "w362513477"):
+        grown = grown.difference(g[g.osm == o].geometry.iloc[0])
+    if grown.geom_type == "MultiPolygon":
+        grown = max(grown.geoms, key=lambda q: q.area)
+    return Polygon(grown.exterior).simplify(0.5)
 
 
 if __name__ == "__main__":

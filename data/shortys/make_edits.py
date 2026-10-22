@@ -102,7 +102,24 @@ def main():
                     "reason": f"{len(prop)} golf=path ways inside the boundary, not read by s01: copied as golf=cartpath (free relief, drawn as paths)"})
         for o in sorted(paths.osm):
             drop.append({"osm": o, "reason": "replaced by its golf=cartpath copy (add above)"})
+    # a neighbour's penalty areas outside this course's boundary are still penalty areas in the game
+    # (water is checked before out of bounds; COURSE_LESSONS.md 23): redraw them as plain water
+    outside = g[g.kind.isin(["water_hazard", "lateral_water_hazard"]) & ~g.geometry.intersects(bnd)]
+    if len(outside):
+        prop = outside.copy()
+        prop["osm"] = prop.osm + "_water"
+        prop["kind"] = "water"
+        prop["tags"] = prop.tags.apply(lambda t: {k: v for k, v in t.items() if k not in ("golf", "penalty")} | {"natural": "water", "was": f"golf={t.get('golf')}"})
+        (HERE / "proposed").mkdir(exist_ok=True)
+        prop[["osm", "kind", "tags", "geometry"]].to_file(HERE / "proposed" / "water_outside.geojson", driver="GeoJSON")
+        add.append({"from": "proposed/water_outside.geojson", "ids": sorted(prop.osm),
+                    "reason": f"{len(prop)} neighbouring courses' penalty areas outside this boundary (Round Lake and the Bandon Trails ponds): "
+                              "redrawn as plain natural=water, so a ball there is out of bounds, not in a penalty area"})
+        for o in sorted(outside.osm):
+            drop.append({"osm": o, "reason": "replaced by its natural=water copy (add above)"})
     for i, f in g[g.kind.isin(["water_hazard", "lateral_water_hazard"])].sort_values("osm").iterrows():
+        if f.osm in set(outside.osm):
+            continue
         if f.tags.get("penalty") != "red":  # also off the map: s10 exports every penalty area
             nm = f.tags.get("name") or "unnamed"
             tags.append({"osm": f.osm, "set": {"penalty": "red"},

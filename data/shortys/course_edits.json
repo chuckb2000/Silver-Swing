@@ -1,6 +1,13 @@
 {
  "add": [
   {
+   "from": "proposed/boundary.geojson",
+   "ids": [
+    "p_boundary"
+   ],
+   "reason": "OSM's Shorty's polygon (w1540940976) cuts across the 15th green, so its back half and the ground behind it were out of bounds; grown to take in every green and 12 m round it (make_proposals.py; course chat 2026-10-22, after the course test found a perfect tee shot on 15 ending out of bounds)"
+  },
+  {
    "from": "proposed/greens_split.geojson",
    "ids": [
     "p_green_6",
@@ -97,6 +104,10 @@
   {
    "osm": "w1547581185",
    "reason": "replaced by its two parts (add above)"
+  },
+  {
+   "osm": "w1540940976",
+   "reason": "replaced by the grown boundary (add above)"
   }
  ],
  "extend_start": []

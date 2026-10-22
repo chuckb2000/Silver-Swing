@@ -1,0 +1,10 @@
+## Other open items (Bandon Preserve)
+
+Built 2026-10-22 together with Shorty's (shared downloads, GitHub release bandon-par-threes-data). Standing defaults (COURSE_BUILD.md 4.1): Back tees (no Blue; the longest set), all water red, out of bounds = the course polygon (grown, item 3), trees from lidar with `trees_off_fairways_m` 2; wind 8-16 mph and the `bandon_dunes` theme with gorse, as the developer set for Bandon Dunes. The developer approved the tracing desk as shown (2026-10-22) and asked for no rough between fairway and green (`connect_fairways`, `merge_touching_fairways`, as at East Potomac and Langston). The items below are the course chat's calls, each with a recommendation.
+
+1. **Stroke index.** The resort's card prints no handicap row, so every hole stores 0 and the hole intro reads "handicap 0". GolfPass's row (13,15,3,5,1,17,7,11,9,8,2,18,6) is not a 1-13 set and is not used. Recommendation: ask the design chat to hide that line when the handicap is 0.
+2. **Back tees on holes 4-11 and 13:** OSM maps no box there, and the 2008 lidar predates the course (2012), so it shows no pads. A 10 x 6 m box stands on each hole line where the card distance to the green centre falls. Approved in the desk.
+3. **Out of bounds:** OSM's Bandon Preserve polygon traces only the mown turf (4.7 ha): most back tees and every dune between the holes were outside it. The boundary is grown to 8.8 ha (15 m round the hole lines and greens, 12 m round the tees, gaps under 60 m closed), minus the Bandon Trails, Shorty's and resort polygons. Approved in the desk.
+4. **The mown turf** is the OSM polygon minus its rough (the native mounds inside the turf, which stay rough: developer, 2026-10-22) and buildings, drawn as fairway.
+5. **The lidar was flown in 2008, before the Preserve was built.** The ground is the pre-construction dunes: greens are shaped by script and tees levelled anyway (developer: accepted). 225 lidar trees not seen in the 2024 photo were dropped (`trees_need_ortho`).
+6. **Neighbours' water.** Round Lake and the two Bandon Trails ponds lie outside the boundary; they are plain water (out of bounds), not penalty areas.
