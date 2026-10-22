@@ -452,10 +452,10 @@ DECISIONS.md with the reason.
     `src/systems/game/pins.ts`); the meter has a line at the middle of the green, no
     ghost tick and no display-lag allowance. 376 unit tests and 4 Playwright tests pass.
 
--   **Courses (course chats, 2026-10-18 to 2026-10-22):** twenty-four data
-    folders, twenty-six courses on offer (East Potomac is three) in six states;
-    RedTail Golf Center (Beaverton OR; PR #39) merged 2026-10-22, in the daily
-    rotation from 2026-10-23;
+-   **Courses (course chats, 2026-10-18 to 2026-10-22):** twenty-five data
+    folders, twenty-seven courses on offer (East Potomac is three) in six states;
+    RedTail Golf Center (Beaverton OR; PR #39) and The Muni (Lake Oswego OR, nine
+    holes; PR #42) merged 2026-10-22, in the daily rotation from 2026-10-23;
     TPC Boston (Norton MA) and Pacific Dunes, Old Macdonald and Sheep Ranch (Bandon OR)
     merged 2026-10-21;
     Gearhart Golf Links (Gearhart OR), Bandon Trails (Bandon OR, `bandon`
@@ -1671,6 +1671,7 @@ files (`game/scripts/course-lists.mjs`). The first course, Oswego Lake, is
 | Indian Island Golf Course | `docs/courses/indian_island.md` |
 | Langdon Farms Golf Club | `docs/courses/langdon.md` |
 | Langston Golf Course | `docs/courses/langston.md` |
+| The Muni (Lake Oswego) | `docs/courses/lake_oswego_muni.md` |
 | Old Macdonald | `docs/courses/old_macdonald.md` |
 | Oregon Golf Club | `docs/courses/ogc.md` |
 | Oswego Lake Country Club | `docs/courses/oswego_lake.md` |

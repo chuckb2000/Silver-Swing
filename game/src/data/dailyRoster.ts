@@ -41,6 +41,7 @@ export const DAILY_ROSTER: Readonly<Record<string, string>> = {
   sheep_ranch: '2026-10-22',
   // merged on 2026-10-22
   redtail: '2026-10-23',
+  lake_oswego_muni: '2026-10-23',
 };
 
 /**
