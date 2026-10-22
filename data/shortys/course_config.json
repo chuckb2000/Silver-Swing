@@ -1,0 +1,76 @@
+{
+  "id": "shortys",
+  "name": "Shorty's",
+  "location": "Bandon, Coos County, Oregon",
+  "state": "OR",
+  "architects": "Rod Whitman, Dave Axland and Keith Cutten (2024)",
+  "theme": "bandon_dunes",
+  "epsg": 32610,
+  "osm_sources": [
+    "raw/overpass.geojson"
+  ],
+  "boundary_name": "Shortys",
+  "dtm": {
+    "path": "raw/dogami_dtm_ft.tif",
+    "units": "ft",
+    "source": "DOGAMI lidar DIGITAL_TERRAIN_MODEL_MOSAIC (bare earth), probably the OLC South Coast project flown 2008 (as for the other Bandon courses; to confirm on arrival), exportImage at 1 m in EPSG:32610, box x 386050-387300 / y 4780850-4782700 shared by Shorty's and Bandon Preserve (GitHub release bandon-par-threes-data). PENDING: requested 2026-10-22."
+  },
+  "chm": {
+    "path": "raw/dogami_chm_ft.tif",
+    "units": "ft",
+    "source": "DOGAMI lidar CANOPY_HEIGHT_MODEL_MOSAIC, same project and shared box (GitHub release bandon-par-threes-data). PENDING: requested 2026-10-22.",
+    "label": "DOGAMI canopy height model"
+  },
+  "ortho": {
+    "path": "raw/osip2024_05m.tif",
+    "source": "Oregon Statewide Imagery Program 2024 (OSIP_2024_WM), one exportImage JPEG at 0.5 m, box x 386050-387300 / y 4780850-4782700, shared by Shorty's and Bandon Preserve (GitHub release bandon-par-threes-data). PENDING: requested 2026-10-22."
+  },
+  "world": {
+    "x0": 386318,
+    "y0": 4780979,
+    "width": 768,
+    "height": 1280,
+    "note": "OSM course boundary bbox (304 x 804 m, way 1540940976) + at least 120 m of scenery, rounded out to whole 256 m chunks and centred (232 m west/east, 238 m south/north)"
+  },
+  "tee_sets": [
+    {
+      "name": "Back",
+      "playable": true,
+      "rating": 0,
+      "slope": 0,
+      "total_yd": 0
+    }
+  ],
+  "default_tee": "Back",
+  "scorecard_source": "PENDING: the resort's scorecard (requested 2026-10-22). No reliable public card found: golfingrecord.com lists 9 holes (1,104 yd, one of 177 yd), against 19 par-3 holes of 51-152 yd from the back tees (First Call Golf, 2024-05-11). Built from the back tees; the putting tees are not built.",
+  "penalty_default": "red",
+  "driving_range_is_ob": true,
+  "wind_mph": {
+    "minMph": 8,
+    "maxMph": 16
+  },
+  "trees_off_fairways_m": 2,
+  "attribution": [
+    "Map data © OpenStreetMap contributors (ODbL)",
+    "Elevation and canopy: Oregon Department of Geology and Mineral Industries (DOGAMI) lidar",
+    "Orthophoto: Oregon Statewide Imagery Program 2024 (gorse, tree and tee checks)",
+    "Scorecard: pending"
+  ],
+  "notes": "Intake 2026-10-22 (built with Bandon Preserve from shared downloads, release bandon-par-threes-data). Standing defaults (COURSE_BUILD.md 4.1): back tees (no Blue), all water red, OB = the OSM course polygon, trees from lidar with trees_off_fairways_m 2; wind 8-16 mph as the developer set for Bandon Dunes; theme bandon_dunes with gorse from the 2024 photo, as at Bandon Dunes. Provisional until the rasters arrive; lake_level_max_m / cliff keys copied from Old Macdonald, to be checked against this DTM.",
+  "lake_level_max_m": 1.3,
+  "cliff_sand_slope_pct": 45,
+  "tree_type": "conifer",
+  "tree_type_note": "the trees on the bluffs at Bandon are shore pine (and Sitka spruce in the hollows), whose broad wind-flattened crowns the crown-shape rule calls deciduous; the broadleaf scrub is drawn as gorse (as at Bandon Dunes)",
+  "gorse": {
+    "spacing_m": 3.4,
+    "r_min_m": 1.5,
+    "r_max_m": 2.3,
+    "ground": "gorse",
+    "note": "as at Bandon Dunes (developer 2026-10-20): thickets from the OSIP 2024 orthophoto (pipeline/gorse.py); the ground under them is the gorse surface (17)"
+  },
+  "trees_need_ortho": {
+    "v_max": 120,
+    "min_share": 0.1,
+    "note": "the DOGAMI lidar here was flown in 2008, older than parts of the course; lidar trees whose crowns are not dark canopy in the OSIP 2024 photo are dropped"
+  }
+}
