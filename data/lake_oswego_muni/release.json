@@ -1,0 +1,62 @@
+{
+ "release": "muni-data",
+ "note": "build inputs; the clipped rasters, the orthophoto mosaic and the Overpass export are also committed in raw/ (all small), so `make fetch NAME=lake_oswego_muni` only restores a missing or changed one (pipeline/fetch_raw.py). more.data.tiff = DOGAMI bare earth (feet); exportImage.12 = canopy height (feet; .13 is the same file), muni.25-28.jpg = OSIP 2024 quarters NW, NE, SW, SE (mosaicked into raw/osip2024_032m.tif by `prepare_raw.py ortho`, committed), export.geojson = Overpass export of the second box (2026-10-22). more.data.tiff = DOGAMI bare earth (feet), second box.",
+ "files": [
+  {
+   "asset": "more.data.tiff",
+   "sha256": "4991b2755c1fcf755583620d597b852f7237c7fd36dd7a063319b17176e8d567",
+   "run": "python3 data/lake_oswego_muni/prepare_raw.py clip {file} raw/dogami_dtm_ft.tif",
+   "outputs": {
+    "raw/dogami_dtm_ft.tif": "326b1fccd5f76917cef2cbe1ac24761b53b9dca627980da2bbaf031ffb6703ca"
+   }
+  },
+  {
+   "asset": "exportImage.12.tiff",
+   "sha256": "a6a2a9408bc66265ed54f4c54f1363db944f6257c2623d0e1e588f1dbc49a3b7",
+   "run": "python3 data/lake_oswego_muni/prepare_raw.py clip {file} raw/dogami_chm_ft.tif",
+   "outputs": {
+    "raw/dogami_chm_ft.tif": "4009b0c88ab4f2a82bf2d7f1eb47e50e4e8b6eff1fa81d75b99e82ea9fe7fb94"
+   }
+  },
+  {
+   "asset": "muni.25.jpg",
+   "sha256": "62180aa5aa8ba200dd0c373c787ed198d542a3cfc078f9b81220395a8c3f882b",
+   "to": "raw/osip_src/",
+   "outputs": {
+    "raw/osip_src/muni.25.jpg": "62180aa5aa8ba200dd0c373c787ed198d542a3cfc078f9b81220395a8c3f882b"
+   }
+  },
+  {
+   "asset": "muni.26.jpg",
+   "sha256": "00d6d5e84f7eea55ad17c7097a93c40a161c823461025ecbe4eb1adf5befcecc",
+   "to": "raw/osip_src/",
+   "outputs": {
+    "raw/osip_src/muni.26.jpg": "00d6d5e84f7eea55ad17c7097a93c40a161c823461025ecbe4eb1adf5befcecc"
+   }
+  },
+  {
+   "asset": "muni.27.jpg",
+   "sha256": "874efd970844f4c5fc119e6f729f6b799f28ceb389ee4f9eed9931cb830b569d",
+   "to": "raw/osip_src/",
+   "outputs": {
+    "raw/osip_src/muni.27.jpg": "874efd970844f4c5fc119e6f729f6b799f28ceb389ee4f9eed9931cb830b569d"
+   }
+  },
+  {
+   "asset": "muni.28.jpg",
+   "sha256": "8b021f2f073b89ab5b08fde335a5fa7e2f07b9a2993eb7bd096c4446a4ab7c6f",
+   "to": "raw/osip_src/",
+   "outputs": {
+    "raw/osip_src/muni.28.jpg": "8b021f2f073b89ab5b08fde335a5fa7e2f07b9a2993eb7bd096c4446a4ab7c6f"
+   }
+  },
+  {
+   "asset": "export.geojson",
+   "sha256": "bc0f2288e6dc9f3213df42ed2f4e57139b3ddda22f3ec7011fa276865ba6cb32",
+   "run": "cp {file} data/lake_oswego_muni/raw/overpass.geojson",
+   "outputs": {
+    "raw/overpass.geojson": "bc0f2288e6dc9f3213df42ed2f4e57139b3ddda22f3ec7011fa276865ba6cb32"
+   }
+  }
+ ]
+}

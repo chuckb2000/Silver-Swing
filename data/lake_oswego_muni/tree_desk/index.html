@@ -1,0 +1,276 @@
+<title>Muni Tree Tracer</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<style>
+/* Layout: the map fills the screen, a narrow panel on the right (below it on a phone). */
+:root {
+  --bg: #f3f4ef; --panel: #ffffff; --fg: #1d2a22; --muted: #5d6b62; --line: #d5dacf;
+  --accent: #23683f; --accent-fg: #ffffff; --mark: #d4361f; --conifer: #2fbf6a; --decid: #ffd23f;
+  --bound: #ff8a1f; --hole: #ffffff; --chip: #e7ebe2;
+  --ui: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --num: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #121814; --panel: #1a221d; --fg: #e4ebe5; --muted: #95a59a; --line: #2c3830;
+  --accent: #3fa465; --accent-fg: #0d1410; --mark: #ff5a3c; --chip: #243029; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #121814; --panel: #1a221d; --fg: #e4ebe5; --muted: #95a59a; --line: #2c3830;
+  --accent: #3fa465; --accent-fg: #0d1410; --mark: #ff5a3c; --chip: #243029; color-scheme: dark }
+html, body { height: 100%; }
+body { background: var(--bg); color: var(--fg); font-family: var(--ui); }
+.app { display: flex; height: 100%; min-height: 0; }
+.map { position: relative; flex: 1; min-width: 0; overflow: hidden; background: #0b0f0c; touch-action: none; cursor: grab; }
+.map.dragging { cursor: grabbing; }
+.map.boxmode { cursor: crosshair; }
+.map svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; user-select: none; -webkit-user-select: none; }
+.tools { position: absolute; top: max(10px, env(safe-area-inset-top, 0px)); left: max(10px, env(safe-area-inset-left, 0px)); display: flex; flex-wrap: wrap; gap: 6px; }
+.tools button, .panel button { font: 600 13px var(--ui); border-radius: 6px; border: 1px solid var(--line); background: var(--panel); color: var(--fg); padding: 7px 11px; cursor: pointer; }
+.tools button[aria-pressed="true"] { background: var(--accent); color: var(--accent-fg); border-color: var(--accent); }
+button:focus-visible, textarea:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.panel { width: 330px; flex: none; background: var(--panel); border-left: 1px solid var(--line); display: flex; flex-direction: column; min-height: 0;
+  padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-left: 16px; padding-block: 16px; gap: 12px; }
+.panel h1 { font-size: 17px; margin: 0; text-wrap: balance; }
+.panel p { margin: 0; color: var(--muted); line-height: 1.45; font-size: 13px; }
+.count { display: flex; gap: 8px; align-items: baseline; font-family: var(--num); font-variant-numeric: tabular-nums; }
+.count b { font-size: 26px; color: var(--mark); }
+.legend { display: flex; flex-wrap: wrap; gap: 10px; font-size: 12px; color: var(--muted); }
+.legend i { display: inline-block; width: 10px; height: 10px; border-radius: 50%; border: 2px solid; margin-right: 4px; vertical-align: -1px; }
+.hover { font: 12px var(--num); color: var(--muted); min-height: 1.4em; font-variant-numeric: tabular-nums; }
+.list { flex: 1; min-height: 80px; overflow: auto; border: 1px solid var(--line); border-radius: 6px; }
+.list:empty::before { content: "No trees marked yet. Click a tree on the map, or use Box select."; display: block; padding: 12px; color: var(--muted); font-size: 13px; }
+.row { display: flex; align-items: center; gap: 8px; padding: 6px 8px; border-bottom: 1px solid var(--line); font: 12px var(--num); font-variant-numeric: tabular-nums; }
+.row span { flex: 1; min-width: 0; cursor: pointer; }
+.row button { padding: 3px 8px; font-size: 12px; }
+textarea { width: 100%; box-sizing: border-box; min-height: 64px; font: 13px var(--ui); background: var(--bg); color: var(--fg); border: 1px solid var(--line); border-radius: 6px; padding: 8px; resize: vertical; }
+.save { display: flex; gap: 10px; align-items: center; }
+.save .primary { background: var(--accent); color: var(--accent-fg); border-color: var(--accent); }
+.status { font-size: 12px; color: var(--muted); }
+@media (max-width: 760px) {
+  .app { flex-direction: column; }
+  .map { flex: none; height: 62%; }
+  .panel { width: auto; border-left: 0; border-top: 1px solid var(--line); flex: 1; padding-left: max(16px, env(safe-area-inset-left, 0px)); }
+}
+@media (prefers-reduced-motion: no-preference) { .tools button, .panel button { transition: background .12s; } }
+</style>
+
+<div class="app">
+  <div class="map" id="map">
+    <svg id="svg" aria-label="Course map with trees">
+      <image id="bg" preserveAspectRatio="none"></image>
+      <g id="treesG"></g>
+      <g id="over" pointer-events="none"></g>
+      <rect id="box" fill="rgba(212,54,31,.18)" stroke="#d4361f" stroke-width="1" vector-effect="non-scaling-stroke" hidden></rect>
+    </svg>
+    <div class="tools">
+      <button id="bPhoto" aria-pressed="true">Photo 2024</button>
+      <button id="bGame" aria-pressed="false">Game map</button>
+      <button id="bBox" aria-pressed="false">Box select</button>
+      <button id="bIn" aria-label="Zoom in">+</button>
+      <button id="bOut" aria-label="Zoom out">&minus;</button>
+      <button id="bFit">Fit</button>
+    </div>
+  </div>
+  <aside class="panel">
+    <h1>The Muni: trees to delete</h1>
+    <p>Click a tree to mark it for deletion; click again to keep it. Box select marks every tree whose centre is inside the box (shift-drag does the same). Drag to pan, scroll or pinch to zoom.</p>
+    <div class="legend"><span><i style="border-color:var(--conifer)"></i>conifer</span><span><i style="border-color:var(--decid)"></i>broadleaf</span><span><i style="border-color:var(--mark);background:var(--mark)"></i>marked</span><span><i style="border-color:var(--bound)"></i>out of bounds line</span></div>
+    <div class="count"><b id="nMarked">0</b><span id="nLabel">trees marked</span></div>
+    <div class="hover" id="hover">Hover a tree to see its height.</div>
+    <div class="list" id="list"></div>
+    <label for="note" style="font-size:13px;font-weight:600">Note for Claude</label>
+    <textarea id="note" placeholder="Anything else, for example trees to keep or a type that looks wrong"></textarea>
+    <div class="save"><button class="primary" id="bSave">Save marks</button><span class="status" id="status">Loading&hellip;</span></div>
+  </aside>
+</div>
+
+<script>
+const $ = id => document.getElementById(id);
+let D = null, marked = new Map(), view = null, mode = "photo", box = false, db = null, me = null, savedAt = null;
+const svg = $("svg"), NS = "http://www.w3.org/2000/svg";
+const el = (n, a) => { const e = document.createElementNS(NS, n); for (const k in a) e.setAttribute(k, a[k]); return e; };
+
+function toSvg(x, y) { return [x - D.view[0], D.view[3] - y]; }
+function full() { return { x: 0, y: 0, w: D.view[2] - D.view[0], h: D.view[3] - D.view[1] }; }
+function apply() { svg.setAttribute("viewBox", `${view.x} ${view.y} ${view.w} ${view.h}`); }
+function fit() {
+  const r = svg.getBoundingClientRect(), f = full();
+  const s = Math.max(f.w / r.width, f.h / r.height);
+  view = { w: r.width * s, h: r.height * s }; view.x = (f.w - view.w) / 2; view.y = (f.h - view.h) / 2; apply();
+}
+function zoomAt(px, py, k) {
+  const r = svg.getBoundingClientRect();
+  const fx = view.x + (px - r.left) / r.width * view.w, fy = view.y + (py - r.top) / r.height * view.h;
+  const w = Math.min(Math.max(view.w * k, 20), full().w * 3);
+  const h = w * view.h / view.w;
+  view = { x: fx - (fx - view.x) * w / view.w, y: fy - (fy - view.y) * h / view.h, w, h }; apply();
+}
+function clientToWorld(cx, cy) {
+  const r = svg.getBoundingClientRect();
+  const sx = view.x + (cx - r.left) / r.width * view.w, sy = view.y + (cy - r.top) / r.height * view.h;
+  return [sx + D.view[0], D.view[3] - sy];
+}
+
+function setMode(m) {
+  mode = m; $("bPhoto").setAttribute("aria-pressed", m === "photo"); $("bGame").setAttribute("aria-pressed", m === "game");
+  $("bg").setAttribute("href", m === "photo" ? "img/photo.jpg" : "img/game.jpg");
+}
+
+function holeNear(t) {
+  let best = null, bd = 1e9;
+  for (const h of D.holes) {
+    const [ax, ay] = h.tee, [bx, by] = h.green, dx = bx - ax, dy = by - ay;
+    const u = Math.max(0, Math.min(1, ((t.x - ax) * dx + (t.y - ay) * dy) / (dx * dx + dy * dy)));
+    const d = Math.hypot(t.x - ax - u * dx, t.y - ay - u * dy);
+    if (d < bd) { bd = d; best = h; }
+  }
+  return { h: best.n, d: bd };
+}
+
+function draw() {
+  const f = full();
+  const bg = $("bg"); bg.setAttribute("x", 0); bg.setAttribute("y", 0); bg.setAttribute("width", f.w); bg.setAttribute("height", f.h);
+  const over = $("over"); over.textContent = "";
+  over.appendChild(el("polyline", { points: D.boundary.map(p => toSvg(...p).join(",")).join(" "), fill: "none",
+    stroke: "var(--bound)", "stroke-width": 2, "stroke-dasharray": "6 4", "vector-effect": "non-scaling-stroke" }));
+  for (const h of D.holes) {
+    const [ax, ay] = toSvg(...h.tee), [bx, by] = toSvg(...h.green);
+    over.appendChild(el("line", { x1: ax, y1: ay, x2: bx, y2: by, stroke: "var(--hole)", "stroke-width": 1.5, "stroke-dasharray": "4 4", opacity: .85, "vector-effect": "non-scaling-stroke" }));
+    over.appendChild(el("circle", { cx: ax, cy: ay, r: 4.5, fill: "#1d2a22", stroke: "#fff", "stroke-width": 1, "vector-effect": "non-scaling-stroke" }));
+    const t = el("text", { x: ax, y: ay + 1.8, "text-anchor": "middle", "font-size": 5.2, "font-weight": 700, fill: "#fff", "font-family": "IBM Plex Sans, system-ui, sans-serif" });
+    t.textContent = h.n; over.appendChild(t);
+  }
+  const g = $("treesG"); g.textContent = "";
+  D.trees.forEach((t, i) => {
+    const [cx, cy] = toSvg(t.x, t.y);
+    const c = el("circle", { cx, cy, r: Math.max(t.r, 1.2), "data-i": i, "vector-effect": "non-scaling-stroke",
+      stroke: t.t === "conifer" ? "var(--conifer)" : "var(--decid)", "stroke-width": 1.6, fill: "transparent",
+      opacity: D.inside[i] ? 1 : .55 });
+    g.appendChild(c); t.el = c;
+  });
+  paint();
+}
+
+function paint() {
+  D.trees.forEach(t => {
+    const m = marked.has(t.id);
+    t.el.setAttribute("fill", m ? "rgba(212,54,31,.55)" : "transparent");
+    t.el.setAttribute("stroke", m ? "var(--mark)" : (t.t === "conifer" ? "var(--conifer)" : "var(--decid)"));
+    t.el.setAttribute("stroke-width", m ? 2.4 : 1.6);
+  });
+  const rows = [...marked.values()].map(t => ({ t, near: holeNear(t) })).sort((a, b) => a.near.h - b.near.h || a.near.d - b.near.d);
+  const list = $("list"); list.textContent = "";
+  for (const { t, near } of rows) {
+    const r = document.createElement("div"); r.className = "row";
+    const s = document.createElement("span");
+    s.textContent = `hole ${near.h} \u00b7 ${t.t === "conifer" ? "conifer" : "broadleaf"} ${Math.round(t.h)} m \u00b7 ${Math.round(near.d)} m off line`;
+    s.title = "Show on the map"; s.onclick = () => { const [x, y] = toSvg(t.x, t.y); view = { w: 80, h: 80 * view.h / view.w }; view.x = x - view.w / 2; view.y = y - view.h / 2; apply(); };
+    const b = document.createElement("button"); b.textContent = "Keep"; b.onclick = () => { marked.delete(t.id); paint(); };
+    r.append(s, b); list.appendChild(r);
+  }
+  $("nMarked").textContent = marked.size; $("nLabel").textContent = marked.size === 1 ? "tree marked" : "trees marked";
+}
+
+function treeAt(cx, cy) {
+  const [x, y] = clientToWorld(cx, cy);
+  const r = svg.getBoundingClientRect(), mPerPx = view.w / r.width;
+  let best = -1, bd = 1e9;
+  D.trees.forEach((t, i) => {
+    const d = Math.hypot(t.x - x, t.y - y);
+    if (d <= Math.max(t.r, 4 * mPerPx) && d < bd) { bd = d; best = i; }
+  });
+  return best;
+}
+
+// pointer handling: drag pans, a click toggles a tree, box mode or shift-drag selects
+const ptrs = new Map(); let start = null, pinch = null;
+const map = $("map");
+map.addEventListener("pointerdown", e => {
+  map.setPointerCapture(e.pointerId); ptrs.set(e.pointerId, [e.clientX, e.clientY]);
+  if (ptrs.size === 2) { const [a, b] = [...ptrs.values()]; pinch = { d: Math.hypot(a[0] - b[0], a[1] - b[1]) }; start = null; return; }
+  start = { x: e.clientX, y: e.clientY, vx: view.x, vy: view.y, moved: false, box: box || e.shiftKey };
+});
+map.addEventListener("pointermove", e => {
+  if (ptrs.has(e.pointerId)) ptrs.set(e.pointerId, [e.clientX, e.clientY]);
+  if (pinch && ptrs.size === 2) {
+    const [a, b] = [...ptrs.values()], d = Math.hypot(a[0] - b[0], a[1] - b[1]);
+    zoomAt((a[0] + b[0]) / 2, (a[1] + b[1]) / 2, pinch.d / d); pinch.d = d; return;
+  }
+  if (!start) {
+    const i = treeAt(e.clientX, e.clientY);
+    $("hover").textContent = i < 0 ? "Hover a tree to see its height." :
+      `${D.trees[i].t === "conifer" ? "conifer" : "broadleaf"} \u00b7 ${D.trees[i].h} m tall \u00b7 crown ${Math.round(D.trees[i].r * 2)} m${D.inside[i] ? "" : " \u00b7 outside the course"}`;
+    return;
+  }
+  const dx = e.clientX - start.x, dy = e.clientY - start.y;
+  if (Math.hypot(dx, dy) > 4) start.moved = true;
+  if (!start.moved) return;
+  if (start.box) {
+    const r = svg.getBoundingClientRect(), k = view.w / r.width;
+    const x0 = view.x + (Math.min(start.x, e.clientX) - r.left) * k, y0 = view.y + (Math.min(start.y, e.clientY) - r.top) * k;
+    const b = $("box"); b.hidden = false;
+    b.setAttribute("x", x0); b.setAttribute("y", y0); b.setAttribute("width", Math.abs(dx) * k); b.setAttribute("height", Math.abs(dy) * k);
+  } else {
+    map.classList.add("dragging");
+    const r = svg.getBoundingClientRect(), k = view.w / r.width;
+    view.x = start.vx - dx * k; view.y = start.vy - dy * k; apply();
+  }
+});
+function end(e) {
+  ptrs.delete(e.pointerId); if (ptrs.size < 2) pinch = null;
+  map.classList.remove("dragging");
+  if (!start) return;
+  if (!start.moved) {
+    const i = treeAt(e.clientX, e.clientY);
+    if (i >= 0) { const t = D.trees[i]; marked.has(t.id) ? marked.delete(t.id) : marked.set(t.id, t); paint(); }
+  } else if (start.box) {
+    const [x0, y0] = clientToWorld(Math.min(start.x, e.clientX), Math.max(start.y, e.clientY));
+    const [x1, y1] = clientToWorld(Math.max(start.x, e.clientX), Math.min(start.y, e.clientY));
+    for (const t of D.trees) if (t.x >= x0 && t.x <= x1 && t.y >= y0 && t.y <= y1) marked.set(t.id, t);
+    $("box").hidden = true; paint();
+  }
+  start = null;
+}
+map.addEventListener("pointerup", end); map.addEventListener("pointercancel", end);
+map.addEventListener("wheel", e => { e.preventDefault(); zoomAt(e.clientX, e.clientY, e.deltaY > 0 ? 1.15 : 1 / 1.15); }, { passive: false });
+$("bIn").onclick = () => { const r = svg.getBoundingClientRect(); zoomAt(r.left + r.width / 2, r.top + r.height / 2, 1 / 1.4); };
+$("bOut").onclick = () => { const r = svg.getBoundingClientRect(); zoomAt(r.left + r.width / 2, r.top + r.height / 2, 1.4); };
+$("bFit").onclick = fit;
+$("bPhoto").onclick = () => setMode("photo");
+$("bGame").onclick = () => setMode("game");
+$("bBox").onclick = () => { box = !box; $("bBox").setAttribute("aria-pressed", box); map.classList.toggle("boxmode", box); };
+window.addEventListener("resize", () => view && fit());
+
+$("bSave").onclick = async () => {
+  if (!db) { $("status").textContent = "Saving needs the page opened on claude.ai while signed in."; return; }
+  $("bSave").disabled = true; $("status").textContent = "Saving\u2026";
+  try {
+    const trees = [...marked.values()].map(t => ({ id: t.id, x: t.x, y: t.y, h: t.h, r: t.r, t: t.t, hole: holeNear(t).h }));
+    await db.doc("marks/current").set({ trees, note: $("note").value, savedAt: new Date().toISOString(), by: me });
+    $("status").textContent = `Saved ${trees.length} ${trees.length === 1 ? "tree" : "trees"}. Tell Claude when you're done.`;
+  } catch (err) {
+    $("status").textContent = "Not saved: " + (err && err.message ? err.message : "the database refused the write") + ". Try again.";
+  }
+  $("bSave").disabled = false;
+};
+
+(async () => {
+  D = await (await fetch("data.json")).json();
+  setMode("photo"); draw(); fit();
+  $("status").textContent = "Connecting to the save store\u2026";
+  try {
+    db = window.claude && window.claude.use ? await window.claude.use("db") : null;
+    const user = window.claude && window.claude.use ? await window.claude.use("user") : null;
+    me = user ? await user.id().catch(() => null) : null;
+  } catch (e) { db = null; }
+  if (!db) { $("status").textContent = "Marks can't be saved in this view."; return; }
+  try {
+    const snap = await db.doc("marks/current").get();
+    const v = snap && (snap.data ? snap.data() : snap);
+    if (v && v.trees) {
+      const byId = new Map(D.trees.map(t => [t.id, t]));
+      for (const t of v.trees) if (byId.has(t.id)) marked.set(t.id, byId.get(t.id));
+      $("note").value = v.note || ""; paint();
+      $("status").textContent = `Loaded your saved marks (${marked.size}).`;
+    } else $("status").textContent = "Nothing saved yet.";
+  } catch (e) { $("status").textContent = "Nothing saved yet."; }
+})();
+</script>
