@@ -8,7 +8,7 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 |---|---|---|---|---|---|---|---|---|---|---|
 | 1 | 3 | Back | 119 | 113.7 | -5.3 | -4.5% | flag | 116.2 | -2.3% | pass |
 | 2 | 3 | Back | 124 | 112.5 | -11.5 | -9.3% | FAIL | 120.4 | -2.9% | pass |
-| 3 | 3 | Back | 85 | 90.1 | +5.1 | +5.9% | flag | 86.9 | +2.3% | pass |
+| 3 | 3 | Back | 85 | 67.4 | -17.6 | -20.7% | FAIL | 69.4 | -18.3% | FAIL |
 | 4 | 3 | Back | 80 | 83.8 | +3.8 | +4.8% | flag | 82.8 | +3.5% | flag |
 | 5 | 3 | Back | 117 | 117.8 | +0.8 | +0.7% | pass | 117.8 | +0.7% | pass |
 | 6 | 3 | Back | 84 | 85.8 | +1.8 | +2.2% | pass | 85.8 | +2.2% | pass |
@@ -25,31 +25,32 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 | 17 | 3 | Back | 80 | 80.3 | +0.3 | +0.4% | pass | 80.3 | +0.4% | pass |
 | 18 | 3 | Back | 92 | 87.5 | -4.5 | -4.9% | flag | 89.8 | -2.4% | pass |
 | 19 | 3 | Back | 57 | 56.4 | -0.6 | -1.1% | pass | 56.4 | -1.1% | pass |
-| **total** | 57 | | **1997** | **1957** | -40 | -2.0% | | **2000** | +0.1% | |
+| **total** | 57 | | **1997** | **1935** | -62 | -3.1% | | **1982** | -0.7% | |
 
 ## Open items
 
 1. Hole 1 (Back): tee box a_tee_back_1 assigned by the developer (tagged hole=1, tee_set=Back in edited/course.geojson).
 2. Hole 2 (Back): tee box a_tee_back_2 assigned by the developer (tagged hole=2, tee_set=Back in edited/course.geojson).
-3. Hole 3 (Back): tee box a_tee_back_3 assigned by the developer (tagged hole=3, tee_set=Back in edited/course.geojson).
-4. Hole 4 (Back): measured 83 yd vs card 80 (+3.5%) even with the virtual tee at the best spot in its box; accepted for play.
-5. Hole 4 (Back): tee box a_tee_back_4 assigned by the developer (tagged hole=4, tee_set=Back in edited/course.geojson).
-6. Hole 5 (Back): tee box a_tee_back_5 assigned by the developer (tagged hole=5, tee_set=Back in edited/course.geojson).
-7. Hole 6 (Back): tee box a_tee_back_6 assigned by the developer (tagged hole=6, tee_set=Back in edited/course.geojson).
-8. Hole 7 (Back): tee box a_tee_back_7 assigned by the developer (tagged hole=7, tee_set=Back in edited/course.geojson).
-9. Hole 8 (Back): tee box a_tee_back_8 assigned by the developer (tagged hole=8, tee_set=Back in edited/course.geojson).
-10. Hole 9 (Back): tee box a_tee_back_9 assigned by the developer (tagged hole=9, tee_set=Back in edited/course.geojson).
-11. Hole 10 (Back): tee box a_tee_back_10 assigned by the developer (tagged hole=10, tee_set=Back in edited/course.geojson).
-12. Hole 11 (Back): tee box a_tee_back_11 assigned by the developer (tagged hole=11, tee_set=Back in edited/course.geojson).
-13. Hole 12 (Back): tee box a_tee_back_12 assigned by the developer (tagged hole=12, tee_set=Back in edited/course.geojson).
-14. Hole 13 (Back): tee box a_tee_back_13 assigned by the developer (tagged hole=13, tee_set=Back in edited/course.geojson).
-15. Hole 14 (Back): tee box a_tee_back_14 assigned by the developer (tagged hole=14, tee_set=Back in edited/course.geojson).
-16. Hole 15 (Back): measured 49 yd vs card 51 (-3.4%) even with the virtual tee at the best spot in its box; accepted for play.
-17. Hole 15 (Back): tee box a_tee_back_15 assigned by the developer (tagged hole=15, tee_set=Back in edited/course.geojson).
-18. Hole 16 (Back): tee box a_tee_back_16 assigned by the developer (tagged hole=16, tee_set=Back in edited/course.geojson).
-19. Hole 17 (Back): tee box a_tee_back_17 assigned by the developer (tagged hole=17, tee_set=Back in edited/course.geojson).
-20. Hole 18 (Back): tee box a_tee_back_18 assigned by the developer (tagged hole=18, tee_set=Back in edited/course.geojson).
-21. Hole 19 (Back): tee box a_tee_back_19 assigned by the developer (tagged hole=19, tee_set=Back in edited/course.geojson).
+3. Hole 3 (Back): measured 69 yd vs card 85 (-18.3%) - FAIL, needs a decision.
+4. Hole 3 (Back): tee box a_tee_back_3 assigned by the developer (tagged hole=3, tee_set=Back in edited/course.geojson).
+5. Hole 4 (Back): measured 83 yd vs card 80 (+3.5%) even with the virtual tee at the best spot in its box; accepted for play.
+6. Hole 4 (Back): tee box a_tee_back_4 assigned by the developer (tagged hole=4, tee_set=Back in edited/course.geojson).
+7. Hole 5 (Back): tee box a_tee_back_5 assigned by the developer (tagged hole=5, tee_set=Back in edited/course.geojson).
+8. Hole 6 (Back): tee box a_tee_back_6 assigned by the developer (tagged hole=6, tee_set=Back in edited/course.geojson).
+9. Hole 7 (Back): tee box a_tee_back_7 assigned by the developer (tagged hole=7, tee_set=Back in edited/course.geojson).
+10. Hole 8 (Back): tee box a_tee_back_8 assigned by the developer (tagged hole=8, tee_set=Back in edited/course.geojson).
+11. Hole 9 (Back): tee box a_tee_back_9 assigned by the developer (tagged hole=9, tee_set=Back in edited/course.geojson).
+12. Hole 10 (Back): tee box a_tee_back_10 assigned by the developer (tagged hole=10, tee_set=Back in edited/course.geojson).
+13. Hole 11 (Back): tee box a_tee_back_11 assigned by the developer (tagged hole=11, tee_set=Back in edited/course.geojson).
+14. Hole 12 (Back): tee box a_tee_back_12 assigned by the developer (tagged hole=12, tee_set=Back in edited/course.geojson).
+15. Hole 13 (Back): tee box a_tee_back_13 assigned by the developer (tagged hole=13, tee_set=Back in edited/course.geojson).
+16. Hole 14 (Back): tee box a_tee_back_14 assigned by the developer (tagged hole=14, tee_set=Back in edited/course.geojson).
+17. Hole 15 (Back): measured 49 yd vs card 51 (-3.4%) even with the virtual tee at the best spot in its box; accepted for play.
+18. Hole 15 (Back): tee box a_tee_back_15 assigned by the developer (tagged hole=15, tee_set=Back in edited/course.geojson).
+19. Hole 16 (Back): tee box a_tee_back_16 assigned by the developer (tagged hole=16, tee_set=Back in edited/course.geojson).
+20. Hole 17 (Back): tee box a_tee_back_17 assigned by the developer (tagged hole=17, tee_set=Back in edited/course.geojson).
+21. Hole 18 (Back): tee box a_tee_back_18 assigned by the developer (tagged hole=18, tee_set=Back in edited/course.geojson).
+22. Hole 19 (Back): tee box a_tee_back_19 assigned by the developer (tagged hole=19, tee_set=Back in edited/course.geojson).
 
 ## Other open items (Shorty's)
 
@@ -66,12 +67,13 @@ Built 2026-10-22 together with Bandon Preserve (shared downloads, GitHub release
 9. **Hole 12's Back tee** is one long strip OSM maps for all three tee sets (84-143 yd); the virtual tee slides to its back end (130 yd against 133).
 10. **The lidar was flown in 2008, before Shorty's was built (2023-24).** The ground is the pre-construction dunes: greens are shaped by script and tees levelled anyway (developer: accepted). 349 lidar trees not seen in the 2024 photo were dropped (`trees_need_ortho`).
 11. **Neighbours' water.** Round Lake and the two Bandon Trails ponds lie outside the boundary; they are plain water (out of bounds), not penalty areas.
+12. **Hole 3's Back tee** is OSM box w1547384735 (OSM tags it `tee=middle`), chosen by the developer in play (2026-10-22, circled on a screenshot). The box first picked (w1547559697, nearest the card at 90 yd) stands in hole 5's tee complex. The chosen box measures 67 yd from its centre and 69 yd from the best spot in it, against 85 on the card (-18 %): a FAIL in the table, accepted by the developer.
 
 ## Playability adjustments
 
 - Hole 1 (Back): measured 114 yd from the tee-box centre vs 119 on the card (-4.5%); moved the virtual tee along the middle of the real tee polygon a_tee_back_1 (on its centre line, at least 2.5 m from its back and front) -> 116.2 yd (real 113.7 yd).
 - Hole 2 (Back): measured 112 yd from the tee-box centre vs 124 on the card (-9.3%); moved the virtual tee along the middle of the real tee polygon a_tee_back_2 (on its centre line, at least 2.5 m from its back and front) -> 120.4 yd (real 112.5 yd).
-- Hole 3 (Back): measured 90 yd from the tee-box centre vs 85 on the card (+5.9%); moved the virtual tee along the middle of the real tee polygon a_tee_back_3 (on its centre line, at least 2.5 m from its back and front) -> 86.9 yd (real 90.1 yd).
+- Hole 3 (Back): measured 67 yd from the tee-box centre vs 85 on the card (-20.7%); moved the virtual tee along the middle of the real tee polygon a_tee_back_3 (on its centre line, at least 2.5 m from its back and front) -> 69.4 yd (real 67.4 yd).
 - Hole 4 (Back): measured 84 yd from the tee-box centre vs 80 on the card (+4.8%); moved the virtual tee along the middle of the real tee polygon a_tee_back_4 (on its centre line, at least 2.5 m from its back and front) -> 82.8 yd (real 83.8 yd).
 - Hole 9 (Back): measured 77 yd from the tee-box centre vs 72 on the card (+6.5%); moved the virtual tee along the middle of the real tee polygon a_tee_back_9 (on its centre line, at least 2.5 m from its back and front) -> 73.7 yd (real 76.7 yd).
 - Hole 12 (Back): measured 92 yd from the tee-box centre vs 133 on the card (-30.8%); moved the virtual tee along the middle of the real tee polygon a_tee_back_12 (on its centre line, at least 2.5 m from its back and front) -> 129.7 yd (real 92.0 yd).
@@ -137,9 +139,9 @@ Built 2026-10-22 together with Bandon Preserve (shared downloads, GitHub release
 |---|---|---|---|---|---|---|---|---|
 | 1 | 3 | yes | yes (3 near) | yes | yes | yes | 7 | 0 |
 | 2 | 3 | yes | yes (3 near) | yes | yes | yes | 6 | 0 |
-| 3 | 3 | yes | NO (2 near) | yes | yes | yes | 10 | 0 |
-| 4 | 3 | yes | yes (9 near) | yes | yes | yes | 5 | 0 |
-| 5 | 3 | yes | yes (5 near) | yes | yes | yes | 5 | 0 |
+| 3 | 3 | yes | NO (3 near) | yes | yes | yes | 10 | 0 |
+| 4 | 3 | yes | yes (8 near) | yes | yes | yes | 5 | 0 |
+| 5 | 3 | yes | yes (4 near) | yes | yes | yes | 5 | 0 |
 | 6 | 3 | yes | yes (3 near) | yes | yes | yes | 5 | 0 |
 | 7 | 3 | yes | yes (7 near) | yes | yes | yes | 2 | 0 |
 | 8 | 3 | yes | yes (4 near) | yes | yes | yes | 7 | 0 |

@@ -4,7 +4,7 @@ Course id: `shortys` (data folder `data/shortys/`), branch `course/bandon_par3s`
 
 ## Build summary
 
-Built by a course chat on 2026-10-22, together with Bandon Preserve from one set of downloads (GitHub release `bandon-par-threes-data`). OSM maps all 19 holes, their tees, greens and bunkers, but no pins, no fairway and no green for hole 2. The mown turf (a pixel classifier on the 2024 photo, trained on the Preserve's mapped turf), hole 2's green (traced from the photo), a centre pin per green and the Back tee per hole went to the developer in the tracing desk, who approved them as shown. The double greens of 6/18 and 9/13 are cut in two per hole. Every fairway runs up to its green (`connect_fairways`, `merge_touching_fairways`, as at East Potomac and Langston). Elevation and canopy are DOGAMI's 2008 lidar (older than the course), with the OSIP 2024 photo for gorse and stale trees. Theme `bandon_dunes`; the logo is the design chat's spotted fawn. Every hole is within 3 % of the card except two 3.5 % flags (4 and 15): 1,999 yd against 1,997. The 14 course tests are `game/tests/unit/shortys.test.ts` (moved there by the design chat, 2026-10-22).
+Built by a course chat on 2026-10-22, together with Bandon Preserve from one set of downloads (GitHub release `bandon-par-threes-data`). OSM maps all 19 holes, their tees, greens and bunkers, but no pins, no fairway and no green for hole 2. The mown turf (a pixel classifier on the 2024 photo, trained on the Preserve's mapped turf), hole 2's green (traced from the photo), a centre pin per green and the Back tee per hole went to the developer in the tracing desk, who approved them as shown. The double greens of 6/18 and 9/13 are cut in two per hole. Every fairway runs up to its green (`connect_fairways`, `merge_touching_fairways`, as at East Potomac and Langston). Elevation and canopy are DOGAMI's 2008 lidar (older than the course), with the OSIP 2024 photo for gorse and stale trees. Theme `bandon_dunes`; the logo is the design chat's spotted fawn. Every hole is within 3 % of the card except two 3.5 % flags (4 and 15) and hole 3, whose Back tee the developer picked in play (69 yd against 85): 1,982 yd against 1,997. The 14 course tests are `game/tests/unit/shortys.test.ts` (moved there by the design chat, 2026-10-22).
 
 ## Facts
 
@@ -23,7 +23,7 @@ Bandon Dunes Golf Resort scorecard dated 2024-03-13 (`2024-Shortys-Scorecard-3-1
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
 | Par | 3 | 3 | 3 | 3 | 3 | 3 | 3 | 3 | 3 | 3 | 3 | 3 | 3 | 3 | 3 | 3 | 3 | 3 | 3 | 57 |
 | Back | 119 | 124 | 85 | 80 | 117 | 84 | 114 | 104 | 72 | 101 | 148 | 133 | 152 | 161 | 51 | 123 | 80 | 92 | 57 | 1997 |
-| Built | 116 | 120 | 87 | 83 | 118 | 86 | 115 | 105 | 74 | 104 | 144 | 130 | 153 | 165 | 49 | 124 | 80 | 90 | 56 | 1999 |
+| Built | 116 | 120 | 69 | 83 | 118 | 86 | 115 | 105 | 74 | 104 | 144 | 130 | 153 | 165 | 49 | 124 | 80 | 90 | 56 | 1982 |
 
 Middle (1,673), Front (1,309) and Putting (979) are in `scorecard.csv`, not built. No ratings.
 
@@ -37,6 +37,7 @@ Back, the only set built: the card has no Blue, so the 4.1 default takes the lon
 -   2026-10-22: the tracing desk approved as shown: the turf as fairway, hole 2's green, a Back tee per hole.
 -   2026-10-22: no rough between fairway and green, the fix used at East Potomac and Langston (`connect_fairways`, `merge_touching_fairways`); the small rough patches left inside the fairways stay.
 -   2026-10-22: the logo is the design chat's spotted fawn (on `main`).
+-   2026-10-22: hole 3's Back tee is OSM box w1547384735 (circled on a screenshot from play), not the box in hole 5's tee complex; 69 yd against 85 on the card, accepted (`desk_prep.py` `TEE_CHOICE`, branch `course/shortys-hole3`).
 
 ## New pipeline keys or theme
 
@@ -51,6 +52,7 @@ In `data/shortys/report_notes.md` (and `validation_report.md`):
 3.  Hole 15's boundary grown round its green (OSM's line crossed it). Recommendation: keep.
 4.  Flags 4 (+3.5 %) and 15 (-3.4 %). Recommendation: accept.
 5.  The shared tests need the design chat: `courses.test.ts` still expects 9 or 18 holes, and `player.test.ts` expects every listed course in the daily rotation.
+6.  Hole 3 is 69 yd against 85 on the card (-18 %), from the box the developer chose. Accepted.
 
 ## Lessons
 
