@@ -146,8 +146,30 @@ def prep():
 
 
 def mark(out_dir):
+    """Also show each hole's own OSM greens, bunkers and tees as solid shapes (ids osm_<hole>_<i>),
+    not dashed references: they are built as mapped, and the developer should not read them as
+    shapes left to trace (developer, 2026-10-22). Unchanged ones are ignored on read-back."""
+    from shapely.geometry import LineString, Polygon
     p = Path(out_dir) / "holes.json"
     holes = json.load(open(p))
+    lines = {h["hole"]: LineString(h["line"]) for h in holes if len(h["line"]) > 1}
+    for h in holes:
+        if h["hole"] not in lines:
+            continue
+        near = lines[h["hole"]].buffer(25)
+        mine = [Polygon(f["poly"]) for f in h["features"]]
+        keep, n = [], 0
+        for r in h["refs"]:
+            q = Polygon(r["poly"])
+            own = (r["kind"] in ("green", "bunker", "tee") and q.is_valid and q.intersects(near)
+                   and min(lines, key=lambda k: lines[k].distance(q)) == h["hole"]
+                   and not any(q.symmetric_difference(m).area < 0.05 * q.area for m in mine if m.is_valid))
+            if own:
+                h["features"].append({"id": f"osm_{h['hole']}_{n}", "kind": r["kind"], "poly": r["poly"]})
+                n += 1
+            else:
+                keep.append(r)
+        h["refs"] = keep
     for h in holes:
         tees = [f for f in h["features"] if f["kind"] == "tee" and (f["id"].endswith("_back") or f["id"].endswith("_osm"))]
         if not any(f["kind"] == "bluetee" for f in h["features"]) and tees:
