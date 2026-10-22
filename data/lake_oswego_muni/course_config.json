@@ -68,5 +68,47 @@
     "v_max": 120,
     "min_share": 0.1,
     "note": "the 2019 lidar predates the 2023-25 rebuild (about 160 trees removed): lidar crowns that are not dark canopy on the OSIP 2024 photo are dropped (pipeline/gorse.py missing_in_ortho)"
-  }
+  },
+  "drop_trees": [
+    {
+      "x": 319.5,
+      "y": 451.5,
+      "reason": "developer 2026-10-22, tree tracer: remove (broadleaf 20.4 m, near hole 7)"
+    },
+    {
+      "x": 461.5,
+      "y": 528.5,
+      "reason": "developer 2026-10-22, tree tracer: remove (broadleaf 6.9 m, near hole 1)"
+    },
+    {
+      "x": 444.5,
+      "y": 540.5,
+      "reason": "developer 2026-10-22, tree tracer: remove (broadleaf 9.1 m, near hole 1)"
+    },
+    {
+      "x": 385.5,
+      "y": 381.5,
+      "reason": "developer 2026-10-22, tree tracer: remove (broadleaf 19.0 m, near hole 9)"
+    },
+    {
+      "x": 364.5,
+      "y": 397.5,
+      "reason": "developer 2026-10-22, tree tracer: remove (broadleaf 14.2 m, near hole 9)"
+    },
+    {
+      "x": 280.5,
+      "y": 365.5,
+      "reason": "developer 2026-10-22, tree tracer: remove (broadleaf 16.8 m, near hole 8)"
+    },
+    {
+      "x": 459.5,
+      "y": 388.5,
+      "reason": "developer 2026-10-22, tree tracer: remove (conifer 30.8 m, near hole 1)"
+    },
+    {
+      "x": 320.5,
+      "y": 547.5,
+      "reason": "developer 2026-10-22, tree tracer: remove (broadleaf 25.5 m, near hole 2)"
+    }
+  ]
 }
