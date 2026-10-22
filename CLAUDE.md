@@ -596,6 +596,12 @@ DECISIONS.md with the reason.
     Kept with the match (storage key `c`, latest 100, 400 per match), filtered
     like names (`cleanChat`). DECISIONS.md "Chat in live matches".
 
+-   **Scorecards from the daily and recent lists (design chat, 2026-10-22):**
+    branch `design/card-taps`, merged 2026-10-22
+    (developer: "merge"): a tap on a round there shows its card
+    (`/api/scores?id=` for "recent"); "this week" lists a player's rounds.
+    DECISIONS.md "Scorecards from the daily and recent lists".
+
 -   **Next task:** Item 1 of the player improvements (swing coach) is on
     `design/coach`, unmerged. Also: the third playtest (putting, yellow
     misses), the club's printed scorecard and the hole 3 Blue tee box. New

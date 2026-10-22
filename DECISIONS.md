@@ -941,3 +941,19 @@ Not merged (the developer will say when). Design note: docs/reports/multiplayer_
 - A test found on main: online.test.ts's "hide me" test posted daily rounds dated 2026-10-20, which
   the server stops taking two days on; it uses today's date now.
 
+## Scorecards from the daily and recent lists (developer, 2026-10-22; branch design/card-taps)
+
+- "View people's scorecards when you click on their score on the daily and recents page like you
+  can if you click on their score on the leaderboard": a tap on a round on "daily: today" and on
+  "recent" shows its card, as on the course boards (the same picture, with copy / download on a
+  computer and the share sheet on a phone). The card's box says whose it is ("sam's scorecard";
+  it said "your scorecard" for anyone's).
+- "Daily: this week" lists players, not rounds: a tap on one lists their daily rounds of the week
+  (day, course, score) to pick one.
+- The "recent" list carries scores only, so the card is fetched on the tap (`/api/scores?id=`, a
+  hidden player's round isn't given). Matches on "recent" have no card (the server keeps their
+  result, not the holes).
+- The card's pictures (course art, logos) load through the scene's loader, which ignores a start
+  while it is busy: the card now waits for it, and never longer than 8 s (a card without its art
+  rather than none).
+

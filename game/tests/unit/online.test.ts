@@ -393,3 +393,22 @@ describe('merging names (developer, 2026-10-21: "played under two names")', () =
     expect(await board()).toEqual(['a1:charlie', 's1:sam']); // nothing changed
   });
 });
+
+describe('one round for its card (developer, 2026-10-22: tap a score on "recent")', () => {
+  it('gives the round with that id, not a hidden player\'s, and nothing for an unknown id', async () => {
+    resetSchemaCache(); resetFeedCache();
+    const db = fakeD1();
+    const pars = [4, 4, 4, 4, 4, 4, 4, 4, 4];
+    await handlePost(db, JSON.stringify([
+      { ...scored('r1', 'charlie', [3, 4, 4, 4, 4, 4, 4, 4, 5], pars), owner: KEY_A },
+      { ...scored('r2', 'sam', [4, 4, 4, 4, 4, 4, 4, 4, 4], pars), owner: KEY_B },
+    ]));
+    const one = async (id: string) => ((await (await get(db, `id=${encodeURIComponent(id)}`)).json()) as { entries: LeaderboardEntry[] }).entries;
+    const r1 = await one('r1');
+    expect(r1.map((e) => [e.id, e.player, e.scores.length])).toEqual([['r1', 'charlie', 9]]);
+    expect(await one('nope')).toEqual([]);
+    await handleHide(db, JSON.stringify({ owner: KEY_B, hidden: true }));
+    expect(await one('r2')).toEqual([]);
+    expect((await get(db, 'id=')).status).toBe(400);
+  });
+});

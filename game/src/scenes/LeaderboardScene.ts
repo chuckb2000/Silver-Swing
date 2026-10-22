@@ -8,7 +8,7 @@
 import { app } from '../app';
 import { Difficulty } from '../data/difficulty';
 import { backupText, LeaderboardEntry, loadBoard, RoundLength } from '../save/store';
-import { BirdieRow, fetchBirdieRecords, fetchHandicapRounds, fetchBoard, fetchDaily, fetchDailyWeek, fetchEagles, fetchRecent, flushUploads, nameConflicts, onlineAvailable } from '../save/online';
+import { BirdieRow, fetchBirdieRecords, fetchHandicapRounds, fetchBoard, fetchDaily, fetchDailyWeek, fetchEagles, fetchRecent, fetchRound, flushUploads, nameConflicts, onlineAvailable } from '../save/online';
 import { FeedRow, matchFeedText, timeAgo } from '../save/feed';
 import { shareRound } from '../ui/shareCard';
 import { addDays, dailyPlan, dayStandings, weekStandings, weekStart } from '../systems/game/daily';
@@ -20,7 +20,7 @@ import { lengthLabel, lengthsFor } from './flow';
 import { askImport, showBackup } from '../ui/backup';
 import { compareRounds, toPar } from '../systems/rules/scoring';
 import { teeFor } from '../data/registry';
-import { Button, COLORS, Panel, txt } from '../ui/widgets';
+import { Button, COLORS, dimmer, Panel, txt } from '../ui/widgets';
 import { MenuScene } from './menu';
 import { DEFAULT_NAME } from '../save/names';
 
@@ -41,6 +41,9 @@ function localDay(iso: string): string {
   const p = (n: number) => String(n).padStart(2, '0');
   return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}`;
 }
+
+/** A row of the daily and recent lists (`tap`: a round's card). */
+interface TableRow { v: string[]; hi?: number[]; span?: boolean; tap?: () => void }
 
 export class LeaderboardScene extends MenuScene {
   constructor() {
@@ -155,9 +158,10 @@ export class LeaderboardScene extends MenuScene {
 
   /**
    * A list with a header row and pages (the daily and recent views). A row with `span` has two values: the
-   * first column's, and a line across the rest (a match on the recent list), cut to fit.
+   * first column's, and a line across the rest (a match on the recent list), cut to fit. A row with `tap`
+   * opens something (a round's card: developer, 2026-10-22, "like you can on the leaderboard").
    */
-  private table(x0: number, y0: number, pw: number, ph: number, y: number, head: string[], cols: number[], rows: { v: string[]; hi?: number[]; span?: boolean }[], empty: string) {
+  private table(x0: number, y0: number, pw: number, ph: number, y: number, head: string[], cols: number[], rows: TableRow[], empty: string, hint = 'tap a round to see its card') {
     const lineH = 11;
     const listTop = y + 2;
     const maxRows = Math.max(1, Math.floor((y0 + ph - 36 - listTop) / lineH) - 1);
@@ -165,8 +169,14 @@ export class LeaderboardScene extends MenuScene {
     page = Math.min(page, pages - 1);
     head.forEach((h, i) => { if (cols[i] >= 0) this.root.add(txt(this, cols[i], listTop, h, { color: COLORS.dim })); });
     if (!rows.length) this.root.add(txt(this, x0 + pw / 2, listTop + 24, empty, { origin: [0.5, 0], color: COLORS.dim, maxWidth: pw - 16 }));
+    else if (rows.some((r) => r.tap)) this.root.add(txt(this, x0 + pw / 2, y0 + ph - 32, hint, { origin: [0.5, 0], color: COLORS.dim }));
     rows.slice(page * maxRows, (page + 1) * maxRows).forEach((r, k) => {
       const yy = listTop + (k + 1) * lineH;
+      if (r.tap) {
+        const zone = this.add.zone(x0 + 6, yy - 1, pw - 12, lineH).setOrigin(0, 0).setInteractive({ useHandCursor: true });
+        zone.on('pointerup', r.tap);
+        this.root.add(zone);
+      }
       if (r.span) {
         this.root.add(txt(this, cols[0], yy, r.v[0]));
         const t = txt(this, cols[1], yy, r.v[1], { color: COLORS.white });
@@ -225,7 +235,11 @@ export class LeaderboardScene extends MenuScene {
       const sub = info && plan ? `${info.name.toLowerCase()}  ·  ${lengthLabel(plan.length)}  ·  ${plan.tee.toLowerCase()} tees  ·  normal` : '';
       this.root.add(txt(this, x0 + pw / 2, y, sub, { origin: [0.5, 0], color: COLORS.dim, maxWidth: pw - 16 }));
       y += 11;
-      const rows = dayStandings(list, day, plan).map((e, i) => ({ v: [String(i + 1), e.player.slice(0, 12), String(e.gross), toPar(e.toPar), timeAgo(e.date)] }));
+      const standings = dayStandings(list, day, plan);
+      const rows: TableRow[] = standings.map((e, i) => ({
+        v: [String(i + 1), e.player.slice(0, 12), String(e.gross), toPar(e.toPar), timeAgo(e.date)],
+        tap: () => { void shareRound(this, e, `#${i + 1} of ${standings.length} in today's daily`); },
+      }));
       this.table(x0, y0, pw, ph, y, ['#', 'player', 'gross', 'to par', wide ? 'when' : ''], [x0 + 10, x0 + 30, x0 + 110, x0 + 150, wide ? x0 + 200 : -1], rows,
         'nobody has played today\'s round yet - be the first');
       if (!rows.length && plan && info) {
@@ -236,8 +250,12 @@ export class LeaderboardScene extends MenuScene {
       this.root.add(txt(this, x0 + pw / 2, y, `week of ${first.slice(5)}: best five daily rounds, to par`, { origin: [0.5, 0], color: COLORS.dim, maxWidth: pw - 16 }));
       y += 11;
       const weekList = list.filter((e) => e.daily! >= first && e.daily! <= addDays(first, 6));
-      const rows = weekStandings(weekList, 5, (d) => dailyPlan(d, app.courses, DAILY_ROSTER, DAILY_PICKS)).map((r, i) => ({ v: [String(i + 1), r.player.slice(0, 12), `${r.days}/7`, toPar(r.toPar)] }));
-      this.table(x0, y0, pw, ph, y, ['#', 'player', 'days', 'to par'], [x0 + 10, x0 + 30, x0 + 110, x0 + 150], rows, 'no daily rounds this week yet');
+      const rows: TableRow[] = weekStandings(weekList, 5, (d) => dailyPlan(d, app.courses, DAILY_ROSTER, DAILY_PICKS)).map((r, i) => ({
+        v: [String(i + 1), r.player.slice(0, 12), `${r.days}/7`, toPar(r.toPar)],
+        // a player's week: their rounds to choose from
+        tap: () => this.chooseRound(r.rounds, `${r.player}'s daily rounds this week`, (e) => `daily ${localDay(e.date).slice(5)}`),
+      }));
+      this.table(x0, y0, pw, ph, y, ['#', 'player', 'days', 'to par'], [x0 + 10, x0 + 30, x0 + 110, x0 + 150], rows, 'no daily rounds this week yet', "tap a player to see their week's cards");
     }
   }
 
@@ -264,16 +282,56 @@ export class LeaderboardScene extends MenuScene {
       row: {
         v: [timeAgo(r.received), r.player.slice(0, 10), courseName(r.course).toLowerCase().slice(0, courseChars), `${r.gross} (${toPar(r.toPar)})${r.holes < 18 ? ' 9' : ''}`, badge(r)],
         hi: r.record || r.pb ? [4] : [],
-      } as { v: string[]; hi?: number[]; span?: boolean },
+        tap: () => { void this.openFeedRound(r); },
+      } as TableRow,
     }));
     // a match across the player, course and score columns: "kevin def. charlie 3&2 · oswego lake"
     const matches = feed.matches.map((m) => ({
       at: m.received,
-      row: { v: [timeAgo(m.received), `${matchFeedText({ ...m, winner: m.winner.slice(0, 10), loser: m.loser.slice(0, 10) })}  ·  ${courseName(m.course).toLowerCase()}`], span: true },
+      row: { v: [timeAgo(m.received), `${matchFeedText({ ...m, winner: m.winner.slice(0, 10), loser: m.loser.slice(0, 10) })}  ·  ${courseName(m.course).toLowerCase()}`], span: true } as TableRow,
     }));
     const table = [...rounds, ...matches].sort((a, b) => (a.at < b.at ? 1 : a.at > b.at ? -1 : 0)).slice(0, 50).map((x) => x.row);
     this.table(x0, y0, pw, ph, y, ['when', 'player', 'course', 'score', ''],
       [x0 + 8, x0 + 66, x0 + 128, wide ? x0 + 236 : x0 + 196, wide ? x0 + 296 : -1], table, 'no rounds yet - go play!');
+  }
+
+  /** A round on the recent list: its card, fetched from the shared board (the list itself carries only the score). */
+  private async openFeedRound(r: FeedRow) {
+    const g = this.gen;
+    const note = txt(this, app.view.w / 2, app.view.h - 30, 'getting the card...', { origin: [0.5, 0], color: COLORS.yellow });
+    this.root.add(note);
+    const e = await fetchRound(r.id);
+    if (!this.isCurrentBuild(g)) return;
+    note.destroy();
+    if (!e) {
+      const t = txt(this, app.view.w / 2, app.view.h - 30, "that card can't be had (offline, or the player is hidden)", { origin: [0.5, 0], color: COLORS.yellow });
+      this.root.add(t);
+      this.time.delayedCall(2500, () => t.destroy());
+      return;
+    }
+    void shareRound(this, e, r.record ? 'a new record' : r.pb ? 'a personal best' : '');
+  }
+
+  /** A short list of rounds to choose one from (a player's week of dailies); tapping one shows its card. */
+  private chooseRound(rounds: LeaderboardEntry[], title: string, label: (e: LeaderboardEntry) => string) {
+    const W = app.view.w, H = app.view.h;
+    const layer = this.add.container(0, 0).setDepth(50);
+    const close = () => layer.destroy();
+    const dim = dimmer(this, 0.6);
+    dim.on('pointerdown', close);
+    const list = [...rounds].sort((a, b) => (a.daily ?? a.date).localeCompare(b.daily ?? b.date));
+    const pw = Math.min(260, W - 16), ph = 34 + list.length * 18 + 22;
+    const x0 = Math.round((W - pw) / 2), y0 = Math.round((H - ph) / 2);
+    layer.add([dim, new Panel(this, x0, y0, pw, ph, 0.95), txt(this, x0 + pw / 2, y0 + 6, title, { origin: [0.5, 0], maxWidth: pw - 12 })]);
+    const courseName = (id: string) => app.courses.find((c) => c.id === id)?.name.replace(/ (golf|country) club$| golf (course|links)$/i, '') ?? id;
+    list.forEach((e, i) => {
+      const day = new Date(`${e.daily ?? localDay(e.date)}T12:00:00`);
+      const when = Number.isNaN(day.getTime()) ? '' : ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'][day.getDay()];
+      const text = `${when}  ${courseName(e.course).toLowerCase().slice(0, 16)}  ${e.gross} (${toPar(e.toPar)})`;
+      layer.add(new Button(this, x0 + 8, y0 + 26 + i * 18, pw - 16, 15, text, () => { close(); void shareRound(this, e, label(e)); }, { color: 'grey' }));
+    });
+    layer.add(new Button(this, x0 + pw / 2 - 26, y0 + ph - 20, 52, 15, 'close', close, { color: 'grey' }));
+    this.root.add(layer);
   }
 
   /** The recent eagles and the most birdies in a round, across every course. */
