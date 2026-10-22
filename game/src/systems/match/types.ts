@@ -3,6 +3,7 @@
 // Pure data; nothing here touches Phaser, the browser or the network.
 
 import type { Difficulty } from '../../data/difficulty';
+import type { RoundLength } from '../../save/entry';
 import type { BallPos, PendingRelief } from '../game/round';
 import type { PuttStrike, Strike } from '../swing/outcome';
 
@@ -107,6 +108,10 @@ export interface MatchConfig {
   tee: string;
   /** scorecard hole numbers, as RoundConfig.holes */
   holes: number[];
+  /** the course hole of each of them, when it isn't the usual one (a club's pairs of nines) */
+  courseHoles?: number[];
+  /** the round's length, when the holes alone don't tell it (a club's nines: "nines:red+white") */
+  length?: RoundLength;
   difficulty: Difficulty;
   /** wind, lies, gusts and the pin sheet come from it (the same for both players) */
   seed: number;

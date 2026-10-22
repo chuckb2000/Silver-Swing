@@ -516,9 +516,10 @@ so a hole resumed after closing the tab lists the strokes since.
   "broke 80 / 40" milestones.
 - **Merged with what came since (2026-10-22, developer: "please merge the 13 and 19 hole courses
   support"):** the scorecard shows only the nines a round plays (`cardBlocks(length, slots,
-  shape)`); live matches take a course of 13 or 19 holes played all at once (the server takes up
-  to 19 holes a match, and extra holes after them), not a club's pairs of nines yet (the new-match
-  screen says so); handicaps count courses of 9 or 18 holes only (a 13- or 19-hole course has no
+  shape)`); live matches are played on every course: 13 or 19 holes all at once (the server takes up to
+  19 holes a match, and extra holes after them), and at a club of nines any pair or nine (the
+  match keeps the course hole of each scorecard hole, `MatchConfig.courseHoles`, and its length;
+  developer: "matches just work on every course"); handicaps count courses of 9 or 18 holes only (a 13- or 19-hole course has no
   rating for a nine or an 18; a club of nines is rated per pair, which the list doesn't keep); the
   daily rotation roster leaves out a course without a nine even when it is listed.
 

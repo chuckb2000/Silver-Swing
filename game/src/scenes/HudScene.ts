@@ -1718,7 +1718,7 @@ export class HudScene extends Phaser.Scene {
     const s = live?.session?.state;
     if (!live || !s) return null;
     const me = this.play.me;
-    const cfg = await newMatchConfig(s.cfg.tee, s.cfg.holes, s.cfg.difficulty);
+    const cfg = await newMatchConfig(s.cfg.tee, { holes: s.cfg.holes, courseHoles: s.cfg.courseHoles, length: s.cfg.length }, s.cfg.difficulty);
     // the player as they are in this match (a different name since would be a different player to the friend)
     const mine = s.players[me];
     const r = await createLiveMatch(cfg, { name: mine?.name ?? app.settings.playerName, lefty: mine?.lefty ?? app.settings.lefty });

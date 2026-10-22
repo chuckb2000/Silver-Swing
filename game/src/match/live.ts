@@ -11,6 +11,7 @@ import { MatchSession } from '../systems/match/session';
 import { applyEvent, clockText, holeLive, holeNo, other, resultFor, statusText, toPlay, waitingOn } from '../systems/match/rules';
 import { Action, ChatMsg, CLOCK, Logged, MatchConfig, MatchPlayer, PROTOCOL, RULES, Seat } from '../systems/match/types';
 import type { Difficulty } from '../data/difficulty';
+import type { RoundLength } from '../save/entry';
 
 /** What the server tells anyone about a match (its info page). */
 export interface MatchInfo {
@@ -54,13 +55,21 @@ export async function courseVersion(id: string): Promise<string> {
   } catch { return 'dev'; }
 }
 
+/** The holes of a match: scorecard slots, and the course hole of each when it isn't the usual one (a club's nines). */
+export interface MatchHoles { holes: number[]; courseHoles?: number[]; length?: RoundLength }
+
 /** A new match on the loaded course: its settings, pins and wind fixed now. */
-export async function newMatchConfig(tee: string, holes: number[], difficulty: Difficulty): Promise<MatchConfig> {
+export async function newMatchConfig(tee: string, h: MatchHoles, difficulty: Difficulty): Promise<MatchConfig> {
   const c = app.course!;
+  const n = c.json.holes.length;
   const seed = newSeed();
+  const ch = h.courseHoles ?? h.holes.map((s) => courseHoleFor(s, n));
+  const usual = ch.length === h.holes.length && ch.every((k, i) => k === courseHoleFor(h.holes[i], n));
   return {
-    protocol: PROTOCOL, courseId: c.json.id, courseVersion: await courseVersion(c.json.id), tee, holes, difficulty, seed,
-    pins: roundPins(c, tee, holes.map((h) => courseHoleFor(h, c.json.holes.length)), seed), startedAt: new Date().toISOString(),
+    protocol: PROTOCOL, courseId: c.json.id, courseVersion: await courseVersion(c.json.id), tee, holes: h.holes, difficulty, seed,
+    pins: roundPins(c, tee, ch, seed), startedAt: new Date().toISOString(),
+    ...(usual ? {} : { courseHoles: ch }),
+    ...(h.length?.startsWith('nines:') ? { length: h.length } : {}),
   };
 }
 
