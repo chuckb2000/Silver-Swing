@@ -971,6 +971,24 @@ Not merged (the developer will say when). Design note: docs/reports/multiplayer_
   place of their own. RedTail's course id is assumed to be `redtail`; if its chat builds it under
   another id, the two files are renamed to that id.
 
+## Missed clicks (developer, 2026-10-22; branch fix/missed-clicks)
+
+- "The game is occasionally missing clicks, it could be a hardware problem but can you look and see
+  if there's anything that would cause that." Two causes in the game, both fixed:
+  - **A swing tapped during a camera move was dropped.** The camera cuts (a fade, about 0.4 s) or
+    zooms (the putting views, about 0.5 s) to a new shot, and the swing button is live and looks
+    ready during it, but `PlayScene.tap` ignored taps until the move had finished. The tap is now
+    kept and the meter starts when the camera gets there (only if it is still the same shot and
+    nothing is open over it).
+  - **A button let go a little off its edge didn't count.** Buttons act on release (all but the
+    swing button, which acts on the press), and a press that slid off the button before the release
+    was cancelled: a finger rolling on a phone or a mouse moving while clicking a small button
+    (chat, map, menu, the club arrows) lost the click. A release within 6 game pixels of the button
+    now counts; let go well away, it still doesn't (the way to change your mind).
+- Not changed: a button made when a screen is redrawn takes input from the game's next frame
+  (Phaser), about 16 ms; on a slow device right after a screen change a click can still be early.
+- tests/e2e/clicks.spec.ts covers both; both tests fail on the old code.
+
 ## Logos for Shorty's and the Preserve (developer, 2026-10-22)
 
 - "We'll need a logo for shorty's in bandon which is being made, maybe some kind of baby elk or
