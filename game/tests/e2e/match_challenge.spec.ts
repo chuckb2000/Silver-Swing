@@ -2,7 +2,8 @@
 // looking for a match at Oswego Lake; kevin, on the title screen, gets a note
 // (nothing greyed out, his menu where it was) and charlie in the box beside
 // the menu, taps him, sets the match up and offers it; charlie gets a note of
-// the offer, taps it, accepts, and both are on the first tee. Against the match Worker (with its
+// the offer and "1 offer for you" on his button, taps it, accepts, and both
+// are on the first tee. Against the match Worker (with its
 // lobby) and the site's functions under wrangler (scripts/match-dev.sh).
 
 import { expect, Page, test } from '@playwright/test';
@@ -82,15 +83,15 @@ test('open to a challenge: a post, a note, an offer, accepted, both on the first
   await b.waitForFunction(() => { const m = window.__game.scene.getScene('match'); return m.sys.isActive() && m.m.mode === 'invite' && m.m.challenge?.to === 'charlie'; }, null, { timeout: 30_000 });
   await b.screenshot({ path: `${SHOTS}/challenge-5-waiting.png` });
 
-  // charlie: a note of the offer (his button says so too); a tap on it, he accepts, and joins kevin's match
+  // charlie: a note of the offer, and his button says so; he taps it, accepts, and joins kevin's match
   await noteUp(a, 'kevin offers you a match');
   await a.waitForFunction(() => {
     const find = (l: any[]): boolean => l.some((o) => o.label?.text === '1 offer for you' || (o.list && find(o.list)));
     return find(window.__game.scene.getScene('title').children.list);
   }, null, { timeout: 30_000 });
   await a.screenshot({ path: `${SHOTS}/challenge-6-offer.png` });
-  await a.locator('[data-toast]').click();
-  await dialogSays(a, 'kevin offers you a match');
+  // the note may have gone by now (it stays 12 s): the offer waits on his button
+  await tapButton(a, 'title', '1 offer for you', 30_000, async () => (await a.getByRole('button', { name: 'accept', exact: true }).count()) > 0);
   await a.getByRole('button', { name: 'accept', exact: true }).click();
   await Promise.all([inPlay(a), inPlay(b)]);
   const players = await a.evaluate(() => window.__game.scene.getScene('play').match.session.state.players.map((p: any) => p?.name));
