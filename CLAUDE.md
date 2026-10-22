@@ -589,9 +589,10 @@ DECISIONS.md with the reason.
     "Live match play".
 
 -   **Chat in live matches (design chat, 2026-10-22):** branch `design/chat`,
-    unmerged. Typed messages (the developer's choice), a chat button under the
-    menu button (T on a keyboard), an HTML panel, a note under the match bar
-    for a new message; nothing shows while a player is hitting (developer).
+    merged 2026-10-22 (developer: "merge"). Typed messages (the developer's
+    choice), a chat button under the menu button (T on a keyboard), an HTML
+    panel, a note under the match bar for a new message, a "press t to chat"
+    line when a match starts; nothing shows while a player is hitting (developer).
     Kept with the match (storage key `c`, latest 100, 400 per match), filtered
     like names (`cleanChat`). DECISIONS.md "Chat in live matches".
 

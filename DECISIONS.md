@@ -926,6 +926,11 @@ Not merged (the developer will say when). Design note: docs/reports/multiplayer_
   like the menu).
 - A new message otherwise: a note under the match bar for 6 s (tap it to open the chat), a soft
   sound, and the count on the chat button, which turns orange; a background tab's title says it.
+- "Can you put a little thing up at the start of the round that says press T to open chat":
+  when a match's first hole starts (both players in, nothing played yet), a yellow line under the
+  match bar for 8 s: "press t (or tap chat) to chat with <name>", or on a phone "tap chat (top
+  right) to talk to <name>". Once per match on a device, and never again once the player has
+  opened the chat.
 - Filtered like names: each word the name filter refuses becomes stars (also a word spelt out in
   single letters). The server does it, so both players see the same text.
 - Kept with the match on the server (its own storage key: one write per message, apart from the

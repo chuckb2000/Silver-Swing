@@ -163,6 +163,8 @@ export class HudScene extends Phaser.Scene {
   private chatting = false;
   /** a message that came during this player's shot: shown once the shot is over (developer: no distraction while hitting) */
   private heldNote: ChatMsg | null = null;
+  /** the "press T to chat" hint has been considered on this page */
+  private chatHinted = false;
   /** the banner on screen: when it went up and for how long (a banner that follows waits for it) */
   private bannerAt = 0;
   private bannerFor = 0;
@@ -201,6 +203,7 @@ export class HudScene extends Phaser.Scene {
     this.chatNoteTimer = null;
     this.chatting = false;
     this.heldNote = null;
+    this.chatHinted = false;
     this.bannerAt = 0;
     this.bannerFor = 0;
     this.queuedFlash = null;
@@ -353,6 +356,7 @@ export class HudScene extends Phaser.Scene {
     this.play.cancelSwing();
     this.hideChatNote();
     this.chatting = true;
+    try { localStorage.setItem('golf:chat:used', '1'); } catch { /* blocked */ } // found it: no more hints
     openChat(this, live, this.play.me, () => { this.chatting = false; if (this.sys.isActive()) this.refresh(); });
     this.refresh();
   }
@@ -386,7 +390,7 @@ export class HudScene extends Phaser.Scene {
     const w = Math.min(260, this.W - 16);
     const max = Math.floor((w - 12) / 5) * 2 - 3; // two lines of text
     setTxt(this.chatNoteTxt, text.length > max ? `${text.slice(0, max)}...` : text);
-    this.chatNoteTxt.setMaxWidth(w - 12);
+    this.chatNoteTxt.setMaxWidth(w - 12).setTint(COLORS.white);
     const h = Math.round(this.chatNoteTxt.height) + 8;
     this.chatNote.resize(w, h, 0.9);
     this.chatNote.setSize(w, h);
@@ -397,6 +401,36 @@ export class HudScene extends Phaser.Scene {
     this.chatNoteTimer?.remove();
     this.chatNoteTimer = this.time.delayedCall(6000, () => this.hideChatNote());
     this.refresh();
+  }
+
+  /** The hint is shown once per match, and not at all once the player has opened the chat. */
+  private chatHintDue(code: string): boolean {
+    try {
+      if (localStorage.getItem('golf:chat:used')) return false;
+      const key = `golf:match:${code}:chathint`;
+      if (localStorage.getItem(key)) return false;
+      localStorage.setItem(key, '1');
+      return true;
+    } catch { return true; }
+  }
+
+  /** "press t to chat with kevin" (on a phone: "tap chat"), in the note's place under the match bar, a little longer. */
+  private showChatHint() {
+    const who = (this.play.oppName() || 'your friend').slice(0, 12);
+    let touch = false;
+    try { touch = navigator.maxTouchPoints > 0 && window.matchMedia('(pointer: coarse)').matches; } catch { /* a computer */ }
+    const text = touch ? `tap chat (top right) to talk to ${who}` : `press t (or tap chat) to chat with ${who}`;
+    const w = Math.min(260, this.W - 16);
+    setTxt(this.chatNoteTxt, text);
+    this.chatNoteTxt.setMaxWidth(w - 12).setTint(COLORS.yellow);
+    const h = Math.round(this.chatNoteTxt.height) + 8;
+    this.chatNote.resize(w, h, 0.9);
+    this.chatNote.setSize(w, h);
+    (this.chatNote.input!.hitArea as Phaser.Geom.Rectangle).setTo(0, 0, w, h);
+    this.placeChatNote();
+    this.chatNote.setVisible(true);
+    this.chatNoteTimer?.remove();
+    this.chatNoteTimer = this.time.delayedCall(8000, () => this.hideChatNote());
   }
 
   private hideChatNote() {
@@ -704,6 +738,12 @@ export class HudScene extends Phaser.Scene {
       setTxt(this.chatBadgeTxt, n > 9 ? '+' : String(n));
       this.chatBtn.setColor(flag ? 'orange' : 'grey');
       if (!ready || quiet) this.hideChatNote();
+      // once per match, until the player has found the chat: how to open it (developer, 2026-10-22: "otherwise
+      // I don't think people will figure it out"); not while hitting, and not over a message
+      if (ready && !quiet && !this.chatHinted && !this.chatting && !this.heldNote) {
+        this.chatHinted = true;
+        if (n === 0 && this.chatHintDue(live.code)) this.showChatHint();
+      }
       if (ready && !quiet && this.heldNote) {
         const m = this.heldNote;
         this.heldNote = null;

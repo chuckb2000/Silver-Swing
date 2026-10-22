@@ -43,6 +43,11 @@ test('chat: a message reaches the other player (filtered), replies show as they 
   await joinMatch(b, code, `dog-${TAG}`);
   await Promise.all([inPlay(a), inPlay(b)]);
   await a.waitForFunction(() => window.__game.scene.getScene('play').match?.chatReady, null, { timeout: 30_000 });
+  // at the start, the one not hitting is told how to open the chat (once per match)
+  const hinted = async () => [await chatOf(a), await chatOf(b)].some((c) => (c.note ?? '').includes('press t (or tap chat) to chat with'));
+  for (let i = 0; i < 60 && !(await hinted()); i++) await a.waitForTimeout(250);
+  expect(await hinted()).toBe(true);
+  await (((await chatOf(a)).note ?? '').includes('press t') ? a : b).screenshot({ path: `${SHOTS}/chat-0-hint.png` });
 
   // A opens the chat with its button and types
   await tapButton(a, 'hud', 'chat', 30_000, async () => (await chatOf(a)).open);
@@ -52,7 +57,7 @@ test('chat: a message reaches the other player (filtered), replies show as they 
   await a.screenshot({ path: `${SHOTS}/chat-1-panel.png` });
 
   // B: a note under the match bar and a count on the button (emoji left out of the pixel font's note)
-  await b.waitForFunction(() => window.__game.scene.getScene('hud').chatNote?.visible, null, { timeout: 20_000 });
+  await b.waitForFunction(() => { const h = window.__game.scene.getScene('hud'); return h.chatNote?.visible && h.chatNoteTxt.text.includes('what the'); }, null, { timeout: 20_000 });
   const nb = await chatOf(b);
   expect(nb.note).toContain('what the ****');
   expect(nb.note).not.toContain('fuck');
@@ -117,7 +122,7 @@ test('chat on a phone held upright', async ({ browser }) => {
   await a.waitForFunction(() => window.__game.scene.getScene('play').match?.chatReady, null, { timeout: 30_000 });
   await tapButton(a, 'hud', 'chat', 30_000, async () => (await chatOf(a)).open);
   await say(a, 'a long one to see how it wraps on a narrow screen: that was a great up and down from the bunker');
-  await b.waitForFunction(() => window.__game.scene.getScene('hud').chatNote?.visible, null, { timeout: 20_000 });
+  await b.waitForFunction(() => { const h = window.__game.scene.getScene('hud'); return h.chatNote?.visible && h.chatNoteTxt.text.includes('long one'); }, null, { timeout: 20_000 });
   await b.screenshot({ path: `${SHOTS}/chat-4-phone-note.png` });
   await a.screenshot({ path: `${SHOTS}/chat-5-phone-panel.png` });
   // the panel inside the screen
