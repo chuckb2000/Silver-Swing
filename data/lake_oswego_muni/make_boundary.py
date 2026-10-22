@@ -12,8 +12,8 @@ fence and path north of the center, around the turf west of the clubhouse (the h
 tee), and east past the clubhouse to the OSM east edge. The driving range stays inside
 and is out of bounds by its own polygon (`driving_range_is_ob`).
 
-Writes proposed/boundary.geojson (WGS84, one `leisure=golf_course` polygon, id
-`prop_boundary`) and proposed/boundary.png (OSM line orange, proposal red).
+Writes proposed/boundary.geojson (WGS84, one `leisure=golf_course` polygon, osm id
+`prop_boundary`; approved by the developer 2026-10-22) and proposed/boundary.png (OSM line orange, proposal red).
 """
 import json
 import sys
@@ -50,10 +50,11 @@ def main():
     tr = Transformer.from_crs(f"EPSG:{cfg['epsg']}", "EPSG:4326", always_xy=True)
     ll = transform(lambda x, y: tr.transform(np.asarray(x) + w.x0, np.asarray(y) + w.y0), new)
     fc = {"type": "FeatureCollection", "features": [{
-        "type": "Feature", "id": "prop_boundary", "geometry": mapping(ll),
-        "properties": {"@id": "prop_boundary", "leisure": "golf_course", "name": cfg["boundary_name"],
-                       "source": "OSM way 60087783 cut along the north side of the aquatics center (OSIP 2024 photo)",
-                       "proposed": "course chat 2026-10-22"}}]}
+        "type": "Feature", "geometry": mapping(ll),
+        "properties": {"osm": "prop_boundary", "kind": "boundary", "tags": {
+            "leisure": "golf_course", "name": cfg["boundary_name"],
+            "source": "OSM way 60087783 cut along the north side of the aquatics center (OSIP 2024 photo)",
+            "proposed": "course chat 2026-10-22", "approved": "developer 2026-10-22"}}}]}
     (HERE / "proposed").mkdir(exist_ok=True)
     json.dump(fc, open(HERE / "proposed" / "boundary.geojson", "w"), indent=1)
 

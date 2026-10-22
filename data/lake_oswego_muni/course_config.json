@@ -63,5 +63,10 @@
     "Imagery: Oregon Statewide Imagery Program (OSIP) 2024",
     "Scorecard: GolfPass"
   ],
-  "notes": "Standing defaults (COURSE_BUILD.md 4.1) used without asking: Black tees only, all water red, boundary OB with the range OB, pins at green centres, lidar trees with fairway and tee-shot trees removed, pnw theme, wind 1-7 mph. OSM maps the city's golf property and the range only (the 2025 nine is not mapped): every hole is traced from the OSIP 2024 photo and corrected by the developer in the tracing desk. Hole identity from the 2021 site plan and the course map (look only)."
+  "notes": "Standing defaults (COURSE_BUILD.md 4.1) used without asking: Black tees only, all water red, boundary OB with the range OB, pins at green centres, lidar trees with fairway and tee-shot trees removed, pnw theme, wind 1-7 mph. OSM maps the city's golf property and the range only (the 2025 nine is not mapped): every hole is traced from the OSIP 2024 photo and corrected by the developer in the tracing desk. Hole identity from the 2021 site plan and the course map (look only).",
+  "trees_need_ortho": {
+    "v_max": 120,
+    "min_share": 0.1,
+    "note": "the 2019 lidar predates the 2023-25 rebuild (about 160 trees removed): lidar crowns that are not dark canopy on the OSIP 2024 photo are dropped (pipeline/gorse.py missing_in_ortho)"
+  }
 }

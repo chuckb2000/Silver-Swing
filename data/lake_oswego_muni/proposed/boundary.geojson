@@ -3,7 +3,6 @@
  "features": [
   {
    "type": "Feature",
-   "id": "prop_boundary",
    "geometry": {
     "type": "Polygon",
     "coordinates": [
@@ -100,11 +99,15 @@
     ]
    },
    "properties": {
-    "@id": "prop_boundary",
-    "leisure": "golf_course",
-    "name": "Lake Oswego Golf Course",
-    "source": "OSM way 60087783 cut along the north side of the aquatics center (OSIP 2024 photo)",
-    "proposed": "course chat 2026-10-22"
+    "osm": "prop_boundary",
+    "kind": "boundary",
+    "tags": {
+     "leisure": "golf_course",
+     "name": "Lake Oswego Golf Course",
+     "source": "OSM way 60087783 cut along the north side of the aquatics center (OSIP 2024 photo)",
+     "proposed": "course chat 2026-10-22",
+     "approved": "developer 2026-10-22"
+    }
    }
   }
  ]
