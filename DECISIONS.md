@@ -957,3 +957,16 @@ Not merged (the developer will say when). Design note: docs/reports/multiplayer_
   while it is busy: the card now waits for it, and never longer than 8 s (a card without its art
   rather than none).
 
+
+## Logos for the Muni and RedTail (developer, 2026-10-22)
+
+- "Can you make two logos: a sailboat for the muni and a fox for redtail golf course", then "let's
+  use your sailboat logo and fox logo" (the course chats had drawn their own to compare). The
+  design chat's drawings are the ones to use:
+  - `assets-src/course_logos/lake_oswego_muni.py`: a sailboat on the lake, white sails, a red hull
+    with a white stripe, an orange pennant;
+  - `assets-src/course_logos/redtail.py`: a red fox sitting in profile, its tail curled round
+    behind with a white tip, black socks, white chin and bib.
+- The course chats take these two files and their PNGs (`game/public/sprites/logos/<id>.png`) in
+  place of their own. RedTail's course id is assumed to be `redtail`; if its chat builds it under
+  another id, the two files are renamed to that id.
