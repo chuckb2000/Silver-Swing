@@ -41,6 +41,16 @@
       "x": 412.5,
       "y": 905.5,
       "reason": "developer 2026-10-19: hole 8, 25 m broadleaf right of the cart path between the fairway and the green, in the way of the approach; removed for playability"
+    },
+    {
+      "x": 940.5,
+      "y": 710.5,
+      "reason": "developer 2026-10-22: hole 17, 30 m broadleaf by the pond 28 m in front of the tee, crown over the line of the drive; removed for playability"
+    },
+    {
+      "x": 957.5,
+      "y": 705.5,
+      "reason": "developer 2026-10-22: hole 17, 39 m fir 31 m in front of the tee, crown over the line of the drive; removed for playability"
     }
   ],
   "world": {
