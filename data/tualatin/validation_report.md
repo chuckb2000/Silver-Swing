@@ -22,9 +22,9 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 | 14 | 4 | Blue | 341 | 337.3 | -3.7 | -1.1% | pass | 337.3 | -1.1% | pass |
 | 15 | 3 | Blue | 135 | 118.8 | -16.2 | -12.0% | FAIL | 131.6 | -2.5% | pass |
 | 16 | 4 | Blue | 375 | 389.7 | +14.7 | +3.9% | flag | 384.3 | +2.5% | pass |
-| 17 | 4 | Blue | 380 | 388.9 | +8.9 | +2.3% | pass | 387.9 | +2.1% | pass |
+| 17 | 4 | Blue | 380 | 388.9 | +8.9 | +2.3% | pass | 388.9 | +2.3% | pass |
 | 18 | 4 | Blue | 400 | 400.5 | +0.5 | +0.1% | pass | 400.5 | +0.1% | pass |
-| **total** | 72 | | **6370** | **6376** | +6 | +0.1% | | **6395** | +0.4% | |
+| **total** | 72 | | **6370** | **6376** | +6 | +0.1% | | **6396** | +0.4% | |
 
 ## Open items
 
@@ -59,11 +59,10 @@ Decisions the developer made on 2026-10-19 are in DECISIONS.md ("Tualatin Countr
 - Hole 11 (Blue): tee shot: a perfect drive at the middle of the fairway clipped a tree near the tee; moved 0.8 m along the middle of the real tee polygon w821713865 to the nearest clear spot -> 482.8 yd (real 483.3 yd).
 - Hole 15 (Blue): measured 119 yd from the tee-box centre vs 135 on the card (-12.0%); moved the virtual tee along the middle of the real tee polygon w821134355 (on its centre line, at least 2.5 m from its back and front) -> 131.6 yd (real 118.8 yd).
 - Hole 16 (Blue): measured 390 yd from the tee-box centre vs 375 on the card (+3.9%); moved the virtual tee along the middle of the real tee polygon w821713867 (on its centre line, at least 2.5 m from its back and front) -> 384.3 yd (real 389.7 yd).
-- Hole 17 (Blue): tee shot: a perfect drive at the middle of the fairway clipped a tree near the tee; moved 1.0 m along the middle of the real tee polygon w821134367 to the nearest clear spot -> 387.9 yd (real 388.9 yd).
 
 ## Tree detection (DOGAMI canopy height model)
 
-- 9020 trees detected in the world extent (1745 inside the course), 2269 conifers / 6751 deciduous; median height 12.7 m, max 55.0 m.
+- 9018 trees detected in the world extent (1743 inside the course), 2268 conifers / 6750 deciduous; median height 12.7 m, max 55.0 m.
 - Dropped: 1313 tops on building footprints, 0 over the lake, 30 tiny crowns.
 - Dropped on playing surfaces (spec 5.4): 3 -> lateral_water_hazard w821134379 (6.9 m), lateral_water_hazard w821134379 (6.4 m), lateral_water_hazard w821134379 (6.1 m)
 - OSM natural=tree points matched by a detected tree within 4 m: 1 of 1.
