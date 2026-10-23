@@ -628,7 +628,7 @@ DECISIONS.md with the reason.
     DECISIONS.md "Logos for the Muni and RedTail", "Logos for Shorty's and the Preserve".
 
 -   **Open to a challenge (design chat, 2026-10-22):** branch `design/challenge`,
-    unmerged: a title button next to "play a friend" to say you're looking for a
+    merged 2026-10-22 (PR #50): a title button next to "play a friend" to say you're looking for a
     match (a course or any course, 15 minutes), a short note at the top of every
     other open game (no popups, nothing greyed out; never while hitting; settings
     can make it title-only) and a box beside the title menu (the menu never
@@ -636,6 +636,12 @@ DECISIONS.md with the reason.
     (joins) or not. The lobby is the
     match Worker's object named `lobby` (`src/server/lobby.ts`), reached through the
     same `MATCH` binding. DECISIONS.md "Open to a challenge".
+
+-   **Music (design chat, 2026-10-22):** branch `design/music`, unmerged: an
+    original suite of nine movements (about 15 minutes) made in code
+    (`assets-src/music/`, `make music`), shuffled in the menus and in rounds;
+    the sound setting (volume, muted) applies (`src/audio/music.ts`).
+    DECISIONS.md "Music".
 
 -   **Next task:** Item 1 of the player improvements (swing coach) is on
     `design/coach`, unmerged. Also: the third playtest (putting, yellow
@@ -1658,8 +1664,12 @@ local leaderboard stays as the offline copy.
     -   quiet looping outdoor ambience (generated wind noise plus
         occasional synthesized bird chirps)
 
--   Master volume and mute in settings. Respect browser autoplay rules:
-    start audio on the first user input.
+-   **Music** (developer, 2026-10-22): an original nine-movement suite made in
+    code (`assets-src/music/`), shuffled in the menus and in rounds
+    (DECISIONS.md "Music").
+
+-   Master volume and mute in settings (they apply to the music too). Respect
+    browser autoplay rules: start audio on the first user input.
 
 **11. Courses**
 

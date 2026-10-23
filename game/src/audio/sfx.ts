@@ -56,6 +56,23 @@ export function setVolume(v: number, m: boolean) {
   volume = v;
   muted = m;
   if (master) master.gain.value = muted ? 0 : volume * MASTER_SCALE;
+  for (const f of listeners) f();
+}
+
+/** Sound on (not muted, volume above nothing): the music plays only then. */
+export function soundOn(): boolean {
+  return !muted && volume > 0;
+}
+
+/** The context and the master gain (volume and mute) once audio has started; the music plays through it. */
+export function audioGraph(): { ctx: AudioContext; master: GainNode } | null {
+  return ctx && master ? { ctx, master } : null;
+}
+
+const listeners: (() => void)[] = [];
+/** Called whenever the volume or mute changes. */
+export function onSoundChange(f: () => void) {
+  listeners.push(f);
 }
 
 function buffer(name: string): AudioBuffer | null {

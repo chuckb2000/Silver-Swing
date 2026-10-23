@@ -7,10 +7,13 @@
 //   - courses/<id>/*: this device, in a cache per course version
 //     (courses/versions.json, a hash of the course's files written by the
 //     build); a rebuilt course gets a new cache and the old one is dropped
+//   - music/*.mp3: this device once fetched (each file's name carries its hash);
+//     music/index.json the network first
 //   - api/*: never cached (scores always go to the network)
 const BUILD = '__BUILD__';
 const APP = `app-${BUILD}`;
 const SPRITES = 'sprites-1';
+const MUSIC = 'music-1';
 const VERSIONS = 'courses/versions.json';
 let versions = null;
 let versionsAt = 0;
@@ -26,6 +29,12 @@ self.addEventListener('message', (e) => {
 self.addEventListener('activate', (e) => {
   e.waitUntil((async () => {
     for (const k of await caches.keys()) if (k.startsWith('app-') && k !== APP) await caches.delete(k);
+    // music files this build no longer has go (a movement made again has a new name)
+    try {
+      const want = new Set(((await (await fetch('music/index.json', { cache: 'no-store' })).json()).tracks ?? []).map((t) => t.file));
+      const mc = await caches.open(MUSIC);
+      for (const r of await mc.keys()) if (!want.has(new URL(r.url).pathname.split('/').pop())) await mc.delete(r);
+    } catch { /* offline: next time */ }
     await self.clients.claim();
   })());
 });
@@ -105,6 +114,7 @@ self.addEventListener('fetch', (e) => {
   if (m) { e.respondWith(courseFile(req, m[1], m[2])); return; }
   if (path === VERSIONS) { e.respondWith(courseVersions(true).then((v) => new Response(JSON.stringify(v), { headers: { 'content-type': 'application/json' } }))); return; }
   if (path.startsWith('assets/')) { e.respondWith(cacheFirst(req, APP)); return; }
+  if (path.startsWith('music/') && path.endsWith('.mp3')) { e.respondWith(cacheFirst(req, MUSIC)); return; }
   if (path.startsWith('sprites/') || path.startsWith('icons/')) { e.respondWith(staleWhileRevalidate(req, SPRITES)); return; }
   e.respondWith(networkFirst(req)); // the page, index.json, manifest
 });

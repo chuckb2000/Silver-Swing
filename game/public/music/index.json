@@ -1,0 +1,67 @@
+{
+ "tracks": [
+  {
+   "id": "dawn",
+   "title": "dawn on the first tee",
+   "file": "dawn-db71d553.mp3",
+   "seconds": 104.6,
+   "bytes": 1255444
+  },
+  {
+   "id": "march",
+   "title": "fairway march",
+   "file": "march-2c4df668.mp3",
+   "seconds": 101.3,
+   "bytes": 1216261
+  },
+  {
+   "id": "waltz",
+   "title": "waltz on the back nine",
+   "file": "waltz-27194df2.mp3",
+   "seconds": 101.7,
+   "bytes": 1220963
+  },
+  {
+   "id": "primetime",
+   "title": "primetime",
+   "file": "primetime-6383640d.mp3",
+   "seconds": 99.5,
+   "bytes": 1194631
+  },
+  {
+   "id": "nocturne",
+   "title": "quiet green",
+   "file": "nocturne-86855329.mp3",
+   "seconds": 99.5,
+   "bytes": 1194631
+  },
+  {
+   "id": "coastal",
+   "title": "coastal wind",
+   "file": "coastal-5cb71140.mp3",
+   "seconds": 100.7,
+   "bytes": 1208424
+  },
+  {
+   "id": "birdie",
+   "title": "birdie run",
+   "file": "birdie-2bec28e2.mp3",
+   "seconds": 102.8,
+   "bytes": 1234442
+  },
+  {
+   "id": "hymn",
+   "title": "hymn at the turn",
+   "file": "hymn-05588536.mp3",
+   "seconds": 105.4,
+   "bytes": 1264535
+  },
+  {
+   "id": "finale",
+   "title": "grand finale",
+   "file": "finale-45ed5239.mp3",
+   "seconds": 108.5,
+   "bytes": 1302778
+  }
+ ]
+}

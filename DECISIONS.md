@@ -1103,6 +1103,32 @@ Not merged (the developer will say when). Design note: docs/reports/multiplayer_
 - Tests: tests/unit/lobby.test.ts and lobby_client.test.ts; tests/e2e/match_challenge.spec.ts
   (two browsers, under wrangler).
 
+## Music (developer, 2026-10-22; branch design/music)
+
+- "A background song like 80% inspired by the US Open golf theme song and 20% by the Sunday Night
+  Football NBC theme song, but appropriate for a golf game"; then "a 15 minute long version with
+  substantial variations otherwise people are going to go absolutely insane hearing the same
+  thing"; "during the menus and during the game", with the existing sound setting turning it off.
+- **Original music, made in code** (no samples, no outside audio): `assets-src/music/` (additive
+  synthesis of horns, trumpets, trombones, strings, harp, piano, winds, glockenspiel, xylophone,
+  timpani, snare, cymbals; a synthetic hall). Its melodies and chords are new; the two broadcast
+  themes set only the style (a stately golf anthem; a driving primetime section).
+- **Nine movements, about 15 minutes**, on shared themes, each with its own key, tempo and
+  instruments: dawn on the first tee, fairway march, waltz on the back nine, primetime, quiet
+  green (piano), coastal wind (D dorian), birdie run, hymn at the turn, grand finale.
+  `make music` renders them (about 15 min on two cores) and writes
+  `game/public/music/<id>-<hash>.mp3` (96 kb/s, about 1.2 MB each, 11 MB in all) and
+  `music/index.json`.
+- **Playing** (`src/audio/music.ts`): from the first tap or key (browsers allow sound only after
+  one); every movement once in a shuffled order, never the same one twice running
+  (`src/audio/playlist.ts`); in the menus and in rounds, a little quieter in a round. It goes
+  through the sound effects' master gain, so settings "volume" and "sound: muted" apply; muted or
+  with the tab hidden it pauses and downloads nothing. Each movement is fetched whole as it's
+  needed and the next one while it plays; the offline copy keeps them (`public/sw.js`, cache
+  `music-1`; files a build no longer has are dropped).
+- Tests: tests/unit/music.test.ts; tests/e2e/music.spec.ts (starts on the first tap, "muted"
+  pauses it, "on" resumes it).
+
 ## The meter counts a tap where the cursor was drawn (developer, 2026-10-22)
 
 - "I feel like it is not registering exactly where i click... usually in my favor somehow."

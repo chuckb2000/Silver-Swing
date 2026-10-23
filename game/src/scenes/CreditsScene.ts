@@ -29,7 +29,7 @@ export class CreditsScene extends MenuScene {
       ...c.attribution.map((a): [string, number] => [a, COLORS.white]),
       ['', 0],
       ['engine: phaser 3 (mit)  ·  sound: zzfx by frank force (mit)', COLORS.dim],
-      ['all art, sound and the pixel font were generated in code', COLORS.dim],
+      ['all art, sound, music and the pixel font were generated in code', COLORS.dim],
       ['for this project; style inspired by 16-bit golf games.', COLORS.dim],
       ['', 0],
       ['personal, unofficial project - not affiliated with any club.', COLORS.dim],

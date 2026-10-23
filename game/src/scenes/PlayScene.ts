@@ -8,6 +8,7 @@ import { reportEagle } from '../save/eagleReport';
 import Phaser from 'phaser';
 import { app, HEIGHT_PX, PX_PER_M } from '../app';
 import { initAudio, sfx, startAmbience } from '../audio/sfx';
+import { musicFor } from '../audio/music';
 import { CLUBS, Club } from '../data/clubs';
 import { Outcome, PlannedShot, PlayedStroke, puttScales, Round, SWING_SCALES } from '../systems/game/round';
 import { strokeLabel } from '../systems/game/strokes';
@@ -235,6 +236,8 @@ export class PlayScene extends Phaser.Scene {
       if (this.state === 'aim') this.cycleClub(dy > 0 ? 1 : -1);
     });
     // any first interaction unlocks audio
+    musicFor('round');
+    this.events.once('shutdown', () => musicFor('menu'));
     this.input.once('pointerdown', () => { void initAudio().then(startAmbience); });
     kb.once('keydown', () => { void initAudio().then(startAmbience); });
     const onResize = () => this.rig.apply();

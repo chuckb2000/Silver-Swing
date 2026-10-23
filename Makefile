@@ -3,7 +3,7 @@ NAME ?= oswego_lake
 NAMES ?=
 PY   ?= python3
 
-.PHONY: dev build test e2e course fetch regress lists assets cards all clean-course
+.PHONY: dev build test e2e course fetch regress lists assets music cards all clean-course
 
 dev:            ## run the game locally (Vite dev server)
 	cd game && npm run dev
@@ -19,6 +19,9 @@ e2e:            ## Playwright smoke test (builds first)
 
 assets:         ## regenerate sprites, UI art and the bitmap font
 	$(PY) assets-src/build_assets.py
+
+music:          ## make the game's music again (about 15 min on two cores) -> game/public/music
+	$(PY) assets-src/music/build_music.py
 
 fetch:          ## put a course's build inputs that aren't in git (lidar, big DEMs) into data/$(NAME)/raw/
 	$(PY) pipeline/fetch_raw.py $(NAME)
