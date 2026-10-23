@@ -64,6 +64,9 @@ def edited():
 
 
 KEEP: set = set()
+# Back tee boxes the developer picked by hand (hole -> OSM box, reason); others: the box nearest the card
+TEE_CHOICE = {"shortys": {3: ("w1547384735", "the developer's Back tee for hole 3 (2026-10-22, circled on a game screenshot); "
+                                             "it measures about 70 yd against 85 on the card, accepted")}}.get(CID, {})
 
 
 def prep():
@@ -119,6 +122,11 @@ def prep():
         gc = tg.centroid
         want = float(card[n]["back"])
         best = None
+        if n in TEE_CHOICE:  # the developer named this hole's Back tee box
+            t = tees[tees.osm == TEE_CHOICE[n][0]].iloc[0]
+            feats.append({"osm": f"tr_tee_{n}_osm", "kind": "tee", "geometry": t.geometry,
+                          "tags": {"golf": "tee", "hole": str(n), "copy_of": t.osm, "source": f"OSM tee box {t.osm}: {TEE_CHOICE[n][1]}"}})
+            continue
         for _, t in tees.iterrows():
             if t.geometry.distance(Point(L.coords[0])) > 70:
                 continue

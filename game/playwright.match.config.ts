@@ -5,7 +5,7 @@ import { defineConfig } from '@playwright/test';
 //   npm run build && npx playwright test -c playwright.match.config.ts
 export default defineConfig({
   testDir: 'tests/e2e',
-  testMatch: ['**/match.spec.ts', '**/match_flows.spec.ts', '**/match_clock.spec.ts', '**/match_chat.spec.ts', '**/match_challenge.spec.ts'],
+  testMatch: ['**/match.spec.ts', '**/match_flows.spec.ts', '**/match_clock.spec.ts', '**/match_chat.spec.ts', '**/match_challenge.spec.ts', '**/match_ob.spec.ts'],
   timeout: 600_000,
   use: {
     baseURL: 'http://localhost:8788',

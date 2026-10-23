@@ -1128,3 +1128,21 @@ Not merged (the developer will say when). Design note: docs/reports/multiplayer_
   `music-1`; files a build no longer has are dropped).
 - Tests: tests/unit/music.test.ts; tests/e2e/music.spec.ts (starts on the first tap, "muted"
   pauses it, "on" resumes it).
+
+## The meter counts a tap where the cursor was drawn (developer, 2026-10-22)
+
+- "I feel like it is not registering exactly where i click... usually in my favor somehow."
+- Two causes, both fixed:
+  - **Timing:** a tap counted at its own time, but the screen shows the cursor a frame or two
+    late, so the tap landed ahead of what the player saw: on a full swing's way back about 2 %
+    of the bar (the whole green zone is about ±2 %), and the stopped cursor jumped on after the
+    tap. An early tap (right of centre) was moved toward the centre: in the player's favour. Now
+    the screen tells the meter when it draws the cursor (`SwingMeter.drawn`) and a tap counts
+    where it was last drawn before the tap (within 50 ms; else, a stalled screen or a scripted
+    tap, its own time). The cursor turns back from that spot, so it moves on smoothly, and it
+    stops exactly where it was seen. (The 30 ms allowance of 2026-10-19, removed on 2026-10-20
+    because the cursor jumped back, guessed the lag; this uses the frame actually drawn.)
+  - **Drawing:** the green and yellow bands left out their right-hand pixel while the cursor is
+    drawn on its rounded pixel, so a tap just right of the green showed yellow and counted
+    green. Each band now covers its edge pixels on both sides.
+- Tests: tests/unit/meter_seen.test.ts.
