@@ -1,0 +1,20 @@
+{
+  "name": "Astoria (Clatsop Plains dune ridges)",
+  "note": "Course theme palette (<= 32 colours; same keys as pnw.json plus F0-F2). Astoria Golf & Country Club, Warrenton OR: irrigated fairways in the hollows between parallel dune ridges, the rough on the ridges left to dry to a warm tawny in summer (F0-F2; the whole rough, with a mown green band beside the fairways from config rough_band_m), grey-white coastal sand, dark tannin water (Sunset Lake), near-black Sitka spruce and shore pine (assets-src/trees_astoria.py). Hues from the OSIP 2024 photo of the course (fairway #8a9d6e, dry rough #aba486, sand #cbc5ba, lake #323b3e, conifers #384140), saturated for the game's style; the tawny is warmer and pinker than Gearhart's olive straw. Off the course (L0-L2) stays an olive green so out of bounds reads apart from the rough. Shadows are a 35% black overlay on top of these.",
+  "colors": {
+    "G0": "#172d24", "G1": "#203f2e", "G2": "#2b5236", "G3": "#38663b", "G4": "#467a40",
+    "G5": "#548c47", "G6": "#639d50", "G7": "#74ad5a", "G8": "#87bd66", "G9": "#a9d38c",
+    "L0": "#56693d", "L1": "#667a45", "L2": "#788b4f",
+    "S0": "#a39f93", "S1": "#d4cfc3", "S2": "#ebe7dd",
+    "W0": "#1d2a2c", "W1": "#2c3d3e", "W2": "#5f7a78",
+    "K0": "#25262b", "K1": "#505158", "K2": "#777880", "K3": "#ada89a", "K4": "#d4cfc1",
+    "B0": "#4a3a2c", "B1": "#6e5a42", "B2": "#8f7a5a",
+    "R0": "#4f5a66", "WH": "#f5f5f0",
+    "F0": "#8e7a4e", "F1": "#a99060", "F2": "#c0a873"
+  },
+  "lut": {"rough": ["F0", "F1", "F2", "F2"], "rough_band": ["G3", "G4", "G5", "G5"]},
+  "aliases": {"TUFT": "F0"},
+  "minimap": {"rough": "#a08a5c", "woods": "#2b5236", "ob_woods": "#264a32", "water": "#2c3d3e", "ob_water": "#2c3d3e", "bunker": "#d4cfc3", "ob_sand": "#d4cfc3"},
+  "minimap_trees": {"conifer": ["#10292a", "#28584f"], "deciduous": ["#1a3826", "#356336"]},
+  "trees": {"conifer": "trees_astoria:conifer", "deciduous": "trees_astoria:deciduous"}
+}
