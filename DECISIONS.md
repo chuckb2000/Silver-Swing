@@ -1158,7 +1158,8 @@ Not merged (the developer will say when). Design note: docs/reports/multiplayer_
   takes the club that lands nearest the pin. No plays-like formula: the physics is CLAUDE.md 7.2
   as before. In gorse every club's carry is capped, so there it keeps the flat rule (the
   shortest club on a tie).
-- Wildwood 3 now gets an 8-iron that finishes on the green, 4 m from the pin; the course
-  chat can drop its hole-3 exception in `game/tests/unit/wildwood.test.ts` once this is merged.
+- Wildwood's downhill par 3s now hold the green with the auto club and a perfect shot at the
+  pin: 3 (17.5 m drop) an 8-iron, 4 m past; 6 a gap wedge, 0.7 m; 12 a 9-iron, 6 m past (they
+  flew 15-30 m long before). `wildwood.test.ts` drops its hole-3 exception and checks all three.
 - Tests: tests/unit/auto_club_slope.test.ts (a par 3 tilted 17.5 m either way takes less or
   more club, and its perfect shot lands within 8 m of the pin). Every course's tests pass.

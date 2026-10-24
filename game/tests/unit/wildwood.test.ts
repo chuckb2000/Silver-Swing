@@ -97,11 +97,7 @@ describe('Wildwood Golf Course course data', () => {
     expect(blocked).toEqual([]);
   });
 
-  // Hole 3 is a par 3 that drops 17.5 m from tee to green: the auto club (6-iron for 155 m, by
-  // horizontal distance) flies a perfect shot 25 m past the pin into the trees behind the green.
-  // That is the game's club choice, not the data (request to the design chat: let autoClub allow
-  // for the height difference).
-  it('the default aim keeps a perfect tee shot out of the trees, the water and OB (hole 3: the auto club is one too long)', () => {
+  it('the default aim keeps a perfect tee shot out of the trees, the water and OB', () => {
     const bad: string[] = [];
     for (const h of json.holes) {
       const r = new Round(course, roundCfg(course, [h.number]));
@@ -114,7 +110,22 @@ describe('Wildwood Golf Course course data', () => {
       if (isOB(sim.restSurface)) bad.push(`${h.number} OB`);
       if (sim.inWater) bad.push(`${h.number} water`);
     }
-    expect(bad).toEqual(['3 woods']);
+    expect(bad).toEqual([]);
+  });
+
+  // The downhill par 3s (3 drops 17.5 m, 6 about 14 m, 12 about 20 m): the auto club is picked by
+  // where its perfect shot lands on the ground (design chat, 2026-10-24), so a perfect shot at the
+  // pin with it finishes on the green or fringe instead of flying it.
+  it('on the downhill par 3s the auto club holds the green', () => {
+    for (const n of [3, 6, 12]) {
+      const r = new Round(course, roundCfg(course, [n]));
+      r.startHole(0);
+      r.wind = { dir: 0, mph: 0, vx: 0, vy: 0 };
+      const club = r.autoClub();
+      const toPin = Math.atan2(r.pin.y - r.ball.y, r.pin.x - r.ball.x);
+      const sim = r.simulate(r.plan(club.id, toPin, meterFor(1, 0, false), 0, r.autoSwingScale(club)));
+      expect([SURF.green, SURF.fringe], `hole ${n}: ${club.id} rests on ${sim.restSurface}`).toContain(sim.restSurface);
+    }
   });
 
   it('a robot golfer completes 18 holes with legal, finite scores', () => {
