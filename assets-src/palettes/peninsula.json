@@ -1,0 +1,54 @@
+{
+  "name": "Peninsula (San Francisco Peninsula oak woodland, dry summer)",
+  "note": "Course theme palette (<= 32 colours; same keys as pnw.json plus F0-F2 for the rough). Stanford Golf Course in the foothills behind the campus, from the developer's photos (release stanford-data): bright, warm irrigated turf; olive rough; bright cream bunker sand; a shaded, olive-brown creek; and outside the course the golden summer grass of the California foothills (L0-L2, the out-of-bounds ground). Woods ground (G0-G2) is the dark olive of oak duff. Trees in assets-src/trees_peninsula.py: live and valley oaks, eucalyptus, redwoods and pines. Shadows are a 35% black overlay on top of these.",
+  "colors": {
+    "G0": "#1f3118",
+    "G1": "#2b421d",
+    "G2": "#3a5725",
+    "G3": "#46702f",
+    "G4": "#4f8a37",
+    "G5": "#5c9c3f",
+    "G6": "#6bad47",
+    "G7": "#7bbd50",
+    "G8": "#8dcb5d",
+    "G9": "#b2de86",
+    "L0": "#94804a",
+    "L1": "#ad9a5c",
+    "L2": "#c4b170",
+    "S0": "#c9b98f",
+    "S1": "#ebe1c4",
+    "S2": "#f8f3e2",
+    "W0": "#2c443b",
+    "W1": "#3b5a4e",
+    "W2": "#76968a",
+    "K0": "#26272d",
+    "K1": "#53545c",
+    "K2": "#7a7b83",
+    "K3": "#b3aa97",
+    "K4": "#d9d1bf",
+    "B0": "#46301f",
+    "B1": "#6d4a31",
+    "B2": "#8c5a40",
+    "R0": "#5a5550",
+    "WH": "#f6f6f2",
+    "F0": "#46642f",
+    "F1": "#557837",
+    "F2": "#658a40"
+  },
+  "lut": {
+    "rough": [
+      "F0",
+      "F1",
+      "F2",
+      "F2"
+    ]
+  },
+  "minimap": {
+    "ob": "#ad9a5c",
+    "rough": "#557837"
+  },
+  "trees": {
+    "conifer": "trees_peninsula:conifer",
+    "deciduous": "trees_peninsula:deciduous"
+  }
+}

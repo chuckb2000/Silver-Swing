@@ -1,0 +1,54 @@
+{
+  "id": "stanford",
+  "name": "Stanford Golf Course",
+  "location": "Stanford, Santa Clara County, California",
+  "state": "CA",
+  "architects": "George C. Thomas Jr. and William P. Bell (opened 1 January 1930); renovated by John Harbottle (2008); bunkers rebuilt and some holes changed (2018) (stanfordgolfcourse.com, Stanford Magazine)",
+  "theme": "peninsula",
+  "epsg": 32610,
+  "osm_sources": [
+    "raw/overpass.geojson"
+  ],
+  "boundary_name": "Stanford University Golf Course",
+  "dtm": {
+    "path": "raw/USGS_1M_3DEP_service_stanford.tif",
+    "units": "m",
+    "source": "USGS 3DEP 1 m bare-earth elevation (3DEPElevation ImageServer exportImage, float32, NAD83 / UTM 10N EPSG:26910, 1 m pixels, world + 100 m); NAVD88 metres; requested 2026-10-24"
+  },
+  "world": {
+    "x0": 571321,
+    "y0": 4141180,
+    "width": 1536,
+    "height": 2048,
+    "note": "OSM course boundary bbox (relation 3570691, three parts, 1,198 x 1,674 m) + scenery, rounded out to whole 256 m chunks and centred: 1,536 m east-west (169 m each side), 2,048 m north-south (187 m each side, the 2,048 m limit)."
+  },
+  "join_boundary_parts": {
+    "max_gap_m": 30
+  },
+  "ob_highways": [
+    "primary"
+  ],
+  "tee_sets": [
+    {
+      "name": "Black",
+      "playable": true,
+      "rating": 71.0,
+      "slope": 131,
+      "total_yd": 6213
+    }
+  ],
+  "default_tee": "Black",
+  "scorecard_source": "The club's printed scorecard (Golf ScoreCards Inc., printed 10/2019; 2020SC1.jpg in GitHub release stanford-data, supplied by the developer 2026-10-24); every row adds up to its printed totals. Par 70. Cardinal 6,742 73.7/138, Black 6,213 71.0/131, White 5,771 69.1/123 (men) and 74.2/133 (women), Blue 5,363 71.7/130 (forward set, women's par 71: holes 12 and 16 par 5, 13 par 4; not in scorecard.csv's par column). Handicap: the row printed under Black (OSM's handicap tags follow the White row on the back nine; not used). Built from the Black tees (closest to 6,300 yd; the card's Blue is the forward set).",
+  "penalty_default": "red",
+  "driving_range_is_ob": true,
+  "wind_mph": {
+    "minMph": 2,
+    "maxMph": 10
+  },
+  "attribution": [
+    "Map data © OpenStreetMap contributors (ODbL)",
+    "Elevation: U.S. Geological Survey 3D Elevation Program",
+    "Scorecard: Stanford Golf Course"
+  ],
+  "notes": "Phase 1 (2026-10-24): standing defaults (COURSE_BUILD.md 4.1): every penalty area red, OSM boundary is OB, range OB, pins by the game, trees from lidar, wind 2-10 mph (Bay Area; no Californian row in the defaults). Default tee Black (the card's Blue is the 5,363 yd forward set). The boundary relation has three parts: the main course, a strip holding hole 1's green and hole 2's tee (27 m across Fremont Road; joined by join_boundary_parts, the road strip stays out of bounds) and the driving range 98 m east (left out of the boundary in edits.json; out of bounds). Developer 2026-10-24: Junipero Serra Boulevard (the only highway=primary inside the boundary, ~520 m) is out of bounds (ob_highways); the practice area north of holes 2-3 stays in play (its greens are wrong greens); keep the oak in the 12th fairway."
+}
