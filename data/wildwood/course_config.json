@@ -55,5 +55,28 @@
     "Elevation and canopy height: Oregon Department of Geology and Mineral Industries (DOGAMI) lidar",
     "Scorecard and course map: Wildwood Golf Course"
   ],
-  "notes": "Standing defaults (COURSE_BUILD.md 4.1), 2026-10-24: no Blue on the card, so Black (5,853 yd, the set closest to 6,300); all water red; OB = the OSM course boundary, roads inside it are cart paths, the driving range is OB; pnw theme; inland Pacific Northwest wind 1-7 mph; trees from DOGAMI lidar, trees in fairways or in the way of a centre-line drive removed and listed."
+  "notes": "Standing defaults (COURSE_BUILD.md 4.1), 2026-10-24: no Blue on the card, so Black (5,853 yd, the set closest to 6,300); all water red; OB = the OSM course boundary, roads inside it are cart paths, the driving range is OB; pnw theme; inland Pacific Northwest wind 1-7 mph; trees from DOGAMI lidar, trees in fairways or in the way of a centre-line drive removed and listed.",
+  "red_water_osm": [
+    "w825464987",
+    "w676379150"
+  ],
+  "remove_wires": {
+    "min_len_m": 40,
+    "max_width_m": 3.0,
+    "rise_m": 3.0,
+    "note": "the canopy model holds a utility line along US 30 east of the course (a dotted line of single cells); s05 removes wires before finding trees"
+  },
+  "trees_need_ortho": {
+    "v_max": 120,
+    "min_share": 0.1,
+    "note": "the DOGAMI lidar is older than the OSIP 2024 photo: trees since removed (e.g. down the 9th fairway) are still in the canopy model; lidar crowns that are not dark canopy on the photo are dropped (pipeline/gorse.py missing_in_ortho)"
+  },
+  "drop_trees": [
+    {
+      "x": 440.5,
+      "y": 574.5,
+      "reason": "hole 2: a 24 m crown 16 m in front of the Black tee; a perfect drive at the middle of the fairway clips it 21 m out (game tee-shot test; standing default, COURSE_BUILD.md 4.1). s06b's own check passed it"
+    }
+  ],
+  "red_water_note": "w825464987: the creek strip between the 2nd green and the 5th tee; w676379150: the swimming pool behind the house north of the 16th tee, a red penalty area at the developer's request (2026-10-24: 'that would be funny'); pools inside the boundary otherwise paint as rough"
 }

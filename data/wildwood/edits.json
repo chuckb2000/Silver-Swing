@@ -1,0 +1,60 @@
+{
+ "note": "Edits to the OSM layout for Wildwood, built into edited/course.geojson by pipeline/merge_edits.py (run by make course).",
+ "tags": [
+  {
+   "osm": "w351701703",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "Pond left of the 10th (golf=water_hazard, which s10 reads as yellow): all water red (COURSE_BUILD.md 4.1 default, 2026-10-24)."
+  },
+  {
+   "osm": "w1283767033",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "Pond in front of the 13th green and right of the 12th (golf=water_hazard): all water red (4.1 default)."
+  },
+  {
+   "osm": "w1283820863",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "Pond left of the 2nd and 3rd (golf=water_hazard): all water red (4.1 default)."
+  },
+  {
+   "osm": "w825464987",
+   "set": {
+    "flatten": "no"
+   },
+   "reason": "The creek mapped as a natural=water strip between the 2nd green and the 5th tee (a red penalty area through course_config red_water_osm): it falls along its length, so s04 keeps its lidar bed instead of flattening it like a pond."
+  },
+  {
+   "osm": "w1283372592",
+   "set": {
+    "hole": "3",
+    "tee_set": "Black",
+    "assigned_by": "the course chat (edits.json): one long teeing ground holds the Black tee at its back"
+   },
+   "reason": "Hole 3: the OSM line starts on this box and its yardage runs 141-174 yd against the Black card 173; s06 assigns boxes by centroid and skipped it, leaving the tee on the bare line start. Tagged so s06 places the Black tee on the box (course chat's call, 2026-10-24)."
+  },
+  {
+   "osm": "w1283753569",
+   "set": {
+    "hole": "6",
+    "tee_set": "Black",
+    "assigned_by": "the course chat (edits.json): one long teeing ground holds the Black tee at its back"
+   },
+   "reason": "Hole 6: the OSM line starts on this box and its yardage runs 107-132 yd against the Black card 131; s06 assigns boxes by centroid and skipped it, leaving the tee on the bare line start. Tagged so s06 places the Black tee on the box (course chat's call, 2026-10-24)."
+  },
+  {
+   "osm": "w1283765491",
+   "set": {
+    "hole": "9",
+    "tee_set": "Black",
+    "assigned_by": "the course chat (edits.json): one long teeing ground holds the Black tee at its back"
+   },
+   "reason": "Hole 9: the OSM line starts on this box and its yardage runs 251-308 yd against the Black card 311; s06 assigns boxes by centroid and skipped it, leaving the tee on the bare line start. Tagged so s06 places the Black tee on the box (course chat's call, 2026-10-24)."
+  }
+ ]
+}
