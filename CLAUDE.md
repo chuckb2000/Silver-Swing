@@ -472,7 +472,9 @@ DECISIONS.md with the reason.
     rotation from 2026-10-25. Stanford Golf Course (Stanford CA, `peninsula`
     theme; PR #59) merged 2026-10-24, in the daily rotation from 2026-10-25.
     Wildwood Golf Course (Portland OR, `pnw` theme; PR #60) merged 2026-10-24, in
-    the daily rotation from 2026-10-25.
+    the daily rotation from 2026-10-25. Pumpkin Ridge (North Plains OR, Witch Hollow and
+    Ghost Creek as two layouts, `pumpkin_ridge` theme; PR #61) merged 2026-10-24,
+    both in the daily rotation from 2026-10-25.
     Each course's build history, facts and open items are in
     `docs/courses/<id>.md` (section 11).
 
@@ -1707,6 +1709,7 @@ files (`game/scripts/course-lists.mjs`). The first course, Oswego Lake, is
 | Oregon Golf Club | `docs/courses/ogc.md` |
 | Oswego Lake Country Club | `docs/courses/oswego_lake.md` |
 | Pacific Dunes | `docs/courses/pacific_dunes.md` |
+| Pumpkin Ridge Golf Club (Witch Hollow and Ghost Creek) | `docs/courses/pumpkin_ridge.md` |
 | RedTail Golf Center | `docs/courses/redtail.md` |
 | Sandpines Golf Links | `docs/courses/sandpines.md` |
 | Sheep Ranch | `docs/courses/sheep_ranch.md` |
