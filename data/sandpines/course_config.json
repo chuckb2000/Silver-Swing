@@ -85,6 +85,6 @@
     "Imagery: Oregon Statewide Imagery Program 2024",
     "Scorecard: Sandpines Golf Links"
   ],
-  "notes": "Standing defaults (COURSE_BUILD.md 4.1), 2026-10-24: Blue tees; all water red; the OSM boundary is out of bounds and the driving range is out of bounds; trees in fairways removed; open-coast wind 3-14 mph. Theme sandpines is new (pending): bentgrass turf, dune-grass mounds, shore pine and spruce.",
+  "notes": "Standing defaults (COURSE_BUILD.md 4.1), 2026-10-24: Blue tees; all water red; the OSM boundary is out of bounds and the driving range is out of bounds; trees in fairways removed; open-coast wind 3-14 mph. Theme sandpines is new (developer approved 2026-10-24): bentgrass turf, dune-grass mounds, shore pine and spruce; the native dune-grass areas (fescue_areas = proposed/native.geojson, make_native.py) are drawn tawny and play as rough (developer 2026-10-24, the card's 'non-kept areas are lateral hazards' rule is not modelled). Hole 8 plays from its Black tee, 208 yd vs Blue 174 (developer 2026-10-24).",
   "fescue_areas": "proposed/native.geojson"
 }

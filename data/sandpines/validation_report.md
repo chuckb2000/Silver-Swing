@@ -13,7 +13,7 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 | 5 | 3 | Blue | 178 | 184.5 | +6.5 | +3.6% | flag | 182.4 | +2.5% | pass |
 | 6 | 4 | Blue | 396 | 390.0 | -6.0 | -1.5% | pass | 390.0 | -1.5% | pass |
 | 7 | 5 | Blue | 454 | 469.1 | +15.1 | +3.3% | flag | 467.3 | +2.9% | pass |
-| 8 | 3 | Blue | 174 | 224.7 | +50.7 | +29.2% | FAIL | 224.7 | +29.2% | FAIL |
+| 8 | 3 | Blue | 174 | 208.1 | +34.1 | +19.6% | FAIL | 205.0 | +17.8% | FAIL |
 | 9 | 4 | Blue | 436 | 451.2 | +15.2 | +3.5% | flag | 446.8 | +2.5% | pass |
 | 10 | 4 | Blue | 407 | 400.9 | -6.1 | -1.5% | pass | 400.9 | -1.5% | pass |
 | 11 | 3 | Blue | 163 | 133.6 | -29.4 | -18.0% | FAIL | 159.0 | -2.4% | pass |
@@ -24,7 +24,7 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 | 16 | 4 | Blue | 325 | 325.0 | -0.0 | -0.0% | pass | 325.0 | -0.0% | pass |
 | 17 | 3 | Blue | 176 | 200.1 | +24.1 | +13.7% | FAIL | 180.2 | +2.4% | pass |
 | 18 | 5 | Blue | 496 | 487.6 | -8.4 | -1.7% | pass | 487.6 | -1.7% | pass |
-| **total** | 72 | | **6456** | **6470** | +14 | +0.2% | | **6498** | +0.7% | |
+| **total** | 72 | | **6456** | **6453** | -3 | -0.0% | | **6479** | +0.4% | |
 
 ## Open items
 
@@ -36,8 +36,8 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 6. Hole 7: OSM handicap 5 differs from the scorecard's stroke index 3; using the scorecard.
 7. Hole 7: the OSM hole line starts 111 m from the Blue tee box (w997608304), and only that box matches the card; the line was probably drawn from another tee. Measured from the Blue box through the line's bend points.
 8. Hole 8: OSM handicap 9 differs from the scorecard's stroke index 11; using the scorecard.
-9. Hole 8 (Blue): no mapped tee box within 8% of the card; the tee is the start point of the OSM hole line (225 yd). The Blue tee box is not in OSM - trace it to confirm.
-10. Hole 8 (Blue): measured 225 yd vs card 174 (+29.2%) - FAIL, needs a decision.
+9. Hole 8 (Blue): measured 205 yd vs card 174 (+17.8%) - FAIL, needs a decision.
+10. Hole 8 (Blue): tee box tee_w849043569 assigned by the developer (tagged hole=8, tee_set=Blue in edited/course.geojson).
 11. Hole 9: OSM handicap 3 differs from the scorecard's stroke index 7; using the scorecard.
 12. Hole 10: OSM handicap 2 differs from the scorecard's stroke index 4; using the scorecard.
 13. Hole 11: OSM handicap 18 differs from the scorecard's stroke index 16; using the scorecard.
@@ -55,6 +55,7 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 - Hole 2 (Blue): measured 297 yd from the tee-box centre vs 318 on the card (-6.7%); moved the virtual tee along the middle of the real tee polygon w997608292 (on its centre line, at least 2.5 m from its back and front) -> 310.1 yd (real 296.7 yd).
 - Hole 5 (Blue): measured 184 yd from the tee-box centre vs 178 on the card (+3.6%); moved the virtual tee along the middle of the real tee polygon w849043548 (on its centre line, at least 2.5 m from its back and front) -> 182.4 yd (real 184.5 yd).
 - Hole 7 (Blue): measured 469 yd from the tee-box centre vs 454 on the card (+3.3%); moved the virtual tee along the middle of the real tee polygon w997608304 (on its centre line, at least 2.5 m from its back and front) -> 467.3 yd (real 469.1 yd).
+- Hole 8 (Blue): measured 208 yd from the tee-box centre vs 174 on the card (+19.6%); moved the virtual tee along the middle of the real tee polygon tee_w849043569 (on its centre line, at least 2.5 m from its back and front) -> 205.0 yd (real 208.1 yd).
 - Hole 9 (Blue): measured 451 yd from the tee-box centre vs 436 on the card (+3.5%); moved the virtual tee along the middle of the real tee polygon w997608309 (on its centre line, at least 2.5 m from its back and front) -> 446.8 yd (real 451.2 yd).
 - Hole 11 (Blue): measured 134 yd from the tee-box centre vs 163 on the card (-18.0%); moved the virtual tee along the middle of the real tee polygon w849053547 (on its centre line, at least 2.5 m from its back and front) -> 159.0 yd (real 133.6 yd).
 - Hole 14 (Blue): measured 339 yd from the tee-box centre vs 366 on the card (-7.5%); moved the virtual tee along the middle of the real tee polygon w849053572 (on its centre line, at least 2.5 m from its back and front) -> 356.9 yd (real 338.5 yd).

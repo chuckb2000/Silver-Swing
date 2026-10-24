@@ -14,12 +14,41 @@
   ],
   "tags": [
     {
+      "osm": "tee_w849043569",
+      "set": {
+        "hole": "8",
+        "tee_set": "Blue"
+      },
+      "reason": "developer 2026-10-24: hole 8 has no Blue box (card 174 yd; no pad in the lidar, none on the photo) and plays longer than the card from its Black tee (208 yd, card Black 209); accepted as a FAIL against the Blue card"
+    },
+    {
       "osm": "w849053547",
       "set": {
         "hole": "11",
         "tee_set": "Blue"
       },
       "reason": "hole 11's long teeing ground (836 m2, 38 x 50 m) spans 116-179 yd along the line; its centroid measures 146 yd, so s06 (which assigns boxes by centroid within 8 %) passed it over for the line start (182 yd, +11.5 %). The Blue 163 lies inside it (OSIP 2024 photo: one mown strip). Course chat's call, 2026-10-24"
+    },
+    {
+      "osm": "w674843114",
+      "set": {
+        "penalty": "red"
+      },
+      "reason": "the pond on hole 2: all water red (standing default, COURSE_BUILD.md 4.1); golf=water_hazard otherwise exports as yellow (COURSE_LESSONS.md 12)"
+    },
+    {
+      "osm": "w674843391",
+      "set": {
+        "penalty": "red"
+      },
+      "reason": "the pond on hole 5: all water red (standing default, COURSE_BUILD.md 4.1); golf=water_hazard otherwise exports as yellow (COURSE_LESSONS.md 12)"
+    },
+    {
+      "osm": "w1052451682",
+      "set": {
+        "penalty": "red"
+      },
+      "reason": "the pond on holes 17 and 18: all water red (standing default, COURSE_BUILD.md 4.1); golf=water_hazard otherwise exports as yellow (COURSE_LESSONS.md 12)"
     }
   ],
   "drop": [

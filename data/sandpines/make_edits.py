@@ -17,7 +17,8 @@ tee under a new id ("tee_<osm id>"; dropping by the original id would otherwise
 remove the copy too) and the fairway is dropped. The pads are not given a tee
 set: only Blue is built, and s06 assigns boxes by measurement.
 
-It also tags hole 11's long teeing ground w849053547 as the Blue box (its centroid
+It tags hole 8's Black tee as the Blue box (developer, 2026-10-24: the hole plays
+longer than the card), the three ponds red (standing default) and hole 11's long teeing ground w849053547 as the Blue box (its centroid
 measures 146 yd, but the box spans 116-179 yd and holds the card's 163).
 """
 from __future__ import annotations
@@ -63,6 +64,12 @@ def main():
                       "Black 209; hole 9 471/485 yd, Black 468). Copied as tees by data/sandpines/make_edits.py",
         }],
         "tags": [{
+            "osm": "tee_w849043569",
+            "set": {"hole": "8", "tee_set": "Blue"},
+            "reason": "developer 2026-10-24: hole 8 has no Blue box (card 174 yd; no pad in the lidar, none on the "
+                      "photo) and plays longer than the card from its Black tee (208 yd, card Black 209); accepted "
+                      "as a FAIL against the Blue card",
+        }, {
             "osm": "w849053547",
             "set": {"hole": "11", "tee_set": "Blue"},
             "reason": "hole 11's long teeing ground (836 m2, 38 x 50 m) spans 116-179 yd along the line; its "
@@ -72,6 +79,10 @@ def main():
         }],
         "drop": [{"osm": k, "reason": f"mistagged golf=fairway: {why}; replaced by tee_{k}"} for k, why in PADS.items()],
     }
+    for w, where in (("w674843114", "hole 2"), ("w674843391", "hole 5"), ("w1052451682", "holes 17 and 18")):
+        edits["tags"].append({"osm": w, "set": {"penalty": "red"},
+                              "reason": f"the pond on {where}: all water red (standing default, COURSE_BUILD.md 4.1); "
+                                        "golf=water_hazard otherwise exports as yellow (COURSE_LESSONS.md 12)"})
     (HERE / "edits.json").write_text(json.dumps(edits, indent=2) + "\n")
     print(f"[edits] {out.name}: {len(rows)} tees; edits.json written")
 
