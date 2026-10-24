@@ -1,0 +1,30 @@
+{
+ "release": "florence-data",
+ "note": "build inputs not kept in git; `make fetch NAME=sandpines` puts them in place (pipeline/fetch_raw.py). exportImage.16.tiff = USGS 3DEP 1 m bare-earth DEM (metres); exportImage.19.tiff = DOGAMI canopy height model (feet); exportImage.jpg = OSIP 2024 0.5 m orthophoto (JPEG, corners = the bbox in DATA_REQUEST.md: x 410050-411850, y 4871950-4873450, EPSG:32610)",
+ "files": [
+  {
+   "asset": "exportImage.16.tiff",
+   "sha256": "a9fa68f6ad909c7023cb4c734805339f9483ff820b844c49459b948c844baf68",
+   "run": "cp {file} data/sandpines/raw/usgs_dem_m.tif",
+   "outputs": {
+    "raw/usgs_dem_m.tif": "a9fa68f6ad909c7023cb4c734805339f9483ff820b844c49459b948c844baf68"
+   }
+  },
+  {
+   "asset": "exportImage.19.tiff",
+   "sha256": "a19e206bb35ccd78f45d1612f70ec959d593bee8fb97571f46695355350f52f0",
+   "run": "cp {file} data/sandpines/raw/dogami_chm_ft.tif",
+   "outputs": {
+    "raw/dogami_chm_ft.tif": "a19e206bb35ccd78f45d1612f70ec959d593bee8fb97571f46695355350f52f0"
+   }
+  },
+  {
+   "asset": "exportImage.jpg",
+   "sha256": "807244d3bb128cc6d6f8838b0f394f2b6ebe99831bceaf8be818f54aaf7d3e84",
+   "run": "python3 data/sandpines/make_ortho.py {file}",
+   "outputs": {
+    "raw/osip2024_05m.tif": "0f6843b648169a3d020b480e9a6245dbc994014751d69a2cc6074667d8b97229"
+   }
+  }
+ ]
+}
