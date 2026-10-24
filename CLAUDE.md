@@ -471,6 +471,8 @@ DECISIONS.md with the reason.
     Sandpines Golf Links (Florence OR; PR #57) merged 2026-10-24, in the daily
     rotation from 2026-10-25. Stanford Golf Course (Stanford CA, `peninsula`
     theme; PR #59) merged 2026-10-24, in the daily rotation from 2026-10-25.
+    Wildwood Golf Course (Portland OR, `pnw` theme; PR #60) merged 2026-10-24, in
+    the daily rotation from 2026-10-25.
     Each course's build history, facts and open items are in
     `docs/courses/<id>.md` (section 11).
 
@@ -1714,6 +1716,7 @@ files (`game/scripts/course-lists.mjs`). The first course, Oswego Lake, is
 | Tualatin Country Club | `docs/courses/tualatin.md` |
 | Wannamoisett Country Club | `docs/courses/wannamoisett.md` |
 | Waverley Country Club | `docs/courses/waverley.md` |
+| Wildwood Golf Course | `docs/courses/wildwood.md` |
 | Willamette Valley Country Club | `docs/courses/willamette_valley.md` |
 | Practice ground (synthetic, not on the course list) | `data/practice/make_practice.py`, DECISIONS.md "Player improvements" |
 

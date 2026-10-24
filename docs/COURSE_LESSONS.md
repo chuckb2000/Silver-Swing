@@ -871,3 +871,24 @@ Details in each course's file (`docs/courses/<id>.md`, "Lessons").
   picks Black, as at TPC Boston.
 - **The game spells `SURF` names in camelCase** (`obRoad`, not `ob_road`).
 
+## 30. Wildwood Golf Course (2026-10-24)
+
+- **A long teeing ground that s06 skips by centroid.** Where the OSM line starts
+  on a long box reaching the back card, s06 (assigning boxes by centroid) put
+  the tee on the bare line start: check every line start against its box and
+  tag the box `hole` and `tee_set` (Gearhart's lesson again).
+- **The game's default aim finds trees that s06b passes** (a crown over the OSM
+  line): run the course test after every s05 change, water changes included.
+- **Lidar older than the photo:** `trees_need_ortho` took out a row the 2024
+  photo no longer shows; overlay the crowns on the photo before removing trees.
+- **Downhill par 3s:** on a valley course check every par 3's height drop. Over
+  about 10 m the old auto club (flat carry) flew the green; PR #55 picks the
+  club by where it lands on the ground.
+- **A pool inside the boundary paints as rough:** `red_water_osm` makes it a
+  penalty area with no pipeline change.
+- **Tracing desk saves:** each page needs its own save; read the collection
+  back before rebuilding and list what's missing.
+- **Playwright here:** link the image's newer headless shell under the path the
+  installed `@playwright/test` expects; run in-game looks in chunks under 10
+  minutes.
+
