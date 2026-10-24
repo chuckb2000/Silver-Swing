@@ -48,6 +48,7 @@ export const DAILY_ROSTER: Readonly<Record<string, string>> = {
   // merged on 2026-10-24
   sandpines: '2026-10-25',
   stanford: '2026-10-25',
+  wildwood: '2026-10-25',
 };
 
 /**
