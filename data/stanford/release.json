@@ -1,0 +1,22 @@
+{
+ "release": "stanford-data",
+ "note": "build inputs not kept in git; `make fetch NAME=stanford` puts them in place (pipeline/fetch_raw.py). The OSM export is cut down into raw/overpass.geojson (in git) by clip_osm.py; the release also keeps the original export, the club's scorecard images and the developer's photos (DATA_REQUEST.md).",
+ "files": [
+  {
+   "asset": "exportImage.18.tiff",
+   "sha256": "25f505e0fe50b9f39a8950d22f16d4844ddca84e87dce17b4cb0e05fa0782606",
+   "run": "python3 data/stanford/place_dem.py {file}",
+   "outputs": {
+    "raw/USGS_1M_3DEP_service_stanford.tif": "25f505e0fe50b9f39a8950d22f16d4844ddca84e87dce17b4cb0e05fa0782606"
+   }
+  },
+  {
+   "asset": "ca2020_santa_clara_J1476069.zip",
+   "sha256": "42cd39639f551d164c251cec77274fff01d9972f24775be60f8f0e1b8b60af61",
+   "run": "python3 data/stanford/make_laz.py {file}",
+   "outputs": {
+    "raw/laz/stanford_2020_clip.laz": "666efc75fe0ff0f740eae35c02ce18cc2a0aea0456fe11e989a82a4e2e03e6a2"
+   }
+  }
+ ]
+}
