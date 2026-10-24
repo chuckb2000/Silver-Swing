@@ -15,6 +15,20 @@
     "units": "m",
     "source": "USGS 3DEP 1 m bare-earth elevation (3DEPElevation ImageServer exportImage, float32, NAD83 / UTM 10N EPSG:26910, 1 m pixels, world + 100 m); NAVD88 metres; requested 2026-10-24"
   },
+  "laz": {
+    "paths": [
+      "raw/laz/*.laz"
+    ],
+    "classes": [
+      3,
+      4,
+      5
+    ],
+    "units": "m",
+    "source": "2020 Lidar: Santa Clara County, CA (NOAA Data Access Viewer dataset 9329, job J1476069), classes 3-5 (vegetation) ordered, clipped to the world + 100 m by data/stanford/make_laz.py; delivered in NAD83(2011) / California zone 3 (US survey feet) with NAVD88 heights in metres; flown April 2020 (GPS times), leaf-on; ordered by the developer 2026-10-24 (GitHub release stanford-data, ca2020_santa_clara_J1476069.zip)",
+    "label": "2020 Santa Clara County lidar",
+    "leaf_off": false
+  },
   "world": {
     "x0": 571321,
     "y0": 4141180,
@@ -47,8 +61,25 @@
   },
   "attribution": [
     "Map data © OpenStreetMap contributors (ODbL)",
-    "Elevation: U.S. Geological Survey 3D Elevation Program",
+    "Elevation and trees: U.S. Geological Survey 3D Elevation Program; 2020 Santa Clara County lidar (NOAA Data Access Viewer)",
     "Scorecard: Stanford Golf Course"
   ],
-  "notes": "Phase 1 (2026-10-24): standing defaults (COURSE_BUILD.md 4.1): every penalty area red, OSM boundary is OB, range OB, pins by the game, trees from lidar, wind 2-10 mph (Bay Area; no Californian row in the defaults). Default tee Black (the card's Blue is the 5,363 yd forward set). The boundary relation has three parts: the main course, a strip holding hole 1's green and hole 2's tee (27 m across Fremont Road; joined by join_boundary_parts, the road strip stays out of bounds) and the driving range 98 m east (left out of the boundary in edits.json; out of bounds). Developer 2026-10-24: Junipero Serra Boulevard (the only highway=primary inside the boundary, ~520 m) is out of bounds (ob_highways); the practice area north of holes 2-3 stays in play (its greens are wrong greens); keep the oak in the 12th fairway."
+  "notes": "Phase 1 (2026-10-24): standing defaults (COURSE_BUILD.md 4.1): every penalty area red, OSM boundary is OB, range OB, pins by the game, trees from lidar, wind 2-10 mph (Bay Area; no Californian row in the defaults). Default tee Black (the card's Blue is the 5,363 yd forward set). The boundary relation has three parts: the main course, a strip holding hole 1's green and hole 2's tee (27 m across Fremont Road; joined by join_boundary_parts, the road strip stays out of bounds) and the driving range 98 m east (left out of the boundary in edits.json; out of bounds). Developer 2026-10-24: Junipero Serra Boulevard (the only highway=primary inside the boundary, ~520 m) is out of bounds (ob_highways); the practice area north of holes 2-3 stays in play (its greens are wrong greens); keep the oak in the 12th fairway.",
+  "drop_trees": [
+    {
+      "x": 451.5,
+      "y": 803.5,
+      "reason": "fairway: 13 m tree more than 2 m inside fairway r14093501 (standing default; the 12th-fairway oak is kept)"
+    },
+    {
+      "x": 452.5,
+      "y": 806.5,
+      "reason": "fairway: 13 m tree more than 2 m inside fairway r14093501 (standing default; the 12th-fairway oak is kept)"
+    },
+    {
+      "x": 503.5,
+      "y": 1112.5,
+      "reason": "fairway: 11 m tree more than 2 m inside fairway r14093514 (standing default; the 12th-fairway oak is kept)"
+    }
+  ]
 }

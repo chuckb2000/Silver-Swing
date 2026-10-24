@@ -11,7 +11,7 @@ more than 2 m inside a fairway (`trees_off_fairways_m: 2`), but that key
 would also remove the great oak in the 12th fairway, the hole's known feature
 (Stanford Magazine, "Green Acres"; developer 2026-10-24: keep it). So the same
 rule is applied here, by list, with the trees within KEEP_R m of the oak's OSM
-points (nodes 10608768322 and 10608768323, both inside the 12th fairway)
+points (nodes 10608768322 and 10608768323, both inside the 12th fairway; the lidar splits each broad crown into three tops, up to 11 m from the node)
 left out. Entries this script adds carry reason "fairway: ..."; re-running it
 adds only trees not already listed (the dropped ones are gone from
 trees_all.json), so the list is stable.
@@ -29,7 +29,7 @@ from shapely.geometry import Point
 HERE = Path(__file__).resolve().parent
 INSET_M = 2.0
 KEEP_OSM = ["n10608768322", "n10608768323"]
-KEEP_R = 8.0
+KEEP_R = 12.0
 
 
 def main():

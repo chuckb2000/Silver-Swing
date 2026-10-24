@@ -6,7 +6,7 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 
 | hole | par | tee set | card yd | measured yd | diff yd | diff % | status | adjusted yd | adj. diff % | adj. status |
 |---|---|---|---|---|---|---|---|---|---|---|
-| 1 | 5 | Black | 505 | 504.7 | -0.3 | -0.1% | pass | 508.1 | +0.6% | pass |
+| 1 | 5 | Black | 505 | 504.7 | -0.3 | -0.1% | pass | 504.7 | -0.1% | pass |
 | 2 | 4 | Black | 418 | 414.4 | -3.6 | -0.9% | pass | 414.4 | -0.9% | pass |
 | 3 | 3 | Black | 192 | 193.2 | +1.2 | +0.6% | pass | 193.2 | +0.6% | pass |
 | 4 | 3 | Black | 143 | 147.0 | +4.0 | +2.8% | pass | 147.0 | +2.8% | pass |
@@ -24,7 +24,7 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 | 16 | 5 | Black | 492 | 491.5 | -0.5 | -0.1% | pass | 491.5 | -0.1% | pass |
 | 17 | 3 | Black | 175 | 190.5 | +15.5 | +8.9% | FAIL | 179.3 | +2.4% | pass |
 | 18 | 4 | Black | 420 | 420.6 | +0.6 | +0.1% | pass | 420.6 | +0.1% | pass |
-| **total** | 70 | | **6213** | **6240** | +27 | +0.4% | | **6232** | +0.3% | |
+| **total** | 70 | | **6213** | **6240** | +27 | +0.4% | | **6229** | +0.3% | |
 
 ## Open items
 
@@ -39,19 +39,32 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 9. Hole 17: OSM handicap 16 differs from the scorecard's stroke index 18; using the scorecard.
 10. Hole 18: OSM handicap 12 differs from the scorecard's stroke index 10; using the scorecard.
 
+## Other open items (Stanford Golf Course)
+
+Built by a course chat on 2026-10-24 with the standing defaults (docs/COURSE_BUILD.md 4.1). The developer's calls (2026-10-24): Junipero Serra Boulevard out of bounds; the practice area north of holes 2-3 in play; keep the oak in the 12th fairway; penalty areas A, B and C from the DEM (not D); the `peninsula` theme; an arcade logo inspired by the Main Quad.
+
+1. **Scorecard:** the club's printed card (10/2019, `2020SC1.jpg` in release `stanford-data`); every row adds up. Black 71.0/131 built; Cardinal, White and Blue are in `scorecard.csv`. Stroke index from the row printed under Black; OSM's handicap tags follow the card's other (White) row on the back nine. Recommendation: keep the card.
+2. **Every hole within 3 % of the card** (Black 6,229 vs 6,213, +0.3 %). Hole 17's long tee box spans 139-203 yd; s06 moved the tee along its middle to 179 yd (card 175). Holes 2 and 7: the OSM lines start on the Cardinal tees, 56-57 m behind the Black boxes; measured from the Black boxes.
+3. **Boundary:** the OSM relation has three parts. The strip holding hole 1's green and hole 2's tee is joined to the course across Fremont Road (`join_boundary_parts`, 30 m); the road strip between them stays out of bounds (a forced carry on hole 1's drive and 2's). The driving-range part is left out of the boundary (out of bounds). One Cardinal tee box (way 798608794) reaches 128 m2 outside the boundary; Cardinal is not built.
+4. **Out of bounds near play** (boundary within 25 m): fairways of 15 (8 m), 17 (10 m), 16 (15 m), 2 (16 m), 6/7 (18 m), 18 (18 m), 13 and 10 (22 m); hole 2's line runs 1-25 m from the Fremont Road strip for its first 160 yd. That is the OSM boundary; no change made.
+5. **Junipero Serra Boulevard** (OSM highway=primary, ~520 m inside the boundary) is out of bounds (`ob_highways`, developer). Where it bridges the creek, the creek below is the penalty area.
+6. **Water, all red:** San Francisquito Creek (the ravine to the top of its banks, 2.9 ha, from the lidar DEM; crosses holes 3, 4, 8, 12 and 14), an open ditch across hole 6 and a short ditch by hole 1's fairway (developer approved, 2026-10-24). South of hole 14 the creek leaves the OSM boundary and is out of bounds (18-28 m from the 16th tees). Other ditches are culverts; a shallow ditch left of 6 stays rough (developer). Lake Lagunita is outside the boundary, drawn as water although it is an intermittent basin, dry most of the year (scenery only).
+7. **Trees:** 15,921 from the 2020 Santa Clara County lidar (2,965 on the course), flown in April 2020 (leaf-on); 6 % read as conifers by crown shape (redwoods, pines and eucalyptus; the rest live and valley oaks), species drawn as flair. The oak in the 12th fairway and the second OSM-mapped tree 23 m from it are kept (the lidar splits each broad crown into three tops). Three tree tops in fairways removed (standing default, `make_tree_drops.py`): a 13 m tree on 12 near the creek (two tops) and an 11 m tree at the dogleg of 7. s06b dropped no tree from the tee shots.
+8. **Hole 9:** a drive straight down the OSM hole line touches an edge tree (the line runs along the fairway's edge); a drive at the middle of the fairway clears it (the standing default). Recommendation: accept.
+9. **Practice greens:** 11 OSM greens that are not hole greens (practice area north of 2-3, by the clubhouse and near 6/7) are wrong greens (relief required).
+10. **Course card:** hole 8 (the green across the creek); `assets-src/cards/stanford.json`.
+
 ## Playability adjustments
 
-- Hole 1 (Black): tee shot: a perfect drive at the middle of the fairway clipped a tree near the tee; moved 4.6 m along the middle of the real tee polygon w798911282 to the nearest clear spot -> 508.1 yd (real 504.7 yd).
 - Hole 17 (Black): measured 191 yd from the tee-box centre vs 175 on the card (+8.9%); moved the virtual tee along the middle of the real tee polygon w798946721 (on its centre line, at least 2.5 m from its back and front) -> 179.3 yd (real 190.5 yd).
 
-## Tree detection (OSM fallback (no lidar))
+## Tree detection (2020 Santa Clara County lidar)
 
-- 10034 trees detected in the world extent (2007 inside the course), 4988 conifers / 5046 deciduous; median height 10.0 m, max 14.0 m.
-- Dropped: 73 tops on building footprints, 0 over the lake, 0 tiny crowns.
-- Dropped on playing surfaces (spec 5.4): 0 -> 
-- Dropped from tee shots (s06b): 1 -> 12 Black (8.3 m tree, 10.1 m from the tee)
-- OSM natural=tree points matched by a detected tree within 4 m: 0 of 2603.
-- LOWER FIDELITY: no canopy raster. Trees are OSM natural=tree points plus a seeded Poisson-disk fill of OSM woods every 6 m; heights 6-14 m and type (50% conifer) are drawn at random, not measured.
+- 15921 trees detected in the world extent (2965 inside the course), 930 conifers / 14991 deciduous; median height 11.3 m, max 45.6 m.
+- Dropped: 521 tops on building footprints, 0 over the lake, 2 tiny crowns.
+- Dropped on playing surfaces (spec 5.4): 7 -> tee w798939535 (11.4 m), tee w798911282 (12.6 m), bunker w798607463 (11.2 m), tee w798911310 (10.1 m), pool w884189259 (15.0 m), pool w1258403652 (5.1 m), pool w1085200043 (7.8 m)
+- OSM natural=tree points matched by a detected tree within 4 m: 1554 of 2603.
+- Conifer vs deciduous is inferred from crown shape only (no leaf-off imagery); see build/trees_preview.png.
 
 # Green shaping checks
 
