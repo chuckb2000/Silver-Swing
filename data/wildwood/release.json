@@ -1,0 +1,31 @@
+{
+ "release": "wildwood-data",
+ "note": "build inputs; `make fetch NAME=wildwood` puts them in place (pipeline/fetch_raw.py). exportImage.15 = DOGAMI bare-earth DTM (ft), exportImage.14 = DOGAMI canopy height model (ft), both 1 m, EPSG:32610, box x 508813-510037 / y 5057547-5059027; exportImage.jpg = OSIP 2024 0.5 m orthophoto (JPEG, corners = the same box; make_ortho.py georeferences it). Told apart by their values: the DTM has no zeros (11.7-485.9 ft), the CHM is mostly near 0 with tall tails.",
+ "files": [
+  {
+   "asset": "exportImage.15.tiff",
+   "sha256": "5437b5ccd4f96db605f2c4a275657d96621b1a26736d4eca468b609cb5eb2dfe",
+   "run": "cp {file} data/wildwood/raw/dogami_dtm_ft.tif",
+   "outputs": {
+    "raw/dogami_dtm_ft.tif": "5437b5ccd4f96db605f2c4a275657d96621b1a26736d4eca468b609cb5eb2dfe"
+   }
+  },
+  {
+   "asset": "exportImage.14.tiff",
+   "sha256": "e8b626f7171058852ce67d283da1145618065d0a86c018c8a3f6b7fd9359fb0b",
+   "run": "cp {file} data/wildwood/raw/dogami_chm_ft.tif",
+   "outputs": {
+    "raw/dogami_chm_ft.tif": "e8b626f7171058852ce67d283da1145618065d0a86c018c8a3f6b7fd9359fb0b"
+   }
+  },
+  {
+   "asset": "exportImage.jpg",
+   "sha256": "b30b7201a457dabdff46d7ebd79f1e97f8cf3eee809d398773b8d629e09e950c",
+   "run": "python3 data/wildwood/make_ortho.py {file}",
+   "outputs": {
+    "raw/osip2024_05m.jpg": "b30b7201a457dabdff46d7ebd79f1e97f8cf3eee809d398773b8d629e09e950c",
+    "raw/osip2024_05m.tif": "5feb6e61206c11518384557ffb0a20756f851c1aae8d8d479edcb899e04e5b4e"
+   }
+  }
+ ]
+}

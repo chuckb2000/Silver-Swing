@@ -1,0 +1,63 @@
+{
+  "name": "Sandpines (central Oregon coast: bentgrass links among dunes, lakes and shore pine)",
+  "note": "Course theme palette (<= 32 colours; same keys as pnw.json plus F0-F2). Sandpines Golf Links, Florence OR (Rees Jones, 1993): emerald bentgrass fairways, tees and greens (greener and cooler than Bandon's fescue); mown rough in the G3-G5 greens (lut rough_band); tawny European beachgrass on the native dune areas and the mounds along the fairways (F0-F2, drawn where data/sandpines/proposed/native.geojson says, config fescue_areas); near-white bunker sand and pale dune sand; blue dune lakes; shore pine and Sitka spruce woods (assets-src/trees_sandpines.py). Draft hues from the club's photos in the GitHub release florence-data (2026-10-24), to be checked against the OSIP 2024 orthophoto; saturated for the game's style. Shadows are a 35% black overlay on top of these.",
+  "colors": {
+    "G0": "#172a1c",
+    "G1": "#213c25",
+    "G2": "#30552c",
+    "G3": "#3f6b32",
+    "G4": "#4f8039",
+    "G5": "#5f9441",
+    "G6": "#6fa74a",
+    "G7": "#81b854",
+    "G8": "#94c761",
+    "G9": "#b6dc88",
+    "L0": "#59633a",
+    "L1": "#6a7543",
+    "L2": "#7d874e",
+    "S0": "#c4b893",
+    "S1": "#e6dec4",
+    "S2": "#f5f0e1",
+    "W0": "#22466a",
+    "W1": "#2e5d87",
+    "W2": "#6c9ac3",
+    "K0": "#26272d",
+    "K1": "#53545c",
+    "K2": "#7a7b83",
+    "K3": "#b3ad9d",
+    "K4": "#d9d3c4",
+    "B0": "#46301f",
+    "B1": "#6d4a31",
+    "B2": "#8c5a40",
+    "R0": "#4b586a",
+    "WH": "#f6f6f2",
+    "F0": "#8a7a3e",
+    "F1": "#a6955a",
+    "F2": "#c2b06f"
+  },
+  "lut": {
+    "rough": ["F0", "F1", "F2", "F2"],
+    "rough_band": ["G3", "G4", "G5", "G5"]
+  },
+  "aliases": {
+    "TUFT": "F0"
+  },
+  "minimap": {
+    "ob": "#6a7543",
+    "rough": "#a6955a",
+    "woods": "#213c25",
+    "ob_woods": "#1d3422",
+    "water": "#2e5d87",
+    "ob_water": "#2e5d87",
+    "bunker": "#e6dec4",
+    "ob_sand": "#e6dec4"
+  },
+  "minimap_trees": {
+    "conifer": ["#13282a", "#2c5a52"],
+    "deciduous": ["#18301a", "#3a6432"]
+  },
+  "trees": {
+    "conifer": "trees_sandpines:conifer",
+    "deciduous": "trees_sandpines:deciduous"
+  }
+}

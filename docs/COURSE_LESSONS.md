@@ -832,3 +832,63 @@ Details in each course's file (`docs/courses/<id>.md`, "Lessons").
   Preserve's mapped turf next door (same grass, same photo) gave 0.99 holdout accuracy.
 - **A course polygon can cut a green.** A perfect tee shot on 15 ended out of bounds where the OSM
   line crossed the green. Grow the boundary round every green and run the course test early.
+
+## 28. Sandpines Golf Links (2026-10-24)
+
+- **DOGAMI `f=json` can fail where `f=image` works** (the reverse of Bandon):
+  give both links for each raster in the first request.
+- **The USGS 3DEPElevation `exportImage` is a good DTM fallback in Oregon**:
+  one click, metres, no gaps across DOGAMI project seams.
+- **Check `logos.py` for the subject, not just the course id**, before
+  proposing a logo: the first idea (a rhododendron) was already Eastmoreland's.
+- **A drought-year photo defeats colour rules.** Fairways measured as tan as
+  the rough; local texture separated native grass from mown turf, and a
+  majority vote over ~3 m turned the speckle into areas.
+- **Small `golf=fairway` squares at a hole line's start are tees** (four of
+  57-119 m2 here, found by sorting fairways by area).
+- **`trees_need_ortho` reads sunlit tree-line edges as gone trees.** Where the
+  lidar postdates the course, look at what it flags before switching it on.
+- **The installed Chromium can be newer than the one Playwright expects**:
+  point `executablePath` at it.
+
+## 29. Stanford Golf Course (2026-10-24)
+
+- **NOAA's job can ignore the projection asked for** (here California zone 3 in
+  US feet, heights in metres): read the LAZ header first. Tiles can have
+  different offsets; a clip that merges tiles must re-quantise
+  (`data/stanford/make_laz.py`).
+- **Ask NOAA for vegetation classes only** (3-5): roofs and wires stay out of the
+  canopy, no `remove_wires` or roof filter needed.
+- **A protected fairway tree rules out `trees_off_fairways_m`**: drop trees by
+  list instead (`make_tree_drops.py`), keeping those near the OSM tree nodes
+  (the lidar split each broad oak into several tops up to 11 m from its node).
+- **A creek in a ravine:** propose the penalty area as the ravine to the top of
+  its banks, clipped to the boundary, tagged `flatten=no`; where an OB road
+  crosses it, water wins (a bridge).
+- **A boundary in three parts where one is the range:** copy the boundary
+  without the range part rather than widening `join_boundary_parts`' gap.
+- **The card's Blue can be the forward set** (5,363 yd here): the 6,300 yd rule
+  picks Black, as at TPC Boston.
+- **The game spells `SURF` names in camelCase** (`obRoad`, not `ob_road`).
+
+## 30. Wildwood Golf Course (2026-10-24)
+
+- **A long teeing ground that s06 skips by centroid.** Where the OSM line starts
+  on a long box reaching the back card, s06 (assigning boxes by centroid) put
+  the tee on the bare line start: check every line start against its box and
+  tag the box `hole` and `tee_set` (Gearhart's lesson again).
+- **The game's default aim finds trees that s06b passes** (a crown over the OSM
+  line): run the course test after every s05 change, water changes included.
+- **Lidar older than the photo:** `trees_need_ortho` took out a row the 2024
+  photo no longer shows; overlay the crowns on the photo before removing trees.
+- **Downhill par 3s:** on a valley course check every par 3's height drop. Over
+  about 10 m the old auto club (flat carry) flew the green; PR #55 picks the
+  club by where it lands on the ground.
+- **A pool inside the boundary paints as rough:** `red_water_osm` makes it a
+  penalty area with no pipeline change.
+- **Tracing desk saves:** each page needs its own save; read the collection
+  back before rebuilding and list what's missing.
+- **Playwright here:** link the image's newer headless shell under the path the
+  installed `@playwright/test` expects; run in-game looks in chunks under 10
+  minutes.
+

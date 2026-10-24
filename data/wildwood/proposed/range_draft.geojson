@@ -1,0 +1,48 @@
+{
+ "type": "FeatureCollection",
+ "features": [
+  {
+   "type": "Feature",
+   "properties": {
+    "@id": "proposed/range_draft",
+    "golf": "driving_range",
+    "source": "course chat by eye from OSIP 2024 (first pass for the tracing desk; not approved)"
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       -122.8786841053954,
+       45.67866379184096
+      ],
+      [
+       -122.87671755541798,
+       45.679561771968935
+      ],
+      [
+       -122.87687104979396,
+       45.67983196305125
+      ],
+      [
+       -122.87836126339555,
+       45.67950952872447
+      ],
+      [
+       -122.87887517642012,
+       45.67937506194572
+      ],
+      [
+       -122.87906855969251,
+       45.67901523270445
+      ],
+      [
+       -122.8786841053954,
+       45.67866379184096
+      ]
+     ]
+    ]
+   }
+  }
+ ]
+}

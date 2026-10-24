@@ -1,0 +1,65 @@
+{
+ "add": [
+  {
+   "from": "proposed/boundary.geojson",
+   "ids": [
+    "r3570691_course"
+   ],
+   "reason": "the course boundary without its third part, the driving range 98 m east (4.4 ha, out of bounds anyway): join_boundary_parts joins the other two parts (27 m apart across Fremont Road) and stops on a part farther than its gap"
+  },
+  {
+   "from": "proposed/cartpath_loops.geojson",
+   "ids": [
+    "w823292795_line"
+   ],
+   "reason": "golf=cartpath loop mapped as a closed way; the Overpass export made it a polygon (a 950 m2 cart-path area). Copied back as a line (free relief, drawn as a path)"
+  },
+  {
+   "from": "proposed/water_lidar.geojson",
+   "ids": [
+    "creek_w49231216"
+   ],
+   "tags": {
+    "proposed": "approved",
+    "flatten": "no",
+    "penalty": "red"
+   },
+   "reason": "A: San Francisquito Creek, the ravine to the top of its banks inside the boundary (crosses holes 3, 4, 8, 12, 14); red penalty area from the lidar DEM channel (make_water.py), approved by the developer 2026-10-24"
+  },
+  {
+   "from": "proposed/water_lidar.geojson",
+   "ids": [
+    "ditch_w1216390234"
+   ],
+   "tags": {
+    "proposed": "approved",
+    "flatten": "no",
+    "penalty": "red"
+   },
+   "reason": "B: open ditch across hole 6, about 30 m short of the green; red penalty area from the lidar DEM channel (make_water.py), approved by the developer 2026-10-24"
+  },
+  {
+   "from": "proposed/water_lidar.geojson",
+   "ids": [
+    "ditch_w1216390238"
+   ],
+   "tags": {
+    "proposed": "approved",
+    "flatten": "no",
+    "penalty": "red"
+   },
+   "reason": "C: short ditch at the right edge of hole 1's fairway; red penalty area from the lidar DEM channel (make_water.py), approved by the developer 2026-10-24"
+  }
+ ],
+ "drop": [
+  {
+   "osm": "r3570691",
+   "reason": "replaced by its copy without the range part (add above)"
+  },
+  {
+   "osm": "w823292795",
+   "reason": "replaced by its line copy (add above)"
+  }
+ ],
+ "tags": []
+}

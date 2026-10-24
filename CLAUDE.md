@@ -468,6 +468,11 @@ DECISIONS.md with the reason.
     2026-10-20. Bandon Dunes (Bandon OR, `bandon_dunes` theme, penal gorse on
     surface 17; PR #17) merged 2026-10-20; in the daily rotation from 2026-10-21. Triggs Memorial (Providence RI,
     `seekonk` theme; PR #21) merged 2026-10-20; in the daily rotation from 2026-10-21.
+    Sandpines Golf Links (Florence OR; PR #57) merged 2026-10-24, in the daily
+    rotation from 2026-10-25. Stanford Golf Course (Stanford CA, `peninsula`
+    theme; PR #59) merged 2026-10-24, in the daily rotation from 2026-10-25.
+    Wildwood Golf Course (Portland OR, `pnw` theme; PR #60) merged 2026-10-24, in
+    the daily rotation from 2026-10-25.
     Each course's build history, facts and open items are in
     `docs/courses/<id>.md` (section 11).
 
@@ -1703,14 +1708,17 @@ files (`game/scripts/course-lists.mjs`). The first course, Oswego Lake, is
 | Oswego Lake Country Club | `docs/courses/oswego_lake.md` |
 | Pacific Dunes | `docs/courses/pacific_dunes.md` |
 | RedTail Golf Center | `docs/courses/redtail.md` |
+| Sandpines Golf Links | `docs/courses/sandpines.md` |
 | Sheep Ranch | `docs/courses/sheep_ranch.md` |
 | Shorty's (19 holes) | `docs/courses/shortys.md` |
+| Stanford Golf Course | `docs/courses/stanford.md` |
 | Stone Creek Golf Club | `docs/courses/stone_creek.md` |
 | Triggs Memorial Golf Course | `docs/courses/triggs.md` |
 | TPC Boston | `docs/courses/tpc_boston.md` |
 | Tualatin Country Club | `docs/courses/tualatin.md` |
 | Wannamoisett Country Club | `docs/courses/wannamoisett.md` |
 | Waverley Country Club | `docs/courses/waverley.md` |
+| Wildwood Golf Course | `docs/courses/wildwood.md` |
 | Willamette Valley Country Club | `docs/courses/willamette_valley.md` |
 | Practice ground (synthetic, not on the course list) | `data/practice/make_practice.py`, DECISIONS.md "Player improvements" |
 
