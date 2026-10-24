@@ -469,7 +469,8 @@ DECISIONS.md with the reason.
     surface 17; PR #17) merged 2026-10-20; in the daily rotation from 2026-10-21. Triggs Memorial (Providence RI,
     `seekonk` theme; PR #21) merged 2026-10-20; in the daily rotation from 2026-10-21.
     Sandpines Golf Links (Florence OR; PR #57) merged 2026-10-24, in the daily
-    rotation from 2026-10-25.
+    rotation from 2026-10-25. Stanford Golf Course (Stanford CA, `peninsula`
+    theme; PR #59) merged 2026-10-24, in the daily rotation from 2026-10-25.
     Each course's build history, facts and open items are in
     `docs/courses/<id>.md` (section 11).
 
@@ -1706,6 +1707,7 @@ files (`game/scripts/course-lists.mjs`). The first course, Oswego Lake, is
 | Sandpines Golf Links | `docs/courses/sandpines.md` |
 | Sheep Ranch | `docs/courses/sheep_ranch.md` |
 | Shorty's (19 holes) | `docs/courses/shortys.md` |
+| Stanford Golf Course | `docs/courses/stanford.md` |
 | Stone Creek Golf Club | `docs/courses/stone_creek.md` |
 | Triggs Memorial Golf Course | `docs/courses/triggs.md` |
 | TPC Boston | `docs/courses/tpc_boston.md` |

@@ -1,0 +1,20 @@
+[
+ {
+  "hole": 17,
+  "tee_set": "Black",
+  "step": 2,
+  "type": "tee_position",
+  "from": [
+   822.49,
+   255.41
+  ],
+  "to": [
+   832.5,
+   253.0
+  ],
+  "real_yd": 190.5,
+  "adjusted_yd": 179.3,
+  "card_yd": 175.0,
+  "reason": "measured 191 yd from the tee-box centre vs 175 on the card (+8.9%); moved the virtual tee along the middle of the real tee polygon w798946721 (on its centre line, at least 2.5 m from its back and front)"
+ }
+]
