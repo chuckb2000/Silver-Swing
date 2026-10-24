@@ -1147,3 +1147,18 @@ Not merged (the developer will say when). Design note: docs/reports/multiplayer_
     drawn on its rounded pixel, so a tap just right of the green showed yellow and counted
     green. Each band now covers its edge pixels on both sides.
 - Tests: tests/unit/meter_seen.test.ts.
+
+## The auto club allows for the ground (Wildwood course chat, 2026-10-24; branch fix/auto-club-downhill)
+
+- Wildwood 3 (par 3, Black 173 yd) drops 17.5 m from tee to green. The auto club matched each
+  club's flat carry to the horizontal distance and chose a 6-iron for 155 m; a perfect 6-iron
+  stopped about 25 m past the pin, in the trees behind the green.
+- `Round.autoClub()` now flies each allowed club's perfect full shot (calm air, no trees, the
+  landing marker's own preview, `previewLanding`) straight at the pin over the real terrain and
+  takes the club that lands nearest the pin. No plays-like formula: the physics is CLAUDE.md 7.2
+  as before. In gorse every club's carry is capped, so there it keeps the flat rule (the
+  shortest club on a tie).
+- Wildwood 3 now gets an 8-iron that finishes on the green, 4 m from the pin; the course
+  chat can drop its hole-3 exception in `game/tests/unit/wildwood.test.ts` once this is merged.
+- Tests: tests/unit/auto_club_slope.test.ts (a par 3 tilted 17.5 m either way takes less or
+  more club, and its perfect shot lands within 8 m of the pin). Every course's tests pass.
