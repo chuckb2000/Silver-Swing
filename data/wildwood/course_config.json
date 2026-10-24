@@ -10,6 +10,21 @@
     "raw/overpass.geojson"
   ],
   "boundary_name": "Wildwood Golf Course",
+  "dtm": {
+    "path": "raw/dogami_dtm_ft.tif",
+    "units": "ft",
+    "source": "DOGAMI lidar DIGITAL_TERRAIN_MODEL_MOSAIC (bare earth), exportImage at 1 m in EPSG:32610, box x 508813-510037 / y 5057547-5059027, downloaded by the developer 2026-10-24 (GitHub release wildwood-data, exportImage.15.tiff)"
+  },
+  "chm": {
+    "path": "raw/dogami_chm_ft.tif",
+    "units": "ft",
+    "source": "DOGAMI lidar CANOPY_HEIGHT_MODEL_MOSAIC (highest hit minus bare earth), exportImage at 1 m in EPSG:32610, same box, downloaded by the developer 2026-10-24 (GitHub release wildwood-data, exportImage.14.tiff)",
+    "label": "DOGAMI canopy height model"
+  },
+  "ortho": {
+    "path": "raw/osip2024_05m.tif",
+    "source": "Oregon Statewide Imagery Program 2024 (0.5 m), exportImage JPEG from imagery.oregonexplorer.info OSIP_2024_WM, placed by its request bbox (make_ortho.py; GitHub release wildwood-data, exportImage.jpg)"
+  },
   "world": {
     "x0": 508913,
     "y0": 5057647,
