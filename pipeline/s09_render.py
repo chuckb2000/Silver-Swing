@@ -51,7 +51,8 @@ def load_theme(theme: str = "pnw") -> dict:
 
 
 def paint_rock(rgb, rock, t, n1, n2, P, theme: dict):
-    """Penalty areas over rock (cfg rock_water_osm): granite tones from the theme's "rock" keys
+    """Penalty areas over rock (cfg rock_water_osm; s09 and s09b also leave out the OB stakes where
+    the boundary meets them and the red_water_osm areas): granite tones from the theme's "rock" keys
     (default the grey K tones), dark crevices and, if the theme names "rock_plants", speckles of
     plants (iceplant) on the ledges. Only courses with rock_water_osm call this."""
     keys = theme.get("rock", ["K1", "K2", "K3", "K3"])
@@ -612,6 +613,12 @@ def main():
     rgb = np.array(img)
 
     # OB stakes along the boundary ------------------------------------------
+    no_stakes = None
+    if (cfg or {}).get("rock_water_osm"):  # no OB stakes where the boundary meets the penalty areas
+        from shapely.prepared import prep as _prep  # outside it (Cypress Point's shore and sea)
+        from shapely.ops import unary_union as _uu
+        _ids = list(cfg["rock_water_osm"]) + list(cfg.get("red_water_osm") or [])
+        no_stakes = _prep(_uu(list(g[g.osm.isin(_ids)].geometry)).buffer(1.0))
     for ring, poly, ob_inside in stake_lines(boundary_rings(g, cfg), g, cfg):
         for s_ in np.arange(0, ring.length, 9.0):
             p = ring.interpolate(s_)
@@ -622,6 +629,8 @@ def main():
             cand = Point(p.x + nx_ * 0.8, p.y + ny_ * 0.8)
             if poly.contains(cand) != ob_inside:
                 cand = Point(p.x - nx_ * 0.8, p.y - ny_ * 0.8)
+            if no_stakes is not None and no_stakes.contains(cand):
+                continue
             col = int(cand.x * PX_PER_M)
             row = int((world.height - cand.y) * PX_PER_M)
             if 2 <= row < H - 1 and 0 <= col < W - 1:

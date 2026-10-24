@@ -19,6 +19,18 @@
     "path": "raw/naip_05m.tif",
     "source": "USDA NAIP via the USGS USGSNAIPImagery ImageServer (exportImage, JPEG, 0.5 m, EPSG:32610), two halves downloaded by the developer 2026-10-24 (hahahs.jpg west, exportImage.jpg east), mosaicked by make_ortho.py; alignment against OSM greens and bunkers within 1-2 m"
   },
+  "laz": {
+    "paths": [
+      "raw/laz/*.laz"
+    ],
+    "classes": [
+      1
+    ],
+    "units": "ft",
+    "source": "2018 FEMA Lidar: Region 9, CA (NOAA Data Access Viewer, job J1476067), flown 19 March - 9 April 2018 (GPS times); NAD83(2011) / California zone 4 (EPSG:6422, US survey feet) with NAVD88 heights in US survey feet; class 1 (unclassified: vegetation and structures; the project has only classes 1, 2, 9 and 10); ordered by the developer 2026-10-24 (GitHub release cypress-point-data)",
+    "label": "2018 FEMA Region 9 lidar",
+    "leaf_off": false
+  },
   "world": {
     "x0": 591331,
     "y0": 4048006,
@@ -60,7 +72,7 @@
   "trees_off_fairways_m": 2,
   "attribution": [
     "Map data © OpenStreetMap contributors (ODbL)",
-    "Elevation: U.S. Geological Survey 3D Elevation Program",
+    "Elevation: U.S. Geological Survey 3D Elevation Program; trees: FEMA Region 9 lidar (2018) via NOAA Digital Coast",
     "Imagery for dune sand: USDA National Agriculture Imagery Program",
     "Scorecard: Cypress Point Club card (as scanned by BlueGolf)"
   ],
@@ -72,5 +84,6 @@
   ],
   "rock_water_osm": [
     "shore_pacific"
-  ]
+  ],
+  "keep_trees_areas": "proposed/keep_trees.geojson"
 }

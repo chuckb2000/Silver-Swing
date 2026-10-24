@@ -35,13 +35,14 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 
 - Hole 15 (Middle): measured 138 yd from the tee-box centre vs 120 on the card (+15.3%); moved the virtual tee along the middle of the real tee polygon w678939689 (on its centre line, at least 2.5 m from its back and front) -> 122.9 yd (real 138.4 yd).
 
-## Tree detection (OSM fallback (no lidar))
+## Tree detection (2018 FEMA Region 9 lidar)
 
-- 5041 trees detected in the world extent (159 inside the course), 2521 conifers / 2520 deciduous; median height 10.0 m, max 14.0 m.
-- Dropped: 0 tops on building footprints, 0 over the lake, 0 tiny crowns.
-- Dropped on playing surfaces (spec 5.4): 0 -> 
-- OSM natural=tree points matched by a detected tree within 4 m: 0 of 116.
-- LOWER FIDELITY: no canopy raster. Trees are OSM natural=tree points plus a seeded Poisson-disk fill of OSM woods every 6 m; heights 6-14 m and type (50% conifer) are drawn at random, not measured.
+- 11707 trees detected in the world extent (2602 inside the course), 3089 conifers / 8618 deciduous; median height 16.2 m, max 42.3 m.
+- Dropped: 691 tops on building footprints, 63 over the lake, 35 tiny crowns.
+- Dropped on playing surfaces (spec 5.4): 18 -> tee w679397634 (17.6 m), fairway r19320970 (5.8 m), bunker w670746812 (9.1 m), bunker w670746812 (14.1 m), bunker w670746812 (14.8 m), bunker w670746813 (6.5 m), bunker w281748081 (14.4 m), fairway r19320968 (6.4 m), fairway r19320970 (16.4 m), bunker w1093464734 (22.3 m), bunker w1138136391 (7.7 m), bunker w1138136391 (5.2 m), bunker w1138136391 (8.0 m), bunker w1138136391 (9.2 m), bunker w1138136391 (6.3 m), bunker w1138136393 (11.9 m), bunker w1138136393 (11.9 m), bunker w1138136394 (6.9 m)
+- Dropped from tee shots (s06b): 2 -> 5 Middle (26.8 m tree, 30.0 m from the tee), 6 Middle (16.0 m tree, 14.5 m from the tee)
+- OSM natural=tree points matched by a detected tree within 4 m: 75 of 116.
+- Conifer vs deciduous is inferred from crown shape only (no leaf-off imagery); see build/trees_preview.png.
 
 # Green shaping checks
 

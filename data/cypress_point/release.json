@@ -1,6 +1,6 @@
 {
  "release": "cypress-point-data",
- "note": "Build inputs not kept in git for Cypress Point; `make fetch NAME=cypress_point` puts them in place (pipeline/fetch_raw.py). The clipped OSM (raw/overpass.geojson) is also committed. The DEM and the NAIP mosaic are also committed (small). The lidar entry is added when the NOAA job arrives. hahahs.jpg is the NAIP west half, exportImage.jpg the east half.",
+ "note": "Build inputs not kept in git for Cypress Point; `make fetch NAME=cypress_point` puts them in place (pipeline/fetch_raw.py). The clipped OSM (raw/overpass.geojson) is also committed. The DEM and the NAIP mosaic are also committed (small). The NOAA lidar zip (206 MB) holds one LAZ over the world + 150 m, extracted as is. hahahs.jpg is the NAIP west half, exportImage.jpg the east half.",
  "files": [
   {
    "asset": "export.3.geojson",
@@ -32,6 +32,17 @@
    "run": "python3 data/cypress_point/make_ortho.py {file} data/cypress_point/build/naip_east.jpg",
    "outputs": {
     "raw/naip_05m.tif": "ecf2470a350d079762561972e6ff26b320bba3a9b25e3e3f3575a0aaccc4be54"
+   }
+  },
+  {
+   "asset": "2018_ca_fema_region9_J1476067.zip",
+   "sha256": "9786fd49c14e7cf2c1432adcde42927c70f4cbc0244ad0c2fb25ff780c5f0a49",
+   "extract": [
+    "2018_ca_fema_region9_J1476067tR0_C0.laz"
+   ],
+   "to": "raw/laz/",
+   "outputs": {
+    "raw/laz/2018_ca_fema_region9_J1476067tR0_C0.laz": "3cfc4fc09e749327bf27ac6d8a56da1a57dce765dba8fe8a3c4148247b2d0ef3"
    }
   }
  ]

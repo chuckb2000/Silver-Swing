@@ -92,6 +92,17 @@ def trace(dL, dS, r_close):
 # one, so the dunes carry on past the out-of-bounds line instead of stopping at it (developer:
 # "include the out of bounds sand above hole 8 so it doesn't just cut off at ob")
 play_sand = trace(0, 0, 3)
+# trees standing in the dunes stay trees: cut the lidar canopy (over 3 m) out of the sand in play,
+# so s05 doesn't drop them as crowns "in a bunker" (when the lidar is there)
+chm_p = HERE / "build" / "chm_local.npy"
+if chm_p.exists():
+    chm = np.load(chm_p)                                # 1 m, rows south -> north
+    canopy = np.flipud(chm > 3.0)
+    canopy = ndimage.binary_dilation(np.kron(canopy, np.ones((2, 2), bool))[:H, :W], iterations=2)
+    play_sand &= ~canopy
+    lab_, n_ = ndimage.label(play_sand)
+    sz_ = ndimage.sum(play_sand, lab_, range(1, n_ + 1)) * RES * RES
+    play_sand = np.isin(lab_, 1 + np.where(sz_ >= 60)[0])
 scen_sand = trace(12, 3, 7) | play_sand
 sand = np.where(inside, play_sand, scen_sand)
 polys = [shape(geom).simplify(0.6) for geom, v in shapes(sand.astype(np.uint8), mask=sand, transform=tr_local) if v]

@@ -338,6 +338,12 @@ def render_art(surf, z, grid: Grid, g, holes, trees, buildings, boundary, P, lut
 
     # OB stakes along the boundary (every 9 m, just outside it)
     parts = list(boundary.geoms) if boundary.geom_type == "MultiPolygon" else [boundary]
+    no_stakes = None
+    if (cfg or {}).get("rock_water_osm"):  # no OB stakes where the boundary meets the penalty areas
+        from shapely.prepared import prep as _prep  # outside it (Cypress Point's shore and sea)
+        from shapely.ops import unary_union as _uu
+        _ids = list(cfg["rock_water_osm"]) + list(cfg.get("red_water_osm") or [])
+        no_stakes = _prep(_uu(list(g[g.osm.isin(_ids)].geometry)).buffer(1.0))
     for ring, poly, ob_inside in stake_lines(parts, g, cfg or {}):
         for s_ in np.arange(0, ring.length, 9.0):
             p = ring.interpolate(s_)
@@ -348,6 +354,8 @@ def render_art(surf, z, grid: Grid, g, holes, trees, buildings, boundary, P, lut
             cand = Point(p.x + nx_ * 0.8, p.y + ny_ * 0.8)
             if poly.contains(cand) != ob_inside:
                 cand = Point(p.x - nx_ * 0.8, p.y - ny_ * 0.8)
+            if no_stakes is not None and no_stakes.contains(cand):
+                continue
             col, row = (int(v) for v in grid.px(cand.x, cand.y))
             hpx = int(round(ppm * 1.0))
             if hpx + 1 <= row < H - 2 and 1 <= col < W - 2:

@@ -128,6 +128,11 @@ describe('Cypress Point Club course data', () => {
     expect(sand).toBeGreaterThan(10);
   });
 
+  it('the cypress clump in the middle of the 17th fairway stands (keep_trees_areas)', () => {
+    const clump = course.obstacles.trees.filter((t) => t.x >= 300 && t.x <= 345 && t.y >= 530 && t.y <= 595);
+    expect(clump.length).toBeGreaterThanOrEqual(10);
+  });
+
   it('a perfect drive down the hole line touches no tree', () => {
     const blocked: string[] = [];
     for (const h of json.holes) {
