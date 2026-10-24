@@ -12,6 +12,16 @@
       "reason": "OSM tags these four tee pads golf=fairway (73, 119, 57 and 74 m2 squares at the hole 8 and 9 line starts); measured to the green they are the back tees (hole 8 208/224 yd, Black 209; hole 9 471/485 yd, Black 468). Copied as tees by data/sandpines/make_edits.py"
     }
   ],
+  "tags": [
+    {
+      "osm": "w849053547",
+      "set": {
+        "hole": "11",
+        "tee_set": "Blue"
+      },
+      "reason": "hole 11's long teeing ground (836 m2, 38 x 50 m) spans 116-179 yd along the line; its centroid measures 146 yd, so s06 (which assigns boxes by centroid within 8 %) passed it over for the line start (182 yd, +11.5 %). The Blue 163 lies inside it (OSIP 2024 photo: one mown strip). Course chat's call, 2026-10-24"
+    }
+  ],
   "drop": [
     {
       "osm": "w849043568",

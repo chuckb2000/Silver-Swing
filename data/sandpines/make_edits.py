@@ -16,6 +16,9 @@ hole line (s06's method), they are the back tees of holes 8 and 9:
 tee under a new id ("tee_<osm id>"; dropping by the original id would otherwise
 remove the copy too) and the fairway is dropped. The pads are not given a tee
 set: only Blue is built, and s06 assigns boxes by measurement.
+
+It also tags hole 11's long teeing ground w849053547 as the Blue box (its centroid
+measures 146 yd, but the box spans 116-179 yd and holds the card's 163).
 """
 from __future__ import annotations
 
@@ -58,6 +61,14 @@ def main():
             "reason": "OSM tags these four tee pads golf=fairway (73, 119, 57 and 74 m2 squares at the hole 8 "
                       "and 9 line starts); measured to the green they are the back tees (hole 8 208/224 yd, "
                       "Black 209; hole 9 471/485 yd, Black 468). Copied as tees by data/sandpines/make_edits.py",
+        }],
+        "tags": [{
+            "osm": "w849053547",
+            "set": {"hole": "11", "tee_set": "Blue"},
+            "reason": "hole 11's long teeing ground (836 m2, 38 x 50 m) spans 116-179 yd along the line; its "
+                      "centroid measures 146 yd, so s06 (which assigns boxes by centroid within 8 %) passed it over "
+                      "for the line start (182 yd, +11.5 %). The Blue 163 lies inside it (OSIP 2024 photo: one mown "
+                      "strip). Course chat's call, 2026-10-24",
         }],
         "drop": [{"osm": k, "reason": f"mistagged golf=fairway: {why}; replaced by tee_{k}"} for k, why in PADS.items()],
     }
