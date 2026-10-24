@@ -1,6 +1,6 @@
 {
  "release": "cypress-point-data",
- "note": "Build inputs not kept in git for Cypress Point; `make fetch NAME=cypress_point` puts them in place (pipeline/fetch_raw.py). The clipped OSM (raw/overpass.geojson) is also committed. Elevation, lidar and photo entries are added when the developer's uploads arrive.",
+ "note": "Build inputs not kept in git for Cypress Point; `make fetch NAME=cypress_point` puts them in place (pipeline/fetch_raw.py). The clipped OSM (raw/overpass.geojson) is also committed. The DEM and the NAIP mosaic are also committed (small). The lidar entry is added when the NOAA job arrives. hahahs.jpg is the NAIP west half, exportImage.jpg the east half.",
  "files": [
   {
    "asset": "export.3.geojson",
@@ -8,6 +8,30 @@
    "run": "python3 data/cypress_point/clip_osm.py {file}",
    "outputs": {
     "raw/overpass.geojson": "74dbf9d3d2dd1bc29bf763db3eb7cd939af9cfe4a8a05ac18d48e62691abd09b"
+   }
+  },
+  {
+   "asset": "exportImage.17.tiff",
+   "sha256": "283c90daa7da18149fd026ca568352ef13894fc1007584df906d3c88a488f30b",
+   "run": "python3 data/cypress_point/make_dem.py {file}",
+   "outputs": {
+    "raw/usgs_dem_1m.tif": "6840c8900b360faada6b027bc7e5cc1da42c7bba2c0ce73adc9eeeb7ba174523"
+   }
+  },
+  {
+   "asset": "exportImage.jpg",
+   "sha256": "449ac9b7252b81889493cfad88c2ff5c2bcf23770917245903f6ebbe9ed62822",
+   "run": "install -D -m 644 {file} data/cypress_point/build/naip_east.jpg",
+   "outputs": {
+    "build/naip_east.jpg": "449ac9b7252b81889493cfad88c2ff5c2bcf23770917245903f6ebbe9ed62822"
+   }
+  },
+  {
+   "asset": "hahahs.jpg",
+   "sha256": "b376a242bdf369c70f678f33dc89095161331c720e10fdccf538b7eaa58d9ce4",
+   "run": "python3 data/cypress_point/make_ortho.py {file} data/cypress_point/build/naip_east.jpg",
+   "outputs": {
+    "raw/naip_05m.tif": "ecf2470a350d079762561972e6ff26b320bba3a9b25e3e3f3575a0aaccc4be54"
    }
   }
  ]

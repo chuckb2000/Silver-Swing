@@ -1,6 +1,6 @@
 {
   "name": "Monterey (Cypress Point: cypress, pine, white dunes, Pacific)",
-  "note": "Course theme palette (<= 32 colours; same keys as pnw.json). Cypress Point Club, Pebble Beach CA: deep, saturated coastal turf (greener and cooler than the pnw parkland set, from the developer's aerials), near-white dune sand, deep blue-green Pacific, olive-tan forest floor and dune scrub off the course, grey-brown granite and cypress bark. From the photos in the GitHub release cypress-point-data (2026-10-24). Trees in assets-src/trees_monterey.py: Monterey pine, Monterey cypress and coast live oak. Shadows are a 35% black overlay on top of these.",
+  "note": "Course theme palette (<= 32 colours; same keys as pnw.json). Cypress Point Club, Pebble Beach CA: deep, saturated coastal turf (greener and cooler than the pnw parkland set, from the developer's aerials), near-white dune sand, deep blue-green Pacific, olive-tan forest floor and dune scrub off the course, grey-brown granite and cypress bark. From the photos in the GitHub release cypress-point-data (2026-10-24). Trees in assets-src/trees_monterey.py: Monterey pine, Monterey cypress and coast live oak. The rocks between the clifftop and the sea (a penalty area, cfg rock_water_osm) use the \"rock\" keys, with iceplant (F0 red, F1 green) on the ledges. Shadows are a 35% black overlay on top of these.",
   "colors": {
     "G0": "#122a1e",
     "G1": "#1b3d27",
@@ -30,7 +30,9 @@
     "B1": "#64503f",
     "B2": "#8a6e55",
     "R0": "#4a5562",
-    "WH": "#f6f6f2"
+    "WH": "#f6f6f2",
+    "F0": "#6e3a3b",
+    "F1": "#58773a"
   },
   "minimap": {
     "ob": "#60663b",
@@ -42,11 +44,27 @@
     "ob_sand": "#e2ddcf"
   },
   "minimap_trees": {
-    "conifer": ["#13301f", "#2a5135"],
-    "deciduous": ["#10291f", "#28503a"]
+    "conifer": [
+      "#13301f",
+      "#2a5135"
+    ],
+    "deciduous": [
+      "#10291f",
+      "#28503a"
+    ]
   },
   "trees": {
     "conifer": "trees_monterey:pine",
     "deciduous": "trees_monterey:cypress"
-  }
+  },
+  "rock": [
+    "B0",
+    "B1",
+    "B2",
+    "K3"
+  ],
+  "rock_plants": [
+    "F0",
+    "F1"
+  ]
 }

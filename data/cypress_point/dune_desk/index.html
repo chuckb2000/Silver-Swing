@@ -1,0 +1,249 @@
+<title>Cypress Point Dunes</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<style>
+/* Layout: one screen - a tool bar over a full-bleed photo canvas, a status line under it. */
+:root {
+  --bg: #eef1ec; --panel: #ffffff; --fg: #1f2a24; --muted: #5d6a62; --line: #cfd8d1;
+  --accent: #0f6d6a; --accent-fg: #ffffff; --sand: #ff8a1f; --drop: #8c949b; --sel: #00e0ff;
+  --ui: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #121916; --panel: #1b2420; --fg: #e4ebe6; --muted: #9aa9a0; --line: #2e3a34;
+  --accent: #3fb5ae; --accent-fg: #0b1412; color-scheme: dark } }
+:root[data-theme="dark"] { --bg: #121916; --panel: #1b2420; --fg: #e4ebe6; --muted: #9aa9a0; --line: #2e3a34;
+  --accent: #3fb5ae; --accent-fg: #0b1412; color-scheme: dark }
+html, body { height: 100%; }
+body { background: var(--bg); color: var(--fg); font-family: var(--ui); display: flex; flex-direction: column; overflow: hidden; }
+header { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; padding-block: 8px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  background: var(--panel); border-bottom: 1px solid var(--line); }
+h1 { font-size: 15px; margin: 0; font-weight: 600; letter-spacing: .01em; margin-right: auto; }
+h1 small { font-weight: 400; color: var(--muted); font-size: 12px; margin-left: 6px; }
+.tools { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+button { font: 500 13px var(--ui); padding: 6px 10px; border-radius: 6px; border: 1px solid var(--line);
+  background: var(--bg); color: var(--fg); cursor: pointer; }
+button:hover { border-color: var(--accent); }
+button:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+button[aria-pressed="true"], button.primary { background: var(--accent); color: var(--accent-fg); border-color: var(--accent); }
+button:disabled { opacity: .45; cursor: default; }
+label.chk { font-size: 13px; display: flex; gap: 4px; align-items: center; color: var(--muted); }
+#stage { position: relative; flex: 1; min-height: 0; touch-action: none; }
+canvas { position: absolute; inset: 0; width: 100%; height: 100%; cursor: grab; }
+canvas.drawing { cursor: crosshair; }
+footer { display: flex; flex-wrap: wrap; gap: 4px 16px; padding-block: 6px; font-size: 12px; color: var(--muted);
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  background: var(--panel); border-top: 1px solid var(--line); font-variant-numeric: tabular-nums; }
+footer b { color: var(--fg); font-weight: 600; }
+#help { position: absolute; left: max(12px, env(safe-area-inset-left, 0px)); bottom: 12px; max-width: min(360px, calc(100% - 24px));
+  background: color-mix(in srgb, var(--panel) 92%, transparent); border: 1px solid var(--line); border-radius: 8px;
+  padding: 10px 12px; font-size: 12.5px; line-height: 1.45; }
+#help ol { margin: 4px 0 0; padding-left: 18px; }
+#help .x { float: right; padding: 0 6px; border: 0; background: none; font-size: 16px; line-height: 1; }
+.key { display: inline-block; width: 10px; height: 10px; border-radius: 2px; vertical-align: -1px; margin-right: 4px; }
+</style>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+
+<header>
+  <h1>Cypress Point dunes <small>open sand inside the boundary plays as waste sand</small></h1>
+  <div class="tools">
+    <button id="fit">Fit</button>
+    <button id="zin" aria-label="Zoom in">+</button>
+    <button id="zout" aria-label="Zoom out">&minus;</button>
+    <button id="draw" aria-pressed="false">Draw sand</button>
+    <button id="toggle" disabled>Remove shape</button>
+    <button id="delpt" disabled>Delete point</button>
+    <button id="undo" disabled>Undo</button>
+    <label class="chk"><input type="checkbox" id="showsand" checked> sand</label>
+    <button id="save" class="primary">Save</button>
+  </div>
+</header>
+<div id="stage">
+  <canvas id="cv"></canvas>
+  <div id="help">
+    <button class="x" id="hidehelp" aria-label="Hide help">&times;</button>
+    <b>Correct the traced sand</b>
+    <ol>
+      <li>Tap a shape to select it. Drag its points to move them; <b>Delete point</b> removes the one you tapped.</li>
+      <li><b>Remove shape</b> if it isn't open sand (tap it again later to restore).</li>
+      <li><b>Draw sand</b>, then tap around a missing patch; tap the first point to close it.</li>
+      <li><b>Save</b> when done. Drag empty ground to pan, scroll or pinch to zoom.</li>
+    </ol>
+  </div>
+</div>
+<footer>
+  <span><span class="key" style="background:var(--sand)"></span>sand in play</span>
+  <span><span class="key" style="background:#ffd29a"></span>sand off the course (scenery)</span>
+  <span><span class="key" style="background:var(--drop)"></span>removed</span>
+  <span id="sel">Nothing selected</span>
+  <span id="status">Loading</span>
+</footer>
+
+<script>
+(async function () {
+  const $ = (id) => document.getElementById(id);
+  const cv = $("cv"), ctx = cv.getContext("2d"), stage = $("stage");
+  const data = await (await fetch("data.json")).json();
+  const img = new Image(); img.src = "img/photo.jpg";
+  await img.decode().catch(() => {});
+  const [xa, ya, xb, yb] = data.view, RES = data.res;
+  const P = (x, y) => [(x - xa) / RES, (yb - y) / RES];          // metres -> photo px
+  const M = (px, py) => [xa + px * RES, yb - py * RES];          // photo px -> metres
+
+  // state ---------------------------------------------------------------
+  const base = new Map(data.dunes.map(d => [d.id, d]));
+  let st = { dropped: [], edited: {}, added: [] };
+  const undo = [];
+  let sel = null, selPt = -1, drawing = null, dirty = false;
+  const ringOf = (id) => st.edited[id] || (base.get(id) ? base.get(id).ring : (st.added.find(a => a.id === id) || {}).ring);
+  const isDrop = (id) => st.dropped.includes(id);
+  const allIds = () => [...base.keys(), ...st.added.map(a => a.id)];
+  function push() { undo.push(JSON.stringify(st)); if (undo.length > 80) undo.shift(); $("undo").disabled = false; dirty = true; status(); }
+  function status(msg) { $("status").textContent = msg || (dirty ? "Unsaved changes" : "Saved"); }
+  function area(r) { let a = 0; for (let i = 0; i < r.length; i++) { const [x1, y1] = r[i], [x2, y2] = r[(i + 1) % r.length]; a += x1 * y2 - x2 * y1; } return Math.abs(a / 2); }
+
+  // view ----------------------------------------------------------------
+  let scale = 1, ox = 0, oy = 0, dpr = 1;
+  function resize() { dpr = window.devicePixelRatio || 1; cv.width = stage.clientWidth * dpr; cv.height = stage.clientHeight * dpr; render(); }
+  function fit() { const s = Math.min(stage.clientWidth / img.width, stage.clientHeight / img.height); scale = s; ox = (stage.clientWidth - img.width * s) / 2; oy = (stage.clientHeight - img.height * s) / 2; render(); }
+  const toScr = (x, y) => { const [px, py] = P(x, y); return [px * scale + ox, py * scale + oy]; };
+  const toM = (sx, sy) => M((sx - ox) / scale, (sy - oy) / scale);
+  function zoomAt(f, sx, sy) { const ns = Math.min(24, Math.max(0.15, scale * f)); ox = sx - (sx - ox) * ns / scale; oy = sy - (sy - oy) * ns / scale; scale = ns; render(); }
+
+  function path(r, holes) {
+    ctx.beginPath();
+    for (const ring of [r, ...(holes || [])]) { ring.forEach(([x, y], i) => { const [sx, sy] = toScr(x, y); i ? ctx.lineTo(sx, sy) : ctx.moveTo(sx, sy); }); ctx.closePath(); }
+  }
+  const css = (n) => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+  function render() {
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.fillStyle = css("--bg"); ctx.fillRect(0, 0, cv.width, cv.height);
+    ctx.imageSmoothingEnabled = scale < 2;
+    ctx.drawImage(img, ox, oy, img.width * scale, img.height * scale);
+    // references: boundary, greens, hole lines
+    ctx.lineWidth = 1.5; ctx.strokeStyle = "#ff9d00"; ctx.setLineDash([6, 4]); path(data.boundary); ctx.stroke(); ctx.setLineDash([]);
+    ctx.strokeStyle = "rgba(255,255,255,.85)"; ctx.lineWidth = 1;
+    for (const g of data.greens) { path(g); ctx.stroke(); }
+    ctx.strokeStyle = "rgba(255,255,255,.55)";
+    for (const h of data.holes) { ctx.beginPath(); h.line.forEach(([x, y], i) => { const [sx, sy] = toScr(x, y); i ? ctx.lineTo(sx, sy) : ctx.moveTo(sx, sy); }); ctx.stroke(); }
+    ctx.font = "600 13px " + css("--ui"); ctx.textAlign = "center"; ctx.textBaseline = "middle";
+    for (const h of data.holes) { const [sx, sy] = toScr(...h.line[0]); ctx.fillStyle = "#c0262c"; ctx.beginPath(); ctx.arc(sx, sy, 10, 0, 7); ctx.fill(); ctx.fillStyle = "#fff"; ctx.fillText(h.n, sx, sy + 0.5); }
+    if ($("showsand").checked) {
+      for (const id of allIds()) {
+        const b = base.get(id), r = ringOf(id); if (!r) continue;
+        const inPlay = b ? b.in : true, drop = isDrop(id);
+        path(r, st.edited[id] ? [] : (b ? b.holes : []));
+        ctx.fillStyle = drop ? "rgba(140,148,155,.35)" : inPlay ? "rgba(255,138,31,.38)" : "rgba(255,210,154,.30)";
+        ctx.fill("evenodd");
+        ctx.lineWidth = id === sel ? 2.5 : 1.3; ctx.setLineDash(drop || !inPlay ? [5, 4] : []);
+        ctx.strokeStyle = id === sel ? css("--sel") : drop ? "#5f666c" : inPlay ? "#e0620a" : "#d09a50"; ctx.stroke(); ctx.setLineDash([]);
+      }
+      if (sel && ringOf(sel)) {
+        const r = ringOf(sel), step = scale < 1.2 ? Math.ceil(1.2 / scale) * 2 : 1;
+        r.forEach(([x, y], i) => { if (i % step && i !== selPt) return; const [sx, sy] = toScr(x, y);
+          ctx.fillStyle = i === selPt ? css("--sel") : "#fff"; ctx.strokeStyle = "#003a44"; ctx.lineWidth = 1;
+          ctx.beginPath(); ctx.rect(sx - 3.5, sy - 3.5, 7, 7); ctx.fill(); ctx.stroke(); });
+      }
+    }
+    if (drawing && drawing.length) {
+      ctx.strokeStyle = css("--sel"); ctx.lineWidth = 2; ctx.beginPath();
+      drawing.forEach(([x, y], i) => { const [sx, sy] = toScr(x, y); i ? ctx.lineTo(sx, sy) : ctx.moveTo(sx, sy); }); ctx.stroke();
+      drawing.forEach(([x, y], i) => { const [sx, sy] = toScr(x, y); ctx.fillStyle = i ? "#fff" : css("--sel"); ctx.beginPath(); ctx.arc(sx, sy, i ? 3 : 6, 0, 7); ctx.fill(); });
+    }
+    const s = sel && ringOf(sel);
+    $("sel").innerHTML = s ? `<b>${sel.startsWith("new") ? "new shape" : sel.replace("dune_", "shape ")}</b> ${Math.round(area(s))} m² · ${isDrop(sel) ? "removed" : (base.get(sel) && !base.get(sel).in ? "off the course" : "in play")}` : "Nothing selected";
+    $("toggle").disabled = !sel; $("toggle").textContent = sel && isDrop(sel) ? "Restore shape" : "Remove shape";
+    $("delpt").disabled = !(sel && selPt >= 0);
+  }
+
+  // hit tests -----------------------------------------------------------
+  function inside(r, x, y) { let c = false; for (let i = 0, j = r.length - 1; i < r.length; j = i++) { const [xi, yi] = r[i], [xj, yj] = r[j]; if ((yi > y) !== (yj > y) && x < (xj - xi) * (y - yi) / (yj - yi) + xi) c = !c; } return c; }
+  function hitShape(x, y) { const ids = allIds().filter(id => ringOf(id) && inside(ringOf(id), x, y)); ids.sort((a, b) => area(ringOf(a)) - area(ringOf(b))); return ids[0] || null; }
+  function hitPt(sx, sy) { if (!sel) return -1; const r = ringOf(sel); let best = -1, bd = 12; r.forEach(([x, y], i) => { const [px, py] = toScr(x, y); const d = Math.hypot(px - sx, py - sy); if (d < bd) { bd = d; best = i; } }); return best; }
+
+  // pointer handling: pan, drag a point, pinch zoom, draw ------------------
+  const pts = new Map(); let drag = null, pinch = null, moved = false;
+  cv.addEventListener("pointerdown", (e) => {
+    cv.setPointerCapture(e.pointerId); pts.set(e.pointerId, [e.offsetX, e.offsetY]); moved = false;
+    if (pts.size === 2) { const [a, b] = [...pts.values()]; pinch = { d: Math.hypot(a[0] - b[0], a[1] - b[1]), s: scale }; drag = null; return; }
+    if (drawing) { drag = { pan: true, x: e.offsetX, y: e.offsetY, ox, oy }; return; }
+    const i = hitPt(e.offsetX, e.offsetY);
+    if (i >= 0) { push(); selPt = i; if (!st.edited[sel] && base.get(sel)) st.edited[sel] = base.get(sel).ring.map(p => p.slice()); drag = { pt: i }; render(); return; }
+    drag = { pan: true, x: e.offsetX, y: e.offsetY, ox, oy };
+  });
+  cv.addEventListener("pointermove", (e) => {
+    if (!pts.has(e.pointerId)) return; pts.set(e.pointerId, [e.offsetX, e.offsetY]);
+    if (pinch && pts.size === 2) { const [a, b] = [...pts.values()]; const d = Math.hypot(a[0] - b[0], a[1] - b[1]); zoomAt(pinch.s * d / pinch.d / scale, (a[0] + b[0]) / 2, (a[1] + b[1]) / 2); return; }
+    if (!drag) return;
+    if (Math.abs(e.offsetX - (drag.x ?? e.offsetX)) + Math.abs(e.offsetY - (drag.y ?? e.offsetY)) > 4) moved = true;
+    if (drag.pt !== undefined) { moved = true; const ring = st.edited[sel] || ringOf(sel); ring[drag.pt] = toM(e.offsetX, e.offsetY).map(v => Math.round(v * 10) / 10); render(); }
+    else if (drag.pan) { ox = drag.ox + e.offsetX - drag.x; oy = drag.oy + e.offsetY - drag.y; render(); }
+  });
+  function up(e) {
+    pts.delete(e.pointerId); if (pts.size < 2) pinch = null;
+    if (drag && drag.pan && !moved) click(e.offsetX, e.offsetY);
+    if (drag && drag.pt !== undefined && !moved) undo.pop();
+    drag = null;
+  }
+  cv.addEventListener("pointerup", up); cv.addEventListener("pointercancel", (e) => { pts.delete(e.pointerId); drag = null; pinch = null; });
+  cv.addEventListener("wheel", (e) => { e.preventDefault(); zoomAt(Math.exp(-e.deltaY * 0.0015), e.offsetX, e.offsetY); }, { passive: false });
+
+  function click(sx, sy) {
+    const [x, y] = toM(sx, sy);
+    if (drawing) {
+      if (drawing.length >= 3) { const [fx, fy] = toScr(...drawing[0]); if (Math.hypot(fx - sx, fy - sy) < 12) return finishDraw(); }
+      drawing.push([Math.round(x * 10) / 10, Math.round(y * 10) / 10]); render(); return;
+    }
+    sel = hitShape(x, y); selPt = -1; render();
+  }
+  function finishDraw() {
+    if (drawing && drawing.length >= 3) { push(); const id = "new_" + Date.now().toString(36); st.added.push({ id, ring: drawing }); sel = id; }
+    drawing = null; $("draw").setAttribute("aria-pressed", "false"); cv.classList.remove("drawing"); render();
+  }
+
+  // buttons --------------------------------------------------------------
+  $("fit").onclick = fit;
+  $("zin").onclick = () => zoomAt(1.5, stage.clientWidth / 2, stage.clientHeight / 2);
+  $("zout").onclick = () => zoomAt(1 / 1.5, stage.clientWidth / 2, stage.clientHeight / 2);
+  $("showsand").onchange = render;
+  $("draw").onclick = () => { if (drawing) return finishDraw(); drawing = []; sel = null; $("draw").setAttribute("aria-pressed", "true"); cv.classList.add("drawing"); render(); };
+  $("toggle").onclick = () => { if (!sel) return; push();
+    if (sel.startsWith("new")) { st.added = st.added.filter(a => a.id !== sel); sel = null; }
+    else st.dropped = isDrop(sel) ? st.dropped.filter(i => i !== sel) : [...st.dropped, sel];
+    render(); };
+  $("delpt").onclick = () => { if (!sel || selPt < 0) return; push(); if (!st.edited[sel] && base.get(sel)) st.edited[sel] = base.get(sel).ring.map(p => p.slice());
+    const r = st.edited[sel] || ringOf(sel); if (r.length > 3) r.splice(selPt, 1); selPt = -1; render(); };
+  $("undo").onclick = () => { if (!undo.length) return; st = JSON.parse(undo.pop()); $("undo").disabled = !undo.length; dirty = true; status(); render(); };
+  $("hidehelp").onclick = () => { $("help").hidden = true; };
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && drawing) { drawing = null; $("draw").setAttribute("aria-pressed", "false"); cv.classList.remove("drawing"); render(); }
+    if (e.key === "Enter" && drawing) finishDraw();
+    if ((e.key === "Delete" || e.key === "Backspace") && sel && selPt >= 0) $("delpt").onclick();
+  });
+
+  // storage ---------------------------------------------------------------
+  let db = null, me = null;
+  try { db = await window.claude?.use?.("db"); const u = await window.claude?.use?.("user"); me = u ? await u.id() : null; } catch (e) { db = null; }
+  if (db) {
+    try { const snap = await db.doc("dunes/current").get();
+      if (snap.exists) { const d = snap.data();
+        const dec = (t) => String(t).split(";").map(p => p.split(",").map(Number));
+        const ed = {}; for (const [k, v] of Object.entries(d.edited || {})) ed[k] = dec(v);
+        st = { dropped: d.dropped || [], edited: ed, added: (d.added || []).map(a => ({ id: a.id, ring: dec(a.ring) })) }; }
+      status("Loaded your last save"); } catch (e) { status("Could not load the last save: " + (e.message || e.code)); }
+  } else status("Saving isn't available in this view; changes stay in this tab");
+  $("save").onclick = async () => {
+    if (!db) return status("Saving isn't available in this view");
+    status("Saving");
+    // rings travel as "x,y;x,y;..." strings (the store keeps no arrays inside arrays)
+    const enc = (r) => r.map(p => p.join(",")).join(";");
+    const ed = {}; for (const [k, v] of Object.entries(st.edited)) ed[k] = enc(v);
+    try { await db.doc("dunes/current").set({ dropped: st.dropped, edited: ed, added: st.added.map(a => ({ id: a.id, ring: enc(a.ring) })),
+        savedAt: new Date().toISOString(), by: me || "" });
+      dirty = false; status("Saved " + new Date().toLocaleTimeString([], { hour: "numeric", minute: "2-digit" })); }
+    catch (e) { status("Save failed (" + (e.code || e.message) + "). Try again in a moment."); }
+  };
+  window.addEventListener("resize", resize);
+  resize(); fit();
+})();
+</script>

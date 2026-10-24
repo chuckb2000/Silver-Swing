@@ -40,7 +40,7 @@ from common import build_dir, course_name_from_argv, GORSE_SURF, joins_parts, la
 from s08_surface import course_layers, road_geoms
 from terrain import tier_offset
 from s09_render import draw_lighthouse, LIGHTHOUSE_DRAW_SCALE  # noqa: E402
-from s09_render import BAYER4, PRIO, SHADOW_DIR, SHADOW_MULT, band_lut, build_lut, load_palette, load_theme, rough_band_mask, stake_lines, wave_mask
+from s09_render import BAYER4, PRIO, SHADOW_DIR, SHADOW_MULT, band_lut, build_lut, load_palette, load_theme, paint_rock, rough_band_mask, stake_lines, wave_mask
 
 sys.path.insert(0, str(ROOT / "assets-src"))
 from atlas import Atlas  # noqa: E402
@@ -212,6 +212,11 @@ def render_art(surf, z, grid: Grid, g, holes, trees, buildings, boundary, P, lut
         range_cells = surf == S["range"]
         surf = surf.copy()
         surf[range_cells] = S["rough"]
+    rock = None
+    if cfg and cfg.get("rock_water_osm"):  # penalty areas over rock drawn as rock (s09_render, rock_water_osm)
+        rock = grid.mask(list(g[g.osm.isin(cfg["rock_water_osm"])].geometry)) & (surf == S["water"])
+        surf = surf.copy()
+        surf[rock] = S["ob_road"]
     tone = hillshade_tone(z, surf, ppm)
     stripe = stripe_field(g, holes, grid, tee)
     t = tone.astype(np.int16)
@@ -254,6 +259,8 @@ def render_art(surf, z, grid: Grid, g, holes, trees, buildings, boundary, P, lut
     tuft3 = np.zeros_like(tuft)
     tuft3[:-2] = tuft[2:]
     put(tuft | tuft2 | tuft3, "TUFT" if "TUFT" in P else "G5")
+    if rock is not None:
+        paint_rock(rgb, rock, t, n1, n2, P, load_theme(cfg["theme"]))
     # outlines
     pr = PRIO[surf]
     edge = np.zeros((H, W), bool)

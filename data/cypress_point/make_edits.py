@@ -85,6 +85,9 @@ def main():
             tags.append({"osm": f.osm, "set": {"penalty": "red"},
                          "reason": f"{f.tags.get('name', 'unnamed')}: every penalty area red (standing default)"})
     mine = json.load(open(EDITS_FILE)) if EDITS_FILE.exists() else {}
+    for a in mine.get("add", []):
+        if a.get("ids") == "*":   # every feature of an approved proposals file (the dune trace)
+            a["ids"] = [f["id"] for f in json.load(open(HERE / a["from"]))["features"]]
     out = {"note": "Edits to the OSM layout for Cypress Point, written by make_edits.py (generic edits, then "
                    "course_edits.json); built into edited/course.geojson by pipeline/merge_edits.py.",
            "add": add + mine.get("add", []), "tags": tags + mine.get("tags", []),
