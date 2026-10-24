@@ -13,7 +13,10 @@ made one red penalty area. Middle tees (the card has no Blue), new `monterey` th
 Every hole is within 3 % of the Middle card (6,296 yd built vs 6,294). Trees from the 2018 FEMA
 Region 9 lidar (NOAA job), with the cypress clump in the 17th fairway kept on purpose. The course
 test (`data/cypress_point/tests/cypress_point.test.ts`, 17 checks) passes when copied into
-`game/tests/unit/`; robot rounds over five seeds scored 67-75 with no penalty strokes.
+`game/tests/unit/`; robot rounds over five seeds scored 67-75 with no penalty strokes. On the
+branch rebased on `main` (296f2453, with Stanford, Wildwood and Pumpkin Ridge): `npm run build`
+passes, 964 unit tests pass with the course test copied in (the one failure is `player.test.ts`
+asking for `cypress_point` in the daily roster), and the 12 Playwright tests pass.
 
 ## Facts
 
@@ -117,7 +120,8 @@ Middle (COURSE_BUILD 4.1: no Blue on the card; Middle is the set closest to 6,30
     different `validation_report.md` only. For RedTail and TPC Boston that is s06's open-item
     wording on `main` ("the scorecard's stroke index" where the committed reports say "GolfPass").
     Tualatin's diff was not inspected. Not run (stopped to open the PR): Wannamoisett, Waverley,
-    Willamette Valley. Could not run, for reasons on `main`: Chambers Bay (its lidar clip no longer
+    Willamette Valley, and the courses merged to `main` since (Stanford, Wildwood, Pumpkin Ridge;
+    the new keys are absent from their configs). Could not run, for reasons on `main`: Chambers Bay (its lidar clip no longer
     matches the hash in its `release.json`) and Pacific Dunes / Old Macdonald / Sheep Ranch
     (`release.json` still names the `PENDING-north-photo.jpg` asset).
 
