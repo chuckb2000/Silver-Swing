@@ -48,7 +48,7 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 
 ## Tree detection (DOGAMI canopy height model)
 
-- 9061 trees detected in the world extent (777 inside the course), 3444 conifers / 5617 deciduous; median height 21.7 m, max 58.9 m.
+- 9060 trees detected in the world extent (776 inside the course), 3443 conifers / 5617 deciduous; median height 21.7 m, max 58.9 m.
 - Dropped: 45 tops on building footprints, 0 over the lake, 71 tiny crowns.
 - Dropped on playing surfaces (spec 5.4): 30 -> fairway w1283753562 (15.1 m), fairway w848967022 (12.6 m), fairway w848967022 (14.8 m), fairway w1283765488 (39.6 m), tee w1283765491 (9.9 m), fairway w1283767032 (6.8 m), fairway w1283765492 (22.1 m), fairway w1283767032 (8.8 m), fairway w1283765492 (12.0 m), fairway w1283765492 (14.7 m), fairway w1283765492 (22.6 m), fairway w1283765492 (7.7 m), fairway w1283767032 (24.7 m), fairway w1283765492 (8.6 m), fairway w1283767032 (23.8 m), fairway w1283787865 (7.6 m), tee w1283820848 (32.9 m), tee w1283820848 (24.2 m), fairway w1283765492 (21.1 m), fairway w1283765492 (8.5 m), fairway w1283765492 (7.2 m), fairway w1283765492 (14.0 m), fairway w1283765492 (10.1 m), fairway r18566934 (24.0 m), fairway r18566933 (19.5 m), fairway r18566933 (20.4 m), fairway r18566933 (11.1 m), fairway r18566933 (11.1 m), fairway w1283820850 (16.1 m), fairway w1283820850 (20.2 m)
 - Dropped from tee shots (s06b): 2 -> 16 Black (17.7 m tree, 26.0 m from the tee), 16 Black (26.9 m tree, 62.1 m from the tee)

@@ -76,6 +76,11 @@
       "x": 440.5,
       "y": 574.5,
       "reason": "hole 2: a 24 m crown 16 m in front of the Black tee; a perfect drive at the middle of the fairway clips it 21 m out (game tee-shot test; standing default, COURSE_BUILD.md 4.1). s06b's own check passed it"
+    },
+    {
+      "x": 629.5,
+      "y": 331.5,
+      "reason": "hole 7: a 46 m fir at the right edge of the fairway whose 12.6 m crown overhangs the OSM line of play 58 m from the Black tee; the game's default aim (down the line) drives into it and stops in the woods (game test). Standing default: trees in a perfect tee-shot line are removed"
     }
   ],
   "red_water_note": "w825464987: the creek strip between the 2nd green and the 5th tee; w676379150: the swimming pool behind the house north of the 16th tee, a red penalty area at the developer's request (2026-10-24: 'that would be funny'); pools inside the boundary otherwise paint as rough"
