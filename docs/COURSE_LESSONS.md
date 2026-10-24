@@ -850,3 +850,24 @@ Details in each course's file (`docs/courses/<id>.md`, "Lessons").
   lidar postdates the course, look at what it flags before switching it on.
 - **The installed Chromium can be newer than the one Playwright expects**:
   point `executablePath` at it.
+
+## 29. Stanford Golf Course (2026-10-24)
+
+- **NOAA's job can ignore the projection asked for** (here California zone 3 in
+  US feet, heights in metres): read the LAZ header first. Tiles can have
+  different offsets; a clip that merges tiles must re-quantise
+  (`data/stanford/make_laz.py`).
+- **Ask NOAA for vegetation classes only** (3-5): roofs and wires stay out of the
+  canopy, no `remove_wires` or roof filter needed.
+- **A protected fairway tree rules out `trees_off_fairways_m`**: drop trees by
+  list instead (`make_tree_drops.py`), keeping those near the OSM tree nodes
+  (the lidar split each broad oak into several tops up to 11 m from its node).
+- **A creek in a ravine:** propose the penalty area as the ravine to the top of
+  its banks, clipped to the boundary, tagged `flatten=no`; where an OB road
+  crosses it, water wins (a bridge).
+- **A boundary in three parts where one is the range:** copy the boundary
+  without the range part rather than widening `join_boundary_parts`' gap.
+- **The card's Blue can be the forward set** (5,363 yd here): the 6,300 yd rule
+  picks Black, as at TPC Boston.
+- **The game spells `SURF` names in camelCase** (`obRoad`, not `ob_road`).
+
