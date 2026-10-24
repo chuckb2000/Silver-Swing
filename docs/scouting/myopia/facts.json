@@ -1,0 +1,66 @@
+{
+  "id": "myopia",
+  "name": "Myopia Hunt Club",
+  "short_name": "Myopia",
+  "town": "South Hamilton (Hamilton)",
+  "county": "Essex",
+  "state": "MA",
+  "lat": 42.609,
+  "lon": -70.8584,
+  "centre_source": "OpenGolfAPI's OpenStreetMap link (42.6090024, -70.8583887); Wikipedia 42°36'32\"N 70°51'32\"W and Stymie's range point (42.609652, -70.857161) lie within 150 m. Probably near the clubhouse, not the course centroid; the box allows for that.",
+  "epsg": 32619,
+  "holes": 18,
+  "par": 72,
+  "architects": ["Herbert C. Leeds", "R. M. Appleton (first nine, 1894)"],
+  "opened": 1894,
+  "renovations": [
+    "1896 first nine complete; 18 holes 1898-1901 (Leeds)",
+    "1990s: superintendent Dave Heroian restored 25 bunkers, let the rough grow to fescue, removed trees (1998 article)",
+    "1995-2005: club lengthening (new tees on 2, 4, 7, 10, 11, 15, 18), trees removed, mounds added (Wikipedia)",
+    "2011 on: Gil Hanse, tree removal and fairway widening (Fried Egg, GOLF, GolfPass)",
+    "fuller Hanse restoration reported as pending by 2025 Golf Digest reviewers (unconfirmed)"
+  ],
+  "access": "private",
+  "notable": [
+    "US Open 1898, 1901, 1905, 1908",
+    "Golf Digest America's 100 Greatest #54, Massachusetts #2 (2025-26)",
+    "GOLF Top 100 Courses in the World #86 (2025-26)",
+    "holes 4 and 9 among Golf Magazine's top-100 signature holes",
+    "100th NEPGA Section Championship (6,555 yd, par 72)"
+  ],
+  "video_games": "none found (no known EA/Tiger Woods, PGA Tour 2K, Links or Golden Tee appearance; dedicated search not possible this session)",
+  "tees": [
+    {"name": "Red", "yards": 6555, "rating": 72.7, "slope": 138, "par": 72, "gender": "M"},
+    {"name": "White", "yards": 6190, "rating": 71.1, "slope": 134, "par": 72, "gender": "M"},
+    {"name": "White", "yards": 6190, "rating": 77.4, "slope": 142, "par": 72, "gender": "W"},
+    {"name": "Yellow", "yards": 5495, "rating": 67.1, "slope": 123, "par": 72, "gender": "M"},
+    {"name": "Yellow", "yards": 5485, "rating": 72.4, "slope": 137, "par": 72, "gender": "W"},
+    {"name": "Green", "yards": 4419, "rating": 0, "slope": 0, "par": 72, "gender": "M"}
+  ],
+  "default_tee": "White",
+  "theme": "seekonk",
+  "new_theme_needed": false,
+  "wind_mph": [1, 9],
+  "special_ground": ["tall red fescue / bluestem rough (plays as rough)", "about 104-120 deep pit and coffin bunkers", "Leeds mounds and stone walls (barrier=wall)", "bridle paths crossing holes (cart paths, free relief)"],
+  "water": "all red: wetland carry on 4 (Miles River), stream across 5, creek short of 6's green and a pond right of 6's fairway, pond in front of 9's green",
+  "layouts": [],
+  "lidar": {
+    "bare_earth": "USGS 3DEP 1 m DEM via exportImage; expected project MA_CentralEastern_2021_B21, tiles x34y472 and x34y473 (unconfirmed)",
+    "canopy": "lidar point cloud clipped by the NOAA Data Access Viewer, 2021 USGS Lidar: Central Eastern Massachusetts (leaf-off)",
+    "flight_year": 2021,
+    "noaa_dav_id": 9777
+  },
+  "imagery": "USDA NAIP via the USGS National Map, 0.9 m export of the download box (newest MA flight)",
+  "osm_coverage": "unknown until the export; OpenGolfAPI (built on OSM) counts 119 bunkers and 3 water features",
+  "scorecard_status": "third-party complete per hole (Stymie, GolfPass agree on Red/White); no official card; ratings conflict; Yellow 12 conflict (447 vs 443)",
+  "open_questions": [
+    "White only (default) or also Red?",
+    "ratings: Stymie (72.7/138, 71.1/134) vs GolfPass (73.2/135, 71.0/131, older totals)",
+    "theme seekonk vs bayside",
+    "polo fields and paddocks out of bounds; bridle paths as cart paths",
+    "any Hanse restoration since the 2021 lidar",
+    "logo: near-sighted spectacles"
+  ],
+  "box": {"half_m": 1800, "w_m": 3601, "h_m": 3601},
+  "lidar_box_wgs84": {"south": 42.597, "west": -70.875, "north": 42.621, "east": -70.842}
+}

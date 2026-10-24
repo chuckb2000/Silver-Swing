@@ -1,0 +1,20 @@
+{
+ "id": "baltimore_cc",
+ "state": "MD",
+ "epsg": 32618,
+ "wgs84": {
+  "south": 39.412885,
+  "west": -76.696433,
+  "north": 39.4771,
+  "east": -76.613611
+ },
+ "utm": {
+  "x0": 354088,
+  "y0": 4363967,
+  "x1": 361089,
+  "y1": 4370968,
+  "w": 7001,
+  "h": 7001
+ },
+ "note": "download box = estimated course extent + margin; the course chat sets the world from the OSM boundary"
+}

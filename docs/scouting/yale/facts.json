@@ -1,0 +1,62 @@
+{
+  "id": "yale",
+  "name": "Yale Golf Course",
+  "short_name": "Yale",
+  "town": "New Haven",
+  "county": "New Haven",
+  "state": "CT",
+  "lat": 41.32081,
+  "lon": -72.97978,
+  "centre_source": "US Army Corps of Engineers public notice NAE-2022-00115 (2023), project point for the restoration permit; clubhouse about 41.3186, -72.9855 (18Birdies, OpenGolfAPI)",
+  "epsg": 32618,
+  "holes": 18,
+  "par": 70,
+  "architects": ["Seth Raynor", "Charles Blair Macdonald (consultant)", "Charles Banks (construction)"],
+  "opened": 1926,
+  "renovations": [
+    "1990s: Roger Rulewich (12th Alps bunker; other changes)",
+    "2003-2020: superintendent Scott Ramsay, tree removal, green expansions, drainage",
+    "2023-2026: restoration by Gil Hanse and Jim Wagner (Hanse Golf Design), closed September 2023, reopened 28 April 2026: greens rebuilt and enlarged, 3rd double punchbowl green rebuilt, double fairways on 3 and 18, inverted bunkers on 6, new tees to 7,054 yd, 1,000-1,500 trees removed, about 35 acres of native grasses, new irrigation, ponds dredged"
+  ],
+  "access": "public daily fee (since 2020), owned by Yale University",
+  "notable": [
+    "Golf Digest America's 100 Greatest Public Courses #38 (2023-26)",
+    "Golf Digest America's Greatest College Courses #1 (2023)",
+    "Golfweek best campus course",
+    "1988 U.S. Junior Amateur; NCAA regionals 1991, 1995, 2004, 2010, 2015, 2022; Connecticut Open 1931, 1981; New England Amateur 1972, 2010"
+  ],
+  "video_games": "none found in the pages read; no dedicated search (web search budget ran out)",
+  "tees": [
+    {"name": "Championship", "yards": 7054, "rating": 74.7, "slope": 144, "par": 70, "gender": "M"},
+    {"name": "Long", "yards": 6361, "rating": 71.5, "slope": 139, "par": 70, "gender": "M"},
+    {"name": "Regular", "yards": 5767, "rating": 68.9, "slope": 130, "par": 70, "gender": "M"},
+    {"name": "Short", "yards": 4814, "rating": 64.5, "slope": 110, "par": 70, "gender": "M"},
+    {"name": "Championship", "yards": 7054, "rating": 81.4, "slope": 152, "par": 70, "gender": "F"},
+    {"name": "Long", "yards": 6361, "rating": 77.5, "slope": 146, "par": 70, "gender": "F"},
+    {"name": "Regular", "yards": 5767, "rating": 74.3, "slope": 138, "par": 70, "gender": "F"},
+    {"name": "Short", "yards": 4814, "rating": 68.5, "slope": 122, "par": 70, "gender": "F"}
+  ],
+  "default_tee": "Long",
+  "theme": "new darker woods theme (the planned temperate-forest theme) recommended; fallback seekonk",
+  "new_theme_needed": true,
+  "wind_mph": [1, 9],
+  "special_ground": ["native grass areas (about 35 acres, planted 2024-25): rough", "rock ledge", "inverted bunkers on 6", "Biarritz swale through green 9, double punchbowl green 3"],
+  "water": "Griest Pond (carry on 1 and 9; near 3 and 4), a stream along 6, irrigation ponds A/B/C, wetlands and vernal pools; all red",
+  "layouts": [],
+  "lidar": {
+    "bare_earth": "USGS 3DEP 1 m (project not confirmed: CT 2016 statewide QL2 or 2023) and CT ECO Statewide2023 DEM image service (2023 CT statewide lidar, QL1)",
+    "canopy": "NOAA Data Access Viewer point cloud, 2023 CT GIS Lidar: Connecticut Statewide (classes 2, 4, 5)",
+    "flight_year": 2023,
+    "noaa_dav_id": 10296
+  },
+  "imagery": "USDA NAIP via USGS (CT 2023 NAIP is 0.3 m, summer 2023); CT ECO 2023 spring leaf-off 3-inch orthos (optional); all before the 2024-25 restoration",
+  "osm_coverage": "partly known: OpenGolfAPI (built from OSM) counts 47 bunkers and 4 water features; holes/greens/tees unknown until the export; probably pre-restoration",
+  "scorecard_status": "complete third-party post-restoration card (GolfPass per hole for four sets, 18Birdies ratings); no official card online; front-nine stroke index conflict",
+  "open_questions": [
+    "Build from pre-restoration data and correct from recent imagery (recommended), or wait for CT's 2026 flight",
+    "Theme: new darker woods theme (recommended) or seekonk",
+    "Tee: Long by default; also Championship if its new boxes are mapped",
+    "Stroke index: 18Birdies row used until a printed card is seen",
+    "Logo: plough horse (recommended) or dynamite"
+  ]
+}

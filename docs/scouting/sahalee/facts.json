@@ -1,0 +1,75 @@
+{
+  "id": "sahalee",
+  "name": "Sahalee Country Club",
+  "short_name": "Sahalee",
+  "town": "Sammamish",
+  "county": "King",
+  "state": "WA",
+  "lat": 47.635,
+  "lon": -122.057,
+  "centre_source": "Wikipedia infobox 47°38′06″N 122°03′25″W (the club); Stymie's map link 47.635136, -122.055192 agrees within 150 m. Not checked against OSM.",
+  "epsg": 32610,
+  "holes": 27,
+  "par": 72,
+  "par_note": "par 36 on each of three nines; any two make a par-72 18. Championship course = South + North.",
+  "nines": [
+    {"id": "south", "name": "South", "holes": [1, 9]},
+    {"id": "north", "name": "North", "holes": [10, 18]},
+    {"id": "east", "name": "East", "holes": [19, 27]}
+  ],
+  "architects": ["Ted Robinson (1969)", "Rees Jones (1996-98 renovation; 2022-23 master-plan renovation with Steve Weisser)"],
+  "opened": 1969,
+  "renovations": [
+    "1969-70: East and South (the first 18) opened 9 Aug 1969; North opened July 1970 (HistoryLink)",
+    "1996-98: Rees Jones redesigned bunkers and key features of North and South for the 1998 PGA; East after the PGA",
+    "2000: driving range rebuilt (target greens, bunkers, drainage)",
+    "2015: Rees Jones tree management plan, tree removal ongoing since",
+    "fall 2022 - Feb 2023: Rees Jones / Steve Weisser master plan, built by Landscapes Unlimited: every bunker redesigned (some removed, added or moved), drainage and irrigation, fairway landing areas and approaches widened, trees removed (championship 8, 11, 12, 16) and canopies raised, the pond by the championship 10th (North 1) green extended to its front left and a front-left bunker removed"
+  ],
+  "access": "private",
+  "notable": [
+    "1998 PGA Championship (Vijay Singh)",
+    "2002 WGC-NEC Invitational (Craig Parry)",
+    "2010 U.S. Senior Open (Bernhard Langer)",
+    "2016 KPMG Women's PGA Championship (Brooke Henderson)",
+    "2024 KPMG Women's PGA Championship (Amy Yang)",
+    "Sahalee Players Championship (amateur)",
+    "Golf Digest: Second 100 Greatest 196th (2025-26), 4th in Washington; 100 Greatest 1977-2014 and 2017-18, best 48th (1989-90)"
+  ],
+  "video_games": "Not checked (scouting's web-search budget ran out). From memory, unverified: probably Sierra's PGA Championship Golf 1999 Edition (the 1998 PGA venue).",
+  "tees": [
+    {"name": "Black", "yards": 7003, "yards_ne": 6966, "yards_es": 6965, "rating": 74.6, "slope": 139, "par": 72, "gender": "M"},
+    {"name": "Blue", "yards": 6754, "yards_ne": 6769, "yards_es": 6769, "rating": 73.4, "slope": 138, "par": 72, "gender": "M"},
+    {"name": "White", "yards": 6321, "yards_ne": 6325, "yards_es": 6322, "rating": 71.0, "slope": 135, "par": 72, "gender": "M"},
+    {"name": "White", "yards": 6321, "yards_ne": 6325, "yards_es": 6322, "rating": 77.2, "slope": 136, "par": 72, "gender": "F"},
+    {"name": "Gold", "yards": 5742, "yards_ne": 5762, "yards_es": 5700, "rating": 68.6, "slope": 125, "par": 72, "gender": "M"},
+    {"name": "Gold", "yards": 5742, "yards_ne": 5762, "yards_es": 5700, "rating": 73.8, "slope": 131, "par": 72, "gender": "F"},
+    {"name": "Green", "yards": 5411, "yards_ne": 5412, "yards_es": 5413, "rating": 67.2, "slope": 121, "par": 72, "gender": "M"},
+    {"name": "Green", "yards": 5411, "yards_ne": 5412, "yards_es": 5413, "rating": 71.8, "slope": 128, "par": 72, "gender": "F"}
+  ],
+  "tees_note": "yards = South/North (championship); _ne = North/East; _es = East/South. Club website ratings (one set for every pair). Green is called Silver on the club's overview page.",
+  "default_tee": "Blue",
+  "theme": "pnw",
+  "new_theme_needed": false,
+  "wind_mph": [1, 7],
+  "special_ground": [],
+  "water": "Six ponds (club: 6 water hazards): South 2 (lake to carry on the second shot), South 5 (lake right of the green), South 9 (lake curving round the left), North 1 / championship 10th (horseshoe pond round the green, extended in 2022-23), North 8 (water right of the green), East 1 (lake guarding the approach). All red by default.",
+  "layouts": [],
+  "lidar": {
+    "bare_earth": "USGS 3DEP 1 m via the 3DEPElevation ImageServer (tiles x56y528, x57y528, zone 10); project name and flight year not found during scouting",
+    "canopy": "Washington DNR lidar portal DSM + DTM of the newest King County project (preferred), or a NOAA Data Access Viewer point-cloud job; dataset not identified during scouting",
+    "flight_year": null,
+    "noaa_dav_id": null
+  },
+  "imagery": "USDA NAIP via the USGS National Map (1 m JPEG, two pieces); check its year is 2023 or later (after the renovation)",
+  "osm_coverage": "probably detailed (OpenGolfAPI, built from OSM, counts 89 bunkers and 8 water features for Sahalee); per-hole coverage and hole numbering unknown until the export",
+  "scorecard_status": "complete official (club website nine cards, all three nines, five tee sets, men's and women's 1-9 handicaps); three typos corrected to the club's own totals; a possibly newer re-measured South/North card on Stymie is a conflict",
+  "open_questions": [
+    "Which card is current: the club website's (used) or Stymie's re-measured South/North card with ~10-lower slopes?",
+    "Keep the documented in-play trees (South 3, 4, 6; North 5, 6; North 2 and 7 only if they survived the 2022-23 removals) against the standing default that removes fairway and tee-shot trees?",
+    "Lidar year vs the 2022-23 tree removal: drop removed trees with a post-2023 photo (trees_need_ortho)",
+    "Nine order 1-27 (South, North, East) and nine-relative 1-9 handicaps",
+    "Theme pnw (recommended) vs puget",
+    "World size: check the 27 holes fit 2,048 m"
+  ]
+}

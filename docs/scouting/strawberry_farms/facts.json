@@ -1,0 +1,67 @@
+{
+  "id": "strawberry_farms",
+  "name": "Strawberry Farms Golf Club",
+  "short_name": "Strawberry Farms",
+  "town": "Irvine",
+  "county": "Orange",
+  "state": "CA",
+  "lat": 33.6496,
+  "lon": -117.7964,
+  "centre_source": "OpenGolfAPI (OSM-based) course centre 33.6496164, -117.7963756; clubhouse pin 33.64929, -117.79573 (wander.golf); Sand Canyon Dam 33.6479, -117.7960 (IRWD EAP 2025)",
+  "epsg": 32611,
+  "holes": 18,
+  "par": 71,
+  "architects": ["Jim Lipe (James W. Lipe Jr., ASGCA; then a senior designer with Jack Nicklaus's Golden Bear)"],
+  "opened": 1997,
+  "renovations": [
+    "2023-10: land movement at the hole 10 tee box (County of Orange board item, 2024)",
+    "2024-09 lease amendment: about $5.3 M of work incl. rebuilding hole 10, cart paths and irrigation; status unknown (a reviewer in Jan 2025 asked whether 10 would ever be fixed; on 28 Jul 2026 a reviewer saw one hole torn up and being worked on)"
+  ],
+  "access": "public (daily fee); county land (front nine, Mason Regional Park) and Irvine Ranch Water District land (back nine), leased to Strawberry Farms Golf Club LLC until 2061",
+  "notable": [
+    "GolfPass 2024 Top Courses in California #24",
+    "Golf Digest readers' 'must play' 2000-01",
+    "the 12th, 630 yd uphill par 5, billed as Orange County's longest hole",
+    "developed by former Angels third baseman Doug DeCinces"
+  ],
+  "video_games": "none found (one search; results were only generic Tiger Woods PGA Tour 2003 listings)",
+  "tees": [
+    {"name": "Black", "yards": 6700, "rating": 73.0, "slope": 134, "par": 71, "gender": "M", "note": "card 6,700 (GolfPass); SCGA 6,680; rating SCGA current"},
+    {"name": "Blue", "yards": 6276, "rating": 71.0, "slope": 129, "par": 71, "gender": "M", "note": "card 6,276; SCGA 6,271; printed card's older rating 70.7/131"},
+    {"name": "White", "yards": 5836, "rating": 69.0, "slope": 124, "par": 71, "gender": "M", "note": "holes sum to 5,836; tee table says 5,805; SCGA 5,841"},
+    {"name": "Gold", "yards": 5243, "rating": 66.1, "slope": 116, "par": 71, "gender": "M", "note": "SCGA 5,218"},
+    {"name": "Red", "yards": 4832, "rating": 63.5, "slope": 109, "par": 71, "gender": "M", "note": "SCGA 4,648"},
+    {"name": "Black", "yards": 6680, "rating": 79.3, "slope": 142, "par": 72, "gender": "F"},
+    {"name": "Blue", "yards": 6271, "rating": 77.1, "slope": 136, "par": 72, "gender": "F"},
+    {"name": "White", "yards": 5841, "rating": 74.7, "slope": 131, "par": 72, "gender": "F"},
+    {"name": "Gold", "yards": 5218, "rating": 71.5, "slope": 123, "par": 72, "gender": "F"},
+    {"name": "Red", "yards": 4648, "rating": 68.3, "slope": 116, "par": 72, "gender": "F"}
+  ],
+  "default_tee": "Blue",
+  "theme": "socal",
+  "new_theme_needed": true,
+  "wind_mph": [2, 10],
+  "special_ground": [
+    "coastal sage scrub / brush along Sand Canyon Wash (front nine) and on the canyon slopes (back nine): penalty area or general area unknown (local rules not found)",
+    "wetlands on the front nine and in Shady Canyon (back nine)",
+    "granite boulders on the hillsides"
+  ],
+  "water": "Sand Canyon Reservoir (IRWD recycled-water storage, 35 acres per the club, 51 acres at full pool; drawn down every autumn): five back-nine holes around it, water left of 10. Sand Canyon Wash, a brush-filled channel along many front-nine holes (creek beyond the trees left of 6). Wetlands. Hole 18: a brook about 30 yd short of the green and a waterfall right of the fairway (a recirculating feature fed from the reservoir). Standing default: all red.",
+  "layouts": [],
+  "lidar": {
+    "bare_earth": "USGS 3DEP 1 m, best available via the 3DEPElevation ImageServer (project not identified; tile x42y373)",
+    "canopy": "NOAA Data Access Viewer clipped LAZ; dataset to be picked on the map (DATA_REQUEST 3)",
+    "flight_year": 0,
+    "noaa_dav_id": null
+  },
+  "imagery": "USDA NAIP via the USGS National Map (year unknown until download)",
+  "osm_coverage": "probably mapped in detail (OpenGolfAPI, built on OSM, counts 53 bunkers and 1 water hazard); boundary and holes unconfirmed until the export",
+  "scorecard_status": "third-party, complete per hole (GolfPass, all five tees, rows add up to its totals); conflicts with a second full measurement (Stymie) and the SCGA's current totals, hole 18 Blue 385 vs 418; official card not found",
+  "open_questions": [
+    "hole 18 Blue: 385 (card) or 418 (Stymie)? measure and choose; a photo of the current card settles it",
+    "brush/scrub: red penalty area or general area (the gorse lie)? the local rules on the card settle it",
+    "hole 10 rebuild: done, and does the lidar or NAIP show the old or the new tee?",
+    "reservoir level: the lidar and NAIP may show it part-full; use the full-pool outline (OSM or spillway level 196.4 ft NAVD88 = 59.9 m)?",
+    "new socal theme shared with Pelican Hill"
+  ]
+}

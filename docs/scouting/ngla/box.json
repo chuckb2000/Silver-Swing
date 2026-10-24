@@ -1,0 +1,20 @@
+{
+ "id": "ngla",
+ "state": "NY",
+ "epsg": 32618,
+ "wgs84": {
+  "south": 40.879139,
+  "west": -72.473718,
+  "north": 40.928955,
+  "east": -72.417272
+ },
+ "utm": {
+  "x0": 712858,
+  "y0": 4528547,
+  "x1": 717459,
+  "y1": 4533948,
+  "w": 4601,
+  "h": 5401
+ },
+ "note": "download box = estimated course extent + margin; the course chat sets the world from the OSM boundary"
+}

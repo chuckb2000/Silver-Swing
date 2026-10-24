@@ -1,0 +1,20 @@
+{
+ "id": "pumpkin_ridge",
+ "state": "OR",
+ "epsg": 32610,
+ "wgs84": {
+  "south": 45.595889,
+  "west": -123.027597,
+  "north": 45.631885,
+  "east": -122.976291
+ },
+ "utm": {
+  "x0": 497849,
+  "y0": 5049150,
+  "x1": 501848,
+  "y1": 5053149,
+  "w": 3999,
+  "h": 3999
+ },
+ "note": "download box = estimated course extent + margin; the course chat sets the world from the OSM boundary"
+}

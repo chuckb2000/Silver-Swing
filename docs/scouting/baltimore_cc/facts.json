@@ -1,0 +1,52 @@
+{
+  "id": "baltimore_cc",
+  "name": "Baltimore Country Club, East Course at Five Farms",
+  "short_name": "Baltimore CC",
+  "town": "Lutherville-Timonium",
+  "county": "Baltimore County",
+  "state": "MD",
+  "lat": 39.445,
+  "lon": -76.655,
+  "centre_source": "estimate from the club's address as remembered (11500 Mays Chapel Road, west of I-83 between Timonium Road and Padonia Road); not checked on a map; the download box is 7 km a side to absorb the error",
+  "epsg": 32618,
+  "holes": 18,
+  "par": null,
+  "architects": ["A. W. Tillinghast (unverified)"],
+  "opened": 1926,
+  "renovations": ["restoration attributed to Keith Foster in the 2000s by the brief (unverified)"],
+  "access": "private",
+  "notable": [
+    "unverified: club founded 1898; Roland Park course hosted the 1899 U.S. Open",
+    "unverified: 1928 PGA Championship (Five Farms)",
+    "unverified: 1932 U.S. Amateur",
+    "unverified: 1965 Walker Cup",
+    "unverified: 1988 U.S. Women's Open (the brief's '1988 Walker Cup' is probably this)",
+    "unverified: Senior Players Championship, believed 2007-2010"
+  ],
+  "video_games": "not checked",
+  "tees": [],
+  "default_tee": null,
+  "theme": "anacostia",
+  "new_theme_needed": false,
+  "wind_mph": [1, 9],
+  "special_ground": [],
+  "water": "unknown",
+  "layouts": ["East Course (Tillinghast, the build)", "West Course (same site; possible second layout; architect unverified)"],
+  "lidar": {
+    "bare_earth": "USGS 3DEP 1 m via the 3DEPElevation ImageServer (4 pieces); project and year unknown, the developer reads them off the National Map downloader; tiles x35y437, x35y438, x36y437, x36y438",
+    "canopy": "NOAA DAV point cloud, dataset picked on the site by the developer (newest USGS/Maryland lidar covering the course); MD iMAP DSM/nDSM unchecked",
+    "flight_year": null,
+    "noaa_dav_id": null
+  },
+  "imagery": "NAIP (USGS National Map) at 1 m; MD iMAP six-inch leaf-off orthos preferred if reachable (service unchecked)",
+  "osm_coverage": "unknown",
+  "scorecard_status": "missing: nothing read (search budget exhausted); photo of the printed card requested",
+  "verification": "partial scouting: no web page about this course was read; architects, opened, renovations, notable and the address are from model knowledge and unverified",
+  "open_questions": [
+    "Photo of the printed East Course card?",
+    "East only, or East and West as two layouts (East now recommended)?",
+    "Theme anacostia (recommended) or seekonk?",
+    "Logo: Five Farms weathervane (recommended) or a black-eyed Susan?",
+    "Follow-up scouting to verify the facts, card, lidar project and MD iMAP endpoints (recommended)?"
+  ]
+}

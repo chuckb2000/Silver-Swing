@@ -1,0 +1,47 @@
+{
+  "id": "newport",
+  "name": "Newport Country Club",
+  "short_name": "Newport",
+  "town": "Newport",
+  "county": "Newport",
+  "state": "RI",
+  "lat": 41.463,
+  "lon": -71.348,
+  "centre_source": "UNVERIFIED estimate from memory (Brenton's Neck, inland of Ocean Drive); no source read; the download box is +-2 km to absorb the error",
+  "epsg": 32619,
+  "holes": 18,
+  "par": null,
+  "architects": ["UNVERIFIED: William F. Davis (original nine, 1894)", "UNVERIFIED: Donald Ross", "UNVERIFIED: A. W. Tillinghast"],
+  "opened": 1894,
+  "renovations": ["UNVERIFIED: restoration before the 2024 U.S. Senior Open (architect unknown)"],
+  "access": "private",
+  "notable": [
+    "UNVERIFIED (memory): first U.S. Amateur and first U.S. Open, 1895",
+    "UNVERIFIED (memory): 1995 U.S. Amateur (Tiger Woods)",
+    "UNVERIFIED (memory): 2006 U.S. Women's Open (Annika Sorenstam)",
+    "UNVERIFIED (memory): 2020 U.S. Senior Open cancelled; 2024 U.S. Senior Open (Richard Bland)"
+  ],
+  "video_games": "not researched",
+  "tees": [],
+  "default_tee": "",
+  "theme": "coastal (recommended, pending photos); bayside is the regional default",
+  "new_theme_needed": false,
+  "wind_mph": [3, 14],
+  "special_ground": ["UNVERIFIED: native fescue rough (rough_band_m as at Highland Links)"],
+  "water": "UNVERIFIED: Rhode Island Sound beyond the seaward edge; on-course ponds unknown; all red",
+  "layouts": [],
+  "lidar": {
+    "bare_earth": "USGS 3DEP 1 m, 2022 USGS Lidar: RI Statewide (RI_Statewide_D22), tile x30y460",
+    "canopy": "NOAA Data Access Viewer point cloud, same survey, all classes (no vegetation class; trees from class 1)",
+    "flight_year": 2022,
+    "noaa_dav_id": 9981
+  },
+  "imagery": "USDA NAIP via USGS",
+  "osm_coverage": "unknown",
+  "scorecard_status": "missing: no source read (web search budget exhausted); needs a follow-up scouting pass or a photo of the printed card",
+  "open_questions": [
+    "Scorecard: follow-up scouting pass, else a photo of the printed card",
+    "Theme: coastal (recommended) or bayside",
+    "Logo: hickory club and gutty ball over waves (1895)"
+  ]
+}

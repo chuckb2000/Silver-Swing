@@ -1,0 +1,77 @@
+{
+  "id": "eastward_ho",
+  "name": "Eastward Ho! Country Club",
+  "short_name": "Eastward Ho!",
+  "town": "Chatham",
+  "county": "Barnstable",
+  "state": "MA",
+  "lat": 41.7172,
+  "lon": -69.9827,
+  "centre_source": "OpenGolfAPI's OpenStreetMap link (41.7172022, -69.9826558); where2golf 41.717270, -69.982764; Stymie 41.715873, -69.982199. Probably near the clubhouse at the middle of the figure-8; the box allows for that.",
+  "epsg": 32619,
+  "holes": 18,
+  "par": 71,
+  "architects": ["Herbert Fowler"],
+  "opened": 1922,
+  "renovations": [
+    "2004 (13 Sept - 23 Dec): Keith Foster, 13 lost bunkers and 13 greens restored, all tees and the other 46 bunkers renovated, ~20 acres of native grasses; thousands of trees removed from 2000 on",
+    "2005 (Dec): storm felled ~175 trees",
+    "2007: Keith Foster (and Kevin Hargrave); 2014: Kevin Hargrave (GolfPass credits)",
+    "2019-2024: Kyle Franz, full restoration finished 2024: greens enlarged (28,000+ sq ft), Fowler bunkers restored plus new ones (one in 8's fairway), sand scrapes in place of fescue and trees, new back tees on 15 (+30 yd) and 18 (par 4 or 5), 4 made Biarritz-like"
+  ],
+  "access": "private",
+  "notable": [
+    "GOLF Top 100 Courses in the US #50 (2024-25)",
+    "Golf Digest America's Second 100 #101, Massachusetts #7 (2025-26)",
+    "Cape Cod Open 1930 and 1932",
+    "102nd NEPGA Section Championship (2022, centennial year)"
+  ],
+  "video_games": "none found (no known EA/Tiger Woods, PGA Tour 2K, Links or Golden Tee appearance; dedicated search not possible this session)",
+  "tees": [
+    {"name": "Championship", "yards": 6728, "rating": 73.3, "slope": 149, "par": 71, "gender": "M"},
+    {"name": "Black", "yards": 6609, "rating": 73.0, "slope": 142, "par": 71, "gender": "M"},
+    {"name": "Black", "yards": 6609, "rating": 80.0, "slope": 145, "par": 73, "gender": "W"},
+    {"name": "Blue", "yards": 6227, "rating": 70.8, "slope": 137, "par": 71, "gender": "M"},
+    {"name": "Blue", "yards": 6227, "rating": 77.5, "slope": 137, "par": 73, "gender": "W"},
+    {"name": "Gold", "yards": 5875, "rating": 69.5, "slope": 133, "par": 71, "gender": "M"},
+    {"name": "Gold", "yards": 5875, "rating": 74.7, "slope": 133, "par": 73, "gender": "W"},
+    {"name": "White", "yards": 5392, "rating": 66.9, "slope": 118, "par": 71, "gender": "M"},
+    {"name": "White", "yards": 5392, "rating": 71.7, "slope": 131, "par": 73, "gender": "W"},
+    {"name": "White/Green", "yards": 4997, "rating": 64.5, "slope": 113, "par": 71, "gender": "M"},
+    {"name": "White/Green", "yards": 4997, "rating": 69.7, "slope": 125, "par": 73, "gender": "W"},
+    {"name": "Green", "yards": 4327, "rating": 62.1, "slope": 103, "par": 71, "gender": "M"},
+    {"name": "Green", "yards": 4327, "rating": 66.3, "slope": 117, "par": 73, "gender": "W"}
+  ],
+  "default_tee": "Blue",
+  "theme": "bayside",
+  "new_theme_needed": false,
+  "wind_mph": [2, 12],
+  "special_ground": [
+    "2024 sand scrapes / sandy native areas: surface 18 waste (\"waste_sand\": true) where OSM or a post-2024 image shows them",
+    "native fescue and bluestem (plays as rough)",
+    "beaches along Pleasant Bay (ob_sand outside the boundary)",
+    "three-tiered green on 15 (tiers green model)"
+  ],
+  "water": "all red: Pleasant Bay along 4, 6, 7, 8, 14, 15, 16, 18 (strip inside a grown boundary); Crows Pond on 2's tee shot",
+  "layouts": [],
+  "lidar": {
+    "bare_earth": "USGS 3DEP 1 m DEM via exportImage; project MA_CentralEastern_2021_B21 (covers Truro; Chatham expected), tiles x41y462 and x41y463",
+    "canopy": "lidar point cloud clipped by the NOAA Data Access Viewer, 2021 USGS Lidar: Central Eastern Massachusetts (leaf-off; before the 2024 clearing)",
+    "flight_year": 2021,
+    "noaa_dav_id": 9777
+  },
+  "imagery": "USDA NAIP via the USGS National Map, 0.85 m export of the download box (newest MA flight; only a 2025 flight shows the 2024 restoration)",
+  "osm_coverage": "unknown until the export; OpenGolfAPI (built on OSM) counts 85 bunkers and no water features; may predate the 2024 restoration",
+  "scorecard_status": "third-party complete per hole: card B (GolfPass, post-2024) used; card A (Stymie, 2022, 6,437) recorded; no official card; 18 par 4 or 5 unsettled",
+  "open_questions": [
+    "card B (post-2024, Blue 6,227) vs card A (2022, Blue 6,168)",
+    "hole 18 par 4 (card) or 5",
+    "2024 restoration after the lidar: trace from the newest NAIP or keep mapped shapes",
+    "bay and Crows Pond red, beaches ob_sand, boundary grown over the shore strip",
+    "wind 2-12 (bay) vs 3-14 (open coast)",
+    "theme bayside vs coastal",
+    "logo: a seal with a golf ball on its nose"
+  ],
+  "box": {"half_m": 1700, "w_m": 3401, "h_m": 3401},
+  "lidar_box_wgs84": {"south": 41.705, "west": -69.999, "north": 41.729, "east": -69.9665}
+}

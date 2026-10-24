@@ -1,0 +1,20 @@
+{
+ "id": "sand_hills",
+ "state": "NE",
+ "epsg": 32614,
+ "wgs84": {
+  "south": 41.842628,
+  "west": -101.137628,
+  "north": 41.897965,
+  "east": -101.063594
+ },
+ "utm": {
+  "x0": 322676,
+  "y0": 4634509,
+  "x1": 328677,
+  "y1": 4640510,
+  "w": 6001,
+  "h": 6001
+ },
+ "note": "download box = estimated course extent + margin; the course chat sets the world from the OSM boundary"
+}

@@ -1,0 +1,63 @@
+{
+  "id": "ngla",
+  "name": "National Golf Links of America",
+  "short_name": "National Golf Links",
+  "town": "Southampton",
+  "county": "Suffolk",
+  "state": "NY",
+  "lat": 40.9139,
+  "lon": -72.4522,
+  "centre_source": "OpenGolfAPI map point (40.9138621752, -72.4522078493); may be the clubhouse rather than the course middle; Wikipedia gives no coordinates",
+  "epsg": 32618,
+  "holes": 18,
+  "par": 72,
+  "architects": ["C. B. Macdonald (1911)", "Seth Raynor (construction, 1907-1911)"],
+  "opened": 1911,
+  "renovations": [
+    "Perry Maxwell 1935, Robert Trent Jones Sr. 1948 and 1969 (listed by GolfPass, unverified)",
+    "14th green moved for Sebonac Inlet Road (date not found)",
+    "new back tees on 3, 7 and 16 for the 2013 Walker Cup (on March 2012 imagery)",
+    "lengthened about 800 yd over the years; 7th from 456 to 505 yd (Fox News review)"
+  ],
+  "access": "private",
+  "notable": ["Walker Cup 1922", "Walker Cup 2013 (6,995 yd, par 72)", "Top100golfcourses world 4th-5th", "the original Macdonald template-hole course", "windmill between the 2nd and 16th"],
+  "video_games": "none found",
+  "tees": [
+    {"name": "Red", "yards": 6935, "rating": 73.9, "slope": 140, "par": 72, "gender": "M"},
+    {"name": "Green", "yards": 6505, "rating": 71.6, "slope": 134, "par": 72, "gender": "M"},
+    {"name": "Green", "yards": 6505, "rating": 77.5, "slope": 145, "par": 72, "gender": "F"},
+    {"name": "White", "yards": 5771, "rating": 68.0, "slope": 122, "par": 72, "gender": "M"},
+    {"name": "White", "yards": 5771, "rating": 73.2, "slope": 137, "par": 72, "gender": "F"},
+    {"name": "Black (newer card, totals only)", "yards": 6873, "rating": 74.3, "slope": 141, "par": 73, "gender": "M"},
+    {"name": "White (newer card, totals only)", "yards": 6425, "rating": 72.7, "slope": 137, "par": 73, "gender": "M"},
+    {"name": "Green (newer card, totals only)", "yards": 5817, "rating": 69.9, "slope": 131, "par": 73, "gender": "M"},
+    {"name": "Green (newer card, totals only)", "yards": 5817, "rating": 73.3, "slope": 135, "par": 73, "gender": "F"}
+  ],
+  "default_tee": "Green",
+  "theme": "coastal",
+  "new_theme_needed": false,
+  "wind_mph": [2, 12],
+  "special_ground": ["golden fescue rough (rough_band_m ~2-3, fescue beyond)", "sand and scrub waste on the 9th ('the pit') and elsewhere: surface 18 waste", "300+ bunkers", "bluffs above Peconic Bay"],
+  "water": "Great Peconic Bay right of 18 and below the clubhouse bluff; Bull's Head Bay behind 12 and along 14; tidal pools on 13 and 14; wetlands near the 17th green / 18th tee; all red by default",
+  "layouts": [],
+  "shared_box_with": "shinnecock",
+  "neighbours_in_box": ["Shinnecock Hills Golf Club", "Sebonack Golf Club", "Southampton Golf Club"],
+  "box_m": [4601, 5401],
+  "lidar": {
+    "bare_earth": "NYS DEM_2024_Long_Island (1 m, hydro-flattened, NAD83 UTM 18N, NAVD88 GEOID18 m; elevation.its.ny.gov); 3DEP fallback, 1 m project name not confirmed (tiles x71y453, x71y454)",
+    "canopy": "NYS Long Island 2024 LAS tiles (Discover GIS Data NY / ftp.gis.ny.gov NYS_LongIsland2024), class 1 = vegetation and structures; fallback NOAA DAV 4938",
+    "flight_year": 2024,
+    "noaa_dav_id": 4938
+  },
+  "imagery": "NYS orthoimagery wms/Latest (orthos-np.its.ny.gov), 0.5 m JPEG; NAIP 1 m fallback",
+  "osm_coverage": "unknown",
+  "scorecard_status": "third-party per-hole card (GolfPass: Red/Green/White, pars, stroke index, ratings); newer card (Black/White/Green, par 73) totals only; no official card online",
+  "open_questions": [
+    "theme coastal instead of bayside (rec: coastal)",
+    "which card: per-hole GolfPass card vs newer totals-only card (rec: build Green 6,505 now, swap when a printed card arrives)",
+    "par 72 or 73 (rec: 72)",
+    "lidar: NYS 2024 tiles or NOAA 2014 clip (rec: 2024 tiles)",
+    "Sebonac Inlet Road: cart path or OB (rec: default cart path)",
+    "logo: Peconic Bay scallop shell (rec: yes)"
+  ]
+}

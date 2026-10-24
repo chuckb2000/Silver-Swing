@@ -1,0 +1,20 @@
+{
+ "id": "yale",
+ "state": "CT",
+ "epsg": 32618,
+ "wgs84": {
+  "south": 41.304221,
+  "west": -73.001777,
+  "north": 41.337393,
+  "east": -72.957776
+ },
+ "utm": {
+  "x0": 667281,
+  "y0": 4574539,
+  "x1": 670882,
+  "y1": 4578140,
+  "w": 3601,
+  "h": 3601
+ },
+ "note": "download box = estimated course extent + margin; the course chat sets the world from the OSM boundary"
+}

@@ -1,0 +1,20 @@
+{
+ "id": "newport",
+ "state": "RI",
+ "epsg": 32619,
+ "wgs84": {
+  "south": 41.444549,
+  "west": -71.372525,
+  "north": 41.481443,
+  "east": -71.323478
+ },
+ "utm": {
+  "x0": 301916,
+  "y0": 4590822,
+  "x1": 305907,
+  "y1": 4594813,
+  "w": 3991,
+  "h": 3991
+ },
+ "note": "download box = estimated course extent + margin; the course chat sets the world from the OSM boundary"
+}

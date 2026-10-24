@@ -1,0 +1,20 @@
+{
+ "id": "heron_lakes",
+ "state": "OR",
+ "epsg": 32610,
+ "wgs84": {
+  "south": 45.574409,
+  "west": -122.744167,
+  "north": 45.619584,
+  "east": -122.679816
+ },
+ "utm": {
+  "x0": 519961,
+  "y0": 5046813,
+  "x1": 524962,
+  "y1": 5051814,
+  "w": 5001,
+  "h": 5001
+ },
+ "note": "download box = estimated course extent + margin; the course chat sets the world from the OSM boundary"
+}

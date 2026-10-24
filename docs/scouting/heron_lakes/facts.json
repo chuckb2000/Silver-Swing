@@ -1,0 +1,42 @@
+{
+  "id": "heron_lakes",
+  "name": "Heron Lakes Golf Club",
+  "short_name": "Heron Lakes",
+  "town": "Portland",
+  "county": "Multnomah",
+  "state": "OR",
+  "lat": 45.597,
+  "lon": -122.712,
+  "centre_source": "scout's estimate from memory (West Delta Park, west of Portland International Raceway); not surveyed; the 5 x 5 km box absorbs about 1.5 km of error",
+  "epsg": 32610,
+  "holes": 18,
+  "par": null,
+  "architects": ["Robert Trent Jones Jr."],
+  "opened": 1992,
+  "renovations": [],
+  "access": "public (municipal; City of Portland — memory)",
+  "notable": [],
+  "video_games": "not checked (search budget ran out); none known",
+  "tees": [],
+  "default_tee": "",
+  "theme": "pnw",
+  "new_theme_needed": false,
+  "wind_mph": [1, 7],
+  "special_ground": [],
+  "water": "many ponds and lakes on both courses (brief); wetland and slough edges around West Delta Park (memory); all red",
+  "layouts": [
+    {"id": "heron_lakes_great_blue", "name": "Great Blue", "par": null, "scorecard": "scorecard_great_blue.csv (to collect)", "opened": 1992, "build": "first"},
+    {"id": "heron_lakes_greenback", "name": "Greenback", "par": null, "scorecard": "scorecard_greenback.csv (to collect)", "opened": null, "build": "second, same world if it fits in 2,048 m"}
+  ],
+  "lidar": {"bare_earth": "DOGAMI DTM mosaic (most likely OLC West Metro 3DEP 2019, else OLC Metro 2014)", "canopy": "DOGAMI CHM mosaic (same flight)", "flight_year": 2019, "noaa_dav_id": 10044},
+  "imagery": "OSIP 2024 orthophoto (1.0 m JPEG, four pieces over the 5 x 5 km box)",
+  "osm_coverage": "unknown until the export",
+  "scorecard_status": "not collected for either course (search budget ran out); see scorecard_sources.md",
+  "open_questions": [
+    "Scorecards not collected — recommendation: the course chat collects both at intake",
+    "Box centre is an estimate — recommendation: run the Overpass step first and download rasters only if both courses sit well inside the box",
+    "Which course first — recommendation: Great Blue, Greenback as the second layout if the world fits in 2,048 m",
+    "Wind — recommendation: 1-7 mph (standing default; 2-10 if the developer prefers the river band)"
+  ],
+  "scouting_complete": false
+}

@@ -1,0 +1,53 @@
+{
+  "id": "pelican_hill",
+  "name": "Pelican Hill Golf Club (The Resort at Pelican Hill)",
+  "short_name": "Pelican Hill",
+  "town": "Newport Coast (Newport Beach)",
+  "county": "Orange",
+  "state": "CA",
+  "lat": 33.592,
+  "lon": -117.848,
+  "centre_source": "from memory, unverified (between Pacific Coast Highway, Newport Coast Drive and Crystal Cove State Park); the web-search budget ran out before it could be checked",
+  "epsg": 32611,
+  "holes": 36,
+  "par": null,
+  "architects": ["Tom Fazio (both courses; Golf Digest)"],
+  "opened": 1991,
+  "renovations": ["Fazio redesign of both courses around 2007, during the resort's construction (assignment; unverified)"],
+  "access": "resort, public (Golf Digest lists both as public)",
+  "notable": ["Golf Digest Best in State: Ocean South and Ocean North"],
+  "video_games": "not searched",
+  "tees": [],
+  "default_tee": "",
+  "theme": "socal",
+  "new_theme_needed": true,
+  "wind_mph": [3, 12],
+  "special_ground": [
+    "canyons of coastal sage scrub (Ocean North: several canyon carries off the tee, Golf Digest); penalty area or general area unknown",
+    "ice plant banks (assignment; unverified)",
+    "ocean bluffs and cliffs (assignment; unverified)"
+  ],
+  "water": "unknown: the Pacific lies beyond Pacific Coast Highway and Crystal Cove State Park, probably outside the boundary; ponds on either course not known",
+  "layouts": [
+    {"id": "pelican_hill_south", "name": "Pelican Hill - Ocean South", "short": "Ocean South", "scorecard": "scorecard_ocean_south.csv", "status": "build first; card missing"},
+    {"id": "pelican_hill_north", "name": "Pelican Hill - Ocean North", "short": "Ocean North", "scorecard": "scorecard_ocean_north.csv", "status": "later; card missing"}
+  ],
+  "lidar": {
+    "bare_earth": "USGS 3DEP 1 m, best available via the 3DEPElevation ImageServer (project not identified; tiles x41y372, x42y372)",
+    "canopy": "NOAA Data Access Viewer clipped LAZ; dataset to be picked on the map (DATA_REQUEST 3)",
+    "flight_year": 0,
+    "noaa_dav_id": null
+  },
+  "imagery": "USDA NAIP via the USGS National Map (year unknown until download)",
+  "osm_coverage": "unknown until the Overpass export",
+  "scorecard_status": "missing: no card read for either course (search budget ran out); developer to save the resort's cards (DATA_REQUEST 5) or a follow-up pass to find them",
+  "open_questions": [
+    "the box centre is from memory: confirm with the Overpass map (DATA_REQUEST 1) before the big downloads",
+    "both scorecards and ratings",
+    "build Ocean South as a layout from the start (data id pelican_hill, course id pelican_hill_south) so Ocean North can be added without renaming",
+    "sage-scrub canyons: red penalty areas (ESA) or general area?",
+    "ice plant: rough, or the penal gorse lie?",
+    "which Ocean South green for the course card",
+    "new socal theme shared with Strawberry Farms"
+  ]
+}

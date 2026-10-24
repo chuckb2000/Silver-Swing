@@ -1,0 +1,20 @@
+{
+ "id": "astoria",
+ "state": "OR",
+ "epsg": 32610,
+ "wgs84": {
+  "south": 46.077798,
+  "west": -123.95834,
+  "north": 46.132205,
+  "east": -123.905694
+ },
+ "utm": {
+  "x0": 425970,
+  "y0": 5103137,
+  "x1": 429969,
+  "y1": 5109136,
+  "w": 3999,
+  "h": 5999
+ },
+ "note": "download box = estimated course extent + margin; the course chat sets the world from the OSM boundary"
+}
