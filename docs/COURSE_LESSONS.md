@@ -892,3 +892,20 @@ Details in each course's file (`docs/courses/<id>.md`, "Lessons").
   installed `@playwright/test` expects; run in-game looks in chunks under 10
   minutes.
 
+## 31. Pumpkin Ridge (2026-10-24)
+
+- **DOGAMI `exportImage` for a big box: use `f=json`, and cut the box once OSM
+  is in.** The scouting's 3,999 x 3,999 `f=image` links (64 MB float32) failed
+  in the browser; `f=json` on the course polygon + 400 m (21 MB) worked. Ask for
+  OSM first when the scouting only had a point.
+- **One OSM polygon for two courses needs `boundary_osm` and `layout` tags**:
+  `common.layout_holes` reads `layout=` only when the layout has a
+  `boundary_osm`; give each layout the shared polygon's id and tag the hole
+  lines (`make_edits.py`, from the lines' OSM names).
+- **The rough can be bimodal on the photo** (native grass vs mown): Gearhart's
+  fescue rule found 35 ha of native areas in one pass.
+- **`green_tilt` with layouts takes s07's green key, not the hole number**
+  (Ghost Creek 17 = 2017). Run `pins.test.ts` as soon as the course exports.
+- **The title screen keeps one view per place**, the first layout
+  alphabetically.
+
