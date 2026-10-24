@@ -127,4 +127,4 @@ None collected. If the course's website has a course map or hole pictures, save 
 
 ## 7. Hand-off
 
-On https://github.com/chuckb2000/Silver-Swing/releases open the draft release `heron_lakes-data` (it will exist; otherwise **Draft a new release**, tag `heron_lakes-data`), drop every file into **Attach binaries** (below the description box, which rejects files over 25 MB), and click **Publish release** (not "Save draft": `make fetch` finds the release by its tag, and GitHub doesn't return drafts that way). Upload the files as they downloaded, without compressing them.
+On https://github.com/chuckb2000/Silver-Swing/releases click **Draft a new release** with the tag `heron_lakes-data` (or open that release if it's already there), drop every file into **Attach binaries** (below the description box, which rejects files over 25 MB), and click **Publish release** (not "Save draft": `make fetch` finds the release by its tag, and GitHub doesn't return drafts that way). Upload the files as they downloaded, without compressing them.

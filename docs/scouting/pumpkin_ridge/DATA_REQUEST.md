@@ -73,4 +73,4 @@ None found online beyond the scorecards. If pumpkinridge.com has a course map or
 
 ## 7. Hand-off
 
-On https://github.com/chuckb2000/Silver-Swing/releases open the draft release `pumpkin_ridge-data` (it will exist; otherwise **Draft a new release**, tag `pumpkin_ridge-data`), drop every file into **Attach binaries** (below the description box, which rejects files over 25 MB), and click **Publish release** (not "Save draft": `make fetch` finds the release by its tag, and GitHub doesn't return drafts that way). Upload the files as they downloaded, without compressing them.
+On https://github.com/chuckb2000/Silver-Swing/releases click **Draft a new release** with the tag `pumpkin_ridge-data` (or open that release if it's already there), drop every file into **Attach binaries** (below the description box, which rejects files over 25 MB), and click **Publish release** (not "Save draft": `make fetch` finds the release by its tag, and GitHub doesn't return drafts that way). Upload the files as they downloaded, without compressing them.

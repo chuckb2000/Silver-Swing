@@ -203,11 +203,10 @@ Plain steps a non-GIS person can follow, one file per link, in this order:
 4. Orthophoto (tool links).
 5. Scorecard images/PDFs to save, if the sandbox couldn't read them (URLs).
 6. Course map / reference pictures to save (look-only), if useful.
-7. Hand-off: on https://github.com/chuckb2000/Silver-Swing/releases open the
-   draft release `<id>-data` (it will exist; otherwise "Draft a new
-   release", tag `<id>-data`), drop every file into "Attach binaries" (below
-   the description box, which rejects files over 25 MB), and click
-   **Publish release**.
+7. Hand-off: on https://github.com/chuckb2000/Silver-Swing/releases click
+   "Draft a new release" with the tag `<id>-data` (the sandbox can't create
+   releases), drop every file into "Attach binaries" (below the description
+   box, which rejects files over 25 MB), and click **Publish release**.
 
 Give each file the name to save it as. Say roughly how big each is. Mark
 optional items as optional. Keep it short.
