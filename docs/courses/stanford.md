@@ -12,7 +12,7 @@ County lidar (NOAA, classes 3-5) for the trees. Black tees, new theme
 `peninsula`. The OSM boundary is in three parts: the main course, a strip
 across Fremont Road holding hole 1's green and hole 2's tee (joined), and the
 driving range (left out). Every hole within 3 % of the card (6,229 vs 6,213).
-On the branch: 865 of 866 unit tests pass (the one failure is
+On the branch: 885 of 886 unit tests pass (the one failure is
 `player.test.ts` until the course is in `DAILY_ROSTER`), 12 Playwright tests
 pass, `npm run build` passes.
 
@@ -163,8 +163,8 @@ recommendations; the main ones:
 -   Pipeline: `make course NAME=stanford` from clean (build/ and edited/
     deleted), twice: all 235 exported files identical, and identical to the
     step-by-step build.
--   Game (2026-10-24, before the PR): `npm run build` (type check included)
-    passes; `npm test`: 865 passed, 1 failed (`player.test.ts`, "stanford is in
+-   Game (2026-10-24, after rebasing on main with Sandpines): `npm run build` (type check included)
+    passes; `npm test`: 885 passed, 1 failed (`player.test.ts`, "stanford is in
     the daily rotation": the design chat adds it to `DAILY_ROSTER` after the
     merge), 2 skipped; Playwright: 12 passed (with the sandbox's preinstalled
     Chromium).
