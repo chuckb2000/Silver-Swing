@@ -258,17 +258,29 @@ export class Round {
     return CLUBS.filter((c) => clubAllowed(this.lie, c));
   }
 
-  /** Spec 6.3: club whose full carry (adjusted for lie) is closest to the pin distance. */
+  /**
+   * Spec 6.3: the club whose perfect full shot (adjusted for lie) lands closest to the pin.
+   * The landing is flown over the real ground (calm air, no trees: the landing marker's point),
+   * so a steep drop or climb picks less or more club with no separate plays-like formula
+   * (Wildwood 3 drops 17.5 m: the flat carry chose a 6-iron that flew 25 m long).
+   */
   autoClub(): Club {
     if (this.puttingRange()) return PUTTER;
     const d = this.distToPin();
+    const capped = this.lie.carryCap !== undefined;
+    const toPin = Math.atan2(this.pin.y - this.ball.y, this.pin.x - this.ball.x);
     let best: Club = CLUBS[0];
     let bestErr = Infinity;
     for (const c of this.allowedClubs()) {
       if (c.kind === 'putter') continue;
-      const err = Math.abs(this.fullCarry(c) - d);
+      let err: number;
+      if (capped) err = Math.abs(this.fullCarry(c) - d);
+      else {
+        const l = this.previewLanding(c, toPin, 1);
+        err = Math.hypot(l.x - this.pin.x, l.y - this.pin.y);
+      }
       // in gorse every club carries the same capped distance: take the shortest (a wedge to hack out)
-      if (err < bestErr || (this.lie.carryCap !== undefined && err <= bestErr + 1e-9)) { bestErr = err; best = c; }
+      if (err < bestErr || (capped && err <= bestErr + 1e-9)) { bestErr = err; best = c; }
     }
     return best;
   }

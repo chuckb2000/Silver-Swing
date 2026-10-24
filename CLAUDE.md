@@ -1223,9 +1223,11 @@ launchBall({ aim, curveDeg: handed(curve), carry, club, spin, wind, lie
     marker. The marker shows where a 100% shot with the current club
     lands on flat ground with no wind. Holding Shift gives fine aim.
 
--   **Club select:** auto-picks the club whose full carry is closest to
-    the distance to the pin (adjusted for lie). Override with W/S or the
-    mouse wheel. Lie restrictions apply (7.4).
+-   **Club select:** auto-picks the club whose perfect full shot (adjusted
+    for lie) lands closest to the pin, flown over the real ground in calm
+    air (2026-10-24: a steep drop takes less club, a climb more; gorse
+    keeps the flat carry). Override with W/S or the mouse wheel. Lie
+    restrictions apply (7.4).
 
 -   **Spin:** a ball icon. Click its top for topspin (more roll) or its
     bottom for backspin (check/stop). Keys Q/E.
