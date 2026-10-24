@@ -1,0 +1,130 @@
+{
+ "note": "Edits to the OSM layout for Cypress Point, written by make_edits.py (generic edits, then course_edits.json); built into edited/course.geojson by pipeline/merge_edits.py.",
+ "add": [
+  {
+   "from": "proposed/paths_as_cartpaths.geojson",
+   "ids": [
+    "w1346341475_cartpath",
+    "w281740968_cartpath",
+    "w678927631_cartpath"
+   ],
+   "reason": "3 golf=path ways inside the boundary, not read by s01: copied as golf=cartpath (free relief, drawn as paths)"
+  }
+ ],
+ "tags": [],
+ "drop": [
+  {
+   "osm": "w281477606",
+   "reason": "Spyglass Hill Golf Course (leisure=golf_course): another course; the out-of-bounds line is Cypress Point's own polygon"
+  },
+  {
+   "osm": "w688794179",
+   "reason": "Spyglass Hill hole 1 (Treasure Island): another course's hole line, outside the boundary"
+  },
+  {
+   "osm": "w688794180",
+   "reason": "Spyglass Hill hole 2 (Billy Bones): another course's hole line, outside the boundary"
+  },
+  {
+   "osm": "w688794181",
+   "reason": "Spyglass Hill hole 3 (The Black Spot): another course's hole line, outside the boundary"
+  },
+  {
+   "osm": "w688794182",
+   "reason": "Spyglass Hill hole 4 (Blind Pew): another course's hole line, outside the boundary"
+  },
+  {
+   "osm": "w688794183",
+   "reason": "Spyglass Hill hole 5 (Bird Rock): another course's hole line, outside the boundary"
+  },
+  {
+   "osm": "w688794184",
+   "reason": "Spyglass Hill hole 6 (Israel Hands): another course's hole line, outside the boundary"
+  },
+  {
+   "osm": "w688794185",
+   "reason": "Spyglass Hill hole 7 (Indian Village): another course's hole line, outside the boundary"
+  },
+  {
+   "osm": "w688794186",
+   "reason": "Spyglass Hill hole 8 (Signal Hill): another course's hole line, outside the boundary"
+  },
+  {
+   "osm": "w688794187",
+   "reason": "Spyglass Hill hole 9 (Captain Smollett): another course's hole line, outside the boundary"
+  },
+  {
+   "osm": "w688794188",
+   "reason": "Spyglass Hill hole 10 (Captain Flint): another course's hole line, outside the boundary"
+  },
+  {
+   "osm": "w688794189",
+   "reason": "Spyglass Hill hole 11 (Admiral Benbow): another course's hole line, outside the boundary"
+  },
+  {
+   "osm": "w688794195",
+   "reason": "Spyglass Hill hole 17 (Ben Gunn): another course's hole line, outside the boundary"
+  },
+  {
+   "osm": "w688794196",
+   "reason": "Spyglass Hill hole 18 (Spyglass): another course's hole line, outside the boundary"
+  },
+  {
+   "osm": "w1093425899",
+   "reason": "another course's green wholly outside the world box (s07/s09 cannot shape a green off the map)"
+  },
+  {
+   "osm": "w1093439800",
+   "reason": "another course's green wholly outside the world box (s07/s09 cannot shape a green off the map)"
+  },
+  {
+   "osm": "w1093439808",
+   "reason": "another course's green wholly outside the world box (s07/s09 cannot shape a green off the map)"
+  },
+  {
+   "osm": "w1093448449",
+   "reason": "another course's green wholly outside the world box (s07/s09 cannot shape a green off the map)"
+  },
+  {
+   "osm": "w1093451950",
+   "reason": "another course's green wholly outside the world box (s07/s09 cannot shape a green off the map)"
+  },
+  {
+   "osm": "w1093463541",
+   "reason": "another course's green wholly outside the world box (s07/s09 cannot shape a green off the map)"
+  },
+  {
+   "osm": "w281478823",
+   "reason": "another course's green wholly outside the world box (s07/s09 cannot shape a green off the map)"
+  },
+  {
+   "osm": "w686748512",
+   "reason": "another course's green wholly outside the world box (s07/s09 cannot shape a green off the map)"
+  },
+  {
+   "osm": "w686748513",
+   "reason": "another course's green wholly outside the world box (s07/s09 cannot shape a green off the map)"
+  },
+  {
+   "osm": "w686748516",
+   "reason": "another course's green wholly outside the world box (s07/s09 cannot shape a green off the map)"
+  },
+  {
+   "osm": "w686748518",
+   "reason": "another course's green wholly outside the world box (s07/s09 cannot shape a green off the map)"
+  },
+  {
+   "osm": "w1346341475",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w281740968",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w678927631",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  }
+ ],
+ "extend_start": []
+}

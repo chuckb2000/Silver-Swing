@@ -1,0 +1,52 @@
+{
+  "name": "Monterey (Cypress Point: cypress, pine, white dunes, Pacific)",
+  "note": "Course theme palette (<= 32 colours; same keys as pnw.json). Cypress Point Club, Pebble Beach CA: deep, saturated coastal turf (greener and cooler than the pnw parkland set, from the developer's aerials), near-white dune sand, deep blue-green Pacific, olive-tan forest floor and dune scrub off the course, grey-brown granite and cypress bark. From the photos in the GitHub release cypress-point-data (2026-10-24). Trees in assets-src/trees_monterey.py: Monterey pine, Monterey cypress and coast live oak. Shadows are a 35% black overlay on top of these.",
+  "colors": {
+    "G0": "#122a1e",
+    "G1": "#1b3d27",
+    "G2": "#29552f",
+    "G3": "#346a34",
+    "G4": "#427f38",
+    "G5": "#51933d",
+    "G6": "#60a544",
+    "G7": "#70b54d",
+    "G8": "#82c45a",
+    "G9": "#a6d982",
+    "L0": "#4f5532",
+    "L1": "#60663b",
+    "L2": "#747a47",
+    "S0": "#b9b19e",
+    "S1": "#e2ddcf",
+    "S2": "#f4f1e8",
+    "W0": "#0f3a55",
+    "W1": "#175a7a",
+    "W2": "#4e98ae",
+    "K0": "#25262b",
+    "K1": "#514f52",
+    "K2": "#787574",
+    "K3": "#aaa395",
+    "K4": "#d3ccbc",
+    "B0": "#3d3029",
+    "B1": "#64503f",
+    "B2": "#8a6e55",
+    "R0": "#4a5562",
+    "WH": "#f6f6f2"
+  },
+  "minimap": {
+    "ob": "#60663b",
+    "woods": "#1b3d27",
+    "ob_woods": "#162f22",
+    "water": "#175a7a",
+    "ob_water": "#175a7a",
+    "bunker": "#e2ddcf",
+    "ob_sand": "#e2ddcf"
+  },
+  "minimap_trees": {
+    "conifer": ["#13301f", "#2a5135"],
+    "deciduous": ["#10291f", "#28503a"]
+  },
+  "trees": {
+    "conifer": "trees_monterey:pine",
+    "deciduous": "trees_monterey:cypress"
+  }
+}

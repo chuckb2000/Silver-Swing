@@ -1,0 +1,14 @@
+{
+ "release": "cypress-point-data",
+ "note": "Build inputs not kept in git for Cypress Point; `make fetch NAME=cypress_point` puts them in place (pipeline/fetch_raw.py). The clipped OSM (raw/overpass.geojson) is also committed. Elevation, lidar and photo entries are added when the developer's uploads arrive.",
+ "files": [
+  {
+   "asset": "export.3.geojson",
+   "sha256": "5bd59b8b24416e804b64155631308bced857d9db52194fdc5801fcaac6a32b66",
+   "run": "python3 data/cypress_point/clip_osm.py {file}",
+   "outputs": {
+    "raw/overpass.geojson": "74dbf9d3d2dd1bc29bf763db3eb7cd939af9cfe4a8a05ac18d48e62691abd09b"
+   }
+  }
+ ]
+}
