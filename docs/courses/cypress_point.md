@@ -110,7 +110,16 @@ Middle (COURSE_BUILD 4.1: no Blue on the card; Middle is the set closest to 6,30
     iceplant), `assets-src/trees_monterey.py`: Monterey pine (conifer class), wind-sheared layered
     Monterey cypress and coast live oak (broad-crown class, variants 0-1 and 2), built with
     `build_assets.py --theme monterey`.
--   `make regress`: see the PR (run with `--since origin/main --mine cypress_point`).
+-   `make regress` (2026-10-24, `regress.py` per course): the game files of 21 data folders came
+    out unchanged: Bandon Dunes, Bandon Preserve, Bandon Trails, East Potomac, Eastmoreland, Franklin,
+    Gearhart, Highland Links, Indian Island, the Muni, Langdon, Langston, OGC, Oswego Lake,
+    Practice, RedTail, Shorty's, Stone Creek, TPC Boston, Triggs and Tualatin. RedTail, TPC Boston and Tualatin rebuilt with a
+    different `validation_report.md` only. For RedTail and TPC Boston that is s06's open-item
+    wording on `main` ("the scorecard's stroke index" where the committed reports say "GolfPass").
+    Tualatin's diff was not inspected. Not run (stopped to open the PR): Wannamoisett, Waverley,
+    Willamette Valley. Could not run, for reasons on `main`: Chambers Bay (its lidar clip no longer
+    matches the hash in its `release.json`) and Pacific Dunes / Old Macdonald / Sheep Ranch
+    (`release.json` still names the `PENDING-north-photo.jpg` asset).
 
 ## Open items
 
@@ -130,6 +139,10 @@ Middle (COURSE_BUILD 4.1: no Blue on the card; Middle is the set closest to 6,30
     course fails `player.test.ts` until it is in the roster), the CLAUDE.md section 11 line, fold
     the lessons below into COURSE_LESSONS.md, and move
     `data/cypress_point/tests/cypress_point.test.ts` into `game/tests/unit/`.
+3.  Found during the regression check (not this course's files): Chambers Bay's `make fetch` fails
+    (the LAZ its `make_laz.py` writes no longer matches `release.json`); the Pacific Dunes release
+    still lacks the north photo; the committed RedTail and TPC Boston validation reports predate
+    s06's current open-item wording, and Tualatin's report also rebuilds differently.
 
 ## Lessons
 
