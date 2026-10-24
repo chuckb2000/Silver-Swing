@@ -1,0 +1,54 @@
+{
+  "id": "sandpines",
+  "name": "Sandpines Golf Links",
+  "location": "Florence, Lane County, Oregon",
+  "state": "OR",
+  "architects": "Rees Jones (opened 1993; formerly Florence Golf Links) (Wikipedia, top100golfcourses.com; unverified)",
+  "theme": "sandpines",
+  "epsg": 32610,
+  "osm_sources": [
+    "raw/overpass.geojson"
+  ],
+  "boundary_name": "Sandpines Golf Link",
+  "dtm": {
+    "path": "raw/dogami_dtm_ft.tif",
+    "units": "ft",
+    "source": "DOGAMI lidar DIGITAL_TERRAIN_MODEL_MOSAIC (bare earth), exportImage at 1 m in EPSG:32610, box x 410050-411850 / y 4871950-4873450 (GitHub release florence-data); pending"
+  },
+  "chm": {
+    "path": "raw/dogami_chm_ft.tif",
+    "units": "ft",
+    "source": "DOGAMI lidar CANOPY_HEIGHT_MODEL_MOSAIC (highest hit minus bare earth), exportImage at 1 m in EPSG:32610, same box (GitHub release florence-data); pending",
+    "label": "DOGAMI canopy height model"
+  },
+  "world": {
+    "x0": 410177,
+    "y0": 4872051,
+    "width": 1536,
+    "height": 1280,
+    "note": "OSM course boundary bbox (1,095 x 1,036 m, way 304892693) + at least 120 m of scenery, rounded out to whole 256 m chunks and centred (221 m west/east, 122 m south/north)"
+  },
+  "tee_sets": [
+    {"name": "Black", "playable": false, "rating": 73.8, "slope": 128, "total_yd": 6877},
+    {"name": "Blue", "playable": true, "rating": 71.6, "slope": 125, "total_yd": 6456},
+    {"name": "Rees", "playable": false, "rating": 70.1, "slope": 123, "total_yd": 6187},
+    {"name": "White", "playable": false, "rating": 69.1, "slope": 122, "total_yd": 5972},
+    {"name": "Jones", "playable": false, "rating": 67.2, "slope": 116, "total_yd": 5561},
+    {"name": "Red", "playable": false, "rating": 65.6, "slope": 114, "total_yd": 5245}
+  ],
+  "default_tee": "Blue",
+  "scorecard_source": "Sandpines Golf Links printed scorecard (scorecard.jpg and scorecard-cover.jpg, GitHub release florence-data), read 2026-10-24. Every row adds up to the printed Out/In/Total; handicap = the men's row (a clean 1-18). Men's ratings/slopes: Black 73.8/128, Blue 71.6/125, Rees 70.1/123, White 69.1/122, Jones 67.2/116, Red 65.6/114 (women: Jones 72.6/128, Red 70.9/121). OSM's handicap tags are a different order (neither card row); the card is used.",
+  "penalty_default": "red",
+  "driving_range_is_ob": true,
+  "trees_off_fairways_m": 2,
+  "wind_mph": {
+    "minMph": 3,
+    "maxMph": 14
+  },
+  "attribution": [
+    "Map data © OpenStreetMap contributors (ODbL)",
+    "Elevation and canopy height: Oregon Department of Geology and Mineral Industries (DOGAMI) lidar",
+    "Scorecard: Sandpines Golf Links"
+  ],
+  "notes": "Standing defaults (COURSE_BUILD.md 4.1), 2026-10-24: Blue tees; all water red; the OSM boundary is out of bounds and the driving range is out of bounds; trees in fairways removed; open-coast wind 3-14 mph. Theme sandpines is new (pending): bentgrass turf, dune-grass mounds, shore pine and spruce."
+}

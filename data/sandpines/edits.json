@@ -1,0 +1,33 @@
+{
+  "add": [
+    {
+      "from": "proposed/retag_tees.geojson",
+      "ids": [
+        "tee_w849043568",
+        "tee_w849043569",
+        "tee_w849053534",
+        "tee_w849053535"
+      ],
+      "tags": {},
+      "reason": "OSM tags these four tee pads golf=fairway (73, 119, 57 and 74 m2 squares at the hole 8 and 9 line starts); measured to the green they are the back tees (hole 8 208/224 yd, Black 209; hole 9 471/485 yd, Black 468). Copied as tees by data/sandpines/make_edits.py"
+    }
+  ],
+  "drop": [
+    {
+      "osm": "w849043568",
+      "reason": "mistagged golf=fairway: hole 8 back pad at the line start (224 yd); replaced by tee_w849043568"
+    },
+    {
+      "osm": "w849043569",
+      "reason": "mistagged golf=fairway: hole 8 Black tee (208 yd, card 209); replaced by tee_w849043569"
+    },
+    {
+      "osm": "w849053534",
+      "reason": "mistagged golf=fairway: hole 9 back pad at the line start (485 yd); replaced by tee_w849053534"
+    },
+    {
+      "osm": "w849053535",
+      "reason": "mistagged golf=fairway: hole 9 Black tee (471 yd, card 468); replaced by tee_w849053535"
+    }
+  ]
+}
