@@ -1147,3 +1147,13 @@ Not merged (the developer will say when). Design note: docs/reports/multiplayer_
     drawn on its rounded pixel, so a tap just right of the green showed yellow and counted
     green. Each band now covers its edge pixels on both sides.
 - Tests: tests/unit/meter_seen.test.ts.
+
+## Pumpkin Ridge: a pumpkin for the club, short names inside it (developer, 2026-10-24)
+
+- The club's card on the course screen shows a pumpkin (`assets-src/course_logos/pumpkin_ridge.py`,
+  the group's own logo, which the card takes before its courses' logos). Witch Hollow and Ghost
+  Creek keep their own logos.
+- Inside a place, each course is named without the words it shares with the place
+  (`registry.nameInGroup`): "Witch Hollow" and "Ghost Creek" in Pumpkin Ridge Golf Club,
+  "Blue Course" (etc.) in East Potomac Golf Links. Full names everywhere else.
+- Tests: tests/unit/name_in_group.test.ts.
