@@ -468,6 +468,8 @@ DECISIONS.md with the reason.
     2026-10-20. Bandon Dunes (Bandon OR, `bandon_dunes` theme, penal gorse on
     surface 17; PR #17) merged 2026-10-20; in the daily rotation from 2026-10-21. Triggs Memorial (Providence RI,
     `seekonk` theme; PR #21) merged 2026-10-20; in the daily rotation from 2026-10-21.
+    Sandpines Golf Links (Florence OR; PR #57) merged 2026-10-24, in the daily
+    rotation from 2026-10-25.
     Each course's build history, facts and open items are in
     `docs/courses/<id>.md` (section 11).
 
@@ -1701,6 +1703,7 @@ files (`game/scripts/course-lists.mjs`). The first course, Oswego Lake, is
 | Oswego Lake Country Club | `docs/courses/oswego_lake.md` |
 | Pacific Dunes | `docs/courses/pacific_dunes.md` |
 | RedTail Golf Center | `docs/courses/redtail.md` |
+| Sandpines Golf Links | `docs/courses/sandpines.md` |
 | Sheep Ranch | `docs/courses/sheep_ranch.md` |
 | Shorty's (19 holes) | `docs/courses/shortys.md` |
 | Stone Creek Golf Club | `docs/courses/stone_creek.md` |
