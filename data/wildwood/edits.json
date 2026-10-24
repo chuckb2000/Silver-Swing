@@ -1,0 +1,70 @@
+{
+ "note": "Edits to the OSM layout for Wildwood, built into edited/course.geojson by pipeline/merge_edits.py (run by make course).",
+ "tags": [
+  {
+   "osm": "w351701703",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "Pond left of the 10th (golf=water_hazard, which s10 reads as yellow): all water red (COURSE_BUILD.md 4.1 default, 2026-10-24)."
+  },
+  {
+   "osm": "w1283767033",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "Pond in front of the 13th green and right of the 12th (golf=water_hazard): all water red (4.1 default)."
+  },
+  {
+   "osm": "w1283820863",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "Pond left of the 2nd and 3rd (golf=water_hazard): all water red (4.1 default)."
+  },
+  {
+   "osm": "w825464987",
+   "set": {
+    "flatten": "no"
+   },
+   "reason": "The creek mapped as a natural=water strip between the 2nd green and the 5th tee (a red penalty area through course_config red_water_osm): it falls along its length, so s04 keeps its lidar bed instead of flattening it like a pond."
+  },
+  {
+   "osm": "w1283372592",
+   "set": {
+    "hole": "3",
+    "tee_set": "Black",
+    "assigned_by": "the course chat (edits.json): one long teeing ground holds the Black tee at its back"
+   },
+   "reason": "Hole 3: the OSM line starts on this box and its yardage runs 141-174 yd against the Black card 173; s06 assigns boxes by centroid and skipped it, leaving the tee on the bare line start. Tagged so s06 places the Black tee on the box (course chat's call, 2026-10-24)."
+  }
+ ],
+ "add": [
+  {
+   "from": "proposed/creeks.geojson",
+   "ids": [
+    "creek_w428675793_0",
+    "creek_w428675793_1",
+    "creek_w428675793_2",
+    "creek_w428683557_0",
+    "creek_w428675795_0",
+    "creek_w428675795_1",
+    "creek_w428675795_2"
+   ],
+   "tags": {
+    "approved": "developer 2026-10-24"
+   },
+   "reason": "Creek channels from the DOGAMI bare-earth DEM along the OSM stream lines w428675793 (main creek: down 15/13, across 11/2, south of 5 and 7, across 9), w428683557 (in front of the 6th green and up the left of 7) and w428675795 (left of 4): red penalty areas, kept inside the OSM boundary (OB as mapped, developer) and 3 m clear of greens and tees; w534446765 across the 14th left out (no channel in the lidar, none on the club map). Made by propose_channels.py + make_creeks.py; approved by the developer 2026-10-24 ('creeks look good')."
+  },
+  {
+   "from": "proposed/approved.geojson",
+   "ids": [
+    "desk_6_bluetee_0",
+    "desk_9_bluetee_0",
+    "desk_14_bluetee_0",
+    "desk_18_bluetee_0"
+   ],
+   "reason": "Black tees on 6, 9, 14 and 18 marked by the developer in the tracing desk (2026-10-24; data/wildwood/desk/, desk_to_proposed.py). Their yardages differ from the card; the developer accepted that ('don't worry about the discrepancies on those holes')."
+  }
+ ]
+}

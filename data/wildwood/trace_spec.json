@@ -1,0 +1,5 @@
+{
+  "note": "Wildwood is built from OSM; this file only tells the tracing desk (pipeline/desk_export.py) which picture to show and which tee set to mark (Black, with White beside it).",
+  "ortho": "raw/osip2024_05m.tif",
+  "desk": {"tee": "Black", "ref": "White", "photo": "OSIP 2024 orthophoto"}
+}

@@ -1,0 +1,11 @@
+{
+"type": "FeatureCollection",
+"name": "approved",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+"features": [
+{ "type": "Feature", "properties": { "osm": "desk_6_bluetee_0", "kind": "tee", "tags": { "golf": "tee", "hole": "6", "source": "tracing desk (developer)", "approved": "developer 2026-10-24", "tee_set": "Black" } }, "geometry": { "type": "Polygon", "coordinates": [ [ [ -122.879468468701603, 45.674562931678089 ], [ -122.879463394771321, 45.674534123573316 ], [ -122.879426160496251, 45.674534084283216 ], [ -122.879423532693323, 45.674561984175511 ], [ -122.879468468701603, 45.674562931678089 ] ] ] } },
+{ "type": "Feature", "properties": { "osm": "desk_9_bluetee_0", "kind": "tee", "tags": { "golf": "tee", "hole": "9", "source": "tracing desk (developer)", "approved": "developer 2026-10-24", "tee_set": "Black" } }, "geometry": { "type": "Polygon", "coordinates": [ [ [ -122.874786299361404, 45.677273454801579 ], [ -122.874713089098449, 45.677283275481848 ], [ -122.874719436805847, 45.677315685522785 ], [ -122.874796493098998, 45.677308569310092 ], [ -122.874786299361404, 45.677273454801579 ] ] ] } },
+{ "type": "Feature", "properties": { "osm": "desk_14_bluetee_0", "kind": "tee", "tags": { "golf": "tee", "hole": "14", "source": "tracing desk (developer)", "approved": "developer 2026-10-24", "tee_set": "Black" } }, "geometry": { "type": "Polygon", "coordinates": [ [ [ -122.883145759491399, 45.680078875950237 ], [ -122.883072548895399, 45.680087801897088 ], [ -122.883099426220539, 45.68013013340164 ], [ -122.883152097392596, 45.680118486177285 ], [ -122.883145759491399, 45.680078875950237 ] ] ] } },
+{ "type": "Feature", "properties": { "osm": "desk_18_bluetee_0", "kind": "tee", "tags": { "golf": "tee", "hole": "18", "source": "tracing desk (developer)", "approved": "developer 2026-10-24", "tee_set": "Black" } }, "geometry": { "type": "Polygon", "coordinates": [ [ [ -122.879764717278888, 45.678919658341698 ], [ -122.879722459639325, 45.678865608743521 ], [ -122.87966592138045, 45.678884450998659 ], [ -122.87970306403119, 45.678928594293623 ], [ -122.879764717278888, 45.678919658341698 ] ] ] } }
+]
+}
