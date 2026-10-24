@@ -832,3 +832,21 @@ Details in each course's file (`docs/courses/<id>.md`, "Lessons").
   Preserve's mapped turf next door (same grass, same photo) gave 0.99 holdout accuracy.
 - **A course polygon can cut a green.** A perfect tee shot on 15 ended out of bounds where the OSM
   line crossed the green. Grow the boundary round every green and run the course test early.
+
+## 28. Sandpines Golf Links (2026-10-24)
+
+- **DOGAMI `f=json` can fail where `f=image` works** (the reverse of Bandon):
+  give both links for each raster in the first request.
+- **The USGS 3DEPElevation `exportImage` is a good DTM fallback in Oregon**:
+  one click, metres, no gaps across DOGAMI project seams.
+- **Check `logos.py` for the subject, not just the course id**, before
+  proposing a logo: the first idea (a rhododendron) was already Eastmoreland's.
+- **A drought-year photo defeats colour rules.** Fairways measured as tan as
+  the rough; local texture separated native grass from mown turf, and a
+  majority vote over ~3 m turned the speckle into areas.
+- **Small `golf=fairway` squares at a hole line's start are tees** (four of
+  57-119 m2 here, found by sorting fairways by area).
+- **`trees_need_ortho` reads sunlit tree-line edges as gone trees.** Where the
+  lidar postdates the course, look at what it flags before switching it on.
+- **The installed Chromium can be newer than the one Playwright expects**:
+  point `executablePath` at it.
