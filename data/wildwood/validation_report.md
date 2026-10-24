@@ -82,21 +82,21 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 
 | hole | par (OSM) | hole line | tee at line start | fairway | green | pin | bunkers <40 m | water <40 m |
 |---|---|---|---|---|---|---|---|---|
-| 1 | 5 | yes | yes (2 near) | yes | yes | yes | 2 | 1 |
-| 2 | 4 | yes | yes (3 near) | yes | yes | yes | 0 | 1 |
+| 1 | 5 | yes | yes (2 near) | yes | yes | yes | 2 | 2 |
+| 2 | 4 | yes | yes (3 near) | yes | yes | yes | 0 | 2 |
 | 3 | 3 | yes | yes (2 near) | yes | yes | yes | 0 | 0 |
-| 4 | 5 | yes | yes (3 near) | yes | yes | yes | 0 | 0 |
-| 5 | 4 | yes | yes (2 near) | yes | yes | yes | 1 | 0 |
-| 6 | 3 | yes | yes (3 near) | - | yes | yes | 0 | 0 |
-| 7 | 5 | yes | yes (1 near) | yes | yes | yes | 0 | 0 |
-| 8 | 3 | yes | yes (1 near) | yes | yes | yes | 0 | 0 |
-| 9 | 4 | yes | yes (1 near) | yes | yes | yes | 0 | 0 |
+| 4 | 5 | yes | yes (3 near) | yes | yes | yes | 0 | 4 |
+| 5 | 4 | yes | yes (2 near) | yes | yes | yes | 1 | 3 |
+| 6 | 3 | yes | yes (3 near) | - | yes | yes | 0 | 1 |
+| 7 | 5 | yes | yes (1 near) | yes | yes | yes | 0 | 3 |
+| 8 | 3 | yes | yes (1 near) | yes | yes | yes | 0 | 1 |
+| 9 | 4 | yes | yes (1 near) | yes | yes | yes | 0 | 1 |
 | 10 | 4 | yes | yes (1 near) | yes | yes | yes | 2 | 1 |
-| 11 | 4 | yes | yes (4 near) | yes | yes | yes | 0 | 2 |
+| 11 | 4 | yes | yes (4 near) | yes | yes | yes | 0 | 3 |
 | 12 | 3 | yes | yes (1 near) | yes | yes | yes | 0 | 1 |
-| 13 | 4 | yes | yes (2 near) | yes | yes | yes | 1 | 1 |
-| 14 | 3 | yes | yes (1 near) | yes | yes | yes | 1 | 0 |
-| 15 | 5 | yes | yes (3 near) | yes | yes | yes | 1 | 0 |
+| 13 | 4 | yes | yes (2 near) | yes | yes | yes | 1 | 2 |
+| 14 | 3 | yes | yes (1 near) | yes | yes | yes | 1 | 2 |
+| 15 | 5 | yes | yes (3 near) | yes | yes | yes | 1 | 1 |
 | 16 | 5 | yes | yes (3 near) | yes | yes | yes | 0 | 0 |
 | 17 | 4 | yes | yes (1 near) | yes | yes | yes | 0 | 0 |
 | 18 | 4 | yes | yes (2 near) | yes | yes | yes | 0 | 0 |
@@ -105,5 +105,5 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 
 - none
 
-Totals: 33 tees, 18 greens, 23 fairways, 5 bunkers, 3 water hazards, 18 pins, 0 cart paths, 0 OSM tree points.
+Totals: 33 tees, 18 greens, 23 fairways, 5 bunkers, 10 water hazards, 18 pins, 0 cart paths, 0 OSM tree points.
 

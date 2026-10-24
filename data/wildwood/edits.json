@@ -56,5 +56,23 @@
    },
    "reason": "Hole 9: the OSM line starts on this box and its yardage runs 251-308 yd against the Black card 311; s06 assigns boxes by centroid and skipped it, leaving the tee on the bare line start. Tagged so s06 places the Black tee on the box (course chat's call, 2026-10-24)."
   }
+ ],
+ "add": [
+  {
+   "from": "proposed/creeks.geojson",
+   "ids": [
+    "creek_w428675793_0",
+    "creek_w428675793_1",
+    "creek_w428675793_2",
+    "creek_w428683557_0",
+    "creek_w428675795_0",
+    "creek_w428675795_1",
+    "creek_w428675795_2"
+   ],
+   "tags": {
+    "approved": "developer 2026-10-24"
+   },
+   "reason": "Creek channels from the DOGAMI bare-earth DEM along the OSM stream lines w428675793 (main creek: down 15/13, across 11/2, south of 5 and 7, across 9), w428683557 (in front of the 6th green and up the left of 7) and w428675795 (left of 4): red penalty areas, kept inside the OSM boundary (OB as mapped, developer) and 3 m clear of greens and tees; w534446765 across the 14th left out (no channel in the lidar, none on the club map). Made by propose_channels.py + make_creeks.py; approved by the developer 2026-10-24 ('creeks look good')."
+  }
  ]
 }
