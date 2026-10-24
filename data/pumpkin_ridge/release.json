@@ -1,0 +1,30 @@
+{
+ "release": "pumpkin_ridge-data",
+ "note": "build inputs not kept in git; `make fetch NAME=pumpkin_ridge` puts them in place (pipeline/fetch_raw.py). _ags_244124c3... = DOGAMI bare-earth DTM (ft), _ags_9e49efe7... = DOGAMI canopy height model (ft), both 1 m, EPSG:32610, box x 498700-501050 / y 5050350-5052450 (exportImage f=json, 2026-10-24); exportImage.jpg = OSIP 2024 1.0 m orthophoto (JPEG, corners = the request box x 497849-501848 / y 5049150-5053149), placed and clipped to the world + 100 m by make_ortho.py. export.1.geojson = the Overpass export, committed as raw/overpass.geojson. The other assets are look-only reference photos.",
+ "files": [
+  {
+   "asset": "_ags_244124c3_2a88_4172_b3f0_fa8133d21cc1.tif",
+   "sha256": "8dccb90e14ac158a914596ecc3272ee4b1d973803426e4e12c612a66385b2fdf",
+   "run": "cp {file} data/pumpkin_ridge/raw/dogami_dtm_ft.tif",
+   "outputs": {
+    "raw/dogami_dtm_ft.tif": "8dccb90e14ac158a914596ecc3272ee4b1d973803426e4e12c612a66385b2fdf"
+   }
+  },
+  {
+   "asset": "_ags_9e49efe7_2a23_45e7_9423_1db683de7751.tif",
+   "sha256": "523c0e5423cae40f4110eee41ca1fc06e28fb002afcfee3a3bb853a485a0914f",
+   "run": "cp {file} data/pumpkin_ridge/raw/dogami_chm_ft.tif",
+   "outputs": {
+    "raw/dogami_chm_ft.tif": "523c0e5423cae40f4110eee41ca1fc06e28fb002afcfee3a3bb853a485a0914f"
+   }
+  },
+  {
+   "asset": "exportImage.jpg",
+   "sha256": "7c3343bdc0d2571706c5a32ea45530a95d600e9de4da557d82e1a16f253a1705",
+   "run": "python3 data/pumpkin_ridge/make_ortho.py {file} raw/osip2024_1m.tif",
+   "outputs": {
+    "raw/osip2024_1m.tif": "9f075ba077ed819e3e9b1ef6794dea14d80c9b09cf13e8b807ca4783d4af7aab"
+   }
+  }
+ ]
+}

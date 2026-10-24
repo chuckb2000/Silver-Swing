@@ -1,0 +1,35 @@
+{
+  "name": "Pumpkin Ridge (autumn at the foot of the Tualatin Mountains)",
+  "note": "Course theme palette (32 colours; same keys as pnw.json plus F0-F2). Pumpkin Ridge Golf Club, North Plains OR, drawn in late October: turf still green but a little olive (OSIP 2024 photo: fairway #8c9e6f, green #acae6e); wide native-grass areas between the holes left long and straw-gold (F0-F2, drawn where data/pumpkin_ridge/proposed/fescue.geojson says, config fescue_areas; photo rough median #908c66 where green minus red < 0); mown rough in G3-G5; cream bunker sand (#ccc4a2); slate-teal creek and lakes (#4c5c5e); harvested wheat and grass-seed fields around the course in a dry olive-gold (L0-L2); rust leaf litter under the trees (B1-B2). Trees: deep blue-green Douglas fir, and Oregon white oak, bigleaf maple and vine maple in autumn colour (assets-src/trees_pumpkin_ridge.py). Shadows are a 35% black overlay on top of these.",
+  "colors": {
+    "G0": "#17301f", "G1": "#1f4428", "G2": "#2b5a30", "G3": "#376e34",
+    "G4": "#45823a", "G5": "#549540", "G6": "#63a648", "G7": "#73b652",
+    "G8": "#85c460", "G9": "#aad685",
+    "L0": "#5c6234", "L1": "#71753e", "L2": "#878849",
+    "S0": "#b6aa86", "S1": "#dbd1ae", "S2": "#eee7d1",
+    "W0": "#263f4a", "W1": "#34545f", "W2": "#6c9099",
+    "K0": "#26272d", "K1": "#53545c", "K2": "#7a7b83", "K3": "#b3aa97", "K4": "#d9d1bf",
+    "B0": "#3c2817", "B1": "#874a1e", "B2": "#a8682c",
+    "R0": "#4b586a", "WH": "#f6f6f2",
+    "F0": "#86793f", "F1": "#a5934c", "F2": "#c0ab5e"
+  },
+  "lut": {
+    "rough": ["F0", "F1", "F2", "F2"],
+    "rough_band": ["G3", "G4", "G5", "G5"]
+  },
+  "aliases": {
+    "TUFT": "F0"
+  },
+  "minimap": {
+    "rough": "#5d8a43", "woods": "#2b5a30", "ob_woods": "#25452c", "ob": "#7a7c47",
+    "water": "#34545f", "ob_water": "#34545f", "bunker": "#dbd1ae"
+  },
+  "minimap_trees": {
+    "conifer": ["#11302a", "#28584a"],
+    "deciduous": ["#6a3c16", "#b0742a"]
+  },
+  "trees": {
+    "conifer": "trees_pumpkin_ridge:conifer",
+    "deciduous": "trees_pumpkin_ridge:deciduous"
+  }
+}
