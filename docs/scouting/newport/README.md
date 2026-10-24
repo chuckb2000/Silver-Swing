@@ -1,94 +1,118 @@
-# Newport Country Club — scouting (2026-10-24, partial)
+# Newport Country Club — scouting (2026-10-24)
 
-Newport Country Club, Newport, RI: ⚠ one of the five founding clubs of the
-USGA, host of the first U.S. Open and U.S. Amateur (1895), an open, nearly
-treeless course on the shore of Rhode Island Sound. On the scouting list as a
-third Rhode Island course (after Triggs and Wannamoisett) and a landmark of
-American golf.
-
-## Scouting status: incomplete
-
-The session's shared web search budget ran out before any Newport search was
-made, and the page fetcher only opens pages that a search returned. So
-nothing below comes from a source read for Newport. What is here:
-
-- **Ready:** the download box and links (DATA_REQUEST items 1-4), the lidar
-  route (the 2022 Rhode Island statewide survey, already used for Triggs and
-  Wannamoisett), the build defaults.
-- **From memory, unverified (marked ⚠):** the facts below. They need checking
-  against sources.
-- **Missing:** the scorecard (every tee set per hole, ratings), the design
-  history, the course's exact position, OSM coverage, water and out-of-bounds
-  details, video games.
-
-A follow-up scouting pass (a new message to this session or a new scouting
-chat) should search, at least: the club or USGA history pages and Wikipedia
-("Newport Country Club"); BlueGolf / GolfPass / 18Birdies / Stymie cards;
-the USGA 2024 U.S. Senior Open and 2006 U.S. Women's Open hole-by-hole
-yardages; the architects (William F. Davis, A. W. Tillinghast, Donald Ross)
-and the recent restoration for the Senior Open; then fill `scorecard.csv`,
-`scorecard_sources.md` and `sources.md`, correct this README and
-`facts.json`, and re-run `make_links.py` with the real centre if it is more
-than about 1 km from the one used.
+Newport Country Club, Newport, Rhode Island: one of the five founding clubs of
+the USGA, where the first U.S. Amateur and the first U.S. Open were played in
+October 1895. An open, nearly treeless, unirrigated seaside course by William
+F. Davis (1894) and A. W. Tillinghast (1921-23), on the hill and fields above
+Ocean Drive and Brenton Point, under a Gilded Age clubhouse. On the scouting
+list as a third Rhode Island course (after Triggs and Wannamoisett) and a
+landmark of American golf.
 
 ## At a glance
 | | |
 |---|---|
 | Id | `newport` |
-| Location | ⚠ 280 Harrison Avenue, Newport, Newport County, RI; centre estimated 41.4630, -71.3480 (from memory: Brenton's Neck, inland of Ocean Drive) |
+| Location | 280 Harrison Avenue, Newport, Newport County, RI; centre 41.462, -71.347 (Wikipedia; OSM's course point 41.46219, -71.34694) |
 | UTM | zone 19, EPSG:32619 |
-| Holes / par | ⚠ 18; par 70 for the 2024 U.S. Senior Open, about 71 for members (unverified) |
-| Designed | ⚠ founded 1893 (Theodore Havemeyer among the founders); original nine by William F. Davis (1894); 18 holes later, with work credited to Donald Ross and A. W. Tillinghast (dates unverified); clubhouse by Whitney Warren (1890s); recent restoration for the U.S. Senior Open (architect not known) |
+| Holes / par | 18 / 72 on the card (36-36); 70 for championships (holes 1 and 12 as par 4s) |
+| Designed | club founded 1893; nine holes by William F. Davis 1894, 18 by 1897-99 (Davis; the old Donald Ross credit was refuted by a scorecard found in 2013, per Wikipedia); A. W. Tillinghast re-routing 1921-23 with seven new holes on about 49 acres west of Harrison Avenue; Ron Forse restoration of the Tillinghast greens and bunkers from 1995 (USGA: 2005), 500+ yd of new tees in the two decades before 2024; clubhouse by Whitney Warren (1895) |
 | Access | private |
-| Notable | ⚠ first U.S. Amateur (C. B. Macdonald) and first U.S. Open (Horace Rawlins), October 1895; 1995 U.S. Amateur (Tiger Woods); 2006 U.S. Women's Open (Annika Sörenstam, playoff over Pat Hurst); 2020 U.S. Senior Open cancelled (COVID-19); 2024 U.S. Senior Open (Richard Bland) |
-| In video games | not researched |
-| Default tee (standing defaults) | unknown until the card is found (Blue, else the set closest to 6,300 yd) |
+| Notable | 1895 U.S. Amateur (C. B. Macdonald) and U.S. Open (Horace Rawlins); 1995 U.S. Amateur (Tiger Woods); 2006 U.S. Women's Open (Annika Sorenstam, playoff); 2020 U.S. Senior Open postponed, played 2024 (Richard Bland, playoff), nines reversed, 7,024 yd par 70; Golf Digest #1 in Rhode Island |
+| In video games | no licensed appearance found; a fan recreation "Newport CC LIDAR" for The Golf Club 2019 (2022) |
+| Default tee (standing defaults) | Blue by name, but Blue is the forward set (5,506 yd, 67.4/118). Recommended: **White**, 6,204 yd, 70.7/122 (women 76.8/135) — open question 1 |
 
 ## Data status
 | Item | Status |
 |---|---|
-| Scorecard | **missing** (no source read) |
-| OSM | unknown until the export |
-| Bare earth | USGS 3DEP 1 m from the 2022 USGS Lidar: RI Statewide (project `RI_Statewide_D22`, flown late March 2022, leaf-off); the statewide survey covers Aquidneck Island |
+| Scorecard | complete third-party per-hole card (GolfPass): seven sets, par, men's and women's stroke index, ratings/slopes. Wikipedia's undated card differs hole by hole (up to 36 yd); the club card is not online (`scorecard_sources.md`) |
+| OSM | the course is in OSM (a course point); holes, greens and tees unknown until the export |
+| Bare earth | USGS 3DEP 1 m from the 2022 USGS Lidar: RI Statewide (`RI_Statewide_D22`, flown late March 2022, leaf-off), tile x30y460 |
 | Canopy | NOAA DAV dataset 9981 (same survey), all classes; no vegetation class, so trees come from class 1 with OSM buildings removed (as at Triggs and Wannamoisett). Flight year 2022 |
 | Orthophoto | NAIP (newest the USGS service holds) |
 
+## The holes (club numbering, names from Wikipedia)
+
+1 The First, 2 The Cop, 3 Ocean, 4 Graves Point, 5 Polo Shed, 6 Lookout,
+7 Long Meadow, 8 Willows, 9 Orchard, 10 Quarry, 11 Harbour, 12 Valley, 13 Club,
+14 Plateau, 15 Brenton Reef, 16 Island, 17 Pond, 18 Home. Par-3s: 4, 8, 13,
+14; par-5s on the card: 1, 7, 10, 12.
+
+**Championships reverse the nines** (the 2024 Senior Open's 1st was the
+club's 10th, its 18th the club's 9th). Media from 2020-24 use championship
+numbers; the card, Wikipedia and Golfer's Journal use the club's. Build in the
+club's numbering (the card's); if OSM's `ref`s follow the championship order,
+renumber and say so.
+
 ## Build notes
-- **Theme:** ⚠ `coastal` (Highland Links: golden fescue, sand, sea, few
-  trees) fits an open seaside course better than the New England defaults
-  `bayside` or `seekonk`, if Newport's rough is the tall golden fescue it is
-  known for. Check against photos in the follow-up pass.
-- **Trees:** few: probably ornamental trees and hedges near the clubhouse and
-  along the roads. The 2022 lidar will show them; the leaf-off flight sees
-  bare deciduous crowns poorly, as at Triggs.
-- **Water and penalty areas:** ⚠ Rhode Island Sound lies beyond the course's
-  seaward edge; ponds on the course not known. All red (standing default).
-- **Out of bounds:** the OSM course boundary; roads crossing it unknown.
-- **Special ground:** ⚠ native fescue rough (use `rough_band_m` like Highland
-  Links: a thin mown band, then fescue); probably rock outcrops and stone walls
-  near the shore. No waste sand known.
-- **One course on the site** (as far as known). No `layouts`.
-- **Renovations after the data:** ⚠ work before the 2024 Senior Open may
-  post-date the March 2022 lidar; check in the follow-up pass.
-- **Wind:** open coast, 3-14 mph.
-- **Course card hole:** to choose in the follow-up pass (a green by the sea).
+- **Theme:** start from `coastal` (Highland Links: golden fescue, sand, sea,
+  few trees). Newport has no fairway irrigation (sprinklers on greens and tees
+  only): fairways of bent, poa, rye and fescue go tawny in dry summers, the
+  rough is native grass with yellowing bent patches, the sand is coarse, and
+  the sea is the open Atlantic. A theme of its own (`newport`) with tawny
+  fairways and olive-gold rough would suit it; the kickoff allows that.
+- **Trees:** few ("often the clubhouse is the only structure in view"); heavy
+  bushes on both sides of 7 and 8 (8 is "Willows"), shrubs along a fence left
+  of 4, and probably ornamentals by the clubhouse, the roads and the houses
+  around the edge. The March 2022 leaf-off lidar sees bare deciduous crowns
+  poorly (as at Triggs); low thickets may come out as short trees.
+- **Water and penalty areas (all red, standing default):** the ocean beyond
+  Ocean Drive (left of 4; near 3); a creek down the far left of 12; a hazard
+  down the left of 16 and a "deep, wet burn" in front of its green; a hidden
+  water hazard left of 17 ("Pond"). Map what OSM and the lidar show; don't
+  draw any from these notes.
+- **Out of bounds:** the OSM course boundary (standing default). Reviews put
+  OB left of 2, left of 3 (a narrow fairway), left of 11, and right of 16 along
+  a brick wall.
+- **Roads:** Harrison Avenue splits the course: holes 2-8 west of it (Golfer's
+  Journal; SI says six holes, from 3), crossed after the 1st green and between
+  8 and 9. Ocean Drive runs along the shore, outside the course. The 10th plays
+  over two clubhouse drives. If OSM's boundary leaves Harrison Avenue out, the
+  road is OB between the two parts (a ball rarely stops on it); if it is
+  inside, it is a cart path (free relief), per 4.1.
+- **Buildings:** the clubhouse on the hill above 13 and 14 (14's tee is beside
+  it); houses around the edges.
+- **Special ground:** native fescue beside the rough (left of 2, right of 3,
+  left of 17, both sides of 9): `rough_band_m` as at Highland Links (a mown
+  band, then fescue as rough). Shrub thickets right of 2 (one reviewer calls
+  them gorse) and on 7 and 8: trees/shrubs from the lidar, not the penal
+  `gorse` surface (open question 4). No waste sand. Thin, rocky soil on 10.
+  Terrain mostly gentle; a few holes climb or drop steeply (13 straight uphill
+  to the clubhouse, 9 uphill and partly blind, 14 over a ravine, 12's false
+  front).
+- **One course on the site.** No `layouts`. Fairways are wide (35-45 yd).
+- **Renovations after the data:** no construction reported after the March
+  2022 lidar (for the 2024 Senior Open the USGA only set up tees and greens). New championship tees may be on
+  the lidar but not in OSM; they don't matter for White.
+- **Wind:** open coast, 3-14 mph (4.1). The prevailing wind is southerly, off
+  the water, and stronger in the afternoon.
+- **Course card hole:** the 4th, Graves Point (a long par 3 with the ocean along
+  the left and long contoured bunkers). Alternative: the 14th, Plateau, under
+  the clubhouse.
 - **Logo idea:** a hickory-shafted club and a gutty ball over a line of
-  waves, for the first U.S. Open and Amateur (1895). No club crest or
-  clubhouse drawing.
-- **Hard to build:** nothing known yet beyond the missing card; a private
-  club card is often not online.
+  Atlantic waves, for the first U.S. Open and Amateur
+  (1895). No club crest, no clubhouse drawing.
+- **Hard to build:** the two disagreeing cards (build on GolfPass; validation
+  will show which fits the ground), the reversed championship numbering in
+  every recent article and possibly in OSM, and the low thickets in the
+  leaf-off lidar.
 
 ## Open questions for the developer
-1. **The scorecard.** — recommendation: let the follow-up scouting pass look
-   first; if it finds no per-hole card, a photo of the printed card (a
-   member or the pro shop) is the only reliable source.
-2. **Theme.** `coastal` or `bayside`? — recommendation: `coastal`, pending
-   photos.
-3. **Logo.** — recommendation: the 1895 club and gutty ball.
+1. **Default tee.** Newport's Blue is its forward set (5,506 yd). —
+   recommendation: White (6,204 yd, 70.7/122), the single set closest to
+   6,300, as for TPC Boston.
+2. **Which card.** GolfPass and Wikipedia disagree hole by hole; neither is
+   dated. — recommendation: GolfPass (the only one with every set, both
+   indexes and ratings); a photo of the printed card replaces it if one turns
+   up (DATA_REQUEST item 5).
+3. **Par.** The card says 72; championships play 70 (1 and 12 as par 4s). —
+   recommendation: the card's 72, like every other course in the game.
+4. **The shrub thickets** (2, 7, 8). — recommendation: shrubs and rough, not
+   the penal gorse surface; nothing says they are gorse.
+5. **Theme.** — recommendation: a `newport` theme drawn from `coastal`, with
+   tawny fairways.
+6. **Logo.** — recommendation: the 1895 hickory club and gutty ball over waves.
 
 ## Kickoff prompt
-
-(Use it after the follow-up scouting pass has filled the scorecard.)
 
 ```
 Build Newport Country Club (`newport`, Newport, RI) for Silver Swings Golf.

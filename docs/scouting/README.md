@@ -24,8 +24,7 @@ file on arrival and cuts the real world from the OSM boundary.
 ## The courses
 
 Status: **ready** = scorecard per hole and facts in hand; **partial** =
-usable, with named gaps; **needs a second pass** = folder and links made, but
-no scorecard or facts yet (the search budget ran out).
+usable, with named gaps.
 
 | Course | Where | Why | Status | Default tee | Theme |
 |---|---|---|---|---|---|
@@ -43,11 +42,11 @@ no scorecard or facts yet (the search budget ran out).
 | [Eastward Ho!](eastward_ho/) | Chatham, MA | Fowler 1922 on Pleasant Bay; 2024 restoration | ready | Blue, 6,227 yd | `bayside` |
 | [Pine Valley](pine_valley/) | Pine Valley, NJ | often ranked #1 in the world; never licensed | ready (third-party, two tee sets) | Regular, 6,532 yd | `bayside` |
 | [Sand Hills](sand_hills/) | Mullen, NE | Coore & Crenshaw 1995 | partial (location to confirm on the OSM map first; may need a world over 2,048 m) | Square, 6,432 yd | new `sandhills` |
-| [Astoria G&CC](astoria/) | Warrenton, OR | 1923 dune-ridge course near Gearhart | needs a second pass | — | `gearhart` |
-| [Heron Lakes](heron_lakes/) | Portland, OR | RTJ Jr. muni, Great Blue + Greenback | needs a second pass | — | `pnw` |
-| [Pelican Hill](pelican_hill/) | Newport Coast, CA | Fazio's two ocean courses | needs a second pass | — | new `socal` |
-| [Newport CC](newport/) | Newport, RI | site of the first US Open (1895) | needs a second pass | — | `coastal` |
-| [Baltimore CC, Five Farms](baltimore_cc/) | Lutherville-Timonium, MD | Tillinghast 1926; central Maryland | needs a second pass | — | `anacostia` |
+| [Astoria G&CC](astoria/) | Warrenton, OR | 1923 dune-ridge course near Gearhart | ready (third-party card; club card would settle 3 stroke indexes) | Silver, 6,321 yd | own theme (rough is green, not `gearhart` straw) |
+| [Heron Lakes](heron_lakes/) | Portland, OR | Great Blue (RTJ Jr. 1992) + Greenback (RTJ Sr. 1971) | ready (Great Blue cards disagree on 3 holes; club card to save) | Great Blue Blue, 6,244 yd | `pnw` |
+| [Pelican Hill](pelican_hill/) | Newport Coast, CA | Fazio's two ocean courses | ready (both cards; 2026 restoration postdates the data) | Ocean South Blue, 6,323 yd | new `socal` |
+| [Newport CC](newport/) | Newport, RI | site of the first US Open (1895) | ready (GolfPass card; Wikipedia's differs) | White, 6,204 yd (Blue is the shortest set) | new `newport` from `coastal` |
+| [Baltimore CC, Five Farms](baltimore_cc/) | Lutherville-Timonium, MD | Tillinghast 1926; central Maryland | ready (card rows matched to tee names by total) | Blue, 6,620 yd | `anacostia` |
 
 ## Suggested order
 
@@ -57,7 +56,7 @@ gives bare earth and canopy in two clicks), then the two you asked for,
 Massachusetts lidar as TPC Boston and Highland Links), **Pasatiempo**,
 **SFGC**, **Pine Valley**, **NGLA**, **Sahalee**, **Fishers Island**,
 **Sand Hills**. Shinnecock last if a course already in a video game matters.
-The five "second pass" courses need their scorecards and facts first.
+Then Heron Lakes, Astoria, Newport, Baltimore CC and Pelican Hill (all ready after the second pass).
 
 ## Things several courses share
 
@@ -84,8 +83,9 @@ The five "second pass" courses need their scorecards and facts first.
 
 ## Still open
 
-- Second pass (scorecard, facts, video games) for Astoria, Heron Lakes,
-  Pelican Hill, Newport and Baltimore CC.
+- Printed club cards would settle small conflicts at Astoria (3 stroke
+  indexes), Heron Lakes (Great Blue holes 8, 16, 17), Newport and Baltimore CC
+  (tee names); each data request lists it as an optional photo.
 - The exact 3DEP project and NOAA dataset id for Sahalee, Sand Hills,
   Pasatiempo, SFGC and Strawberry Farms (their requests have the developer
   pick the dataset on the NOAA map instead; that works, it is one more step).

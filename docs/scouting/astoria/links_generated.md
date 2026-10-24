@@ -1,7 +1,7 @@
 ## Box (astoria)
 
-- WGS84: south 46.07780, west -123.95834, north 46.13221, east -123.90569
-- EPSG:32610 (WGS 84 / UTM zone 10N): x 425970-429969, y 5103137-5109136 (3999 x 5999 m)
+- WGS84: south 46.08409, west -123.94082, north 46.12032, east -123.90140
+- EPSG:32610 (WGS 84 / UTM zone 10N): x 427308-430309, y 5103820-5107811 (3001 x 3991 m)
 
 ### OSM (Overpass Turbo)
 
@@ -9,7 +9,7 @@ Open https://overpass-turbo.eu, replace the text on the left with this, click Ru
 then Export -> GeoJSON -> download. Save as `astoria_overpass.geojson`.
 
 ```
-[out:json][timeout:180][bbox:46.07780,-123.95834,46.13221,-123.90569];
+[out:json][timeout:180][bbox:46.08409,-123.94082,46.12032,-123.90140];
 (
   nwr["leisure"="golf_course"];
   nwr["golf"];
@@ -25,26 +25,21 @@ then Export -> GeoJSON -> download. Save as `astoria_overpass.geojson`.
 out geom;
 ```
 
-The box is cut into 2 elevation piece(s) and 2 image piece(s) (each at most 4000 px a side); download every link.
-
 ### Bare earth (DOGAMI lidar DTM, 1 m)
 
 ```
-https://gis.dogami.oregon.gov/arcgis/rest/services/lidar/DIGITAL_TERRAIN_MODEL_MOSAIC/ImageServer/exportImage?bbox=425970,5103137,429969,5106136&bboxSR=32610&imageSR=32610&size=3999,2999&format=tiff&pixelType=F32&noData=-9999&interpolation=RSP_BilinearInterpolation&f=image
-https://gis.dogami.oregon.gov/arcgis/rest/services/lidar/DIGITAL_TERRAIN_MODEL_MOSAIC/ImageServer/exportImage?bbox=425970,5106136,429969,5109136&bboxSR=32610&imageSR=32610&size=3999,3000&format=tiff&pixelType=F32&noData=-9999&interpolation=RSP_BilinearInterpolation&f=image
+https://gis.dogami.oregon.gov/arcgis/rest/services/lidar/DIGITAL_TERRAIN_MODEL_MOSAIC/ImageServer/exportImage?bbox=427308,5103820,430309,5107811&bboxSR=32610&imageSR=32610&size=3001,3991&format=tiff&pixelType=F32&noData=-9999&interpolation=RSP_BilinearInterpolation&f=image
 ```
 
 ### Canopy height (DOGAMI lidar CHM, 1 m)
 
 ```
-https://gis.dogami.oregon.gov/arcgis/rest/services/lidar/CANOPY_HEIGHT_MODEL_MOSAIC/ImageServer/exportImage?bbox=425970,5103137,429969,5106136&bboxSR=32610&imageSR=32610&size=3999,2999&format=tiff&pixelType=F32&noData=-9999&interpolation=RSP_BilinearInterpolation&f=image
-https://gis.dogami.oregon.gov/arcgis/rest/services/lidar/CANOPY_HEIGHT_MODEL_MOSAIC/ImageServer/exportImage?bbox=425970,5106136,429969,5109136&bboxSR=32610&imageSR=32610&size=3999,3000&format=tiff&pixelType=F32&noData=-9999&interpolation=RSP_BilinearInterpolation&f=image
+https://gis.dogami.oregon.gov/arcgis/rest/services/lidar/CANOPY_HEIGHT_MODEL_MOSAIC/ImageServer/exportImage?bbox=427308,5103820,430309,5107811&bboxSR=32610&imageSR=32610&size=3001,3991&format=tiff&pixelType=F32&noData=-9999&interpolation=RSP_BilinearInterpolation&f=image
 ```
 
 ### Orthophoto (Oregon Statewide Imagery Program 2024, 1.0 m, JPEG)
 
 ```
-https://imagery.oregonexplorer.info/arcgis/rest/services/OSIP_2024/OSIP_2024_WM/ImageServer/exportImage?bbox=425970,5103137,429969,5106136&bboxSR=32610&imageSR=32610&size=3999,2999&format=jpg&f=image
-https://imagery.oregonexplorer.info/arcgis/rest/services/OSIP_2024/OSIP_2024_WM/ImageServer/exportImage?bbox=425970,5106136,429969,5109136&bboxSR=32610&imageSR=32610&size=3999,3000&format=jpg&f=image
+https://imagery.oregonexplorer.info/arcgis/rest/services/OSIP_2024/OSIP_2024_WM/ImageServer/exportImage?bbox=427308,5103820,430309,5107811&bboxSR=32610&imageSR=32610&size=3001,3991&format=jpg&f=image
 ```
 

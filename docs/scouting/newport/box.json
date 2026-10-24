@@ -3,18 +3,18 @@
  "state": "RI",
  "epsg": 32619,
  "wgs84": {
-  "south": 41.444549,
-  "west": -71.372525,
-  "north": 41.481443,
-  "east": -71.323478
+  "south": 41.448275,
+  "west": -71.368838,
+  "north": 41.476115,
+  "east": -71.327173
  },
  "utm": {
-  "x0": 301916,
-  "y0": 4590822,
-  "x1": 305907,
-  "y1": 4594813,
-  "w": 3991,
-  "h": 3991
+  "x0": 302208,
+  "y0": 4591228,
+  "x1": 305609,
+  "y1": 4594229,
+  "w": 3401,
+  "h": 3001
  },
  "note": "download box = estimated course extent + margin; the course chat sets the world from the OSM boundary"
 }

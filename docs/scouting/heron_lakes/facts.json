@@ -1,42 +1,372 @@
 {
-  "id": "heron_lakes",
-  "name": "Heron Lakes Golf Club",
-  "short_name": "Heron Lakes",
-  "town": "Portland",
-  "county": "Multnomah",
-  "state": "OR",
-  "lat": 45.597,
-  "lon": -122.712,
-  "centre_source": "scout's estimate from memory (West Delta Park, west of Portland International Raceway); not surveyed; the 5 x 5 km box absorbs about 1.5 km of error",
-  "epsg": 32610,
-  "holes": 18,
-  "par": null,
-  "architects": ["Robert Trent Jones Jr."],
-  "opened": 1992,
-  "renovations": [],
-  "access": "public (municipal; City of Portland — memory)",
-  "notable": [],
-  "video_games": "not checked (search budget ran out); none known",
-  "tees": [],
-  "default_tee": "",
-  "theme": "pnw",
-  "new_theme_needed": false,
-  "wind_mph": [1, 7],
-  "special_ground": [],
-  "water": "many ponds and lakes on both courses (brief); wetland and slough edges around West Delta Park (memory); all red",
-  "layouts": [
-    {"id": "heron_lakes_great_blue", "name": "Great Blue", "par": null, "scorecard": "scorecard_great_blue.csv (to collect)", "opened": 1992, "build": "first"},
-    {"id": "heron_lakes_greenback", "name": "Greenback", "par": null, "scorecard": "scorecard_greenback.csv (to collect)", "opened": null, "build": "second, same world if it fits in 2,048 m"}
-  ],
-  "lidar": {"bare_earth": "DOGAMI DTM mosaic (most likely OLC West Metro 3DEP 2019, else OLC Metro 2014)", "canopy": "DOGAMI CHM mosaic (same flight)", "flight_year": 2019, "noaa_dav_id": 10044},
-  "imagery": "OSIP 2024 orthophoto (1.0 m JPEG, four pieces over the 5 x 5 km box)",
-  "osm_coverage": "unknown until the export",
-  "scorecard_status": "not collected for either course (search budget ran out); see scorecard_sources.md",
-  "open_questions": [
-    "Scorecards not collected — recommendation: the course chat collects both at intake",
-    "Box centre is an estimate — recommendation: run the Overpass step first and download rasters only if both courses sit well inside the box",
-    "Which course first — recommendation: Great Blue, Greenback as the second layout if the world fits in 2,048 m",
-    "Wind — recommendation: 1-7 mph (standing default; 2-10 if the developer prefers the river band)"
-  ],
-  "scouting_complete": false
+ "id": "heron_lakes",
+ "name": "Heron Lakes Golf Club",
+ "short_name": "Heron Lakes",
+ "town": "Portland",
+ "county": "Multnomah",
+ "state": "OR",
+ "address": "3500 N Victory Blvd, Portland, OR 97217",
+ "lat": 45.601,
+ "lon": -122.704,
+ "centre_source": "box centre chosen from sourced points: clubhouse/range 45.6044,-122.7032 and 45.6018,-122.7027 (stymie map links), 45.6046,-122.7051 (golfn), Great Blue 45.6021,-122.6981 (OpenGolfAPI, from OSM); bracketed by PIR 45.5969,-122.6958 (Wikipedia), Force Lake 45.6047,-122.6936 (Wikipedia), Smith Lake (west) and the Columbia Slough (south). Not a surveyed centre; each course's extent is unknown until the OSM export",
+ "area_acres": 340.77,
+ "epsg": 32610,
+ "holes": 36,
+ "par": 72,
+ "architects": [
+  "Robert Trent Jones Sr. (Greenback, 1971)",
+  "Robert Trent Jones Jr. (Greenback with his father; Great Blue 1992; Top100 credits RTJ II associate Kyle Phillips)"
+ ],
+ "opened": 1971,
+ "renovations": [
+  "1987: third nine (Red) added; 1988 renamed Heron Lakes (was West Delta Park Golf Course)",
+  "1992: fourth nine; split into Greenback (original 18) and Great Blue (Red nine + new nine)",
+  "2008: KemperSports management, clubhouse work",
+  "2025: new forward tees on Great Blue, bunker sand and restoration on both courses, re-rated by the OGA (Portland golf advisory committee minutes, Apr-Nov 2025)",
+  "2025: levee raise under study with the US Army Corps (nothing built)"
+ ],
+ "access": "public (City of Portland, Portland Parks & Recreation; managed by KemperSports)",
+ "notable": [
+  "2000 U.S. Amateur Public Links (Great Blue; D.J. Trahan)",
+  "PGA Northwest Open; NFL Quarterback Shootout",
+  "Golf Digest Top 75 Public (RTJ II portfolio, undated)",
+  "Audubon Cooperative Sanctuary",
+  "course records 64 Tiger Woods (Great Blue), 63 Johnny Miller (Greenback) (GolfPass 2010)"
+ ],
+ "video_games": "none found (searched EA/Tiger Woods PGA Tour, PGA Tour 2K, Links, Golden Tee)",
+ "tees": [
+  {
+   "name": "Gold",
+   "yards": 7016,
+   "rating": 74.2,
+   "slope": 146,
+   "par": 72,
+   "gender": "M",
+   "gender_stated": false
+  },
+  {
+   "name": "Black",
+   "yards": 6612,
+   "rating": 72.5,
+   "slope": 142,
+   "par": 72,
+   "gender": "M",
+   "gender_stated": false
+  },
+  {
+   "name": "Blue",
+   "yards": 6244,
+   "rating": 70.5,
+   "slope": 135,
+   "par": 72,
+   "gender": "M"
+  },
+  {
+   "name": "Blue",
+   "yards": 6244,
+   "rating": 76.2,
+   "slope": 144,
+   "par": 72,
+   "gender": "F"
+  },
+  {
+   "name": "White/Blue/Black",
+   "yards": 6241,
+   "rating": 70.6,
+   "slope": 135,
+   "par": 72,
+   "gender": "M",
+   "gender_stated": false
+  },
+  {
+   "name": "White",
+   "yards": 5857,
+   "rating": 68.7,
+   "slope": 127,
+   "par": 72,
+   "gender": "M"
+  },
+  {
+   "name": "White",
+   "yards": 5857,
+   "rating": 74.3,
+   "slope": 140,
+   "par": 72,
+   "gender": "F"
+  },
+  {
+   "name": "Yellow/White/Blue",
+   "yards": 5804,
+   "rating": 68.1,
+   "slope": 132,
+   "par": 72,
+   "gender": "M",
+   "gender_stated": false
+  },
+  {
+   "name": "Yellow",
+   "yards": 5258,
+   "rating": 65.8,
+   "slope": 121,
+   "par": 72,
+   "gender": "M"
+  },
+  {
+   "name": "Yellow",
+   "yards": 5258,
+   "rating": 70.9,
+   "slope": 131,
+   "par": 72,
+   "gender": "F"
+  }
+ ],
+ "default_tee": "Blue (Great Blue 6,244 yd 70.5/135; Greenback 6,141 yd 69.6/127)",
+ "theme": "pnw",
+ "new_theme_needed": false,
+ "wind_mph": [
+  1,
+  7
+ ],
+ "special_ground": [],
+ "water": "six ponds dug at construction; Greenback six ponds (holes not listed); Great Blue 8 (pond guarding the fairway), 16 (lake and wetland along the fairway), 17 (slough), 18 (water right and in front of the green, lake behind); all red; Columbia Slough south of the site",
+ "layouts": [
+  {
+   "id": "heron_lakes_great_blue",
+   "name": "Great Blue",
+   "par": 72,
+   "scorecard": "scorecard_great_blue.csv (= scorecard.csv)",
+   "opened": 1992,
+   "architect": "Robert Trent Jones Jr.",
+   "default_tee": {
+    "name": "Blue",
+    "yards": 6244,
+    "rating": 70.5,
+    "slope": 135
+   },
+   "tees": [
+    {
+     "name": "Gold",
+     "yards": 7016,
+     "rating": 74.2,
+     "slope": 146,
+     "par": 72,
+     "gender": "M",
+     "gender_stated": false
+    },
+    {
+     "name": "Black",
+     "yards": 6612,
+     "rating": 72.5,
+     "slope": 142,
+     "par": 72,
+     "gender": "M",
+     "gender_stated": false
+    },
+    {
+     "name": "Blue",
+     "yards": 6244,
+     "rating": 70.5,
+     "slope": 135,
+     "par": 72,
+     "gender": "M"
+    },
+    {
+     "name": "Blue",
+     "yards": 6244,
+     "rating": 76.2,
+     "slope": 144,
+     "par": 72,
+     "gender": "F"
+    },
+    {
+     "name": "White/Blue/Black",
+     "yards": 6241,
+     "rating": 70.6,
+     "slope": 135,
+     "par": 72,
+     "gender": "M",
+     "gender_stated": false
+    },
+    {
+     "name": "White",
+     "yards": 5857,
+     "rating": 68.7,
+     "slope": 127,
+     "par": 72,
+     "gender": "M"
+    },
+    {
+     "name": "White",
+     "yards": 5857,
+     "rating": 74.3,
+     "slope": 140,
+     "par": 72,
+     "gender": "F"
+    },
+    {
+     "name": "Yellow/White/Blue",
+     "yards": 5804,
+     "rating": 68.1,
+     "slope": 132,
+     "par": 72,
+     "gender": "M",
+     "gender_stated": false
+    },
+    {
+     "name": "Yellow",
+     "yards": 5258,
+     "rating": 65.8,
+     "slope": 121,
+     "par": 72,
+     "gender": "M"
+    },
+    {
+     "name": "Yellow",
+     "yards": 5258,
+     "rating": 70.9,
+     "slope": 131,
+     "par": 72,
+     "gender": "F"
+    }
+   ],
+   "build": "first"
+  },
+  {
+   "id": "heron_lakes_greenback",
+   "name": "Greenback",
+   "par": 72,
+   "scorecard": "scorecard_greenback.csv",
+   "opened": 1971,
+   "architect": "Robert Trent Jones Sr. and Jr.",
+   "default_tee": {
+    "name": "Blue",
+    "yards": 6141,
+    "rating": 69.6,
+    "slope": 127
+   },
+   "tees": [
+    {
+     "name": "Black",
+     "yards": 6638,
+     "rating": 72.0,
+     "slope": 132,
+     "par": 72,
+     "gender": "M",
+     "gender_stated": false
+    },
+    {
+     "name": "White/Blue/Black",
+     "yards": 6196,
+     "rating": 69.9,
+     "slope": 126,
+     "par": 72,
+     "gender": "M",
+     "gender_stated": false
+    },
+    {
+     "name": "Blue",
+     "yards": 6141,
+     "rating": 69.6,
+     "slope": 127,
+     "par": 72,
+     "gender": "M"
+    },
+    {
+     "name": "Blue",
+     "yards": 6141,
+     "rating": 75.6,
+     "slope": 136,
+     "par": 72,
+     "gender": "F"
+    },
+    {
+     "name": "White",
+     "yards": 5750,
+     "rating": 67.7,
+     "slope": 124,
+     "par": 72,
+     "gender": "M"
+    },
+    {
+     "name": "White",
+     "yards": 5750,
+     "rating": 73.4,
+     "slope": 131,
+     "par": 72,
+     "gender": "F"
+    },
+    {
+     "name": "Yellow/White/Blue",
+     "yards": 5667,
+     "rating": 67.9,
+     "slope": 123,
+     "par": 72,
+     "gender": "M"
+    },
+    {
+     "name": "Yellow/White/Blue",
+     "yards": 5667,
+     "rating": 72.6,
+     "slope": 132,
+     "par": 72,
+     "gender": "F"
+    },
+    {
+     "name": "Yellow",
+     "yards": 5269,
+     "rating": 65.1,
+     "slope": 115,
+     "par": 72,
+     "gender": "M"
+    },
+    {
+     "name": "Yellow",
+     "yards": 5269,
+     "rating": 70.2,
+     "slope": 127,
+     "par": 72,
+     "gender": "F"
+    },
+    {
+     "name": "Orange",
+     "yards": 4013,
+     "rating": 60.4,
+     "slope": 106,
+     "par": 72,
+     "gender": "M"
+    },
+    {
+     "name": "Orange",
+     "yards": 4013,
+     "rating": 62.5,
+     "slope": 108,
+     "par": 72,
+     "gender": "F"
+    }
+   ],
+   "build": "second, same world (should fit in 2,048 m)"
+  }
+ ],
+ "lidar": {
+  "bare_earth": "DOGAMI DTM mosaic (most likely OLC West Metro 3DEP 2019, else OLC Metro 2014)",
+  "canopy": "DOGAMI CHM mosaic (same flight)",
+  "flight_year": 2019,
+  "noaa_dav_id": 10044
+ },
+ "imagery": "OSIP 2024 orthophoto (about 1 m JPEG, one piece over the 3,981 m box)",
+ "box_m": [
+  3981,
+  3981
+ ],
+ "osm_coverage": "a Great Blue course feature exists (OpenGolfAPI credits OSM); hole-level coverage unknown until the export",
+ "scorecard_status": "third-party complete per hole for both courses (stymie; Greenback confirmed by GolfPass); Great Blue conflicts with a GolfPass card that may be the 2025 re-tee; club card not read",
+ "open_questions": [
+  "Great Blue card: stymie (used) vs GolfPass (maybe the 2025 card) — recommendation: build stymie Blue 6,244; switch only if the club's printed card is the GolfPass one",
+  "Which course first — recommendation: Great Blue, Greenback as the second layout of the same world",
+  "Architect credit — recommendation: Greenback RTJ Sr. and Jr. (1971), Great Blue RTJ Jr. (1992)",
+  "Box from sourced points, not OSM — recommendation: run the Overpass step first and download rasters only if both courses sit well inside",
+  "Wind — recommendation: 1-7 mph (standing default)"
+ ],
+ "scouting_complete": true,
+ "tees_note": "Great Blue tees (stymie); ratings marked gender_stated false carry no gender label on the source and are taken as men's (their values fit the men's range)"
 }

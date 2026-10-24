@@ -1,14 +1,33 @@
 # Astoria Golf & Country Club — sources (2026-10-24)
 
-No page about the course itself could be read: the shared web-search budget
-ran out before this course's turn, and the sandbox opens only pages a search
-returned. What the folder rests on:
+Every page below came back from a web search and was read on 2026-10-24
+unless a date says otherwise. The repo files at the end were read by the
+first pass.
 
-| Source | What it gave | Read |
-|---|---|---|
-| The design chat's assignment | Warrenton OR; 1923; built on parallel coastal dune ridges; hosts the Oregon Coast Invitational; coastal theme to compare with `gearhart` and `coastal` | 2026-10-24 |
-| The scout's memory (unverified) | address 33445 Sunset Beach Lane; position west of US 101 near the Sunset Beach road, south of Camp Rilea; architect George Junor; Sunset Lake nearby; shore pine and spruce on the ridges; mown rough in the hollows | — |
-| https://www.fisheries.noaa.gov/inport/item/49906 | 2009 DOGAMI Oregon Lidar: North Coast: flown 2008-10-23 to 2009-08-09 (11 delivery areas), 8.61 points/m², 1,553 sq mi in Clatsop, Columbia, Lane, Lincoln, Tillamook and Washington counties, extent -124.150 to -122.815, 43.875 to 46.239; NOAA DAV id 575 | 2026-10-24 |
-| https://www.fisheries.noaa.gov/inport/item/78466 | 2020 ODF Lidar (Clatsop/Nehalem/Trask...): ~1,176 sq mi of forested land, collected 2020-05-07 to 09-30, extent west edge -123.93; NOAA DAV id 13737 (probably not over the course) | 2026-10-24 |
-| https://www.oregon.gov/dogami/lidar/Pages/collectinglidar.aspx | DOGAMI projects on the north coast: OLC North Coast 2009 (Apr 5 - Aug 9, 2009), NW Oregon - Clatsop (ODF, Dec 2015 - Feb 2016), OLC Ecola State Park 2023 | 2026-10-24 |
-| `docs/courses/gearhart.md`, `assets-src/palettes/gearhart.json`, `assets-src/palettes/coastal.json`, `pipeline/s09_render.py` (repo) | the neighbouring course's lidar (2008-09 North Coast, older than its renovation), its theme and the `fescue_areas` behaviour | 2026-10-24 |
+| Source | What it gave |
+|---|---|
+| https://stymie.golf/golf-courses/oregon/clatsop-county/gearhart/astoria-golf-country-club | address 33445 Sunset Beach Ln (postal town Gearhart 97146), phone; George Junor, 1924; par 72 card; per-hole yards for six tee sets; one stroke-index row; ratings/slopes (newer set). Map link 46.105004, -123.925436 labelled "Gearhart, OR" |
+| https://www.golfpass.com/travel-advisor/courses/11400-astoria-golf-country-club | address 33445 Sunset Beach Ln, Warrenton 97146, Clatsop County; George Junor (1924); per-hole yards (four sets, mislabelled columns), men's and women's stroke index; older tee table with men's and women's ratings |
+| https://courses.opengolfapi.org/courses/OR/astoria-golf-country-club | 46.1020, -123.9206 (map pin); George Junor, established 1923; an older par-71 Tournament card (6,538 yd, 71.7/123) |
+| https://www.top100golfcourses.com/golf-course/astoria-golf-country-club | ranked 14th in Oregon (on that site); "eskers" (it calls the ridges glacial; they are dunes); fairways routed north-south between the ridges after an east-west plan was rejected; No. 3 the signature hole, tee on a ridge, fairway "perilously tight" between two parallel ridges; clubhouse on a wider dune; 10th a ~120 yd par 3 open to the wind; cart path on 3 re-routed (no date) |
+| https://www.golfclubatlas.com/forum/index.php/topic,26002.25.html | forum (2008): club history quoted by Dale Jackson: R.C. Asbury's east-west plan rejected; club president George Halderman and first greenkeeper George Junor laid it out north-south in the valleys; a 1924 Seattle P-I item credits "R.C.F. Ashbury" with A.V. Macan checking the survey. Dunes ~30-40 ft high; fairways as narrow as ~12 yd; greens ~25 yd radius, most back-to-front, a third tilting away; 10th a "volcano" green; tree lines along the parallel fairways, many lost in the December 2007 storm, replanting discussed |
+| https://www.golfclubatlas.com/forum/index.php/topic,26002.0.html | forum (Oct-Nov 2006): US 101 runs past the course and the practice area is "highly visible from the highway"; 3 and 15 the narrowest valleys; 2, 4, 8 and 17 run the opposite way to the rest; 16 plays back up 14's wider valley; 10 a 127 yd par 3 on a dune top; 5 a 461 yd dogleg right with water; 9 a 519 yd par 5 over a swamp with swamp down the left; cart paths recently paved; plans for "a couple more holes and a practice area just north of the course" |
+| https://planetgolf.com/courses/usa/astoria-golf-and-country-club | opened 1923; north-south ridges up to ~30 ft; valleys ten or twelve paces wide; Doak (Confidential Guide vol. 3) 6/10: small tilted greens, minimal bunkering, cart wear |
+| https://www.top100golfcourses.com/golf-course/astoria-golf-country-club/reviews/29847 | review (Mark White, undated; page has a 2023 article): three lines of dunes, clubhouse and 10 on the first; scattered trees, many down the left of 9; 9 has a pond, a narrow creek and wetland on the left and runs beside busy US 101; two forced carries over water (holes not named); few bunkers; small greens; cart path on 3 re-routed |
+| https://www.top100golfcourses.com/golf-course/astoria-golf-country-club/reviews/23022 | review (David Davis, undated): "firm and fast"; 3 tees off a ridge between two parallel dunes; 10 about 120 yd, exposed |
+| https://dailyastorian.com/?p=213725 | Daily Astorian, Dec 2012: founded June 1923, opened June 1924; founder Charles Haldeman; 33445 Sunset Beach Lane, Warrenton; "a lot of sand dunes"; Sunset Lake on the west side of the course; motto "St. Andrews of the Pacific"; ~30,000 rounds a year |
+| https://www.amateurgolf.com/amateur-golf-tournaments/3732/oregon-coast-invitational-match-play-championship | Oregon Coast Invitational at Astoria G&CC: stroke-play qualifying then match play; "over 100 years old"; club website https://www.astoriagolf.com/ (not opened: never returned by a search) |
+| https://seasidesignal.com/2022/07/31/golf-titles-for-mack-and-moir-in-coast-invitational | Oregon Coast Invitational began in 1910, the first at Gearhart Golf Links; 2022 match play at Astoria G&CC |
+| https://foretee.com/courses/oregon/warrenton/usa/astoria-golf-and-country-club/12168/ | George Halderman and George Junor; opened June 1924; routed north-south between the dunes; 13-acre practice facility; older yardages (6,538 / 6,331 / 5,753 / 5,495) |
+| https://www.golfn.com/courses/united-states-of-america/oregon/astoria-golf-and-country-club | map pin 46.102357, -123.921511; George Junor, 1924; bent greens, rye fairways |
+| https://www.golfnow.com/courses/1035506-astoria-golf-country-club-details | the older tee table (par, yards, rating, slope per set, men's and women's) |
+| https://www.1golf.eu/en/club/astoria-golf-country-club/ | address; 1924; George Junor; four garbled older rating rows |
+| https://exploreoregongolf.oga.org/astoria-golf-country-club | OGA: private, member-owned, established 1924, "rolling sand dunes that define the Clatsop Plains"; no card |
+| https://www.northwestfishingreports.com/Area/Details/9430 | Sunset Lake (Neacoxie Lake): 46.0895507, -123.9270863, 107 acres, about 2 miles long north-south, roughly half a mile west of US 101 |
+| https://www.oregonhikers.org/field_guide/Sunset_Lake_Footbridge | "three-mile-long, narrow Sunset Lake" |
+| https://en.wikipedia.org/wiki/Sunset_Beach,_Oregon | Sunset Beach 46.10111, -123.93056, "between U.S. Route 101, Sunset Lake and the Pacific Ocean" |
+| Searches with nothing useful | USGA NCRDB (no result page); OpenStreetMap pages for the course (none); video games (two searches, none); tree species, broom or beach grass at the course (none); renovation news (none) |
+| https://www.fisheries.noaa.gov/inport/item/49906 (first pass) | 2009 DOGAMI Oregon Lidar: North Coast: flown 2008-10-23 to 2009-08-09, 8.61 points/m², extent -124.150 to -122.815, 43.875 to 46.239; NOAA DAV id 575 |
+| https://www.fisheries.noaa.gov/inport/item/78466 (first pass) | 2020 ODF lidar (forest land), west edge -123.93; NOAA DAV id 13737; probably not over the course |
+| https://www.oregon.gov/dogami/lidar/Pages/collectinglidar.aspx (first pass) | DOGAMI north-coast projects: OLC North Coast 2009, NW Oregon - Clatsop (ODF, Dec 2015 - Feb 2016), OLC Ecola State Park 2023 |
+| `docs/courses/gearhart.md`, `assets-src/palettes/gearhart.json`, `assets-src/palettes/coastal.json`, `pipeline/s09_render.py` (repo, first pass) | the neighbouring course's lidar and theme; the `fescue_areas` behaviour |
