@@ -113,7 +113,10 @@ The files from DATA_REQUEST.md are in the GitHub release `ngla-data`; the
 same files serve Shinnecock Hills next door (docs/scouting/shinnecock/), so
 if a Shinnecock branch already exists, reuse its clips and world choices.
 Use the standing defaults (4.1) and the scouting's choices unless the data
-says otherwise. Work on branch course/ngla. I'm not watching: make the calls
+says otherwise. You may design a new theme of its own for this course (`ngla`, even
+where an existing theme would fit; the scouting's theme notes are the
+starting point) and draw its logo from the scouting's logo idea, without
+asking. Show me both when you're done. Work on branch course/ngla. I'm not watching: make the calls
 you can, write down open items with recommendations, and stop only for what
 section 10 lists.
 ```

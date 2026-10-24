@@ -98,7 +98,10 @@ DATA_REQUEST.md are in the GitHub release `shinnecock-data` (the same files
 as `ngla-data`; National Golf Links next door uses them too, so if a
 course/ngla branch exists, reuse its clips and world choices). Use the
 standing defaults (4.1) and the scouting's choices unless the data says
-otherwise. Work on branch course/shinnecock. I'm not watching: make the
+otherwise. You may design a new theme of its own for this course (`shinnecock`, even
+where an existing theme would fit; the scouting's theme notes are the
+starting point) and draw its logo from the scouting's logo idea, without
+asking. Show me both when you're done. Work on branch course/shinnecock. I'm not watching: make the
 calls you can, write down open items with recommendations, and stop only for
 what section 10 lists.
 ```

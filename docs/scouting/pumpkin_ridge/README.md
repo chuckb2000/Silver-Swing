@@ -107,7 +107,10 @@ sources.md). Treat the scouting as unverified notes: check every downloaded
 file on arrival (COURSE_BUILD.md 5.5) and the scorecard against its sources.
 The files from DATA_REQUEST.md are in the GitHub release `pumpkin_ridge-data`.
 Use the standing defaults (4.1) and the scouting's choices unless the data
-says otherwise. Work on branch course/pumpkin_ridge. I'm not watching: make
+says otherwise. You may design a new theme of its own for this course (`pumpkin_ridge`, even
+where an existing theme would fit; the scouting's theme notes are the
+starting point) and draw its logo from the scouting's logo idea, without
+asking. Show me both when you're done. Work on branch course/pumpkin_ridge. I'm not watching: make
 the calls you can, write down open items with recommendations, and stop only
 for what section 10 lists.
 ```

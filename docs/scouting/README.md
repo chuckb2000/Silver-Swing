@@ -61,6 +61,11 @@ The five "second pass" courses need their scorecards and facts first.
 
 ## Things several courses share
 
+- **Themes and logos (developer, 2026-10-24):** every kickoff prompt lets the
+  course chat design a theme of its own for the course (even where an
+  existing theme would fit) and draw its logo from the scouting's logo idea,
+  without asking; it shows you both when done. The theme notes below and in
+  each brief are the starting points.
 - **New themes:** `socal` (Strawberry Farms, Pelican Hill), `norcal`
   (Pasatiempo, SFGC; reuse Cypress Point's or Stanford's if it fits), a
   darker woods theme (Yale; the "temperate forest" theme CLAUDE.md plans),
