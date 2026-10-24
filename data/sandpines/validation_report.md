@@ -50,6 +50,23 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 20. Hole 17: OSM handicap 14 differs from the scorecard's stroke index 6; using the scorecard.
 21. Hole 18: OSM handicap 12 differs from the scorecard's stroke index 18; using the scorecard.
 
+## Other open items (Sandpines Golf Links)
+
+Built 2026-10-24 by a course chat with the standing defaults (docs/COURSE_BUILD.md 4.1). The developer accepted every recommendation of the intake message and the later questions (2026-10-24). The items below are listed for the record, each with a recommendation.
+
+1. **Scorecard:** the club's printed card (`scorecard.jpg`, release `florence-data`). Every row adds up to its printed totals; handicap is the men's row (a clean 1-18). OSM's handicap tags match neither card row; the card is used. Black, Rees, White, Jones and Red are in `scorecard.csv`, not built.
+2. **Hole 8 plays 205 yd against the Blue 174** (developer, 2026-10-24): it plays from its Black tee (one of two pads OSM tags as fairway). No Blue box is in OSM, the lidar or the 2024 photo. Recommendation: leave until someone who knows the course places the Blue tee in the tracing desk.
+3. **Hole 7** plays from its only tee box (467 yd, +2.9 %; developer): the OSM line starts 110 m behind it, on a mown strip that measures 562 yd.
+4. **Hole 11** plays from its long teeing ground (116-179 yd), tagged as the Blue box (course chat's call): s06's centroid rule had passed it over for the line start (+11.5 %). 159 yd, -2.4 %.
+5. **Four tee pads tagged as fairway** in OSM (the Black tees of holes 8 and 9; 57-119 m2) are copied as tees (`make_edits.py`).
+6. **Water, all red:** the three ponds (holes 2, 5 and 17/18); OSM tags them `golf=water_hazard`, which would export yellow, so they carry `penalty=red`. No other water inside the boundary; the DEM shows no unmapped creek (the low cells are swales between dune mounds).
+7. **Native areas play as rough** (developer): the card plays all non-kept areas as lateral hazards; the game has no dry penalty area. They are drawn as tawny dune grass from `proposed/native.geojson` (`make_native.py`, photo texture; 65 % of the rough). Recommendation: leave, unless the design chat adds a staked native surface.
+8. **Out of bounds within 25 m of play:** hole 2 (21 m left of the fairway, 82-163 yd), hole 5 (15 m, along the houses behind the pond), hole 8 (16-19 m left of the green), hole 9 (7 m left of the Blue tee, 17-20 m left of the fairway). These are the real boundary.
+9. **Trees:** 11,796 from the DOGAMI canopy model (3,103 inside the boundary); 160 on a lot south-east of the clubhouse, cleared since the flight, dropped (developer). The photo check (`trees_need_ortho`) is not used: it also flags the sunlit edges of standing tree lines on the front nine. No tree is in a fairway or a tee-shot line. Broad crowns are drawn as shore pine (a drawing choice, not a species map).
+10. **Greens:** every pin area is 1.5 % or flatter within 3 m; greens 1, 2, 6, 8, 12, 15, 17 and 18 reach 3.8-5.3 % at their edges. Recommendation: playtest first.
+11. **Wind 3-14 mph** (open coast default).
+12. **Course card:** the par-3 17th over the dune lake, rotating with 5, 15 and 3 (course chat's pick).
+
 ## Playability adjustments
 
 - Hole 2 (Blue): measured 297 yd from the tee-box centre vs 318 on the card (-6.7%); moved the virtual tee along the middle of the real tee polygon w997608292 (on its centre line, at least 2.5 m from its back and front) -> 310.1 yd (real 296.7 yd).
@@ -61,13 +78,13 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 - Hole 14 (Blue): measured 339 yd from the tee-box centre vs 366 on the card (-7.5%); moved the virtual tee along the middle of the real tee polygon w849053572 (on its centre line, at least 2.5 m from its back and front) -> 356.9 yd (real 338.5 yd).
 - Hole 17 (Blue): measured 200 yd from the tee-box centre vs 176 on the card (+13.7%); moved the virtual tee along the middle of the real tee polygon w849054450 (on its centre line, at least 2.5 m from its back and front) -> 180.2 yd (real 200.1 yd).
 
-## Tree detection (OSM fallback (no lidar))
+## Tree detection (DOGAMI canopy height model)
 
-- 7212 trees detected in the world extent (3190 inside the course), 3573 conifers / 3639 deciduous; median height 10.0 m, max 14.0 m.
-- Dropped: 270 tops on building footprints, 0 over the lake, 0 tiny crowns.
+- 11796 trees detected in the world extent (3103 inside the course), 3532 conifers / 8264 deciduous; median height 12.5 m, max 27.5 m.
+- Dropped: 1897 tops on building footprints, 0 over the lake, 62 tiny crowns.
 - Dropped on playing surfaces (spec 5.4): 0 -> 
 - OSM natural=tree points matched by a detected tree within 4 m: 0 of 0.
-- LOWER FIDELITY: no canopy raster. Trees are OSM natural=tree points plus a seeded Poisson-disk fill of OSM woods every 6 m; heights 6-14 m and type (50% conifer) are drawn at random, not measured.
+- Conifer vs deciduous is inferred from crown shape only (no leaf-off imagery); see build/trees_preview.png.
 
 # Green shaping checks
 
@@ -106,8 +123,8 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 | 5 | 3 | yes | yes (1 near) | yes | yes | yes | 2 | 1 |
 | 6 | 4 | yes | yes (2 near) | yes | yes | yes | 3 | 0 |
 | 7 | 5 | yes | NO (0 near) | yes | yes | yes | 3 | 0 |
-| 8 | 3 | yes | NO (2 near) | yes | yes | yes | 2 | 0 |
-| 9 | 4 | yes | NO (2 near) | yes | yes | yes | 3 | 0 |
+| 8 | 3 | yes | yes (4 near) | yes | yes | yes | 2 | 0 |
+| 9 | 4 | yes | yes (4 near) | yes | yes | yes | 3 | 0 |
 | 10 | 4 | yes | yes (4 near) | yes | yes | yes | 2 | 0 |
 | 11 | 3 | yes | yes (3 near) | yes | yes | yes | 1 | 0 |
 | 12 | 5 | yes | yes (4 near) | yes | yes | yes | 4 | 0 |
@@ -128,9 +145,7 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 - hole 6: hole line carries handicap=1 (compare with scorecard)
 - hole 7: no tee polygon at the start of the hole line (nearest 106.5 m)
 - hole 7: hole line carries handicap=5 (compare with scorecard)
-- hole 8: no tee polygon at the start of the hole line (nearest 57.1 m)
 - hole 8: hole line carries handicap=9 (compare with scorecard)
-- hole 9: no tee polygon at the start of the hole line (nearest 23.0 m)
 - hole 9: hole line carries handicap=3 (compare with scorecard)
 - hole 10: hole line carries handicap=2 (compare with scorecard)
 - hole 11: hole line carries handicap=18 (compare with scorecard)
@@ -145,5 +160,5 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 - green w849054465 at (806, 491) is not the end of any hole line (practice green?) -> treated as a wrong green
 - green w849054468 at (996, 424) is not the end of any hole line (practice green?) -> treated as a wrong green
 
-Totals: 52 tees, 21 greens, 23 fairways, 60 bunkers, 3 water hazards, 18 pins, 23 cart paths, 0 OSM tree points.
+Totals: 56 tees, 21 greens, 19 fairways, 60 bunkers, 3 water hazards, 18 pins, 23 cart paths, 0 OSM tree points.
 

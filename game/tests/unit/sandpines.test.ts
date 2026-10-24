@@ -60,7 +60,7 @@ describe('Sandpines course data', () => {
   });
 
   it('the surface map holds only the standard surfaces (the native areas are art, played as rough)', () => {
-    const allowed = new Set(Object.values(SURF));
+    const allowed = new Set<number>(Object.values(SURF));
     const seen = new Set<number>();
     for (let y = 1; y < json.world.height; y += 3) for (let x = 1; x < json.world.width; x += 3) seen.add(course.terrain.surface(x, y));
     for (const s of seen) expect(allowed.has(s), `surface ${s}`).toBe(true);
