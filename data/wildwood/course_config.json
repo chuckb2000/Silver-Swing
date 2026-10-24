@@ -1,0 +1,44 @@
+{
+  "id": "wildwood",
+  "name": "Wildwood Golf Course",
+  "location": "Portland, Multnomah County, Oregon",
+  "state": "OR",
+  "architects": "Bill O'Meara (built by the O'Meara family on the site of a closed nine-hole course; first nine opened 1991)",
+  "theme": "pnw",
+  "epsg": 32610,
+  "osm_sources": [
+    "raw/overpass.geojson"
+  ],
+  "boundary_name": "Wildwood Golf Course",
+  "world": {
+    "x0": 508913,
+    "y0": 5057647,
+    "width": 1024,
+    "height": 1280,
+    "note": "OSM course boundary bbox (774 x 838 m, way 428675780) + at least 120 m of scenery, rounded out to whole 256 m chunks and centred (125 m west/east, 221 m south/north)"
+  },
+  "tee_sets": [
+    {
+      "name": "Black",
+      "playable": true,
+      "rating": 69.1,
+      "slope": 127,
+      "total_yd": 5853
+    }
+  ],
+  "default_tee": "Black",
+  "scorecard_source": "Club scorecard image (Wildwood-Scorecard-for-Website.webp, GitHub release wildwood-data, uploaded by the developer 2026-10-24), read 2026-10-24. Every row adds up to the printed Out/In/Total; handicaps 1-18 once each. Ratings/slopes (men/ladies): Black 69.1/127, 74.5/134; White 67.9/124, 73.3/133; Orange 64.5/113, 69.6/125. GolfPass lists 68.9/124 for one unnamed set.",
+  "penalty_default": "red",
+  "driving_range_is_ob": true,
+  "trees_off_fairways_m": 2,
+  "wind_mph": {
+    "minMph": 1,
+    "maxMph": 7
+  },
+  "attribution": [
+    "Map data © OpenStreetMap contributors (ODbL)",
+    "Elevation and canopy height: Oregon Department of Geology and Mineral Industries (DOGAMI) lidar",
+    "Scorecard and course map: Wildwood Golf Course"
+  ],
+  "notes": "Standing defaults (COURSE_BUILD.md 4.1), 2026-10-24: no Blue on the card, so Black (5,853 yd, the set closest to 6,300); all water red; OB = the OSM course boundary, roads inside it are cart paths, the driving range is OB; pnw theme; inland Pacific Northwest wind 1-7 mph; trees from DOGAMI lidar, trees in fairways or in the way of a centre-line drive removed and listed."
+}
