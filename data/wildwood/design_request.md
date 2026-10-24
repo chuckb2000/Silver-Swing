@@ -9,6 +9,10 @@ flight meets the ground (CLAUDE.md 7.2), a perfect 6-iron carries well past the 
 and stops about 25 m past the pin, in the trees behind the green (`restSurface` woods). The
 player gets a club that is one or more too long with no hint that it is.
 
+The in-game look (2026-10-24) shows the same on two more Wildwood par 3s: the 6th (tee
+14 m above the green; pitching wedge for 121 yd, rests 16 yd past the pin in the rough) and the
+12th (65 ft drop; 7-iron for 164 yd, rests 32 yd past the pin).
+
 **Why it matters:** the default club plus a perfect strike should reach the green on a par 3.
 Wildwood is a valley course with several elevated tees, and other hilly courses
 (Oregon Golf Club, Chambers Bay) can hit the same thing. `game/tests/unit/wildwood.test.ts`
