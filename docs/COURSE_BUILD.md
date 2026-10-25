@@ -293,6 +293,7 @@ and DECISIONS.md.
   "tee_grow_m": 0,                      // tee boxes drawn larger than mapped, metres per side (s02)
   "flatten_wetlands": true,             // false: vegetated wetlands keep their lidar ground (s04)
   "gorse": {"ground": "gorse"},         // gorse thickets from the orthophoto, penal surface 17 (pipeline/gorse.py; Bandon Dunes)
+  "gorse": {"extra_areas": "edited/thicket.geojson"},  // also bushes in these WGS84 areas whatever the photo shows (Silvies); no "ground" = bushes only, no penal lie
   "garden": {},                         // flowering shrubs of a garden beside the course (pipeline/garden.py; Eastmoreland)
   "keep_trees_areas": "keep.geojson",   // WGS84 areas whose lidar trees stay even on fairways (s05; Cypress Point 17)
   "not_trees_areas": "not.geojson",     // WGS84 areas whose lidar "trees" are structures or vehicles (s05; Chambers Bay)

@@ -54,6 +54,10 @@ export const DAILY_ROSTER: Readonly<Record<string, string>> = {
   // merged on 2026-10-24 in the evening
   cypress_point: '2026-10-25',
   astoria: '2026-10-25',
+  // landed 2026-10-25 (pipeline/land.py)
+  silvies_craddock: '2026-10-26',
+  silvies_hankins: '2026-10-26',
+  silvies_chief_egan: '2026-10-26',
 };
 
 /**
