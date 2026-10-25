@@ -1,0 +1,13 @@
+{
+ "note": "per-course settings for game/tests/unit/course_play.test.ts (the every-course checks); docs/COURSE_BUILD.md 8.2",
+ "centre_line_clear": {},
+ "yardage": {
+  "range_yd": {
+   "8": [
+    195,
+    215
+   ]
+  },
+  "why": "8: plays from its Black tee, longer than the card (developer, 2026-10-24)"
+ }
+}

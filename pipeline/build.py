@@ -4,7 +4,9 @@
     python3 pipeline/build.py <id> --from s06_holes   # that step and the ones after it
     python3 pipeline/build.py <id> --only s10_export  # one step
     python3 pipeline/build.py <id> --head         # this checkout's pipeline even if the course is pinned
-    python3 pipeline/build.py <id> --fresh        # no reuse of earlier results (memo.py): what regress does
+    python3 pipeline/build.py <id> --fresh        # run every step even if its inputs are unchanged: what regress does
+
+Steps whose inputs haven't changed since they last ran are skipped (stepcache.py).
 
 A pinned course (data/<id>/pipeline_pin.json, pipeline/pins.py) is built by its own
 pipeline, unpacked from git, so changes to the shared code never change it.
@@ -27,16 +29,40 @@ STEPS = ["s00_prepare_rasters", "s01_osm", "merge_edits", "s02_reproject", "s02b
 LEGACY_STEPS = STEPS
 
 
-def run_steps(name: str, pipeline_dir: Path, steps: list[str], env: dict) -> int:
+def run_steps(name: str, pipeline_dir: Path, steps: list[str], env: dict, legacy: bool = False, force_first: bool = False) -> int:
+    """Run the steps in order. With this pipeline (not a legacy snapshot) each step runs through
+    stepcache.py, which records what it used, and steps whose inputs are unchanged are skipped."""
     total = time.time()
-    for s in steps:
+    ran = skipped = 0
+    i = 0
+    cfg = None
+    if not legacy:
+        import json
+        import stepcache
+        cfg = json.load(open(stepcache.ROOT / "data" / name / "course_config.json"))
+    while i < len(steps):
+        j = i
+        if not legacy and not (force_first and i == 0):
+            os.environ.update({k: v for k, v in env.items() if k in ("SS_FRESH", "HOLES")})
+            j, info = stepcache.plan(name, steps, i, cfg)
+            for s in steps[i:j]:
+                print(f"[build] {name}: {s} unchanged, skipped", flush=True)
+                skipped += 1
+            if j >= len(steps):
+                break
+            if j > i or info["why"] not in ("no record", "fresh build"):
+                print(f"[build] {name}: {steps[j]} runs: {info['why']}", flush=True)
+        s = steps[j]
         t0 = time.time()
-        r = subprocess.run([sys.executable, f"{s}.py", name], cwd=pipeline_dir, env=env)
+        cmd = [sys.executable, f"{s}.py", name] if legacy else [sys.executable, "stepcache.py", "run", s, name]
+        r = subprocess.run(cmd, cwd=pipeline_dir, env=env)
         if r.returncode:
             print(f"[build] {name}: {s} failed (exit {r.returncode})", flush=True)
             return r.returncode
         print(f"[build] {name}: {s} {time.time() - t0:.1f} s", flush=True)
-    print(f"[build] {name}: {len(steps)} steps in {time.time() - total:.0f} s", flush=True)
+        ran += 1
+        i = j + 1
+    print(f"[build] {name}: {ran} steps run, {skipped} skipped, {time.time() - total:.0f} s", flush=True)
     return 0
 
 
@@ -67,19 +93,20 @@ def main(argv: list[str]) -> int:
     if "--fresh" in flags:
         env["SS_FRESH"] = "1"
     steps = pick(STEPS, opt.get("from"), opt.get("only"))
+    force = bool(opt.get("from") or opt.get("only"))   # the step you name always runs
     if "--here" in flags or "--head" in flags:
-        return run_steps(name, HERE, steps, env)
+        return run_steps(name, HERE, steps, env, force_first=force)
     import pins
     pin = pins.read_pin(name)
     if not pin or pins.same_as_checkout(pin):
-        return run_steps(name, HERE, steps, env)
+        return run_steps(name, HERE, steps, env, force_first=force)
     snap = pins.materialize(pin)
     print(f"[build] {name}: pinned pipeline {pins.snapshot_key(pin)} ({pin['commit'][:10]}, {pin.get('date', '')})", flush=True)
     pinned_build = snap / "pipeline" / "build.py"
     if pinned_build.exists():
         return subprocess.run([sys.executable, str(pinned_build), name, "--here", *[a for a in argv if a != name]],
                               env=env).returncode
-    return run_steps(name, snap / "pipeline", pick(LEGACY_STEPS, opt.get("from"), opt.get("only")), env)
+    return run_steps(name, snap / "pipeline", pick(LEGACY_STEPS, opt.get("from"), opt.get("only")), env, legacy=True)
 
 
 if __name__ == "__main__":

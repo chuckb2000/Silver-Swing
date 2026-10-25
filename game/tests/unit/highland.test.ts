@@ -3,11 +3,9 @@ import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { PNG } from 'pngjs';
 import { beforeAll, describe, expect, it } from 'vitest';
-import type { CourseRuntime, HeightMeta } from '../../src/data/course';
-import { holesFor } from '../../src/systems/game/lengths';
-import { Round } from '../../src/systems/game/round';
+import type { CourseRuntime } from '../../src/data/course';
 import { isOB, SURF } from '../../src/systems/physics/surfaces';
-import { COURSES_DIR, loadCourseFiles, meterFor, robotRound, roundCfg } from './helpers';
+import { COURSES_DIR, loadCourseFiles } from './helpers';
 
 const ID = 'highland_links';
 const base = resolve(COURSES_DIR, ID);
@@ -26,63 +24,6 @@ describe('Highland Links course data', () => {
     expect((j as unknown as { state: string }).state).toBe('MA');
     expect(j.theme).toBe('coastal');
     expect(j.holes.map((h) => h.par)).toEqual([4, 5, 3, 4, 4, 5, 3, 4, 3]);
-  });
-
-  it('decodes heights exactly (pipeline samples)', () => {
-    const hmeta = JSON.parse(readFileSync(resolve(base, 'height.json'), 'utf8')) as HeightMeta;
-    for (const [i, j, z] of hmeta.samples) expect(course.terrain.baseZ(i, j)).toBeCloseTo(z, 2);
-  });
-
-  it('every tee is on a tee box and every pin on its green', () => {
-    for (const h of course.json.holes) {
-      const t = h.tees.Blue;
-      expect(course.terrain.surface(t.x, t.y), `hole ${h.number} tee`).toBe(SURF.tee);
-      expect(course.greenPolys.get(h.greenId)!.contains(h.pin[0], h.pin[1]), `hole ${h.number} pin`).toBe(true);
-    }
-  });
-
-  it('measured yardages are within 3% of the card (hole 1: the developer\'s tee, accepted at +3.8%, now +4.0%)', () => {
-    for (const h of course.json.holes) {
-      const t = h.tees.Blue;
-      const lim = h.number === 1 ? 0.045 : 0.03; // hole 1: +3.8 %, +4.0 % since the tees centred on their boxes (design chat, 2026-10-20; DECISIONS.md "Overnight requests")
-      expect(Math.abs(t.adjYd - t.cardYd) / t.cardYd, `hole ${h.number}`).toBeLessThanOrEqual(lim);
-    }
-  });
-
-  it('a robot golfer completes 9 holes and 18 twice around with legal, finite scores', () => {
-    for (const len of ['9', '9x2'] as const) {
-      const r = robotRound(course, holesFor(len));
-      expect(r.scores).toHaveLength(len === '9' ? 9 : 18);
-      for (const s of r.scores) {
-        expect(s.strokes).toBeGreaterThanOrEqual(1);
-        expect(s.strokes).toBeLessThan(16);
-      }
-    }
-  });
-
-  it('the default aim keeps a perfect tee shot out of the trees and in bounds on every hole', () => {
-    for (const h of course.json.holes) {
-      const r = new Round(course, roundCfg(course, [h.number]));
-      r.startHole(0);
-      r.wind = { dir: 0, mph: 0, vx: 0, vy: 0 };
-      const club = r.autoClub();
-      const scale = r.autoSwingScale(club);
-      const plan = r.plan(club.id, r.defaultAim(club, scale), meterFor(1, 0, false), 0, scale);
-      const sim = r.simulate(plan);
-      expect(sim.restSurface, `hole ${h.number}`).not.toBe(SURF.woods);
-      expect(isOB(sim.restSurface), `hole ${h.number} out of bounds`).toBe(false);
-      expect(sim.inWater, `hole ${h.number}`).toBe(false);
-    }
-  });
-
-  it('wind stays inside the course range (3-14 mph)', () => {
-    for (const seed of [1, 2, 3, 99, 12345]) {
-      const r = new Round(course, roundCfg(course, holesFor('9x2'), seed));
-      for (const w of r.winds) {
-        expect(w.mph).toBeGreaterThanOrEqual(3);
-        expect(w.mph).toBeLessThanOrEqual(14);
-      }
-    }
   });
 
   it('every hole has far, near and close-up putting views covering its pin, with all tree frames', () => {
@@ -123,21 +64,4 @@ describe('Highland Links course data', () => {
     expect(isOB(course.terrain.surface(990, 300))).toBe(true);
   });
 
-  it('same seed, same inputs -> identical round', () => {
-    const play = () => {
-      const r = new Round(course, roundCfg(course, [5], 99));
-      r.startHole(0);
-      const out: number[] = [];
-      for (let k = 0; k < 3; k++) {
-        const club = r.autoClub();
-        const scale = r.autoSwingScale(club);
-        const plan = r.plan(club.id, r.defaultAim(club, scale), meterFor(0.9, 2, club.kind === 'putter'), 0, scale);
-        const sim = r.simulate(plan);
-        r.resolve(plan, sim);
-        out.push(sim.end.x, sim.end.y);
-      }
-      return out;
-    };
-    expect(play()).toEqual(play());
-  });
 });

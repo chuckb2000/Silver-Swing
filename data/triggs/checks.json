@@ -1,0 +1,8 @@
+{
+ "note": "per-course settings for game/tests/unit/course_play.test.ts (the every-course checks); docs/COURSE_BUILD.md 8.2",
+ "tee_shot_clear": {
+  "sets": [
+   "Blue"
+  ]
+ }
+}
