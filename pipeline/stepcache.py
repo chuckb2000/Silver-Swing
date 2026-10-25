@@ -404,7 +404,7 @@ def child(step: str, name: str) -> int:
 
 def _scratch(k: str) -> bool:
     """The recorder's and the PNG cache's own files."""
-    return "/.stamps/" in k or "/.png_cache/" in k
+    return "/.stamps/" in k or "/.png_cache/" in k or k.endswith("/build/regress.log")  # regress.py's log of the build
 
 
 def output_dirs(name: str) -> list[Path]:
