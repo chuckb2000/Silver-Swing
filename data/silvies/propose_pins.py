@@ -28,7 +28,7 @@ for _, h in g[g.kind == "hole"].iterrows():
     seen.add(gosm)
     poly = greens.loc[gi].geometry
     c = poly.centroid
-    p = c if poly.buffer(-2.0).contains(c) else polylabel(poly, 0.1)
+    p = c if poly.buffer(-3.5).contains(c) else polylabel(poly, 0.1)   # the game wants the centre pin 10 ft (3.05 m) inside the edge (pins.ts)
     rows.append({"osm": f"pin_{gosm}", "kind": "pin",
                  "tags": json.dumps({"golf": "pin", "source": f"proposal: centre of green {gosm}"}), "geometry": p})
 out = gpd.GeoDataFrame(rows, geometry="geometry", crs=EPSG).to_crs(4326).sort_values("osm")

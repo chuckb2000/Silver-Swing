@@ -19,6 +19,18 @@
   "path": "raw/osip2024_05m.tif",
   "source": "Oregon Statewide Imagery Program 2024, OSIP_2024_WM exportImage JPEG at 0.5 m in four quarters, placed by their request boxes by make_ortho.py (GitHub release silvies-data)"
  },
+ "laz": {
+  "paths": [
+   "raw/laz/*.laz"
+  ],
+  "classes": [
+   1
+  ],
+  "units": "m",
+  "source": "2019-2020 OLC Lidar: Upper John Day, OR (USGS 3DEP OR_UpperJohnDay_2020), NOAA Data Access Viewer job J1476256, clipped to the box by NOAA, classes 1 and 2 delivered (class 1 used: unclassified, vegetation and structures; the project has no vegetation classes); NAD83(2011) / Oregon North (metres), NAVD88 metres; flown 11 August 2020 (GPS times), leaf-on; ordered by the developer 2026-10-25 (GitHub release silvies-data, or2020_johnday_J1476256.zip)",
+  "label": "2020 Upper John Day lidar",
+  "leaf_off": false
+ },
  "world": {
   "x0": 339997,
   "y0": 4879339,
@@ -36,6 +48,7 @@
  "attribution": [
   "Map data © OpenStreetMap contributors (ODbL)",
   "Elevation: Oregon Department of Geology and Mineral Industries (DOGAMI) lidar",
+  "Trees: 2020 Upper John Day lidar (Oregon Lidar Consortium / USGS 3DEP, via NOAA Digital Coast)",
   "Imagery check: Oregon Statewide Imagery Program 2024"
  ],
  "layouts": [
@@ -202,6 +215,16 @@
   "h_min_m": 0.6,
   "h_max_m": 1.5,
   "h_default_m": 1.0,
-  "note": "sagebrush, not gorse: bushes from the OSIP 2024 photo (pipeline/gorse.py, its colour rule tuned to the grey-green sage: smoothed V 80-135, G-R above -14, B-G -26 to -8; the irrigated turf has B-G below -40), 7 m apart, kept 3 m off mown grass; no penal ground (developer 2026-10-25: bushes only); drawn by the theme's sage painter"
- }
+  "note": "sagebrush, not gorse: bushes from the OSIP 2024 photo (pipeline/gorse.py, its colour rule tuned to the grey-green sage: smoothed V 80-135, G-R above -14, B-G -26 to -8; the irrigated turf has B-G below -40), 7 m apart, kept 3 m off mown grass; no penal ground (developer 2026-10-25: bushes only); drawn by the theme's sage painter; extra_areas: the thicket north of the Craddock 9th green (make_riparian.py; developer 2026-10-25: 'should just be shrubs') is bushes whatever its colour or canopy",
+  "extra_areas": "proposed/riparian_c9.geojson"
+ },
+ "green_tilt": [
+  {
+   "hole": 3006,
+   "max_tilt": 0.025,
+   "bumps": 0,
+   "note": "Chief Egan 6 (s07's key: 1000 x layout position + hole, so 3006): a small green (fitted tilt 4.5 %); its random bump left the game two hole locations (pins.test.ts wants three), so no bumps"
+  }
+ ],
+ "not_trees_areas": "proposed/riparian_c9.geojson"
 }

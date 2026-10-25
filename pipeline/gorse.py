@@ -31,6 +31,9 @@ not which plant it is.
 
     "gorse": {"spacing_m": 3.4, "r_min_m": 1.5, "r_max_m": 2.3, "ground": "gorse"}
 
+`extra_areas` (a GeoJSON file in data/<id>/): areas that are bushes whatever the photo
+shows or the canopy over them (Silvies). Default none.
+
 Without the key nothing here runs (every other course is unchanged).
 """
 from __future__ import annotations
@@ -47,7 +50,7 @@ DEFAULTS = {
     "min_patch_m2": 10.0, "min_z_m": 4.0, "max_chm_m": 5.0, "canopy_gap_m": 3, "clear_m": 1.0,
     "spacing_m": 3.4, "jitter": 0.35, "r_min_m": 1.5, "r_max_m": 2.3,
     "h_min_m": 1.2, "h_max_m": 3.5, "h_default_m": 2.2, "tree_gap": 0.8,
-    "ground": None,
+    "ground": None, "extra_areas": None,
 }
 
 
@@ -111,7 +114,19 @@ def gorse_area(cfg, world, g, chm: np.ndarray) -> np.ndarray:
     water = burn(["water", "lateral_water_hazard", "water_hazard", "pool"], 1.0)
     play = burn(["green", "tee", "fairway", "bunker", "cartpath", "building"], p["clear_m"])
     tall = ndimage.binary_dilation(chm > p["max_chm_m"], iterations=int(p["canopy_gap_m"])) if p["canopy_gap_m"] else chm > p["max_chm_m"]
-    return veg & ~water & ~lake & ~play & (z >= p["min_z_m"]) & ~tall
+    area = veg & ~water & ~lake & ~play & (z >= p["min_z_m"]) & ~tall
+    if p.get("extra_areas"):
+        # optional (gorse.extra_areas: a GeoJSON file in data/<id>/, WGS84; Silvies' thicket by
+        # the Craddock 9th green): areas that are bushes whatever their colour on the photo or
+        # the canopy over them (still off water and the mown surfaces). Without the key: nothing.
+        import geopandas as gpd
+        from shapely.affinity import translate
+        xa = gpd.read_file(course_dir(cfg["id"]) / p["extra_areas"]).to_crs(cfg["epsg"])
+        geoms = [translate(gm, -world.x0, -world.y0) for gm in xa.geometry if gm is not None]
+        if geoms:
+            extra = rasterize([(gm, 1) for gm in geoms], out_shape=(H, W), transform=tr, fill=0, dtype="uint8").astype(bool)
+            area |= extra & ~water & ~lake & ~play
+    return area
 
 
 def gorse_bushes(cfg, area: np.ndarray, chm: np.ndarray, trees: list, boundary) -> list[dict]:

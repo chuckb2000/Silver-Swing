@@ -14,6 +14,8 @@
 - OSM w904342353 (golf=tee) is Chief Egan's 3rd green: replaced by its copy as a green
   (proposed/routing.geojson).
 - A pin at the centre of every played green (propose_pins.py).
+- The Chief Egan creek (make_egan_creek.py), approved 2026-10-25.
+- The thicket by the Craddock 9th green (make_riparian.py), for the shrubs there.
 """
 from __future__ import annotations
 
@@ -55,6 +57,10 @@ def main():
     add.append({"from": "proposed/routing.geojson", "ids": ["w904342353_green"],
                 "reason": "OSM w904342353 is tagged golf=tee but is Chief Egan's 3rd green on the club map and the photo"})
     drop.append({"osm": "w904342353", "reason": "replaced by its copy as a green (add above)"})
+    add.append({"from": "proposed/egan_creek.geojson", "ids": ["egan_creek"],
+                "reason": "the small creek through Chief Egan, from the DEM channel, 2 m wide, red, running into the pond (make_egan_creek.py; developer 2026-10-25: keep it small, connect it to the lake)"})
+    add.append({"from": "proposed/riparian_c9.geojson", "ids": ["riparian_c9"],
+                "reason": "the shrub thicket north of the Craddock 9th green (make_riparian.py): an area for the config's gorse extra_areas (bushes) and not_trees_areas keys; no surface of its own (developer 2026-10-25: 'should just be shrubs')"})
     if (HERE / "proposed" / "pins.geojson").exists():
         pn = gpd.read_file(HERE / "proposed" / "pins.geojson")
         add.append({"from": "proposed/pins.geojson", "ids": sorted(pn.osm),

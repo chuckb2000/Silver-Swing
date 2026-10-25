@@ -156,6 +156,20 @@
    "reason": "OSM w904342353 is tagged golf=tee but is Chief Egan's 3rd green on the club map and the photo"
   },
   {
+   "from": "proposed/egan_creek.geojson",
+   "ids": [
+    "egan_creek"
+   ],
+   "reason": "the small creek through Chief Egan, from the DEM channel, 2 m wide, red, running into the pond (make_egan_creek.py; developer 2026-10-25: keep it small, connect it to the lake)"
+  },
+  {
+   "from": "proposed/riparian_c9.geojson",
+   "ids": [
+    "riparian_c9"
+   ],
+   "reason": "the shrub thicket north of the Craddock 9th green (make_riparian.py): an area for the config's garden (bushes) and not_trees_areas keys; no surface of its own (developer 2026-10-25: 'should just be shrubs')"
+  },
+  {
    "from": "proposed/pins.geojson",
    "ids": [
     "pin_w1301404210",
