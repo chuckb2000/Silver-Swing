@@ -1291,9 +1291,10 @@ The developer asked for all six proposals; branch `design/build-speed`.
    every-course checks on every course in the list; what differs per course is
    `data/<id>/checks.json` (accepted yardage flags over 8 %, tee sets, skipped holes,
    opt-in checks, points, trees). The 25 per-course test files keep only what is
-   special (about 1,780 lines, was about 5,000). Two findings: Oswego Lake 10's Blue
-   tee shot meets a fir crown 14 m out (skipped in its checks.json, an open item), and
-   the yardage line is now the 8 % fail line (3-8 % flags are in the validation reports).
+   special (about 1,780 lines, was about 5,000). The test leaves out the holes listed in
+   `keep_tee_trees` (Oswego Lake 10's tree right of the tee is deliberate: it stops
+   players cutting the dogleg down the 18th fairway; developer, 2026-10-25). The yardage
+   line is now the 8 % fail line (3-8 % flags are in the validation reports).
 4. **Intake.** `pipeline/intake.py` osm / ortho / laz / raster replace the per-course
    download scripts (checked against Sandpines' OSM file and orthophoto, the same
    features and pixels, and Indian Island's lidar), and `make intake` checks the
@@ -1310,3 +1311,10 @@ The developer asked for all six proposals; branch `design/build-speed`.
    no longer gets a line per course (section 11 points at `docs/courses/`). GitHub
    Actions couldn't be reached from the sandbox, so this is a command the design chat
    runs at the merge rather than a workflow.
+
+## Rock Creek Park is not merged (developer, 2026-10-25)
+
+"Rock Creek WILL NOT be merged... it's not up to my standards." PR #48 (`course/rock_creek`)
+is closed with a note; the branch is kept. `pipeline/land.py` refuses `rock_creek`
+(`NOT_TO_MERGE`), and `courses.test.ts` fails if a `rock_creek` course or data folder
+appears on any branch.

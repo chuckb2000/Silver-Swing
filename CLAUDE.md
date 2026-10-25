@@ -663,10 +663,12 @@ DECISIONS.md with the reason.
 
 -   **Next task:** Item 1 of the player improvements (swing coach) is on
     `design/coach`, unmerged. Also: the third playtest (putting, yellow
-    misses), the club's printed scorecard and the hole 3 Blue tee box, and
-    Oswego Lake 10's tee shot (a fir crown 14 m out of the Blue tee, found
-    2026-10-25). New courses: a separate chat following docs/COURSE_BUILD.md
+    misses), the club's printed scorecard and the hole 3 Blue tee box. New courses: a separate chat following docs/COURSE_BUILD.md
     (quick path); the design chat merges with `make land NAME=<id>`.
+
+-   **Not to be merged:** Rock Creek Park (`course/rock_creek`, PR #48, closed
+    2026-10-25): not up to the developer's standards. `make land` refuses it and
+    `courses.test.ts` fails if it appears.
 
 -   **Open items:** data/oswego_lake/validation_report.md (hole 3 tee
     not mapped; holes 7/11 OSM lines start on each other's tees;

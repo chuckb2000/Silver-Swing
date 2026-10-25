@@ -27,6 +27,8 @@ from zoneinfo import ZoneInfo
 
 ROOT = Path(__file__).resolve().parent.parent
 ROSTER = ROOT / "game" / "src" / "data" / "dailyRoster.ts"
+# courses the developer has said are never to be merged (and why); land refuses them
+NOT_TO_MERGE = {"rock_creek": "Rock Creek Park: not up to the developer's standards (developer, 2026-10-25; PR #48 closed)"}
 
 
 def game_ids(name: str) -> list[str]:
@@ -60,6 +62,8 @@ def main(argv: list[str]) -> int:
     if len(args) != 1:
         sys.exit(__doc__)
     name = args[0]
+    if name in NOT_TO_MERGE:
+        sys.exit(f"[land] {name} is not to be merged: {NOT_TO_MERGE[name]}")
     if not (ROOT / "data" / name / "course_config.json").exists():
         sys.exit(f"[land] no data/{name}/course_config.json")
     tomorrow = (datetime.now(ZoneInfo("America/New_York")) + timedelta(days=1)).strftime("%Y-%m-%d")

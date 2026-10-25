@@ -72,7 +72,21 @@ function checksFor(id: string, dataId: string | undefined): Checks {
   const f = dataId && resolve(DATA_DIR, dataId, 'checks.json');
   const all = f && existsSync(f) ? (JSON.parse(readFileSync(f, 'utf8')) as Checks) : {};
   const { courses, ...base } = all;
-  return { ...base, ...(courses?.[id] ?? {}) };
+  const ck: Checks = { ...base, ...(courses?.[id] ?? {}) };
+  // holes whose trees in front of the tee are deliberate (course_config.json keep_tee_trees: "10",
+  // or "<layout short name> 7" on a site with layouts) are not held to the every-course tee-shot rule
+  const cfgFile = dataId && resolve(DATA_DIR, dataId, 'course_config.json');
+  if (cfgFile && existsSync(cfgFile) && ck.tee_shot_clear !== false) {
+    const cfg = JSON.parse(readFileSync(cfgFile, 'utf8')) as { keep_tee_trees?: string[]; layouts?: { id: string; short?: string }[] };
+    const lay = cfg.layouts?.find((l) => l.id === id);
+    const keep = (cfg.keep_tee_trees ?? []).flatMap((k) => {
+      const parts = String(k).trim().split(/\s+/);
+      if (parts.length === 1) return [Number(parts[0])];
+      return lay && parts[0].toLowerCase() === (lay.short ?? lay.id).toLowerCase() ? [Number(parts[1])] : [];
+    });
+    if (keep.length) ck.tee_shot_clear = { ...(ck.tee_shot_clear || {}), skip: [...(ck.tee_shot_clear?.skip ?? []), ...keep] };
+  }
+  return ck;
 }
 
 const surfId = (name: string): number => {
