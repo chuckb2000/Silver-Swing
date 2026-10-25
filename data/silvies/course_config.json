@@ -221,9 +221,9 @@
  "green_tilt": [
   {
    "hole": 3006,
-   "max_tilt": 0.025,
+   "max_tilt": 0.012,
    "bumps": 0,
-   "note": "Chief Egan 6 (s07's key: 1000 x layout position + hole, so 3006): a small green (fitted tilt 4.5 %); its random bump left the game two hole locations (pins.test.ts wants three), so no bumps"
+   "note": "Chief Egan 6 (s07's key: 1000 x layout position + hole, so 3006): a 154 m2 green (OSM outline, matches the photo; fitted tilt 4.5 %). At 2.5 % with no bump the game still found only two hole locations 10 ft from the edge and gentle round the cup (pins.test.ts wants three), so its tilt is capped at 1.2 %"
   }
  ],
  "not_trees_areas": "proposed/riparian_c9.geojson"
