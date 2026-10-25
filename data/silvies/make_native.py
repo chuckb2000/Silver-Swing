@@ -12,7 +12,8 @@ Rule, calibrated on this photo (2026-10-25): green-minus-red does not separate t
 their 10th percentile, the rough +7 median and +27 at its 90th), with the texture of the
 sage (std of green over 3.5 m: fairways 7 median, rough 20). A pixel is native ground where
 2G-R-B, smoothed over 1.5 m, is below +30 and its texture above 10. Only the course's rough
-counts; patches under 40 m2 are dropped, gaps under 2 m closed, outlines simplified 0.75 m.
+counts; patches under 40 m2 are dropped, gaps under 2 m closed, holes under 600 m2 filled
+(tree crowns), outlines simplified 0.75 m.
 
 Writes proposed/fescue.geojson (WGS84) and proposed/fescue.jpg (photo with outlines).
 
@@ -36,6 +37,7 @@ from shapely.ops import unary_union
 HERE = Path(__file__).resolve().parent
 EXG_MAX, TEX_MIN = 30.0, 10.0            # 2G-R-B below, green texture above: native ground
 SIGMA_M, MIN_AREA_M2, CLOSE_M, SIMPLIFY_M = 1.5, 40.0, 2.0, 0.75
+HOLE_M2 = 600.0                         # holes in the native ground smaller than this are filled
 
 
 def main():
@@ -69,6 +71,14 @@ def main():
     k = int(round(CLOSE_M / RES))
     fes = ndimage.binary_closing(fes, iterations=k) & rough
     fes = ndimage.binary_opening(fes, iterations=1)
+    # holes in the native ground under juniper and pine crowns (dark, so not "native" by
+    # colour) and small irrigated spots: fill those under HOLE_M2 that are rough, so the
+    # trees stand in the sage instead of on little green lawns
+    holes = ndimage.binary_fill_holes(fes) & ~fes
+    hl, hn = ndimage.label(holes)
+    if hn:
+        hs = ndimage.sum(holes, hl, range(1, hn + 1)) * RES * RES
+        fes |= np.isin(hl, 1 + np.where(hs < HOLE_M2)[0]) & rough
     lab, n = ndimage.label(fes)
     sizes = ndimage.sum(fes, lab, range(1, n + 1)) * RES * RES
     fes = np.isin(lab, 1 + np.where(sizes >= MIN_AREA_M2)[0])
