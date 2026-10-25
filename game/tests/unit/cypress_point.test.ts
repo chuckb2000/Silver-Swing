@@ -2,8 +2,6 @@
 // (the card has no Blue), all water red, the Pacific a red penalty area everywhere (never out of
 // bounds, developer), the rocks between the clifftop and the sea part of it, the traced dune sand
 // in play, wind 3-14 mph (open coast), monterey theme.
-// Kept in data/cypress_point/tests/ (the course chat writes only in its own folders); to run it,
-// copy it into game/tests/unit/. The design chat may move it there.
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
@@ -117,15 +115,20 @@ describe('Cypress Point Club course data', () => {
     expect(bad.filter((b) => b.includes('dir -1,0'))).toEqual([]);
   });
 
-  it('the traced dune sand plays as sand (a bunker until a waste-sand surface exists)', () => {
+  it('the traced dune sand plays as waste sand (surface 18, "waste_sand": true), not as bunkers', () => {
     // a point in the big dune between the 9th and the 13th (proposed/dunes.geojson, approved)
     const c = hole(9).tees[TEE].centerline;
-    let sand = 0;
+    let sand = 0, bunker = 0;
     for (let f = 0.05; f < 0.6; f += 0.01) {
       const [x, y] = along(c, f);
-      for (const off of [-20, -10, 10, 20]) if (course.terrain.surface(x + off, y) === SURF.bunker) sand++;
+      for (const off of [-20, -10, 10, 20]) {
+        const s = course.terrain.surface(x + off, y);
+        if (s === SURF.waste) sand++;
+        if (s === SURF.bunker) bunker++;
+      }
     }
     expect(sand).toBeGreaterThan(10);
+    expect(bunker).toBeLessThan(sand);
   });
 
   it('the cypress clump in the middle of the 17th fairway stands (keep_trees_areas)', () => {

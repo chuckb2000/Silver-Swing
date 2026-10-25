@@ -85,5 +85,6 @@
   "rock_water_osm": [
     "shore_pacific"
   ],
-  "keep_trees_areas": "proposed/keep_trees.geojson"
+  "keep_trees_areas": "proposed/keep_trees.geojson",
+  "waste_sand": true
 }

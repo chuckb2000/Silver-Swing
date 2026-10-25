@@ -82,20 +82,20 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 
 | hole | par (OSM) | hole line | tee at line start | fairway | green | pin | bunkers <40 m | water <40 m |
 |---|---|---|---|---|---|---|---|---|
-| 1 | 4 | yes | yes (3 near) | yes | yes | yes | 7 | 0 |
-| 2 | 5 | yes | yes (1 near) | yes | yes | yes | 12 | 0 |
-| 3 | 3 | yes | yes (2 near) | yes | yes | yes | 7 | 0 |
-| 4 | 4 | yes | yes (2 near) | yes | yes | yes | 10 | 0 |
+| 1 | 4 | yes | yes (3 near) | yes | yes | yes | 10 | 0 |
+| 2 | 5 | yes | yes (2 near) | yes | yes | yes | 17 | 0 |
+| 3 | 3 | yes | yes (2 near) | yes | yes | yes | 8 | 0 |
+| 4 | 4 | yes | yes (2 near) | yes | yes | yes | 12 | 0 |
 | 5 | 5 | yes | yes (2 near) | yes | yes | yes | 9 | 0 |
-| 6 | 5 | yes | yes (3 near) | yes | yes | yes | 12 | 0 |
-| 7 | 3 | yes | yes (3 near) | yes | yes | yes | 7 | 0 |
-| 8 | 4 | yes | yes (3 near) | yes | yes | yes | 5 | 0 |
-| 9 | 4 | yes | yes (5 near) | yes | yes | yes | 6 | 0 |
-| 10 | 5 | yes | yes (1 near) | yes | yes | yes | 14 | 0 |
-| 11 | 4 | yes | yes (3 near) | yes | yes | yes | 13 | 0 |
-| 12 | 4 | yes | yes (4 near) | yes | yes | yes | 7 | 0 |
-| 13 | 4 | yes | yes (2 near) | yes | yes | yes | 7 | 0 |
-| 14 | 4 | yes | yes (2 near) | yes | yes | yes | 12 | 0 |
+| 6 | 5 | yes | yes (3 near) | yes | yes | yes | 15 | 0 |
+| 7 | 3 | yes | yes (3 near) | yes | yes | yes | 16 | 0 |
+| 8 | 4 | yes | yes (3 near) | yes | yes | yes | 12 | 0 |
+| 9 | 4 | yes | yes (5 near) | yes | yes | yes | 12 | 0 |
+| 10 | 5 | yes | yes (1 near) | yes | yes | yes | 18 | 0 |
+| 11 | 4 | yes | yes (3 near) | yes | yes | yes | 15 | 0 |
+| 12 | 4 | yes | yes (4 near) | yes | yes | yes | 16 | 0 |
+| 13 | 4 | yes | yes (2 near) | yes | yes | yes | 14 | 0 |
+| 14 | 4 | yes | yes (3 near) | yes | yes | yes | 14 | 0 |
 | 15 | 3 | yes | yes (1 near) | yes | yes | yes | 6 | 0 |
 | 16 | 3 | yes | yes (2 near) | yes | yes | yes | 6 | 0 |
 | 17 | 4 | yes | yes (2 near) | yes | yes | yes | 12 | 0 |
@@ -115,5 +115,5 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 - green w1138134211 at (480, 824) is not the end of any hole line (practice green?) -> treated as a wrong green
 - green w1346361726 at (487, 647) is not the end of any hole line (practice green?) -> treated as a wrong green
 
-Totals: 81 tees, 29 greens, 29 fairways, 149 bunkers, 0 water hazards, 28 pins, 35 cart paths, 116 OSM tree points.
+Totals: 82 tees, 29 greens, 29 fairways, 183 bunkers, 0 water hazards, 28 pins, 35 cart paths, 116 OSM tree points.
 
