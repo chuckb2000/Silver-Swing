@@ -871,3 +871,60 @@ Details in each course's file (`docs/courses/<id>.md`, "Lessons").
   picks Black, as at TPC Boston.
 - **The game spells `SURF` names in camelCase** (`obRoad`, not `ob_road`).
 
+## 30. Wildwood Golf Course (2026-10-24)
+
+- **A long teeing ground that s06 skips by centroid.** Where the OSM line starts
+  on a long box reaching the back card, s06 (assigning boxes by centroid) put
+  the tee on the bare line start: check every line start against its box and
+  tag the box `hole` and `tee_set` (Gearhart's lesson again).
+- **The game's default aim finds trees that s06b passes** (a crown over the OSM
+  line): run the course test after every s05 change, water changes included.
+- **Lidar older than the photo:** `trees_need_ortho` took out a row the 2024
+  photo no longer shows; overlay the crowns on the photo before removing trees.
+- **Downhill par 3s:** on a valley course check every par 3's height drop. Over
+  about 10 m the old auto club (flat carry) flew the green; PR #55 picks the
+  club by where it lands on the ground.
+- **A pool inside the boundary paints as rough:** `red_water_osm` makes it a
+  penalty area with no pipeline change.
+- **Tracing desk saves:** each page needs its own save; read the collection
+  back before rebuilding and list what's missing.
+- **Playwright here:** link the image's newer headless shell under the path the
+  installed `@playwright/test` expects; run in-game looks in chunks under 10
+  minutes.
+
+## 31. Pumpkin Ridge (2026-10-24)
+
+- **DOGAMI `exportImage` for a big box: use `f=json`, and cut the box once OSM
+  is in.** The scouting's 3,999 x 3,999 `f=image` links (64 MB float32) failed
+  in the browser; `f=json` on the course polygon + 400 m (21 MB) worked. Ask for
+  OSM first when the scouting only had a point.
+- **One OSM polygon for two courses needs `boundary_osm` and `layout` tags**:
+  `common.layout_holes` reads `layout=` only when the layout has a
+  `boundary_osm`; give each layout the shared polygon's id and tag the hole
+  lines (`make_edits.py`, from the lines' OSM names).
+- **The rough can be bimodal on the photo** (native grass vs mown): Gearhart's
+  fescue rule found 35 ha of native areas in one pass.
+- **`green_tilt` with layouts takes s07's green key, not the hole number**
+  (Ghost Creek 17 = 2017). Run `pins.test.ts` as soon as the course exports.
+- **The title screen keeps one view per place**, the first layout
+  alphabetically.
+
+## 32. Cypress Point (2026-10-24)
+
+- **OSM's sea is only a coastline.** Where the boundary runs along a clifftop,
+  build the sea from the coastline ways (sea on the right of each way), fill the
+  offshore rocks and add the shore between boundary and sea to the same penalty
+  area, stopping at roads; grow the shore up to the boundary line so no seam
+  is left. `rock_water_osm` draws such areas as rock.
+- **Clip a big Overpass export first** (the coastline ran the length of
+  California): clip to the world + 300 m in a `release.json` step, cutting the
+  coastline a little inside the box before polygonising.
+- **A tracing script must ignore its own output** once its shapes are in
+  `edited/`.
+- **Check the standing tree defaults against signature trees**: the 17th's
+  cypress clump stood in the OSM fairway and was dropped; `keep_trees_areas`
+  keeps such a stand. Cut the lidar canopy out of traced sand, or s05 drops the
+  trees standing in it.
+- **Long shared tee strips:** measure along the strip for both holes; cutting
+  the OSM box where the two cards fall fixes both.
+

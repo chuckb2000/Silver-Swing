@@ -471,6 +471,12 @@ DECISIONS.md with the reason.
     Sandpines Golf Links (Florence OR; PR #57) merged 2026-10-24, in the daily
     rotation from 2026-10-25. Stanford Golf Course (Stanford CA, `peninsula`
     theme; PR #59) merged 2026-10-24, in the daily rotation from 2026-10-25.
+    Wildwood Golf Course (Portland OR, `pnw` theme; PR #60) merged 2026-10-24, in
+    the daily rotation from 2026-10-25. Pumpkin Ridge (North Plains OR, Witch Hollow and
+    Ghost Creek as two layouts, `pumpkin_ridge` theme; PR #61) merged 2026-10-24,
+    both in the daily rotation from 2026-10-25. Cypress Point Club (Pebble Beach CA,
+    `monterey` theme, the Pacific a red penalty area; PR #62) merged 2026-10-24, in
+    the daily rotation from 2026-10-25.
     Each course's build history, facts and open items are in
     `docs/courses/<id>.md` (section 11).
 
@@ -1690,6 +1696,7 @@ files (`game/scripts/course-lists.mjs`). The first course, Oswego Lake, is
 | Bandon Preserve (13 holes) | `docs/courses/bandon_preserve.md` |
 | Bandon Trails | `docs/courses/bandon_trails.md` |
 | Chambers Bay | `docs/courses/chambers_bay.md` |
+| Cypress Point Club | `docs/courses/cypress_point.md` |
 | East Potomac Golf Links (Blue, White and Red courses) | `docs/courses/east_potomac.md` |
 | Eastmoreland Golf Course | `docs/courses/eastmoreland.md` |
 | Franklin Country Club | `docs/courses/franklin.md` |
@@ -1703,6 +1710,7 @@ files (`game/scripts/course-lists.mjs`). The first course, Oswego Lake, is
 | Oregon Golf Club | `docs/courses/ogc.md` |
 | Oswego Lake Country Club | `docs/courses/oswego_lake.md` |
 | Pacific Dunes | `docs/courses/pacific_dunes.md` |
+| Pumpkin Ridge Golf Club (Witch Hollow and Ghost Creek) | `docs/courses/pumpkin_ridge.md` |
 | RedTail Golf Center | `docs/courses/redtail.md` |
 | Sandpines Golf Links | `docs/courses/sandpines.md` |
 | Sheep Ranch | `docs/courses/sheep_ranch.md` |
@@ -1714,6 +1722,7 @@ files (`game/scripts/course-lists.mjs`). The first course, Oswego Lake, is
 | Tualatin Country Club | `docs/courses/tualatin.md` |
 | Wannamoisett Country Club | `docs/courses/wannamoisett.md` |
 | Waverley Country Club | `docs/courses/waverley.md` |
+| Wildwood Golf Course | `docs/courses/wildwood.md` |
 | Willamette Valley Country Club | `docs/courses/willamette_valley.md` |
 | Practice ground (synthetic, not on the course list) | `data/practice/make_practice.py`, DECISIONS.md "Player improvements" |
 

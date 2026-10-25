@@ -387,6 +387,18 @@ def main():
         keep = excl.osm.astype(str).str.startswith("join_") | excl.tags.apply(lambda t: t.get("flatten") == "no")
         excl = excl[~keep]
     boundary = play_boundary(g, cfg)
+    # optional (course_config.json keep_trees_areas: a GeoJSON file in data/<id>/, WGS84;
+    # Cypress Point's cypress clump in the 17th fairway): crowns whose top lies in these areas
+    # are real trees standing in play on purpose and are kept on fairways, bunkers and tees
+    # (buildings, the lake and tiny crowns still drop them). Without the key: nothing.
+    keep_area = None
+    if cfg.get("keep_trees_areas"):
+        from shapely.affinity import translate as _translate
+        from shapely.ops import unary_union as _unary_union
+        from shapely.prepared import prep as _prep
+        from common import course_dir as _course_dir
+        ka = gpd.read_file(_course_dir(name) / cfg["keep_trees_areas"]).to_crs(cfg["epsg"])
+        keep_area = _prep(_unary_union([_translate(gm, -cfg["world"]["x0"], -cfg["world"]["y0"]) for gm in ka.geometry if gm is not None]))
 
     trees, dropped = [], {"building": 0, "lake": 0, "tiny": 0}
     dropped_surface = []
@@ -412,11 +424,12 @@ def main():
             dropped["tiny"] += 1
             continue
         p = Point(x, y)
-        hit = excl[excl.contains(p)]
+        kept = keep_area is not None and keep_area.contains(p)
+        hit = excl[excl.contains(p)] if not kept else excl.iloc[0:0]
         if len(hit):
             dropped_surface.append({"x": round(x, 1), "y": round(y, 1), "h": round(h, 1), "on": hit.kind.iloc[0], "osm": hit.osm.iloc[0]})
             continue
-        if fw_inset is not None and fw_inset.contains(p):
+        if fw_inset is not None and not kept and fw_inset.contains(p):
             fw = g[(g.kind == "fairway") & g.contains(p)]
             dropped_surface.append({"x": round(x, 1), "y": round(y, 1), "h": round(h, 1), "on": "fairway",
                                     "osm": fw.osm.iloc[0] if len(fw) else "fairway"})

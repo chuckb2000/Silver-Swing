@@ -1,0 +1,89 @@
+{
+  "id": "cypress_point",
+  "name": "Cypress Point Club",
+  "location": "Pebble Beach, Monterey County, California",
+  "state": "CA",
+  "architects": "Alister MacKenzie with Robert Hunter, 1928 (Marion Hollins hired MacKenzie and shaped the 16th; Seth Raynor sketched a first routing in 1925); restoration work by Bill Coore and Ben Crenshaw since the 2010s (thefriedegg.com)",
+  "theme": "monterey",
+  "epsg": 32610,
+  "osm_sources": [
+    "raw/overpass.geojson"
+  ],
+  "boundary_name": "Cypress Point Golf Course",
+  "dtm": {
+    "path": "raw/usgs_dem_1m.tif",
+    "units": "m",
+    "source": "USGS 3DEP elevation service (3DEPElevation ImageServer exportImage, 1 m, float32), the world + 100 m in EPSG:26910 (NAD83 / UTM 10N), NAVD88 metres; downloaded by the developer 2026-10-24 (GitHub release cypress-point-data, exportImage.17.tiff), rewritten with DEFLATE by make_dem.py. Sea hydro-flattened at 1.14 m."
+  },
+  "ortho": {
+    "path": "raw/naip_05m.tif",
+    "source": "USDA NAIP via the USGS USGSNAIPImagery ImageServer (exportImage, JPEG, 0.5 m, EPSG:32610), two halves downloaded by the developer 2026-10-24 (hahahs.jpg west, exportImage.jpg east), mosaicked by make_ortho.py; alignment against OSM greens and bunkers within 1-2 m"
+  },
+  "laz": {
+    "paths": [
+      "raw/laz/*.laz"
+    ],
+    "classes": [
+      1
+    ],
+    "units": "ft",
+    "source": "2018 FEMA Lidar: Region 9, CA (NOAA Data Access Viewer, job J1476067), flown 19 March - 9 April 2018 (GPS times); NAD83(2011) / California zone 4 (EPSG:6422, US survey feet) with NAVD88 heights in US survey feet; class 1 (unclassified: vegetation and structures; the project has only classes 1, 2, 9 and 10); ordered by the developer 2026-10-24 (GitHub release cypress-point-data)",
+    "label": "2018 FEMA Region 9 lidar",
+    "leaf_off": false
+  },
+  "world": {
+    "x0": 591331,
+    "y0": 4048006,
+    "width": 2048,
+    "height": 1280,
+    "note": "OSM course boundary w36435651 bbox (1,842 x 958 m, UTM 10N) + scenery, rounded out to whole 256 m chunks and centred: 2,048 m east-west (the limit; 103 m each side), 1,280 m north-south (161 m each side)"
+  },
+  "tee_sets": [
+    {
+      "name": "Championship",
+      "playable": false,
+      "rating": 72.1,
+      "slope": 140,
+      "total_yd": 6524
+    },
+    {
+      "name": "Middle",
+      "playable": true,
+      "rating": 71.3,
+      "slope": 136,
+      "total_yd": 6294
+    },
+    {
+      "name": "Forward",
+      "playable": false,
+      "rating": 69.1,
+      "slope": 128,
+      "total_yd": 5797
+    }
+  ],
+  "default_tee": "Middle",
+  "scorecard_source": "Club scorecard as scanned by BlueGolf (undated, unverified; supplied by the developer in the release cypress-point-data, 2026-10-24, dde54a0db1e296e3bea71533_l.jpg). Men's ratings. Every tee row adds up to its printed total. No Blue tees: Middle (6,294 yd) is the set closest to 6,300 (COURSE_BUILD 4.1).",
+  "penalty_default": "red",
+  "driving_range_is_ob": true,
+  "wind_mph": {
+    "minMph": 3,
+    "maxMph": 14
+  },
+  "trees_off_fairways_m": 2,
+  "attribution": [
+    "Map data © OpenStreetMap contributors (ODbL)",
+    "Elevation: U.S. Geological Survey 3D Elevation Program; trees: FEMA Region 9 lidar (2018) via NOAA Digital Coast",
+    "Imagery for dune sand: USDA National Agriculture Imagery Program",
+    "Scorecard: Cypress Point Club card (as scanned by BlueGolf)"
+  ],
+  "notes": "Phase 1 decisions (developer, 2026-10-24): Middle tees only (no Blue on the card; 6,294 yd is closest to 6,300); all water red, and the Pacific is a red penalty area everywhere, never out of bounds; OB = the OSM boundary w36435651, 17-Mile Drive and paths inside it are cart paths; open dune sand traced from NAIP and added as bunkers (sand=waste) until a waste-sand surface exists; new theme 'monterey'; wind open coast 3-14 mph.",
+  "lake_level_max_m": 1.2,
+  "red_water_osm": [
+    "sea_pacific",
+    "shore_pacific"
+  ],
+  "rock_water_osm": [
+    "shore_pacific"
+  ],
+  "keep_trees_areas": "proposed/keep_trees.geojson"
+}

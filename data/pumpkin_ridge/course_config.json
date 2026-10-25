@@ -1,0 +1,184 @@
+{
+  "id": "pumpkin_ridge",
+  "name": "Pumpkin Ridge Golf Club",
+  "location": "North Plains, Washington County, Oregon",
+  "state": "OR",
+  "architects": "Robert E. (Bob) Cupp (Witch Hollow); Bob Cupp and John Fought (Ghost Creek); both opened 1992",
+  "theme": "pumpkin_ridge",
+  "epsg": 32610,
+  "osm_sources": [
+    "raw/overpass.geojson"
+  ],
+  "boundary_name": "Pumpkin Ridge Golf Club",
+  "dtm": {
+    "path": "raw/dogami_dtm_ft.tif",
+    "units": "ft",
+    "source": "DOGAMI lidar DIGITAL_TERRAIN_MODEL_MOSAIC (bare earth), exportImage (f=json) at 1 m in EPSG:32610, box x 498700-501050 / y 5050350-5052450, downloaded by the developer 2026-10-24 (GitHub release pumpkin_ridge-data, _ags_244124c3...tif)"
+  },
+  "chm": {
+    "path": "raw/dogami_chm_ft.tif",
+    "units": "ft",
+    "source": "DOGAMI lidar CANOPY_HEIGHT_MODEL_MOSAIC (highest hit minus bare earth), exportImage (f=json) at 1 m in EPSG:32610, same box, downloaded by the developer 2026-10-24 (GitHub release pumpkin_ridge-data, _ags_9e49efe7...tif)",
+    "label": "DOGAMI canopy height model"
+  },
+  "ortho": {
+    "path": "raw/osip2024_1m.tif",
+    "source": "Oregon Statewide Imagery Program 2024 (OSIP_2024_WM ImageServer, 1.0 m over the request box), exportImage JPEG downloaded by the developer 2026-10-24 (GitHub release pumpkin_ridge-data, exportImage.jpg), placed by its request bbox and clipped to the world + 100 m by make_ortho.py"
+  },
+  "world": {
+    "x0": 498976,
+    "y0": 5050633,
+    "width": 1792,
+    "height": 1536,
+    "note": "bbox of the one OSM course polygon for both courses (way 901988733, 1,489 x 1,254 m) + at least 120 m of scenery, rounded out to whole 256 m chunks and centred (151-152 m west/east, 141 m south/north)"
+  },
+  "layouts": [
+    {
+      "id": "pumpkin_ridge_witch_hollow",
+      "name": "Pumpkin Ridge Witch Hollow",
+      "short": "Witch Hollow",
+      "boundary_osm": "w901988733",
+      "scorecard": "scorecard_witch_hollow.csv",
+      "tee_sets": [
+        {
+          "name": "Black",
+          "playable": false,
+          "rating": 74.9,
+          "slope": 142,
+          "total_yd": 7015
+        },
+        {
+          "name": "Blue Plus",
+          "playable": false,
+          "rating": 73.7,
+          "slope": 141,
+          "total_yd": 6761
+        },
+        {
+          "name": "Blue",
+          "playable": true,
+          "rating": 72.4,
+          "slope": 140,
+          "total_yd": 6506
+        },
+        {
+          "name": "White Plus",
+          "playable": false,
+          "rating": 71.3,
+          "slope": 139,
+          "total_yd": 6248
+        },
+        {
+          "name": "White",
+          "playable": false,
+          "rating": 69.9,
+          "slope": 132,
+          "total_yd": 6000
+        },
+        {
+          "name": "Red Plus",
+          "playable": false,
+          "rating": 67.7,
+          "slope": 128,
+          "total_yd": 5492
+        },
+        {
+          "name": "Red",
+          "playable": false,
+          "rating": 66.7,
+          "slope": 125,
+          "total_yd": 5270
+        }
+      ],
+      "default_tee": "Blue",
+      "scorecard_source": "GolfPass course 14617 scorecard (golfpass.com/courses/14617-pumpkin-ridge-golf-club-witch-hollow-course/scorecard-and-layout), read 2026-10-24 by the scouting chat, third party, unverified against the club's own card. Every row adds up; men's ratings/slopes from the same page. Agrees with the GolfPass membership page and wiscogolfaddict.com (2015). The tee table prints White Plus as 6,272; its row adds to 6,248 (the row is used). Members' par 72 (the Korn Ferry Tour plays 71, 14th as a par 4). Only Blue is built (standing default)"
+    },
+    {
+      "id": "pumpkin_ridge_ghost_creek",
+      "name": "Pumpkin Ridge Ghost Creek",
+      "short": "Ghost Creek",
+      "boundary_osm": "w901988733",
+      "scorecard": "scorecard_ghost_creek.csv",
+      "tee_sets": [
+        {
+          "name": "Black",
+          "playable": false,
+          "rating": 74.5,
+          "slope": 146,
+          "total_yd": 6834
+        },
+        {
+          "name": "Blue Plus",
+          "playable": false,
+          "rating": 73.2,
+          "slope": 141,
+          "total_yd": 6523
+        },
+        {
+          "name": "Blue",
+          "playable": true,
+          "rating": 72.0,
+          "slope": 139,
+          "total_yd": 6357
+        },
+        {
+          "name": "White Plus",
+          "playable": false,
+          "rating": 71.0,
+          "slope": 136,
+          "total_yd": 6137
+        },
+        {
+          "name": "White",
+          "playable": false,
+          "rating": 69.6,
+          "slope": 136,
+          "total_yd": 5882
+        },
+        {
+          "name": "Red Plus",
+          "playable": false,
+          "rating": 67.4,
+          "slope": 133,
+          "total_yd": 5409
+        },
+        {
+          "name": "Red",
+          "playable": false,
+          "rating": 66.0,
+          "slope": 128,
+          "total_yd": 5111
+        }
+      ],
+      "default_tee": "Blue",
+      "scorecard_source": "GolfPass course 14616 scorecard (golfpass.com/courses/14616-pumpkin-ridge-golf-club-ghost-creek-course/scorecard-and-layout), read 2026-10-24 by the scouting chat, third party, unverified against the club's own card. Every row adds up; hole19golf.com's Blue+ (metres) matches hole for hole. The tee table prints Blue Plus 6,599 and White Plus 6,132; the rows add to 6,523 and 6,137 (the rows are used). An older card (greenskeeper.org: Blue 6,451, another stroke index) is not used. Only Blue is built (standing default)"
+    }
+  ],
+  "penalty_default": "red",
+  "driving_range_is_ob": true,
+  "trees_off_fairways_m": 2,
+  "wind_mph": {
+    "minMph": 1,
+    "maxMph": 7
+  },
+  "attribution": [
+    "Map data © OpenStreetMap contributors (ODbL)",
+    "Elevation and canopy height: Oregon Department of Geology and Mineral Industries (DOGAMI) lidar",
+    "Scorecards: GolfPass (Pumpkin Ridge Golf Club, Witch Hollow and Ghost Creek)"
+  ],
+  "notes": "Two courses on one property share one world (COURSE_BUILD.md 3.5): every layout is exported as its own course (courses/<layout id>/) whose terrain, surface, height and overview files live in courses/pumpkin_ridge/. OSM maps one leisure=golf_course polygon for the club, so each hole line carries layout=<id> (edits.json, from the hole line's OSM name). Standing defaults (COURSE_BUILD.md 4.1), 2026-10-24: Blue tees; all water red; OB = the OSM course boundary, roads inside it are cart paths, the driving range is OB; inland Pacific Northwest wind 1-7 mph; trees from DOGAMI lidar, trees in fairways or in the way of a centre-line drive removed and listed.",
+  "trees_need_ortho": {
+    "v_max": 120,
+    "min_share": 0.1,
+    "note": "the DOGAMI lidar (2019 or earlier) predates the OSIP 2024 photo: lidar crowns that are not dark canopy on the photo are dropped (pipeline/gorse.py missing_in_ortho): a cleared plantation north of the course and about 180 crowns inside the boundary (Ghost Creek 11/12 and 16/17 native areas, checked on the photo 2026-10-24)"
+  },
+  "fescue_areas": "proposed/fescue.geojson",
+  "green_tilt": [
+    {
+      "hole": 2017,
+      "max_tilt": 0.025,
+      "bumps": 0,
+      "note": "Ghost Creek 17 (with layouts s07 keys a green as 1000 x (layout position + 1) + hole: 2017). Its random bump on top of the 2.5 % tilt left the game only two hole locations (pins.test.ts wants three at <= 3 % round the cup); the bump is dropped, the tilt kept"
+    }
+  ]
+}
