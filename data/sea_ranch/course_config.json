@@ -1,0 +1,81 @@
+{
+ "id": "sea_ranch",
+ "name": "The Sea Ranch Golf Links",
+ "location": "The Sea Ranch (Gualala), Sonoma County, California",
+ "state": "CA",
+ "architects": "Robert Muir Graves (first nine 1974; 18 holes completed 1996)",
+ "theme": "sea_ranch",
+ "epsg": 32610,
+ "osm_sources": [
+  "raw/overpass.geojson"
+ ],
+ "boundary_name": "The Sea Ranch Golf Links",
+ "dtm": {
+  "path": "raw/usgs_3dep_1m.tif",
+  "units": "m",
+  "source": "USGS 3DEP 1 m DEM from the 3DEPElevation ImageServer (best available), exported by the developer 2026-10-25 over the world + 100 m in EPSG:32610 at 1 m (release assorted-lidar-data, exportImage.4.tiff), NAVD88 m; stored with pipeline/intake.py raster. Trees come from the 2013 Sonoma County lidar (laz), which covers the whole course"
+ },
+ "laz": {
+  "paths": [
+   "raw/laz/*.laz"
+  ],
+  "classes": [
+   5
+  ],
+  "units": "m",
+  "source": "2013 Sonoma County Vegetation Mapping and Lidar Program (NOAA Data Access Viewer job J1476309), flown 28 October 2013 (GPS times); classes 2 (ground) and 5 (high vegetation) as delivered; NAD83(2011) / California zone 2 (EPSG:6417, m), NAVD88 m; GitHub release assorted-lidar-data, 2013_Sonoma_County_J1476309.zip (developer, 2026-10-25), clipped to the world + 100 m with pipeline/intake.py laz; covers the whole course",
+  "label": "2013 Sonoma County lidar",
+  "leaf_off": false
+ },
+ "world": {
+  "x0": 454173,
+  "y0": 4288522,
+  "width": 2048,
+  "height": 1792,
+  "note": "OSM course boundary (relation 11506411) bbox 1,608 x 1,458 m in UTM 10N + ~120 m scenery, whole 256 m chunks, centred: 2,048 m east-west (220 m each side), 1,792 m north-south (167 m each side); inside the 2013 Sonoma County lidar's footprint"
+ },
+ "tee_sets": [
+  {
+   "name": "Black",
+   "playable": true,
+   "rating": 72.5,
+   "slope": 130,
+   "total_yd": 6649
+  }
+ ],
+ "default_tee": "Black",
+ "scorecard_source": "GolfPass (golfpass.com/courses/1841-the-sea-ranch-golf-links/scorecard-and-layout), read 2026-10-25: Black, Blue, White and Red per hole, par 72, men's and women's stroke index, every row adds up to its printed total (the tee table gives White 5,439 and Red 4,805 against rows of 5,355 and 4,790). OpenGolfAPI's Black row and stroke index are the same. Unverified third-party card. Played from the tips, Black 6,649 yd (developer, 2026-10-25: \"for all of these courses lets play from the tips\"); rating GolfPass tee table, Black 72.5/130. The other sets are in scorecard.csv but not built.",
+ "wind_mph": {
+  "minMph": 3,
+  "maxMph": 14
+ },
+ "attribution": [
+  "Map data © OpenStreetMap contributors (ODbL)",
+  "Elevation and trees: U.S. Geological Survey (2016 West Coast El Nino lidar), via NOAA Digital Coast",
+  "Scorecard: GolfPass (unverified)"
+ ],
+ "notes": "Course chat, 2026-10-25: not scouted; course identified from the lidar orders' footprint (OpenGolfAPI 38.753, -123.516). Standing defaults (every penalty area red, OSM boundary as OB, trees from lidar). Played from the tips: Black (developer, 2026-10-25: \"for all of these courses lets play from the tips\"). Wind 3-14 mph (open coast). Bare earth from the USGS 3DEP 1 m DEM; trees from the 2013 Sonoma County lidar (the release's 2016 and 2017 coastal strips covered about half the course and are not used). Theme sea_ranch: the course's own, from the developer's photos (developer: a new theme for each course).",
+ "penalty_default": "red",
+ "driving_range_is_ob": true,
+ "trees_off_fairways_m": 2,
+ "red_water_osm": [
+  "sea",
+  "w837523067",
+  "w837523068",
+  "w837523069",
+  "w393293619",
+  "w393293618"
+ ],
+ "red_water_note": "the Pacific (proposed/sea.geojson, from OSM's coastline) and the five ponds beside holes 6, 10 and 13 (natural=water, inside the developer's outline): red penalty areas (standing default; as Cypress Point)",
+ "connect_fairways": true,
+ "connect_fairways_note": "developer 2026-10-25: where a small gap between fairway and green looks as if it should be fairway, make it fairway; \"only fix if the gap is like 5 yards or less\" (4.8 m: hole 1's 4.7 m gap is 5.1 yd). Holes 1, 3 and 6 are connected; the larger gaps (7-84 m) stay rough",
+ "connect_fairways_max_gap_m": 4.8,
+ "green_tilt": [
+  {
+   "hole": 9,
+   "max_tilt": 0.015,
+   "bumps": 0,
+   "note": "the 9th's small green (121 m2, 13 x 13 m as OSM maps it): tilt capped at 1.5 % and no random undulations, and its centre pin moved 1.9 m (proposed/pin9.geojson), so the game finds three pin positions on it (pins.test.ts; COURSE_LESSONS 4)"
+  }
+ ]
+}
