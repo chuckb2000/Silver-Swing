@@ -223,7 +223,7 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 | w1301566446 | practice | 4.3 | 2.5 | 2 | 3.4 | 0.0 |
 | w1301566453 | practice | 5.3 | 2.5 | 2 | 4.3 | 0.0 |
 | w904342353_green | egan 3 | 2.4 | 2.4 | 2 | 3.3 | 1.5 |
-| w904342360_traced | egan 6 | 4.9 | 1.2 | 0 | 1.2 | 1.2 |
+| w904342360_traced | egan 6 | 4.9 | 2.5 | 1 | 3.4 | 1.5 |
 
 # OSM coverage audit
 

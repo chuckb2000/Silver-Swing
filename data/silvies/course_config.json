@@ -218,13 +218,5 @@
   "note": "sagebrush, not gorse: bushes from the OSIP 2024 photo (pipeline/gorse.py, its colour rule tuned to the grey-green sage: smoothed V 80-135, G-R above -14, B-G -26 to -8; the irrigated turf has B-G below -40), 7 m apart, kept 3 m off mown grass; no penal ground (developer 2026-10-25: bushes only); drawn by the theme's sage painter; extra_areas: the thicket north of the Craddock 9th green (make_riparian.py; developer 2026-10-25: 'should just be shrubs') is bushes whatever its colour or canopy",
   "extra_areas": "proposed/riparian_c9.geojson"
  },
- "green_tilt": [
-  {
-   "hole": 3006,
-   "max_tilt": 0.012,
-   "bumps": 0,
-   "note": "Chief Egan 6 (s07's key: 1000 x layout position + hole, so 3006): a 154 m2 green (OSM outline, matches the photo; fitted tilt 4.5 %). At 2.5 % with no bump the game still found only two hole locations 10 ft from the edge and gentle round the cup (pins.test.ts wants three), so its tilt is capped at 1.2 %"
-  }
- ],
  "not_trees_areas": "proposed/riparian_c9.geojson"
 }
