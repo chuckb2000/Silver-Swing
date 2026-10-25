@@ -385,7 +385,11 @@ def main():
     bld = g[g.kind == "building"].geometry
     bmask = rasterize([(geom.buffer(1.0), 1) for geom in bld], out_shape=(H, W), transform=tr, fill=0, dtype="uint8").astype(bool) if len(bld) else np.zeros((H, W), bool)
     lake = np.load(build_dir(name) / "lake_mask.npy")[:H, :W]
-    excl = g[g.kind.isin(["green", "tee", "bunker", "lateral_water_hazard", "water_hazard", "pool"])]
+    excl = g[g.kind.isin(["green", "tee", "bunker", "lateral_water_hazard", "water_hazard", "pool"]
+                         # optional (course_config.json trees_off_water: true; Strawberry Farms, developer
+                         # 2026-10-25: "don't put trees in the water"): no crown top in natural=water either
+                         # (the reservoir's reedy south end read as canopy). Without the key: as before.
+                         + (["water"] if cfg.get("trees_off_water") else []))]
     # The penalty areas made by join_boundary (s02) are a lake polygon filled over its marsh
     # islands and drawn loosely along the banks; trees the lidar finds there stand on that
     # ground (open water has no canopy), so they stay (Langston: ~440 trees on Kingman Lake's islands).
@@ -394,6 +398,12 @@ def main():
     if len(excl):
         keep = excl.osm.astype(str).str.startswith("join_") | excl.tags.apply(lambda t: t.get("flatten") == "no")
         excl = excl[~keep]
+    if cfg.get("trees_off_water") and len(excl):
+        # half a surface pixel round the water too, so no crown top lands on a water pixel of the
+        # surface map at the edge (the course test checks the map)
+        wet = excl.kind.isin(["water", "water_hazard", "lateral_water_hazard"])
+        excl = excl.copy()
+        excl.loc[wet, "geometry"] = excl.loc[wet, "geometry"].buffer(0.5)
     boundary = play_boundary(g, cfg)
     # optional (course_config.json keep_trees_areas: a GeoJSON file in data/<id>/, WGS84;
     # Cypress Point's cypress clump in the 17th fairway): crowns whose top lies in these areas
