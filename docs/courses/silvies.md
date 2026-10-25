@@ -169,10 +169,11 @@ Craddock Challenge, Hankins White, Chief Egan White.
 -   **Logo:** `assets-src/course_logos/silvies.py`, a white Boer goat with a red-brown head
     carrying a red golf bag, in bunchgrass, for the ranch's card. One per course, after
     the names: Craddock and Hankins honour the pioneers who homesteaded the site (GolfPass
-    2017), so Craddock is a covered wagon and Hankins a log homestead cabin; Chief Egan
-    shows its spring-fed pond with a flag and cattails under the sun (water on every hole,
-    off the grid; Visit Central Oregon), not a picture of Egan himself. Original drawings;
-    not the club's emblem.
+    2017), so Craddock is a homestead windmill over a stock tank and Hankins a log
+    homestead cabin. Chief Egan is a twined willow burden basket: it honours Egan and the
+    Wadatika Paiute through their own craft, with plain bands so no real tribal pattern
+    is copied. The developer chose them, 2026-10-25 (a covered wagon was dropped because
+    another course has one). Original drawings; not the club's emblem.
 
 ## Open items
 
