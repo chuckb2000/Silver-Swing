@@ -4,7 +4,7 @@
  "location": "Seneca, Grant County, Oregon",
  "state": "OR",
  "architects": "Dan Hixson (2017; reversible Craddock and Hankins courses on 27 greens; GolfPass, golf.com)",
- "theme": "pnw",
+ "theme": "silvies",
  "epsg": 32611,
  "osm_sources": [
   "raw/overpass.geojson"
@@ -185,5 +185,23 @@
    "scorecard_source": "Yardages: the club's Chief Egan map (release silvies-data chief.egan.webp) and GolfPass (the same 875 yd). Par: the club map (holes 3 and 6 par 4: par 29; GolfPass lists every hole par 3, 27; same rule as Craddock, developer 2026-10-25). Handicaps: GolfPass. No rating."
   }
  ],
- "notes": "Three layouts in one world (developer 2026-10-25): Craddock (the OSM hole lines), Hankins (Craddock's fairways played the other way, 9 greens of its own) and Chief Egan (the 9-hole short course round the east pond). McVeigh's Gauntlet (7 holes on the south edge, partly outside the boundary) is not built. Tees: the back set on the club maps (developer 2026-10-25, overriding the 6,300 yd default): Craddock Challenge 7,170, Hankins White 7,075, Chief Egan White 875. Standing defaults otherwise:, all water red, OB = the OSM boundary grown 30 m round Craddock play (approved 2026-10-25), the practice strip by the lodge stays in play (developer: no need to make it OB), wind 1-7 mph, theme silvies (new)."
+ "notes": "Three layouts in one world (developer 2026-10-25): Craddock (the OSM hole lines), Hankins (Craddock's fairways played the other way, 9 greens of its own) and Chief Egan (the 9-hole short course round the east pond). McVeigh's Gauntlet (7 holes on the south edge, partly outside the boundary) is not built. Tees: the back set on the club maps (developer 2026-10-25, overriding the 6,300 yd default): Craddock Challenge 7,170, Hankins White 7,075, Chief Egan White 875. Standing defaults otherwise:, all water red, OB = the OSM boundary grown 30 m round Craddock play (approved 2026-10-25), the practice strip by the lodge stays in play (developer: no need to make it OB), wind 1-7 mph, theme silvies (new).",
+ "fescue_areas": "proposed/fescue.geojson",
+ "gorse": {
+  "v_min": 80,
+  "v_max": 135,
+  "gr_min": -14,
+  "bg_min": -26,
+  "bg_max": -8,
+  "min_z_m": 0,
+  "clear_m": 3.0,
+  "spacing_m": 7.0,
+  "jitter": 0.4,
+  "r_min_m": 0.9,
+  "r_max_m": 1.6,
+  "h_min_m": 0.6,
+  "h_max_m": 1.5,
+  "h_default_m": 1.0,
+  "note": "sagebrush, not gorse: bushes from the OSIP 2024 photo (pipeline/gorse.py, its colour rule tuned to the grey-green sage: smoothed V 80-135, G-R above -14, B-G -26 to -8; the irrigated turf has B-G below -40), 7 m apart, kept 3 m off mown grass; no penal ground (developer 2026-10-25: bushes only); drawn by the theme's sage painter"
+ }
 }

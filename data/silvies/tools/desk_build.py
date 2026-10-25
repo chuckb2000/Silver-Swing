@@ -50,6 +50,12 @@ pads += [(r.osm, r.geometry) for _, r in lid.iterrows()]
 ring = lambda geom: [[round(x, 1), round(y, 1)] for x, y in list(geom.exterior.coords)[:-1]]  # noqa: E731
 
 src = rasterio.open(HERE / cfg["ortho"]["path"])
+BOXES = {}
+if (HERE / "proposed" / "tee_boxes.geojson").exists():
+    tbx = gpd.read_file(HERE / "proposed" / "tee_boxes.geojson").to_crs(cfg["epsg"])
+    for _, r in tbx.iterrows():
+        tg = r.tags if isinstance(r.tags, dict) else json.loads(r.tags)
+        BOXES[{"silvies_craddock": "C", "silvies_hankins": "H", "silvies_chief_egan": "E"}[tg["layout"]] + tg["hole"]] = translate(r.geometry, -X0, -Y0)
 
 
 def measure(pts, tee):
@@ -82,7 +88,14 @@ for lay, hs in plan.items():
             if abs(e) < 0.08 and (best is None or abs(e) < abs(best[1])):
                 best = (o, e, p)
         feats = []
-        if best:
+        saved_f = HERE / "desk" / f"{KEY[lay]}{n}.json"
+        if saved_f.exists() and (HERE / "proposed" / "tee_boxes.geojson").exists():
+            # round 2 (2026-10-25): the developer's saved mark plus the proposed tee box under it, editable
+            feats = [f for f in json.load(open(saved_f))["features"] if f["kind"] == "bluetee"]
+            tb = BOXES.get(f"{KEY[lay]}{n}")
+            if tb is not None:
+                feats.append({"id": f"box_{KEY[lay]}{n}", "kind": "tee", "poly": ring(tb)})
+        elif best:
             feats.append({"id": f"grey_{KEY[lay]}{n}", "kind": "bluetee", "poly": ring(best[2].buffer(0.3).simplify(0.3))})
         G = Point(pts[-1])
         start = Point(pts[0])
@@ -112,7 +125,7 @@ for lay, hs in plan.items():
                       "box": bx0, "w": W_, "h": H_, "img": fn,
                       "line": [[round(x, 1), round(y, 1)] for x, y in pts],
                       "greenCenter": [round(G.x, 1), round(G.y, 1)],
-                      "features": feats, "refs": refs, "boundary": blines, "editShapes": False})
+                      "features": feats, "refs": refs, "boundary": blines, "editShapes": bool(BOXES)})
         print(key, NAME[lay], "par", card[n]["par"], "Grey", grey, "prefill", best[0] if best else "-", f"{best[1]*100:+.1f}%" if best else "")
 json.dump(holes, open(out / "holes.json", "w"), separators=(",", ":"))
 print(f"{len(holes)} pages -> {out}/holes.json")
