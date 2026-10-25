@@ -101,7 +101,8 @@ import { earnedBy, milestonesOf } from '../../src/save/milestones';
 import { mergeRounds, playerStats } from '../../src/save/stats';
 import { feedBadges, timeAgo } from '../../src/save/feed';
 import { D1Like, D1Statement, handleGet, handlePost, handleRecentGet, resetFeedCache, resetSchemaCache } from '../../src/server/scores';
-import { addDays, dailyPlan, dayStandings, weekStandings, weekStart } from '../../src/systems/game/daily';
+import { addDays, dailyPlan, dayStandings, PLACE_REST_DAYS, placeOf, RANDOM_DAILY_FROM, restDays, weekStandings, weekStart } from '../../src/systems/game/daily';
+import type { DailyCourse } from '../../src/systems/game/daily';
 import { DAILY_PICKS, DAILY_ROSTER } from '../../src/data/dailyRoster';
 import index from '../../public/courses/index.json';
 import { drillSpot, PracticeLog, rangeShot } from '../../src/systems/game/practice';
@@ -208,6 +209,30 @@ describe('daily round (item 4)', () => {
     expect([p.courseId, p.length, p.tee]).toEqual(['oswego_lake', 'back', 'Blue']);
     expect(dailyPlan('2026-10-20', all, DAILY_ROSTER, DAILY_PICKS)).toEqual(dailyPlan('2026-10-20', all, DAILY_ROSTER));
     expect(dailyPlan('2026-10-22', all, DAILY_ROSTER, DAILY_PICKS)).toEqual(dailyPlan('2026-10-22', all, DAILY_ROSTER));
+  });
+
+  it('from 2026-10-25 the daily is drawn: no place twice in five days, no course again within two thirds of the rotation (developer, 2026-10-25)', () => {
+    const all = (index as { courses: DailyCourse[] }).courses;
+    // East Potomac Red, White and Blue had come up on the 22nd, 24th and 25th; today changes
+    expect(dailyPlan('2026-10-25', all, DAILY_ROSTER, DAILY_PICKS)!.courseId).not.toMatch(/^east_potomac/);
+    // the days before the change keep their courses (their boards stand)
+    expect(dailyPlan('2026-10-24', all, DAILY_ROSTER, DAILY_PICKS)!.courseId).toBe('east_potomac_white');
+    const days = Array.from({ length: 200 }, (_, i) => addDays(RANDOM_DAILY_FROM, i));
+    const plans = days.map((d) => dailyPlan(d, all, DAILY_ROSTER, DAILY_PICKS)!);
+    const byId = new Map(all.map((c) => [c.id, c]));
+    const pool = all.filter((c) => (c.holes === 9 || c.holes === 18) && DAILY_ROSTER[c.id] <= RANDOM_DAILY_FROM).length;
+    for (let i = 1; i < plans.length; i++) {
+      const place = placeOf(byId.get(plans[i].courseId)!);
+      for (let k = 1; k <= Math.min(i, PLACE_REST_DAYS); k++) expect(placeOf(byId.get(plans[i - k].courseId)!), days[i]).not.toBe(place);
+      for (let k = 1; k <= Math.min(i, restDays(pool)); k++) expect(plans[i - k].courseId, days[i]).not.toBe(plans[i].courseId);
+    }
+    // every course in the rotation comes up within two rotations
+    expect(new Set(plans.slice(0, 2 * pool).map((p) => p.courseId)).size).toBe(pool);
+    // the same for everyone, whatever order the list is in; a course added later leaves the days before it alone
+    expect(dailyPlan('2026-11-20', all.slice().reverse(), DAILY_ROSTER, DAILY_PICKS)).toEqual(dailyPlan('2026-11-20', all, DAILY_ROSTER, DAILY_PICKS));
+    const extra = [...all, { id: 'zz_new', holes: 18, defaultTee: 'Blue', teeSets: ['Blue'], location: 'Nowhere, Oregon' }];
+    const later = { ...DAILY_ROSTER, zz_new: '2026-11-10' };
+    for (const d of days.slice(0, 16)) expect(dailyPlan(d, extra, later, DAILY_PICKS)).toEqual(dailyPlan(d, all, DAILY_ROSTER, DAILY_PICKS));
   });
 
   it('weeks start on Monday; the week board counts the best five days, more days first', () => {
