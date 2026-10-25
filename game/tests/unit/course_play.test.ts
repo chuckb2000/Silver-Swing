@@ -17,6 +17,8 @@
 //   fairway_meets_green: {"skip": [4]}       opt-in: walking back from the green, past the fringe comes fairway/sand/path/water
 //   no_tree_in_fairway: true                 opt-in: no tree trunk deep inside a fairway
 //   robot_seeds: [7]
+//   max_tree_h_m: 65                         the tallest tree allowed (power lines read as trees made 60 m+ "trees")
+//   no_tree_in_water: true                   opt-in: no tree stands in a penalty area (a pond; creeks in ravines keep their trees)
 //   points:    [{"x": 860, "y": 700, "surface": "water", "inside": true, "why": "Kingman Lake"},
 //               {"x": 10, "y": 20, "ob": true}, {"x": 5, "y": 6, "not": "ob"}]
 //   trees:     [{"x": 585.5, "y": 1269.5, "r": 2, "absent": true, "why": "developer, 2026-10-20"},
@@ -46,6 +48,8 @@ interface Checks {
   fairway_meets_green?: { skip?: number[] } | boolean;
   no_tree_in_fairway?: boolean;
   robot_seeds?: number[];
+  max_tree_h_m?: number;
+  no_tree_in_water?: boolean;
   points?: { x: number; y: number; surface?: string; not?: string; ob?: boolean; inside?: boolean; why?: string }[];
   trees?: { x: number; y: number; r: number; absent?: boolean; present?: boolean; why?: string }[];
   courses?: Record<string, Checks>;
@@ -279,6 +283,16 @@ for (const info of registry()) {
       const S = course.terrain;
       const deep = course.obstacles.trees.filter((x) => [[0, 0], [2.5, 0], [-2.5, 0], [0, 2.5], [0, -2.5]].every(([dx, dy]) => S.surface(x.x + dx, x.y + dy) === SURF.fairway));
       expect(deep.map((x) => `${x.x.toFixed(0)},${x.y.toFixed(0)}`)).toEqual([]);
+    });
+
+    it('no tree is implausibly tall (power lines and roofs read as trees)', () => {
+      const tall = course.obstacles.trees.filter((t) => t.h > (ck.max_tree_h_m ?? 65));
+      expect(tall.map((t) => `${t.x.toFixed(0)},${t.y.toFixed(0)} ${t.h.toFixed(0)} m`)).toEqual([]);
+    });
+
+    if (ck.no_tree_in_water) it('no tree stands in a penalty area inside the boundary', () => {
+      const wet = course.obstacles.trees.filter((t) => course.terrain.surface(t.x, t.y) === SURF.water && course.boundary.contains(t.x, t.y));
+      expect(wet.map((t) => `${t.x.toFixed(0)},${t.y.toFixed(0)}`)).toEqual([]);
     });
 
     it('a robot golfer completes every hole with legal, finite scores', () => {
