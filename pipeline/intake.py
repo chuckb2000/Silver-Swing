@@ -418,7 +418,7 @@ def check_osm(R: Report, cfg, path: Path, box_):
     area = box(*tr.transform_bounds(*box_, densify_pts=21))
     meta = sorted({k for f in feats for k in (f.get("properties") or {}) if k in META})
     if meta:
-        R.e(f"osm: {rel} carries OSM metadata ({', '.join(meta)}): it would become tags; rewrite it with intake.py osm")
+        R.i(f"osm: {rel} carries OSM metadata ({', '.join(meta)}); s01 drops it")
     courses = [f for f in feats if (f.get("properties") or {}).get("leisure") == "golf_course"]
     holes = [f for f in feats if (f.get("properties") or {}).get("golf") == "hole"]
     farout = sum(1 for f in feats if f.get("geometry") and not area.buffer(0.05).contains(shape(f["geometry"])))

@@ -1,26 +1,80 @@
 # Building a new course — runbook for the course-building chat
 
-Read this whole file before doing anything. Then read `CLAUDE.md` (the project
-spec; sections 3, 4, 5, 7.3, 8 and 14 matter most here) and `DECISIONS.md`.
-This file is the procedure; `CLAUDE.md` is the source of truth for rules and
-numbers. If they disagree, `CLAUDE.md` wins and you tell the developer.
-Then read `docs/COURSE_LESSONS.md` (what went wrong on earlier courses and
-what to do instead) and one finished course's file in `docs/courses/` (for
-example `docs/courses/franklin.md`) to see the shape of yours. If OSM is
-missing whole holes, also read `docs/COURSE_TRACING.md` (tracing them with the
-developer).
+Read the **quick path** below and `docs/COURSE_LESSONS.md` (about 120 lines of
+judgment calls) before starting. The numbered sections after the quick path are
+reference: open the one a step points to when you get there. `CLAUDE.md` is the
+source of truth for rules and numbers (sections 3, 4, 5, 7.3, 8 and 14 matter
+most); if this file disagrees with it, `CLAUDE.md` wins and you tell the
+developer. Look at one finished course's file in `docs/courses/` (for example
+`docs/courses/sandpines.md`) to see the shape of yours, and if OSM is missing
+whole holes, read `docs/COURSE_TRACING.md`.
 
-**A course chat edits no shared file.** Everything it writes is in its own
-places: `data/<id>/`, `game/public/courses/<id>/`, `docs/courses/<id>.md`,
-`assets-src/cards/<id>.json`, `assets-src/course_logos/<id>.py`, and (rarely)
-a new theme or a new config key
-(section 0). The course list, the title-screen list, `CLAUDE.md`,
-`DECISIONS.md` and `COURSE_LESSONS.md` are generated or kept by the design
-chat, so merging a course never conflicts with another course.
+**A course chat edits no shared file except pipeline code it needs** (3.4).
+Everything else it writes is in its own places: `data/<id>/`,
+`game/public/courses/<id>/`, `docs/courses/<id>.md`, `assets-src/cards/<id>.json`,
+`assets-src/course_logos/<id>.py`, and (rarely) a new theme. The course list, the
+title-screen list, the daily rotation, `CLAUDE.md`, `DECISIONS.md` and
+`COURSE_LESSONS.md` are generated or kept by the design chat, so merging a course
+never conflicts with another course.
 
-Recommended setup for this work: **Claude Opus 5.5 at high effort**; use
-**extra-high (xhigh)** for the first new course, because that one also includes
-Phase 0 (generalising the pipeline). Max effort isn't needed.
+Recommended setup for this work: **Claude Opus 5.5 at high effort.**
+
+---
+
+## Quick path (read this; the sections below are reference)
+
+Every finished course is **pinned** to the pipeline that built it
+(`data/<id>/pipeline_pin.json`, `pipeline/pins.py`), so changes to the shared code
+can't change it and nobody rebuilds other courses to check them. `make course`
+**skips steps whose inputs haven't changed** (`pipeline/stepcache.py`), so a rebuild
+after an edit runs only what the edit reaches.
+
+1. **Set up** (0.1). `git clone --filter=blob:none` the repository (full history,
+   files fetched as needed: fast, and pinned pipelines can still be unpacked),
+   branch `course/<id>`, `pip install -r pipeline/requirements.txt
+   --break-system-packages`, `cd game && npm install`.
+2. **Scouting.** If `docs/scouting/<id>/` exists, read it: the facts, the scorecard
+   and the download list are done. Otherwise work them out (4.3, 5.3).
+3. **Intake message** (4.2): the standing defaults (4.1) you'll use, the data
+   request (5), and only the questions that are really open. Start on what doesn't
+   wait for the answer: `course_config.json` (3.3; copy a finished course's),
+   `scorecard.csv` (5.3), the logo idea (12).
+4. **Files arrive** (5.6). Put each into `raw/` with a `release.json` entry, using
+   `pipeline/intake.py` instead of writing scripts: `intake.py osm` (Overpass
+   exports), `intake.py ortho` (photo exports placed by their request boxes),
+   `intake.py laz` (lidar tiles or a NOAA zip, clipped to the world), `intake.py
+   raster` (a big raster clipped). Then **`make intake NAME=<id>`** and fix every
+   error before going on; read the warnings.
+5. **World and layout** (6). Set `world` (6.1), then `make course NAME=<id>
+   ARGS="--to s03_audit"` runs s00-s03. Read `build/audit.md` in full, including "Checks from earlier
+   courses". Fix the layout in `edits.json` (3.6), never in `edited/`. Tracing:
+   `docs/COURSE_TRACING.md`.
+6. **Build** (7): `make course NAME=<id>`. Read each step's output and report
+   (heights, `build/trees_preview.png`, `build/validation_table.md`,
+   `build/greens_report.md`, the art). Iterate with edits and `make course` again:
+   only the steps an edit reaches run (a scorecard fix: s03 and s06; a tree drop:
+   s05 on; a layout edit: from merge_edits on). `ARGS="--from s06_holes"` forces a
+   step and the ones after it; `ARGS=--fresh` runs everything.
+7. **Check** (8). Write `data/<id>/checks.json` (8.2) for what is special about the
+   course (accepted yardage flags, the wind band, points that must be water or in
+   bounds, trees the developer removed) and run `cd game && npx vitest run
+   tests/unit/course_play.test.ts -t <id>`. Write no test file unless a check can't
+   be said in `checks.json`. Look at every hole in the game (8.3).
+8. **Card, logo, state** (12).
+9. **Hand off** (9). Commit, run `python3 pipeline/pins.py pin <id>` (after your last
+   commit to `pipeline/` or `assets-src/`), then `make course NAME=<id> ARGS=--fresh`
+   once and check `git status` shows nothing changed. Then `npm test` and `npm run
+   e2e`, write `docs/courses/<id>.md`, push and open the pull request (`gh api
+   repos/<owner>/<repo>/pulls`; `gh pr create` is blocked). `player.test.ts` fails
+   on "<id> is in the daily rotation" until the merge: the design chat's `make land`
+   adds it. Say so in the pull request.
+
+Stop and ask only for what section 10 lists.
+
+**The design chat's merge** (not the course chat's job): merge `main` into the
+branch, `make land NAME=<id>` (daily rotation from tomorrow, pin check, rebuild
+with the pin to prove it reproduces, the course's tests), push, merge. Nothing else
+needs editing.
 
 ---
 
@@ -31,15 +85,15 @@ Two chats work on this repository.
 | Area | Owner | Course chat may… |
 |---|---|---|
 | `game/src/**` (engine, physics, rules, UI, camera, swing) | design chat | read only. Never change gameplay. |
-| `game/tests/**` | design chat | add course-specific test cases (section 8.2) only |
+| `game/tests/**` | design chat | write `data/<id>/checks.json` (8.2); a `<id>.test.ts` only for a check `checks.json` can't say |
 | `assets-src/sprites.py`, `font.py`, UI art | design chat | read only |
 | A new theme: `assets-src/palettes/<theme>.json`, `assets-src/trees_<theme>.py` (its tree and bush painters), `game/public/sprites/trees_<theme>*` and `shrubs_<theme>*` | course chat | create (7.6); never change an existing theme or `trees.py` / `shrubs.py` |
-| `pipeline/**` | course chat | **add a config key** whose default changes nothing (section 3.4); never change what an existing course gets. A change to existing behaviour is a request to the design chat |
+| `pipeline/**` | course chat | change what your course needs (3.4): finished courses are pinned, so nothing else changes. Prefer a config key for course-specific behaviour |
 | `data/<course>/**`, `game/public/courses/<course>/**` | course chat | own it fully |
 | `docs/courses/<course>.md` | course chat | write it: facts, scorecard, the developer's calls, open items, new config keys, lessons (section 9) |
 | `assets-src/cards/<course>.json` | course chat | write it (section 12) |
 | `game/public/courses/index.json`, `game/public/sprites/title/index.json` | nobody | generated from the courses' `course.json` files at every build (`game/scripts/course-lists.mjs`); not in git |
-| `CLAUDE.md`, `DECISIONS.md`, `docs/COURSE_LESSONS.md` | design chat | read only. The design chat adds the course's line to `CLAUDE.md`, folds its lessons into `COURSE_LESSONS.md` and adds the course to the daily rotation (`game/src/data/dailyRoster.ts`, from the next day) after the merge |
+| `CLAUDE.md`, `DECISIONS.md`, `docs/COURSE_LESSONS.md`, `game/src/data/dailyRoster.ts` | design chat | read only. The design chat's `make land NAME=<id>` adds the course to the daily rotation at the merge; lessons stay in your course file |
 | `assets-src/course_logos/<course>.py`, `game/public/sprites/logos/<course>.png` | course chat | draw the course's logo (section 12) |
 | `assets-src/logos.py` | design chat | read only (its helpers are imported by course logos) |
 
@@ -54,10 +108,15 @@ design chat. Keep building everything that doesn't depend on it.
 The repository is **`chuckb2000/Silver-Swing`** on GitHub (private; default
 branch `main`; GitHub renamed it from `silver-swing`, which still redirects: an
 older clone can switch with `git remote set-url origin
-https://github.com/chuckb2000/Silver-Swing.git`). Attach it to the session and clone it. Work on a branch named
-`course/<id>`, push it, and open a pull request into `main`; the developer
-merges it. Before starting and before handing off, fetch `main` and rebase on
-it. Never push to `main` yourself.
+https://github.com/chuckb2000/Silver-Swing.git`). Attach it to the session and
+clone it with `git clone --filter=blob:none` (all of the history, file contents
+fetched when needed: quick, and `pins.py` can still unpack a pinned pipeline; a
+`--depth` clone can't rebase and can't unpack pins). Work on a branch named
+`course/<id>`, push it, and open a pull request into `main` through the REST API
+(`gh api repos/chuckb2000/Silver-Swing/pulls --input pr.json`; GraphQL commands
+such as `gh pr create` and `gh release` are blocked); the developer merges it.
+Before starting and before handing off, fetch `main` and merge or rebase on it.
+Never push to `main` yourself.
 
 Cloudflare Pages publishes `main` as the live site on every merge, and builds
 every other branch at its own preview address, so the developer can play the
@@ -148,59 +207,19 @@ extent in the course's UTM zone.
 
 Surface ids (`pipeline/common.py` `SURF`, mirrored in the game): ob 0, rough
 1, fairway 2, fringe 3, green 4, tee 5, bunker 6, water 7, cartpath 8, woods
-9, ob_road 10, ob_water 11, ob_woods 12, ob_building 13, building 14, range 15.
+9, ob_road 10, ob_water 11, ob_woods 12, ob_building 13, building 14, range 15,
+ob_sand 16, gorse 17, waste 18.
 Out of bounds = every `ob*` id plus `range`. **Never renumber these.** A new
 surface type is a game change (section 0).
 
 ---
 
-## 3. Phase 0 — one-time generalisation (first new course only)
+## 3. The pipeline and the course config
 
-The pipeline and game were written for Oswego Lake. Before the second course,
-these assumptions must go. Check each one; it may already have been fixed.
-
-### 3.1 Game side (done by the design chat, session 2)
-
-- [x] Course list `game/public/courses/index.json` (`{courses: [{id, name,
-      location, state, theme, holes, par, defaultTee, totalYd, teeSets}]}`),
-      generated from every `courses/<id>/course.json` (2026-10-20), and a
-      course choice on the new-round screen.
-- [x] Course data loaded when a course is chosen (`src/data/courses.ts`;
-      one course in memory at a time).
-- [x] Title, credits and leaderboard read the course from the list and
-      `course.json` (`name`, `location`, `architects`, `attribution`).
-- [x] Resume loads the saved round's own course.
-- [x] Tree sprites per theme: the game loads `sprites/trees_<theme>.png/json`
-      and `sprites/trees_<theme>_meta.json` for a theme other than `pnw`, and
-      falls back to the `pnw` set (with a console warning) if they're missing.
-- [x] Tests run for every course in the list (`tests/unit/courses.test.ts`:
-      files present, list matches `course.json`, minimaps and the three
-      putting views per hole, a robot round). `course.test.ts` stays
-      Oswego-specific.
-- [x] Courses of any size and clubs of three nines (3.5a).
-- [x] 9-hole courses: rounds of 9 holes or 18 (twice around). The scorecard
-      numbers the second loop 10-18; `Round.courseHole` is the course's own
-      hole. A 9-hole course needs only holes 1-9 in `course.json`.
-
-### 3.2 Pipeline side (course chat does this)
-
-Known Oswego-specific code, with the fix:
-
-| Where | Problem | Fix |
-|---|---|---|
-| `s09_render.py` `load_palette()` | always loads `palettes/pnw.json` | `load_palette(cfg["theme"])`; s09b passes the same |
-| `s09_render.py` `stripe_field`, `s09b_green_views.py` line ~172 | `h["tees"]["Blue"]` | use `cfg["default_tee"]` |
-| `s10_export.py` `attribution` | hard-coded DOGAMI + GolfPass | read `cfg["attribution"]` (list of strings) |
-| `s10_export.py` `spec_items` | hard-coded Oswego open-item text | read `data/<id>/report_notes.md` if it exists |
-| `s10_export.py` height `samples` | fixed indices (100,100), (700,500), (1200,800) fail on a smaller world | three samples at 10 %, 50 %, 90 % of cols/rows |
-| `s01_osm.py` | only reads GDAL OSM GeoPackages; `cfg["osm_sources"]` required | also accept Overpass output (`raw/overpass.geojson`, osmtogeojson format: tags as properties), running the same `classify()` so every later step sees `{osm, kind, tags}` |
-| `s04_elevation.py`, `s05_trees.py` | assume a 1 m raster aligned to whole metres in the course EPSG; `s05` slices the CHM by index | add `s00_prepare_rasters.py`: reproject + resample every input raster (DTM, DSM, CHM) with `rasterio.warp` to the world grid (1 m, whole-metre aligned, course EPSG, metres), writing `build/dtm_1m.tif`, `build/chm_1m.tif`; later steps read those |
-| `s05_trees.py` | requires a CHM | CHM sources in order: `cfg.chm` raster; else DSM − DTM (`cfg.dsm`); else from a LAZ point cloud with PDAL (`cfg.laz`, highest-return grid at 1 m); else spec 5.4 item 3 fallback (OSM `natural=tree` points + Poisson-disk fill of `natural=wood`, seeded, flagged in the report as lower fidelity) |
-| `s04_elevation.py` lake handling | `lake_level_max_m` written for Oswego Lake | keep it optional; document it in the config (3.3) |
-| `s03_audit.py`, `s06_holes.py` | expect holes 1–18 | read the hole count from `scorecard.csv` |
-| `s08_surface.py` | spec's `ob=yes` lines inside the boundary are not implemented | only if the course needs them: an `ob=yes` **area** polygon painted `SURF["ob"]`, plus a test that a ball at rest there is OB. Lines need a game change (section 0). |
-| `s10_export.py` | ~~doesn't write the registry~~ | done: the course list is generated from the `course.json` files (`update_course_lists()`, also at every game build) |
-| `Makefile` | step list | add `s00_prepare_rasters.py` first |
+The pipeline started with Oswego Lake and was generalised for every course by the
+second one (Phase 0, 2026-10-18/19: themes, Overpass input, `s00_prepare_rasters`,
+any hole count, layouts). The history is in `docs/archive/COURSE_LESSONS_full.md`
+and DECISIONS.md.
 
 ### 3.3 `course_config.json` (document every field you add)
 
@@ -214,17 +233,16 @@ Known Oswego-specific code, with the fix:
   "theme": "pnw",                       // palette + tree theme (assets-src/palettes/<theme>.json)
   "epsg": 32618,                        // UTM zone from longitude, see 4.2
   "osm_sources": ["raw/osm.gpkg"],      // and/or "raw/overpass.geojson"
-  "boundary_name": "Name as tagged in OSM",
+  "boundary_name": "Name as tagged in OSM",   // read only by propose_trace.py: every leisure=golf_course becomes a boundary
   "dtm": {"path": "raw/...tif", "units": "m|ft", "source": "who, product, date, resolution, CRS"},
   "chm": {"path": "...", "units": "m|ft", "source": "..."},   // optional, see 3.2
   "dsm": {"path": "...", "units": "m|ft", "source": "..."},   // optional
-  "laz": {"paths": ["raw/laz/*.laz"], "source": "..."},       // optional
+  "laz": {"paths": ["raw/laz/*.laz"], "classes": [3, 4, 5], "units": "m|ft", "source": "...", "leaf_off": true},  // optional; units = the heights' (make intake prints them)
   "world": {"x0": 0, "y0": 0, "width": 1536, "height": 1024, "note": "how it was chosen"},
   "lake_level_max_m": null,             // optional: flatten a large off-course lake below this elevation
   "tee_sets": [{"name": "Blue", "playable": true, "rating": 0, "slope": 0, "total_yd": 0}],
   "default_tee": "Blue",
   "scorecard_source": "where, when, verified or not",
-  "penalty_default": "red",
   "driving_range_is_ob": true,
   "wind_mph": {"minMph": 1, "maxMph": 7},
   "attribution": ["Map data © OpenStreetMap contributors (ODbL)", "..."],
@@ -236,7 +254,7 @@ Known Oswego-specific code, with the fix:
   "blossom": {"max_h": 12, "shore_m": 45, "max_from_boundary_m": 100},  // optional: flowering trees (potomac theme)
   "paint_range_outside": false,         // optional: draw a driving range outside the boundary as a range
   "connect_fairways": false,            // optional, only where OSM is wrong: s02b runs the fairway up to the green
-                                        // (true = every hole, or a list of holes); see COURSE_LESSONS.md 3
+                                        // (true = every hole, or a list of holes); see docs/archive/COURSE_LESSONS_full.md 3
   "trees_off_fairways_m": null,         // optional: drop trees whose top is this far (m) inside a fairway (check the course first)
   "merge_touching_fairways": false,     // optional: merge fairway pieces that touch (s02b approaches, OSM fairways drawn edge to edge)
                                         // before s08 rounds them, so no line of rough is left along the join (East Potomac)
@@ -254,7 +272,7 @@ Known Oswego-specific code, with the fix:
                                         // (Waverley 11); bumps sets its random undulations (0 = the slope is the feature)
   "keep_tee_trees": [],                 // optional: holes ("10", or "blue 7" with layouts) that keep trees in front of the tee
                                         // (a deliberate tree-lined dogleg). Every other tee shot at the middle of the fairway
-                                        // is cleared: s06 moves the tee within its box, s06b drops trees (COURSE_LESSONS.md 3)
+                                        // is cleared: s06 moves the tee within its box, s06b drops trees
   "ob_highways": ["trunk"],             // optional: roads of these OSM highway values inside the boundary are out of bounds (Indian Island's Route 105)
   "tee_shot_margin_m": 0,               // optional: extra vertical clearance (m) the tee-shot tree check keeps from each crown,
                                         // when the game test still finds a crown the pipeline check passed by centimetres
@@ -268,9 +286,24 @@ Known Oswego-specific code, with the fix:
   "join_boundary_parts": {"max_gap_m": 16},  // optional: a boundary in several parts, all in play, with OB land between
                                         // (Eastmoreland's road; Langdon Farms' highway, its parts mapped as separate ways)
   "building_colours": {"w123": "#a3302a"},   // optional: buildings drawn in their own colour (Langdon Farms' red barns)
-  "waste_sand": true                    // optional: golf=bunker + sand=waste, and natural=sand inside the boundary, are
+  "waste_sand": true,                   // optional: golf=bunker + sand=waste, and natural=sand inside the boundary, are
                                         // waste sand (surface 18): general area, not a bunker, no lip, sparse scrub tufts;
                                         // natural=sand outside stays ob_sand (s08, s09, s09b, s10; Cypress Point)
+  // more optional keys (read the code's comment before using one):
+  "tee_grow_m": 0,                      // tee boxes drawn larger than mapped, metres per side (s02)
+  "flatten_wetlands": true,             // false: vegetated wetlands keep their lidar ground (s04)
+  "gorse": {"ground": "gorse"},         // gorse thickets from the orthophoto, penal surface 17 (pipeline/gorse.py; Bandon Dunes)
+  "garden": {},                         // flowering shrubs of a garden beside the course (pipeline/garden.py; Eastmoreland)
+  "keep_trees_areas": "keep.geojson",   // WGS84 areas whose lidar trees stay even on fairways (s05; Cypress Point 17)
+  "not_trees_areas": "not.geojson",     // WGS84 areas whose lidar "trees" are structures or vehicles (s05; Chambers Bay)
+  "trees_need_ortho": {"v_max": 120, "min_share": 0.1},  // drop lidar crowns the photo no longer shows (s05, gorse.py)
+  "tree_types_osm": true,               // OSM natural=tree leaf_type sets a lidar tree's type (s05; Chambers Bay)
+  "tree_fallback": {"spacing_m": 6, "height_m": [6, 14], "conifer_share": 0.5},  // no canopy data: trees from OSM woods (s05)
+  "roof_last_share": 0.85,              // class-1 lidar: crowns whose returns are mostly last returns are roofs (s05; Wannamoisett)
+  "rock_water_osm": ["w1"],             // penalty areas over rock: drawn as rock, no OB stakes (s09; Cypress Point)
+  "fescue_areas": "fescue.geojson",     // areas of the rough drawn as native fescue (art only; s09)
+  "rough_band_m": 6,                    // a band of mown rough this wide along fairways (art only; s09)
+  "beach_max_m": 3, "cliff_sand_slope_pct": 40  // outside sand: beach below this height, cliff above this slope (s08)
 }
 ```
 
@@ -282,7 +315,8 @@ heights, trees, every green, art) is built once and exported to
 `courses/<data id>/`; each layout gets its holes, putting views, minimaps and
 `course.json` in `courses/<layout id>/`, pointing at the shared files with
 `../<data id>/` paths. A layout's holes are the `golf=hole` lines inside its
-`boundary_osm` polygon (or tagged `layout=<id>`); its card is its own
+`boundary_osm` polygon (a hole line tagged `layout=<id>` overrides that, for a
+layout that has a `boundary_osm`); its card is its own
 `scorecard` file. The OB line is the union of all `leisure=golf_course`
 polygons. Each layout is a separate entry in the course list, with `group`,
 `groupName` and `layout` fields.
@@ -331,36 +365,33 @@ with `{db: {}, user: {}}`; change its `<title>` per course), where the developer
 drags traced outlines into place and marks each Blue tee against a live yardage
 readout; read the saved holes back into `data/<id>/desk/` and run
 `desk_to_proposed.py`, then add `proposed/approved.geojson` in `edits.json` (Waverley, where OSM maps no holes: `desk_export.py --traced` starts the desk from `proposed/traced.geojson`, and `desk_to_proposed.py --traced-fallback` keeps the traces of a hole the developer has not saved, tagged `approved=pending`)
-(Indian Island, COURSE_LESSONS.md 3). Large state-wide rasters: `clip_raster.py` cuts them to the
+(Indian Island). Large state-wide rasters: `clip_raster.py` cuts them to the
 world before they go into `raw/`.
 
-### 3.4 Pipeline changes: config keys only, and `make regress`
+### 3.4 Changing the pipeline, and pins
 
-**The rule.** Courses share the pipeline, so a course chat changes it only by
-adding an optional `course_config.json` key whose absence leaves every step
-doing exactly what it did (as `red_water_osm`, `drop_trees`, `remove_wires`,
-`roof_last_share`, `tee_shot_margin_m` and `range_art` do). Document the key
-in 3.3's table and in your course file. If an existing behaviour has to
-change for your course (a bug, a better default), don't change it: describe it
-as a request to the design chat, and work around it with a key in the
-meantime.
+Every finished course has `data/<id>/pipeline_pin.json`: the git trees of
+`pipeline/` and `assets-src/` that built its committed files. `make course` builds
+a pinned course with that pipeline, unpacked from git into `.pins/`, so **a change
+to the shared code changes no finished course** and needs no regression check of
+the others. `make pins` lists what each course is pinned to.
 
-**The check.** Run it once, before asking the developer to merge, and only if
-you touched `pipeline/`, `assets-src/` or the `Makefile`:
+So a course chat may change pipeline code its course needs, including existing
+behaviour. Still:
+- prefer a config key for something only your course wants (3.3; document it
+  there and in your course file);
+- keep the change small and say in the pull request what it changes;
+- a course being built on another branch picks the change up when it merges
+  `main`: if it changes a default, say so in the pull request.
 
-```
-make regress                    # every course
-python3 pipeline/regress.py --since origin/main --mine <id>   # only what your diff can change
-```
+Before handing off, pin your course (`python3 pipeline/pins.py pin <id>`, after the
+last commit to `pipeline/` or `assets-src/`). `python3 pipeline/regress.py --since
+origin/main --mine <id>` rebuilds the courses your branch can reach (your own and any
+other unpinned one) from scratch and compares them with the committed files.
 
-It fetches each course's raw files (section 5.6), rebuilds it with
-`make course`, and compares the result with the committed files (the
-committed files are the baseline; no "before" build is needed). It prints one
-line per course, `unchanged` or the changed files, and fails if any course
-other than `--mine` changed. A changed course means the new key's default is
-not a no-op: fix it, don't explain it. The full run takes about an hour (East
-Potomac and Franklin are the longest); start it in the background and keep
-working. Then `cd game && npm test` and `npm run e2e`.
+**Updating a finished course** to the current pipeline is a choice made for that
+course (a bug fix it should have): `python3 pipeline/pins.py unpin <id>`, `make course
+NAME=<id> ARGS=--fresh`, look at every changed file, commit, pin again.
 
 ---
 
@@ -421,8 +452,10 @@ experience. Put the instructions in `data/<id>/DATA_REQUEST.md` too.
 
 ### 5.1 Layout: OpenStreetMap
 
-Option A (easiest for the developer): Overpass Turbo (overpass-turbo.eu),
-paste this, run, Export → GeoJSON, save as `raw/overpass.geojson`:
+Option A (the default; easiest for the developer): Overpass Turbo
+(overpass-turbo.eu), paste this, run, Export → GeoJSON, upload it to the release;
+`python3 pipeline/intake.py osm <id> <export.geojson>` (a `release.json` "run" line)
+writes `raw/overpass.geojson` with only the features near the world:
 
 ```
 [out:json][timeout:120];
@@ -448,6 +481,7 @@ out geom;
 
 Option B: QGIS with the QuickOSM plugin, or a Geofabrik extract clipped in
 QGIS, saved as GeoPackage (`raw/osm.gpkg`, the format the Oswego build used).
+Avoid it: GDAL's OSM driver turns closed tee ways into lines.
 
 ### 5.2 Elevation
 
@@ -492,11 +526,14 @@ is re-exported from Overpass.
 
 ### 5.5 Checks on arrival (before anything else)
 
-For each raster: CRS, resolution, units (feet vs metres: elevations in the
-hundreds where the area is ~50 m above sea level means feet), nodata value
-and holes, and coverage of the whole world extent. For OSM: there is a
-`leisure=golf_course` boundary with the course's name, and feature counts per
-kind. Report problems in one message.
+`make intake NAME=<id>` (`pipeline/intake.py check`) prints errors, warnings and
+facts: every raw input present and covering the world, its CRS, units and kind
+(elevation, canopy height, a picture), nodata and flattened water; lidar CRS,
+vertical units against `laz.units`, classes (no vegetation classes = roofs and wires
+will read as trees), flight dates, tiles with their own scale/offset; the OSM
+export's course polygons and size; the same file uploaded twice; the scorecard
+(holes 1..N, pars, stroke indexes, yardages for the par, totals against
+`tee_sets[].total_yd`). Fix the errors; report the rest in one message.
 
 ### 5.6 Large files: the release and `make fetch`
 
@@ -513,7 +550,7 @@ is and where it goes, so anyone can rebuild the course with one command:
       "sha256": "…",                       // of the asset as downloaded
       "extract": ["tile.laz"],             // members to take out of a zip (omit for a plain file)
       "to": "raw/laz/",                    // where the file or the extracted members go
-      // or instead of extract/to: "run": "python3 data/<id>/make_x.py {file}"
+      // or instead of extract/to: "run": "python3 pipeline/intake.py laz <id> {file}" (or osm, ortho, raster: 5.7)
       "outputs": {"raw/laz/tile.laz": "…"} }  // path → sha256 of what ends up in raw/
   ]
 }
@@ -526,7 +563,28 @@ runs. Copy a finished course's file (`data/franklin/release.json`,
 `data/indian_island/release.json`) and fill in yours; run `make fetch` from a
 clean `raw/` once to prove it works. Clip big lidar to the world box once, at
 intake, and put the clip in the release when you can (it makes every later
-build faster).
+build faster). The release must be published, not a draft (a draft is invisible
+to `make fetch`).
+
+### 5.7 `pipeline/intake.py`: the downloads into `raw/`
+
+Use these in `release.json` "run" lines instead of a script per course:
+
+```
+python3 pipeline/intake.py osm <id> {file} [MORE.geojson ...]      # -> raw/overpass.geojson
+python3 pipeline/intake.py ortho <id> {file} X0 Y0 X1 Y1 [IMG X0 Y0 X1 Y1 ...] [--out raw/ortho.tif]
+python3 pipeline/intake.py laz <id> {file} [--classes 3,4,5] [--out raw/laz/<id>_clip.laz]
+python3 pipeline/intake.py raster <id> {file} --out raw/USGS_1M_<id>.tif
+```
+
+`ortho` places JPEG/PNG exports by their request boxes (course EPSG unless
+`--epsg`), several tiles mosaicked, cut to the world + 100 m. `laz` clips tiles or a
+NOAA zip in the files' own CRS (NOAA ignores the requested projection; s00
+reprojects), re-quantises tiles with other offsets and keeps the source's creation
+date, so the clip's hash is the same on any day. Before `world` is set, pass
+`--box X0 Y0 X1 Y1` (the scouting folder's `box.json`). A course that needs
+something these don't do keeps a small script in `data/<id>/` (several exist:
+`fill_sea.py`, `split_double_greens.py`, `make_beach.py`; look before writing one).
 
 ---
 
@@ -547,8 +605,7 @@ build faster).
 
 ```
 cd pipeline && pip install -r requirements.txt --break-system-packages
-python3 s00_prepare_rasters.py <id>   # after Phase 0
-python3 s01_osm.py <id> && python3 s02_reproject.py <id> && python3 s03_audit.py <id>
+python3 build.py <id> --to s03_audit   # s00 to s03 (each only if its inputs changed)
 ```
 
 Read `build/audit.md` in full. For each hole you need: a `golf=hole` line with
@@ -567,22 +624,23 @@ The course's `pin` is the centre pin. The game adds up to three more hole locati
 | Hole line starts on another hole's tee (Oswego 7/11) | The tee-set assignment in s06 handles it if the right box exists; report it. |
 | Tee set missing (no box within 8 % of the card) | Open item: the developer traces the box in QGIS, or accepts the line start as the tee. |
 | Missing bunker/fairway/water visible on imagery | Proposed geometry from NAIP/lidar in `proposed/`, or the developer traces it. Never silently added. |
-| Water polygon untagged red/yellow | Default from `penalty_default`; ask about each one. |
+| Water polygon untagged red/yellow | `golf=water_hazard` exports yellow, `lateral_water_hazard` red, unless a `penalty` tag says otherwise; the standing default is red (4.1): tag them. |
 | Practice greens | Become wrong greens (relief required); list them. |
 
-Edits go in `data/<id>/edited/course.geojson` (WGS84, same tags as OSM, plus
-`penalty=red|yellow`, `ob=yes`, `tee_set=<name>` where needed). Validate it:
-closed polygons, no self-intersections (`shapely.is_valid`), every feature
-tagged, hole refs complete, a pin on every green. `s02` uses `edited/` instead
-of `raw/` when it exists, so `edited/` must contain **everything**, not only
-the fixes.
+Edits go in `data/<id>/edits.json` (3.6), never in `edited/course.geojson` by
+hand: `merge_edits.py` writes `edited/` from OSM + `edits.json` at every build.
+Tags you can add: `penalty=red|yellow`, `ob=yes`, `tee_set=<name>` (`"Blue;White"`
+for a box shared by two sets), `hole=<n>`, `layout=<id>`. `tags` in `edits.json`
+doesn't change a feature's kind: copy it with the new kind and drop the original.
 
 ---
 
 ## 7. Phase 4 — terrain, trees, holes, greens, art
 
-Run each step on its own, read its output, then go on. Never run the whole
-Makefile and look only at the end.
+Run the steps with `make course NAME=<id>` (or `python3 pipeline/build.py <id>
+--to <step>` / `--from <step>` / `--only <step>`), read each step's output, then go
+on; don't look only at the end. A step whose inputs (files, config keys, code)
+haven't changed since it last ran is skipped; `--fresh` runs every step.
 
 ### 7.1 `s04_elevation.py` — heightmap
 
@@ -698,14 +756,37 @@ never edit `index.json`.
 
 ### 8.2 Unit tests for the course
 
-Each check in `tests/unit/course.test.ts` must pass for the new course:
-height decode against samples; every tee on a tee box and every pin on its
-green; measured yardages within 3 % (or the accepted, logged exceptions);
-a robot golfer completes every hole with legal, finite scores; the default
-aim keeps a perfect tee shot out of the trees on every hole; wind stays in
-the course range; far, near and close-up putting views cover every pin;
-same seed → identical round. If the test file is still Oswego-only, ask the
-design chat to parametrise it (3.1); don't fork it.
+`game/tests/unit/course_play.test.ts` runs the every-course checks on every course
+in the list: heights decode; every tee on its box and pin on its green; yardages
+within 8 % of the card; penalty areas red; a perfect tee shot at the middle of the
+fairway clears the trees by the tee; the default aim keeps it out of the trees, the
+water and OB; no tree implausibly tall; a robot round completes; wind in the
+course's band; putting views cover every pin; same seed, same round. Run it for
+your course: `cd game && npx vitest run tests/unit/course_play.test.ts -t <id>`.
+
+What is special about your course goes in `data/<id>/checks.json` (all keys
+optional; the schema is at the top of `course_play.test.ts`):
+
+```jsonc
+{
+  "note": "per-course settings for course_play.test.ts",
+  "yardage": {"max": {"17": 0.12}, "why": "17 from the developer's back tee"},  // over 8 %, accepted
+  "wind_mph": [3, 14],
+  "water": {"count": 3, "ids": ["channel_w1"]},       // "penalty": "any" if not all red
+  "tees": {"sets": ["Blue"], "holes": {"3": ["tee", "rough"]}},
+  "tee_shot_clear": {"sets": ["Blue", "White"], "skip": [10]},
+  "default_aim": {"skip": [3]},
+  "centre_line_clear": {},  "inside_boundary": true,  "fairway_meets_green": true,  // opt-ins
+  "points": [{"x": 860, "y": 700, "surface": "water", "inside": true, "why": "the lake between the parts"}],
+  "trees": [{"x": 585.5, "y": 1269.5, "r": 2, "absent": true, "why": "developer, 2026-10-20"}],
+  "courses": {"<layout id>": { }}                      // per layout, on a site with layouts
+}
+```
+
+Write the developer's complaints as `points` and `trees` entries and confirm each
+fails on the old data. A `game/tests/unit/<id>.test.ts` only for a check this can't
+say (a green's tier height, a relief procedure); the game's own tests, `pins.test.ts`
+and `courses.test.ts`, cover every course already.
 
 ### 8.3 Play it (in the sandbox, with Playwright)
 
@@ -746,8 +827,9 @@ paths (relief), not OB, unless the developer says otherwise.
    your lessons (what cost time and what to do instead). This replaces the
    old `CLAUDE.md` section 11, `DECISIONS.md` and `COURSE_LESSONS.md` edits;
    the design chat folds it into those after the merge.
-3. Tests: `npm test` and `npm run e2e` pass; if you touched `pipeline/`,
-   `make regress` (3.4) shows every other course unchanged.
+3. Pin (3.4), rebuild with `ARGS=--fresh` and see `git status` unchanged; `npm
+   test` (only `player.test.ts`'s daily-rotation line may fail: the merge adds it)
+   and `npm run e2e` pass.
 4. Hand off: branch + pull request (or the zip described in 0.1). The
    message to the developer has: what was built, open items needing their
    decision (numbered, each with a recommendation), anything requested from
@@ -774,15 +856,18 @@ paths (relief), not OB, unless the developer says otherwise.
 - [ ] `make course NAME=<id>` rebuilds everything from raw/edited/config/scorecard.
 - [ ] `make fetch NAME=<id>` puts every file that isn't in git into `raw/`
       (5.6).
-- [ ] Pipeline changes are new config keys only, and `make regress` shows
-      every other course unchanged (3.4).
+- [ ] `data/<id>/pipeline_pin.json` written after the last pipeline commit, and a
+      `--fresh` build leaves `git status` clean (3.4).
+- [ ] `make intake NAME=<id>` has no errors (5.5).
+- [ ] `course_play.test.ts -t <id>` passes, with `data/<id>/checks.json` for what is
+      special about the course (8.2).
 - [ ] Every hole: pass, or flag/fail explicitly accepted by the developer.
 - [ ] Every playable tee set has a tee position on every hole.
 - [ ] Every green has a pin and far, near and close-up putting views.
 - [ ] Trees placed from lidar (or the documented fallback), preview inspected.
 - [ ] Every water hazard has a confirmed penalty colour.
 - [ ] Attribution complete in `course.json` and shown in the credits.
-- [ ] Unit tests and the Playwright smoke test pass.
+- [ ] Unit tests (but the daily-rotation line) and the Playwright smoke test pass.
 - [ ] Every hole was looked at in the game (8.3), and the screenshots were
       checked, not just taken.
 - [ ] `validation_report.md`, `docs/courses/<id>.md` and
