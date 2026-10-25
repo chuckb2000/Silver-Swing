@@ -14,11 +14,11 @@ import { COURSES_DIR, loadCourseFiles, meterFor, registry, robotRound, roundCfg 
 const LAYOUTS = [
   // flags (3-8 %) left as the developer marked the tees in the desk (validation_report.md)
   { id: 'silvies_craddock', name: 'Silvies Valley Craddock', holes: 18, par: 71, tee: 'Challenge', rating: 0, slope: 0,
-    flagged: { 8: 0.05, 14: 0.08 } as Record<number, number> },
+    flagged: { 8: 0.05, 14: 0.07 } as Record<number, number> },
   { id: 'silvies_hankins', name: 'Silvies Valley Hankins', holes: 18, par: 72, tee: 'White', rating: 71.8, slope: 120,
     flagged: { 8: 0.06, 18: 0.06 } as Record<number, number> },
   { id: 'silvies_chief_egan', name: 'Silvies Valley Chief Egan', holes: 9, par: 29, tee: 'White', rating: 0, slope: 0,
-    flagged: { 8: 0.07, 9: 0.04 } as Record<number, number> },
+    flagged: { 8: 0.06, 9: 0.04 } as Record<number, number> },
 ];
 
 for (const L of LAYOUTS) {
