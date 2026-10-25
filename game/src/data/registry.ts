@@ -46,6 +46,18 @@ export function courseEntries(courses: CourseInfo[]): CourseEntry[] {
   return out.map((e) => (e.kind === 'group' && e.courses.length === 1 ? { kind: 'course', course: e.courses[0] } : e));
 }
 
+/**
+ * A course's name inside its place's list: the words it shares with the place's name are
+ * dropped ("Pumpkin Ridge Witch Hollow" in "Pumpkin Ridge Golf Club" is "Witch Hollow";
+ * developer, 2026-10-24). The full name stays everywhere else (boards, cards, the round).
+ */
+export function nameInGroup(name: string, groupName: string): string {
+  const a = name.split(/\s+/), g = groupName.split(/\s+/);
+  let k = 0;
+  while (k < a.length - 1 && k < g.length && a[k].toLowerCase() === g[k].toLowerCase()) k++;
+  return a.slice(k).join(' ');
+}
+
 /** The tee set to play: the one last chosen for this course if it still has it, else the course's default. */
 export function teeFor(c: { id: string; defaultTee: string; teeSets: (string | { name: string })[] }, saved: Record<string, string> | undefined): string {
   const names = c.teeSets.map((t) => (typeof t === 'string' ? t : t.name));
