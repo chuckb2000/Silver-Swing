@@ -112,3 +112,35 @@ A photo of the printed Craddock card (both sides), if you have one. The only
 card found online (GolfPass) disagrees with the OSM routing on holes 2 and 16.
 
 Add every file to the `silvies-data` release and keep it published (not a draft).
+
+## Canopy: what arrived and what's needed instead (2026-10-25)
+
+`_ags_f865b3b0_e1b1_4af1_b447_007176fca9e4.tif` (sha256 24502257afba11e04bcc419c8e56991e6775fbd6e876607dd956b55d62d2aac8)
+is the DOGAMI CANOPY_HEIGHT_MODEL_MOSAIC on the box (feet, 0-141 ft), but **75 % of it is
+nodata**: the mosaic has canopy only for the forest north of the course and a sliver in
+the south. The DTM mosaic under the course comes from OR_SouthEast_6_D22 (USGS 3DEP,
+Malheur-Strawberry, flown 2 June-11 August 2023, 8 points/m2, UTM 11N NAD83(2011),
+metres; DOGAMI mapping report), which has no canopy layer in the DOGAMI mosaic. Its
+points are classed 1 (unclassified: trees, shrubs, roofs), 2 ground, 7/18 noise, 9 water,
+17 bridges, 20 ignored ground. So the trees come from that point cloud.
+
+### 6. Lidar points, OR_SouthEast_6_D22, clipped to the box (one zip, LAZ)
+
+Route A, NOAA Data Access Viewer (one clipped file, as for Franklin, Triggs, Stanford):
+1. Open https://coast.noaa.gov/dataviewer/#/lidar/search/
+2. Draw a rectangle: south 44.04845, west -119.00110, north 44.07015, east -118.96858
+   (or zoom to Seneca, OR, and draw round the golf course with a little margin).
+3. In the list, pick the 2023 (or "2022 D22") USGS lidar for southeast Oregon / Malheur-
+   Strawberry; Add to cart.
+4. Cart: output **LAZ**, projection **UTM zone 11N, NAD83(2011), metres**, vertical
+   **NAVD88 metres**, classes **1 and 2** (all classes is fine too). Submit; the email
+   brings a zip link.
+5. Upload the zip to the `silvies-data` release.
+
+Route B, USGS National Map downloader, if NOAA doesn't list the project:
+1. Open https://apps.nationalmap.gov/downloader/
+2. Tick **Elevation Source Data (3DEP) - Lidar, IfSAR** → **Lidar Point Cloud (LPC)**.
+3. Draw the same box; Search Products; download every `USGS_LPC_OR_SouthEast_D22_*` tile
+   listed (LAZ).
+4. Zip them into one file and upload it (single big LAS/LAZ uploads have failed in the
+   browser; one zip has worked).
