@@ -1,0 +1,22 @@
+{
+  "note": "Silvies Valley Ranch: per-course settings for game/tests/unit/course_play.test.ts (COURSE_BUILD.md 8.2). Three layouts in one world; what only Silvies needs (pars, ratings, the shared greens) stays in game/tests/unit/silvies.test.ts.",
+  "wind_mph": [1, 7],
+  "water": {"penalty": "red", "count": 3, "ids": ["egan_creek"]},
+  "inside_boundary": true,
+  "points": [
+    {"x": 1658.5, "y": 608.2, "surface": "water", "why": "the Chief Egan creek is a red penalty area (developer, 2026-10-25: small, red)"},
+    {"x": 1725.6, "y": 613.3, "surface": "water", "why": "the creek runs on into the pond, 1 m from it (developer: make sure the red connects to the lake)"},
+    {"x": 716.0, "y": 972.1, "not": "water", "why": "the band by the Craddock 9th green and 14th tee is shrubs, not water (developer: should just be shrubs)"}
+  ],
+  "courses": {
+    "silvies_craddock": {
+      "yardage": {"tolerance": 0.03, "max": {"8": 0.05, "14": 0.07}, "why": "flags (3-8 %) left as the developer marked the Challenge tees in the desk (validation_report.md)"}
+    },
+    "silvies_hankins": {
+      "yardage": {"tolerance": 0.03, "max": {"8": 0.06, "18": 0.06}, "why": "flags (3-8 %) left as the developer marked the White tees"}
+    },
+    "silvies_chief_egan": {
+      "yardage": {"tolerance": 0.03, "max": {"8": 0.06, "9": 0.04}, "why": "flags (3-8 %) left as the developer marked the White tees"}
+    }
+  }
+}

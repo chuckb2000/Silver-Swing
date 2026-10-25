@@ -226,8 +226,14 @@ describe('daily round (item 4)', () => {
       for (let k = 1; k <= Math.min(i, PLACE_REST_DAYS); k++) expect(placeOf(byId.get(plans[i - k].courseId)!), days[i]).not.toBe(place);
       for (let k = 1; k <= Math.min(i, restDays(pool)); k++) expect(plans[i - k].courseId, days[i]).not.toBe(plans[i].courseId);
     }
-    // every course in the rotation comes up within two rotations
-    expect(new Set(plans.slice(0, 2 * pool).map((p) => p.courseId)).size).toBe(pool);
+    // every course in the rotation comes up within two rotations of joining it (courses landed after
+    // RANDOM_DAILY_FROM join on their own day; the pool then is every course in by that day)
+    for (const c of all.filter((c) => (c.holes === 9 || c.holes === 18) && DAILY_ROSTER[c.id])) {
+      const from = DAILY_ROSTER[c.id] > RANDOM_DAILY_FROM ? DAILY_ROSTER[c.id] : RANDOM_DAILY_FROM;
+      const n = all.filter((o) => (o.holes === 9 || o.holes === 18) && DAILY_ROSTER[o.id] && DAILY_ROSTER[o.id] <= from).length;
+      const i0 = days.indexOf(from);
+      expect(plans.slice(i0, i0 + 2 * n).map((p) => p.courseId), `${c.id} within two rotations of ${from}`).toContain(c.id);
+    }
     // the same for everyone, whatever order the list is in; a course added later leaves the days before it alone
     expect(dailyPlan('2026-11-20', all.slice().reverse(), DAILY_ROSTER, DAILY_PICKS)).toEqual(dailyPlan('2026-11-20', all, DAILY_ROSTER, DAILY_PICKS));
     const extra = [...all, { id: 'zz_new', holes: 18, defaultTee: 'Blue', teeSets: ['Blue'], location: 'Nowhere, Oregon' }];

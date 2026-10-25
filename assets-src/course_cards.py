@@ -97,8 +97,13 @@ class Course:
         self.ui = Atlas(PUBLIC / "sprites" / "sprites.png", PUBLIC / "sprites" / "sprites.json")
         bl = PUBLIC / "sprites" / "blossom.png"
         self.blossom = Atlas(bl, PUBLIC / "sprites" / "blossom.json") if bl.exists() else None  # flowering trees (c: 2)
-        sb = PUBLIC / "sprites" / "shrubs.png"
-        self.shrubs = Atlas(sb, PUBLIC / "sprites" / "shrubs.json") if sb.exists() else None   # flowering shrubs (c: 3)
+        # trees.json c: 3: the course's own bush sheet when it has one (course.json "shrubs", e.g. gorse or
+        # sagebrush), else the flowering shrubs, as the game does (src/data/courses.ts)
+        shs = self.json.get("shrubs") or "shrubs"
+        if not (PUBLIC / "sprites" / f"{shs}.png").exists():
+            shs = "shrubs"
+        sb = PUBLIC / "sprites" / f"{shs}.png"
+        self.shrubs = Atlas(sb, PUBLIC / "sprites" / f"{shs}.json") if sb.exists() else None
         self.surface = np.array(Image.open(self.dir / self.json["surface"]["file"]))
         self._chunks: dict = {}
 

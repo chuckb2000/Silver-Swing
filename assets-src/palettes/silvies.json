@@ -1,0 +1,21 @@
+{
+  "name": "Silvies (high desert ranch, Blue Mountains)",
+  "note": "Course theme palette (<= 32 colours; same keys as pnw.json plus F0-F2). Silvies Valley Ranch, Seneca OR, about 4,700 ft up in the Blue Mountains: irrigated fairways and greens a clear green against the dry hills; the native rough of bunchgrass and sage cured to a tawny gold by summer (F0-F2, inside config fescue_areas; mown rough beside the fairways in G3-G5); off the course (L0-L2) the grey-olive of sagebrush steppe, so out of bounds reads apart from the rough; pale tan sand; blue ponds; log-cabin browns. Trees: ponderosa pine and western juniper (assets-src/trees_silvies.py), sagebrush as the theme's bush. Hues chosen for the game's saturated style, to be checked against the OSIP photo once it arrives. Shadows are a 35% black overlay on top of these.",
+  "colors": {
+    "G0": "#1a2e22", "G1": "#26422b", "G2": "#345834", "G3": "#436e3a",
+    "G4": "#538340", "G5": "#649748", "G6": "#76a951", "G7": "#89b95c",
+    "G8": "#9dc86b", "G9": "#bfdc94",
+    "L0": "#6b6f52", "L1": "#7d8160", "L2": "#8f936f",
+    "S0": "#b9a88a", "S1": "#dccdb0", "S2": "#eee4cf",
+    "W0": "#24496b", "W1": "#335f86", "W2": "#6f97b8",
+    "K0": "#2a2a2c", "K1": "#58585a", "K2": "#807e7a", "K3": "#b4aa96", "K4": "#d8cfbc",
+    "B0": "#4a3020", "B1": "#70482e", "B2": "#93633f",
+    "R0": "#5a5a62", "WH": "#f6f5ef",
+    "F0": "#957d4c", "F1": "#ad945c", "F2": "#c3aa70"
+  },
+  "lut": {"rough": ["F0", "F1", "F2", "F2"], "rough_band": ["G3", "G4", "G5", "G5"]},
+  "aliases": {"TUFT": "F0"},
+  "minimap": {"ob": "#7d8160", "rough": "#ad945c", "woods": "#345834", "ob_woods": "#2f4e30", "water": "#335f86", "ob_water": "#335f86", "bunker": "#dccdb0", "ob_sand": "#dccdb0"},
+  "minimap_trees": {"conifer": ["#152b1c", "#3a6436"], "deciduous": ["#22322b", "#56705c"], "shrub": ["#4a5443", "#9ba68c"]},
+  "trees": {"conifer": "trees_silvies:ponderosa", "deciduous": "trees_silvies:juniper", "shrub": "trees_silvies:sage_bush"}
+}

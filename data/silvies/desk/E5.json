@@ -1,0 +1,30 @@
+{
+ "features": [
+  {
+   "id": "user_bluetee_mvny8ivu",
+   "kind": "bluetee",
+   "poly": [
+    [
+     1873.5,
+     669.2
+    ],
+    [
+     1879.4,
+     669.8
+    ],
+    [
+     1880.8,
+     663.9
+    ],
+    [
+     1874.8,
+     663.2
+    ]
+   ]
+  }
+ ],
+ "hole": "E5",
+ "note": "",
+ "savedAt": "2026-10-25T14:54:50.545Z",
+ "units": "local metres, origin 339997 E 4879339 N, EPSG:32611"
+}
