@@ -1,0 +1,40 @@
+{
+ "note": "Cypress Point's own edits (approved proposals only), appended by make_edits.py.",
+ "add": [
+  {
+   "from": "proposed/tee_split.geojson",
+   "ids": [
+    "tee_w281499468_n",
+    "tee_w281499468_s"
+   ],
+   "reason": "developer 2026-10-24 (approved): the long curved tee box shared by holes 2 and 14 (OSM w281499468) cut across at local y 932; south half hole 2 (Middle 535 at its south end), north half hole 14 (Middle 384 near its north tip). make_tee_split.py"
+  },
+  {
+   "from": "proposed/dunes.geojson",
+   "ids": "*",
+   "reason": "developer 2026-10-24 (approved: 'the trace looks excellent'; off-course sand to carry on past the OB line): open dune sand traced from NAIP by make_dunes.py; shapes inside the boundary as golf=bunker + sand=waste (bunkers until a waste-sand surface exists), outside as natural=sand (scenery)"
+  },
+  {
+   "from": "proposed/sea.geojson",
+   "ids": [
+    "sea_pacific"
+   ],
+   "reason": "developer 2026-10-24 ('the Pacific should absolutely be a water hazard in all circumstances'; approved): the sea side of OSM's natural=coastline ways in the world + 300 m box (make_sea.py), one red penalty area wherever it lies (config red_water_osm)"
+  },
+  {
+   "from": "proposed/shore.geojson",
+   "ids": [
+    "shore_pacific"
+   ],
+   "reason": "developer 2026-10-24 (approved): the rocks, cliffs and small beaches between the course boundary and the sea (make_shore.py: outside the boundary, within 60 m of the sea and 120 m of the boundary, clear of roads and houses, not across 17-Mile Drive) are part of the same red penalty area, so a ball below the clifftop is in the hazard, not out of bounds; drawn as rock (config rock_water_osm), its ground kept (flatten=no)"
+  }
+ ],
+ "tags": [],
+ "drop": [
+  {
+   "osm": "w281499468",
+   "reason": "replaced by its two halves (tee_split, add above)"
+  }
+ ],
+ "extend_start": []
+}

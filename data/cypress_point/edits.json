@@ -1,0 +1,335 @@
+{
+ "note": "Edits to the OSM layout for Cypress Point, written by make_edits.py (generic edits, then course_edits.json); built into edited/course.geojson by pipeline/merge_edits.py.",
+ "add": [
+  {
+   "from": "proposed/paths_as_cartpaths.geojson",
+   "ids": [
+    "w1346341475_cartpath",
+    "w281740968_cartpath",
+    "w678927631_cartpath"
+   ],
+   "reason": "3 golf=path ways inside the boundary, not read by s01: copied as golf=cartpath (free relief, drawn as paths)"
+  },
+  {
+   "from": "proposed/tee_split.geojson",
+   "ids": [
+    "tee_w281499468_n",
+    "tee_w281499468_s"
+   ],
+   "reason": "developer 2026-10-24 (approved): the long curved tee box shared by holes 2 and 14 (OSM w281499468) cut across at local y 932; south half hole 2 (Middle 535 at its south end), north half hole 14 (Middle 384 near its north tip). make_tee_split.py"
+  },
+  {
+   "from": "proposed/dunes.geojson",
+   "ids": [
+    "dune_1",
+    "dune_2",
+    "dune_3",
+    "dune_4",
+    "dune_5",
+    "dune_6",
+    "dune_7",
+    "dune_8",
+    "dune_9",
+    "dune_10",
+    "dune_11",
+    "dune_12",
+    "dune_13",
+    "dune_14",
+    "dune_15",
+    "dune_16",
+    "dune_17",
+    "dune_18",
+    "dune_19",
+    "dune_20",
+    "dune_21",
+    "dune_22",
+    "dune_23",
+    "dune_24",
+    "dune_25",
+    "dune_26",
+    "dune_27",
+    "dune_28",
+    "dune_29",
+    "dune_30",
+    "dune_31",
+    "dune_32",
+    "dune_33",
+    "dune_34",
+    "dune_35",
+    "dune_36",
+    "dune_37",
+    "dune_38",
+    "dune_39",
+    "dune_40",
+    "dune_41",
+    "dune_42",
+    "dune_43",
+    "dune_44",
+    "dune_45",
+    "dune_46",
+    "dune_47",
+    "dune_48",
+    "dune_49",
+    "dune_50",
+    "dune_51",
+    "dune_52",
+    "dune_53",
+    "dune_54",
+    "dune_55",
+    "dune_56",
+    "dune_57",
+    "dune_58",
+    "dune_59",
+    "dune_60",
+    "dune_61",
+    "dune_62",
+    "dune_63",
+    "dune_64",
+    "dune_65",
+    "dune_66",
+    "dune_67",
+    "dune_68",
+    "dune_69",
+    "dune_70",
+    "dune_71",
+    "dune_72",
+    "dune_73",
+    "dune_74",
+    "dune_75",
+    "dune_76",
+    "dune_77",
+    "dune_78",
+    "dune_79",
+    "dune_80",
+    "dune_81",
+    "dune_82",
+    "dune_83",
+    "dune_84",
+    "dune_85",
+    "dune_86",
+    "dune_87",
+    "dune_88",
+    "dune_89",
+    "dune_90",
+    "dune_91",
+    "dune_92",
+    "dune_93",
+    "dune_94",
+    "dune_95",
+    "dune_96",
+    "dune_97",
+    "dune_98",
+    "dune_99",
+    "dune_100",
+    "dune_101",
+    "dune_102",
+    "dune_103",
+    "dune_104",
+    "dune_105",
+    "dune_106",
+    "dune_107",
+    "dune_108",
+    "dune_109",
+    "dune_110",
+    "dune_111",
+    "dune_112",
+    "dune_113",
+    "dune_114",
+    "dune_115",
+    "dune_116",
+    "dune_117",
+    "dune_118",
+    "dune_119",
+    "dune_120",
+    "dune_121",
+    "dune_122",
+    "dune_123",
+    "dune_124",
+    "dune_125",
+    "dune_126",
+    "dune_127",
+    "dune_128",
+    "dune_129",
+    "dune_130",
+    "dune_131",
+    "dune_132",
+    "dune_133",
+    "dune_134",
+    "dune_135",
+    "dune_136",
+    "dune_137",
+    "dune_138",
+    "dune_139",
+    "dune_140",
+    "dune_141",
+    "dune_142",
+    "dune_143",
+    "dune_144",
+    "dune_145",
+    "dune_146",
+    "dune_147",
+    "dune_148",
+    "dune_149",
+    "dune_150",
+    "dune_151",
+    "dune_152",
+    "dune_153",
+    "dune_154",
+    "dune_155",
+    "dune_156",
+    "dune_157",
+    "dune_158",
+    "dune_159",
+    "dune_160",
+    "dune_161",
+    "dune_162",
+    "dune_163",
+    "dune_164",
+    "dune_165",
+    "dune_166",
+    "dune_167",
+    "dune_168",
+    "dune_169",
+    "dune_170",
+    "dune_171",
+    "dune_172",
+    "dune_173"
+   ],
+   "reason": "developer 2026-10-24 (approved: 'the trace looks excellent'; off-course sand to carry on past the OB line): open dune sand traced from NAIP by make_dunes.py; shapes inside the boundary as golf=bunker + sand=waste (bunkers until a waste-sand surface exists), outside as natural=sand (scenery)"
+  },
+  {
+   "from": "proposed/sea.geojson",
+   "ids": [
+    "sea_pacific"
+   ],
+   "reason": "developer 2026-10-24 ('the Pacific should absolutely be a water hazard in all circumstances'; approved): the sea side of OSM's natural=coastline ways in the world + 300 m box (make_sea.py), one red penalty area wherever it lies (config red_water_osm)"
+  },
+  {
+   "from": "proposed/shore.geojson",
+   "ids": [
+    "shore_pacific"
+   ],
+   "reason": "developer 2026-10-24 (approved): the rocks, cliffs and small beaches between the course boundary and the sea (make_shore.py: outside the boundary, within 60 m of the sea and 120 m of the boundary, clear of roads and houses, not across 17-Mile Drive) are part of the same red penalty area, so a ball below the clifftop is in the hazard, not out of bounds; drawn as rock (config rock_water_osm), its ground kept (flatten=no)"
+  }
+ ],
+ "tags": [],
+ "drop": [
+  {
+   "osm": "w281477606",
+   "reason": "Spyglass Hill Golf Course (leisure=golf_course): another course; the out-of-bounds line is Cypress Point's own polygon"
+  },
+  {
+   "osm": "w688794179",
+   "reason": "Spyglass Hill hole 1 (Treasure Island): another course's hole line, outside the boundary"
+  },
+  {
+   "osm": "w688794180",
+   "reason": "Spyglass Hill hole 2 (Billy Bones): another course's hole line, outside the boundary"
+  },
+  {
+   "osm": "w688794181",
+   "reason": "Spyglass Hill hole 3 (The Black Spot): another course's hole line, outside the boundary"
+  },
+  {
+   "osm": "w688794182",
+   "reason": "Spyglass Hill hole 4 (Blind Pew): another course's hole line, outside the boundary"
+  },
+  {
+   "osm": "w688794183",
+   "reason": "Spyglass Hill hole 5 (Bird Rock): another course's hole line, outside the boundary"
+  },
+  {
+   "osm": "w688794184",
+   "reason": "Spyglass Hill hole 6 (Israel Hands): another course's hole line, outside the boundary"
+  },
+  {
+   "osm": "w688794185",
+   "reason": "Spyglass Hill hole 7 (Indian Village): another course's hole line, outside the boundary"
+  },
+  {
+   "osm": "w688794186",
+   "reason": "Spyglass Hill hole 8 (Signal Hill): another course's hole line, outside the boundary"
+  },
+  {
+   "osm": "w688794187",
+   "reason": "Spyglass Hill hole 9 (Captain Smollett): another course's hole line, outside the boundary"
+  },
+  {
+   "osm": "w688794188",
+   "reason": "Spyglass Hill hole 10 (Captain Flint): another course's hole line, outside the boundary"
+  },
+  {
+   "osm": "w688794189",
+   "reason": "Spyglass Hill hole 11 (Admiral Benbow): another course's hole line, outside the boundary"
+  },
+  {
+   "osm": "w688794195",
+   "reason": "Spyglass Hill hole 17 (Ben Gunn): another course's hole line, outside the boundary"
+  },
+  {
+   "osm": "w688794196",
+   "reason": "Spyglass Hill hole 18 (Spyglass): another course's hole line, outside the boundary"
+  },
+  {
+   "osm": "w1093425899",
+   "reason": "another course's green wholly outside the world box (s07/s09 cannot shape a green off the map)"
+  },
+  {
+   "osm": "w1093439800",
+   "reason": "another course's green wholly outside the world box (s07/s09 cannot shape a green off the map)"
+  },
+  {
+   "osm": "w1093439808",
+   "reason": "another course's green wholly outside the world box (s07/s09 cannot shape a green off the map)"
+  },
+  {
+   "osm": "w1093448449",
+   "reason": "another course's green wholly outside the world box (s07/s09 cannot shape a green off the map)"
+  },
+  {
+   "osm": "w1093451950",
+   "reason": "another course's green wholly outside the world box (s07/s09 cannot shape a green off the map)"
+  },
+  {
+   "osm": "w1093463541",
+   "reason": "another course's green wholly outside the world box (s07/s09 cannot shape a green off the map)"
+  },
+  {
+   "osm": "w281478823",
+   "reason": "another course's green wholly outside the world box (s07/s09 cannot shape a green off the map)"
+  },
+  {
+   "osm": "w686748512",
+   "reason": "another course's green wholly outside the world box (s07/s09 cannot shape a green off the map)"
+  },
+  {
+   "osm": "w686748513",
+   "reason": "another course's green wholly outside the world box (s07/s09 cannot shape a green off the map)"
+  },
+  {
+   "osm": "w686748516",
+   "reason": "another course's green wholly outside the world box (s07/s09 cannot shape a green off the map)"
+  },
+  {
+   "osm": "w686748518",
+   "reason": "another course's green wholly outside the world box (s07/s09 cannot shape a green off the map)"
+  },
+  {
+   "osm": "w1346341475",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w281740968",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w678927631",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w281499468",
+   "reason": "replaced by its two halves (tee_split, add above)"
+  }
+ ],
+ "extend_start": []
+}

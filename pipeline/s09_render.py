@@ -50,6 +50,19 @@ def load_theme(theme: str = "pnw") -> dict:
     return json.load(open(ROOT / "assets-src" / "palettes" / f"{theme}.json"))
 
 
+def paint_rock(rgb, rock, t, n1, n2, P, theme: dict):
+    """Penalty areas over rock (cfg rock_water_osm; s09 and s09b also leave out the OB stakes where
+    the boundary meets them and the red_water_osm areas): granite tones from the theme's "rock" keys
+    (default the grey K tones), dark crevices and, if the theme names "rock_plants", speckles of
+    plants (iceplant) on the ledges. Only courses with rock_water_osm call this."""
+    keys = theme.get("rock", ["K1", "K2", "K3", "K3"])
+    tones = np.array([P[k] for k in keys], np.uint8)
+    rgb[rock] = tones[np.clip(t[rock], 0, 3)]
+    rgb[rock & (n2 < 0.14)] = P[keys[0]]
+    for k, col in enumerate(theme.get("rock_plants", [])):
+        rgb[rock & (n2 > 0.9 - 0.05 * k) & (n2 <= 0.95 - 0.05 * k) & (n1 < 0.7)] = P[col]
+
+
 def load_palette(theme: str = "pnw"):
     """Course theme palette: colour key -> RGB. Optional "aliases" name a role
     after a colour key (e.g. "TUFT": "F2" for the rough's grass tufts)."""
@@ -418,6 +431,15 @@ def main():
     trees = json.load(open(bdir / "trees.json"))
     g = gpd.read_file(bdir / "course_local.geojson")
     rng = np.random.default_rng(20261018)
+    rock = None
+    if cfg.get("rock_water_osm"):
+        # optional: penalty areas over rock (Cypress Point's shore between the clifftop and the
+        # sea) are drawn as rock, in the ob_road tones; they stay water in the surface map
+        rock = rasterize([(geom, 1) for geom in g[g.osm.isin(cfg["rock_water_osm"])].geometry],
+                         out_shape=(H, W), transform=Affine(1 / PX_PER_M, 0, 0, 0, -1 / PX_PER_M, world.height),
+                         fill=0, dtype="uint8").astype(bool) & (surf == S["water"])
+        surf = surf.copy()
+        surf[rock] = S["ob_road"]
 
     z = terrain_z_px(world, base, greens, H, W)
     np.save(bdir / "z_px.npy", z.astype(np.float32))
@@ -473,6 +495,9 @@ def main():
     # range balls
     if cfg.get("range_art") != "rough":  # a range drawn as rough shows only its OB stakes (developer, Oregon Golf Club)
         put(range_cells & (n1 > 0.9975), "WH")
+
+    if rock is not None:
+        paint_rock(rgb, rock, t, n1, n2, P, load_theme(cfg["theme"]))
 
     # outlines -----------------------------------------------------------
     pr = PRIO[surf]
@@ -606,6 +631,12 @@ def main():
     rgb = np.array(img)
 
     # OB stakes along the boundary ------------------------------------------
+    no_stakes = None
+    if (cfg or {}).get("rock_water_osm"):  # no OB stakes where the boundary meets the penalty areas
+        from shapely.prepared import prep as _prep  # outside it (Cypress Point's shore and sea)
+        from shapely.ops import unary_union as _uu
+        _ids = list(cfg["rock_water_osm"]) + list(cfg.get("red_water_osm") or [])
+        no_stakes = _prep(_uu(list(g[g.osm.isin(_ids)].geometry)).buffer(1.0))
     for ring, poly, ob_inside in stake_lines(boundary_rings(g, cfg), g, cfg):
         for s_ in np.arange(0, ring.length, 9.0):
             p = ring.interpolate(s_)
@@ -616,6 +647,8 @@ def main():
             cand = Point(p.x + nx_ * 0.8, p.y + ny_ * 0.8)
             if poly.contains(cand) != ob_inside:
                 cand = Point(p.x - nx_ * 0.8, p.y - ny_ * 0.8)
+            if no_stakes is not None and no_stakes.contains(cand):
+                continue
             col = int(cand.x * PX_PER_M)
             row = int((world.height - cand.y) * PX_PER_M)
             if 2 <= row < H - 1 and 0 <= col < W - 1:

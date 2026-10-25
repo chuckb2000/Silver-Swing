@@ -40,7 +40,7 @@ from common import build_dir, course_name_from_argv, GORSE_SURF, WASTE_SURF, joi
 from s08_surface import course_layers, road_geoms
 from terrain import tier_offset
 from s09_render import draw_lighthouse, LIGHTHOUSE_DRAW_SCALE  # noqa: E402
-from s09_render import BAYER4, PRIO, SHADOW_DIR, SHADOW_MULT, band_lut, build_lut, load_palette, load_theme, rough_band_mask, stake_lines, waste_scrub, wave_mask
+from s09_render import BAYER4, PRIO, SHADOW_DIR, SHADOW_MULT, band_lut, build_lut, load_palette, load_theme, paint_rock, rough_band_mask, stake_lines, waste_scrub, wave_mask
 
 sys.path.insert(0, str(ROOT / "assets-src"))
 from atlas import Atlas  # noqa: E402
@@ -212,6 +212,11 @@ def render_art(surf, z, grid: Grid, g, holes, trees, buildings, boundary, P, lut
         range_cells = surf == S["range"]
         surf = surf.copy()
         surf[range_cells] = S["rough"]
+    rock = None
+    if cfg and cfg.get("rock_water_osm"):  # penalty areas over rock drawn as rock (s09_render, rock_water_osm)
+        rock = grid.mask(list(g[g.osm.isin(cfg["rock_water_osm"])].geometry)) & (surf == S["water"])
+        surf = surf.copy()
+        surf[rock] = S["ob_road"]
     tone = hillshade_tone(z, surf, ppm)
     stripe = stripe_field(g, holes, grid, tee)
     t = tone.astype(np.int16)
@@ -255,6 +260,8 @@ def render_art(surf, z, grid: Grid, g, holes, trees, buildings, boundary, P, lut
     tuft3 = np.zeros_like(tuft)
     tuft3[:-2] = tuft[2:]
     put(tuft | tuft2 | tuft3, "TUFT" if "TUFT" in P else "G5")
+    if rock is not None:
+        paint_rock(rgb, rock, t, n1, n2, P, load_theme(cfg["theme"]))
     # outlines
     pr = PRIO[surf]
     edge = np.zeros((H, W), bool)
@@ -332,6 +339,12 @@ def render_art(surf, z, grid: Grid, g, holes, trees, buildings, boundary, P, lut
 
     # OB stakes along the boundary (every 9 m, just outside it)
     parts = list(boundary.geoms) if boundary.geom_type == "MultiPolygon" else [boundary]
+    no_stakes = None
+    if (cfg or {}).get("rock_water_osm"):  # no OB stakes where the boundary meets the penalty areas
+        from shapely.prepared import prep as _prep  # outside it (Cypress Point's shore and sea)
+        from shapely.ops import unary_union as _uu
+        _ids = list(cfg["rock_water_osm"]) + list(cfg.get("red_water_osm") or [])
+        no_stakes = _prep(_uu(list(g[g.osm.isin(_ids)].geometry)).buffer(1.0))
     for ring, poly, ob_inside in stake_lines(parts, g, cfg or {}):
         for s_ in np.arange(0, ring.length, 9.0):
             p = ring.interpolate(s_)
@@ -342,6 +355,8 @@ def render_art(surf, z, grid: Grid, g, holes, trees, buildings, boundary, P, lut
             cand = Point(p.x + nx_ * 0.8, p.y + ny_ * 0.8)
             if poly.contains(cand) != ob_inside:
                 cand = Point(p.x - nx_ * 0.8, p.y - ny_ * 0.8)
+            if no_stakes is not None and no_stakes.contains(cand):
+                continue
             col, row = (int(v) for v in grid.px(cand.x, cand.y))
             hpx = int(round(ppm * 1.0))
             if hpx + 1 <= row < H - 2 and 1 <= col < W - 2:

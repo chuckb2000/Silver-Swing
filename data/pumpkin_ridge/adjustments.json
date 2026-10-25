@@ -1,0 +1,78 @@
+{
+ "pumpkin_ridge_witch_hollow": [
+  {
+   "hole": 5,
+   "tee_set": "Blue",
+   "step": 2,
+   "type": "tee_position",
+   "from": [
+    1320.5,
+    801.46
+   ],
+   "to": [
+    1320.5,
+    802.5
+   ],
+   "real_yd": 192.7,
+   "adjusted_yd": 191.6,
+   "card_yd": 187.0,
+   "reason": "measured 193 yd from the tee-box centre vs 187 on the card (+3.0%); moved the virtual tee along the middle of the real tee polygon w900259501 (on its centre line, at least 2.5 m from its back and front)"
+  }
+ ],
+ "pumpkin_ridge_ghost_creek": [
+  {
+   "hole": 3,
+   "tee_set": "Blue",
+   "step": 2,
+   "type": "tee_position",
+   "from": [
+    1521.3,
+    666.71
+   ],
+   "to": [
+    1520.25,
+    668.5
+   ],
+   "real_yd": 164.6,
+   "adjusted_yd": 163.0,
+   "card_yd": 158.0,
+   "reason": "measured 165 yd from the tee-box centre vs 158 on the card (+4.1%); moved the virtual tee along the middle of the real tee polygon w903974911 (on its centre line, at least 2.5 m from its back and front)"
+  },
+  {
+   "hole": 12,
+   "tee_set": "Blue",
+   "step": 2,
+   "type": "tee_position",
+   "from": [
+    1391.49,
+    614.61
+   ],
+   "to": [
+    1393.75,
+    616.0
+   ],
+   "real_yd": 393.0,
+   "adjusted_yd": 395.9,
+   "card_yd": 406.0,
+   "reason": "measured 393 yd from the tee-box centre vs 406 on the card (-3.2%); moved the virtual tee along the middle of the real tee polygon w903974921 (on its centre line, at least 2.5 m from its back and front)"
+  },
+  {
+   "hole": 17,
+   "tee_set": "Blue",
+   "step": 2,
+   "type": "tee_position",
+   "from": [
+    1036.64,
+    1154.46
+   ],
+   "to": [
+    1036.75,
+    1158.0
+   ],
+   "real_yd": 289.7,
+   "adjusted_yd": 293.6,
+   "card_yd": 301.0,
+   "reason": "measured 290 yd from the tee-box centre vs 301 on the card (-3.7%); moved the virtual tee along the middle of the real tee polygon w903974948 (on its centre line, at least 2.5 m from its back and front)"
+  }
+ ]
+}

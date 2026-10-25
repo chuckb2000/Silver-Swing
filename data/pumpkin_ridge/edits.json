@@ -1,0 +1,507 @@
+{
+ "add": [
+  {
+   "from": "proposed/retagged.geojson",
+   "ids": [
+    "w900259494_range"
+   ],
+   "reason": "golf=practice (the driving range, 3.6 ha) as golf=driving_range: out of bounds (standing default)"
+  },
+  {
+   "from": "proposed/retagged.geojson",
+   "ids": [
+    "w903974790_bldg",
+    "w906032327_bldg",
+    "w906032328_bldg"
+   ],
+   "reason": "golf=clubhouse areas as buildings (drawn, and an obstruction); s01 reads the golf key first"
+  },
+  {
+   "from": "proposed/retagged.geojson",
+   "ids": [
+    "w903232732_path",
+    "w903232733_path",
+    "w903232739_path",
+    "w903232740_path"
+   ],
+   "reason": "golf=path lines as cart paths (free relief); s01 reads only golf=cartpath"
+  }
+ ],
+ "drop": [
+  {
+   "osm": "w900259494",
+   "reason": "replaced by its retagged copy (add above)"
+  },
+  {
+   "osm": "w903974790",
+   "reason": "replaced by its retagged copy (add above)"
+  },
+  {
+   "osm": "w906032327",
+   "reason": "replaced by its retagged copy (add above)"
+  },
+  {
+   "osm": "w906032328",
+   "reason": "replaced by its retagged copy (add above)"
+  },
+  {
+   "osm": "w903232732",
+   "reason": "replaced by its retagged copy (add above)"
+  },
+  {
+   "osm": "w903232733",
+   "reason": "replaced by its retagged copy (add above)"
+  },
+  {
+   "osm": "w903232739",
+   "reason": "replaced by its retagged copy (add above)"
+  },
+  {
+   "osm": "w903232740",
+   "reason": "replaced by its retagged copy (add above)"
+  }
+ ],
+ "tags": [
+  {
+   "osm": "w902087398",
+   "set": {
+    "layout": "pumpkin_ridge_ghost_creek"
+   },
+   "reason": "OSM name 'Ghost Creek 10': one course polygon for both courses, so the hole line is assigned to its layout by name"
+  },
+  {
+   "osm": "w902087399",
+   "set": {
+    "layout": "pumpkin_ridge_ghost_creek"
+   },
+   "reason": "OSM name 'Ghost Creek 11': one course polygon for both courses, so the hole line is assigned to its layout by name"
+  },
+  {
+   "osm": "w902087402",
+   "set": {
+    "layout": "pumpkin_ridge_ghost_creek"
+   },
+   "reason": "OSM name 'Ghost Creek 12': one course polygon for both courses, so the hole line is assigned to its layout by name"
+  },
+  {
+   "osm": "w902087405",
+   "set": {
+    "layout": "pumpkin_ridge_ghost_creek"
+   },
+   "reason": "OSM name 'Ghost Creek 13': one course polygon for both courses, so the hole line is assigned to its layout by name"
+  },
+  {
+   "osm": "w902087406",
+   "set": {
+    "layout": "pumpkin_ridge_ghost_creek"
+   },
+   "reason": "OSM name 'Ghost Creek 14': one course polygon for both courses, so the hole line is assigned to its layout by name"
+  },
+  {
+   "osm": "w902087408",
+   "set": {
+    "layout": "pumpkin_ridge_ghost_creek"
+   },
+   "reason": "OSM name 'Ghost Creek 15': one course polygon for both courses, so the hole line is assigned to its layout by name"
+  },
+  {
+   "osm": "w902087410",
+   "set": {
+    "layout": "pumpkin_ridge_ghost_creek"
+   },
+   "reason": "OSM name 'Ghost Creek 16': one course polygon for both courses, so the hole line is assigned to its layout by name"
+  },
+  {
+   "osm": "w902087412",
+   "set": {
+    "layout": "pumpkin_ridge_ghost_creek"
+   },
+   "reason": "OSM name 'Ghost Creek 17': one course polygon for both courses, so the hole line is assigned to its layout by name"
+  },
+  {
+   "osm": "w902087414",
+   "set": {
+    "layout": "pumpkin_ridge_ghost_creek"
+   },
+   "reason": "OSM name 'Ghost Creek 18': one course polygon for both courses, so the hole line is assigned to its layout by name"
+  },
+  {
+   "osm": "w902093330",
+   "set": {
+    "layout": "pumpkin_ridge_ghost_creek"
+   },
+   "reason": "OSM name 'Ghost Creek 1': one course polygon for both courses, so the hole line is assigned to its layout by name"
+  },
+  {
+   "osm": "w902093332",
+   "set": {
+    "layout": "pumpkin_ridge_ghost_creek"
+   },
+   "reason": "OSM name 'Ghost Creek 2': one course polygon for both courses, so the hole line is assigned to its layout by name"
+  },
+  {
+   "osm": "w902093334",
+   "set": {
+    "layout": "pumpkin_ridge_ghost_creek"
+   },
+   "reason": "OSM name 'Ghost Creek 3': one course polygon for both courses, so the hole line is assigned to its layout by name"
+  },
+  {
+   "osm": "w902093336",
+   "set": {
+    "layout": "pumpkin_ridge_ghost_creek"
+   },
+   "reason": "OSM name 'Ghost Creek 4': one course polygon for both courses, so the hole line is assigned to its layout by name"
+  },
+  {
+   "osm": "w902093338",
+   "set": {
+    "layout": "pumpkin_ridge_ghost_creek"
+   },
+   "reason": "OSM name 'Ghost Creek 5': one course polygon for both courses, so the hole line is assigned to its layout by name"
+  },
+  {
+   "osm": "w902093340",
+   "set": {
+    "layout": "pumpkin_ridge_ghost_creek"
+   },
+   "reason": "OSM name 'Ghost Creek 6': one course polygon for both courses, so the hole line is assigned to its layout by name"
+  },
+  {
+   "osm": "w902093342",
+   "set": {
+    "layout": "pumpkin_ridge_ghost_creek"
+   },
+   "reason": "OSM name 'Ghost Creek 7': one course polygon for both courses, so the hole line is assigned to its layout by name"
+  },
+  {
+   "osm": "w902093344",
+   "set": {
+    "layout": "pumpkin_ridge_ghost_creek"
+   },
+   "reason": "OSM name 'Ghost Creek 8': one course polygon for both courses, so the hole line is assigned to its layout by name"
+  },
+  {
+   "osm": "w902093346",
+   "set": {
+    "layout": "pumpkin_ridge_ghost_creek"
+   },
+   "reason": "OSM name 'Ghost Creek 9': one course polygon for both courses, so the hole line is assigned to its layout by name"
+  },
+  {
+   "osm": "w903281323",
+   "set": {
+    "layout": "pumpkin_ridge_witch_hollow"
+   },
+   "reason": "OSM name 'Witch Hollow 1': one course polygon for both courses, so the hole line is assigned to its layout by name"
+  },
+  {
+   "osm": "w903281324",
+   "set": {
+    "layout": "pumpkin_ridge_witch_hollow"
+   },
+   "reason": "OSM name 'Witch Hollow 2': one course polygon for both courses, so the hole line is assigned to its layout by name"
+  },
+  {
+   "osm": "w903281348",
+   "set": {
+    "layout": "pumpkin_ridge_witch_hollow"
+   },
+   "reason": "OSM name 'Witch Hollow 3': one course polygon for both courses, so the hole line is assigned to its layout by name"
+  },
+  {
+   "osm": "w903281349",
+   "set": {
+    "layout": "pumpkin_ridge_witch_hollow"
+   },
+   "reason": "OSM name 'Witch Hollow 4': one course polygon for both courses, so the hole line is assigned to its layout by name"
+  },
+  {
+   "osm": "w903281350",
+   "set": {
+    "layout": "pumpkin_ridge_witch_hollow"
+   },
+   "reason": "OSM name 'Witch Hollow 5': one course polygon for both courses, so the hole line is assigned to its layout by name"
+  },
+  {
+   "osm": "w903281351",
+   "set": {
+    "layout": "pumpkin_ridge_witch_hollow"
+   },
+   "reason": "OSM name 'Witch Hollow 6': one course polygon for both courses, so the hole line is assigned to its layout by name"
+  },
+  {
+   "osm": "w903281353",
+   "set": {
+    "layout": "pumpkin_ridge_witch_hollow"
+   },
+   "reason": "OSM name 'Witch Hollow 7': one course polygon for both courses, so the hole line is assigned to its layout by name"
+  },
+  {
+   "osm": "w903281357",
+   "set": {
+    "layout": "pumpkin_ridge_witch_hollow"
+   },
+   "reason": "OSM name 'Witch Hollow 8': one course polygon for both courses, so the hole line is assigned to its layout by name"
+  },
+  {
+   "osm": "w903281376",
+   "set": {
+    "layout": "pumpkin_ridge_witch_hollow"
+   },
+   "reason": "OSM name 'Witch Hollow 9': one course polygon for both courses, so the hole line is assigned to its layout by name"
+  },
+  {
+   "osm": "w903281378",
+   "set": {
+    "layout": "pumpkin_ridge_witch_hollow"
+   },
+   "reason": "OSM name 'Witch Hollow 10': one course polygon for both courses, so the hole line is assigned to its layout by name"
+  },
+  {
+   "osm": "w903281384",
+   "set": {
+    "layout": "pumpkin_ridge_witch_hollow"
+   },
+   "reason": "OSM name 'Witch Hollow 11': one course polygon for both courses, so the hole line is assigned to its layout by name"
+  },
+  {
+   "osm": "w903281385",
+   "set": {
+    "layout": "pumpkin_ridge_witch_hollow"
+   },
+   "reason": "OSM name 'Witch Hollow 12': one course polygon for both courses, so the hole line is assigned to its layout by name"
+  },
+  {
+   "osm": "w903281386",
+   "set": {
+    "layout": "pumpkin_ridge_witch_hollow"
+   },
+   "reason": "OSM name 'Witch Hollow 13': one course polygon for both courses, so the hole line is assigned to its layout by name"
+  },
+  {
+   "osm": "w903303029",
+   "set": {
+    "layout": "pumpkin_ridge_witch_hollow"
+   },
+   "reason": "OSM name 'Witch Hollow 14': one course polygon for both courses, so the hole line is assigned to its layout by name"
+  },
+  {
+   "osm": "w903303030",
+   "set": {
+    "layout": "pumpkin_ridge_witch_hollow"
+   },
+   "reason": "OSM name 'Witch Hollow 15': one course polygon for both courses, so the hole line is assigned to its layout by name"
+  },
+  {
+   "osm": "w903303031",
+   "set": {
+    "layout": "pumpkin_ridge_witch_hollow"
+   },
+   "reason": "OSM name 'Witch Hollow 16': one course polygon for both courses, so the hole line is assigned to its layout by name"
+  },
+  {
+   "osm": "w903303032",
+   "set": {
+    "layout": "pumpkin_ridge_witch_hollow"
+   },
+   "reason": "OSM name 'Witch Hollow 17': one course polygon for both courses, so the hole line is assigned to its layout by name"
+  },
+  {
+   "osm": "w903303033",
+   "set": {
+    "layout": "pumpkin_ridge_witch_hollow"
+   },
+   "reason": "OSM name 'Witch Hollow 18': one course polygon for both courses, so the hole line is assigned to its layout by name"
+  },
+  {
+   "osm": "w1173387533",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "standing default (COURSE_BUILD.md 4.1): every penalty area red"
+  },
+  {
+   "osm": "w1173387534",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "standing default (COURSE_BUILD.md 4.1): every penalty area red"
+  },
+  {
+   "osm": "w1444798570",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "standing default (COURSE_BUILD.md 4.1): every penalty area red"
+  },
+  {
+   "osm": "w1444804811",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "standing default (COURSE_BUILD.md 4.1): every penalty area red"
+  },
+  {
+   "osm": "w1444804812",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "standing default (COURSE_BUILD.md 4.1): every penalty area red"
+  },
+  {
+   "osm": "w1444804813",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "standing default (COURSE_BUILD.md 4.1): every penalty area red"
+  },
+  {
+   "osm": "w1444804814",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "standing default (COURSE_BUILD.md 4.1): every penalty area red"
+  },
+  {
+   "osm": "w1444804815",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "standing default (COURSE_BUILD.md 4.1): every penalty area red"
+  },
+  {
+   "osm": "w1444804816",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "standing default (COURSE_BUILD.md 4.1): every penalty area red"
+  },
+  {
+   "osm": "w1444804817",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "standing default (COURSE_BUILD.md 4.1): every penalty area red"
+  },
+  {
+   "osm": "w1444804818",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "standing default (COURSE_BUILD.md 4.1): every penalty area red"
+  },
+  {
+   "osm": "w1444804819",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "standing default (COURSE_BUILD.md 4.1): every penalty area red"
+  },
+  {
+   "osm": "w1444804820",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "standing default (COURSE_BUILD.md 4.1): every penalty area red"
+  },
+  {
+   "osm": "w1444804821",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "standing default (COURSE_BUILD.md 4.1): every penalty area red"
+  },
+  {
+   "osm": "w1444804822",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "standing default (COURSE_BUILD.md 4.1): every penalty area red"
+  },
+  {
+   "osm": "w1444804823",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "standing default (COURSE_BUILD.md 4.1): every penalty area red"
+  },
+  {
+   "osm": "w1444804824",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "standing default (COURSE_BUILD.md 4.1): every penalty area red"
+  },
+  {
+   "osm": "w1444804825",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "standing default (COURSE_BUILD.md 4.1): every penalty area red"
+  },
+  {
+   "osm": "w1444804826",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "standing default (COURSE_BUILD.md 4.1): every penalty area red"
+  },
+  {
+   "osm": "w1444818398",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "standing default (COURSE_BUILD.md 4.1): every penalty area red"
+  },
+  {
+   "osm": "w900259505",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "standing default (COURSE_BUILD.md 4.1): every penalty area red"
+  },
+  {
+   "osm": "w900259514",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "standing default (COURSE_BUILD.md 4.1): every penalty area red"
+  },
+  {
+   "osm": "w901935487",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "standing default (COURSE_BUILD.md 4.1): every penalty area red"
+  },
+  {
+   "osm": "w901953301",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "standing default (COURSE_BUILD.md 4.1): every penalty area red"
+  },
+  {
+   "osm": "w901953302",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "standing default (COURSE_BUILD.md 4.1): every penalty area red"
+  },
+  {
+   "osm": "w903281374",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "standing default (COURSE_BUILD.md 4.1): every penalty area red"
+  },
+  {
+   "osm": "w903281375",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "standing default (COURSE_BUILD.md 4.1): every penalty area red"
+  }
+ ]
+}
