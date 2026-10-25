@@ -19,7 +19,7 @@ from rasterio.features import rasterize
 from scipy import ndimage
 from shapely.ops import unary_union
 
-from common import build_dir, course_name_from_argv, GORSE_SURF, load_config, play_boundary, PX_PER_M, round_corners, SURF, surf_ids, uses_gorse_ground, World, write_json
+from common import build_dir, course_name_from_argv, GORSE_SURF, load_config, play_boundary, PX_PER_M, round_corners, SURF, surf_ids, uses_gorse_ground, uses_waste_sand, WASTE_SURF, World, write_json
 
 warnings.filterwarnings("ignore")
 
@@ -38,7 +38,19 @@ def course_layers(g, roads, cfg):
     fringe = [geom.buffer(1.5).difference(geom) for geom in greens]
     fairways = smooth_fairways(g, cfg)
     paths = [r.geometry.buffer(1.2, cap_style=1) for _, r in g[g.kind == "cartpath"].iterrows()]
+    bunkers = g[g.kind == "bunker"]
+    waste_bunkers, sand_inside = [], []
+    if uses_waste_sand(cfg):
+        # optional (course_config.json "waste_sand": true): golf=bunker tagged sand=waste is waste
+        # sand, general area (id 18), at the bunkers' place in the order; natural=sand here is the
+        # dune sand under everything else (outside the boundary it stays ob_sand: s08 keeps only
+        # the inside of these layers)
+        is_waste = bunkers.tags.apply(lambda t: isinstance(t, dict) and t.get("sand") == "waste")
+        waste_bunkers = list(bunkers[is_waste].geometry)
+        bunkers = bunkers[~is_waste]
+        sand_inside = list(g[g.kind == "sand"].geometry)
     layers = [
+        (sand_inside, WASTE_SURF),
         (fairways, SURF["fairway"]),
         (fringe, SURF["fringe"]),
         # paved: cart paths (2.4 m), service roads / parking inside the boundary
@@ -46,7 +58,8 @@ def course_layers(g, roads, cfg):
         ([geom for geom, hw in roads if hw in ("service", "residential", "tertiary", "primary")], SURF["cartpath"]),
         (list(g[g.kind == "parking"].geometry), SURF["cartpath"]),
         (list(g[g.kind == "tee"].geometry), SURF["tee"]),
-        (list(g[g.kind == "bunker"].geometry), SURF["bunker"]),
+        (waste_bunkers, WASTE_SURF),
+        (list(bunkers.geometry), SURF["bunker"]),
         (greens, SURF["green"]),
         (list(g[g.kind.isin(["lateral_water_hazard", "water_hazard"])].geometry), SURF["water"]),
     ]

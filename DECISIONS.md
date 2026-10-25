@@ -1147,3 +1147,24 @@ Not merged (the developer will say when). Design note: docs/reports/multiplayer_
     drawn on its rounded pixel, so a tap just right of the green showed yellow and counted
     green. Each band now covers its edge pixels on both sides.
 - Tests: tests/unit/meter_seen.test.ts.
+
+## Waste sand: surface 18 (Cypress Point course chat, 2026-10-23; branch design/waste-sand)
+
+- Cypress Point's dunes are sandy waste areas, not bunkers: no rake, no bunker rules. The course
+  chat asked for a new surface rather than playing them as bunkers or rough.
+- **Surface 18 `waste`** (`pipeline/common.py` `WASTE_SURF`, game `SURF.waste`). Nothing
+  renumbered. Opt-in per course: `course_config.json` `"waste_sand": true` paints `golf=bunker`
+  tagged `sand=waste` as waste sand at the bunkers' place in the paint order, and `natural=sand`
+  inside the boundary as waste sand under everything else (outside the boundary it stays
+  `ob_sand`). Without the key nothing changes; `make regress` showed every course unchanged.
+- **Plays as** general area: distance x0.92, accuracy window x0.8, a bad lie (yellow in the info
+  panel), no splash rule, the putter allowed, the driver not (never off the deck). Under a canopy
+  it is a punch like any ground. Spin as from sand: a twentieth (my choice; the request didn't
+  say). Not a hazard, no relief, no bunker options in the unplayable rules.
+- **Ball:** restitution 0.10, horizontal speed kept 0.35, rolling deceleration 4.0 m/s²,
+  static friction 0.35 g (between rough and bunker). Landing in it plays the sand sound.
+- **Art:** the bunker's sand colours and speckle without the 1 px lip or the inner shadow, and a
+  sparse scrub of 2 px grass tufts; the rough beside it takes the soft edge
+  (`s09_render.waste_scrub`, also in the putting views). Minimap colour `#e2d3a6`. A theme can
+  recolour it by name (`"waste"`).
+- Tests: tests/unit/waste_sand.test.ts.

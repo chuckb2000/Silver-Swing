@@ -637,11 +637,18 @@ DECISIONS.md with the reason.
     match Worker's object named `lobby` (`src/server/lobby.ts`), reached through the
     same `MATCH` binding. DECISIONS.md "Open to a challenge".
 
--   **Music (design chat, 2026-10-22):** branch `design/music`, unmerged: an
+-   **Music (design chat, 2026-10-22):** branch `design/music`, merged 2026-10-22: an
     original suite of nine movements (about 15 minutes) made in code
     (`assets-src/music/`, `make music`), shuffled in the menus and in rounds;
     the sound setting (volume, muted) applies (`src/audio/music.ts`).
-    DECISIONS.md "Music".
+    DECISIONS.md "Music". The meter counts a tap where the cursor was drawn
+    (`fix/meter-seen`, merged 2026-10-22; DECISIONS.md).
+
+-   **Waste sand (design chat, 2026-10-23):** branch `design/waste-sand`
+    (Cypress Point's request): surface 18 `waste`, general area, opt-in per
+    course (`"waste_sand": true`: `golf=bunker` + `sand=waste`, and
+    `natural=sand` inside the boundary). Distance x0.92, window x0.8, no splash,
+    putter allowed; no lip, sparse scrub tufts. DECISIONS.md "Waste sand".
 
 -   **Next task:** Item 1 of the player improvements (swing coach) is on
     `design/coach`, unmerged. Also: the third playtest (putting, yellow
@@ -1353,6 +1360,9 @@ by √power, so partial shots fly lower.
 
   Out of bounds Normal bounce, then the ---                 ---
                 rules check (section 8)                     
+
+  Waste sand    0.10                    0.35                4.0
+  (surface 18)                                              
   --------------------------------------------------------------------------
 
 -   **Spin:**
@@ -1419,6 +1429,10 @@ by √power, so partial shots fly lower.
 
   Green           ---                     ---          Putter by default;
                                                        chipping allowed
+
+  Waste sand      0.92                    0.80         General area: no
+  (surface 18)                                         splash, putter
+                                                       allowed
   -------------------------------------------------------------------------
 
 The info panel always shows the current lie by name, e.g. \"rough\"
