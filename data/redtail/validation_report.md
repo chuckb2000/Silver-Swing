@@ -28,7 +28,7 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 
 ## Open items
 
-1. Hole 1: OSM handicap 10 differs from the GolfPass stroke index 13 (see spec 11.4 item 1); using GolfPass.
+1. Hole 1: OSM handicap 10 differs from the scorecard's stroke index 13; using the scorecard.
 2. Hole 3 (Blue): measured 306 yd vs card 322 (-4.9%) even with the virtual tee at the best spot in its box; accepted for play.
 
 ## Other open items (RedTail Golf Center)
@@ -137,6 +137,10 @@ Built 2026-10-22. Standing defaults (COURSE_BUILD.md 4.1): Blue tees, all water 
 - green w870641367 at (302, 647) is not the end of any hole line (practice green?) -> treated as a wrong green
 - green w874511397 at (408, 686) is not the end of any hole line (practice green?) -> treated as a wrong green
 - green w904617445 at (393, 722) is not the end of any hole line (practice green?) -> treated as a wrong green
+
+## Checks from earlier courses
+
+- golf=clubhouse: 1 feature(s) (w352717539) -> a building: add building=yes
 
 Totals: 57 tees, 22 greens, 25 fairways, 45 bunkers, 7 water hazards, 18 pins, 10 cart paths, 206 OSM tree points.
 

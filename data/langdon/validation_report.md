@@ -152,5 +152,10 @@ Tracing desk: https://claude.ai/artifact/G4bThDJVqubcH8TdhBfTFc (`desk_export.py
 - hole 17: hole line carries handicap=16 (compare with scorecard)
 - hole 18: hole line carries handicap=6 (compare with scorecard)
 
+## Checks from earlier courses
+
+- golf=boundary: 1 feature(s) (w1569564855) -> not read by the pipeline
+- golf=rough;fairway: 1 feature(s) (r21713621) -> not read by the pipeline
+
 Totals: 78 tees, 18 greens, 24 fairways, 38 bunkers, 1 water hazards, 18 pins, 16 cart paths, 34 OSM tree points.
 

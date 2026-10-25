@@ -85,8 +85,9 @@ def affected(changed: list[str]) -> list[str]:
 
 
 def changed_files(name: str) -> list[str]:
+    """Committed files the build changed, and new files outside raw/ (fetch_raw puts release files in raw/)."""
     out = subprocess.check_output(["git", "status", "--porcelain", "--", *outputs(name)], cwd=ROOT, text=True)
-    return [line[3:] for line in out.splitlines()]
+    return [line[3:] for line in out.splitlines() if not (line.startswith("??") and "/raw/" in line)]
 
 
 def main(argv: list[str]):
@@ -108,7 +109,11 @@ def main(argv: list[str]):
     rows, bad = [], False
     for n in names:
         t0 = time.time()
-        subprocess.run([sys.executable, "pipeline/fetch_raw.py", n], cwd=ROOT, check=True)
+        if subprocess.run([sys.executable, "pipeline/fetch_raw.py", n], cwd=ROOT).returncode:
+            rows.append((n, (time.time() - t0) / 60, "FETCH FAILED (see above): not rebuilt"))
+            print(f"[regress] {n}: fetch failed, not rebuilt", flush=True)
+            bad = True
+            continue
         log = ROOT / "data" / n / "build" / "regress.log"
         log.parent.mkdir(parents=True, exist_ok=True)
         with open(log, "w") as f:

@@ -175,5 +175,17 @@ Decisions the developer made on 2026-10-19 are in DECISIONS.md ("Oregon Golf Clu
 - green w984701643 at (733, 1325) is not the end of any hole line (practice green?) -> treated as a wrong green
 - green w984701644 at (727, 1299) is not the end of any hole line (practice green?) -> treated as a wrong green
 
+## Checks from earlier courses
+
+- the world is 1280 x 2304 m, over the 2,048 m limit (COURSE_BUILD 10: stop and ask)
+- golf=path: 7 feature(s) (w984701667, w984701668, w984701669, w984701670 ...) -> cart path: retag golf=cartpath in edits.json
+- fairway r14014798 at (746, 1187) is more than 30 m from every hole line (a range or practice area mapped as fairway?)
+- fairway r14014801 at (732, 1313) is more than 30 m from every hole line (a range or practice area mapped as fairway?)
+- penalty area w865546394 lies mostly outside the boundary (a neighbour's? redraw as natural=water)
+- penalty area w866037980 lies mostly outside the boundary (a neighbour's? redraw as natural=water)
+- waterway w563952416 (stream): 168 m of it within 30 m of a hole line isn't in a penalty area (pipeline/propose_channels.py makes one; or say it's dry)
+- waterway w984709089 (stream): 198 m of it within 30 m of a hole line isn't in a penalty area (pipeline/propose_channels.py makes one; or say it's dry)
+- waterway w984713092 (stream): 14 m of it within 30 m of a hole line isn't in a penalty area (pipeline/propose_channels.py makes one; or say it's dry)
+
 Totals: 69 tees, 22 greens, 24 fairways, 34 bunkers, 11 water hazards, 18 pins, 46 cart paths, 0 OSM tree points.
 

@@ -79,5 +79,9 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 
 - none
 
+## Checks from earlier courses
+
+- none
+
 Totals: 9 tees, 9 greens, 5 fairways, 3 bunkers, 1 water hazards, 9 pins, 1 cart paths, 0 OSM tree points.
 

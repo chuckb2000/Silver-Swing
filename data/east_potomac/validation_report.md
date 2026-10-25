@@ -310,5 +310,9 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 - green w926833415 at (952, 1338) is not the end of any hole line (practice green?) -> treated as a wrong green
 - green w926833416 at (887, 1429) is not the end of any hole line (practice green?) -> treated as a wrong green
 
+## Checks from earlier courses
+
+- golf=clubhouse: 1 feature(s) (w66418626) -> a building: add building=yes
+
 Totals: 53 tees, 42 greens, 93 fairways, 52 bunkers, 0 water hazards, 39 pins, 12 cart paths, 1199 OSM tree points.
 

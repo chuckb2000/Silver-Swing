@@ -101,5 +101,9 @@ The developer's calls of 2026-10-22 are in `docs/courses/lake_oswego_muni.md`. O
 - hole 8: hole line carries handicap=9 (compare with scorecard)
 - hole 9: hole line carries handicap=17 (compare with scorecard)
 
+## Checks from earlier courses
+
+- none
+
 Totals: 18 tees, 9 greens, 7 fairways, 5 bunkers, 1 water hazards, 9 pins, 0 cart paths, 13 OSM tree points.
 

@@ -182,5 +182,19 @@ Built 2026-10-22 together with Bandon Preserve (shared downloads, GitHub release
 - green w888289372 at (697, 233) is not the end of any hole line (practice green?) -> treated as a wrong green
 - green w888289376 at (780, 777) is not the end of any hole line (practice green?) -> treated as a wrong green
 
+## Checks from earlier courses
+
+- tee w1057216445 crosses the edge of the world box (s09 failed on a green outside it): drop it or grow the world
+- tee w675499028 crosses the edge of the world box (s09 failed on a green outside it): drop it or grow the world
+- tee w675499030 crosses the edge of the world box (s09 failed on a green outside it): drop it or grow the world
+- green w675665049 crosses the edge of the world box (s09 failed on a green outside it): drop it or grow the world
+- green w833065858 crosses the edge of the world box (s09 failed on a green outside it): drop it or grow the world
+- tee w888289364 crosses the edge of the world box (s09 failed on a green outside it): drop it or grow the world
+- green w888289376 crosses the edge of the world box (s09 failed on a green outside it): drop it or grow the world
+- golf=clubhouse: 2 feature(s) (w1540940975, w833094306) -> a building: add building=yes
+- golf=path: 11 feature(s) (w1057196950, w1057206622, w1057206623, w1057206624 ...) -> cart path: retag golf=cartpath in edits.json
+- golf=rough;fairway;tee: 1 feature(s) (r21190363) -> not read by the pipeline
+- cart path w832457614 is an area of 1596 m2 (a closed way read as an area?)
+
 Totals: 125 tees, 40 greens, 60 fairways, 226 bunkers, 0 water hazards, 51 pins, 64 cart paths, 11 OSM tree points.
 

@@ -176,5 +176,16 @@ Built 2026-10-20 by a course chat with the standing defaults (docs/COURSE_BUILD.
 - green w1547584783 at (240, 964) is not the end of any hole line (practice green?) -> treated as a wrong green
 - green w1547585712 at (288, 1116) is not the end of any hole line (practice green?) -> treated as a wrong green
 
+## Checks from earlier courses
+
+- green w853761988 crosses the edge of the world box (s09 failed on a green outside it): drop it or grow the world
+- tee w1057044871 crosses the edge of the world box (s09 failed on a green outside it): drop it or grow the world
+- golf=clubhouse: 2 feature(s) (w833094306, w1540940975) -> a building: add building=yes
+- golf=path: 18 feature(s) (w832457611, w832462832, w832462833, w1057044861 ...) -> cart path: retag golf=cartpath in edits.json
+- golf=rough;fairway;tee: 1 feature(s) (r21190363) -> not read by the pipeline
+- fairway w675017686: 27 m2 near a hole line's start (a tee tagged as fairway?)
+- cart path w832457614 is an area of 1596 m2 (a closed way read as an area?)
+- penalty area w266664513 lies mostly outside the boundary (a neighbour's? redraw as natural=water)
+
 Totals: 122 tees, 48 greens, 32 fairways, 268 bunkers, 4 water hazards, 39 pins, 67 cart paths, 12 OSM tree points.
 

@@ -134,5 +134,16 @@ The developer's calls on 2026-10-20: Blue tees; all water red (none on the cours
 - green w353151415 at (849, 524) is not the end of any hole line (practice green?) -> treated as a wrong green
 - green w606811080 at (690, 221) is not the end of any hole line (practice green?) -> treated as a wrong green
 
+## Checks from earlier courses
+
+- golf=clubhouse: 1 feature(s) (w574723358) -> a building: add building=yes
+- golf=path: 4 feature(s) (w353507774, w353507808, w867808250, w1239288306) -> cart path: retag golf=cartpath in edits.json
+- fairway r19923362 at (930, 452) is more than 30 m from every hole line (a range or practice area mapped as fairway?)
+- fairway w1239279027 at (925, 543) is more than 30 m from every hole line (a range or practice area mapped as fairway?)
+- fairway w1239290927 at (885, 537) is more than 30 m from every hole line (a range or practice area mapped as fairway?)
+- fairway w1322010708 at (951, 521) is more than 30 m from every hole line (a range or practice area mapped as fairway?)
+- fairway w1322368285 at (916, 296) is more than 30 m from every hole line (a range or practice area mapped as fairway?)
+- water w582088908 at (743, 688), 1657 m2, is inside the boundary but not a penalty area: it plays as rough (tag it golf=lateral_water_hazard in edits.json, or list it in red_water_osm)
+
 Totals: 66 tees, 20 greens, 19 fairways, 71 bunkers, 0 water hazards, 18 pins, 59 cart paths, 1 OSM tree points.
 

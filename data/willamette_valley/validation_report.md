@@ -150,5 +150,10 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 - green w1053644812 at (487, 275) is not the end of any hole line (practice green?) -> treated as a wrong green
 - green w1053644816 at (652, 962) is not the end of any hole line (practice green?) -> treated as a wrong green
 
+## Checks from earlier courses
+
+- fairway r19774872 at (559, 883) is more than 30 m from every hole line (a range or practice area mapped as fairway?)
+- fairway w1053594242 at (436, 729) is more than 30 m from every hole line (a range or practice area mapped as fairway?)
+
 Totals: 72 tees, 21 greens, 19 fairways, 38 bunkers, 5 water hazards, 18 pins, 11 cart paths, 0 OSM tree points.
 

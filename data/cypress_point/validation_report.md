@@ -115,5 +115,12 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 - green w1138134211 at (480, 824) is not the end of any hole line (practice green?) -> treated as a wrong green
 - green w1346361726 at (487, 647) is not the end of any hole line (practice green?) -> treated as a wrong green
 
+## Checks from earlier courses
+
+- hole line w679401818 (ref 15): 41 % outside the boundary
+- hole line w679401819 (ref 16): 72 % outside the boundary (a neighbouring course's line?)
+- hole line w679401821 (ref 17): 26 % outside the boundary
+- golf=path: 6 feature(s) (w923642071, w1093434134, w1093434136, w1093464737 ...) -> cart path: retag golf=cartpath in edits.json
+
 Totals: 82 tees, 29 greens, 29 fairways, 183 bunkers, 0 water hazards, 28 pins, 35 cart paths, 116 OSM tree points.
 

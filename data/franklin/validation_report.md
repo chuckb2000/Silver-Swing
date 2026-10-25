@@ -124,5 +124,22 @@ Decisions the developer made on 2026-10-19 are in DECISIONS.md ("Franklin Countr
 - green w1263304345 at (1078, 1615) is not the end of any hole line (practice green?) -> treated as a wrong green
 - green w1263304348 at (1065, 1455) is not the end of any hole line (practice green?) -> treated as a wrong green
 
+## Checks from earlier courses
+
+- hole line w1263796089 (ref 14): 66 % outside the boundary (a neighbouring course's line?)
+- golf=clubhouse: 1 feature(s) (w213273514) -> a building: add building=yes
+- fairway r17353179 at (1081, 1447) is more than 30 m from every hole line (a range or practice area mapped as fairway?)
+- fairway w1263780667 at (882, 1490) is more than 30 m from every hole line (a range or practice area mapped as fairway?)
+- water w90967809 at (741, 619), 1456 m2, is inside the boundary but not a penalty area: it plays as rough (tag it golf=lateral_water_hazard in edits.json, or list it in red_water_osm)
+- pool w1263089456 at (1102, 1581), 28 m2, is inside the boundary but not a penalty area: it plays as rough (tag it golf=lateral_water_hazard in edits.json, or list it in red_water_osm)
+- pool w1263089457 at (1117, 1587), 295 m2, is inside the boundary but not a penalty area: it plays as rough (tag it golf=lateral_water_hazard in edits.json, or list it in red_water_osm)
+- penalty area channel_w942611233 lies mostly outside the boundary (a neighbour's? redraw as natural=water)
+- penalty area channel_w1263089459 lies mostly outside the boundary (a neighbour's? redraw as natural=water)
+- penalty area channel_w1263302049 lies mostly outside the boundary (a neighbour's? redraw as natural=water)
+- waterway r12706451 (stream): 41 m of it within 30 m of a hole line isn't in a penalty area (pipeline/propose_channels.py makes one; or say it's dry)
+- waterway w942611232 (stream): 40 m of it within 30 m of a hole line isn't in a penalty area (pipeline/propose_channels.py makes one; or say it's dry)
+- waterway w1263302043 (stream): 11 m of it within 30 m of a hole line isn't in a penalty area (pipeline/propose_channels.py makes one; or say it's dry)
+- waterway w1263302048 (stream): 14 m of it within 30 m of a hole line isn't in a penalty area (pipeline/propose_channels.py makes one; or say it's dry)
+
 Totals: 59 tees, 20 greens, 24 fairways, 59 bunkers, 14 water hazards, 23 pins, 50 cart paths, 0 OSM tree points.
 

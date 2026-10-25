@@ -148,5 +148,11 @@ The developer's calls of 2026-10-19 are in DECISIONS.md ("Eastmoreland"): Blue i
 - green w503890179 at (428, 1155) is not the end of any hole line (practice green?) -> treated as a wrong green
 - green w503890180 at (385, 1141) is not the end of any hole line (practice green?) -> treated as a wrong green
 
+## Checks from earlier courses
+
+- golf=clubhouse: 1 feature(s) (w121300086) -> a building: add building=yes
+- penalty area channel_w146979976 lies mostly outside the boundary (a neighbour's? redraw as natural=water)
+- waterway w603121887 (stream): 17 m of it within 30 m of a hole line isn't in a penalty area (pipeline/propose_channels.py makes one; or say it's dry)
+
 Totals: 45 tees, 20 greens, 20 fairways, 33 bunkers, 6 water hazards, 18 pins, 40 cart paths, 154 OSM tree points.
 
