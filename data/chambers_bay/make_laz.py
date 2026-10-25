@@ -51,6 +51,9 @@ def main():
         with laspy.open(Path(td) / MEMBER) as r:
             hdr = laspy.LasHeader(point_format=r.header.point_format, version=r.header.version)
             hdr.scales, hdr.offsets = r.header.scales, r.header.offsets
+            # the source's date, not today's: laspy stamps the day it writes, which made the clip's
+            # hash change every day and `make fetch` reject it (design chat, 2026-10-24)
+            hdr.creation_date = r.header.creation_date
             for v in r.header.vlrs:
                 hdr.vlrs.append(v)
             n = 0
