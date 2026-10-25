@@ -32,6 +32,27 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 PIN_FILE = "pipeline_pin.json"
+# the files under the pinned folders that course builds read: the pipeline's own top-level files and
+# assets-src's top-level modules and palettes; everything else there (logos, cards, logo concepts, music,
+# title art, UI sprites) can change without moving a course off this checkout's pipeline
+NOT_BUILD_PY = ("assets-src/logos.py", "assets-src/course_cards.py", "assets-src/title_art.py",
+                "assets-src/sprites.py", "assets-src/font.py", "assets-src/build_assets.py",
+                # the pipeline's tools, run by hand or by make, never inside a build step
+                "pipeline/pins.py", "pipeline/regress.py", "pipeline/land.py", "pipeline/intake.py",
+                "pipeline/fetch_raw.py", "pipeline/clip_raster.py", "pipeline/propose_channels.py",
+                "pipeline/propose_tees.py", "pipeline/propose_trace.py", "pipeline/desk_export.py",
+                "pipeline/desk_to_proposed.py")
+
+
+def builds_read(path: str) -> bool:
+    parts = path.split("/")
+    if parts[0] == "pipeline":
+        return len(parts) == 2 and path not in NOT_BUILD_PY
+    if parts[0] == "assets-src":
+        return (len(parts) == 2 and path.endswith(".py") and path not in NOT_BUILD_PY) or parts[1] == "palettes"
+    return False
+
+
 PINNED = ("pipeline", "assets-src")      # what a pin freezes; data/ and game/ are always this checkout's
 SNAP_DIR = ROOT / ".pins"
 
@@ -54,13 +75,23 @@ def head_trees(rev: str = "HEAD") -> dict:
     return {d: git("rev-parse", f"{rev}:{d}") for d in PINNED}
 
 
-def dirty(paths=PINNED) -> list[str]:
+def dirty(paths=PINNED, build_only: bool = False) -> list[str]:
     out = git("status", "--porcelain", "--", *paths)
-    return [line[3:] for line in out.splitlines()]
+    files = [line[3:] for line in out.splitlines()]
+    return [f for f in files if builds_read(f)] if build_only else files
+
+
+def build_key(rev: str = "HEAD") -> str:
+    """A digest of the pinned folders' files that course builds read (builds_read)."""
+    import hashlib
+    lines = [l for l in git("ls-tree", "-r", rev, "--", *PINNED).splitlines() if builds_read(l.split("\t", 1)[1])]
+    return hashlib.sha256("\n".join(lines).encode()).hexdigest()
 
 
 def same_as_checkout(pin: dict) -> bool:
-    """Does this checkout's committed and clean pipeline equal the pin?"""
+    """Does this checkout's committed and clean pipeline build the same as the pin?"""
+    if pin.get("build_key"):
+        return not dirty(build_only=True) and pin["build_key"] == build_key()
     return not dirty() and all(pin["trees"][d] == t for d, t in head_trees().items())
 
 
@@ -100,12 +131,12 @@ def materialize(pin: dict) -> Path:
 
 
 def pin(names: list[str], at: str | None = None):
-    bad = [] if at else dirty()
+    bad = [] if at else dirty(build_only=True)
     if bad:
         sys.exit(f"[pins] commit pipeline/ and assets-src/ first (a pin names committed trees): {', '.join(bad[:5])}")
     rev = at or "HEAD"
     trees = head_trees(rev)
-    rec = {"trees": trees, "commit": git("rev-parse", rev), "date": git("log", "-1", "--format=%cs", rev),
+    rec = {"trees": trees, "build_key": build_key(rev), "commit": git("rev-parse", rev), "date": git("log", "-1", "--format=%cs", rev),
            "note": "the pipeline that built this course's committed files; pipeline/pins.py"}
     for n in names:
         (ROOT / "data" / n / PIN_FILE).write_text(json.dumps(rec, indent=1) + "\n")
@@ -121,15 +152,13 @@ def unpin(names: list[str]):
 
 
 def status():
-    here = head_trees()
-    clean = not dirty()
     print("| course | pinned pipeline | pinned assets-src | commit | as this checkout |\n|---|---|---|---|---|")
     for n in all_courses():
         p = read_pin(n)
         if not p:
             print(f"| {n} | - | - | - | unpinned: builds with this checkout |")
             continue
-        same = clean and all(p["trees"][d] == here[d] for d in PINNED)
+        same = same_as_checkout(p)
         print(f"| {n} | {p['trees']['pipeline'][:12]} | {p['trees']['assets-src'][:12]} | {p['commit'][:10]} ({p.get('date', '')}) | {'yes' if same else 'no'} |")
 
 
