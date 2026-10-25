@@ -1,10 +1,21 @@
 # Logo concepts
 
-Two new logo directions for every course, next to the logo it has now. Nothing
-here replaces a shipped logo: `game/public/sprites/logos/<id>.png` and the
-drawing scripts (`assets-src/logos.py`, `assets-src/course_logos/<id>.py`) are
-untouched. To adopt a concept, copy `<id>/conceptN_32.png` over
-`game/public/sprites/logos/<id>.png` (and keep the SVG source as the drawing).
+Two new logo directions for every course, next to the logo it has now. The
+developer's picks (2026-10-25) are in DECISIONS.md "Logos from the logo concepts"
+and in each `notes.json` as `"chosen"` (`"current"`, `1` or `2`; RedTail
+`"hawk"`, with five more hawks in `redtail/hawk_*.src.svg` awaiting the pick).
+
+A course uses a concept through its own file, `assets-src/course_logos/<id>.py`:
+
+```python
+from logos import concept_logo
+LOGO = concept_logo("<id>", "concept2")   # reads <id>/concept2_32.png
+```
+
+then `python3 assets-src/logos.py <id>` writes `game/public/sprites/logos/<id>.png`.
+Change a chosen logo by editing its `.src.svg`, then `lc.py build <id>`, then
+`logos.py <id>`. `python3 assets-src/logo_concepts/review.py out.html` rebuilds the
+review page.
 
 ```
 assets-src/logo_concepts/

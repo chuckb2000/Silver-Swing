@@ -124,3 +124,13 @@ LOGO = (trail_post, {
     "blaze": rgba("#f4f0e6"), "band": rgba("#d8a031"), "band_dark": rgba("#a87920"),
     "grass": rgba("#ad9c5b"), "grass_light": rgba("#d3c27a"), "edge": EDGE,
 })
+
+
+# ------------------------------------------------------------------ 2026-10-25
+# The developer chose Concept 1 of the logo concepts, "The Trail Marker"
+# (assets-src/logo_concepts/bandon_trails/concept1.src.svg; DECISIONS.md "Logos from the logo
+# concepts"). The drawing above is kept as PREVIOUS; the game uses the concept's sprite.
+from logos import concept_logo  # noqa: E402
+
+PREVIOUS = LOGO
+LOGO = concept_logo("bandon_trails", "concept1")

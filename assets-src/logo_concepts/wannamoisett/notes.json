@@ -62,5 +62,6 @@
     }
   ],
   "pick": 1,
-  "recommendation": "Concept 1. The skate is the developer's choice and the cleaner icon."
+  "recommendation": "Concept 1. The skate is the developer's choice and the cleaner icon.",
+  "chosen": "current"
 }

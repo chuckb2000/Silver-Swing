@@ -115,6 +115,52 @@ def card_img(cid: str, img: Image.Image, alt: str) -> str:
     return f'<img class="px card" src="{png_uri(card)}" width="{card.width*2}" height="{card.height*2}" alt="{esc(alt)}">'
 
 
+def status_line(n: dict) -> str:
+    c = n.get("chosen")
+    if c == "current":
+        t = "Keeping the current logo."
+    elif c in (1, 2):
+        t = f"Concept {c}, {n['concepts'][c-1]['name']}, is now the logo in the game."
+    elif c == "hawk":
+        t = 'Changing to a red-tailed hawk: <a href="#hawks">five options at the top of the page</a>. The fox stays until you pick.'
+        return f'<p class="status"><strong>Your call:</strong> {t}</p>'
+    else:
+        return ""
+    return f'<p class="status"><strong>Your call:</strong> {esc(t)}</p>'
+
+
+def hawk_section(n: dict) -> str:
+    cid = n["id"]
+    tiles = []
+    fox = lc.current_logo(cid)
+    tiles.append(f'''<article class="col current"><p class="kicker">Now</p><h3>The fox</h3>{tile_logo(fox, "RedTail's current fox")}{card_img(cid, fox, "the fox on the course card")}</article>''')
+    for o in n["options"]:
+        im = Image.open(HERE / cid / f"{o['file']}_32.png").convert("RGBA")
+        svg = (HERE / cid / f"{o['file']}.svg").read_bytes()
+        mine = o["file"] == n.get("options_pick")
+        letter = o["file"][-1].upper()
+        tiles.append(f'''<article class="col{' mine' if mine else ''}">
+  <p class="kicker">Hawk {letter}{'<span class="badge alt">My pick</span>' if mine else ''}</p>
+  <h3>{esc(o["name"])}</h3>
+  {tile_logo(im, "RedTail hawk " + o["name"])}
+  {card_img(cid, im, o["name"] + " on the course card")}
+  <div class="lockup"><img src="{b64(svg, 'image/svg+xml')}" width="56" height="56" alt=""><span class="lk" style="font-family:'Oswald', system-ui, sans-serif;font-weight:600;text-transform:uppercase;letter-spacing:0.1em">RedTail Golf Center</span></div>
+  <p class="why">{esc(o["idea"])}</p>
+  <dl class="notes"><dt>Strength</dt><dd>{esc(o["strength"])}</dd><dt>Trade-off</dt><dd>{esc(o["tradeoff"])}</dd></dl>
+</article>''')
+    return f'''<section class="hawks" id="hawks" aria-labelledby="h-hawks">
+  <p class="eyebrow">Still to choose</p>
+  <h2 id="h-hawks">A hawk for RedTail</h2>
+  <p class="sub">The course was renamed in 1999 for the red-tailed hawks that nest in the trees around it. Five new hawks, each shown large, at actual size and on the card. {esc(n.get("options_note", ""))}</p>
+  <div class="cols hawkgrid">{"".join(tiles)}</div>
+</section>'''
+
+
+def chosen_index(n: dict):
+    c = n.get("chosen")
+    return {"current": 0, 1: 1, 2: 2}.get(c)
+
+
 def build(out: Path):
     ids = [p.parent.name for p in sorted(HERE.glob("*/notes.json"))]
     courses = []
@@ -141,8 +187,10 @@ def build(out: Path):
         cells = []
         for k, im in enumerate(imgs):
             label = ["now", "1", "2"][k]
-            pick = ' class="pick"' if k == n.get("pick") else ""
+            pick = ' class="pick"' if k == chosen_index(n) else ""
             cells.append(f'<figure{pick}><img class="px" src="{png_uri(im)}" width="64" height="64" alt="{esc(n["course"])} {label}"><figcaption>{label}</figcaption></figure>')
+        if n.get("chosen") == "hawk":
+            cells.append('<span class="gnote">a hawk:<br>choose below</span>')
         glance.append(f'<a class="g" href="#{cid}"><span class="gname">{esc(n["course"])}</span><span class="gmarks">{"".join(cells)}</span></a>')
 
     # ------------------------------------------------------------- course sections
@@ -152,8 +200,9 @@ def build(out: Path):
         cur = lc.current_logo(cid)
         cols = []
         # current
-        cols.append(f'''<article class="col current">
-  <p class="kicker">Current logo</p>
+        kept = chosen_index(n) == 0
+        cols.append(f'''<article class="col current{' picked' if kept else ''}">
+  <p class="kicker">Current logo{'<span class="badge">Chosen: keep</span>' if kept else ''}</p>
   <h3>{esc(n["current"]["subject"])}</h3>
   {tile_logo(cur, n["course"] + " current logo")}
   {card_img(cid, cur, "current logo on the course card")}
@@ -173,7 +222,7 @@ def build(out: Path):
             fam = f"'{font}', {'Georgia, serif' if font in SERIF else 'system-ui, sans-serif'}"
             case = "uppercase" if lk.get("case", "upper") == "upper" else "none"
             sw = "".join(f'<span class="sw" style="background:{h}" title="{h}"></span>' for h in palette(im))
-            pick = n.get("pick") == k
+            pick = chosen_index(n) == k
             kicker = "Concept 1 · the existing idea, elevated" if k == 1 else "Concept 2 · new, from the course"
             interp = f'<p class="interp">{esc(c["interpretation"])}</p>' if c.get("interpretation") else ""
             refs = "".join(f"<li>{esc(r)}</li>" for r in c["references"])
@@ -185,7 +234,7 @@ def build(out: Path):
                     vs.append(f'<figure><img class="px" src="{png_uri(vim)}" width="64" height="64" alt="{v} course"><figcaption>{v.title()}</figcaption></figure>')
                 variants = f'<div class="variants" aria-label="the three courses">{"".join(vs)}</div>'
             cols.append(f'''<article class="col{' picked' if pick else ''}">
-  <p class="kicker">{kicker}{'<span class="badge">Recommended</span>' if pick else ''}</p>
+  <p class="kicker">{kicker}{'<span class="badge">Chosen</span>' if pick else ''}</p>
   <h3>{esc(c["name"])}</h3>
   {tile_logo(im, n["course"] + " " + c["name"])}
   {variants}
@@ -218,7 +267,8 @@ def build(out: Path):
     <p class="card-line">{esc(m["line"])}</p>
   </header>
   <div class="cols">{''.join(cols)}</div>
-  <p class="rec"><strong>Pick:</strong> {esc(n["recommendation"])}</p>
+  {status_line(n)}
+  <p class="rec"><strong>My recommendation:</strong> {esc(n["recommendation"])}</p>
   <details class="facts"><summary>Facts behind the designs ({len(n["facts"])})</summary><ul>{facts}</ul></details>
 </section>''')
 
@@ -234,9 +284,10 @@ def build(out: Path):
             body.append(f'<h2 class="state" id="st-{s}">{esc(STATE_NAMES.get(s, s))} <span>{cnt} course{"s" if cnt > 1 else ""}</span></h2>')
         body.append(sec)
 
+    hawks = "".join(hawk_section(n) for n in order if n.get("options"))
     n_courses = len(order)
     page = TEMPLATE.replace("%FONTS%", font_links(used)).replace("%GLANCE%", "".join(glance)).replace(
-        "%NAV%", nav).replace("%BODY%", "\n".join(body)).replace("%N%", str(n_courses)).replace("%M%", str(n_courses * 2))
+        "%NAV%", nav).replace("%BODY%", "\n".join(body)).replace("%HAWKS%", hawks).replace("%N%", str(n_courses)).replace("%M%", str(n_courses * 2))
     out.write_text(page)
     print(out, f"{out.stat().st_size/1024:.0f} KB")
 
@@ -343,8 +394,17 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .notes ul{margin:0;padding-left:18px}
 .swatches{display:flex;gap:4px;flex-wrap:wrap;align-items:center}
 .sw{width:22px;height:22px;border-radius:3px;border:1px solid var(--rule)}
-.rec{margin:18px 0 0;max-width:80ch}
-.rec strong{font:700 16px var(--f-display);color:var(--accent);margin-right:4px}
+.rec{margin:8px 0 0;max-width:80ch;color:var(--dim);font-size:15px}
+.status{margin:18px 0 0;max-width:80ch}
+.status strong{font:700 16px var(--f-display);color:var(--accent);margin-right:4px}
+.rec strong{font:600 13px var(--f-data);letter-spacing:.06em;text-transform:uppercase;margin-right:4px}
+.gnote{align-self:center;font:500 12px/1.3 var(--f-data);color:var(--accent)}
+.hawks{margin:40px 0 0;padding:24px 0 8px;border-top:2px solid var(--ink)}
+.hawks h2{font:700 30px/1.1 var(--f-display);margin:4px 0 6px}
+.hawks .sub{color:var(--dim);margin:0 0 18px;max-width:75ch}
+.hawkgrid{grid-template-columns:repeat(3,minmax(0,1fr))}
+.col.mine{border:2px dashed var(--pick)}
+.badge.alt{background:transparent;color:var(--accent);border:1px solid var(--accent)}
 .facts{margin-top:12px;font-size:14.5px;color:var(--dim)}
 .facts summary{cursor:pointer;font:500 13px/1.6 var(--f-data);letter-spacing:.04em}
 .facts ul{margin:8px 0 0;padding-left:18px;display:grid;gap:4px}
@@ -361,7 +421,7 @@ html{scroll-behavior:smooth}
 <header class="mast">
   <p class="eyebrow">Silver Swings Golf · course identity</p>
   <h1>Course Marks</h1>
-  <p class="lede">Every course in the game, its logo today, and two new directions. <b>Concept 1</b> keeps the subject the course already has and makes it as good as it can be. <b>Concept 2</b> starts again from the course's own history, landscape or town. Each mark is drawn on the game's 32 × 32 grid, shown large, at actual size, on its course card, and as the vector master with a type lockup.</p>
+  <p class="lede">Every course in the game, its logo today, and two new directions. <b>Concept 1</b> keeps the subject the course already has and makes it as good as it can be. <b>Concept 2</b> starts again from the course's own history, landscape or town. Each mark is drawn on the game's 32 × 32 grid, shown large, at actual size, on its course card, and as the vector master with a type lockup. Your picks are marked: 15 courses now use a new mark in the game, 13 keep theirs, and RedTail is choosing a hawk.</p>
   <ul class="counts"><li><b>%N%</b>courses</li><li><b>%M%</b>new marks</li><li><b>+6</b>East Potomac course variants</li></ul>
 </header>
 <div class="legend">
@@ -369,15 +429,16 @@ html{scroll-behavior:smooth}
   <div><h4>Concept 1</h4><p>The existing idea, elevated: same subject, better silhouette, colour and composition.</p></div>
   <div class="c2"><h4>Concept 2</h4><p>A new mark from the course itself. Facts behind it are listed with sources under each course.</p></div>
 </div>
+%HAWKS%
 <section class="sheet" aria-labelledby="h-sheet">
   <h2 id="h-sheet">The set at a glance</h2>
-  <p>Shown at twice actual size, as on a phone. The orange ring marks the recommended mark for each course. Select a course to see its full comparison.</p>
+  <p>Shown at twice actual size, as on a phone. The orange ring marks your pick for each course (25 October). Select a course to see its full comparison.</p>
   <div class="glance">%GLANCE%</div>
 </section>
 <nav class="statenav" aria-label="States">%NAV%</nav>
 %BODY%
 <footer class="foot">
-  <div><h4>Using a mark in the game</h4><p>Each concept's sprite is a drop-in for the game's logo: copy <code>assets-src/logo_concepts/&lt;course&gt;/concept1_32.png</code> (or <code>concept2_32.png</code>) over <code>game/public/sprites/logos/&lt;course&gt;.png</code>. The shipped logos and their drawing scripts have not been changed.</p></div>
+  <div><h4>Using a mark in the game</h4><p>A course takes a concept in <code>assets-src/course_logos/&lt;course&gt;.py</code> with <code>LOGO = concept_logo("&lt;course&gt;", "concept1")</code>; <code>python3 assets-src/logos.py &lt;course&gt;</code> then writes the game sprite. The 15 picks are wired this way; each old drawing is kept as <code>PREVIOUS</code>.</p></div>
   <div><h4>Files</h4><p><code>conceptN.src.svg</code> is the drawing on the 32 grid; <code>conceptN.svg</code> is the vector master with the outline, for print and merchandise; <code>conceptN_512.png</code> is a smooth render; <code>notes.json</code> holds the rationale and sources. Rebuild with <code>python3 assets-src/logo_concepts/lc.py all</code>.</p></div>
   <div><h4>House rules kept</h4><p>Original drawings, never a club's logo or trademark (each club's real mark was checked and avoided where found). Light from the upper left, the game's dark 1 px outline, at most 12 colours, and readable at 32 px on the card.</p></div>
 </footer>

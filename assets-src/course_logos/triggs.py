@@ -97,3 +97,13 @@ if __name__ == "__main__":
     bg.alpha_composite(im)
     bg.save(sys.argv[1])
     print(sys.argv[1])
+
+
+# ------------------------------------------------------------------ 2026-10-25
+# The developer chose Concept 1 of the logo concepts, "Reveille"
+# (assets-src/logo_concepts/triggs/concept1.src.svg; DECISIONS.md "Logos from the logo
+# concepts"). The drawing above is kept as PREVIOUS; the game uses the concept's sprite.
+from logos import concept_logo  # noqa: E402
+
+PREVIOUS = LOGO
+LOGO = concept_logo("triggs", "concept1")

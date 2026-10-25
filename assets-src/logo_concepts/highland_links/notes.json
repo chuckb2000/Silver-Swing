@@ -67,5 +67,6 @@
     }
   ],
   "pick": 1,
-  "recommendation": "Concept 1. The lighthouse stands on the course; the night roundel makes it read."
+  "recommendation": "Concept 1. The lighthouse stands on the course; the night roundel makes it read.",
+  "chosen": "current"
 }

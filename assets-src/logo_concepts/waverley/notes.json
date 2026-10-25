@@ -10,11 +10,15 @@
     {
       "fact": "Pear trees from the orchard still stand left of the 10th green.",
       "source": "https://www.waverley.cc/story/waverley-history-1800s-the-beginning-1"
+    },
+    {
+      "fact": "The Junior Clubhouse was the 'Trolley House' or 'Over Links' stop on the interurban Ardgour line; its back keeps the original double doors (developer, citing the club).",
+      "source": "https://www.waverley.cc/golf/field-house-facilities"
     }
   ],
   "current": {
-    "subject": "A green and white locomotive.",
-    "keep": "The locomotive and its apple-green livery.",
+    "subject": "A green and white locomotive, for the club's Junior Clubhouse: once the 'Trolley House' (or 'Over Links') stop on the interurban Ardgour line across the property (developer, 2026-10-25).",
+    "keep": "The locomotive: it stands for a real building on the course, whose back still has the stop's double doors.",
     "weaknesses": "Side-on and long; the shape reads as a toy train at 1x."
   },
   "concepts": [
@@ -25,8 +29,8 @@
       "references": [
         "Existing locomotive logo"
       ],
-      "symbolism": "Arrival: the club's guests coming to the riverbank.",
-      "interpretation": "Read as a nod to Scott's Waverley and Edinburgh's Waverley station; that link is ours, not the club's.",
+      "symbolism": "Arrival at the club, by the line that once stopped on the course.",
+      "interpretation": "The stop served trolleys on an interurban line; a steam engine is the developer's existing subject, kept here.",
       "typography": "Playfair Display Bold capitals.",
       "lockup": {
         "font": "Playfair Display",
@@ -37,7 +41,7 @@
         "line1": "Waverley Country Club"
       },
       "strengths": "Bold, symmetric, much stronger at 1x.",
-      "tradeoffs": "The train has no documented link to the club; it is the developer's choice."
+      "tradeoffs": "A trolley car would be the literal subject; the steam engine reads better at 32 px."
     },
     {
       "n": 2,
@@ -63,5 +67,6 @@
     }
   ],
   "pick": 2,
-  "recommendation": "Concept 2. The pear is the club's own ground and history, and the cleanest icon in the Portland set."
+  "recommendation": "Concept 2. The pear is the club's own ground and history, and the cleanest icon in the Portland set.",
+  "chosen": "current"
 }

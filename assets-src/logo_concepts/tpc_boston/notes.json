@@ -62,5 +62,6 @@
     }
   ],
   "pick": 1,
-  "recommendation": "Concept 1, because the developer chose the joke. The cattails are the sensible choice if the course should look like itself."
+  "recommendation": "Concept 1, because the developer chose the joke. The cattails are the sensible choice if the course should look like itself.",
+  "chosen": 1
 }

@@ -68,5 +68,6 @@
     }
   ],
   "pick": 2,
-  "recommendation": "Concept 2. The pine says 'Sandpines' without words and owns a shape no other course in the game has."
+  "recommendation": "Concept 2. The pine says 'Sandpines' without words and owns a shape no other course in the game has.",
+  "chosen": "current"
 }

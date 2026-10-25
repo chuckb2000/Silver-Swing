@@ -853,6 +853,21 @@ for _layout, _fill, _rim in (("blue", "#2f6fd1", "#5d97ee"), ("white", "#f6f6f2"
     LOGOS[f"east_potomac_{_layout}"] = (colour_disc(memorial, rgba(_fill), rgba(_rim)), LOGOS["east_potomac"][1])
 
 
+def concept_logo(cid: str, concept: str):
+    """A logo drawn as SVG in assets-src/logo_concepts/<cid>/<concept>.src.svg (developer's pick,
+    2026-10-25). The game takes the 32 px sprite that `logo_concepts/lc.py build <cid>` writes
+    next to it, so building the game's art needs no SVG renderer. Use as
+    `LOGO = concept_logo("<id>", "concept1")` in assets-src/course_logos/<id>.py."""
+    path = HERE / "logo_concepts" / cid / f"{concept}_32.png"
+
+    def draw(c: dict) -> np.ndarray:
+        img = np.asarray(Image.open(path).convert("RGBA")).copy()
+        assert img.shape == (S, S, 4), f"{path} is not {S} x {S}"
+        return img
+
+    return (draw, {})
+
+
 def course_logos() -> dict:
     """Logos drawn by course chats, one file per course: assets-src/course_logos/<id>.py,
     each defining LOGO = (draw_function, colours), drawn with the helpers here

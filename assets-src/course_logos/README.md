@@ -26,3 +26,8 @@ Then `python3 assets-src/logos.py <id>` writes
 original drawing, never the club's own logo or trademark; light from the upper
 left; a dark 1 px outline; readable at 32 px (look at it at 1x, not only
 enlarged).
+
+A logo can also be drawn as SVG in `assets-src/logo_concepts/<id>/` (see its
+README): the course file is then `LOGO = concept_logo("<id>", "concept1")`, and
+any older drawing stays in the file as `PREVIOUS` (DECISIONS.md "Logos from the
+logo concepts").

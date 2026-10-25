@@ -63,5 +63,6 @@
     }
   ],
   "pick": 1,
-  "recommendation": "Concept 1. The memorial with coloured rims is the clearest system for three courses."
+  "recommendation": "Concept 1. The memorial with coloured rims is the clearest system for three courses.",
+  "chosen": "current"
 }
