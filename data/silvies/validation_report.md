@@ -152,6 +152,12 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
    not built; its greens are wrong greens.
 5. **Ratings**: Craddock Challenge and Chief Egan have none (rounds there are not rated).
 6. **Chief Egan 6 green** is the developer's trace (172 m², 2026-10-25), not the OSM outline.
+7. **"Checks from earlier courses" (s03 audit, added on main 2026-10-25) are expected here:**
+   the nine "double greens" are the greens Craddock and Hankins share (each ends one hole of
+   each layout, not two holes of one); the small fairways near hole starts are the mown tee
+   pads (the tee boxes were drawn in the desk over them); the far fairways are practice areas
+   and McVeigh's Gauntlet; the stream is Owens Ditch (intermittent, NHD), left out of play;
+   the Craddock 3 OSM line's start is replaced by the developer's tee.
 
 ## Playability adjustments
 
@@ -302,6 +308,46 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 - green w1301566445 at (935, 272) is not the end of any hole line (practice green?) -> treated as a wrong green
 - green w1301566446 at (1153, 408) is not the end of any hole line (practice green?) -> treated as a wrong green
 - green w1301566453 at (1415, 251) is not the end of any hole line (practice green?) -> treated as a wrong green
+
+## Checks from earlier courses
+
+- fairway w935659297: 46 m2 near a hole line's start (a tee tagged as fairway?)
+- fairway w1301422147: 119 m2 near a hole line's start (a tee tagged as fairway?)
+- fairway w1301422165: 102 m2 near a hole line's start (a tee tagged as fairway?)
+- fairway w1301509456: 96 m2 near a hole line's start (a tee tagged as fairway?)
+- fairway w1301509457: 72 m2 near a hole line's start (a tee tagged as fairway?)
+- fairway w1301541100: 125 m2 near a hole line's start (a tee tagged as fairway?)
+- fairway w1301548848: 139 m2 near a hole line's start (a tee tagged as fairway?)
+- fairway w1301548851: 85 m2 near a hole line's start (a tee tagged as fairway?)
+- fairway w1301548854: 55 m2 near a hole line's start (a tee tagged as fairway?)
+- fairway w1301548861: 142 m2 near a hole line's start (a tee tagged as fairway?)
+- fairway w1301558538: 120 m2 near a hole line's start (a tee tagged as fairway?)
+- fairway w1301588440: 105 m2 near a hole line's start (a tee tagged as fairway?)
+- fairway w1301595995: 49 m2 near a hole line's start (a tee tagged as fairway?)
+- fairway r18710401 at (1292, 375) is more than 30 m from every hole line (a range or practice area mapped as fairway?)
+- fairway r18710410 at (1101, 370) is more than 30 m from every hole line (a range or practice area mapped as fairway?)
+- fairway r18710414 at (939, 277) is more than 30 m from every hole line (a range or practice area mapped as fairway?)
+- fairway w1301512748 at (658, 1065) is more than 30 m from every hole line (a range or practice area mapped as fairway?)
+- fairway w1301548844 at (352, 1517) is more than 30 m from every hole line (a range or practice area mapped as fairway?)
+- fairway w1301548864 at (270, 801) is more than 30 m from every hole line (a range or practice area mapped as fairway?)
+- fairway w1301548865 at (239, 805) is more than 30 m from every hole line (a range or practice area mapped as fairway?)
+- fairway w1301558532 at (468, 1314) is more than 30 m from every hole line (a range or practice area mapped as fairway?)
+- fairway w1301558542 at (463, 264) is more than 30 m from every hole line (a range or practice area mapped as fairway?)
+- fairway w1301566454 at (1362, 309) is more than 30 m from every hole line (a range or practice area mapped as fairway?)
+- fairway w1301566465 at (1813, 387) is more than 30 m from every hole line (a range or practice area mapped as fairway?)
+- fairway w1301588425 at (1423, 939) is more than 30 m from every hole line (a range or practice area mapped as fairway?)
+- fairway w1301596013 at (1875, 600) is more than 30 m from every hole line (a range or practice area mapped as fairway?)
+- waterway w561187359 (stream): 60 m of it within 30 m of a hole line isn't in a penalty area (pipeline/propose_channels.py makes one; or say it's dry)
+- hole line w1301409391 (ref 3) starts within 10 m of a green (the previous green?)
+- green w1301404216 ends 2 hole lines (5, 12): a double green, split it so each hole has its own green and pin
+- green w1301404213 ends 2 hole lines (6, 11): a double green, split it so each hole has its own green and pin
+- green w1301404220 ends 2 hole lines (7, 10): a double green, split it so each hole has its own green and pin
+- green w1301404232 ends 2 hole lines (8, 9): a double green, split it so each hole has its own green and pin
+- green w1301404230 ends 2 hole lines (9, 8): a double green, split it so each hole has its own green and pin
+- green w1301404235 ends 2 hole lines (14, 4): a double green, split it so each hole has its own green and pin
+- green w1301404236 ends 2 hole lines (15, 3): a double green, split it so each hole has its own green and pin
+- green w935659296 ends 2 hole lines (17, 1): a double green, split it so each hole has its own green and pin
+- green w1301404215 ends 2 hole lines (2, 16): a double green, split it so each hole has its own green and pin
 
 Totals: 47 tees, 44 greens, 82 fairways, 119 bunkers, 3 water hazards, 36 pins, 54 cart paths, 0 OSM tree points.
 

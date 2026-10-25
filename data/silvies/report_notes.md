@@ -13,3 +13,9 @@
    not built; its greens are wrong greens.
 5. **Ratings**: Craddock Challenge and Chief Egan have none (rounds there are not rated).
 6. **Chief Egan 6 green** is the developer's trace (172 m², 2026-10-25), not the OSM outline.
+7. **"Checks from earlier courses" (s03 audit, added on main 2026-10-25) are expected here:**
+   the nine "double greens" are the greens Craddock and Hankins share (each ends one hole of
+   each layout, not two holes of one); the small fairways near hole starts are the mown tee
+   pads (the tee boxes were drawn in the desk over them); the far fairways are practice areas
+   and McVeigh's Gauntlet; the stream is Owens Ditch (intermittent, NHD), left out of play;
+   the Craddock 3 OSM line's start is replaced by the developer's tee.
