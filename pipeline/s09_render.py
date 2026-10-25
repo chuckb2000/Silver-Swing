@@ -26,7 +26,7 @@ from shapely.affinity import translate
 from shapely.geometry import LineString, MultiPolygon, Point, Polygon
 from shapely.ops import unary_union
 
-from common import boundary_rings, build_dir, course_name_from_argv, GORSE_SURF, layouts, load_config, PX_PER_M, ROOT, SURF, World, write_json
+from common import boundary_rings, build_dir, course_name_from_argv, GORSE_SURF, WASTE_SURF, layouts, load_config, PX_PER_M, ROOT, SURF, World, write_json
 from terrain import tier_offset
 from s08_surface import smooth_fairways
 
@@ -95,8 +95,9 @@ def build_lut(P, overrides=None):
         S["range"]: ["G5", "G6", "G7", "G7"],
         S["ob_sand"]: ["S0", "S1", "S2", "S2"],
         GORSE_SURF: ["G0", "G1", "G2", "G2"],  # ground under gorse: as woods unless the theme says ("gorse")
+        WASTE_SURF: ["S0", "S1", "S2", "S2"],  # waste sand: the bunker sand, without the lip ("waste")
     }
-    named = {**S, "gorse": GORSE_SURF}
+    named = {**S, "gorse": GORSE_SURF, "waste": WASTE_SURF}
     for name, keys in (overrides or {}).items():
         if name in named:  # "rough_band" is an art role, not a surface (see rough_band_mask)
             t[named[name]] = keys
@@ -114,6 +115,22 @@ for k, v in {"ob_woods": 1, "ob": 2, "ob_building": 2, "ob_road": 3, "ob_water":
              "water": 14, "building": 15, "ob_sand": 3}.items():
     PRIO[S[k]] = v
 PRIO[GORSE_SURF] = PRIO[S["woods"]]
+PRIO[WASTE_SURF] = PRIO[S["range"]]  # between rough and fairway: rough beside it takes the soft edge, the sand keeps no lip
+
+
+def waste_scrub(rgb, surf, n1, P):
+    """Waste sand (id 18): the bunker's sand speckle, and a sparse scrub of 2-px grass tufts
+    (dune grass) in the rough's tones; no lip anywhere (it is not a bunker)."""
+    ws = surf == WASTE_SURF
+    if not ws.any():
+        return
+    rgb[ws & (n1 < 0.03)] = P["S0"]
+    rgb[ws & (n1 > 0.975) & (n1 <= 0.985)] = P["S2"]
+    tuft = ws & (n1 > 0.993)
+    below = np.zeros_like(tuft)
+    below[1:] = tuft[:-1]
+    rgb[tuft] = P["G3"]
+    rgb[below & ws] = P["G2"]
 
 
 def terrain_z_px(world, base, greens, H, W):
@@ -466,6 +483,7 @@ def main():
     put(np.isin(surf, [S["woods"], GORSE_SURF]) & (n1 < 0.10), "B1")
     put(np.isin(surf, [S["woods"], GORSE_SURF]) & (n1 > 0.96), "B0")
     put((surf == S["ob_woods"]) & (n1 < 0.05), "B0")
+    waste_scrub(rgb, surf, n1, P)
     put((surf == S["ob_road"]) & (n1 < 0.03), "K2")
     put((surf == S["cartpath"]) & (n1 < 0.04), "K2")
     rough = surf == S["rough"]
