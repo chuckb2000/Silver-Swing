@@ -153,5 +153,58 @@ Built 2026-10-21 together with Old Macdonald and Sheep Ranch (shared downloads, 
 - green w699106368 at (894, 1688) is not the end of any hole line (practice green?) -> treated as a wrong green
 - green w759067092 at (756, 183) is not the end of any hole line (practice green?) -> treated as a wrong green
 
+## Checks from earlier courses
+
+- tee w1056844975 crosses the edge of the world box (s09 failed on a green outside it): drop it or grow the world
+- green w676138279 crosses the edge of the world box (s09 failed on a green outside it): drop it or grow the world
+- green w696984353 crosses the edge of the world box (s09 failed on a green outside it): drop it or grow the world
+- green w698132188 crosses the edge of the world box (s09 failed on a green outside it): drop it or grow the world
+- tee w696979805: 3308 m2 (a fairway tagged as a tee?)
+- fairway r16463303 at (245, 426) is more than 30 m from every hole line (a range or practice area mapped as fairway?)
+- fairway r16463306 at (190, -136) is more than 30 m from every hole line (a range or practice area mapped as fairway?)
+- fairway r16463308 at (477, 145) is more than 30 m from every hole line (a range or practice area mapped as fairway?)
+- fairway r16463309 at (916, -33) is more than 30 m from every hole line (a range or practice area mapped as fairway?)
+- fairway r16463313 at (772, -276) is more than 30 m from every hole line (a range or practice area mapped as fairway?)
+- fairway r16463314 at (493, 280) is more than 30 m from every hole line (a range or practice area mapped as fairway?)
+- fairway r16463316 at (590, -6) is more than 30 m from every hole line (a range or practice area mapped as fairway?)
+- fairway r16463321 at (514, -331) is more than 30 m from every hole line (a range or practice area mapped as fairway?)
+- fairway r16463323 at (174, 28) is more than 30 m from every hole line (a range or practice area mapped as fairway?)
+- fairway r16463324 at (611, -240) is more than 30 m from every hole line (a range or practice area mapped as fairway?)
+- fairway r16463327 at (88, -305) is more than 30 m from every hole line (a range or practice area mapped as fairway?)
+- fairway r16463330 at (303, -369) is more than 30 m from every hole line (a range or practice area mapped as fairway?)
+- fairway r16463332 at (1258, 1744) is more than 30 m from every hole line (a range or practice area mapped as fairway?)
+- fairway r16463334 at (1113, 1678) is more than 30 m from every hole line (a range or practice area mapped as fairway?)
+- fairway r16463335 at (1312, 1122) is more than 30 m from every hole line (a range or practice area mapped as fairway?)
+- fairway r16463336 at (1037, 1235) is more than 30 m from every hole line (a range or practice area mapped as fairway?)
+- fairway r16463338 at (1278, 1437) is more than 30 m from every hole line (a range or practice area mapped as fairway?)
+- fairway r16463342 at (790, 1876) is more than 30 m from every hole line (a range or practice area mapped as fairway?)
+- fairway r18552168 at (861, 1172) is more than 30 m from every hole line (a range or practice area mapped as fairway?)
+- fairway r19671351 at (1290, 1897) is more than 30 m from every hole line (a range or practice area mapped as fairway?)
+- fairway r20040852 at (910, 1998) is more than 30 m from every hole line (a range or practice area mapped as fairway?)
+- fairway r20040853 at (775, 1554) is more than 30 m from every hole line (a range or practice area mapped as fairway?)
+- fairway r20040857 at (722, 1254) is more than 30 m from every hole line (a range or practice area mapped as fairway?)
+- fairway r20064160 at (963, 1383) is more than 30 m from every hole line (a range or practice area mapped as fairway?)
+- fairway r20064161 at (1414, 1420) is more than 30 m from every hole line (a range or practice area mapped as fairway?)
+- fairway r20064162 at (1061, 1814) is more than 30 m from every hole line (a range or practice area mapped as fairway?)
+- fairway r20064164 at (591, 1701) is more than 30 m from every hole line (a range or practice area mapped as fairway?)
+- fairway r20064165 at (883, 1531) is more than 30 m from every hole line (a range or practice area mapped as fairway?)
+- fairway w1186570928 at (759, 1952) is more than 30 m from every hole line (a range or practice area mapped as fairway?)
+- fairway w1186884944 at (753, 117) is more than 30 m from every hole line (a range or practice area mapped as fairway?)
+- fairway w694618957 at (802, 1796) is more than 30 m from every hole line (a range or practice area mapped as fairway?)
+- fairway w695872459 at (664, 1937) is more than 30 m from every hole line (a range or practice area mapped as fairway?)
+- fairway w696510092 at (1091, 1931) is more than 30 m from every hole line (a range or practice area mapped as fairway?)
+- fairway w696525902 at (1042, 1937) is more than 30 m from every hole line (a range or practice area mapped as fairway?)
+- fairway w696555011 at (632, 1920) is more than 30 m from every hole line (a range or practice area mapped as fairway?)
+- fairway w696728400 at (999, 1887) is more than 30 m from every hole line (a range or practice area mapped as fairway?)
+- fairway w698132185 at (577, 1778) is more than 30 m from every hole line (a range or practice area mapped as fairway?)
+- fairway w698408311 at (762, 1387) is more than 30 m from every hole line (a range or practice area mapped as fairway?)
+- fairway w698924895 at (952, 1117) is more than 30 m from every hole line (a range or practice area mapped as fairway?)
+- fairway w698924896 at (972, 1190) is more than 30 m from every hole line (a range or practice area mapped as fairway?)
+- fairway w698924897 at (971, 1209) is more than 30 m from every hole line (a range or practice area mapped as fairway?)
+- fairway w699104196 at (859, 1338) is more than 30 m from every hole line (a range or practice area mapped as fairway?)
+- fairway w699136649 at (909, 1758) is more than 30 m from every hole line (a range or practice area mapped as fairway?)
+- fairway w699225020 at (1140, 2098) is more than 30 m from every hole line (a range or practice area mapped as fairway?)
+- water w694622372 at (1168, 773), 10151 m2, is inside the boundary but not a penalty area: it plays as rough (tag it golf=lateral_water_hazard in edits.json, or list it in red_water_osm)
+
 Totals: 120 tees, 39 greens, 61 fairways, 379 bunkers, 1 water hazards, 45 pins, 248 cart paths, 208 OSM tree points.
 

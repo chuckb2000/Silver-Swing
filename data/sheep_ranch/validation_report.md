@@ -133,5 +133,11 @@ Built 2026-10-21 together with Pacific Dunes and Old Macdonald (shared downloads
 - green w883621035 at (811, 1341) is not the end of any hole line (practice green?) -> treated as a wrong green
 - green w883621036 at (786, 1255) is not the end of any hole line (practice green?) -> treated as a wrong green
 
+## Checks from earlier courses
+
+- golf=clubhouse: 1 feature(s) (w883621061) -> a building: add building=yes
+- golf=path: 13 feature(s) (w694844361, w694844364, w696739532, w696739534 ...) -> cart path: retag golf=cartpath in edits.json
+- hole line w865791059 (ref 3) starts within 10 m of a green (the previous green?)
+
 Totals: 23 tees, 21 greens, 38 fairways, 83 bunkers, 0 water hazards, 26 pins, 31 cart paths, 4 OSM tree points.
 
