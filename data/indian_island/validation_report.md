@@ -158,5 +158,11 @@ Decisions the developer made on 2026-10-19 are in DECISIONS.md ("Indian Island")
 - hole 17: hole line carries handicap=10 (compare with scorecard)
 - hole 18: hole line carries handicap=8 (compare with scorecard)
 
+## Checks from earlier courses
+
+- the boundary has a hole of 2649 m2 at (1297, 816): it is out of bounds (a pond cut out?)
+- the boundary has a hole of 1461 m2 at (1189, 828): it is out of bounds (a pond cut out?)
+- golf=path: 1 feature(s) (w929881214) -> cart path: retag golf=cartpath in edits.json
+
 Totals: 44 tees, 18 greens, 18 fairways, 47 bunkers, 2 water hazards, 18 pins, 0 cart paths, 0 OSM tree points.
 

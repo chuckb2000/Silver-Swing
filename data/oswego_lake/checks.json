@@ -1,0 +1,12 @@
+{
+ "note": "per-course settings for game/tests/unit/course_play.test.ts (the every-course checks); docs/COURSE_BUILD.md 8.2",
+ "tees": {
+  "holes": {
+   "3": [
+    "tee",
+    "rough"
+   ]
+  },
+  "why": "hole 3's Blue tee isn't mapped (open item in validation_report.md)"
+ }
+}

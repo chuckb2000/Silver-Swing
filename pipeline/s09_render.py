@@ -659,7 +659,8 @@ def main():
     Image.fromarray(rgb).save(art / "terrain.png")
     meta = {"buildings": [{"osm": o, "h": round(h, 1), **({"kind": kinds[o]} if kinds.get(o) != "house" else {})} for _, h, o in buildings]}
     write_json(art / "render_meta.json", meta)
-    print(f"[s09] terrain {W}x{H}, {len(np.unique(rgb.reshape(-1, 3), axis=0))} colours, {len(buildings)} buildings")
+    flat = rgb.reshape(-1, 3).astype(np.uint32)  # colours counted as packed ints (unique over rows took 9 s)
+    print(f"[s09] terrain {W}x{H}, {len(np.unique((flat[:, 0] << 16) | (flat[:, 1] << 8) | flat[:, 2]))} colours, {len(buildings)} buildings")
 
 
 if __name__ == "__main__":

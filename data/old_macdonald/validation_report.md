@@ -28,38 +28,38 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 
 ## Open items
 
-1. Hole 1: OSM handicap 9 differs from the GolfPass stroke index 11 (see spec 11.4 item 1); using GolfPass.
+1. Hole 1: OSM handicap 9 differs from the scorecard's stroke index 11; using the scorecard.
 2. Hole 1 (Black): tee box p_tee_black_1 assigned by the course chat (2026-10-21; the line start measures over 8 % beyond the Black card) (tagged hole=1, tee_set=Black in edited/course.geojson).
-3. Hole 2: OSM handicap 13 differs from the GolfPass stroke index 15 (see spec 11.4 item 1); using GolfPass.
+3. Hole 2: OSM handicap 13 differs from the scorecard's stroke index 15; using the scorecard.
 4. Hole 2 (Black): measured 174 yd vs card 181 (-4.1%) even with the virtual tee at the best spot in its box; accepted for play.
 5. Hole 2 (Black): tee box p_tee_black_2 assigned by the course chat (2026-10-21; developer: the tees are at the start of the OSM hole lines) (tagged hole=2, tee_set=Black in edited/course.geojson).
-6. Hole 3: OSM handicap 7 differs from the GolfPass stroke index 9 (see spec 11.4 item 1); using GolfPass.
+6. Hole 3: OSM handicap 7 differs from the scorecard's stroke index 9; using the scorecard.
 7. Hole 4 (Black): tee box p_tee_black_4 assigned by the course chat (2026-10-21; developer: the tees are at the start of the OSM hole lines) (tagged hole=4, tee_set=Black in edited/course.geojson).
 8. Hole 6 (Black): tee box p_tee_black_6 assigned by the course chat (2026-10-21; developer: the tees are at the start of the OSM hole lines) (tagged hole=6, tee_set=Black in edited/course.geojson).
-9. Hole 7: OSM handicap 11 differs from the GolfPass stroke index 5 (see spec 11.4 item 1); using GolfPass.
+9. Hole 7: OSM handicap 11 differs from the scorecard's stroke index 5; using the scorecard.
 10. Hole 7 (Black): tee box p_tee_black_7 assigned by the course chat (2026-10-21; developer: the tees are at the start of the OSM hole lines) (tagged hole=7, tee_set=Black in edited/course.geojson).
-11. Hole 8: OSM handicap 15 differs from the GolfPass stroke index 13 (see spec 11.4 item 1); using GolfPass.
+11. Hole 8: OSM handicap 15 differs from the scorecard's stroke index 13; using the scorecard.
 12. Hole 8 (Black): tee box p_tee_black_8 assigned by the course chat (2026-10-21; developer: the tees are at the start of the OSM hole lines) (tagged hole=8, tee_set=Black in edited/course.geojson).
-13. Hole 9: OSM handicap 5 differs from the GolfPass stroke index 7 (see spec 11.4 item 1); using GolfPass.
+13. Hole 9: OSM handicap 5 differs from the scorecard's stroke index 7; using the scorecard.
 14. Hole 9 (Black): tee box p_tee_black_9 assigned by the course chat (2026-10-21; developer: the tees are at the start of the OSM hole lines) (tagged hole=9, tee_set=Black in edited/course.geojson).
-15. Hole 10: OSM handicap 10 differs from the GolfPass stroke index 6 (see spec 11.4 item 1); using GolfPass.
+15. Hole 10: OSM handicap 10 differs from the scorecard's stroke index 6; using the scorecard.
 16. Hole 10 (Black): tee box p_tee_black_10 assigned by the course chat (2026-10-21; developer: the tees are at the start of the OSM hole lines) (tagged hole=10, tee_set=Black in edited/course.geojson).
-17. Hole 11: OSM handicap 8 differs from the GolfPass stroke index 4 (see spec 11.4 item 1); using GolfPass.
+17. Hole 11: OSM handicap 8 differs from the scorecard's stroke index 4; using the scorecard.
 18. Hole 11 (Black): measured 466 yd vs card 445 (+4.7%) even with the virtual tee at the best spot in its box; accepted for play.
 19. Hole 11 (Black): tee box p_tee_black_11 assigned by the course chat (2026-10-21; developer: the tees are at the start of the OSM hole lines) (tagged hole=11, tee_set=Black in edited/course.geojson).
 20. Hole 12 (Black): measured 245 yd vs card 237 (+3.3%) even with the virtual tee at the best spot in its box; accepted for play.
 21. Hole 12 (Black): tee box p_tee_black_12 assigned by the course chat (2026-10-21; developer: the tees are at the start of the OSM hole lines) (tagged hole=12, tee_set=Black in edited/course.geojson).
-22. Hole 13: OSM handicap 14 differs from the GolfPass stroke index 18 (see spec 11.4 item 1); using GolfPass.
+22. Hole 13: OSM handicap 14 differs from the scorecard's stroke index 18; using the scorecard.
 23. Hole 13 (Black): tee box p_tee_black_13 assigned by the course chat (2026-10-21; the line start measures over 8 % beyond the Black card) (tagged hole=13, tee_set=Black in edited/course.geojson).
 24. Hole 14 (Black): tee box p_tee_black_14 assigned by the course chat (2026-10-21; developer: the tees are at the start of the OSM hole lines) (tagged hole=14, tee_set=Black in edited/course.geojson).
-25. Hole 15: OSM handicap 4 differs from the GolfPass stroke index 12 (see spec 11.4 item 1); using GolfPass.
+25. Hole 15: OSM handicap 4 differs from the scorecard's stroke index 12; using the scorecard.
 26. Hole 15 (Black): tee box p_tee_black_15 assigned by the course chat (2026-10-21; developer: the tees are at the start of the OSM hole lines) (tagged hole=15, tee_set=Black in edited/course.geojson).
-27. Hole 16: OSM handicap 6 differs from the GolfPass stroke index 2 (see spec 11.4 item 1); using GolfPass.
+27. Hole 16: OSM handicap 6 differs from the scorecard's stroke index 2; using the scorecard.
 28. Hole 16 (Black): measured 473 yd vs card 455 (+4.0%) even with the virtual tee at the best spot in its box; accepted for play.
 29. Hole 16 (Black): tee box p_tee_black_16 assigned by the course chat (2026-10-21; developer: the tees are at the start of the OSM hole lines) (tagged hole=16, tee_set=Black in edited/course.geojson).
-30. Hole 17: OSM handicap 2 differs from the GolfPass stroke index 10 (see spec 11.4 item 1); using GolfPass.
+30. Hole 17: OSM handicap 2 differs from the scorecard's stroke index 10; using the scorecard.
 31. Hole 17 (Black): tee box p_tee_black_17 assigned by the course chat (2026-10-21; developer: the tees are at the start of the OSM hole lines) (tagged hole=17, tee_set=Black in edited/course.geojson).
-32. Hole 18: OSM handicap 12 differs from the GolfPass stroke index 8 (see spec 11.4 item 1); using GolfPass.
+32. Hole 18: OSM handicap 12 differs from the scorecard's stroke index 8; using the scorecard.
 
 ## Other open items (Old Macdonald)
 
@@ -192,6 +192,35 @@ Built 2026-10-21 together with Pacific Dunes and Sheep Ranch (shared downloads, 
 - green w865788984 at (208, 1502) is not the end of any hole line (practice green?) -> treated as a wrong green
 - green w865788985 at (515, 1723) is not the end of any hole line (practice green?) -> treated as a wrong green
 - green w865788998 at (215, 1650) is not the end of any hole line (practice green?) -> treated as a wrong green
+
+## Checks from earlier courses
+
+- tee w674353941 crosses the edge of the world box (s09 failed on a green outside it): drop it or grow the world
+- tee w674357759 crosses the edge of the world box (s09 failed on a green outside it): drop it or grow the world
+- tee w696979805: 3308 m2 (a fairway tagged as a tee?)
+- fairway w696510092: 123 m2 near a hole line's start (a tee tagged as fairway?)
+- fairway w696555011: 63 m2 near a hole line's start (a tee tagged as fairway?)
+- fairway w698924895: 97 m2 near a hole line's start (a tee tagged as fairway?)
+- fairway r15705593 at (132, -232) is more than 30 m from every hole line (a range or practice area mapped as fairway?)
+- fairway r15705594 at (32, -170) is more than 30 m from every hole line (a range or practice area mapped as fairway?)
+- fairway r16463302 at (-55, -113) is more than 30 m from every hole line (a range or practice area mapped as fairway?)
+- fairway r16463303 at (-95, -309) is more than 30 m from every hole line (a range or practice area mapped as fairway?)
+- fairway r16463335 at (972, 387) is more than 30 m from every hole line (a range or practice area mapped as fairway?)
+- fairway r16463339 at (8, 182) is more than 30 m from every hole line (a range or practice area mapped as fairway?)
+- fairway r16463341 at (197, -12) is more than 30 m from every hole line (a range or practice area mapped as fairway?)
+- fairway r18956765 at (189, 361) is more than 30 m from every hole line (a range or practice area mapped as fairway?)
+- fairway r19997495 at (352, -25) is more than 30 m from every hole line (a range or practice area mapped as fairway?)
+- fairway r20000070 at (115, 749) is more than 30 m from every hole line (a range or practice area mapped as fairway?)
+- fairway r20040812 at (579, -283) is more than 30 m from every hole line (a range or practice area mapped as fairway?)
+- fairway r20040813 at (265, -237) is more than 30 m from every hole line (a range or practice area mapped as fairway?)
+- fairway r20040814 at (410, -319) is more than 30 m from every hole line (a range or practice area mapped as fairway?)
+- fairway r20040854 at (446, 7) is more than 30 m from every hole line (a range or practice area mapped as fairway?)
+- fairway r20040855 at (325, 364) is more than 30 m from every hole line (a range or practice area mapped as fairway?)
+- fairway r20040856 at (101, 241) is more than 30 m from every hole line (a range or practice area mapped as fairway?)
+- fairway r20064158 at (634, 62) is more than 30 m from every hole line (a range or practice area mapped as fairway?)
+- fairway r20064159 at (188, 719) is more than 30 m from every hole line (a range or practice area mapped as fairway?)
+- fairway w1098414788 at (-58, -217) is more than 30 m from every hole line (a range or practice area mapped as fairway?)
+- water w694622372 at (828, 38), 10151 m2, is inside the boundary but not a penalty area: it plays as rough (tag it golf=lateral_water_hazard in edits.json, or list it in red_water_osm)
 
 Totals: 79 tees, 32 greens, 56 fairways, 327 bunkers, 1 water hazards, 43 pins, 152 cart paths, 114 OSM tree points.
 

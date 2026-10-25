@@ -1,0 +1,11 @@
+{
+ "note": "per-course settings for game/tests/unit/course_play.test.ts (the every-course checks); docs/COURSE_BUILD.md 8.2",
+ "centre_line_clear": {},
+ "yardage": {
+  "max": {
+   "8": 0.1,
+   "10": 0.1
+  },
+  "why": "8 and 10 from the developer's back tees"
+ }
+}

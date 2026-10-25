@@ -452,34 +452,11 @@ DECISIONS.md with the reason.
     `src/systems/game/pins.ts`); the meter has a line at the middle of the green, no
     ghost tick and no display-lag allowance. 376 unit tests and 4 Playwright tests pass.
 
--   **Courses (course chats, 2026-10-18 to 2026-10-22):** twenty-seven data
-    folders, twenty-nine courses on offer (East Potomac is three) in six states;
-    Shorty's (19 par 3s) and Bandon Preserve (13 par 3s), Bandon OR, merged
-    2026-10-22 (PR #47), in the rotation from 2026-10-23 (no nine for the daily);
-    RedTail Golf Center (Beaverton OR; PR #39) and The Muni (Lake Oswego OR, nine
-    holes; PR #42) merged 2026-10-22, in the daily rotation from 2026-10-23;
-    TPC Boston (Norton MA) and Pacific Dunes, Old Macdonald and Sheep Ranch (Bandon OR)
-    merged 2026-10-21;
-    Gearhart Golf Links (Gearhart OR), Bandon Trails (Bandon OR, `bandon`
-    theme) and Chambers Bay (University Place WA, `puget` theme) merged 2026-10-20. Oregon Golf Club's creek on
-    13, 14 and 15 (from the lidar, `course/ogc-creek`) merged 2026-10-20.
-    Chambers Bay's trees from the 2020 lidar (`course/chambers_bay`) and East
-    Potomac's fairway joins and Blue 10 object (`fix/east-potomac-tree`) merged
-    2026-10-20. Bandon Dunes (Bandon OR, `bandon_dunes` theme, penal gorse on
-    surface 17; PR #17) merged 2026-10-20; in the daily rotation from 2026-10-21. Triggs Memorial (Providence RI,
-    `seekonk` theme; PR #21) merged 2026-10-20; in the daily rotation from 2026-10-21.
-    Sandpines Golf Links (Florence OR; PR #57) merged 2026-10-24, in the daily
-    rotation from 2026-10-25. Stanford Golf Course (Stanford CA, `peninsula`
-    theme; PR #59) merged 2026-10-24, in the daily rotation from 2026-10-25.
-    Wildwood Golf Course (Portland OR, `pnw` theme; PR #60) merged 2026-10-24, in
-    the daily rotation from 2026-10-25. Pumpkin Ridge (North Plains OR, Witch Hollow and
-    Ghost Creek as two layouts, `pumpkin_ridge` theme; PR #61) merged 2026-10-24,
-    both in the daily rotation from 2026-10-25. Cypress Point Club (Pebble Beach CA,
-    `monterey` theme, the Pacific a red penalty area; PR #62) merged 2026-10-24, in
-    the daily rotation from 2026-10-25. Astoria Country Club (Warrenton OR, `astoria`
-    theme; PR #64) merged 2026-10-24, in the daily rotation from 2026-10-25.
-    Each course's build history, facts and open items are in
-    `docs/courses/<id>.md` (section 11).
+-   **Courses:** thirty-three data folders, thirty-six courses on offer (East
+    Potomac is three, Pumpkin Ridge two) in seven states, built by course chats
+    from 2026-10-18. Each course's facts, build history and open items are in
+    `docs/courses/<id>.md`; which ones are in the daily rotation from when is
+    `game/src/data/dailyRoster.ts`. A merged course needs no line here (section 11).
 
 -   **Overnight (design chat, 2026-10-19/20):** branch `design/overnight`,
     merged 2026-10-20 (developer approved). The developer's overnight list:
@@ -668,12 +645,30 @@ DECISIONS.md with the reason.
     `natural=sand` inside the boundary). Distance x0.92, window x0.8, no splash,
     putter allowed; no lip, sparse scrub tufts. DECISIONS.md "Waste sand".
 
+-   **Faster course building, part 2 (design chat, 2026-10-25):** branch
+    `design/build-speed`. Every course is pinned to the pipeline that built it
+    (`data/<id>/pipeline_pin.json`, `pipeline/pins.py`, `make pins`), so a change to
+    `pipeline/` or `assets-src/` changes no finished course and needs no
+    regression run of the others; `make course` goes through `pipeline/build.py`,
+    which skips steps whose inputs (files, config keys, code) haven't changed
+    (`pipeline/stepcache.py`; `ARGS=--fresh` runs all); a full build is about 1.5
+    min (was 3.5-4; parallel putting views, cached PNG saves). `pipeline/intake.py`
+    puts downloads into `raw/` and checks them on arrival (`make intake`); s03 adds
+    "Checks from earlier courses"; `course_play.test.ts` runs the every-course
+    checks on every course with `data/<id>/checks.json` (the per-course test files
+    keep only what is special); `docs/COURSE_LESSONS.md` is the short version (full
+    history in `docs/archive/`); `make land NAME=<id>` is the whole merge chore
+    (daily rotation from tomorrow, pin, rebuild check, tests). DECISIONS.md
+    "Faster course building, part 2".
+
 -   **Next task:** Item 1 of the player improvements (swing coach) is on
     `design/coach`, unmerged. Also: the third playtest (putting, yellow
-    misses), the club's printed scorecard and the hole 3 Blue tee box. New
-    courses: a separate chat following docs/COURSE_BUILD.md; after each one
-    lands, add its line to section 11 and fold its lessons into
-    docs/COURSE_LESSONS.md (the course chat makes its own card now).
+    misses), the club's printed scorecard and the hole 3 Blue tee box. New courses: a separate chat following docs/COURSE_BUILD.md
+    (quick path); the design chat merges with `make land NAME=<id>`.
+
+-   **Not to be merged:** Rock Creek Park (`course/rock_creek`, PR #48, closed
+    2026-10-25): not up to the developer's standards. `make land` refuses it and
+    `courses.test.ts` fails if it appears.
 
 -   **Open items:** data/oswego_lake/validation_report.md (hole 3 tee
     not mapped; holes 7/11 OSM lines start on each other's tees;
@@ -1139,7 +1134,9 @@ Bake into 512×512 PNG chunks plus a downsampled mini-map.
 -   data/\<course\>/ also keeps raw/, edited/, proposed/, build/,
     scorecard.csv, adjustments.json, validation_report.md
 
-make course NAME=\<course\> regenerates everything from raw/ + edited/.
+make course NAME=\<course\> regenerates everything from raw/ + edited/, with the
+course's pinned pipeline (pipeline/pins.py); steps whose inputs are unchanged are
+skipped (pipeline/stepcache.py).
 
 **6. Swing design**
 
@@ -1713,46 +1710,10 @@ design, UTM zone, world, data sources, water, trees), the scorecard with its
 source, the default tee, the developer's calls, open items and the build
 history. Course chats write only that file (docs/COURSE_BUILD.md section 9);
 the course list the game offers is made from the courses' own `course.json`
-files (`game/scripts/course-lists.mjs`). The first course, Oswego Lake, is
-`docs/courses/oswego_lake.md`.
-
-| Course | File |
-|---|---|
-| Astoria Country Club | `docs/courses/astoria.md` |
-| Bandon Dunes | `docs/courses/bandon_dunes.md` |
-| Bandon Preserve (13 holes) | `docs/courses/bandon_preserve.md` |
-| Bandon Trails | `docs/courses/bandon_trails.md` |
-| Chambers Bay | `docs/courses/chambers_bay.md` |
-| Cypress Point Club | `docs/courses/cypress_point.md` |
-| East Potomac Golf Links (Blue, White and Red courses) | `docs/courses/east_potomac.md` |
-| Eastmoreland Golf Course | `docs/courses/eastmoreland.md` |
-| Franklin Country Club | `docs/courses/franklin.md` |
-| Gearhart Golf Links | `docs/courses/gearhart.md` |
-| Highland Links | `docs/courses/highland_links.md` |
-| Indian Island Golf Course | `docs/courses/indian_island.md` |
-| Langdon Farms Golf Club | `docs/courses/langdon.md` |
-| Langston Golf Course | `docs/courses/langston.md` |
-| The Muni (Lake Oswego) | `docs/courses/lake_oswego_muni.md` |
-| Old Macdonald | `docs/courses/old_macdonald.md` |
-| Oregon Golf Club | `docs/courses/ogc.md` |
-| Oswego Lake Country Club | `docs/courses/oswego_lake.md` |
-| Pacific Dunes | `docs/courses/pacific_dunes.md` |
-| Pumpkin Ridge Golf Club (Witch Hollow and Ghost Creek) | `docs/courses/pumpkin_ridge.md` |
-| RedTail Golf Center | `docs/courses/redtail.md` |
-| Sandpines Golf Links | `docs/courses/sandpines.md` |
-| Sheep Ranch | `docs/courses/sheep_ranch.md` |
-| Shorty's (19 holes) | `docs/courses/shortys.md` |
-| Stanford Golf Course | `docs/courses/stanford.md` |
-| Stone Creek Golf Club | `docs/courses/stone_creek.md` |
-| Triggs Memorial Golf Course | `docs/courses/triggs.md` |
-| TPC Boston | `docs/courses/tpc_boston.md` |
-| Tualatin Country Club | `docs/courses/tualatin.md` |
-| Wannamoisett Country Club | `docs/courses/wannamoisett.md` |
-| Waverley Country Club | `docs/courses/waverley.md` |
-| Wildwood Golf Course | `docs/courses/wildwood.md` |
-| Willamette Valley Country Club | `docs/courses/willamette_valley.md` |
-| Practice ground (synthetic, not on the course list) | `data/practice/make_practice.py`, DECISIONS.md "Player improvements" |
-
+files (`game/scripts/course-lists.mjs`), so nothing here changes when a course
+lands: `ls docs/courses/` is the list. The first course, Oswego Lake, is
+`docs/courses/oswego_lake.md`; the practice ground is
+`data/practice/make_practice.py` (DECISIONS.md "Player improvements").
 
 **12. Repository layout**
 
@@ -1768,7 +1729,7 @@ files (`game/scripts/course-lists.mjs`). The first course, Oswego Lake, is
 
 /game/public/courses/index.json ← the course list (written by pipeline s10)
 
-/Makefile ← make dev \| make test \| make course NAME=x \| make assets
+/Makefile ← make dev \| make test \| make course NAME=x \| make intake NAME=x \| make land NAME=x \| make pins \| make assets
 
 /reference/ ← developer screenshots (art reference only)
 

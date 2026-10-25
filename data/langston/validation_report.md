@@ -155,5 +155,10 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 
 - none
 
+## Checks from earlier courses
+
+- golf=clubhouse: 1 feature(s) (w298560022) -> a building: add building=yes
+- golf=path: 4 feature(s) (w50095947, w50095958, w50095963, w50192195) -> cart path: retag golf=cartpath in edits.json
+
 Totals: 28 tees, 18 greens, 34 fairways, 42 bunkers, 3 water hazards, 18 pins, 0 cart paths, 183 OSM tree points.
 

@@ -10,6 +10,8 @@ __pycache__/
 
 # pipeline intermediates (rebuilt by `make course NAME=<id>` from raw/ + edited/)
 data/*/build/
+# pinned pipelines unpacked from git (pipeline/pins.py)
+.pins/
 
 # local Cloudflare dev state (wrangler pages dev)
 .wrangler/

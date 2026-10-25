@@ -409,6 +409,20 @@ def main():
         from shapely.ops import unary_union
         from shapely.prepared import prep
         fw_inset = prep(unary_union(list(g[g.kind == "fairway"].geometry)).buffer(-float(cfg["trees_off_fairways_m"])))
+    # the first playing surface containing a point, in excl's order, as excl[excl.contains(p)].iloc[0]
+    # gave it (one GeoDataFrame filter per detected tree took about 10 s a course)
+    from shapely import STRtree
+    from shapely.prepared import prep as _prep_b
+    ex_geoms, ex_kind, ex_osm = list(excl.geometry), list(excl.kind), list(excl.osm)
+    ex_tree = STRtree(ex_geoms) if ex_geoms else None
+    boundary_p = _prep_b(boundary)
+
+    def first_hit(pt):
+        if ex_tree is None:
+            return None
+        idx = ex_tree.query(pt, predicate="within")
+        return int(min(idx)) if len(idx) else None
+
     for k, (cy, cx) in enumerate(cents, start=1):
         jy, ix = int(round(cy)), int(round(cx))
         h = float(chm[max(0, jy - 1):jy + 2, max(0, ix - 1):ix + 2].max())
@@ -425,9 +439,9 @@ def main():
             continue
         p = Point(x, y)
         kept = keep_area is not None and keep_area.contains(p)
-        hit = excl[excl.contains(p)] if not kept else excl.iloc[0:0]
-        if len(hit):
-            dropped_surface.append({"x": round(x, 1), "y": round(y, 1), "h": round(h, 1), "on": hit.kind.iloc[0], "osm": hit.osm.iloc[0]})
+        hit = first_hit(p) if not kept else None
+        if hit is not None:
+            dropped_surface.append({"x": round(x, 1), "y": round(y, 1), "h": round(h, 1), "on": ex_kind[hit], "osm": ex_osm[hit]})
             continue
         if fw_inset is not None and not kept and fw_inset.contains(p):
             fw = g[(g.kind == "fairway") & g.contains(p)]
@@ -442,7 +456,7 @@ def main():
         trees.append({
             "x": round(x, 2), "y": round(y, 2), "h": round(h, 1), "r": round(r, 2),
             "type": "conifer" if conifer else "deciduous",
-            "in": bool(boundary.contains(p)),
+            "in": bool(boundary_p.contains(p)),
         })
 
     # optional (course_config.json drop_trees): single trees the developer asked to

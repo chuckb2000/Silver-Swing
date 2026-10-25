@@ -119,5 +119,10 @@ The developer's calls of 2026-10-20 are in docs/courses/gearhart.md ("The develo
 - green w891580533 at (321, 1121) is not the end of any hole line (practice green?) -> treated as a wrong green
 - green w1322722950 at (271, 873) is not the end of any hole line (practice green?) -> treated as a wrong green
 
+## Checks from earlier courses
+
+- the boundary has a hole of 2089 m2 at (325, 1177): it is out of bounds (a pond cut out?)
+- golf=path: 4 feature(s) (w825926514, w825926516, w827108985, w827155483) -> cart path: retag golf=cartpath in edits.json
+
 Totals: 48 tees, 20 greens, 19 fairways, 72 bunkers, 3 water hazards, 18 pins, 31 cart paths, 60 OSM tree points.
 

@@ -160,5 +160,9 @@ Built 2026-10-24 by a course chat with the standing defaults (docs/COURSE_BUILD.
 - green w849054465 at (806, 491) is not the end of any hole line (practice green?) -> treated as a wrong green
 - green w849054468 at (996, 424) is not the end of any hole line (practice green?) -> treated as a wrong green
 
+## Checks from earlier courses
+
+- none
+
 Totals: 56 tees, 21 greens, 19 fairways, 60 bunkers, 3 water hazards, 18 pins, 23 cart paths, 0 OSM tree points.
 

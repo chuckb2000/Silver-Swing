@@ -123,5 +123,13 @@ The developer's calls of 2026-10-24 are in docs/courses/astoria.md ("The develop
 - green w1151048615 at (837, 961) is not the end of any hole line (practice green?) -> treated as a wrong green
 - green w1151393046 at (929, 192) is not the end of any hole line (practice green?) -> treated as a wrong green
 
+## Checks from earlier courses
+
+- tee w1151402541 at (367, 580): 89 m2 of it is outside the boundary, so out of bounds
+- hole line x_hole_5 (ref 5): 30 % outside the boundary
+- fairway r18419806 at (828, 931) is more than 30 m from every hole line (a range or practice area mapped as fairway?)
+- fairway w1151370641 at (811, 1046) is more than 30 m from every hole line (a range or practice area mapped as fairway?)
+- fairway w1151402521 at (528, 934) is more than 30 m from every hole line (a range or practice area mapped as fairway?)
+
 Totals: 52 tees, 23 greens, 23 fairways, 30 bunkers, 0 water hazards, 18 pins, 33 cart paths, 0 OSM tree points.
 

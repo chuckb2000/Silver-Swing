@@ -39,6 +39,7 @@ from shapely.geometry import MultiPolygon, Point, Polygon
 from common import build_dir, course_name_from_argv, GORSE_SURF, WASTE_SURF, joins_parts, layout_dir, layouts, load_config, play_boundary, PX_PER_M, ROOT, SURF, World, write_json
 from s08_surface import course_layers, road_geoms
 from terrain import tier_offset
+from pngcache import save_png
 from s09_render import draw_lighthouse, LIGHTHOUSE_DRAW_SCALE  # noqa: E402
 from s09_render import BAYER4, PRIO, SHADOW_DIR, SHADOW_MULT, band_lut, build_lut, load_palette, load_theme, paint_rock, rough_band_mask, stake_lines, waste_scrub, wave_mask
 
@@ -437,56 +438,77 @@ def main():
 
 def render_layout(lay, name, cfg, world, ldir, all_holes, green_by_osm, only, LAYERS, g, surf05, base, greens,
                   trees_all, building_polys, boundary, P, lut, make_c, make_d, gidx, blut):
-    """Putting views for one layout's holes (written to <layout build dir>/greens/)."""
+    """Putting views for one layout's holes (written to <layout build dir>/greens/). The holes are
+    drawn in parallel (SS_JOBS processes, default one per CPU): each is independent and seeded on
+    its own, so the files are the same however many run at once."""
     outd = ldir / "greens"
     outd.mkdir(exist_ok=True)
     holes = json.load(open(ldir / "holes.json")) if lay["shared"] else all_holes
-    views = []
-    for h in holes:
-        n = h["number"]
-        if only and n not in only:
-            continue
-        gpoly = Polygon(green_by_osm[h["green_osm"]]["poly"])
-        cx, cy = gpoly.centroid.x, gpoly.centroid.y
-        if not gpoly.contains(gpoly.centroid):  # a crescent (Langdon Farms 9, half a double green): centre on the pin
-            cx, cy = h["pin"]
-        entry = {"hole": n}
-        for L in LAYERS:
-            WIN, ppm = L["win"], L["ppm"]
-            x0 = float(np.clip(round(cx - WIN / 2), 0, world.width - WIN))
-            y1 = float(np.clip(round(cy + WIN / 2), WIN, world.height))
-            grid = Grid(x0, y1, WIN, WIN, ppm)
-            y0, x1 = y1 - WIN, x0 + WIN
-            surf = surface_grid(g, cfg, surf05, world, grid, boundary)
-            z = terrain_z_grid(base, greens, grid)
-            # trees whose sprite can reach into the window (tall ones south of it poke up)
-            near = [t for t in trees_all if x0 - 12 <= t["x"] <= x1 + 12 and y0 - min(t["h"] * HEIGHT_K, L["max_h"] / ppm) - 4 <= t["y"] <= y1 + 12]
-            box = Polygon([(x0 - 30, y0 - 30), (x1 + 30, y0 - 30), (x1 + 30, y1 + 30), (x0 - 30, y1 + 30)])
-            blds = [(p, hb, o) for p, hb, o in building_polys if p.intersects(box)]
-            rng = np.random.default_rng(20261018 + n + 1000 * ppm)
-            rgb = render_art(surf, z, grid, g, all_holes, near, blds, boundary, P, lut, rng, lay["default_tee"], max_h=L["max_h"], cfg=cfg, blut=blut)
-            base_name = f"g{n:02d}{L['suffix']}"
-            Image.fromarray(rgb).save(outd / f"{base_name}.png", optimize=True)
-            # tree sprites
-            atlas = Atlas(f"{base_name}_trees", max_w=1024)
-            made = {}
-            places = []
-            for i, t in enumerate(near):
-                kind, w, hh, v = tree_sprite_key(t, i if gidx is None else gidx[id(t)], L)
-                key = f"{kind}_{w}_{hh}_{v}"
-                if key not in made:
-                    made[key] = (shrub_painter if kind == "s" else make_c if kind == "c" else make_d)(w, hh, v)  # the theme's tree painters
-                    atlas.add(key, made[key])
-                places.append({"f": key, "x": round(t["x"], 2), "y": round(t["y"], 2)})
-            aw, ah = atlas.write(outd)
-            js = json.load(open(outd / f"{base_name}_trees.json"))
-            js["trees"] = places
-            (outd / f"{base_name}_trees.json").write_text(json.dumps(js, separators=(",", ":")))
-            entry[L["name"]] = {"file": f"greens/{base_name}.png", "trees": f"greens/{base_name}_trees.json",
-                                "treesImage": f"greens/{base_name}_trees.png", "x0": x0, "y1": y1, "w": WIN, "h": WIN, "ppm": ppm}
-            print(f"[s09b] {'' if not lay['shared'] else lay['id'] + ' '}hole {n:2d} {L['name']:4s}: window {x0:.0f},{y0:.0f}-{x1:.0f},{y1:.0f} at {ppm} px/m, {len(near)} trees ({len(made)} sprites, atlas {aw}x{ah})")
-        views.append(entry)
+    todo = [h for h in holes if not (only and h["number"] not in only)]
+    _JOB.clear()
+    _JOB.update(lay=lay, cfg=cfg, world=world, outd=outd, all_holes=all_holes, green_by_osm=green_by_osm, LAYERS=LAYERS,
+                g=g, surf05=surf05, base=base, greens=greens, trees_all=trees_all, building_polys=building_polys,
+                boundary=boundary, P=P, lut=lut, make_c=make_c, make_d=make_d, gidx=gidx, blut=blut)
+    jobs = min(int(os.environ.get("SS_JOBS", os.cpu_count() or 1)), len(todo))
+    if jobs > 1:
+        import multiprocessing
+        with multiprocessing.get_context("fork").Pool(jobs) as pool:
+            views = pool.map(_render_hole, todo, chunksize=1)
+    else:
+        views = [_render_hole(h) for h in todo]
     write_json(outd / "green_views.json", views, indent=1)
+
+
+_JOB: dict = {}   # what render_layout hands the workers (inherited by fork, not pickled)
+
+
+def _render_hole(h) -> dict:
+    J = _JOB
+    lay, cfg, world, outd, LAYERS = J["lay"], J["cfg"], J["world"], J["outd"], J["LAYERS"]
+    g, surf05, base, greens, trees_all = J["g"], J["surf05"], J["base"], J["greens"], J["trees_all"]
+    building_polys, boundary, P, lut, blut = J["building_polys"], J["boundary"], J["P"], J["lut"], J["blut"]
+    make_c, make_d, gidx, all_holes = J["make_c"], J["make_d"], J["gidx"], J["all_holes"]
+    n = h["number"]
+    gpoly = Polygon(J["green_by_osm"][h["green_osm"]]["poly"])
+    cx, cy = gpoly.centroid.x, gpoly.centroid.y
+    if not gpoly.contains(gpoly.centroid):  # a crescent (Langdon Farms 9, half a double green): centre on the pin
+        cx, cy = h["pin"]
+    entry = {"hole": n}
+    for L in LAYERS:
+        WIN, ppm = L["win"], L["ppm"]
+        x0 = float(np.clip(round(cx - WIN / 2), 0, world.width - WIN))
+        y1 = float(np.clip(round(cy + WIN / 2), WIN, world.height))
+        grid = Grid(x0, y1, WIN, WIN, ppm)
+        y0, x1 = y1 - WIN, x0 + WIN
+        surf = surface_grid(g, cfg, surf05, world, grid, boundary)
+        z = terrain_z_grid(base, greens, grid)
+        # trees whose sprite can reach into the window (tall ones south of it poke up)
+        near = [t for t in trees_all if x0 - 12 <= t["x"] <= x1 + 12 and y0 - min(t["h"] * HEIGHT_K, L["max_h"] / ppm) - 4 <= t["y"] <= y1 + 12]
+        box = Polygon([(x0 - 30, y0 - 30), (x1 + 30, y0 - 30), (x1 + 30, y1 + 30), (x0 - 30, y1 + 30)])
+        blds = [(p, hb, o) for p, hb, o in building_polys if p.intersects(box)]
+        rng = np.random.default_rng(20261018 + n + 1000 * ppm)
+        rgb = render_art(surf, z, grid, g, all_holes, near, blds, boundary, P, lut, rng, lay["default_tee"], max_h=L["max_h"], cfg=cfg, blut=blut)
+        base_name = f"g{n:02d}{L['suffix']}"
+        save_png(Image.fromarray(rgb), outd / f"{base_name}.png", optimize=True)
+        # tree sprites
+        atlas = Atlas(f"{base_name}_trees", max_w=1024)
+        made = {}
+        places = []
+        for i, t in enumerate(near):
+            kind, w, hh, v = tree_sprite_key(t, i if gidx is None else gidx[id(t)], L)
+            key = f"{kind}_{w}_{hh}_{v}"
+            if key not in made:
+                made[key] = (shrub_painter if kind == "s" else make_c if kind == "c" else make_d)(w, hh, v)  # the theme's tree painters
+                atlas.add(key, made[key])
+            places.append({"f": key, "x": round(t["x"], 2), "y": round(t["y"], 2)})
+        aw, ah = atlas.write(outd)
+        js = json.load(open(outd / f"{base_name}_trees.json"))
+        js["trees"] = places
+        (outd / f"{base_name}_trees.json").write_text(json.dumps(js, separators=(",", ":")))
+        entry[L["name"]] = {"file": f"greens/{base_name}.png", "trees": f"greens/{base_name}_trees.json",
+                            "treesImage": f"greens/{base_name}_trees.png", "x0": x0, "y1": y1, "w": WIN, "h": WIN, "ppm": ppm}
+        print(f"[s09b] {'' if not lay['shared'] else lay['id'] + ' '}hole {n:2d} {L['name']:4s}: window {x0:.0f},{y0:.0f}-{x1:.0f},{y1:.0f} at {ppm} px/m, {len(near)} trees ({len(made)} sprites, atlas {aw}x{ah})", flush=True)
+    return entry
 
 
 if __name__ == "__main__":

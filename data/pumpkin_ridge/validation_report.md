@@ -234,5 +234,10 @@ Built 2026-10-24, both courses in one world (COURSE_BUILD.md 3.5). Standing defa
 - green w903974811 at (818, 537) is not the end of any hole line (practice green?) -> treated as a wrong green
 - green w903974870 at (1001, 834) is not the end of any hole line (practice green?) -> treated as a wrong green
 
+## Checks from earlier courses
+
+- tee w1444592954 at (236, 801): 3 m2 of it is outside the boundary, so out of bounds
+- fairway r20051891 at (817, 525) is more than 30 m from every hole line (a range or practice area mapped as fairway?)
+
 Totals: 148 tees, 42 greens, 45 fairways, 168 bunkers, 30 water hazards, 36 pins, 26 cart paths, 109 OSM tree points.
 

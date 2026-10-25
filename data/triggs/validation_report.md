@@ -134,5 +134,9 @@ Built by a course chat on 2026-10-20 with the standing defaults (docs/COURSE_BUI
 - hole 18: hole line carries handicap=6 (compare with scorecard)
 - green w698136783 at (589, 325) is not the end of any hole line (practice green?) -> treated as a wrong green
 
+## Checks from earlier courses
+
+- none
+
 Totals: 43 tees, 19 greens, 19 fairways, 70 bunkers, 9 water hazards, 18 pins, 20 cart paths, 285 OSM tree points.
 

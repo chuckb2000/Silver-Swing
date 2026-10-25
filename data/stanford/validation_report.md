@@ -155,5 +155,18 @@ Built by a course chat on 2026-10-24 with the standing defaults (docs/COURSE_BUI
 - green w1193027678 at (664, 1625) is not the end of any hole line (practice green?) -> treated as a wrong green
 - green w1193027709 at (685, 1812) is not the end of any hole line (practice green?) -> treated as a wrong green
 
+## Checks from earlier courses
+
+- green w1193027709 at (685, 1812): 7 m2 of it is outside the boundary, so out of bounds
+- tee w798608794 at (206, 1027): 128 m2 of it is outside the boundary, so out of bounds
+- hole line w1137961752 (ref 1): 16 % outside the boundary
+- fairway r14093507 at (921, 1221) is more than 30 m from every hole line (a range or practice area mapped as fairway?)
+- fairway r14093515 at (942, 599) is more than 30 m from every hole line (a range or practice area mapped as fairway?)
+- waterway r8745748 (canal): 786 m of it within 30 m of a hole line isn't in a penalty area (pipeline/propose_channels.py makes one; or say it's dry)
+- waterway w1216390230 (ditch): 67 m of it within 30 m of a hole line isn't in a penalty area (pipeline/propose_channels.py makes one; or say it's dry)
+- waterway w1216390231 (ditch): 33 m of it within 30 m of a hole line isn't in a penalty area (pipeline/propose_channels.py makes one; or say it's dry)
+- waterway w1216390235 (ditch): 11 m of it within 30 m of a hole line isn't in a penalty area (pipeline/propose_channels.py makes one; or say it's dry)
+- waterway w1216390239 (ditch): 62 m of it within 30 m of a hole line isn't in a penalty area (pipeline/propose_channels.py makes one; or say it's dry)
+
 Totals: 59 tees, 29 greens, 21 fairways, 67 bunkers, 3 water hazards, 18 pins, 48 cart paths, 2603 OSM tree points.
 

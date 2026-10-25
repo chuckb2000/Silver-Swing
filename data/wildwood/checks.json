@@ -1,0 +1,16 @@
+{
+ "note": "per-course settings for game/tests/unit/course_play.test.ts (the every-course checks); docs/COURSE_BUILD.md 8.2",
+ "default_aim": {
+  "skip": [
+   3
+  ],
+  "why": "hole 3: the auto club is one too long on the steep downhill (PR #55, on hold)"
+ },
+ "yardage": {
+  "max": {
+   "14 Black": 0.16,
+   "18 Black": 0.1
+  },
+  "why": "accepted by the developer over 8% (the course's validation_report.md and docs/courses/<id>.md)"
+ }
+}

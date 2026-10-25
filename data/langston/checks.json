@@ -1,0 +1,16 @@
+{
+ "note": "per-course settings for game/tests/unit/course_play.test.ts (the every-course checks); docs/COURSE_BUILD.md 8.2",
+ "fairway_meets_green": true,
+ "tee_shot_clear": {
+  "sets": [
+   "Royal",
+   "White"
+  ]
+ },
+ "yardage": {
+  "max": {
+   "6 Royal": 0.13
+  },
+  "why": "accepted by the developer over 8% (the course's validation_report.md and docs/courses/<id>.md)"
+ }
+}

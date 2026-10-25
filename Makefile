@@ -1,9 +1,10 @@
 # Silver Swings Golf - one command per job (see CLAUDE.md section 12)
 NAME ?= oswego_lake
 NAMES ?=
+ARGS ?=
 PY   ?= python3
 
-.PHONY: dev build test e2e course fetch regress lists assets music cards all clean-course
+.PHONY: dev build test e2e course fetch regress lists assets music cards all clean-course pins land intake
 
 dev:            ## run the game locally (Vite dev server)
 	cd game && npm run dev
@@ -32,23 +33,17 @@ regress:        ## rebuild every course (or NAMES="a b") and check its committed
 lists:          ## make the game's course lists (courses/index.json, sprites/title/index.json)
 	cd game && node scripts/course-lists.mjs
 
-course: fetch   ## rebuild one course from raw/ (+ edited/) -> game/public/courses/$(NAME)
-	cd pipeline && \
-	$(PY) s00_prepare_rasters.py $(NAME) && \
-	$(PY) s01_osm.py $(NAME) && \
-	$(PY) merge_edits.py $(NAME) && \
-	$(PY) s02_reproject.py $(NAME) && \
-	$(PY) s02b_approaches.py $(NAME) && \
-	$(PY) s03_audit.py $(NAME) && \
-	$(PY) s04_elevation.py $(NAME) && \
-	$(PY) s05_trees.py $(NAME) && \
-	$(PY) s06_holes.py $(NAME) && \
-	$(PY) s06b_tee_shots.py $(NAME) && \
-	$(PY) s07_greens.py $(NAME) && \
-	$(PY) s08_surface.py $(NAME) && \
-	$(PY) s09_render.py $(NAME) && \
-	$(PY) s09b_green_views.py $(NAME) && \
-	$(PY) s10_export.py $(NAME)
+course: fetch   ## rebuild one course from raw/ (+ edited/) -> game/public/courses/$(NAME), with its pinned pipeline (pipeline/pins.py); ARGS="--from s06_holes" etc.
+	$(PY) pipeline/build.py $(NAME) $(ARGS)
+
+land:           ## a finished course: daily rotation from tomorrow, pinned, its tests (pipeline/land.py)
+	$(PY) pipeline/land.py $(NAME)
+
+intake:         ## the checks on arrival of a course's downloads (pipeline/intake.py check)
+	$(PY) pipeline/intake.py check $(NAME)
+
+pins:           ## which pipeline each course is pinned to
+	$(PY) pipeline/pins.py status
 
 all: assets course build test
 

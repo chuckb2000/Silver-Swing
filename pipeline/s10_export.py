@@ -18,6 +18,8 @@ from datetime import date
 import geopandas as gpd
 import numpy as np
 from PIL import Image
+
+from pngcache import save_png
 from shapely.geometry import MultiPolygon, Polygon
 
 from common import build_dir, course_dir, course_name_from_argv, game_boundary, GORSE_SURF, WASTE_SURF, surf_ids, layout_dir, layouts, load_config, out_dir, play_boundary, PX_PER_M, rnd, ROOT, SURF, World, write_json
@@ -37,15 +39,17 @@ MAP_TREE_COLOURS = {"conifer": ([31, 74, 50], [58, 112, 74]), "deciduous": ([47,
 def to_palette_png(arr: np.ndarray, path):
     """Save an RGB(A) array as an exact palette PNG when it has <= 256 colours."""
     img = Image.fromarray(arr)
-    flat = arr.reshape(-1, arr.shape[-1])
-    uniq = np.unique(flat, axis=0)
-    if len(uniq) <= 256 and arr.shape[-1] == 3:
-        pal_img = img.quantize(colors=len(uniq), method=Image.Quantize.MAXCOVERAGE, dither=Image.Dither.NONE)
+    if arr.shape[-1] == 3:
+        # count the colours as packed 24-bit ints (np.unique over rows sorted the whole image: 50 s a course)
+        a = arr.reshape(-1, 3).astype(np.uint32)
+        n_colours = len(np.unique((a[:, 0] << 16) | (a[:, 1] << 8) | a[:, 2]))
+    if arr.shape[-1] == 3 and n_colours <= 256:
+        pal_img = img.quantize(colors=n_colours, method=Image.Quantize.MAXCOVERAGE, dither=Image.Dither.NONE)
         # verify exactness, fall back to RGB if quantisation changed a colour
         if np.array_equal(np.array(pal_img.convert("RGB")), arr):
-            pal_img.save(path, optimize=True)
+            save_png(pal_img, path, optimize=True)
             return
-    img.save(path, optimize=True)
+    save_png(img, path, optimize=True)
 
 
 def hex_rgb(h: str):
@@ -212,7 +216,7 @@ def export_minimaps(holes, tee_of, surf, z_px, trees, world, green_by_osm, out):
         local_world.height = sub.shape[0] / PX_PER_M
         img = render_map(sub, zsub, tr_sub, local_world, f)
         fname = f"hole{h['number']:02d}.png"
-        Image.fromarray(img).save(out / "maps" / fname, optimize=True)
+        save_png(Image.fromarray(img), out / "maps" / fname, optimize=True)
         minimaps.append({"hole": h["number"], "file": f"maps/{fname}", "x0": rnd(mx0, 3), "y1": rnd(my1, 3), "mPerPx": mpp,
                          "w": int(img.shape[1]), "h": int(img.shape[0])})
     return minimaps
@@ -250,7 +254,7 @@ def main():
 
     # surface map -------------------------------------------------------------
     surf = np.load(bdir / "surface.npy")
-    Image.fromarray(surf, "L").save(out / "surface.png", optimize=True)
+    save_png(Image.fromarray(surf, "L"), out / "surface.png", optimize=True)
     shutil.copy(bdir / "surface_legend.json", out / "surface_legend.json")
     map_surf = surf  # what the minimaps draw (range_art "rough": a range drawn as rough, as in s09)
     if cfg.get("range_art") == "rough":
@@ -274,7 +278,7 @@ def main():
     rgb = np.zeros(q.shape + (3,), np.uint8)
     rgb[..., 0] = q >> 8
     rgb[..., 1] = q & 255
-    Image.fromarray(rgb, "RGB").save(out / "height.png", optimize=True)
+    save_png(Image.fromarray(rgb, "RGB"), out / "height.png", optimize=True)
     write_json(out / "height.json", {"cols": int(q.shape[1]), "rows": int(q.shape[0]), "res": 1.0,
                                       "min": round(zmin, 4), "max": round(zmax, 4), "encoding": "R*256+G, row0=north",
                                       "samples": [[i, j, round(float(hb[j, i]), 4)] for i, j in
@@ -291,7 +295,7 @@ def main():
     # maps --------------------------------------------------------------------
     z_px = np.load(bdir / "z_px.npy")
     overview = render_map(map_surf, z_px, trees, world, 4)
-    Image.fromarray(overview).save(out / "maps" / "overview_2m.png", optimize=True)
+    save_png(Image.fromarray(overview), out / "maps" / "overview_2m.png", optimize=True)
 
     g = gpd.read_file(bdir / "course_local.geojson")
     greens = json.load(open(bdir / "greens.json"))
@@ -326,13 +330,15 @@ def main():
     meta = json.load(open(bdir / "art" / "render_meta.json"))
     bh_by_osm = {b["osm"]: b["h"] for b in meta["buildings"]}
     buildings = []
+    near = boundary.buffer(40)
     for _, r in g[g.kind == "building"].iterrows():
         geom = r.geometry
-        parts = [o for o in bh_by_osm if o.startswith(f"{r.osm}:")]
+        prefix = f"{r.osm}:"
+        parts = [o for o in bh_by_osm if o.startswith(prefix)]
         if parts:  # OSM building parts (s09): each collides at its own height, e.g. a lighthouse tower
             for o in parts:
                 poly = g[g.osm == o.split(":", 1)[1]].geometry.iloc[0]
-                if boundary.buffer(40).intersects(poly):
+                if near.intersects(poly):
                     buildings.append({"id": o, "h": bh_by_osm[o], "inside": bool(boundary.intersects(poly)),
                                       "poly": [[rnd(x, 1), rnd(y, 1)] for x, y in poly.simplify(0.3).exterior.coords]})
             continue
@@ -340,7 +346,7 @@ def main():
         for poly in polys:
             if poly.area < 4:
                 continue
-            if not boundary.buffer(40).intersects(poly):
+            if not near.intersects(poly):
                 continue
             buildings.append({"id": r.osm, "h": bh_by_osm.get(r.osm, 6.0), "inside": bool(boundary.intersects(poly)),
                               "poly": [[rnd(x, 1), rnd(y, 1)] for x, y in poly.simplify(0.3).exterior.coords]})
