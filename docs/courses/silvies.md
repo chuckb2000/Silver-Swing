@@ -29,7 +29,8 @@ No hole is over 8 %. The world holds 3,063 lidar trees inside the boundary and 1
 sagebrush bushes from the photo. The course has its own theme, `silvies` (high desert),
 and a goat-caddie logo. One new pipeline key, `gorse.extra_areas` (default none). The
 course test has 36 checks (`game/tests/unit/silvies.test.ts`); every hole of all three
-courses was looked at in the game.
+courses was looked at in the game (tee, overview, approach, 6 m and 2.5 m putts), with
+the trees and bushes in. The Chief Egan 6 green is the developer's trace.
 
 ## Facts
 
@@ -55,6 +56,8 @@ courses was looked at in the game.
         11 August 2020. NAD83(2011) Oregon North metres, classes 1 and 2 only, class 1
         used. One 689 MB LAZ, not in git.
     -   The club's four hole maps with yardages, in `reference/`.
+    -   The Chief Egan 6 green: traced by the developer in the tracing desk over the OSIP
+        photo, 172 m² (the OSM outline was 154 m² and held too few hole locations).
     -   The DOGAMI canopy mosaic is empty over the course and is not used.
 -   **Water** (all red, standing default):
     -   the two OSM ponds: the irrigation pond by the Craddock 12th tee and the Chief Egan
@@ -143,6 +146,7 @@ Craddock Challenge, Hankins White, Chief Egan White.
     to the lake". Built 2 m wide into the pond.
 -   The band by the Craddock 9th green and 14th tee: "should just be shrubs".
 -   Sagebrush: bushes only, no penal lie. Canopy: requested the NOAA lidar.
+-   Chief Egan 6: traced the green ("it's just a small green!").
 -   Standing defaults otherwise: all water red, trees from lidar (fairway trees and tee-shot
     blockers removed), wind 1-7 mph, card holes the course chat's pick.
 
@@ -153,8 +157,8 @@ Craddock Challenge, Hankins White, Chief Egan White.
     and only courses with a `gorse` key run that code. `make regress` result: see the PR.
 -   Existing keys used: `layouts` (three, sharing one grown boundary), `fescue_areas`,
     `gorse` (as sagebrush: tuned colour rule, small bushes, no penal ground),
-    `not_trees_areas`, `trees_off_fairways_m`, `green_tilt` for Chief Egan 6 (key 3006),
-    `laz` (class 1).
+    `not_trees_areas`, `trees_off_fairways_m`, `laz` (class 1). Greens are shaped by the
+    standard rule (no `green_tilt`).
 -   **New theme `silvies`:** `assets-src/palettes/silvies.json` (the pnw keys plus F0-F2:
     irrigated greens, tawny native ground, grey-olive steppe outside, log-cabin browns) and
     `assets-src/trees_silvies.py`:
@@ -182,6 +186,19 @@ Details in `data/silvies/validation_report.md`.
 5.  **Juniper vs pine** is a drawing choice from crown shape (summer lidar, no leaf-off).
     Recommendation: accept.
 
+## Requests for the design chat
+
+1.  Add `silvies_craddock`, `silvies_hankins` and `silvies_chief_egan` to the daily
+    rotation from the day after the merge (`game/src/data/dailyRoster.ts`, e.g.
+    `silvies_craddock: '2026-10-26'`). Until then `player.test.ts` "the real rotation"
+    fails: it wants every listed course in the roster. Chief Egan is a par-29 nine (875
+    yd), like Shorty's and the Preserve, which are in the roster.
+2.  `assets-src/course_cards.py` draws trees.json `c: 3` bushes from the generic
+    flowering `shrubs.png`, not the theme's `shrubs_<theme>` sheet, so the cards show
+    sagebrush as coloured dots. Smallest fix: pick the sheet as the game does
+    (`shrubs_<theme>` when it exists).
+3.  Document `gorse.extra_areas` in COURSE_BUILD.md 3.3 (the `gorse` key's table).
+
 ## Lessons
 
 -   **A reversible course is two layouts on shared greens.** OSM mapped one direction (here
@@ -201,5 +218,10 @@ Details in `data/silvies/validation_report.md`.
     ground +7 median.
 -   **`garden` and `gorse` can't be used together** (garden.order_trees wants a colour on
     every bush). `gorse.extra_areas` adds bushes to an area instead.
--   **Tiny greens and pins.test.ts:** Chief Egan 6 (154 m²) held only two hole locations
-    until its tilt was capped at 1.2 % with no bumps.
+-   **Tiny greens and pins.test.ts:** the OSM outline of Chief Egan 6 (154 m²) held only
+    two hole locations (the test wants three), even with its tilt capped at 1.2 % and no
+    bumps. A trace by the developer (172 m², the green in the photo) holds them with the
+    standard shaping. Ask for a trace instead of flattening the green.
+-   **Re-run `make_edits.py` after any proposal script.** `propose_pins.py` was re-run after
+    the trace (new pin id) but `edits.json` still listed the old one, so the committed
+    build no longer came from source. A clean `make course` caught it; do one before the PR.
