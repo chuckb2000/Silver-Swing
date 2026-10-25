@@ -139,10 +139,10 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 
 ## Other open items (course chat, 2026-10-25)
 
-1. **Trees and sagebrush wait on the 2023 lidar points.** The DOGAMI canopy mosaic has no
-   data over the course (the course's bare earth is from OR_SouthEast_6_D22, which has no
-   canopy layer in the mosaic); the developer requested the NOAA job. Until it lands the
-   build has no trees and no sage bushes (s05's OSM fallback: OSM maps no trees here).
+1. **Trees north of US 395 are missing.** The trees come from the 2020 Upper John Day lidar
+   points (NOAA job J1476256, class 1); that clip stops at the highway, about 60 m short of
+   the world's north edge. Scenery only: no hole plays there. The DOGAMI canopy mosaic has
+   no data over the course and is not used.
 2. **Craddock card**: GolfPass for yardages and ratings, the club map for par (71). The
    map's three columns differ from GolfPass on holes 1 and 9 (Grey) and 6 (Black). A photo
    of the printed card would settle them.
@@ -151,6 +151,7 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 4. **McVeigh's Gauntlet** (7 holes on the south edge, mostly outside the OSM boundary) is
    not built; its greens are wrong greens.
 5. **Ratings**: Craddock Challenge and Chief Egan have none (rounds there are not rated).
+6. **Chief Egan 6 green** is the developer's trace (172 m², 2026-10-25), not the OSM outline.
 
 ## Playability adjustments
 
