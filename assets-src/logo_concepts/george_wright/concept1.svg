@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="512" height="512">
+  <title>George Wright - Concept 1: The Stitched Ball</title>
+  <defs>
+    <clipPath id="ballc"><circle cx="16" cy="14" r="10.6" /></clipPath>
+  </defs>
+  
+  <g id="outline"><path d="M2 26.4 L5 24.2 L5.4 22.4 L8.4 23.4 L10 21.4 L12 23.2 L16 22 L20 23.2 L22 21.4 L23.6 23.4 L26.6 22.4 L27 24.2 L30 26.4 L27 28 L26.6 29.8 L23.4 28.8 L21.8 30.6 L20 29 L16 30 L12 29 L10.2 30.6 L8.6 28.8 L5.4 29.8 L5 28 Z" fill="#0d1620" stroke="#0d1620" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+  <path d="M2 26.4 L5 24.2 L5.4 22.4 L8.4 23.4 L10 21.4 L12 23.2 L16 22 L20 23.2 L22 21.4 L23.6 23.4 L26.6 22.4 L27 24.2 L30 26.4 Z" fill="#0d1620" stroke="#0d1620" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+  <rect x="3" y="25.8" width="26" height="1" fill="#0d1620" stroke="#0d1620" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+  
+  <circle cx="16" cy="14" r="10.6" fill="#0d1620" stroke="#0d1620" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+  <circle cx="19.6" cy="17.6" r="10.6" fill="#0d1620" clip-path="url(#ballc)" stroke="#0d1620" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+  <circle cx="16.4" cy="14.4" r="9.4" fill="#0d1620" clip-path="url(#ballc)" stroke="#0d1620" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+  <g>
+    <rect x="15.4" y="6" width="1.2" height="1.2" fill="#0d1620" stroke="#0d1620" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" /><rect x="15.4" y="12" width="1.2" height="1.2" fill="#0d1620" stroke="#0d1620" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" /><rect x="15.4" y="18" width="1.2" height="1.2" fill="#0d1620" stroke="#0d1620" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+    <rect x="12.6" y="9" width="1.2" height="1.2" fill="#0d1620" stroke="#0d1620" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" /><rect x="18.2" y="9" width="1.2" height="1.2" fill="#0d1620" stroke="#0d1620" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" /><rect x="12.6" y="15" width="1.2" height="1.2" fill="#0d1620" stroke="#0d1620" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" /><rect x="18.2" y="15" width="1.2" height="1.2" fill="#0d1620" stroke="#0d1620" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+  </g>
+  
+  <g clip-path="url(#ballc)">
+    <path d="M9.4 5.4 C5.4 10 5.4 18 9.4 22.6" fill="#0d1620" stroke="#0d1620" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+    <path d="M22.6 5.4 C26.6 10 26.6 18 22.6 22.6" fill="#0d1620" stroke="#0d1620" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+  </g>
+  <g>
+    <rect x="8.8" y="7.6" width="2" height="1" fill="#0d1620" stroke="#0d1620" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" /><rect x="7.8" y="10.6" width="2" height="1" fill="#0d1620" stroke="#0d1620" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" /><rect x="7.6" y="13.6" width="2" height="1" fill="#0d1620" stroke="#0d1620" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" /><rect x="7.8" y="16.6" width="2" height="1" fill="#0d1620" stroke="#0d1620" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" /><rect x="8.8" y="19.6" width="2" height="1" fill="#0d1620" stroke="#0d1620" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+    <rect x="21.2" y="7.6" width="2" height="1" fill="#0d1620" stroke="#0d1620" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" /><rect x="22.2" y="10.6" width="2" height="1" fill="#0d1620" stroke="#0d1620" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" /><rect x="22.4" y="13.6" width="2" height="1" fill="#0d1620" stroke="#0d1620" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" /><rect x="22.2" y="16.6" width="2" height="1" fill="#0d1620" stroke="#0d1620" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" /><rect x="21.2" y="19.6" width="2" height="1" fill="#0d1620" stroke="#0d1620" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+  </g>
+  <rect x="11.6" y="6.4" width="2" height="1.6" fill="#0d1620" stroke="#0d1620" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+</g><path d="M2 26.4 L5 24.2 L5.4 22.4 L8.4 23.4 L10 21.4 L12 23.2 L16 22 L20 23.2 L22 21.4 L23.6 23.4 L26.6 22.4 L27 24.2 L30 26.4 L27 28 L26.6 29.8 L23.4 28.8 L21.8 30.6 L20 29 L16 30 L12 29 L10.2 30.6 L8.6 28.8 L5.4 29.8 L5 28 Z" fill="#c2461f" />
+  <path d="M2 26.4 L5 24.2 L5.4 22.4 L8.4 23.4 L10 21.4 L12 23.2 L16 22 L20 23.2 L22 21.4 L23.6 23.4 L26.6 22.4 L27 24.2 L30 26.4 Z" fill="#e0712f" />
+  <rect x="3" y="25.8" width="26" height="1" fill="#86281a" />
+  
+  <circle cx="16" cy="14" r="10.6" fill="#f5f4ee" />
+  <circle cx="19.6" cy="17.6" r="10.6" fill="#d2d1c8" clip-path="url(#ballc)" />
+  <circle cx="16.4" cy="14.4" r="9.4" fill="#f5f4ee" clip-path="url(#ballc)" />
+  <g fill="#dcdbd3">
+    <rect x="15.4" y="6" width="1.2" height="1.2" /><rect x="15.4" y="12" width="1.2" height="1.2" /><rect x="15.4" y="18" width="1.2" height="1.2" />
+    <rect x="12.6" y="9" width="1.2" height="1.2" /><rect x="18.2" y="9" width="1.2" height="1.2" /><rect x="12.6" y="15" width="1.2" height="1.2" /><rect x="18.2" y="15" width="1.2" height="1.2" />
+  </g>
+  
+  <g fill="none" stroke="#c8202a" stroke-width="1.2" clip-path="url(#ballc)">
+    <path d="M9.4 5.4 C5.4 10 5.4 18 9.4 22.6" />
+    <path d="M22.6 5.4 C26.6 10 26.6 18 22.6 22.6" />
+  </g>
+  <g fill="#c8202a">
+    <rect x="8.8" y="7.6" width="2" height="1" /><rect x="7.8" y="10.6" width="2" height="1" /><rect x="7.6" y="13.6" width="2" height="1" /><rect x="7.8" y="16.6" width="2" height="1" /><rect x="8.8" y="19.6" width="2" height="1" />
+    <rect x="21.2" y="7.6" width="2" height="1" /><rect x="22.2" y="10.6" width="2" height="1" /><rect x="22.4" y="13.6" width="2" height="1" /><rect x="22.2" y="16.6" width="2" height="1" /><rect x="21.2" y="19.6" width="2" height="1" />
+  </g>
+  <rect x="11.6" y="6.4" width="2" height="1.6" fill="#ffffff" />
+</svg>

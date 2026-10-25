@@ -1,0 +1,79 @@
+{
+  "name": "George Wright (Boston oak-maple woods in autumn)",
+  "note": "Course theme palette (<= 32 colours; same keys as pnw.json plus F0-F2). George Wright Golf Course, Hyde Park, from the developer's photos (release assorted-lidar-data, george.1-6) and NAIP, drawn in October: fairways and greens still bright green; an olive rough with a golden cast of the long native grasses (F0-F2) beyond a mown band; the woods' floor russet leaf litter (G0-G2: woods and out-of-bounds woods); bright white sand; dark, still ponds; grey Roxbury puddingstone in the paths' greys. Trees in assets-src/trees_george_wright.py: red and sugar maples, birch, red oak, white pine and hemlock turning: about half still green. Shadows are a 35% black overlay on top of these.",
+  "colors": {
+    "G0": "#33281a",
+    "G1": "#4a3620",
+    "G2": "#5f4628",
+    "G3": "#456b31",
+    "G4": "#4c8739",
+    "G5": "#579a40",
+    "G6": "#64ab48",
+    "G7": "#73bb51",
+    "G8": "#86c85d",
+    "G9": "#abdb84",
+    "L0": "#4a5a2c",
+    "L1": "#586a33",
+    "L2": "#697c3c",
+    "S0": "#c6bda6",
+    "S1": "#ebe5d4",
+    "S2": "#f8f5ec",
+    "W0": "#233a33",
+    "W1": "#31503f",
+    "W2": "#5d7b6a",
+    "K0": "#262429",
+    "K1": "#535058",
+    "K2": "#7c7880",
+    "K3": "#b0aa9e",
+    "K4": "#d6d0c4",
+    "B0": "#46301f",
+    "B1": "#6b4b33",
+    "B2": "#8e6a4b",
+    "R0": "#5a5550",
+    "WH": "#f6f6f2",
+    "F0": "#5e6a32",
+    "F1": "#73803d",
+    "F2": "#8c934a"
+  },
+  "lut": {
+    "rough": [
+      "F0",
+      "F1",
+      "F2",
+      "F2"
+    ],
+    "rough_band": [
+      "G3",
+      "G4",
+      "G5",
+      "G5"
+    ]
+  },
+  "aliases": {
+    "TUFT": "G3"
+  },
+  "minimap": {
+    "ob": "#586a33",
+    "rough": "#73803d",
+    "woods": "#7a4a22",
+    "ob_woods": "#6a3f1e",
+    "water": "#31503f",
+    "ob_water": "#31503f",
+    "bunker": "#ebe5d4",
+    "ob_sand": "#ebe5d4"
+  },
+  "minimap_trees": {
+    "conifer": [
+      "#183a2a",
+      "#2b5f3d"
+    ],
+    "deciduous": [
+      "#4a4a22",
+      "#a8622a"
+    ]
+  },
+  "trees": {
+    "conifer": "trees_george_wright:conifer",
+    "deciduous": "trees_george_wright:deciduous"
+  }
+}
