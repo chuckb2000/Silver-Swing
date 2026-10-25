@@ -3,6 +3,7 @@
 // Worked out from a player's finished rounds, so nothing extra is stored and
 // the list is the same on every device that has the rounds. Pure.
 
+import { nameInGroup } from '../data/registry';
 import type { LeaderboardEntry } from './entry';
 import { isFullRound } from '../systems/game/lengths';
 
@@ -23,7 +24,17 @@ const BREAK_9 = [50, 45, 40, 35];
 
 /** "Langston Golf Course" -> "langston" (short names read better in a banner). */
 export function shortName(name: string): string {
-  return name.replace(/ (golf|country) club$| golf (course|links)$| golf links$/i, '').toLowerCase();
+  return name.replace(/ (golf|country) club$| golf (course|links|center)$| club$| cc$/i, '').toLowerCase();
+}
+
+/**
+ * A course's label under its card in the passport (17 characters): a course at a place with
+ * several drops the place's name, as on the course list ("Pumpkin Ridge Witch Hollow" is
+ * "witch hollow", "East Potomac White Course" "white course"; developer, 2026-10-25).
+ */
+export function passportName(c: { name: string; groupName?: string }): string {
+  const n = c.groupName ? nameInGroup(c.name, c.groupName) : c.name;
+  return shortName(n).slice(0, 17);
 }
 
 const isEighteen = (e: LeaderboardEntry) => isFullRound(e.length);

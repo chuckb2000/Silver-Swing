@@ -375,3 +375,20 @@ describe('practice ground (item 5)', () => {
     void Polygon;
   });
 });
+
+describe('passport labels (developer, 2026-10-25)', () => {
+  it('a course at a place with several drops the place name; short names drop club words', async () => {
+    const { passportName, shortName } = await import('../../src/save/milestones');
+    expect(passportName({ name: 'Pumpkin Ridge Witch Hollow', groupName: 'Pumpkin Ridge Golf Club' })).toBe('witch hollow');
+    expect(passportName({ name: 'Pumpkin Ridge Ghost Creek', groupName: 'Pumpkin Ridge Golf Club' })).toBe('ghost creek');
+    expect(passportName({ name: 'East Potomac White Course', groupName: 'East Potomac Golf Links' })).toBe('white course');
+    expect(passportName({ name: 'Silvies Valley Chief Egan', groupName: 'Silvies Valley Ranch' })).toBe('chief egan');
+    expect(passportName({ name: 'Langston Golf Course' })).toBe('langston');
+    expect(shortName('Cypress Point Club')).toBe('cypress point');
+    expect(shortName('RedTail Golf Center')).toBe('redtail');
+    expect(shortName('Willamette Valley CC')).toBe('willamette valley');
+    // every course on offer fits under its card
+    const idx = (await import('../../public/courses/index.json')).default as { courses: { name: string; groupName?: string }[] };
+    for (const c of idx.courses) expect(passportName(c).length, c.name).toBeLessThanOrEqual(17);
+  });
+});
