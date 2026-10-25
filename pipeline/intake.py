@@ -648,7 +648,12 @@ def cmd_check(name: str, args: list[str]) -> int:
     if "world" in cfg:
         W, H = cfg["world"]["width"], cfg["world"]["height"]
         if max(W, H) > 2048:
-            R.e(f"config: the world is {W} x {H} m, over the 2,048 m limit (COURSE_BUILD 10: stop and ask)")
+            ok = cfg["world"].get("over_limit_approved")   # who approved it, and when (Strawberry Farms)
+            if ok:
+                R.i(f"config: the world is {W} x {H} m, over the 2,048 m limit; approved: {ok}")
+            else:
+                R.e(f"config: the world is {W} x {H} m, over the 2,048 m limit (COURSE_BUILD 10: stop and ask; "
+                    'once approved, world.over_limit_approved: "<who, date>")')
         if W % 256 or H % 256:
             R.w(f"config: world {W} x {H} m is not whole 512 px chunks (multiples of 256 m)")
     tee_sets = cfg.get("tee_sets", [])

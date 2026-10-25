@@ -100,7 +100,7 @@ def lesson_checks(g, cfg) -> list[str]:
     for r in g[kinds.isin(["green", "tee", "hole"])].itertuples():
         if r.geometry.intersects(world) and not world.contains(r.geometry):
             out.append(f"{r.kind} {r.osm} crosses the edge of the world box (s09 failed on a green outside it): drop it or grow the world")
-    if max(W, H) > 2048:
+    if max(W, H) > 2048 and not cfg["world"].get("over_limit_approved"):
         out.append(f"the world is {W} x {H} m, over the 2,048 m limit (COURSE_BUILD 10: stop and ask)")
     # golf=* values s01 doesn't read
     other = g[kinds == "golf_other"]
