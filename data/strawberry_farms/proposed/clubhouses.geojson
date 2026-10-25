@@ -1,0 +1,8 @@
+{
+"type": "FeatureCollection",
+"name": "clubhouses",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+"features": [
+{ "type": "Feature", "properties": { "osm": "w67384478_building", "kind": "building", "tags": { "addr:city": "Irvine", "addr:housenumber": "12", "addr:postcode": "92612", "addr:state": "CA", "addr:street": "Strawberry Farms Road", "building": "yes", "golf": "clubhouse", "height": "6.23", "sport": "golf" } }, "geometry": { "type": "Polygon", "coordinates": [ [ [ -117.7964661, 33.6500641 ], [ -117.7964697, 33.6500321 ], [ -117.7966435, 33.6500456 ], [ -117.7966619, 33.6498812 ], [ -117.7966419, 33.6498797 ], [ -117.7966471, 33.6498336 ], [ -117.7962398, 33.6498021 ], [ -117.7962347, 33.6498474 ], [ -117.7961652, 33.649842 ], [ -117.7961582, 33.6499044 ], [ -117.7962606, 33.6499123 ], [ -117.7962456, 33.6500471 ], [ -117.7964661, 33.6500641 ] ] ] } }
+]
+}

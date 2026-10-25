@@ -1,0 +1,76 @@
+{
+ "id": "strawberry_farms",
+ "name": "Strawberry Farms Golf Club",
+ "location": "Irvine, Orange County, California",
+ "state": "CA",
+ "architects": "Jim Lipe (James W. Lipe Jr., then with Jack Nicklaus's Golden Bear), opened November 1997",
+ "theme": "strawberry_farms",
+ "epsg": 32611,
+ "osm_sources": [
+  "raw/overpass.geojson"
+ ],
+ "boundary_name": "Strawberry Farms Golf Club",
+ "dtm": {
+  "path": "raw/ca2023_gaps_dem_clip.tif",
+  "units": "ft",
+  "source": "2023 USGS Lidar DEM: California Gaps (NOAA Data Access Viewer, ca2023_gaps_dem_m10428, job J1476267), 0.5 m (1.64 ft) pixels, NAD83(2011) / California zone 6 (EPSG:6426, US ft), NAVD88 US ft; ordered by the developer 2026-10-25 (GitHub release assorted-lidar-data, strawberry.farms.zip), clipped to the world + 100 m with pipeline/intake.py raster"
+ },
+ "laz": {
+  "paths": [
+   "raw/laz/*.laz"
+  ],
+  "classes": [
+   1
+  ],
+  "units": "m",
+  "source": "2011 USGS Lidar: Orange County CA (NOAA Data Access Viewer dataset 4793, job J1476278), flown 24-28 December 2011 (GPS times); classes 1 and 2 only (no vegetation classes: trees from class 1); NAD83(2011) / California zone 6 (EPSG:6425, m), NAVD88 m; GitHub release assorted-lidar-data, ca2011_usgs_orange_J1476278.zip, clipped to the world with pipeline/intake.py laz",
+  "label": "2011 USGS Orange County lidar",
+  "leaf_off": false
+ },
+ "ortho": {
+  "path": "raw/naip_05m.tif",
+  "source": "USDA NAIP via the USGS National Map ImageServer, exported by the developer 2026-10-25 as two JPEGs at 0.5 m in EPSG:32611 (release assorted-lidar-data: 34312.jpg south, 432311.jpg north), placed by their request boxes and mosaicked by pipeline/intake.py ortho; flight year not stated"
+ },
+ "world": {
+  "x0": 425072,
+  "y0": 3721879,
+  "width": 1536,
+  "height": 2816,
+  "note": "OSM course boundary (way 213565038) bbox 1,347 x 2,485 m in UTM 11N + scenery, whole 256 m chunks, centred: 1,536 m east-west (94 m each side), 2,816 m north-south (165 m each side), past the 2,048 m limit (about the area of TPC Boston's 1,792 x 2,304). Approved by the developer 2026-10-25 (as TPC Boston's and Oregon Golf Club's 2,304 m); the alternative, 2,560 m, leaves about 37 m at each end",
+  "over_limit_approved": "developer, 2026-10-25"
+ },
+ "tee_sets": [
+  {
+   "name": "Black",
+   "playable": true,
+   "rating": 72.7,
+   "slope": 136,
+   "total_yd": 6700
+  }
+ ],
+ "default_tee": "Black",
+ "scorecard_source": "GolfPass scorecard (golfpass.com/courses/15312-strawberry-farms-golf-club/scorecard-and-layout, read 2026-10-24 by the scouting chat): all five tees per hole, rows add up to the printed totals. Unverified third-party card; no club card online. Conflicts: Stymie measures Blue 6,302 (hole 18: 418 v 385); SCGA's current totals 6,680/6,271/5,841/5,218/4,648. Rating 71.0/129 is the SCGA's current men's Blue rating (the printed card's older one is 70.7/131). Played from the tips, Black 6,700 yd (developer, 2026-10-25: \"for all of these courses lets play from the tips\"); rating GolfPass tee table, men's Black 72.7/136 (par 71). The other sets are in scorecard.csv but not built.",
+ "wind_mph": {
+  "minMph": 2,
+  "maxMph": 10
+ },
+ "attribution": [
+  "Map data © OpenStreetMap contributors (ODbL)",
+  "Elevation: U.S. Geological Survey 3D Elevation Program (2023 USGS Lidar DEM: California Gaps), via NOAA Digital Coast",
+  "Trees: U.S. Geological Survey (2011 Orange County lidar), via NOAA Digital Coast",
+  "Scorecard: GolfPass (unverified)"
+ ],
+ "notes": "Course chat, 2026-10-25: standing defaults (every penalty area red, OSM boundary as OB, trees from lidar, trees_off_fairways_m 2). Played from the tips: Black (developer, 2026-10-25: \"for all of these courses lets play from the tips\"). Wind 2-10 mph (the scouting's proposal for an inland Orange County site ~8 km from the sea; the standing bands have no California entry). Theme strawberry_farms: the course's own, from the developer's photos (developer: a new theme for each course).",
+ "penalty_default": "red",
+ "driving_range_is_ob": true,
+ "trees_off_fairways_m": 2,
+ "red_water_osm": [
+  "w213565026",
+  "w823686578",
+  "w1213748739"
+ ],
+ "red_water_note": "Sand Canyon Reservoir (w213565026), the pond mapped intermittent (w823686578) and the small pond w1213748739 are natural=water in OSM: red penalty areas (standing default, COURSE_BUILD 4.1)",
+ "roof_last_share": 0.85,
+ "trees_ortho": true,
+ "trees_off_water": true
+}
