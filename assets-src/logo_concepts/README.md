@@ -2,8 +2,9 @@
 
 Two new logo directions for every course, next to the logo it has now. The
 developer's picks (2026-10-25) are in DECISIONS.md "Logos from the logo concepts"
-and in each `notes.json` as `"chosen"` (`"current"`, `1` or `2`; RedTail
-`"hawk"`, with five more hawks in `redtail/hawk_*.src.svg` awaiting the pick).
+and in each `notes.json` as `"chosen"` (`"current"`, `1` or `2`, or a named
+option: RedTail `"hawk_e"` of five hawks in `redtail/hawk_*.src.svg`, Waverley
+`"trolley_c"` of five trolleys in `waverley/trolley_*.src.svg`).
 
 A course uses a concept through its own file, `assets-src/course_logos/<id>.py`:
 
@@ -83,7 +84,9 @@ redtail red fox · sandpines Siuslaw River Bridge · sheep_ranch black-faced she
 on a clifftop · shortys spotted fawn · stanford arcade of the Main Quad ·
 tpc_boston baby-blue lederhosen · triggs Rhode Island Red rooster
 
-New in this folder: oswego_lake concept 2, the Oswego Iron Furnace.
+This list is the set as it stood when the concepts were drawn. Since the
+picks, RedTail is a red-tailed hawk and Waverley a trolley car, and the 15
+courses that took a concept use its subject (DECISIONS.md).
 
 ## notes.json
 
