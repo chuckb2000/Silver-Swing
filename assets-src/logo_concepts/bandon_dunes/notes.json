@@ -1,0 +1,73 @@
+{
+  "id": "bandon_dunes",
+  "course": "Bandon Dunes",
+  "place": "Bandon, Oregon",
+  "facts": [
+    {
+      "fact": "David McLay Kidd design, opened 19 May 1999, on a bluff about 30 m above the Pacific.",
+      "source": "docs/courses/bandon_dunes.md"
+    },
+    {
+      "fact": "George Bennett, an Irish settler, brought gorse to Bandon after 1873 and named the town after his home in County Cork. Gorse fed the fire that burned the town on 26 September 1936.",
+      "source": "https://oregonhistoryproject.org/articles/historical-records/bandon-fire-1936/"
+    },
+    {
+      "fact": "Gorse has been cleared from the resort in large amounts since it opened; the game plays it as a penal lie.",
+      "source": "docs/courses/bandon_dunes.md"
+    }
+  ],
+  "current": {
+    "subject": "A harbor seal hauled out on a sea rock (course chat).",
+    "keep": "The seal: the resort's first course gets the coast's most familiar animal.",
+    "weaknesses": "Side-on and small, the seal reads as a grey lump on a rock at 1x; the rock and water take as much room as the animal."
+  },
+  "concepts": [
+    {
+      "n": 1,
+      "name": "The Harbor Seal",
+      "rationale": "The seal turns to face you, head up out of the water: big dark eyes, whiskers, a spotted grey coat. A face is the most legible thing at 32 px, and this one is friendly and unmistakable.",
+      "references": [
+        "Existing seal logo",
+        "Harbor seals on the Bandon coast"
+      ],
+      "symbolism": "A watcher at the edge of the bluff; the waterline ties it to the sea below the course.",
+      "interpretation": "",
+      "typography": "Josefin Sans SemiBold, spaced capitals: clean and coastal, it doesn't compete with the face.",
+      "lockup": {
+        "font": "Josefin Sans",
+        "weight": 600,
+        "case": "upper",
+        "tracking": "0.14em",
+        "line2": null,
+        "line1": "Bandon Dunes"
+      },
+      "strengths": "Instantly readable at 1x; warm and memorable; works as a hat or ball-marker icon.",
+      "tradeoffs": "Cute rather than grand; a seal is not specific to Bandon alone."
+    },
+    {
+      "n": 2,
+      "name": "Bennett's Gorse",
+      "rationale": "A sprig of gorse in bloom: spiny whorls and yellow pea flowers. The plant came with Bandon's founder, burned his town, and is what the course was carved from. It is the one plant every Bandon golfer remembers.",
+      "references": [
+        "Gorse, introduced by George Bennett (fact)",
+        "The 1936 Bandon fire (fact)",
+        "The game's own gorse lie"
+      ],
+      "symbolism": "Beauty with teeth: bright yellow flowers on a plant that punishes a wayward shot.",
+      "interpretation": "The sprig is a stylised composition, not a botanical drawing.",
+      "typography": "IM Fell English, a 17th-century revival with an Irish-Scots flavour, for Bennett and the links tradition.",
+      "lockup": {
+        "font": "IM Fell English",
+        "weight": 400,
+        "case": "none",
+        "tracking": "0.02em",
+        "line2": null,
+        "line1": "Bandon Dunes"
+      },
+      "strengths": "Ownable, local, and a quiet golf joke; strong yellow stands out on every card.",
+      "tradeoffs": "The story is darker than it looks; a viewer may read it as broom or mustard."
+    }
+  ],
+  "pick": 1,
+  "recommendation": "Concept 1. The seal's face is the most immediately loved mark in the Bandon set. Bennett's Gorse is the more clever story and would be my pick for merchandise."
+}

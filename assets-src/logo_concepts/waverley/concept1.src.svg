@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <title>Waverley - Concept 1: The Express, head-on</title>
+  <!-- a puff of steam -->
+  <circle cx="11.4" cy="3.6" r="2.2" fill="#e6e9ec"/>
+  <circle cx="8" cy="4.6" r="1.8" fill="#e6e9ec"/>
+  <circle cx="14" cy="3.2" r="1.4" fill="#e6e9ec"/>
+  <!-- cab roof and side tanks, apple green with white lining -->
+  <path d="M4.4 9.4 L27.6 9.4 L28.4 11.2 L3.6 11.2 Z" fill="#2f6a2e"/>
+  <rect x="4" y="11.2" width="24" height="11.4" fill="#5fa04a"/>
+  <rect x="22" y="11.2" width="6" height="11.4" fill="#3f7a36"/>
+  <rect x="4" y="11.2" width="1.2" height="11.4" fill="#86c26a"/>
+  <rect x="5.4" y="12.6" width="21.2" height="1" fill="#f6f6f2"/>
+  <rect x="5.4" y="20.4" width="21.2" height="1" fill="#f6f6f2"/>
+  <!-- chimney -->
+  <rect x="13.6" y="5.6" width="4.8" height="4.6" fill="#1d1a18"/>
+  <rect x="13" y="5" width="6" height="1.4" fill="#1d1a18"/>
+  <!-- the smokebox door, lamp on top -->
+  <circle cx="16" cy="16.6" r="5.6" fill="#1d1a18"/>
+  <circle cx="16" cy="16.6" r="4.2" fill="#3a3a42"/>
+  <rect x="15.4" y="12.6" width="1.2" height="8" fill="#1d1a18"/>
+  <rect x="12.6" y="16" width="6.8" height="1.2" fill="#1d1a18"/>
+  <circle cx="16" cy="16.6" r="1.2" fill="#e3b84a"/>
+  <rect x="14.6" y="10" width="2.8" height="2.4" fill="#f6f6f2"/>
+  <rect x="15.2" y="10.6" width="1.6" height="1.2" fill="#ffd84a"/>
+  <!-- buffer beam and buffers -->
+  <rect x="3.4" y="22.6" width="25.2" height="3" fill="#c8382e"/>
+    <rect x="5" y="23.2" width="3" height="1.8" fill="#8a8f96"/>
+  <rect x="24" y="23.2" width="3" height="1.8" fill="#8a8f96"/>
+  <!-- wheels and rails -->
+  <rect x="6" y="25.6" width="4" height="3" fill="#1d1a18"/>
+  <rect x="22" y="25.6" width="4" height="3" fill="#1d1a18"/>
+  <rect x="12.6" y="25.6" width="6.8" height="2" fill="#1d1a18"/>
+  <rect x="2" y="28.6" width="28" height="1.2" fill="#8a8f96"/>
+</svg>

@@ -1,0 +1,67 @@
+{
+  "id": "old_macdonald",
+  "course": "Old Macdonald",
+  "place": "Bandon, Oregon",
+  "facts": [
+    {
+      "fact": "Tom Doak and Jim Urbina, opened 2010, built on Charles Blair Macdonald's template holes; the 8th is the Biarritz.",
+      "source": "docs/courses/old_macdonald.md"
+    },
+    {
+      "fact": "The club's own marks are an M with crossed clubs in an O, and a 'ghost tree' cedar (both avoided).",
+      "source": "https://golf.com/travel/creating-logo-bandon-dunes-sheep-ranch/"
+    }
+  ],
+  "current": {
+    "subject": "A tweed flat cap above a pipe, for C.B. Macdonald.",
+    "keep": "The idea of the founder, suggested by his cap and pipe rather than a face.",
+    "weaknesses": "Two separate objects stacked; the cap is flat and the tweed hardly shows."
+  },
+  "concepts": [
+    {
+      "n": 1,
+      "name": "The Founder's Cap",
+      "rationale": "One lockup: a properly shaped tweed flat cap with a check you can see, the pipe laid across its band, a wisp of smoke.",
+      "references": [
+        "Existing cap-and-pipe logo",
+        "C.B. Macdonald, whose templates the course follows (fact)"
+      ],
+      "symbolism": "The gentleman architect, present without a portrait.",
+      "interpretation": "",
+      "typography": "Playfair Display SC: high-contrast, Edwardian, Macdonald's era.",
+      "lockup": {
+        "font": "Playfair Display SC",
+        "weight": 700,
+        "case": "upper",
+        "tracking": "0.14em",
+        "line2": null,
+        "line1": "Old Macdonald"
+      },
+      "strengths": "Characterful and specific to the course's homage.",
+      "tradeoffs": "Busier than the best icons; the pipe is dated imagery."
+    },
+    {
+      "n": 2,
+      "name": "The Biarritz",
+      "rationale": "The 8th hole's green in section: front plateau, the deep swale, the pin on the back plateau, a ball on its way down. The template hole every architecture fan knows.",
+      "references": [
+        "Biarritz template, Old Macdonald's 8th (fact)"
+      ],
+      "symbolism": "The swale is the joke and the test: Old Mac's whole idea in one line.",
+      "interpretation": "",
+      "typography": "Bitter SemiBold, an architect's-drawing slab.",
+      "lockup": {
+        "font": "Bitter",
+        "weight": 600,
+        "case": "upper",
+        "tracking": "0.14em",
+        "line2": null,
+        "line1": "Old Macdonald"
+      },
+      "strengths": "Original and golf-literate; a simple graphic line.",
+      "tradeoffs": "Needs golf literacy; at 1x it reads as a green valley rather than a named hole."
+    }
+  ],
+  "pick": 1,
+  "recommendation": "Concept 1. It keeps the developer's homage to Macdonald and is the more recognisable object; the Biarritz is a lovely second mark for course guides."
+}

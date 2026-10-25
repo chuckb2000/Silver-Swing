@@ -1,0 +1,124 @@
+{
+  "id": "oswego_lake",
+  "course": "Oswego Lake Country Club",
+  "place": "Lake Oswego, Oregon",
+  "facts": [
+    {
+      "fact": "Founded 1924 by Paul Murphy; course by H. Chandler Egan, built by Wm. H. Tucker and Sons; clubhouse by Church and Whitehouse; opened August 1925.",
+      "source": "https://blog.oga.org/news/centennial-feature-oswego-lake-country-club"
+    },
+    {
+      "fact": "Built on the former site of Ladd's Iron Mine Farm; the Ladd Estate Company sold the district with the slogan \"Live Where You Play\".",
+      "source": "https://www.oregonencyclopedia.org/articles/murphy_paul_c_1876_1957_/"
+    },
+    {
+      "fact": "The Oregon Iron Company (1865) bought the town, the lake and the ore hills; Oswego was an iron-smelting town until the early 1900s.",
+      "source": "https://en.wikipedia.org/wiki/Oswego_Lake"
+    },
+    {
+      "fact": "The Oswego Iron Furnace (fired 1867) was the first iron furnace on the Pacific Coast: a 32 ft basalt stack shaped like a truncated pyramid with Gothic arches on all four sides. Oregon's oldest industrial landmark, in George Rogers Park.",
+      "source": "https://oregonencyclopedia.org/articles/oswego_iron_furnace/"
+    },
+    {
+      "fact": "Finishing holes look over Oswego Lake toward Mt. Hood. Hole 3 is the pond green (the game's course card).",
+      "source": "https://blog.oga.org/news/centennial-feature-oswego-lake-country-club ; docs/courses/oswego_lake.md"
+    }
+  ],
+  "current": {
+    "subject": "A blue anchor with a white keyline (developer's choice, DECISIONS.md 2026-10-18).",
+    "keep": "The anchor, the lake blue and the white: simple, legible, and the only nautical mark in the game.",
+    "weaknesses": "Reads as a generic nautical sticker. The dark outline inside the anchor's counters makes two busy black hooks at 1x, and nothing says which lake."
+  },
+  "concepts": [
+    {
+      "n": 1,
+      "name": "The Lake Anchor",
+      "rationale": "The anchor stays; the white keyline becomes the anchor itself and the blue becomes the lake. A white anchor set on a lake-blue roundel with a single horizon line reads as a club seal rather than a sticker, and the disc gives it one clean silhouette on any card art.",
+      "references": [
+        "Existing anchor logo (shape, blue #2f6fd1, white)",
+        "Oswego Lake, the club's namesake (fact)"
+      ],
+      "symbolism": "Anchor: lakeside living, the district's \"Live Where You Play\" pitch. Disc: the lake. The lighter band below the horizon is the water's surface; the anchor sits half above, half below it.",
+      "interpretation": "Reading the anchor as the developer's nod to the lake is an interpretation; the anchor has no documented link to the club.",
+      "typography": "Cormorant Garamond SemiBold, all caps, wide tracking: a 1920s country-club serif that sits quietly beside a bold mark.",
+      "lockup": {
+        "font": "Cormorant Garamond",
+        "weight": 600,
+        "case": "upper",
+        "tracking": "0.18em",
+        "line1": "Oswego Lake Country Club",
+        "line2": "Country Club · 1924"
+      },
+      "palette": [
+        {
+          "hex": "#2f6fd1",
+          "name": "Lake blue (the original's blue)"
+        },
+        {
+          "hex": "#173f86",
+          "name": "Deep water rim"
+        },
+        {
+          "hex": "#f6f6f2",
+          "name": "Sail white"
+        },
+        {
+          "hex": "#c3d6f0",
+          "name": "White in shade"
+        }
+      ],
+      "strengths": "Keeps every recognisable element of the original; the disc is the most legible shape at 32 px; one colour family, prints and embroiders as two inks.",
+      "tradeoffs": "Roundel-with-anchor is a familiar yacht-club form; it is better executed than the original but not much more ownable."
+    },
+    {
+      "n": 2,
+      "name": "The Iron Furnace",
+      "rationale": "Lake Oswego was an iron town before it was a lake suburb, and the club was laid out on the Ladd Estate's Iron Mine Farm. The 1867 furnace stack is the town's oldest landmark and has a shape no other club owns: a basalt truncated pyramid with a pointed Gothic arch. Drawn with the arch glowing, it is a monument and a hearth at once.",
+      "references": [
+        "Oswego Iron Furnace, George Rogers Park (fact)",
+        "Ladd's Iron Mine Farm, the club's site (fact)"
+      ],
+      "symbolism": "Stack: permanence, a century of history before golf. Glowing arch: the hearth of a clubhouse, the warmth of the 19th hole. Two embers: the game's orange accent.",
+      "interpretation": "The glow and embers are invented (the furnace has been cold since the 1890s); the stack's shape, stone and arch follow the landmark.",
+      "typography": "Bitter SemiBold, all caps: a sturdy slab serif with the feel of cast lettering on a foundry plate.",
+      "lockup": {
+        "font": "Bitter",
+        "weight": 600,
+        "case": "upper",
+        "tracking": "0.12em",
+        "line1": "Oswego Lake Country Club",
+        "line2": "Country Club"
+      },
+      "palette": [
+        {
+          "hex": "#6b7079",
+          "name": "Basalt"
+        },
+        {
+          "hex": "#4b5059",
+          "name": "Basalt in shade"
+        },
+        {
+          "hex": "#8d939b",
+          "name": "Lit stone"
+        },
+        {
+          "hex": "#3a3e46",
+          "name": "Mortar and cap"
+        },
+        {
+          "hex": "#e8681e",
+          "name": "Ember orange (the game's button orange)"
+        },
+        {
+          "hex": "#ffd84a",
+          "name": "Molten yellow"
+        }
+      ],
+      "strengths": "Specific to this town and no other; the silhouette and the lit arch read instantly at 1x; the warm glow stands out from every green card.",
+      "tradeoffs": "The furnace is in George Rogers Park, not on the course, so the link runs through the town's and the land's history; it says less about golf or the lake."
+    }
+  ],
+  "recommendation": "Concept 2. It is the one mark in the set that could only belong to Lake Oswego, and it is the stronger icon at 32 px. Concept 1 is the safe choice if the lake should stay the story.",
+  "pick": 2
+}

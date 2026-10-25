@@ -1,0 +1,66 @@
+{
+  "id": "willamette_valley",
+  "course": "Willamette Valley CC",
+  "place": "Canby, Oregon",
+  "facts": [
+    {
+      "fact": "Shirley Stone, opened 1962, on a terrace above the Willamette River in Canby.",
+      "source": "docs/courses/willamette_valley.md"
+    },
+    {
+      "fact": "Swan Island Dahlias, in Canby since the 1940s, calls itself the largest dahlia grower in the US.",
+      "source": "https://www.dahlias.com/our-farm/about-us/"
+    }
+  ],
+  "current": {
+    "subject": "A glass of red wine.",
+    "keep": "Wine: the valley's best-known crop.",
+    "weaknesses": "A static glass; says 'wine bar' as much as 'valley'."
+  },
+  "concepts": [
+    {
+      "n": 1,
+      "name": "The Swirl",
+      "rationale": "The glass tipped mid-swirl, Pinot climbing the far side: motion and colour.",
+      "references": [
+        "Existing wine-glass logo"
+      ],
+      "symbolism": "Pinot noir country.",
+      "interpretation": "",
+      "typography": "Playfair Display Italic.",
+      "lockup": {
+        "font": "Playfair Display",
+        "weight": 500,
+        "case": "none",
+        "tracking": "0.02em",
+        "line2": null,
+        "line1": "Willamette Valley CC"
+      },
+      "strengths": "More life than the original.",
+      "tradeoffs": "Still a wine glass; still generic to the region."
+    },
+    {
+      "n": 2,
+      "name": "The Canby Dahlia",
+      "rationale": "A decorative dahlia in rings of coral petals: Canby's flower fields in one bloom.",
+      "references": [
+        "Swan Island Dahlias in Canby (fact)"
+      ],
+      "symbolism": "Canby in August.",
+      "interpretation": "",
+      "typography": "Fraunces SemiBold.",
+      "lockup": {
+        "font": "Fraunces",
+        "weight": 600,
+        "case": "upper",
+        "tracking": "0.14em",
+        "line2": null,
+        "line1": "Willamette Valley CC"
+      },
+      "strengths": "Beautiful radial icon; reads at 1x; specific to Canby.",
+      "tradeoffs": "Another flower in a set with several."
+    }
+  ],
+  "pick": 2,
+  "recommendation": "Concept 2. The dahlia is specific to Canby and is one of the most beautiful marks in the set."
+}

@@ -1,0 +1,71 @@
+{
+  "id": "chambers_bay",
+  "course": "Chambers Bay",
+  "place": "University Place, Washington",
+  "facts": [
+    {
+      "fact": "Robert Trent Jones Jr., 2007, in a former sand and gravel mine on Puget Sound; host of the 2015 U.S. Open.",
+      "source": "docs/courses/chambers_bay.md"
+    },
+    {
+      "fact": "The Lone Fir behind the 15th green is the course's only tree.",
+      "source": "https://linksmagazine.com/?p=52690"
+    },
+    {
+      "fact": "The course's own emblem is two sails (avoided).",
+      "source": "https://www.geoffshackelford.com/homepage/2011/10/2/deep-meaning-quiz-2015-us-open-logo-unveiled.html"
+    }
+  ],
+  "current": {
+    "subject": "The concrete gravel-plant ruins on a fescue dune (from the developer's photos).",
+    "keep": "The ruins: the site's industrial past and an unusual shape.",
+    "weaknesses": "Grey on grey; it floats without a setting at 1x."
+  },
+  "concepts": [
+    {
+      "n": 1,
+      "name": "The Ruins at Sundown",
+      "rationale": "The ruins in silhouette against a Puget Sound sunset, on golden fescue: the same structure, now with light and a place.",
+      "references": [
+        "Existing ruins logo",
+        "Gravel-mine history (fact)"
+      ],
+      "symbolism": "Industry turned to links; the evening light Chambers Bay is known for.",
+      "interpretation": "The sunset colouring is atmosphere, not a specific view.",
+      "typography": "Barlow Condensed SemiBold: industrial and clean.",
+      "lockup": {
+        "font": "Barlow Condensed",
+        "weight": 600,
+        "case": "upper",
+        "tracking": "0.14em",
+        "line2": null,
+        "line1": "Chambers Bay"
+      },
+      "strengths": "Dramatic colour; owns its subject completely.",
+      "tradeoffs": "A sunset roundel is a familiar resort format."
+    },
+    {
+      "n": 2,
+      "name": "The Lone Fir",
+      "rationale": "One Douglas fir on a fescue knoll, the Sound behind. The only tree on the course is its most photographed feature.",
+      "references": [
+        "The Lone Fir behind the 15th green (fact)"
+      ],
+      "symbolism": "Solitude on a treeless links.",
+      "interpretation": "",
+      "typography": "Cormorant Garamond capitals.",
+      "lockup": {
+        "font": "Cormorant Garamond",
+        "weight": 600,
+        "case": "upper",
+        "tracking": "0.14em",
+        "line2": null,
+        "line1": "Chambers Bay"
+      },
+      "strengths": "Iconic, calm and true; reads at once.",
+      "tradeoffs": "A single tree is a common golf emblem shape (avoid any look of Cypress Point)."
+    }
+  ],
+  "pick": 2,
+  "recommendation": "Concept 2. The Lone Fir is the course's own symbol in waiting; the ruins at sundown is the bolder colour if the industrial story should lead."
+}

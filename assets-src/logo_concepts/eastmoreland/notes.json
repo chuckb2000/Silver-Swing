@@ -1,0 +1,71 @@
+{
+  "id": "eastmoreland",
+  "course": "Eastmoreland Golf Course",
+  "place": "Portland, Oregon",
+  "facts": [
+    {
+      "fact": "H. Chandler Egan, 1918 (club card); a City of Portland course.",
+      "source": "docs/courses/eastmoreland.md"
+    },
+    {
+      "fact": "It borders the Crystal Springs Rhododendron Garden.",
+      "source": "https://en.wikipedia.org/wiki/Crystal_Springs_Rhododendron_Garden"
+    },
+    {
+      "fact": "Crystal Springs Creek flows through the course; coho, chinook and steelhead use it.",
+      "source": "https://en.wikipedia.org/wiki/Crystal_Springs_Creek"
+    }
+  ],
+  "current": {
+    "subject": "A pink rhododendron truss over its leaves.",
+    "keep": "The rhododendron, for the garden next door.",
+    "weaknesses": "Side-on truss and leaves read as a pink blob on green."
+  },
+  "concepts": [
+    {
+      "n": 1,
+      "name": "The Rhododendron Rosette",
+      "rationale": "Seen from above, the way the game sees everything: a dome of pink bells inside a whorl of glossy leaves.",
+      "references": [
+        "Existing rhododendron logo",
+        "Crystal Springs Rhododendron Garden (fact)"
+      ],
+      "symbolism": "The garden next door, in full May bloom.",
+      "interpretation": "",
+      "typography": "Cormorant Garamond SemiBold.",
+      "lockup": {
+        "font": "Cormorant Garamond",
+        "weight": 600,
+        "case": "upper",
+        "tracking": "0.14em",
+        "line2": null,
+        "line1": "Eastmoreland Golf Course"
+      },
+      "strengths": "A crisp radial emblem; reads at 1x.",
+      "tradeoffs": "Flowers are common in park graphics."
+    },
+    {
+      "n": 2,
+      "name": "Salmon in the City",
+      "rationale": "A coho in spawning colours leaping from the creek. Salmon still run through the middle of a city golf course.",
+      "references": [
+        "Crystal Springs Creek and its salmon (fact)"
+      ],
+      "symbolism": "A wild river running through a public course in the city.",
+      "interpretation": "",
+      "typography": "Bitter SemiBold.",
+      "lockup": {
+        "font": "Bitter",
+        "weight": 600,
+        "case": "upper",
+        "tracking": "0.14em",
+        "line2": null,
+        "line1": "Eastmoreland Golf Course"
+      },
+      "strengths": "Surprising and true; strong colour.",
+      "tradeoffs": "A leaping fish is a familiar Northwest motif."
+    }
+  ],
+  "pick": 1,
+  "recommendation": "Concept 1. The top-down rosette is the most refined version of a subject the course owns; the salmon is a strong second for conservation messaging."
+}

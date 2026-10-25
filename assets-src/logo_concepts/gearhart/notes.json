@@ -1,0 +1,71 @@
+{
+  "id": "gearhart",
+  "course": "Gearhart Golf Links",
+  "place": "Gearhart, Oregon",
+  "facts": [
+    {
+      "fact": "Formally established 1892; the club calls itself 'The Oldest Golf Course West of the Mississippi River'.",
+      "source": "https://blog.oga.org/news/centennial-feature-gearhart-golf-links"
+    },
+    {
+      "fact": "More than 100 Roosevelt elk were counted on the course in 2017; the club tried coyote decoys to move them on.",
+      "source": "https://dailyastorian.com/2017/05/11/wily-coyote-decoys-take-on-elk-at-golf-course"
+    },
+    {
+      "fact": "The developer chose the shipwreck over a beer stein (2026-10-20).",
+      "source": "DECISIONS.md"
+    }
+  ],
+  "current": {
+    "subject": "A wooden sailing ship, wrecked and half sunk.",
+    "keep": "The wreck: the Clatsop coast's 'graveyard of the Pacific' story.",
+    "weaknesses": "A busy little ship scene; the torn sail and waves blur at 1x."
+  },
+  "concepts": [
+    {
+      "n": 1,
+      "name": "The Wreck on the Beach",
+      "rationale": "The rusted bow and ribs of an iron barque, half buried in the sand at the surf line: a skeleton you can read from across a room.",
+      "references": [
+        "Existing shipwreck logo",
+        "Wrecks on the Clatsop beaches"
+      ],
+      "symbolism": "Time and the sea: a course that has been here since 1892.",
+      "interpretation": "It recalls the Peter Iredale wreck on Clatsop Spit, north of Gearhart; it is not a drawing of it.",
+      "typography": "Old Standard TT capitals: 19th-century newsprint.",
+      "lockup": {
+        "font": "Old Standard TT",
+        "weight": 600,
+        "case": "upper",
+        "tracking": "0.14em",
+        "line2": null,
+        "line1": "Gearhart Golf Links"
+      },
+      "strengths": "Bold, rusty, unmistakable silhouette.",
+      "tradeoffs": "Shipwrecks are a coast-wide motif; reads as ruin more than golf."
+    },
+    {
+      "n": 2,
+      "name": "The Gallery",
+      "rationale": "A Roosevelt elk bull, front on: antlers, dark mane, long face. Gearhart's most faithful regulars are the herd that grazes its fairways.",
+      "references": [
+        "Elk herd on the course (fact)"
+      ],
+      "symbolism": "The locals who never pay dues: wild Oregon walking the oldest links in the West.",
+      "interpretation": "",
+      "typography": "Bitter Bold, sturdy and outdoorsy.",
+      "lockup": {
+        "font": "Bitter",
+        "weight": 700,
+        "case": "upper",
+        "tracking": "0.14em",
+        "line2": null,
+        "line1": "Gearhart Golf Links"
+      },
+      "strengths": "True, funny and very Gearhart; a strong frontal icon.",
+      "tradeoffs": "Elk heads are common in lodge and hunting graphics; the joke needs the story."
+    }
+  ],
+  "pick": 2,
+  "recommendation": "Concept 2. The elk is the most surprising true story in the set; the wreck stays a strong alternative."
+}

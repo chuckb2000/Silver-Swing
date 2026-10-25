@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <title>Wannamoisett - Concept 2: The Chemical Works (a glass retort)</title>
+  <defs>
+    <clipPath id="bulb"><circle cx="19.4" cy="17.6" r="8.6"/></clipPath>
+  </defs>
+  <!-- the iron ring stand -->
+  <rect x="12" y="27.6" width="15.6" height="1.8" fill="#4a4a52"/>
+  <rect x="12.4" y="24.4" width="1.4" height="3.4" fill="#4a4a52"/><rect x="25.6" y="24.4" width="1.4" height="3.4" fill="#4a4a52"/>
+  <!-- the long neck: up from the crown of the bulb, then down and away, tapering -->
+  <path d="M15.4 10.6 C14.6 7 11.6 5.2 8.6 6.8 C6.4 8 5 11 4 15 L2.6 22.4 L3.8 22.6 L5.4 15.4 C6.4 12 7.6 9.6 9.4 8.8 C11.6 7.8 13.2 9.2 13.8 11.6 Z" fill="#cfe3f2"/>
+  <path d="M8.6 6.8 C6.4 8 5 11 4 15 L2.6 22.4 L3.2 22.4 L4.6 15.2 C5.6 11.4 6.8 9 8.8 7.8 Z" fill="#f6f6f2"/>
+  <!-- the round bulb, half full -->
+  <circle cx="19.4" cy="17.6" r="8.6" fill="#cfe3f2"/>
+  <g clip-path="url(#bulb)">
+    <rect x="0" y="18" width="32" height="12" fill="#3f8a7a"/>
+    <rect x="0" y="18" width="32" height="1.2" fill="#6fbca8"/>
+    <rect x="23" y="8" width="6" height="22" fill="#2f6a5e" opacity="1"/>
+    <path d="M23 8 L29 8 L29 18 L23 18 Z" fill="#a9c8de"/>
+  </g>
+  <!-- glints on the glass, a bubble or two -->
+  <path d="M13.6 13.6 C14.6 11.4 16.6 10 18.6 9.6 L18.8 10.8 C17 11.2 15.4 12.4 14.6 14.2 Z" fill="#f6f6f2"/>
+  <rect x="17" y="21" width="1.4" height="1.4" fill="#a8e0d0"/><rect x="20.6" y="23.4" width="1" height="1" fill="#a8e0d0"/>
+</svg>

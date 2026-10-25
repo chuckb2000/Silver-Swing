@@ -1,0 +1,66 @@
+{
+  "id": "ogc",
+  "course": "Oregon Golf Club",
+  "place": "West Linn, Oregon",
+  "facts": [
+    {
+      "fact": "Peter Jacobsen and Jim Hardy with Ken Kavanaugh, 1992, on the slopes of Pete's Mountain above the Willamette.",
+      "source": "docs/courses/ogc.md"
+    },
+    {
+      "fact": "Oregon grape was named the state flower in 1899; it grows as an understory shrub in conifer forests.",
+      "source": "https://www.oregonencyclopedia.org/articles/oregon_grape"
+    }
+  ],
+  "current": {
+    "subject": "A great blue heron in tall golden grass.",
+    "keep": "The heron: tall, elegant, Northwest.",
+    "weaknesses": "The grass hides half the bird; neck and bill are lost at 1x."
+  },
+  "concepts": [
+    {
+      "n": 1,
+      "name": "The Heron",
+      "rationale": "The heron alone, standing in still water: blue-grey body, white face, black crown stripe, dagger bill.",
+      "references": [
+        "Existing heron logo"
+      ],
+      "symbolism": "Patience and poise.",
+      "interpretation": "",
+      "typography": "Cormorant Garamond capitals.",
+      "lockup": {
+        "font": "Cormorant Garamond",
+        "weight": 600,
+        "case": "upper",
+        "tracking": "0.14em",
+        "line2": null,
+        "line1": "Oregon Golf Club"
+      },
+      "strengths": "A clean, tall silhouette.",
+      "tradeoffs": "Herons are common in golf and lake-club logos."
+    },
+    {
+      "n": 2,
+      "name": "Oregon Grape",
+      "rationale": "A club named for the state carries the state flower: a bunch of dusty blue berries under a spiny leaf.",
+      "references": [
+        "Oregon grape, state flower since 1899 (fact)"
+      ],
+      "symbolism": "Oregon, quite literally.",
+      "interpretation": "",
+      "typography": "Lora SemiBold.",
+      "lockup": {
+        "font": "Lora",
+        "weight": 600,
+        "case": "upper",
+        "tracking": "0.14em",
+        "line2": null,
+        "line1": "Oregon Golf Club"
+      },
+      "strengths": "Ownable and on-name; strong colour on green cards.",
+      "tradeoffs": "Reads as 'grapes' first; few know the plant."
+    }
+  ],
+  "pick": 1,
+  "recommendation": "Concept 1. The cleaned-up heron keeps the developer's subject and is the better silhouette; Oregon grape is a clever second."
+}

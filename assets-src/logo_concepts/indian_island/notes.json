@@ -1,0 +1,67 @@
+{
+  "id": "indian_island",
+  "course": "Indian Island Golf Course",
+  "place": "Riverhead, New York",
+  "facts": [
+    {
+      "fact": "William F. Mitchell, 1972, a Suffolk County Parks course where the Peconic River opens into Flanders Bay.",
+      "source": "docs/courses/indian_island.md"
+    },
+    {
+      "fact": "Long Island duck farming grew after the American Pekin arrived in 1873; about 90 Suffolk farms raised three million ducks a year in 1939. The Big Duck was built in Riverhead in 1931.",
+      "source": "https://en.wikipedia.org/wiki/Big_Duck"
+    }
+  ],
+  "current": {
+    "subject": "A knapped flint arrowhead pointing right.",
+    "keep": "The stone point.",
+    "weaknesses": "Sideways and grey; reads as a fish or a jet."
+  },
+  "concepts": [
+    {
+      "n": 1,
+      "name": "The Knapped Point",
+      "rationale": "An upright, corner-notched projectile point with its flake scars shown facet by facet.",
+      "references": [
+        "Existing arrowhead logo"
+      ],
+      "symbolism": "Deep human history on the Peconic.",
+      "interpretation": "",
+      "typography": "Spectral SemiBold.",
+      "lockup": {
+        "font": "Spectral",
+        "weight": 600,
+        "case": "upper",
+        "tracking": "0.14em",
+        "line2": null,
+        "line1": "Indian Island Golf Course"
+      },
+      "strengths": "Crisp, symmetric, much clearer.",
+      "tradeoffs": "Native imagery needs care; the artefact is drawn generically, not as a tribal symbol."
+    },
+    {
+      "n": 2,
+      "name": "The Long Island Duckling",
+      "rationale": "A white Pekin duck on the bay shore: Riverhead's duck-farming century.",
+      "references": [
+        "Long Island duck farming (fact)",
+        "The Big Duck, Riverhead (fact)"
+      ],
+      "symbolism": "The farms along the Peconic.",
+      "interpretation": "",
+      "typography": "Nunito Black.",
+      "lockup": {
+        "font": "Nunito",
+        "weight": 900,
+        "case": "upper",
+        "tracking": "0.14em",
+        "line2": null,
+        "line1": "Indian Island Golf Course"
+      },
+      "strengths": "Friendly, local, clear.",
+      "tradeoffs": "Keep clear of the Long Island Ducks baseball mascot."
+    }
+  ],
+  "pick": 2,
+  "recommendation": "Concept 2. The duck is the area's own story and avoids leaning on Native imagery."
+}

@@ -1,0 +1,66 @@
+{
+  "id": "langdon",
+  "course": "Langdon Farms Golf Club",
+  "place": "Aurora, Oregon",
+  "facts": [
+    {
+      "fact": "John Fought and Bob Cupp, 1995, between I-5 and NE Airport Road.",
+      "source": "docs/courses/langdon.md"
+    },
+    {
+      "fact": "Hops have been grown on the French Prairie around Butteville and Aurora since the 19th century.",
+      "source": "https://butteville.org/hops.html"
+    }
+  ],
+  "current": {
+    "subject": "A red barn with white trim.",
+    "keep": "The barn, the 'Farms' in the name.",
+    "weaknesses": "A simple gable barn; good but generic."
+  },
+  "concepts": [
+    {
+      "n": 1,
+      "name": "Barn and Silo",
+      "rationale": "A gambrel-roofed barn with a hayloft door and white X doors, a silo beside it: the classic Willamette Valley farmstead.",
+      "references": [
+        "Existing barn logo"
+      ],
+      "symbolism": "Farmland turned to golf.",
+      "interpretation": "",
+      "typography": "Arvo Bold.",
+      "lockup": {
+        "font": "Arvo",
+        "weight": 700,
+        "case": "upper",
+        "tracking": "0.14em",
+        "line2": null,
+        "line1": "Langdon Farms Golf Club"
+      },
+      "strengths": "Stronger farm silhouette, reads at 1x.",
+      "tradeoffs": "Barns are common in rural golf branding."
+    },
+    {
+      "n": 2,
+      "name": "The Hop Cone",
+      "rationale": "A hop cone on its bine, papery bracts overlapping, with a three-lobed leaf: the crop of the French Prairie around the course.",
+      "references": [
+        "French Prairie hop growing (fact)"
+      ],
+      "symbolism": "The valley's harvest, and the beer after the round.",
+      "interpretation": "The course land's own crop history isn't documented; the hop stands for the region.",
+      "typography": "Alegreya SC.",
+      "lockup": {
+        "font": "Alegreya SC",
+        "weight": 600,
+        "case": "upper",
+        "tracking": "0.14em",
+        "line2": null,
+        "line1": "Langdon Farms Golf Club"
+      },
+      "strengths": "Distinctive shape; local agriculture.",
+      "tradeoffs": "Some will read it as a pine cone or artichoke."
+    }
+  ],
+  "pick": 1,
+  "recommendation": "Concept 1. The barn and silo tell 'Farms' fastest; the hop cone is a good merchandise mark."
+}

@@ -1,0 +1,67 @@
+{
+  "id": "waverley",
+  "course": "Waverley Country Club",
+  "place": "Milwaukie, Oregon",
+  "facts": [
+    {
+      "fact": "Founded April 1896 and named for Sir Walter Scott's novel 'Waverley'; moved in 1898 to the former Luelling orchard on the east bank of the Willamette.",
+      "source": "https://www.waverley.cc/story/waverley-history-1800s-the-beginning-1"
+    },
+    {
+      "fact": "Pear trees from the orchard still stand left of the 10th green.",
+      "source": "https://www.waverley.cc/story/waverley-history-1800s-the-beginning-1"
+    }
+  ],
+  "current": {
+    "subject": "A green and white locomotive.",
+    "keep": "The locomotive and its apple-green livery.",
+    "weaknesses": "Side-on and long; the shape reads as a toy train at 1x."
+  },
+  "concepts": [
+    {
+      "n": 1,
+      "name": "The Express, Head-On",
+      "rationale": "The locomotive face on: round smokebox door, lamp, chimney, red buffer beam, green tanks with white lining. Symmetric and commanding.",
+      "references": [
+        "Existing locomotive logo"
+      ],
+      "symbolism": "Arrival: the club's guests coming to the riverbank.",
+      "interpretation": "Read as a nod to Scott's Waverley and Edinburgh's Waverley station; that link is ours, not the club's.",
+      "typography": "Playfair Display Bold capitals.",
+      "lockup": {
+        "font": "Playfair Display",
+        "weight": 700,
+        "case": "upper",
+        "tracking": "0.14em",
+        "line2": null,
+        "line1": "Waverley Country Club"
+      },
+      "strengths": "Bold, symmetric, much stronger at 1x.",
+      "tradeoffs": "The train has no documented link to the club; it is the developer's choice."
+    },
+    {
+      "n": 2,
+      "name": "The Luelling Pear",
+      "rationale": "A ripe pear with its leaf. The club plays on Henderson Luelling's old orchard, and its pear trees still stand by the 10th green.",
+      "references": [
+        "Luelling orchard, the club's site since 1898 (fact)",
+        "Pear trees left of the 10th (fact)"
+      ],
+      "symbolism": "Roots: one of the oldest clubs in the West, playing on an orchard planted before it.",
+      "interpretation": "",
+      "typography": "Libre Baskerville Italic.",
+      "lockup": {
+        "font": "Libre Baskerville",
+        "weight": 400,
+        "case": "none",
+        "tracking": "0.02em",
+        "line2": null,
+        "line1": "Waverley Country Club"
+      },
+      "strengths": "True, simple, beautiful; reads from across a room.",
+      "tradeoffs": "A pear is gentle for a championship club."
+    }
+  ],
+  "pick": 2,
+  "recommendation": "Concept 2. The pear is the club's own ground and history, and the cleanest icon in the Portland set."
+}

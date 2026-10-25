@@ -1,0 +1,66 @@
+{
+  "id": "tpc_boston",
+  "course": "TPC Boston",
+  "place": "Norton, Massachusetts",
+  "facts": [
+    {
+      "fact": "Arnold Palmer, 2002; redesigned by Gil Hanse with Brad Faxon, 2007. Host of the Deutsche Bank Championship (2003-2016).",
+      "source": "https://en.wikipedia.org/wiki/TPC_Boston"
+    },
+    {
+      "fact": "Ponds and marshes run through the middle of the course.",
+      "source": "docs/courses/tpc_boston.md"
+    }
+  ],
+  "current": {
+    "subject": "A baby-blue pair of lederhosen (developer's pick).",
+    "keep": "The joke and the baby blue.",
+    "weaknesses": "Plain shapes; the details that make lederhosen lederhosen are missing."
+  },
+  "concepts": [
+    {
+      "n": 1,
+      "name": "Lederhosen, Sunday Best",
+      "rationale": "Proper Bavarian lederhosen: H-bar braces with an edelweiss on the chest bar, an embroidered front flap, horn buttons.",
+      "references": [
+        "Existing lederhosen logo"
+      ],
+      "symbolism": "A wink at the course's German-bank tournament years.",
+      "interpretation": "The Deutsche Bank link is our reading of the developer's joke.",
+      "typography": "Bebas Neue.",
+      "lockup": {
+        "font": "Bebas Neue",
+        "weight": 400,
+        "case": "upper",
+        "tracking": "0.14em",
+        "line2": null,
+        "line1": "TPC Boston"
+      },
+      "strengths": "Funny and now well made.",
+      "tradeoffs": "An in-joke; nothing to do with golf or Massachusetts."
+    },
+    {
+      "n": 2,
+      "name": "The Cattails",
+      "rationale": "Three cattails in marsh water: the wetlands that thread through the course.",
+      "references": [
+        "Marshes through the course (fact)"
+      ],
+      "symbolism": "New England wetland golf.",
+      "interpretation": "",
+      "typography": "Libre Franklin SemiBold.",
+      "lockup": {
+        "font": "Libre Franklin",
+        "weight": 600,
+        "case": "upper",
+        "tracking": "0.14em",
+        "line2": null,
+        "line1": "TPC Boston"
+      },
+      "strengths": "Clean, natural, clear of TPC marks.",
+      "tradeoffs": "Quiet; marsh plants are generic."
+    }
+  ],
+  "pick": 1,
+  "recommendation": "Concept 1, because the developer chose the joke. The cattails are the sensible choice if the course should look like itself."
+}

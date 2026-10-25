@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <title>Stone Creek - Concept 1: The Cascade</title>
+  <!-- three stone steps, moss on each lip -->
+  <path d="M2 6 L13 6 L14 9 L14 12 L2 12 Z" fill="#8a9098"/>
+  <path d="M8 13 L20 13 L21 16 L21 19 L8 19 Z" fill="#8a9098"/>
+  <path d="M14 20 L28 20 L29 23 L29 26 L14 26 Z" fill="#8a9098"/>
+  <g fill="#62686f">
+    <path d="M11 6 L13 6 L14 9 L14 12 L11 12 Z"/><path d="M18 13 L20 13 L21 16 L21 19 L18 19 Z"/><path d="M26 20 L28 20 L29 23 L29 26 L26 26 Z"/>
+  </g>
+  <g fill="#aeb4bb"><rect x="2" y="7.2" width="1.2" height="4.8"/><rect x="8" y="14.2" width="1.2" height="4.8"/><rect x="14" y="21.2" width="1.2" height="4.8"/></g>
+  <g fill="#4f8f4a">
+    <path d="M2 6 C5 4.6 9 4.6 12.4 5.6 L12.6 7 L2 7.2 Z"/>
+    <path d="M8 13 C11 11.6 15 11.6 18.6 12.6 L18.8 14 L8 14.2 Z"/>
+    <path d="M14 20 C18 18.6 23 18.6 26.6 19.6 L26.8 21 L14 21.2 Z"/>
+  </g>
+  <!-- the creek spilling over each step -->
+  <g fill="#cfe8f6">
+    <path d="M12.8 5.4 C15 6 15.8 8 15.8 13 L13.6 13 C13.6 9 13.4 7 12.8 5.4 Z"/>
+    <path d="M19.6 12.4 C22 13 22.8 15 22.8 20 L20.6 20 C20.6 16 20.4 14 19.6 12.4 Z"/>
+    <path d="M27.4 19.4 C29.4 20 30 22 30 27 L28 27 C28 23 27.8 21 27.4 19.4 Z"/>
+  </g>
+  <g fill="#5d97ee">
+    <rect x="15" y="7.6" width="0.9" height="5"/><rect x="22" y="14.6" width="0.9" height="5"/>
+  </g>
+  <!-- the pool and its splash -->
+  <path d="M2 27 C8 25.6 22 25.6 30.4 27 C30 29.2 24 30.4 16 30.4 C8 30.4 2.4 29.2 2 27 Z" fill="#2d6aa8"/>
+  <path d="M24 26.6 C26 25.6 29 25.8 30.4 27 L24.4 27.6 Z" fill="#f6f6f2"/>
+  <rect x="6" y="27.6" width="4" height="1" fill="#5d97ee"/>
+</svg>

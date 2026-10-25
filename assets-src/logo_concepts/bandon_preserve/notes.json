@@ -1,0 +1,71 @@
+{
+  "id": "bandon_preserve",
+  "course": "Bandon Preserve",
+  "place": "Bandon, Oregon",
+  "facts": [
+    {
+      "fact": "Coore & Crenshaw, opened 2012; 13 par 3s; net proceeds go to the Wild Rivers Coast Alliance.",
+      "source": "docs/courses/bandon_preserve.md"
+    },
+    {
+      "fact": "Part of the course's funding was to support conservation of the silvery phacelia, a flower threatened in Oregon that thrives at the resort.",
+      "source": "https://www.golfdigest.com/story/more-on-bandons-fifth-course"
+    },
+    {
+      "fact": "Silvery phacelia has silvery, hairy leaves and white flower clusters.",
+      "source": "https://biologicaldiversity.org/news/press_releases/2014/silvery-phacelia-03-07-2014.html"
+    }
+  ],
+  "current": {
+    "subject": "A western snowy plover on the sand (course chat, developer's call).",
+    "keep": "The plover: a protected shorebird for a course that funds conservation.",
+    "weaknesses": "Small and thin-legged at 1x; the sand base is a separate strip."
+  },
+  "concepts": [
+    {
+      "n": 1,
+      "name": "The Snowy Plover",
+      "rationale": "A rounder, bigger plover with its real field marks: pale back, dark forehead bar, ear patch and breast patches, standing where the wave runs out.",
+      "references": [
+        "Existing plover logo"
+      ],
+      "symbolism": "Small, protected, at home on the dunes, like the course's purpose.",
+      "interpretation": "",
+      "typography": "Spectral SemiBold: light and precise.",
+      "lockup": {
+        "font": "Spectral",
+        "weight": 600,
+        "case": "upper",
+        "tracking": "0.14em",
+        "line2": null,
+        "line1": "Bandon Preserve"
+      },
+      "strengths": "Cute and clear; the field marks make it a real species.",
+      "tradeoffs": "Another bird in a resort with many coastal animals."
+    },
+    {
+      "n": 2,
+      "name": "Silvery Phacelia",
+      "rationale": "The flower the Preserve was built to help: a coil of white flowers above silver leaves, on a dusk-green medallion.",
+      "references": [
+        "Silvery phacelia at the resort (fact)",
+        "Conservation funding (fact)"
+      ],
+      "symbolism": "The name's real meaning: this course preserves something.",
+      "interpretation": "",
+      "typography": "Cormorant Garamond Italic for a botanical-plate feel.",
+      "lockup": {
+        "font": "Cormorant Garamond",
+        "weight": 500,
+        "case": "none",
+        "tracking": "0.04em",
+        "line2": null,
+        "line1": "Bandon Preserve"
+      },
+      "strengths": "Authentic and unexpected; nobody else owns it.",
+      "tradeoffs": "A small white flower is subtle; few golfers know the plant."
+    }
+  ],
+  "pick": 2,
+  "recommendation": "Concept 2. It carries the course's reason for existing, and the dark medallion makes it read at 1x."
+}

@@ -1,0 +1,71 @@
+{
+  "id": "highland_links",
+  "course": "Highland Links",
+  "place": "Truro, Massachusetts",
+  "facts": [
+    {
+      "fact": "Laid out by Willard Small c. 1892 on the bluff beside Highland Light.",
+      "source": "docs/courses/highland_links.md"
+    },
+    {
+      "fact": "Highland Light (1857) was moved 450 ft west in 1996 because the cliff was eroding.",
+      "source": "https://en.wikipedia.org/wiki/Highland_Light"
+    },
+    {
+      "fact": "Bartholomew Gosnold named Cape Cod in 1602 after the cod his crew caught there.",
+      "source": "https://historyofmassachusetts.org/cape-cod-name/"
+    }
+  ],
+  "current": {
+    "subject": "Highland Light with beams.",
+    "keep": "The lighthouse, which stands on the course.",
+    "weaknesses": "Pale beams vanish on light cards; the tower floats."
+  },
+  "concepts": [
+    {
+      "n": 1,
+      "name": "Highland Light by Night",
+      "rationale": "The tower on its sand bluff in a night-blue roundel, beams sweeping out over the Atlantic.",
+      "references": [
+        "Existing lighthouse logo",
+        "Highland Light (fact)"
+      ],
+      "symbolism": "The light that has watched the links since 1892.",
+      "interpretation": "",
+      "typography": "Cinzel SemiBold.",
+      "lockup": {
+        "font": "Cinzel",
+        "weight": 600,
+        "case": "upper",
+        "tracking": "0.14em",
+        "line2": null,
+        "line1": "Highland Links"
+      },
+      "strengths": "Strong contrast at 1x; unmistakable.",
+      "tradeoffs": "Lighthouses are a common coastal mark."
+    },
+    {
+      "n": 2,
+      "name": "The Namesake Cod",
+      "rationale": "An Atlantic cod: the fish that named the Cape the course stands on.",
+      "references": [
+        "Gosnold's 1602 naming (fact)"
+      ],
+      "symbolism": "Cape Cod, named for its fish.",
+      "interpretation": "",
+      "typography": "Libre Baskerville.",
+      "lockup": {
+        "font": "Libre Baskerville",
+        "weight": 700,
+        "case": "upper",
+        "tracking": "0.14em",
+        "line2": null,
+        "line1": "Highland Links"
+      },
+      "strengths": "Witty and rooted in the place.",
+      "tradeoffs": "About the Cape more than the course."
+    }
+  ],
+  "pick": 1,
+  "recommendation": "Concept 1. The lighthouse stands on the course; the night roundel makes it read."
+}

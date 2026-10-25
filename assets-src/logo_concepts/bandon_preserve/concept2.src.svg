@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <title>Bandon Preserve - Concept 2: Silvery Phacelia</title>
+  <!-- a dusk-green field so the silver and white read on any card -->
+  <circle cx="16" cy="16" r="14.6" fill="#2c4a3e"/>
+  <path d="M16 1.4 A14.6 14.6 0 0 0 1.4 16 L3 16 A13 13 0 0 1 16 3 Z" fill="#3d6252"/>
+  <!-- silver, hairy leaves fanned at the base -->
+  <g fill="#9fb09c">
+    <ellipse cx="9.2" cy="25" rx="6" ry="2.2" transform="rotate(-24 9.2 25)"/>
+    <ellipse cx="22.8" cy="25" rx="6" ry="2.2" transform="rotate(24 22.8 25)"/>
+    <ellipse cx="11.6" cy="21.4" rx="5" ry="1.9" transform="rotate(-50 11.6 21.4)"/>
+    <ellipse cx="20.4" cy="21.4" rx="5" ry="1.9" transform="rotate(50 20.4 21.4)"/>
+  </g>
+  <g fill="#d3ddd1">
+    <ellipse cx="8.6" cy="24.2" rx="4" ry="0.9" transform="rotate(-24 8.6 24.2)"/>
+    <ellipse cx="11" cy="20.6" rx="3.2" ry="0.8" transform="rotate(-50 11 20.6)"/>
+  </g>
+  <g fill="#7d8f7c">
+    <ellipse cx="23.4" cy="25.8" rx="4" ry="0.9" transform="rotate(24 23.4 25.8)"/>
+    <ellipse cx="21.2" cy="22.2" rx="3.2" ry="0.8" transform="rotate(50 21.2 22.2)"/>
+  </g>
+  <!-- one stem ending in a tight coil, the way phacelia flowers unroll -->
+  <path d="M16 26 L16 15.6 C16 13 10.4 13.4 10.4 8.6 C10.4 4.4 16.4 3.4 19 5.8 C21.2 8 19.8 11.6 17 11.4 C15.4 11.2 15 9.6 16.2 8.8" fill="none" stroke="#8fa88a" stroke-width="3" stroke-linecap="round"/>
+  <path d="M15.2 26 L15.2 16" stroke="#c6d3b6" stroke-width="0.9"/>
+  <!-- white flowers along the outside of the coil -->
+  <g fill="#f6f6f2"><circle cx="9.9" cy="11.8" r="1.7"/><circle cx="9.2" cy="7.5" r="1.7"/><circle cx="11.4" cy="3.8" r="1.7"/><circle cx="15.4" cy="2.3" r="1.7"/><circle cx="19.4" cy="3.8" r="1.7"/><circle cx="21.6" cy="7.5" r="1.7"/><circle cx="20.9" cy="11.8" r="1.7"/></g>
+  <g fill="#e8dfb0"><rect x="9.0" y="10.8" width="1" height="1"/><rect x="10.5" y="2.9" width="1" height="1"/><rect x="18.5" y="2.9" width="1" height="1"/><rect x="20.0" y="10.8" width="1" height="1"/></g>
+</svg>

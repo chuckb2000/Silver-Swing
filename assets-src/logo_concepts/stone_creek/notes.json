@@ -1,0 +1,66 @@
+{
+  "id": "stone_creek",
+  "course": "Stone Creek Golf Club",
+  "place": "Oregon City, Oregon",
+  "facts": [
+    {
+      "fact": "Peter Jacobsen and Jim Hardy, opened 2002; about 120 acres among old-growth Douglas firs with ponds and wetlands.",
+      "source": "docs/courses/stone_creek.md"
+    },
+    {
+      "fact": "Oregon City was the end of the Oregon Trail and was incorporated in 1844.",
+      "source": "https://www.blm.gov/blog/2020-11-06/oregon-city"
+    }
+  ],
+  "current": {
+    "subject": "A waterfall between mossy stones.",
+    "keep": "Stone and water: the name.",
+    "weaknesses": "Symmetric and static; the falls are a flat blue bar."
+  },
+  "concepts": [
+    {
+      "n": 1,
+      "name": "The Cascade",
+      "rationale": "The creek spills over three mossy stone steps into a pool: the name told as a little journey downhill.",
+      "references": [
+        "Existing waterfall logo"
+      ],
+      "symbolism": "Stone and creek, step by step.",
+      "interpretation": "",
+      "typography": "Zilla Slab SemiBold.",
+      "lockup": {
+        "font": "Zilla Slab",
+        "weight": 600,
+        "case": "upper",
+        "tracking": "0.14em",
+        "line2": null,
+        "line1": "Stone Creek Golf Club"
+      },
+      "strengths": "More movement and more 'stone'.",
+      "tradeoffs": "Busier than the original; a generic water feature."
+    },
+    {
+      "n": 2,
+      "name": "End of the Trail",
+      "rationale": "A covered wagon, westward bound. Stone Creek is in Oregon City, where the Oregon Trail ended.",
+      "references": [
+        "Oregon City, end of the Oregon Trail (fact)"
+      ],
+      "symbolism": "Arrival after a long journey; a fitting place for the 18th.",
+      "interpretation": "",
+      "typography": "Rye for the frontier.",
+      "lockup": {
+        "font": "Rye",
+        "weight": 400,
+        "case": "upper",
+        "tracking": "0.06em",
+        "line2": null,
+        "line1": "Stone Creek Golf Club"
+      },
+      "strengths": "Instantly readable; rooted in the town's history.",
+      "tradeoffs": "About the town rather than the course itself."
+    }
+  ],
+  "pick": 2,
+  "recommendation": "Concept 2. The wagon gives Stone Creek a story; the cascade is a better-drawn version of a generic subject."
+}

@@ -1,0 +1,66 @@
+{
+  "id": "redtail",
+  "course": "RedTail Golf Center",
+  "place": "Beaverton, Oregon",
+  "facts": [
+    {
+      "fact": "Built as Progress Downs (1966-68), redesigned and renamed RedTail in 1999 for the red-tailed hawks that nest in the trees round the course.",
+      "source": "https://www.portland.gov/parks/redtail-golf-course"
+    },
+    {
+      "fact": "The developer asked for a fox (2026-10-22).",
+      "source": "DECISIONS.md"
+    }
+  ],
+  "current": {
+    "subject": "A red fox sitting in profile, tail curled.",
+    "keep": "The fox's colour and white-tipped tail.",
+    "weaknesses": "A full-body animal scene; the face is small at 1x."
+  },
+  "concepts": [
+    {
+      "n": 1,
+      "name": "The Fox Mask",
+      "rationale": "The fox's face alone: tall black-tipped ears, white cheeks, amber eyes, a pointed muzzle. Geometric and bold.",
+      "references": [
+        "Existing fox logo"
+      ],
+      "symbolism": "Quick and clever.",
+      "interpretation": "",
+      "typography": "Archivo Black.",
+      "lockup": {
+        "font": "Archivo Black",
+        "weight": 400,
+        "case": "upper",
+        "tracking": "0.14em",
+        "line2": null,
+        "line1": "RedTail Golf Center"
+      },
+      "strengths": "Reads instantly at any size; great on hats.",
+      "tradeoffs": "Fox masks are a popular modern motif."
+    },
+    {
+      "n": 2,
+      "name": "The Namesake",
+      "rationale": "A red-tailed hawk seen from below as it soars: pale underwings, dark bars, the brick-red fanned tail.",
+      "references": [
+        "Red-tailed hawks, the course's namesake (fact)"
+      ],
+      "symbolism": "The bird the course is named after, overhead.",
+      "interpretation": "",
+      "typography": "Oswald SemiBold.",
+      "lockup": {
+        "font": "Oswald",
+        "weight": 600,
+        "case": "upper",
+        "tracking": "0.14em",
+        "line2": null,
+        "line1": "RedTail Golf Center"
+      },
+      "strengths": "The authentic subject.",
+      "tradeoffs": "Soaring raptors are common in sports logos."
+    }
+  ],
+  "pick": 1,
+  "recommendation": "Concept 1. The fox mask is the strongest icon in the Portland set; the hawk is the truthful alternative if the name should lead."
+}

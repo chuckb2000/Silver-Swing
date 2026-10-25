@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="512" height="512">
+  <title>Langston - Concept 1: Wake-Robin</title>
+  
+  <g id="outline"><ellipse cx="22.3" cy="20.4" rx="5.2" ry="7.3" transform="rotate(120.0 22.3 20.4)" fill="#0d1620" stroke="#0d1620" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+  <ellipse cx="9.7" cy="20.4" rx="5.2" ry="7.3" transform="rotate(240.0 9.7 20.4)" fill="#0d1620" stroke="#0d1620" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+  <ellipse cx="16.0" cy="9.5" rx="5.2" ry="7.3" transform="rotate(360.0 16.0 9.5)" fill="#0d1620" stroke="#0d1620" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+  <ellipse cx="11.4" cy="19.4" rx="2.0" ry="5.3" transform="rotate(240.0 11.4 19.4)" fill="#0d1620" stroke="#0d1620" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+  <ellipse cx="16.0" cy="11.5" rx="2.0" ry="5.3" transform="rotate(360.0 16.0 11.5)" fill="#0d1620" stroke="#0d1620" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+  <ellipse cx="21.5" cy="19.9" rx="0.5" ry="6.3" transform="rotate(120.0 21.5 19.9)" fill="#0d1620" stroke="#0d1620" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+  <ellipse cx="10.5" cy="19.9" rx="0.5" ry="6.3" transform="rotate(240.0 10.5 19.9)" fill="#0d1620" stroke="#0d1620" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+  <ellipse cx="16.0" cy="10.5" rx="0.5" ry="6.3" transform="rotate(360.0 16.0 10.5)" fill="#0d1620" stroke="#0d1620" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+  
+  <ellipse cx="20.1" cy="19.1" rx="1.4" ry="4.7" transform="rotate(120.0 20.1 19.1)" fill="#0d1620" stroke="#0d1620" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+  <ellipse cx="11.9" cy="19.1" rx="1.4" ry="4.7" transform="rotate(240.0 11.9 19.1)" fill="#0d1620" stroke="#0d1620" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+  <ellipse cx="16.0" cy="12.1" rx="1.4" ry="4.7" transform="rotate(360.0 16.0 12.1)" fill="#0d1620" stroke="#0d1620" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+  
+  <ellipse cx="16.0" cy="22.2" rx="3.8" ry="5.4" transform="rotate(180.0 16.0 22.2)" fill="#0d1620" stroke="#0d1620" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+  <ellipse cx="11.3" cy="14.1" rx="3.8" ry="5.4" transform="rotate(300.0 11.3 14.1)" fill="#0d1620" stroke="#0d1620" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+  <ellipse cx="20.7" cy="14.1" rx="3.8" ry="5.4" transform="rotate(420.0 20.7 14.1)" fill="#0d1620" stroke="#0d1620" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+  <ellipse cx="12.7" cy="14.9" rx="1.5" ry="3.8" transform="rotate(300.0 12.7 14.9)" fill="#0d1620" stroke="#0d1620" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+  <ellipse cx="16.0" cy="20.6" rx="1.5" ry="3.8" transform="rotate(180.0 16.0 20.6)" fill="#0d1620" stroke="#0d1620" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+  <ellipse cx="19.4" cy="14.8" rx="1.5" ry="3.9" transform="rotate(420.0 19.4 14.8)" fill="#0d1620" stroke="#0d1620" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+  
+  <circle cx="16" cy="16.8" r="2" fill="#0d1620" stroke="#0d1620" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+  <rect x="15.5" y="16.3" width="1" height="1" fill="#0d1620" stroke="#0d1620" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+</g><ellipse cx="22.3" cy="20.4" rx="5.2" ry="7.3" transform="rotate(120.0 22.3 20.4)" fill="#2f6a3a" />
+  <ellipse cx="9.7" cy="20.4" rx="5.2" ry="7.3" transform="rotate(240.0 9.7 20.4)" fill="#2f6a3a" />
+  <ellipse cx="16.0" cy="9.5" rx="5.2" ry="7.3" transform="rotate(360.0 16.0 9.5)" fill="#2f6a3a" />
+  <ellipse cx="11.4" cy="19.4" rx="2.0" ry="5.3" transform="rotate(240.0 11.4 19.4)" fill="#4f8f4a" />
+  <ellipse cx="16.0" cy="11.5" rx="2.0" ry="5.3" transform="rotate(360.0 16.0 11.5)" fill="#4f8f4a" />
+  <ellipse cx="21.5" cy="19.9" rx="0.5" ry="6.3" transform="rotate(120.0 21.5 19.9)" fill="#24502c" />
+  <ellipse cx="10.5" cy="19.9" rx="0.5" ry="6.3" transform="rotate(240.0 10.5 19.9)" fill="#24502c" />
+  <ellipse cx="16.0" cy="10.5" rx="0.5" ry="6.3" transform="rotate(360.0 16.0 10.5)" fill="#24502c" />
+  
+  <ellipse cx="20.1" cy="19.1" rx="1.4" ry="4.7" transform="rotate(120.0 20.1 19.1)" fill="#6f9a4a" />
+  <ellipse cx="11.9" cy="19.1" rx="1.4" ry="4.7" transform="rotate(240.0 11.9 19.1)" fill="#6f9a4a" />
+  <ellipse cx="16.0" cy="12.1" rx="1.4" ry="4.7" transform="rotate(360.0 16.0 12.1)" fill="#6f9a4a" />
+  
+  <ellipse cx="16.0" cy="22.2" rx="3.8" ry="5.4" transform="rotate(180.0 16.0 22.2)" fill="#a8243a" />
+  <ellipse cx="11.3" cy="14.1" rx="3.8" ry="5.4" transform="rotate(300.0 11.3 14.1)" fill="#a8243a" />
+  <ellipse cx="20.7" cy="14.1" rx="3.8" ry="5.4" transform="rotate(420.0 20.7 14.1)" fill="#a8243a" />
+  <ellipse cx="12.7" cy="14.9" rx="1.5" ry="3.8" transform="rotate(300.0 12.7 14.9)" fill="#d84a5a" />
+  <ellipse cx="16.0" cy="20.6" rx="1.5" ry="3.8" transform="rotate(180.0 16.0 20.6)" fill="#d84a5a" />
+  <ellipse cx="19.4" cy="14.8" rx="1.5" ry="3.9" transform="rotate(420.0 19.4 14.8)" fill="#7a1a2a" />
+  
+  <circle cx="16" cy="16.8" r="2" fill="#f2d86a" />
+  <rect x="15.5" y="16.3" width="1" height="1" fill="#8a6a2a" />
+</svg>

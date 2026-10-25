@@ -1,0 +1,72 @@
+{
+  "id": "langston",
+  "course": "Langston Golf Course",
+  "place": "Washington, DC",
+  "facts": [
+    {
+      "fact": "Opened 1939; built by the CCC and WPA; on the National Register of Historic Places; the holes are named after Black pioneers of American golf.",
+      "source": "docs/courses/langston.md"
+    },
+    {
+      "fact": "The Wake-Robin Golf Club (1937, Helen Webb Harris) and the Royal Golf Club petitioned in 1938 to desegregate DC's public courses; Langston opened in 1939. The wake-robin is an early-spring wildflower.",
+      "source": "https://new.blackpast.org/?p=39948"
+    },
+    {
+      "fact": "The course's back tees are named Royal.",
+      "source": "game/public/courses/langston/course.json"
+    }
+  ],
+  "current": {
+    "subject": "A three-petalled orange wildflower.",
+    "keep": "The three-petalled flower, read as the wake-robin.",
+    "weaknesses": "Side-on with stem and leaves; not identifiable as a trillium."
+  },
+  "concepts": [
+    {
+      "n": 1,
+      "name": "Wake-Robin",
+      "rationale": "A red trillium (wake-robin) from above: three petals over three leaves, a perfect three-fold emblem.",
+      "references": [
+        "Wake-Robin Golf Club (fact)",
+        "Existing three-petalled flower"
+      ],
+      "symbolism": "The women's club whose petition helped open the course.",
+      "interpretation": "",
+      "typography": "Cormorant Garamond SemiBold.",
+      "lockup": {
+        "font": "Cormorant Garamond",
+        "weight": 600,
+        "case": "upper",
+        "tracking": "0.14em",
+        "line2": null,
+        "line1": "Langston Golf Course"
+      },
+      "strengths": "Geometric, historic, beautiful.",
+      "tradeoffs": "The link is a reading of the current flower; the developer should confirm."
+    },
+    {
+      "n": 2,
+      "name": "Royal Tees",
+      "rationale": "A crown whose points are golf tees on a gold band, on royal purple.",
+      "references": [
+        "Royal Golf Club (fact)",
+        "The Royal tees (fact)"
+      ],
+      "symbolism": "The men's club that petitioned alongside Wake-Robin.",
+      "interpretation": "",
+      "typography": "Cinzel Bold.",
+      "lockup": {
+        "font": "Cinzel",
+        "weight": 700,
+        "case": "upper",
+        "tracking": "0.14em",
+        "line2": null,
+        "line1": "Langston Golf Course"
+      },
+      "strengths": "Clever and specific.",
+      "tradeoffs": "Crowns are generic; the story is needed."
+    }
+  ],
+  "pick": 1,
+  "recommendation": "Concept 1. The trillium honours Langston's founding history and is the strongest mark."
+}
