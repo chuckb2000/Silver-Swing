@@ -1,0 +1,39 @@
+{
+ "id": "silvies",
+ "name": "Silvies Valley Ranch",
+ "location": "Seneca, Grant County, Oregon",
+ "state": "OR",
+ "architects": "Dan Hixson (2017; reversible Craddock and Hankins courses on 27 greens; GolfPass, golf.com)",
+ "theme": "pnw",
+ "epsg": 32611,
+ "osm_sources": [
+  "raw/overpass.geojson"
+ ],
+ "boundary_name": "Silvies Ranch",
+ "world": {
+  "x0": 339997,
+  "y0": 4879339,
+  "width": 2048,
+  "height": 2048,
+  "note": "PROVISIONAL (intake): OSM boundary w904342362 bbox (x 340019-342023, y 4879508-4881218: 2,004 x 1,710 m) held to the 2,048 m limit: 22 m of scenery at the west and east tips, about 170 m north and south"
+ },
+ "tee_sets": [
+  {"name": "Challenge", "playable": false, "rating": 0, "slope": 0, "total_yd": 7170},
+  {"name": "White", "playable": false, "rating": 71.9, "slope": 120, "total_yd": 7035},
+  {"name": "White/Grey", "playable": false, "rating": 0, "slope": 0, "total_yd": 6600},
+  {"name": "Grey", "playable": true, "rating": 68.6, "slope": 118, "total_yd": 6340},
+  {"name": "Grey/Black", "playable": false, "rating": 0, "slope": 0, "total_yd": 5820},
+  {"name": "Black", "playable": false, "rating": 64.9, "slope": 109, "total_yd": 5560},
+  {"name": "Black/Blue", "playable": false, "rating": 0, "slope": 0, "total_yd": 4984},
+  {"name": "Blue", "playable": false, "rating": 0, "slope": 0, "total_yd": 4533}
+ ],
+ "default_tee": "Grey",
+ "scorecard_source": "GolfPass, The Retreat & Links at Silvies Valley Ranch - Craddock Course, scorecard and layout (read 2026-10-25): every row adds up to its Out/In/Total; ratings for White, Grey and Black only. Unverified (third party); no club card found online.",
+ "penalty_default": "red",
+ "driving_range_is_ob": true,
+ "wind_mph": {"minMph": 1, "maxMph": 7},
+ "trees_off_fairways_m": 2,
+ "attribution": [
+  "Map data © OpenStreetMap contributors (ODbL)"
+ ]
+}
