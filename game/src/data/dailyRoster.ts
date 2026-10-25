@@ -62,4 +62,5 @@ export const DAILY_ROSTER: Readonly<Record<string, string>> = {
  */
 export const DAILY_PICKS: Readonly<Record<string, DailyPick>> = {
   '2026-10-21': { courseId: 'oswego_lake', length: 'back' }, // developer, 2026-10-20: "the back 9 at Oswego Lake"
+  '2026-10-25': { courseId: 'sandpines', length: 'front' }, // developer, 2026-10-25: an Oregon course today, the random draw from tomorrow
 };
