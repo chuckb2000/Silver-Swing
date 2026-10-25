@@ -1239,12 +1239,15 @@ but not on today's daily board. `DAILY_PICKS` still overrides a day.
     Gearhart, Highland Links, Indian Island, Langdon, Langston, The Muni, Sandpines, Waverley,
     Wannamoisett.
   - **RedTail goes to a red-tailed hawk** (developer: "we should definitely change to a hawk",
-    but not Concept 2's soaring hawk). Five more are drawn (`redtail/hawk_a` to `hawk_e`) for
-    the developer to choose from; the fox stays in the game until then.
+    but not Concept 2's soaring hawk). Of five more (`redtail/hawk_a` to `hawk_e`) the developer
+    chose Hawk E, "Talons Out" ("Hawk E is SO COOL"): wings up, talons forward, red tail
+    fanned. It is in the game; the fox stays in `course_logos/redtail.py` as `PREVIOUS`.
 - **Why Waverley has a train** (developer): the club's Junior Clubhouse was the "Trolley
   House" (or "Over Links") stop on the old interurban Ardgour line across the property, and its
   back keeps the stop's original double doors (waverley.cc/golf/field-house-facilities,
-  waverley.cc/story). The locomotive stays.
+  waverley.cc/story). The locomotive stays for now; the developer asked to see trolleys, and
+  five are drawn (`waverley/trolley_a` to `trolley_e`: head-on in the line's maroon and cream
+  or in Waverley green, side on over the turf, a "Golf Junction" roundel, the pole and spark).
 - **How a concept becomes the logo:** `assets-src/course_logos/<id>.py` sets
   `LOGO = concept_logo("<id>", "conceptN")` (new in `logos.py`), which reads the 32 px sprite
   `logo_concepts/lc.py` builds from the SVG, so `logos.py` and `make cards` need no SVG

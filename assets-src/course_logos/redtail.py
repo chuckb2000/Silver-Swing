@@ -103,3 +103,13 @@ if __name__ == "__main__":
     bg.alpha_composite(im)
     bg.save(sys.argv[1])
     print(sys.argv[1])
+
+
+# ------------------------------------------------------------------ 2026-10-25
+# The developer changed RedTail to a red-tailed hawk, the course's namesake, and chose
+# "Talons Out" (assets-src/logo_concepts/redtail/hawk_e.src.svg; DECISIONS.md "Logos from
+# the logo concepts"). The fox above is kept as PREVIOUS; the game uses the hawk's sprite.
+from logos import concept_logo  # noqa: E402
+
+PREVIOUS = LOGO
+LOGO = concept_logo("redtail", "hawk_e")

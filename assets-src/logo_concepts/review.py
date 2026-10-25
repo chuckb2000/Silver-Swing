@@ -115,43 +115,56 @@ def card_img(cid: str, img: Image.Image, alt: str) -> str:
     return f'<img class="px card" src="{png_uri(card)}" width="{card.width*2}" height="{card.height*2}" alt="{esc(alt)}">'
 
 
+def option_by_file(n: dict, f) -> dict | None:
+    return next((o for o in n.get("options", []) if o["file"] == f), None)
+
+
 def status_line(n: dict) -> str:
     c = n.get("chosen")
-    if c == "current":
+    opt = option_by_file(n, c)
+    if opt:
+        t = f"{n['options_label']} {c[-1].upper()}, {opt['name']}, is now the logo in the game."
+    elif c == "current":
         t = "Keeping the current logo."
     elif c in (1, 2):
         t = f"Concept {c}, {n['concepts'][c-1]['name']}, is now the logo in the game."
-    elif c == "hawk":
-        t = 'Changing to a red-tailed hawk: <a href="#hawks">five options at the top of the page</a>. The fox stays until you pick.'
-        return f'<p class="status"><strong>Your call:</strong> {t}</p>'
     else:
         return ""
-    return f'<p class="status"><strong>Your call:</strong> {esc(t)}</p>'
+    more = ""
+    if n.get("options_pending"):
+        more = f' {esc(n["options_label"])} options to look at: <a href="#opts-{n["id"]}">at the top of the page</a>.'
+    return f'<p class="status"><strong>Your call:</strong> {esc(t)}{more}</p>'
 
 
-def hawk_section(n: dict) -> str:
+def option_tile(n: dict, o: dict, badge: str = "") -> str:
     cid = n["id"]
-    tiles = []
-    fox = lc.current_logo(cid)
-    tiles.append(f'''<article class="col current"><p class="kicker">Now</p><h3>The fox</h3>{tile_logo(fox, "RedTail's current fox")}{card_img(cid, fox, "the fox on the course card")}</article>''')
-    for o in n["options"]:
-        im = Image.open(HERE / cid / f"{o['file']}_32.png").convert("RGBA")
-        svg = (HERE / cid / f"{o['file']}.svg").read_bytes()
-        mine = o["file"] == n.get("options_pick")
-        letter = o["file"][-1].upper()
-        tiles.append(f'''<article class="col{' mine' if mine else ''}">
-  <p class="kicker">Hawk {letter}{'<span class="badge alt">My pick</span>' if mine else ''}</p>
+    im = Image.open(HERE / cid / f"{o['file']}_32.png").convert("RGBA")
+    svg = (HERE / cid / f"{o['file']}.svg").read_bytes()
+    font, weight, case, tracking, name = n["options_font"]
+    mine = o["file"] == n.get("options_pick")
+    cls = " picked" if badge else (" mine" if mine else "")
+    tag = badge or ('<span class="badge alt">My pick</span>' if mine else "")
+    return f'''<article class="col{cls}">
+  <p class="kicker">{esc(n["options_label"])} {o["file"][-1].upper()}{tag}</p>
   <h3>{esc(o["name"])}</h3>
-  {tile_logo(im, "RedTail hawk " + o["name"])}
+  {tile_logo(im, n["course"] + " " + o["name"])}
   {card_img(cid, im, o["name"] + " on the course card")}
-  <div class="lockup"><img src="{b64(svg, 'image/svg+xml')}" width="56" height="56" alt=""><span class="lk" style="font-family:'Oswald', system-ui, sans-serif;font-weight:600;text-transform:uppercase;letter-spacing:0.1em">RedTail Golf Center</span></div>
+  <div class="lockup"><img src="{b64(svg, 'image/svg+xml')}" width="56" height="56" alt=""><span class="lk" style="font-family:'{font}', system-ui, sans-serif;font-weight:{weight};text-transform:{case};letter-spacing:{tracking}">{esc(name)}</span></div>
   <p class="why">{esc(o["idea"])}</p>
   <dl class="notes"><dt>Strength</dt><dd>{esc(o["strength"])}</dd><dt>Trade-off</dt><dd>{esc(o["tradeoff"])}</dd></dl>
-</article>''')
-    return f'''<section class="hawks" id="hawks" aria-labelledby="h-hawks">
+</article>'''
+
+
+def options_section(n: dict) -> str:
+    """Options still to choose from (shown at the top of the page)."""
+    cid = n["id"]
+    cur = lc.current_logo(cid)
+    tiles = [f'''<article class="col current"><p class="kicker">Now</p><h3>{esc(n["current"]["subject"].split(",")[0].split(":")[0])}</h3>{tile_logo(cur, n["course"] + " current logo")}{card_img(cid, cur, "the current logo on the course card")}</article>''']
+    tiles += [option_tile(n, o) for o in n["options"]]
+    return f'''<section class="hawks" id="opts-{cid}" aria-labelledby="h-opts-{cid}">
   <p class="eyebrow">Still to choose</p>
-  <h2 id="h-hawks">A hawk for RedTail</h2>
-  <p class="sub">The course was renamed in 1999 for the red-tailed hawks that nest in the trees around it. Five new hawks, each shown large, at actual size and on the card. {esc(n.get("options_note", ""))}</p>
+  <h2 id="h-opts-{cid}">{esc(n["options_title"])}</h2>
+  <p class="sub">{esc(n.get("options_intro", ""))} {esc(n.get("options_note", ""))}</p>
   <div class="cols hawkgrid">{"".join(tiles)}</div>
 </section>'''
 
@@ -189,8 +202,12 @@ def build(out: Path):
             label = ["now", "1", "2"][k]
             pick = ' class="pick"' if k == chosen_index(n) else ""
             cells.append(f'<figure{pick}><img class="px" src="{png_uri(im)}" width="64" height="64" alt="{esc(n["course"])} {label}"><figcaption>{label}</figcaption></figure>')
-        if n.get("chosen") == "hawk":
-            cells.append('<span class="gnote">a hawk:<br>choose below</span>')
+        opt = option_by_file(n, n.get("chosen"))
+        if opt:
+            oim = Image.open(HERE / cid / f"{opt['file']}_32.png").convert("RGBA")
+            cells.append(f'<figure class="pick"><img class="px" src="{png_uri(oim)}" width="64" height="64" alt="{esc(n["course"])} {esc(opt["name"])}"><figcaption>{esc(n["options_label"].lower())}</figcaption></figure>')
+        if n.get("options_pending"):
+            cells.append(f'<span class="gnote">{esc(n["options_label"].lower())}s:<br>see above</span>')
         glance.append(f'<a class="g" href="#{cid}"><span class="gname">{esc(n["course"])}</span><span class="gmarks">{"".join(cells)}</span></a>')
 
     # ------------------------------------------------------------- course sections
@@ -252,6 +269,9 @@ def build(out: Path):
     <dt>Trade-off</dt><dd>{esc(c["tradeoffs"])}</dd>
   </dl>
 </article>''')
+        opt = option_by_file(n, n.get("chosen"))
+        if opt:
+            cols.append(option_tile(n, opt, '<span class="badge">Chosen</span>'))
         cur_variants = ""
         if cid == "east_potomac":
             vs = "".join(f'<figure><img class="px" src="{png_uri(lc.current_logo("east_potomac_" + v))}" width="64" height="64" alt="current {v}"><figcaption>{v.title()}</figcaption></figure>' for v in ("blue", "white", "red"))
@@ -284,7 +304,7 @@ def build(out: Path):
             body.append(f'<h2 class="state" id="st-{s}">{esc(STATE_NAMES.get(s, s))} <span>{cnt} course{"s" if cnt > 1 else ""}</span></h2>')
         body.append(sec)
 
-    hawks = "".join(hawk_section(n) for n in order if n.get("options"))
+    hawks = "".join(options_section(n) for n in order if n.get("options_pending"))
     n_courses = len(order)
     page = TEMPLATE.replace("%FONTS%", font_links(used)).replace("%GLANCE%", "".join(glance)).replace(
         "%NAV%", nav).replace("%BODY%", "\n".join(body)).replace("%HAWKS%", hawks).replace("%N%", str(n_courses)).replace("%M%", str(n_courses * 2))
@@ -421,7 +441,7 @@ html{scroll-behavior:smooth}
 <header class="mast">
   <p class="eyebrow">Silver Swings Golf · course identity</p>
   <h1>Course Marks</h1>
-  <p class="lede">Every course in the game, its logo today, and two new directions. <b>Concept 1</b> keeps the subject the course already has and makes it as good as it can be. <b>Concept 2</b> starts again from the course's own history, landscape or town. Each mark is drawn on the game's 32 × 32 grid, shown large, at actual size, on its course card, and as the vector master with a type lockup. Your picks are marked: 15 courses now use a new mark in the game, 13 keep theirs, and RedTail is choosing a hawk.</p>
+  <p class="lede">Every course in the game, its logo today, and two new directions. <b>Concept 1</b> keeps the subject the course already has and makes it as good as it can be. <b>Concept 2</b> starts again from the course's own history, landscape or town. Each mark is drawn on the game's 32 × 32 grid, shown large, at actual size, on its course card, and as the vector master with a type lockup. Your picks are marked: 16 courses now use a new mark in the game (RedTail its new hawk), 13 keep theirs, and Waverley has five trolleys to look at.</p>
   <ul class="counts"><li><b>%N%</b>courses</li><li><b>%M%</b>new marks</li><li><b>+6</b>East Potomac course variants</li></ul>
 </header>
 <div class="legend">

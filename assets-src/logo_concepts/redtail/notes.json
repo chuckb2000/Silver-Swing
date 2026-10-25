@@ -63,7 +63,7 @@
   ],
   "pick": 1,
   "recommendation": "Concept 1. The fox mask is the strongest icon in the Portland set; the hawk is the truthful alternative if the name should lead.",
-  "chosen": "hawk",
+  "chosen": "hawk_e",
   "options": [
     {
       "file": "hawk_a",
@@ -102,5 +102,15 @@
     }
   ],
   "options_pick": "hawk_b",
-  "options_note": "My pick is On the Post: the most natural pose and the clearest red tail at card size. The Medallion if you want a bolder badge."
+  "options_note": "You chose Talons Out (25 October); it is now the logo in the game.",
+  "options_label": "Hawk",
+  "options_title": "A hawk for RedTail",
+  "options_intro": "The course was renamed in 1999 for the red-tailed hawks that nest in the trees around it.",
+  "options_font": [
+    "Oswald",
+    600,
+    "uppercase",
+    "0.1em",
+    "RedTail Golf Center"
+  ]
 }
