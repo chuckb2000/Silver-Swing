@@ -167,7 +167,14 @@
    "ids": [
     "riparian_c9"
    ],
-   "reason": "the shrub thicket north of the Craddock 9th green (make_riparian.py): an area for the config's garden (bushes) and not_trees_areas keys; no surface of its own (developer 2026-10-25: 'should just be shrubs')"
+   "reason": "the shrub thicket north of the Craddock 9th green (make_riparian.py): an area for the config's gorse extra_areas (bushes) and not_trees_areas keys; no surface of its own (developer 2026-10-25: 'should just be shrubs')"
+  },
+  {
+   "from": "proposed/egan6_green.geojson",
+   "ids": [
+    "w904342360_traced"
+   ],
+   "reason": "Chief Egan 6's green as the developer traced it (172 m2; make_egan6_green.py)"
   },
   {
    "from": "proposed/pins.geojson",
@@ -550,6 +557,10 @@
   {
    "osm": "w904342353",
    "reason": "replaced by its copy as a green (add above)"
+  },
+  {
+   "osm": "w904342360",
+   "reason": "replaced by the developer's trace (add above)"
   },
   {
    "osm": "w1301409390",

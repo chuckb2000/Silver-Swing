@@ -16,6 +16,7 @@
 - A pin at the centre of every played green (propose_pins.py).
 - The Chief Egan creek (make_egan_creek.py), approved 2026-10-25.
 - The thicket by the Craddock 9th green (make_riparian.py), for the shrubs there.
+- Chief Egan 6's green as the developer traced it (make_egan6_green.py).
 """
 from __future__ import annotations
 
@@ -61,6 +62,9 @@ def main():
                 "reason": "the small creek through Chief Egan, from the DEM channel, 2 m wide, red, running into the pond (make_egan_creek.py; developer 2026-10-25: keep it small, connect it to the lake)"})
     add.append({"from": "proposed/riparian_c9.geojson", "ids": ["riparian_c9"],
                 "reason": "the shrub thicket north of the Craddock 9th green (make_riparian.py): an area for the config's gorse extra_areas (bushes) and not_trees_areas keys; no surface of its own (developer 2026-10-25: 'should just be shrubs')"})
+    add.append({"from": "proposed/egan6_green.geojson", "ids": ["w904342360_traced"],
+                "reason": "Chief Egan 6's green as the developer traced it (172 m2; make_egan6_green.py)"})
+    drop.append({"osm": "w904342360", "reason": "replaced by the developer's trace (add above)"})
     if (HERE / "proposed" / "pins.geojson").exists():
         pn = gpd.read_file(HERE / "proposed" / "pins.geojson")
         add.append({"from": "proposed/pins.geojson", "ids": sorted(pn.osm),
