@@ -15,7 +15,7 @@ Hankins: no OSM lines. Its routing from the club's Hankins map and the GolfClubA
   notes (which Craddock fairway and green each hole shares), each hole ending on the OSM
   green below (GREENS_H). The tee is the small mown pad (OSM maps most tee pads as small
   golf=fairway pieces) within 220 m of the previous green whose distance best matches the
-  Grey card; where none does, a point on the line from the previous green at the Grey
+  played set's card (White; the developer chose the club maps' back tees, 2026-10-25); where none does, a point on the line from the previous green at the Grey
   distance (flagged "placed"). Doglegs follow the bend of the Craddock hole it shares,
   reversed (SHARED).
 Chief Egan: no OSM lines or tees. The club's map is fitted to the nine OSM greens
@@ -109,7 +109,7 @@ for n in range(1, 19):
         add_line("silvies_craddock", n, int(cc[n]["par"]), pts, why)
     green = min(greens, key=lambda k: greens[k].distance(Point(pts[-1])))
     pts[-1] = (gc(green).x, gc(green).y)
-    grey = int(cc[n]["grey"])
+    grey = int(cc[n]["challenge"])
     best = None
     for o, p in PADS.items():
         c = p.centroid
@@ -119,7 +119,7 @@ for n in range(1, 19):
         e = (yd - grey) / grey
         if abs(e) < 0.08 and (best is None or abs(e) < abs(best[2])):
             best = (o, round(yd), e)
-    plan["silvies_craddock"][n] = {"osm_line": r.osm, "green": green, "line": pts, "grey": grey, "back": int(cc[n]["challenge"]),
+    plan["silvies_craddock"][n] = {"osm_line": r.osm, "green": green, "line": pts, "grey": grey, "back": int(cc[n]["grey"]),
                                    "tee_pad": best[0] if best else None, "tee_yd": best[1] if best else None,
                                    "note": why}
 
@@ -135,7 +135,7 @@ for n in range(1, 19):
     gk = gid(GREENS_H[n])
     G = gc(gk)
     prev = gc(gid(PREV_H.get(n, GREENS_H.get(n - 1, "308"))))
-    grey = int(hc[n]["grey"])
+    grey = int(hc[n]["white"])
     bend = []
     if n in SHARED:
         cp = list(craddock[SHARED[n]].geometry.coords)
@@ -152,7 +152,7 @@ for n in range(1, 19):
         if abs(e) < 0.08 and (best is None or abs(e) < abs(best[2])):
             best = (o, round(yd), e, pts)
     if best:
-        pts, why = best[3], f"tee on pad {best[0]} ({best[1]} yd vs Grey {grey})"
+        pts, why = best[3], f"tee on pad {best[0]} ({best[1]} yd vs card {grey})"
     else:
         # no pad fits: a point on the way from the previous green, at the Grey distance from the green
         d = grey * YD
@@ -175,9 +175,9 @@ for n in range(1, 19):
                 u = np.array([b[0] - a[0], b[1] - a[1]]); u /= np.linalg.norm(u)
                 t = (b[0] + u[0] * rem, b[1] + u[1] * rem)
         pts = [t] + [p for p in bend if Point(p).distance(Point(t)) > 30 and Point(p).distance(G) < Point(t).distance(G)] + [(G.x, G.y)]
-        why = f"no mown pad fits the Grey {grey} yd: tee placed at that distance (to mark in the desk)"
+        why = f"no mown pad fits the card {grey} yd: tee placed at that distance (to mark in the desk)"
     add_line("silvies_hankins", n, int(hc[n]["par"]), pts, why)
-    plan["silvies_hankins"][n] = {"green": gk, "line": pts, "grey": grey, "back": int(hc[n]["white"]),
+    plan["silvies_hankins"][n] = {"green": gk, "line": pts, "grey": grey, "back": int(hc[n]["grey"]),
                                   "tee_pad": best[0] if best else None, "tee_yd": best[1] if best else None,
                                   "placed": None if best else pts[0], "note": why}
 

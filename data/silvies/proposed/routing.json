@@ -17,10 +17,10 @@
      494.25257814078867
     ]
    ],
-   "grey": 455,
-   "back": 555,
-   "tee_pad": "w935659311",
-   "tee_yd": 455,
+   "grey": 555,
+   "back": 455,
+   "tee_pad": "w1301409387",
+   "tee_yd": 555,
    "note": "OSM line, unchanged"
   },
   "2": {
@@ -40,8 +40,8 @@
      729.9631781450151
     ]
    ],
-   "grey": 345,
-   "back": 355,
+   "grey": 355,
+   "back": 345,
    "tee_pad": "w1301409389",
    "tee_yd": 348,
    "note": "OSM line started in the 1st fairway, across a Hankins green (416 yd vs the card's 355); re-started on the oval pad the club map and photo show NE of that green"
@@ -63,8 +63,8 @@
      392.67804324153894
     ]
    ],
-   "grey": 425,
-   "back": 475,
+   "grey": 475,
+   "back": 425,
    "tee_pad": null,
    "tee_yd": null,
    "note": "OSM line, unchanged"
@@ -82,8 +82,8 @@
      388.5549556965891
     ]
    ],
-   "grey": 120,
-   "back": 125,
+   "grey": 125,
+   "back": 120,
    "tee_pad": null,
    "tee_yd": null,
    "note": "OSM line, unchanged"
@@ -105,10 +105,10 @@
      521.7144510173315
     ]
    ],
-   "grey": 470,
-   "back": 520,
-   "tee_pad": "w1301422155",
-   "tee_yd": 474,
+   "grey": 520,
+   "back": 470,
+   "tee_pad": null,
+   "tee_yd": null,
    "note": "OSM line, unchanged"
   },
   "6": {
@@ -128,8 +128,8 @@
      706.1977618877356
     ]
    ],
-   "grey": 380,
-   "back": 405,
+   "grey": 405,
+   "back": 380,
    "tee_pad": "w1301548866",
    "tee_yd": 389,
    "note": "OSM line, unchanged"
@@ -147,8 +147,8 @@
      868.3738252247321
     ]
    ],
-   "grey": 225,
-   "back": 260,
+   "grey": 260,
+   "back": 225,
    "tee_pad": null,
    "tee_yd": null,
    "note": "OSM line, unchanged"
@@ -170,8 +170,8 @@
      940.1108465992684
     ]
    ],
-   "grey": 420,
-   "back": 445,
+   "grey": 445,
+   "back": 420,
    "tee_pad": "w1301558522",
    "tee_yd": 414,
    "note": "OSM line, unchanged"
@@ -193,10 +193,10 @@
      1078.931796302701
     ]
    ],
-   "grey": 350,
-   "back": 495,
-   "tee_pad": null,
-   "tee_yd": null,
+   "grey": 495,
+   "back": 350,
+   "tee_pad": "w1301422165",
+   "tee_yd": 495,
    "note": "OSM line, unchanged"
   },
   "10": {
@@ -212,10 +212,10 @@
      1213.4234926396848
     ]
    ],
-   "grey": 160,
-   "back": 205,
-   "tee_pad": "w1301409400",
-   "tee_yd": 159,
+   "grey": 205,
+   "back": 160,
+   "tee_pad": "w1301409402",
+   "tee_yd": 206,
    "note": "OSM line, unchanged"
   },
   "11": {
@@ -235,10 +235,10 @@
      1611.3083901143332
     ]
    ],
-   "grey": 385,
-   "back": 445,
-   "tee_pad": "w1301548847",
-   "tee_yd": 387,
+   "grey": 445,
+   "back": 385,
+   "tee_pad": "w1301548848",
+   "tee_yd": 448,
    "note": "OSM line, unchanged"
   },
   "12": {
@@ -254,10 +254,10 @@
      1589.3310573792314
     ]
    ],
-   "grey": 155,
-   "back": 190,
-   "tee_pad": "w1301548840",
-   "tee_yd": 148,
+   "grey": 190,
+   "back": 155,
+   "tee_pad": "w1301422173",
+   "tee_yd": 188,
    "note": "OSM line, unchanged"
   },
   "13": {
@@ -277,10 +277,10 @@
      1147.2968332163828
     ]
    ],
-   "grey": 520,
-   "back": 550,
-   "tee_pad": "w1301548842",
-   "tee_yd": 520,
+   "grey": 550,
+   "back": 520,
+   "tee_pad": "w1301548843",
+   "tee_yd": 543,
    "note": "OSM line, unchanged"
   },
   "14": {
@@ -300,10 +300,10 @@
      916.2251798714077
     ]
    ],
-   "grey": 530,
-   "back": 570,
-   "tee_pad": "w1301512748",
-   "tee_yd": 523,
+   "grey": 570,
+   "back": 530,
+   "tee_pad": "w1301588440",
+   "tee_yd": 613,
    "note": "OSM line, unchanged"
   },
   "15": {
@@ -323,8 +323,8 @@
      835.7014920082172
     ]
    ],
-   "grey": 290,
-   "back": 315,
+   "grey": 315,
+   "back": 290,
    "tee_pad": null,
    "tee_yd": null,
    "note": "OSM line, unchanged"
@@ -346,10 +346,10 @@
      733.9433456704212
     ]
    ],
-   "grey": 365,
-   "back": 410,
-   "tee_pad": "w1301422164",
-   "tee_yd": 378,
+   "grey": 410,
+   "back": 365,
+   "tee_pad": "w1301541100",
+   "tee_yd": 409,
    "note": "OSM line started east of the 15th green (312 yd vs 410); the club map puts the 16th tee west of it, on this pad"
   },
   "17": {
@@ -369,10 +369,10 @@
      854.8935358284031
     ]
    ],
-   "grey": 420,
-   "back": 490,
-   "tee_pad": "w1301504166",
-   "tee_yd": 412,
+   "grey": 490,
+   "back": 420,
+   "tee_pad": "w1301548854",
+   "tee_yd": 485,
    "note": "OSM line, unchanged"
   },
   "18": {
@@ -392,10 +392,10 @@
      608.4086698483135
     ]
    ],
-   "grey": 325,
-   "back": 360,
-   "tee_pad": "w1301504167",
-   "tee_yd": 324,
+   "grey": 360,
+   "back": 325,
+   "tee_pad": "w1301509456",
+   "tee_yd": 358,
    "note": "OSM line, unchanged"
   }
  },
@@ -404,20 +404,20 @@
    "green": "w935659296",
    "line": [
     [
-     1367.039893203266,
-     576.6622137657678
+     1411.9662466415018,
+     505.69483679218473
     ],
     [
      1557.5064959538051,
      854.8935358284031
     ]
    ],
-   "grey": 370,
-   "back": 415,
-   "tee_pad": "w935659309",
-   "tee_yd": 369,
+   "grey": 415,
+   "back": 370,
+   "tee_pad": "w1301409387",
+   "tee_yd": 414,
    "placed": null,
-   "note": "tee on pad w935659309 (369 yd vs Grey 370)"
+   "note": "tee on pad w1301409387 (414 yd vs card 415)"
   },
   "2": {
    "green": "w935659299",
@@ -436,14 +436,14 @@
    "tee_pad": "w935659297",
    "tee_yd": 150,
    "placed": null,
-   "note": "tee on pad w935659297 (150 yd vs Grey 150)"
+   "note": "tee on pad w935659297 (150 yd vs card 150)"
   },
   "3": {
    "green": "w1301404236",
    "line": [
     [
-     1278.9394126680982,
-     830.1540415566512
+     1369.2898032668732,
+     695.5084065174112
     ],
     [
      1061.2136624000268,
@@ -454,19 +454,22 @@
      835.7014920082172
     ]
    ],
-   "grey": 470,
-   "back": 590,
-   "tee_pad": "w1301509451",
-   "tee_yd": 486,
-   "placed": null,
-   "note": "tee on pad w1301509451 (486 yd vs Grey 470)"
+   "grey": 590,
+   "back": 470,
+   "tee_pad": null,
+   "tee_yd": null,
+   "placed": [
+    1369.2898032668732,
+    695.5084065174112
+   ],
+   "note": "no mown pad fits the card 590 yd: tee placed at that distance (to mark in the desk)"
   },
   "4": {
    "green": "w1301404235",
    "line": [
     [
-     819.4153078148565,
-     870.6309774813225
+     783.7120964270443,
+     854.0240293768641
     ],
     [
      897.5391190382652,
@@ -477,19 +480,19 @@
      916.2251798714077
     ]
    ],
-   "grey": 325,
-   "back": 370,
-   "tee_pad": "w1301422164",
-   "tee_yd": 326,
+   "grey": 370,
+   "back": 325,
+   "tee_pad": "w1301541100",
+   "tee_yd": 366,
    "placed": null,
-   "note": "tee on pad w1301422164 (326 yd vs Grey 325)"
+   "note": "tee on pad w1301541100 (366 yd vs card 370)"
   },
   "5": {
    "green": "w1301404237",
    "line": [
     [
-     1070.3959953705282,
-     884.5067005258084
+     1116.9893632169521,
+     855.5391916800718
     ],
     [
      930.1243942868896,
@@ -500,22 +503,22 @@
      1121.0746894326567
     ]
    ],
-   "grey": 490,
-   "back": 550,
+   "grey": 550,
+   "back": 490,
    "tee_pad": null,
    "tee_yd": null,
    "placed": [
-    1070.3959953705282,
-    884.5067005258084
+    1116.9893632169521,
+    855.5391916800718
    ],
-   "note": "no mown pad fits the Grey 490 yd: tee placed at that distance (to mark in the desk)"
+   "note": "no mown pad fits the card 550 yd: tee placed at that distance (to mark in the desk)"
   },
   "6": {
    "green": "w1301404231",
    "line": [
     [
-     602.2109762560655,
-     1159.2771183436892
+     590.8390688077411,
+     1120.6982229256869
     ],
     [
      525.7511696243891,
@@ -526,34 +529,31 @@
      1512.7661282947242
     ]
    ],
-   "grey": 425,
-   "back": 465,
-   "tee_pad": null,
-   "tee_yd": null,
-   "placed": [
-    602.2109762560655,
-    1159.2771183436892
-   ],
-   "note": "no mown pad fits the Grey 425 yd: tee placed at that distance (to mark in the desk)"
+   "grey": 465,
+   "back": 425,
+   "tee_pad": "w1301588440",
+   "tee_yd": 460,
+   "placed": null,
+   "note": "tee on pad w1301588440 (460 yd vs card 465)"
   },
   "7": {
    "green": "w1301404223",
    "line": [
     [
-     394.2628761973041,
-     1573.757539582082
+     389.7764003340028,
+     1595.2689526433892
     ],
     [
      409.08858512748725,
      1419.3885612931706
     ]
    ],
-   "grey": 175,
-   "back": 200,
-   "tee_pad": "w1301548842",
-   "tee_yd": 170,
+   "grey": 200,
+   "back": 175,
+   "tee_pad": "w1301548843",
+   "tee_yd": 194,
    "placed": null,
-   "note": "tee on pad w1301548842 (170 yd vs Grey 175)"
+   "note": "tee on pad w1301548843 (194 yd vs card 200)"
   },
   "8": {
    "green": "w1301404230",
@@ -571,19 +571,19 @@
      1078.931796302701
     ]
    ],
-   "grey": 385,
-   "back": 410,
+   "grey": 410,
+   "back": 385,
    "tee_pad": "w1301548851",
    "tee_yd": 386,
    "placed": null,
-   "note": "tee on pad w1301548851 (386 yd vs Grey 385)"
+   "note": "tee on pad w1301548851 (386 yd vs card 410)"
   },
   "9": {
    "green": "w1301404232",
    "line": [
     [
-     351.99243170032014,
-     1052.765949979224
+     264.9022773096677,
+     1025.8935945876844
     ],
     [
      435.5597640570486,
@@ -594,22 +594,19 @@
      940.1108465992684
     ]
    ],
-   "grey": 405,
-   "back": 500,
-   "tee_pad": null,
-   "tee_yd": null,
-   "placed": [
-    351.99243170032014,
-    1052.765949979224
-   ],
-   "note": "no mown pad fits the Grey 405 yd: tee placed at that distance (to mark in the desk)"
+   "grey": 500,
+   "back": 405,
+   "tee_pad": "w1301409402",
+   "tee_yd": 496,
+   "placed": null,
+   "note": "tee on pad w1301409402 (496 yd vs card 500)"
   },
   "10": {
    "green": "w1301404220",
    "line": [
     [
-     680.3875209341103,
-     890.617469845038
+     737.5326974916486,
+     899.2546030915904
     ],
     [
      572.1880902337143,
@@ -620,12 +617,12 @@
      868.3738252247321
     ]
    ],
-   "grey": 385,
-   "back": 445,
-   "tee_pad": "w1301422163",
-   "tee_yd": 385,
+   "grey": 445,
+   "back": 385,
+   "tee_pad": "w1301422165",
+   "tee_yd": 446,
    "placed": null,
-   "note": "tee on pad w1301422163 (385 yd vs Grey 385)"
+   "note": "tee on pad w1301422165 (446 yd vs card 445)"
   },
   "11": {
    "green": "w1301404213",
@@ -639,98 +636,95 @@
      706.1977618877356
     ]
    ],
-   "grey": 285,
-   "back": 305,
+   "grey": 305,
+   "back": 285,
    "tee_pad": "w1301548863",
    "tee_yd": 303,
    "placed": null,
-   "note": "tee on pad w1301548863 (303 yd vs Grey 285)"
+   "note": "tee on pad w1301548863 (303 yd vs card 305)"
   },
   "12": {
    "green": "w1301404216",
    "line": [
     [
-     610.9137500883934,
-     525.4468298201047
+     606.3737928020885,
+     683.7961092740419
     ],
     [
      235.1973932944364,
      521.7144510173315
     ]
    ],
-   "grey": 405,
-   "back": 445,
-   "tee_pad": "w1301568771",
-   "tee_yd": 411,
+   "grey": 445,
+   "back": 405,
+   "tee_pad": "w1301548861",
+   "tee_yd": 443,
    "placed": null,
-   "note": "tee on pad w1301568771 (411 yd vs Grey 405)"
+   "note": "tee on pad w1301548861 (443 yd vs card 445)"
   },
   "13": {
    "green": "w1301404219",
    "line": [
     [
-     185.64723017730546,
-     469.25058770381946
+     155.3674844536147,
+     490.38632511787387
     ],
     [
      233.34916964125227,
      382.28125891594965
     ]
    ],
-   "grey": 115,
-   "back": 140,
-   "tee_pad": "w1301422159",
-   "tee_yd": 108,
+   "grey": 140,
+   "back": 115,
+   "tee_pad": "w1301595995",
+   "tee_yd": 146,
    "placed": null,
-   "note": "tee on pad w1301422159 (108 yd vs Grey 115)"
+   "note": "tee on pad w1301595995 (146 yd vs card 140)"
   },
   "14": {
    "green": "w1301404218",
    "line": [
     [
-     290.8449354261415,
-     366.64328916774195
+     289.54968311679323,
+     332.95147545012225
     ],
     [
      734.4529811028325,
      451.2135383296115
     ]
    ],
-   "grey": 490,
-   "back": 505,
-   "tee_pad": "w1301558539",
-   "tee_yd": 494,
+   "grey": 505,
+   "back": 490,
+   "tee_pad": "w1301558538",
+   "tee_yd": 503,
    "placed": null,
-   "note": "tee on pad w1301558539 (494 yd vs Grey 490)"
+   "note": "tee on pad w1301558538 (503 yd vs card 505)"
   },
   "15": {
    "green": "w1301404211",
    "line": [
     [
-     785.6880152186386,
-     406.8110429695473
+     739.0543992313584,
+     373.36246672915775
     ],
     [
      885.8844816261936,
      319.9764538737284
     ]
    ],
-   "grey": 145,
-   "back": 175,
-   "tee_pad": null,
-   "tee_yd": null,
-   "placed": [
-    785.6880152186386,
-    406.8110429695473
-   ],
-   "note": "no mown pad fits the Grey 145 yd: tee placed at that distance (to mark in the desk)"
+   "grey": 175,
+   "back": 145,
+   "tee_pad": "w1301409397",
+   "tee_yd": 171,
+   "placed": null,
+   "note": "tee on pad w1301409397 (171 yd vs card 175)"
   },
   "16": {
    "green": "w1301404215",
    "line": [
     [
-     739.0543992313584,
-     373.36246672915775
+     875.0649100699549,
+     320.51812168181266
     ],
     [
      798.2006294414168,
@@ -741,19 +735,22 @@
      729.9631781450151
     ]
    ],
-   "grey": 450,
-   "back": 490,
-   "tee_pad": "w1301409397",
-   "tee_yd": 429,
-   "placed": null,
-   "note": "tee on pad w1301409397 (429 yd vs Grey 450)"
+   "grey": 490,
+   "back": 450,
+   "tee_pad": null,
+   "tee_yd": null,
+   "placed": [
+    875.0649100699549,
+    320.51812168181266
+   ],
+   "note": "no mown pad fits the card 490 yd: tee placed at that distance (to mark in the desk)"
   },
   "17": {
    "green": "w1301404214",
    "line": [
     [
-     729.1918673422208,
-     734.0674247443125
+     709.881261408904,
+     746.3018065631112
     ],
     [
      780.2950117343571,
@@ -764,37 +761,34 @@
      584.8079665549687
     ]
    ],
-   "grey": 305,
-   "back": 330,
+   "grey": 330,
+   "back": 305,
    "tee_pad": null,
    "tee_yd": null,
    "placed": [
-    729.1918673422208,
-    734.0674247443125
+    709.881261408904,
+    746.3018065631112
    ],
-   "note": "no mown pad fits the Grey 305 yd: tee placed at that distance (to mark in the desk)"
+   "note": "no mown pad fits the card 330 yd: tee placed at that distance (to mark in the desk)"
   },
   "18": {
    "green": "w1301404234",
    "line": [
     [
-     914.7379933938334,
-     590.0344315925953
+     871.2054801054362,
+     521.8285429251589
     ],
     [
      1374.0120232447202,
      542.0683447339959
     ]
    ],
-   "grey": 505,
-   "back": 590,
-   "tee_pad": null,
-   "tee_yd": null,
-   "placed": [
-    914.7379933938334,
-    590.0344315925953
-   ],
-   "note": "no mown pad fits the Grey 505 yd: tee placed at that distance (to mark in the desk)"
+   "grey": 590,
+   "back": 505,
+   "tee_pad": "w1301422147",
+   "tee_yd": 550,
+   "placed": null,
+   "note": "tee on pad w1301422147 (550 yd vs card 590)"
   }
  },
  "silvies_chief_egan": {

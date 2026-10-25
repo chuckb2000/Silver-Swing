@@ -5,8 +5,8 @@
 pipeline/desk_export.py keys its pages by hole number, one routing per course; Silvies has
 three layouts sharing greens, so this writes holes.json for pipeline/desk/index.html with
 page keys C1-C18 (Craddock), H1-H18 (Hankins) and E1-E9 (Chief Egan). Each page has the
-proposed line of play (proposed/routing.json), the card's Grey yardage (White for Chief
-Egan, its only set) and back yardage (Challenge / White / White), every OSM green,
+proposed line of play (proposed/routing.json), the card yardage of the set built (Craddock Challenge,
+Hankins White, Chief Egan White: the club maps' back tees) and the Grey yardage, every OSM green,
 fairway, bunker and tee and every lidar pad as dashed references, the grown boundary,
 and, where a mown OSM pad or a lidar pad matches the Grey card within 8 % along the
 line, that pad pre-filled as the Grey tee for the developer to keep or move.
@@ -105,7 +105,7 @@ for lay, hs in plan.items():
         refs += [{"kind": "pad", "poly": ring(p)} for o, p in pads if str(o).startswith("lidar") and p.intersects(clip)]
         bl = grown.boundary.intersection(clip.buffer(5))
         blines = [[[round(x, 1), round(y, 1)] for x, y in l.coords] for l in getattr(bl, "geoms", [bl]) if l.geom_type == "LineString"]
-        holes.append({"teeName": "Grey", "refName": "Back", "course": "Silvies Valley Ranch",
+        holes.append({"teeName": "Back", "refName": "Grey", "course": "Silvies Valley Ranch",
                       "photo": "OSIP 2024 photo",
                       "units": f"local metres, origin {X0:.0f} E {Y0:.0f} N, EPSG:{cfg['epsg']}",
                       "hole": key, "par": int(card[n]["par"]), "blue": grey, "white": back,
