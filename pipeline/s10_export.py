@@ -18,6 +18,8 @@ from datetime import date
 import geopandas as gpd
 import numpy as np
 from PIL import Image
+
+from pngcache import save_png
 from shapely.geometry import MultiPolygon, Polygon
 
 from common import build_dir, course_dir, course_name_from_argv, game_boundary, GORSE_SURF, WASTE_SURF, surf_ids, layout_dir, layouts, load_config, out_dir, play_boundary, PX_PER_M, rnd, ROOT, SURF, World, write_json
@@ -45,9 +47,9 @@ def to_palette_png(arr: np.ndarray, path):
         pal_img = img.quantize(colors=n_colours, method=Image.Quantize.MAXCOVERAGE, dither=Image.Dither.NONE)
         # verify exactness, fall back to RGB if quantisation changed a colour
         if np.array_equal(np.array(pal_img.convert("RGB")), arr):
-            pal_img.save(path, optimize=True)
+            save_png(pal_img, path, optimize=True)
             return
-    img.save(path, optimize=True)
+    save_png(img, path, optimize=True)
 
 
 def hex_rgb(h: str):
@@ -214,7 +216,7 @@ def export_minimaps(holes, tee_of, surf, z_px, trees, world, green_by_osm, out):
         local_world.height = sub.shape[0] / PX_PER_M
         img = render_map(sub, zsub, tr_sub, local_world, f)
         fname = f"hole{h['number']:02d}.png"
-        Image.fromarray(img).save(out / "maps" / fname, optimize=True)
+        save_png(Image.fromarray(img), out / "maps" / fname, optimize=True)
         minimaps.append({"hole": h["number"], "file": f"maps/{fname}", "x0": rnd(mx0, 3), "y1": rnd(my1, 3), "mPerPx": mpp,
                          "w": int(img.shape[1]), "h": int(img.shape[0])})
     return minimaps
@@ -252,7 +254,7 @@ def main():
 
     # surface map -------------------------------------------------------------
     surf = np.load(bdir / "surface.npy")
-    Image.fromarray(surf, "L").save(out / "surface.png", optimize=True)
+    save_png(Image.fromarray(surf, "L"), out / "surface.png", optimize=True)
     shutil.copy(bdir / "surface_legend.json", out / "surface_legend.json")
     map_surf = surf  # what the minimaps draw (range_art "rough": a range drawn as rough, as in s09)
     if cfg.get("range_art") == "rough":
@@ -276,7 +278,7 @@ def main():
     rgb = np.zeros(q.shape + (3,), np.uint8)
     rgb[..., 0] = q >> 8
     rgb[..., 1] = q & 255
-    Image.fromarray(rgb, "RGB").save(out / "height.png", optimize=True)
+    save_png(Image.fromarray(rgb, "RGB"), out / "height.png", optimize=True)
     write_json(out / "height.json", {"cols": int(q.shape[1]), "rows": int(q.shape[0]), "res": 1.0,
                                       "min": round(zmin, 4), "max": round(zmax, 4), "encoding": "R*256+G, row0=north",
                                       "samples": [[i, j, round(float(hb[j, i]), 4)] for i, j in
@@ -293,7 +295,7 @@ def main():
     # maps --------------------------------------------------------------------
     z_px = np.load(bdir / "z_px.npy")
     overview = render_map(map_surf, z_px, trees, world, 4)
-    Image.fromarray(overview).save(out / "maps" / "overview_2m.png", optimize=True)
+    save_png(Image.fromarray(overview), out / "maps" / "overview_2m.png", optimize=True)
 
     g = gpd.read_file(bdir / "course_local.geojson")
     greens = json.load(open(bdir / "greens.json"))

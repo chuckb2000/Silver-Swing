@@ -265,6 +265,12 @@ class TrackingDict(dict):
 def child(step: str, name: str) -> int:
     roots = real_roots()
     reads: dict[str, str] = {}     # first-read state of each file (before the step changes it)
+    parent = os.getpid()
+    sp = stamp_path(name, step)
+    sp.parent.mkdir(parents=True, exist_ok=True)
+    worker_log = sp.with_suffix(".workers")
+    worker_log.unlink(missing_ok=True)
+    os.environ["SS_PNG_CACHE"] = str(ROOT / "data" / name / "build" / ".png_cache")
     writes: set[str] = set()
     dirs: dict[str, str] = {}      # folders listed (outside build/), as they were
     start = time.time()
@@ -272,12 +278,15 @@ def child(step: str, name: str) -> int:
 
     def note_read(path):
         k = rel_key(path, roots)
-        if k and k not in reads and k not in writes and not k.endswith((".pyc", ".py")) and "/.stamps/" not in k:
+        if k and k not in reads and k not in writes and not k.endswith((".pyc", ".py")) and not _scratch(k):
             reads[k] = digest(key_path(k))   # before the step can change it
+            if os.getpid() != parent:      # a worker process (s09b renders greens in parallel): tell the parent
+                with open(worker_log, "a") as f:
+                    f.write(f"{k}\t{reads[k]}\n")
 
     def note_write(path):
         k = rel_key(path, roots)
-        if k and "/.stamps/" not in k:
+        if k and not _scratch(k):
             writes.add(k)
 
     busy = [False]   # the hook's own work (realpath, hashing) opens files too
@@ -370,8 +379,14 @@ def child(step: str, name: str) -> int:
     for base in output_dirs(name):
         if base.is_dir():
             for p in base.rglob("*"):
-                if p.is_file() and p.stat().st_mtime_ns >= start_ns and "/.stamps/" not in str(p):
+                if p.is_file() and p.stat().st_mtime_ns >= start_ns:
                     note_write(p)
+    if worker_log.exists():
+        for line in worker_log.read_text().splitlines():
+            k, h = line.split("\t")
+            if k not in reads and k not in writes:
+                reads[k] = h
+        worker_log.unlink()
     stamp = {
         "step": step, "libs": libs_hash(),
         "code": {**code_files(), f"pipeline/{step}.py": digest(HERE / f"{step}.py")},
@@ -383,10 +398,13 @@ def child(step: str, name: str) -> int:
         "writes": {k: digest(key_path(k)) for k in sorted(writes)},
         "seconds": round(time.time() - start, 1),
     }
-    sp = stamp_path(name, step)
-    sp.parent.mkdir(parents=True, exist_ok=True)
     sp.write_text(json.dumps(stamp, indent=1) + "\n")
     return 0
+
+
+def _scratch(k: str) -> bool:
+    """The recorder's and the PNG cache's own files."""
+    return "/.stamps/" in k or "/.png_cache/" in k
 
 
 def output_dirs(name: str) -> list[Path]:
