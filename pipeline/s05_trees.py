@@ -609,6 +609,8 @@ def main():
     d = ImageDraw.Draw(img)
     for poly in g[g.kind.isin(["green", "fairway", "tee", "bunker"])].geometry:
         for part in getattr(poly, "geoms", [poly]):
+            if part.geom_type != "Polygon":  # a tee mapped as a point (Astoria) has no outline
+                continue
             pts = [(px * 2, (H - py) * 2) for px, py in part.exterior.coords]
             d.line(pts, fill=(80, 160, 255), width=1)
     for t_ in trees:

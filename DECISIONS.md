@@ -1178,3 +1178,16 @@ Not merged (the developer will say when). Design note: docs/reports/multiplayer_
   (`s09_render.waste_scrub`, also in the putting views). Minimap colour `#e2d3a6`. A theme can
   recolour it by name (`"waste"`).
 - Tests: tests/unit/waste_sand.test.ts.
+
+## Rebuild fixes: Chambers Bay's lidar clip and point tees (developer, 2026-10-24)
+
+- **Chambers Bay:** `data/chambers_bay/make_laz.py` wrote today's date into the
+  clipped LAZ header (laspy stamps the day it writes), so the clip's hash changed
+  every day and `make fetch` rejected it. It now keeps the source file's creation
+  date; the clip matches `release.json` again and the rebuild leaves every game
+  file unchanged.
+- **Point tees:** s05's tree preview drew every tee, green, fairway and bunker
+  outline with `.exterior`, which a `golf=tee` mapped as a point doesn't have
+  (Astoria). The preview now skips non-polygons. Checked by running Astoria
+  s03-s08 with its point tee put back; Astoria keeps dropping it (a marker, not a
+  tee box). Regress: Astoria unchanged.

@@ -161,6 +161,8 @@ Details in `data/astoria/validation_report.md`.
 7. **Request to the design chat:** s05's preview drawing crashes on a `golf=tee`
    mapped as a point (`part.exterior` on a Point). The point here (node 10711517820)
    is dropped in `edits.json`. The smallest fix: skip non-polygons in that loop.
+   **Fixed** (design chat, 2026-10-24, `fix/rebuilds`): the preview skips
+   non-polygons. The drop stays, since the point is a marker, not a tee box.
 
 ## Lessons
 
