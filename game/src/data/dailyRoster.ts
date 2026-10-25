@@ -53,6 +53,7 @@ export const DAILY_ROSTER: Readonly<Record<string, string>> = {
   pumpkin_ridge_ghost_creek: '2026-10-25',
   // merged on 2026-10-24 in the evening
   cypress_point: '2026-10-25',
+  astoria: '2026-10-25',
 };
 
 /**

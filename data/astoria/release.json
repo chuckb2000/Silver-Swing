@@ -1,0 +1,38 @@
+{
+ "release": "astoria-data",
+ "note": "build inputs; all are also committed in raw/ (each under 13 MB), so `make fetch NAME=astoria` only restores a missing or changed one. _ags_8efa33d3 = DOGAMI bare earth (feet), _ags_6e845640 = DOGAMI canopy height (feet), both exportImage f=json at 1 m, box x 427800-429400 / y 5105200-5107000 EPSG:32610; _ags_e53832b4 = OSIP 2024 photo, 0.5 m JPEG, made into raw/osip2024_05m.tif (placed by the same box) by make_ortho.py; export.1.geojson = Overpass export of the same box (2026-10-24). The earlier assets (astoria.jpg, exportImage.jpg: OSIP 2024 at 1 m over the scouting box; scorecard and reference photos) are look-only and not build inputs.",
+ "files": [
+  {
+   "asset": "_ags_8efa33d3_7bc0_4701_af17_49e269176c4a.tif",
+   "sha256": "067329191270000a180a2607b6a79c704f70cd4d1595b4c6ffe02b23830faabf",
+   "run": "cp {file} data/astoria/raw/dogami_dtm_ft.tif",
+   "outputs": {
+    "raw/dogami_dtm_ft.tif": "067329191270000a180a2607b6a79c704f70cd4d1595b4c6ffe02b23830faabf"
+   }
+  },
+  {
+   "asset": "_ags_6e845640_524c_4536_a0b4_536cc7160bef.tif",
+   "sha256": "116ed493a1db2ec76d24b1241832d1fb16951531c325ebd9fd997499943a17cd",
+   "run": "cp {file} data/astoria/raw/dogami_chm_ft.tif",
+   "outputs": {
+    "raw/dogami_chm_ft.tif": "116ed493a1db2ec76d24b1241832d1fb16951531c325ebd9fd997499943a17cd"
+   }
+  },
+  {
+   "asset": "_ags_e53832b4_84fc_423d_9297_6414e722b2c3.jpg",
+   "sha256": "97c3625602d3b1e4f1c875c9dfa6e6c66c4f1d92f75245dda2bbd1819bc2ea06",
+   "run": "python3 data/astoria/make_ortho.py {file}",
+   "outputs": {
+    "raw/osip2024_05m.tif": "4527a30e5c959fb4800e9b096100aa091f1e4570b561e5c4aa9f5500471aed47"
+   }
+  },
+  {
+   "asset": "export.1.geojson",
+   "sha256": "e7c50081c7da027f82049eb5f2d2220d6866afceb6727602f205ea29cac564d8",
+   "run": "cp {file} data/astoria/raw/overpass.geojson",
+   "outputs": {
+    "raw/overpass.geojson": "e7c50081c7da027f82049eb5f2d2220d6866afceb6727602f205ea29cac564d8"
+   }
+  }
+ ]
+}

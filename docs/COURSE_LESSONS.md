@@ -928,3 +928,24 @@ Details in each course's file (`docs/courses/<id>.md`, "Lessons").
 - **Long shared tee strips:** measure along the strip for both holes; cutting
   the OSM box where the two cards fall fixes both.
 
+## 33. Astoria Country Club (2026-10-24)
+
+- **Find the course on the photo before anything else**: a 1 m photo of the
+  whole scouting box placed the course 600 m from the scout's guess and let a
+  smaller download box go out before any lidar.
+- **Check a scouting's links against these lessons**: 4 x 3 km DOGAMI exports
+  with `f=image` failed; 1.6 x 1.8 km with `f=json` worked (give both).
+- **A routing with no OSM hole lines can come from the card alone** when every
+  green and tee box is mapped: pair each fairway with the green at its end and
+  chain the holes so each tee sits by the previous green and fits the card;
+  confirm with the course's written descriptions.
+- **A tee outside the OSM boundary** can be joined with the hull of the box and
+  the nearby boundary edge, less a strip along any road.
+- **`trees_need_ortho` takes out what is gone, not what has grown**: old lidar
+  misses young trees; plan a manual pass rather than a colour rule.
+- **`pins.test.ts` finds small, undulating greens**: `green_tilt` with
+  `bumps: 0` fixed a 210-270 m2 green with only two pin spots; put a crescent
+  green's pin at its deepest point.
+- **Playwright's `webServer` runs in the config's folder** (`cwd: '../..'` for a
+  look script kept elsewhere).
+

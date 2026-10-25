@@ -1,0 +1,83 @@
+{
+ "add": [
+  {
+   "from": "proposed/holes.geojson",
+   "ids": [
+    "x_hole_1",
+    "x_hole_2",
+    "x_hole_3",
+    "x_hole_4",
+    "x_hole_5",
+    "x_hole_6",
+    "x_hole_7",
+    "x_hole_8",
+    "x_hole_9",
+    "x_hole_10",
+    "x_hole_11",
+    "x_hole_12",
+    "x_hole_13",
+    "x_hole_14",
+    "x_hole_15",
+    "x_hole_16",
+    "x_hole_17",
+    "x_hole_18",
+    "x_pin_1",
+    "x_pin_2",
+    "x_pin_3",
+    "x_pin_4",
+    "x_pin_5",
+    "x_pin_6",
+    "x_pin_7",
+    "x_pin_8",
+    "x_pin_9",
+    "x_pin_10",
+    "x_pin_11",
+    "x_pin_12",
+    "x_pin_13",
+    "x_pin_14",
+    "x_pin_15",
+    "x_pin_16",
+    "x_pin_17",
+    "x_pin_18"
+   ],
+   "tags": {},
+   "reason": "OSM has no golf=hole lines or pins. Routing worked out by the course chat (2026-10-24) from the Silver card and the course's descriptions (data/astoria/make_holes.py docstring); lines from the mapped tee box via the mapped fairway centreline to the green centre, pins at green centroids"
+  },
+  {
+   "from": "proposed/boundary_9th_tee.geojson",
+   "ids": [
+    "bd_w285375235"
+   ],
+   "tags": {},
+   "reason": "course chat 2026-10-24: the 9th back tee (w1151403990) stands 16.8 m outside the OSM boundary across Neacoxie Creek; the boundary is joined to the tee box (data/astoria/make_boundary.py). Replaces the OSM boundary"
+  }
+ ],
+ "drop": [
+  {
+   "osm": "w285375235",
+   "reason": "replaced by bd_w285375235 (the same boundary joined to the 9th tee)"
+  },
+  {
+   "osm": "n10711517820",
+   "reason": "a golf=tee mapped as a point (a marker, not a tee box; box 26 on proposed/osm_labelled.jpg, beside hole 7's boxes 23 and 25). s05's preview crashes on a point tee (request to the design chat); the hole's tee boxes are mapped as polygons"
+  }
+ ],
+ "tags": [
+  {
+   "osm": "w1151402541",
+   "set": {
+    "hole": "5",
+    "tee_set": "Silver"
+   },
+   "reason": "developer 2026-10-24: play the 5th from the box on the Sunset Lake bank (box 19 on proposed/osm_labelled.jpg); s06 already chose it, the tag keeps it"
+  },
+  {
+   "osm": "w1151403990",
+   "set": {
+    "hole": "9",
+    "tee_set": "Silver"
+   },
+   "reason": "developer 2026-10-24: play the 9th from the box across Neacoxie Creek by US 101 (box 6; inside the boundary through make_boundary.py); s06 already chose it, the tag keeps it"
+  }
+ ]
+}

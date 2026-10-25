@@ -1,0 +1,122 @@
+{
+ "id": "astoria",
+ "name": "Astoria Country Club",
+ "location": "Warrenton, Clatsop County, Oregon",
+ "state": "OR",
+ "architects": "George Junor with founder Charles Halderman (club founded 1923, course opened June 1924; stymie.golf, GolfPass, Top 100 Golf Courses, Daily Astorian)",
+ "theme": "astoria",
+ "epsg": 32610,
+ "osm_sources": [
+  "raw/overpass.geojson"
+ ],
+ "boundary_name": "Astoria Golf & Country Club",
+ "dtm": {
+  "path": "raw/dogami_dtm_ft.tif",
+  "units": "ft",
+  "source": "DOGAMI lidar DIGITAL_TERRAIN_MODEL_MOSAIC (bare earth), exportImage (f=json) at 1 m in EPSG:32610, box x 427800-429400 / y 5105200-5107000, downloaded by the developer 2026-10-24 (GitHub release astoria-data, _ags_8efa33d3_7bc0_4701_af17_49e269176c4a.tif)"
+ },
+ "chm": {
+  "path": "raw/dogami_chm_ft.tif",
+  "units": "ft",
+  "source": "DOGAMI lidar CANOPY_HEIGHT_MODEL_MOSAIC (highest hit minus bare earth), exportImage (f=json) at 1 m in EPSG:32610, same box, downloaded by the developer 2026-10-24 (GitHub release astoria-data, _ags_6e845640_524c_4536_a0b4_536cc7160bef.tif)",
+  "label": "DOGAMI canopy height model"
+ },
+ "world": {
+  "x0": 427838,
+  "y0": 5105488,
+  "width": 1280,
+  "height": 1280,
+  "note": "OSM boundary w285375235 bbox (x 428062-428893, y 5105659-5106596: 831 x 938 m) + about 120 m each side, rounded out to whole 256 m chunks and centred (about 220 m of scenery east-west, 170 m north-south); inside the downloaded rasters (x 427800-429400, y 5105200-5107000)"
+ },
+ "tee_sets": [
+  {
+   "name": "Tournament",
+   "playable": false,
+   "rating": 72.3,
+   "slope": 127,
+   "total_yd": 6550
+  },
+  {
+   "name": "Black",
+   "playable": false,
+   "rating": 71.9,
+   "slope": 127,
+   "total_yd": 6479
+  },
+  {
+   "name": "Silver",
+   "playable": true,
+   "rating": 71.2,
+   "slope": 127,
+   "total_yd": 6321
+  },
+  {
+   "name": "Silver/Gold",
+   "playable": false,
+   "rating": 69.7,
+   "slope": 122,
+   "total_yd": 5966
+  },
+  {
+   "name": "Gold",
+   "playable": false,
+   "rating": 68.7,
+   "slope": 121,
+   "total_yd": 5753
+  },
+  {
+   "name": "Green",
+   "playable": false,
+   "rating": 67.5,
+   "slope": 118,
+   "total_yd": 5541
+  }
+ ],
+ "default_tee": "Silver",
+ "scorecard_source": "stymie.golf (Astoria Golf & Country Club page, read 2026-10-24): per-hole yards, par and stroke index for every set, men's ratings and slopes; every row adds up to its totals. Unverified (third party). Cross-checked: GSPro course card in the astoria-data release (its 'Blue' 6,298 is the Silver set within 2 yd on 16 holes; hole 12 456 vs 471), GolfPass (Silver 6,331, ratings 70.7/121), opengolfapi (Tournament only, par 71, other stroke index). See docs/courses/astoria.md.",
+ "penalty_default": "red",
+ "driving_range_is_ob": true,
+ "wind_mph": {
+  "minMph": 3,
+  "maxMph": 14
+ },
+ "trees_off_fairways_m": 2,
+ "rough_band_m": 2.0,
+ "attribution": [
+  "Map data © OpenStreetMap contributors (ODbL)",
+  "Elevation and canopy height: Oregon Department of Geology and Mineral Industries (DOGAMI) lidar",
+  "Imagery check: Oregon Statewide Imagery Program 2024"
+ ],
+ "notes": "Standing defaults (COURSE_BUILD.md 4.1): no Blue set, so Silver (6,321, closest to 6,300); all water red; OB = the OSM boundary; wind 3-14 mph (open coast); theme astoria (new, course chat's own, as the brief allowed): rough drawn tawny with a 2 m mown band beside the fairways, as the summer 2024 photo shows. Name shown in the game: \"Astoria Country Club\" (developer 2026-10-24; the club is Astoria Golf & Country Club).",
+ "red_water_osm": [
+  "r20068414",
+  "w34066511",
+  "w426952615",
+  "w426952616",
+  "w426952617",
+  "w426952618"
+ ],
+ "ortho": {
+  "path": "raw/osip2024_05m.tif",
+  "source": "Oregon Statewide Imagery Program 2024 (summer 2024), OSIP_2024_WM exportImage JPEG at 0.5 m from imagery.oregonexplorer.info, placed by its request box by make_ortho.py (GitHub release astoria-data, _ags_e53832b4_84fc_423d_9297_6414e722b2c3.jpg)"
+ },
+ "trees_need_ortho": {
+  "v_max": 120,
+  "min_share": 0.1,
+  "note": "the DOGAMI lidar here is the 2008-09 North Coast flight; lidar crowns that are not dark canopy on the OSIP 2024 photo are dropped (pipeline/gorse.py missing_in_ortho), as at Gearhart 8 km south (737 gone there)"
+ },
+ "green_tilt": [
+  {
+   "hole": 3,
+   "max_tilt": 0.02,
+   "bumps": 0,
+   "note": "the 3rd's small green (210 m2, 25 x 11 m) at the end of the narrow valley: tilt capped at 2 % (fitted 3.2 %) and no random undulations, so the game finds three pin positions on it under 3 % (pins.test.ts)"
+  },
+  {
+   "hole": 16,
+   "max_tilt": 0.025,
+   "bumps": 0,
+   "note": "the 16th's small green (272 m2): no random undulations (they reached 5.1 %), so the game finds three pin positions on it (pins.test.ts)"
+  }
+ ]
+}
