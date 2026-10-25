@@ -10,23 +10,23 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 |---|---|---|---|---|---|---|---|---|---|---|
 | 1 | 5 | Challenge | 555 | 555.4 | +0.4 | +0.1% | pass | 555.4 | +0.1% | pass |
 | 2 | 4 | Challenge | 355 | 360.0 | +5.0 | +1.4% | pass | 360.0 | +1.4% | pass |
-| 3 | 4 | Challenge | 475 | 469.2 | -5.8 | -1.2% | pass | 469.2 | -1.2% | pass |
-| 4 | 3 | Challenge | 125 | 126.9 | +1.9 | +1.6% | pass | 126.9 | +1.6% | pass |
-| 5 | 4 | Challenge | 520 | 523.1 | +3.1 | +0.6% | pass | 523.1 | +0.6% | pass |
+| 3 | 4 | Challenge | 475 | 468.8 | -6.2 | -1.3% | pass | 468.8 | -1.3% | pass |
+| 4 | 3 | Challenge | 125 | 114.9 | -10.1 | -8.0% | FAIL | 121.9 | -2.4% | pass |
+| 5 | 4 | Challenge | 520 | 521.1 | +1.1 | +0.2% | pass | 521.1 | +0.2% | pass |
 | 6 | 4 | Challenge | 405 | 408.1 | +3.1 | +0.8% | pass | 408.1 | +0.8% | pass |
 | 7 | 3 | Challenge | 260 | 261.7 | +1.7 | +0.7% | pass | 261.7 | +0.7% | pass |
 | 8 | 4 | Challenge | 445 | 422.4 | -22.6 | -5.1% | flag | 426.0 | -4.3% | flag |
 | 9 | 4 | Challenge | 495 | 495.5 | +0.5 | +0.1% | pass | 495.5 | +0.1% | pass |
 | 10 | 3 | Challenge | 205 | 207.4 | +2.4 | +1.2% | pass | 207.4 | +1.2% | pass |
 | 11 | 4 | Challenge | 445 | 448.2 | +3.2 | +0.7% | pass | 448.2 | +0.7% | pass |
-| 12 | 3 | Challenge | 190 | 195.8 | +5.8 | +3.1% | flag | 194.6 | +2.4% | pass |
+| 12 | 3 | Challenge | 190 | 194.1 | +4.1 | +2.2% | pass | 194.1 | +2.2% | pass |
 | 13 | 5 | Challenge | 550 | 545.8 | -4.2 | -0.8% | pass | 545.8 | -0.8% | pass |
-| 14 | 5 | Challenge | 570 | 613.3 | +43.3 | +7.6% | flag | 611.6 | +7.3% | flag |
-| 15 | 4 | Challenge | 315 | 323.3 | +8.3 | +2.6% | pass | 323.3 | +2.6% | pass |
+| 14 | 5 | Challenge | 570 | 616.4 | +46.4 | +8.1% | FAIL | 607.9 | +6.7% | flag |
+| 15 | 4 | Challenge | 315 | 324.8 | +9.8 | +3.1% | flag | 322.8 | +2.5% | pass |
 | 16 | 4 | Challenge | 410 | 409.5 | -0.5 | -0.1% | pass | 409.5 | -0.1% | pass |
 | 17 | 4 | Challenge | 490 | 484.0 | -6.0 | -1.2% | pass | 484.0 | -1.2% | pass |
 | 18 | 4 | Challenge | 360 | 357.2 | -2.8 | -0.8% | pass | 357.2 | -0.8% | pass |
-| **total** | 71 | | **7170** | **7207** | +37 | +0.5% | | **7208** | +0.5% | |
+| **total** | 71 | | **7170** | **7195** | +25 | +0.4% | | **7196** | +0.4% | |
 
 ### Open items
 
@@ -46,7 +46,7 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 14. Hole 11 (Challenge): tee box desk_craddock_11_tee assigned by the developer (tagged hole=11, tee_set=Challenge in edited/course.geojson).
 15. Hole 12 (Challenge): tee box desk_craddock_12_tee assigned by the developer (tagged hole=12, tee_set=Challenge in edited/course.geojson).
 16. Hole 13 (Challenge): tee box desk_craddock_13_tee assigned by the developer (tagged hole=13, tee_set=Challenge in edited/course.geojson).
-17. Hole 14 (Challenge): measured 612 yd vs card 570 (+7.3%) even with the virtual tee at the best spot in its box; accepted for play.
+17. Hole 14 (Challenge): measured 608 yd vs card 570 (+6.7%) even with the virtual tee at the best spot in its box; accepted for play.
 18. Hole 14 (Challenge): tee box desk_craddock_14_tee assigned by the developer (tagged hole=14, tee_set=Challenge in edited/course.geojson).
 19. Hole 15 (Challenge): tee box desk_craddock_15_tee assigned by the developer (tagged hole=15, tee_set=Challenge in edited/course.geojson).
 20. Hole 16 (Challenge): tee box desk_craddock_16_tee assigned by the developer (tagged hole=16, tee_set=Challenge in edited/course.geojson).
@@ -65,7 +65,7 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 | 2 | 3 | White | 150 | 150.1 | +0.1 | +0.1% | pass | 150.1 | +0.1% | pass |
 | 3 | 5 | White | 590 | 581.0 | -9.0 | -1.5% | pass | 581.0 | -1.5% | pass |
 | 4 | 4 | White | 370 | 366.0 | -4.0 | -1.1% | pass | 366.0 | -1.1% | pass |
-| 5 | 5 | White | 550 | 541.1 | -8.9 | -1.6% | pass | 541.1 | -1.6% | pass |
+| 5 | 5 | White | 550 | 540.2 | -9.8 | -1.8% | pass | 540.2 | -1.8% | pass |
 | 6 | 4 | White | 465 | 459.8 | -5.2 | -1.1% | pass | 459.8 | -1.1% | pass |
 | 7 | 3 | White | 200 | 196.9 | -3.1 | -1.5% | pass | 196.9 | -1.5% | pass |
 | 8 | 4 | White | 410 | 385.9 | -24.1 | -5.9% | flag | 388.6 | -5.2% | flag |
@@ -77,9 +77,9 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 | 14 | 5 | White | 505 | 504.7 | -0.3 | -0.1% | pass | 504.7 | -0.1% | pass |
 | 15 | 3 | White | 175 | 168.2 | -6.8 | -3.9% | flag | 170.7 | -2.5% | pass |
 | 16 | 4 | White | 490 | 472.7 | -17.3 | -3.5% | flag | 477.9 | -2.5% | pass |
-| 17 | 4 | White | 330 | 329.5 | -0.5 | -0.2% | pass | 329.5 | -0.2% | pass |
+| 17 | 4 | White | 330 | 329.0 | -1.0 | -0.3% | pass | 329.0 | -0.3% | pass |
 | 18 | 5 | White | 590 | 547.1 | -42.9 | -7.3% | flag | 557.9 | -5.4% | flag |
-| **total** | 72 | | **7075** | **6948** | -127 | -1.8% | | **6966** | -1.5% | |
+| **total** | 72 | | **7075** | **6946** | -129 | -1.8% | | **6965** | -1.6% | |
 
 ### Open items
 
@@ -112,16 +112,16 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 
 | hole | par | tee set | card yd | measured yd | diff yd | diff % | status | adjusted yd | adj. diff % | adj. status |
 |---|---|---|---|---|---|---|---|---|---|---|
-| 1 | 3 | White | 70 | 71.0 | +1.0 | +1.5% | pass | 71.0 | +1.5% | pass |
-| 2 | 3 | White | 100 | 101.8 | +1.8 | +1.8% | pass | 101.8 | +1.8% | pass |
-| 3 | 4 | White | 95 | 93.8 | -1.2 | -1.3% | pass | 93.8 | -1.3% | pass |
-| 4 | 3 | White | 120 | 120.2 | +0.2 | +0.1% | pass | 120.2 | +0.1% | pass |
-| 5 | 3 | White | 110 | 111.7 | +1.7 | +1.6% | pass | 111.7 | +1.6% | pass |
-| 6 | 4 | White | 90 | 93.7 | +3.7 | +4.1% | flag | 92.2 | +2.5% | pass |
-| 7 | 3 | White | 105 | 103.8 | -1.2 | -1.1% | pass | 103.8 | -1.1% | pass |
-| 8 | 3 | White | 85 | 92.5 | +7.5 | +8.9% | FAIL | 90.9 | +6.9% | flag |
+| 1 | 3 | White | 70 | 68.6 | -1.4 | -2.0% | pass | 68.6 | -2.0% | pass |
+| 2 | 3 | White | 100 | 96.6 | -3.4 | -3.4% | flag | 97.6 | -2.4% | pass |
+| 3 | 4 | White | 95 | 93.3 | -1.7 | -1.8% | pass | 93.3 | -1.8% | pass |
+| 4 | 3 | White | 120 | 118.4 | -1.6 | -1.3% | pass | 118.4 | -1.3% | pass |
+| 5 | 3 | White | 110 | 110.5 | +0.5 | +0.5% | pass | 110.5 | +0.5% | pass |
+| 6 | 4 | White | 90 | 89.9 | -0.1 | -0.1% | pass | 89.9 | -0.1% | pass |
+| 7 | 3 | White | 105 | 101.6 | -3.4 | -3.3% | flag | 102.4 | -2.4% | pass |
+| 8 | 3 | White | 85 | 93.2 | +8.2 | +9.6% | FAIL | 89.6 | +5.4% | flag |
 | 9 | 3 | White | 100 | 94.7 | -5.3 | -5.3% | flag | 96.7 | -3.3% | flag |
-| **total** | 29 | | **875** | **883** | +8 | +0.9% | | **882** | +0.8% | |
+| **total** | 29 | | **875** | **867** | -8 | -0.9% | | **867** | -0.9% | |
 
 ### Open items
 
@@ -132,32 +132,49 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 5. Hole 5 (White): tee box desk_chief_egan_05_tee assigned by the developer (tagged hole=5, tee_set=White in edited/course.geojson).
 6. Hole 6 (White): tee box desk_chief_egan_06_tee assigned by the developer (tagged hole=6, tee_set=White in edited/course.geojson).
 7. Hole 7 (White): tee box desk_chief_egan_07_tee assigned by the developer (tagged hole=7, tee_set=White in edited/course.geojson).
-8. Hole 8 (White): measured 91 yd vs card 85 (+6.9%) even with the virtual tee at the best spot in its box; accepted for play.
+8. Hole 8 (White): measured 90 yd vs card 85 (+5.4%) even with the virtual tee at the best spot in its box; accepted for play.
 9. Hole 8 (White): tee box desk_chief_egan_08_tee assigned by the developer (tagged hole=8, tee_set=White in edited/course.geojson).
 10. Hole 9 (White): measured 97 yd vs card 100 (-3.3%) even with the virtual tee at the best spot in its box; accepted for play.
 11. Hole 9 (White): tee box desk_chief_egan_09_tee assigned by the developer (tagged hole=9, tee_set=White in edited/course.geojson).
 
+## Other open items (course chat, 2026-10-25)
+
+1. **Trees and sagebrush wait on the 2023 lidar points.** The DOGAMI canopy mosaic has no
+   data over the course (the course's bare earth is from OR_SouthEast_6_D22, which has no
+   canopy layer in the mosaic); the developer requested the NOAA job. Until it lands the
+   build has no trees and no sage bushes (s05's OSM fallback: OSM maps no trees here).
+2. **Craddock card**: GolfPass for yardages and ratings, the club map for par (71). The
+   map's three columns differ from GolfPass on holes 1 and 9 (Grey) and 6 (Black). A photo
+   of the printed card would settle them.
+3. **Flags left as the developer marked the tees**: Craddock 8 (-4.3 %) and 14 (+6.7 %),
+   Hankins 8 (-5.2 %) and 18 (-5.4 %), Chief Egan 8 (+5.4 %) and 9 (-3.3 %). All under 8 %.
+4. **McVeigh's Gauntlet** (7 holes on the south edge, mostly outside the OSM boundary) is
+   not built; its greens are wrong greens.
+5. **Ratings**: Craddock Challenge and Chief Egan have none (rounds there are not rated).
+
 ## Playability adjustments
 
+- Hole 4 (Craddock course, Challenge): measured 115 yd from the tee-box centre vs 125 on the card (-8.0%); moved the virtual tee along the middle of the real tee polygon desk_craddock_04_tee (on its centre line, at least 2.5 m from its back and front) -> 121.9 yd (real 114.9 yd).
 - Hole 8 (Craddock course, Challenge): measured 422 yd from the tee-box centre vs 445 on the card (-5.1%); moved the virtual tee along the middle of the real tee polygon desk_craddock_08_tee (on its centre line, at least 2.5 m from its back and front) -> 426.0 yd (real 422.4 yd).
-- Hole 12 (Craddock course, Challenge): measured 196 yd from the tee-box centre vs 190 on the card (+3.1%); moved the virtual tee along the middle of the real tee polygon desk_craddock_12_tee (on its centre line, at least 2.5 m from its back and front) -> 194.6 yd (real 195.8 yd).
-- Hole 14 (Craddock course, Challenge): measured 613 yd from the tee-box centre vs 570 on the card (+7.6%); moved the virtual tee along the middle of the real tee polygon desk_craddock_14_tee (on its centre line, at least 2.5 m from its back and front) -> 611.6 yd (real 613.3 yd).
+- Hole 14 (Craddock course, Challenge): measured 616 yd from the tee-box centre vs 570 on the card (+8.1%); moved the virtual tee along the middle of the real tee polygon desk_craddock_14_tee (on its centre line, at least 2.5 m from its back and front) -> 607.9 yd (real 616.4 yd).
+- Hole 15 (Craddock course, Challenge): measured 325 yd from the tee-box centre vs 315 on the card (+3.1%); moved the virtual tee along the middle of the real tee polygon desk_craddock_15_tee (on its centre line, at least 2.5 m from its back and front) -> 322.8 yd (real 324.8 yd).
 - Hole 8 (Hankins course, White): measured 386 yd from the tee-box centre vs 410 on the card (-5.9%); moved the virtual tee along the middle of the real tee polygon desk_hankins_08_tee (on its centre line, at least 2.5 m from its back and front) -> 388.6 yd (real 385.9 yd).
 - Hole 13 (Hankins course, White): measured 146 yd from the tee-box centre vs 140 on the card (+4.3%); moved the virtual tee along the middle of the real tee polygon desk_hankins_13_tee (on its centre line, at least 2.5 m from its back and front) -> 143.4 yd (real 146.1 yd).
 - Hole 15 (Hankins course, White): measured 168 yd from the tee-box centre vs 175 on the card (-3.9%); moved the virtual tee along the middle of the real tee polygon desk_hankins_15_tee (on its centre line, at least 2.5 m from its back and front) -> 170.7 yd (real 168.2 yd).
 - Hole 16 (Hankins course, White): measured 473 yd from the tee-box centre vs 490 on the card (-3.5%); moved the virtual tee along the middle of the real tee polygon desk_hankins_16_tee (on its centre line, at least 2.5 m from its back and front) -> 477.9 yd (real 472.7 yd).
 - Hole 18 (Hankins course, White): measured 547 yd from the tee-box centre vs 590 on the card (-7.3%); moved the virtual tee along the middle of the real tee polygon desk_hankins_18_tee (on its centre line, at least 2.5 m from its back and front) -> 557.9 yd (real 547.1 yd).
-- Hole 6 (Chief Egan course, White): measured 94 yd from the tee-box centre vs 90 on the card (+4.1%); moved the virtual tee along the middle of the real tee polygon desk_chief_egan_06_tee (on its centre line, at least 2.5 m from its back and front) -> 92.2 yd (real 93.7 yd).
-- Hole 8 (Chief Egan course, White): measured 93 yd from the tee-box centre vs 85 on the card (+8.9%); moved the virtual tee along the middle of the real tee polygon desk_chief_egan_08_tee (on its centre line, at least 2.5 m from its back and front) -> 90.9 yd (real 92.5 yd).
+- Hole 2 (Chief Egan course, White): measured 97 yd from the tee-box centre vs 100 on the card (-3.4%); moved the virtual tee along the middle of the real tee polygon desk_chief_egan_02_tee (on its centre line, at least 2.5 m from its back and front) -> 97.6 yd (real 96.6 yd).
+- Hole 7 (Chief Egan course, White): measured 102 yd from the tee-box centre vs 105 on the card (-3.3%); moved the virtual tee along the middle of the real tee polygon desk_chief_egan_07_tee (on its centre line, at least 2.5 m from its back and front) -> 102.4 yd (real 101.6 yd).
+- Hole 8 (Chief Egan course, White): measured 93 yd from the tee-box centre vs 85 on the card (+9.6%); moved the virtual tee along the middle of the real tee polygon desk_chief_egan_08_tee (on its centre line, at least 2.5 m from its back and front) -> 89.6 yd (real 93.2 yd).
 - Hole 9 (Chief Egan course, White): measured 95 yd from the tee-box centre vs 100 on the card (-5.3%); moved the virtual tee along the middle of the real tee polygon desk_chief_egan_09_tee (on its centre line, at least 2.5 m from its back and front) -> 96.7 yd (real 94.7 yd).
 
-## Tree detection (OSM fallback (no lidar))
+## Tree detection (2020 Upper John Day lidar)
 
-- 0 trees detected in the world extent (0 inside the course), 0 conifers / 0 deciduous; median height 0.0 m, max 0.0 m.
-- Dropped: 0 tops on building footprints, 0 over the lake, 0 tiny crowns.
-- Dropped on playing surfaces (spec 5.4): 0 -> 
+- 11116 trees detected in the world extent (3063 inside the course), 3379 conifers / 7737 deciduous; median height 18.0 m, max 36.1 m.
+- Dropped: 14 tops on building footprints, 0 over the lake, 5 tiny crowns.
+- Dropped on playing surfaces (spec 5.4): 20 -> fairway w1301566448 (16.4 m), fairway r18710410 (15.9 m), fairway r18710421 (23.4 m), fairway r18710421 (19.9 m), fairway r18710421 (10.1 m), fairway r18710421 (18.1 m), fairway r18710421 (22.8 m), fairway r18710407 (12.5 m), fairway r18710421 (19.1 m), fairway r18710421 (28.3 m), fairway r18710421 (22.6 m), fairway r18710405 (14.3 m), fairway r18710421 (21.2 m), fairway r18710421 (16.5 m), fairway w1301548853 (20.6 m), fairway w1301548853 (21.3 m), fairway w1301548853 (16.6 m), fairway r18710405 (19.8 m), fairway r18710413 (28.4 m), fairway r18710413 (27.0 m)
 - OSM natural=tree points matched by a detected tree within 4 m: 0 of 0.
-- LOWER FIDELITY: no canopy raster. Trees are OSM natural=tree points plus a seeded Poisson-disk fill of OSM woods every 6 m; heights 6-14 m and type (50% conifer) are drawn at random, not measured.
+- Conifer vs deciduous is inferred from crown shape only (no leaf-off imagery); see build/trees_preview.png.
 
 # Green shaping checks
 
@@ -169,7 +186,7 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 | w904342357 | egan 8 | 1.7 | 1.7 | 1 | 2.5 | 1.5 |
 | w904342358 | egan 9 | 3.2 | 2.5 | 2 | 3.6 | 1.5 |
 | w904342359 | egan 1 | 2.9 | 2.5 | 0 | 3.8 | 1.5 |
-| w904342360 | egan 6 | 4.5 | 2.5 | 1 | 3.4 | 1.5 |
+| w904342360 | egan 6 | 4.5 | 1.2 | 0 | 1.2 | 1.2 |
 | w904342361 | egan 2 | 3.6 | 2.5 | 1 | 4.3 | 1.5 |
 | w935659296 | hankins 1 | 4.4 | 2.5 | 2 | 3.6 | 1.5 |
 | w935659299 | hankins 2 | 3.0 | 2.5 | 1 | 3.7 | 1.5 |
@@ -182,7 +199,7 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 | w1301404214 | hankins 17 | 3.8 | 2.5 | 1 | 3.8 | 1.5 |
 | w1301404215 | hankins 16 | 4.9 | 2.5 | 1 | 3.8 | 1.5 |
 | w1301404216 | hankins 12 | 1.9 | 1.9 | 1 | 3.3 | 1.5 |
-| w1301404218 | hankins 14 | 2.0 | 2.0 | 2 | 3.3 | 1.5 |
+| w1301404218 | hankins 14 | 2.0 | 2.0 | 2 | 3.8 | 1.5 |
 | w1301404219 | hankins 13 | 2.8 | 2.5 | 2 | 4.3 | 1.5 |
 | w1301404220 | hankins 10 | 2.6 | 2.5 | 2 | 4.9 | 1.5 |
 | w1301404222 | craddock 1 | 3.5 | 2.5 | 1 | 5.5 | 1.5 |
@@ -206,7 +223,7 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 | w1301566445 | practice | 3.5 | 2.5 | 2 | 3.6 | 0.0 |
 | w1301566446 | practice | 4.3 | 2.5 | 2 | 3.5 | 0.0 |
 | w1301566453 | practice | 5.3 | 2.5 | 2 | 3.5 | 0.0 |
-| w904342353_green | egan 3 | 2.4 | 2.4 | 2 | 3.7 | 1.5 |
+| w904342353_green | egan 3 | 2.4 | 2.4 | 2 | 3.3 | 1.5 |
 
 # OSM coverage audit
 
@@ -214,113 +231,68 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 
 | hole | par (OSM) | hole line | tee at line start | fairway | green | pin | bunkers <40 m | water <40 m |
 |---|---|---|---|---|---|---|---|---|
-| 1 | 4 | yes | yes (3 near) | yes | yes | NO | 7 | 0 |
-| 2 | 4 | yes | yes (1 near) | yes | yes | NO | 8 | 0 |
-| 3 | 4 | yes | yes (1 near) | yes | yes | NO | 6 | 0 |
-| 4 | 3 | yes | yes (2 near) | yes | yes | NO | 8 | 0 |
-| 5 | 5 | yes | yes (1 near) | yes | yes | NO | 6 | 0 |
-| 6 | 4 | yes | yes (1 near) | yes | yes | NO | 3 | 0 |
-| 7 | 3 | yes | NO (1 near) | yes | yes | NO | 4 | 0 |
-| 8 | 4 | yes | yes (1 near) | yes | yes | NO | 5 | 0 |
-| 9 | 4 | yes | NO (0 near) | yes | yes | NO | 6 | 0 |
-| 10 | 3 | yes | yes (2 near) | yes | yes | NO | 3 | 0 |
-| 11 | 4 | yes | yes (1 near) | yes | yes | NO | 4 | 0 |
-| 12 | 3 | yes | yes (1 near) | yes | yes | NO | 1 | 0 |
-| 13 | 5 | yes | yes (2 near) | yes | yes | NO | 10 | 0 |
-| 14 | 5 | yes | NO (0 near) | yes | yes | NO | 7 | 0 |
-| 15 | 4 | yes | yes (1 near) | yes | yes | NO | 7 | 0 |
-| 16 | 4 | yes | yes (2 near) | yes | yes | NO | 9 | 0 |
-| 17 | 4 | yes | yes (1 near) | yes | yes | NO | 7 | 0 |
-| 18 | 4 | yes | yes (1 near) | yes | yes | NO | 7 | 0 |
+| 1 | 4 | yes | yes (3 near) | yes | yes | yes | 7 | 0 |
+| 2 | 4 | yes | yes (1 near) | yes | yes | yes | 8 | 0 |
+| 3 | 4 | yes | yes (1 near) | yes | yes | yes | 6 | 0 |
+| 4 | 3 | yes | yes (2 near) | yes | yes | yes | 8 | 0 |
+| 5 | 5 | yes | yes (1 near) | yes | yes | yes | 6 | 0 |
+| 6 | 4 | yes | yes (1 near) | yes | yes | yes | 3 | 0 |
+| 7 | 3 | yes | NO (1 near) | yes | yes | yes | 4 | 0 |
+| 8 | 4 | yes | yes (1 near) | yes | yes | yes | 5 | 0 |
+| 9 | 4 | yes | NO (0 near) | yes | yes | yes | 6 | 0 |
+| 10 | 3 | yes | yes (2 near) | yes | yes | yes | 3 | 0 |
+| 11 | 4 | yes | yes (1 near) | yes | yes | yes | 4 | 0 |
+| 12 | 3 | yes | yes (1 near) | yes | yes | yes | 1 | 0 |
+| 13 | 5 | yes | yes (2 near) | yes | yes | yes | 10 | 0 |
+| 14 | 5 | yes | NO (0 near) | yes | yes | yes | 7 | 0 |
+| 15 | 4 | yes | yes (1 near) | yes | yes | yes | 7 | 0 |
+| 16 | 4 | yes | yes (2 near) | yes | yes | yes | 9 | 0 |
+| 17 | 4 | yes | yes (1 near) | yes | yes | yes | 7 | 0 |
+| 18 | 4 | yes | yes (1 near) | yes | yes | yes | 7 | 0 |
 
 ## Silvies Valley Hankins
 
 | hole | par (OSM) | hole line | tee at line start | fairway | green | pin | bunkers <40 m | water <40 m |
 |---|---|---|---|---|---|---|---|---|
-| 1 | 4 | yes | yes (2 near) | yes | yes | NO | 9 | 0 |
-| 2 | 3 | yes | yes (1 near) | yes | yes | NO | 3 | 0 |
-| 3 | 5 | yes | yes (1 near) | yes | yes | NO | 9 | 0 |
-| 4 | 4 | yes | yes (2 near) | yes | yes | NO | 7 | 0 |
-| 5 | 5 | yes | yes (1 near) | yes | yes | NO | 5 | 0 |
-| 6 | 4 | yes | yes (2 near) | yes | yes | NO | 8 | 0 |
-| 7 | 3 | yes | yes (2 near) | yes | yes | NO | 7 | 0 |
-| 8 | 4 | yes | yes (1 near) | yes | yes | NO | 6 | 0 |
-| 9 | 4 | yes | yes (2 near) | yes | yes | NO | 5 | 0 |
-| 10 | 4 | yes | yes (2 near) | yes | yes | NO | 4 | 0 |
-| 11 | 4 | yes | yes (1 near) | yes | yes | NO | 3 | 0 |
-| 12 | 4 | yes | yes (1 near) | yes | yes | NO | 5 | 0 |
-| 13 | 3 | yes | yes (1 near) | yes | yes | NO | 5 | 0 |
-| 14 | 5 | yes | yes (1 near) | yes | yes | NO | 4 | 0 |
-| 15 | 3 | yes | yes (1 near) | yes | yes | NO | 7 | 0 |
-| 16 | 4 | yes | yes (2 near) | yes | yes | NO | 10 | 0 |
-| 17 | 4 | yes | yes (1 near) | yes | yes | NO | 6 | 0 |
-| 18 | 5 | yes | yes (2 near) | yes | yes | NO | 5 | 0 |
+| 1 | 4 | yes | yes (2 near) | yes | yes | yes | 9 | 0 |
+| 2 | 3 | yes | yes (1 near) | yes | yes | yes | 3 | 0 |
+| 3 | 5 | yes | yes (1 near) | yes | yes | yes | 9 | 0 |
+| 4 | 4 | yes | yes (2 near) | yes | yes | yes | 7 | 0 |
+| 5 | 5 | yes | yes (1 near) | yes | yes | yes | 5 | 0 |
+| 6 | 4 | yes | yes (2 near) | yes | yes | yes | 8 | 0 |
+| 7 | 3 | yes | yes (2 near) | yes | yes | yes | 7 | 0 |
+| 8 | 4 | yes | yes (1 near) | yes | yes | yes | 6 | 0 |
+| 9 | 4 | yes | yes (2 near) | yes | yes | yes | 5 | 0 |
+| 10 | 4 | yes | yes (2 near) | yes | yes | yes | 4 | 0 |
+| 11 | 4 | yes | yes (1 near) | yes | yes | yes | 3 | 0 |
+| 12 | 4 | yes | yes (1 near) | yes | yes | yes | 5 | 0 |
+| 13 | 3 | yes | yes (1 near) | yes | yes | yes | 5 | 0 |
+| 14 | 5 | yes | yes (1 near) | yes | yes | yes | 4 | 0 |
+| 15 | 3 | yes | yes (1 near) | yes | yes | yes | 7 | 0 |
+| 16 | 4 | yes | yes (2 near) | yes | yes | yes | 10 | 0 |
+| 17 | 4 | yes | yes (1 near) | yes | yes | yes | 6 | 0 |
+| 18 | 5 | yes | yes (2 near) | yes | yes | yes | 5 | 0 |
 
 ## Silvies Valley Chief Egan
 
 | hole | par (OSM) | hole line | tee at line start | fairway | green | pin | bunkers <40 m | water <40 m |
 |---|---|---|---|---|---|---|---|---|
-| 1 | 3 | yes | yes (2 near) | yes | yes | NO | 3 | 0 |
-| 2 | 3 | yes | yes (2 near) | yes | yes | NO | 5 | 0 |
-| 3 | 4 | yes | yes (1 near) | yes | yes | NO | 0 | 0 |
-| 4 | 3 | yes | yes (1 near) | yes | yes | NO | 0 | 1 |
-| 5 | 3 | yes | yes (1 near) | yes | yes | NO | 0 | 1 |
-| 6 | 4 | yes | yes (1 near) | yes | yes | NO | 4 | 1 |
-| 7 | 3 | yes | yes (3 near) | yes | yes | NO | 4 | 1 |
-| 8 | 3 | yes | yes (1 near) | yes | yes | NO | 2 | 1 |
-| 9 | 3 | yes | yes (1 near) | yes | yes | NO | 1 | 1 |
+| 1 | 3 | yes | yes (2 near) | yes | yes | yes | 3 | 0 |
+| 2 | 3 | yes | yes (2 near) | yes | yes | yes | 5 | 1 |
+| 3 | 4 | yes | yes (1 near) | yes | yes | yes | 0 | 1 |
+| 4 | 3 | yes | yes (1 near) | yes | yes | yes | 0 | 1 |
+| 5 | 3 | yes | yes (1 near) | yes | yes | yes | 0 | 2 |
+| 6 | 4 | yes | yes (1 near) | yes | yes | yes | 4 | 2 |
+| 7 | 3 | yes | yes (3 near) | yes | yes | yes | 4 | 2 |
+| 8 | 3 | yes | yes (1 near) | yes | yes | yes | 2 | 1 |
+| 9 | 3 | yes | yes (1 near) | yes | yes | yes | 1 | 1 |
 
 
 ## Missing or suspect features
 
-- Craddock: hole 1: no golf=pin inside its green
-- Craddock: hole 2: no golf=pin inside its green
-- Craddock: hole 3: no golf=pin inside its green
-- Craddock: hole 4: no golf=pin inside its green
-- Craddock: hole 5: no golf=pin inside its green
-- Craddock: hole 6: no golf=pin inside its green
 - Craddock: hole 7: no tee polygon at the start of the hole line (nearest 11.7 m)
-- Craddock: hole 7: no golf=pin inside its green
-- Craddock: hole 8: no golf=pin inside its green
 - Craddock: hole 9: no tee polygon at the start of the hole line (nearest 51.1 m)
-- Craddock: hole 9: no golf=pin inside its green
-- Craddock: hole 10: no golf=pin inside its green
-- Craddock: hole 11: no golf=pin inside its green
-- Craddock: hole 12: no golf=pin inside its green
-- Craddock: hole 13: no golf=pin inside its green
 - Craddock: hole 14: no tee polygon at the start of the hole line (nearest 39.5 m)
-- Craddock: hole 14: no golf=pin inside its green
-- Craddock: hole 15: no golf=pin inside its green
-- Craddock: hole 16: no golf=pin inside its green
-- Craddock: hole 17: no golf=pin inside its green
-- Craddock: hole 18: no golf=pin inside its green
-- Hankins: hole 1: no golf=pin inside its green
-- Hankins: hole 2: no golf=pin inside its green
-- Hankins: hole 3: no golf=pin inside its green
-- Hankins: hole 4: no golf=pin inside its green
-- Hankins: hole 5: no golf=pin inside its green
-- Hankins: hole 6: no golf=pin inside its green
-- Hankins: hole 7: no golf=pin inside its green
-- Hankins: hole 8: no golf=pin inside its green
-- Hankins: hole 9: no golf=pin inside its green
-- Hankins: hole 10: no golf=pin inside its green
-- Hankins: hole 11: no golf=pin inside its green
-- Hankins: hole 12: no golf=pin inside its green
-- Hankins: hole 13: no golf=pin inside its green
-- Hankins: hole 14: no golf=pin inside its green
-- Hankins: hole 15: no golf=pin inside its green
-- Hankins: hole 16: no golf=pin inside its green
-- Hankins: hole 17: no golf=pin inside its green
-- Hankins: hole 18: no golf=pin inside its green
-- Chief Egan: hole 1: no golf=pin inside its green
-- Chief Egan: hole 2: no golf=pin inside its green
-- Chief Egan: hole 3: no golf=pin inside its green
-- Chief Egan: hole 4: no golf=pin inside its green
-- Chief Egan: hole 5: no golf=pin inside its green
-- Chief Egan: hole 6: no golf=pin inside its green
-- Chief Egan: hole 7: no golf=pin inside its green
-- Chief Egan: hole 8: no golf=pin inside its green
-- Chief Egan: hole 9: no golf=pin inside its green
 - green w935659312 at (1391, 431) is not the end of any hole line (practice green?) -> treated as a wrong green
 - green w1301409392 at (1111, 190) is not the end of any hole line (practice green?) -> treated as a wrong green
 - green w1301512759 at (1295, 187) is not the end of any hole line (practice green?) -> treated as a wrong green
@@ -330,5 +302,5 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 - green w1301566446 at (1153, 408) is not the end of any hole line (practice green?) -> treated as a wrong green
 - green w1301566453 at (1415, 251) is not the end of any hole line (practice green?) -> treated as a wrong green
 
-Totals: 47 tees, 44 greens, 82 fairways, 119 bunkers, 2 water hazards, 0 pins, 54 cart paths, 0 OSM tree points.
+Totals: 47 tees, 44 greens, 82 fairways, 119 bunkers, 3 water hazards, 36 pins, 54 cart paths, 0 OSM tree points.
 
