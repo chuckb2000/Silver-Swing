@@ -18,7 +18,9 @@ the actual size or shape of the tee box"). The box under a mark is, in order:
 3. where neither gives a box, a 14 x 7 m rectangle (10 x 6 m on Chief Egan) centred on
    the mark and turned to the line of play (flagged "drawn").
 
-Each box is smoothed (1 m in and out), must contain the mark's centre (the mark is
+Holes listed in desk/accepted_boxes.json (the developer kept the round-1 pre-filled pad
+unchanged and accepted it as the box, 2026-10-25) take that shape as it is.
+Each other box is smoothed (1 m in and out), must contain the mark's centre (the mark is
 added if not), and is checked against the card in s06. Writes proposed/tee_boxes.geojson
 (WGS84; kind tee, tags hole / tee_set / layout / how) and proposed/tee_boxes.jpg
 (a contact sheet: photo, the mark in blue, the box in magenta).
@@ -61,6 +63,7 @@ not_tee = unary_union(list(g[(g.kind == "fairway") & (g.geometry.area >= 1500)].
                       + list(g[g.kind == "bunker"].geometry)
                       + [x.buffer(1) for x in g[g.kind == "cartpath"].geometry])
 plan = json.load(open(HERE / "proposed" / "routing.json"))
+ACCEPTED = set(json.load(open(HERE / "desk" / "accepted_boxes.json"))["accepted"])
 src = rasterio.open(HERE / cfg["ortho"]["path"])
 RES = src.transform.a
 
@@ -112,6 +115,13 @@ for kl, lay in LAY.items():
         mark = Polygon([f for f in d["features"] if f["kind"] == "bluetee"][0]["poly"]).buffer(0)
         c = mark.centroid
         parts, how = [], []
+        if key in ACCEPTED:   # the developer kept the pre-filled pad unchanged: that shape is the box
+            feats.append({"osm": f"box_{lay.split('_', 1)[1]}_{n:02d}", "kind": "tee",
+                          "tags": {"golf": "tee", "hole": str(n), "tee_set": SET[lay], "layout": lay, "how": "accepted",
+                                   "source": "developer, tracing desk 2026-10-25 (kept the course chat's pad unchanged)"},
+                          "geometry": mark, "key": key, "mark": mark})
+            print(f"{key:4s} mark {mark.area:5.0f} m2 -> box {mark.area:5.0f} m2  accepted")
+            continue
         pp, why = photo_patch(c)
         under = [p for p in pads if p.intersects(mark.buffer(1.5))]
         under = [p for p in under if p.area / p.convex_hull.area >= 0.7]   # a ragged lidar patch is not a box

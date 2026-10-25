@@ -70,11 +70,16 @@ def measure(pts, tee):
     return sum(Point(a).distance(Point(b)) for a, b in zip(path, path[1:])) / YD
 
 
+ROUND2 = None
+if (HERE / "desk" / "accepted_boxes.json").exists():
+    ROUND2 = set(json.load(open(HERE / "desk" / "accepted_boxes.json"))["round2"])   # only these pages still need a box
 holes = []
 for lay, hs in plan.items():
     card = {r["hole"]: r for r in csv.DictReader(open(HERE / cards[lay]))}
     for n, h in hs.items():
         if n == "_map_fit":
+            continue
+        if ROUND2 is not None and f"{KEY[lay]}{n}" not in ROUND2:
             continue
         pts = [tuple(p) for p in h["line"]]
         grey, back = h["grey"], h["back"]
