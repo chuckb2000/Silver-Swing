@@ -1,0 +1,116 @@
+{
+  "id": "redtail",
+  "course": "RedTail Golf Center",
+  "place": "Beaverton, Oregon",
+  "facts": [
+    {
+      "fact": "Built as Progress Downs (1966-68), redesigned and renamed RedTail in 1999 for the red-tailed hawks that nest in the trees round the course.",
+      "source": "https://www.portland.gov/parks/redtail-golf-course"
+    },
+    {
+      "fact": "The developer asked for a fox (2026-10-22).",
+      "source": "DECISIONS.md"
+    }
+  ],
+  "current": {
+    "subject": "A red fox sitting in profile, tail curled.",
+    "keep": "The fox's colour and white-tipped tail.",
+    "weaknesses": "A full-body animal scene; the face is small at 1x."
+  },
+  "concepts": [
+    {
+      "n": 1,
+      "name": "The Fox Mask",
+      "rationale": "The fox's face alone: tall black-tipped ears, white cheeks, amber eyes, a pointed muzzle. Geometric and bold.",
+      "references": [
+        "Existing fox logo"
+      ],
+      "symbolism": "Quick and clever.",
+      "interpretation": "",
+      "typography": "Archivo Black.",
+      "lockup": {
+        "font": "Archivo Black",
+        "weight": 400,
+        "case": "upper",
+        "tracking": "0.14em",
+        "line2": null,
+        "line1": "RedTail Golf Center"
+      },
+      "strengths": "Reads instantly at any size; great on hats.",
+      "tradeoffs": "Fox masks are a popular modern motif."
+    },
+    {
+      "n": 2,
+      "name": "The Namesake",
+      "rationale": "A red-tailed hawk seen from below as it soars: pale underwings, dark bars, the brick-red fanned tail.",
+      "references": [
+        "Red-tailed hawks, the course's namesake (fact)"
+      ],
+      "symbolism": "The bird the course is named after, overhead.",
+      "interpretation": "",
+      "typography": "Oswald SemiBold.",
+      "lockup": {
+        "font": "Oswald",
+        "weight": 600,
+        "case": "upper",
+        "tracking": "0.14em",
+        "line2": null,
+        "line1": "RedTail Golf Center"
+      },
+      "strengths": "The authentic subject.",
+      "tradeoffs": "Soaring raptors are common in sports logos."
+    }
+  ],
+  "pick": 1,
+  "recommendation": "Concept 1. The fox mask is the strongest icon in the Portland set; the hawk is the truthful alternative if the name should lead.",
+  "chosen": "hawk_e",
+  "options": [
+    {
+      "file": "hawk_a",
+      "name": "The Medallion",
+      "idea": "The hawk's head in profile on a disc in the tail's own colours: rufous, the narrow dark band, the pale tip.",
+      "strength": "A bold portrait that reads at 1x; the colours alone say 'red tail'.",
+      "tradeoff": "A head on a disc is a common sports-badge form."
+    },
+    {
+      "file": "hawk_b",
+      "name": "On the Post",
+      "idea": "Perched on a fence post, head turned, the red tail hanging over the wood: the way most people see a red-tail, by a road or a fairway.",
+      "strength": "The most natural pose, and the red tail is plain to see.",
+      "tradeoff": "Tall and narrow; the post takes some of the space."
+    },
+    {
+      "file": "hawk_c",
+      "name": "Overhead",
+      "idea": "Soaring and banking in a roundel of sky, tail fanned: the view from the fairway when one circles over.",
+      "strength": "Calm, open, and the sky disc frames it on any card.",
+      "tradeoff": "Closest to the soaring hawk you passed on; small head at 1x."
+    },
+    {
+      "file": "hawk_d",
+      "name": "The Tail Feather",
+      "idea": "One rufous tail feather with its dark band and pale tip: the name, reduced to a single object.",
+      "strength": "Elegant and unusual; great on a hat or ball marker.",
+      "tradeoff": "Says 'feather' before it says 'hawk'."
+    },
+    {
+      "file": "hawk_e",
+      "name": "Talons Out",
+      "idea": "Wings flung up, talons forward, coming down on its target.",
+      "strength": "The most energy of the five.",
+      "tradeoff": "The busiest at 1x; close to heraldic eagle poses."
+    }
+  ],
+  "options_pick": "hawk_b",
+  "options_note": "You chose Talons Out (25 October); it is now the logo in the game.",
+  "options_label": "Hawk",
+  "options_title": "A hawk for RedTail",
+  "options_intro": "The course was renamed in 1999 for the red-tailed hawks that nest in the trees around it.",
+  "options_font": [
+    "Oswald",
+    600,
+    "uppercase",
+    "0.1em",
+    "RedTail Golf Center"
+  ]
+}

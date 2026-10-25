@@ -1220,3 +1220,43 @@ Oregon course, set in `DAILY_PICKS`; the draws from 2026-10-26 follow on from
 it); a daily round
 already played on East Potomac Blue today keeps its place on the course board
 but not on today's daily board. `DAILY_PICKS` still overrides a day.
+
+## Logos from the logo concepts (developer, 2026-10-25; branch design/logo-concepts)
+
+- The design chat drew two logos for each of the 29 courses then in the game
+  (`assets-src/logo_concepts/<id>/`): Concept 1 redraws the existing logo, Concept 2 is a new
+  subject from the course's history, landscape or town. Each folder's `notes.json` has the
+  rationale and the facts with sources; `review.py` builds the review page.
+- The developer's picks (2026-10-25):
+  - **To a concept (15), now in the game** (plus RedTail's hawk and Waverley's trolley, below): Bandon Dunes 1 (the harbor seal's face), Bandon
+    Preserve 1 (the plover), Bandon Trails 1 (the carved trail post), Old Macdonald 1 (cap and
+    pipe), Oregon Golf Club 1 (the heron in still water), Oswego Lake 2 (the Oswego Iron
+    Furnace), Pacific Dunes 1 (the whale's fluke), Sheep Ranch 1 (a black face in a fleece),
+    Shorty's 1 (the bedded fawn), Stanford 1 (the arcade), Stone Creek 2 (a covered wagon:
+    Oregon City, the end of the Oregon Trail), TPC Boston 1 (the lederhosen), Triggs 1 (the
+    rooster's head), Tualatin 2 (the Tualatin mastodon), Willamette Valley 2 (a dahlia, for Canby).
+  - **Unchanged (12):** Chambers Bay, East Potomac (all three), Eastmoreland, Franklin,
+    Gearhart, Highland Links, Indian Island, Langdon, Langston, The Muni, Sandpines,
+    Wannamoisett.
+  - **RedTail goes to a red-tailed hawk** (developer: "we should definitely change to a hawk",
+    but not Concept 2's soaring hawk). Of five more (`redtail/hawk_a` to `hawk_e`) the developer
+    chose Hawk E, "Talons Out" ("Hawk E is SO COOL"): wings up, talons forward, red tail
+    fanned. It is in the game; the fox stays in `course_logos/redtail.py` as `PREVIOUS`.
+- **Why Waverley has a train** (developer): the club's Junior Clubhouse was the "Trolley
+  House" (or "Over Links") stop on the old interurban Ardgour line across the property, and its
+  back keeps the stop's original double doors (waverley.cc/golf/field-house-facilities,
+  waverley.cc/story). The developer asked to see trolleys; of five (`waverley/trolley_a` to
+  `trolley_e`: head-on in the line's maroon and cream or in Waverley green, side on over the
+  turf, a "Golf Junction" roundel, the pole and spark) the developer chose Trolley C, "Along
+  the Line": a green and cream car on rails laid across the turf. It is in the game through
+  `course_logos/waverley.py`; the locomotive stays in `LOGOS["waverley"]`.
+- **How a concept becomes the logo:** `assets-src/course_logos/<id>.py` sets
+  `LOGO = concept_logo("<id>", "conceptN")` (new in `logos.py`), which reads the 32 px sprite
+  `logo_concepts/lc.py` builds from the SVG, so `logos.py` and `make cards` need no SVG
+  renderer. The old drawing stays in the course file as `PREVIOUS`, or in `LOGOS` for the five
+  drawn in `logos.py` (Oswego Lake, Oregon Golf Club, Stone Creek, Tualatin, Willamette
+  Valley). To change one: edit `conceptN.src.svg`, `pip install cairosvg`,
+  `python3 assets-src/logo_concepts/lc.py build <id>`, then `python3 assets-src/logos.py <id>`.
+  Every other logo rebuilds byte-identical.
+- Courses merged after the concepts were drawn (Astoria, Cypress Point, Pumpkin Ridge,
+  Wildwood) keep their course chats' logos and have no concepts.

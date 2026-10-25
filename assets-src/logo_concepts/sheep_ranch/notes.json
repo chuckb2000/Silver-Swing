@@ -1,0 +1,72 @@
+{
+  "id": "sheep_ranch",
+  "course": "Sheep Ranch",
+  "place": "Bandon, Oregon",
+  "facts": [
+    {
+      "fact": "Coore & Crenshaw, opened 2020, on the headland at the north end of the resort.",
+      "source": "docs/courses/sheep_ranch.md"
+    },
+    {
+      "fact": "Tom Doak's earlier layout (2000) had 13 greens, A to M, with no set holes; six sat on promontories above Whiskey Run Beach. Retired fire engines watered them.",
+      "source": "https://thefriedegg.com/course-profile-sheep-ranch/"
+    },
+    {
+      "fact": "The club's own logo is a shepherd's crook between the letters S and R (avoided here).",
+      "source": "https://golf.com/travel/creating-logo-bandon-dunes-sheep-ranch/"
+    }
+  ],
+  "current": {
+    "subject": "A black-faced sheep standing on a clifftop.",
+    "keep": "The sheep, and the black face against white wool.",
+    "weaknesses": "The whole animal plus a cliff block is too much for 32 px; the sheep's head is tiny."
+  },
+  "concepts": [
+    {
+      "n": 1,
+      "name": "Black-Face",
+      "rationale": "The sheep's head, front on, framed by a ring of fleece: black face, ears straight out, amber eyes. The fleece becomes the badge.",
+      "references": [
+        "Existing sheep logo"
+      ],
+      "symbolism": "The name made literal and friendly: the ranch's one resident, looking back at you.",
+      "interpretation": "",
+      "typography": "Rokkitt Bold, a sturdy slab with a ranch-sign feel.",
+      "lockup": {
+        "font": "Rokkitt",
+        "weight": 700,
+        "case": "upper",
+        "tracking": "0.14em",
+        "line2": null,
+        "line1": "Sheep Ranch"
+      },
+      "strengths": "A perfect round silhouette; the black-on-white contrast reads at any size.",
+      "tradeoffs": "Playful more than prestigious."
+    },
+    {
+      "n": 2,
+      "name": "The Promontory",
+      "rationale": "A green on the edge of a headland, flag up, the sea breaking below. Sheep Ranch has always been about greens on the cliff edge.",
+      "references": [
+        "Doak's promontory greens above Whiskey Run Beach (fact)",
+        "Coore & Crenshaw's cliff-edge par 3s (fact)"
+      ],
+      "symbolism": "Golf at the edge of the continent: nothing between the pin and the Pacific.",
+      "interpretation": "",
+      "typography": "Libre Baskerville capitals, wide-tracked: calm and classic.",
+      "lockup": {
+        "font": "Libre Baskerville",
+        "weight": 700,
+        "case": "upper",
+        "tracking": "0.14em",
+        "line2": null,
+        "line1": "Sheep Ranch"
+      },
+      "strengths": "Tells the course's real story; reads as golf instantly.",
+      "tradeoffs": "A scene in a roundel is less iconic than a single object; uses a flag."
+    }
+  ],
+  "pick": 1,
+  "recommendation": "Concept 1. The fleece medallion is the strongest pure icon in the Bandon set. The Promontory is the better description of the golf.",
+  "chosen": 1
+}

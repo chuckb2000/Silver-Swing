@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <title>Franklin - Concept 1: The Turtle, from above</title>
+  <defs>
+    <clipPath id="shell"><ellipse cx="16" cy="17" rx="9.4" ry="11"/></clipPath>
+  </defs>
+  <!-- head, legs and tail, striped yellow -->
+  <ellipse cx="16" cy="4.6" rx="2.8" ry="3.2" fill="#6f8a3a"/>
+  <rect x="15.4" y="2.4" width="1.2" height="3" fill="#d6c04a"/>
+  <rect x="13.8" y="3.6" width="1.2" height="1.2" fill="#12181e"/><rect x="17" y="3.6" width="1.2" height="1.2" fill="#12181e"/>
+  <g fill="#6f8a3a">
+    <ellipse cx="6" cy="10.4" rx="3.6" ry="2.2" transform="rotate(-35 6 10.4)"/>
+    <ellipse cx="26" cy="10.4" rx="3.6" ry="2.2" transform="rotate(35 26 10.4)"/>
+    <ellipse cx="6.4" cy="24.4" rx="3.4" ry="2.2" transform="rotate(35 6.4 24.4)"/>
+    <ellipse cx="25.6" cy="24.4" rx="3.4" ry="2.2" transform="rotate(-35 25.6 24.4)"/>
+    <path d="M14.8 27 L16 30 L17.2 27 Z"/>
+  </g>
+  <g fill="#d6c04a"><rect x="3.6" y="9.6" width="2" height="1"/><rect x="26.4" y="9.6" width="2" height="1"/></g>
+  <!-- the shell: a gold rim, then the scutes -->
+  <ellipse cx="16" cy="17" rx="10.6" ry="12.2" fill="#c9a64a"/>
+  <ellipse cx="16" cy="17" rx="9.4" ry="11" fill="#3f5a2a"/>
+  <g clip-path="url(#shell)">
+    <polygon points="19.2,9.2 17.6,12.1 14.4,12.1 12.8,9.2 14.4,6.3 17.6,6.3" fill="#7f9a4a"/>
+    <polygon points="19.6,16.8 17.8,20.1 14.2,20.1 12.4,16.8 14.2,13.5 17.8,13.5" fill="#7f9a4a"/>
+    <polygon points="19.2,24.6 17.6,27.5 14.4,27.5 12.8,24.6 14.4,21.7 17.6,21.7" fill="#7f9a4a"/>
+    <polygon points="12.8,12.6 11.1,15.7 7.7,15.7 6.0,12.6 7.7,9.5 11.1,9.5" fill="#6f8a3e"/>
+    <polygon points="26.0,12.6 24.3,15.7 20.9,15.7 19.2,12.6 20.9,9.5 24.3,9.5" fill="#5f7a34"/>
+    <polygon points="12.8,21.2 11.1,24.3 7.7,24.3 6.0,21.2 7.7,18.1 11.1,18.1" fill="#6f8a3e"/>
+    <polygon points="26.0,21.2 24.3,24.3 20.9,24.3 19.2,21.2 20.9,18.1 24.3,18.1" fill="#5f7a34"/>
+    <rect x="21" y="0" width="12" height="32" fill="#2f4a20" opacity="1" transform="translate(4.6 0)"/>
+  </g>
+  <!-- light on the upper-left scutes -->
+  <g fill="#a8c06a">
+    <rect x="14.2" y="7.4" width="2" height="1.2"/><rect x="13.8" y="14.6" width="2.2" height="1.2"/><rect x="7.4" y="10.6" width="2" height="1.2"/>
+  </g>
+  <!-- marginal scute ticks on the gold rim -->
+  <g fill="#9a7a2a">
+    <rect x="5.6" y="16.4" width="1" height="1.2"/><rect x="25.4" y="16.4" width="1" height="1.2"/>
+    <rect x="15.5" y="28.2" width="1" height="1"/><rect x="8" y="7.6" width="1" height="1"/><rect x="23" y="7.6" width="1" height="1"/>
+    <rect x="8" y="26" width="1" height="1"/><rect x="23" y="26" width="1" height="1"/>
+  </g>
+</svg>

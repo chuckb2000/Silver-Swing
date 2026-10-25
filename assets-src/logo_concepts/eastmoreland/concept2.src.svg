@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <title>Eastmoreland - Concept 2: Salmon in the City</title>
+  <defs>
+    <clipPath id="fish"><path d="M5.4 22.4 C6.6 15 12.4 8.6 19.4 7.2 C22.6 6.6 25.6 7.4 27.6 9 C26.6 10.8 24.8 12 22.6 12.2 C18.4 12.6 14 14.8 10.6 19 C9.4 20.6 8.4 22.4 7.6 24.4 Z"/></clipPath>
+  </defs>
+  <!-- the creek -->
+  <path d="M1.6 25.6 C5 24 8 26.8 12 25.6 C16 24.4 18 26.8 22 25.6 C26 24.4 28 26.4 30.4 25.6 L30.4 28.6 C26 30.2 6 30.2 1.6 28.6 Z" fill="#2d6aa8"/>
+  <path d="M1.6 25.6 C5 24 8 26.8 12 25.6 C16 24.4 18 26.8 22 25.6 C26 24.4 28 26.4 30.4 25.6 L30.4 26.6 C28 27.4 26 25.4 22 26.6 C18 27.8 16 25.4 12 26.6 C8 27.8 5 25 1.6 26.6 Z" fill="#5d97ee"/>
+  <!-- tail fin, splashing out of the water -->
+  <path d="M7.4 21.6 L2.4 21 L4.8 24.4 L3.2 28 L8.4 25.4 Z" fill="#2f4a3a"/>
+  <!-- a coho in spawning colour, leaping in an arc -->
+  <path d="M5.4 22.4 C6.6 15 12.4 8.6 19.4 7.2 C22.6 6.6 25.6 7.4 27.6 9 C26.6 10.8 24.8 12 22.6 12.2 C18.4 12.6 14 14.8 10.6 19 C9.4 20.6 8.4 22.4 7.6 24.4 Z" fill="#d8443a"/>
+  <g clip-path="url(#fish)">
+    <!-- dark back along the top of the arc -->
+    <path d="M4 21 C6 13 12 7 20 5.6 L28 6 L28 8.2 C24 7.8 20 8.4 17 9.8 C12 12 8.4 16.4 6.8 22 Z" fill="#3f5a44"/>
+    <!-- pale belly under the arc -->
+    <path d="M8 24.4 C9 21 11 18 14 15.6 C17 13.2 20 12.4 24 12.2 L24 14 C19 14.2 15 15.8 12 19 C10.4 20.8 9.4 22.6 9 25 Z" fill="#e8b0a0"/>
+    <!-- the hooked green head -->
+    <path d="M21 6 L30 6 L30 13 L21.6 13 C22.4 10.6 22.2 8 21 6 Z" fill="#3f6a4a"/>
+  </g>
+  <!-- hooked jaw, eye, gill -->
+  <path d="M27.4 9 C28.4 9.6 28.8 10.6 28.2 11.6 L26.8 10.4 Z" fill="#3f6a4a"/>
+  <rect x="24.4" y="8.4" width="1.4" height="1.4" fill="#f6d84a"/>
+  <rect x="24.8" y="8.8" width="0.8" height="0.8" fill="#12181e"/>
+  <path d="M21.6 8.2 C22.4 9.4 22.4 10.8 21.8 12" stroke="#2a3a2e" stroke-width="1" fill="none"/>
+  <!-- dorsal fin -->
+  <path d="M13.4 10.4 L14.6 7 L17.4 8.4 Z" fill="#2f4a3a"/>
+  <!-- spray -->
+  <g fill="#cfe3f2"><rect x="9.6" y="23.6" width="1.2" height="1.2"/><rect x="1.8" y="19.6" width="1.2" height="1.2"/><rect x="12.4" y="22.4" width="1" height="1"/></g>
+</svg>

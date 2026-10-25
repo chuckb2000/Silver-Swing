@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="512" height="512">
+  <title>RedTail - Concept 2: The Namesake (red-tailed hawk)</title>
+  <defs>
+    <clipPath id="right"><rect x="16" y="0" width="16" height="32" /></clipPath>
+    <g id="wings">
+      
+      <path d="M14 10 C10 8.6 6 8.4 2.4 9.6 L1.8 11 L3.4 11.4 L2 12.6 L3.8 13 L2.6 14.4 L4.6 14.6 C8 15 11.6 15.6 14 16.6 Z" />
+      <path d="M18 10 C22 8.6 26 8.4 29.6 9.6 L30.2 11 L28.6 11.4 L30 12.6 L28.2 13 L29.4 14.4 L27.4 14.6 C24 15 20.4 15.6 18 16.6 Z" />
+    </g>
+  </defs>
+  
+  <g id="outline"><use href="#wings" fill="#0d1620" stroke="#0d1620" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+  <use href="#wings" fill="#0d1620" clip-path="url(#right)" stroke="#0d1620" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+  <path d="M14 10 C10 8.6 6 8.4 2.4 9.6 L2.6 10.6 C6 9.6 9.6 9.8 13.8 11.2 Z" fill="#0d1620" stroke="#0d1620" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+  <path d="M18 10 C22 8.6 26 8.4 29.6 9.6 L29.4 10.6 C26 9.6 22.4 9.8 18.2 11.2 Z" fill="#0d1620" stroke="#0d1620" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+  <g><path d="M1.8 11 L4.4 10.6 L4.6 14.6 L2.6 14.4 L3.8 13 L2 12.6 L3.4 11.4 Z" fill="#0d1620" stroke="#0d1620" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" /><path d="M30.2 11 L27.6 10.6 L27.4 14.6 L29.4 14.4 L28.2 13 L30 12.6 L28.6 11.4 Z" fill="#0d1620" stroke="#0d1620" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" /></g>
+  
+  <path d="M13.6 18.8 L18.4 18.8 L21.8 26.2 C19.6 27.8 12.4 27.8 10.2 26.2 Z" fill="#0d1620" stroke="#0d1620" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+  <path d="M16 18.8 L18.4 18.8 L21.8 26.2 C20.6 27 18.4 27.4 16 27.4 Z" fill="#0d1620" stroke="#0d1620" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+  <path d="M10.8 24.8 C13.6 25.8 18.4 25.8 21.2 24.8 L21.5 25.6 C18.6 26.6 13.4 26.6 10.5 25.6 Z" fill="#0d1620" stroke="#0d1620" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+  
+  <ellipse cx="16" cy="13.6" rx="3" ry="6.4" fill="#0d1620" stroke="#0d1620" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+  <path d="M13 14.6 C14.4 15.8 17.6 15.8 19 14.6 L19 16.6 C17.6 17.6 14.4 17.6 13 16.6 Z" fill="#0d1620" stroke="#0d1620" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+  <g><rect x="14" y="15.4" width="1" height="1" fill="#0d1620" stroke="#0d1620" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" /><rect x="17" y="15.4" width="1" height="1" fill="#0d1620" stroke="#0d1620" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" /></g>
+  
+  <circle cx="16" cy="6.8" r="2.6" fill="#0d1620" stroke="#0d1620" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+  <path d="M15.2 3.8 L16.8 3.8 L16 2.6 Z" fill="#0d1620" stroke="#0d1620" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+  <rect x="15.4" y="4" width="1.2" height="1" fill="#0d1620" stroke="#0d1620" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+</g><use href="#wings" fill="#efe3cc" />
+  <use href="#wings" fill="#d9c8a8" clip-path="url(#right)" />
+  <path d="M14 10 C10 8.6 6 8.4 2.4 9.6 L2.6 10.6 C6 9.6 9.6 9.8 13.8 11.2 Z" fill="#5a3a24" />
+  <path d="M18 10 C22 8.6 26 8.4 29.6 9.6 L29.4 10.6 C26 9.6 22.4 9.8 18.2 11.2 Z" fill="#5a3a24" />
+  <g fill="#4a4a52"><path d="M1.8 11 L4.4 10.6 L4.6 14.6 L2.6 14.4 L3.8 13 L2 12.6 L3.4 11.4 Z" /><path d="M30.2 11 L27.6 10.6 L27.4 14.6 L29.4 14.4 L28.2 13 L30 12.6 L28.6 11.4 Z" /></g>
+  
+  <path d="M13.6 18.8 L18.4 18.8 L21.8 26.2 C19.6 27.8 12.4 27.8 10.2 26.2 Z" fill="#c8582e" />
+  <path d="M16 18.8 L18.4 18.8 L21.8 26.2 C20.6 27 18.4 27.4 16 27.4 Z" fill="#a8441e" />
+  <path d="M10.8 24.8 C13.6 25.8 18.4 25.8 21.2 24.8 L21.5 25.6 C18.6 26.6 13.4 26.6 10.5 25.6 Z" fill="#4a3020" />
+  
+  <ellipse cx="16" cy="13.6" rx="3" ry="6.4" fill="#efe3cc" />
+  <path d="M13 14.6 C14.4 15.8 17.6 15.8 19 14.6 L19 16.6 C17.6 17.6 14.4 17.6 13 16.6 Z" fill="#8a5a34" />
+  <g fill="#5a3a24"><rect x="14" y="15.4" width="1" height="1" /><rect x="17" y="15.4" width="1" height="1" /></g>
+  
+  <circle cx="16" cy="6.8" r="2.6" fill="#8a5a34" />
+  <path d="M15.2 3.8 L16.8 3.8 L16 2.6 Z" fill="#e3b84a" />
+  <rect x="15.4" y="4" width="1.2" height="1" fill="#e3b84a" />
+</svg>

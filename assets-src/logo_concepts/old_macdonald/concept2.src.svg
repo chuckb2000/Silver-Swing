@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <title>Old Macdonald - Concept 2: The Biarritz</title>
+  <defs>
+    <clipPath id="disc"><circle cx="16" cy="16" r="13.6"/></clipPath>
+    <path id="ground" d="M0 16 L8.4 16 C10.6 16 11.2 25 16 25 C20.8 25 21.4 14 23.6 14 L32 14 L32 32 L0 32 Z"/>
+  </defs>
+  <circle cx="16" cy="16" r="14.9" fill="#2f5a2c"/>
+  <g clip-path="url(#disc)">
+    <rect x="0" y="0" width="32" height="32" fill="#d8ecf7"/>
+    <!-- the green in section: front plateau, the deep swale, back plateau -->
+    <use href="#ground" fill="#7ccf5e"/>
+    <use href="#ground" fill="#3f7a36" transform="translate(0 3)"/>
+    <use href="#ground" fill="#2f5a2c" transform="translate(0 7)"/>
+    <!-- the lit lip of the front plateau -->
+    <path d="M0 16 L8.4 16 C9.4 16 10 17.4 10.4 18.4 L8.6 17.4 L0 17.4 Z" fill="#a8e687"/>
+  </g>
+  <!-- the ball on the front plateau, the pin on the back -->
+  <rect x="11.6" y="19.4" width="2.6" height="2.6" fill="#f6f6f2"/>
+  <rect x="25.4" y="4.4" width="1.2" height="9.6" fill="#f6f6f2"/>
+  <path d="M26.6 4.4 L30 5.8 L26.6 7.4 Z" fill="#e8483a"/>
+</svg>

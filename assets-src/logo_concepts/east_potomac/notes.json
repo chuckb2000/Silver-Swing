@@ -1,0 +1,68 @@
+{
+  "id": "east_potomac",
+  "course": "East Potomac Golf Links",
+  "place": "Washington, DC",
+  "facts": [
+    {
+      "fact": "Blue (18, Walter Travis), White (9) and Red (9) courses, opened in stages 1921-1925, on National Park Service land at Hains Point.",
+      "source": "docs/courses/east_potomac.md"
+    },
+    {
+      "fact": "Some of the city's oldest Japanese flowering cherry trees grow in East Potomac Park; its mini golf (1931) is the oldest continuously operated in the US.",
+      "source": "https://www.nps.gov/places/000/east-potomac-park-mini-golf.htm"
+    }
+  ],
+  "current": {
+    "subject": "The domed, columned memorial; the three courses on Blue, White and Red discs.",
+    "keep": "The memorial, and the colour system for the three courses.",
+    "weaknesses": "The dome fills the disc; columns are lost; the rims are thin."
+  },
+  "concepts": [
+    {
+      "n": 1,
+      "name": "The Memorial across the Basin",
+      "rationale": "A cleaner memorial (dome, pediment, six columns, steps) over the Tidal Basin. The courses get a navy field with a thick Blue, White or Red rim.",
+      "references": [
+        "Existing memorial logos",
+        "The Jefferson Memorial across the Tidal Basin"
+      ],
+      "symbolism": "Golf in the shadow of the monuments.",
+      "interpretation": "",
+      "typography": "Cinzel.",
+      "lockup": {
+        "font": "Cinzel",
+        "weight": 600,
+        "case": "upper",
+        "tracking": "0.14em",
+        "line2": null,
+        "line1": "East Potomac Golf Links"
+      },
+      "strengths": "A dignified family; the rim colour tells the courses apart at 1x.",
+      "tradeoffs": "Monuments are DC-generic."
+    },
+    {
+      "n": 2,
+      "name": "Hains Point Blossom",
+      "rationale": "A five-petal cherry blossom on the same navy field and coloured rims.",
+      "references": [
+        "Cherry trees of East Potomac Park (fact)"
+      ],
+      "symbolism": "Spring at Hains Point.",
+      "interpretation": "",
+      "typography": "Cormorant Garamond.",
+      "lockup": {
+        "font": "Cormorant Garamond",
+        "weight": 600,
+        "case": "upper",
+        "tracking": "0.14em",
+        "line2": null,
+        "line1": "East Potomac Golf Links"
+      },
+      "strengths": "Beautiful and readable; the same rim system.",
+      "tradeoffs": "Cherry blossoms are the city's symbol, not only the park's."
+    }
+  ],
+  "pick": 1,
+  "recommendation": "Concept 1. The memorial with coloured rims is the clearest system for three courses.",
+  "chosen": "current"
+}

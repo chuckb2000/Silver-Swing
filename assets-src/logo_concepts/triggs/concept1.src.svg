@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <title>Triggs - Concept 1: Reveille (Rhode Island Red)</title>
+  <defs>
+    <clipPath id="neck"><path d="M9.6 9.4 C12.6 6.4 17.4 6.6 19.6 10 C22 13.6 23.6 18 27.6 22 L29.4 29.4 L8.4 29.4 C10.6 24 11.6 19.4 10 15.6 C9 13.4 8.4 11.4 9.6 9.4 Z"/></clipPath>
+  </defs>
+  <!-- neck and shoulder: mahogany hackles flowing back -->
+  <path d="M9.6 9.4 C12.6 6.4 17.4 6.6 19.6 10 C22 13.6 23.6 18 27.6 22 L29.4 29.4 L8.4 29.4 C10.6 24 11.6 19.4 10 15.6 C9 13.4 8.4 11.4 9.6 9.4 Z" fill="#b8401e"/>
+  <g clip-path="url(#neck)">
+    <!-- pointed hackle feathers, lit, then the deep red of the body -->
+    <path d="M10 12 L13 22 L14.6 14 L17 22 L17.6 13 L20.6 20.4 L19.4 11 Z" fill="#d8642e"/>
+    <path d="M8 24 C14 21.6 22 21.4 30 24 L30 30 L8 30 Z" fill="#8a2a1a"/>
+    <path d="M12 24 L13.6 27 L15.4 23.6 L17 27 L18.6 23.4 L20.4 26.8 L22 23.6 L23.6 26.8 L25 24 Z" fill="#b8401e"/>
+    <rect x="24" y="14" width="8" height="16" fill="#8a2a1a"/>
+  </g>
+  <!-- the comb, five tall points -->
+  <path d="M9 9.6 L9.4 5.4 L11 7.4 L12 3.2 L13.6 6.4 L15.2 2.6 L16.4 6.4 L18.2 3.6 L18.6 7.6 L20.6 6.2 L19.8 10 Z" fill="#e8302a"/>
+  <path d="M9 9.6 L9.4 5.4 L11 7.4 L12 3.2 L12.4 7.6 Z" fill="#ff6a5a"/>
+  <!-- head, open beak crowing -->
+  <path d="M9.6 9.4 C11.6 8.4 14 8.6 15.4 10.6 C16.2 12 15.6 14 14 15 L10.4 15.4 C9 14 8.6 11.4 9.6 9.4 Z" fill="#b8401e"/>
+  <path d="M9.4 10 L4 8.4 L8.8 11.2 Z" fill="#f2b830"/>
+  <path d="M9 11.8 L4.6 12.6 L9.4 12.8 Z" fill="#d8962a"/>
+  <!-- red face, wattle, eye -->
+  <path d="M9.4 10 C10.6 9.4 12.6 9.8 12.8 11.6 C12.6 13 11 13.4 9.8 13 Z" fill="#e8302a"/>
+  <path d="M9.4 12.8 C9.4 15 10.4 17.4 12 17.6 C13 16.4 12.6 14.4 11.8 13 Z" fill="#e8302a"/>
+  <rect x="11" y="10.6" width="1.2" height="1.2" fill="#f08a2a"/>
+  <rect x="11.4" y="11" width="0.6" height="0.6" fill="#12181e"/>
+  <!-- the ear lobe -->
+  <rect x="13.4" y="12" width="1.4" height="1.4" fill="#e8302a"/>
+</svg>

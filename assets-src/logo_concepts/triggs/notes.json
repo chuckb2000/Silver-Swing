@@ -1,0 +1,72 @@
+{
+  "id": "triggs",
+  "course": "Triggs Memorial Golf Course",
+  "place": "Providence, Rhode Island",
+  "facts": [
+    {
+      "fact": "Donald Ross design, opened May 1932; named for Jeremiah Triggs, Providence's parks superintendent; built by the Parks Department's own crews.",
+      "source": "https://pvdeye.org/?p=36418"
+    },
+    {
+      "fact": "Raised greens that slope from back to front; built by Civil Works Administration labour.",
+      "source": "https://linksmagazine.com/6-historical-public-golf-courses-across-new-england/"
+    },
+    {
+      "fact": "The developer chose a Rhode Island Red (2026-10-20).",
+      "source": "docs/courses/triggs.md"
+    }
+  ],
+  "current": {
+    "subject": "A Rhode Island Red rooster standing in grass.",
+    "keep": "The rooster and its mahogany red.",
+    "weaknesses": "Full body plus grass; the comb and head are small."
+  },
+  "concepts": [
+    {
+      "n": 1,
+      "name": "Reveille",
+      "rationale": "The rooster's head and neck, crowing: tall comb, wattles, mahogany hackles.",
+      "references": [
+        "Existing rooster logo"
+      ],
+      "symbolism": "Up early for the first tee time.",
+      "interpretation": "",
+      "typography": "Rokkitt Bold.",
+      "lockup": {
+        "font": "Rokkitt",
+        "weight": 700,
+        "case": "upper",
+        "tracking": "0.14em",
+        "line2": null,
+        "line1": "Triggs Memorial Golf Course"
+      },
+      "strengths": "Bold, colourful, characterful.",
+      "tradeoffs": "A rooster says Rhode Island more than golf."
+    },
+    {
+      "n": 2,
+      "name": "Built by Hand",
+      "rationale": "A spade driven into a raised green, turf just lifted: the Depression-era crews who built a public course.",
+      "references": [
+        "Built by city crews and CWA labour (fact)",
+        "Ross's raised greens (fact)"
+      ],
+      "symbolism": "Golf for everyone, made by hand.",
+      "interpretation": "",
+      "typography": "Zilla Slab Bold.",
+      "lockup": {
+        "font": "Zilla Slab",
+        "weight": 700,
+        "case": "upper",
+        "tracking": "0.14em",
+        "line2": null,
+        "line1": "Triggs Memorial Golf Course"
+      },
+      "strengths": "A true, humane story.",
+      "tradeoffs": "A spade is a modest image."
+    }
+  ],
+  "pick": 1,
+  "recommendation": "Concept 1. The crowing rooster is the more memorable mark.",
+  "chosen": 1
+}

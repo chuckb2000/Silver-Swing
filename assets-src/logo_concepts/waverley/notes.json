@@ -1,0 +1,126 @@
+{
+  "id": "waverley",
+  "course": "Waverley Country Club",
+  "place": "Milwaukie, Oregon",
+  "facts": [
+    {
+      "fact": "Founded April 1896 and named for Sir Walter Scott's novel 'Waverley'; moved in 1898 to the former Luelling orchard on the east bank of the Willamette.",
+      "source": "https://www.waverley.cc/story/waverley-history-1800s-the-beginning-1"
+    },
+    {
+      "fact": "Pear trees from the orchard still stand left of the 10th green.",
+      "source": "https://www.waverley.cc/story/waverley-history-1800s-the-beginning-1"
+    },
+    {
+      "fact": "The Junior Clubhouse was the 'Trolley House' or 'Over Links' stop on the interurban Ardgour line; its back keeps the original double doors (developer, citing the club).",
+      "source": "https://www.waverley.cc/golf/field-house-facilities"
+    },
+    {
+      "fact": "The Portland to Oregon City line opened in 1892 (East Side Railway), the first long-distance interurban passenger line; the company's cars wore maroon and cream, later blue and cream, then orange and cream.",
+      "source": "https://future.trimet.org/history/newinterurban.htm"
+    }
+  ],
+  "current": {
+    "subject": "A green and white locomotive, for the club's Junior Clubhouse: once the 'Trolley House' (or 'Over Links') stop on the interurban Ardgour line across the property (developer, 2026-10-25).",
+    "keep": "The locomotive: it stands for a real building on the course, whose back still has the stop's double doors.",
+    "weaknesses": "Side-on and long; the shape reads as a toy train at 1x."
+  },
+  "concepts": [
+    {
+      "n": 1,
+      "name": "The Express, Head-On",
+      "rationale": "The locomotive face on: round smokebox door, lamp, chimney, red buffer beam, green tanks with white lining. Symmetric and commanding.",
+      "references": [
+        "Existing locomotive logo"
+      ],
+      "symbolism": "Arrival at the club, by the line that once stopped on the course.",
+      "interpretation": "The stop served trolleys on an interurban line; a steam engine is the developer's existing subject, kept here.",
+      "typography": "Playfair Display Bold capitals.",
+      "lockup": {
+        "font": "Playfair Display",
+        "weight": 700,
+        "case": "upper",
+        "tracking": "0.14em",
+        "line2": null,
+        "line1": "Waverley Country Club"
+      },
+      "strengths": "Bold, symmetric, much stronger at 1x.",
+      "tradeoffs": "A trolley car would be the literal subject; the steam engine reads better at 32 px."
+    },
+    {
+      "n": 2,
+      "name": "The Luelling Pear",
+      "rationale": "A ripe pear with its leaf. The club plays on Henderson Luelling's old orchard, and its pear trees still stand by the 10th green.",
+      "references": [
+        "Luelling orchard, the club's site since 1898 (fact)",
+        "Pear trees left of the 10th (fact)"
+      ],
+      "symbolism": "Roots: one of the oldest clubs in the West, playing on an orchard planted before it.",
+      "interpretation": "",
+      "typography": "Libre Baskerville Italic.",
+      "lockup": {
+        "font": "Libre Baskerville",
+        "weight": 400,
+        "case": "none",
+        "tracking": "0.02em",
+        "line2": null,
+        "line1": "Waverley Country Club"
+      },
+      "strengths": "True, simple, beautiful; reads from across a room.",
+      "tradeoffs": "A pear is gentle for a championship club."
+    }
+  ],
+  "pick": 2,
+  "recommendation": "Concept 2. The pear is the club's own ground and history, and the cleanest icon in the Portland set.",
+  "chosen": "trolley_c",
+  "options_label": "Trolley",
+  "options_title": "A trolley for Waverley",
+  "options_pending": false,
+  "options_intro": "The Junior Clubhouse was the Trolley House, a stop on the interurban Ardgour line from the club's 'Riverside Links and Golf Junction era'. The line opened in 1892 as one of the first long-distance electric interurbans; the company's cars wore maroon and cream (later blue, then orange, with cream).",
+  "options_font": [
+    "Playfair Display",
+    700,
+    "uppercase",
+    "0.12em",
+    "Waverley Country Club"
+  ],
+  "options": [
+    {
+      "file": "trolley_a",
+      "name": "Head-On, Line Colours",
+      "idea": "The interurban car face on, its pole up to the wire, in the maroon and cream the company's cars wore.",
+      "strength": "The most authentic livery; reads at once as a trolley.",
+      "tradeoff": "Maroon is new to the club's look."
+    },
+    {
+      "file": "trolley_b",
+      "name": "Head-On, Waverley Green",
+      "idea": "The same car in the green and white of the locomotive the club has now.",
+      "strength": "Keeps the colours people know, with the right vehicle.",
+      "tradeoff": "The green is ours, not the line's."
+    },
+    {
+      "file": "trolley_c",
+      "name": "Along the Line",
+      "idea": "Side on, green and cream, the rails laid across the turf: the line ran through the links.",
+      "strength": "Says where the stop was.",
+      "tradeoff": "A long shape; the windows are small at 1x."
+    },
+    {
+      "file": "trolley_d",
+      "name": "Golf Junction",
+      "idea": "A maroon-and-cream car passing a green and its pin, in a roundel.",
+      "strength": "Trolley and golf together, the whole story in one badge.",
+      "tradeoff": "The busiest of the five; more scene than symbol."
+    },
+    {
+      "file": "trolley_e",
+      "name": "The Live Wire",
+      "idea": "Only the trolley pole, its wheel on the wire, and the spark.",
+      "strength": "Modern and unusual; strong on a hat.",
+      "tradeoff": "Abstract: it can read as a wand before a trolley."
+    }
+  ],
+  "options_pick": "trolley_b",
+  "options_note": "You chose Along the Line (25 October); it is now the logo in the game."
+}

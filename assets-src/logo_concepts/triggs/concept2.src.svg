@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <title>Triggs - Concept 2: Built by Hand</title>
+  <defs>
+    <clipPath id="disc"><circle cx="16" cy="16" r="13.6"/></clipPath>
+  </defs>
+  <circle cx="16" cy="16" r="14.9" fill="#2f4a2a"/>
+  <g clip-path="url(#disc)">
+    <rect x="0" y="0" width="32" height="32" fill="#e9e3c8"/>
+    <!-- a raised Ross green, the turf just cut and lifted -->
+    <path d="M0 22 C6 15 26 15 32 22 L32 32 L0 32 Z" fill="#7a5232"/>
+    <path d="M0 21 C6 14 26 14 32 21 L32 23.4 C26 17 6 17 0 23.4 Z" fill="#6fae4c"/>
+    <path d="M0 21 C6 14 26 14 32 21 L32 21.8 C26 15.4 6 15.4 0 21.8 Z" fill="#9ee27c"/>
+    <g fill="#5a3a22"><rect x="4" y="26" width="2" height="1.4"/><rect x="12" y="28" width="2.4" height="1.4"/><rect x="23" y="25.6" width="2" height="1.4"/></g>
+    <!-- a lifted sod beside the spade -->
+    <path d="M20.6 15.6 L26.4 14.4 L27 16.2 L21.2 17.4 Z" fill="#6fae4c"/>
+    <path d="M21.2 17.4 L27 16.2 L27 17.4 L21.4 18.6 Z" fill="#7a5232"/>
+  </g>
+  <!-- the spade, driven into the green -->
+  <rect x="14.8" y="7" width="2.4" height="11" fill="#a0703f"/>
+  <rect x="14.8" y="7" width="1" height="11" fill="#c08a52"/>
+  <path d="M12.6 3 L19.4 3 L19.4 7.4 L12.6 7.4 Z M14.4 4.4 L14.4 6 L17.6 6 L17.6 4.4 Z" fill="#a0703f" fill-rule="evenodd"/>
+  <path d="M12.8 17 L19.2 17 L19.2 21.6 C19.2 23.6 17.6 24.8 16 24.8 C14.4 24.8 12.8 23.6 12.8 21.6 Z" fill="#a8b0b8"/>
+  <path d="M16 17 L19.2 17 L19.2 21.6 C19.2 23.6 17.6 24.8 16 24.8 Z" fill="#7c848c"/>
+  <rect x="13.6" y="17.6" width="1" height="4" fill="#d6dde4"/>
+</svg>

@@ -637,6 +637,14 @@ DECISIONS.md with the reason.
     ids are assumed: a course built under another id renames its two files.
     DECISIONS.md "Logos for the Muni and RedTail", "Logos for Shorty's and the Preserve".
 
+-   **Logo concepts (design chat, 2026-10-24/25):** branch `design/logo-concepts`,
+    merged 2026-10-25 (PR #69; developer: "merge it"): two
+    logos per course (`assets-src/logo_concepts/`, SVG on the 32 grid, `lc.py`, review page
+    `review.py`). The developer moved 15 courses to a concept and kept 12; RedTail is now a
+    red-tailed hawk ("Talons Out", `logo_concepts/redtail/hawk_e`) and Waverley a trolley
+    ("Along the Line", `waverley/trolley_c`, for the Trolley House stop). A course takes a
+    concept with `concept_logo` in `logos.py`. DECISIONS.md "Logos from the logo concepts".
+
 -   **Open to a challenge (design chat, 2026-10-22):** branch `design/challenge`,
     merged 2026-10-22 (PR #50): a title button next to "play a friend" to say you're looking for a
     match (a course or any course, 15 minutes), a short note at the top of every

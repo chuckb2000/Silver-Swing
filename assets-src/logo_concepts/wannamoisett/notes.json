@@ -1,0 +1,67 @@
+{
+  "id": "wannamoisett",
+  "course": "Wannamoisett Country Club",
+  "place": "Rumford, Rhode Island",
+  "facts": [
+    {
+      "fact": "Established 1898 on land rented from the Rumford Chemical Works; host of the 1931 PGA Championship and the Northeast Amateur.",
+      "source": "https://en.wikipedia.org/wiki/Rumford,_Rhode_Island"
+    },
+    {
+      "fact": "The club's 1916 crest shows a goat, an eagle, a fireside and the state seal (all avoided).",
+      "source": "https://www.wannamoisett.com/our-history"
+    }
+  ],
+  "current": {
+    "subject": "A black hockey skate (developer's pick).",
+    "keep": "The skate, black and white.",
+    "weaknesses": "Static side view; the blade and holder blur at 1x."
+  },
+  "concepts": [
+    {
+      "n": 1,
+      "name": "The Hockey Stop",
+      "rationale": "The skate tipped into a hard stop, a spray of ice off the blade.",
+      "references": [
+        "Existing skate logo"
+      ],
+      "symbolism": "Speed and edge.",
+      "interpretation": "",
+      "typography": "Oswald Bold.",
+      "lockup": {
+        "font": "Oswald",
+        "weight": 700,
+        "case": "upper",
+        "tracking": "0.14em",
+        "line2": null,
+        "line1": "Wannamoisett Country Club"
+      },
+      "strengths": "Dynamic and bold.",
+      "tradeoffs": "No link to golf or the club."
+    },
+    {
+      "n": 2,
+      "name": "The Chemical Works",
+      "rationale": "A glass retort. The club began on land rented from the Rumford Chemical Works.",
+      "references": [
+        "Land rented from Rumford Chemical Works (fact)"
+      ],
+      "symbolism": "Old New England industry under a Ross course.",
+      "interpretation": "",
+      "typography": "Old Standard TT.",
+      "lockup": {
+        "font": "Old Standard TT",
+        "weight": 600,
+        "case": "upper",
+        "tracking": "0.14em",
+        "line2": null,
+        "line1": "Wannamoisett Country Club"
+      },
+      "strengths": "Unexpected and true.",
+      "tradeoffs": "Laboratory glass is an odd golf mark."
+    }
+  ],
+  "pick": 1,
+  "recommendation": "Concept 1. The skate is the developer's choice and the cleaner icon.",
+  "chosen": "current"
+}

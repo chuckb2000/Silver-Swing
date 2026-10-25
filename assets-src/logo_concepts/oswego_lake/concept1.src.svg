@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <title>Oswego Lake - Concept 1: The Lake Anchor</title>
+  <defs>
+    <clipPath id="right"><rect x="16" y="0" width="16" height="32"/></clipPath>
+    <clipPath id="field"><circle cx="16" cy="16" r="13.6"/></clipPath>
+    <g id="anchor">
+      <path fill-rule="evenodd" d="M16 3.4a2.9 2.9 0 1 1 0 5.8a2.9 2.9 0 1 1 0-5.8zM16 5.2a1.2 1.2 0 1 0 0 2.4a1.2 1.2 0 1 0 0-2.4z"/>
+      <path d="M8.6 10.0 L23.4 10.0 L24.2 12.4 L7.8 12.4 Z"/>
+      <rect x="14.6" y="8.6" width="2.8" height="17.6"/>
+      <path d="M6.4 17.8 A9.6 9.6 0 0 0 25.6 17.8 L22.9 17.8 A6.9 6.9 0 0 1 9.1 17.8 Z"/>
+      <path d="M4.6 20.2 L6.6 12.4 L10.2 19.2 Z"/>
+      <path d="M27.4 20.2 L25.4 12.4 L21.8 19.2 Z"/>
+      <path d="M13.2 25.0 L16 28.0 L18.8 25.0 Z"/>
+    </g>
+  </defs>
+  <!-- the lake: a blue disc, a lighter band of water below the horizon -->
+  <circle cx="16" cy="16" r="14.9" fill="#173f86"/>
+  <circle cx="16" cy="16" r="13.6" fill="#2f6fd1"/>
+  <g clip-path="url(#field)">
+    <rect x="0" y="21" width="32" height="12" fill="#2a63bd"/>
+    <rect x="0" y="21" width="32" height="1" fill="#5d97ee"/>
+  </g>
+  <!-- the anchor in white, its right half in shade -->
+  <use href="#anchor" fill="#f6f6f2"/>
+  <use href="#anchor" fill="#c3d6f0" clip-path="url(#right)"/>
+</svg>
