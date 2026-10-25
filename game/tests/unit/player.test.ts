@@ -200,7 +200,7 @@ describe('daily round (item 4)', () => {
   it("the real rotation: 2026-10-20 stays Stone Creek after that afternoon's three courses", () => {
     const all = (index as { courses: { id: string; holes: number; defaultTee: string; teeSets: string[] }[] }).courses;
     expect(dailyPlan('2026-10-20', all, DAILY_ROSTER)!.courseId).toBe('stone_creek');
-    for (const c of all) expect(DAILY_ROSTER[c.id], `${c.id} is in the daily rotation`).toBeDefined();
+    for (const c of all) expect(DAILY_ROSTER[c.id], `${c.id} is in the daily rotation (the design chat's make land NAME=<data id> adds it at the merge)`).toBeDefined();
   });
 
   it("a picked day: 2026-10-21 is the back nine at Oswego Lake (developer); the days around it keep the rotation", () => {

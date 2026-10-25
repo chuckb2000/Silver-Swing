@@ -4,7 +4,7 @@ NAMES ?=
 ARGS ?=
 PY   ?= python3
 
-.PHONY: dev build test e2e course fetch regress lists assets music cards all clean-course pins
+.PHONY: dev build test e2e course fetch regress lists assets music cards all clean-course pins land intake
 
 dev:            ## run the game locally (Vite dev server)
 	cd game && npm run dev
@@ -35,6 +35,12 @@ lists:          ## make the game's course lists (courses/index.json, sprites/tit
 
 course: fetch   ## rebuild one course from raw/ (+ edited/) -> game/public/courses/$(NAME), with its pinned pipeline (pipeline/pins.py); ARGS="--from s06_holes" etc.
 	$(PY) pipeline/build.py $(NAME) $(ARGS)
+
+land:           ## a finished course: daily rotation from tomorrow, pinned, its tests (pipeline/land.py)
+	$(PY) pipeline/land.py $(NAME)
+
+intake:         ## the checks on arrival of a course's downloads (pipeline/intake.py check)
+	$(PY) pipeline/intake.py check $(NAME)
 
 pins:           ## which pipeline each course is pinned to
 	$(PY) pipeline/pins.py status
