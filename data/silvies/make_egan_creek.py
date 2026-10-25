@@ -9,11 +9,11 @@ Its line comes from the bare-earth DEM, as at Langdon Farms (data/langdon/make_c
 in a box round the strip (local x BOX), cells more than DEPTH below the 25 m running median
 are channel; the longest piece running east-west is the creek, its line the piece's main
 axis (pipeline/fairway_axis.py), simplified. The penalty area is that line widened to
-WIDTH_M in all (quite small, as asked), red, `flatten=no` so s04 keeps its bed, clipped
-off greens, tees and the pond (the pond is already a penalty area).
+WIDTH_M in all (quite small, as asked), red, `flatten=no` so s04 keeps its bed, carried on
+from the channel's end to the pond's edge so it runs into the pond (developer), and
+clipped off greens and tees.
 
-Writes proposed/egan_creek.geojson (WGS84) and proposed/egan_creek.jpg (photo crop: the
-channel in cyan, the proposed penalty area in red).
+Writes proposed/egan_creek.geojson (WGS84) and proposed/egan_creek.jpg (photo crop: the proposed penalty area in red, the OSM pond in blue).
 
     python3 data/silvies/make_egan_creek.py      (after s00-s02)
 """
@@ -65,9 +65,23 @@ def main():
     a, p, dep = max(pieces, key=lambda t: t[0])
     ax = centreline(p, res=0.5)
     line = LineString(ax).simplify(1.0)
+    # the creek runs into the pond (developer 2026-10-25: "make sure the red connects to the
+    # lake"): carry the line on from its end nearer the pond to the pond's edge, plus 1 m in
+    g0 = gpd.read_file(HERE / "build" / "course_local.geojson")
+    pond = min((r.geometry for _, r in g0[g0.kind == "lateral_water_hazard"].iterrows()), key=lambda q: q.distance(line))
+    from shapely.geometry import Point
+    from shapely.ops import nearest_points
+    c = list(line.coords)
+    if Point(c[0]).distance(pond) < Point(c[-1]).distance(pond):
+        c = c[::-1]
+    q = nearest_points(Point(c[-1]), pond.boundary)[1]
+    v = np.array([q.x - c[-1][0], q.y - c[-1][1]])
+    v = v / (np.linalg.norm(v) or 1)
+    line = LineString(c + [(q.x + v[0], q.y + v[1])])
+    print(f"  carried {Point(c[-1]).distance(q):.0f} m on to the pond")
     print(f"  channel {a} m2, bounds {[round(v) for v in p.bounds]}, median depth {dep:.2f} m; line {line.length:.0f} m")
     g = gpd.read_file(HERE / "build" / "course_local.geojson")
-    keep_off = unary_union(list(g[g.kind.isin(["green", "tee", "lateral_water_hazard", "water_hazard"])].geometry.buffer(1.0)))
+    keep_off = unary_union(list(g[g.kind.isin(["green", "tee"])].geometry.buffer(1.0)))
     area = line.buffer(WIDTH_M / 2, cap_style=2).difference(keep_off)
     if area.geom_type == "MultiPolygon":
         area = unary_union([q for q in area.geoms if q.area > 10])
@@ -78,14 +92,16 @@ def main():
                            geometry=[area], crs=None)
     out = out.set_geometry(out.geometry.translate(x0w, y0w)).set_crs(cfg["epsg"]).to_crs(4326)
     out.to_file(HERE / "proposed" / "egan_creek.geojson", driver="GeoJSON")
+    area = area.difference(pond)  # the pond is its own penalty area already: the creek runs up to it
+    if area.geom_type == "MultiPolygon":   # keep the strip that reaches the pond, drop slivers left by the pond's ragged edge
+        area = unary_union([q for q in area.geoms if q.area > 25])
     # picture
     with rasterio.open(HERE / cfg["ortho"]["path"]) as s:
         w = from_bounds(x0w + xa, y0w + ya, x0w + xb, y0w + yb, s.transform)
         im = Image.fromarray(np.moveaxis(s.read(window=w, out_shape=(3, (yb - ya) * 4, (xb - xa) * 4)), 0, 2))
     d = ImageDraw.Draw(im)
     P = lambda x, y: ((x - xa) * 4, (yb - y) * 4)  # noqa: E731
-    for q in getattr(p, "geoms", [p]):
-        d.line([P(*c) for c in q.exterior.coords], fill=(0, 255, 255), width=1)
+    d.line([P(*c) for c in pond.exterior.coords], fill=(60, 150, 255), width=2)
     for q in getattr(area, "geoms", [area]):
         d.line([P(*c) for c in q.exterior.coords], fill=(255, 40, 40), width=3)
     im.save(HERE / "proposed" / "egan_creek.jpg", quality=88)
