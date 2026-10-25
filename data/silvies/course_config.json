@@ -10,6 +10,15 @@
   "raw/overpass.geojson"
  ],
  "boundary_name": "Silvies Ranch",
+ "dtm": {
+  "path": "raw/dogami_dtm_ft.tif",
+  "units": "ft",
+  "source": "DOGAMI lidar DIGITAL_TERRAIN_MODEL_MOSAIC (bare earth; top projects at the course OR_SOUTHEAST_2023_USGS_3DEP_6_MALHEUR_STRAWBERRY and OLC_ODF_PRIVATE_FOREST_ACCORDS_2023_MALHEUR), exportImage at 1 m in EPSG:32611, box x 339750-342300 / y 4879200-4881550, downloaded by the developer 2026-10-25 (GitHub release silvies-data, _ags_eb4f76b6_cb97_4d90_b5f5_7456798dde3d.tif)"
+ },
+ "ortho": {
+  "path": "raw/osip2024_05m.tif",
+  "source": "Oregon Statewide Imagery Program 2024, OSIP_2024_WM exportImage JPEG at 0.5 m in four quarters, placed by their request boxes by make_ortho.py (GitHub release silvies-data)"
+ },
  "world": {
   "x0": 339997,
   "y0": 4879339,
@@ -17,23 +26,164 @@
   "height": 2048,
   "note": "PROVISIONAL (intake): OSM boundary w904342362 bbox (x 340019-342023, y 4879508-4881218: 2,004 x 1,710 m) held to the 2,048 m limit: 22 m of scenery at the west and east tips, about 170 m north and south"
  },
- "tee_sets": [
-  {"name": "Challenge", "playable": false, "rating": 0, "slope": 0, "total_yd": 7170},
-  {"name": "White", "playable": false, "rating": 71.9, "slope": 120, "total_yd": 7035},
-  {"name": "White/Grey", "playable": false, "rating": 0, "slope": 0, "total_yd": 6600},
-  {"name": "Grey", "playable": true, "rating": 68.6, "slope": 118, "total_yd": 6340},
-  {"name": "Grey/Black", "playable": false, "rating": 0, "slope": 0, "total_yd": 5820},
-  {"name": "Black", "playable": false, "rating": 64.9, "slope": 109, "total_yd": 5560},
-  {"name": "Black/Blue", "playable": false, "rating": 0, "slope": 0, "total_yd": 4984},
-  {"name": "Blue", "playable": false, "rating": 0, "slope": 0, "total_yd": 4533}
- ],
- "default_tee": "Grey",
- "scorecard_source": "GolfPass, The Retreat & Links at Silvies Valley Ranch - Craddock Course, scorecard and layout (read 2026-10-25): every row adds up to its Out/In/Total; ratings for White, Grey and Black only. Unverified (third party); no club card found online.",
  "penalty_default": "red",
- "driving_range_is_ob": true,
- "wind_mph": {"minMph": 1, "maxMph": 7},
+ "driving_range_is_ob": false,
+ "wind_mph": {
+  "minMph": 1,
+  "maxMph": 7
+ },
  "trees_off_fairways_m": 2,
  "attribution": [
-  "Map data © OpenStreetMap contributors (ODbL)"
- ]
+  "Map data © OpenStreetMap contributors (ODbL)",
+  "Elevation: Oregon Department of Geology and Mineral Industries (DOGAMI) lidar",
+  "Imagery check: Oregon Statewide Imagery Program 2024"
+ ],
+ "layouts": [
+  {
+   "id": "silvies_craddock",
+   "name": "Silvies Valley Craddock",
+   "short": "Craddock",
+   "boundary_osm": "w904342362_grown",
+   "scorecard": "scorecard_craddock.csv",
+   "tee_sets": [
+    {
+     "name": "Challenge",
+     "playable": false,
+     "rating": 0,
+     "slope": 0,
+     "total_yd": 7170
+    },
+    {
+     "name": "White",
+     "playable": false,
+     "rating": 71.9,
+     "slope": 120,
+     "total_yd": 7035
+    },
+    {
+     "name": "White/Grey",
+     "playable": false,
+     "rating": 0,
+     "slope": 0,
+     "total_yd": 6600
+    },
+    {
+     "name": "Grey",
+     "playable": true,
+     "rating": 68.6,
+     "slope": 118,
+     "total_yd": 6340
+    },
+    {
+     "name": "Grey/Black",
+     "playable": false,
+     "rating": 0,
+     "slope": 0,
+     "total_yd": 5820
+    },
+    {
+     "name": "Black",
+     "playable": false,
+     "rating": 64.9,
+     "slope": 109,
+     "total_yd": 5560
+    },
+    {
+     "name": "Black/Blue",
+     "playable": false,
+     "rating": 0,
+     "slope": 0,
+     "total_yd": 4984
+    },
+    {
+     "name": "Blue",
+     "playable": false,
+     "rating": 0,
+     "slope": 0,
+     "total_yd": 4533
+    }
+   ],
+   "default_tee": "Grey",
+   "scorecard_source": "Yardages, handicaps and ratings: GolfPass, The Retreat & Links at Silvies Valley Ranch - Craddock Course, scorecard and layout (read 2026-10-25); every row adds up to its Out/In/Total; ratings for White, Grey and Black only. Par: the club's Craddock map (release silvies-data craddock.webp): hole 1 par 5, hole 5 par 4 (520 yd), par 71; GolfPass has both par 5 (72), OSM has 1 par 4 and 5 par 5 (developer 2026-10-25: use the club map). The map's three yardage columns match GolfPass Challenge/Grey/Black except holes 1 and 9 (map 490/425 vs Grey 455/350) and 6 (map 345 vs Black 325): open item. Unverified (no printed card)."
+  },
+  {
+   "id": "silvies_hankins",
+   "name": "Silvies Valley Hankins",
+   "short": "Hankins",
+   "boundary_osm": "w904342362_grown",
+   "scorecard": "scorecard_hankins.csv",
+   "tee_sets": [
+    {
+     "name": "Goat",
+     "playable": false,
+     "rating": 0,
+     "slope": 0,
+     "total_yd": 8000
+    },
+    {
+     "name": "Pink",
+     "playable": false,
+     "rating": 0,
+     "slope": 0,
+     "total_yd": 7250
+    },
+    {
+     "name": "White",
+     "playable": false,
+     "rating": 71.8,
+     "slope": 120,
+     "total_yd": 7075
+    },
+    {
+     "name": "White/Grey",
+     "playable": false,
+     "rating": 0,
+     "slope": 0,
+     "total_yd": 6575
+    },
+    {
+     "name": "Grey",
+     "playable": true,
+     "rating": 68.1,
+     "slope": 115,
+     "total_yd": 6280
+    },
+    {
+     "name": "Grey/Black",
+     "playable": false,
+     "rating": 0,
+     "slope": 0,
+     "total_yd": 5705
+    },
+    {
+     "name": "Black",
+     "playable": false,
+     "rating": 63.7,
+     "slope": 102,
+     "total_yd": 5335
+    }
+   ],
+   "default_tee": "Grey",
+   "scorecard_source": "GolfPass, The Retreat & Links at Silvies Valley Ranch - Hankins Course, scorecard and layout (read 2026-10-25): all seven sets, men's handicaps, ratings for White, Grey and Black only; every column adds up (par 72; GolfPass's tee table says 73). The club's Hankins map (release silvies-data Hankins.webp) prints White/Grey/Black and agrees, except that its hole 3 row repeats hole 2. Pink 8 (465) is longer than White 8 (410) on the card. Unverified (third party)."
+  },
+  {
+   "id": "silvies_chief_egan",
+   "name": "Silvies Valley Chief Egan",
+   "short": "Chief Egan",
+   "boundary_osm": "w904342362_grown",
+   "scorecard": "scorecard_chief_egan.csv",
+   "tee_sets": [
+    {
+     "name": "White",
+     "playable": true,
+     "rating": 0,
+     "slope": 0,
+     "total_yd": 875
+    }
+   ],
+   "default_tee": "White",
+   "scorecard_source": "Yardages: the club's Chief Egan map (release silvies-data chief.egan.webp) and GolfPass (the same 875 yd). Par: the club map (holes 3 and 6 par 4: par 29; GolfPass lists every hole par 3, 27; same rule as Craddock, developer 2026-10-25). Handicaps: GolfPass. No rating."
+  }
+ ],
+ "notes": "Three layouts in one world (developer 2026-10-25): Craddock (the OSM hole lines), Hankins (Craddock's fairways played the other way, 9 greens of its own) and Chief Egan (the 9-hole short course round the east pond). McVeigh's Gauntlet (7 holes on the south edge, partly outside the boundary) is not built. Standing defaults: Grey tees (closest to 6,300 on both 18s), all water red, OB = the OSM boundary grown 30 m round Craddock play (approved 2026-10-25), the practice strip by the lodge stays in play (developer: no need to make it OB), wind 1-7 mph, theme silvies (new)."
 }

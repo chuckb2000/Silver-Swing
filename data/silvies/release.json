@@ -1,0 +1,54 @@
+{
+ "release": "silvies-data",
+ "note": "Build inputs for Silvies Valley Ranch; `make fetch NAME=silvies` puts them in place (pipeline/fetch_raw.py). raw/overpass.geojson is also committed. export.geojson = Overpass export (2026-10-25), clipped to the world + 300 m by clip_osm.py; map.osm = openstreetmap.org export of the same box, not used. _ags_eb4f76b6 = DOGAMI DIGITAL_TERRAIN_MODEL_MOSAIC (bare earth, feet), exportImage at 1 m, box x 339750-342300 / y 4879200-4881550 EPSG:32611. The four _ags_*.jpg = OSIP 2024 quarters at 0.5 m of the same box (cc6d121f NW, 8535d091 NE, f70236de SW, a35cde54 SE, identified by looking), mosaicked by make_ortho.py. craddock.webp, Hankins.webp, chief.egan.webp, mcvgeighs.gauntlet.webp = the club's hole maps with yardages (look only; copies in reference/).",
+ "files": [
+  {
+   "asset": "export.geojson",
+   "sha256": "130130748e9a88d2f046f28e3ddb5bf8c2fdf18b94c72392f9ad2c85795b9c96",
+   "run": "python3 data/silvies/clip_osm.py {file}",
+   "outputs": {
+    "raw/overpass.geojson": "cc1ea5016759c1d2e3f758299b99eda98d6690299bb0d069019080f6617d4ddc"
+   }
+  },
+  {
+   "asset": "_ags_eb4f76b6_cb97_4d90_b5f5_7456798dde3d.tif",
+   "sha256": "3efd5576dad27d843980a280f6bafc15fe17800696a17389a2b2b117ced23afd",
+   "run": "cp {file} data/silvies/raw/dogami_dtm_ft.tif",
+   "outputs": {
+    "raw/dogami_dtm_ft.tif": "3efd5576dad27d843980a280f6bafc15fe17800696a17389a2b2b117ced23afd"
+   }
+  },
+  {
+   "asset": "_ags_cc6d121f_6489_436d_be27_6f3435711f55.jpg",
+   "sha256": "965a33523c0b8ff4fa7b5e454417aaa6aebafe30161c65cbe0291b4c05345873",
+   "run": "install -D -m 644 {file} data/silvies/build/osip_nw.jpg",
+   "outputs": {
+    "build/osip_nw.jpg": "965a33523c0b8ff4fa7b5e454417aaa6aebafe30161c65cbe0291b4c05345873"
+   }
+  },
+  {
+   "asset": "_ags_8535d091_e0d1_4f2d_927a_e6b94bf0d9d8.jpg",
+   "sha256": "2f30b19bea4e1867eac5632f56422f8f8186fdba009d8c8411647847597fde47",
+   "run": "install -D -m 644 {file} data/silvies/build/osip_ne.jpg",
+   "outputs": {
+    "build/osip_ne.jpg": "2f30b19bea4e1867eac5632f56422f8f8186fdba009d8c8411647847597fde47"
+   }
+  },
+  {
+   "asset": "_ags_f70236de_3e76_4854_aae1_b834b1181857.jpg",
+   "sha256": "54ae0dd378bef20e49391cedeafec6711084b610e2f8196540ce9fda91c773cc",
+   "run": "install -D -m 644 {file} data/silvies/build/osip_sw.jpg",
+   "outputs": {
+    "build/osip_sw.jpg": "54ae0dd378bef20e49391cedeafec6711084b610e2f8196540ce9fda91c773cc"
+   }
+  },
+  {
+   "asset": "_ags_a35cde54_fdc2_49c4_bb95_87d5be44fead.jpg",
+   "sha256": "e714b9bab678f267059dfc535dbc5a592822f1fc417674f86cd87bb804ab3c95",
+   "run": "python3 data/silvies/make_ortho.py NW=data/silvies/build/osip_nw.jpg NE=data/silvies/build/osip_ne.jpg SW=data/silvies/build/osip_sw.jpg SE={file}",
+   "outputs": {
+    "raw/osip2024_05m.tif": "3bd1eab7fbad10ac28626dd32298723d7ad659bfc76aa18a93e48450353a8981"
+   }
+  }
+ ]
+}

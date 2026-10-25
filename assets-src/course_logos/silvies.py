@@ -1,6 +1,6 @@
 """Silvies Valley Ranch logo: a goat caddie, facing left, a small red golf bag strapped
-on its back with three club heads showing, standing in tawny bunchgrass with a
-ponderosa pine behind (course chat, 2026-10-25: the ranch's goats carry players' bags
+on its back with three club heads showing, standing in tawny bunchgrass (course chat, 2026-10-25; the developer: "just the goat caddie",
+no tree: the ranch's goats carry players' bags
 on McVeigh's Gauntlet; the ranch is a working cattle and goat ranch in ponderosa
 country). The club's own emblem is not used. `python3 assets-src/logos.py silvies`
 writes game/public/sprites/logos/silvies.png (assets-src/course_logos/README.md).
@@ -16,17 +16,6 @@ def ell(X, Y, cx, cy, rx, ry):
 def goat_caddie(c: dict) -> np.ndarray:
     X, Y = grid()
     img = np.zeros((S, S, 4), np.uint8)
-
-    # a ponderosa behind on the right: bare cinnamon trunk, tufted crown on top
-    trunk = (X >= 26.0) & (X <= 27.4) & (Y >= 5.0) & (Y <= 27.0)
-    paint(img, trunk, c["bark"])
-    paint(img, trunk & (X > 26.8), c["bark_dark"])
-    crown = (ell(X, Y, 26.8, 3.2, 1.8, 1.4) | ell(X, Y, 26.6, 6.0, 3.0, 1.7)
-             | ell(X, Y, 26.4, 9.2, 3.8, 1.9) | ell(X, Y, 26.9, 12.4, 4.0, 1.9)
-             | ell(X, Y, 26.6, 15.0, 3.2, 1.3))
-    paint(img, crown, c["pine"])
-    paint(img, crown & (X + Y < 30.5), c["pine_light"])
-    shade(img, crown, None, c["pine_dark"])
 
     # bunchgrass across the bottom
     grass = (Y >= 26.6 + 0.6 * np.sin(X * 0.9)) & (Y <= 30.5) & (X >= 1.0) & (X <= 31.0)
@@ -79,8 +68,6 @@ GOAT = {
     "band": rgba("#efe6cc"), "strap": rgba("#4a3424"),
     "shaft": rgba("#9aa0a6"), "club": rgba("#d6dade"),
     "grass": rgba("#bfa265"), "grass_light": rgba("#dcc489"), "grass_dark": rgba("#8f7547"),
-    "pine": rgba("#2a5530"), "pine_light": rgba("#3f7040"), "pine_dark": rgba("#173a22"),
-    "bark": rgba("#b0673b"), "bark_dark": rgba("#7c4426"),
     "edge": EDGE,
 }
 
