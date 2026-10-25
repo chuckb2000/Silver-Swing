@@ -36,11 +36,11 @@ from rasterio.features import rasterize
 from scipy import ndimage
 from shapely.geometry import MultiPolygon, Point, Polygon
 
-from common import build_dir, course_name_from_argv, GORSE_SURF, joins_parts, layout_dir, layouts, load_config, play_boundary, PX_PER_M, ROOT, SURF, World, write_json
+from common import build_dir, course_name_from_argv, GORSE_SURF, WASTE_SURF, joins_parts, layout_dir, layouts, load_config, play_boundary, PX_PER_M, ROOT, SURF, World, write_json
 from s08_surface import course_layers, road_geoms
 from terrain import tier_offset
 from s09_render import draw_lighthouse, LIGHTHOUSE_DRAW_SCALE  # noqa: E402
-from s09_render import BAYER4, PRIO, SHADOW_DIR, SHADOW_MULT, band_lut, build_lut, load_palette, load_theme, paint_rock, rough_band_mask, stake_lines, wave_mask
+from s09_render import BAYER4, PRIO, SHADOW_DIR, SHADOW_MULT, band_lut, build_lut, load_palette, load_theme, paint_rock, rough_band_mask, stake_lines, waste_scrub, wave_mask
 
 sys.path.insert(0, str(ROOT / "assets-src"))
 from atlas import Atlas  # noqa: E402
@@ -249,6 +249,7 @@ def render_art(surf, z, grid: Grid, g, holes, trees, buildings, boundary, P, lut
     put((surf == S["bunker"]) & (n1 > 0.975), "S2")
     put(np.isin(surf, [S["woods"], GORSE_SURF]) & (n1 < 0.08), "B1")
     put(np.isin(surf, [S["woods"], GORSE_SURF]) & (n1 > 0.965), "B0")
+    waste_scrub(rgb, surf, n1, P)
     put((surf == S["ob_woods"]) & (n1 < 0.04), "B0")
     put((surf == S["ob_road"]) & (n1 < 0.025), "K2")
     put((surf == S["cartpath"]) & (n1 < 0.03), "K2")

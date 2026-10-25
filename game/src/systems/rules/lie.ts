@@ -4,7 +4,7 @@ import { Club, isWedge, isWood } from '../../data/clubs';
 import { Rng } from '../physics/rng';
 import { SURF } from '../physics/surfaces';
 
-export type LieKind = 'tee' | 'fairway' | 'fringe' | 'rough' | 'trees' | 'gorse' | 'fairway_bunker' | 'greenside_bunker' | 'cartpath' | 'green';
+export type LieKind = 'tee' | 'fairway' | 'fringe' | 'rough' | 'trees' | 'gorse' | 'waste' | 'fairway_bunker' | 'greenside_bunker' | 'cartpath' | 'green';
 
 export interface Lie {
   kind: LieKind;
@@ -46,6 +46,8 @@ const BASE: Record<LieKind, { dist: number; win: number; name: string }> = {
   rough: { dist: 0.85, win: 0.7, name: 'rough' },
   trees: { dist: 0.8, win: 0.6, name: 'under trees' },
   gorse: { dist: 1, win: GORSE.windowMult, name: 'gorse' },
+  // waste sand (Cypress Point chat, 2026-10-23): general area, a little worse than fairway; no splash, putter allowed
+  waste: { dist: 0.92, win: 0.8, name: 'waste sand' },
   fairway_bunker: { dist: 0.85, win: 0.55, name: 'fairway bunker' },
   greenside_bunker: { dist: 0.5, win: 0.6, name: 'bunker' },
   cartpath: { dist: 1, win: 0.9, name: 'cart path' },
@@ -60,6 +62,7 @@ export function lieKindFor(ctx: LieContext): LieKind {
   if (s === SURF.fringe) return 'fringe';
   if (s === SURF.cartpath || s === SURF.building) return 'cartpath';
   if (s === SURF.gorse) return 'gorse';
+  if (s === SURF.waste && ctx.canopyBase === null) return 'waste';
   if (s === SURF.woods || (ctx.canopyBase !== null && s !== SURF.fairway && s !== SURF.tee)) return 'trees';
   if (s === SURF.fairway || s === SURF.tee || s === SURF.range) return 'fairway';
   return 'rough';
@@ -124,14 +127,14 @@ export function lieModsFor(lie: Lie, club: Club): { distMult: number; windowMult
 /**
  * How much of the spin chosen (top or back) the ball gets (developer, 2026-10-20: "backspin
  * and front spin are too powerful ... cut down like 50% ... and like 95% when you're hitting
- * out of the rough or sand"): half from a clean lie, a twentieth from rough, under trees or
- * a bunker, none from gorse.
+ * out of the rough or sand"): half from a clean lie, a twentieth from rough, under trees,
+ * waste sand or a bunker, none from gorse.
  */
 export const SPIN_CLEAN = 0.5;
 export const SPIN_POOR = 0.05;
 export function spinEffect(lie: Lie): number {
   if (lie.kind === 'gorse') return 0; // no spin out of a bush
-  const poor = lie.kind === 'rough' || lie.kind === 'trees' || lie.kind === 'fairway_bunker' || lie.kind === 'greenside_bunker';
+  const poor = lie.kind === 'rough' || lie.kind === 'trees' || lie.kind === 'waste' || lie.kind === 'fairway_bunker' || lie.kind === 'greenside_bunker';
   return poor ? SPIN_POOR : SPIN_CLEAN;
 }
 
@@ -151,6 +154,7 @@ export function lieIsPenal(lie: Lie): boolean {
     case 'rough':
     case 'trees':
     case 'gorse':
+    case 'waste':
     case 'fairway_bunker':
     case 'greenside_bunker':
       return true;

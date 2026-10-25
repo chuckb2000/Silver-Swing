@@ -48,8 +48,8 @@ asking for `cypress_point` in the daily roster), and the 12 Playwright tests pas
     Drive, 1's left corner by the Drive, 18's right side near the tee, the north line by the 9th
     tee and 8th green, the 3rd and 5th tees.
 -   **Dunes:** the open sand between the holes (4.2 ha inside the boundary) traced from NAIP,
-    calibrated on the mapped bunkers (`make_dunes.py`); in play as `golf=bunker` + `sand=waste`
-    until a waste-sand surface exists (design request 1). Outside the boundary a looser trace
+    calibrated on the mapped bunkers (`make_dunes.py`); in play as waste sand (surface 18,
+    `"waste_sand": true`; they were bunkers until design request 1 landed). Outside the boundary a looser trace
     carries the dunes on as scenery (`natural=sand`), so they don't stop at the OB line.
 -   **Trees:** 11,707 from the lidar (2,604 inside the boundary), median 16 m, tallest 42 m;
     74 % broad-crown (drawn as Monterey cypress and coast live oak), 26 % conifer (Monterey pine),
@@ -138,8 +138,10 @@ Middle (COURSE_BUILD 4.1: no Blue on the card; Middle is the set closest to 6,30
     no driver, no splash rule, putter allowed; restitution 0.10, speed kept 0.35, roll decel 4.0;
     bunker colours without the lip, sparse tufts; general area, no relief) and an optional config
     key `"waste_sand": true` painting `golf=bunker` + `sand=waste` as 18. Cypress Point's dunes are
-    already tagged `sand=waste`, so switching is the key and a rebuild.
-2.  After the merge: add `cypress_point` to `game/src/data/dailyRoster.ts` (from the next day; a new
+    already tagged `sand=waste`, so switching is the key and a rebuild. **Done** (design chat,
+    2026-10-24, branch `design/waste-sand`): `"waste_sand": true` is on and the course rebuilt;
+    4.0 ha of the dunes play as waste sand.
+2.  **Done** (PR #62's merge). After the merge: add `cypress_point` to `game/src/data/dailyRoster.ts` (from the next day; a new
     course fails `player.test.ts` until it is in the roster), the CLAUDE.md section 11 line, fold
     the lessons below into COURSE_LESSONS.md, and move
     `data/cypress_point/tests/cypress_point.test.ts` into `game/tests/unit/`.

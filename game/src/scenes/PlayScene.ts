@@ -1169,7 +1169,7 @@ export class PlayScene extends Phaser.Scene {
   private onSimEvent(e: SimEvent) {
     switch (e.type) {
       case 'land':
-        if (e.surf === SURF.bunker) sfx('sand'); else if (e.surf === SURF.water || e.surf === SURF.obWater) { /* splash event follows */ } else sfx('thud', 0.8);
+        if (e.surf === SURF.bunker || e.surf === SURF.waste) sfx('sand'); else if (e.surf === SURF.water || e.surf === SURF.obWater) { /* splash event follows */ } else sfx('thud', 0.8);
         if (!this.landedShown && this.shot?.strike) {
           this.landedShown = true;
           this.hud.carryInfo(this.round.ball, e);

@@ -267,7 +267,10 @@ Known Oswego-specific code, with the fix:
                                         // along its edge; it stays out of bounds (s09, s09b, s10; Oregon Golf Club)
   "join_boundary_parts": {"max_gap_m": 16},  // optional: a boundary in several parts, all in play, with OB land between
                                         // (Eastmoreland's road; Langdon Farms' highway, its parts mapped as separate ways)
-  "building_colours": {"w123": "#a3302a"}    // optional: buildings drawn in their own colour (Langdon Farms' red barns)
+  "building_colours": {"w123": "#a3302a"},   // optional: buildings drawn in their own colour (Langdon Farms' red barns)
+  "waste_sand": true                    // optional: golf=bunker + sand=waste, and natural=sand inside the boundary, are
+                                        // waste sand (surface 18): general area, not a bunker, no lip, sparse scrub tufts;
+                                        // natural=sand outside stays ob_sand (s08, s09, s09b, s10; Cypress Point)
 }
 ```
 

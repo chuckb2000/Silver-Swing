@@ -50,9 +50,26 @@ def uses_gorse_ground(cfg: dict) -> bool:
     return isinstance(cfg.get("gorse"), dict) and cfg["gorse"].get("ground") == "gorse"
 
 
+# Waste sand (Cypress Point, Bandon Dunes, Chambers Bay): open dune sand that the rules treat
+# as general area, not a bunker (game: surfaces.ts SURF.waste, rules/lie.ts). Like gorse, kept
+# out of SURF so a course without it exports exactly the ids it always had.
+WASTE_SURF = 18
+
+
+def uses_waste_sand(cfg: dict) -> bool:
+    """course_config.json "waste_sand": true: golf=bunker features tagged sand=waste, and
+    natural=sand inside the boundary, are painted as waste sand (id 18)."""
+    return cfg.get("waste_sand") is True
+
+
 def surf_ids(cfg: dict) -> dict:
-    """The surface ids a course's map can hold (SURF, plus gorse where the course has it)."""
-    return {**SURF, "gorse": GORSE_SURF} if uses_gorse_ground(cfg) else dict(SURF)
+    """The surface ids a course's map can hold (SURF, plus gorse and waste sand where the course has them)."""
+    out = dict(SURF)
+    if uses_gorse_ground(cfg):
+        out["gorse"] = GORSE_SURF
+    if uses_waste_sand(cfg):
+        out["waste"] = WASTE_SURF
+    return out
 SURF_NAME = {v: k for k, v in SURF.items()}
 
 
