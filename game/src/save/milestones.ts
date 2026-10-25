@@ -30,12 +30,26 @@ export function shortName(name: string): string {
 /**
  * A course's label under its card in the passport (17 characters): a course at a place with
  * several drops the place's name, as on the course list ("Pumpkin Ridge Witch Hollow" is
- * "witch hollow", "East Potomac White Course" "white course"; developer, 2026-10-25).
+ * "witch hollow", "East Potomac White Course" "east po white"; developer, 2026-10-25).
  */
-export function passportName(c: { name: string; groupName?: string }): string {
-  const n = c.groupName ? nameInGroup(c.name, c.groupName) : c.name;
-  return shortName(n).slice(0, 17);
+export function passportName(c: { name: string; group?: string; groupName?: string }): string {
+  return listName(c).slice(0, 17);
 }
+
+/**
+ * A course's name in the passport and the lists across courses (recent, eagles, most
+ * birdies, this week): the short name, and for a course at a place with several, its name
+ * there, with a short form of the place's name for East Potomac ("east po white").
+ */
+export function listName(c: { name: string; group?: string; groupName?: string }): string {
+  const n = c.groupName ? nameInGroup(c.name, c.groupName) : c.name;
+  const prefix = c.group ? PASSPORT_PREFIX[c.group] : undefined;
+  if (prefix) return `${prefix} ${shortName(n).replace(/ course$/, '')}`;
+  return shortName(n);
+}
+
+/** places whose courses keep a short form of the place's name in the passport (developer, 2026-10-25) */
+const PASSPORT_PREFIX: Record<string, string> = { east_potomac: 'east po' };
 
 const isEighteen = (e: LeaderboardEntry) => isFullRound(e.length);
 
