@@ -1,0 +1,79 @@
+{
+  "name": "Eastward Ho! (Fowler's moraine on Pleasant Bay, restored heath)",
+  "note": "Course theme palette (<= 32 colours; same keys as pnw.json plus F0-F2). Eastward Ho! Country Club, Chatham, from the developer's photos (release assorted-lidar-data, eastward.1-5) and NAIP: bright, firm fairways and greens; beyond a mown band, the restored native heath of little bluestem and fescue in straw, olive and copper (F0-F2); pale Cape sand; the bright blue of Pleasant Bay and Crows Pond; dark pitch-pine and oak scrub ground (G0-G2); grassy Chatham lawns and woods out of bounds (L0-L2). Trees in assets-src/trees_eastward_ho.py: pitch pine, red cedar, scrub oak and bayberry. Shadows are a 35% black overlay on top of these.",
+  "colors": {
+    "G0": "#1c2e1c",
+    "G1": "#283f24",
+    "G2": "#34522b",
+    "G3": "#426a33",
+    "G4": "#4d873a",
+    "G5": "#5a9b42",
+    "G6": "#68ae4a",
+    "G7": "#79bf53",
+    "G8": "#8dcd61",
+    "G9": "#b2df88",
+    "L0": "#4e5c30",
+    "L1": "#5f6e39",
+    "L2": "#728244",
+    "S0": "#cbb894",
+    "S1": "#eadfc3",
+    "S2": "#f7f1e1",
+    "W0": "#164a78",
+    "W1": "#20609a",
+    "W2": "#4f8fc4",
+    "K0": "#26272d",
+    "K1": "#55565d",
+    "K2": "#7d7e86",
+    "K3": "#b5ad9a",
+    "K4": "#dbd3c1",
+    "B0": "#4a3424",
+    "B1": "#6f5038",
+    "B2": "#93704f",
+    "R0": "#5b5e66",
+    "WH": "#f6f6f2",
+    "F0": "#6e5c36",
+    "F1": "#8a7444",
+    "F2": "#a48b55"
+  },
+  "lut": {
+    "rough": [
+      "F0",
+      "F1",
+      "F2",
+      "F2"
+    ],
+    "rough_band": [
+      "G3",
+      "G4",
+      "G5",
+      "G5"
+    ]
+  },
+  "aliases": {
+    "TUFT": "G3"
+  },
+  "minimap": {
+    "ob": "#5f6e39",
+    "rough": "#8a7444",
+    "woods": "#283f24",
+    "ob_woods": "#223822",
+    "water": "#20609a",
+    "ob_water": "#20609a",
+    "bunker": "#eadfc3",
+    "ob_sand": "#eadfc3"
+  },
+  "minimap_trees": {
+    "conifer": [
+      "#21422a",
+      "#3c6d3a"
+    ],
+    "deciduous": [
+      "#31481e",
+      "#567631"
+    ]
+  },
+  "trees": {
+    "conifer": "trees_eastward_ho:conifer",
+    "deciduous": "trees_eastward_ho:deciduous"
+  }
+}
