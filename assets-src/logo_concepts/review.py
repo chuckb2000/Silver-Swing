@@ -441,7 +441,7 @@ html{scroll-behavior:smooth}
 <header class="mast">
   <p class="eyebrow">Silver Swings Golf · course identity</p>
   <h1>Course Marks</h1>
-  <p class="lede">Every course in the game, its logo today, and two new directions. <b>Concept 1</b> keeps the subject the course already has and makes it as good as it can be. <b>Concept 2</b> starts again from the course's own history, landscape or town. Each mark is drawn on the game's 32 × 32 grid, shown large, at actual size, on its course card, and as the vector master with a type lockup. Your picks are marked: 16 courses now use a new mark in the game (RedTail its new hawk), 13 keep theirs, and Waverley has five trolleys to look at.</p>
+  <p class="lede">Every course in the game, its logo today, and two new directions. <b>Concept 1</b> keeps the subject the course already has and makes it as good as it can be. <b>Concept 2</b> starts again from the course's own history, landscape or town. Each mark is drawn on the game's 32 × 32 grid, shown large, at actual size, on its course card, and as the vector master with a type lockup. Your picks are marked: 17 courses now use a new mark in the game, RedTail's hawk and Waverley's trolley among them, and 12 keep theirs.</p>
   <ul class="counts"><li><b>%N%</b>courses</li><li><b>%M%</b>new marks</li><li><b>+6</b>East Potomac course variants</li></ul>
 </header>
 <div class="legend">

@@ -72,10 +72,10 @@
   ],
   "pick": 2,
   "recommendation": "Concept 2. The pear is the club's own ground and history, and the cleanest icon in the Portland set.",
-  "chosen": "current",
+  "chosen": "trolley_c",
   "options_label": "Trolley",
   "options_title": "A trolley for Waverley",
-  "options_pending": true,
+  "options_pending": false,
   "options_intro": "The Junior Clubhouse was the Trolley House, a stop on the interurban Ardgour line from the club's 'Riverside Links and Golf Junction era'. The line opened in 1892 as one of the first long-distance electric interurbans; the company's cars wore maroon and cream (later blue, then orange, with cream).",
   "options_font": [
     "Playfair Display",
@@ -122,5 +122,5 @@
     }
   ],
   "options_pick": "trolley_b",
-  "options_note": "My pick is Head-On, Waverley Green: the right vehicle in the colours the club already uses. Line Colours if you want it true to the old cars."
+  "options_note": "You chose Along the Line (25 October); it is now the logo in the game."
 }

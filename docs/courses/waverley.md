@@ -21,8 +21,9 @@ DECISIONS.md ("Waverley"), data/waverley/validation_report.md and
 report_notes.md.
 
 -   **Location:** 1100 SE Waverly Dr, Milwaukie, Clackamas County, Oregon, on
-    the east bank of the Willamette. `state` OR. Course id `waverley` (logo
-    exists). Club founded 1896; Jack Moffat's routing (1898), H. Chandler
+    the east bank of the Willamette. `state` OR. Course id `waverley` (logo: a
+    trolley car, "Along the Line", 2026-10-25: the Junior Clubhouse was the Trolley House
+    stop on the interurban Ardgour line; DECISIONS.md "Logos from the logo concepts"). Club founded 1896; Jack Moffat's routing (1898), H. Chandler
     Egan's current routing, bunkers and greens (1912-1924), restoration by
     Gil Hanse (c. 2012).
 -   **UTM zone:** 10N (EPSG:32610). World 1,280 x 1,792 m.

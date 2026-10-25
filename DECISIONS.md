@@ -1228,15 +1228,15 @@ but not on today's daily board. `DAILY_PICKS` still overrides a day.
   subject from the course's history, landscape or town. Each folder's `notes.json` has the
   rationale and the facts with sources; `review.py` builds the review page.
 - The developer's picks (2026-10-25):
-  - **To a concept (15), now in the game:** Bandon Dunes 1 (the harbor seal's face), Bandon
+  - **To a concept (15), now in the game** (plus RedTail's hawk and Waverley's trolley, below): Bandon Dunes 1 (the harbor seal's face), Bandon
     Preserve 1 (the plover), Bandon Trails 1 (the carved trail post), Old Macdonald 1 (cap and
     pipe), Oregon Golf Club 1 (the heron in still water), Oswego Lake 2 (the Oswego Iron
     Furnace), Pacific Dunes 1 (the whale's fluke), Sheep Ranch 1 (a black face in a fleece),
     Shorty's 1 (the bedded fawn), Stanford 1 (the arcade), Stone Creek 2 (a covered wagon:
     Oregon City, the end of the Oregon Trail), TPC Boston 1 (the lederhosen), Triggs 1 (the
     rooster's head), Tualatin 2 (the Tualatin mastodon), Willamette Valley 2 (a dahlia, for Canby).
-  - **Unchanged (13):** Chambers Bay, East Potomac (all three), Eastmoreland, Franklin,
-    Gearhart, Highland Links, Indian Island, Langdon, Langston, The Muni, Sandpines, Waverley,
+  - **Unchanged (12):** Chambers Bay, East Potomac (all three), Eastmoreland, Franklin,
+    Gearhart, Highland Links, Indian Island, Langdon, Langston, The Muni, Sandpines,
     Wannamoisett.
   - **RedTail goes to a red-tailed hawk** (developer: "we should definitely change to a hawk",
     but not Concept 2's soaring hawk). Of five more (`redtail/hawk_a` to `hawk_e`) the developer
@@ -1245,9 +1245,11 @@ but not on today's daily board. `DAILY_PICKS` still overrides a day.
 - **Why Waverley has a train** (developer): the club's Junior Clubhouse was the "Trolley
   House" (or "Over Links") stop on the old interurban Ardgour line across the property, and its
   back keeps the stop's original double doors (waverley.cc/golf/field-house-facilities,
-  waverley.cc/story). The locomotive stays for now; the developer asked to see trolleys, and
-  five are drawn (`waverley/trolley_a` to `trolley_e`: head-on in the line's maroon and cream
-  or in Waverley green, side on over the turf, a "Golf Junction" roundel, the pole and spark).
+  waverley.cc/story). The developer asked to see trolleys; of five (`waverley/trolley_a` to
+  `trolley_e`: head-on in the line's maroon and cream or in Waverley green, side on over the
+  turf, a "Golf Junction" roundel, the pole and spark) the developer chose Trolley C, "Along
+  the Line": a green and cream car on rails laid across the turf. It is in the game through
+  `course_logos/waverley.py`; the locomotive stays in `LOGOS["waverley"]`.
 - **How a concept becomes the logo:** `assets-src/course_logos/<id>.py` sets
   `LOGO = concept_logo("<id>", "conceptN")` (new in `logos.py`), which reads the 32 px sprite
   `logo_concepts/lc.py` builds from the SVG, so `logos.py` and `make cards` need no SVG
