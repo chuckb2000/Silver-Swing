@@ -476,7 +476,8 @@ DECISIONS.md with the reason.
     Ghost Creek as two layouts, `pumpkin_ridge` theme; PR #61) merged 2026-10-24,
     both in the daily rotation from 2026-10-25. Cypress Point Club (Pebble Beach CA,
     `monterey` theme, the Pacific a red penalty area; PR #62) merged 2026-10-24, in
-    the daily rotation from 2026-10-25.
+    the daily rotation from 2026-10-25. Astoria Country Club (Warrenton OR, `astoria`
+    theme; PR #64) merged 2026-10-24, in the daily rotation from 2026-10-25.
     Each course's build history, facts and open items are in
     `docs/courses/<id>.md` (section 11).
 
@@ -1706,6 +1707,7 @@ files (`game/scripts/course-lists.mjs`). The first course, Oswego Lake, is
 
 | Course | File |
 |---|---|
+| Astoria Country Club | `docs/courses/astoria.md` |
 | Bandon Dunes | `docs/courses/bandon_dunes.md` |
 | Bandon Preserve (13 holes) | `docs/courses/bandon_preserve.md` |
 | Bandon Trails | `docs/courses/bandon_trails.md` |
