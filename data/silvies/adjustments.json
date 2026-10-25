@@ -1,0 +1,206 @@
+{
+ "silvies_craddock": [
+  {
+   "hole": 8,
+   "tee_set": "Challenge",
+   "step": 2,
+   "type": "tee_position",
+   "from": [
+    323.04,
+    895.27
+   ],
+   "to": [
+    319.75,
+    894.5
+   ],
+   "real_yd": 422.4,
+   "adjusted_yd": 426.0,
+   "card_yd": 445.0,
+   "reason": "measured 422 yd from the tee-box centre vs 445 on the card (-5.1%); moved the virtual tee along the middle of the real tee polygon desk_craddock_08_tee (on its centre line, at least 2.5 m from its back and front)"
+  },
+  {
+   "hole": 12,
+   "tee_set": "Challenge",
+   "step": 2,
+   "type": "tee_position",
+   "from": [
+    171.25,
+    1675.63
+   ],
+   "to": [
+    172.25,
+    1675.25
+   ],
+   "real_yd": 195.8,
+   "adjusted_yd": 194.6,
+   "card_yd": 190.0,
+   "reason": "measured 196 yd from the tee-box centre vs 190 on the card (+3.1%); moved the virtual tee along the middle of the real tee polygon desk_craddock_12_tee (on its centre line, at least 2.5 m from its back and front)"
+  },
+  {
+   "hole": 14,
+   "tee_set": "Challenge",
+   "step": 2,
+   "type": "tee_position",
+   "from": [
+    590.64,
+    1120.5
+   ],
+   "to": [
+    592.25,
+    1120.25
+   ],
+   "real_yd": 613.3,
+   "adjusted_yd": 611.6,
+   "card_yd": 570.0,
+   "reason": "measured 613 yd from the tee-box centre vs 570 on the card (+7.6%); moved the virtual tee along the middle of the real tee polygon desk_craddock_14_tee (on its centre line, at least 2.5 m from its back and front)"
+  }
+ ],
+ "silvies_hankins": [
+  {
+   "hole": 8,
+   "tee_set": "White",
+   "step": 2,
+   "type": "tee_position",
+   "from": [
+    372.61,
+    1392.08
+   ],
+   "to": [
+    373.75,
+    1394.75
+   ],
+   "real_yd": 385.9,
+   "adjusted_yd": 388.6,
+   "card_yd": 410.0,
+   "reason": "measured 386 yd from the tee-box centre vs 410 on the card (-5.9%); moved the virtual tee along the middle of the real tee polygon desk_hankins_08_tee (on its centre line, at least 2.5 m from its back and front)"
+  },
+  {
+   "hole": 13,
+   "tee_set": "White",
+   "step": 2,
+   "type": "tee_position",
+   "from": [
+    155.22,
+    490.6
+   ],
+   "to": [
+    156.75,
+    488.75
+   ],
+   "real_yd": 146.1,
+   "adjusted_yd": 143.4,
+   "card_yd": 140.0,
+   "reason": "measured 146 yd from the tee-box centre vs 140 on the card (+4.3%); moved the virtual tee along the middle of the real tee polygon desk_hankins_13_tee (on its centre line, at least 2.5 m from its back and front)"
+  },
+  {
+   "hole": 15,
+   "tee_set": "White",
+   "step": 2,
+   "type": "tee_position",
+   "from": [
+    741.24,
+    372.19
+   ],
+   "to": [
+    738.75,
+    372.0
+   ],
+   "real_yd": 168.2,
+   "adjusted_yd": 170.7,
+   "card_yd": 175.0,
+   "reason": "measured 168 yd from the tee-box centre vs 175 on the card (-3.9%); moved the virtual tee along the middle of the real tee polygon desk_hankins_15_tee (on its centre line, at least 2.5 m from its back and front)"
+  },
+  {
+   "hole": 16,
+   "tee_set": "White",
+   "step": 2,
+   "type": "tee_position",
+   "from": [
+    896.47,
+    350.54
+   ],
+   "to": [
+    900.0,
+    347.25
+   ],
+   "real_yd": 472.7,
+   "adjusted_yd": 477.9,
+   "card_yd": 490.0,
+   "reason": "measured 473 yd from the tee-box centre vs 490 on the card (-3.5%); moved the virtual tee along the middle of the real tee polygon desk_hankins_16_tee (on its centre line, at least 2.5 m from its back and front)"
+  },
+  {
+   "hole": 18,
+   "tee_set": "White",
+   "step": 2,
+   "type": "tee_position",
+   "from": [
+    874.13,
+    522.27
+   ],
+   "to": [
+    864.25,
+    521.5
+   ],
+   "real_yd": 547.1,
+   "adjusted_yd": 557.9,
+   "card_yd": 590.0,
+   "reason": "measured 547 yd from the tee-box centre vs 590 on the card (-7.3%); moved the virtual tee along the middle of the real tee polygon desk_hankins_18_tee (on its centre line, at least 2.5 m from its back and front)"
+  }
+ ],
+ "silvies_chief_egan": [
+  {
+   "hole": 6,
+   "tee_set": "White",
+   "step": 2,
+   "type": "tee_position",
+   "from": [
+    1747.26,
+    630.48
+   ],
+   "to": [
+    1746.0,
+    630.0
+   ],
+   "real_yd": 93.7,
+   "adjusted_yd": 92.2,
+   "card_yd": 90.0,
+   "reason": "measured 94 yd from the tee-box centre vs 90 on the card (+4.1%); moved the virtual tee along the middle of the real tee polygon desk_chief_egan_06_tee (on its centre line, at least 2.5 m from its back and front)"
+  },
+  {
+   "hole": 8,
+   "tee_set": "White",
+   "step": 2,
+   "type": "tee_position",
+   "from": [
+    1751.48,
+    569.23
+   ],
+   "to": [
+    1752.75,
+    568.25
+   ],
+   "real_yd": 92.5,
+   "adjusted_yd": 90.9,
+   "card_yd": 85.0,
+   "reason": "measured 93 yd from the tee-box centre vs 85 on the card (+8.9%); moved the virtual tee along the middle of the real tee polygon desk_chief_egan_08_tee (on its centre line, at least 2.5 m from its back and front)"
+  },
+  {
+   "hole": 9,
+   "tee_set": "White",
+   "step": 2,
+   "type": "tee_position",
+   "from": [
+    1857.37,
+    533.47
+   ],
+   "to": [
+    1858.75,
+    535.25
+   ],
+   "real_yd": 94.7,
+   "adjusted_yd": 96.7,
+   "card_yd": 100.0,
+   "reason": "measured 95 yd from the tee-box centre vs 100 on the card (-5.3%); moved the virtual tee along the middle of the real tee polygon desk_chief_egan_09_tee (on its centre line, at least 2.5 m from its back and front)"
+  }
+ ]
+}
