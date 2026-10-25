@@ -51,6 +51,8 @@ export const DAILY_ROSTER: Readonly<Record<string, string>> = {
   wildwood: '2026-10-25',
   pumpkin_ridge_witch_hollow: '2026-10-25',
   pumpkin_ridge_ghost_creek: '2026-10-25',
+  // merged on 2026-10-24 in the evening
+  cypress_point: '2026-10-25',
 };
 
 /**
