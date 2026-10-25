@@ -1,0 +1,12 @@
+{
+"type": "FeatureCollection",
+"name": "clubhouses",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+"features": [
+{ "type": "Feature", "properties": { "osm": "w673490788_building", "kind": "building", "tags": { "building": "house", "golf": "clubhouse" } }, "geometry": { "type": "Polygon", "coordinates": [ [ [ -71.3465878, 41.4644658 ], [ -71.3466357, 41.4643608 ], [ -71.3464757, 41.4643135 ], [ -71.346429, 41.464422 ], [ -71.3465878, 41.4644658 ] ] ] } },
+{ "type": "Feature", "properties": { "osm": "w673490789_building", "kind": "building", "tags": { "building": "yes", "golf": "clubhouse" } }, "geometry": { "type": "Polygon", "coordinates": [ [ [ -71.3466765, 41.464275 ], [ -71.3467641, 41.4641044 ], [ -71.3466497, 41.4640651 ], [ -71.3466555, 41.4640519 ], [ -71.3466007, 41.4640344 ], [ -71.3465808, 41.4640616 ], [ -71.3465236, 41.4640458 ], [ -71.3465259, 41.4640283 ], [ -71.346422, 41.4639924 ], [ -71.3463286, 41.4641578 ], [ -71.3464349, 41.4641945 ], [ -71.3464419, 41.4641867 ], [ -71.3465481, 41.4642199 ], [ -71.3465423, 41.4642313 ], [ -71.3466765, 41.464275 ] ] ] } },
+{ "type": "Feature", "properties": { "osm": "w673490793_building", "kind": "building", "tags": { "building": "yes", "golf": "clubhouse" } }, "geometry": { "type": "Polygon", "coordinates": [ [ [ -71.3463636, 41.4620308 ], [ -71.3464313, 41.4619179 ], [ -71.3463624, 41.4618917 ], [ -71.3462924, 41.4620054 ], [ -71.3463636, 41.4620308 ] ] ] } },
+{ "type": "Feature", "properties": { "osm": "w673526885_building", "kind": "building", "tags": { "building": "yes", "golf": "clubhouse" } }, "geometry": { "type": "Polygon", "coordinates": [ [ [ -71.3450028, 41.4571223 ], [ -71.3450033, 41.4570875 ], [ -71.3449511, 41.457086 ], [ -71.3449499, 41.4571209 ], [ -71.3450028, 41.4571223 ] ] ] } },
+{ "type": "Feature", "properties": { "osm": "w673528158_building", "kind": "building", "tags": { "building": "yes", "golf": "clubhouse" } }, "geometry": { "type": "Polygon", "coordinates": [ [ [ -71.352665, 41.4584482 ], [ -71.3526622, 41.4584143 ], [ -71.3526134, 41.4584164 ], [ -71.3526175, 41.4584509 ], [ -71.352665, 41.4584482 ] ] ] } }
+]
+}
