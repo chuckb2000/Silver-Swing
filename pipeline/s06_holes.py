@@ -256,7 +256,16 @@ def build_layout(name, cfg, lay, g):
         n = int(h.ref)
         L, start, gi, gc = geo[n]
         green = greens.loc[gi]
-        pin = pins.loc[pins.distance(green.geometry).idxmin()].geometry
+        near = pins[pins.distance(green.geometry) <= 2.0] if len(pins) else pins
+        if len(near):
+            pin = near.loc[near.distance(green.geometry).idxmin()].geometry
+        else:
+            # No golf=pin on this green (many OSM courses map none): the centre pin is the green's
+            # centroid, or a point inside it when the centroid falls outside (a crescent green).
+            # The game adds the other hole locations itself (pins.ts; COURSE_BUILD 4.1 "Pins").
+            c = green.geometry.centroid
+            pin = c if green.geometry.contains(c) else green.geometry.representative_point()
+            open_items.append(f"Hole {n}: no golf=pin on its green; the centre pin is the green's centre (proposal).")
         par = int(card[n]["par"])
         osm_par = h.tags.get("par")
         if osm_par and int(osm_par) != par:
