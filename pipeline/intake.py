@@ -13,6 +13,12 @@ course: release.json "run" lines call it, so `make fetch` rebuilds raw/ from the
         Lidar tiles (or a NOAA zip of them) -> one LAZ of the points in the world + margin,
         in the files' own CRS, re-quantised onto the first tile's scale and offset, with the
         source's creation date (so the clip's hash is the same any day: Chambers Bay).
+    python3 pipeline/intake.py dtm <id> SRC.laz|SRC.zip [...] [--margin 100] [--classes 2] [--zunits ft] [--out raw/dtm_ground_1m.tif]
+        Bare earth from the lidar's ground points, for a release with lidar but no DEM: a 1 m
+        GeoTIFF in the course EPSG (whole-metre edges), heights in metres (the vertical unit
+        comes from the files' CRS). Mean of the ground returns per cell; gaps (buildings,
+        water, sparse cover) filled linearly from their rim, cells beyond the points' hull from
+        the nearest cell; the counts are printed. Config: "dtm": {"path": "raw/dtm_ground_1m.tif", "units": "m"}.
     python3 pipeline/intake.py raster <id> SRC.tif --out raw/NAME.tif [--margin 100]
         A big raster cut to the world + margin, keeping its CRS and grid (pipeline/clip_raster.py).
     python3 pipeline/intake.py check <id>
@@ -244,6 +250,114 @@ def cmd_laz(name: str, args: list[str]):
                 print(f"[intake] {s.name}: {n:,} points in the world + {margin:g} m")
                 total += n
     print(f"[intake] {out.relative_to(ROOT)}: {total:,} points; CRS {crs.name if crs else '?'}")
+
+
+# --- dtm (bare earth from the lidar's ground points) ----------------------------------------
+
+def cmd_dtm(name: str, args: list[str]):
+    """Ground returns -> a 1 m bare-earth GeoTIFF in the course EPSG (for a course whose release
+    has lidar but no DEM). Mean height of the ground points per cell; cells without one (under
+    buildings, water, dense cover) are filled by linear interpolation across the gap from its rim,
+    and cells outside the points' hull from the nearest filled cell. Heights in metres."""
+    import laspy
+    import rasterio
+    from pyproj import Transformer
+    from rasterio.crs import CRS
+    from rasterio.transform import from_origin
+    from scipy import ndimage
+    from scipy.interpolate import LinearNDInterpolator
+    cfg = load_cfg(name)
+    margin = float(opt(args, "--margin", default=100))
+    out = cdir(name) / opt(args, "--out", default="raw/dtm_ground_1m.tif")
+    classes = np.array([int(c) for c in opt(args, "--classes", default="2").split(",")])
+    zunits = opt(args, "--zunits")
+    x0, y0, x1, y1 = world_box(cfg, args, margin)
+    x0, y0, x1, y1 = np.floor(x0), np.floor(y0), np.ceil(x1), np.ceil(y1)
+    W, H = int(x1 - x0), int(y1 - y0)
+    s = np.zeros(W * H)
+    n = np.zeros(W * H)
+    used = 0
+    with tempfile.TemporaryDirectory() as td:
+        srcs = _laz_sources(args, td)
+        if not srcs:
+            sys.exit("[intake] dtm: no .laz/.las files")
+        names = []
+        for p in srcs:
+            with laspy.open(p) as r:
+                if r.header.point_count == 0:
+                    continue
+                crs = r.header.parse_crs()
+                if crs is None:
+                    sys.exit(f"[intake] dtm: {p.name} has no CRS in its header; ask the developer which it is")
+                k = 1.0
+                vu = zunits
+                if vu is None and getattr(crs, "is_compound", False):
+                    vu = crs.sub_crs_list[1].axis_info[0].unit_name
+                if vu and ("foot" in vu.lower() or vu.lower() == "ft"):
+                    k = 0.3048006096 if "us" in vu.lower() else 0.3048
+                elif vu is None:
+                    print(f"[intake] warning: {p.name}: vertical units not stated; taken as metres (--zunits ft to change)")
+                tf = Transformer.from_crs(_horizontal(crs), cfg["epsg"], always_xy=True)
+                bx0, by0, bx1, by1 = _box_in_crs(cfg, (x0, y0, x1, y1), _horizontal(crs))
+                m = 0
+                for c in r.chunk_iterator(5_000_000):
+                    keep = np.isin(np.asarray(c.classification), classes)
+                    x, y = np.asarray(c.x)[keep], np.asarray(c.y)[keep]
+                    inb = (x >= bx0) & (x <= bx1) & (y >= by0) & (y <= by1)
+                    if not inb.any():
+                        continue
+                    ex, ey = tf.transform(x[inb], y[inb])
+                    z = np.asarray(c.z)[keep][inb] * k
+                    col = np.floor(ex - x0).astype(np.int64)
+                    row = np.floor(y1 - ey).astype(np.int64)
+                    ok = (col >= 0) & (col < W) & (row >= 0) & (row < H)
+                    cell = row[ok] * W + col[ok]
+                    s += np.bincount(cell, weights=z[ok], minlength=W * H)
+                    n += np.bincount(cell, minlength=W * H)
+                    m += int(ok.sum())
+                names.append(p.name)
+                print(f"[intake] {p.name}: {m:,} ground points (classes {classes.tolist()}) in the world + {margin:g} m")
+                used += m
+    if used == 0:
+        sys.exit("[intake] dtm: no ground points in the world box")
+    a = np.full(W * H, np.nan)
+    has = n > 0
+    a[has] = s[has] / n[has]
+    a = a.reshape(H, W)
+    filled = ~np.isnan(a)
+    empty = ~filled
+    n_empty = int(empty.sum())
+    n_tin = n_out = 0
+    far = 0.0
+    if n_empty:
+        dist = ndimage.distance_transform_edt(empty)
+        far = float(dist.max())
+        rim = filled & ndimage.binary_dilation(empty, structure=np.ones((3, 3), bool))
+        rr, cc = np.nonzero(rim)
+        er, ec = np.nonzero(empty)
+        if len(rr) >= 3:
+            f = LinearNDInterpolator(np.column_stack([cc, rr]).astype(np.float64), a[rr, cc])
+            v = f(ec.astype(np.float64), er.astype(np.float64))
+            got = ~np.isnan(v)
+            a[er[got], ec[got]] = v[got]
+            n_tin = int(got.sum())
+        rest = np.isnan(a)
+        n_out = int(rest.sum())
+        if n_out:
+            idx = ndimage.distance_transform_edt(rest, return_distances=False, return_indices=True)
+            a[rest] = a[idx[0][rest], idx[1][rest]]
+    out.parent.mkdir(parents=True, exist_ok=True)
+    prof = dict(driver="GTiff", width=W, height=H, count=1, dtype="float32", crs=CRS.from_epsg(cfg["epsg"]),
+                transform=from_origin(x0, y1, 1.0, 1.0), nodata=None, compress="DEFLATE", predictor=3,
+                tiled=True, blockxsize=256, blockysize=256)
+    with rasterio.open(out, "w", **prof) as d:
+        d.write(a.astype(np.float32), 1)
+        d.update_tags(DESCRIPTION=f"bare earth (m) from lidar ground points, classes {classes.tolist()}, "
+                                  f"pipeline/intake.py dtm", SOURCES=";".join(names))
+    shown = out.relative_to(ROOT) if out.is_relative_to(ROOT) else out
+    print(f"[intake] {shown}: {W} x {H} m at 1 m, {used:,} points, {100 * filled.mean():.1f} % of cells "
+          f"with a ground point; {n_tin:,} filled across gaps, {n_out:,} from the nearest cell (outside the points' "
+          f"hull); farthest cell from a ground point {far:.0f} m; heights {np.min(a):.1f}..{np.max(a):.1f} m")
 
 
 # --- raster --------------------------------------------------------------------------------
@@ -533,7 +647,8 @@ def main(argv: list[str]) -> int:
     if len(argv) < 2:
         sys.exit(__doc__)
     cmd, name, args = argv[0], argv[1], argv[2:]
-    fn = {"osm": cmd_osm, "ortho": cmd_ortho, "laz": cmd_laz, "raster": cmd_raster, "check": cmd_check}.get(cmd)
+    fn = {"osm": cmd_osm, "ortho": cmd_ortho, "laz": cmd_laz, "dtm": cmd_dtm, "raster": cmd_raster,
+          "check": cmd_check}.get(cmd)
     if not fn:
         sys.exit(__doc__)
     return fn(name, args) or 0
