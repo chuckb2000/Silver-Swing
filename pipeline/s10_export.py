@@ -37,10 +37,12 @@ MAP_TREE_COLOURS = {"conifer": ([31, 74, 50], [58, 112, 74]), "deciduous": ([47,
 def to_palette_png(arr: np.ndarray, path):
     """Save an RGB(A) array as an exact palette PNG when it has <= 256 colours."""
     img = Image.fromarray(arr)
-    flat = arr.reshape(-1, arr.shape[-1])
-    uniq = np.unique(flat, axis=0)
-    if len(uniq) <= 256 and arr.shape[-1] == 3:
-        pal_img = img.quantize(colors=len(uniq), method=Image.Quantize.MAXCOVERAGE, dither=Image.Dither.NONE)
+    if arr.shape[-1] == 3:
+        # count the colours as packed 24-bit ints (np.unique over rows sorted the whole image: 50 s a course)
+        a = arr.reshape(-1, 3).astype(np.uint32)
+        n_colours = len(np.unique((a[:, 0] << 16) | (a[:, 1] << 8) | a[:, 2]))
+    if arr.shape[-1] == 3 and n_colours <= 256:
+        pal_img = img.quantize(colors=n_colours, method=Image.Quantize.MAXCOVERAGE, dither=Image.Dither.NONE)
         # verify exactness, fall back to RGB if quantisation changed a colour
         if np.array_equal(np.array(pal_img.convert("RGB")), arr):
             pal_img.save(path, optimize=True)
@@ -326,13 +328,15 @@ def main():
     meta = json.load(open(bdir / "art" / "render_meta.json"))
     bh_by_osm = {b["osm"]: b["h"] for b in meta["buildings"]}
     buildings = []
+    near = boundary.buffer(40)
     for _, r in g[g.kind == "building"].iterrows():
         geom = r.geometry
-        parts = [o for o in bh_by_osm if o.startswith(f"{r.osm}:")]
+        prefix = f"{r.osm}:"
+        parts = [o for o in bh_by_osm if o.startswith(prefix)]
         if parts:  # OSM building parts (s09): each collides at its own height, e.g. a lighthouse tower
             for o in parts:
                 poly = g[g.osm == o.split(":", 1)[1]].geometry.iloc[0]
-                if boundary.buffer(40).intersects(poly):
+                if near.intersects(poly):
                     buildings.append({"id": o, "h": bh_by_osm[o], "inside": bool(boundary.intersects(poly)),
                                       "poly": [[rnd(x, 1), rnd(y, 1)] for x, y in poly.simplify(0.3).exterior.coords]})
             continue
@@ -340,7 +344,7 @@ def main():
         for poly in polys:
             if poly.area < 4:
                 continue
-            if not boundary.buffer(40).intersects(poly):
+            if not near.intersects(poly):
                 continue
             buildings.append({"id": r.osm, "h": bh_by_osm.get(r.osm, 6.0), "inside": bool(boundary.intersects(poly)),
                               "poly": [[rnd(x, 1), rnd(y, 1)] for x, y in poly.simplify(0.3).exterior.coords]})
