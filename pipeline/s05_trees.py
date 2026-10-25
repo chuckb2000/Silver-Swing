@@ -349,6 +349,14 @@ def main():
     chm = np.flipud(chm)  # rows south->north: row j = local y in [j, j+1]
     water_cells = chm <= -4.0  # DC's normalized surface model marks open water -5
     chm[chm < 0] = 0
+    # optional (course_config.json trees_ortho; Strawberry Farms): where the lidar has no
+    # points, canopy from the orthophoto, its classifier and heights learnt on the lidar part
+    # (pipeline/ortho_canopy.py). Without the key: nothing.
+    ortho_fill, ortho_gap = None, None
+    if cfg.get("trees_ortho"):
+        from ortho_canopy import fill_chm
+        lake0 = np.load(build_dir(name) / "lake_mask.npy")[:H, :W]
+        chm, ortho_fill, ortho_gap = fill_chm(name, cfg, world, chm, lake0 | water_cells, (r0, c0, H, W))
     wires = None
     if cfg.get("remove_wires"):
         chm, wires = remove_wires(chm, cfg["remove_wires"])
@@ -600,6 +608,10 @@ def main():
         stats["removed_by_developer"] = removed
     if wires is not None:
         stats["wires_removed"] = wires
+    if ortho_fill is not None:
+        if ortho_gap is not None:
+            ortho_fill["trees_from_photo"] = int(sum(bool(ortho_gap[min(H - 1, int(t_["y"])), min(W - 1, int(t_["x"]))]) for t_ in rt))
+        stats["ortho_canopy"] = ortho_fill
     bdir = build_dir(name)
     write_json(bdir / "trees.json", trees)
     write_json(bdir / "trees_report.json", stats, indent=1)
