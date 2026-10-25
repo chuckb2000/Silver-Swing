@@ -3,6 +3,7 @@
   "pipeline": "88915b23ba0650d30803e7855b372037b670a5fa",
   "assets-src": "5fa1e801a8303bfb50239abd65aeda9adbc192c7"
  },
+ "build_key": "9bace0bbafaf718ea1b91d101424f1c1c23d6a454b1f2a9af5c1be0078297123",
  "commit": "afd9935075256eb75fe786ced1aba634a4f2766d",
  "date": "2026-10-25",
  "note": "the pipeline that built this course's committed files; pipeline/pins.py"
