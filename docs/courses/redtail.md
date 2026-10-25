@@ -36,6 +36,7 @@ Blue, the standing default (COURSE_BUILD.md 4.1); the only set built.
 
 -   2026-10-22: the card's rating and slope for Blue, 72.6/130 (not 72.3/128).
 -   2026-10-22: the logo is a fox. The developer chose the design chat's fox (`assets-src/course_logos/redtail.py`, merged on `main` in PR #35) over the course chat's drawing; this branch takes main's.
+-   2026-10-25: the logo is a red-tailed hawk, "Talons Out" (the course's namesake; DECISIONS.md "Logos from the logo concepts"); the fox is kept in `assets-src/course_logos/redtail.py` as `PREVIOUS`.
 -   Standing defaults used without asking: Blue tees, all water red, OSM boundary as OB with the range OB, trees from lidar, `pnw`, wind 1-7 mph, course card hole the course chat's pick.
 
 ## New pipeline keys or theme

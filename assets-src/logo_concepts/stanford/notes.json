@@ -1,0 +1,68 @@
+{
+  "id": "stanford",
+  "course": "Stanford Golf Course",
+  "place": "Stanford, California",
+  "facts": [
+    {
+      "fact": "George C. Thomas Jr. and William P. Bell, opened 1 January 1930, in the foothills behind the campus.",
+      "source": "docs/courses/stanford.md"
+    },
+    {
+      "fact": "The Stanford Dish, a 150 ft radio telescope built in 1961, stands in the Stanford foothills.",
+      "source": "https://en.wikipedia.org/wiki/Stanford_Dish_(Stanford_Radio_Telescope)"
+    }
+  ],
+  "current": {
+    "subject": "An arcade inspired by the Main Quad, in a round badge.",
+    "keep": "The sandstone arcade and red tile roof.",
+    "weaknesses": "The badge's sky, grass and flag crowd the arches."
+  },
+  "concepts": [
+    {
+      "n": 1,
+      "name": "The Arcade",
+      "rationale": "Three Romanesque arches in buff sandstone under a red tile roof: the architecture alone, chunky and clear.",
+      "references": [
+        "Existing arcade logo",
+        "Main Quad architecture"
+      ],
+      "symbolism": "A campus landmark beside the course.",
+      "interpretation": "",
+      "typography": "Cinzel.",
+      "lockup": {
+        "font": "Cinzel",
+        "weight": 600,
+        "case": "upper",
+        "tracking": "0.14em",
+        "line2": null,
+        "line1": "Stanford Golf Course"
+      },
+      "strengths": "Strong, warm silhouette.",
+      "tradeoffs": "The university's architecture, not the course's."
+    },
+    {
+      "n": 2,
+      "name": "The Dish",
+      "rationale": "The radio telescope on a golden foothill.",
+      "references": [
+        "The Stanford Dish (fact)"
+      ],
+      "symbolism": "Science in the foothills the course shares.",
+      "interpretation": "",
+      "typography": "Space Grotesk Medium.",
+      "lockup": {
+        "font": "Space Grotesk",
+        "weight": 500,
+        "case": "upper",
+        "tracking": "0.14em",
+        "line2": null,
+        "line1": "Stanford Golf Course"
+      },
+      "strengths": "Unexpected and memorable; clear of university marks.",
+      "tradeoffs": "Visibility from specific holes isn't verified."
+    }
+  ],
+  "pick": 2,
+  "recommendation": "Concept 2. The Dish is ownable in golf and clear of the university's trademarks.",
+  "chosen": 1
+}

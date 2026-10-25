@@ -1,0 +1,64 @@
+{
+  "id": "bandon_trails",
+  "course": "Bandon Trails",
+  "place": "Bandon, Oregon",
+  "facts": [
+    {
+      "fact": "Coore & Crenshaw, opened 1 June 2005; it runs from dune scrub through meadow into Sitka spruce and shore pine forest; no hole on the ocean.",
+      "source": "docs/courses/bandon_trails.md"
+    }
+  ],
+  "current": {
+    "subject": "A wooden trail-marker post beside a spruce (course chat, developer's call).",
+    "keep": "The trail marker, the course's name in an object.",
+    "weaknesses": "The post and the tree compete side by side; the arrow is tiny."
+  },
+  "concepts": [
+    {
+      "n": 1,
+      "name": "The Trail Marker",
+      "rationale": "One object: a gabled cedar trail post with a Sitka spruce routed into its face and a carved arrow below, standing in dune grass.",
+      "references": [
+        "Existing trail-marker logo",
+        "Sitka spruce forest on the course (fact)"
+      ],
+      "symbolism": "The way on: the post tells you where the trail goes and what you'll find there.",
+      "interpretation": "",
+      "typography": "Alegreya Sans SC: humanist, like park signage.",
+      "lockup": {
+        "font": "Alegreya Sans SC",
+        "weight": 600,
+        "case": "upper",
+        "tracking": "0.14em",
+        "line2": null,
+        "line1": "Bandon Trails"
+      },
+      "strengths": "A single tall silhouette; reads at 1x; feels like the course.",
+      "tradeoffs": "A post is a modest object; less romantic than a landscape."
+    },
+    {
+      "n": 2,
+      "name": "Dune, Meadow, Forest",
+      "rationale": "A roundel of the course's journey: sand dunes at the foot, a meadow, a skyline of spruce, and the trail winding through all three.",
+      "references": [
+        "The routing through dune, meadow and forest (fact)"
+      ],
+      "symbolism": "The round as a walk: three landscapes, one trail.",
+      "interpretation": "",
+      "typography": "Cormorant Garamond capitals for a quiet, outdoorsy elegance.",
+      "lockup": {
+        "font": "Cormorant Garamond",
+        "weight": 600,
+        "case": "upper",
+        "tracking": "0.14em",
+        "line2": null,
+        "line1": "Bandon Trails"
+      },
+      "strengths": "Says what makes Trails different from the ocean courses.",
+      "tradeoffs": "A landscape vignette is more scene than symbol."
+    }
+  ],
+  "pick": 1,
+  "recommendation": "Concept 1. The carved post is a cleaner, more ownable mark; the roundel would make a fine scorecard cover.",
+  "chosen": 1
+}

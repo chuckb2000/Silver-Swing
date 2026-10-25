@@ -1,0 +1,63 @@
+{
+  "id": "franklin",
+  "course": "Franklin Country Club",
+  "place": "Franklin, Massachusetts",
+  "facts": [
+    {
+      "fact": "Founded 1899 as the Franklin Rod and Gun Club; golf came in the early 1920s.",
+      "source": "https://countryclubmag.com/massachusetts/franklin-country-club/"
+    }
+  ],
+  "current": {
+    "subject": "A turtle walking, domed shell over a gold rim (developer's pick).",
+    "keep": "The turtle and its gold rim.",
+    "weaknesses": "Side-on, the shell pattern is lost."
+  },
+  "concepts": [
+    {
+      "n": 1,
+      "name": "The Turtle, from Above",
+      "rationale": "Seen from directly above, as the game sees the course: hexagonal scutes, gold rim, legs and head out.",
+      "references": [
+        "Existing turtle logo"
+      ],
+      "symbolism": "Steady and patient.",
+      "interpretation": "",
+      "typography": "Libre Franklin Bold, for the name.",
+      "lockup": {
+        "font": "Libre Franklin",
+        "weight": 700,
+        "case": "upper",
+        "tracking": "0.14em",
+        "line2": null,
+        "line1": "Franklin Country Club"
+      },
+      "strengths": "A crisp geometric emblem; reads at 1x.",
+      "tradeoffs": "The turtle has no documented link to the club."
+    },
+    {
+      "n": 2,
+      "name": "The Rod and Gun Fly",
+      "rationale": "A classic dry fly on its hook: white wings, brown hackle, a red band. The club began as a fishing and shooting club.",
+      "references": [
+        "Franklin Rod and Gun Club, 1899 (fact)"
+      ],
+      "symbolism": "The sporting club it was before it was a golf club.",
+      "interpretation": "The fly is a generic classic pattern, not one tied to the club.",
+      "typography": "Libre Baskerville Italic.",
+      "lockup": {
+        "font": "Libre Baskerville",
+        "weight": 400,
+        "case": "none",
+        "tracking": "0.02em",
+        "line2": null,
+        "line1": "Franklin Country Club"
+      },
+      "strengths": "Authentic, unusual, rich colour.",
+      "tradeoffs": "Fishing imagery may confuse at a glance."
+    }
+  ],
+  "pick": 1,
+  "recommendation": "Concept 1. The top-down turtle is one of the strongest icons in the set; the fly is the better heritage story.",
+  "chosen": "current"
+}

@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <title>Stone Creek - Concept 2: End of the Trail</title>
+  <defs>
+    <clipPath id="bonnet"><path d="M5 15.6 C4.6 10 6.4 5.4 10 4.6 C13 4 15 5.6 16 5.6 C17 5.6 19 4 22 4.6 C25.6 5.4 27.4 10 27 15.6 Z"/></clipPath>
+  </defs>
+  <!-- the canvas bonnet over its bows, westward bound -->
+  <path d="M5 15.6 C4.6 10 6.4 5.4 10 4.6 C13 4 15 5.6 16 5.6 C17 5.6 19 4 22 4.6 C25.6 5.4 27.4 10 27 15.6 Z" fill="#efe6cf"/>
+  <g clip-path="url(#bonnet)">
+    <rect x="21" y="0" width="8" height="16" fill="#cfc4a6"/>
+    <g fill="#b8ab88">
+      <rect x="10.4" y="4" width="1" height="12"/><rect x="15.6" y="4" width="1" height="12"/><rect x="20.8" y="4" width="1" height="12"/>
+    </g>
+    <!-- the puckered front opening -->
+    <ellipse cx="5.4" cy="11.6" rx="1.8" ry="3.6" fill="#5a3a20"/>
+  </g>
+  <!-- the wagon box -->
+  <rect x="4.6" y="15.4" width="23" height="5" fill="#8a5a34"/>
+  <rect x="4.6" y="15.4" width="23" height="1.2" fill="#a8743f"/>
+  <rect x="22" y="15.4" width="5.6" height="5" fill="#6b4428"/>
+  <rect x="4.6" y="19.4" width="23" height="1" fill="#5a3a20"/>
+  <!-- the tongue -->
+  <path d="M5 19.6 L2.6 22" stroke="#5a3a20" stroke-width="1.4" stroke-linecap="round"/>
+  <!-- wheels: small at the front, big at the back -->
+  <g fill="none" stroke="#3a2a20" stroke-width="1">
+    <path d="M9.0 24.0 L13.2 24.0"/><path d="M9.0 24.0 L12.0 27.0"/><path d="M9.0 24.0 L9.0 28.2"/><path d="M9.0 24.0 L6.0 27.0"/><path d="M9.0 24.0 L4.8 24.0"/><path d="M9.0 24.0 L6.0 21.0"/><path d="M9.0 24.0 L9.0 19.8"/><path d="M9.0 24.0 L12.0 21.0"/>
+    <path d="M23.4 23.4 L28.4 23.4"/><path d="M23.4 23.4 L26.9 26.9"/><path d="M23.4 23.4 L23.4 28.4"/><path d="M23.4 23.4 L19.9 26.9"/><path d="M23.4 23.4 L18.4 23.4"/><path d="M23.4 23.4 L19.9 19.9"/><path d="M23.4 23.4 L23.4 18.4"/><path d="M23.4 23.4 L26.9 19.9"/>
+  </g>
+  <circle cx="9" cy="24" r="4" fill="none" stroke="#5a3a20" stroke-width="1.6"/>
+  <circle cx="23.4" cy="23.4" r="4.9" fill="none" stroke="#5a3a20" stroke-width="1.6"/>
+  <circle cx="9" cy="24" r="1.2" fill="#3a2a20"/>
+  <circle cx="23.4" cy="23.4" r="1.4" fill="#3a2a20"/>
+  <!-- the trail underfoot -->
+  <rect x="2" y="28.6" width="28" height="1.2" fill="#b8a27a"/>
+</svg>

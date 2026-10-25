@@ -1,0 +1,71 @@
+{
+  "id": "lake_oswego_muni",
+  "course": "The Muni",
+  "place": "Lake Oswego, Oregon",
+  "facts": [
+    {
+      "fact": "Dan Hixson, opened 26 April 2025: a new nine on part of the city's 1964 par-3 course.",
+      "source": "docs/courses/lake_oswego_muni.md"
+    },
+    {
+      "fact": "The lake's Native name was 'waluga', meaning swan; wild swans lived there.",
+      "source": "https://en.wikipedia.org/wiki/Oswego_Lake"
+    },
+    {
+      "fact": "The developer asked for a sailboat (2026-10-22).",
+      "source": "DECISIONS.md"
+    }
+  ],
+  "current": {
+    "subject": "A sailboat on the lake: white sails, red hull, orange pennant.",
+    "keep": "The sailboat and its colours.",
+    "weaknesses": "Upright and static; a block of water underneath."
+  },
+  "concepts": [
+    {
+      "n": 1,
+      "name": "Close-Hauled",
+      "rationale": "The same boat heeled into the wind with a wake streaming astern: geometric sails, red hull, one line of lake.",
+      "references": [
+        "Existing sailboat logo"
+      ],
+      "symbolism": "A summer afternoon on Oswego Lake, under way.",
+      "interpretation": "",
+      "typography": "Josefin Sans Bold.",
+      "lockup": {
+        "font": "Josefin Sans",
+        "weight": 700,
+        "case": "upper",
+        "tracking": "0.14em",
+        "line2": null,
+        "line1": "The Muni"
+      },
+      "strengths": "Movement and colour; clearer silhouette.",
+      "tradeoffs": "Sailboats are a common lake-town motif."
+    },
+    {
+      "n": 2,
+      "name": "Waluga",
+      "rationale": "A wild swan with a black bill gliding on blue water: the lake's original name.",
+      "references": [
+        "'Waluga', the lake's Native name (fact)"
+      ],
+      "symbolism": "The oldest name in town, given to its newest course.",
+      "interpretation": "Trumpeter and tundra swans are the region's native swans; the drawing is generic.",
+      "typography": "Fraunces Italic for a graceful, modern touch.",
+      "lockup": {
+        "font": "Fraunces",
+        "weight": 500,
+        "case": "none",
+        "tracking": "0.02em",
+        "line2": null,
+        "line1": "The Muni"
+      },
+      "strengths": "Elegant, specific to Lake Oswego, different from Oswego Lake CC.",
+      "tradeoffs": "The link from swan to course needs the story."
+    }
+  ],
+  "pick": 2,
+  "recommendation": "Concept 2. Waluga gives the town's public course its own identity, distinct from the private club's anchor or furnace.",
+  "chosen": "current"
+}

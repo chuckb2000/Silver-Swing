@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <title>RedTail - Hawk D: The Tail Feather</title>
+  <defs>
+    <clipPath id="vane"><path d="M16 1.8 C19 2.2 20 4.6 19.8 8 L19.4 22 C18.6 25 17.6 26.8 16.6 28 L15.4 28 C14.4 26.8 13.4 25 12.6 22 L12.2 8 C12 4.6 13 2.2 16 1.8 Z"/></clipPath>
+  </defs>
+  <g transform="rotate(32 16 15)">
+    <!-- one long tail feather: rufous vane, a narrow dark band, a pale tip -->
+    <path d="M16 1.8 C19 2.2 20 4.6 19.8 8 L19.4 22 C18.6 25 17.6 26.8 16.6 28 L15.4 28 C14.4 26.8 13.4 25 12.6 22 L12.2 8 C12 4.6 13 2.2 16 1.8 Z" fill="#c8582e"/>
+    <g clip-path="url(#vane)">
+      <rect x="16" y="0" width="6" height="30" fill="#a8441e"/>
+      <rect x="0" y="0" width="32" height="4.4" fill="#efe3cc"/>
+      <rect x="0" y="4.4" width="32" height="1.8" fill="#3a2414"/>
+      <rect x="12.2" y="8" width="1.2" height="13" fill="#e0703a"/>
+      <!-- two places where the barbs have split -->
+      <path d="M12 13 L16 14.6 L12 14.4 Z" fill="#8a3214"/>
+      <path d="M20 17.4 L16 19 L20 19 Z" fill="#8a3214"/>
+    </g>
+    <!-- the shaft running out into a bare quill -->
+    <rect x="15.5" y="2.6" width="1" height="25.4" fill="#efe3cc"/>
+    <rect x="15.6" y="28" width="0.9" height="2.4" fill="#cfc4a6"/>
+  </g>
+</svg>

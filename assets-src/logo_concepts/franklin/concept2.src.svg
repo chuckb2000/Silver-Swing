@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <title>Franklin - Concept 2: The Rod and Gun Fly</title>
+  <!-- the hook: eye, shank, bend, point -->
+  <g fill="none" stroke="#a8b0b8" stroke-linecap="round">
+    <path d="M8.4 16.6 L22 16.6 C27 16.6 28.4 21 27 24.2 C25.6 27.4 21 27.6 19.4 24.6" stroke-width="1.6"/>
+    <circle cx="6.6" cy="16.6" r="1.6" stroke-width="1.2"/>
+  </g>
+  <path d="M19.4 24.6 L18.8 22.2 L20.8 23.6 Z" fill="#a8b0b8"/>
+  <path d="M22 16 C25 16 26.6 17.6 27 19.6" stroke="#e6e9ec" stroke-width="0.9" fill="none"/>
+  <!-- tail fibres -->
+  <g stroke="#d6a43a" stroke-width="1.1"><path d="M21.4 15.6 L28.6 12.6"/><path d="M21.4 16 L29 15"/></g>
+  <!-- brown hackle collar -->
+  <g stroke="#8a4a22" stroke-width="1.3" fill="none"><path d="M12.6 15.6 L18.4 15.6"/><path d="M12.6 15.6 L18.1 17.6"/><path d="M12.6 15.6 L17.0 19.3"/><path d="M12.6 15.6 L15.5 20.6"/><path d="M12.6 15.6 L13.6 21.3"/><path d="M12.6 15.6 L11.6 21.3"/><path d="M12.6 15.6 L9.7 20.6"/><path d="M12.6 15.6 L8.2 19.3"/><path d="M12.6 15.6 L7.1 17.6"/><path d="M12.6 15.6 L6.8 15.6"/><path d="M12.6 15.6 L7.1 13.6"/><path d="M12.6 15.6 L8.2 11.9"/><path d="M12.6 15.6 L9.7 10.6"/><path d="M12.6 15.6 L11.6 9.9"/><path d="M12.6 15.6 L13.6 9.9"/><path d="M12.6 15.6 L15.5 10.6"/><path d="M12.6 15.6 L17.0 11.9"/><path d="M12.6 15.6 L18.1 13.6"/></g>
+  <circle cx="12.6" cy="15.6" r="2.6" fill="#6a3418"/>
+  <!-- upright white wings -->
+  <ellipse cx="11.2" cy="8" rx="2.4" ry="5" transform="rotate(-18 11.2 8)" fill="#f6f6f2"/>
+  <ellipse cx="14.4" cy="8" rx="2.4" ry="5" transform="rotate(14 14.4 8)" fill="#dfe3e6"/>
+  <!-- body: peacock herl, a red floss band, peacock again -->
+  <rect x="14.6" y="14.6" width="7" height="4" rx="1.6" fill="#2f4a3a"/>
+  <rect x="16.8" y="14.6" width="2.6" height="4" fill="#d8302a"/>
+  <rect x="14.6" y="14.6" width="7" height="1" fill="#5a8a5a"/>
+  <rect x="11.2" y="14.2" width="3.4" height="4.6" rx="1.4" fill="#2f4a3a"/>
+</svg>

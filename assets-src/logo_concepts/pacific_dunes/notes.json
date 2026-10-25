@@ -1,0 +1,69 @@
+{
+  "id": "pacific_dunes",
+  "course": "Pacific Dunes",
+  "place": "Bandon, Oregon",
+  "facts": [
+    {
+      "fact": "Tom Doak (Renaissance Golf Design), opened 2001, on the bluff above the Pacific north of Bandon Dunes.",
+      "source": "docs/courses/pacific_dunes.md"
+    },
+    {
+      "fact": "The grey whale's tail was the course chat's suggestion, approved 2026-10-21.",
+      "source": "docs/courses/pacific_dunes.md"
+    }
+  ],
+  "current": {
+    "subject": "A grey whale's tail rising from a block of sea.",
+    "keep": "The fluke: a strong, symmetric silhouette and the ocean in one shape.",
+    "weaknesses": "The rectangle of water is as big as the tail and the drips clutter it; the fluke's shape is soft."
+  },
+  "concepts": [
+    {
+      "n": 1,
+      "name": "The Fluke",
+      "rationale": "The tail is the whole mark now: a crisp, symmetric fluke with a notched trailing edge, barnacle patches and a single ring of foam where it leaves the water.",
+      "references": [
+        "Existing whale-tail logo",
+        "Grey whales off the Oregon coast"
+      ],
+      "symbolism": "The moment before the dive: the Pacific showing itself, as the course does.",
+      "interpretation": "",
+      "typography": "Cormorant Garamond SemiBold capitals: an ocean-liner elegance that matches the symmetry.",
+      "lockup": {
+        "font": "Cormorant Garamond",
+        "weight": 600,
+        "case": "upper",
+        "tracking": "0.14em",
+        "line2": null,
+        "line1": "Pacific Dunes"
+      },
+      "strengths": "Clean silhouette, reads at any size, embroiders well.",
+      "tradeoffs": "Whale tails are a common coastal motif; this one is better, not more ownable."
+    },
+    {
+      "n": 2,
+      "name": "The Sand Wave",
+      "rationale": "A dune drawn as a breaking wave, crested with fescue, the Pacific curling in beneath. Pacific Dunes is a course of dunes beside an ocean; the mark makes them one shape.",
+      "references": [
+        "Tom Doak's dune routing (fact)",
+        "The Pacific (fact)"
+      ],
+      "symbolism": "Sand that moves like water: the dunes are the waves of this course.",
+      "interpretation": "The dune-as-wave is a visual metaphor, not a real landform on the course.",
+      "typography": "Fraunces SemiBold, soft-cornered and modern, picks up the curl.",
+      "lockup": {
+        "font": "Fraunces",
+        "weight": 600,
+        "case": "upper",
+        "tracking": "0.14em",
+        "line2": null,
+        "line1": "Pacific Dunes"
+      },
+      "strengths": "A single, original idea no other club owns; striking silhouette.",
+      "tradeoffs": "Some will see a wave before they see sand."
+    }
+  ],
+  "pick": 2,
+  "recommendation": "Concept 2. The Sand Wave is the most original idea in the Bandon set and says 'dunes by the Pacific' in one shape. The fluke stays a fine alternative.",
+  "chosen": 1
+}

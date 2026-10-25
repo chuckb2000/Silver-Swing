@@ -1,0 +1,67 @@
+{
+  "id": "tualatin",
+  "course": "Tualatin Country Club",
+  "place": "Tualatin, Oregon",
+  "facts": [
+    {
+      "fact": "George Junor's nine (1913) and H. Chandler Egan's nine (1919), on a terrace above the Tualatin River.",
+      "source": "docs/courses/tualatin.md"
+    },
+    {
+      "fact": "A Pacific mastodon was found in Tualatin in 1962; its skeleton is shown in the Tualatin Public Library.",
+      "source": "https://www.tualatinoregon.gov/library/tualatins-mastodon"
+    }
+  ],
+  "current": {
+    "subject": "An arched wooden footbridge over a creek.",
+    "keep": "The arched bridge.",
+    "weaknesses": "Square scene with banks; the arch doesn't make a shape of its own."
+  },
+  "concepts": [
+    {
+      "n": 1,
+      "name": "The Moon Bridge",
+      "rationale": "The arched bridge and its reflection close a circle on the water: a round emblem from the same subject.",
+      "references": [
+        "Existing footbridge logo"
+      ],
+      "symbolism": "Crossing the river, a full circle.",
+      "interpretation": "",
+      "typography": "Cormorant Garamond.",
+      "lockup": {
+        "font": "Cormorant Garamond",
+        "weight": 600,
+        "case": "upper",
+        "tracking": "0.14em",
+        "line2": null,
+        "line1": "Tualatin Country Club"
+      },
+      "strengths": "A round, balanced emblem.",
+      "tradeoffs": "Moon bridges are a garden cliché."
+    },
+    {
+      "n": 2,
+      "name": "The Tualatin Mastodon",
+      "rationale": "An Ice Age mastodon walking across the card. Tualatin's best-known resident is 12,000 years older than its golf.",
+      "references": [
+        "The 1962 mastodon (fact)"
+      ],
+      "symbolism": "Deep time and the town's own symbol.",
+      "interpretation": "",
+      "typography": "Archivo Black.",
+      "lockup": {
+        "font": "Archivo Black",
+        "weight": 400,
+        "case": "upper",
+        "tracking": "0.14em",
+        "line2": null,
+        "line1": "Tualatin Country Club"
+      },
+      "strengths": "Memorable and unique to the town.",
+      "tradeoffs": "Unexpected for a 1913 country club."
+    }
+  ],
+  "pick": 2,
+  "recommendation": "Concept 2. Nothing else in golf looks like it, and it is Tualatin's own story.",
+  "chosen": 2
+}

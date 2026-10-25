@@ -1,0 +1,73 @@
+{
+  "id": "sandpines",
+  "course": "Sandpines Golf Links",
+  "place": "Florence, Oregon",
+  "facts": [
+    {
+      "fact": "Rees Jones, opened 1993 as Florence Golf Links; the front nine plays through shore pine and spruce, the back nine among dune-grass mounds.",
+      "source": "docs/courses/sandpines.md"
+    },
+    {
+      "fact": "The Siuslaw River Bridge (1936, Conde McCullough) has four Art Deco obelisks round a bascule drawspan.",
+      "source": "https://en.wikipedia.org/wiki/Siuslaw_River_Bridge"
+    },
+    {
+      "fact": "Shore pine is Pinus contorta: twisted pine.",
+      "source": "https://nativeplantspnw.com/shore-pine-pinus-contorta"
+    }
+  ],
+  "current": {
+    "subject": "The Siuslaw River Bridge (course chat's option, developer liked it).",
+    "keep": "The bridge: Florence's landmark and a handsome silhouette.",
+    "weaknesses": "Too many towers and arches at once; the obelisks lose their shape."
+  },
+  "concepts": [
+    {
+      "n": 1,
+      "name": "The Bridge Obelisks",
+      "rationale": "The two obelisks of the drawspan stand tall and clean, the tied arches either side, the river below. Fewer parts, a stronger skyline.",
+      "references": [
+        "Existing bridge logo",
+        "Siuslaw River Bridge (fact)"
+      ],
+      "symbolism": "The way into Florence, and an Art Deco elegance worth borrowing.",
+      "interpretation": "",
+      "typography": "Poiret One, an Art Deco display face, for the obelisks.",
+      "lockup": {
+        "font": "Poiret One",
+        "weight": 400,
+        "case": "upper",
+        "tracking": "0.14em",
+        "line2": null,
+        "line1": "Sandpines Golf Links"
+      },
+      "strengths": "Elegant and specific to the town.",
+      "tradeoffs": "Says Florence more than golf; detailed for 32 px."
+    },
+    {
+      "n": 2,
+      "name": "The Shore Pine",
+      "rationale": "A shore pine shorn flat by the sea wind, leaning inland from the top of a dune. The course's name in one tree.",
+      "references": [
+        "Shore pine on the front nine (fact)",
+        "The dunes (fact)"
+      ],
+      "symbolism": "Sand and pines; the wind that shapes both and the golf.",
+      "interpretation": "",
+      "typography": "Alegreya SC: calligraphic and windswept.",
+      "lockup": {
+        "font": "Alegreya SC",
+        "weight": 600,
+        "case": "upper",
+        "tracking": "0.14em",
+        "line2": null,
+        "line1": "Sandpines Golf Links"
+      },
+      "strengths": "Says the name, the place and the wind; distinctive silhouette.",
+      "tradeoffs": "Could be read as an acacia or a bonsai by people who don't know the coast."
+    }
+  ],
+  "pick": 2,
+  "recommendation": "Concept 2. The pine says 'Sandpines' without words and owns a shape no other course in the game has.",
+  "chosen": "current"
+}

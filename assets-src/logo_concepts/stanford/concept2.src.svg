@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <title>Stanford - Concept 2: The Dish</title>
+  <defs>
+    <clipPath id="face"><ellipse cx="14.6" cy="11.4" rx="11.6" ry="5.8" transform="rotate(-32 14.6 11.4)"/></clipPath>
+  </defs>
+  <!-- the golden foothill -->
+  <path d="M1.6 29.6 C6 24.6 12 22.4 18 22.6 C23.4 22.8 28 25 30.4 28 L30.4 29.6 Z" fill="#d6b24a"/>
+  <path d="M20 22.8 C24.6 23.4 28.4 25.4 30.4 28 L30.4 29.6 L24 29.6 C24 26.6 22.6 24.4 20 22.8 Z" fill="#b08a34"/>
+  <!-- pedestal and its lattice -->
+  <path d="M15 15.6 L19.4 15.6 L22.4 24.4 L12 24.4 Z" fill="#6a7078"/>
+  <path d="M17.2 15.6 L19.4 15.6 L22.4 24.4 L18.6 24.4 Z" fill="#4a5058"/>
+  <path d="M13.4 22.4 L20.6 17.6 M14.4 17.6 L21.4 22.4" stroke="#8a9298" stroke-width="0.9"/>
+  <!-- the 150 ft dish, tilted to the sky -->
+  <ellipse cx="14.6" cy="11.4" rx="11.6" ry="5.8" transform="rotate(-32 14.6 11.4)" fill="#f6f6f2"/>
+  <g clip-path="url(#face)">
+    <path d="M0 22 L32 2 L32 32 L0 32 Z" fill="#cfd6dc" transform="translate(2 1)"/>
+    <ellipse cx="14.6" cy="11.4" rx="6" ry="3" transform="rotate(-32 14.6 11.4)" fill="none" stroke="#dfe3e6" stroke-width="1"/>
+  </g>
+  <!-- the feed: struts up to a focal point -->
+  <g stroke="#4a5058" stroke-width="1" fill="none">
+    <path d="M8.6 17.4 L10.6 6.6"/><path d="M20.8 6.2 L10.6 6.6"/>
+  </g>
+  <rect x="9.4" y="5.4" width="2.4" height="2.4" fill="#4a5058"/>
+</svg>

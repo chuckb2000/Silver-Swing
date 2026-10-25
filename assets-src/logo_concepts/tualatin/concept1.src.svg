@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <title>Tualatin - Concept 1: The Moon Bridge</title>
+  <defs>
+    <clipPath id="water"><path d="M2 17 L30 17 C30 24.6 23.8 29.8 16 29.8 C8.2 29.8 2 24.6 2 17 Z"/></clipPath>
+    <g id="arch">
+      <!-- the arched deck and its handrail on posts -->
+      <path d="M2.6 17 C5 8.6 10 5.6 16 5.6 C22 5.6 27 8.6 29.4 17 L26.6 17 C24.8 11 21 8.4 16 8.4 C11 8.4 7.2 11 5.4 17 Z"/>
+    </g>
+  </defs>
+  <!-- the creek, with the bridge's reflection closing the circle -->
+  <path d="M2 17 L30 17 C30 24.6 23.8 29.8 16 29.8 C8.2 29.8 2 24.6 2 17 Z" fill="#2d6aa8"/>
+  <g clip-path="url(#water)">
+    <use href="#arch" fill="#1f4f86" transform="translate(0 34) scale(1 -1)"/>
+    <rect x="0" y="21" width="32" height="1" fill="#5d97ee"/>
+    <rect x="0" y="25.6" width="32" height="1" fill="#5d97ee"/>
+  </g>
+  <!-- banks -->
+  <path d="M2 17 C2 14 3.2 12.6 4.6 12.6 L6 17 Z" fill="#4f8f4a"/>
+  <path d="M30 17 C30 14 28.8 12.6 27.4 12.6 L26 17 Z" fill="#3f7a36"/>
+  <!-- the bridge -->
+  <use href="#arch" fill="#a0703f"/>
+  <path d="M2.6 17 C5 8.6 10 5.6 16 5.6 L16 6.8 C10.6 6.8 6 9.4 3.8 17 Z" fill="#c08a52"/>
+  <path d="M29.4 17 C27 8.6 22 5.6 16 5.6 L16 6.8 C21.4 6.8 26 9.4 28.2 17 Z" fill="#7a5230"/>
+  <!-- handrail and posts -->
+  <path d="M4.4 13 C7 6.4 11 3.2 16 3.2 C21 3.2 25 6.4 27.6 13" fill="none" stroke="#6b4a32" stroke-width="1.2"/>
+  <g fill="#6b4a32">
+    <rect x="6.2" y="8.8" width="1" height="2.6"/><rect x="10.2" y="5.2" width="1" height="2.8"/><rect x="15.5" y="3.4" width="1" height="2.4"/>
+    <rect x="20.8" y="5.2" width="1" height="2.8"/><rect x="24.8" y="8.8" width="1" height="2.6"/>
+  </g>
+</svg>

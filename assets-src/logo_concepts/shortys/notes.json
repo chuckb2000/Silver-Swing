@@ -1,0 +1,68 @@
+{
+  "id": "shortys",
+  "course": "Shorty's",
+  "place": "Bandon, Oregon",
+  "facts": [
+    {
+      "fact": "Rod Whitman, Dave Axland and Keith Cutten; opened 2 May 2024; 19 par 3s.",
+      "source": "docs/courses/shortys.md"
+    },
+    {
+      "fact": "Named for Shorty Dow, caretaker of the land that became the resort. The 6th and 18th share a horseshoe-shaped double green.",
+      "source": "https://linksmagazine.com/a-preview-of-shortys-bandon-dunes-new-par-3-course/"
+    }
+  ],
+  "current": {
+    "subject": "A spotted fawn standing in dune grass (developer's request).",
+    "keep": "The fawn: small, young, a short course.",
+    "weaknesses": "Thin legs and a standing pose make a spindly silhouette at 1x."
+  },
+  "concepts": [
+    {
+      "n": 1,
+      "name": "The Bedded Fawn",
+      "rationale": "The fawn lies curled in the dune grass, head up and ears wide: one compact, round silhouette full of spots.",
+      "references": [
+        "Existing fawn logo"
+      ],
+      "symbolism": "Young and small and at home in the dunes, like a par-3 course.",
+      "interpretation": "",
+      "typography": "Nunito ExtraBold, round and friendly.",
+      "lockup": {
+        "font": "Nunito",
+        "weight": 800,
+        "case": "upper",
+        "tracking": "0.14em",
+        "line2": null,
+        "line1": "Shorty's"
+      },
+      "strengths": "Much stronger shape than the standing fawn; charming.",
+      "tradeoffs": "Sweet rather than sporty."
+    },
+    {
+      "n": 2,
+      "name": "The Horseshoe",
+      "rationale": "The 6th/18th double green seen from above: a horseshoe of putting surface with a pin at each end, in the dunes.",
+      "references": [
+        "Horseshoe double green (fact)",
+        "Shorty Dow, the caretaker (fact)"
+      ],
+      "symbolism": "Luck and two pins on one green: the fun of a par-3 course.",
+      "interpretation": "",
+      "typography": "Rye, a frontier display face, for the caretaker who called himself sheriff.",
+      "lockup": {
+        "font": "Rye",
+        "weight": 400,
+        "case": "upper",
+        "tracking": "0.06em",
+        "line2": null,
+        "line1": "Shorty's"
+      },
+      "strengths": "Specific, playful, golf-literate.",
+      "tradeoffs": "Without the story it could read as a green magnet."
+    }
+  ],
+  "pick": 1,
+  "recommendation": "Concept 1. The bedded fawn is the developer's subject done right; the Horseshoe is a great secondary mark.",
+  "chosen": 1
+}

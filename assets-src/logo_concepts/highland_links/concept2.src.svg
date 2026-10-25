@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <title>Highland Links - Concept 2: The Namesake Cod</title>
+  <defs>
+    <clipPath id="fish"><path d="M3.2 16 C4.6 12 8 9.6 13 9 C18 8.4 22 9.6 25 12.2 L28.6 9.4 L29.4 10.4 L27.6 16 L29.4 21.6 L28.6 22.6 L25 19.8 C22 22.4 18 23.6 13 23 C8 22.4 4.6 20 3.2 16 Z"/></clipPath>
+  </defs>
+  <!-- three dorsal fins, two anal fins -->
+  <g fill="#6a6a3e">
+    <path d="M9.6 10 C10 7.4 12.4 6.4 14.4 9 Z"/><path d="M15 9 C15.6 6.6 18.4 6.4 19.6 9.4 Z"/><path d="M20.2 10 C21 8 23 8.4 23.6 11.4 Z"/>
+    <path d="M14 22.8 C14.6 25.2 17.4 25.4 18.4 22.6 Z"/><path d="M19.4 22.2 C20.2 24.4 22.6 24 23 21.2 Z"/>
+  </g>
+  <!-- body: olive-brown back, pale lateral line, cream belly -->
+  <path d="M3.2 16 C4.6 12 8 9.6 13 9 C18 8.4 22 9.6 25 12.2 L28.6 9.4 L29.4 10.4 L27.6 16 L29.4 21.6 L28.6 22.6 L25 19.8 C22 22.4 18 23.6 13 23 C8 22.4 4.6 20 3.2 16 Z" fill="#9a9458"/>
+  <g clip-path="url(#fish)">
+    <path d="M0 17.6 C8 18.6 18 18.6 32 16.6 L32 32 L0 32 Z" fill="#e9e3c8"/>
+    <path d="M0 8 L32 8 L32 12.6 C22 10.6 12 11 0 13.4 Z" fill="#6f6a3a"/>
+    <path d="M6 15.6 C12 14.4 20 14 27 16" stroke="#efe6cf" stroke-width="1" fill="none"/>
+    <g fill="#5a5630">
+      <rect x="9" y="12" width="1" height="1"/><rect x="13" y="11.4" width="1" height="1"/><rect x="17" y="12.4" width="1" height="1"/>
+      <rect x="21" y="13" width="1" height="1"/><rect x="11" y="16.4" width="1" height="1"/><rect x="15.6" y="16.8" width="1" height="1"/><rect x="19.6" y="16.6" width="1" height="1"/>
+    </g>
+    <rect x="25" y="8" width="8" height="24" fill="#6a6a3e"/>
+  </g>
+  <!-- gill, eye, the chin barbel -->
+  <path d="M9 11.8 C10.4 14 10.4 17.6 9.2 20" stroke="#5a5630" stroke-width="1" fill="none"/>
+  <rect x="5.6" y="13.4" width="1.6" height="1.6" fill="#12181e"/>
+  <rect x="5.6" y="13.4" width="0.8" height="0.8" fill="#f6f6f2"/>
+  <path d="M5 19.4 L4.6 22 L5.6 22 L5.8 19.6 Z" fill="#6a6a3e"/>
+  <!-- pectoral fin -->
+  <path d="M11 17.6 L14.6 19.8 L11.4 20.4 Z" fill="#b8b07a"/>
+</svg>
