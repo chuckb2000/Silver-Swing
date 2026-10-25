@@ -256,6 +256,15 @@ def main():
     if cfg.get("range_art") == "rough":
         map_surf = surf.copy()
         map_surf[surf == SURF["range"]] = SURF["rough"]
+    if cfg.get("rock_water_osm"):  # penalty areas over rock drawn as rock (s09_render, rock_water_osm)
+        from rasterio.features import rasterize as _rasterize
+        from rasterio.transform import Affine as _Affine
+        _g = gpd.read_file(bdir / "course_local.geojson")
+        _rock = _rasterize([(geom, 1) for geom in _g[_g.osm.isin(cfg["rock_water_osm"])].geometry], out_shape=surf.shape,
+                           transform=_Affine(1 / PX_PER_M, 0, 0, 0, -1 / PX_PER_M, cfg["world"]["height"]),
+                           fill=0, dtype="uint8").astype(bool) & (surf == SURF["water"])
+        map_surf = map_surf.copy()
+        map_surf[_rock] = SURF["ob_road"]
 
     # heightmap ------------------------------------------------------------------
     hb = np.load(bdir / "height_base.npy").astype(np.float64)

@@ -909,3 +909,22 @@ Details in each course's file (`docs/courses/<id>.md`, "Lessons").
 - **The title screen keeps one view per place**, the first layout
   alphabetically.
 
+## 32. Cypress Point (2026-10-24)
+
+- **OSM's sea is only a coastline.** Where the boundary runs along a clifftop,
+  build the sea from the coastline ways (sea on the right of each way), fill the
+  offshore rocks and add the shore between boundary and sea to the same penalty
+  area, stopping at roads; grow the shore up to the boundary line so no seam
+  is left. `rock_water_osm` draws such areas as rock.
+- **Clip a big Overpass export first** (the coastline ran the length of
+  California): clip to the world + 300 m in a `release.json` step, cutting the
+  coastline a little inside the box before polygonising.
+- **A tracing script must ignore its own output** once its shapes are in
+  `edited/`.
+- **Check the standing tree defaults against signature trees**: the 17th's
+  cypress clump stood in the OSM fairway and was dropped; `keep_trees_areas`
+  keeps such a stand. Cut the lidar canopy out of traced sand, or s05 drops the
+  trees standing in it.
+- **Long shared tee strips:** measure along the strip for both holes; cutting
+  the OSM box where the two cards fall fixes both.
+

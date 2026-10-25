@@ -1,0 +1,49 @@
+{
+ "release": "cypress-point-data",
+ "note": "Build inputs not kept in git for Cypress Point; `make fetch NAME=cypress_point` puts them in place (pipeline/fetch_raw.py). The clipped OSM (raw/overpass.geojson) is also committed. The DEM and the NAIP mosaic are also committed (small). The NOAA lidar zip (206 MB) holds one LAZ over the world + 150 m, extracted as is. hahahs.jpg is the NAIP west half, exportImage.jpg the east half.",
+ "files": [
+  {
+   "asset": "export.3.geojson",
+   "sha256": "5bd59b8b24416e804b64155631308bced857d9db52194fdc5801fcaac6a32b66",
+   "run": "python3 data/cypress_point/clip_osm.py {file}",
+   "outputs": {
+    "raw/overpass.geojson": "74dbf9d3d2dd1bc29bf763db3eb7cd939af9cfe4a8a05ac18d48e62691abd09b"
+   }
+  },
+  {
+   "asset": "exportImage.17.tiff",
+   "sha256": "283c90daa7da18149fd026ca568352ef13894fc1007584df906d3c88a488f30b",
+   "run": "python3 data/cypress_point/make_dem.py {file}",
+   "outputs": {
+    "raw/usgs_dem_1m.tif": "6840c8900b360faada6b027bc7e5cc1da42c7bba2c0ce73adc9eeeb7ba174523"
+   }
+  },
+  {
+   "asset": "exportImage.jpg",
+   "sha256": "449ac9b7252b81889493cfad88c2ff5c2bcf23770917245903f6ebbe9ed62822",
+   "run": "install -D -m 644 {file} data/cypress_point/build/naip_east.jpg",
+   "outputs": {
+    "build/naip_east.jpg": "449ac9b7252b81889493cfad88c2ff5c2bcf23770917245903f6ebbe9ed62822"
+   }
+  },
+  {
+   "asset": "hahahs.jpg",
+   "sha256": "b376a242bdf369c70f678f33dc89095161331c720e10fdccf538b7eaa58d9ce4",
+   "run": "python3 data/cypress_point/make_ortho.py {file} data/cypress_point/build/naip_east.jpg",
+   "outputs": {
+    "raw/naip_05m.tif": "ecf2470a350d079762561972e6ff26b320bba3a9b25e3e3f3575a0aaccc4be54"
+   }
+  },
+  {
+   "asset": "2018_ca_fema_region9_J1476067.zip",
+   "sha256": "9786fd49c14e7cf2c1432adcde42927c70f4cbc0244ad0c2fb25ff780c5f0a49",
+   "extract": [
+    "2018_ca_fema_region9_J1476067tR0_C0.laz"
+   ],
+   "to": "raw/laz/",
+   "outputs": {
+    "raw/laz/2018_ca_fema_region9_J1476067tR0_C0.laz": "3cfc4fc09e749327bf27ac6d8a56da1a57dce765dba8fe8a3c4148247b2d0ef3"
+   }
+  }
+ ]
+}
