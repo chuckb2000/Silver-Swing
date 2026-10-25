@@ -235,12 +235,23 @@ def build_layout(name, cfg, lay, g):
                 continue
             L, start, gi, gc = geo[n]
             target = float(card[n][ts.lower()]) * YD
+            # back along the line from its start (a box behind it, as for a back tee)
+            bx, by = start.x - L.coords[1][0], start.y - L.coords[1][1]
+            bn = math.hypot(bx, by) or 1.0
             for b, ti in enumerate(tee_idx):
                 if ti in taken:
                     continue
                 c = tees.loc[ti].geometry.centroid
                 s = L.project(c)
-                if not ((L.distance(c) < 25 and s < 0.45 * L.length) or c.distance(start) < 40):
+                # a box whose OSM tee=* tag names this set (tee=black, tee=blue;black) may stand
+                # up to 150 m behind the line's start, within 35 m of the line run backwards:
+                # OSM lines often start at a forward tee (Strawberry Farms 1, 2, 9, 11, 12, 16;
+                # course chat 2026-10-25)
+                named = ts.lower() in [v.strip().lower() for v in str(tees.loc[ti].tags.get("tee", "")).split(";")]
+                vx, vy = c.x - start.x, c.y - start.y
+                back, side = (vx * bx + vy * by) / bn, abs(vx * by - vy * bx) / bn
+                behind = named and 0 < back <= 150 and side <= 35
+                if not ((L.distance(c) < 25 and s < 0.45 * L.length) or c.distance(start) < 40 or behind):
                     continue
                 m, _ = path_from(c, L, gc)
                 d = abs(m - target) / target * 100
