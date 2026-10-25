@@ -1191,3 +1191,29 @@ Not merged (the developer will say when). Design note: docs/reports/multiplayer_
   (Astoria). The preview now skips non-polygons. Checked by running Astoria
   s03-s08 with its point tee put back; Astoria keeps dropping it (a marker, not a
   tee box). Regress: Astoria unchanged.
+
+## A random daily (developer, 2026-10-25)
+
+"Make the daily course a bit more random. It's been East Potomac three days in
+a row! Red then White then Blue. Change today also." The courses took turns in a
+fixed order sorted by a hash of their ids, and the turn moved by one a day; East
+Potomac's three courses happened to sit close together in that order, and each
+course joining the rotation shifted it.
+
+From 2026-10-25 (`RANDOM_DAILY_FROM` in `src/systems/game/daily.ts`) each day
+is drawn from the date, so it is still the same for everyone:
+- a course that came up in the last two thirds of a rotation's worth of days
+  (22 days with 34 courses) sits out;
+- a place that came up in the last five days sits out: a group (East Potomac's
+  three, Pumpkin Ridge's two) or the town of the location (Bandon's five);
+- the longer a course has waited, the likelier it is drawn (weight = days
+  waited squared), so every course comes up within two rotations;
+- a small rotation relaxes these in turn (another place than yesterday, then
+  not yesterday's course, then anything);
+- an 18-hole course plays a drawn nine.
+Each day follows from the days before it, from 14 days before the change (the
+old order), so the first draws don't repeat what came just before. Days before
+2026-10-25 keep the old order, so their boards and the week board stand. Today
+changes from East Potomac Blue to the back nine at Langston; a daily round
+already played on East Potomac Blue today keeps its place on the course board
+but not on today's daily board. `DAILY_PICKS` still overrides a day.

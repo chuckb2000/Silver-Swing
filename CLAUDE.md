@@ -1583,7 +1583,10 @@ calm (≈60% of holes below half the max). It is seeded per round.
 -   **Daily round** (2026-10-20): one course a day, nine holes at Normal,
     fixed by the date and the day's rotation (`src/data/dailyRoster.ts`; a
     merged course joins the next day; a day can be picked by hand in
-    `DAILY_PICKS`); one counted round per player code and day.
+    `DAILY_PICKS`); one counted round per player code and day. From
+    2026-10-25 each day is drawn at random: no place (East Potomac, Bandon, a
+    town) twice in five days, no course again within two thirds of the
+    rotation (DECISIONS.md "A random daily").
 
 -   **Live match play** (2026-10-21): two players on their own devices, match
     play (section 0; docs/reports/multiplayer_live_match.md).
