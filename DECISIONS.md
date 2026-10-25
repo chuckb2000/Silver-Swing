@@ -1214,6 +1214,9 @@ is drawn from the date, so it is still the same for everyone:
 Each day follows from the days before it, from 14 days before the change (the
 old order), so the first draws don't repeat what came just before. Days before
 2026-10-25 keep the old order, so their boards and the week board stand. Today
-changes from East Potomac Blue to the back nine at Langston; a daily round
+changes from East Potomac Blue to the back nine at Langston (then, at the
+developer's request the same morning, to the front nine at Sandpines, an
+Oregon course, set in `DAILY_PICKS`; the draws from 2026-10-26 follow on from
+it); a daily round
 already played on East Potomac Blue today keeps its place on the course board
 but not on today's daily board. `DAILY_PICKS` still overrides a day.
