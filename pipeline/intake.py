@@ -19,8 +19,10 @@ course: release.json "run" lines call it, so `make fetch` rebuilds raw/ from the
         comes from the files' CRS). Mean of the ground returns per cell; gaps (buildings,
         water, sparse cover) filled linearly from their rim, cells beyond the points' hull from
         the nearest cell; the counts are printed. Config: "dtm": {"path": "raw/dtm_ground_1m.tif", "units": "m"}.
-    python3 pipeline/intake.py raster <id> SRC.tif --out raw/NAME.tif [--margin 100]
+    python3 pipeline/intake.py raster <id> SRC.tif --out raw/NAME.tif [--margin 100] [--fill-sea]
         A big raster cut to the world + margin, keeping its CRS and grid (pipeline/clip_raster.py).
+        --fill-sea: nodata regions touching the clip's edge (open sea in a DEM that isn't
+        hydro-flattened offshore) get the median height of their rim. Also reads /vsizip/ paths.
     python3 pipeline/intake.py check <id>
         The checks on arrival: config, every raw input (present, covers the world, CRS, units,
         what kind of raster it is, nodata and flattened sea), lidar (CRS, units, classes,
@@ -367,11 +369,47 @@ def cmd_raster(name: str, args: list[str]):
     cfg = load_cfg(name)
     out = opt(args, "--out")
     margin = opt(args, "--margin", default="100")
+    fill_sea = "--fill-sea" in args
+    if fill_sea:
+        args.remove("--fill-sea")
     if not out or len(args) != 1:
-        sys.exit("[intake] raster <id> SRC --out raw/NAME.tif [--margin 100]")
+        sys.exit("[intake] raster <id> SRC --out raw/NAME.tif [--margin 100] [--fill-sea]")
     x0, y0, x1, y1 = world_box(cfg, args)
     subprocess.run([sys.executable, str(ROOT / "pipeline" / "clip_raster.py"), args[0], str(cdir(name) / out),
                     "--epsg", str(cfg["epsg"]), "--bbox", str(x0), str(y0), str(x1), str(y1), "--margin", margin], check=True)
+    if fill_sea:
+        _fill_sea(cdir(name) / out)
+
+
+def _fill_sea(path: Path):
+    """A DEM without data over open sea (not hydro-flattened offshore): nodata regions that
+    touch the raster's edge are the sea; each gets the median height of the valid cells along
+    its rim (the water line in the survey), which s04 then flattens with the rest of the water.
+    Nodata elsewhere is left for s00 to report (as data/sheep_ranch/fill_sea.py)."""
+    import rasterio
+    from scipy import ndimage
+    with rasterio.open(path) as r:
+        prof = r.profile.copy()
+        tags = r.tags()
+        a = r.read(1)
+        nd = r.nodata
+    hole = (a == nd) if nd is not None and not np.isnan(nd) else np.isnan(a)
+    lab, _ = ndimage.label(hole)
+    edge = np.unique(np.concatenate([lab[0], lab[-1], lab[:, 0], lab[:, -1]]))
+    edge = edge[edge > 0]
+    n = 0
+    for k in edge:
+        sea = lab == k
+        rim = ndimage.binary_dilation(sea) & ~hole
+        if rim.any():
+            a[sea] = np.median(a[rim])
+            n += int(sea.sum())
+    with rasterio.open(path, "w", **prof) as d:
+        d.write(a, 1)
+        d.update_tags(**tags, SEA_FILL=f"{len(edge)} edge nodata region(s) set to their rim's median")
+    shown = path.relative_to(ROOT) if path.is_relative_to(ROOT) else path
+    print(f"[intake] {shown}: {n:,} sea cells in {len(edge)} region(s) touching the edge filled from their rim; "
+          f"{int(hole.sum()) - n:,} other nodata cells left")
 
 
 # --- check ---------------------------------------------------------------------------------
