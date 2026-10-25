@@ -87,5 +87,9 @@ Decisions the developer made on 2026-10-18 are in DECISIONS.md ("Highland Links"
 
 - none
 
+## Checks from earlier courses
+
+- none
+
 Totals: 27 tees, 9 greens, 9 fairways, 16 bunkers, 0 water hazards, 9 pins, 8 cart paths, 0 OSM tree points.
 

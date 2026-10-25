@@ -122,5 +122,10 @@ Built 2026-10-24. Standing defaults (COURSE_BUILD.md 4.1): no Blue on the card, 
 
 - none
 
+## Checks from earlier courses
+
+- waterway w428675793 (stream): 16 m of it within 30 m of a hole line isn't in a penalty area (pipeline/propose_channels.py makes one; or say it's dry)
+- waterway w534446765 (stream): 60 m of it within 30 m of a hole line isn't in a penalty area (pipeline/propose_channels.py makes one; or say it's dry)
+
 Totals: 37 tees, 18 greens, 23 fairways, 5 bunkers, 10 water hazards, 18 pins, 0 cart paths, 0 OSM tree points.
 

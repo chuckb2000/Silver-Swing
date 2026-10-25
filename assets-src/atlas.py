@@ -7,6 +7,12 @@ from pathlib import Path
 import numpy as np
 from PIL import Image
 
+try:  # the course pipeline's cached save (pipeline/pngcache.py); a plain save elsewhere
+    from pngcache import save_png as _save
+except ImportError:
+    def _save(img, path, **kw):
+        img.save(path, **kw)
+
 
 class Atlas:
     def __init__(self, name: str, max_w: int = 1024, pad: int = 1):
@@ -51,7 +57,7 @@ class Atlas:
             if meta:
                 fr["anchor"] = meta.get("anchor", {"x": 0.5, "y": 1.0})
             frames[key] = fr
-        Image.fromarray(sheet, "RGBA").save(out_dir / f"{self.name}.png", optimize=True)
+        _save(Image.fromarray(sheet, "RGBA"), out_dir / f"{self.name}.png", optimize=True)
         with open(out_dir / f"{self.name}.json", "w") as f:
             json.dump({"frames": frames, "meta": {"image": f"{self.name}.png", "size": {"w": self.max_w, "h": H2}, "scale": "1"}}, f, separators=(",", ":"))
         return self.max_w, H2

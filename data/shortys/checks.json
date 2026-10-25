@@ -1,0 +1,9 @@
+{
+ "note": "per-course settings for game/tests/unit/course_play.test.ts (the every-course checks); docs/COURSE_BUILD.md 8.2",
+ "yardage": {
+  "max": {
+   "3 Back": 0.2
+  },
+  "why": "accepted by the developer over 8% (the course's validation_report.md and docs/courses/<id>.md)"
+ }
+}

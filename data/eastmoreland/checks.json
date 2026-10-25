@@ -1,0 +1,17 @@
+{
+ "note": "per-course settings for game/tests/unit/course_play.test.ts (the every-course checks); docs/COURSE_BUILD.md 8.2",
+ "tees": {
+  "surfaces": [
+   "tee",
+   "fairway",
+   "rough"
+  ],
+  "why": "some tees stand where the OSM hole line starts"
+ },
+ "yardage": {
+  "max": {
+   "17 White": 0.15
+  },
+  "why": "accepted by the developer over 8% (the course's validation_report.md and docs/courses/<id>.md)"
+ }
+}

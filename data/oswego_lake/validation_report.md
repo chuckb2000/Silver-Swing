@@ -33,7 +33,7 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 3. Hole 11: the OSM hole line starts 62 m from the Blue tee box (w843607745), and only that box matches the card; the line was probably drawn from another tee. Measured from the Blue box through the line's bend points.
 4. Hole 13: the OSM hole line starts 52 m from the Blue tee box (w846269099), and only that box matches the card; the line was probably drawn from another tee. Measured from the Blue box through the line's bend points.
 5. Hole 18: OSM hole line has no par tag; using scorecard par 5.
-6. Hole 18: OSM handicap 5 differs from the GolfPass stroke index 12 (see spec 11.4 item 1); using GolfPass.
+6. Hole 18: OSM handicap 5 differs from the scorecard's stroke index 12; using the scorecard.
 
 ## Other open items (spec 11.4)
 
@@ -116,6 +116,11 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 - hole 18: hole line carries handicap=5 (compare with scorecard)
 - green w845580977 at (666, 534) is not the end of any hole line (practice green?) -> treated as a wrong green
 - green w845872284 at (876, 276) is not the end of any hole line (practice green?) -> treated as a wrong green
+
+## Checks from earlier courses
+
+- the boundary is in 1 parts and the game keeps only the largest: 48.9 ha (join_boundary_parts?)
+- pool w1056814436 at (914, 175), 174 m2, is inside the boundary but not a penalty area: it plays as rough (tag it golf=lateral_water_hazard in edits.json, or list it in red_water_osm)
 
 Totals: 46 tees, 20 greens, 19 fairways, 65 bunkers, 4 water hazards, 18 pins, 32 cart paths, 250 OSM tree points.
 

@@ -136,5 +136,18 @@ Built 2026-10-22 together with Shorty's (shared downloads, GitHub release bandon
 - green w888290705 at (1029, 388) is not the end of any hole line (practice green?) -> treated as a wrong green
 - green w888362150 at (756, 495) is not the end of any hole line (practice green?) -> treated as a wrong green
 
+## Checks from earlier courses
+
+- tee w1057196949 crosses the edge of the world box (s09 failed on a green outside it): drop it or grow the world
+- green w1187067947 crosses the edge of the world box (s09 failed on a green outside it): drop it or grow the world
+- tee w1547584750 crosses the edge of the world box (s09 failed on a green outside it): drop it or grow the world
+- green w1547584758 crosses the edge of the world box (s09 failed on a green outside it): drop it or grow the world
+- tee w685529550 crosses the edge of the world box (s09 failed on a green outside it): drop it or grow the world
+- green w888290705 crosses the edge of the world box (s09 failed on a green outside it): drop it or grow the world
+- golf=clubhouse: 1 feature(s) (w833094306) -> a building: add building=yes
+- golf=path: 15 feature(s) (w1057196950, w1057206622, w1057206623, w1057206624 ...) -> cart path: retag golf=cartpath in edits.json
+- fairway w833234949: 62 m2 near a hole line's start (a tee tagged as fairway?)
+- cart path w832457614 is an area of 1596 m2 (a closed way read as an area?)
+
 Totals: 85 tees, 27 greens, 36 fairways, 182 bunkers, 0 water hazards, 28 pins, 46 cart paths, 11 OSM tree points.
 

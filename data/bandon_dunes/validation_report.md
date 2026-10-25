@@ -181,5 +181,35 @@ The developer's calls (2026-10-20): Green tees; every water hazard red; out of b
 - green w1098413085 at (997, 1721) is not the end of any hole line (practice green?) -> treated as a wrong green
 - green w1187067947 at (956, 556) is not the end of any hole line (practice green?) -> treated as a wrong green
 
+## Checks from earlier courses
+
+- green w674268643 crosses the edge of the world box (s09 failed on a green outside it): drop it or grow the world
+- tee w674353941 crosses the edge of the world box (s09 failed on a green outside it): drop it or grow the world
+- tee w674357759 crosses the edge of the world box (s09 failed on a green outside it): drop it or grow the world
+- green w833092173 crosses the edge of the world box (s09 failed on a green outside it): drop it or grow the world
+- green w833094299 crosses the edge of the world box (s09 failed on a green outside it): drop it or grow the world
+- green w833234950 crosses the edge of the world box (s09 failed on a green outside it): drop it or grow the world
+- golf=clubhouse: 2 feature(s) (w833094305, w833094306) -> a building: add building=yes
+- golf=path: 144 feature(s) (w832457611, w686728923, w686728924, w686941566 ...) -> cart path: retag golf=cartpath in edits.json
+- cart path w832457614 is an area of 1596 m2 (a closed way read as an area?)
+- fairway r15705593 at (654, 1567) is more than 30 m from every hole line (a range or practice area mapped as fairway?)
+- fairway r15705594 at (554, 1629) is more than 30 m from every hole line (a range or practice area mapped as fairway?)
+- fairway r16463302 at (467, 1686) is more than 30 m from every hole line (a range or practice area mapped as fairway?)
+- fairway r16463321 at (696, 733) is more than 30 m from every hole line (a range or practice area mapped as fairway?)
+- fairway r16463339 at (530, 1981) is more than 30 m from every hole line (a range or practice area mapped as fairway?)
+- fairway r16463341 at (719, 1787) is more than 30 m from every hole line (a range or practice area mapped as fairway?)
+- fairway r19997495 at (874, 1774) is more than 30 m from every hole line (a range or practice area mapped as fairway?)
+- fairway r20040812 at (1101, 1516) is more than 30 m from every hole line (a range or practice area mapped as fairway?)
+- fairway r20040813 at (787, 1562) is more than 30 m from every hole line (a range or practice area mapped as fairway?)
+- fairway r20040814 at (932, 1480) is more than 30 m from every hole line (a range or practice area mapped as fairway?)
+- fairway r20040854 at (968, 1806) is more than 30 m from every hole line (a range or practice area mapped as fairway?)
+- fairway r20040856 at (623, 2040) is more than 30 m from every hole line (a range or practice area mapped as fairway?)
+- fairway r20064158 at (1156, 1861) is more than 30 m from every hole line (a range or practice area mapped as fairway?)
+- fairway w1098414788 at (464, 1582) is more than 30 m from every hole line (a range or practice area mapped as fairway?)
+- fairway w1186884944 at (935, 1181) is more than 30 m from every hole line (a range or practice area mapped as fairway?)
+- water w694622372 at (1350, 1837), 10151 m2, is inside the boundary but not a penalty area: it plays as rough (tag it golf=lateral_water_hazard in edits.json, or list it in red_water_osm)
+- penalty area w266664506 lies mostly outside the boundary (a neighbour's? redraw as natural=water)
+- penalty area w266664513 lies mostly outside the boundary (a neighbour's? redraw as natural=water)
+
 Totals: 147 tees, 49 greens, 43 fairways, 251 bunkers, 3 water hazards, 48 pins, 75 cart paths, 201 OSM tree points.
 

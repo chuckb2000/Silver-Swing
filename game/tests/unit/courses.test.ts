@@ -14,6 +14,11 @@ import { COURSES_DIR, loadCourseFiles, registry, robotRound } from './helpers';
 const courses = registry();
 
 describe('course registry', () => {
+  it('Rock Creek Park is not in the game (developer, 2026-10-25: not to be merged; PR #48 closed)', () => {
+    expect(courses.map((c) => c.id).filter((id) => id.startsWith('rock_creek'))).toEqual([]);
+    expect(existsSync(resolve(COURSES_DIR, '..', '..', '..', 'data', 'rock_creek'))).toBe(false);
+  });
+
   it('lists at least one course, each id once', () => {
     expect(courses.length).toBeGreaterThan(0);
     expect(new Set(courses.map((c) => c.id)).size).toBe(courses.length);

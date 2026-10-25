@@ -42,7 +42,7 @@ Decisions the developer made on 2026-10-19 are in DECISIONS.md ("Tualatin Countr
 3. **Holes 8 and 10 play from the back tees** (developer, 2026-10-19: "the 8th tee box should be pushed back to the back tee, as should 10"): boxes 24 and 25 (tagged `hole`/`tee_set` in `edits.json`, and the hole lines start there). Measured from the front of each back box (s06 moves the virtual tee within its box toward the card): hole 8 377 yd vs 346 on the Blue card (+8.9 %, over 8 %), hole 10 166 vs 155 (+7.0 %). From the box centres they are 381 and 170 yd, close to the Black card (384 and 168). Accepted by the developer.
 4. **Only the Blue tees are built** (developer). OSM has 29 tee boxes; Black, White, Red and Gold yardages are in `scorecard.csv` but not built. Recommendation: add White later if a tee choice is wanted; most of its boxes are mapped.
 5. **The Tualatin River is a red penalty area** (developer: in play on holes 7, 9 and 10), including where it lies outside the course boundary (`red_water_osm`); land across the river is out of bounds. The clubhouse swimming pool (OSM w820800003, inside the boundary) is drawn as water through the same list and is out of play. Both ponds (holes 9 and 18) are red.
-6. **Four trees removed** (developer, 2026-10-19, `drop_trees`): on hole 13 the 41 m and 43 m firs whose crowns stood over the front of the green (a 36 m fir just left of them stays; its crown only reaches the fringe); on hole 8 the two 25 m broadleaves right of the cart path between the end of the fairway and the green ("super in the way"; the tree left of the path stays). The canopy under each is cleared too, so no patch of woods is left there.
+6. **Six trees removed** (developer, `drop_trees`). 2026-10-19: on hole 13 the 41 m and 43 m firs whose crowns stood over the front of the green (a 36 m fir just left of them stays; its crown only reaches the fringe); on hole 8 the two 25 m broadleaves right of the cart path between the end of the fairway and the green ("super in the way"; the tree left of the path stays). 2026-10-22: on hole 17 the 30 m broadleaf beside the pond and the 39 m fir right of the line, 28-31 m in front of the tee, whose crowns reached the line of the drive (the firs behind them stay; with these two gone the tee no longer needs moving off the middle of its box). The canopy under each is cleared too, so no patch of woods is left there.
 7. **Tree checks** (the East Potomac problem): a perfect drive down the centre of every par 4 and par 5 touches no tree (unit test). On hole 11 the first hole lines aimed the drive down the right side of the tee chute into a row of 26-40 m trees; the landing-zone bend fixed that without removing trees, and main's tee-shot check (s06/s06b, a lower 110 % drive with a 1 m margin) moved the virtual tee 0.6 m within box 26 and removed nothing. Hole 8's approach from the centre of the fairway used to clip a 25 m broadleaf beside the green; the developer had that tree and its neighbour removed (item 6). Two crowns (38 m and 23 m) also reach 2-3 % into the back of hole 11's green, beyond the pin from the line of play; the putting view, drawn with north up, shows them over the green's back edge. Recommendation: keep both (they stand behind the green); either can be removed the same way.
 8. **Tree types are inferred from crown shape** (DOGAMI canopy height model, no leaf-off imagery): 39 % conifers on the course, 98 % of trees over 30 m. The photos show Douglas fir lining the fairways with maples between, which matches.
 9. **Lidar date not recorded.** The DOGAMI mosaic services give no project year for the export. Recommendation: none needed for play.
@@ -115,6 +115,10 @@ Decisions the developer made on 2026-10-19 are in DECISIONS.md ("Tualatin Countr
 | 18 | 4 | yes | yes (2 near) | yes | yes | yes | 5 | 1 |
 
 ## Missing or suspect features
+
+- none
+
+## Checks from earlier courses
 
 - none
 

@@ -46,33 +46,33 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 
 ## Open items
 
-1. Hole 1: OSM handicap 15 differs from the GolfPass stroke index 11 (see spec 11.4 item 1); using GolfPass.
-2. Hole 2: OSM handicap 3 differs from the GolfPass stroke index 1 (see spec 11.4 item 1); using GolfPass.
+1. Hole 1: OSM handicap 15 differs from the scorecard's stroke index 11; using the scorecard.
+2. Hole 2: OSM handicap 3 differs from the scorecard's stroke index 1; using the scorecard.
 3. Hole 2: the OSM hole line starts 56 m from the Black tee box (w677144042), and only that box matches the card; the line was probably drawn from another tee. Measured from the Black box through the line's bend points.
-4. Hole 3: OSM handicap 13 differs from the GolfPass stroke index 15 (see spec 11.4 item 1); using GolfPass.
+4. Hole 3: OSM handicap 13 differs from the scorecard's stroke index 15; using the scorecard.
 5. Hole 3 (Gold): tee box w1239401660 assigned by the developer (tagged hole=3, tee_set=Gold in edited/course.geojson).
-6. Hole 4: OSM handicap 9 differs from the GolfPass stroke index 7 (see spec 11.4 item 1); using GolfPass.
-7. Hole 5: OSM handicap 7 differs from the GolfPass stroke index 9 (see spec 11.4 item 1); using GolfPass.
+6. Hole 4: OSM handicap 9 differs from the scorecard's stroke index 7; using the scorecard.
+7. Hole 5: OSM handicap 7 differs from the scorecard's stroke index 9; using the scorecard.
 8. Hole 5: the OSM hole line starts 87 m from the Black tee box (w677741667), and only that box matches the card; the line was probably drawn from another tee. Measured from the Black box through the line's bend points.
 9. Hole 5: the OSM hole line starts 52 m from the Gold tee box (w677741663), and only that box matches the card; the line was probably drawn from another tee. Measured from the Gold box through the line's bend points.
 10. Hole 6 (Black): tee box w677741698 assigned by the developer (tagged hole=6, tee_set=Black in edited/course.geojson).
-11. Hole 7: OSM handicap 1 differs from the GolfPass stroke index 3 (see spec 11.4 item 1); using GolfPass.
+11. Hole 7: OSM handicap 1 differs from the scorecard's stroke index 3; using the scorecard.
 12. Hole 7: the OSM hole line starts 88 m from the Black tee box (w677744789), and only that box matches the card; the line was probably drawn from another tee. Measured from the Black box through the line's bend points.
-13. Hole 9: OSM handicap 11 differs from the GolfPass stroke index 13 (see spec 11.4 item 1); using GolfPass.
+13. Hole 9: OSM handicap 11 differs from the scorecard's stroke index 13; using the scorecard.
 14. Hole 9: the OSM hole line starts 85 m from the Black tee box (w677936436), and only that box matches the card; the line was probably drawn from another tee. Measured from the Black box through the line's bend points.
 15. Hole 9: the OSM hole line starts 69 m from the Gold tee box (w677936435), and only that box matches the card; the line was probably drawn from another tee. Measured from the Gold box through the line's bend points.
-16. Hole 10: OSM handicap 12 differs from the GolfPass stroke index 14 (see spec 11.4 item 1); using GolfPass.
-17. Hole 11: OSM handicap 16 differs from the GolfPass stroke index 18 (see spec 11.4 item 1); using GolfPass.
-18. Hole 12: OSM handicap 8 differs from the GolfPass stroke index 10 (see spec 11.4 item 1); using GolfPass.
-19. Hole 13: OSM handicap 2 differs from the GolfPass stroke index 6 (see spec 11.4 item 1); using GolfPass.
+16. Hole 10: OSM handicap 12 differs from the scorecard's stroke index 14; using the scorecard.
+17. Hole 11: OSM handicap 16 differs from the scorecard's stroke index 18; using the scorecard.
+18. Hole 12: OSM handicap 8 differs from the scorecard's stroke index 10; using the scorecard.
+19. Hole 13: OSM handicap 2 differs from the scorecard's stroke index 6; using the scorecard.
 20. Hole 13: the OSM hole line starts 61 m from the Black tee box (w678016727), and only that box matches the card; the line was probably drawn from another tee. Measured from the Black box through the line's bend points.
-21. Hole 14: OSM handicap 14 differs from the GolfPass stroke index 8 (see spec 11.4 item 1); using GolfPass.
+21. Hole 14: OSM handicap 14 differs from the scorecard's stroke index 8; using the scorecard.
 22. Hole 14: the OSM hole line starts 55 m from the Black tee box (w678019252), and only that box matches the card; the line was probably drawn from another tee. Measured from the Black box through the line's bend points.
-23. Hole 15: OSM handicap 10 differs from the GolfPass stroke index 4 (see spec 11.4 item 1); using GolfPass.
-24. Hole 16: OSM handicap 18 differs from the GolfPass stroke index 16 (see spec 11.4 item 1); using GolfPass.
+23. Hole 15: OSM handicap 10 differs from the scorecard's stroke index 4; using the scorecard.
+24. Hole 16: OSM handicap 18 differs from the scorecard's stroke index 16; using the scorecard.
 25. Hole 16 (Black): tee box w1110722253 assigned by the developer (tagged hole=16, tee_set=Black in edited/course.geojson).
-26. Hole 17: OSM handicap 6 differs from the GolfPass stroke index 12 (see spec 11.4 item 1); using GolfPass.
-27. Hole 18: OSM handicap 4 differs from the GolfPass stroke index 2 (see spec 11.4 item 1); using GolfPass.
+26. Hole 17: OSM handicap 6 differs from the scorecard's stroke index 12; using the scorecard.
+27. Hole 18: OSM handicap 4 differs from the scorecard's stroke index 2; using the scorecard.
 
 ## Other open items (TPC Boston)
 
@@ -204,6 +204,13 @@ Built by a course chat on 2026-10-20/21 with the standing defaults (docs/COURSE_
 - green w1239469844 at (146, 542) is not the end of any hole line (practice green?) -> treated as a wrong green
 - green w1239469845 at (96, 870) is not the end of any hole line (practice green?) -> treated as a wrong green
 - green w1239469856 at (273, 395) is not the end of any hole line (practice green?) -> treated as a wrong green
+
+## Checks from earlier courses
+
+- the world is 1792 x 2304 m, over the 2,048 m limit (COURSE_BUILD 10: stop and ask)
+- tee w1110732537: 2873 m2 (a fairway tagged as a tee?)
+- fairway w1239419342 at (857, 1703) is more than 30 m from every hole line (a range or practice area mapped as fairway?)
+- fairway w1239419347 at (771, 1885) is more than 30 m from every hole line (a range or practice area mapped as fairway?)
 
 Totals: 131 tees, 30 greens, 36 fairways, 97 bunkers, 17 water hazards, 24 pins, 128 cart paths, 0 OSM tree points.
 

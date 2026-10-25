@@ -166,5 +166,16 @@ Decisions the developer made on 2026-10-19 are in DECISIONS.md ("Wannamoisett").
 - green w482626790 at (683, 385) is not the end of any hole line (practice green?) -> treated as a wrong green
 - green w746437295 at (637, 364) is not the end of any hole line (practice green?) -> treated as a wrong green
 
+## Checks from earlier courses
+
+- golf=clubhouse: 1 feature(s) (r7106970) -> a building: add building=yes
+- fairway r14005162 at (676, 379) is more than 30 m from every hole line (a range or practice area mapped as fairway?)
+- fairway w482626828 at (567, 591) is more than 30 m from every hole line (a range or practice area mapped as fairway?)
+- waterway w482687990 (ditch): 62 m of it within 30 m of a hole line isn't in a penalty area (pipeline/propose_channels.py makes one; or say it's dry)
+- waterway w482687991 (ditch): 65 m of it within 30 m of a hole line isn't in a penalty area (pipeline/propose_channels.py makes one; or say it's dry)
+- waterway w482687996 (ditch): 85 m of it within 30 m of a hole line isn't in a penalty area (pipeline/propose_channels.py makes one; or say it's dry)
+- waterway w482687999 (ditch): 55 m of it within 30 m of a hole line isn't in a penalty area (pipeline/propose_channels.py makes one; or say it's dry)
+- hole line w482688010 (ref 17) starts within 10 m of a green (the previous green?)
+
 Totals: 42 tees, 20 greens, 26 fairways, 108 bunkers, 2 water hazards, 18 pins, 20 cart paths, 157 OSM tree points.
 

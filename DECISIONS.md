@@ -1260,3 +1260,61 @@ but not on today's daily board. `DAILY_PICKS` still overrides a day.
   Every other logo rebuilds byte-identical.
 - Courses merged after the concepts were drawn (Astoria, Cypress Point, Pumpkin Ridge,
   Wildwood) keep their course chats' logos and have no concepts.
+
+## Faster course building, part 2 (developer, 2026-10-25)
+
+"Every course requires a million regression checks and then adding that course adds
+another regression check... I would love to be able to bang out courses more quickly."
+The developer asked for all six proposals; branch `design/build-speed`.
+
+1. **Pins.** Every course is built by the pipeline that built its committed files:
+   `data/<id>/pipeline_pin.json` holds the git trees of `pipeline/` and `assets-src/`
+   (content addresses, so a rebase doesn't break them), and `pipeline/build.py` (what
+   `make course` runs) unpacks them into `.pins/` to build a pinned course. A change to
+   the shared code changes no finished course, so the regression run over every course
+   is gone; `regress.py --since` reaches only unpinned courses. A course chat may now
+   change existing pipeline behaviour (COURSE_BUILD 3.4); updating a finished course is
+   unpin, rebuild, look, pin. The design chat pinned every course to the trees of this
+   branch after a full rebuild with them came out the same (section "Pinned" below).
+2. **Skipping and speed.** `pipeline/stepcache.py` records what each step read (files
+   through Python's audit hook plus rasterio and geopandas, folders, the config keys it
+   looked at, its own code files and the library versions) and wrote; `build.py`
+   replays the records and skips a step whose inputs are as they were (the replay
+   handles steps that rewrite an earlier step's file). Checked against fresh builds of
+   Sandpines for no change, a scorecard edit (s03 and s06 run), a late config key (s10),
+   a tree drop (s05 on, s07 skipped), a layout edit and a code change (all identical).
+   Faster steps with the same files: s09b draws its holes in parallel, PNG saves reuse
+   the bytes of an identical image (`pngcache.py`), s05 finds the surface under each
+   tree with an STRtree, s09 and s10 count colours as packed ints (s10 had sorted every
+   image's pixels). Sandpines' full build: 214 s -> 95 s.
+3. **One test of every course.** `game/tests/unit/course_play.test.ts` runs the
+   every-course checks on every course in the list; what differs per course is
+   `data/<id>/checks.json` (accepted yardage flags over 8 %, tee sets, skipped holes,
+   opt-in checks, points, trees). The 25 per-course test files keep only what is
+   special (about 1,780 lines, was about 5,000). The test leaves out the holes listed in
+   `keep_tee_trees` (Oswego Lake 10's tree right of the tee is deliberate: it stops
+   players cutting the dogleg down the 18th fairway; developer, 2026-10-25). The yardage
+   line is now the 8 % fail line (3-8 % flags are in the validation reports).
+4. **Intake.** `pipeline/intake.py` osm / ortho / laz / raster replace the per-course
+   download scripts (checked against Sandpines' OSM file and orthophoto, the same
+   features and pixels, and Indian Island's lidar), and `make intake` checks the
+   downloads on arrival.
+5. **Lessons into checks.** The 951-line COURSE_LESSONS.md is archived
+   (`docs/archive/COURSE_LESSONS_full.md`); the new one holds the 35 lessons that need
+   judgment (about 125 lines). Checkable lessons became intake checks, s03's "Checks
+   from earlier courses" and course_play checks. COURSE_BUILD.md has a quick path at the
+   top (a course chat reads it and the lessons, about 200 lines, and opens the rest as
+   reference) and documents 14 config keys it lacked; `penalty_default` (read by
+   nothing) is gone from it.
+6. **Merging.** `make land NAME=<id>` adds the course to the daily rotation from
+   tomorrow, checks its pin rebuilds the committed files, and runs its tests; CLAUDE.md
+   no longer gets a line per course (section 11 points at `docs/courses/`). GitHub
+   Actions couldn't be reached from the sandbox, so this is a command the design chat
+   runs at the merge rather than a workflow.
+
+## Rock Creek Park is not merged (developer, 2026-10-25)
+
+"Rock Creek WILL NOT be merged... it's not up to my standards." PR #48 (`course/rock_creek`)
+is closed with a note; the branch is kept. `pipeline/land.py` refuses `rock_creek`
+(`NOT_TO_MERGE`), and `courses.test.ts` fails if a `rock_creek` course or data folder
+appears on any branch.
