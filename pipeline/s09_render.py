@@ -145,6 +145,8 @@ def terrain_z_px(world, base, greens, H, W):
         bx0, by0, bx1, by1 = poly.buffer(gm["blend"] + 1).bounds
         c0, c1 = max(0, int(bx0 * PX_PER_M)), min(W, int(bx1 * PX_PER_M) + 1)
         r0, r1 = max(0, int((world.height - by1) * PX_PER_M)), min(H, int((world.height - by0) * PX_PER_M) + 1)
+        if r1 <= r0 or c1 <= c0:
+            continue  # a green outside the world (a neighbour's, from the export's margin): nothing to shape here
         sub_tr = tr * Affine.translation(c0, r0)
         inside = rasterize([(poly, 1)], out_shape=(r1 - r0, c1 - c0), transform=sub_tr, fill=0, dtype="uint8").astype(bool)
         dist = ndimage.distance_transform_edt(~inside) / PX_PER_M
