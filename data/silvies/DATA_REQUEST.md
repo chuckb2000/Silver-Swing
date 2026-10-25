@@ -34,6 +34,11 @@ under the course, or says there is none:
 https://gis.dogami.oregon.gov/arcgis/rest/services/lidar/DIGITAL_TERRAIN_MODEL_MOSAIC/ImageServer/identify?geometry=%7B%22x%22%3A341000%2C%22y%22%3A4880300%2C%22spatialReference%22%3A%7B%22wkid%22%3A32611%7D%7D&geometryType=esriGeometryPoint&returnCatalogItems=true&f=json
 ```
 
+Result (developer, 2026-10-25): lidar exists. The DTM mosaic at the point reads
+4,714.72 ft (1,437 m). Projects under it, newest first: OR_SOUTHEAST_2023_USGS_3DEP_6_MALHEUR_STRAWBERRY
+and OLC_ODF_PRIVATE_FOREST_ACCORDS_2023_MALHEUR (both 2023, after the course opened in
+2017), OLC_UPPER_JOHN_DAY_3DEP_2020_SOUTH, OLC_MALHEUR_RIVER_2009. Item 4 is not needed.
+
 ### 1. Bare earth (DOGAMI DTM mosaic, 1 m, feet) → `silvies_dtm.tif`
 
 Open, then click the `href` in the JSON page:
