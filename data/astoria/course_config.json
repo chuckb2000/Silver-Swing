@@ -1,6 +1,6 @@
 {
  "id": "astoria",
- "name": "Astoria Golf & Country Club",
+ "name": "Astoria Country Club",
  "location": "Warrenton, Clatsop County, Oregon",
  "state": "OR",
  "architects": "George Junor with founder Charles Halderman (club founded 1923, course opened June 1924; stymie.golf, GolfPass, Top 100 Golf Courses, Daily Astorian)",
@@ -87,7 +87,7 @@
   "Elevation and canopy height: Oregon Department of Geology and Mineral Industries (DOGAMI) lidar",
   "Imagery check: Oregon Statewide Imagery Program 2024"
  ],
- "notes": "Standing defaults (COURSE_BUILD.md 4.1): no Blue set, so Silver (6,321, closest to 6,300); all water red; OB = the OSM boundary; wind 3-14 mph (open coast); theme astoria (new, course chat's own, as the brief allowed): rough drawn tawny with a 2 m mown band beside the fairways, as the summer 2024 photo shows.",
+ "notes": "Standing defaults (COURSE_BUILD.md 4.1): no Blue set, so Silver (6,321, closest to 6,300); all water red; OB = the OSM boundary; wind 3-14 mph (open coast); theme astoria (new, course chat's own, as the brief allowed): rough drawn tawny with a 2 m mown band beside the fairways, as the summer 2024 photo shows. Name shown in the game: \"Astoria Country Club\" (developer 2026-10-24; the club is Astoria Golf & Country Club).",
  "red_water_osm": [
   "r20068414",
   "w34066511",
@@ -104,5 +104,19 @@
   "v_max": 120,
   "min_share": 0.1,
   "note": "the DOGAMI lidar here is the 2008-09 North Coast flight; lidar crowns that are not dark canopy on the OSIP 2024 photo are dropped (pipeline/gorse.py missing_in_ortho), as at Gearhart 8 km south (737 gone there)"
- }
+ },
+ "green_tilt": [
+  {
+   "hole": 3,
+   "max_tilt": 0.02,
+   "bumps": 0,
+   "note": "the 3rd's small green (210 m2, 25 x 11 m) at the end of the narrow valley: tilt capped at 2 % (fitted 3.2 %) and no random undulations, so the game finds three pin positions on it under 3 % (pins.test.ts)"
+  },
+  {
+   "hole": 16,
+   "max_tilt": 0.025,
+   "bumps": 0,
+   "note": "the 16th's small green (272 m2): no random undulations (they reached 5.1 %), so the game finds three pin positions on it (pins.test.ts)"
+  }
+ ]
 }

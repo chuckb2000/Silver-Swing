@@ -22,7 +22,10 @@ For each hole this script uses the mapped OSM features only (as Tualatin's):
          axis point in the landing zone, LANDING_M (250 yd) from the tee or 70 % of
          a shorter hole; a straight hole gets no bend
   end    the centroid of the green
-  pin    the centroid of the green (a proposal)
+  pin    the centroid of the green (a proposal), or the green's deepest point (pole of
+         inaccessibility) where the centroid is within PIN_EDGE_M (14 ft) of the edge,
+         so the game keeps its centre pin at least that far in (pins.ts; green D, the 8th,
+         is a crescent)
 
 Writes proposed/holes.geojson (WGS84; kinds hole and pin, ids x_hole_<n> /
 x_pin_<n>) and, with --png, proposed/holes.jpg over the OSIP 2024 photo.
@@ -48,6 +51,7 @@ EPSG = 32610
 BEND_MIN_M = 12.0   # a fairway centre this far off the straight line makes a dogleg bend
 LANDING_M = 228.6   # 250 yd: the scratch golfer's tee-shot landing zone (USGA length measurement)
 TEE_SET = "silver"  # scorecard.csv column the line start is fitted to (the default tee)
+PIN_EDGE_M = 4.267  # 14 ft: the game's preferred distance from a pin to the green's edge (pins.ts)
 
 # hole -> green (OSM id; letter on proposed/osm_labelled.jpg)
 GREENS = {
@@ -186,9 +190,15 @@ def main():
                 "source": "proposed by data/astoria/make_holes.py from the mapped tee, fairway and green",
                 "tee_osm": tid, "green_osm": gid}
         rows.append({"osm": f"x_hole_{n}", "kind": "hole", "tags": tags, "geometry": line})
+        pin, pin_src = gc, "green centroid (proposal)"
+        if green.exterior.distance(gc) < PIN_EDGE_M or not green.contains(gc):
+            from shapely.ops import polylabel
+            pin = polylabel(green, tolerance=0.1)
+            pin_src = f"the green's deepest point, {green.exterior.distance(pin):.1f} m from its edge (centroid {green.exterior.distance(gc):.1f} m) (proposal)"
+            report.append(f"hole {n:2d}: pin at the green's deepest point ({green.exterior.distance(pin):.1f} m in; centroid {green.exterior.distance(gc):.1f} m)")
         rows.append({"osm": f"x_pin_{n}", "kind": "pin",
-                     "tags": {"golf": "pin", "ref": str(n), "source": "green centroid (proposal)"},
-                     "geometry": gc})
+                     "tags": {"golf": "pin", "ref": str(n), "source": pin_src},
+                     "geometry": pin})
     out = gpd.GeoDataFrame(rows, crs=EPSG).to_crs(4326)
     out["tags"] = out["tags"].apply(json.dumps)
     (HERE / "proposed").mkdir(exist_ok=True)
