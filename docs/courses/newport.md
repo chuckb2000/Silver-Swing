@@ -44,7 +44,12 @@ from that release.
     Drive). All are red.
 -   **Out of bounds:** the OSM boundary (relation 13922079). It has two parts, 12 m apart across
     Harrison Avenue, joined with `join_boundary_parts`; the road between them is out of
-    bounds. Five clubhouse buildings mapped `golf=clubhouse` are copied as buildings.
+    bounds. Along the 10th the line is the developer's (2026-10-26: "part of the fairway is
+    out of bounds on newport hole 10"): OSM's cut across the fairway's west lobe and the
+    bunker beside it, so the developer traced a new line in the tracer (`desk/ob10.json`),
+    about 2,860 m2 further toward the road; its ends join OSM's line 20 m beyond the
+    tracer's frame (`proposed/boundary.geojson`). Five clubhouse buildings mapped
+    `golf=clubhouse` are copied as buildings.
 -   **Trees:** 13,660 from the lidar, 739 of them inside the boundary. Median height 8.8 m,
     tallest 29 m. 31 % are conifers, judged by crown shape and the leaf-off flight. Dropped:
     167 roof crowns (`roof_last_share` 0.85) and 367 on OSM buildings.

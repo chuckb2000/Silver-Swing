@@ -13,6 +13,12 @@
    "y": 945.4,
    "ob": true,
    "why": "Harrison Avenue, between the course's two parts: out of bounds (join_boundary_parts joins the parts for the boundary only)"
+  },
+  {
+   "x": 603,
+   "y": 1611,
+   "ob": false,
+   "why": "the 10th fairway's west lobe, which OSM's boundary cut across: in bounds since the developer's traced line (2026-10-26)"
   }
  ],
  "yardage": {
