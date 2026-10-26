@@ -1341,7 +1341,8 @@ The leaderboard's "birdies" tab is now "stats", with three lists across every co
 (friends or this device, casual rounds left out):
 
 - **hole-outs** (shown first): the longest hole-outs from off the green (a chip-in, a
-  holed approach, an ace; a putt from the fringe counts, being off the green), longest
+  holed approach, an ace; not a putt from the fringe, which counts as a putt made:
+  developer, 2026-10-26), longest
   first. Like an eagle, each goes on the shared list the moment the ball drops
   (`reportHoleout` in `save/eagleReport.ts`, `/api/holeouts`, D1 table `holeouts`), so an
   unfinished round counts. It carries its flight as the player's game simulated it (the

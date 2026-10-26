@@ -15,6 +15,11 @@ describe('nameAllowed', () => {
       expect(nameAllowed(n), n).toBe(true);
     }
   });
+  it('names that a mild word squashes to are allowed; the words are not (developer, 2026-10-26: Bob)', () => {
+    for (const n of ['bob', 'Bob', 'bobby', 'big bob', 'bob smith', 'con', 'connor', 'but'])
+      expect(nameAllowed(n), n).toBe(true);
+    for (const n of ['boob', 'boobs', 'b00b', 'coon', 'butt']) expect(nameAllowed(n), n).toBe(false);
+  });
 });
 
 describe('boardName', () => {
