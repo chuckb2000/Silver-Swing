@@ -1,0 +1,83 @@
+{
+ "id": "george_wright",
+ "name": "George Wright Golf Course",
+ "location": "Hyde Park, Boston, Suffolk County, Massachusetts",
+ "state": "MA",
+ "architects": "Donald Ross; built by the Works Progress Administration, opened 23 April 1938 (City of Boston)",
+ "theme": "george_wright",
+ "epsg": 32619,
+ "osm_sources": [
+  "raw/overpass.geojson"
+ ],
+ "boundary_name": "George Wright Golf Course",
+ "dtm": {
+  "path": "raw/dtm_ground_1m.tif",
+  "units": "m",
+  "source": "bare earth from the ground points (class 2) of the 2021 USGS Lidar: Central Eastern Massachusetts (NOAA Data Access Viewer dataset 9777, job J1476274), gridded to 1 m in EPSG:32619 by pipeline/intake.py dtm (mean per cell, gaps filled linearly from their rim); NAVD88 m"
+ },
+ "laz": {
+  "paths": [
+   "raw/laz/*.laz"
+  ],
+  "classes": [
+   3,
+   4,
+   5
+  ],
+  "units": "m",
+  "source": "2021 USGS Lidar: Central Eastern Massachusetts (NOAA Data Access Viewer dataset 9777, job J1476274), flown 20 March 2021 (GPS times), leaf-off; vegetation classes 3-5; NAD83(2011) / Massachusetts Mainland (EPSG:6491, m), NAVD88 m; GitHub release assorted-lidar-data, ma2021_cent_east_J1476274.zip, clipped to the world with pipeline/intake.py laz",
+  "label": "2021 USGS lidar, leaf-off",
+  "leaf_off": true
+ },
+ "ortho": {
+  "path": "raw/naip_05m.tif",
+  "source": "USDA NAIP via the USGS National Map ImageServer, exported by the developer 2026-10-25 as one JPEG at 0.5 m in EPSG:32619 (release assorted-lidar-data: 12.jpg), placed by its request box by pipeline/intake.py ortho; flight year not stated"
+ },
+ "world": {
+  "x0": 323420,
+  "y0": 4680796,
+  "width": 1280,
+  "height": 1792,
+  "note": "OSM course boundary (way 29830747) bbox 1,028 x 1,517 m in UTM 19N + ~120 m scenery, whole 256 m chunks, centred: 1,280 m east-west (126 m each side), 1,792 m north-south (138 m each side)"
+ },
+ "tee_sets": [
+  {
+   "name": "Blue",
+   "playable": true,
+   "rating": 71.9,
+   "slope": 133,
+   "total_yd": 6506
+  }
+ ],
+ "default_tee": "Blue",
+ "scorecard_source": "Stymie (stymie.golf/golf-courses/massachusetts/suffolk-county/hyde-park/george-wright-golf-course), read 2026-10-25: Blue, White, Gold and Red per hole ('2017' sets), par 70, stroke index; every row adds up. OpenGolfAPI's per-hole Blue row is the same (6,506; its tee table says 6,440 and 69.5/126). Rating 71.9/133 (Stymie; Wikipedia agrees). Unverified third-party card.",
+ "wind_mph": {
+  "minMph": 1,
+  "maxMph": 9
+ },
+ "attribution": [
+  "Map data © OpenStreetMap contributors (ODbL)",
+  "Elevation and trees: U.S. Geological Survey 3D Elevation Program (2021 Central Eastern Massachusetts lidar), via NOAA Digital Coast",
+  "Scorecard: Stymie (unverified)"
+ ],
+ "notes": "Course chat, 2026-10-25: not scouted; course identified from the lidar order's footprint (centre 42.267, -71.132; Wikipedia 42.268, -71.133). Standing defaults (every penalty area red, OSM boundary as OB, trees from lidar). Played from Blue, the tips (developer, 2026-10-25: \"for all of these courses lets play from the tips\"). Wind 1-9 mph (inland New England). Bare earth from the lidar's ground points: the release has no DEM. Theme george_wright: the course's own, from the developer's photos (developer: a new theme for each course).",
+ "penalty_default": "red",
+ "driving_range_is_ob": true,
+ "trees_off_fairways_m": 2,
+ "red_water_osm": [
+  "w89790834",
+  "w89913468",
+  "w91080594",
+  "w91095376"
+ ],
+ "red_water_note": "ponds inside the boundary mapped as natural=water (in the woods west of 4-7 and north of 3): red penalty areas (standing default)",
+ "rough_band_m": 3.0,
+ "rough_band_note": "a mown band of rough along the fairways, then the long golden native grass the photos show beside many holes",
+ "drop_trees": [
+  {
+   "x": 193.5,
+   "y": 1722.5,
+   "reason": "course chat 2026-10-25: a 49.8 m 'conifer' among the apartment blocks at the world's north-west corner, out of bounds; the next tallest crown in the world is 31.8 m, so it is a structure the lidar classed as vegetation"
+  }
+ ]
+}

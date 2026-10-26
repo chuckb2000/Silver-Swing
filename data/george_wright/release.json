@@ -1,0 +1,22 @@
+{
+ "release": "assorted-lidar-data",
+ "note": "Build inputs not kept in git for George Wright; `make fetch NAME=george_wright` puts them in place (pipeline/fetch_raw.py). In git: raw/overpass.geojson, raw/osm.geojson and raw/dtm_ground_1m.tif (pipeline/intake.py dtm, 7 MB). Here: the lidar clip (2021 central-east Massachusetts, classes 3-5) and the NAIP photo (12.jpg).",
+ "files": [
+  {
+   "asset": "ma2021_cent_east_J1476274.zip",
+   "sha256": "89bb828091c8220ed036228bda58c085c1ed602641dfedb73961f36ab9df8346",
+   "run": "python3 pipeline/intake.py laz george_wright {file} --classes 3,4,5",
+   "outputs": {
+    "raw/laz/george_wright_clip.laz": "828fd45e92cb1d551666a5769f887e43252861f0a240e7563601e9f215cf931d"
+   }
+  },
+  {
+   "asset": "12.jpg",
+   "sha256": "fe068e93038de2f3e51da2e7a55da2f83aa8182102d804ff3660d58447bc1863",
+   "run": "python3 pipeline/intake.py ortho george_wright {file} 323320 4680696 324800 4682688 --out raw/naip_05m.tif",
+   "outputs": {
+    "raw/naip_05m.tif": "5fc51c6a93bbef78e10bee5c66d1dbd4524327367a4a50db24d616f247bfc618"
+   }
+  }
+ ]
+}
