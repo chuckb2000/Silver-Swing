@@ -6,6 +6,7 @@ import { BeforeShot, PendingRelief, PlannedShot, Round, RoundConfig } from '../s
 import type { SimResult } from '../systems/physics/sim';
 import { HoleScore } from '../systems/rules/scoring';
 import { clearRoundInProgress, loadRoundInProgress, saveRoundInProgress } from './store';
+import { fixScores, slotHole } from './cardFixes';
 
 interface Snapshot {
   v: 1;
@@ -58,9 +59,20 @@ export function snapshotOf(r: Round): Snapshot {
 }
 
 export async function peekSnapshot(): Promise<{ cfg: RoundConfig; holeIndex: number; scores: HoleScore[]; savedAt: string; betweenHoles: boolean } | null> {
-  const s = await loadRoundInProgress<Snapshot>();
+  const s = await loadSnapshot();
   if (!s || s.v !== 1 || !s.cfg) return null;
   return s;
+}
+
+/** The saved round, with a course's corrected card (cardFixes.ts) applied to its holes so far and stored. */
+async function loadSnapshot(): Promise<Snapshot | undefined> {
+  const s = await loadRoundInProgress<Snapshot>();
+  if (!s || s.v !== 1 || !s.cfg || !Array.isArray(s.scores)) return s;
+  const f = fixScores(s.cfg.courseId, s.scores, slotHole({ length: s.cfg.length, holes: s.cfg.courseHoles }, s.cfg.holes));
+  if (!f) return s;
+  const fixed = { ...s, scores: f };
+  await saveRoundInProgress(fixed);
+  return fixed;
 }
 
 /**
@@ -69,7 +81,7 @@ export async function peekSnapshot(): Promise<{ cfg: RoundConfig; holeIndex: num
  * leaderboard (the tab closed on the hole-complete panel); the caller finishes it.
  */
 export async function restoreRound(): Promise<{ round: Round; betweenHoles: boolean; finished?: boolean } | null> {
-  const s = await loadRoundInProgress<Snapshot>();
+  const s = await loadSnapshot();
   if (!s || s.v !== 1 || !app.course) return null;
   const r = new Round(app.course, s.cfg);
   if (s.betweenHoles || s.holeIndex >= s.cfg.holes.length) {

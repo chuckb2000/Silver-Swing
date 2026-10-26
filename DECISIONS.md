@@ -1318,3 +1318,19 @@ The developer asked for all six proposals; branch `design/build-speed`.
 is closed with a note; the branch is kept. `pipeline/land.py` refuses `rock_creek`
 (`NOT_TO_MERGE`), and `courses.test.ts` fails if a `rock_creek` course or data folder
 appears on any branch.
+
+## Card corrections for rounds already played (developer, 2026-10-26)
+
+Chief Egan's holes 3 and 6 became par 3 (PR #81) a day after the course went live, and
+the developer wanted the rounds already shot there rescored. `game/src/save/cardFixes.ts`
+holds a list of corrections (course, course hole, new par, date, why). The server applies
+it once (`applyCardFixes` in `src/server/scores.ts`, after the schema and backfill, ten
+rounds per request, done when `meta.card_fixes` holds the list's key): each stored round
+gets the new par, to par, totals and birdie count, and the course's eagles the new par, or
+are deleted when they are no longer eagles (a 2 on a new par 3 is a birdie; an ace stays).
+Rounds and eagles that arrive later from a copy with the old card are corrected on the way
+in. Each device rewrites its board, eagles and saved round on load (`store.ts`,
+`snapshot.ts`). Gross never changes, so no board's order does; on a hole that drops a par
+the fairway is no longer counted and a green in regulation stays one only if the strokes
+before the putts are within the new par minus two. Handicaps (Chief Egan isn't rated) and
+matches are unaffected. A later correction is one more line in the list.
