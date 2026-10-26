@@ -64,7 +64,7 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 
 ## Tree detection (2021 USGS lidar, leaf-off)
 
-- 23833 trees detected in the world extent (4617 inside the course), 4752 conifers / 19081 deciduous; median height 16.5 m, max 31.8 m.
+- 23833 trees detected in the world extent (4618 inside the course), 4752 conifers / 19081 deciduous; median height 16.5 m, max 31.8 m.
 - Dropped: 588 tops on building footprints, 0 over the lake, 158 tiny crowns.
 - Dropped on playing surfaces (spec 5.4): 2 -> water_hazard w671580026 (17.4 m), water_hazard w671580026 (19.9 m)
 - OSM natural=tree points matched by a detected tree within 4 m: 0 of 0.

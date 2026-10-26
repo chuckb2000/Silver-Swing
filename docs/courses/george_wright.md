@@ -10,7 +10,7 @@ from it. The course wasn't scouted; it was identified from the lidar order's foo
 -   **Map data:** OSM is complete, with no pins.
 -   **Elevation and trees:** bare earth is gridded from the 2021 Massachusetts lidar's ground
     points. Trees come from the same survey's vegetation classes (3-5).
--   **Out of bounds:** the 11th green crossed the OSM boundary by 34 m2, so the boundary is grown
+-   **Out of bounds:** the 10th green crossed the OSM boundary by 34 m2, so the boundary is grown
     3 m around that green.
 -   **Tee:** Blue, already the tips (6,506 yd). Hole 8's tee box is tagged to the hole.
 -   **Theme and logo:** a new autumn `george_wright` theme. The logo is a golf ball with
@@ -37,7 +37,7 @@ from it. The course wasn't scouted; it was identified from the lidar order's foo
     -   The lidar clip and the photo are rebuilt from the release by `release.json`.
 -   **Water:** every penalty area is red: ten `golf=water_hazard` areas (tagged red) and four
     ponds mapped `natural=water` in the woods west of 4-7 and north of 3.
--   **Out of bounds:** the OSM boundary (way 29830747), grown around the 11th green
+-   **Out of bounds:** the OSM boundary (way 29830747), grown around the 10th green and, behind it, moved back by the developer (2026-10-26)
     (`proposed/boundary.geojson`).
 -   **Trees:** 23,833 from the lidar, 4,617 inside the boundary. Median height 16.5 m, tallest
     31.8 m. 20 % are conifers (white pine and hemlock), judged by crown shape and the leaf-off
