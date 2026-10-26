@@ -45,5 +45,26 @@
   "Elevation: U.S. Geological Survey 3D Elevation Program (2023 San Francisco Bay Area lidar), via NOAA Digital Coast",
   "Scorecard: Presidio Golf Course"
  ],
- "notes": "Course chat, 2026-10-25: not scouted; the developer added the lidar to assorted-lidar-data. Standing defaults (every penalty area red, OSM boundary as OB, trees from lidar once a vegetation order arrives: the first zip is ground points only). Played from the tips: Black (developer, 2026-10-25: \"for all of these courses lets play from the tips\"). Wind 3-12 mph: a sheltered, wooded site above the Golden Gate (between the bay band and the open coast). Theme presidio: the course's own, from the developer's photos (developer: a new theme for each course)."
+ "notes": "Course chat, 2026-10-25: not scouted; the developer added the lidar to assorted-lidar-data. Standing defaults (every penalty area red, OSM boundary as OB, trees from the 2023 lidar's class 1 (the survey has no vegetation classes), roofs dropped on OSM's building footprints (the April flight is not leaf-off, so roof_last_share doesn't apply)). Played from the tips: Black (developer, 2026-10-25: \"for all of these courses lets play from the tips\"). Wind 3-12 mph: a sheltered, wooded site above the Golden Gate (between the bay band and the open coast). Theme presidio: the course's own, from the developer's photos (developer: a new theme for each course).",
+ "laz": {
+  "paths": [
+   "raw/laz/*.laz"
+  ],
+  "classes": [
+   1
+  ],
+  "units": "m",
+  "source": "2023 USGS Lidar: San Francisco Bay Area (NOAA Data Access Viewer job J1476365, all classes: the survey has no vegetation classes, so trees come from class 1, processed but unclassified), flown 20 April 2023 (GPS times); NAD83(2011) / California zone 3, NAVD88 m; GitHub release assorted-lidar-data, ca2023_sanfran_J1476365.zip (developer, 2026-10-25), clipped to the world + 100 m with pipeline/intake.py laz",
+  "label": "2023 USGS San Francisco Bay Area lidar",
+  "leaf_off": false,
+  "max_height_m": 60,
+  "max_height_note": "returns more than 60 m above the ground are high noise left in class 1 (some reached 113 m over the eucalyptus); the canopy's own heights tail off by 55-60 m"
+ },
+ "drop_trees": [
+  {
+   "x": 658.5,
+   "y": 839.5,
+   "reason": "course chat 2026-10-25: a 24 m crown 11.6 m wide 69 m out from the 17th's Black tee, 5 m off the line; its canopy reached a perfect tee shot at the middle of the fairway 60 m out, just past s06b's 60 m reach (course_play.test.ts, the every-course rule)"
+  }
+ ]
 }

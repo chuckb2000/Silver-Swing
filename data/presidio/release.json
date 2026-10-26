@@ -1,0 +1,14 @@
+{
+ "release": "assorted-lidar-data",
+ "note": "Build inputs not kept in git for Presidio; `make fetch NAME=presidio` puts them in place (pipeline/fetch_raw.py). In git: raw/overpass.geojson, raw/osm.geojson and raw/dtm_ground_1m.tif (bare earth from the ground points of the first 2023 order, job J1476298, by pipeline/intake.py dtm; 5 MB). Here: the lidar clip from the second order (job J1476365, all classes; trees from class 1).",
+ "files": [
+  {
+   "asset": "ca2023_sanfran_J1476365.zip",
+   "sha256": "dd0cc901d47349f3d34ecc8ef80f1c5d4d8772671eb47896f5f67d6f873f2b40",
+   "run": "python3 pipeline/intake.py laz presidio {file}",
+   "outputs": {
+    "raw/laz/presidio_clip.laz": "d20a7f2837993b5d65692eae9e556d84c485b6aad85fac0771de65a41c8eb755"
+   }
+  }
+ ]
+}

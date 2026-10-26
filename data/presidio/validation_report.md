@@ -59,13 +59,13 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 - Hole 13 (Black): measured 194 yd from the tee-box centre vs 180 on the card (+7.6%); moved the virtual tee along the middle of the real tee polygon w718180229 (on its centre line, at least 2.5 m from its back and front) -> 192.8 yd (real 193.6 yd).
 - Hole 17 (Black): measured 334 yd from the tee-box centre vs 350 on the card (-4.5%); moved the virtual tee along the middle of the real tee polygon w718409398 (on its centre line, at least 2.5 m from its back and front) -> 341.4 yd (real 334.4 yd).
 
-## Tree detection (OSM fallback (no lidar))
+## Tree detection (2023 USGS San Francisco Bay Area lidar)
 
-- 4445 trees detected in the world extent (37 inside the course), 2201 conifers / 2244 deciduous; median height 10.0 m, max 14.0 m.
-- Dropped: 0 tops on building footprints, 0 over the lake, 0 tiny crowns.
-- Dropped on playing surfaces (spec 5.4): 0 -> 
-- OSM natural=tree points matched by a detected tree within 4 m: 0 of 253.
-- LOWER FIDELITY: no canopy raster. Trees are OSM natural=tree points plus a seeded Poisson-disk fill of OSM woods every 6 m; heights 6-14 m and type (50% conifer) are drawn at random, not measured.
+- 6536 trees detected in the world extent (1095 inside the course), 2576 conifers / 3960 deciduous; median height 19.1 m, max 60.0 m.
+- Dropped: 1244 tops on building footprints, 0 over the lake, 23 tiny crowns.
+- Dropped on playing surfaces (spec 5.4): 2 -> tee w877795246 (28.3 m), fairway w718409400 (21.7 m)
+- OSM natural=tree points matched by a detected tree within 4 m: 178 of 253.
+- Conifer vs deciduous is inferred from crown shape only (no leaf-off imagery); see build/trees_preview.png.
 
 # Green shaping checks
 
