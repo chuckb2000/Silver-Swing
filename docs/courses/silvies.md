@@ -208,6 +208,29 @@ Details in `data/silvies/validation_report.md`.
     sagebrush as coloured dots. Smallest fix: pick the sheet as the game does
     (`shrubs_<theme>` when it exists).
 3.  Document `gorse.extra_areas` in COURSE_BUILD.md 3.3 (the `gorse` key's table).
+4.  **Re-score the rounds already shot at Chief Egan** (developer, 2026-10-26: apply the
+    par-3 change "to scores that have already been shot there"). `silvies_chief_egan`
+    went live with PR #71 (merged 2026-10-25 20:10 UTC) with holes 3 and 6 par 4 (par
+    29); they are par 3 now (par 27). Gross scores don't change, so the boards' order
+    (by gross) doesn't either; what changes is each hole's par, `toPar`, the birdie count
+    and the eagles. Course chats can't edit the server or the game, and the course chat
+    couldn't reach the live API to see whether any rounds exist. What it needs:
+    -   **D1 `rounds`** where `course = 'silvies_chief_egan'`: in `data`, set `par: 3`
+        on the scores of course holes 3 and 6 (scorecard slots 3 and 6, plus 12 and 15
+        for "18 twice around"); recompute `toPar` (gross minus the new par total) and the
+        `birdies` column (`birdiesIn`). A 3 there was a birdie and is now a par.
+    -   **D1 `eagles`** where `course = 'silvies_chief_egan'` and `hole IN (3, 6)` (the
+        course hole): set `par = 3`, then delete the rows that are no longer eagles
+        (`strokes > par - 2`, i.e. a 2, now a birdie). An ace stays (now an eagle, not an
+        albatross).
+    -   **On each device** (IndexedDB `local-golf`: the local board, personal bests, "my
+        golf", milestones, and a saved round in progress at Chief Egan, whose finished
+        holes keep the old par): the same rewrite once on load.
+    -   Not affected: handicaps (Chief Egan has no rating) and matches (no par stored).
+        Casual rounds with the double-par cap keep their strokes as played.
+    -   Smallest general form: a list of card corrections (`course`, course hole, new par,
+        since) applied once by the server (a schema bump in `ensureSchema`) and by the
+        client on load, so a later card fix on any course reuses it.
 
 ## Lessons
 
