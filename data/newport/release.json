@@ -1,0 +1,38 @@
+{
+ "release": "assorted-lidar-data",
+ "note": "Build inputs not kept in git for Newport; `make fetch NAME=newport` puts them in place (pipeline/fetch_raw.py). In git: raw/overpass.geojson and raw/osm.geojson. Here: the 2022 Rhode Island DEM clip (newport.cc.zip, open sea filled), the lidar clip (2022 statewide, class 1) and the NAIP mosaic (123.jpg south, 1212.jpg north).",
+ "files": [
+  {
+   "asset": "newport.cc.zip",
+   "sha256": "f89c02bcfa98f6bcc1365804e44e1a8c8886f914a3c27de36ac0a1d900670d16",
+   "run": "python3 pipeline/intake.py raster newport /vsizip/{file}/ri2022_statewide_dem_J1476269tR0_C0.tif --out raw/ri2022_dem_clip.tif --fill-sea",
+   "outputs": {
+    "raw/ri2022_dem_clip.tif": "882d2cc13f4f7460979c77170c09874b91fc473fa5a1c104202cae3b26b7d371"
+   }
+  },
+  {
+   "asset": "ri2022_statewide_J1476270.zip",
+   "sha256": "1ac42819f36b4c1d66774e3ac56bfceac6f8a1cc308ec071d363b24eedd72530",
+   "run": "python3 pipeline/intake.py laz newport {file} --classes 1",
+   "outputs": {
+    "raw/laz/newport_clip.laz": "35684f877a0603f496ff0b0d1e7cf247fe98b0e1482ab620844786ea566034cd"
+   }
+  },
+  {
+   "asset": "123.jpg",
+   "sha256": "c83add9e0e7e9686730c7dcd4c61e14e729c18acd00c307428f8161205ed8607",
+   "to": "raw/ortho_src/",
+   "outputs": {
+    "raw/ortho_src/123.jpg": "c83add9e0e7e9686730c7dcd4c61e14e729c18acd00c307428f8161205ed8607"
+   }
+  },
+  {
+   "asset": "1212.jpg",
+   "sha256": "ad486ea27253b51ec5a6ab63bfa57168a1e6db390dcb1476bab7c8e676a81415",
+   "run": "python3 pipeline/intake.py ortho newport data/newport/raw/ortho_src/123.jpg 303207 4591324 304687 4592448 {file} 303207 4592448 304687 4593572 --out raw/naip_05m.tif",
+   "outputs": {
+    "raw/naip_05m.tif": "d16915bc5a55b48d2a50f84fb4c3c378769989c6530139c3ac8c3c62dc1e6991"
+   }
+  }
+ ]
+}

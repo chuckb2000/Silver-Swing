@@ -1,0 +1,79 @@
+{
+  "name": "Newport (the first U.S. Open's links on Rhode Island Sound)",
+  "note": "Course theme palette (<= 32 colours; same keys as pnw.json plus F0-F2). Newport Country Club, from the developer's photos (release assorted-lidar-data, newport.1-7) and NAIP: deep, saturated fairways and greens; a deep olive rough with a tawny cast of fescue (F0-F2) beyond a mown band; warm tan bunker sand; the steel-blue Atlantic beyond Ocean Drive and its dark rocky shore; green estate lawns and fields out of bounds (L0-L2). Trees in assets-src/trees_newport.py: black pine, spruce, maple, oak and copper beech. Shadows are a 35% black overlay on top of these.",
+  "colors": {
+    "G0": "#1b301c",
+    "G1": "#243f23",
+    "G2": "#2f532b",
+    "G3": "#3d6a32",
+    "G4": "#3f8a35",
+    "G5": "#4b9c3c",
+    "G6": "#58ae44",
+    "G7": "#68be4d",
+    "G8": "#7dcb5a",
+    "G9": "#a4dc80",
+    "L0": "#3f5a2c",
+    "L1": "#4d6c33",
+    "L2": "#5d7f3c",
+    "S0": "#bfa57a",
+    "S1": "#dcc79c",
+    "S2": "#eee1c0",
+    "W0": "#1e3f57",
+    "W1": "#2c5874",
+    "W2": "#5f8aa5",
+    "K0": "#24252b",
+    "K1": "#4a4a50",
+    "K2": "#73737b",
+    "K3": "#aaa597",
+    "K4": "#d3cebf",
+    "B0": "#46301f",
+    "B1": "#6b4b33",
+    "B2": "#8e6a4b",
+    "R0": "#5a5550",
+    "WH": "#f6f6f2",
+    "F0": "#55692f",
+    "F1": "#6a7c3a",
+    "F2": "#838f48"
+  },
+  "lut": {
+    "rough": [
+      "F0",
+      "F1",
+      "F2",
+      "F2"
+    ],
+    "rough_band": [
+      "G3",
+      "G4",
+      "G5",
+      "G5"
+    ]
+  },
+  "aliases": {
+    "TUFT": "G3"
+  },
+  "minimap": {
+    "ob": "#4d6c33",
+    "rough": "#6a7c3a",
+    "woods": "#243f23",
+    "ob_woods": "#1f361f",
+    "water": "#2c5874",
+    "ob_water": "#2c5874",
+    "bunker": "#dcc79c",
+    "ob_sand": "#dcc79c"
+  },
+  "minimap_trees": {
+    "conifer": [
+      "#1b3524",
+      "#325c36"
+    ],
+    "deciduous": [
+      "#215025",
+      "#3f843b"
+    ]
+  },
+  "trees": {
+    "conifer": "trees_newport:conifer",
+    "deciduous": "trees_newport:deciduous"
+  }
+}

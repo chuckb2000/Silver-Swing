@@ -1,0 +1,80 @@
+{
+ "tags": [
+  {
+   "osm": "w673525419",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "standing default (COURSE_BUILD 4.1): every penalty area red; OSM maps it golf=water_hazard (yellow)"
+  },
+  {
+   "osm": "p_tee_black_6",
+   "set": {
+    "hole": "6",
+    "tee_set": "Black"
+   },
+   "reason": "the 6th's Black tee (approved proposal, see add)"
+  },
+  {
+   "osm": "p_tee_black_15",
+   "set": {
+    "hole": "15",
+    "tee_set": "Black"
+   },
+   "reason": "the 15th's Black tee (approved proposal, see add)"
+  }
+ ],
+ "add": [
+  {
+   "from": "proposed/sea.geojson",
+   "ids": [
+    "sea"
+   ],
+   "tags": {},
+   "reason": "course chat 2026-10-25: OSM maps Rhode Island Sound only as natural=coastline ways; pipeline/propose_sea.py makes the sea side one water feature, a red penalty area (config red_water_osm; standing default every penalty area red, as Cypress Point's Pacific)"
+  },
+  {
+   "from": "proposed/clubhouses.geojson",
+   "ids": [
+    "w673490788_building",
+    "w673490789_building",
+    "w673490793_building",
+    "w673526885_building",
+    "w673528158_building"
+   ],
+   "tags": {},
+   "reason": "the clubhouse buildings are mapped golf=clubhouse + building=*, which s01 reads as a golf feature, not a building; copied as buildings (audit: 'add building=yes'), originals dropped"
+  },
+  {
+   "from": "proposed/tees_black.geojson",
+   "ids": [
+    "p_tee_black_6",
+    "p_tee_black_15"
+   ],
+   "tags": {},
+   "reason": "developer 2026-10-25 (approved): proposed by the course chat: Black tee pads not in OSM, found by pipeline/propose_tees.py as raised flat pads in the 2022 lidar DEM and seen as mown pads on the NAIP photo: p_tee_black_6, 17 m behind the 6th's line start (436 yd, card 446), p_tee_black_15, the round pad 25 m behind the 15th's (466 yd, card 475). Without them 6 and 15 play 417 and 443 yd"
+  }
+ ],
+ "drop": [
+  {
+   "osm": "w673490788",
+   "reason": "replaced by its copy as a building (proposed/clubhouses.geojson)"
+  },
+  {
+   "osm": "w673490789",
+   "reason": "replaced by its copy as a building (proposed/clubhouses.geojson)"
+  },
+  {
+   "osm": "w673490793",
+   "reason": "replaced by its copy as a building (proposed/clubhouses.geojson)"
+  },
+  {
+   "osm": "w673526885",
+   "reason": "replaced by its copy as a building (proposed/clubhouses.geojson)"
+  },
+  {
+   "osm": "w673528158",
+   "reason": "replaced by its copy as a building (proposed/clubhouses.geojson)"
+  }
+ ]
+}

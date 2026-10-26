@@ -5,6 +5,7 @@
 // 2026-10-19): the recent eagles (kept the moment the ball drops) and the
 // most birdies in a round.
 
+import { listName } from '../save/milestones';
 import { app } from '../app';
 import { Difficulty } from '../data/difficulty';
 import { backupText, LeaderboardEntry, loadBoard, RoundLength } from '../save/store';
@@ -274,7 +275,7 @@ export class LeaderboardScene extends MenuScene {
     const feed = await fetchRecent(50);
     if (!this.isCurrentBuild(g)) return;
     let y = y0 + 40;
-    const courseName = (id: string) => app.courses.find((c) => c.id === id)?.name.replace(/ (golf|country) club$| golf (course|links)$/i, '') ?? id;
+    const courseName = (id: string) => { const c = app.courses.find((x) => x.id === id); return c ? listName(c) : id; };
     if (!feed) {
       this.root.add(txt(this, x0 + pw / 2, y + 30, "friends' rounds show here on the hosted game (the shared board can't be reached)", { origin: [0.5, 0], color: COLORS.dim, maxWidth: pw - 24 }));
       return;
@@ -330,7 +331,7 @@ export class LeaderboardScene extends MenuScene {
     const pw = Math.min(260, W - 16), ph = 34 + list.length * 18 + 22;
     const x0 = Math.round((W - pw) / 2), y0 = Math.round((H - ph) / 2);
     layer.add([dim, new Panel(this, x0, y0, pw, ph, 0.95), txt(this, x0 + pw / 2, y0 + 6, title, { origin: [0.5, 0], maxWidth: pw - 12 })]);
-    const courseName = (id: string) => app.courses.find((c) => c.id === id)?.name.replace(/ (golf|country) club$| golf (course|links)$/i, '') ?? id;
+    const courseName = (id: string) => { const c = app.courses.find((x) => x.id === id); return c ? listName(c) : id; };
     list.forEach((e, i) => {
       const day = new Date(`${e.daily ?? localDay(e.date)}T12:00:00`);
       const when = Number.isNaN(day.getTime()) ? '' : ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'][day.getDay()];
@@ -354,7 +355,7 @@ export class LeaderboardScene extends MenuScene {
       ([['friends', 'friends'], ['device', 'this device']] as const).forEach(([k, lab], i) => this.root.add(new Button(this, x0 + 8 + i * (bw + 2), y, bw, 14, lab, () => { source = k; page = 0; this.rebuild(); }, { color: src === k ? 'orange' : 'grey' })));
       y += 17;
     }
-    const courseName = (id: string) => app.courses.find((c) => c.id === id)?.name.replace(/ (golf|country) club$| golf (course|links)$/i, '') ?? id;
+    const courseName = (id: string) => { const c = app.courses.find((x) => x.id === id); return c ? listName(c) : id; };
     let note = '';
     let empty = ''; // under the column headers, like the other boards
     const lineH = 11;
