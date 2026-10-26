@@ -1,0 +1,30 @@
+{
+ "release": "assorted-lidar-data",
+ "note": "Build inputs not kept in git for Eastward Ho!; `make fetch NAME=eastward_ho` puts them in place (pipeline/fetch_raw.py). In git: raw/overpass.geojson, raw/osm.geojson and raw/dtm_ground_1m.tif (pipeline/intake.py dtm, 7 MB). Here: the lidar clip (2021 central-east Massachusetts, classes 3-5) and the NAIP mosaic (4323.jpg west, 2343.jpg east).",
+ "files": [
+  {
+   "asset": "ma2021_cent_east_J1476268.zip",
+   "sha256": "dc5f0ae3cfc7902d6e910d3bf5629492847d0ed0566484d5b1a7f99019ce10c9",
+   "run": "python3 pipeline/intake.py laz eastward_ho {file} --classes 3,4,5",
+   "outputs": {
+    "raw/laz/eastward_ho_clip.laz": "677c6916b941a8caa4a82ee6e77c9cba73f14b7880f2eeafaa1ebb1ecec937e3"
+   }
+  },
+  {
+   "asset": "4323.jpg",
+   "sha256": "0222ad3c2e83f66b6c75bf6a53c55939ca5fb6dab367949f9d81d258a593784c",
+   "to": "raw/ortho_src/",
+   "outputs": {
+    "raw/ortho_src/4323.jpg": "0222ad3c2e83f66b6c75bf6a53c55939ca5fb6dab367949f9d81d258a593784c"
+   }
+  },
+  {
+   "asset": "2343.jpg",
+   "sha256": "60c1f3ec3a3f40a19dac9654e40376a638373a443682fe5b46625f8ee783b6e8",
+   "run": "python3 pipeline/intake.py ortho eastward_ho data/eastward_ho/raw/ortho_src/4323.jpg 417161 4617830 418285 4619566 {file} 418285 4617830 419409 4619566 --out raw/naip_05m.tif",
+   "outputs": {
+    "raw/naip_05m.tif": "f88b95a591916f109509f74f41bb21be557d3f5567ec0a19964cb7c3076b81ad"
+   }
+  }
+ ]
+}

@@ -1,0 +1,63 @@
+{
+ "id": "strawberry_farms",
+ "course": "Strawberry Farms Golf Club",
+ "place": "Irvine, California",
+ "facts": [
+  {
+   "fact": "The course takes its name from the strawberry fields of the old farm; strawberries are still grown at the top end of the property.",
+   "source": "https://where2golf.com/usa-california-nevada/strawberry-farms-golf-club"
+  },
+  {
+   "fact": "Logo idea from the scouting brief (a strawberry whose cap doubles as the flag).",
+   "source": "docs/scouting/strawberry_farms/README.md (branch scouting/new-courses)"
+  }
+ ],
+ "current": {
+  "subject": "none: a new course (course chat 2026-10-25)",
+  "keep": "",
+  "weaknesses": ""
+ },
+ "concepts": [
+  {
+   "n": 1,
+   "name": "The Strawberry Flag",
+   "rationale": "A ripe strawberry whose leafy cap carries a short pin with a strawberry leaf for its flag.",
+   "references": [
+    "https://where2golf.com/usa-california-nevada/strawberry-farms-golf-club",
+    "docs/scouting/strawberry_farms/README.md (branch scouting/new-courses)"
+   ],
+   "symbolism": "",
+   "interpretation": "",
+   "palette": [
+    {
+     "hex": "#d63a32",
+     "name": "berry red"
+    },
+    {
+     "hex": "#a82a2c",
+     "name": "shade"
+    },
+    {
+     "hex": "#f4d45c",
+     "name": "seed"
+    },
+    {
+     "hex": "#3d8a34",
+     "name": "leaf"
+    },
+    {
+     "hex": "#6ab348",
+     "name": "lit leaf"
+    },
+    {
+     "hex": "#f2f2ec",
+     "name": "pin"
+    }
+   ],
+   "strengths": "One subject, no background, in the house style (developer 2026-10-25: no circular badges).",
+   "tradeoffs": ""
+  }
+ ],
+ "recommendation": "Concept 1.",
+ "chosen": 1
+}

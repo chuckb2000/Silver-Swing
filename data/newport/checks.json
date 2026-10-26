@@ -1,0 +1,24 @@
+{
+ "note": "per-course settings for game/tests/unit/course_play.test.ts (the every-course checks); docs/COURSE_BUILD.md 8.2",
+ "wind_mph": [
+  3,
+  14
+ ],
+ "water": {
+  "penalty": "red"
+ },
+ "points": [
+  {
+   "x": 421.9,
+   "y": 945.4,
+   "ob": true,
+   "why": "Harrison Avenue, between the course's two parts: out of bounds (join_boundary_parts joins the parts for the boundary only)"
+  }
+ ],
+ "yardage": {
+  "max": {
+   "11": 0.09
+  },
+  "why": "11 from the farthest-back mapped tee: 294 yd against the Black's 321 (-8.4 %); no Black box is mapped or visible (accepted by the developer 2026-10-25)"
+ }
+}

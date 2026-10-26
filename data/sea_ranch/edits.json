@@ -1,0 +1,38 @@
+{
+ "add": [
+  {
+   "from": "proposed/sea.geojson",
+   "ids": [
+    "sea"
+   ],
+   "tags": {},
+   "reason": "course chat 2026-10-25: OSM maps the Pacific only as natural=coastline ways; pipeline/propose_sea.py makes the sea side one water feature, a red penalty area (config red_water_osm; standing default, as Cypress Point)"
+  },
+  {
+   "from": "proposed/boundary_developer.geojson",
+   "ids": [
+    "sea_ranch_ob_developer"
+   ],
+   "tags": {},
+   "reason": "developer 2026-10-25: \"this is what out of bounds should look like at sea ranch--the red outline\", drawn on maps/overview_2m.png; traced as the centreline of the red stroke (2 m/px, aligned with the image to the pixel). It replaces OSM's 16 corridors (developer's first call that day: grow the corridors). The 13th's two back tee boxes and the pond w393293619, which the hand-drawn line crossed, are added (+3 m, +2 m). Inside it the unmapped meadow is rough; the five ponds are red penalty areas (red_water_osm)"
+  },
+  {
+   "from": "proposed/pin9.geojson",
+   "ids": [
+    "p_pin_9"
+   ],
+   "tags": {},
+   "reason": "course chat 2026-10-25: the 9th green is 121 m2 as OSM maps it (13 x 13 m). With the centre pin at OSM's pin (node 10220838020) the game found only one more hole location 10 ft from every edge and 15 ft apart (pins.test.ts needs three). The centre pin stands 1.9 m south-east of OSM's instead (chosen by running the game's pins.ts over the green), which leaves room for two more. A hole location, not course geometry"
+  }
+ ],
+ "drop": [
+  {
+   "osm": "r11506411",
+   "reason": "replaced by the developer's out-of-bounds outline (proposed/boundary_developer.geojson)"
+  },
+  {
+   "osm": "n10220838020",
+   "reason": "the 9th's OSM pin, replaced by proposed/pin9.geojson (see add)"
+  }
+ ]
+}

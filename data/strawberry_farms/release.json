@@ -1,0 +1,38 @@
+{
+ "release": "assorted-lidar-data",
+ "note": "Build inputs not kept in git for Strawberry Farms; `make fetch NAME=strawberry_farms` puts them in place (pipeline/fetch_raw.py). In git: raw/overpass.geojson and raw/osm.geojson. Here: the 2023 DEM clip (strawberry.farms.zip, feet), the lidar clip (2011 USGS Orange County, class 1) and the NAIP mosaic (34312.jpg south, 432311.jpg north).",
+ "files": [
+  {
+   "asset": "strawberry.farms.zip",
+   "sha256": "39b4a3cd8d4cf57acb8cb804e864ba0df42c9d19e574aff6edc3d4f987c9db29",
+   "run": "python3 pipeline/intake.py raster strawberry_farms /vsizip/{file}/ca2023_gaps_dem_J1476267tR0_C0.tif --out raw/ca2023_gaps_dem_clip.tif",
+   "outputs": {
+    "raw/ca2023_gaps_dem_clip.tif": "4c0d432ef44b93dfabf53e8d606f4aca6b43431a014cba8d318f9b1bbd3bb58b"
+   }
+  },
+  {
+   "asset": "ca2011_usgs_orange_J1476278.zip",
+   "sha256": "709191849cb8779ddf699ff5b61a3ce4b80a709f6c46038998c0c293f53541f0",
+   "run": "python3 pipeline/intake.py laz strawberry_farms {file} --classes 1",
+   "outputs": {
+    "raw/laz/strawberry_farms_clip.laz": "dc3b566aa491190428b335c556c6dcb3ba477ebd355b3c7fac55b36e9086a4f7"
+   }
+  },
+  {
+   "asset": "34312.jpg",
+   "sha256": "062115572be514e996afe40438ac3262be479412aa2ee3a389393833319e1603",
+   "to": "raw/ortho_src/",
+   "outputs": {
+    "raw/ortho_src/34312.jpg": "062115572be514e996afe40438ac3262be479412aa2ee3a389393833319e1603"
+   }
+  },
+  {
+   "asset": "432311.jpg",
+   "sha256": "fdb160aac1a95965186fe395db3b5501157c7e1a802d482c3946d0adc921d04d",
+   "run": "python3 pipeline/intake.py ortho strawberry_farms data/strawberry_farms/raw/ortho_src/34312.jpg 424972 3721779 426708 3723287 {file} 424972 3723287 426708 3724795 --out raw/naip_05m.tif",
+   "outputs": {
+    "raw/naip_05m.tif": "13d6aa9d3820d166d37dc11b4710d5d39aa00bffb2e71fce9612f32946507e54"
+   }
+  }
+ ]
+}
