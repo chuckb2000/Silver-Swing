@@ -1,0 +1,63 @@
+{
+ "add": [
+  {
+   "from": "proposed/sea.geojson",
+   "ids": [
+    "sea"
+   ],
+   "tags": {},
+   "reason": "course chat 2026-10-25: OSM maps Fishers Island Sound and Block Island Sound only as natural=coastline ways; pipeline/propose_sea.py makes the sea side one water feature, a red penalty area wherever it lies (config red_water_osm; standing default every penalty area red, as Cypress Point's Pacific). It fills the inlet hole 14 plays across and the reedy inlet in front of the 18th tee, which the boundary cuts out"
+  }
+ ],
+ "tags": [
+  {
+   "osm": "w1127323837",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "standing default (COURSE_BUILD 4.1): every penalty area red; OSM maps it golf=water_hazard (yellow)"
+  },
+  {
+   "osm": "w191740585",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "standing default (COURSE_BUILD 4.1): every penalty area red; OSM maps it golf=water_hazard (yellow)"
+  },
+  {
+   "osm": "w191740588",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "standing default (COURSE_BUILD 4.1): every penalty area red; OSM maps it golf=water_hazard (yellow)"
+  },
+  {
+   "osm": "w191740589",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "standing default (COURSE_BUILD 4.1): every penalty area red; OSM maps it golf=water_hazard (yellow)"
+  },
+  {
+   "osm": "w191740597",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "standing default (COURSE_BUILD 4.1): every penalty area red; OSM maps it golf=water_hazard (yellow)"
+  },
+  {
+   "osm": "w602771375",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "standing default (COURSE_BUILD 4.1): every penalty area red; OSM maps it golf=water_hazard (yellow)"
+  },
+  {
+   "osm": "w602771380",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "standing default (COURSE_BUILD 4.1): every penalty area red; OSM maps it golf=water_hazard (yellow)"
+  }
+ ]
+}

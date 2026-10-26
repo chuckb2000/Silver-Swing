@@ -1,0 +1,28 @@
+{
+ "note": "per-course settings for game/tests/unit/course_play.test.ts (the every-course checks); docs/COURSE_BUILD.md 8.2",
+ "wind_mph": [
+  1,
+  9
+ ],
+ "water": {
+  "penalty": "red"
+ },
+ "points": [
+  {
+   "x": 380.7,
+   "y": 518.3,
+   "surface": "green",
+   "ob": false,
+   "why": "the 34 m2 of the 11th green outside OSM's boundary: the boundary is grown around it (proposed/boundary.geojson)"
+  }
+ ],
+ "trees": [
+  {
+   "x": 193.5,
+   "y": 1722.5,
+   "r": 2,
+   "absent": true,
+   "why": "a 49.8 m return over a structure (course chat 2026-10-25, drop_trees)"
+  }
+ ]
+}

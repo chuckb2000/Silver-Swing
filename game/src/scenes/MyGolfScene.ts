@@ -6,7 +6,7 @@
 import { app } from '../app';
 import { STATES } from '../data/registry';
 import type { LeaderboardEntry } from '../save/entry';
-import { milestonesOf, shortName } from '../save/milestones';
+import { milestonesOf, passportName, shortName } from '../save/milestones';
 import { milestoneCourses, myRounds } from '../save/mine';
 import { DEFAULT_NAME } from '../save/names';
 import { playerStats } from '../save/stats';
@@ -164,7 +164,7 @@ export class MyGolfScene extends MenuScene {
         if (!best.has(c.id)) im.setAlpha(0.35);
         art.add(im);
       });
-      this.root.add(txt(this, cx, cy + ch + 2, shortName(c.name).slice(0, 17), { color: best.has(c.id) ? COLORS.white : COLORS.dim }));
+      this.root.add(txt(this, cx, cy + ch + 2, passportName(c), { color: best.has(c.id) ? COLORS.white : COLORS.dim }));
       const b = best.get(c.id);
       if (b) {
         // the stamp: a ring with the best score

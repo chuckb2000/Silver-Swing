@@ -1,0 +1,35 @@
+{
+  "name": "Fishers Island (Raynor's headland in Long Island Sound)",
+  "note": "Course theme palette (<= 32 colours; same keys as pnw.json plus F0-F2). Fishers Island Club, from the developer's photos (release assorted-lidar-data, fishers.1-6) and the NYS orthophoto: bright, saturated fairways and greens; tawny-gold fescue rough with a rust tint beyond a mown band; dark thickets of bayberry and shadbush (woods ground G0-G2); cream-white sand; grey shore boulders; deep blue Sound. Out of bounds (L0-L2) is the island's tawny meadow. Trees in assets-src/trees_fishers_island.py: red cedar, pitch pine, wind-pruned oak, bayberry thickets. Shadows are a 35% black overlay on top of these.",
+  "colors": {
+    "G0": "#1a2e1d", "G1": "#243f25", "G2": "#30522c", "G3": "#3f6a33",
+    "G4": "#4c853a", "G5": "#589a41", "G6": "#66ad49", "G7": "#77be52",
+    "G8": "#8ccd5f", "G9": "#b0df87",
+    "L0": "#6e6a3c", "L1": "#857f48", "L2": "#9b9454",
+    "S0": "#c9b88f", "S1": "#ece3c6", "S2": "#f8f3e3",
+    "W0": "#143e66", "W1": "#1d5283", "W2": "#4a83b5",
+    "K0": "#26272d", "K1": "#55565d", "K2": "#7d7e86", "K3": "#b1ab9c", "K4": "#d8d2c3",
+    "B0": "#4a3424", "B1": "#6f5038", "B2": "#93704f",
+    "R0": "#5b5e66", "WH": "#f6f6f2",
+    "F0": "#7a6b3c", "F1": "#988749", "F2": "#b3a05a"
+  },
+  "lut": {
+    "rough": ["F0", "F1", "F2", "F2"],
+    "rough_band": ["G3", "G4", "G5", "G5"]
+  },
+  "aliases": {
+    "TUFT": "G3"
+  },
+  "minimap": {
+    "ob": "#857f48", "rough": "#988749", "woods": "#243f25", "ob_woods": "#1f3621",
+    "water": "#1d5283", "ob_water": "#1d5283", "bunker": "#ece3c6", "ob_sand": "#ece3c6"
+  },
+  "minimap_trees": {
+    "conifer": ["#183a30", "#2c6447"],
+    "deciduous": ["#2c401b", "#4d6b2c"]
+  },
+  "trees": {
+    "conifer": "trees_fishers_island:conifer",
+    "deciduous": "trees_fishers_island:deciduous"
+  }
+}
