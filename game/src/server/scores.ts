@@ -588,6 +588,7 @@ export async function handleHoleoutsPost(db: D1Like | undefined, body: string): 
     try {
       if (!isHoleOut(raw)) { rejected++; continue; }
       const { owner: rawOwner, ...h } = raw as HoleOut & { owner?: unknown };
+      if (h.lie === 'fringe' && h.club === 'putter') continue; // a putt from the fringe isn't a hole-out (developer, 2026-10-26)
       if (!ownerOf(rawOwner)) { rejected++; continue; }
       // a flight that doesn't read, or doesn't end in the cup, is kept without one (no replay)
       const sim = h.path ? decodePath(h.path) : null;

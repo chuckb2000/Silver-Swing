@@ -45,7 +45,7 @@ export function isHoleOut(e: unknown): e is HoleOut {
     && (x.path === undefined || (typeof x.path === 'string' && x.path.length <= MAX_PATH));
 }
 
-/** Metres of putts holed in a round (the holing stroke of each hole, when it was played on the green). */
+/** Metres of putts holed in a round (the holing stroke of each hole, when it was played on the green or a putter from the fringe). */
 export function puttsMadeM(scores: HoleScore[]): number {
   return Math.round(scores.reduce((a, s) => a + (s.made !== undefined && !s.off ? s.made : 0), 0) * 100) / 100;
 }

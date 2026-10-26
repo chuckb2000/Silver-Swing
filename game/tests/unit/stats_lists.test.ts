@@ -8,7 +8,10 @@ import { D1Like, D1Statement, handleHoleoutsGet, handleHoleoutsPost, handlePost,
 import { decodePath, encodePath } from '../../src/systems/match/path';
 import { HoleScore, HoleTally, totals } from '../../src/systems/rules/scoring';
 import type { SimResult } from '../../src/systems/physics/sim';
-import { loadCourseFiles, robotRound } from './helpers';
+import { loadCourseFiles, meterFor, robotRound, roundCfg } from './helpers';
+import { Round } from '../../src/systems/game/round';
+import { clubById } from '../../src/data/clubs';
+import { SURF } from '../../src/systems/physics/surfaces';
 
 function fakeD1(): D1Like & { raw: DatabaseSync } {
   const db = new DatabaseSync(':memory:');
@@ -54,6 +57,32 @@ describe('tracking the holing stroke', () => {
     const onGreen = holed.filter((s) => !s.off).reduce((a, s) => a + s.made!, 0);
     expect(puttsMadeM(r.scores)).toBeCloseTo(onGreen, 1);
     expect(tracksMade(r.scores)).toBe(true);
+  });
+
+  it('a putt holed from the fringe is a putt made, not a hole-out; a chip from there is a hole-out (developer, 2026-10-26)', () => {
+    const c = loadCourseFiles('langston');
+    const holeAt = (club: string) => {
+      const r = new Round(c, roundCfg(c, [1]));
+      r.startHole(0);
+      // a fringe spot near the first green
+      const t = c.terrain;
+      let at: { x: number; y: number } | null = null;
+      for (let d = 2; d < 30 && !at; d += 0.5) for (let a = 0; a < 6.28 && !at; a += 0.1) {
+        const x = r.pin.x + d * Math.cos(a), y = r.pin.y + d * Math.sin(a);
+        if (t.surface(x, y) === SURF.fringe && !r.onHoleGreen({ x, y })) at = { x, y };
+      }
+      r.ball = { x: at!.x, y: at!.y, teedUp: false };
+      r.refreshLie();
+      expect(r.lie.kind).toBe('fringe');
+      const p = r.plan(club, r.defaultAim(clubById(club), 1), meterFor(0.3, 0, club === 'pt'), 0, club === 'pt' ? 12 * 0.3048 : 0.25);
+      const n = 20, samples = new Float32Array(n * 3);
+      for (let i = 0; i < n; i++) { samples[i * 3] = at!.x + ((r.pin.x - at!.x) * i) / (n - 1); samples[i * 3 + 1] = at!.y + ((r.pin.y - at!.y) * i) / (n - 1); }
+      const sim: SimResult = { samples, n, end: { x: r.pin.x, y: r.pin.y, z: 0 }, restSurface: SURF.green, holed: true, inWater: false, waterCross: null, landing: null, events: [], duration: 1, hitTree: false };
+      expect(r.resolve(p, sim).kind).toBe('holed');
+      return r.finishHole();
+    };
+    expect(holeAt('pt')).toMatchObject({ off: false });
+    expect(holeAt('lw')).toMatchObject({ off: true });
   });
 
   it('distances read in feet close in, yards from 30 yd', () => {
@@ -102,6 +131,9 @@ describe('the shared stats lists', () => {
     expect(decodePath(one.holeout.path!)!.holed).toBe(true);
     const bad = await (await handleHoleoutsGet(db, new URL('https://x.pages.dev/api/holeouts?id=r3-h2'))).json() as { holeout: HoleOut };
     expect(bad.holeout.path).toBeUndefined();
+    // a putt from the fringe (an older copy of the game): not on the list
+    await handleHoleoutsPost(db, JSON.stringify({ ...holeOut('r4-h1', 9, encodePath(chip())), club: 'putter', lie: 'fringe', owner }));
+    expect((db.raw.prepare("SELECT COUNT(*) AS n FROM holeouts WHERE id = 'r4-h1'").get() as { n: number }).n).toBe(0);
     // no player key, or not a hole-out: refused
     const r = await (await handleHoleoutsPost(db, JSON.stringify([holeOut('r9-h1', 5), { ...holeOut('r8-h1', 5), dist: -1, owner }]))).json() as { rejected: number };
     expect(r.rejected).toBe(2);

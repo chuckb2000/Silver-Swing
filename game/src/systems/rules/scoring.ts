@@ -10,7 +10,7 @@ export interface HoleScore {
   gir: boolean;
   /** the holing stroke's length in metres, start to cup (rounds from 2026-10-26; none for a conceded putt) */
   made?: number;
-  /** the holing stroke started off the green: a chip-in, a holed approach, an ace */
+  /** the holing stroke started off the green: a chip-in, a holed approach, an ace (a putt from the fringe doesn't) */
   off?: boolean;
 }
 

@@ -57,7 +57,10 @@ function readings(name: string): { words: string[][]; joined: string[] } {
 const squash = (w: string) => w.replace(/(.)\1+/g, '$1');
 // (at least 4 letters: "nigg" -> "nig" and "gook" -> "gok" refused Nigel, Knight, Gokul)
 const strongSquashed = STRONG.map(squash).filter((w) => w.length >= 4);
-const mildSet = new Set([...MILD, ...MILD.map(squash).filter((w) => w.length >= 3)]);
+// ... nor when the squashed form is an ordinary name or word ("boob" -> "bob", "coon" -> "con",
+// "butt" -> "but"; developer, 2026-10-26: Bob couldn't go on the boards). The words themselves stay out.
+const SQUASH_SAFE = new Set(['bob', 'bobs', 'con', 'cons', 'but']);
+const mildSet = new Set([...MILD, ...MILD.map(squash).filter((w) => w.length >= 3 && !SQUASH_SAFE.has(w))]);
 
 /** Is this name allowed on the leaderboard? */
 export function nameAllowed(name: string): boolean {
