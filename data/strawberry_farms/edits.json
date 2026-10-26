@@ -1,0 +1,46 @@
+{
+ "drop": [
+  {
+   "osm": "r19559718",
+   "reason": "Shady Canyon Golf Club, the neighbouring course to the south: its boundary would become a second out-of-bounds-free area (intake: 2 leisure=golf_course)"
+  },
+  {
+   "osm": "w1085621497",
+   "reason": "Shady Canyon's hole 7 line (outside Strawberry Farms' boundary)"
+  },
+  {
+   "osm": "w1085621506",
+   "reason": "Shady Canyon's hole 8 line (outside Strawberry Farms' boundary)"
+  },
+  {
+   "osm": "w1085621513",
+   "reason": "Shady Canyon's hole 9 line (outside Strawberry Farms' boundary)"
+  },
+  {
+   "osm": "w67384478",
+   "reason": "replaced by its copy as a building (proposed/clubhouses.geojson)"
+  },
+  {
+   "osm": "w1492418667",
+   "reason": "replaced by its copy as a green (proposed/green10.geojson)"
+  }
+ ],
+ "add": [
+  {
+   "from": "proposed/clubhouses.geojson",
+   "ids": [
+    "w67384478_building"
+   ],
+   "tags": {},
+   "reason": "the clubhouse buildings are mapped golf=clubhouse + building=*, which s01 reads as a golf feature, not a building; copied as buildings (audit: 'add building=yes'), originals dropped"
+  },
+  {
+   "from": "proposed/green10.geojson",
+   "ids": [
+    "w1492418667_green"
+   ],
+   "tags": {},
+   "reason": "the 10th green is mapped golf=tee in OSM (way 1492418667): the 10th's line and its pin (node 9382718311, ref 10) end on it and the NAIP photo shows a green with bunkers; copied as a green, original dropped"
+  }
+ ]
+}
