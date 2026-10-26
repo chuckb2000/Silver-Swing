@@ -195,7 +195,7 @@
     }
    ],
    "default_tee": "White",
-   "scorecard_source": "Yardages: the club's Chief Egan map (release silvies-data chief.egan.webp) and GolfPass (the same 875 yd). Par: the club map (holes 3 and 6 par 4: par 29; GolfPass lists every hole par 3, 27; same rule as Craddock, developer 2026-10-25). Handicaps: GolfPass. No rating."
+   "scorecard_source": "Yardages: the club's Chief Egan map (release silvies-data chief.egan.webp) and GolfPass (the same 875 yd). Par: every hole par 3, par 27 (developer 2026-10-26: \"Chief Egan is a par 3 course\"; GolfPass agrees; the club map's par 4s on holes 3 and 6 were used until then). Handicaps: GolfPass. No rating."
   }
  ],
  "notes": "Three layouts in one world (developer 2026-10-25): Craddock (the OSM hole lines), Hankins (Craddock's fairways played the other way, 9 greens of its own) and Chief Egan (the 9-hole short course round the east pond). McVeigh's Gauntlet (7 holes on the south edge, partly outside the boundary) is not built. Tees: the back set on the club maps (developer 2026-10-25, overriding the 6,300 yd default): Craddock Challenge 7,170, Hankins White 7,075, Chief Egan White 875. Standing defaults otherwise:, all water red, OB = the OSM boundary grown 30 m round Craddock play (approved 2026-10-25), the practice strip by the lodge stays in play (developer: no need to make it OB), wind 1-7 mph, theme silvies (new).",

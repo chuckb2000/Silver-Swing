@@ -113,13 +113,14 @@ White 71.8/120. Others (in `scorecard_hankins.csv`, not built): Goat 8,000, Pink
 (its hole 8, 465, is longer than White's 410), White/Grey 6,575, Grey 6,280 (68.1/115),
 Grey/Black 5,705, Black 5,335 (63.7/102).
 
-**Chief Egan** (the club's map and GolfPass, the same 875 yd). Par from the map: holes 3
-and 6 par 4, par 29; GolfPass lists every hole par 3. Handicaps from GolfPass. One set, no
+**Chief Egan** (the club's map and GolfPass, the same 875 yd). Every hole par 3, par 27
+(developer, 2026-10-26: "Chief Egan is a par 3 course"; GolfPass agrees). It was built on
+2026-10-25 with the club map's par 4s on holes 3 and 6 (par 29). Handicaps from GolfPass. One set, no
 rating.
 
 | Hole | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | Total |
 |---|---|---|---|---|---|---|---|---|---|---|
-| Par | 3 | 3 | 4 | 3 | 3 | 4 | 3 | 3 | 3 | 29 |
+| Par | 3 | 3 | 3 | 3 | 3 | 3 | 3 | 3 | 3 | 27 |
 | HCP | 7 | 3 | 4 | 9 | 1 | 8 | 2 | 5 | 6 | |
 | White | 70 | 100 | 95 | 120 | 110 | 90 | 105 | 85 | 100 | 875 |
 | Built | 69 | 98 | 93 | 118 | 110 | 90 | 102 | 90 | 97 | 867 |
@@ -147,6 +148,9 @@ Craddock Challenge, Hankins White, Chief Egan White.
 -   The band by the Craddock 9th green and 14th tee: "should just be shrubs".
 -   Sagebrush: bushes only, no penal lie. Canopy: requested the NOAA lidar.
 -   Chief Egan 6: traced the green ("it's just a small green!").
+-   Chief Egan pars (2026-10-26): "Chief Egan is a par 3 course there shouldn't be par 4s":
+    all nine par 3, par 27, and the change applied to scores already shot there (a request
+    for the design chat: the stored rounds and eagles, below).
 -   Standing defaults otherwise: all water red, trees from lidar (fairway trees and tee-shot
     blockers removed), wind 1-7 mph, card holes the course chat's pick.
 
@@ -197,13 +201,36 @@ Details in `data/silvies/validation_report.md`.
 1.  Add `silvies_craddock`, `silvies_hankins` and `silvies_chief_egan` to the daily
     rotation from the day after the merge (`game/src/data/dailyRoster.ts`, e.g.
     `silvies_craddock: '2026-10-26'`). Until then `player.test.ts` "the real rotation"
-    fails: it wants every listed course in the roster. Chief Egan is a par-29 nine (875
+    fails: it wants every listed course in the roster. Chief Egan is a par-27 nine (875
     yd), like Shorty's and the Preserve, which are in the roster.
 2.  `assets-src/course_cards.py` draws trees.json `c: 3` bushes from the generic
     flowering `shrubs.png`, not the theme's `shrubs_<theme>` sheet, so the cards show
     sagebrush as coloured dots. Smallest fix: pick the sheet as the game does
     (`shrubs_<theme>` when it exists).
 3.  Document `gorse.extra_areas` in COURSE_BUILD.md 3.3 (the `gorse` key's table).
+4.  **Re-score the rounds already shot at Chief Egan** (developer, 2026-10-26: apply the
+    par-3 change "to scores that have already been shot there"). `silvies_chief_egan`
+    went live with PR #71 (merged 2026-10-25 20:10 UTC) with holes 3 and 6 par 4 (par
+    29); they are par 3 now (par 27). Gross scores don't change, so the boards' order
+    (by gross) doesn't either; what changes is each hole's par, `toPar`, the birdie count
+    and the eagles. Course chats can't edit the server or the game, and the course chat
+    couldn't reach the live API to see whether any rounds exist. What it needs:
+    -   **D1 `rounds`** where `course = 'silvies_chief_egan'`: in `data`, set `par: 3`
+        on the scores of course holes 3 and 6 (scorecard slots 3 and 6, plus 12 and 15
+        for "18 twice around"); recompute `toPar` (gross minus the new par total) and the
+        `birdies` column (`birdiesIn`). A 3 there was a birdie and is now a par.
+    -   **D1 `eagles`** where `course = 'silvies_chief_egan'` and `hole IN (3, 6)` (the
+        course hole): set `par = 3`, then delete the rows that are no longer eagles
+        (`strokes > par - 2`, i.e. a 2, now a birdie). An ace stays (now an eagle, not an
+        albatross).
+    -   **On each device** (IndexedDB `local-golf`: the local board, personal bests, "my
+        golf", milestones, and a saved round in progress at Chief Egan, whose finished
+        holes keep the old par): the same rewrite once on load.
+    -   Not affected: handicaps (Chief Egan has no rating) and matches (no par stored).
+        Casual rounds with the double-par cap keep their strokes as played.
+    -   Smallest general form: a list of card corrections (`course`, course hole, new par,
+        since) applied once by the server (a schema bump in `ensureSchema`) and by the
+        client on load, so a later card fix on any course reuses it.
 
 ## Lessons
 

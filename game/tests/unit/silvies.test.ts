@@ -11,7 +11,7 @@ import { loadCourseFiles, registry } from './helpers';
 const LAYOUTS = [
   { id: 'silvies_craddock', name: 'Silvies Valley Craddock', holes: 18, par: 71, tee: 'Challenge', rating: 0, slope: 0 },
   { id: 'silvies_hankins', name: 'Silvies Valley Hankins', holes: 18, par: 72, tee: 'White', rating: 71.8, slope: 120 },
-  { id: 'silvies_chief_egan', name: 'Silvies Valley Chief Egan', holes: 9, par: 29, tee: 'White', rating: 0, slope: 0 },
+  { id: 'silvies_chief_egan', name: 'Silvies Valley Chief Egan', holes: 9, par: 27, tee: 'White', rating: 0, slope: 0 },
 ];
 
 for (const L of LAYOUTS) {
