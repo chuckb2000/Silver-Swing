@@ -1,0 +1,30 @@
+{
+ "release": "assorted-lidar-data",
+ "note": "Build inputs not kept in git for Fishers Island; `make fetch NAME=fishers_island` puts them in place (pipeline/fetch_raw.py). In git: raw/overpass.geojson, raw/osm.geojson and raw/dtm_ground_1m.tif (bare earth from the lidar's ground points, pipeline/intake.py dtm, 5 MB). Here: the lidar clip (fishers.zip, NOAA 2014 USGS CMGP Sandy) and the New York State ortho (two JPEGs placed by their request boxes in EPSG:26919: 12345.jpg west, 1234.jpg east).",
+ "files": [
+  {
+   "asset": "fishers.zip",
+   "sha256": "6b1d5e744a7e92050d4f48c8c157bd024e770a9e93aaf93f29390c74692eb48d",
+   "run": "python3 pipeline/intake.py laz fishers_island {file} --classes 1",
+   "outputs": {
+    "raw/laz/fishers_island_clip.laz": "0c9e11398eff07490a75a7a5936a4fe9b99763eca049796bf3e781070835fc2e"
+   }
+  },
+  {
+   "asset": "12345.jpg",
+   "sha256": "87715aef10e7d18b104272b6ac34e5a1c9821c788389ce1f938d32e2e49d1eac",
+   "to": "raw/ortho_src/",
+   "outputs": {
+    "raw/ortho_src/12345.jpg": "87715aef10e7d18b104272b6ac34e5a1c9821c788389ce1f938d32e2e49d1eac"
+   }
+  },
+  {
+   "asset": "1234.jpg",
+   "sha256": "147f6b568a9da9f43eaa908344a4533d9149e0c71db9842f9a9348b4b980e5a7",
+   "run": "python3 pipeline/intake.py ortho fishers_island data/fishers_island/raw/ortho_src/12345.jpg 252623 4573562 253747 4575554 {file} 253747 4573562 254871 4575554 --epsg 26919 --out raw/nys_ortho_05m.tif",
+   "outputs": {
+    "raw/nys_ortho_05m.tif": "acfb62f552a80f6f48cad8cee2dd022d3f41825bb021a7e4727d55e704a3f77a"
+   }
+  }
+ ]
+}

@@ -1,0 +1,84 @@
+{
+ "id": "newport",
+ "name": "Newport Country Club",
+ "location": "Newport, Newport County, Rhode Island",
+ "state": "RI",
+ "architects": "William F. Davis (1894-99); A. W. Tillinghast (1921-23 remodel); Ron Forse (restoration from 1995)",
+ "theme": "newport",
+ "epsg": 32619,
+ "osm_sources": [
+  "raw/overpass.geojson"
+ ],
+ "boundary_name": "Newport Country Club",
+ "dtm": {
+  "path": "raw/ri2022_dem_clip.tif",
+  "units": "ft",
+  "source": "2022 USGS Lidar DEM: RI Statewide (RI_StatewideLidar_2022_D22, QL1; NOAA Data Access Viewer, job J1476269), 1 ft pixels, NAD83(2011) / Rhode Island (EPSG:6568, US ft), NAVD88 US ft; ordered by the developer 2026-10-25 (GitHub release assorted-lidar-data, newport.cc.zip), clipped to the world + 100 m with pipeline/intake.py raster"
+ },
+ "laz": {
+  "paths": [
+   "raw/laz/*.laz"
+  ],
+  "classes": [
+   1
+  ],
+  "units": "m",
+  "source": "2022 USGS Lidar: RI Statewide (NOAA Data Access Viewer dataset 9981, job J1476270), flown 29 March 2022 (GPS times), leaf-off; no vegetation classes (trees from class 1, roofs dropped by roof_last_share as at Wannamoisett); NAD83(2011) / Rhode Island (EPSG:6567, m), NAVD88 m; GitHub release assorted-lidar-data, ri2022_statewide_J1476270.zip, clipped to the world with pipeline/intake.py laz",
+  "label": "2022 USGS RI statewide lidar, leaf-off",
+  "leaf_off": true
+ },
+ "ortho": {
+  "path": "raw/naip_05m.tif",
+  "source": "USDA NAIP via the USGS National Map ImageServer, exported by the developer 2026-10-25 as two JPEGs at 0.5 m in EPSG:32619 (release assorted-lidar-data: 123.jpg south, 1212.jpg north), placed by their request boxes and mosaicked by pipeline/intake.py ortho; flight year not stated"
+ },
+ "world": {
+  "x0": 303307,
+  "y0": 4591424,
+  "width": 1280,
+  "height": 2048,
+  "note": "OSM course boundary (relation 13922079) bbox 898 x 1,790 m in UTM 19N + scenery, whole 256 m chunks, centred: 1,280 m east-west (191 m each side), 2,048 m north-south (the 2,048 m limit: 129 m south and north)"
+ },
+ "roof_last_share": 0.85,
+ "tee_sets": [
+  {
+   "name": "Black",
+   "playable": true,
+   "rating": 75.5,
+   "slope": 135,
+   "total_yd": 7109
+  }
+ ],
+ "default_tee": "Black",
+ "scorecard_source": "GolfPass (golfpass.com/courses/12085-newport-country-club/scorecard-and-layout), read 2026-10-24 by the scouting chat: seven sets per hole, par 72, men's and women's stroke index (column handicap_w), rows add up (its tee table's lengths differ slightly). Wikipedia's per-hole table differs; unverified, no club card online. Played from the tips, Black 7,109 yd (developer, 2026-10-25: \"for all of these courses lets play from the tips\"); rating GolfPass tee table, Black 75.5/135 (the table prints 7,083 yd and par 70; the per-hole card adds to 7,109 at par 72, used here). The other sets are in scorecard.csv but not built.",
+ "wind_mph": {
+  "minMph": 3,
+  "maxMph": 14
+ },
+ "attribution": [
+  "Map data © OpenStreetMap contributors (ODbL)",
+  "Elevation and trees: U.S. Geological Survey 3D Elevation Program (2022 USGS Lidar: RI Statewide), via NOAA Digital Coast",
+  "Scorecard: GolfPass (unverified)"
+ ],
+ "notes": "Course chat, 2026-10-25: standing defaults (every penalty area red, OSM boundary as OB, trees from lidar). Played from the tips: Black (developer, 2026-10-25: \"for all of these courses lets play from the tips\"). Wind 3-14 mph (open coast). Par 72 as on the card (championships play 70). Theme newport: the course's own, from the developer's photos (developer: a new theme for each course).",
+ "penalty_default": "red",
+ "driving_range_is_ob": true,
+ "trees_off_fairways_m": 2,
+ "join_boundary_parts": {
+  "max_gap_m": 16,
+  "note": "the boundary is mapped as two parts (45.1 and 19.4 ha) on either side of Harrison Avenue, 12 m apart; holes 2-8 are west of the road. Joined so both are in play; the road between them stays out of bounds (brief: 'if OSM's boundary leaves Harrison Avenue out, the road is OB between the two parts')"
+ },
+ "red_water_osm": [
+  "sea"
+ ],
+ "red_water_note": "the sea (proposed/sea.geojson, from OSM's coastline beyond Ocean Drive): a red penalty area (standing default)",
+ "rough_band_m": 3.5,
+ "rough_band_note": "a mown band of rough along the fairways, then the wispy native fescue the photos show (brief: as at Highland Links)",
+ "green_tilt": [
+  {
+   "hole": 11,
+   "max_tilt": 0.02,
+   "bumps": 0,
+   "note": "the 11th's small green (258 m2): tilt capped at 2 % and no random undulations, so the game finds three pin positions on it under 3 % (pins.test.ts; COURSE_LESSONS 4)"
+  }
+ ]
+}

@@ -1,0 +1,55 @@
+{
+ "id": "george_wright",
+ "course": "George Wright Golf Course",
+ "place": "Hyde Park, Boston, Massachusetts",
+ "facts": [
+  {
+   "fact": "The course is named for George Wright, shortstop of the 1869 Cincinnati Red Stockings and a Hall of Famer, who with three friends cut nine holes in Franklin Park in December 1890.",
+   "source": "https://en.wikipedia.org/wiki/George_Wright_(shortstop)"
+  },
+  {
+   "fact": "Donald Ross course built by the WPA, opened 1938, owned by the City of Boston.",
+   "source": "https://en.wikipedia.org/wiki/George_Wright_Golf_Course"
+  }
+ ],
+ "current": {
+  "subject": "none: a new course (course chat 2026-10-25)",
+  "keep": "",
+  "weaknesses": ""
+ },
+ "concepts": [
+  {
+   "n": 1,
+   "name": "The Stitched Ball",
+   "rationale": "A golf ball sewn with a baseball's red stitching, sitting on a scarlet oak leaf.",
+   "references": [
+    "https://en.wikipedia.org/wiki/George_Wright_(shortstop)",
+    "https://en.wikipedia.org/wiki/George_Wright_Golf_Course"
+   ],
+   "symbolism": "",
+   "interpretation": "",
+   "palette": [
+    {
+     "hex": "#f5f4ee",
+     "name": "ball"
+    },
+    {
+     "hex": "#c8202a",
+     "name": "stitching"
+    },
+    {
+     "hex": "#c2461f",
+     "name": "oak leaf"
+    },
+    {
+     "hex": "#e0712f",
+     "name": "lit leaf"
+    }
+   ],
+   "strengths": "One subject, no background, in the house style (developer 2026-10-25: no circular badges).",
+   "tradeoffs": ""
+  }
+ ],
+ "recommendation": "Concept 1.",
+ "chosen": 1
+}

@@ -1,0 +1,32 @@
+{
+ "note": "per-course settings for game/tests/unit/course_play.test.ts (the every-course checks); docs/COURSE_BUILD.md 8.2",
+ "wind_mph": [
+  2,
+  12
+ ],
+ "water": {
+  "penalty": "red"
+ },
+ "points": [
+  {
+   "x": 2038.5,
+   "y": 1254,
+   "surface": "water",
+   "ob": false,
+   "why": "Pleasant Bay: a red penalty area (red_water_osm), not out of bounds"
+  },
+  {
+   "x": 1155,
+   "y": 608,
+   "surface": "water",
+   "ob": false,
+   "why": "Crows Pond: a red penalty area (red_water_osm), not out of bounds"
+  }
+ ],
+ "yardage": {
+  "max": {
+   "6": 0.11
+  },
+  "why": "6 from the farthest-back mapped tee: 454 yd against the Championship's 510 (-10.9 %), the card's Black 455 (accepted by the developer 2026-10-25)"
+ }
+}

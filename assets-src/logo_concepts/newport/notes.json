@@ -1,0 +1,59 @@
+{
+ "id": "newport",
+ "course": "Newport Country Club",
+ "place": "Newport, Rhode Island",
+ "facts": [
+  {
+   "fact": "Newport held the first U.S. Amateur and the first U.S. Open, October 1895.",
+   "source": "docs/scouting/newport/README.md (branch scouting/new-courses)"
+  },
+  {
+   "fact": "Logo idea from the scouting brief (a hickory club and a gutty ball over waves).",
+   "source": "docs/scouting/newport/README.md"
+  }
+ ],
+ "current": {
+  "subject": "none: a new course (course chat 2026-10-25)",
+  "keep": "",
+  "weaknesses": ""
+ },
+ "concepts": [
+  {
+   "n": 1,
+   "name": "Hickory and Gutty, 1895",
+   "rationale": "A hickory-shafted, long-nosed wooden club and a hand-hammered gutta-percha ball over a run of Atlantic waves.",
+   "references": [
+    "docs/scouting/newport/README.md (branch scouting/new-courses)",
+    "docs/scouting/newport/README.md"
+   ],
+   "symbolism": "",
+   "interpretation": "",
+   "palette": [
+    {
+     "hex": "#b07c42",
+     "name": "hickory"
+    },
+    {
+     "hex": "#8a5228",
+     "name": "club head"
+    },
+    {
+     "hex": "#e8e2cf",
+     "name": "gutty"
+    },
+    {
+     "hex": "#2a5878",
+     "name": "Atlantic"
+    },
+    {
+     "hex": "#e6f0f6",
+     "name": "foam"
+    }
+   ],
+   "strengths": "One subject, no background, in the house style (developer 2026-10-25: no circular badges).",
+   "tradeoffs": ""
+  }
+ ],
+ "recommendation": "Concept 1.",
+ "chosen": 1
+}

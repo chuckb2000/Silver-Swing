@@ -1,0 +1,98 @@
+{
+ "tags": [
+  {
+   "osm": "w671580013",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "standing default (COURSE_BUILD 4.1): every penalty area red; OSM maps it golf=water_hazard (yellow)"
+  },
+  {
+   "osm": "w671580018",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "standing default (COURSE_BUILD 4.1): every penalty area red; OSM maps it golf=water_hazard (yellow)"
+  },
+  {
+   "osm": "w671580021",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "standing default (COURSE_BUILD 4.1): every penalty area red; OSM maps it golf=water_hazard (yellow)"
+  },
+  {
+   "osm": "w671580024",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "standing default (COURSE_BUILD 4.1): every penalty area red; OSM maps it golf=water_hazard (yellow)"
+  },
+  {
+   "osm": "w671580026",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "standing default (COURSE_BUILD 4.1): every penalty area red; OSM maps it golf=water_hazard (yellow)"
+  },
+  {
+   "osm": "w671580028",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "standing default (COURSE_BUILD 4.1): every penalty area red; OSM maps it golf=water_hazard (yellow)"
+  },
+  {
+   "osm": "w671580030",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "standing default (COURSE_BUILD 4.1): every penalty area red; OSM maps it golf=water_hazard (yellow)"
+  },
+  {
+   "osm": "w671594679",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "standing default (COURSE_BUILD 4.1): every penalty area red; OSM maps it golf=water_hazard (yellow)"
+  },
+  {
+   "osm": "w671594680",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "standing default (COURSE_BUILD 4.1): every penalty area red; OSM maps it golf=water_hazard (yellow)"
+  },
+  {
+   "osm": "w671594681",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "standing default (COURSE_BUILD 4.1): every penalty area red; OSM maps it golf=water_hazard (yellow)"
+  },
+  {
+   "osm": "w671003489",
+   "set": {
+    "hole": "8",
+    "tee_set": "Blue"
+   },
+   "reason": "the only tee box at the start of hole 8's line (241 m2, along the line); its centre measures 150 yd against the card's 167, more than 8 % short, so s06 didn't assign it. Tagged so s06 places the Blue tee within it (the photo shows no other box behind it)"
+  }
+ ],
+ "add": [
+  {
+   "from": "proposed/boundary.geojson",
+   "ids": [
+    "w29830747_grown"
+   ],
+   "tags": {},
+   "reason": "the 11th green (w671102159) crosses the OSM boundary by 34 m2, which would be out of bounds; the boundary is grown to take in the green plus 3 m (COURSE_LESSONS: join the feature to the boundary)"
+  }
+ ],
+ "drop": [
+  {
+   "osm": "w29830747",
+   "reason": "replaced by proposed/boundary.geojson (grown around the 11th green)"
+  }
+ ]
+}

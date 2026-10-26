@@ -1,0 +1,14 @@
+{
+ "release": "assorted-lidar-data",
+ "note": "Build inputs not kept in git for The Sea Ranch; `make fetch NAME=sea_ranch` puts them in place (pipeline/fetch_raw.py). In git: raw/overpass.geojson, raw/osm.geojson and raw/usgs_3dep_1m.tif (the 3DEP DEM export, 9 MB). Here: the lidar clip (2013 Sonoma County, classes 2 and 5).",
+ "files": [
+  {
+   "asset": "2013_Sonoma_County_J1476309.zip",
+   "sha256": "8afb9440d48aa4f32191886ac28b57ed5fa03a0b1027e170336c8c8a41f23e99",
+   "run": "python3 pipeline/intake.py laz sea_ranch {file}",
+   "outputs": {
+    "raw/laz/sea_ranch_clip.laz": "e83dbfecc3b3c8a68a6de5c3ffd4d2bc0000b84eec3f337cddafc24bcee2b578"
+   }
+  }
+ ]
+}

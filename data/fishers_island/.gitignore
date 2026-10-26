@@ -1,0 +1,3 @@
+# build inputs kept in the GitHub release assorted-lidar-data; `make fetch NAME=fishers_island` puts them here (release.json)
+raw/nys_ortho_05m.tif
+raw/ortho_src/

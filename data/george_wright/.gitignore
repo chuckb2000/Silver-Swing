@@ -1,0 +1,2 @@
+# build inputs kept in the GitHub release assorted-lidar-data; `make fetch NAME=george_wright` puts them here (release.json)
+raw/naip_05m.tif

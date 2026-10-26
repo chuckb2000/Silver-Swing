@@ -1,0 +1,59 @@
+{
+ "id": "eastward_ho",
+ "course": "Eastward Ho! Country Club",
+ "place": "Chatham, Massachusetts",
+ "facts": [
+  {
+   "fact": "The course is on a peninsula between Pleasant Bay and Crows Pond in Chatham, on Cape Cod.",
+   "source": "docs/scouting/eastward_ho/README.md (branch scouting/new-courses)"
+  },
+  {
+   "fact": "The quahog (hard clam) of Cape Cod's bays, whose purple shell gave wampum; chosen for the Cape setting (interpretation; the scouting's seal idea repeats Bandon Dunes' seal).",
+   "source": "course chat 2026-10-25"
+  }
+ ],
+ "current": {
+  "subject": "none: a new course (course chat 2026-10-25)",
+  "keep": "",
+  "weaknesses": ""
+ },
+ "concepts": [
+  {
+   "n": 1,
+   "name": "The Quahog",
+   "rationale": "A Cape Cod quahog shell, its chalky grey growth bands and the wampum purple of its lip, on a flat of pale sand.",
+   "references": [
+    "docs/scouting/eastward_ho/README.md (branch scouting/new-courses)",
+    "course chat 2026-10-25"
+   ],
+   "symbolism": "",
+   "interpretation": "",
+   "palette": [
+    {
+     "hex": "#cfc9bc",
+     "name": "shell"
+    },
+    {
+     "hex": "#a8a296",
+     "name": "shade"
+    },
+    {
+     "hex": "#7d776e",
+     "name": "growth band"
+    },
+    {
+     "hex": "#6b3f7a",
+     "name": "wampum purple"
+    },
+    {
+     "hex": "#e9dfc3",
+     "name": "Cape sand"
+    }
+   ],
+   "strengths": "One subject, no background, in the house style (developer 2026-10-25: no circular badges).",
+   "tradeoffs": ""
+  }
+ ],
+ "recommendation": "Concept 1.",
+ "chosen": 1
+}

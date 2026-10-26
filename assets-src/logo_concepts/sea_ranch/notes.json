@@ -1,0 +1,59 @@
+{
+ "id": "sea_ranch",
+ "course": "The Sea Ranch Golf Links",
+ "place": "The Sea Ranch, California",
+ "facts": [
+  {
+   "fact": "The links run through the Monterey cypress hedgerows of The Sea Ranch on the Sonoma coast (the developer's photos, release assorted-lidar-data).",
+   "source": "release assorted-lidar-data (sea-ranch-tee-shot.jpg, sea.ranch.34.jpg)"
+  },
+  {
+   "fact": "The community's own mark (a ram's head) is avoided (interpretation).",
+   "source": "course chat 2026-10-25"
+  }
+ ],
+ "current": {
+  "subject": "none: a new course (course chat 2026-10-25)",
+  "keep": "",
+  "weaknesses": ""
+ },
+ "concepts": [
+  {
+   "n": 1,
+   "name": "The Windbreak Cypress",
+   "rationale": "A wind-swept Monterey cypress on the headland meadow, its flat crown streaming inland, the cliff edge to the sea.",
+   "references": [
+    "release assorted-lidar-data (sea-ranch-tee-shot.jpg, sea.ranch.34.jpg)",
+    "course chat 2026-10-25"
+   ],
+   "symbolism": "",
+   "interpretation": "",
+   "palette": [
+    {
+     "hex": "#1e4d32",
+     "name": "cypress"
+    },
+    {
+     "hex": "#2f6a43",
+     "name": "lit crown"
+    },
+    {
+     "hex": "#8a7e74",
+     "name": "bark"
+    },
+    {
+     "hex": "#a8a35f",
+     "name": "meadow"
+    },
+    {
+     "hex": "#5a5550",
+     "name": "cliff"
+    }
+   ],
+   "strengths": "One subject, no background, in the house style (developer 2026-10-25: no circular badges).",
+   "tradeoffs": ""
+  }
+ ],
+ "recommendation": "Concept 1.",
+ "chosen": 1
+}

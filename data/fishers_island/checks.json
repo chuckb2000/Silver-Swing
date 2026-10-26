@@ -1,0 +1,35 @@
+{
+ "note": "per-course settings for game/tests/unit/course_play.test.ts (the every-course checks); docs/COURSE_BUILD.md 8.2",
+ "wind_mph": [
+  3,
+  14
+ ],
+ "points": [
+  {
+   "x": 424,
+   "y": 716,
+   "surface": "water",
+   "why": "the reedy inlet in front of the 18th tee is the sea, a red penalty area (pipeline/propose_sea.py), not out of bounds",
+   "ob": false
+  },
+  {
+   "x": 1060,
+   "y": 1080,
+   "surface": "water",
+   "why": "the inlet hole 14 plays across, cut out of the OSM boundary: the sea, not out of bounds",
+   "ob": false
+  }
+ ],
+ "trees": [
+  {
+   "x": 1018.5,
+   "y": 1064.5,
+   "r": 2,
+   "absent": true,
+   "why": "a 48 m stray lidar return in the inlet (course chat 2026-10-25, drop_trees)"
+  }
+ ],
+ "water": {
+  "penalty": "red"
+ }
+}

@@ -1,0 +1,26 @@
+{
+ "note": "per-course settings for game/tests/unit/course_play.test.ts (the every-course checks); docs/COURSE_BUILD.md 8.2",
+ "wind_mph": [
+  3,
+  14
+ ],
+ "water": {
+  "penalty": "red"
+ },
+ "points": [
+  {
+   "x": 623,
+   "y": 1013,
+   "surface": "water",
+   "ob": false,
+   "why": "the pond the 6th plays across (w837523067): outside OSM's corridors, taken inside the boundary as a red penalty area (proposed/boundary.geojson)"
+  },
+  {
+   "x": 963,
+   "y": 1164,
+   "surface": "water",
+   "ob": false,
+   "why": "the pond by the 10th (w837523069), as above"
+  }
+ ]
+}
