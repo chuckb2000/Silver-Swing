@@ -43,14 +43,15 @@ once the tee is placed inside its box (6,536 yd built). Test counts are in the p
 
 ## Scorecard
 
-Stymie's card (stymie.golf, USGA course ratings), read 2026-10-25, gives Black and Blue rows.
-OpenGolfAPI gives pars, stroke index and an unlabelled row equal to Stymie's Blue. The Fried
+Stymie's card (stymie.golf, USGA course ratings), read 2026-10-25, gives Black and Blue rows and
+par 70, with 8 and 18 as par 4s. OpenGolfAPI gives the stroke index and an unlabelled row equal
+to Stymie's Blue; its pars add to 72, with 8 and 18 as par 5s. The Fried
 Egg's list is the `back` column. All three are unverified; the club is private and publishes no
 card.
 
 | Hole | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | Out | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | In | Total |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| Par | 4 | 3 | 4 | 4 | 3 | 5 | 4 | 5 | 4 | 36 | 4 | 3 | 4 | 4 | 4 | 5 | 3 | 4 | 5 | 36 | 72 |
+| Par | 4 | 3 | 4 | 4 | 3 | 5 | 4 | 4 | 4 | 35 | 4 | 3 | 4 | 4 | 4 | 5 | 3 | 4 | 4 | 35 | 70 |
 | HCP | 8 | 14 | 10 | 2 | 6 | 12 | 4 | 18 | 16 | | 3 | 13 | 11 | 5 | 1 | 9 | 17 | 7 | 15 | | |
 | Black | 398 | 183 | 325 | 417 | 225 | 551 | 374 | 463 | 361 | 3297 | 396 | 163 | 383 | 397 | 418 | 538 | 145 | 417 | 443 | 3300 | 6597 |
 | Blue | 391 | 181 | 325 | 400 | 205 | 517 | 365 | 463 | 360 | 3207 | 396 | 163 | 383 | 396 | 418 | 537 | 144 | 417 | 442 | 3296 | 6503 |
@@ -67,10 +68,12 @@ Black, the tips (developer, 2026-10-25: "for all of these courses lets play from
 ## The developer's calls (2026-10-25)
 
 1.  **Play from the tips:** Black.
-2.  **New theme** for each course, from the developer's photos: `fishers_island`.
-3.  **Logo:** a house-style SVG concept, not a round badge (the developer turned down the first
+2.  **Par 70** ("let's make fishers a par 70"), as Stymie and The Fried Egg give it: 8 and 18 are
+    par 4s.
+3.  **New theme** for each course, from the developer's photos: `fishers_island`.
+4.  **Logo:** a house-style SVG concept, not a round badge (the developer turned down the first
     badge drafts).
-4.  The standing defaults (COURSE_BUILD 4.1): every penalty area red, the OSM boundary is out of
+5.  The standing defaults (COURSE_BUILD 4.1): every penalty area red, the OSM boundary is out of
     bounds, trees from lidar, the card hole chosen by the course chat.
 
 ## New pipeline keys and theme
@@ -87,9 +90,9 @@ Black, the tips (developer, 2026-10-25: "for all of these courses lets play from
 
 ## Open items
 
-1.  **Par:** OpenGolfAPI gives par 72 (8 and 18 par 5s), but Stymie and The Fried Egg give
-    par 70 with both as par 4s. OSM has 8 as a par 5 and 18 as a par 4. Built at 72.
-    Recommendation: keep 72 unless the developer has a club card.
+1.  **Stroke index:** OpenGolfAPI's index is used. OSM's hole lines carry a different one (odd
+    numbers out, even numbers in; 8 is 7 and 18 is 16), which may be the club's current one. The
+    game shows no net scores, so the index changes nothing in play.
 2.  **Scorecard unverified** (third-party only). Recommendation: keep it.
 3.  **No pins in OSM:** each centre pin is its green's centre (the game adds the others).
 

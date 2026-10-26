@@ -49,7 +49,7 @@
   }
  ],
  "default_tee": "Black",
- "scorecard_source": "OpenGolfAPI (courses.opengolfapi.org/courses/ny/fishers-island-golf-country-club), read 2026-10-24 by the scouting chat: pars (72; 8 and 18 par 5), stroke index and one unlabelled per-hole row adding to 6,503, taken as Blue (the only rated tee: Blue 6,544, 71.8/143). Column 'back' is The Fried Egg's list (6,636, par 70 with 8 and 18 as par 4s; not built). Unverified; no club card online (private). Played from the tips, Black 6,597 yd (developer, 2026-10-25: \"for all of these courses lets play from the tips\"); rating Stymie (stymie.golf, USGA ratings), Black 6,597 yd 72.8/144. The other sets are in scorecard.csv but not built.",
+ "scorecard_source": "Stymie (stymie.golf/golf-courses/new-york/suffolk-county/fishers-island/fishers-island-club, USGA course ratings), read 2026-10-25: Black and Blue per hole, par 70 with 8 and 18 as par 4s; Black 6,597 yd, 72.8/144, Blue 6,503, 72.4/142. OpenGolfAPI (courses.opengolfapi.org/courses/ny/fishers-island-golf-country-club), read 2026-10-24 by the scouting chat: stroke index and an unlabelled per-hole row equal to Stymie's Blue; its pars add to 72, with 8 and 18 as par 5s. Column 'back' is The Fried Egg's list (6,636, par 70; not built). Built at par 70 (developer, 2026-10-25: \"let's make fishers a par 70\"), with OpenGolfAPI's stroke index. Played from the tips, Black 6,597 yd (developer, 2026-10-25: \"for all of these courses lets play from the tips\"). The other sets are in scorecard.csv but not built. Unverified; no club card online (private).",
  "wind_mph": {
   "minMph": 3,
   "maxMph": 14
@@ -57,9 +57,9 @@
  "attribution": [
   "Map data © OpenStreetMap contributors (ODbL)",
   "Elevation and trees: U.S. Geological Survey (2014 CMGP Post Sandy Long Island lidar), via NOAA Digital Coast",
-  "Scorecard: OpenGolfAPI (unverified)"
+  "Scorecard: Stymie and OpenGolfAPI (unverified)"
  ],
- "notes": "Course chat, 2026-10-25: standing defaults (every penalty area red, OSM boundary as OB, trees from lidar). Played from the tips: Black (developer, 2026-10-25: \"for all of these courses lets play from the tips\"). Wind 3-14 mph (open coast: an exposed island). Bare earth from the lidar's ground points: the release has no DEM. Par 72 as on the card listings (the scouting's recommendation). Theme fishers_island: the course's own, from the developer's photos (developer: a new theme for each course).",
+ "notes": "Course chat, 2026-10-25: standing defaults (every penalty area red, OSM boundary as OB, trees from lidar). Played from the tips: Black (developer, 2026-10-25: \"for all of these courses lets play from the tips\"). Wind 3-14 mph (open coast: an exposed island). Bare earth from the lidar's ground points: the release has no DEM. Par 70 (developer, 2026-10-25), as Stymie (USGA ratings) and The Fried Egg give it: 8 and 18 are par 4s; OpenGolfAPI's par 72 has them as par 5s. Theme fishers_island: the course's own, from the developer's photos (developer: a new theme for each course).",
  "penalty_default": "red",
  "driving_range_is_ob": true,
  "trees_off_fairways_m": 2,
