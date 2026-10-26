@@ -72,7 +72,7 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 
 ## Tree detection (2022 USGS RI statewide lidar, leaf-off)
 
-- 13660 trees detected in the world extent (739 inside the course), 4228 conifers / 9432 deciduous; median height 8.8 m, max 29.3 m.
+- 13660 trees detected in the world extent (768 inside the course), 4228 conifers / 9432 deciduous; median height 8.8 m, max 29.3 m.
 - Dropped: 367 tops on building footprints, 0 over the lake, 28 tiny crowns.
 - Dropped on playing surfaces (spec 5.4): 0 -> 
 - OSM natural=tree points matched by a detected tree within 4 m: 1 of 19.

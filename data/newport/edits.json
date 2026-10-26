@@ -53,6 +53,14 @@
    ],
    "tags": {},
    "reason": "developer 2026-10-25 (approved): proposed by the course chat: Black tee pads not in OSM, found by pipeline/propose_tees.py as raised flat pads in the 2022 lidar DEM and seen as mown pads on the NAIP photo: p_tee_black_6, 17 m behind the 6th's line start (436 yd, card 446), p_tee_black_15, the round pad 25 m behind the 15th's (466 yd, card 475). Without them 6 and 15 play 417 and 443 yd"
+  },
+  {
+   "from": "proposed/boundary.geojson",
+   "ids": [
+    "r13922079_traced"
+   ],
+   "tags": {},
+   "reason": "developer 2026-10-26: \"part of the fairway is out of bounds on newport hole 10\". OSM's boundary cut across the west lobe of the 10th fairway (r19086010, 49 m2 out) and a bunker beside it (w673510352, 179 m2 out). The developer traced the out-of-bounds line along the 10th in the tracer (desk/ob10.json); its ends join the old line 20 m beyond the tracer's frame. About 2,860 m2 added between the fairway and the road"
   }
  ],
  "drop": [
@@ -75,6 +83,10 @@
   {
    "osm": "w673528158",
    "reason": "replaced by its copy as a building (proposed/clubhouses.geojson)"
+  },
+  {
+   "osm": "r13922079",
+   "reason": "replaced by proposed/boundary.geojson (the developer's traced line along the 10th)"
   }
  ]
 }
