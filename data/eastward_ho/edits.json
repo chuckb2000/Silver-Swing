@@ -1,0 +1,22 @@
+{
+ "drop": [
+  {
+   "osm": "w311809812",
+   "reason": "Cape Cod National Golf Club's boundary, a neighbouring course inside the world (audit: every leisure=golf_course becomes a boundary)"
+  },
+  {
+   "osm": "w1221245466",
+   "reason": "a hole line ref 12 entirely outside Eastward Ho!'s boundary (a neighbouring course's hole)"
+  }
+ ],
+ "tags": [
+  {
+   "osm": "w1530730413",
+   "set": {
+    "hole": "18",
+    "tee_set": "Championship"
+   },
+   "reason": "course chat 2026-10-25: the back box of the two mapped behind the 18th's line start (way 1530730413, OSM 2024-25, the restoration's new back tees) measures 531 yd, the card's Black; s06 doesn't look 80 m behind a line start. The Championship's 546 is not mapped: this is the farthest-back box (developer: play from the tips, as far back as possible)"
+  }
+ ]
+}

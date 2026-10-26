@@ -1,0 +1,75 @@
+{
+ "id": "eastward_ho",
+ "name": "Eastward Ho! Country Club",
+ "location": "Chatham, Barnstable County, Massachusetts",
+ "state": "MA",
+ "architects": "Herbert Fowler (1922); restorations by Keith Foster (2004, 2007), Kevin Hargrave (2014) and Kyle Franz (2019-2024)",
+ "theme": "eastward_ho",
+ "epsg": 32619,
+ "osm_sources": [
+  "raw/overpass.geojson"
+ ],
+ "boundary_name": "Eastward Ho! Country Club",
+ "dtm": {
+  "path": "raw/dtm_ground_1m.tif",
+  "units": "m",
+  "source": "bare earth from the ground points (class 2) of the 2021 USGS Lidar: Central Eastern Massachusetts (NOAA Data Access Viewer dataset 9777, job J1476268), gridded to 1 m in EPSG:32619 by pipeline/intake.py dtm (mean per cell, gaps filled linearly from their rim); NAVD88 m"
+ },
+ "laz": {
+  "paths": [
+   "raw/laz/*.laz"
+  ],
+  "classes": [
+   3,
+   4,
+   5
+  ],
+  "units": "m",
+  "source": "2021 USGS Lidar: Central Eastern Massachusetts (NOAA Data Access Viewer dataset 9777, job J1476268), flown 4-9 April 2021 (GPS times), leaf-off; vegetation classes 3-5; NAD83(2011) / Massachusetts Mainland (EPSG:6491, m), NAVD88 m; GitHub release assorted-lidar-data, ma2021_cent_east_J1476268.zip, clipped to the world with pipeline/intake.py laz",
+  "label": "2021 USGS lidar, leaf-off",
+  "leaf_off": true
+ },
+ "ortho": {
+  "path": "raw/naip_05m.tif",
+  "source": "USDA NAIP via the USGS National Map ImageServer (USGSNAIPImagery), exported by the developer 2026-10-25 as two JPEGs at 0.5 m in EPSG:32619 (release assorted-lidar-data: 4323.jpg west, 2343.jpg east), placed by their request boxes and mosaicked by pipeline/intake.py ortho; flight year not stated by the service"
+ },
+ "world": {
+  "x0": 417261,
+  "y0": 4617930,
+  "width": 2048,
+  "height": 1536,
+  "note": "OSM course boundary (way 29848550) bbox 1,841 x 1,189 m in UTM 19N + scenery, whole 256 m chunks, centred: 2,048 m east-west (the 2,048 m limit: 103 m of scenery west and east), 1,536 m north-south (173 m south and north)"
+ },
+ "tee_sets": [
+  {
+   "name": "Championship",
+   "playable": true,
+   "rating": 73.3,
+   "slope": 149,
+   "total_yd": 6728
+  }
+ ],
+ "default_tee": "Championship",
+ "scorecard_source": "GolfPass (golfpass.com/courses/7075-eastward-ho-club), read 2026-10-24 by the scouting chat: the current card after Kyle Franz's 2024 restoration (new back tees on 15 and 18), seven tees per hole, men's par 71, rows add up; its back-nine stroke-index row is shifted one cell, read with hole 10 = 16 (matches OpenGolfAPI). Unverified; no club card online. The older card (Stymie, Black 6,437) differs. Rating 70.8/137 (GolfPass, GolfNow). Played from the tips, Championship 6,728 yd (developer, 2026-10-25: \"for all of these courses lets play from the tips\"); rating GolfPass tee table, Championship 73.3/149 (par 71). The other sets are in scorecard.csv but not built.",
+ "wind_mph": {
+  "minMph": 2,
+  "maxMph": 12
+ },
+ "attribution": [
+  "Map data © OpenStreetMap contributors (ODbL)",
+  "Elevation and trees: U.S. Geological Survey 3D Elevation Program (2021 Central Eastern Massachusetts lidar), via NOAA Digital Coast",
+  "Scorecard: GolfPass (unverified)"
+ ],
+ "notes": "Course chat, 2026-10-25: standing defaults (every penalty area red, OSM boundary as OB, trees from lidar). Played from the tips: Championship (developer, 2026-10-25: \"for all of these courses lets play from the tips\"). Wind 2-12 mph (bays). The lidar (April 2021) predates the 2024 restoration. Bare earth from the lidar's ground points: the release has no DEM. Theme eastward_ho: the course's own, from the developer's photos (developer: a new theme for each course).",
+ "penalty_default": "red",
+ "driving_range_is_ob": true,
+ "trees_off_fairways_m": 2,
+ "red_water_osm": [
+  "w83116684",
+  "w82282412",
+  "w82421594"
+ ],
+ "red_water_note": "Pleasant Bay (w83116684) and Crows Pond (w82282412), mapped as natural=water polygons, and the pond by the 5th (w82421594): red penalty areas wherever they lie, also outside the boundary (standing default; brief: the bay and Crows Pond red)",
+ "rough_band_m": 5.0,
+ "rough_band_note": "a mown band of rough along the fairways, then the restored copper heath (photos eastward.1-5)"
+}
