@@ -1,0 +1,45 @@
+{
+ "add": [
+  {
+   "from": "proposed/clubhouses.geojson",
+   "ids": [
+    "n10780734458_building"
+   ],
+   "tags": {},
+   "reason": "the clubhouse buildings are mapped golf=clubhouse + building=*, which s01 reads as a golf feature, not a building; copied as buildings (audit: 'add building=yes'), originals dropped"
+  },
+  {
+   "from": "proposed/tees_black.geojson",
+   "ids": [
+    "p_tee_black_3",
+    "p_tee_black_8"
+   ],
+   "tags": {},
+   "reason": "course chat 2026-10-25, proposal for the developer: Black tee pads not in OSM, found by pipeline/propose_tees.py as raised flat pads in the 2023 lidar's bare earth (no photo in the release to check them on): p_tee_black_3 measures 385 yd (card 385), p_tee_black_8 379 yd (card 378). Without them 3 and 8 play 372 and 355 yd"
+  }
+ ],
+ "drop": [
+  {
+   "osm": "n10780734458",
+   "reason": "replaced by its copy as a building (proposed/clubhouses.geojson)"
+  }
+ ],
+ "tags": [
+  {
+   "osm": "p_tee_black_3",
+   "set": {
+    "hole": "3",
+    "tee_set": "Black"
+   },
+   "reason": "the 3rd's Black tee (proposal, see add)"
+  },
+  {
+   "osm": "p_tee_black_8",
+   "set": {
+    "hole": "8",
+    "tee_set": "Black"
+   },
+   "reason": "the 8th's Black tee (proposal, see add)"
+  }
+ ]
+}
