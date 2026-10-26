@@ -64,6 +64,8 @@ export const DAILY_ROSTER: Readonly<Record<string, string>> = {
   newport: '2026-10-26',
   // landed 2026-10-25 (pipeline/land.py)
   george_wright: '2026-10-26',
+  // landed 2026-10-25 (pipeline/land.py)
+  eastward_ho: '2026-10-26',
 };
 
 /**
