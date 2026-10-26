@@ -26,8 +26,8 @@ course boundary. Bunkers, the fringe and cart paths are still painted on top
 The approaches are written into build/course_local.geojson as fairways
 (osm id "approach_<layout>_<hole>", tag derived=approach) so every later step
 (surface, stripes, putting views, tree checks) sees the same ground, and are
-listed in build/approaches.json. Gaps over MAX_GAP m are left alone and
-reported (a real forced carry, or a hole line that misses its fairway).
+listed in build/approaches.json. Gaps over MAX_GAP m (or the course's
+"connect_fairways_max_gap_m", if smaller) are left alone and reported (a real forced carry, or a hole line that misses its fairway).
 """
 from __future__ import annotations
 
@@ -63,6 +63,9 @@ def main():
     boundary = play_boundary(g, cfg)
     rows, report = [], []
     want = cfg["connect_fairways"]
+    # optional (course_config.json connect_fairways_max_gap_m; Sea Ranch, developer 2026-10-25:
+    # "only fix if the gap is like 5 yards or less"): a smaller limit than MAX_GAP
+    max_gap = float(cfg.get("connect_fairways_max_gap_m", MAX_GAP))
     chosen = None if want is True else {str(x).strip().lower() for x in want}
     seen = set()
     for lay in layouts(cfg):
@@ -82,8 +85,8 @@ def main():
             fi = fw.distance(green).idxmin()
             f = fw.loc[fi].geometry
             gap = float(f.distance(green))
-            if gap > MAX_GAP:
-                report.append({"layout": lay["id"], "hole": int(h.ref), "status": f"gap {gap:.0f} m > {MAX_GAP:g} m, left alone"})
+            if gap > max_gap:
+                report.append({"layout": lay["id"], "hole": int(h.ref), "gap_m": round(gap, 1), "status": f"gap {gap:.1f} m > {max_gap:g} m, left alone"})
                 continue
             c = green.centroid
             R = math.sqrt(green.area / math.pi)

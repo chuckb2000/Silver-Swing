@@ -18,6 +18,7 @@ by hand, if any, is left alone).
 from __future__ import annotations
 
 import json
+import os
 
 import geopandas as gpd
 import pandas as pd
@@ -29,7 +30,9 @@ def main():
     name = course_name_from_argv()
     cdir = course_dir(name)
     path = cdir / "edits.json"
-    if not path.exists():
+    # A listing, not path.exists(): the step cache records the folders a step lists, so it sees an
+    # edits.json that appears after a build without one (exists() is only a stat, which it can't see).
+    if "edits.json" not in os.listdir(cdir):
         print("[merge_edits] no edits.json - nothing to do")
         return
     ed = json.load(open(path))

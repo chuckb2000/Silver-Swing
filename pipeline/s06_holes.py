@@ -235,12 +235,23 @@ def build_layout(name, cfg, lay, g):
                 continue
             L, start, gi, gc = geo[n]
             target = float(card[n][ts.lower()]) * YD
+            # back along the line from its start (a box behind it, as for a back tee)
+            bx, by = start.x - L.coords[1][0], start.y - L.coords[1][1]
+            bn = math.hypot(bx, by) or 1.0
             for b, ti in enumerate(tee_idx):
                 if ti in taken:
                     continue
                 c = tees.loc[ti].geometry.centroid
                 s = L.project(c)
-                if not ((L.distance(c) < 25 and s < 0.45 * L.length) or c.distance(start) < 40):
+                # a box whose OSM tee=* tag names this set (tee=black, tee=blue;black) may stand
+                # up to 150 m behind the line's start, within 35 m of the line run backwards:
+                # OSM lines often start at a forward tee (Strawberry Farms 1, 2, 9, 11, 12, 16;
+                # course chat 2026-10-25)
+                named = ts.lower() in [v.strip().lower() for v in str(tees.loc[ti].tags.get("tee", "")).split(";")]
+                vx, vy = c.x - start.x, c.y - start.y
+                back, side = (vx * bx + vy * by) / bn, abs(vx * by - vy * bx) / bn
+                behind = named and 0 < back <= 150 and side <= 35
+                if not ((L.distance(c) < 25 and s < 0.45 * L.length) or c.distance(start) < 40 or behind):
                     continue
                 m, _ = path_from(c, L, gc)
                 d = abs(m - target) / target * 100
@@ -256,7 +267,30 @@ def build_layout(name, cfg, lay, g):
         n = int(h.ref)
         L, start, gi, gc = geo[n]
         green = greens.loc[gi]
-        pin = pins.loc[pins.distance(green.geometry).idxmin()].geometry
+        near = pins[pins.distance(green.geometry) <= 2.0] if len(pins) else pins
+        pin = None
+        if len(near):
+            pin = near.loc[near.distance(green.geometry).idxmin()].geometry
+            # the game keeps every hole location 10 ft (3.05 m) from the green's edge (pins.ts,
+            # pins.test.ts); an OSM pin nearer than 3.2 m (or off the green) gives way to the centre
+            # pin below (Eastward Ho! 8 and 9, course chat 2026-10-25)
+            edge = green.geometry.boundary.distance(pin) if green.geometry.contains(pin) else 0.0
+            if edge < 3.2:
+                open_items.append(f"Hole {n}: OSM's pin is {edge:.1f} m from the green's edge, nearer than the game's 10 ft; "
+                                  "the centre pin is the green's centre instead.")
+                pin = None
+        if pin is None:
+            # No golf=pin on this green (many OSM courses map none): the centre pin is the green's
+            # centroid, or its deepest point (pole of inaccessibility) when the centroid is outside
+            # it or nearer than 4 m to its edge (a crescent or lopsided green; the game keeps every
+            # hole location 10 ft from the edge: pins.ts, Eastward Ho! 8).
+            # The game adds the other hole locations itself (pins.ts; COURSE_BUILD 4.1 "Pins").
+            from shapely.ops import polylabel
+            gp = green.geometry if green.geometry.geom_type == "Polygon" else max(green.geometry.geoms, key=lambda q: q.area)
+            c = gp.centroid
+            pin = c if gp.contains(c) and gp.exterior.distance(c) >= 4.0 else polylabel(gp, tolerance=0.1)
+            if not len(near):
+                open_items.append(f"Hole {n}: no golf=pin on its green; the centre pin is the green's centre (proposal).")
         par = int(card[n]["par"])
         osm_par = h.tags.get("par")
         if osm_par and int(osm_par) != par:

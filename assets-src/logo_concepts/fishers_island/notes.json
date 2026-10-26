@@ -1,0 +1,59 @@
+{
+ "id": "fishers_island",
+ "course": "Fishers Island Club",
+ "place": "Fishers Island, New York",
+ "facts": [
+  {
+   "fact": "The course is on the east end of Fishers Island in Long Island Sound, with salt water in view from every tee and green.",
+   "source": "docs/scouting/fishers_island/README.md (branch scouting/new-courses)"
+  },
+  {
+   "fact": "Red nun buoys mark the channels of the Sound; the buoy here is generic, not a particular one (interpretation).",
+   "source": "course chat 2026-10-25"
+  }
+ ],
+ "current": {
+  "subject": "none: a new course (course chat 2026-10-25)",
+  "keep": "",
+  "weaknesses": ""
+ },
+ "concepts": [
+  {
+   "n": 1,
+   "name": "The Nun Buoy",
+   "rationale": "A red nun buoy (a channel marker) afloat in the Sound, a white reflective band round it and a gull on its top.",
+   "references": [
+    "docs/scouting/fishers_island/README.md (branch scouting/new-courses)",
+    "course chat 2026-10-25"
+   ],
+   "symbolism": "",
+   "interpretation": "",
+   "palette": [
+    {
+     "hex": "#cc3329",
+     "name": "buoy red"
+    },
+    {
+     "hex": "#8f2320",
+     "name": "shade"
+    },
+    {
+     "hex": "#f2efe6",
+     "name": "band"
+    },
+    {
+     "hex": "#1f5a8f",
+     "name": "Sound"
+    },
+    {
+     "hex": "#f6f6f2",
+     "name": "gull"
+    }
+   ],
+   "strengths": "One subject, no background, in the house style (developer 2026-10-25: no circular badges).",
+   "tradeoffs": ""
+  }
+ ],
+ "recommendation": "Concept 1.",
+ "chosen": 1
+}

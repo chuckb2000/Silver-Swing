@@ -4,6 +4,8 @@ extent. Writes build/course_local.geojson (local metres, +x east, +y north).
 """
 from __future__ import annotations
 
+import os
+
 import geopandas as gpd
 from shapely.affinity import translate
 
@@ -13,7 +15,13 @@ from common import World, build_dir, course_dir, course_name_from_argv, load_con
 def source_path(name: str):
     cdir = course_dir(name)
     edited = cdir / "edited" / "course.geojson"
-    return edited if edited.exists() else cdir / "raw" / "osm.geojson"
+    # A listing, not edited.exists(): the step cache records the folders a step lists, so a build
+    # sees edited/course.geojson appear (merge_edits writes it once edits.json exists).
+    try:
+        names = os.listdir(cdir / "edited")
+    except FileNotFoundError:
+        names = []
+    return edited if "course.geojson" in names else cdir / "raw" / "osm.geojson"
 
 
 def load_local(name: str) -> gpd.GeoDataFrame:
