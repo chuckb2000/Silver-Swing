@@ -3,6 +3,7 @@
 // wrapped so a blocked storage never breaks the game.
 
 import { createStore, del, get, set, UseStore } from 'idb-keyval';
+import { fixEagle, fixEntry } from './cardFixes';
 import type { Difficulty } from '../data/difficulty';
 import { isEntry, LeaderboardEntry } from './entry';
 import type { EagleEvent } from './feats';
@@ -109,7 +110,12 @@ export async function loadSettings(): Promise<Settings> {
 export const saveSettings = (s: Settings) => write('settings', s);
 
 export async function loadBoard(): Promise<LeaderboardEntry[]> {
-  return (await read<LeaderboardEntry[]>('leaderboard')) ?? [];
+  const all = (await read<LeaderboardEntry[]>('leaderboard')) ?? [];
+  // a course's corrected card (cardFixes.ts): rewritten here once, then stored
+  let changed = false;
+  const out = all.map((e) => { const f = isEntry(e) ? fixEntry(e) : null; if (f) changed = true; return f ?? e; });
+  if (changed) await write('leaderboard', out);
+  return out;
 }
 
 export async function addToBoard(e: LeaderboardEntry): Promise<void> {
@@ -174,7 +180,11 @@ export async function importBackup(text: string): Promise<number> {
 export interface LocalEagle extends EagleEvent { sent: boolean }
 
 export async function loadEagles(): Promise<LocalEagle[]> {
-  return (await read<LocalEagle[]>('eagles')) ?? [];
+  const all = (await read<LocalEagle[]>('eagles')) ?? [];
+  // a course's corrected card (cardFixes.ts): the new par, or gone when no longer an eagle
+  const out = all.map((e) => fixEagle(e)).filter((e): e is LocalEagle => !!e);
+  if (out.length !== all.length || out.some((e, i) => e !== all[i])) await write('eagles', out);
+  return out;
 }
 
 export const saveEagles = (list: LocalEagle[]) => write('eagles', list);

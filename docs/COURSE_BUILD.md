@@ -835,6 +835,10 @@ paths (relief), not OB, unless the developer says otherwise.
    message to the developer has: what was built, open items needing their
    decision (numbered, each with a recommendation), anything requested from
    the design chat, and how to try it.
+5. A course already live whose par changes (a corrected card): say so in the PR.
+   The design chat adds a line per hole to `CARD_FIXES` in
+   `game/src/save/cardFixes.ts`, which rewrites the rounds and eagles already
+   stored, on the server and on each device, once (gross stays).
 
 ---
 

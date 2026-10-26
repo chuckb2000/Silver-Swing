@@ -7,6 +7,7 @@ import { feedBadges, FeedRow, MatchFeedRow } from '../save/feed';
 import type { MatchResult } from './matchRoom';
 import { isEntry, LeaderboardEntry, MAX_ROUND_HOLES } from '../save/entry';
 import { birdiesIn, EagleEvent, eaglesIn, isEagle } from '../save/feats';
+import { CARD_FIXES, CARD_FIXES_KEY, fixedCourses, fixEagle, fixEntry } from '../save/cardFixes';
 
 /** The parts of Cloudflare's D1 API used here. */
 export interface D1Statement {
@@ -144,7 +145,44 @@ let migratedNow = false;
 export async function prepareDb(db: D1Like): Promise<void> {
   await ensureSchema(db);
   if (migratedNow) { migratedNow = false; return; }
-  await backfill(db);
+  if (await backfill(db)) return;
+  await applyCardFixes(db);
+}
+
+let cardFixed = false;
+/** Rounds rewritten per request by a card fix (each is one query; the free plan allows 50 per request). */
+const CARD_FIX_ROWS = 10;
+
+/**
+ * Scorecard corrections (save/cardFixes.ts): the stored rounds on a course whose par changed get
+ * the new par, to par and birdie count (gross stays), and its eagles the new par, or are removed
+ * when they are no longer eagles. A few rounds per request; once none is left to change, `meta`
+ * keeps the list's key, so the next fix added to the list runs once too.
+ */
+async function applyCardFixes(db: D1Like) {
+  if (cardFixed) return;
+  const { results: flag } = await db.prepare("SELECT v FROM meta WHERE k = 'card_fixes'").all<{ v: string }>();
+  if (flag[0]?.v === CARD_FIXES_KEY || !CARD_FIXES.length) { cardFixed = true; return; }
+  const courses = fixedCourses();
+  const { results } = await db.prepare(`SELECT id, data FROM rounds WHERE course IN (${courses.map(() => '?').join(', ')})`)
+    .bind(...courses).all<{ id: string; data: string }>();
+  let n = 0;
+  for (const r of results) {
+    let e: unknown = null;
+    try { e = JSON.parse(r.data); } catch { /* damaged: left as it is */ }
+    if (!isEntry(e)) continue;
+    const f = fixEntry(e);
+    if (!f) continue;
+    if (n >= CARD_FIX_ROWS) return; // more next request
+    await db.prepare('UPDATE rounds SET data = ?, birdies = ? WHERE id = ?').bind(JSON.stringify(f), birdiesIn(f.scores), r.id).run();
+    n++;
+  }
+  for (const f of CARD_FIXES) {
+    await db.prepare('UPDATE eagles SET par = ? WHERE course = ? AND hole = ? AND par <> ?').bind(f.par, f.course, f.hole, f.par).run();
+    await db.prepare('DELETE FROM eagles WHERE course = ? AND hole = ? AND strokes > par - 2').bind(f.course, f.hole).run();
+  }
+  await db.prepare("INSERT OR REPLACE INTO meta (k, v) VALUES ('card_fixes', ?)").bind(CARD_FIXES_KEY).run();
+  cardFixed = true;
 }
 
 /**
@@ -152,15 +190,15 @@ export async function prepareDb(db: D1Like): Promise<void> {
  * eagles, a few per request so no request goes over the query limit. Once none
  * are left, a flag in `meta` stops the check.
  */
-async function backfill(db: D1Like) {
-  if (backfilled) return;
+async function backfill(db: D1Like): Promise<boolean> {
+  if (backfilled) return false;
   const { results: flag } = await db.prepare("SELECT v FROM meta WHERE k = 'backfill'").all<{ v: string }>();
-  if (flag[0]?.v === 'done') { backfilled = true; return; }
+  if (flag[0]?.v === 'done') { backfilled = true; return false; }
   const { results } = await db.prepare(`SELECT id, data, received FROM rounds WHERE birdies IS NULL LIMIT ${BACKFILL_ROWS}`).all<{ id: string; data: string; received: string }>();
   if (!results.length) {
     await db.prepare("INSERT OR REPLACE INTO meta (k, v) VALUES ('backfill', 'done')").run();
     backfilled = true;
-    return;
+    return true;
   }
   for (const r of results) {
     try {
@@ -177,6 +215,7 @@ async function backfill(db: D1Like) {
       try { await db.prepare('UPDATE rounds SET birdies = 0, casual = 1 WHERE id = ?').bind(r.id).run(); } catch { /* ignore */ }
     }
   }
+  return true;
 }
 
 /** Scorecard slot -> the course's hole (a 9-hole course played twice round; a club's nines carry their holes). */
@@ -234,6 +273,7 @@ export async function claimName(db: D1Like, rawName: unknown, rawOwner: unknown)
 export function resetSchemaCache() {
   ready = null;
   backfilled = false;
+  cardFixed = false;
   migratedNow = false;
 }
 
@@ -380,7 +420,8 @@ export async function handlePost(db: D1Like | undefined, body: string): Promise<
       const c = await claim(e.player, rawOwner);
       if (c === 'taken' || c === 'too_many') { taken.push(e.id); continue; }
       if (c !== 'ok') { rejected++; continue; }
-      const clean: LeaderboardEntry = { ...e, player: boardableName(e.player)!, date: sane(e.date, nowDate) };
+      const named: LeaderboardEntry = { ...e, player: boardableName(e.player)!, date: sane(e.date, nowDate) };
+      const clean = fixEntry(named) ?? named; // a copy of the game with a course's old card (save/cardFixes.ts)
       if (clean.daily !== undefined && !(await dailyCounts(db, clean, ownerOf(rawOwner), nowDate))) delete clean.daily; // a second go: an ordinary round
       const data = JSON.stringify(clean);
       if (data.length > 16_000) { rejected++; continue; }
@@ -435,7 +476,9 @@ export async function handleEaglesPost(db: D1Like | undefined, body: string): Pr
       const c = await claim(ev.player, rawOwner);
       if (c === 'taken' || c === 'too_many') { taken.push(ev.id); continue; }
       if (c !== 'ok') { rejected++; continue; }
-      added += await insertEagle(db, { ...ev, player: boardableName(ev.player)!, date: sane(ev.date, nowDate) }, ownerOf(rawOwner), now);
+      const fixed = fixEagle(ev);
+      if (!fixed) continue; // no longer an eagle on the course's corrected card
+      added += await insertEagle(db, { ...fixed, player: boardableName(fixed.player)!, date: sane(fixed.date, nowDate) }, ownerOf(rawOwner), now);
     } catch {
       rejected++;
     }
