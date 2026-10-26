@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <title>Presidio - Concept 1: The Fort Gun</title>
+  <!-- the parade-ground lawn -->
+  <rect x="2" y="26.6" width="28" height="3" fill="#5c9e3c"/>
+  <rect x="2" y="26.6" width="28" height="1" fill="#7bc24d"/>
+  <!-- the wooden trail of the carriage, back to the ground -->
+  <path d="M14 18.6 L16.2 17.2 L29.4 26 L27.2 27.2 Z" fill="#8a5a34"/>
+  <path d="M14 18.6 L15 18 L28.4 26.6 L27.2 27.2 Z" fill="#a8744a"/>
+  <!-- the bronze barrel, raised toward the upper left -->
+  <path d="M3.4 9 L6 6.4 L21.6 15.2 C22.8 16.2 22.6 18.4 21 19.2 C20 19.8 18.6 19.6 17.6 19 Z" fill="#b07a32"/>
+  <path d="M3.4 9 L6 6.4 L21.4 15 L20.8 16 L5.4 7.8 Z" fill="#d9a552"/>
+  <path d="M17.6 19 L21 19.2 C22.6 18.4 22.8 16.2 21.6 15.2 L20.6 17.4 Z" fill="#7a5222"/>
+  <rect x="22" y="16.2" width="2.6" height="2.4" fill="#7a5222"/>
+  <!-- a golf ball for the shot, at the muzzle -->
+  <circle cx="4" cy="6.2" r="2.6" fill="#f8f8f4"/>
+  <path d="M4 3.6 A2.6 2.6 0 0 1 6.6 6.2 A2.6 2.6 0 0 1 4 8.8 Z" fill="#d0d1cc"/>
+  <!-- the spoked wheel -->
+  <circle cx="14.6" cy="21.4" r="5.4" fill="#5a3a22"/>
+  <circle cx="14.6" cy="21.4" r="3.8" fill="#8a5a34"/>
+  <g fill="#5a3a22">
+    <rect x="14" y="17.6" width="1.2" height="7.6"/><rect x="10.8" y="20.8" width="7.6" height="1.2"/>
+  </g>
+  <path d="M11.8 18.6 L12.6 17.8 L17.4 22.6 L16.6 23.4 Z" fill="#5a3a22"/>
+  <path d="M16.6 17.8 L17.4 18.6 L12.6 23.4 L11.8 22.6 Z" fill="#5a3a22"/>
+  <circle cx="14.6" cy="21.4" r="1.3" fill="#2d2a2a"/>
+</svg>

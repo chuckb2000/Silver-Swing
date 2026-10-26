@@ -1,0 +1,16 @@
+{
+ "note": "per-course settings for game/tests/unit/course_play.test.ts (the every-course checks); docs/COURSE_BUILD.md 8.2",
+ "wind_mph": [
+  3,
+  12
+ ],
+ "trees": [
+  {
+   "x": 658.5,
+   "y": 839.5,
+   "r": 2,
+   "absent": true,
+   "why": "over the 17th's tee shot (drop_trees)"
+  }
+ ]
+}

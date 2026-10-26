@@ -91,8 +91,11 @@ def load_on_grid(path, units: str, grid: Grid) -> tuple[np.ndarray, str]:
     return a, how
 
 
-def laz_highest(paths, classes, grid: Grid) -> tuple[np.ndarray, dict]:
-    """Highest return of the given classes per 1 m grid cell (NaN where none)."""
+def laz_highest(paths, classes, grid: Grid, ground=None, max_above=None, zscale=1.0) -> tuple[np.ndarray, dict]:
+    """Highest return of the given classes per 1 m grid cell (NaN where none). With `ground` (the dtm
+    on the grid, metres) and `max_above`, returns more than that far above the ground are skipped:
+    high noise left in class 1 (cfg laz.max_height_m; Presidio, where returns 110 m over the
+    eucalyptus made 80-113 m "trees")."""
     import laspy
     from pyproj import Transformer
     zmax = np.full(grid.H * grid.W, -np.inf)
@@ -122,6 +125,12 @@ def laz_highest(paths, classes, grid: Grid) -> tuple[np.ndarray, dict]:
                 col = np.floor(x - grid.x0).astype(np.int64)
                 row = np.floor(grid.y1 - y).astype(np.int64)
                 ok = (col >= 0) & (col < grid.W) & (row >= 0) & (row < grid.H)
+                if ground is not None and max_above is not None:
+                    g = np.full(len(z), -np.inf)
+                    g[ok] = ground.ravel()[row[ok] * grid.W + col[ok]]
+                    high = z * zscale - g > max_above
+                    info["points_too_high"] = info.get("points_too_high", 0) + int((ok & high).sum())
+                    ok &= ~high
                 np.maximum.at(zmax, row[ok] * grid.W + col[ok], z[ok])
                 cell = row[ok] * grid.W + col[ok]
                 n_all += np.bincount(cell, minlength=grid.H * grid.W)
@@ -167,7 +176,9 @@ def main():
         if not paths:
             raise SystemExit(f"[s00] no LAZ files match {cfg['laz']['paths']}")
         classes = tuple(cfg["laz"].get("classes", VEG_CLASSES))
-        top, (n_all, n_last), info = laz_highest(paths, classes, grid)
+        mh = cfg["laz"].get("max_height_m")
+        top, (n_all, n_last), info = laz_highest(paths, classes, grid, ground=dtm if mh is not None else None,
+                                                 max_above=mh, zscale=FT if cfg["laz"].get("units", "m") == "ft" else 1.0)
         # Vegetation returns per cell and how many ended their pulse. With leaf-off lidar a
         # needle-leaved crown stops many pulses (the crown holds their last return), while bare
         # deciduous branches let nearly all of them through to the ground. s05 uses the share.

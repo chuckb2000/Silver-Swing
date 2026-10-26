@@ -336,7 +336,10 @@ def main():
     cfg = load_config(name)
     world = World(cfg)
     chm_path = build_dir(name) / "chm_1m.tif"
-    if not chm_path.exists():
+    # listed rather than exists(): the step cache records the listing, so a course that gets its
+    # lidar later (Presidio) reruns s05 instead of keeping the OSM fallback
+    import os
+    if "chm_1m.tif" not in os.listdir(build_dir(name)):
         return osm_fallback(name, cfg, world)
     with rasterio.open(chm_path) as r:  # s00: canopy height in metres on the world grid
         a = r.read(1).astype(np.float64)
