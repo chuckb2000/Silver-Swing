@@ -1,0 +1,59 @@
+{
+ "id": "presidio",
+ "course": "Presidio Golf Course",
+ "place": "San Francisco, California",
+ "facts": [
+  {
+   "fact": "The course opened in 1895 inside the Presidio, then an Army post, by permission of its commander, Colonel William M. Graham.",
+   "source": "https://www.presidiogolf.com/course/our-history/"
+  },
+  {
+   "fact": "The gun is a generic field piece, not a particular one at the Presidio; no Golden Gate Bridge and no club or park marks (interpretation).",
+   "source": "course chat 2026-10-25"
+  }
+ ],
+ "current": {
+  "subject": "none: a new course (course chat 2026-10-25)",
+  "keep": "",
+  "weaknesses": ""
+ },
+ "concepts": [
+  {
+   "n": 1,
+   "name": "The Fort Gun",
+   "rationale": "An old fort's bronze field gun on its wooden carriage, a golf ball at the muzzle, on the parade-ground lawn.",
+   "references": [
+    "https://www.presidiogolf.com/course/our-history/",
+    "course chat 2026-10-25"
+   ],
+   "symbolism": "",
+   "interpretation": "",
+   "palette": [
+    {
+     "hex": "#b07a32",
+     "name": "bronze"
+    },
+    {
+     "hex": "#d9a552",
+     "name": "lit bronze"
+    },
+    {
+     "hex": "#8a5a34",
+     "name": "carriage"
+    },
+    {
+     "hex": "#5c9e3c",
+     "name": "lawn"
+    },
+    {
+     "hex": "#f8f8f4",
+     "name": "ball"
+    }
+   ],
+   "strengths": "One subject, no background, in the house style (developer 2026-10-25: no circular badges).",
+   "tradeoffs": ""
+  }
+ ],
+ "recommendation": "Concept 1.",
+ "chosen": 1
+}

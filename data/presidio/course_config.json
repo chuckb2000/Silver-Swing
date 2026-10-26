@@ -1,0 +1,49 @@
+{
+ "id": "presidio",
+ "name": "Presidio Golf Course",
+ "location": "Presidio of San Francisco, San Francisco, California",
+ "state": "CA",
+ "architects": "opened 1895 (nine holes, San Francisco Golf and Country Club); 18 holes 1910; enlarged by Fowler & Simpson (London), 1920 (club history page)",
+ "theme": "presidio",
+ "epsg": 32610,
+ "osm_sources": [
+  "raw/overpass.geojson"
+ ],
+ "boundary_name": "Presidio Golf Course",
+ "dtm": {
+  "path": "raw/dtm_ground_1m.tif",
+  "units": "m",
+  "source": "bare earth from the ground points (class 2) of the 2023 USGS Lidar: San Francisco Bay Area (NOAA Data Access Viewer dataset 10172, job J1476298), flown 20 April 2023 (GPS times), gridded to 1 m in EPSG:32610 by pipeline/intake.py dtm; NAVD88 m; GitHub release assorted-lidar-data, ca2023_sanfran_J1476298.zip (ground class only)"
+ },
+ "world": {
+  "x0": 546200,
+  "y0": 4182317,
+  "width": 1536,
+  "height": 1024,
+  "note": "OSM course boundary (way 16650363) bbox 1,211 x 748 m in UTM 10N + ~120 m scenery, whole 256 m chunks, centred: 1,536 m east-west (162 m each side), 1,024 m north-south (138 m each side)"
+ },
+ "tee_sets": [
+  {
+   "name": "Black",
+   "playable": true,
+   "rating": 72.5,
+   "slope": 136,
+   "total_yd": 6481
+  }
+ ],
+ "default_tee": "Black",
+ "scorecard_source": "The club's card (presidiogolf.com, PGC-Scorecard.pdf, March 2026), read 2026-10-25: Black, White, Blue and Red per hole, par 72, men's and women's stroke index (its back-nine index rows are shifted one cell, read with hole 10 = 10 as GolfPass prints it), ratings for every set and combo. Black 11 is 419 (GolfPass; the card's printed totals 3,306 / 6,481 need 419). Played from the tips, Black 6,481 yd, 72.5/136 (developer, 2026-10-25: \"for all of these courses lets play from the tips\"). The other sets are in scorecard.csv but not built.",
+ "penalty_default": "red",
+ "driving_range_is_ob": true,
+ "trees_off_fairways_m": 2,
+ "wind_mph": {
+  "minMph": 3,
+  "maxMph": 12
+ },
+ "attribution": [
+  "Map data © OpenStreetMap contributors (ODbL)",
+  "Elevation: U.S. Geological Survey 3D Elevation Program (2023 San Francisco Bay Area lidar), via NOAA Digital Coast",
+  "Scorecard: Presidio Golf Course"
+ ],
+ "notes": "Course chat, 2026-10-25: not scouted; the developer added the lidar to assorted-lidar-data. Standing defaults (every penalty area red, OSM boundary as OB, trees from lidar once a vegetation order arrives: the first zip is ground points only). Played from the tips: Black (developer, 2026-10-25: \"for all of these courses lets play from the tips\"). Wind 3-12 mph: a sheltered, wooded site above the Golden Gate (between the bay band and the open coast). Theme presidio: the course's own, from the developer's photos (developer: a new theme for each course)."
+}

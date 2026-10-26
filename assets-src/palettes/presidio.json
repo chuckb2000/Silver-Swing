@@ -1,0 +1,34 @@
+{
+  "name": "Presidio (the Army's planted forest above the Golden Gate)",
+  "note": "Course theme palette (<= 32 colours; same keys as pnw.json plus F0-F2). Presidio Golf Course, San Francisco, from the developer's photos (release assorted-lidar-data): bright, sunlit yellow-green fairways and greens; a lusher, darker rough (F0-F2); cream sand; the forest floor of pine and cypress duff (G0-G2: woods); out of bounds, the Presidio's lawns and meadow (L0-L2); the bay's blue; the Army buildings' red tile roofs (R0). Trees in assets-src/trees_presidio.py: Monterey pine, Monterey cypress, eucalyptus and live oak. Shadows are a 35% black overlay on top of these.",
+  "colors": {
+    "G0": "#1b2b1c", "G1": "#253b23", "G2": "#314e2a", "G3": "#41692f",
+    "G4": "#4f8a35", "G5": "#5c9e3c", "G6": "#6ab244", "G7": "#7bc24d",
+    "G8": "#90d15d", "G9": "#b8e388",
+    "L0": "#506a33", "L1": "#617c3c", "L2": "#748f47",
+    "S0": "#cbb892", "S1": "#ebe0c3", "S2": "#f8f2e1",
+    "W0": "#1a4f7a", "W1": "#236597", "W2": "#5893c2",
+    "K0": "#26272d", "K1": "#55565d", "K2": "#7d7e86", "K3": "#b3ad9d", "K4": "#d9d3c4",
+    "B0": "#46301f", "B1": "#6b4b33", "B2": "#8e6a4b",
+    "R0": "#a4503a", "WH": "#f6f6f2",
+    "F0": "#3f6c2c", "F1": "#4c7e33", "F2": "#5a903b"
+  },
+  "lut": {
+    "rough": ["F0", "F1", "F2", "F2"]
+  },
+  "aliases": {
+    "TUFT": "G3"
+  },
+  "minimap": {
+    "ob": "#617c3c", "rough": "#4c7e33", "woods": "#253b23", "ob_woods": "#203421",
+    "water": "#236597", "ob_water": "#236597", "bunker": "#ebe0c3", "ob_sand": "#ebe0c3"
+  },
+  "minimap_trees": {
+    "conifer": ["#1c3f2a", "#33673d"],
+    "deciduous": ["#153827", "#29623d"]
+  },
+  "trees": {
+    "conifer": "trees_presidio:conifer",
+    "deciduous": "trees_presidio:deciduous"
+  }
+}
