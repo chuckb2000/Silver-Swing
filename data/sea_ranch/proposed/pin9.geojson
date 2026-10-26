@@ -1,0 +1,8 @@
+{
+"type": "FeatureCollection",
+"name": "pin9",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+"features": [
+{ "type": "Feature", "properties": { "osm": "p_pin_9", "kind": "pin", "tags": { "golf": "pin", "ref": "9", "source": "course chat 2026-10-25 (hole location, not course geometry)" } }, "geometry": { "type": "Point", "coordinates": [ -123.515940476200768, 38.751378696999424 ] } }
+]
+}
