@@ -131,3 +131,51 @@ test('a swing tapped while the camera is still moving to the shot starts when th
   expect(await page.evaluate(() => window.__game.scene.getScene('play').state)).toBe('aim');
   expect(errors).toEqual([]);
 });
+
+test('after the first tap, a press on a button beside the swing button (swing length) or on the course is the next swing tap', async ({ page }) => {
+  test.setTimeout(180_000);
+  const errors: string[] = [];
+  page.on('pageerror', (e) => errors.push(e.message));
+  await page.goto('/');
+  await page.waitForFunction(() => window.__game?.scene.isActive('title'), null, { timeout: 90_000 });
+  const aiming = () => page.evaluate(() => {
+    const g = window.__game;
+    if (!g.scene.isActive('play')) return false;
+    const ps = g.scene.getScene('play');
+    return ps.state === 'aim' && !ps.fading && !ps.zooming;
+  });
+  await tapButton(page, 'title', 'practice', 60_000, aiming);
+  await page.waitForFunction(() => {
+    const ps = window.__game.scene.getScene('play');
+    return ps.state === 'aim' && !ps.fading && !ps.zooming;
+  }, null, { timeout: 60_000 });
+  const swing = await buttonBox(page, 'hud', 'swing');
+  const scale = await buttonBox(page, 'hud', 'full');
+  await settle(page);
+  const scale0 = await page.evaluate(() => window.__game.scene.getScene('play').swingScale);
+  await page.mouse.click(swing.x + swing.w / 2, swing.y + swing.h / 2);
+  await page.waitForFunction(() => window.__game.scene.getScene('play').meter?.phase === 'power', null, { timeout: 10_000 });
+  await settle(page, 4);
+  await page.waitForTimeout(300);
+  // tap 2 lands on the swing-length button next to the swing button: power is set, the length stays
+  await page.mouse.click(scale.x + scale.w / 2, scale.y + scale.h / 2);
+  await page.waitForFunction(() => window.__game.scene.getScene('play').meter?.phase !== 'power', null, { timeout: 5_000 });
+  expect(await page.evaluate(() => window.__game.scene.getScene('play').meter?.phase)).toBe('accuracy');
+  // set by the press, not by the cursor turning at the end of the bar by itself
+  expect(await page.evaluate(() => { const m = window.__game.scene.getScene('play').meter; return !m.maxed && m.powerPos < 95; })).toBe(true);
+  expect(await page.evaluate(() => window.__game.scene.getScene('play').swingScale)).toBe(scale0);
+  // tap 3 well away from it, on the course: the stroke goes
+  await page.mouse.click(swing.x - 200, swing.y - 150);
+  await page.waitForFunction(() => window.__game.scene.getScene('play').state !== 'swing', null, { timeout: 10_000 });
+  // the menu button still opens the menu mid-swing (and stops the swing)
+  await page.waitForFunction(() => window.__game.scene.getScene('play').state === 'aim' && !window.__game.scene.getScene('play').fading, null, { timeout: 60_000 });
+  const menu = await buttonBox(page, 'hud', 'menu');
+  await settle(page);
+  await page.mouse.click(swing.x + swing.w / 2, swing.y + swing.h / 2);
+  await page.waitForFunction(() => window.__game.scene.getScene('play').state === 'swing', null, { timeout: 10_000 });
+  await settle(page, 4);
+  await page.mouse.click(menu.x + menu.w / 2, menu.y + menu.h / 2);
+  await page.waitForFunction(() => window.__game.scene.getScene('play').hud.modalOpen(), null, { timeout: 10_000 });
+  expect(await page.evaluate(() => window.__game.scene.getScene('play').state)).toBe('aim');
+  expect(errors).toEqual([]);
+});

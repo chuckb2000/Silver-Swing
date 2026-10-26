@@ -1360,3 +1360,14 @@ The leaderboard's "birdies" tab is now "stats", with three lists across every co
 
 D1 schema 6 (the `holeouts` table, `rounds.made_m`) migrates itself. Merging names and
 "hide me" cover hole-outs too; a card correction (`cardFixes.ts`) sets their par.
+
+## Swing taps anywhere once the meter runs (developer, 2026-10-26)
+
+The developer suspected missed swing taps come from the mouse drifting off the swing button
+after the first tap. Checked first: during a swing every HUD control beside the swing button is
+hidden or disabled, so a press anywhere on the course already counted; only the menu and map
+buttons took presses. Now, while the meter runs, a zone over the whole HUD takes every press as
+the next tap (`HudScene.swingCatch`), apart from the menu button, which still opens the menu and
+stops the swing; a press on the page just outside the game's canvas counts too
+(`pointerdownoutside`). A press outside the browser window can't be seen by the page. The space
+bar works as before.

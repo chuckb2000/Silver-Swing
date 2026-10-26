@@ -97,6 +97,12 @@ export class HudScene extends Phaser.Scene {
   private unplayBtn!: Button;
   private mulliganBtn!: Button;
   private swingBtn!: Button;
+  /**
+   * While the meter runs (after the first tap), a press anywhere on the HUD is the next swing tap,
+   * except the menu button (developer, 2026-10-26: the mouse drifts off the swing button between
+   * taps, and a press on a button next to it, spin or swing length, was lost or changed the shot).
+   */
+  private swingCatch!: Phaser.GameObjects.Zone;
   private meterPanel!: Panel;
   private meterG!: Phaser.GameObjects.Graphics;
   private meterLabels: Phaser.GameObjects.BitmapText[] = [];
@@ -296,6 +302,16 @@ export class HudScene extends Phaser.Scene {
     this.sub = txt(this, 0, 0, '', { origin: [0.5, 0.5] }).setDepth(50);
     this.root.add([this.menuBtn, this.cardBtn, this.holeBox, this.info, this.windPanel, this.miniPanel, this.mapBtn, this.aimL, this.aimR, this.aimLabel,
       this.clubPanel, this.clubUp, this.clubDown, this.spinBtn, this.scaleBtn, this.unplayBtn, this.mulliganBtn, this.meterPanel, this.meterRead, this.swingBtn, this.offArrow]);
+    this.swingCatch = this.add.zone(-5000, -5000, 20000, 20000).setOrigin(0, 0).setDepth(40).setInteractive();
+    this.swingCatch.input!.enabled = false;
+    this.swingCatch.on('pointerdown', (ptr: Phaser.Input.Pointer) => {
+      if (this.play.state !== 'swing' || this.modal) return;
+      const m = this.menuBtn.getBounds();
+      const w = this.cameras.main.getWorldPoint(ptr.x, ptr.y);
+      if (this.menuBtn.visible && m.contains(w.x, w.y)) { this.togglePause(); return; }
+      if (ptr.rightButtonDown()) return;
+      this.play.tap(ptr.event?.timeStamp ?? performance.now());
+    });
     if (p.round.cfg.practice) this.buildPractice();
     if (p.match) this.buildMatch();
   }
@@ -1007,6 +1023,11 @@ export class HudScene extends Phaser.Scene {
     }
     this.meterRead.setVisible(!!read);
     if (read) setTxt(this.meterRead, read);
+  }
+
+  update() {
+    const on = !!this.play && this.play.state === 'swing' && !this.modal;
+    if (this.swingCatch?.input && this.swingCatch.input.enabled !== on) this.swingCatch.input.enabled = on;
   }
 
   private onSwingButton(time: number) {
