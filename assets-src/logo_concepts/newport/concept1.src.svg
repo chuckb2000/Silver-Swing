@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <title>Newport - Concept 1: Hickory and Gutty, 1895</title>
+  <!-- a short run of Atlantic waves -->
+  <path d="M2 26 C4.6 23.8 7.4 23.8 10 26 C12.6 23.8 15.4 23.8 18 26 C20.6 23.8 23.4 23.8 26 26 C27.6 24.6 29 24.2 30 24.6 L30 30 L2 30 Z" fill="#2a5878"/>
+  <path d="M2 26 C4.6 23.8 7.4 23.8 10 26 C12.6 23.8 15.4 23.8 18 26 C20.6 23.8 23.4 23.8 26 26 C27.6 24.6 29 24.2 30 24.6 L30 26 C29 25.6 27.6 26 26 27.4 C23.4 25.2 20.6 25.2 18 27.4 C15.4 25.2 12.6 25.2 10 27.4 C7.4 25.2 4.6 25.2 2 27.4 Z" fill="#e6f0f6"/>
+  <rect x="2" y="28.6" width="28" height="1.4" fill="#1d4360"/>
+  <!-- the hickory shaft and its leather grip -->
+  <path d="M27.6 2.2 L29.2 3.8 L11 21.4 L9.6 20 Z" fill="#b07c42"/>
+  <path d="M27.6 2.2 L28.4 3 L10.4 20.8 L9.6 20 Z" fill="#d29a5a"/>
+  <path d="M27.6 2.2 L29.2 3.8 L26.2 6.8 L24.6 5.2 Z" fill="#4a2a1a"/>
+  <!-- the long-nosed wooden head with its horn sole -->
+  <path d="M9.4 19.4 L12 22 C10.6 23.6 7.6 24.6 4.6 24.6 C3 24.6 2.4 23.6 3.2 22.8 C5 21.8 7.6 20.8 9.4 19.4 Z" fill="#8a5228"/>
+  <path d="M9.4 19.4 L10.4 20.4 C8.4 21.8 5.8 22.8 3.4 23.4 L3.2 22.8 C5 21.8 7.6 20.8 9.4 19.4 Z" fill="#b5743c"/>
+  <path d="M3.2 23.8 C5.6 23.8 8.6 23.4 11 22.4 L11.6 22.8 C9.6 24 6.8 24.8 4.6 24.8 C3.8 24.8 3.2 24.4 3.2 23.8 Z" fill="#2a1a12"/>
+  <!-- the gutta-percha ball, hand-hammered -->
+  <circle cx="21.4" cy="17" r="4.4" fill="#e8e2cf"/>
+  <path d="M21.4 12.6 A4.4 4.4 0 0 1 25.8 17 A4.4 4.4 0 0 1 21.4 21.4 Z" fill="#cdc5ab"/>
+  <g fill="#b9b195"><rect x="19.4" y="16.2" width="1" height="1"/><rect x="22.6" y="14.6" width="1" height="1"/><rect x="21.2" y="19" width="1" height="1"/><rect x="23.8" y="18" width="1" height="1"/></g>
+  <rect x="18.8" y="14" width="1.6" height="1.4" fill="#fbf9f2"/>
+</svg>
