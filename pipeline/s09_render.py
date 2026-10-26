@@ -199,9 +199,11 @@ def stake_lines(boundaries, g, cfg):
     boundary part given (common.boundary_rings in s09, the boundary's parts in
     s09b), stakes on its outer (OB) side; with cfg range_art "rough" also the edge
     of each driving range, stakes on its inner (OB) side, since a range drawn as
-    rough has no other edge in the art."""
+    rough has no other edge in the art. With cfg "range_stakes": true the range's edge
+    is staked the same way while the range keeps its range art (Sea Ranch, developer
+    2026-10-26)."""
     out = [(b.exterior, b, False) for b in boundaries]
-    if cfg.get("range_art") == "rough":
+    if cfg.get("range_art") == "rough" or cfg.get("range_stakes"):
         for geom in g[g.kind == "driving_range"].geometry:
             for part in getattr(geom, "geoms", [geom]):
                 out.append((part.exterior, part, True))
