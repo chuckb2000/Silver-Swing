@@ -375,3 +375,27 @@ describe('practice ground (item 5)', () => {
     void Polygon;
   });
 });
+
+describe('passport labels (developer, 2026-10-25)', () => {
+  it('a course at a place with several drops the place name; short names drop club words', async () => {
+    const { passportName, shortName } = await import('../../src/save/milestones');
+    expect(passportName({ name: 'Pumpkin Ridge Witch Hollow', groupName: 'Pumpkin Ridge Golf Club' })).toBe('witch hollow');
+    expect(passportName({ name: 'Pumpkin Ridge Ghost Creek', groupName: 'Pumpkin Ridge Golf Club' })).toBe('ghost creek');
+    expect(passportName({ name: 'East Potomac White Course', group: 'east_potomac', groupName: 'East Potomac Golf Links' })).toBe('east po white');
+    expect(passportName({ name: 'East Potomac Red Course', group: 'east_potomac', groupName: 'East Potomac Golf Links' })).toBe('east po red');
+    expect(passportName({ name: 'East Potomac Blue Course', group: 'east_potomac', groupName: 'East Potomac Golf Links' })).toBe('east po blue');
+    expect(passportName({ name: 'Silvies Valley Chief Egan', groupName: 'Silvies Valley Ranch' })).toBe('chief egan');
+    expect(passportName({ name: 'Langston Golf Course' })).toBe('langston');
+    // the lists across courses (recent, eagles, most birdies, this week) use the same names
+    const { listName } = await import('../../src/save/milestones');
+    expect(listName({ name: 'Pumpkin Ridge Witch Hollow', group: 'pumpkin_ridge', groupName: 'Pumpkin Ridge Golf Club' })).toBe('witch hollow');
+    expect(listName({ name: 'East Potomac Blue Course', group: 'east_potomac', groupName: 'East Potomac Golf Links' })).toBe('east po blue');
+    expect(listName({ name: 'Oswego Lake Country Club' })).toBe('oswego lake');
+    expect(shortName('Cypress Point Club')).toBe('cypress point');
+    expect(shortName('RedTail Golf Center')).toBe('redtail');
+    expect(shortName('Willamette Valley CC')).toBe('willamette valley');
+    // every course on offer fits under its card
+    const idx = (await import('../../public/courses/index.json')).default as { courses: { name: string; group?: string; groupName?: string }[] };
+    for (const c of idx.courses) expect(passportName(c).length, c.name).toBeLessThanOrEqual(17);
+  });
+});
