@@ -1,22 +1,25 @@
 // Leaderboard: one board per course x tee set x round length, filterable by
 // difficulty, casual rounds on their own tab. "friends" is the shared online
 // board (when the site has one), "this device" the local one, which can be
-// exported / imported as text. Two more lists across every course (developer,
-// 2026-10-19): the recent eagles (kept the moment the ball drops) and the
-// most birdies in a round.
+// exported / imported as text. More lists across every course: the recent eagles
+// (developer, 2026-10-19; kept the moment the ball drops), and the stats tab
+// (developer, 2026-10-26): most birdies in a round, most feet of putts made in a
+// round, and the longest hole-outs from off the green, each one to watch again.
 
 import { listName } from '../save/milestones';
 import { app } from '../app';
 import { Difficulty } from '../data/difficulty';
 import { backupText, LeaderboardEntry, loadBoard, RoundLength } from '../save/store';
-import { BirdieRow, fetchBirdieRecords, fetchHandicapRounds, fetchBoard, fetchDaily, fetchDailyWeek, fetchEagles, fetchRecent, fetchRound, flushUploads, nameConflicts, onlineAvailable } from '../save/online';
+import { BirdieRow, fetchBirdieRecords, fetchHoleout, fetchHoleouts, fetchPuttRecords, fetchHandicapRounds, fetchBoard, fetchDaily, fetchDailyWeek, fetchEagles, fetchRecent, fetchRound, flushUploads, nameConflicts, onlineAvailable } from '../save/online';
 import { FeedRow, matchFeedText, timeAgo } from '../save/feed';
 import { shareRound } from '../ui/shareCard';
 import { addDays, dailyPlan, dayStandings, weekStandings, weekStart } from '../systems/game/daily';
 import { DAILY_PICKS, DAILY_ROSTER } from '../data/dailyRoster';
 import { handicapBoard, HcpRound, hcpCourses, indexLabel } from '../systems/game/handicap';
 import { birdiesIn, EagleEvent, featName } from '../save/feats';
-import { loadEagles } from '../save/store';
+import { loadEagles, loadHoleouts } from '../save/store';
+import { HoleOut, holeOutDistance, puttsMadeM, tracksMade } from '../save/holeouts';
+import { watchHoleout } from './ReplayScene';
 import { lengthLabel, lengthsFor, shapeById } from './flow';
 import { shapeOfCourse } from '../systems/game/lengths';
 import { askImport, showBackup } from '../ui/backup';
@@ -33,7 +36,9 @@ let source: 'friends' | 'device' | null = null; // null: friends when the site h
 let diff: Difficulty | 'all' = 'all';
 let casual = false;
 let page = 0;
-let view: 'scores' | 'daily' | 'recent' | 'eagles' | 'birdies' | 'handicaps' = 'scores';
+let view: 'scores' | 'daily' | 'recent' | 'eagles' | 'stats' | 'handicaps' = 'scores';
+/** the stats tab's list (developer, 2026-10-26) */
+let stat: 'birdies' | 'putts' | 'holeouts' = 'holeouts';
 let dailyWhen: 'today' | 'week' = 'today';
 
 /** The calendar day (yyyy-mm-dd) of an ISO time in the player's own time zone (an evening round isn't "tomorrow"). */
@@ -64,7 +69,7 @@ export class LeaderboardScene extends MenuScene {
     this.root.add(new Panel(this, x0, y0, pw, ph, 0.9));
     this.root.add(txt(this, x0 + pw / 2, y0 + 5, 'leaderboard', { origin: [0.5, 0], scale: 2 }));
     {
-      const items: [typeof view, string][] = [['scores', 'scores'], ['daily', 'daily'], ['recent', 'recent'], ['eagles', 'eagles'], ['birdies', 'birdies'], ['handicaps', 'handicap']];
+      const items: [typeof view, string][] = [['scores', 'scores'], ['daily', 'daily'], ['recent', 'recent'], ['eagles', 'eagles'], ['stats', 'stats'], ['handicaps', 'handicap']];
       const bw = Math.floor((pw - 16 - 2 * (items.length - 1)) / items.length);
       if (bw < 46) items[5][1] = 'hcp'; // a narrow phone
       items.forEach(([k, lab], i) => this.root.add(new Button(this, x0 + 8 + i * (bw + 2), y0 + 22, bw, 14, lab, () => { view = k; page = 0; this.rebuild(); }, { color: view === k ? 'orange' : 'grey' })));
@@ -342,6 +347,37 @@ export class LeaderboardScene extends MenuScene {
     this.root.add(layer);
   }
 
+  /** The longest hole-outs from off the green, any course; a tap plays one again (ReplayScene). */
+  private async buildHoleouts(x0: number, y0: number, pw: number, ph: number, y: number, src: 'friends' | 'device', g: number) {
+    let list: HoleOut[] | null = null;
+    let note = '';
+    if (src === 'friends') { await flushUploads(); list = await fetchHoleouts(50); if (!list) note = "can't reach the shared list - showing this device"; }
+    const local = await loadHoleouts();
+    if (!list) list = local.filter((h) => h.player !== DEFAULT_NAME).sort((a, b) => b.dist - a.dist);
+    if (!this.isCurrentBuild(g)) return;
+    if (note) { this.root.add(txt(this, x0 + pw / 2, y, note, { origin: [0.5, 0], color: COLORS.yellow, maxWidth: pw - 16 })); y += 11; }
+    const courseName = (id: string) => { const c = app.courses.find((x) => x.id === id); return c ? listName(c) : id; };
+    const wide = pw > 300;
+    const mine = new Map(local.map((h) => [h.id, h]));
+    const rows: TableRow[] = list.map((h, i) => ({
+      v: [String(i + 1), h.player.slice(0, 10), holeOutDistance(h.dist), `${courseName(h.course).slice(0, wide ? 16 : 11)} ${h.hole}`, wide ? h.club.toLowerCase().slice(0, 12) : ''],
+      hi: h.n === 1 ? [2] : [],
+      tap: () => { void this.watch(mine.get(h.id) ?? h); },
+    }));
+    this.table(x0, y0, pw, ph, y, ['#', 'player', 'from', 'course, hole', wide ? 'club' : ''],
+      [x0 + 10, x0 + 30, x0 + 94, x0 + 146, wide ? x0 + 270 : -1], rows,
+      'no hole-outs yet - chip one in! (from 26 october)', 'tap one to watch it again');
+  }
+
+  /** Play a hole-out again: its flight from this device, or from the shared list. */
+  private async watch(h: HoleOut) {
+    let full: HoleOut | null = h.path ? h : null;
+    if (!full) full = await fetchHoleout(h.id);
+    if (!full?.path || !(await watchHoleout(this, full, 'leaderboard'))) {
+      this.root.add(txt(this, app.view.w / 2, app.view.h - 44, "that one can't be played back", { origin: [0.5, 0], color: COLORS.yellow }));
+    }
+  }
+
   /** The recent eagles and the most birdies in a round, across every course. */
   private async buildFeats(x0: number, y0: number, pw: number, ph: number) {
     const g = this.gen;
@@ -388,20 +424,33 @@ export class LeaderboardScene extends MenuScene {
       if (!rows.length) empty = 'no handicaps yet - 27 holes at normal difficulty put you on this board';
       else this.root.add(txt(this, x0 + pw / 2, y0 + ph - 32, 'on the board after 27 holes  ·  normal rounds only', { origin: [0.5, 0], color: COLORS.dim, maxWidth: pw - 16 }));
     } else {
+      // stats: which list
+      const kinds = [['holeouts', 'hole-outs'], ['putts', 'putts made'], ['birdies', 'birdies']] as const;
+      const kw = Math.floor((pw - 16 - 4) / 3);
+      kinds.forEach(([k, lab], i) => this.root.add(new Button(this, x0 + 8 + i * (kw + 2), y, kw, 14, lab, () => { stat = k; page = 0; this.rebuild(); }, { color: stat === k ? 'orange' : 'grey' })));
+      y += 17;
+      if (stat === 'holeouts') { await this.buildHoleouts(x0, y0, pw, ph, y, src, g); return; }
       let list: BirdieRow[] | null = null;
-      if (src === 'friends') { list = await fetchBirdieRecords(50); if (!list) note = "can't reach the shared board - showing this device"; }
+      const putts = stat === 'putts';
+      if (src === 'friends') { list = putts ? await fetchPuttRecords(50) : await fetchBirdieRecords(50); if (!list) note = "can't reach the shared board - showing this device"; }
       if (!list) {
-        list = (await loadBoard())
-          .filter((e) => !e.casual && e.player !== DEFAULT_NAME)
-          .map((e) => ({ id: e.id, player: e.player, course: e.course, birdies: birdiesIn(e.scores), length: e.length, tee: e.tee, date: e.date }))
-          .filter((r) => r.birdies > 0)
-          .sort((a, b) => b.birdies - a.birdies || (a.date < b.date ? -1 : 1));
+        const mine = (await loadBoard()).filter((e) => !e.casual && e.player !== DEFAULT_NAME);
+        list = putts
+          ? mine.filter((e) => tracksMade(e.scores))
+            .map((e) => ({ id: e.id, player: e.player, course: e.course, birdies: birdiesIn(e.scores), made: puttsMadeM(e.scores), length: e.length, tee: e.tee, date: e.date }))
+            .filter((r) => r.made > 0)
+            .sort((a, b) => b.made - a.made || (a.date < b.date ? -1 : 1))
+          : mine
+            .map((e) => ({ id: e.id, player: e.player, course: e.course, birdies: birdiesIn(e.scores), length: e.length, tee: e.tee, date: e.date }))
+            .filter((r) => r.birdies > 0)
+            .sort((a, b) => b.birdies - a.birdies || (a.date < b.date ? -1 : 1));
       }
-      head = ['#', 'player', 'birdies', 'course', 'date'];
+      head = ['#', 'player', putts ? 'feet' : 'birdies', 'course', 'date'];
       cols = [x0 + 10, x0 + 30, x0 + 110, x0 + 150, wide ? x0 + 300 : -1];
-      rows = list.map((r, i) => [String(i + 1), r.player.slice(0, 12), String(r.birdies), courseName(r.course).slice(0, wide ? 24 : 18), localDay(r.date)]);
-      if (!rows.length) empty = 'no birdies yet - go make some!';
-      else this.root.add(txt(this, x0 + pw / 2, y0 + ph - 32, 'birdies or better in one round, any course (casual rounds left out)', { origin: [0.5, 0], color: COLORS.dim, maxWidth: pw - 16 }));
+      const holesOf = (l: string) => (l === '18' || l === '9x2' ? '' : ' (9)');
+      rows = list.map((r, i) => [String(i + 1), r.player.slice(0, 12), putts ? `${Math.round((r.made ?? 0) / 0.3048)}${holesOf(r.length)}` : String(r.birdies), courseName(r.course).slice(0, wide ? 24 : 18), localDay(r.date)]);
+      if (!rows.length) empty = putts ? 'no putts made yet - rounds from 26 october count' : 'no birdies yet - go make some!';
+      else this.root.add(txt(this, x0 + pw / 2, y0 + ph - 32, putts ? 'feet of putts holed in one round, any course (casual rounds left out)' : 'birdies or better in one round, any course (casual rounds left out)', { origin: [0.5, 0], color: COLORS.dim, maxWidth: pw - 16 }));
     }
     if (!this.isCurrentBuild(g)) return;
     if (note) { this.root.add(txt(this, x0 + pw / 2, y, note, { origin: [0.5, 0], color: COLORS.yellow, maxWidth: pw - 16 })); y += 11; }

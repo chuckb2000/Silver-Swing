@@ -8,7 +8,8 @@ import { isEntry, LeaderboardEntry } from './entry';
 import { EagleEvent, isEagle } from './feats';
 import { FeedRow, isFeedRow, isMatchFeedRow, MatchFeedRow } from './feed';
 import { DEFAULT_NAME } from './names';
-import { loadBoard, loadEagles, loadUploaded, saveEagles, saveSettings, saveUploaded } from './store';
+import { loadBoard, loadEagles, loadHoleouts, loadUploaded, saveEagles, saveHoleouts, saveSettings, saveUploaded } from './store';
+import { HoleOut, isHoleOut } from './holeouts';
 import { app } from '../app';
 import type { HcpRound } from '../systems/game/handicap';
 
@@ -23,6 +24,7 @@ function timed(url: string, init: RequestInit = {}, ms = 8000): Promise<Response
 
 const API = 'api/scores'; // relative to the page
 const EAGLES = 'api/eagles';
+const HOLEOUTS = 'api/holeouts';
 const RECORDS = 'api/records';
 const NAMES = 'api/names';
 const RECENT = 'api/recent';
@@ -141,6 +143,7 @@ export function flushUploads(): Promise<number> {
       if (n) await saveUploaded(sent);
       if (resend && todo.every((e) => sent.has(e.id) || nameConflicts.has(e.player))) markResentForOwner();
       await flushEagles();
+      await flushHoleouts();
       return n;
     })().finally(() => { flushing = null; });
   }
@@ -198,7 +201,73 @@ export async function fetchEagles(limit = 30): Promise<EagleEvent[] | null> {
   }
 }
 
-export interface BirdieRow { id: string; player: string; course: string; birdies: number; length: string; tee: string; date: string }
+export interface BirdieRow { id: string; player: string; course: string; birdies: number; made?: number; length: string; tee: string; date: string }
+
+/** Most feet of putts made in a round on the shared board (`made`, metres; null when unreachable). */
+export async function fetchPuttRecords(limit = 50): Promise<BirdieRow[] | null> {
+  if (!(await onlineAvailable())) return null;
+  try {
+    const res = await timed(`${RECORDS}?kind=putts&limit=${limit}`, { cache: 'no-store' });
+    if (!res.ok) return null;
+    const j = (await res.json()) as { records?: BirdieRow[] };
+    return (j.records ?? []).filter((r) => r && typeof r.player === 'string' && Number.isFinite(r.made));
+  } catch {
+    return null;
+  }
+}
+
+let holing: Promise<void> | null = null;
+
+/** Send this device's hole-outs the shared list hasn't got yet (named ones only), a few at a time. */
+export function flushHoleouts(): Promise<void> {
+  if (!holing) {
+    holing = (async () => {
+      if (!(await onlineAvailable())) return;
+      const list = await loadHoleouts();
+      const todo = list.filter((h) => !h.sent && h.player !== DEFAULT_NAME).slice(0, 5);
+      if (!todo.length) return;
+      try {
+        const body = todo.map(({ sent: _s, ...h }) => ({ ...h, owner: app.settings.playerKey }));
+        const res = await timed(HOLEOUTS, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body) }, 15_000);
+        if (!res.ok) return;
+        const j = (await res.json().catch(() => ({}))) as { taken?: string[] };
+        const taken = new Set(j.taken ?? []);
+        for (const h of todo) {
+          if (taken.has(h.id)) nameConflicts.add(h.player);
+          else h.sent = true;
+        }
+        await saveHoleouts(list);
+      } catch { /* try again later */ }
+    })().finally(() => { holing = null; });
+  }
+  return holing;
+}
+
+/** The longest hole-outs from off the green on the shared list, without flights (null when unreachable). */
+export async function fetchHoleouts(limit = 50): Promise<HoleOut[] | null> {
+  if (!(await onlineAvailable())) return null;
+  try {
+    const res = await timed(`${HOLEOUTS}?limit=${limit}`, { cache: 'no-store' });
+    if (!res.ok) return null;
+    const j = (await res.json()) as { holeouts?: unknown[] };
+    return (j.holeouts ?? []).filter(isHoleOut);
+  } catch {
+    return null;
+  }
+}
+
+/** One hole-out with its flight, for the replay (null when unreachable or gone). */
+export async function fetchHoleout(id: string): Promise<HoleOut | null> {
+  if (!(await onlineAvailable())) return null;
+  try {
+    const res = await timed(`${HOLEOUTS}?id=${encodeURIComponent(id)}`, { cache: 'no-store' });
+    if (!res.ok) return null;
+    const j = (await res.json()) as { holeout?: unknown };
+    return isHoleOut(j.holeout) ? j.holeout : null;
+  } catch {
+    return null;
+  }
+}
 
 /** Most birdies (or better) in a round on the shared board (null when unreachable). */
 export async function fetchBirdieRecords(limit = 20, course?: string): Promise<BirdieRow[] | null> {

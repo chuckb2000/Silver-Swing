@@ -504,6 +504,8 @@ export class Round {
     this.ball = { x: end.x, y: end.y, teedUp: false };
     this.history.push({ x: end.x, y: end.y });
     if (sim.holed) {
+      // how far it went in from (the stats lists: putts made, hole-outs from off the green)
+      this.tally.holed(Math.hypot(this.pin.x - p.spec.x, this.pin.y - p.spec.y), !wasOnGreen);
       this.tally.rested(true, true, isTeeShot); // holed from the tee: the fairway counts as hit, not missed
       if (this.tally.reachedGreenAt === null) this.tally.reachedGreenAt = this.tally.strokes;
       return { kind: 'holed' };

@@ -8,6 +8,8 @@ import type { MatchResult } from './matchRoom';
 import { isEntry, LeaderboardEntry, MAX_ROUND_HOLES } from '../save/entry';
 import { birdiesIn, EagleEvent, eaglesIn, isEagle } from '../save/feats';
 import { CARD_FIXES, CARD_FIXES_KEY, fixedCourses, fixEagle, fixEntry } from '../save/cardFixes';
+import { HoleOut, isHoleOut, puttsMadeM, tracksMade } from '../save/holeouts';
+import { decodePath } from '../systems/match/path';
 
 /** The parts of Cloudflare's D1 API used here. */
 export interface D1Statement {
@@ -76,6 +78,27 @@ const SCHEMA = [
     received TEXT NOT NULL
   )`,
   'CREATE INDEX IF NOT EXISTS matches_received ON matches (received)',
+  // hole-outs from off the green (developer, 2026-10-26: the longest, each with its flight to watch
+  // again), reported the moment the ball drops like an eagle
+  `CREATE TABLE IF NOT EXISTS holeouts (
+    id TEXT PRIMARY KEY,
+    round TEXT NOT NULL,
+    player TEXT NOT NULL,
+    owner TEXT,
+    course TEXT NOT NULL,
+    hole INTEGER NOT NULL,
+    par INTEGER NOT NULL,
+    n INTEGER NOT NULL,
+    club TEXT NOT NULL,
+    dist REAL NOT NULL,
+    lie TEXT NOT NULL,
+    tee TEXT NOT NULL,
+    difficulty TEXT NOT NULL,
+    date TEXT NOT NULL,
+    received TEXT NOT NULL,
+    path TEXT
+  )`,
+  'CREATE INDEX IF NOT EXISTS holeouts_dist ON holeouts (dist)',
 ];
 
 /** Rows of players who haven't hidden themselves (rounds and eagles both have `owner`). */
@@ -83,12 +106,12 @@ const SHOWN = '(owner IS NULL OR owner NOT IN (SELECT owner FROM hidden))';
 const shownAs = (t: string) => `(${t}.owner IS NULL OR ${t}.owner NOT IN (SELECT owner FROM hidden))`;
 
 /** Bumped when SCHEMA or ROUND_COLUMNS change: a database at this version skips the setup. */
-const SCHEMA_VERSION = '5';
+const SCHEMA_VERSION = '6';
 /** Old rounds counted per request (Cloudflare's free plan allows 50 database queries per request). */
 const BACKFILL_ROWS = 10;
 
 /** Columns added to `rounds` after it was first created (ALTER TABLE fails harmlessly once they exist). */
-const ROUND_COLUMNS = ['owner TEXT', 'birdies INTEGER', 'casual INTEGER', 'tee TEXT', 'daily TEXT'];
+const ROUND_COLUMNS = ['owner TEXT', 'birdies INTEGER', 'casual INTEGER', 'tee TEXT', 'daily TEXT', 'made_m REAL'];
 
 /** Indexes for the lists added with schema 3 (a player's own rounds, the activity feed, the daily round). */
 const ROUND_INDEXES = [
@@ -96,6 +119,7 @@ const ROUND_INDEXES = [
   'CREATE INDEX IF NOT EXISTS rounds_owner ON rounds (owner, date)',
   'CREATE INDEX IF NOT EXISTS rounds_received ON rounds (received)',
   'CREATE INDEX IF NOT EXISTS rounds_daily ON rounds (daily, gross)',
+  'CREATE INDEX IF NOT EXISTS rounds_made ON rounds (made_m)',
 ];
 
 const MAX_BODY = 256 * 1024;  // bytes per request
@@ -180,6 +204,7 @@ async function applyCardFixes(db: D1Like) {
   for (const f of CARD_FIXES) {
     await db.prepare('UPDATE eagles SET par = ? WHERE course = ? AND hole = ? AND par <> ?').bind(f.par, f.course, f.hole, f.par).run();
     await db.prepare('DELETE FROM eagles WHERE course = ? AND hole = ? AND strokes > par - 2').bind(f.course, f.hole).run();
+    await db.prepare('UPDATE holeouts SET par = ? WHERE course = ? AND hole = ? AND par <> ?').bind(f.par, f.course, f.hole, f.par).run();
   }
   await db.prepare("INSERT OR REPLACE INTO meta (k, v) VALUES ('card_fixes', ?)").bind(CARD_FIXES_KEY).run();
   cardFixed = true;
@@ -293,7 +318,9 @@ const int = (v: unknown, lo: number, hi: number) => Number.isInteger(v) && (v as
 /** A round's scores as the game writes them (nothing else gets stored). */
 export function validScores(e: LeaderboardEntry): boolean {
   return e.scores.every((s) => !!s && int(s.hole, 1, MAX_ROUND_HOLES) && int(s.par, 3, 6) && int(s.strokes, 0, 40)
-    && int(s.putts, 0, 40) && int(s.penalties, 0, 40));
+    && int(s.putts, 0, 40) && int(s.penalties, 0, 40)
+    && (s.made === undefined || (typeof s.made === 'number' && Number.isFinite(s.made) && s.made >= 0 && s.made <= 700))
+    && (s.off === undefined || typeof s.off === 'boolean'));
 }
 
 /** An ISO time no later than tomorrow (a wrong clock or a made-up date can't sit at the top of a list). */
@@ -426,9 +453,10 @@ export async function handlePost(db: D1Like | undefined, body: string): Promise<
       const data = JSON.stringify(clean);
       if (data.length > 16_000) { rejected++; continue; }
       const res = (await db
-        .prepare('INSERT OR IGNORE INTO rounds (id, course, length, player, gross, back, date, data, received, owner, birdies, casual, tee, daily) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)')
+        .prepare('INSERT OR IGNORE INTO rounds (id, course, length, player, gross, back, date, data, received, owner, birdies, casual, tee, daily, made_m) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)')
         .bind(clean.id, clean.course, clean.length, clean.player, clean.gross, clean.back ?? null, clean.date, data, now,
-          ownerOf(rawOwner), birdiesIn(clean.scores), clean.casual ? 1 : 0, clean.tee, clean.daily ?? null)
+          ownerOf(rawOwner), birdiesIn(clean.scores), clean.casual ? 1 : 0, clean.tee, clean.daily ?? null,
+          tracksMade(clean.scores) ? puttsMadeM(clean.scores) : null)
         .run()) as { meta?: { changes?: number }; changes?: number };
       added += res?.meta?.changes ?? res?.changes ?? 0;
       // the round's eagles, in case the live report never arrived (the same ids: never twice)
@@ -486,7 +514,7 @@ export async function handleEaglesPost(db: D1Like | undefined, body: string): Pr
   return json({ ok: true, added, rejected, taken });
 }
 
-export interface BirdieRecord { player: string; course: string; birdies: number; length: string; tee: string; date: string; id: string }
+export interface BirdieRecord { player: string; course: string; birdies: number; made: number; length: string; tee: string; date: string; id: string }
 
 /**
  * GET /api/records?kind=birdies[&course=id][&limit=n]: the most birdies (or
@@ -497,21 +525,88 @@ export async function handleRecordsGet(db: D1Like | undefined, url: URL): Promis
   if (!db) return json({ ok: false, error: 'no database bound (DB)' }, 503);
   await prepareDb(db);
   const kind = url.searchParams.get('kind') ?? 'birdies';
-  if (kind !== 'birdies') return json({ error: 'unknown kind' }, 400);
+  if (kind !== 'birdies' && kind !== 'putts') return json({ error: 'unknown kind' }, 400);
   const limit = Math.max(1, Math.min(MAX_LIST, Number(url.searchParams.get('limit')) || 20));
   const course = url.searchParams.get('course');
-  const sql = `SELECT id, player, course, birdies, length, data, date FROM rounds WHERE birdies > 0 AND casual = 0 AND ${SHOWN}${course ? ' AND course = ?' : ''} ORDER BY birdies DESC, date ASC LIMIT ?`;
+  // most birdies in a round, or most feet of putts made in a round (rounds from 2026-10-26)
+  const where = kind === 'birdies' ? 'birdies > 0' : 'made_m > 0';
+  const order = kind === 'birdies' ? 'birdies DESC, date ASC' : 'made_m DESC, date ASC';
+  const sql = `SELECT id, player, course, birdies, made_m, length, tee, date FROM rounds WHERE ${where} AND casual = 0 AND ${SHOWN}${course ? ' AND course = ?' : ''} ORDER BY ${order} LIMIT ?`;
   const stmt = course ? db.prepare(sql).bind(course, limit * 2) : db.prepare(sql).bind(limit * 2);
-  const { results } = await stmt.all<{ id: string; player: string; course: string; birdies: number; length: string; data: string; date: string }>();
+  const { results } = await stmt.all<{ id: string; player: string; course: string; birdies: number; made_m: number | null; length: string; tee: string | null; date: string }>();
   const rows: BirdieRecord[] = [];
   for (const r of results) {
     const name = boardableName(r.player);
     if (!name || rows.length >= limit) continue;
-    let tee = '';
-    try { tee = (JSON.parse(r.data) as { tee?: string }).tee ?? ''; } catch { /* keep '' */ }
-    rows.push({ id: r.id, player: name, course: r.course, birdies: r.birdies, length: r.length, tee, date: r.date });
+    rows.push({ id: r.id, player: name, course: r.course, birdies: r.birdies, made: r.made_m ?? 0, length: r.length, tee: r.tee ?? '', date: r.date });
   }
   return json({ records: rows });
+}
+
+/**
+ * GET /api/holeouts?limit=n[&course=id]: the longest hole-outs from off the green (no flights);
+ * GET /api/holeouts?id=x: one, with its flight for the replay.
+ */
+export async function handleHoleoutsGet(db: D1Like | undefined, url: URL): Promise<Response> {
+  if (!db) return json({ ok: false, error: 'no database bound (DB)' }, 503);
+  await prepareDb(db);
+  const cols = 'id, round, player, course, hole, par, n, club, dist, lie, tee, difficulty, date';
+  const id = url.searchParams.get('id');
+  if (id !== null) {
+    if (!id || id.length > 140) return json({ error: 'id required' }, 400);
+    const { results } = await db.prepare(`SELECT ${cols}, path FROM holeouts WHERE id = ? AND ${SHOWN}`).bind(id).all<HoleOut & { path: string | null }>();
+    const r = results[0];
+    const name = r ? boardableName(r.player) : null;
+    if (!r || !name) return json({ error: 'not found' }, 404);
+    return json({ holeout: { ...r, player: name, path: r.path ?? undefined } });
+  }
+  const limit = Math.max(1, Math.min(MAX_LIST, Number(url.searchParams.get('limit')) || 30));
+  const course = url.searchParams.get('course');
+  const sql = `SELECT ${cols} FROM holeouts WHERE ${SHOWN}${course ? ' AND course = ?' : ''} ORDER BY dist DESC, date ASC LIMIT ?`;
+  const stmt = course ? db.prepare(sql).bind(course, limit * 2) : db.prepare(sql).bind(limit * 2);
+  const { results } = await stmt.all<HoleOut>();
+  const out: HoleOut[] = [];
+  for (const r of results) {
+    const name = boardableName(r.player);
+    if (name && out.length < limit) out.push({ ...r, player: name });
+  }
+  return json({ holeouts: out });
+}
+
+/** POST /api/holeouts with one hole-out or a list: `HoleOut` (with its flight) plus the device's `owner` key. */
+export async function handleHoleoutsPost(db: D1Like | undefined, body: string): Promise<Response> {
+  if (!db) return json({ ok: false, error: 'no database bound (DB)' }, 503);
+  const list = parseList(body);
+  if (list instanceof Response) return list;
+  await prepareDb(db);
+  const nowDate = new Date();
+  const now = nowDate.toISOString();
+  const claim = claimer(db);
+  let added = 0, rejected = 0;
+  const taken: string[] = [];
+  for (const raw of list) {
+    try {
+      if (!isHoleOut(raw)) { rejected++; continue; }
+      const { owner: rawOwner, ...h } = raw as HoleOut & { owner?: unknown };
+      if (!ownerOf(rawOwner)) { rejected++; continue; }
+      // a flight that doesn't read, or doesn't end in the cup, is kept without one (no replay)
+      const sim = h.path ? decodePath(h.path) : null;
+      const path = sim && sim.holed ? h.path! : null;
+      const c = await claim(h.player, rawOwner);
+      if (c === 'taken' || c === 'too_many') { taken.push(h.id); continue; }
+      if (c !== 'ok') { rejected++; continue; }
+      const fixed = CARD_FIXES.find((f) => f.course === h.course && f.hole === h.hole);
+      const res = (await db
+        .prepare('INSERT OR IGNORE INTO holeouts (id, round, player, owner, course, hole, par, n, club, dist, lie, tee, difficulty, date, received, path) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)')
+        .bind(h.id, h.round, boardableName(h.player)!, ownerOf(rawOwner), h.course, h.hole, fixed?.par ?? h.par, h.n, h.club,
+          Math.round(h.dist * 100) / 100, h.lie, h.tee, h.difficulty, sane(h.date, nowDate), now, path)
+        .run()) as { meta?: { changes?: number }; changes?: number };
+      added += res?.meta?.changes ?? res?.changes ?? 0;
+    } catch {
+      rejected++;
+    }
+  }
+  return json({ ok: true, added, rejected, taken });
 }
 
 /** GET /api/names?name=x&owner=k: may this device use the name? POST the same to claim it. */
@@ -671,6 +766,7 @@ export async function handleMerge(db: D1Like | undefined, body: string): Promise
     await db.prepare('UPDATE names SET owner = ? WHERE owner = ?').bind(o, f).run();
     await db.prepare('UPDATE rounds SET owner = ? WHERE owner = ?').bind(o, f).run();
     await db.prepare('UPDATE eagles SET owner = ? WHERE owner = ?').bind(o, f).run();
+    await db.prepare('UPDATE holeouts SET owner = ? WHERE owner = ?').bind(o, f).run();
     await db.prepare('UPDATE matches SET winner_owner = ? WHERE winner_owner = ?').bind(o, f).run();
     await db.prepare('UPDATE matches SET loser_owner = ? WHERE loser_owner = ?').bind(o, f).run();
     await db.prepare('DELETE FROM hidden WHERE owner = ?').bind(f).run(); // this code's choice stands
@@ -688,6 +784,7 @@ export async function handleMerge(db: D1Like | undefined, body: string): Promise
       .bind(keep, o, keep, ...others, o).run()) as { meta?: { changes?: number }; changes?: number };
     moved = r?.meta?.changes ?? r?.changes ?? 0;
     await db.prepare(`UPDATE eagles SET player = ?, owner = ? WHERE player IN (${qs}) AND (owner = ? OR owner IS NULL)`).bind(keep, o, ...others, o).run();
+    await db.prepare(`UPDATE holeouts SET player = ?, owner = ? WHERE player IN (${qs}) AND (owner = ? OR owner IS NULL)`).bind(keep, o, ...others, o).run();
     // finished matches on "recent" say the kept name too
     await db.prepare(`UPDATE matches SET winner = ?, winner_owner = ? WHERE winner IN (${qs}) AND (winner_owner = ? OR winner_owner IS NULL)`).bind(keep, o, ...others, o).run();
     await db.prepare(`UPDATE matches SET loser = ?, loser_owner = ? WHERE loser IN (${qs}) AND (loser_owner = ? OR loser_owner IS NULL)`).bind(keep, o, ...others, o).run();

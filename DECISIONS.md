@@ -1334,3 +1334,28 @@ in. Each device rewrites its board, eagles and saved round on load (`store.ts`,
 the fairway is no longer counted and a green in regulation stays one only if the strokes
 before the putts are within the new par minus two. Handicaps (Chief Egan isn't rated) and
 matches are unaffected. A later correction is one more line in the list.
+
+## The stats tab: putts made and hole-outs, with replays (developer, 2026-10-26)
+
+The leaderboard's "birdies" tab is now "stats", with three lists across every course
+(friends or this device, casual rounds left out):
+
+- **hole-outs** (shown first): the longest hole-outs from off the green (a chip-in, a
+  holed approach, an ace; a putt from the fringe counts, being off the green), longest
+  first. Like an eagle, each goes on the shared list the moment the ball drops
+  (`reportHoleout` in `save/eagleReport.ts`, `/api/holeouts`, D1 table `holeouts`), so an
+  unfinished round counts. It carries its flight as the player's game simulated it (the
+  live-match path encoding, `systems/match/path.ts`, a few KB), so a tap plays it again:
+  `ReplayScene` loads its course, puts the golfer at the spot and plays the flight, then
+  its end in slow motion ("again", "close"). Kept from the flight rather than simulated
+  again, so later physics tuning never changes an old replay. The server drops a flight
+  that doesn't read or doesn't end in the cup (the hole-out stays, without a replay).
+- **putts made**: most feet of putts holed in a round (the holing stroke of each hole when
+  it was played on the green), 9-hole rounds marked "(9)". Rounds carry this from now:
+  each hole's score gets `made` (metres, start to cup) and `off` (started off the green);
+  the server keeps the round's total in `rounds.made_m`. Rounds before 2026-10-26 have no
+  distances and aren't on the list.
+- **birdies**: most birdies or better in a round, as before.
+
+D1 schema 6 (the `holeouts` table, `rounds.made_m`) migrates itself. Merging names and
+"hide me" cover hole-outs too; a card correction (`cardFixes.ts`) sets their par.
