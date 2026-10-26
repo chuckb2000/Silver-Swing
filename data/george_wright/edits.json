@@ -86,13 +86,13 @@
     "w29830747_grown"
    ],
    "tags": {},
-   "reason": "the 11th green (w671102159) crosses the OSM boundary by 34 m2, which would be out of bounds; the boundary is grown to take in the green plus 3 m (COURSE_LESSONS: join the feature to the boundary)"
+   "reason": "the 10th green (w671102159) crosses the OSM boundary by 34 m2, which would be out of bounds; the boundary was grown to take in the green plus 3 m (COURSE_LESSONS: join the feature to the boundary). Then the developer, 2026-10-26: the OB behind the 10th green moved back, as the developer drew it on the photo (17 m behind the green, about 13 m off its west side; about 800 m2 of the trees added)"
   }
  ],
  "drop": [
   {
    "osm": "w29830747",
-   "reason": "replaced by proposed/boundary.geojson (grown around the 11th green)"
+   "reason": "replaced by proposed/boundary.geojson (grown round the 10th green, and moved back behind it by the developer)"
   }
  ]
 }

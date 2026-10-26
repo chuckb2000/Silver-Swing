@@ -13,7 +13,13 @@
    "y": 518.3,
    "surface": "green",
    "ob": false,
-   "why": "the 34 m2 of the 11th green outside OSM's boundary: the boundary is grown around it (proposed/boundary.geojson)"
+   "why": "the 34 m2 of the 10th green outside OSM's boundary: the boundary is grown around it (proposed/boundary.geojson)"
+  },
+  {
+   "x": 386.47,
+   "y": 507.0,
+   "ob": false,
+   "why": "behind the 10th green: in bounds since the developer moved the OB back (2026-10-26)"
   }
  ],
  "trees": [
