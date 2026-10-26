@@ -232,6 +232,10 @@ export class PlayScene extends Phaser.Scene {
     this.input.on('pointerdown', (p: Phaser.Input.Pointer) => this.onPointerDown(p));
     this.input.on('pointermove', (p: Phaser.Input.Pointer) => this.onPointerMove(p));
     this.input.on('pointerup', () => { this.drag = null; });
+    // a press just off the game (the page around it) while the meter runs is the next swing tap too
+    this.input.on('pointerdownoutside', (p: Phaser.Input.Pointer) => {
+      if (this.state === 'swing' && !this.hud.modalOpen() && !p.rightButtonDown()) this.tap(p.event?.timeStamp ?? performance.now());
+    });
     this.input.on('wheel', (_p: unknown, _o: unknown, _dx: number, dy: number) => {
       if (this.state === 'aim') this.cycleClub(dy > 0 ? 1 : -1);
     });
