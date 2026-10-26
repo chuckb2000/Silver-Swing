@@ -8,6 +8,10 @@ export interface HoleScore {
   penalties: number;
   fairway: boolean | null; // null on par 3s
   gir: boolean;
+  /** the holing stroke's length in metres, start to cup (rounds from 2026-10-26; none for a conceded putt) */
+  made?: number;
+  /** the holing stroke started off the green: a chip-in, a holed approach, an ace */
+  off?: boolean;
 }
 
 export const SCORE_NAMES: Record<number, string> = {
@@ -78,6 +82,9 @@ export class HoleTally {
   penalties = 0;
   fairway: boolean | null;
   reachedGreenAt: number | null = null;
+  /** the holing stroke: its length (m) and whether it started off the green */
+  made: number | null = null;
+  madeOff = false;
   readonly par: number;
   readonly hole: number;
 
@@ -103,10 +110,18 @@ export class HoleTally {
     if (onGreen && this.reachedGreenAt === null) this.reachedGreenAt = this.strokes;
   }
 
+  /** The stroke went in from `m` metres (`off`: it started off the green). */
+  holed(m: number, off: boolean) {
+    this.made = Math.round(m * 100) / 100;
+    this.madeOff = off;
+  }
+
   finish(): HoleScore {
-    return {
+    const s: HoleScore = {
       hole: this.hole, par: this.par, strokes: this.strokes, putts: this.putts, penalties: this.penalties,
       fairway: this.fairway, gir: this.reachedGreenAt !== null && this.reachedGreenAt <= this.par - 2,
     };
+    if (this.made !== null) { s.made = this.made; s.off = this.madeOff; }
+    return s;
   }
 }

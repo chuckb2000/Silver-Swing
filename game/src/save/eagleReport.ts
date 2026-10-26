@@ -7,8 +7,12 @@ import { app } from '../app';
 import type { HoleScore } from '../systems/rules/scoring';
 import { isCasual, Round, roundId } from '../systems/game/round';
 import { EagleEvent, isEagleScore } from './feats';
-import { flushEagles } from './online';
-import { recordEagle, renameEagles, saveSettings } from './store';
+import { flushEagles, flushHoleouts } from './online';
+import type { HoleOut } from './holeouts';
+import { encodePath } from '../systems/match/path';
+import type { SimResult } from '../systems/physics/sim';
+import type { PlannedShot } from '../systems/game/round';
+import { recordEagle, recordHoleout, renameEagles, saveSettings } from './store';
 import { saveSnapshot } from './snapshot';
 
 /** Is this hole one for the eagles list? (not in a casual round) */
@@ -27,12 +31,35 @@ export async function reportEagle(r: Round, score: HoleScore): Promise<EagleEven
   return ev;
 }
 
+const LIE_WORD: Record<string, string> = { fairway_bunker: 'bunker', greenside_bunker: 'bunker', cartpath: 'cart path', waste: 'waste sand' };
+
+/**
+ * A hole-out from off the green (a chip-in, a holed approach, an ace) goes on the shared
+ * "hole-outs" list with its flight, so it can be watched again (developer, 2026-10-26).
+ * Not in a casual round (like eagles); the practice ground and live matches never get here.
+ */
+export async function reportHoleout(r: Round, score: HoleScore, shot: PlannedShot, sim: SimResult): Promise<HoleOut | null> {
+  if (isCasual(r.cfg.settings) || r.cfg.practice || !score.off || score.made === undefined || !sim.holed) return null;
+  const id = roundId(r.cfg);
+  const lie = r.lie?.kind ?? 'fairway';
+  const h: HoleOut = {
+    id: `${id}-h${score.hole}`, round: id, player: r.cfg.playerName, course: r.cfg.courseId, hole: r.courseHole,
+    par: score.par, n: score.strokes, club: shot.club.name,
+    dist: score.made, lie: LIE_WORD[lie] ?? lie, tee: r.cfg.tee, difficulty: r.cfg.settings.difficulty,
+    date: new Date().toISOString(), path: encodePath(sim),
+  };
+  await recordHoleout(h);
+  void flushHoleouts();
+  return h;
+}
+
 /** The player named themselves mid-round: the round, its eagles and the next rounds use the name. */
 export async function nameRound(r: Round, name: string): Promise<void> {
   r.cfg.playerName = name;
   app.settings.playerName = name;
   await saveSettings(app.settings);
-  await renameEagles(roundId(r.cfg), name);
+  await renameEagles(roundId(r.cfg), name); // and its hole-outs
   if (!r.finished && app.round === r) void saveSnapshot(r); // not after the round has gone to the summary
   void flushEagles();
+  void flushHoleouts();
 }

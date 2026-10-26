@@ -661,6 +661,13 @@ DECISIONS.md with the reason.
     (daily rotation from tomorrow, pin, rebuild check, tests). DECISIONS.md
     "Faster course building, part 2".
 
+-   **Stats tab (design chat, 2026-10-26):** branch `design/stats`: the
+    leaderboard's "birdies" tab is "stats": the longest hole-outs from off the
+    green (each with its flight, to watch again in `ReplayScene`), most feet of
+    putts made in a round, most birdies. Each hole's score carries the holing
+    stroke's length (`made`, `off`); D1 schema 6 (`holeouts`, `rounds.made_m`)
+    migrates itself. DECISIONS.md "The stats tab".
+
 -   **Next task:** Item 1 of the player improvements (swing coach) is on
     `design/coach`, unmerged. Also: the third playtest (putting, yellow
     misses), the club's printed scorecard and the hole 3 Blue tee box. New courses: a separate chat following docs/COURSE_BUILD.md
@@ -1634,6 +1641,11 @@ local leaderboard stays as the offline copy.
     belongs to one device. Each copy of the game has a private player key;
     the same person on another device copies the player code from
     settings. "player" is not a name: unnamed rounds stay on the device.
+
+-   **Stats** (developer, 2026-10-26): the leaderboard's "stats" tab lists the
+    longest hole-outs from off the green (a tap plays one again), the most feet
+    of putts made in a round and the most birdies in a round (DECISIONS.md "The
+    stats tab").
 
 -   **Recent eagles and most birdies** (developer, 2026-10-19): a list of
     eagles or better on any course (player, course, hole, date), each sent

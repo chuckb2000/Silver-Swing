@@ -4,7 +4,7 @@
 // scale.ts); the camera is a smooth spring (ui/cameraRig.ts). Putting uses a
 // zoomed-in view with its own high-resolution green art (ui/greenView.ts).
 
-import { reportEagle } from '../save/eagleReport';
+import { reportEagle, reportHoleout } from '../save/eagleReport';
 import Phaser from 'phaser';
 import { app, HEIGHT_PX, PX_PER_M } from '../app';
 import { initAudio, sfx, startAmbience } from '../audio/sfx';
@@ -1462,6 +1462,7 @@ export class PlayScene extends Phaser.Scene {
         this.hud.showHoled(score, out.kind === 'gimme');
         void saveSnapshot(r);
         void reportEagle(r, score); // on the recent eagles list straight away, round finished or not
+        if (out.kind === 'holed') void reportHoleout(r, score, this.shot!, this.sim!); // from off the green: the hole-outs list, with its flight
         break;
       }
       case 'max_score': {

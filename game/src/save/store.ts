@@ -4,6 +4,7 @@
 
 import { createStore, del, get, set, UseStore } from 'idb-keyval';
 import { fixEagle, fixEntry } from './cardFixes';
+import type { HoleOut } from './holeouts';
 import type { Difficulty } from '../data/difficulty';
 import { isEntry, LeaderboardEntry } from './entry';
 import type { EagleEvent } from './feats';
@@ -210,6 +211,10 @@ export async function renameAllLocal(names: string[], into: string): Promise<num
   let m = 0;
   for (const e of eagles) if (from.has(e.player)) { e.player = into; m++; }
   if (m) await saveEagles(eagles);
+  const holeouts = await loadHoleouts();
+  let k = 0;
+  for (const h of holeouts) if (from.has(h.player)) { h.player = into; k++; }
+  if (k) await saveHoleouts(holeouts);
   return n;
 }
 
@@ -219,4 +224,31 @@ export async function renameEagles(round: string, player: string): Promise<void>
   let changed = false;
   for (const e of all) if (e.round === round && !e.sent && e.player !== player) { e.player = player; changed = true; }
   if (changed) await saveEagles(all);
+  const hs = await loadHoleouts();
+  let hc = false;
+  for (const h of hs) if (h.round === round && !h.sent && h.player !== player) { h.player = player; hc = true; }
+  if (hc) await saveHoleouts(hs);
+}
+
+/** Hole-outs from off the green made on this device, with their flights (holeouts.ts); `sent` once the shared list has them. */
+export interface LocalHoleOut extends HoleOut { sent: boolean }
+
+/** Kept on the device: the longest this many (with their flights, a few KB each). */
+const MAX_LOCAL_HOLEOUTS = 60;
+
+export async function loadHoleouts(): Promise<LocalHoleOut[]> {
+  return (await read<LocalHoleOut[]>('holeouts')) ?? [];
+}
+
+export const saveHoleouts = (list: LocalHoleOut[]) => write('holeouts', list);
+
+/** Add a hole-out (or replace one with the same id); the shortest sent ones go when the list is full. */
+export async function recordHoleout(h: HoleOut): Promise<void> {
+  let all = (await loadHoleouts()).filter((x) => x.id !== h.id);
+  all.push({ ...h, sent: false });
+  if (all.length > MAX_LOCAL_HOLEOUTS) {
+    all.sort((a, b) => b.dist - a.dist);
+    all = all.filter((x, i) => i < MAX_LOCAL_HOLEOUTS || !x.sent);
+  }
+  await saveHoleouts(all);
 }
