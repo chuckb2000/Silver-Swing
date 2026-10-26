@@ -1,0 +1,82 @@
+{
+ "id": "fishers_island",
+ "name": "Fishers Island Club",
+ "location": "Fishers Island, Town of Southold, Suffolk County, New York",
+ "state": "NY",
+ "architects": "Seth Raynor (1925-26), completed by Charles Banks; opened 1926",
+ "theme": "fishers_island",
+ "epsg": 32619,
+ "osm_sources": [
+  "raw/overpass.geojson"
+ ],
+ "boundary_name": "Fishers Island Club",
+ "dtm": {
+  "path": "raw/dtm_ground_1m.tif",
+  "units": "m",
+  "source": "bare earth from the ground points (class 2) of the 2014 USGS CMGP Lidar: Post Sandy (Long Island, NY) (NOAA Data Access Viewer dataset 4938, job J1476275), gridded to 1 m in EPSG:32619 by pipeline/intake.py dtm (mean per cell, gaps filled linearly from their rim); NAVD88 m"
+ },
+ "laz": {
+  "paths": [
+   "raw/laz/*.laz"
+  ],
+  "classes": [
+   1
+  ],
+  "units": "m",
+  "source": "2014 USGS CMGP Lidar: Post Sandy (Long Island, NY) (NOAA Data Access Viewer dataset 4938, job J1476275), flown 7 April 2014 (GPS times), leaf-off; no vegetation classes (trees from class 1); NAD83(2011) / Connecticut (EPSG:6433, m), NAVD88 m; GitHub release assorted-lidar-data, fishers.zip, clipped to the world with pipeline/intake.py laz",
+  "label": "2014 USGS post-Sandy lidar, leaf-off",
+  "leaf_off": true
+ },
+ "ortho": {
+  "path": "raw/nys_ortho_05m.tif",
+  "source": "New York State orthoimagery, 'Latest' service (orthos-np.its.ny.gov wms/Latest), exported by the developer 2026-10-25 as two JPEGs at 0.5 m in EPSG:26919 (release assorted-lidar-data: 12345.jpg west, 1234.jpg east), placed by their request boxes and mosaicked by pipeline/intake.py ortho; white corners are outside the state's coverage; flight year not stated"
+ },
+ "world": {
+  "x0": 252723,
+  "y0": 4573662,
+  "width": 2048,
+  "height": 1792,
+  "note": "OSM course boundary (way 191740591) bbox 1,577 x 1,435 m in UTM 19N + ~120 m scenery, whole 256 m chunks, centred: 2,048 m east-west (235 m each side), 1,792 m north-south (178 m each side); inside the 2014 lidar's footprint"
+ },
+ "roof_last_share": 0.85,
+ "tee_sets": [
+  {
+   "name": "Black",
+   "playable": true,
+   "rating": 72.8,
+   "slope": 144,
+   "total_yd": 6597
+  }
+ ],
+ "default_tee": "Black",
+ "scorecard_source": "Stymie (stymie.golf/golf-courses/new-york/suffolk-county/fishers-island/fishers-island-club, USGA course ratings), read 2026-10-25: Black and Blue per hole, par 70 with 8 and 18 as par 4s; Black 6,597 yd, 72.8/144, Blue 6,503, 72.4/142. OpenGolfAPI (courses.opengolfapi.org/courses/ny/fishers-island-golf-country-club), read 2026-10-24 by the scouting chat: stroke index and an unlabelled per-hole row equal to Stymie's Blue; its pars add to 72, with 8 and 18 as par 5s. Column 'back' is The Fried Egg's list (6,636, par 70; not built). Built at par 70 (developer, 2026-10-25: \"let's make fishers a par 70\"), with OpenGolfAPI's stroke index. Played from the tips, Black 6,597 yd (developer, 2026-10-25: \"for all of these courses lets play from the tips\"). The other sets are in scorecard.csv but not built. Unverified; no club card online (private).",
+ "wind_mph": {
+  "minMph": 3,
+  "maxMph": 14
+ },
+ "attribution": [
+  "Map data © OpenStreetMap contributors (ODbL)",
+  "Elevation and trees: U.S. Geological Survey (2014 CMGP Post Sandy Long Island lidar), via NOAA Digital Coast",
+  "Scorecard: Stymie and OpenGolfAPI (unverified)"
+ ],
+ "notes": "Course chat, 2026-10-25: standing defaults (every penalty area red, OSM boundary as OB, trees from lidar). Played from the tips: Black (developer, 2026-10-25: \"for all of these courses lets play from the tips\"). Wind 3-14 mph (open coast: an exposed island). Bare earth from the lidar's ground points: the release has no DEM. Par 70 (developer, 2026-10-25), as Stymie (USGA ratings) and The Fried Egg give it: 8 and 18 are par 4s; OpenGolfAPI's par 72 has them as par 5s. Theme fishers_island: the course's own, from the developer's photos (developer: a new theme for each course).",
+ "penalty_default": "red",
+ "driving_range_is_ob": true,
+ "trees_off_fairways_m": 2,
+ "red_water_osm": [
+  "sea",
+  "w1064544157",
+  "w191740583",
+  "w968026770"
+ ],
+ "red_water_note": "the sea (proposed/sea.geojson, from OSM's coastline) and the ponds inside the boundary mapped as natural=water (by 16/17, by 5 and by 15): red penalty areas (standing default: every penalty area red)",
+ "rough_band_m": 2.5,
+ "rough_band_note": "a mown band of rough along the fairways, then the tawny fescue (brief: rough_band_m ~2-3; the photos)",
+ "drop_trees": [
+  {
+   "x": 1018.5,
+   "y": 1064.5,
+   "reason": "course chat 2026-10-25: a 48 m 'tree' with a 1.6 m crown in the middle of the inlet hole 14 plays across (open water on the NYS photo): a stray class-1 lidar return, not a tree"
+  }
+ ]
+}

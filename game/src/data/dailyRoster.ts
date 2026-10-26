@@ -58,6 +58,8 @@ export const DAILY_ROSTER: Readonly<Record<string, string>> = {
   silvies_craddock: '2026-10-26',
   silvies_hankins: '2026-10-26',
   silvies_chief_egan: '2026-10-26',
+  // landed 2026-10-25 (pipeline/land.py)
+  fishers_island: '2026-10-26',
 };
 
 /**
