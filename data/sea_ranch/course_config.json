@@ -77,5 +77,7 @@
    "bumps": 0,
    "note": "the 9th's small green (121 m2, 13 x 13 m as OSM maps it): tilt capped at 1.5 % and no random undulations, and its centre pin moved 1.9 m (proposed/pin9.geojson), so the game finds three pin positions on it (pins.test.ts; COURSE_LESSONS 4)"
   }
- ]
+ ],
+ "range_stakes": true,
+ "range_stakes_note": "developer 2026-10-26: white OB stakes round the driving range (it keeps its range art)"
 }

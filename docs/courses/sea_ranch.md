@@ -90,6 +90,8 @@ box. From Blue, hole 18 had been 9 % long, because OSM's back box is tagged `blu
 
 ## New pipeline keys and theme
 
+-   **`range_stakes`** (s09, s09b; developer, 2026-10-26): white OB stakes round the driving range, which keeps its
+    range art. Without it, only a range drawn as rough gets stakes.
 -   **`sea_ranch` theme:** `assets-src/palettes/sea_ranch.json` and `assets-src/trees_sea_ranch.py`.
     -   Conifers: bishop pine and redwood.
     -   Broad crowns: wind-sheared Monterey cypress (`trees_monterey._cypress`).
