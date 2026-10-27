@@ -22,6 +22,10 @@ describe('which par, which holes', () => {
   it('goes round par 3s, 4s and 5s a day at a time, par 3s first', () => {
     expect([0, 1, 2, 3, 4, 5].map((i) => tourPar(addDays(TOUR_FROM, i)))).toEqual([3, 4, 5, 3, 4, 5]);
     expect(tourPar(addDays(TOUR_FROM, -1))).toBe(5);
+    // nothing before the first day: it starts on 2026-10-28 with par 3s
+    expect(TOUR_FROM).toBe('2026-10-28');
+    expect(tourPlan(addDays(TOUR_FROM, -1), courses, DAILY_ROSTER)).toBeNull();
+    expect(tourPlan(TOUR_FROM, courses, DAILY_ROSTER)!.par).toBe(3);
     expect(tourName('par5s')).toBe('par 5s');
     expect(isTourId('par4s') && !isTourId('newport')).toBe(true);
   });

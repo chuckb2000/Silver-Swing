@@ -58,7 +58,7 @@ export function tourName(id: string): string {
   return p ? `par ${p}s` : id;
 }
 
-/** The day's par: 3, 4, 5, 3, ... from TOUR_FROM (and backwards before it). */
+/** The day's par: 3, 4, 5, 3, ... from TOUR_FROM. */
 export function tourPar(day: string): TourPar {
   const k = (((dayNumber(day) - dayNumber(TOUR_FROM)) % 3) + 3) % 3;
   return ([3, 4, 5] as const)[k];
@@ -127,13 +127,13 @@ function draw(seed: number, pool: Cand[], recent: Set<string>): Cand[] {
  * there aren't nine holes of the par.
  */
 export function tourPlan(day: string, courses: TourCourse[], roster?: Readonly<Record<string, string>>): TourPlan | null {
+  if (day < TOUR_FROM) return null; // it starts on TOUR_FROM (developer: "it starts tomorrow")
   const par = tourPar(day);
   const history: string[][] = [];
-  // the days of this par from the first one on (a day before TOUR_FROM has none before it)
+  // the days of this par from the first one on
   let d = day;
   const days: string[] = [];
   while (d >= TOUR_FROM) { days.unshift(d); d = addDays(d, -3); }
-  if (!days.length) days.push(day);
   let last: Cand[] = [];
   for (const dd of days) {
     const pool = poolFor(par, courses, roster, dd);

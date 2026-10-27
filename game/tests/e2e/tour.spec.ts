@@ -41,6 +41,27 @@ async function press(page: Page, scene: string, re: string, done: () => unknown)
   throw new Error(`${scene} /${re}/ never took effect`);
 }
 
+/** Run the page's clock as if it were `iso` (local time), moving on from there. */
+async function clockAt(page: Page, iso: string) {
+  await page.addInitScript((target) => {
+    const RealDate = Date;
+    const shift = new RealDate(target).getTime() - RealDate.now();
+    class ShiftedDate extends RealDate {
+      constructor(...a: any[]) { if (a.length) super(...(a as [])); else super(RealDate.now() + shift); }
+      static now() { return RealDate.now() + shift; }
+    }
+    (window as any).Date = ShiftedDate;
+  }, iso);
+}
+
+test('no daily par round before it starts on 28 October', async ({ page }) => {
+  await clockAt(page, '2026-10-27T16:00:00');
+  await page.goto('/?autoplay');
+  await page.waitForFunction(() => window.__game?.scene.isActive('title'), null, { timeout: 60_000 });
+  await page.waitForFunction(buttonAt, ['title', '^daily: '] as [string, string], { timeout: 30_000 });
+  expect(await page.evaluate(buttonAt, ['title', '^daily: par'] as [string, string])).toBeNull();
+});
+
 async function playHole(page: Page) {
   // the fly-over at a hole's start; a resumed hole goes straight to the shot
   await page.waitForFunction(() => window.__game.scene.isActive('play') && ['intro', 'aim'].includes(window.__game.scene.getScene('play').state), null, { timeout: 120_000 });
@@ -59,6 +80,7 @@ test('daily par round: two holes on two courses, and a reload goes on', async ({
   test.setTimeout(900_000);
   const errors: string[] = [];
   page.on('pageerror', (e) => errors.push(e.message));
+  await clockAt(page, '2026-10-28T10:00:00'); // the first day: par 3s
   await page.goto('/?autoplay');
   await page.waitForFunction(() => window.__game?.scene.isActive('title'), null, { timeout: 60_000 });
   const label = ((await (await page.waitForFunction(buttonAt, ['title', '^daily: par [345]s$'] as [string, string], { timeout: 30_000 })).jsonValue()) as { label: string }).label;

@@ -234,8 +234,9 @@ export class LeaderboardScene extends MenuScene {
     if (online) tab([['friends', 'friends'], ['device', 'this device']], src, (v) => { source = v as 'friends' | 'device'; });
     const day = localDay(new Date().toISOString());
     const tp = tourPlan(day, app.courses, DAILY_ROSTER);
+    if (!tp) dailyKind = 'round'; // before the daily pars begin: the daily round only
     const tour = dailyKind === 'tour';
-    tab([['round', 'daily round'], ['tour', tp ? `daily ${tourName(tp.courseId)}` : 'daily pars']], dailyKind, (v) => { dailyKind = v as 'round' | 'tour'; });
+    if (tp) tab([['round', 'daily round'], ['tour', `daily ${tourName(tp.courseId)}`]], dailyKind, (v) => { dailyKind = v as 'round' | 'tour'; });
     tab([['today', 'today'], ['week', 'this week']], dailyWhen, (v) => { dailyWhen = v as 'today' | 'week'; });
     const plan = tour ? tp : dailyPlan(day, app.courses, DAILY_ROSTER, DAILY_PICKS);
     const planOn = (d: string) => (tour ? tourPlan(d, app.courses, DAILY_ROSTER) : dailyPlan(d, app.courses, DAILY_ROSTER, DAILY_PICKS));

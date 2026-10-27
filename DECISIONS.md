@@ -1379,7 +1379,8 @@ from the real holes in the game, then made it a second daily: "Day 1 would be a 
 selection of par 3s, then a random selection of par 4s, then a random selection of par 5s."
 
 - **The day's round** (`systems/game/tour.ts` `tourPlan`): the par goes round 3, 4, 5 a day
-  at a time from 2026-10-28 (par 3s). Nine holes of that par from the courses in the daily
+  at a time from 2026-10-28 (par 3s). Nothing before that day: no title button, no board
+  (developer: "it starts tomorrow"). Nine holes of that par from the courses in the daily
   rotation that day (`dailyRoster.ts`, so a course merged today joins tomorrow), one per
   course and one per place (East Potomac, Bandon and a town count as one place, as in the
   daily round), in a random order fixed by the date. A hole sits out the next rounds of its
