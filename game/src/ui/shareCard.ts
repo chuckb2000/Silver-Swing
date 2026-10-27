@@ -5,6 +5,7 @@
 // without smoothing so it stays pixel-crisp. Phones get the share sheet; a
 // computer gets the picture in a box with copy, download and close.
 
+import { isTourId, tourName, tourParOf } from '../systems/game/tour';
 import Phaser from 'phaser';
 import { app, GAME_NAME } from '../app';
 import type { LeaderboardEntry } from '../save/entry';
@@ -46,10 +47,13 @@ function dayText(iso: string): string {
 
 /** The picture as a PNG blob. `rank` is a line such as "#2 of 14 among friends". */
 export async function shareImage(scene: Phaser.Scene, e: LeaderboardEntry, rank = ''): Promise<Blob | null> {
+  // the daily par 3s / 4s / 5s: named for the round, with the first hole's course for its art
+  const tour = isTourId(e.course) && e.tour?.length ? e.tour : null;
+  const artId = tour ? tour[0].course : e.course;
   const info = app.courses.find((c) => c.id === e.course);
-  const name = info?.name ?? e.course;
-  const logoIds = [e.course, ...(info?.group ? [info.group] : [])];
-  await ensureImages(scene, [[`card_${e.course}`, `sprites/cards/${e.course}.png`], ...logoIds.map((id): [string, string] => [`logo_${id}`, `sprites/logos/${id}.png`])]);
+  const name = tour ? `daily ${tourName(e.course)}` : info?.name ?? e.course;
+  const logoIds = tour ? [] : [e.course, ...(info?.group ? [info.group] : [])];
+  await ensureImages(scene, [[`card_${artId}`, `sprites/cards/${artId}.png`], ...logoIds.map((id): [string, string] => [`logo_${id}`, `sprites/logos/${id}.png`])]);
   if (!scene.sys.isActive()) return null;
   const W = SHARE_W, H = SHARE_H;
   const box = scene.make.container({ x: 0, y: 0 }, false);
@@ -67,7 +71,7 @@ export async function shareImage(scene: Phaser.Scene, e: LeaderboardEntry, rank 
   frame.fillStyle(0x394049, 1).fillRect(ax - 2, ay - 2, 212, artH + 4);
   frame.fillStyle(0x1d2a22, 1).fillRect(ax, ay, 208, artH);
   box.add(frame);
-  const ck = `card_${e.course}`;
+  const ck = `card_${artId}`;
   if (scene.textures.exists(ck)) {
     const src = scene.textures.get(ck).getSourceImage() as HTMLImageElement;
     const cy = Math.max(0, Math.round((src.height - artH) / 2) - 6);
@@ -78,7 +82,9 @@ export async function shareImage(scene: Phaser.Scene, e: LeaderboardEntry, rank 
   let y = ay + artH + 6;
   box.add(txt(scene, W / 2, y, name, { origin: [0.5, 0], maxWidth: W - 12 }));
   y += 11;
-  const meta = [dayText(e.date), `${e.tee.toLowerCase()} tees`, lengthLabel(e.length, shape), e.difficulty, ...(e.casual ? ['casual'] : []), ...(e.daily ? ['daily round'] : [])];
+  const meta = tour
+    ? [dayText(e.date), `nine par ${tourParOf(e.course)}s`, e.difficulty]
+    : [dayText(e.date), `${e.tee.toLowerCase()} tees`, lengthLabel(e.length, shape), e.difficulty, ...(e.casual ? ['casual'] : []), ...(e.daily ? ['daily round'] : [])];
   box.add(txt(scene, W / 2, y, meta.join('  ·  '), { origin: [0.5, 0], color: COLORS.dim, maxWidth: W - 12 }));
   y += 13;
   const who = txt(scene, 8, y + 4, e.player, { scale: 2, color: COLORS.white });
@@ -139,7 +145,9 @@ export async function shareRound(scene: Phaser.Scene, e: LeaderboardEntry, rank 
   const blob = await shareImage(scene, e, rank);
   if (!blob) return 'failed';
   const file = `silver-swings-${e.course}-${e.date.slice(0, 10)}.png`;
-  const text = `${e.player}: ${e.gross} (${toPar(e.toPar)}) at ${app.courses.find((c) => c.id === e.course)?.name ?? e.course}`;
+  const text = isTourId(e.course)
+    ? `${e.player}: ${e.gross} (${toPar(e.toPar)}) in the daily ${tourName(e.course)}`
+    : `${e.player}: ${e.gross} (${toPar(e.toPar)}) at ${app.courses.find((c) => c.id === e.course)?.name ?? e.course}`;
   const nav = navigator as Navigator & { canShare?: (d: ShareData) => boolean };
   const f = new File([blob], file, { type: 'image/png' });
   const canSheet = !!nav.share && !!nav.canShare?.({ files: [f] });

@@ -9,7 +9,8 @@ import { coursesByState } from '../data/registry';
 import { initAudio, setVolume } from '../audio/sfx';
 import { peekSnapshot } from '../save/snapshot';
 import { Button, COLORS, onTap, Panel, setTxt, txt } from '../ui/widgets';
-import { confirmDiscard, editName, hasName, resumeRound, snapshotHole, startPractice, startRound, useCourse, withName } from './flow';
+import { confirmDiscard, editName, hasName, resumeRound, snapshotHole, startPractice, startRound, startTour, useCourse, useCourseQuietly, withName } from './flow';
+import { TourPlan, tourName, tourPlan } from '../systems/game/tour';
 import { DailyPlan, dailyPlan, localDay } from '../systems/game/daily';
 import { DAILY_PICKS, DAILY_ROSTER } from '../data/dailyRoster';
 import { shortName } from '../save/milestones';
@@ -64,13 +65,16 @@ export class TitleScene extends MenuScene {
   private resuming = false;
   /** Opened to start today's daily round (the leaderboard's "play today's round"). */
   private dailyNow = false;
+  /** Opened to start today's par 3s / 4s / 5s (the leaderboard's "play today's round" there). */
+  private tourNow = false;
 
   constructor() {
     super('title');
   }
 
-  init(data?: { daily?: boolean }) {
+  init(data?: { daily?: boolean; tour?: boolean }) {
     this.dailyNow = !!data?.daily;
+    this.tourNow = !!data?.tour;
   }
 
   create() {
@@ -355,6 +359,15 @@ export class TitleScene extends MenuScene {
     })));
   }
 
+  /** Today's par 3s / 4s / 5s: like the daily round, on the first hole's course. */
+  private playTour(plan: TourPlan) {
+    void confirmDiscard(this, this.root, () => withName(this, () => void this.withLoading(async (progress) => {
+      await useCourseQuietly(this, plan.holes[0].course, progress);
+      startTour(this, plan);
+      return true;
+    })));
+  }
+
   async build() {
     const g = this.gen;
     // the last build's lobby parts are gone with it (root emptied): nothing draws into them meanwhile
@@ -441,6 +454,10 @@ export class TitleScene extends MenuScene {
     const dc = plan && app.courses.find((c) => c.id === plan.courseId);
     if (plan && dc) add(`daily: ${shortName(dc.name)}`, () => this.playDaily(plan), !!snap);
     if (this.dailyNow) { this.dailyNow = false; if (plan && dc) this.playDaily(plan); }
+    // the day's par 3s, 4s or 5s: nine holes of one par from all the courses (developer, 2026-10-27)
+    const tp = tourPlan(localDay(), app.courses, DAILY_ROSTER);
+    if (tp) add(`daily: ${tourName(tp.courseId)}`, () => this.playTour(tp), !!snap);
+    if (this.tourNow) { this.tourNow = false; if (tp) this.playTour(tp); }
     // live match play against a friend, where the site has it (the match Worker bound): matches on this device first
     if (matchesUp === true) {
       void startLobby();

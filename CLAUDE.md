@@ -668,6 +668,13 @@ DECISIONS.md with the reason.
     stroke's length (`made`, `off`); D1 schema 6 (`holeouts`, `rounds.made_m`)
     migrates itself. DECISIONS.md "The stats tab".
 
+-   **Daily par 3s, 4s and 5s (design chat, 2026-10-27):** branch `design/par-days`:
+    a second daily, nine real holes of one par from all the courses (par 3s on
+    2026-10-28, then 4s, 5s, 3s ...), one per course and place, the same for everyone;
+    each hole's course loads between holes (`TourLoadScene`), the next one fetched while
+    playing. Title "daily: par 5s"; leaderboard daily tab "daily par 5s". No schema
+    change. DECISIONS.md "The daily par 3s, 4s and 5s".
+
 -   **Next task:** Item 1 of the player improvements (swing coach) is on
     `design/coach`, unmerged. Also: the third playtest (putting, yellow
     misses), the club's printed scorecard and the hole 3 Blue tee box. New courses: a separate chat following docs/COURSE_BUILD.md
@@ -1599,6 +1606,11 @@ calm (≈60% of holes below half the max). It is seeded per round.
     2026-10-25 each day is drawn at random: no place (East Potomac, Bandon, a
     town) twice in five days, no course again within two thirds of the
     rotation (DECISIONS.md "A random daily").
+
+-   **Daily par 3s / 4s / 5s** (2026-10-27): nine holes of the day's par drawn
+    from every course in the rotation, the par going round 3, 4, 5 a day at a time;
+    Normal, the same holes, wind and pins for everyone; its own daily board
+    (`src/systems/game/tour.ts`; DECISIONS.md).
 
 -   **Live match play** (2026-10-21): two players on their own devices, match
     play (section 0; docs/reports/multiplayer_live_match.md).

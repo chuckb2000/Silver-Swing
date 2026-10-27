@@ -37,6 +37,8 @@ export interface LeaderboardEntry {
   daily?: string;
   /** the course hole of each scorecard slot, when it isn't the slot itself (a club's nines) */
   holes?: number[];
+  /** the daily par 3s / 4s / 5s (systems/game/tour.ts): each slot's course, hole, tee and yards */
+  tour?: { course: string; hole: number; tee: string; yd?: number }[];
 }
 
 const str = (v: unknown, max: number) => typeof v === 'string' && v.length > 0 && v.length <= max;
@@ -55,5 +57,8 @@ export function isEntry(e: unknown): e is LeaderboardEntry {
     && !!x.totals && typeof x.totals === 'object'
     && (x.daily === undefined || (typeof x.daily === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(x.daily)))
     && (x.holes === undefined || (Array.isArray(x.holes) && x.holes.length <= MAX_ROUND_HOLES
-      && x.holes.every((h) => Number.isInteger(h) && h >= 1 && h <= 99)));
+      && x.holes.every((h) => Number.isInteger(h) && h >= 1 && h <= 99)))
+    && (x.tour === undefined || (Array.isArray(x.tour) && x.tour.length <= MAX_ROUND_HOLES
+      && x.tour.every((t) => !!t && typeof t === 'object' && str(t.course, 64) && Number.isInteger(t.hole) && t.hole >= 1 && t.hole <= 99
+        && str(t.tee, 32) && (t.yd === undefined || (Number.isFinite(t.yd) && t.yd >= 0 && t.yd <= 1000)))));
 }

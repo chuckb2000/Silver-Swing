@@ -16,6 +16,9 @@ import { MeterResult } from '../swing/meter';
 import { coursePins, pinLabel as spotLabel } from './pins';
 import { holeName, shapeOfCourse } from './lengths';
 import type { RoundLength } from '../../save/entry';
+import type { TourHole } from './tour';
+import { roundPins } from './pins';
+import { hash32 } from '../physics/rng';
 import { PuttStrike, puttStrikeFrom, shotCarry, Strike, strikeFrom } from '../swing/outcome';
 
 export interface RoundSettings {
@@ -47,6 +50,9 @@ export interface RoundConfig {
   courseHoles?: number[];
   /** The round's length (lengths.ts); rounds saved before it was kept work it out from `holes`. */
   length?: RoundLength;
+  /** The daily par 3s / 4s / 5s (tour.ts): each slot's own course, hole and tee. `courseId` is then the
+   *  round's board id (par5s), and the course of the slot being played is loaded between holes. */
+  tour?: TourHole[];
 }
 
 export interface BallPos { x: number; y: number; teedUp: boolean }
@@ -138,7 +144,8 @@ export function isCasual(s: RoundSettings): boolean {
 }
 
 export class Round {
-  readonly course: CourseRuntime;
+  /** The course being played (a tour round moves to the next hole's course between holes: setCourse). */
+  course: CourseRuntime;
   readonly cfg: RoundConfig;
   readonly preset: Preset;
   readonly rng: Rng;
@@ -178,19 +185,33 @@ export class Round {
 
   /** The hole's number on the scorecard (10-18 for the second time around a 9-hole course). */
   get holeNumber(): number { return this.cfg.holes[this.holeIndex]; }
+  /** A tour round's hole on a course other than the loaded one: the caller loads it, then setCourse + startHole. */
+  get needsCourse(): boolean {
+    const t = this.cfg.tour?.[this.holeIndex];
+    return !!t && !this.finished && this.course.json.id !== t.course;
+  }
+  /** The course of a slot (a tour round's own, otherwise the round's). */
+  courseIdAt(index: number): string { return this.cfg.tour?.[index]?.course ?? this.cfg.courseId; }
+  /** The tee set this hole is played from (a tour round: the hole's course's own). */
+  get teeName(): string { return this.cfg.tour?.[this.holeIndex]?.tee ?? this.cfg.tee; }
+  /** Move a tour round onto the course of its next hole (that course loaded). */
+  setCourse(course: CourseRuntime) {
+    this.course = course;
+    this.aimCache.clear();
+  }
   /** The course's own hole being played (a 9-hole course played twice repeats 1-9). */
   get courseHole(): number { return this.cfg.courseHoles?.[this.holeIndex] ?? courseHoleFor(this.holeNumber, this.course.json.holes.length); }
   /** How the hole is shown: its slot, or at a club of nines its number in the nine and the nine's name. */
-  get holeName(): { num: number; nine?: string } { return holeName(this.holeNumber, this.courseHole, shapeOfCourse(this.course.json)); }
+  get holeName(): { num: number; nine?: string } { return this.cfg.tour ? { num: this.holeNumber } : holeName(this.holeNumber, this.courseHole, shapeOfCourse(this.course.json)); }
   get hole(): HoleJson { return this.course.json.holes[this.courseHole - 1]; }
-  get tee(): TeeJson { return this.hole.tees[this.cfg.tee] ?? Object.values(this.hole.tees)[0]; }
+  get tee(): TeeJson { return this.hole.tees[this.teeName] ?? Object.values(this.hole.tees)[0]; }
   get pin(): { x: number; y: number } {
     const p = this.cfg.pins?.[this.holeIndex] ?? this.hole.pin;
     return { x: p[0], y: p[1] };
   }
   /** Where today's pin is on the green ("back left", "middle"...), for the hole intro. */
   pinLabel(): string {
-    const spots = coursePins(this.course, this.cfg.tee)[this.courseHole - 1] ?? [];
+    const spots = coursePins(this.course, this.teeName)[this.courseHole - 1] ?? [];
     const p = this.pin;
     let best = spots[0], d = Infinity;
     for (const s of spots) { const e = Math.hypot(s.x - p.x, s.y - p.y); if (e < d) { d = e; best = s; } }
@@ -214,6 +235,8 @@ export class Round {
 
   startHole(index: number) {
     this.holeIndex = index;
+    if (this.needsCourse) return; // a tour round: set up once the hole's course is loaded
+    if (this.cfg.tour) this.tourHoleSetup(index);
     this.tally = new HoleTally(this.holeNumber, this.hole.par);
     this.ball = { x: this.tee.x, y: this.tee.y, teedUp: true };
     this.prev = { ...this.ball };
@@ -226,6 +249,20 @@ export class Round {
     this.strokes = [];
     this.history = [{ x: this.ball.x, y: this.ball.y }];
     this.refreshLie();
+  }
+
+  /**
+   * A tour round's hole on its own course: its wind from that course's range and its pin, both from the
+   * round's seed and the slot (the same for everyone on the day), and its yards for the card. The pin and
+   * yards go into the config, so a resumed round keeps them.
+   */
+  private tourHoleSetup(index: number) {
+    const seed = hash32(this.cfg.seed ^ Math.imul(index + 1, 0x9e3779b1));
+    this.winds[index] = roundWinds(seed, 1, this.course.json.wind ?? DEFAULT_WIND, this.preset)[0];
+    const t = this.cfg.tour![index];
+    if (!this.cfg.pins) this.cfg.pins = [];
+    if (!this.cfg.pins[index]) this.cfg.pins[index] = roundPins(this.course, t.tee, [t.hole], seed)[0];
+    t.yd = this.hole.tees[t.tee]?.cardYd ?? Object.values(this.hole.tees)[0]?.cardYd;
   }
 
   distToPin(p: { x: number; y: number } = this.ball): number {
