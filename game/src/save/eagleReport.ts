@@ -23,8 +23,8 @@ export async function reportEagle(r: Round, score: HoleScore): Promise<EagleEven
   if (!isListedEagle(r, score)) return null;
   const id = roundId(r.cfg);
   const ev: EagleEvent = {
-    id: `${id}-h${score.hole}`, round: id, player: r.cfg.playerName, course: r.cfg.courseId, hole: r.courseHole,
-    par: score.par, strokes: score.strokes, tee: r.cfg.tee, difficulty: r.cfg.settings.difficulty, date: new Date().toISOString(),
+    id: `${id}-h${score.hole}`, round: id, player: r.cfg.playerName, course: r.course.json.id, hole: r.courseHole,
+    par: score.par, strokes: score.strokes, tee: r.teeName, difficulty: r.cfg.settings.difficulty, date: new Date().toISOString(),
   };
   await recordEagle(ev);
   void flushEagles();
@@ -43,9 +43,9 @@ export async function reportHoleout(r: Round, score: HoleScore, shot: PlannedSho
   const id = roundId(r.cfg);
   const lie = r.lie?.kind ?? 'fairway';
   const h: HoleOut = {
-    id: `${id}-h${score.hole}`, round: id, player: r.cfg.playerName, course: r.cfg.courseId, hole: r.courseHole,
+    id: `${id}-h${score.hole}`, round: id, player: r.cfg.playerName, course: r.course.json.id, hole: r.courseHole,
     par: score.par, n: score.strokes, club: shot.club.name,
-    dist: score.made, lie: LIE_WORD[lie] ?? lie, tee: r.cfg.tee, difficulty: r.cfg.settings.difficulty,
+    dist: score.made, lie: LIE_WORD[lie] ?? lie, tee: r.teeName, difficulty: r.cfg.settings.difficulty,
     date: new Date().toISOString(), path: encodePath(sim),
   };
   await recordHoleout(h);

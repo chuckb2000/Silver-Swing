@@ -10,6 +10,7 @@ import { birdiesIn, EagleEvent, eaglesIn, isEagle } from '../save/feats';
 import { CARD_FIXES, CARD_FIXES_KEY, fixedCourses, fixEagle, fixEntry } from '../save/cardFixes';
 import { HoleOut, isHoleOut, puttsMadeM, tracksMade } from '../save/holeouts';
 import { decodePath } from '../systems/match/path';
+import { isTourId } from '../systems/game/tour';
 
 /** The parts of Cloudflare's D1 API used here. */
 export interface D1Statement {
@@ -351,7 +352,10 @@ async function dailyCounts(db: D1Like, e: LeaderboardEntry, owner: string | null
   if (!e.daily || !isDay(e.daily) || !owner || e.casual || e.difficulty !== 'normal' || !(['front', 'back', '9'].includes(e.length) || /^nines:[a-z0-9_]+$/.test(e.length))) return false;
   const t = Date.parse(`${e.daily}T12:00:00Z`);
   if (Math.abs(t - now.getTime()) > 2 * 86_400_000) return false;
-  const { results } = await db.prepare('SELECT id FROM rounds WHERE daily = ? AND owner = ? LIMIT 1').bind(e.daily, owner).all<{ id: string }>();
+  // the daily round and the day's par 3s / 4s / 5s (tour ids) each count once
+  const tour = isTourId(e.course);
+  const { results } = await db.prepare(`SELECT id FROM rounds WHERE daily = ? AND owner = ? AND course ${tour ? '' : 'NOT '}IN ('par3s', 'par4s', 'par5s') LIMIT 1`)
+    .bind(e.daily, owner).all<{ id: string }>();
   return !results.length;
 }
 

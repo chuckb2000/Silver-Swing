@@ -18,7 +18,9 @@ import { SURFACE_LABEL } from '../systems/physics/surfaces';
 import { Button, COLORS, dimmer, Panel, setTxt, txt } from '../ui/widgets';
 import { uiCamera } from '../scale';
 import type { PlayScene } from './PlayScene';
-import { finishRound } from './flow';
+import { finishRound, toTourHole } from './flow';
+import { isTourId, tourName, tourParOf } from '../systems/game/tour';
+import { shortName } from '../save/milestones';
 import { courseHoleFor } from '../systems/game/round';
 import { cardBlocks, holeName, lengthOf, shapeOfCourse } from '../systems/game/lengths';
 import { strokeLabel } from '../systems/game/strokes';
@@ -1152,8 +1154,10 @@ export class HudScene extends Phaser.Scene {
     const t1 = txt(this, 64, 8, extra ? `${ordinal(r.holeIndex + 1)} hole` : holeTitle(r), { scale: 2 });
     const yd = r.tee.cardYd;
     const ydStr = app.settings.units === 'yd' ? `${yd} yd` : `${Math.round(yd * YD)} m`;
-    const t2 = txt(this, 64, 30, `par ${r.hole.par}  ·  ${ydStr}  ·  ${r.cfg.tee.toLowerCase()}`, { color: COLORS.yellow });
-    const t3 = txt(this, 64, 41, extra ? `hole ${r.holeNumber} again  ·  sudden death` : `${r.hole.handicap ? `handicap ${r.hole.handicap}  ·  ` : ""}pin ${r.pinLabel()}`, { color: extra ? COLORS.yellow : COLORS.dim });
+    const t2 = txt(this, 64, 30, `par ${r.hole.par}  ·  ${ydStr}  ·  ${r.teeName.toLowerCase()}`, { color: COLORS.yellow });
+    // a tour round: the hole's own course and number in place of its handicap
+    const where = r.cfg.tour ? `${shortName(r.course.json.name).toLowerCase()} ${r.courseHole}  ·  ` : r.hole.handicap ? `handicap ${r.hole.handicap}  ·  ` : '';
+    const t3 = txt(this, 64, 41, extra ? `hole ${r.holeNumber} again  ·  sudden death` : `${where}pin ${r.pinLabel()}`, { color: extra ? COLORS.yellow : COLORS.dim, maxWidth: w - 68 });
     const wtxt = r.wind.mph < 0.5 ? 'calm' : `wind ${r.wind.mph.toFixed(1)} mph`;
     const live = this.play.match;
     const honour = live?.session ? (live.session.state.honour === this.play.me ? 'your honour' : `${this.play.oppName()}'s honour`) : '';
@@ -1761,6 +1765,8 @@ export class HudScene extends Phaser.Scene {
     this.closeModal();
     const r = this.play.round;
     if (r.nextHole()) {
+      // the daily par 3s / 4s / 5s: the next hole may be on another course, which loads first
+      if (r.needsCourse) { this.play.state = 'loading'; toTourHole(this); return; }
       this.play.startHoleIntro();
     } else {
       this.play.state = 'done'; // nothing more happens on the course while the round is saved (and a second tap does nothing)
@@ -1777,6 +1783,8 @@ export interface CardData {
   scores: HoleScore[];
   /** the number shown for a slot (a club's nines: 1-9 in each nine), the slot itself if absent */
   label?: (slot: number) => string;
+  /** each slot's course and hole, listed under the card (the daily par 3s / 4s / 5s) */
+  holesFrom?: string[];
 }
 
 /** "hole 12", or at a club of nines "white 3". */
@@ -1787,6 +1795,8 @@ export function holeTitle(r: import('../systems/game/round').Round): string {
 
 /** The card of a round being played (or just finished). */
 export function cardOfRound(r: import('../systems/game/round').Round): CardData {
+  // the holes' courses only once the round is over (developer, 2026-10-27: nobody sees what's coming)
+  if (r.cfg.tour) return tourCard(r.cfg.courseId, r.cfg.playerName, r.cfg.tour, r.scores, r.cfg.daily, r.finished);
   const holes = r.course.json.holes;
   const nCourse = holes.length;
   const shape = shapeOfCourse(r.course.json);
@@ -1806,7 +1816,28 @@ export function cardOfRound(r: import('../systems/game/round').Round): CardData 
  * The card of a finished round from a leaderboard (only the nines it played).
  * Yards need the course's own data (`holes`, when it is the loaded course).
  */
-export function cardOfEntry(e: LeaderboardEntry, courseName: string, holes: import('../data/course').HoleJson[] | null): CardData {
+/**
+ * The card of the daily par 3s / 4s / 5s: one nine, each hole's par and yards as played; the holes'
+ * courses are listed on the card under it (tourLines).
+ */
+function tourCard(id: string, player: string, tour: { course: string; hole: number; yd?: number }[], scores: HoleScore[], day?: string, showHoles = true): CardData {
+  const name = tourName(id);
+  const par = tourParOf(id) ?? 0; // every hole has the round's par (a hole not played yet too)
+  const by = new Map(scores.map((s) => [s.hole, s]));
+  return {
+    title: `${day ? `daily ${name}, ${day.slice(5)}` : name}  ·  ${player}`,
+    blocks: [[1, tour.length, 'tot']],
+    hole: (h) => ({ par: by.get(h)?.par ?? par, yd: tour[h - 1]?.yd ?? null }),
+    scores,
+    holesFrom: !showHoles ? undefined : tour.map((t) => {
+      const c = app.courses.find((x) => x.id === t.course);
+      return `${c ? shortName(c.name).toLowerCase() : t.course} ${t.hole}`;
+    }),
+  };
+}
+
+export function cardOfEntry(e: LeaderboardEntry, courseName: string, holes: import('../data/course').HoleJson[] | null, showHoles = true): CardData {
+  if (e.tour && isTourId(e.course)) return tourCard(e.course, e.player, e.tour, e.scores, e.daily, showHoles);
   const info = app.courses.find((c) => c.id === e.course);
   const shape = info ? shapeOfCourse(info) : undefined;
   const blocks = cardBlocks(e.length, e.scores.map((x) => x.hole), shape);
@@ -1849,12 +1880,19 @@ export function scorecardOf(scene: Phaser.Scene, d: CardData, W: number, H: numb
   const items = [`total ${tot.strokes || '-'} (${tot.holes ? toPar(tot.toPar) : 'e'})`, `putts ${tot.putts}`, `fairways ${fw}`, `gir ${tot.gir}/${tot.holes}`, `penalties ${tot.penalties}`];
   const probe = txt(scene, 0, 0, '');
   const fits = (str: string) => { setTxt(probe, str); return probe.width <= tw; };
-  const lines: string[] = [];
-  for (const it of items) {
-    const last = lines.length - 1;
-    if (last >= 0 && fits(`${lines[last]}  ·  ${it}`)) lines[last] += `  ·  ${it}`;
-    else lines.push(it);
-  }
+  const wrap = (list: string[]) => {
+    const out: string[] = [];
+    for (const it of list) {
+      const last = out.length - 1;
+      if (last >= 0 && fits(`${out[last]}  ·  ${it}`)) out[last] += `  ·  ${it}`;
+      else out.push(it);
+    }
+    return out;
+  };
+  const lines = wrap(items);
+  // the daily par 3s / 4s / 5s: where each hole was ("1 newport 10  ·  2 sea ranch 6 ...")
+  const from = d.holesFrom ? wrap(d.holesFrom.map((h, i) => `${i + 1} ${h}`)) : [];
+  lines.push(...from);
   probe.destroy();
   const statsH = 11 * (lines.length - 1);
   const th = blockH * blocks.length + 36 + statsH;
@@ -1905,7 +1943,7 @@ export function scorecardOf(scene: Phaser.Scene, d: CardData, W: number, H: numb
     c.add(txt(scene, sx, yb + rowH * parRow + 1, String(sumPar), { origin: [0.5, 0] }));
     if (any) c.add(txt(scene, sx, sy, String(sumSc), { origin: [0.5, 0], color: COLORS.yellow }));
   });
-  lines.forEach((l, i) => c.add(txt(scene, x0, y0 + 14 + blocks.length * (blockH + 6) - 2 + i * 11, l, { color: COLORS.dim })));
+  lines.forEach((l, i) => c.add(txt(scene, x0, y0 + 14 + blocks.length * (blockH + 6) - 2 + i * 11, l, { color: i >= lines.length - from.length ? COLORS.white : COLORS.dim })));
   c.setData('bottom', y0 + th + 4);
   c.setData('top', y0 - 4);
   return c;

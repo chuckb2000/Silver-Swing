@@ -57,8 +57,10 @@ export function eaglesIn(e: LeaderboardEntry, courseHoles: (slot: number) => num
   e.scores.forEach((s) => {
     if (!isEagleScore(s)) return;
     out.push({
-      id: `${e.id}-h${s.hole}`, round: e.id, player: e.player, course: e.course, hole: courseHoles(s.hole), par: s.par,
-      strokes: s.strokes, tee: e.tee, difficulty: e.difficulty, date: e.date,
+      // a tour round's eagle is on the hole's own course
+      id: `${e.id}-h${s.hole}`, round: e.id, player: e.player, course: e.tour?.[s.hole - 1]?.course ?? e.course,
+      hole: e.tour?.[s.hole - 1]?.hole ?? courseHoles(s.hole), par: s.par,
+      strokes: s.strokes, tee: e.tour?.[s.hole - 1]?.tee ?? e.tee, difficulty: e.difficulty, date: e.date,
     });
   });
   return out;

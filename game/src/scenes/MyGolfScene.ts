@@ -3,6 +3,7 @@
 // best score) and the milestones earned. Built from this device's rounds and,
 // with a player code, the code's rounds on the shared board.
 
+import { isTourId, tourName } from '../systems/game/tour';
 import { app } from '../app';
 import { STATES } from '../data/registry';
 import type { LeaderboardEntry } from '../save/entry';
@@ -65,7 +66,7 @@ export class MyGolfScene extends MenuScene {
 
   private courseName(id: string): string {
     const c = app.courses.find((x) => x.id === id);
-    return c ? shortName(c.name) : id;
+    return c ? shortName(c.name) : isTourId(id) ? `daily ${tourName(id)}` : id;
   }
 
   private buildStats(x0: number, y: number, pw: number, h: number) {

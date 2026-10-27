@@ -1372,6 +1372,44 @@ stops the swing; a press on the page just outside the game's canvas counts too
 (`pointerdownoutside`). A press outside the browser window can't be seen by the page. The space
 bar works as before.
 
+## The daily par 3s, 4s and 5s (developer, 2026-10-27)
+
+The developer asked for "a course" of nine random par 5s, and the same for par 3s and 4s,
+from the real holes in the game, then made it a second daily: "Day 1 would be a random
+selection of par 3s, then a random selection of par 4s, then a random selection of par 5s."
+
+- **The day's round** (`systems/game/tour.ts` `tourPlan`): the par goes round 3, 4, 5 a day
+  at a time from 2026-10-28 (par 3s). Nothing before that day: no title button, no board
+  (developer: "it starts tomorrow"). Nine holes of that par from the courses in the daily
+  rotation that day (`dailyRoster.ts`, so a course merged today joins tomorrow), one per
+  course and one per place (East Potomac, Bandon and a town count as one place, as in the
+  daily round), in a random order fixed by the date. A hole sits out the next rounds of its
+  par for half the pool's worth of draws (`tourRest`: par 5s 144 holes, eight rounds, about
+  24 days); the rules relax one at a time if the pool runs short. Each hole is played from
+  its course's default tee (the tips on the courses built from the lidar release).
+- **Same for everyone**, like the daily round: Normal difficulty, no casual rules, and each
+  hole's wind (from its own course's wind range) and pin from the date and the slot.
+- **Title:** "daily: par 5s" under the daily round. **Leaderboard:** the daily tab has "daily
+  round" and "daily par 5s" (today, and this week's best five to par). Each counts once per
+  player code and day, apart from the other (the server tells them by the board id:
+  `par3s`, `par4s`, `par5s`). A second go goes on an all-time board of that id, which isn't
+  shown anywhere but the summary's rank. Not counted for handicaps (no rating) or the
+  passport (a hole isn't a round at its course).
+- **Playing it:** a round's config carries its holes (`RoundConfig.tour`); the `Round` waits
+  when a hole is on another course (`needsCourse`), the hole-complete panel hands over to a
+  loading screen (`TourLoadScene`: "hole 2 of 9 · tpc boston · hole 12"), which loads the
+  course and opens the hole. While a hole is played the next course is fetched in the
+  background (`prefetchNextCourse`), so the service worker usually has it already. A
+  closed tab resumes on the right course.
+- **The card:** one nine with each hole's par and yards as played, and where each hole is
+  listed under it ("4 newport 10"), but only once the round is over (developer, 2026-10-27:
+  "the list of holes on the scorecard only shows up after the round and won't show up on the
+  leaderboard unless you've already completed the daily"). Someone else's card from the
+  leaderboard, or a shared picture, lists them only when this device has finished that day's
+  round (a second go counts) or the day is over (`tourHolesOpen`). The hole intro and the
+  loading screen still name the hole being played. The share card uses the first hole's course art. An eagle
+  goes on the eagles list on its own course and hole.
+
 ## Bandon Dunes Golf Resort on the course list (developer, 2026-10-27)
 
 "all the bandon courses could be put under a centralized 'bandon dunes resort' umbrella like
