@@ -53,7 +53,7 @@ describe('Bandon Dunes Golf Resort (developer, 2026-10-27)', async () => {
     expect(resort.map((e: { id: string }) => e.id).sort()).toEqual(BANDON);
     for (const e of resort) {
       expect(e.groupName).toBe('Bandon Dunes Golf Resort');
-      expect(nameInGroup(e.name, e.groupName, e.keepName)).toBe(e.name);
+      expect(nameInGroup(e.name, e.groupName!, e.keepName)).toBe(e.name);
       expect(listName(e)).not.toMatch(/^(dunes|trails|preserve)$/);
     }
     expect(groupsFile().bandon_resort.courses.sort()).toEqual(BANDON);
