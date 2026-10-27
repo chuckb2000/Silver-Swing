@@ -11,6 +11,7 @@ import { courseHoleFor, isCasual, newSeed, Round, RoundConfig, roundId } from '.
 import { roundPins } from '../systems/game/pins';
 import { totals } from '../systems/rules/scoring';
 import type { DailyPlan } from '../systems/game/daily';
+import { isTourId, tourName, TourPlan } from '../systems/game/tour';
 import { PRACTICE_COURSE } from '../systems/game/practice';
 import { confirmBox } from '../ui/confirm';
 import { askName } from '../ui/nameInput';
@@ -57,6 +58,84 @@ export function startRound(scene: Phaser.Scene, len: RoundLength, daily?: DailyP
   scene.scene.start('play', { resume: false });
 }
 
+/**
+ * Start today's par 3s / 4s / 5s (tour.ts) on the first hole's course, already loaded: nine
+ * holes at Normal, each from its course's default tee, the wind and pins fixed by the date.
+ */
+export function startTour(scene: Phaser.Scene, plan: TourPlan) {
+  const s = app.settings;
+  const cfg: RoundConfig = {
+    courseId: plan.courseId,
+    tee: plan.tee,
+    holes: plan.holes.map((_, i) => i + 1),
+    length: plan.length,
+    courseHoles: plan.holes.map((h) => h.hole),
+    tour: plan.holes.map((h) => ({ ...h })),
+    playerName: s.playerName || 'player',
+    seed: plan.seed,
+    settings: { difficulty: 'normal', lefty: s.lefty, e5: false, gimmes: false, maxDoublePar: false, mulligans: false },
+    startedAt: new Date().toISOString(),
+    daily: plan.day,
+  };
+  app.round = new Round(app.course!, cfg);
+  app.round.startHole(0);
+  void clearSnapshot();
+  prefetchNextCourse(app.round);
+  scene.scene.start('play', { resume: false });
+}
+
+/** Load a course into the browser's cache while it isn't needed yet (a tour round's next course). */
+const prefetched = new Set<string>();
+export function prefetchNextCourse(r: Round) {
+  const here = r.course.json.id;
+  const next = r.cfg.tour?.slice(r.holeIndex + 1).find((t) => t.course !== here)?.course;
+  if (!next || prefetched.has(next)) return;
+  prefetched.add(next);
+  void (async () => {
+    try {
+      const base = `courses/${next}/`;
+      const j = await (await fetch(`${base}course.json`)).json() as {
+        terrain: { rows: number; cols: number; pattern: string }; maps: { overview: string; holes: { file: string }[] };
+        height: { file: string }; surface: { file: string };
+      };
+      const files = ['trees.json', 'height.json', j.height.file, j.surface.file, j.maps.overview, ...j.maps.holes.map((m) => m.file)];
+      for (let jj = 0; jj < j.terrain.rows; jj++) for (let i = 0; i < j.terrain.cols; i++) files.push(j.terrain.pattern.replace('{i}', String(i)).replace('{j}', String(jj)));
+      // one at a time, so the round being played never waits on them
+      for (const f of files) await fetch(base + f).then((res) => res.arrayBuffer()).catch(() => null);
+    } catch { prefetched.delete(next); }
+  })();
+}
+
+/**
+ * A tour round's next hole is on another course: the hole-complete panel hands over to the
+ * loading screen ('tourload'), which loads that course and opens the hole.
+ */
+export function toTourHole(scene: Phaser.Scene) {
+  // (the round was saved as the last hole was holed: a tab closed now opens on the next hole)
+  scene.scene.stop('play');
+  scene.scene.start('tourload');
+}
+
+/** The course a saved round goes on with (a tour round: the course of the hole it is on). */
+export function snapshotCourse(snap: Snap): string {
+  if (!snap.cfg.tour) return snap.cfg.courseId;
+  const i = Math.min(snap.cfg.holes.length - 1, snap.holeIndex + (snap.betweenHoles ? 1 : 0));
+  return snap.cfg.tour[i]?.course ?? snap.cfg.courseId;
+}
+
+/** Where a saved round is, for a menu: "oswego lake", or "today's par 5s". */
+export function snapshotWhere(snap: Snap): string {
+  if (isTourId(snap.cfg.courseId)) return `${snap.cfg.daily === localDayNow() ? "today's" : 'the'} ${tourName(snap.cfg.courseId)}`;
+  const c = app.courses.find((k) => k.id === snap.cfg.courseId);
+  return c ? shortName(c.name) : 'another course';
+}
+
+function localDayNow(): string {
+  const d = new Date();
+  const p = (n: number) => String(n).padStart(2, '0');
+  return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}`;
+}
+
 type Snap = NonNullable<Awaited<ReturnType<typeof peekSnapshot>>>;
 
 /** The hole a saved round continues on, and whether only its summary is left. */
@@ -74,12 +153,12 @@ export async function confirmDiscard(scene: Phaser.Scene, parent: Phaser.GameObj
   const snap = await peekSnapshot();
   if (!scene.sys.isActive()) return;
   if (!snap) { go(); return; }
-  const c = app.courses.find((k) => k.id === snap.cfg.courseId);
-  const where = c ? shortName(c.name) : 'another course';
+  const where = snapshotWhere(snap);
+  const at = isTourId(snap.cfg.courseId) ? '' : 'at ';
   const { hole, done } = snapshotHole(snap);
   const body = done
-    ? `your round at ${where} has every hole played but isn't on the leaderboard yet - start a new one and lose it?`
-    : `you have a round in progress at ${where}, hole ${hole} - start a new one and lose it?`;
+    ? `your round ${at}${where} has every hole played but isn't on the leaderboard yet - start a new one and lose it?`
+    : `you have a round in progress ${at}${where}, hole ${hole} - start a new one and lose it?`;
   confirmBox(scene, parent, 'new round?', body, 'keep it', 'start new', () => { if (scene.sys.isActive()) go(); });
 }
 
@@ -131,14 +210,25 @@ export async function useCourse(scene: Phaser.Scene, id: string, progress?: Load
   void saveSettings(app.settings);
 }
 
+/** Make `id` the current course without remembering it as the last one chosen (a tour round's holes). */
+export async function useCourseQuietly(scene: Phaser.Scene, id: string, progress?: LoadProgress): Promise<void> {
+  if (app.course?.json.id === id) return;
+  scene.scene.stop('bg');
+  await untilStopped(scene, 'bg');
+  await loadCourse(scene, id, progress);
+}
+
 export async function resumeRound(scene: Phaser.Scene, progress?: LoadProgress): Promise<boolean> {
   const snap = await peekSnapshot();
   if (!snap) return false;
-  if (!app.courses.some((c) => c.id === snap.cfg.courseId)) { await clearSnapshot(); return false; } // course no longer offered
-  await useCourse(scene, snap.cfg.courseId, progress);
+  const id = snapshotCourse(snap);
+  if (!app.courses.some((c) => c.id === id)) { await clearSnapshot(); return false; } // course no longer offered
+  if (snap.cfg.tour) await useCourseQuietly(scene, id, progress); // a tour round's course isn't the player's last course
+  else await useCourse(scene, id, progress);
   const res = await restoreRound();
   if (!res) { await clearSnapshot(); return false; } // nothing that can be played on: don't offer it again
   app.round = res.round;
+  prefetchNextCourse(res.round);
   if (res.finished) { await finishRound(scene); return true; } // the last hole was holed: straight to the summary
   scene.scene.start('play', { resume: !res.betweenHoles });
   return true;
@@ -162,9 +252,11 @@ export async function finishRound(scene: Phaser.Scene) {
     scores: r.scores,
     totals: tot,
     ...(r.cfg.courseHoles ? { holes: r.cfg.courseHoles } : {}),
+    ...(r.cfg.tour ? { tour: r.cfg.tour.map((t) => ({ ...t })) } : {}),
   };
   // the daily round counts once a day: a second go on this device is an ordinary round (the server checks the player code too)
-  if (r.cfg.daily && !(await loadBoard()).some((b) => b.daily === r.cfg.daily && b.player === entry.player)) entry.daily = r.cfg.daily;
+  // (the daily round and the day's par 3s / 4s / 5s each count once: a tour round is on its own board)
+  if (r.cfg.daily && !(await loadBoard()).some((b) => b.daily === r.cfg.daily && b.player === entry.player && isTourId(b.course) === isTourId(entry.course))) entry.daily = r.cfg.daily;
   await addToBoard(entry);
   await clearSnapshot();
   // a named round goes to the shared leaderboard now (developer, 2026-10-20: a friend's 63 wasn't in

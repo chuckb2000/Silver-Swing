@@ -15,6 +15,7 @@ import { FeedRow, matchFeedText, timeAgo } from '../save/feed';
 import { shareRound } from '../ui/shareCard';
 import { addDays, dailyPlan, dayStandings, weekStandings, weekStart } from '../systems/game/daily';
 import { DAILY_PICKS, DAILY_ROSTER } from '../data/dailyRoster';
+import { isTourId, tourName, tourPlan } from '../systems/game/tour';
 import { handicapBoard, HcpRound, hcpCourses, indexLabel } from '../systems/game/handicap';
 import { birdiesIn, EagleEvent, featName } from '../save/feats';
 import { loadEagles, loadHoleouts } from '../save/store';
@@ -40,6 +41,8 @@ let view: 'scores' | 'daily' | 'recent' | 'eagles' | 'stats' | 'handicaps' = 'sc
 /** the stats tab's list (developer, 2026-10-26) */
 let stat: 'birdies' | 'putts' | 'holeouts' = 'holeouts';
 let dailyWhen: 'today' | 'week' = 'today';
+/** the daily view's round: the daily course, or the day's par 3s / 4s / 5s (developer, 2026-10-27) */
+let dailyKind: 'round' | 'tour' = 'round';
 
 /** The calendar day (yyyy-mm-dd) of an ISO time in the player's own time zone (an evening round isn't "tomorrow"). */
 function localDay(iso: string): string {
@@ -57,9 +60,10 @@ export class LeaderboardScene extends MenuScene {
     super('leaderboard');
   }
 
-  init(data: { courseId?: string; view?: typeof view }) {
+  init(data: { courseId?: string; view?: typeof view; kind?: typeof dailyKind }) {
     if (data?.courseId) { courseId = data.courseId; teeSel = ''; page = 0; view = 'scores'; }
     if (data?.view) { view = data.view; dailyWhen = 'today'; page = 0; }
+    if (data?.kind) dailyKind = data.kind;
   }
 
   async build() {
@@ -228,10 +232,15 @@ export class LeaderboardScene extends MenuScene {
       y += 17;
     };
     if (online) tab([['friends', 'friends'], ['device', 'this device']], src, (v) => { source = v as 'friends' | 'device'; });
-    tab([['today', 'today'], ['week', 'this week']], dailyWhen, (v) => { dailyWhen = v as 'today' | 'week'; });
     const day = localDay(new Date().toISOString());
-    const plan = dailyPlan(day, app.courses, DAILY_ROSTER, DAILY_PICKS);
-    const info = plan ? app.courses.find((c) => c.id === plan.courseId) : undefined;
+    const tp = tourPlan(day, app.courses, DAILY_ROSTER);
+    if (!tp) dailyKind = 'round'; // before the daily pars begin: the daily round only
+    const tour = dailyKind === 'tour';
+    if (tp) tab([['round', 'daily round'], ['tour', `daily ${tourName(tp.courseId)}`]], dailyKind, (v) => { dailyKind = v as 'round' | 'tour'; });
+    tab([['today', 'today'], ['week', 'this week']], dailyWhen, (v) => { dailyWhen = v as 'today' | 'week'; });
+    const plan = tour ? tp : dailyPlan(day, app.courses, DAILY_ROSTER, DAILY_PICKS);
+    const planOn = (d: string) => (tour ? tourPlan(d, app.courses, DAILY_ROSTER) : dailyPlan(d, app.courses, DAILY_ROSTER, DAILY_PICKS));
+    const info = plan && !tour ? app.courses.find((c) => c.id === plan.courseId) : undefined;
     const first = weekStart(day);
     let list: LeaderboardEntry[] | null = null;
     let note = '';
@@ -241,32 +250,34 @@ export class LeaderboardScene extends MenuScene {
       if (!list) note = "can't reach the shared board - showing this device";
     }
     if (!list) list = (await loadBoard()).filter((e) => e.daily && e.player !== DEFAULT_NAME);
+    list = list.filter((e) => isTourId(e.course) === tour); // the daily round's board or the pars'
     if (!this.isCurrentBuild(g)) return;
     if (note) { this.root.add(txt(this, x0 + pw / 2, y, note, { origin: [0.5, 0], color: COLORS.yellow, maxWidth: pw - 16 })); y += 11; }
     const wide = pw > 300;
     if (dailyWhen === 'today') {
-      const sub = info && plan ? `${info.name.toLowerCase()}  ·  ${lengthLabel(plan.length, shapeById(plan.courseId))}  ·  ${plan.tee.toLowerCase()} tees  ·  normal` : '';
+      const sub = tour && tp ? `nine par ${tp.par}s from ${new Set(tp.holes.map((h) => h.course)).size} courses  ·  normal`
+        : info && plan ? `${info.name.toLowerCase()}  ·  ${lengthLabel(plan.length, shapeById(plan.courseId))}  ·  ${plan.tee.toLowerCase()} tees  ·  normal` : '';
       this.root.add(txt(this, x0 + pw / 2, y, sub, { origin: [0.5, 0], color: COLORS.dim, maxWidth: pw - 16 }));
       y += 11;
       const standings = dayStandings(list, day, plan);
       const rows: TableRow[] = standings.map((e, i) => ({
         v: [String(i + 1), e.player.slice(0, 12), String(e.gross), toPar(e.toPar), timeAgo(e.date)],
-        tap: () => { void shareRound(this, e, `#${i + 1} of ${standings.length} in today's daily`); },
+        tap: () => { void shareRound(this, e, `#${i + 1} of ${standings.length} in today's daily${tour ? ` ${tourName(e.course)}` : ''}`); },
       }));
       this.table(x0, y0, pw, ph, y, ['#', 'player', 'gross', 'to par', wide ? 'when' : ''], [x0 + 10, x0 + 30, x0 + 110, x0 + 150, wide ? x0 + 200 : -1], rows,
         'nobody has played today\'s round yet - be the first');
-      if (!rows.length && plan && info) {
+      if (!rows.length && plan && (info || tour)) {
         // the empty board says "be the first": the way to do it (through the title, which asks about a round in progress and a name)
-        this.root.add(new Button(this, Math.round(x0 + pw / 2 - 60), y + 2 + 24 + 28, 120, 16, "play today's round", () => this.scene.start('title', { daily: true })));
+        this.root.add(new Button(this, Math.round(x0 + pw / 2 - 60), y + 2 + 24 + 28, 120, 16, "play today's round", () => this.scene.start('title', tour ? { tour: true } : { daily: true })));
       }
     } else {
-      this.root.add(txt(this, x0 + pw / 2, y, `week of ${first.slice(5)}: best five daily rounds, to par`, { origin: [0.5, 0], color: COLORS.dim, maxWidth: pw - 16 }));
+      this.root.add(txt(this, x0 + pw / 2, y, `week of ${first.slice(5)}: best five ${tour ? 'daily par rounds' : 'daily rounds'}, to par`, { origin: [0.5, 0], color: COLORS.dim, maxWidth: pw - 16 }));
       y += 11;
       const weekList = list.filter((e) => e.daily! >= first && e.daily! <= addDays(first, 6));
-      const rows: TableRow[] = weekStandings(weekList, 5, (d) => dailyPlan(d, app.courses, DAILY_ROSTER, DAILY_PICKS)).map((r, i) => ({
+      const rows: TableRow[] = weekStandings(weekList, 5, planOn).map((r, i) => ({
         v: [String(i + 1), r.player.slice(0, 12), `${r.days}/7`, toPar(r.toPar)],
         // a player's week: their rounds to choose from
-        tap: () => this.chooseRound(r.rounds, `${r.player}'s daily rounds this week`, (e) => `daily ${localDay(e.date).slice(5)}`),
+        tap: () => this.chooseRound(r.rounds, `${r.player}'s daily ${tour ? 'par rounds' : 'rounds'} this week`, (e) => `daily ${localDay(e.date).slice(5)}`),
       }));
       this.table(x0, y0, pw, ph, y, ['#', 'player', 'days', 'to par'], [x0 + 10, x0 + 30, x0 + 110, x0 + 150], rows, 'no daily rounds this week yet', "tap a player to see their week's cards");
     }
@@ -280,7 +291,7 @@ export class LeaderboardScene extends MenuScene {
     const feed = await fetchRecent(50);
     if (!this.isCurrentBuild(g)) return;
     let y = y0 + 40;
-    const courseName = (id: string) => { const c = app.courses.find((x) => x.id === id); return c ? listName(c) : id; };
+    const courseName = (id: string) => { const c = app.courses.find((x) => x.id === id); return c ? listName(c) : isTourId(id) ? tourName(id) : id; };
     if (!feed) {
       this.root.add(txt(this, x0 + pw / 2, y + 30, "friends' rounds show here on the hosted game (the shared board can't be reached)", { origin: [0.5, 0], color: COLORS.dim, maxWidth: pw - 24 }));
       return;
@@ -336,7 +347,7 @@ export class LeaderboardScene extends MenuScene {
     const pw = Math.min(260, W - 16), ph = 34 + list.length * 18 + 22;
     const x0 = Math.round((W - pw) / 2), y0 = Math.round((H - ph) / 2);
     layer.add([dim, new Panel(this, x0, y0, pw, ph, 0.95), txt(this, x0 + pw / 2, y0 + 6, title, { origin: [0.5, 0], maxWidth: pw - 12 })]);
-    const courseName = (id: string) => { const c = app.courses.find((x) => x.id === id); return c ? listName(c) : id; };
+    const courseName = (id: string) => { const c = app.courses.find((x) => x.id === id); return c ? listName(c) : isTourId(id) ? tourName(id) : id; };
     list.forEach((e, i) => {
       const day = new Date(`${e.daily ?? localDay(e.date)}T12:00:00`);
       const when = Number.isNaN(day.getTime()) ? '' : ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'][day.getDay()];
@@ -356,7 +367,7 @@ export class LeaderboardScene extends MenuScene {
     if (!list) list = local.filter((h) => h.player !== DEFAULT_NAME).sort((a, b) => b.dist - a.dist);
     if (!this.isCurrentBuild(g)) return;
     if (note) { this.root.add(txt(this, x0 + pw / 2, y, note, { origin: [0.5, 0], color: COLORS.yellow, maxWidth: pw - 16 })); y += 11; }
-    const courseName = (id: string) => { const c = app.courses.find((x) => x.id === id); return c ? listName(c) : id; };
+    const courseName = (id: string) => { const c = app.courses.find((x) => x.id === id); return c ? listName(c) : isTourId(id) ? tourName(id) : id; };
     const wide = pw > 300;
     const mine = new Map(local.map((h) => [h.id, h]));
     const rows: TableRow[] = list.map((h, i) => ({
@@ -391,7 +402,7 @@ export class LeaderboardScene extends MenuScene {
       ([['friends', 'friends'], ['device', 'this device']] as const).forEach(([k, lab], i) => this.root.add(new Button(this, x0 + 8 + i * (bw + 2), y, bw, 14, lab, () => { source = k; page = 0; this.rebuild(); }, { color: src === k ? 'orange' : 'grey' })));
       y += 17;
     }
-    const courseName = (id: string) => { const c = app.courses.find((x) => x.id === id); return c ? listName(c) : id; };
+    const courseName = (id: string) => { const c = app.courses.find((x) => x.id === id); return c ? listName(c) : isTourId(id) ? tourName(id) : id; };
     let note = '';
     let empty = ''; // under the column headers, like the other boards
     const lineH = 11;

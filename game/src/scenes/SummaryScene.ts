@@ -13,6 +13,7 @@ import { earnedBy, milestonesOf } from '../save/milestones';
 import { milestoneCourses } from '../save/mine';
 import { STATES } from '../data/registry';
 import { dailyPlan, dayStandings } from '../systems/game/daily';
+import { isTourId, tourName, tourPlan } from '../systems/game/tour';
 import { DAILY_PICKS, DAILY_ROSTER } from '../data/dailyRoster';
 import { shareRound } from '../ui/shareCard';
 import { lengthLabel, shapeById } from './flow';
@@ -52,10 +53,13 @@ export class SummaryScene extends MenuScene {
     const shared = e.daily ? await fetchDaily(e.daily) : await fetchBoard(e.course);
     if (!this.sys.isActive()) return;
     const pool = shared ? (shared.some((b) => b.id === e.id) ? shared : [...shared, e]) : local;
-    const where = e.daily ? (shared ? "in today's daily round" : "in today's daily round on this device") : shared ? 'among friends' : 'on this device';
+    const tour = isTourId(e.course);
+    const dname = tour ? `daily ${tourName(e.course)}` : 'daily round';
+    const where = e.daily ? (shared ? `in today's ${dname}` : `in today's ${dname} on this device`) : shared ? 'among friends' : 'on this device';
     // rounds with no name don't go on the boards (developer: nobody as "player"); this one is counted to show where it would be
     const board = e.daily
-      ? dayStandings(pool.filter((b) => b.player !== DEFAULT_NAME || b.id === e.id), e.daily, dailyPlan(e.daily, app.courses, DAILY_ROSTER, DAILY_PICKS))
+      ? dayStandings(pool.filter((b) => b.player !== DEFAULT_NAME || b.id === e.id), e.daily,
+        tour ? tourPlan(e.daily, app.courses, DAILY_ROSTER) : dailyPlan(e.daily, app.courses, DAILY_ROSTER, DAILY_PICKS))
       : pool.filter((b) => b.course === e.course && b.tee === e.tee && b.length === e.length && b.casual === e.casual && (b.player !== DEFAULT_NAME || b.id === e.id));
     if (!e.daily) board.sort(compareRounds);
     const rank = board.findIndex((b) => b.id === e.id) + 1;
@@ -74,7 +78,7 @@ export class SummaryScene extends MenuScene {
       : taken
         ? `another device has the name ${e.player}: tap the name to change it, or to enter that device's player code`
         : rank === 0
-          ? 'a second go at the daily round: it goes on the course board, not the daily one'
+          ? `a second go at the ${dname}: it goes on the ${tour ? 'all-time board' : 'course board'}, not the daily one`
           : `${e.casual ? 'casual round  ·  ' : ''}#${rank} of ${board.length} ${where} (${lengthLabel(e.length, shapeById(e.course))})${pb ? '  ·  new personal best!' : ''}`;
     this.rankLine = !hidden && rank > 0 && e.player !== DEFAULT_NAME && !taken ? `#${rank} of ${board.length} ${where}` : '';
     const noteTxt = txt(this, W / 2, H - 38, note, { origin: [0.5, 0], color: taken ? COLORS.red : pb ? COLORS.yellow : COLORS.dim, maxWidth: W - 12 });
@@ -94,7 +98,7 @@ export class SummaryScene extends MenuScene {
     const over = (card.getData('bottom') as number) + 3 - ny;
     if (over > 0) card.y -= Math.min(over, Math.max(0, (card.getData('top') as number) - (earned.length ? 36 : 24)));
     // leaving the summary sends the round to the shared leaderboard
-    const leave = (to: string) => { void flushUploads(); this.scene.start(to, to === 'leaderboard' ? (e.daily ? { view: 'daily' } : { courseId: e.course }) : undefined); };
+    const leave = (to: string) => { void flushUploads(); this.scene.start(to, to === 'leaderboard' ? (e.daily ? { view: 'daily', kind: tour ? 'tour' : 'round' } : { courseId: e.course }) : undefined); };
     const bw = Math.min(84, Math.floor((W - 20) / 4)); // four buttons fit a narrow phone
     const bx = (i: number) => Math.round(W / 2 - 2 * bw - 6 + i * (bw + 4));
     this.root.add(new Button(this, bx(0), H - 24, bw, 16, 'title', () => leave('title'), { color: 'grey' }));

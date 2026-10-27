@@ -9,7 +9,8 @@ import { coursesByState } from '../data/registry';
 import { initAudio, setVolume } from '../audio/sfx';
 import { peekSnapshot } from '../save/snapshot';
 import { Button, COLORS, onTap, Panel, setTxt, txt } from '../ui/widgets';
-import { confirmDiscard, editName, hasName, resumeRound, snapshotHole, startPractice, startRound, useCourse, withName } from './flow';
+import { confirmDiscard, editName, hasName, resumeRound, snapshotHole, startPractice, startRound, startTour, useCourse, useCourseQuietly, withName } from './flow';
+import { TourPlan, tourName, tourPlan } from '../systems/game/tour';
 import { DailyPlan, dailyPlan, localDay } from '../systems/game/daily';
 import { DAILY_PICKS, DAILY_ROSTER } from '../data/dailyRoster';
 import { shortName } from '../save/milestones';
@@ -64,13 +65,16 @@ export class TitleScene extends MenuScene {
   private resuming = false;
   /** Opened to start today's daily round (the leaderboard's "play today's round"). */
   private dailyNow = false;
+  /** Opened to start today's par 3s / 4s / 5s (the leaderboard's "play today's round" there). */
+  private tourNow = false;
 
   constructor() {
     super('title');
   }
 
-  init(data?: { daily?: boolean }) {
+  init(data?: { daily?: boolean; tour?: boolean }) {
     this.dailyNow = !!data?.daily;
+    this.tourNow = !!data?.tour;
   }
 
   create() {
@@ -355,6 +359,15 @@ export class TitleScene extends MenuScene {
     })));
   }
 
+  /** Today's par 3s / 4s / 5s: like the daily round, on the first hole's course. */
+  private playTour(plan: TourPlan) {
+    void confirmDiscard(this, this.root, () => withName(this, () => void this.withLoading(async (progress) => {
+      await useCourseQuietly(this, plan.holes[0].course, progress);
+      startTour(this, plan);
+      return true;
+    })));
+  }
+
   async build() {
     const g = this.gen;
     // the last build's lobby parts are gone with it (root emptied): nothing draws into them meanwhile
@@ -439,8 +452,34 @@ export class TitleScene extends MenuScene {
     // the daily round: today's course, nine holes, the same wind and pins for everyone
     const plan = dailyPlan(localDay(), app.courses, DAILY_ROSTER, DAILY_PICKS);
     const dc = plan && app.courses.find((c) => c.id === plan.courseId);
-    if (plan && dc) add(`daily: ${shortName(dc.name)}`, () => this.playDaily(plan), !!snap);
+    // the day's par 3s, 4s or 5s: nine holes of one par from all the courses (developer, 2026-10-27)
+    const tp = tourPlan(localDay(), app.courses, DAILY_ROSTER);
+    const dailies: [string, () => void][] = [];
+    if (plan && dc) dailies.push([`daily: ${shortName(dc.name)}`, () => this.playDaily(plan)]);
+    if (tp) dailies.push([`daily: ${tourName(tp.courseId)}`, () => this.playTour(tp)]);
+    // the two dailies side by side (developer, 2026-10-27), one under the other on a screen too narrow for both
+    const dgap = 4;
+    const dws = dailies.map(([label]) => {
+      const probe = txt(this, 0, 0, label);
+      const w = Math.max(bw, Math.ceil(probe.width) + 12);
+      probe.destroy();
+      return w;
+    });
+    const rowW = dws.reduce((a, b) => a + b, 0) + dgap * (dws.length - 1);
+    if (dailies.length === 2 && rowW <= W - 8) {
+      let x = Math.round(cx - rowW / 2);
+      dailies.forEach(([label, go], i) => {
+        this.root.add(new Button(this, x, y, dws[i], bh, label, go, { color: snap ? 'grey' : 'orange' }));
+        x += dws[i] + dgap;
+      });
+      rows.push({ top: y, bottom: y + bh, right: Math.round(cx - rowW / 2) + rowW });
+      bottom = y + bh;
+      y += gap;
+    } else {
+      for (const [label, go] of dailies) add(label, go, !!snap);
+    }
     if (this.dailyNow) { this.dailyNow = false; if (plan && dc) this.playDaily(plan); }
+    if (this.tourNow) { this.tourNow = false; if (tp) this.playTour(tp); }
     // live match play against a friend, where the site has it (the match Worker bound): matches on this device first
     if (matchesUp === true) {
       void startLobby();
