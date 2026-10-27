@@ -1,0 +1,17 @@
+{
+ "_note": "Places with several courses that each have their own data folder (a shared folder, like East Potomac's, sets its group in pipeline s10). course-lists.mjs puts each listed course in the group. keepNames: the courses keep their full names inside the group (Bandon Trails, not Trails).",
+ "bandon_resort": {
+  "name": "Bandon Dunes Golf Resort",
+  "keepNames": true,
+  "courses": [
+   "bandon_dunes",
+   "pacific_dunes",
+   "bandon_trails",
+   "old_macdonald",
+   "sheep_ranch",
+   "bandon_preserve",
+   "shortys"
+  ],
+  "why": "developer, 2026-10-27: all the Bandon courses under one umbrella like East Potomac, Silvies Valley and Pumpkin Ridge"
+ }
+}

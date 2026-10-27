@@ -1371,3 +1371,21 @@ the next tap (`HudScene.swingCatch`), apart from the menu button, which still op
 stops the swing; a press on the page just outside the game's canvas counts too
 (`pointerdownoutside`). A press outside the browser window can't be seen by the page. The space
 bar works as before.
+
+## Bandon Dunes Golf Resort on the course list (developer, 2026-10-27)
+
+"all the bandon courses could be put under a centralized 'bandon dunes resort' umbrella like
+the east potomac and silvies valley and pumpkin ridge courses are." Those three share one data
+folder each, and pipeline s10 writes their group into course.json. The Bandon courses each
+have their own folder, pinned to the pipeline that built them, so the group is added when the
+course list is made instead: `game/scripts/course-groups.json` names the place and its courses,
+and `course-lists.mjs` gives each listed course the group. No course is rebuilt.
+
+- Oregon shows one tile, "Bandon Dunes Golf Resort · 7 courses": Bandon Dunes, Pacific Dunes,
+  Bandon Trails, Old Macdonald, Sheep Ranch, Bandon Preserve and Shorty's.
+- The courses keep their full names inside it (`keepNames`), not "Trails" or "Dunes".
+- Each keeps its own view on the title screen. A shared world like East Potomac shows one.
+- **Logo:** Bennett's Gorse, the gorse sprig drawn as Bandon Dunes' second logo concept (Bandon
+  Dunes kept its seal). The developer: "there was a little gorse flower logo made in another
+  chat i liked" (`assets-src/course_logos/bandon_resort.py`).
+- The daily round already counted the seven as one place (the town of Bandon); it still does.

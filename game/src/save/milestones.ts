@@ -32,7 +32,7 @@ export function shortName(name: string): string {
  * several drops the place's name, as on the course list ("Pumpkin Ridge Witch Hollow" is
  * "witch hollow", "East Potomac White Course" "east po white"; developer, 2026-10-25).
  */
-export function passportName(c: { name: string; group?: string; groupName?: string }): string {
+export function passportName(c: { name: string; group?: string; groupName?: string; keepName?: boolean }): string {
   return listName(c).slice(0, 17);
 }
 
@@ -41,8 +41,8 @@ export function passportName(c: { name: string; group?: string; groupName?: stri
  * birdies, this week): the short name, and for a course at a place with several, its name
  * there, with a short form of the place's name for East Potomac ("east po white").
  */
-export function listName(c: { name: string; group?: string; groupName?: string }): string {
-  const n = c.groupName ? nameInGroup(c.name, c.groupName) : c.name;
+export function listName(c: { name: string; group?: string; groupName?: string; keepName?: boolean }): string {
+  const n = c.groupName ? nameInGroup(c.name, c.groupName, c.keepName) : c.name;
   const prefix = c.group ? PASSPORT_PREFIX[c.group] : undefined;
   if (prefix) return `${prefix} ${shortName(n).replace(/ course$/, '')}`;
   return shortName(n);
