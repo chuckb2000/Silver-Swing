@@ -5,7 +5,8 @@
 // without smoothing so it stays pixel-crisp. Phones get the share sheet; a
 // computer gets the picture in a box with copy, download and close.
 
-import { isTourId, tourName, tourParOf } from '../systems/game/tour';
+import { isTourId, tourHolesOpen, tourName, tourParOf } from '../systems/game/tour';
+import { loadBoard } from '../save/store';
 import Phaser from 'phaser';
 import { app, GAME_NAME } from '../app';
 import type { LeaderboardEntry } from '../save/entry';
@@ -37,6 +38,15 @@ export function ensureImages(scene: Phaser.Scene, want: [string, string][]): Pro
     // never waits for ever: a card without its art is better than no card
     setTimeout(finish, 8000);
   });
+}
+
+/**
+ * May this device see where a daily par round's holes were? Only once its day is over or this
+ * device has finished that day's round itself (developer, 2026-10-27: nobody sees the day's holes
+ * on someone else's card before playing them).
+ */
+async function tourHolesShown(e: LeaderboardEntry): Promise<boolean> {
+  return tourHolesOpen(e, await loadBoard().catch(() => []));
 }
 
 function dayText(iso: string): string {
@@ -95,7 +105,7 @@ export async function shareImage(scene: Phaser.Scene, e: LeaderboardEntry, rank 
   if (rank) { box.add(txt(scene, W / 2, y, rank, { origin: [0.5, 0], color: COLORS.green, maxWidth: W - 12 })); y += 11; }
   // the scorecard, placed under the header (its own layout centres it in the height it is given)
   const holes = app.course?.json.id === e.course ? app.course.json.holes : null;
-  const card = scorecardOf(scene, { ...cardOfEntry(e, name, holes), title: '' }, W, 400);
+  const card = scorecardOf(scene, { ...cardOfEntry(e, name, holes, !tour || (await tourHolesShown(e))), title: '' }, W, 400);
   card.y = y + 2 - (card.getData('top') as number);
   box.add(card);
   // render, then scale up without smoothing

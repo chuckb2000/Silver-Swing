@@ -1401,5 +1401,10 @@ selection of par 3s, then a random selection of par 4s, then a random selection 
   background (`prefetchNextCourse`), so the service worker usually has it already. A
   closed tab resumes on the right course.
 - **The card:** one nine with each hole's par and yards as played, and where each hole is
-  listed under it ("4 newport 10"). The share card uses the first hole's course art. An eagle
+  listed under it ("4 newport 10"), but only once the round is over (developer, 2026-10-27:
+  "the list of holes on the scorecard only shows up after the round and won't show up on the
+  leaderboard unless you've already completed the daily"). Someone else's card from the
+  leaderboard, or a shared picture, lists them only when this device has finished that day's
+  round (a second go counts) or the day is over (`tourHolesOpen`). The hole intro and the
+  loading screen still name the hole being played. The share card uses the first hole's course art. An eagle
   goes on the eagles list on its own course and hole.

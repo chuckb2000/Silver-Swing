@@ -4,7 +4,7 @@
 // everyone on the day, like the daily round (daily.ts), on its own board. Pure.
 
 import { hash32, seedFromString } from '../physics/rng';
-import { addDays, DailyPlan, dayNumber } from './daily';
+import { addDays, DailyPlan, dayNumber, localDay } from './daily';
 
 export type TourPar = 3 | 4 | 5;
 
@@ -147,4 +147,27 @@ export function tourPlan(day: string, courses: TourCourse[], roster?: Readonly<R
     day, par, courseId: TOUR_IDS[par], tee: TOUR_TEE, length: '9', seed: seedFromString(`tour:${day}`),
     holes: last.map((x) => ({ course: x.c.id, hole: x.hole, tee: teeOf(x.c) })),
   };
+}
+
+/** The calendar day (yyyy-mm-dd, local) of an ISO time. */
+function dayOf(iso: string): string {
+  const d = new Date(iso);
+  return Number.isNaN(d.getTime()) ? iso.slice(0, 10) : localDay(d);
+}
+
+/**
+ * Whether a daily par round's card may list where its holes were (developer, 2026-10-27: "the
+ * list of holes on the scorecard only shows up after the round and won't show up on the
+ * leaderboard unless you've already completed the daily"): the round's day is over, or `mine`
+ * (this device's finished rounds) has a round of that day's pars, a second go included.
+ */
+export function tourHolesOpen(
+  e: { course: string; daily?: string; date: string },
+  mine: { course: string; daily?: string; date: string }[],
+  today: string = localDay(),
+): boolean {
+  if (!isTourId(e.course)) return true;
+  const day = e.daily ?? dayOf(e.date);
+  if (day < today) return true;
+  return mine.some((b) => b.course === e.course && (b.daily ?? dayOf(b.date)) === day);
 }

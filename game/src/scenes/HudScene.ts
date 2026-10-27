@@ -1795,7 +1795,8 @@ export function holeTitle(r: import('../systems/game/round').Round): string {
 
 /** The card of a round being played (or just finished). */
 export function cardOfRound(r: import('../systems/game/round').Round): CardData {
-  if (r.cfg.tour) return tourCard(r.cfg.courseId, r.cfg.playerName, r.cfg.tour, r.scores, r.cfg.daily);
+  // the holes' courses only once the round is over (developer, 2026-10-27: nobody sees what's coming)
+  if (r.cfg.tour) return tourCard(r.cfg.courseId, r.cfg.playerName, r.cfg.tour, r.scores, r.cfg.daily, r.finished);
   const holes = r.course.json.holes;
   const nCourse = holes.length;
   const shape = shapeOfCourse(r.course.json);
@@ -1819,7 +1820,7 @@ export function cardOfRound(r: import('../systems/game/round').Round): CardData 
  * The card of the daily par 3s / 4s / 5s: one nine, each hole's par and yards as played; the holes'
  * courses are listed on the card under it (tourLines).
  */
-function tourCard(id: string, player: string, tour: { course: string; hole: number; yd?: number }[], scores: HoleScore[], day?: string): CardData {
+function tourCard(id: string, player: string, tour: { course: string; hole: number; yd?: number }[], scores: HoleScore[], day?: string, showHoles = true): CardData {
   const name = tourName(id);
   const par = tourParOf(id) ?? 0; // every hole has the round's par (a hole not played yet too)
   const by = new Map(scores.map((s) => [s.hole, s]));
@@ -1828,15 +1829,15 @@ function tourCard(id: string, player: string, tour: { course: string; hole: numb
     blocks: [[1, tour.length, 'tot']],
     hole: (h) => ({ par: by.get(h)?.par ?? par, yd: tour[h - 1]?.yd ?? null }),
     scores,
-    holesFrom: tour.map((t) => {
+    holesFrom: !showHoles ? undefined : tour.map((t) => {
       const c = app.courses.find((x) => x.id === t.course);
       return `${c ? shortName(c.name).toLowerCase() : t.course} ${t.hole}`;
     }),
   };
 }
 
-export function cardOfEntry(e: LeaderboardEntry, courseName: string, holes: import('../data/course').HoleJson[] | null): CardData {
-  if (e.tour && isTourId(e.course)) return tourCard(e.course, e.player, e.tour, e.scores, e.daily);
+export function cardOfEntry(e: LeaderboardEntry, courseName: string, holes: import('../data/course').HoleJson[] | null, showHoles = true): CardData {
+  if (e.tour && isTourId(e.course)) return tourCard(e.course, e.player, e.tour, e.scores, e.daily, showHoles);
   const info = app.courses.find((c) => c.id === e.course);
   const shape = info ? shapeOfCourse(info) : undefined;
   const blocks = cardBlocks(e.length, e.scores.map((x) => x.hole), shape);

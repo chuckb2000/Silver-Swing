@@ -8,7 +8,7 @@ import { eaglesIn } from '../../src/save/feats';
 import { D1Like, D1Statement, handleEaglesGet, handleGet, handlePost, resetSchemaCache } from '../../src/server/scores';
 import { addDays, dayStandings } from '../../src/systems/game/daily';
 import { Round, RoundConfig } from '../../src/systems/game/round';
-import { isTourId, TOUR_FROM, TOUR_HOLES, tourName, tourPar, tourPlan, tourRest } from '../../src/systems/game/tour';
+import { isTourId, TOUR_FROM, TOUR_HOLES, tourHolesOpen, tourName, tourPar, tourPlan, tourRest } from '../../src/systems/game/tour';
 import { totals } from '../../src/systems/rules/scoring';
 import { loadCourseFiles, meterFor, registry } from './helpers';
 
@@ -205,5 +205,22 @@ describe('the boards', () => {
     const eagles = (await (await handleEaglesGet(db, new URL('http://x/api/eagles'))).json()) as { eagles: { course: string; hole: number; tee: string }[] };
     expect(eagles.eagles).toEqual([expect.objectContaining({ course: 'newport', hole: 2, tee: 'Black' })]);
     expect(eaglesIn(t).map((e) => [e.course, e.hole])).toEqual([['newport', 2]]);
+  });
+});
+
+describe('where the holes were, on someone else\'s card (developer, 2026-10-27)', () => {
+  const today = '2026-10-28';
+  const theirs = { course: 'par3s', daily: today, date: '2026-10-28T15:00:00' };
+  it('stays hidden today until this device has played today\'s par 3s', () => {
+    expect(tourHolesOpen(theirs, [], today)).toBe(false);
+    // the daily round, or yesterday's par 3s, don't count
+    expect(tourHolesOpen(theirs, [{ course: 'newport', daily: today, date: '2026-10-28T10:00:00' }, { course: 'par3s', daily: '2026-10-25', date: '2026-10-25T10:00:00' }], today)).toBe(false);
+    expect(tourHolesOpen(theirs, [{ course: 'par3s', daily: today, date: '2026-10-28T10:00:00' }], today)).toBe(true);
+    // a second go (no daily tag) is a finished round of the day too
+    expect(tourHolesOpen(theirs, [{ course: 'par3s', date: '2026-10-28T11:00:00' }], today)).toBe(true);
+  });
+  it('shows once the day is over, and on any other round', () => {
+    expect(tourHolesOpen(theirs, [], '2026-10-29')).toBe(true);
+    expect(tourHolesOpen({ course: 'newport', daily: today, date: theirs.date }, [], today)).toBe(true);
   });
 });

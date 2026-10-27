@@ -90,8 +90,17 @@ test('daily par round: two holes on two courses, and a reload goes on', async ({
   await page.waitForFunction((id) => window.__golf.course?.json.id === id && window.__golf.round.holeNumber === 2, plan[1], { timeout: 120_000 });
   await playHole(page);
   await page.waitForFunction(() => window.__game.scene.getScene('hud').modal === 'holed', null, { polling: 100 });
-  // the card lists where each hole is
-  await page.keyboard.press('Tab').catch(() => null);
+  // the card in the round doesn't list where the holes are (developer, 2026-10-27: only after the round)
+  await press(page, 'hud', '^card$', () => window.__game.scene.getScene('hud').modal === 'card');
+  await page.waitForTimeout(500);
+  await page.screenshot({ path: 'test-results/tour-card-in-round.png' });
+  const listed = await page.evaluate(() => {
+    const texts: string[] = [];
+    const walk = (l: any[]) => { for (const o of l) { if (o.type === 'BitmapText') texts.push(o.text); if (o.list) walk(o.list); } };
+    walk(window.__game.scene.getScene('hud').children.list);
+    return texts.filter((t) => /^1 \S.* · 2 /.test(t) || /^1 [a-z]/.test(t));
+  });
+  expect(listed).toEqual([]);
   expect(await page.evaluate(() => window.__golf.round.scores.map((s: any) => s.hole))).toEqual([1, 2]);
   expect(await page.evaluate(() => window.__golf.round.cfg.tour.slice(0, 2).every((t: any) => t.yd > 0))).toBe(true);
   await page.screenshot({ path: 'test-results/tour-holed-2.png' });
