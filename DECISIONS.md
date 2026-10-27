@@ -1409,3 +1409,21 @@ selection of par 3s, then a random selection of par 4s, then a random selection 
   round (a second go counts) or the day is over (`tourHolesOpen`). The hole intro and the
   loading screen still name the hole being played. The share card uses the first hole's course art. An eagle
   goes on the eagles list on its own course and hole.
+
+## Bandon Dunes Golf Resort on the course list (developer, 2026-10-27)
+
+"all the bandon courses could be put under a centralized 'bandon dunes resort' umbrella like
+the east potomac and silvies valley and pumpkin ridge courses are." Those three share one data
+folder each, and pipeline s10 writes their group into course.json. The Bandon courses each
+have their own folder, pinned to the pipeline that built them, so the group is added when the
+course list is made instead: `game/scripts/course-groups.json` names the place and its courses,
+and `course-lists.mjs` gives each listed course the group. No course is rebuilt.
+
+- Oregon shows one tile, "Bandon Dunes Golf Resort · 7 courses": Bandon Dunes, Pacific Dunes,
+  Bandon Trails, Old Macdonald, Sheep Ranch, Bandon Preserve and Shorty's.
+- The courses keep their full names inside it (`keepNames`), not "Trails" or "Dunes".
+- Each keeps its own view on the title screen. A shared world like East Potomac shows one.
+- **Logo:** Bennett's Gorse, the gorse sprig drawn as Bandon Dunes' second logo concept (Bandon
+  Dunes kept its seal). The developer: "there was a little gorse flower logo made in another
+  chat i liked" (`assets-src/course_logos/bandon_resort.py`).
+- The daily round already counted the seven as one place (the town of Bandon); it still does.

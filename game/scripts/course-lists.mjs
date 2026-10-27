@@ -13,8 +13,14 @@ import { fileURLToPath } from 'node:url';
 const HERE = dirname(fileURLToPath(import.meta.url));
 export const PUBLIC = resolve(HERE, '..', 'public');
 
+/** Places with several courses in their own data folders (scripts/course-groups.json). */
+export function groupsFile() {
+  const raw = JSON.parse(readFileSync(join(HERE, 'course-groups.json'), 'utf8'));
+  return Object.fromEntries(Object.entries(raw).filter(([k]) => !k.startsWith('_')));
+}
+
 /** The course-list entry of one course.json (what the course screen and the registry need). */
-export function entryOf(c) {
+export function entryOf(c, groups = {}) {
   // the longest tees first (developer, 2026-10-22: Wannamoisett listed Blue left of the longer Black)
   const tees = [...(c.teeSets ?? [])].sort((a, b) => (b.totalYd ?? 0) - (a.totalYd ?? 0));
   const def = tees.find((t) => t.name === c.defaultTee) ?? tees[0] ?? { totalYd: 0 };
@@ -26,6 +32,11 @@ export function entryOf(c) {
     ratings: Object.fromEntries(tees.filter((t) => t.rating > 0 && t.slope > 0).map((t) => [t.name, [t.rating, t.slope]])),
   };
   if (c.group) Object.assign(e, { group: c.group, groupName: c.groupName, layout: c.layout });
+  else {
+    // a place whose courses each have their own folder (Bandon Dunes Golf Resort): its group from course-groups.json
+    const g = Object.entries(groups).find(([, v]) => v.courses.includes(c.id));
+    if (g) Object.assign(e, { group: g[0], groupName: g[1].name, ...(g[1].keepNames ? { keepName: true } : {}) });
+  }
   if (c.nines) e.nines = c.nines; // a club of three or more nines: the rounds it offers
   return e;
 }
@@ -34,12 +45,13 @@ export function entryOf(c) {
 export function courseEntries(publicDir = PUBLIC) {
   const root = join(publicDir, 'courses');
   const out = [];
+  const groups = groupsFile();
   for (const id of readdirSync(root).sort()) {
     const f = join(root, id, 'course.json');
     if (!existsSync(f)) continue; // a shared world folder (east_potomac) or leftovers
     const c = JSON.parse(readFileSync(f, 'utf8'));
     if (c.practice || c.id !== id) continue; // the practice ground has its own button
-    out.push(entryOf(c));
+    out.push(entryOf(c, groups));
   }
   return out;
 }
@@ -49,7 +61,8 @@ export function titleMaps(entries, publicDir = PUBLIC) {
   const seen = new Set();
   const maps = [];
   for (const e of entries) {
-    const key = e.group || e.id;
+    // one view per shared world (East Potomac); a resort's courses each keep their own
+    const key = e.group && !e.keepName ? e.group : e.id;
     if (seen.has(key) || !existsSync(join(publicDir, 'sprites', 'title', `${e.id}.png`))) continue;
     seen.add(key);
     maps.push(e.id);

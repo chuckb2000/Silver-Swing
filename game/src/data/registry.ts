@@ -21,6 +21,8 @@ export interface CourseInfo {
   group?: string;
   groupName?: string;
   layout?: string;
+  /** keeps its full name inside its group (Bandon Trails at Bandon Dunes Golf Resort: scripts/course-groups.json) */
+  keepName?: boolean;
 }
 
 /** A course on the course screen, or a place with several courses (chosen in a second step). */
@@ -51,7 +53,8 @@ export function courseEntries(courses: CourseInfo[]): CourseEntry[] {
  * dropped ("Pumpkin Ridge Witch Hollow" in "Pumpkin Ridge Golf Club" is "Witch Hollow";
  * developer, 2026-10-24). The full name stays everywhere else (boards, cards, the round).
  */
-export function nameInGroup(name: string, groupName: string): string {
+export function nameInGroup(name: string, groupName: string, keepName = false): string {
+  if (keepName) return name;
   const a = name.split(/\s+/), g = groupName.split(/\s+/);
   let k = 0;
   while (k < a.length - 1 && k < g.length && a[k].toLowerCase() === g[k].toLowerCase()) k++;

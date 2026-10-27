@@ -40,3 +40,38 @@ describe('ratingText', () => {
     expect(ratingText({ rating: 0, slope: 0 })).toBe('not rated');
   });
 });
+
+describe('Bandon Dunes Golf Resort (developer, 2026-10-27)', async () => {
+  const { courseEntries: listed, groupsFile, titleMaps } = await import('../../scripts/course-lists.mjs');
+  const { nameInGroup } = await import('../../src/data/registry');
+  const { listName } = await import('../../src/save/milestones');
+  const BANDON = ['bandon_dunes', 'bandon_preserve', 'bandon_trails', 'old_macdonald', 'pacific_dunes', 'sheep_ranch', 'shortys'];
+
+  it('the seven Bandon courses are one place on the course list, under their own names', () => {
+    const all = listed();
+    const resort = all.filter((e: { group?: string }) => e.group === 'bandon_resort');
+    expect(resort.map((e: { id: string }) => e.id).sort()).toEqual(BANDON);
+    for (const e of resort) {
+      expect(e.groupName).toBe('Bandon Dunes Golf Resort');
+      expect(nameInGroup(e.name, e.groupName!, e.keepName)).toBe(e.name);
+      expect(listName(e)).not.toMatch(/^(dunes|trails|preserve)$/);
+    }
+    expect(groupsFile().bandon_resort.courses.sort()).toEqual(BANDON);
+    // each course keeps its own view on the title screen (one world per course, unlike East Potomac)
+    expect(titleMaps(all).filter((id: string) => BANDON.includes(id)).length).toBeGreaterThan(1);
+    // a course in a group file must be a course on the list, and in one group only
+    const ids = new Set(all.map((e: { id: string }) => e.id));
+    const seen = new Set<string>();
+    for (const g of Object.values(groupsFile()) as { courses: string[] }[]) for (const id of g.courses) {
+      expect(ids.has(id), id).toBe(true);
+      expect(seen.has(id), id).toBe(false);
+      seen.add(id);
+    }
+  });
+
+  it('the resort has its own logo', async () => {
+    const { existsSync } = await import('node:fs');
+    const { resolve } = await import('node:path');
+    expect(existsSync(resolve(__dirname, '../../public/sprites/logos/bandon_resort.png'))).toBe(true);
+  });
+});

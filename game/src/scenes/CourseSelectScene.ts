@@ -176,7 +176,7 @@ export class CourseSelectScene extends MenuScene {
   /** The courses of one place (East Potomac: Blue, White, Red). */
   private buildGroup(g: { id: string; name: string; courses: CourseInfo[] }, x0: number, y0: number, pw: number, ph: number) {
     this.root.add(txt(this, x0 + pw / 2, y0 + 6, g.name, { origin: [0.5, 0], scale: 2, maxWidth: pw - 16 }));
-    this.grid(g.courses.map((c) => ({ ...this.courseTile(c, `${c.holes} holes · par ${c.par} · ${c.totalYd} yd`), name: nameInGroup(c.name, g.name) })), x0, y0, pw, ph);
+    this.grid(g.courses.map((c) => ({ ...this.courseTile(c, `${c.holes} holes · par ${c.par} · ${c.totalYd} yd`), name: nameInGroup(c.name, g.name, c.keepName) })), x0, y0, pw, ph);
   }
 
   private courseTile(c: CourseInfo, sub: string): Tile {
