@@ -39,7 +39,7 @@ export function mergeRounds(...lists: LeaderboardEntry[][]): LeaderboardEntry[] 
 }
 
 export function playerStats(all: LeaderboardEntry[], recentN = 10): PlayerStats {
-  const rounds = all.filter((e) => !e.casual).sort((a, b) => a.date.localeCompare(b.date));
+  const rounds = all.filter((e) => !e.casual && e.length !== 'xc').sort((a, b) => a.date.localeCompare(b.date));
   const holes = rounds.reduce((a, e) => a + e.scores.length, 0);
   let fw = 0, fwc = 0, gir = 0, putts = 0, pen = 0;
   for (const e of rounds) {

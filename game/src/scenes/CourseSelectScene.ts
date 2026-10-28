@@ -28,7 +28,7 @@ function reloadInto(id: string) {
 }
 import { ensureBg, MenuScene } from './menu';
 
-type Purpose = 'play' | 'board' | 'match';
+type Purpose = 'play' | 'board' | 'match' | 'xc';
 /** A card: a course, or a place with several courses. */
 interface Tile { art: string; logos: string[]; name: string; sub: string; on: boolean; tap: () => void }
 /** pick: load `courseId` at once and go on (a challenge on a set course: no choosing) */
@@ -324,6 +324,7 @@ export class CourseSelectScene extends MenuScene {
     if (this.busy) return;
     this.loadError = '';
     if (this.purpose === 'board') { this.scene.start('leaderboard', { courseId: id }); return; }
+    if (this.purpose === 'xc') { this.scene.start('bonus', { courseId: id }); return; } // bonus mode loads it when played
     this.current = id;
     if (app.course?.json.id === id) { this.scene.start('setup', { match: this.purpose === 'match' }); return; }
     this.busy = true;

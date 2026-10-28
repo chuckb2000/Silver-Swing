@@ -107,6 +107,36 @@ export function prefetchNextCourse(r: Round) {
 }
 
 /**
+ * Cross-country (bonus mode, crossCountry.ts) on the current course: one leg per hole, chosen on the
+ * planner ('xcplan') before each; Normal, no casual rules, from the course's default tees.
+ */
+export function startXc(scene: Phaser.Scene) {
+  const c = app.course!.json;
+  const s = app.settings;
+  const cfg: RoundConfig = {
+    courseId: c.id,
+    tee: c.defaultTee,
+    holes: c.holes.map((_, i) => i + 1),
+    length: 'xc',
+    xc: { legs: [] },
+    playerName: s.playerName || 'player',
+    seed: newSeed(),
+    settings: { difficulty: 'normal', lefty: s.lefty, e5: false, gimmes: false, maxDoublePar: false, mulligans: false },
+    startedAt: new Date().toISOString(),
+  };
+  app.round = new Round(app.course!, cfg);
+  app.round.startHole(0);
+  void clearSnapshot(); // nothing to save until the first leg is chosen
+  scene.scene.start('xcplan');
+}
+
+/** Cross-country: the next leg is chosen on the planner (from the hole-complete panel). */
+export function toXcPlan(scene: Phaser.Scene) {
+  scene.scene.stop('play');
+  scene.scene.start('xcplan');
+}
+
+/**
  * A tour round's next hole is on another course: the hole-complete panel hands over to the
  * loading screen ('tourload'), which loads that course and opens the hole.
  */
@@ -125,6 +155,7 @@ export function snapshotCourse(snap: Snap): string {
 
 /** Where a saved round is, for a menu: "oswego lake", or "today's par 5s". */
 export function snapshotWhere(snap: Snap): string {
+  if (snap.cfg.xc) { const c = app.courses.find((k) => k.id === snap.cfg.courseId); return `cross-country${c ? ` at ${shortName(c.name)}` : ''}`; }
   if (isTourId(snap.cfg.courseId)) return `${snap.cfg.daily === localDayNow() ? "today's" : 'the'} ${tourName(snap.cfg.courseId)}`;
   const c = app.courses.find((k) => k.id === snap.cfg.courseId);
   return c ? shortName(c.name) : 'another course';
@@ -154,7 +185,7 @@ export async function confirmDiscard(scene: Phaser.Scene, parent: Phaser.GameObj
   if (!scene.sys.isActive()) return;
   if (!snap) { go(); return; }
   const where = snapshotWhere(snap);
-  const at = isTourId(snap.cfg.courseId) ? '' : 'at ';
+  const at = isTourId(snap.cfg.courseId) || snap.cfg.xc ? '' : 'at ';
   const { hole, done } = snapshotHole(snap);
   const body = done
     ? `your round ${at}${where} has every hole played but isn't on the leaderboard yet - start a new one and lose it?`
@@ -230,6 +261,7 @@ export async function resumeRound(scene: Phaser.Scene, progress?: LoadProgress):
   app.round = res.round;
   prefetchNextCourse(res.round);
   if (res.finished) { await finishRound(scene); return true; } // the last hole was holed: straight to the summary
+  if (res.round.needsLeg) { scene.scene.start('xcplan'); return true; } // cross-country between legs: the planner
   scene.scene.start('play', { resume: !res.betweenHoles });
   return true;
 }
@@ -253,6 +285,7 @@ export async function finishRound(scene: Phaser.Scene) {
     totals: tot,
     ...(r.cfg.courseHoles ? { holes: r.cfg.courseHoles } : {}),
     ...(r.cfg.tour ? { tour: r.cfg.tour.map((t) => ({ ...t })) } : {}),
+    ...(r.cfg.xc ? { legs: r.cfg.xc.legs.map((l) => [l[0], l[1]] as [number, number]) } : {}),
   };
   // the daily round counts once a day: a second go on this device is an ordinary round (the server checks the player code too)
   // (the daily round and the day's par 3s / 4s / 5s each count once: a tour round is on its own board)

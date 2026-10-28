@@ -445,7 +445,7 @@ export class LeaderboardScene extends MenuScene {
       const putts = stat === 'putts';
       if (src === 'friends') { list = putts ? await fetchPuttRecords(50) : await fetchBirdieRecords(50); if (!list) note = "can't reach the shared board - showing this device"; }
       if (!list) {
-        const mine = (await loadBoard()).filter((e) => !e.casual && e.player !== DEFAULT_NAME);
+        const mine = (await loadBoard()).filter((e) => !e.casual && e.length !== 'xc' && e.player !== DEFAULT_NAME);
         list = putts
           ? mine.filter((e) => tracksMade(e.scores))
             .map((e) => ({ id: e.id, player: e.player, course: e.course, birdies: birdiesIn(e.scores), made: puttsMadeM(e.scores), length: e.length, tee: e.tee, date: e.date }))

@@ -527,8 +527,8 @@ DECISIONS.md with the reason.
     affected courses. `design/hole-counts` (13/19-hole courses played all at
     once, clubs of three nines) merged 2026-10-22 (developer); live matches are
     played on every course, a club's nines included (`MatchConfig.courseHoles`).
-    Cross-country golf: report only
-    (`design/cross-country`), not to be built yet (developer).
+    Cross-country golf: the report is `docs/reports/cross_country.md`; built as the bonus mode
+    (2026-10-27, below).
 
 -   **Gorse (design chat, 2026-10-20):** branch `design/gorse`, merged
     2026-10-20: surface 17 `gorse` (course_config `"gorse": {"ground":
@@ -674,6 +674,12 @@ DECISIONS.md with the reason.
     each hole's course loads between holes (`TourLoadScene`), the next one fetched while
     playing. Title "daily: par 5s"; leaderboard daily tab "daily par 5s". No schema
     change. DECISIONS.md "The daily par 3s, 4s and 5s".
+
+-   **Cross-country golf (design chat, 2026-10-27):** branch `design/cross-country-play`:
+    the bonus mode in "my golf" (`BonusScene`, `XcPlanScene`, `systems/game/crossCountry.ts`):
+    one leg per tee and green, 85-900 yd or a hole's own, out of bounds only beyond the
+    boundary, by gross strokes, no par shown; round length `xc`, kept off every other board and
+    list. DECISIONS.md "Cross-country golf, the bonus mode".
 
 -   **Next task:** Item 1 of the player improvements (swing coach) is on
     `design/coach`, unmerged. Also: the third playtest (putting, yellow
@@ -1611,6 +1617,9 @@ calm (≈60% of holes below half the max). It is seeded per round.
     from every course in the rotation, the par going round 3, 4, 5 a day at a time;
     Normal, the same holes, wind and pins for everyone; its own daily board
     (`src/systems/game/tour.ts`; DECISIONS.md).
+
+-   **Cross-country** (2026-10-27): the bonus mode in "my golf"; each tee and green once,
+    choosing the green from each tee (DECISIONS.md "Cross-country golf, the bonus mode").
 
 -   **Live match play** (2026-10-21): two players on their own devices, match
     play (section 0; docs/reports/multiplayer_live_match.md).

@@ -32,6 +32,9 @@ interface Snapshot {
 
 export async function saveSnapshot(r: Round): Promise<void> {
   if (r.cfg.practice) return; // the practice ground is never resumed
+  // a hole not set up yet (a cross-country leg still to choose, a tour hole's course loading): the save
+  // from when the last hole was holed stands, and opens on the next one
+  if (r.needsLeg || r.needsCourse) return;
   await saveRoundInProgress(snapshotOf(r));
 }
 

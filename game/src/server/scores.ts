@@ -385,6 +385,13 @@ export async function handleGet(db: D1Like | undefined, url: URL): Promise<Respo
     // the seven daily rounds from this day on (the week's board: best five of seven, worked out by the game)
     if (!isDay(week)) return json({ error: 'week=yyyy-mm-dd' }, 400);
     stmt = db.prepare(`SELECT data FROM rounds WHERE daily >= ? AND daily <= ? AND ${SHOWN} ORDER BY daily ASC, gross ASC LIMIT ?`).bind(week, addDays(week, 6), MAX_RETURN);
+  } else if (url.searchParams.get('length') === 'xc') {
+    // cross-country (the bonus mode, developer 2026-10-27): its own board, so the course's other rounds
+    // never crowd it out of the limit; without a course, every course's (the "all courses" tab)
+    if (course.length > 64) return json({ error: 'course too long' }, 400);
+    stmt = course
+      ? db.prepare(`SELECT data FROM rounds WHERE course = ? AND length = 'xc' AND ${SHOWN} ORDER BY gross ASC, back ASC, date ASC LIMIT ?`).bind(course, MAX_RETURN)
+      : db.prepare(`SELECT data FROM rounds WHERE length = 'xc' AND ${SHOWN} ORDER BY course ASC, gross ASC, back ASC, date ASC LIMIT ?`).bind(MAX_RETURN);
   } else {
     if (!course || course.length > 64) return json({ error: 'course required' }, 400);
     stmt = db.prepare(`SELECT data FROM rounds WHERE course = ? AND ${SHOWN} ORDER BY gross ASC, back ASC, date ASC LIMIT ?`).bind(course, MAX_RETURN);
@@ -535,7 +542,7 @@ export async function handleRecordsGet(db: D1Like | undefined, url: URL): Promis
   // most birdies in a round, or most feet of putts made in a round (rounds from 2026-10-26)
   const where = kind === 'birdies' ? 'birdies > 0' : 'made_m > 0';
   const order = kind === 'birdies' ? 'birdies DESC, date ASC' : 'made_m DESC, date ASC';
-  const sql = `SELECT id, player, course, birdies, made_m, length, tee, date FROM rounds WHERE ${where} AND casual = 0 AND ${SHOWN}${course ? ' AND course = ?' : ''} ORDER BY ${order} LIMIT ?`;
+  const sql = `SELECT id, player, course, birdies, made_m, length, tee, date FROM rounds WHERE ${where} AND casual = 0 AND length <> 'xc' AND ${SHOWN}${course ? ' AND course = ?' : ''} ORDER BY ${order} LIMIT ?`;
   const stmt = course ? db.prepare(sql).bind(course, limit * 2) : db.prepare(sql).bind(limit * 2);
   const { results } = await stmt.all<{ id: string; player: string; course: string; birdies: number; made_m: number | null; length: string; tee: string | null; date: string }>();
   const rows: BirdieRecord[] = [];
@@ -661,7 +668,7 @@ export async function handleRecentGet(db: D1Like | undefined, url: URL): Promise
   const { results } = await db.prepare(`SELECT r.id, r.player, r.course, r.length, r.tee, r.gross, r.casual, r.date, r.received, r.daily, r.data,
       (SELECT MIN(p.gross) FROM rounds p WHERE p.course = r.course AND p.length = r.length AND p.tee IS r.tee AND p.casual = 0 AND p.received < r.received AND ${shownAs('p')}) AS prev_record,
       (SELECT MIN(p.gross) FROM rounds p WHERE p.course = r.course AND p.length = r.length AND p.tee IS r.tee AND p.casual = 0 AND p.player = r.player AND p.received < r.received) AS prev_best
-    FROM rounds r WHERE ${shownAs('r')} ORDER BY r.received DESC, r.date DESC LIMIT ?`).bind(limit * 2).all<{
+    FROM rounds r WHERE ${shownAs('r')} AND r.length <> 'xc' ORDER BY r.received DESC, r.date DESC LIMIT ?`).bind(limit * 2).all<{
       id: string; player: string; course: string; length: string; tee: string | null; gross: number; casual: number | null; date: string;
       received: string; daily: string | null; data: string; prev_record: number | null; prev_best: number | null;
     }>();
@@ -816,7 +823,7 @@ export async function handleHandicapsGet(db: D1Like | undefined): Promise<Respon
   if (!db) return json({ ok: false, error: 'no database bound (DB)' }, 503);
   if (hcpCache && Date.now() - hcpCache.at < HCP_CACHE_MS) return json(hcpCache.body);
   await prepareDb(db);
-  const { results } = await db.prepare(`SELECT player, owner, data FROM rounds WHERE casual = 0 AND ${SHOWN} ORDER BY date DESC LIMIT ?`).bind(HCP_SCAN).all<{ player: string; owner: string | null; data: string }>();
+  const { results } = await db.prepare(`SELECT player, owner, data FROM rounds WHERE casual = 0 AND length <> 'xc' AND ${SHOWN} ORDER BY date DESC LIMIT ?`).bind(HCP_SCAN).all<{ player: string; owner: string | null; data: string }>();
   // one handicap per player code, under the name of its latest round: a player who changed their
   // name, or played under two, has one index here and in "my golf" (developer, 2026-10-20: the two
   // differed). Rounds sent before player codes are grouped by name.

@@ -18,8 +18,9 @@ import { SURFACE_LABEL } from '../systems/physics/surfaces';
 import { Button, COLORS, dimmer, Panel, setTxt, txt } from '../ui/widgets';
 import { uiCamera } from '../scale';
 import type { PlayScene } from './PlayScene';
-import { finishRound, toTourHole } from './flow';
+import { finishRound, toTourHole, toXcPlan } from './flow';
 import { isTourId, tourName, tourParOf } from '../systems/game/tour';
+import { legHole } from '../systems/game/crossCountry';
 import { shortName } from '../save/milestones';
 import { courseHoleFor } from '../systems/game/round';
 import { cardBlocks, holeName, lengthOf, shapeOfCourse } from '../systems/game/lengths';
@@ -646,7 +647,8 @@ export class HudScene extends Phaser.Scene {
     const d = r.distToPin();
     const lieTxt = r.lie ? r.lie.label : '';
     const surf = SURFACE_LABEL[r.surfaceAt()] ?? '';
-    setTxt(this.infoLines[0], `par ${r.hole.par}`);
+    // cross-country shows no par (developer, 2026-10-27): the leg instead
+    setTxt(this.infoLines[0], r.leg ? `${r.leg[0]} to ${r.leg[1]}` : `par ${r.hole.par}`);
     // a match's penalty strokes for slow play count in the shot number (the Round doesn't hold them)
     setTxt(this.infoLines[1], p.state === 'holed' || p.state === 'replay' || p.state === 'between' || p.state === 'over' ? `${p.state === 'between' || p.state === 'over' ? 'strokes' : 'holed'}: ${r.tally.strokes}` : `shot ${r.tally.strokes + p.slowOf(r) + 1}`);
     // with the putter in hand the distance is in feet (or metres), like the putting meter
@@ -693,8 +695,8 @@ export class HudScene extends Phaser.Scene {
     for (const o of [this.aimL, this.aimR, this.aimLabel, this.clubPanel, this.clubUp, this.clubDown, this.swingBtn, this.meterPanel]) o.setVisible(showCtl);
     if (!showCtl) { this.spinBtn.setVisible(false); this.scaleBtn.setVisible(false); this.unplayBtn.setVisible(false); this.mulliganBtn.setVisible(false); }
     // minimap
-    const mm = app.course!.json.maps.holes.find((m) => m.hole === r.courseHole)!;
-    if (this.mini.texture.key !== `mini_${r.courseHole}`) this.mini.setTexture(`mini_${r.courseHole}`);
+    const mm = this.miniOf(r);
+    if (this.mini.texture.key !== mm.key) this.mini.setTexture(mm.key);
     if (this.miniPanel.pw !== mm.w + 6 || this.miniPanel.ph !== mm.h + 6) {
       this.miniPanel.resize(mm.w + 6, mm.h + 6);
       this.layout();
@@ -883,10 +885,40 @@ export class HudScene extends Phaser.Scene {
       }, () => { this.closeModal(); if (back) back(); p.matchUnheld(); this.refresh(); });
   }
 
+  /**
+   * The minimap of the hole being played: its own map, or for a cross-country leg between two holes a
+   * crop of the course overview around the tee and the green (made once per leg).
+   */
+  private miniOf(r: import('../systems/game/round').Round): { key: string; x0: number; y1: number; mPerPx: number; w: number; h: number } {
+    const l = r.leg;
+    if (!l || l[0] === l[1]) {
+      const mm = app.course!.json.maps.holes.find((m) => m.hole === r.courseHole)!;
+      return { ...mm, key: `mini_${r.courseHole}` };
+    }
+    const c = app.course!.json;
+    const key = `mini_xc_${c.id}_${l[0]}_${l[1]}`;
+    const t = r.tee, g = r.hole.greenCenter, pad = 25;
+    const x0 = Math.max(0, Math.min(t.x, g[0]) - pad), x1 = Math.min(c.world.width, Math.max(t.x, g[0]) + pad);
+    const y0 = Math.max(0, Math.min(t.y, g[1]) - pad), y1 = Math.min(c.world.height, Math.max(t.y, g[1]) + pad);
+    const mPerPx = Math.max(5, (x1 - x0) / 72, (y1 - y0) / 90);
+    const w = Math.max(8, Math.round((x1 - x0) / mPerPx)), h = Math.max(8, Math.round((y1 - y0) / mPerPx));
+    if (!this.textures.exists(key) && this.textures.exists('overview')) {
+      const src = this.textures.get('overview').getSourceImage() as HTMLImageElement;
+      const om = c.maps.overviewMPerPx;
+      const cv = document.createElement('canvas');
+      cv.width = w; cv.height = h;
+      const ctx = cv.getContext('2d')!;
+      ctx.imageSmoothingEnabled = false;
+      ctx.drawImage(src, x0 / om, (c.world.height - y1) / om, (x1 - x0) / om, (y1 - y0) / om, 0, 0, w, h);
+      this.textures.addCanvas(key, cv);
+    }
+    return { key, x0, y1, mPerPx, w, h };
+  }
+
   private drawMini() {
     const p = this.play;
     const r = p.round;
-    const mm = app.course!.json.maps.holes.find((m) => m.hole === r.courseHole)!;
+    const mm = this.miniOf(r);
     const g = this.miniG;
     g.clear();
     const toM = (x: number, y: number) => ({ x: 3 + Math.round((x - mm.x0) / mm.mPerPx), y: 3 + Math.round((mm.y1 - y) / mm.mPerPx) });
@@ -1154,9 +1186,9 @@ export class HudScene extends Phaser.Scene {
     const t1 = txt(this, 64, 8, extra ? `${ordinal(r.holeIndex + 1)} hole` : holeTitle(r), { scale: 2 });
     const yd = r.tee.cardYd;
     const ydStr = app.settings.units === 'yd' ? `${yd} yd` : `${Math.round(yd * YD)} m`;
-    const t2 = txt(this, 64, 30, `par ${r.hole.par}  ·  ${ydStr}  ·  ${r.teeName.toLowerCase()}`, { color: COLORS.yellow });
+    const t2 = txt(this, 64, 30, r.leg ? `tee ${r.leg[0]} to green ${r.leg[1]}  ·  ${ydStr}` : `par ${r.hole.par}  ·  ${ydStr}  ·  ${r.teeName.toLowerCase()}`, { color: COLORS.yellow, maxWidth: w - 68 });
     // a tour round: the hole's own course and number in place of its handicap
-    const where = r.cfg.tour ? `${shortName(r.course.json.name).toLowerCase()} ${r.courseHole}  ·  ` : r.hole.handicap ? `handicap ${r.hole.handicap}  ·  ` : '';
+    const where = r.cfg.tour ? `${shortName(r.course.json.name).toLowerCase()} ${r.courseHole}  ·  ` : r.leg ? `of ${r.cfg.holes.length}  ·  ` : r.hole.handicap ? `handicap ${r.hole.handicap}  ·  ` : '';
     const t3 = txt(this, 64, 41, extra ? `hole ${r.holeNumber} again  ·  sudden death` : `${where}pin ${r.pinLabel()}`, { color: extra ? COLORS.yellow : COLORS.dim, maxWidth: w - 68 });
     const wtxt = r.wind.mph < 0.5 ? 'calm' : `wind ${r.wind.mph.toFixed(1)} mph`;
     const live = this.play.match;
@@ -1284,7 +1316,7 @@ export class HudScene extends Phaser.Scene {
       g.lineStyle(1, 0xffd84a, 0.9).lineBetween(b.x, b.y, e.x, e.y);
       g.strokeCircle(e.x, e.y, 2);
     }
-    const head = txt(this, this.W / 2, 4, `${holeTitle(r)}  ·  par ${r.hole.par}  ·  ${fmtDist(r.distToPin())} ${unitLabel()} to the pin`, { origin: [0.5, 0] });
+    const head = txt(this, this.W / 2, 4, `${holeTitle(r)}  ·  ${r.leg ? `green ${r.leg[1]}` : `par ${r.hole.par}`}  ·  ${fmtDist(r.distToPin())} ${unitLabel()} to the pin`, { origin: [0.5, 0] });
     const foot = txt(this, this.W / 2, this.H - 13, 'tap or press tab to close', { origin: [0.5, 0], color: COLORS.dim });
     this.modalLayer.add([img, frame, g, head, foot]);
   }
@@ -1451,8 +1483,9 @@ export class HudScene extends Phaser.Scene {
     this.lastHoled = [score, gimme, maxed];
     this.redraw = () => this.showHoled(score, gimme, maxed, true);
     const r = this.play.round;
-    const name = maxed ? 'max score' : scoreName(score.strokes, score.par);
-    const d = score.strokes - score.par;
+    const xc = !!r.cfg.xc; // cross-country: no par, so no "birdie" or "bogey"
+    const name = maxed ? 'max score' : xc ? (score.strokes === 1 ? 'hole in one!' : 'holed') : scoreName(score.strokes, score.par);
+    const d = xc ? (score.strokes === 1 ? -1 : 0) : score.strokes - score.par;
     const color = d < 0 ? COLORS.yellow : d === 0 ? COLORS.green : COLORS.white;
     if (!quiet) { if (d < 0) sfx('great'); else if (d === 0) sfx('good'); else sfx('bad'); }
     const tot = totals(r.scores);
@@ -1462,10 +1495,10 @@ export class HudScene extends Phaser.Scene {
     const x = Math.round((this.W - w) / 2), y = Math.round(this.H * 0.28);
     const pnl = new Panel(this, x, y, w, h, 0.9);
     const t1 = txt(this, x + w / 2, y + 6, name + (gimme ? ' (gimme)' : ''), { origin: [0.5, 0], scale: 2, color });
-    const t2 = txt(this, x + w / 2, y + 28, `${score.strokes} ${score.strokes === 1 ? 'stroke' : 'strokes'} on a par ${score.par}${score.penalties ? ` · ${score.penalties} penalty` : ''}`, { origin: [0.5, 0] });
-    const t3 = txt(this, x + w / 2, y + 40, `${toPar(tot.toPar)} through ${tot.holes} · ${tot.strokes} total`, { origin: [0.5, 0], color: COLORS.dim });
+    const t2 = txt(this, x + w / 2, y + 28, `${score.strokes} ${score.strokes === 1 ? 'stroke' : 'strokes'}${xc ? '' : ` on a par ${score.par}`}${score.penalties ? ` · ${score.penalties} penalty` : ''}`, { origin: [0.5, 0] });
+    const t3 = txt(this, x + w / 2, y + 40, xc ? `${tot.strokes} strokes through ${tot.holes} of ${r.cfg.holes.length}` : `${toPar(tot.toPar)} through ${tot.holes} · ${tot.strokes} total`, { origin: [0.5, 0], color: COLORS.dim });
     const last = r.isLastHole;
-    const nb = new Button(this, x + w - 86, y + h - 22, 80, 16, last ? 'finish round' : 'next hole', () => this.continueFromHoled());
+    const nb = new Button(this, x + w - 86, y + h - 22, 80, 16, last ? 'finish round' : xc ? 'next leg' : 'next hole', () => this.continueFromHoled());
     const cb = new Button(this, x + 6, y + h - 22, 44, 16, 'card', () => this.toggleCard(), { color: 'grey' });
     this.modalLayer.add([pnl, t1, t2, t3, nb, cb]);
     if (this.play.replayable() > 0) {
@@ -1767,6 +1800,8 @@ export class HudScene extends Phaser.Scene {
     if (r.nextHole()) {
       // the daily par 3s / 4s / 5s: the next hole may be on another course, which loads first
       if (r.needsCourse) { this.play.state = 'loading'; toTourHole(this); return; }
+      // cross-country: the next leg is chosen on the map
+      if (r.needsLeg) { this.play.state = 'loading'; toXcPlan(this); return; }
       this.play.startHoleIntro();
     } else {
       this.play.state = 'done'; // nothing more happens on the course while the round is saved (and a second tap does nothing)
@@ -1785,17 +1820,21 @@ export interface CardData {
   label?: (slot: number) => string;
   /** each slot's course and hole, listed under the card (the daily par 3s / 4s / 5s) */
   holesFrom?: string[];
+  /** cross-country: each slot's [tee, green]; the card shows them in place of par, and scores plain */
+  legs?: ([number, number] | undefined)[];
 }
 
 /** "hole 12", or at a club of nines "white 3". */
 export function holeTitle(r: import('../systems/game/round').Round): string {
   const n = r.holeName;
+  if (r.cfg.xc) return `leg ${n.num}`;
   return n.nine ? `${n.nine} ${n.num}` : `hole ${n.num}`;
 }
 
 /** The card of a round being played (or just finished). */
 export function cardOfRound(r: import('../systems/game/round').Round): CardData {
   // the holes' courses only once the round is over (developer, 2026-10-27: nobody sees what's coming)
+  if (r.cfg.xc) return xcCard(`${r.course.json.name}  ·  cross-country  ·  ${r.cfg.playerName}`, r.cfg.holes.length, r.cfg.xc.legs, r.scores, r.course.json, r.cfg.tee);
   if (r.cfg.tour) return tourCard(r.cfg.courseId, r.cfg.playerName, r.cfg.tour, r.scores, r.cfg.daily, r.finished);
   const holes = r.course.json.holes;
   const nCourse = holes.length;
@@ -1836,7 +1875,24 @@ function tourCard(id: string, player: string, tour: { course: string; hole: numb
   };
 }
 
+/** A cross-country card: each leg's tee, green and (with the course loaded) yards, and the strokes. */
+function xcCard(title: string, n: number, legs: ([number, number] | undefined)[], scores: HoleScore[], json: { holes: import('../data/course').HoleJson[] } | null, tee: string): CardData {
+  const slots = Array.from({ length: n }, (_, i) => i + 1);
+  return {
+    title,
+    blocks: cardBlocks('xc', slots),
+    hole: (h) => {
+      const l = legs[h - 1];
+      const yd = l && json ? (legHole(json, l[0], l[1], tee).tees[tee] ?? Object.values(legHole(json, l[0], l[1], tee).tees)[0])?.cardYd ?? null : null;
+      return { par: 0, yd: l || !json ? yd : null };
+    },
+    scores,
+    legs: slots.map((h) => legs[h - 1]),
+  };
+}
+
 export function cardOfEntry(e: LeaderboardEntry, courseName: string, holes: import('../data/course').HoleJson[] | null, showHoles = true): CardData {
+  if (e.length === 'xc' && e.legs) return xcCard(`${courseName}  ·  cross-country  ·  ${e.player}`, e.legs.length, e.legs, e.scores, holes ? { holes } : null, e.tee);
   if (e.tour && isTourId(e.course)) return tourCard(e.course, e.player, e.tour, e.scores, e.daily, showHoles);
   const info = app.courses.find((c) => c.id === e.course);
   const shape = info ? shapeOfCourse(info) : undefined;
@@ -1871,13 +1927,16 @@ export function scorecardOf(scene: Phaser.Scene, d: CardData, W: number, H: numb
   const scoreH = 17; // tall enough for a circle / square around the number
   // no yards row when they aren't known (a shared card of a course that isn't loaded)
   const showYd = blocks.some(([a, b]) => { for (let h = a; h <= b; h++) if (d.hole(h).yd !== null) return true; return false; });
-  const nRows = showYd ? 3 : 2;
+  const xc = !!d.legs;
+  const nRows = (showYd ? 3 : 2) + (xc ? 1 : 0);
   const parRow = showYd ? 2 : 1;
   const blockH = rowH * nRows + scoreH + 4;
   // the stats line: wrapped between its items, never inside one ("gir" and "6/9" were split), the panel taller by the extra lines
   const tot = totals(d.scores);
   const fw = tot.fairwayChances ? `${tot.fairways}/${tot.fairwayChances}` : '-';
-  const items = [`total ${tot.strokes || '-'} (${tot.holes ? toPar(tot.toPar) : 'e'})`, `putts ${tot.putts}`, `fairways ${fw}`, `gir ${tot.gir}/${tot.holes}`, `penalties ${tot.penalties}`];
+  const items = xc
+    ? [`total ${tot.strokes || '-'} strokes`, `putts ${tot.putts}`, `penalties ${tot.penalties}`]
+    : [`total ${tot.strokes || '-'} (${tot.holes ? toPar(tot.toPar) : 'e'})`, `putts ${tot.putts}`, `fairways ${fw}`, `gir ${tot.gir}/${tot.holes}`, `penalties ${tot.penalties}`];
   const probe = txt(scene, 0, 0, '');
   const fits = (str: string) => { setTxt(probe, str); return probe.width <= tw; };
   const wrap = (list: string[]) => {
@@ -1907,7 +1966,8 @@ export function scorecardOf(scene: Phaser.Scene, d: CardData, W: number, H: numb
     g.fillStyle(0xffffff, 0.06).fillRect(x0, yb, tw, rowH);
     g.fillStyle(0xffffff, 0.04).fillRect(x0, yb + rowH * parRow, tw, rowH);
     c.add(g);
-    const rows = showYd ? ['hole', 'yards', 'par'] : ['hole', 'par'];
+    // cross-country: the leg's tee and green where par would be (no par: developer, 2026-10-27)
+    const rows = xc ? (showYd ? ['leg', 'yards', 'tee', 'green'] : ['leg', 'tee', 'green']) : showYd ? ['hole', 'yards', 'par'] : ['hole', 'par'];
     const sy = yb + rowH * nRows + 4; // score text top (its digits are 6 x 9 px including the outline)
     rows.forEach((rl, i) => c.add(txt(scene, x0 + 2, yb + i * rowH + 1, rl, { color: COLORS.dim })));
     c.add(txt(scene, x0 + 2, sy, 'score', { color: COLORS.yellow }));
@@ -1919,12 +1979,16 @@ export function scorecardOf(scene: Phaser.Scene, d: CardData, W: number, H: numb
       if (hj.yd === null) ydKnown = false; else sumYd += hj.yd;
       c.add(txt(scene, cx, yb + 1, d.label ? d.label(h) : String(h), { origin: [0.5, 0] }));
       if (showYd) c.add(txt(scene, cx, yb + rowH + 1, hj.yd === null ? '-' : String(hj.yd), { origin: [0.5, 0], color: COLORS.dim }));
-      c.add(txt(scene, cx, yb + rowH * parRow + 1, String(hj.par), { origin: [0.5, 0] }));
+      if (xc) {
+        const l = d.legs![h - 1];
+        c.add(txt(scene, cx, yb + rowH * parRow + 1, l ? String(l[0]) : '-', { origin: [0.5, 0] }));
+        c.add(txt(scene, cx, yb + rowH * (parRow + 1) + 1, l ? String(l[1]) : '-', { origin: [0.5, 0], color: 0x9fd89f }));
+      } else c.add(txt(scene, cx, yb + rowH * parRow + 1, String(hj.par), { origin: [0.5, 0] }));
       const s = byHole.get(h);
       if (s) {
         any = true;
         sumSc += s.strokes;
-        const dd = s.strokes - s.par;
+        const dd = xc ? 0 : s.strokes - s.par;
         const col = dd < 0 ? COLORS.yellow : dd === 0 ? COLORS.white : dd === 1 ? 0x9fd0ff : 0xff9b8a;
         const gg = scene.add.graphics();
         const mx = Math.round(cx), my = sy + 4; // centre of the digits
@@ -1940,7 +2004,7 @@ export function scorecardOf(scene: Phaser.Scene, d: CardData, W: number, H: numb
     const sx = x0 + labelW + 9 * cellW + sumW / 2;
     c.add(txt(scene, sx, yb + 1, lab, { origin: [0.5, 0], color: COLORS.dim }));
     if (showYd) c.add(txt(scene, sx, yb + rowH + 1, ydKnown ? String(sumYd) : '-', { origin: [0.5, 0], color: COLORS.dim }));
-    c.add(txt(scene, sx, yb + rowH * parRow + 1, String(sumPar), { origin: [0.5, 0] }));
+    if (!xc) c.add(txt(scene, sx, yb + rowH * parRow + 1, String(sumPar), { origin: [0.5, 0] }));
     if (any) c.add(txt(scene, sx, sy, String(sumSc), { origin: [0.5, 0], color: COLORS.yellow }));
   });
   lines.forEach((l, i) => c.add(txt(scene, x0, y0 + 14 + blocks.length * (blockH + 6) - 2 + i * 11, l, { color: i >= lines.length - from.length ? COLORS.white : COLORS.dim })));

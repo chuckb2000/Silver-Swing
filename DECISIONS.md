@@ -1427,3 +1427,46 @@ and `course-lists.mjs` gives each listed course the group. No course is rebuilt.
   Dunes kept its seal). The developer: "there was a little gorse flower logo made in another
   chat i liked" (`assets-src/course_logos/bandon_resort.py`).
 - The daily round already counted the seven as one place (the town of Bandon); it still does.
+
+## Cross-country golf, the bonus mode (developer, 2026-10-27)
+
+The design in docs/reports/cross_country.md, with the developer's changes: "the minimum distance
+between tee and green should be 85 yards. And you should always be allowed to play from the same
+tee to the same green as on a real course ... All internal OB should be made in bounds (driving
+ranges are no longer out of bounds). I don't want this polluting the main leaderboards, so there
+should be a little tab next to the back in the my golf tab that says 'bonus mode' ... Exactly one
+leg per tee and green. 85 yards minimum, 900 yards maximum. Rank by gross. I don't think par even
+really needs to be calculated."
+
+- **Rules** (`systems/game/crossCountry.ts`): one leg per hole; each tee and each green once. A leg
+  is 85-900 yd in a straight line from the tee (the course's default tees) to the middle of the
+  green, or a hole's own tee to its own green at any length. The planner only offers a green that
+  still leaves a way to finish: a perfect matching of the tees and greens left (Kuhn's algorithm,
+  instant at 27 holes). Because a hole's own pairing is always allowed, every course can be played,
+  and a random route never gets stuck (tested on every course).
+- **Out of bounds** only beyond the course boundary: inside it, out-of-bounds ground plays as
+  rough, a driving range as fairway, a road as a cart path, water as a penalty area, woods as
+  woods and buildings as buildings (`xcCourse`, a copy of the surface map, made once per course).
+  The art isn't changed, so internal white stakes are still drawn. Other greens are wrong greens
+  (relief), including the tee's own hole's.
+- **No par shown**: the HUD shows the leg ("4 to 12"), the hole-complete panel the strokes, the
+  card each leg's tee, green and yards. The round keeps a par from the leg's length internally,
+  only for the tally's fairway and green stats. Normal difficulty, no casual rules.
+- **Where:** "my golf" has a "bonus mode" button next to "back": the rules in five lines, the
+  course ("course" picks another), "play", and a leaderboard (developer: "there should be a
+  leaderboard within the cross country golf page"): "this course" ranks every cross-country round
+  there by strokes (#, player, strokes, date); "all courses" gives each course's record, the most
+  played first. Friends' (`/api/scores?length=xc`, with or without `course=`, so the course's other
+  rounds never crowd it out) or this device's offline; the player's rows are green, and their best
+  takes the last line when it's further down. A tap shares the card. The planner is the course
+  overview cropped to the course: tap a tee, then a green; greens out of reach are small and grey,
+  with the reason when tapped. The map zooms (developer: "you should be able to zoom in on the
+  map"): pinch, the mouse wheel, the +/- buttons or keys, up to six times the fitted size; a drag
+  moves it and a tap that doesn't move picks; the view is kept between legs.
+- **Kept off everything else:** rounds have length `xc` and their legs. They are on no course
+  board (the boards list their round lengths), and not in friends' activity, the stats lists,
+  eagles or hole-outs (none are reported), handicaps, "my golf" stats, the passport or milestones.
+  No schema change.
+- A leg between two holes plays with a straight centre line from the tee to the green (fly-over,
+  default aim, tee markers); its minimap is a crop of the overview; the putting views are the
+  green's own.

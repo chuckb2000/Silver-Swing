@@ -8,8 +8,9 @@ import type { HoleScore, RoundTotals } from '../systems/rules/scoring';
  * twice around (18). Other sizes (13, 19 holes): 'all'. A club of three or
  * more nines: `nines:<a>+<b>` (two nines) or `nines:<a>` (one), by nine id.
  */
-export type RoundLength = '18' | 'front' | 'back' | '9' | '9x2' | 'all' | `nines:${string}`;
-export const ROUND_LENGTHS: RoundLength[] = ['18', 'front', 'back', '9', '9x2', 'all'];
+export type RoundLength = '18' | 'front' | 'back' | '9' | '9x2' | 'all' | 'xc' | `nines:${string}`;
+/** 'xc': cross-country (bonus mode), on its own board and kept off every other list. */
+export const ROUND_LENGTHS: RoundLength[] = ['18', 'front', 'back', '9', '9x2', 'all', 'xc'];
 
 /** A round length from storage or the network. */
 export function isRoundLength(v: unknown): v is RoundLength {
@@ -39,6 +40,8 @@ export interface LeaderboardEntry {
   holes?: number[];
   /** the daily par 3s / 4s / 5s (systems/game/tour.ts): each slot's course, hole, tee and yards */
   tour?: { course: string; hole: number; tee: string; yd?: number }[];
+  /** cross-country: each leg's [tee hole, green hole], in the order played */
+  legs?: [number, number][];
 }
 
 const str = (v: unknown, max: number) => typeof v === 'string' && v.length > 0 && v.length <= max;
@@ -60,5 +63,7 @@ export function isEntry(e: unknown): e is LeaderboardEntry {
       && x.holes.every((h) => Number.isInteger(h) && h >= 1 && h <= 99)))
     && (x.tour === undefined || (Array.isArray(x.tour) && x.tour.length <= MAX_ROUND_HOLES
       && x.tour.every((t) => !!t && typeof t === 'object' && str(t.course, 64) && Number.isInteger(t.hole) && t.hole >= 1 && t.hole <= 99
-        && str(t.tee, 32) && (t.yd === undefined || (Number.isFinite(t.yd) && t.yd >= 0 && t.yd <= 1000)))));
+        && str(t.tee, 32) && (t.yd === undefined || (Number.isFinite(t.yd) && t.yd >= 0 && t.yd <= 1000)))))
+    && (x.legs === undefined || (Array.isArray(x.legs) && x.legs.length <= MAX_ROUND_HOLES
+      && x.legs.every((l) => Array.isArray(l) && l.length === 2 && l.every((h) => Number.isInteger(h) && h >= 1 && h <= 99))));
 }
