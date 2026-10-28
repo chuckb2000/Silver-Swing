@@ -1470,3 +1470,12 @@ really needs to be calculated."
 - A leg between two holes plays with a straight centre line from the tee to the green (fly-over,
   default aim, tee markers); its minimap is a crop of the overview; the putting views are the
   green's own.
+
+## "Update - tap to reload" always reloads (developer, 2026-10-27)
+
+"the tap to reload button doesnt seem to actual refresh my webpage". The button asked the waiting
+service worker to take over and reloaded only when it had (`controllerchange`). When the worker had
+already taken over from another tab, or a second deploy had replaced it with a newer one, that
+never came and the tap did nothing. Now (`applyUpdate` in `src/save/offline.ts`) the worker still
+waiting, if any, is asked to take over and the page reloads when it has or after 1.5 s; with none
+waiting it reloads at once. The page loads network-first, so the reload is the new version.

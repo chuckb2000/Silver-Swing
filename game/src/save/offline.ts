@@ -24,10 +24,7 @@ export function registerOffline() {
       const reg = await navigator.serviceWorker.register('sw.js');
       const offer = (w: ServiceWorker) => {
         update.ready = true;
-        update.apply = () => {
-          navigator.serviceWorker.addEventListener('controllerchange', () => window.location.reload(), { once: true });
-          w.postMessage('skip-waiting');
-        };
+        update.apply = () => applyUpdate(reg, w);
         onReady?.();
       };
       // A new worker waits. The page itself is loaded network-first, so after a
@@ -53,6 +50,25 @@ export function registerOffline() {
       });
     } catch { /* no offline copy: the game still works online */ }
   });
+}
+
+/**
+ * The title's "update - tap to reload" (developer, 2026-10-27: it didn't reload). It waited for
+ * the new worker to take over, and only then reloaded; when that never came (the worker had
+ * already taken over from another tab, or had been replaced by a newer one after a second
+ * deploy), nothing happened. Now: the waiting worker, if there still is one, is asked to take
+ * over, and the page reloads when it has or after 1.5 s, whichever is first; with no worker
+ * waiting it reloads at once. The page loads network-first, so the reload is the new version.
+ */
+export function applyUpdate(reg: Pick<ServiceWorkerRegistration, 'waiting'>, offered: Pick<ServiceWorker, 'state' | 'postMessage'>,
+  reload: () => void = () => window.location.reload(), sw: Pick<ServiceWorkerContainer, 'addEventListener'> = navigator.serviceWorker) {
+  let done = false;
+  const go = () => { if (!done) { done = true; reload(); } };
+  const w = reg.waiting ?? (offered.state === 'installed' ? offered : null);
+  if (!w) { go(); return; }
+  sw.addEventListener('controllerchange', go, { once: true });
+  w.postMessage('skip-waiting');
+  setTimeout(go, 1500);
 }
 
 /** The page's own bundle (index.html's module script), as a path. */
