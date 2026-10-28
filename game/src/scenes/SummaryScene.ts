@@ -98,7 +98,12 @@ export class SummaryScene extends MenuScene {
     const over = (card.getData('bottom') as number) + 3 - ny;
     if (over > 0) card.y -= Math.min(over, Math.max(0, (card.getData('top') as number) - (earned.length ? 36 : 24)));
     // leaving the summary sends the round to the shared leaderboard
-    const leave = (to: string) => { void flushUploads(); this.scene.start(to, to === 'leaderboard' ? (e.daily ? { view: 'daily', kind: tour ? 'tour' : 'round' } : { courseId: e.course }) : undefined); };
+    const leave = (to: string) => {
+      void flushUploads();
+      // cross-country's board is in bonus mode (developer, 2026-10-27: not on the leaderboards)
+      if (to === 'leaderboard' && e.length === 'xc') { this.scene.start('bonus', { courseId: e.course }); return; }
+      this.scene.start(to, to === 'leaderboard' ? (e.daily ? { view: 'daily', kind: tour ? 'tour' : 'round' } : { courseId: e.course }) : undefined);
+    };
     const bw = Math.min(84, Math.floor((W - 20) / 4)); // four buttons fit a narrow phone
     const bx = (i: number) => Math.round(W / 2 - 2 * bw - 6 + i * (bw + 4));
     this.root.add(new Button(this, bx(0), H - 24, bw, 16, 'title', () => leave('title'), { color: 'grey' }));

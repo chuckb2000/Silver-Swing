@@ -17,6 +17,7 @@ import { coursePins, pinLabel as spotLabel } from './pins';
 import { holeName, shapeOfCourse } from './lengths';
 import type { RoundLength } from '../../save/entry';
 import type { TourHole } from './tour';
+import { Leg, legHole, xcCourse } from './crossCountry';
 import { roundPins } from './pins';
 import { hash32 } from '../physics/rng';
 import { PuttStrike, puttStrikeFrom, shotCarry, Strike, strikeFrom } from '../swing/outcome';
@@ -53,6 +54,9 @@ export interface RoundConfig {
   /** The daily par 3s / 4s / 5s (tour.ts): each slot's own course, hole and tee. `courseId` is then the
    *  round's board id (par5s), and the course of the slot being played is loaded between holes. */
   tour?: TourHole[];
+  /** Cross-country (crossCountry.ts): the legs chosen so far, [tee hole, green hole] per slot; a slot
+   *  without one is chosen on the planner before it is played. Out of bounds only beyond the boundary. */
+  xc?: { legs: Leg[] };
 }
 
 export interface BallPos { x: number; y: number; teedUp: boolean }
@@ -176,7 +180,7 @@ export class Round {
   private aimCache = new Map<string, number>();
 
   constructor(course: CourseRuntime, cfg: RoundConfig) {
-    this.course = course;
+    this.course = cfg.xc ? xcCourse(course) : course;
     this.cfg = cfg;
     this.preset = PRESETS[cfg.settings.difficulty];
     this.rng = new Rng(cfg.seed);
@@ -196,14 +200,27 @@ export class Round {
   get teeName(): string { return this.cfg.tour?.[this.holeIndex]?.tee ?? this.cfg.tee; }
   /** Move a tour round onto the course of its next hole (that course loaded). */
   setCourse(course: CourseRuntime) {
-    this.course = course;
+    this.course = this.cfg.xc ? xcCourse(course) : course;
     this.aimCache.clear();
   }
-  /** The course's own hole being played (a 9-hole course played twice repeats 1-9). */
-  get courseHole(): number { return this.cfg.courseHoles?.[this.holeIndex] ?? courseHoleFor(this.holeNumber, this.course.json.holes.length); }
+  /** A cross-country slot whose leg isn't chosen yet: the planner picks it, then startHole. */
+  get needsLeg(): boolean { return !!this.cfg.xc && !this.finished && !this.cfg.xc.legs[this.holeIndex]; }
+  /** The cross-country leg being played, [tee hole, green hole]. */
+  get leg(): Leg | null { return this.cfg.xc?.legs[this.holeIndex] ?? null; }
+  /** The course's own hole being played (a 9-hole course played twice repeats 1-9; cross-country: the leg's green). */
+  get courseHole(): number {
+    if (this.cfg.xc) return this.cfg.xc.legs[this.holeIndex]?.[1] ?? 1;
+    return this.cfg.courseHoles?.[this.holeIndex] ?? courseHoleFor(this.holeNumber, this.course.json.holes.length);
+  }
   /** How the hole is shown: its slot, or at a club of nines its number in the nine and the nine's name. */
-  get holeName(): { num: number; nine?: string } { return this.cfg.tour ? { num: this.holeNumber } : holeName(this.holeNumber, this.courseHole, shapeOfCourse(this.course.json)); }
-  get hole(): HoleJson { return this.course.json.holes[this.courseHole - 1]; }
+  get holeName(): { num: number; nine?: string } { return this.cfg.tour || this.cfg.xc ? { num: this.holeNumber } : holeName(this.holeNumber, this.courseHole, shapeOfCourse(this.course.json)); }
+  get hole(): HoleJson {
+    const l = this.leg;
+    if (!l) return this.course.json.holes[this.courseHole - 1];
+    if (!this.legCache || this.legCache.key !== `${l[0]}-${l[1]}`) this.legCache = { key: `${l[0]}-${l[1]}`, hole: legHole(this.course.json, l[0], l[1], this.cfg.tee) };
+    return this.legCache.hole;
+  }
+  private legCache: { key: string; hole: HoleJson } | null = null;
   get tee(): TeeJson { return this.hole.tees[this.teeName] ?? Object.values(this.hole.tees)[0]; }
   get pin(): { x: number; y: number } {
     const p = this.cfg.pins?.[this.holeIndex] ?? this.hole.pin;
@@ -236,7 +253,9 @@ export class Round {
   startHole(index: number) {
     this.holeIndex = index;
     if (this.needsCourse) return; // a tour round: set up once the hole's course is loaded
+    if (this.needsLeg) return; // cross-country: set up once the leg is chosen
     if (this.cfg.tour) this.tourHoleSetup(index);
+    if (this.cfg.xc) this.xcLegSetup(index);
     this.tally = new HoleTally(this.holeNumber, this.hole.par);
     this.ball = { x: this.tee.x, y: this.tee.y, teedUp: true };
     this.prev = { ...this.ball };
@@ -264,6 +283,19 @@ export class Round {
     if (!this.cfg.pins[index]) this.cfg.pins[index] = roundPins(this.course, t.tee, [t.hole], seed)[0];
     t.yd = this.hole.tees[t.tee]?.cardYd ?? Object.values(this.hole.tees)[0]?.cardYd;
   }
+
+  /** A cross-country leg's pin: the round's pin for its green, the same whichever slot plays it. */
+  private xcLegSetup(index: number) {
+    if (!this.cfg.pins) this.cfg.pins = [];
+    if (!this.cfg.pins[index]) {
+      if (!this.greenPins) {
+        const all = this.course.json.holes.map((h) => h.number);
+        this.greenPins = roundPins(this.course, this.cfg.tee, all, this.cfg.seed);
+      }
+      this.cfg.pins[index] = this.greenPins[this.courseHole - 1];
+    }
+  }
+  private greenPins: [number, number][] | null = null;
 
   distToPin(p: { x: number; y: number } = this.ball): number {
     return Math.hypot(p.x - this.pin.x, p.y - this.pin.y);

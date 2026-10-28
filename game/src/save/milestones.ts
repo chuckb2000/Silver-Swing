@@ -59,7 +59,7 @@ const isEighteen = (e: LeaderboardEntry) => isFullRound(e.length);
  */
 export function milestonesOf(rounds: LeaderboardEntry[], courses: MilestoneCourse[], stateNames: Record<string, string> = {}): Milestone[] {
   const byId = new Map(courses.map((c) => [c.id, c]));
-  const list = rounds.filter((e) => !e.casual && byId.has(e.course)).slice().sort((a, b) => a.date.localeCompare(b.date) || a.id.localeCompare(b.id));
+  const list = rounds.filter((e) => !e.casual && e.length !== 'xc' && byId.has(e.course)).slice().sort((a, b) => a.date.localeCompare(b.date) || a.id.localeCompare(b.id));
   const out: Milestone[] = [];
   const have = new Set<string>();
   const played = new Set<string>();

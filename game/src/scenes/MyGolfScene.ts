@@ -46,6 +46,8 @@ export class MyGolfScene extends MenuScene {
     const bw = Math.floor((pw - 16 - 4) / 3);
     items.forEach(([k, lab], i) => this.root.add(new Button(this, x0 + 8 + i * (bw + 2), y0 + 24, bw, 14, lab, () => { tab = k; page = 0; this.rebuild(); }, { color: tab === k ? 'orange' : 'grey' })));
     this.root.add(new Button(this, x0 + 6, y0 + ph - 20, 44, 15, 'back', () => this.back(), { color: 'grey' }));
+    // cross-country golf, kept apart from everything else here (developer, 2026-10-27)
+    this.root.add(new Button(this, x0 + 54, y0 + ph - 20, 70, 15, 'bonus mode', () => this.scene.start('bonus'), { color: 'orange' }));
     const g = this.gen;
     if (!this.rounds) {
       this.root.add(txt(this, x0 + pw / 2, y0 + 70, 'adding up your rounds...', { origin: [0.5, 0], color: COLORS.dim }));
@@ -61,7 +63,7 @@ export class MyGolfScene extends MenuScene {
     if (tab === 'stats') this.buildStats(x0, y, pw, y0 + ph - 24 - y);
     else if (tab === 'passport') await this.buildPassport(x0, y, pw, y0 + ph - 24 - y);
     else this.buildMilestones(x0, y, pw, y0 + ph - 24 - y);
-    if (this.fromServer) this.root.add(txt(this, x0 + pw - 8, y0 + ph - 16, 'with your player code\'s rounds from other devices', { origin: [1, 0], color: COLORS.dim, maxWidth: pw - 70 }));
+    if (this.fromServer) this.root.add(txt(this, x0 + pw - 8, y0 + ph - 16, 'with your player code\'s rounds from other devices', { origin: [1, 0], color: COLORS.dim, maxWidth: pw - 140 }));
   }
 
   private courseName(id: string): string {
@@ -130,7 +132,7 @@ export class MyGolfScene extends MenuScene {
   private async buildPassport(x0: number, y: number, pw: number, h: number) {
     const best = new Map<string, LeaderboardEntry>();
     for (const e of this.rounds!) {
-      if (e.casual) continue;
+      if (e.casual || e.length === 'xc') continue;
       const b = best.get(e.course);
       if (!b || e.toPar / e.scores.length < b.toPar / b.scores.length) best.set(e.course, e);
     }

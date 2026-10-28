@@ -19,6 +19,8 @@ import type { LeaderboardEntry } from '../../save/entry';
 
 /** What a round needs for the handicap (a LeaderboardEntry has it all; the server sends just this). */
 export type HcpRound = Pick<LeaderboardEntry, 'id' | 'course' | 'tee' | 'difficulty' | 'casual' | 'player' | 'date'> & {
+  /** the round's length (cross-country, 'xc', never counts) */
+  length?: string;
   scores: { hole: number; par: number; strokes: number }[];
 };
 
@@ -71,7 +73,7 @@ export function indexOf(diffs: Differential[]): Handicap | null {
 
 /** Does this round count for the shared index? */
 export function counts(e: HcpRound, c: HcpCourse | undefined): boolean {
-  if (!c || e.casual || e.difficulty !== 'normal') return false;
+  if (!c || e.casual || e.difficulty !== 'normal' || e.length === 'xc') return false;
   const r = c.ratings[e.tee];
   if (!r || !(r[0] > 0) || !(r[1] > 0)) return false;
   return e.scores.length === 9 || e.scores.length === 18;

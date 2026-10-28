@@ -45,6 +45,7 @@ export function lengthLabel(len: RoundLength, shape?: CourseShape | number): str
   if (fixed[len]) return fixed[len];
   const s = shape === undefined ? undefined : shapeOf(shape);
   if (len === 'all') return s ? `${s.holes} holes` : 'all holes';
+  if (len === 'xc') return 'cross-country';
   const ids = len.slice('nines:'.length).split('+');
   const names = ids.map((id) => (s && nineOf(s, id)?.name.toLowerCase()) || id);
   return names.length === 1 ? `${names[0]} nine` : names.join(' / ');
@@ -105,7 +106,7 @@ export function cardBlocks(len: RoundLength, slots: number[], shape?: CourseShap
       return b;
     });
   }
-  if (len === 'all') {
+  if (len === 'all' || len === 'xc') {
     const n = slots.length;
     if (n <= 9) return [[1, n, 'tot']];
     const out: (readonly [number, number, string])[] = [];

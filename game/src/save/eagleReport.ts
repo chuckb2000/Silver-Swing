@@ -16,7 +16,7 @@ import { recordEagle, recordHoleout, renameEagles, saveSettings } from './store'
 import { saveSnapshot } from './snapshot';
 
 /** Is this hole one for the eagles list? (not in a casual round) */
-export const isListedEagle = (r: Round, score: HoleScore) => !isCasual(r.cfg.settings) && isEagleScore(score);
+export const isListedEagle = (r: Round, score: HoleScore) => !isCasual(r.cfg.settings) && !r.cfg.xc && isEagleScore(score); // cross-country has no par
 
 /** Keep the eagle on this device and send it on. */
 export async function reportEagle(r: Round, score: HoleScore): Promise<EagleEvent | null> {
@@ -39,7 +39,7 @@ const LIE_WORD: Record<string, string> = { fairway_bunker: 'bunker', greenside_b
  * Not in a casual round (like eagles); the practice ground and live matches never get here.
  */
 export async function reportHoleout(r: Round, score: HoleScore, shot: PlannedShot, sim: SimResult): Promise<HoleOut | null> {
-  if (isCasual(r.cfg.settings) || r.cfg.practice || !score.off || score.made === undefined || !sim.holed) return null;
+  if (isCasual(r.cfg.settings) || r.cfg.practice || r.cfg.xc || !score.off || score.made === undefined || !sim.holed) return null;
   const id = roundId(r.cfg);
   const lie = r.lie?.kind ?? 'fairway';
   const h: HoleOut = {

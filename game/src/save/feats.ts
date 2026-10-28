@@ -52,7 +52,7 @@ export function birdiesIn(scores: HoleScore[]): number {
 
 /** The eagles of a finished round, as the live reports would have sent them. */
 export function eaglesIn(e: LeaderboardEntry, courseHoles: (slot: number) => number = (slot) => slot): EagleEvent[] {
-  if (e.casual) return [];
+  if (e.casual || e.length === 'xc') return []; // cross-country has no par: no eagles
   const out: EagleEvent[] = [];
   e.scores.forEach((s) => {
     if (!isEagleScore(s)) return;
