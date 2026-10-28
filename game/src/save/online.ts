@@ -61,6 +61,11 @@ export function fetchBoard(course: string): Promise<LeaderboardEntry[] | null> {
   return fetchEntries(`course=${encodeURIComponent(course)}`);
 }
 
+/** Cross-country rounds (the bonus mode): one course's, or every course's (null when unreachable). */
+export function fetchXcBoard(course?: string): Promise<LeaderboardEntry[] | null> {
+  return fetchEntries(course ? `course=${encodeURIComponent(course)}&length=xc` : 'length=xc');
+}
+
 /** This player code's own rounds, from every device that uses it ("my golf"; null when unreachable). */
 export function fetchOwnRounds(): Promise<LeaderboardEntry[] | null> {
   return app.settings.playerKey ? fetchEntries(`owner=${encodeURIComponent(app.settings.playerKey)}`) : Promise.resolve(null);

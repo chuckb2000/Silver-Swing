@@ -2,6 +2,8 @@
 // Tap a tee, then a green. Greens a leg can't end on are greyed, with the reason
 // when tapped (used, too short, too long, or no way to finish the round after
 // it). The legs played so far are drawn as lines. "play this leg" opens it.
+// The map zooms (developer, 2026-10-27): pinch, the mouse wheel or the +/-
+// buttons, and a drag moves it; a tap that doesn't move picks.
 
 import Phaser from 'phaser';
 import { app } from '../app';
@@ -13,6 +15,9 @@ import { shortName } from '../save/milestones';
 import { Button, COLORS, dimmer, Panel, setTxt, txt } from '../ui/widgets';
 import { scorecard } from './HudScene';
 import { musicFor } from '../audio/music';
+
+/** The last view, kept between legs on the same course and screen size. */
+let savedView: { key: string; s: number; ox: number; oy: number } | null = null;
 
 const TEE_C = 0xffffff, GREEN_C = 0x7be07b, SEL_C = 0xffd23f, OFF_C = 0x6d747c, USED_C = 0x3a4048;
 
@@ -27,6 +32,18 @@ export class XcPlanScene extends Phaser.Scene {
   private playBtn!: Button;
   private toScreen!: (x: number, y: number) => { x: number; y: number };
   private layer: Phaser.GameObjects.Container | null = null;
+  private img!: Phaser.GameObjects.Image;
+  /** The map's view: scale (screen px per overview texel) and where the crop's corner is on screen. */
+  private view = { s: 1, ox: 0, oy: 0 };
+  private fit = 1;
+  private maxS = 4;
+  /** The map's area on screen, and the crop of the overview texture (texels). */
+  private area = { x: 0, y: 0, w: 0, h: 0 };
+  private crop = { x: 0, y: 0, w: 0, h: 0 };
+  private viewKey = '';
+  /** A press on the map: where it started, whether it became a drag or a pinch. */
+  private press: { x: number; y: number; moved: boolean } | null = null;
+  private pinch: { d: number; mx: number; my: number } | null = null;
 
   constructor() {
     super('xcplan');
@@ -55,32 +72,123 @@ export class XcPlanScene extends Phaser.Scene {
     const bx0 = Math.max(0, Math.min(...pts.map((p) => p[0])) - pad), bx1 = Math.min(c.world.width, Math.max(...pts.map((p) => p[0])) + pad);
     const by0 = Math.max(0, Math.min(...pts.map((p) => p[1])) - pad), by1 = Math.min(worldH, Math.max(...pts.map((p) => p[1])) + pad);
     const cx = bx0 / mPer, cy = (worldH - by1) / mPer, cw = (bx1 - bx0) / mPer, ch = (by1 - by0) / mPer;
-    const s = Math.min((W - 8) / cw, (H - top - bottom) / ch);
-    const ox = Math.round((W - cw * s) / 2), oy = Math.round(top + (H - top - bottom - ch * s) / 2);
-    this.add.image(ox - cx * s, oy - cy * s, 'overview').setOrigin(0, 0).setScale(s).setCrop(cx, cy, cw, ch);
-    this.toScreen = (x, y) => ({ x: ox + (x / mPer - cx) * s, y: oy + ((worldH - y) / mPer - cy) * s });
-    this.gfx = this.add.graphics();
+    this.crop = { x: cx, y: cy, w: cw, h: ch };
+    this.area = { x: 0, y: top, w: W, h: H - top - bottom };
+    this.fit = Math.min((W - 8) / cw, (H - top - bottom) / ch);
+    this.maxS = Math.max(this.fit * 6, 6);
+    this.img = this.add.image(0, 0, 'overview').setOrigin(0, 0).setCrop(cx, cy, cw, ch).setDepth(0);
+    this.toScreen = (x, y) => ({ x: this.view.ox + (x / mPer - this.crop.x) * this.view.s, y: this.view.oy + ((worldH - y) / mPer - this.crop.y) * this.view.s });
+    this.viewKey = `${c.id}:${W}x${H}`;
+    if (savedView?.key === this.viewKey) this.view = { s: savedView.s, ox: savedView.ox, oy: savedView.oy };
+    else this.view = { s: this.fit, ox: 0, oy: 0 };
+    this.clampView();
+    this.applyView();
+    // the top line and the bottom panel sit over the map when it's zoomed
+    this.add.rectangle(0, 0, W, top, 0x14202a, 1).setOrigin(0, 0).setDepth(10);
+    this.add.rectangle(0, H - bottom, W, bottom, 0x14202a, 1).setOrigin(0, 0).setDepth(10);
+    this.gfx = this.add.graphics().setDepth(1);
     // top line: where, which leg, strokes so far
     const done = r.scores.length;
     const tot = totals(r.scores);
-    txt(this, W / 2, 3, `cross-country  ·  ${shortName(c.name).toLowerCase()}  ·  leg ${done + 1} of ${c.holes.length}${done ? `  ·  ${tot.strokes} strokes` : ''}`, { origin: [0.5, 0], color: COLORS.yellow, maxWidth: W - 8 });
+    txt(this, W / 2, 3, `cross-country  ·  ${shortName(c.name).toLowerCase()}  ·  leg ${done + 1} of ${c.holes.length}${done ? `  ·  ${tot.strokes} strokes` : ''}`, { origin: [0.5, 0], color: COLORS.yellow, maxWidth: W - 8 }).setDepth(11);
     // bottom panel: what to do, and the buttons
-    this.add.existing(new Panel(this, 4, H - bottom + 2, W - 8, bottom - 6, 0.88));
-    this.status = txt(this, 10, H - bottom + 7, '', { color: COLORS.white, maxWidth: W - 120 });
+    this.add.existing(new Panel(this, 4, H - bottom + 2, W - 8, bottom - 6, 0.88)).setDepth(11);
+    this.status = txt(this, 10, H - bottom + 7, '', { color: COLORS.white, maxWidth: W - 120 }).setDepth(12);
     this.playBtn = new Button(this, W - 98, H - bottom + 8, 90, 16, 'play this leg', () => this.play(), { color: 'orange' });
-    this.add.existing(this.playBtn);
-    this.add.existing(new Button(this, W - 98, H - 18, 44, 13, 'card', () => this.showCard(), { color: 'grey' }));
-    this.add.existing(new Button(this, W - 52, H - 18, 44, 13, 'menu', () => this.scene.start('title'), { color: 'grey' }));
+    this.add.existing(this.playBtn).setDepth(12);
+    this.add.existing(new Button(this, W - 98, H - 18, 44, 13, 'card', () => this.showCard(), { color: 'grey' })).setDepth(12);
+    this.add.existing(new Button(this, W - 52, H - 18, 44, 13, 'menu', () => this.scene.start('title'), { color: 'grey' })).setDepth(12);
+    // zoom buttons, top right of the map
+    const zx = W - 36, zy = top + 3;
+    this.add.existing(new Button(this, zx, zy, 15, 15, '+', () => this.zoomAt(this.area.x + this.area.w / 2, this.area.y + this.area.h / 2, 1.5), { color: 'grey' })).setDepth(12);
+    this.add.existing(new Button(this, zx + 17, zy, 15, 15, '-', () => this.zoomAt(this.area.x + this.area.w / 2, this.area.y + this.area.h / 2, 1 / 1.5), { color: 'grey' })).setDepth(12);
+    this.input.addPointer(1);
+    const onMap = (y: number, x: number) => y > top && y < H - bottom && !(x > zx - 2 && y < zy + 17);
     this.input.on('pointerdown', (p: Phaser.Input.Pointer) => {
       if (this.layer) return;
       const w = this.cameras.main.getWorldPoint(p.x, p.y);
-      if (w.y > H - bottom) return; // the panel's buttons
+      const two = this.twoDown();
+      if (two) { this.press = null; this.pinch = two; return; }
+      this.press = onMap(w.y, w.x) ? { x: w.x, y: w.y, moved: false } : null;
+    });
+    this.input.on('pointermove', (p: Phaser.Input.Pointer) => {
+      if (this.layer) return;
+      const two = this.twoDown();
+      if (two && this.pinch) {
+        // pinch: zoom about the fingers' midpoint, and follow it
+        this.view.ox += two.mx - this.pinch.mx;
+        this.view.oy += two.my - this.pinch.my;
+        this.zoomAt(two.mx, two.my, two.d / Math.max(1, this.pinch.d));
+        this.pinch = two;
+        return;
+      }
+      if (!this.press || !p.isDown) return;
+      const w = this.cameras.main.getWorldPoint(p.x, p.y);
+      if (!this.press.moved && Math.hypot(w.x - this.press.x, w.y - this.press.y) < 4) return;
+      this.view.ox += w.x - this.press.x;
+      this.view.oy += w.y - this.press.y;
+      this.press = { x: w.x, y: w.y, moved: true };
+      this.clampView();
+      this.applyView();
+      this.redraw();
+    });
+    this.input.on('pointerup', (p: Phaser.Input.Pointer) => {
+      if (this.pinch) { if (!this.twoDown()) this.pinch = null; this.press = null; return; }
+      const pr = this.press;
+      this.press = null;
+      if (this.layer || !pr || pr.moved) return;
+      const w = this.cameras.main.getWorldPoint(p.x, p.y);
       this.pick(w.x, w.y);
+    });
+    this.input.on('wheel', (p: Phaser.Input.Pointer, _o: unknown, _dx: number, dy: number) => {
+      if (this.layer || !dy) return;
+      const w = this.cameras.main.getWorldPoint(p.x, p.y);
+      this.zoomAt(w.x, w.y, dy < 0 ? 1.25 : 1 / 1.25);
+    });
+    this.input.keyboard?.on('keydown', (e: KeyboardEvent) => {
+      const f = e.key === '+' || e.key === '=' ? 1.5 : e.key === '-' || e.key === '_' ? 1 / 1.5 : 0;
+      if (f && !this.layer) this.zoomAt(this.area.x + this.area.w / 2, this.area.y + this.area.h / 2, f);
     });
     // a single tee left: chosen already
     const tees = teeChoices(this.map, r.cfg.xc.legs.filter(Boolean));
     if (tees.length === 1) this.selectTee(tees[0]);
     this.redraw();
+  }
+
+  /** Both pointers down: their distance and midpoint (game px), else null. */
+  private twoDown(): { d: number; mx: number; my: number } | null {
+    const a = this.input.pointer1, b = this.input.pointer2;
+    if (!a?.isDown || !b?.isDown) return null;
+    const pa = this.cameras.main.getWorldPoint(a.x, a.y), pb = this.cameras.main.getWorldPoint(b.x, b.y);
+    return { d: Math.hypot(pa.x - pb.x, pa.y - pb.y), mx: (pa.x + pb.x) / 2, my: (pa.y + pb.y) / 2 };
+  }
+
+  /** Zoom by `f` keeping the map point under (px, py) where it is. */
+  private zoomAt(px: number, py: number, f: number) {
+    const v = this.view;
+    const ns = Phaser.Math.Clamp(v.s * f, this.fit, this.maxS);
+    const tx = (px - v.ox) / v.s, ty = (py - v.oy) / v.s;
+    v.ox = px - tx * ns;
+    v.oy = py - ty * ns;
+    v.s = ns;
+    this.clampView();
+    this.applyView();
+    this.redraw();
+  }
+
+  /** Keep the map over its area (centred when it's smaller). */
+  private clampView() {
+    const v = this.view, a = this.area, w = this.crop.w * v.s, h = this.crop.h * v.s;
+    v.ox = w <= a.w ? a.x + (a.w - w) / 2 : Phaser.Math.Clamp(v.ox, a.x + a.w - w, a.x);
+    v.oy = h <= a.h ? a.y + (a.h - h) / 2 : Phaser.Math.Clamp(v.oy, a.y + a.h - h, a.y);
+    v.ox = Math.round(v.ox);
+    v.oy = Math.round(v.oy);
+  }
+
+  private applyView() {
+    const v = this.view;
+    this.img.setScale(v.s).setPosition(v.ox - this.crop.x * v.s, v.oy - this.crop.y * v.s);
+    savedView = { key: this.viewKey, ...v };
   }
 
   private legs() { return app.round!.cfg.xc!.legs.filter(Boolean); }
@@ -127,7 +235,7 @@ export class XcPlanScene extends Phaser.Scene {
       g.lineStyle(2, ok ? SEL_C : 0xe2382f, 0.95);
       g.lineBetween(a.x, a.y, b.x, b.y);
     }
-    const label = (x: number, y: number, s: string, col: number) => this.labels.push(txt(this, Math.round(x), Math.round(y), s, { color: col }));
+    const label = (x: number, y: number, s: string, col: number) => this.labels.push(txt(this, Math.round(x), Math.round(y), s, { color: col }).setDepth(2));
     // greens: circles; green when the chosen tee may go there, grey when not, dark when used
     this.map.greens.forEach((p, i) => {
       const id = i + 1;
@@ -156,7 +264,7 @@ export class XcPlanScene extends Phaser.Scene {
     // what to do next
     let msg: string;
     let ready = false;
-    if (this.tee === null) msg = 'tap a tee (square) to start the next leg';
+    if (this.tee === null) msg = 'tap a tee (square) to start the next leg. pinch, scroll or +/- to zoom';
     else if (this.green === null) msg = `tee ${this.tee}: now tap a green (circle) to play to`;
     else {
       const ch = this.choices[this.green - 1];
@@ -182,6 +290,7 @@ export class XcPlanScene extends Phaser.Scene {
     if (this.layer) { this.layer.destroy(true); this.layer = null; return; }
     const W = app.view.w, H = app.view.h;
     const layer = this.add.container(0, 0).setDepth(50);
+    this.press = null;
     const dim = dimmer(this, 0.6);
     const card = scorecard(this, app.round!, W, H);
     layer.add([dim, card]);

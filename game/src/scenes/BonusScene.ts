@@ -4,7 +4,7 @@
 
 import { app } from '../app';
 import { LeaderboardEntry, loadBoard } from '../save/store';
-import { fetchBoard, flushUploads, onlineAvailable } from '../save/online';
+import { fetchXcBoard, flushUploads, onlineAvailable } from '../save/online';
 import { compareRounds } from '../systems/rules/scoring';
 import { XC_MAX_YD, XC_MIN_YD } from '../systems/game/crossCountry';
 import { shareRound } from '../ui/shareCard';
@@ -17,6 +17,8 @@ import { LoadSuperseded } from '../data/courses';
 
 /** The course last chosen here (else the current one). */
 let courseSel = '';
+/** The leaderboard tab: this course's rounds, or every course's best. */
+let tab: 'course' | 'all' = 'course';
 
 export const XC_RULES = [
   'play every tee and every green on the course once, in any order.',
@@ -65,31 +67,93 @@ export class BonusScene extends MenuScene {
     this.root.add(new Button(this, x0 + pw - 66, y, 54, 15, 'play', () => this.play(), { color: 'orange' }));
     y += Math.max(22, Math.round(cl.height) + 10); // a long name wraps on a phone
     this.root.add(new Button(this, x0 + 6, y0 + ph - 20, 44, 15, 'back', () => this.back(), { color: 'grey' }));
-    // the course's best cross-country rounds: friends' when the site has a shared board, else this device's
+    await this.leaderboard(x0, y, pw, y0 + ph - 24, info.name);
+  }
+
+  /**
+   * The cross-country leaderboard (developer, 2026-10-27): "this course" ranks every round here by
+   * strokes; "all courses" gives each course's best. Friends' when the site has a shared board, else
+   * this device's. The player's own rows are green; one off the bottom is added as a last line.
+   */
+  private async leaderboard(x0: number, y: number, pw: number, bottom: number, courseName: string) {
     const g = this.gen;
-    const head = txt(this, x0 + 12, y, 'best rounds here', { color: COLORS.dim });
-    this.root.add(head);
+    this.root.add(txt(this, x0 + 12, y, 'leaderboard', { color: COLORS.yellow, scale: 1 }));
+    const source = txt(this, x0 + pw - 12, y, '', { origin: [1, 0], color: COLORS.dim });
+    this.root.add(source);
     y += 12;
+    const tw = Math.min(78, Math.floor((pw - 30) / 2));
+    ([['course', 'this course'], ['all', 'all courses']] as const).forEach(([k, label], i) =>
+      this.root.add(new Button(this, x0 + 12 + i * (tw + 4), y, tw, 14, label, () => { if (tab !== k) { tab = k; this.rebuild(); } }, { color: tab === k ? 'orange' : 'grey' })));
+    y += 19;
+    const all = tab === 'all';
+    // columns: the narrow phone panel keeps them inside (about 5 px a letter)
+    const right = x0 + pw - 12;
+    const cols = all
+      ? { a: x0 + 12, b: x0 + 12 + Math.floor((pw - 24 - 34) * 0.55), n: right }
+      : { a: x0 + 12, b: x0 + 26, n: right - 34, d: right };
+    const head = (x: number, s: string, o: [number, number] = [0, 0]) => this.root.add(txt(this, x, y, s, { origin: o, color: COLORS.dim }));
+    if (all) { head(cols.a, 'course'); head(cols.b, 'best'); head(cols.n, 'strokes', [1, 0]); }
+    else { head(cols.a, '#'); head(cols.b, 'player'); head(cols.n, 'strokes', [1, 0]); head(cols.d!, 'date', [1, 0]); }
+    y += 10;
+    this.root.add(this.add.rectangle(x0 + 12, y, pw - 24, 1, COLORS.dim, 0.4).setOrigin(0, 0));
+    y += 3;
+    const wait = txt(this, x0 + pw / 2, y + 8, 'loading...', { origin: [0.5, 0], color: COLORS.dim });
+    this.root.add(wait);
+
     const online = await onlineAvailable();
     let list: LeaderboardEntry[] | null = null;
-    if (online) { await flushUploads(); list = await fetchBoard(courseSel); }
-    const local = await loadBoard();
+    if (online) { await flushUploads(); list = await fetchXcBoard(all ? undefined : courseSel); }
+    const local = list ? null : await loadBoard();
     if (!this.isCurrentBuild(g)) return;
+    wait.destroy();
     const shared = !!list;
-    const rows = (list ?? local).filter((e) => e.course === courseSel && e.length === 'xc' && !e.casual && (shared || e.player !== DEFAULT_NAME)).sort(compareRounds);
-    setTxt(head, `best rounds here${shared ? ' (friends)' : ' (this device)'}`);
-    if (!rows.length) { this.root.add(txt(this, x0 + pw / 2, y + 10, 'nobody has played it here yet', { origin: [0.5, 0], color: COLORS.dim })); return; }
-    const room = Math.max(1, Math.floor((y0 + ph - 26 - y) / 11));
-    rows.slice(0, room).forEach((e, i) => {
-      const yy = y + i * 11;
+    setTxt(source, shared ? 'friends' : 'this device');
+    const rounds = (list ?? local!).filter((e) => e.length === 'xc' && !e.casual && (shared || e.player !== DEFAULT_NAME) && (all || e.course === courseSel)).sort(compareRounds);
+    const me = app.settings.playerName;
+    const room = Math.max(1, Math.floor((bottom - y) / 11));
+    // a cell: x, text, origin, and the width it may take (a long name is cut with a dot)
+    const row = (yy: number, cells: [number, string, [number, number]?, number?][], color: number, tap: () => void) => {
+      for (const [x, v, o, max] of cells) {
+        const t = txt(this, x, yy, v, { origin: o ?? [0, 0], color });
+        for (let n = v.length - 1; max && t.width > max && n > 1; n--) setTxt(t, `${v.slice(0, n)}.`);
+        this.root.add(t);
+      }
+      const zone = this.add.zone(x0 + 6, yy - 1, pw - 12, 11).setOrigin(0, 0).setInteractive({ useHandCursor: true });
+      onTap(zone, tap);
+      this.root.add(zone);
+    };
+    const share = (e: LeaderboardEntry, title: string) => () => { void shareRound(this, e, title); };
+    const nameOf = (id: string) => app.courses.find((c) => c.id === id)?.name ?? id;
+
+    if (all) {
+      // each course's best round, the most played courses first
+      const by = new Map<string, LeaderboardEntry[]>();
+      for (const e of rounds) by.set(e.course, [...(by.get(e.course) ?? []), e]);
+      const best = [...by.values()].sort((a, b) => b.length - a.length || nameOf(a[0].course).localeCompare(nameOf(b[0].course))).map((l) => l[0]);
+      if (!best.length) { this.empty(x0, y, pw, 'no cross-country rounds yet: be the first'); return; }
+      best.slice(0, room).forEach((e, i) => {
+        const cn = shortName(nameOf(e.course)).toLowerCase();
+        row(y + i * 11, [[cols.a, cn, undefined, cols.b - cols.a - 6], [cols.b, e.player, undefined, cols.n - cols.b - 26], [cols.n, String(e.gross), [1, 0]]],
+          e.player === me ? COLORS.green : COLORS.white, share(e, `cross-country record at ${cn}`));
+      });
+      return;
+    }
+    if (!rounds.length) { this.empty(x0, y, pw, `no rounds here yet: be the first at ${shortName(courseName).toLowerCase()}`); return; }
+    const where = shortName(courseName).toLowerCase();
+    const line = (e: LeaderboardEntry, rank: number, yy: number) => {
       const d = new Date(e.date);
       const when = Number.isNaN(d.getTime()) ? '' : `${d.getMonth() + 1}/${d.getDate()}`;
-      [[x0 + 12, String(i + 1)], [x0 + 30, e.player.slice(0, 14)], [x0 + 130, `${e.gross} strokes`], [x0 + 200, when]].forEach(([x, v]) =>
-        this.root.add(txt(this, x as number, yy, v as string, { color: i === 0 ? COLORS.yellow : COLORS.white })));
-      const zone = this.add.zone(x0 + 6, yy - 1, pw - 12, 11).setOrigin(0, 0).setInteractive({ useHandCursor: true });
-      onTap(zone, () => { void shareRound(this, e, `#${i + 1} cross-country at ${shortName(info.name).toLowerCase()}`); });
-      this.root.add(zone);
-    });
+      row(yy, [[cols.a, String(rank)], [cols.b, e.player, undefined, cols.n - cols.b - 26], [cols.n, String(e.gross), [1, 0]], [cols.d!, when, [1, 0]]],
+        rank === 1 ? COLORS.yellow : e.player === me ? COLORS.green : COLORS.white, share(e, `#${rank} cross-country at ${where}`));
+    };
+    const mine = rounds.findIndex((e) => e.player === me);
+    const shown = mine >= room ? room - 1 : room; // keep a line for the player's best when it's further down
+    rounds.slice(0, shown).forEach((e, i) => line(e, i + 1, y + i * 11));
+    if (mine >= shown && shown < room) line(rounds[mine], mine + 1, y + shown * 11);
+  }
+
+  private empty(x0: number, y: number, pw: number, msg: string) {
+    this.root.add(txt(this, x0 + pw / 2, y + 8, msg, { origin: [0.5, 0], color: COLORS.dim, maxWidth: pw - 24 }));
   }
 
   /** Load the course if needed (asking about a round in progress and a name first), then the planner. */

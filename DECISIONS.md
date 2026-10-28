@@ -1453,9 +1453,16 @@ really needs to be calculated."
   card each leg's tee, green and yards. The round keeps a par from the leg's length internally,
   only for the tally's fairway and green stats. Normal difficulty, no casual rules.
 - **Where:** "my golf" has a "bonus mode" button next to "back": the rules in five lines, the
-  course ("course" picks another), "play", and the course's best cross-country rounds by gross
-  (friends', or this device's offline). The planner is the course overview cropped to the course:
-  tap a tee, then a green; greens out of reach are small and grey, with the reason when tapped.
+  course ("course" picks another), "play", and a leaderboard (developer: "there should be a
+  leaderboard within the cross country golf page"): "this course" ranks every cross-country round
+  there by strokes (#, player, strokes, date); "all courses" gives each course's record, the most
+  played first. Friends' (`/api/scores?length=xc`, with or without `course=`, so the course's other
+  rounds never crowd it out) or this device's offline; the player's rows are green, and their best
+  takes the last line when it's further down. A tap shares the card. The planner is the course
+  overview cropped to the course: tap a tee, then a green; greens out of reach are small and grey,
+  with the reason when tapped. The map zooms (developer: "you should be able to zoom in on the
+  map"): pinch, the mouse wheel, the +/- buttons or keys, up to six times the fitted size; a drag
+  moves it and a tap that doesn't move picks; the view is kept between legs.
 - **Kept off everything else:** rounds have length `xc` and their legs. They are on no course
   board (the boards list their round lengths), and not in friends' activity, the stats lists,
   eagles or hole-outs (none are reported), handicaps, "my golf" stats, the passport or milestones.

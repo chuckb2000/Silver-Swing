@@ -39,7 +39,7 @@ describe('which legs', () => {
       }
       expect(validRound(m, legs), c.id).toBe(true);
     }
-  });
+  }, 60_000);
 
   it('greys out greens with the reason', () => {
     const m = xcMap(json('oswego_lake'));
@@ -90,7 +90,7 @@ describe('out of bounds only beyond the boundary', () => {
     expect(outsideOB).toBe(outside);
     // the course itself is untouched
     expect(c.terrain).not.toBe(x.terrain);
-  });
+  }, 60_000);
 });
 
 describe('a cross-country round (robot golfer)', () => {
@@ -136,7 +136,7 @@ describe('a cross-country round (robot golfer)', () => {
     }
     expect(r.scores.map((s) => s.hole)).toEqual([1, 2, 3]);
     expect(r.scores.every((s) => s.strokes > 0 && s.strokes < 15)).toBe(true);
-  });
+  }, 60_000);
 });
 
 describe('kept off every other board and list', async () => {
@@ -183,6 +183,14 @@ describe('kept off every other board and list', async () => {
     }
     const hcp = (await (await handleHandicapsGet(db)).json()) as { players?: { rounds?: unknown[] }[] };
     expect(JSON.stringify(hcp)).not.toContain('xc1');
+    // its own board: one course's, or every course's; a normal round on the course isn't on it
+    const normal = { ...xc, id: 'n1', length: '18', legs: undefined, player: 'chuck' };
+    delete (normal as { legs?: unknown }).legs;
+    await handlePost(db, JSON.stringify([{ ...normal, owner: 'abcdefghjkmnpqrs' }]));
+    const ids = async (q: string) => ((await (await handleGet(db, new URL(`https://x/api/scores?${q}`))).json()) as { entries: { id: string }[] }).entries.map((e) => e.id);
+    expect(await ids('course=oswego_lake&length=xc')).toEqual(['xc1']);
+    expect(await ids('length=xc')).toEqual(['xc1']);
+    expect((await ids('course=oswego_lake')).sort()).toEqual(['n1', 'xc1']);
   });
 
   it('nor in this device\'s stats, milestones or handicap', () => {

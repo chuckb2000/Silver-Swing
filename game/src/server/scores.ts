@@ -385,6 +385,13 @@ export async function handleGet(db: D1Like | undefined, url: URL): Promise<Respo
     // the seven daily rounds from this day on (the week's board: best five of seven, worked out by the game)
     if (!isDay(week)) return json({ error: 'week=yyyy-mm-dd' }, 400);
     stmt = db.prepare(`SELECT data FROM rounds WHERE daily >= ? AND daily <= ? AND ${SHOWN} ORDER BY daily ASC, gross ASC LIMIT ?`).bind(week, addDays(week, 6), MAX_RETURN);
+  } else if (url.searchParams.get('length') === 'xc') {
+    // cross-country (the bonus mode, developer 2026-10-27): its own board, so the course's other rounds
+    // never crowd it out of the limit; without a course, every course's (the "all courses" tab)
+    if (course.length > 64) return json({ error: 'course too long' }, 400);
+    stmt = course
+      ? db.prepare(`SELECT data FROM rounds WHERE course = ? AND length = 'xc' AND ${SHOWN} ORDER BY gross ASC, back ASC, date ASC LIMIT ?`).bind(course, MAX_RETURN)
+      : db.prepare(`SELECT data FROM rounds WHERE length = 'xc' AND ${SHOWN} ORDER BY course ASC, gross ASC, back ASC, date ASC LIMIT ?`).bind(MAX_RETURN);
   } else {
     if (!course || course.length > 64) return json({ error: 'course required' }, 400);
     stmt = db.prepare(`SELECT data FROM rounds WHERE course = ? AND ${SHOWN} ORDER BY gross ASC, back ASC, date ASC LIMIT ?`).bind(course, MAX_RETURN);

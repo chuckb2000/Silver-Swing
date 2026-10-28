@@ -78,9 +78,46 @@ test('cross-country: rules, a leg on the map, the next leg, a reload', async ({ 
   await press(page, 'mygolf', '^bonus mode$', () => window.__game.scene.isActive('bonus'));
   await page.waitForTimeout(800);
   await page.screenshot({ path: 'test-results/xc-bonus.png' });
+  // the leaderboard's two tabs
+  await press(page, 'bonus', '^all courses$', () => true);
+  await page.waitForTimeout(600);
+  await page.screenshot({ path: 'test-results/xc-bonus-all.png' });
   await press(page, 'bonus', '^play$', () => window.__game.scene.isActive('xcplan'));
   await page.waitForTimeout(600);
   await page.screenshot({ path: 'test-results/xc-plan.png' });
+  // zoom: the + button, the wheel over tee 1, a drag that moves the map and picks nothing
+  const scale = () => page.evaluate(() => window.__game.scene.getScene('xcplan').view.s);
+  const s0 = await scale();
+  await press(page, 'xcplan', '^\\+$', () => true);
+  await page.waitForTimeout(200);
+  const s1 = await scale();
+  expect(s1).toBeGreaterThan(s0);
+  const tee1 = await page.evaluate(() => {
+    const g = window.__game, s = g.scene.getScene('xcplan');
+    const q = s.toScreen(s.map.tees[0].x, s.map.tees[0].y);
+    const canvas = g.canvas.getBoundingClientRect();
+    const z = s.cameras.main.zoom * (canvas.width / g.canvas.width);
+    return { x: canvas.left + q.x * z, y: canvas.top + q.y * z };
+  });
+  await page.mouse.move(tee1.x, tee1.y);
+  await page.mouse.wheel(0, -200);
+  await page.waitForTimeout(300);
+  expect(await scale()).toBeGreaterThan(s1);
+  const at = () => page.evaluate(() => { const v = window.__game.scene.getScene('xcplan').view; return `${v.ox},${v.oy}`; });
+  const before = await at();
+  await page.mouse.move(tee1.x, tee1.y + 30);
+  await page.mouse.down();
+  await page.mouse.move(tee1.x + 40, tee1.y + 70, { steps: 5 });
+  await page.mouse.up();
+  await page.waitForTimeout(200);
+  expect(await at()).not.toBe(before);
+  expect(await page.evaluate(() => window.__game.scene.getScene('xcplan').tee)).toBe(null);
+  await tapMarker(page, 'tees', 1);
+  expect(await page.evaluate(() => window.__game.scene.getScene('xcplan').tee)).toBe(1);
+  await page.screenshot({ path: 'test-results/xc-plan-zoom.png' });
+  for (let i = 0; i < 8; i++) await page.keyboard.press('-');
+  await page.waitForTimeout(200);
+  expect(await scale()).toBeCloseTo(s0, 5);
   // the shortest leg from tee 1 to another hole's green
   const plan = await page.evaluate(() => {
     const s = window.__game.scene.getScene('xcplan');
