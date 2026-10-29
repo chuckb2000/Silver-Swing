@@ -1,0 +1,35 @@
+# Downloads for course building (developer, 2026-10-29): the sandbox Claude works
+# in can't reach Overpass, USGS or most data sites, and can't start a workflow
+# through the GitHub API either, but it can push a branch and read a release. So:
+# push a request file (fetch/requests/<name>.json) to a branch named fetch/...,
+# this job downloads what it asks for and attaches the files to the release it
+# names, with fetch-log-<name>.json saying what happened. pipeline/remote_fetch.py
+# has the request format.
+name: fetch course data
+on:
+  push:
+    branches: ['fetch/**']
+    paths: ['fetch/requests/*.json']
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: fetch-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 300
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: osmtogeojson (the converter Overpass Turbo uses)
+        run: npm install -g osmtogeojson@3.0.0-beta.5
+      - name: fetch
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python3 pipeline/remote_fetch.py --changed "${{ github.event.before }}"
