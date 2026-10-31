@@ -136,6 +136,42 @@
   {
    "name": "bluegolf_card.html",
    "url": "https://course.bluegolf.com/bluegolf/course/course/victoriagc/detailedscorecard.htm"
+  },
+  {
+   "name": "lidarbc_s3.json",
+   "url": "https://services6.arcgis.com/ubm4tcTYICKBpist/ArcGIS/rest/services/LiDAR_BC_S3_Public/FeatureServer?f=json"
+  },
+  {
+   "name": "lidarbc_s3_l0.json",
+   "url": "https://services6.arcgis.com/ubm4tcTYICKBpist/ArcGIS/rest/services/LiDAR_BC_S3_Public/FeatureServer/0/query?geometry=477300,5361700,478550,5363200&geometryType=esriGeometryEnvelope&inSR=32610&spatialRel=esriSpatialRelIntersects&outFields=*&returnGeometry=false&f=json"
+  },
+  {
+   "name": "lidarbc_s3_l1.json",
+   "url": "https://services6.arcgis.com/ubm4tcTYICKBpist/ArcGIS/rest/services/LiDAR_BC_S3_Public/FeatureServer/1/query?geometry=477300,5361700,478550,5363200&geometryType=esriGeometryEnvelope&inSR=32610&spatialRel=esriSpatialRelIntersects&outFields=*&returnGeometry=false&f=json"
+  },
+  {
+   "name": "lidarbc_s3_l2.json",
+   "url": "https://services6.arcgis.com/ubm4tcTYICKBpist/ArcGIS/rest/services/LiDAR_BC_S3_Public/FeatureServer/2/query?geometry=477300,5361700,478550,5363200&geometryType=esriGeometryEnvelope&inSR=32610&spatialRel=esriSpatialRelIntersects&outFields=*&returnGeometry=false&f=json"
+  },
+  {
+   "name": "lidarbc_s3_l3.json",
+   "url": "https://services6.arcgis.com/ubm4tcTYICKBpist/ArcGIS/rest/services/LiDAR_BC_S3_Public/FeatureServer/3/query?geometry=477300,5361700,478550,5363200&geometryType=esriGeometryEnvelope&inSR=32610&spatialRel=esriSpatialRelIntersects&outFields=*&returnGeometry=false&f=json"
+  },
+  {
+   "name": "lidarbc_s3_l4.json",
+   "url": "https://services6.arcgis.com/ubm4tcTYICKBpist/ArcGIS/rest/services/LiDAR_BC_S3_Public/FeatureServer/4/query?geometry=477300,5361700,478550,5363200&geometryType=esriGeometryEnvelope&inSR=32610&spatialRel=esriSpatialRelIntersects&outFields=*&returnGeometry=false&f=json"
+  },
+  {
+   "name": "club_scorecard_2025.pdf",
+   "url": "https://www.victoriagolf.com/documents/20124/386685/Scorecard+2025%281%29.pdf/8bda7020-cb7b-9b55-0d6b-9fefd671ac13?t=1753125362199"
+  },
+  {
+   "name": "club_layout_large.jpg",
+   "url": "https://www.victoriagolf.com/documents/20124/65012/course-layout-large.jpg/58fc9030-1132-3ede-4a43-9c70e0bd097e"
+  },
+  {
+   "name": "club_logo.png",
+   "url": "https://www.victoriagolf.com/image/company_logo?img_id=83921&t=1792050629390"
   }
  ]
 }
