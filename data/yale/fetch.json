@@ -1,0 +1,79 @@
+{
+ "items": [
+  {
+   "name": "yale_overpass.geojson",
+   "osm_box": [
+    41.3101,
+    -72.9948,
+    41.3288,
+    -72.9763
+   ]
+  },
+  {
+   "name": "yale_dem1m",
+   "tnm": {
+    "dataset": "dem1m",
+    "bbox": [
+     -72.9948,
+     41.3101,
+     -72.9763,
+     41.3288
+    ],
+    "list": true
+   }
+  },
+  {
+   "name": "yale_lpc",
+   "tnm": {
+    "dataset": "lpc",
+    "bbox": [
+     -72.9948,
+     41.3101,
+     -72.9763,
+     41.3288
+    ],
+    "list": true
+   }
+  },
+  {
+   "name": "yale_ct2023_dem.tif",
+   "url": "https://cteco.uconn.edu/ctraster/rest/services/elevation/Statewide2023/ImageServer/exportImage?bbox=667800,4575100,669400,4577300&bboxSR=32618&imageSR=32618&size=1600,2200&format=tiff&pixelType=F32&noData=-9999&interpolation=RSP_BilinearInterpolation&f=image"
+  },
+  {
+   "name": "yale_ct2023_dem_info.json",
+   "url": "https://cteco.uconn.edu/ctraster/rest/services/elevation/Statewide2023/ImageServer?f=json"
+  },
+  {
+   "name": "yale_ct2023_leafoff_s.jpg",
+   "url": "https://cteco.uconn.edu/ctraster/rest/services/images/Ortho_2023/ImageServer/exportImage?bbox=667800,4575100,669400,4576200&bboxSR=32618&imageSR=32618&size=4000,2750&format=jpg&f=image"
+  },
+  {
+   "name": "yale_ct2023_leafoff_n.jpg",
+   "url": "https://cteco.uconn.edu/ctraster/rest/services/images/Ortho_2023/ImageServer/exportImage?bbox=667800,4576200,669400,4577300&bboxSR=32618&imageSR=32618&size=4000,2750&format=jpg&f=image"
+  },
+  {
+   "name": "yale_naip.jpg",
+   "url": "https://imagery.nationalmap.gov/arcgis/rest/services/USGSNAIPImagery/ImageServer/exportImage?bbox=667800,4575100,669400,4577300&bboxSR=32618&imageSR=32618&size=2667,3667&format=jpg&f=image"
+  },
+  {
+   "name": "yale_naip_info.json",
+   "url": "https://imagery.nationalmap.gov/arcgis/rest/services/USGSNAIPImagery/ImageServer?f=json"
+  },
+  {
+   "name": "noaa_10296_list.xml",
+   "url": "https://noaa-nos-coastal-lidar-pds.s3.amazonaws.com/?list-type=2&prefix=laz/geoid18/10296/&max-keys=1000"
+  },
+  {
+   "name": "noaa_10296_ept.json",
+   "url": "https://noaa-nos-coastal-lidar-pds.s3.amazonaws.com/entwine/geoid18/10296/ept.json"
+  },
+  {
+   "name": "yale_usace_notice.pdf",
+   "url": "https://media.defense.gov/2023/Jul/26/2003268324/-1/-1/1/NAE-2022-00115-PN.PDF"
+  },
+  {
+   "name": "cteco_services.json",
+   "url": "https://cteco.uconn.edu/ctraster/rest/services/images?f=json"
+  }
+ ]
+}
