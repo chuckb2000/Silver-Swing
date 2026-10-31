@@ -67,6 +67,26 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 19. Hole 17: no golf=pin on its green; the centre pin is the green's centre (proposal).
 20. Hole 18: no golf=pin on its green; the centre pin is the green's centre (proposal).
 
+## Developer's calls pending (course chat, 2026-10-31, overnight: made and logged, reversible)
+
+1. **Tee sets: Blue and White.** The club's own printed card (Championship-18-hole-Scorecard.jpg on cypriankeyes.com) has Blue 6,543 (72.7/139) as its back tee, then White 6,098 (71.0/129), Green 5,595, Gold 4,850. Per the overnight rule (back tees are Blue: build Blue and the next set forward) both are built; default Blue. Green and Gold are in scorecard.csv, not built.
+   Conflict: GolfLink, GolfPass and OpenGolfAPI list a longer set (Black 6,871 74.4/136, Blue 6,498 73.3/134, White 6,134, Green 5,676, Gold 5,029, with other stroke indexes; Wikipedia quotes 6,871 74.4/136). A few OSM tee boxes lie behind the boxes measured as Blue (not checked hole by hole). Options: (a) keep the club's card (chosen: it is the club's own, and every Blue hole measures within 3 %); (b) add a Black set from the third-party listing (unverified; hole 11's 210 yd has no mapped box).
+2. **The 9-hole par-3 course is left out.** Its nine hole lines are dropped (edits.json), so its nine greens are wrong greens (relief required) and its tees, fairways and the wet meadows among them stay in play inside the one OSM boundary (the club maps both courses as one polygon). Option: cut the par-3 area out as out of bounds (an `ob=yes` area), which would make the 1st and 18th tighter than on the ground. Recommendation: keep as is.
+3. **Hole 11 White tee:** box w1256012343, 40 m north-east of the hole line, 127 yd from the green (card 131), tagged hole=11, tee_set=White on the 2023 MassGIS photo; without it White 11 measured 187 yd (+43 %). Recommendation: accept.
+4. **Hole 2 White: -3.1 % flag** (343 yd against 354, from the best spot in box w1256012349). No longer box is mapped. Recommendation: accept.
+5. **Water, all red (standing default; the card: "Red Stakes - Lateral Water Hazard", and green-topped stakes for wetlands with drop areas on 1, 10, 13 and 17).** The five OSM lateral hazards; seven ponds, wet meadows and a marsh mapped only as natural=water/wetland (`red_water_osm`); and Sewall Brook with its feeders as red channels from the DEM (`proposed/channels_lidar.geojson`, pipeline/propose_channels.py: 3-4 m wide, 0.1-0.3 m deep). The large wooded swamp along Sewall Brook between 3/4/14 and 5/10 (w86095496, MassGIS "wooded swamp deciduous") stays woods with its trees; `flatten_wetlands: false` keeps the lidar ground under the wetlands. Several OSM "lateral water hazards" (w778422502 by 9/13, w778877369 by 4, w778877370 by 11) hold lidar trees up to 27 m (dropped, listed above): they are wooded wetlands, still red.
+6. **Default aim on 2 and 4** (checks.json `default_aim.skip`): the default driver at the OSM bend point runs through the corner of the dogleg 2nd into trees, and into the hazard beside the 4th's landing area. Options: move each hole line's bend point to the fairway centre in the landing zone (edits.json), or accept. Recommendation: accept for now; look at them when playing.
+7. **Theme `seekonk`** (Wannamoisett/Triggs: eastern white pine, oak, maple just turning) instead of the standing `bayside` (Long Island pitch pine and oak): central Massachusetts is mixed hardwood and white pine, which seekonk draws. No new theme. Option: bayside.
+8. **Logo:** "The Deacon's Key", an original drawing (an old brass key with a golf ball in its bow, for the Keyes homestead of 1734 under the clubhouse). The club's own mark (an animal with reeds) was looked at only to keep clear of it.
+9. **Trees:** 11 lidar "trees" of 38-50 m stand together east of the course outside the boundary (x 1320-1405, y 500-575, local); they may be a mast or the lidar on a steep slope. The ortho shows leaf-off forest there. Outside play; below the 65 m test limit. Recommendation: leave.
+10. **Wind 1-9 mph** (inland New England standing default).
+
+## Data
+
+- OSM (Overpass export through the fetch workflow, 2026-10-31): the Championship 18 fully mapped (lines, tees, greens, fairways, bunkers, hazards; no pins: centre pins). The Haven Country Club's boundary and features (north-east) are dropped; golf=path ways and bridges are cart paths; the clubhouse is a building.
+- USGS 3DEP 1 m DEM tile x27y470 and 2021 lidar tiles 19TBG274690/276690/274689/276689 (MA_CentralEastern_2021_B21, flown 21 March 2021, leaf-off), release data-cyprian_keyes.
+- MassGIS 2023 orthophoto (15 cm, leaf-off, spring 2023): four tiles in the release, mosaicked by data/cyprian_keyes/make_ortho.py into build/ for checking (not a build input).
+
 ## Playability adjustments
 
 - Hole 2 (White): measured 335 yd from the tee-box centre vs 354 on the card (-5.4%); moved the virtual tee along the middle of the real tee polygon w1256012349 (on its centre line, at least 2.5 m from its back and front) -> 342.9 yd (real 334.8 yd).
