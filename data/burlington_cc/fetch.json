@@ -23,7 +23,7 @@
    }
   },
   {
-   "name": "burlington_cc_lpc",
+   "name": "burlington_cc_lpc_N2177E4445",
    "tnm": {
     "dataset": "lpc",
     "bbox": [
@@ -32,7 +32,22 @@
      -73.1872,
      44.469
     ],
-    "only": "VT_Statewide_A23"
+    "only": "VT_Statewide_A23_N2177E4445",
+    "max": 40
+   }
+  },
+  {
+   "name": "burlington_cc_lpc_N2191E4445",
+   "tnm": {
+    "dataset": "lpc",
+    "bbox": [
+     -73.204,
+     44.4503,
+     -73.1872,
+     44.469
+    ],
+    "only": "VT_Statewide_A23_N2191E4445",
+    "max": 40
    }
   }
  ]
