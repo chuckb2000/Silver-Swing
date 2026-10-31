@@ -104,6 +104,20 @@ default and was switched when main was merged in.
 4.  **Holes more than 8 % off otherwise:** pick the best-supported option. None is left after
     the allowed virtual-tee moves.
 5.  The standing defaults (COURSE_BUILD 4.1).
+6.  **Gold pads on 3 and 17 accepted** (2026-10-31): `tee_3_gold` and `tee_17_gold` are raised
+    flat pads from the 2022 DEM, seen on NAIP. 3 plays 373 yd (card 382) and 17 plays 199 yd
+    (card 202).
+7.  **Flags accepted** (2026-10-31): 5 Gold 153 against 163 (−6.3 %), 14 Gold 404 against 426
+    (−5.3 %) and 17 Green 163 against 177 (−7.7 %). Each plays from the farthest usable spot in
+    its mapped box.
+8.  **Hole 9 line kept** (2026-10-31): OSM's line ran up the right edge of the fairway through
+    the woods. It is rebent on the fairway's main axis 250 yd out, and plays 488 yd (card 500).
+9.  **Gold is the default tee** (2026-10-31), under main's longest-set rule; Green was first
+    configured.
+10. **GolfPass card kept** (2026-10-31), unverified; 18Birdies' men's stroke index differs.
+11. **Unmapped building and pool left as rough** (2026-10-31): the building at about
+    (650, 1825) inside the boundary, and the clubhouse pool (w940802256, 153 m²). Neither is
+    near a line of play.
 
 ## New pipeline keys or theme
 
@@ -117,27 +131,7 @@ default and was switched when main was merged in.
 
 ## Open items
 
-1.  **Gold pads on 3 and 17** (`tee_3_gold`, `tee_17_gold`): raised flat pads from the 2022
-    DEM, seen on NAIP. 3 plays 373 yd (card 382) and 17 plays 199 yd (card 202).
-    Recommendation: accept.
-2.  **Flags within 8 %:**
-    -   5 Gold: 153 against 163 (−6.3 %).
-    -   14 Gold: 404 against 426 (−5.3 %).
-    -   17 Green: 163 against 177 (−7.7 %).
-
-    Each plays from the farthest usable spot in its mapped box. Recommendation: accept.
-3.  **Hole 9 line:** OSM's line ran up the right edge of the fairway through the woods. It is
-    rebent on the fairway's main axis 250 yd out, and plays 488 yd (card 500).
-    Recommendation: keep.
-4.  **Default tee:** Gold rather than the Green first configured (main's longest-set rule).
-    Recommendation: keep Gold. Green means one config line plus an exception in
-    `courses.test.ts`.
-5.  **Scorecard unverified** (GolfPass). 18Birdies' men's stroke index differs.
-    Recommendation: keep GolfPass.
-6.  **Unmapped buildings:** a large building at about (650, 1825) inside the boundary
-    plays as rough; the lidar roof filter removed the false trees on it. The outdoor pool by
-    the clubhouse (w940802256, 153 m²) plays as rough. Recommendation: leave both; neither is
-    near a line of play.
+None open. The developer accepted every recommendation on 2026-10-31 (calls 6-11 above).
 
 ## Lessons
 
