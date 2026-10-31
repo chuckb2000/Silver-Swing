@@ -47,10 +47,12 @@ pull request.
 
 ## Scorecard
 
-GolfPass scorecard page, read 2026-10-30 (third party; the club site shows no card); 18Birdies'
-Black row agrees hole for hole and gives the ratings. Stroke index from 18Birdies (Hole19 agrees;
-GolfPass's differs: open item 2). The older par-72 card (Blue 6,848) is the pre-2020 Caldwell
-layout and is not built.
+The club's printed scorecard (Golf Associates, (c) 2024), supplied by the developer 2026-10-31
+(`data/kwiniaska/raw/card/kwiniaska_scorecard.png`). Every row adds up to its printed totals. It
+matches the GolfPass and 18Birdies rows used before on par, men's stroke index, Black and Gold, and
+corrects the unbuilt White (1, 3, 11) and Gold/White (8, 18) columns. The card has no ratings:
+18Birdies' are used. The older par-72 card (Blue 6,848) is the pre-2020 Caldwell layout and is not
+built.
 
 | Hole | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | Out | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | In | Total |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
@@ -61,8 +63,9 @@ layout and is not built.
 | Gold | 335 | 185 | 337 | 101 | 510 | 168 | 430 | 456 | 118 | 2640 | 387 | 307 | 256 | 111 | 180 | 420 | 330 | 282 | 322 | 2595 | 5235 |
 | Built | 325 | 190 | 320 | 103 | 498 | 161 | 435 | 461 | 114 | 2607 | 378 | 292 | 248 | 116 | 180 | 409 | 332 | 286 | 300 | 2541 | 5148 |
 
-Men's ratings/slopes: Black 68.1/120, Gold 65.1/113, White 62.2/104. Black/Gold (5,446),
-Gold/White (4,961) and White (4,492) are in `scorecard.csv`, not built.
+Men's ratings/slopes (18Birdies): Black 68.1/120, Gold 65.1/113, White 62.2/104. Black/Gold
+(5,446), Gold/White (4,855) and White (4,493) are in `scorecard.csv`, not built. Women's handicap
+(card): 5, 15, 13, 9, 1, 11, 3, 7, 17 / 10, 2, 8, 16, 12, 6, 4, 14, 18.
 
 ## Default tee
 
@@ -75,6 +78,8 @@ the later call wins. Gold stays playable.
 -   2026-10-30 (overnight rules): build the back set and the next one forward, both playable; make
     the stop-and-ask calls and log them; full permission for an original logo and a new theme.
 -   2026-10-31: the default tee is the longest set (main).
+-   2026-10-31: the club's printed scorecard (photo supplied): the par-70 card, its yardages and
+    stroke index.
 -   Standing defaults: every penalty area red, out of bounds = the OSM boundary, range out of
     bounds.
 
@@ -83,8 +88,8 @@ the later call wins. Gold stays playable.
 Made by the course chats under the overnight "make the call"; each can be reversed. Full text in
 `data/kwiniaska/validation_report.md`.
 
-1.  **The par-70 card** (PB Dye, 2020) is built, not the par-72 Caldwell card: OSM's pars match it
-    on all 18 holes and the mapped layout measures within 5 % of it.
+1.  **The par-70 card** (PB Dye, 2020) is built, not the par-72 Caldwell card. Confirmed by the
+    club's printed card (developer, 2026-10-31).
 2.  **Default Black** rather than Gold (above).
 3.  **Black on 1, 4, 6, 9 and 14 accepted 8.4-11.9 % short** (`checks.json` yardage entries): no
     Black box in OSM, no convincing lidar pad, and the photo shows road, woods, car park or cart
@@ -112,11 +117,11 @@ Made by the course chats under the overnight "make the call"; each can be revers
 
 ## Open items
 
-1.  **Black boxes on 1, 4, 6, 9 and 14.** Recommendation: if Black matters, supply a photo of the
-    club's printed card or yardage book, or trace the boxes in QGIS over `raw/vcgi_05m.tif`;
-    otherwise keep as built.
-2.  **Stroke index:** 18Birdies and GolfPass differ. Recommendation: the printed card decides; keep
-    18Birdies until then.
+1.  **Black boxes on 1, 4, 6, 9 and 14.** The printed card confirms the Black yardages, so the
+    boxes really are missing from the data. Recommendation: keep as built, or trace the five boxes
+    in QGIS over `raw/vcgi_05m.tif` (or send Google screenshots of those tee areas with control
+    points) if Black matters.
+2.  **Stroke index:** settled by the printed card (the 18Birdies index already used).
 3.  **Munroe Brook penalty area** pending. Recommendation: approve (it follows the creek in the
     photo).
 4.  **Pond colours:** OSM says yellow, built red (standing default). Recommendation: keep red.
