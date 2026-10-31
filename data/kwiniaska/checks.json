@@ -1,0 +1,9 @@
+{
+ "note": "per-course settings for game/tests/unit/course_play.test.ts (the every-course checks); docs/COURSE_BUILD.md 8.2",
+ "yardage": {
+  "max": {"1 Black": 0.09, "4 Black": 0.125, "6 Black": 0.095, "9 Black": 0.125, "14 Black": 0.10},
+  "why": "the Black tee boxes on 1, 4, 6, 9 and 14 are not in OSM and no lidar or photo evidence places them; those holes play from the start of the OSM hole line (the Gold box or near it), 8.4-11.9 % short of the card. Accepted for play by the course chat 2026-10-31 under the developer's overnight 'make the call'; validation_report.md open items"
+ },
+ "wind_mph": [2, 10],
+ "water": {"ids": ["channel_w626918930"]}
+}

@@ -1,0 +1,30 @@
+{
+ "id": "spruce_peak",
+ "course": "The Mountain Course at Spruce Peak",
+ "place": "Stowe, Vermont",
+ "facts": [
+  {"fact": "The Mount Mansfield single chairlift at Stowe opened on 17 November 1940 and was billed as the longest and highest chairlift in the world (6,330 ft long, 2,030 ft vertical); it ran until 1986.", "source": "https://www.newenglandskihistory.com/Vermont/stowe.php"},
+  {"fact": "Spruce Peak opened for skiing in the 1949-50 season; the Spruce Peak base was redeveloped in the 2000s (new quads 2004-06, the Over Easy gondola 2006-07).", "source": "https://www.newenglandskihistory.com/Vermont/stowe.php"},
+  {"fact": "The Mountain Course at Spruce Peak (Stowe Mountain Club), a Bob Cupp design opened in 2007, lies at the base of Spruce Peak; its holes run through spruce-fir and northern hardwood forest (2023 Vermont lidar and orthophoto).", "source": "data/spruce_peak/course_config.json; https://courses.opengolfapi.org/courses/VT/the-mountain-course-at-spruce-peak"},
+  {"fact": "The chair's red and the spruce are a drawing choice for the ski-area setting (interpretation), not the club's colours.", "source": "course chat 2026-10-31"}
+ ],
+ "current": {"subject": "none: a new course (course chat 2026-10-31)", "keep": "", "weaknesses": ""},
+ "concepts": [
+  {
+   "n": 1,
+   "name": "The Single Chair",
+   "rationale": "A vintage red single chairlift chair on its haul cable, with a dark red-spruce spire behind it: the ski mountain the course sits under, and the tree the peak is named for.",
+   "references": ["https://www.newenglandskihistory.com/Vermont/stowe.php", "course chat 2026-10-31"],
+   "symbolism": "the chair is Stowe's ski history (the 1940 single chair); the spruce is Spruce Peak",
+   "interpretation": "the chair is a generic vintage single chair, not a drawing of a particular lift",
+   "palette": [
+    {"hex": "#c8402c", "name": "chair red"}, {"hex": "#8f2a1c", "name": "chair shade"}, {"hex": "#e8694a", "name": "chair light"},
+    {"hex": "#2a6a52", "name": "spruce"}, {"hex": "#163f31", "name": "spruce shade"},
+    {"hex": "#3b3e44", "name": "cable"}, {"hex": "#70747a", "name": "steel"}, {"hex": "#9a9ea4", "name": "steel light"}, {"hex": "#4a3324", "name": "trunk"}
+   ],
+   "strengths": "reads at 32 px as a ski lift and a conifer; no other course uses either",
+   "tradeoffs": "says ski resort more than golf, on purpose: the course is the resort's summer face"
+  }
+ ],
+ "recommendation": "Concept 1 (the only one drawn)."
+}

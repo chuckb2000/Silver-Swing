@@ -1,0 +1,80 @@
+{
+ "id": "cyprian_keyes",
+ "name": "Cyprian Keyes Golf Club",
+ "location": "Boylston, Worcester County, Massachusetts",
+ "state": "MA",
+ "architects": "Mark Mungeam of Cornish, Silva & Mungeam (opened 11 August 1997; Wikipedia, golflink.com)",
+ "theme": "seekonk",
+ "epsg": 32619,
+ "osm_sources": [
+  "raw/overpass.geojson"
+ ],
+ "boundary_name": "Cyprian Keyes Golf Club",
+ "dtm": {
+  "path": "raw/USGS_1M_cyprian_keyes.tif",
+  "units": "m",
+  "source": "USGS 3DEP 1 m DEM, project MA_CentralEastern_2021_B21 (2021 USGS Lidar: Central Eastern Massachusetts), tile x27y470 (published 2023-01-15), clipped to the world + 100 m by pipeline/intake.py raster; NAD83 / UTM 19N, NAVD88 metres; fetched by the GitHub Actions fetch workflow 2026-10-31 (release data-cyprian_keyes)"
+ },
+ "world": {
+  "x0": 275046,
+  "y0": 4690100,
+  "width": 1536,
+  "height": 1792,
+  "note": "OSM course boundary (way 309568600, both the Championship 18 and the 9-hole par-3 course) bbox 1,063 x 1,541 m in UTM 19N + scenery, whole 256 m chunks, centred: 1,536 m east-west (236 m each side), 1,792 m north-south (125 m each side)"
+ },
+ "tee_sets": [
+  {
+   "name": "Blue",
+   "playable": true,
+   "rating": 72.7,
+   "slope": 139,
+   "total_yd": 6543
+  },
+  {
+   "name": "White",
+   "playable": true,
+   "rating": 71.0,
+   "slope": 129,
+   "total_yd": 6098
+  }
+ ],
+ "default_tee": "Blue",
+ "scorecard_source": "The club's printed Championship card (cypriankeyes.com/images/documents/Championship-18-hole-Scorecard.jpg, linked from the club's Scorecards page; fetched by the GitHub Actions fetch workflow 2026-10-31, release data-cyprian_keyes): Blue 6,543 (72.7/139), White 6,098 (men 71.0/129), Green 5,595 (men 68.9/120), Gold 4,850 (69.5/123); every row adds up to its printed total; men's handicap row used. Blue is the club's back tee, so Blue and White are built (developer's overnight call: Blue and the next set forward). Conflict: GolfLink, GolfPass and OpenGolfAPI list a different, longer set (Black 6,871 74.4/136, Blue 6,498, White 6,134, Green 5,676, Gold 5,029, other stroke indexes); not on the club's card, not built (open item).",
+ "penalty_default": "red",
+ "driving_range_is_ob": true,
+ "trees_off_fairways_m": 2,
+ "wind_mph": {
+  "minMph": 1,
+  "maxMph": 9
+ },
+ "attribution": [
+  "Map data © OpenStreetMap contributors (ODbL)",
+  "Elevation and trees: U.S. Geological Survey 3D Elevation Program (2021 Central Eastern Massachusetts lidar)",
+  "Scorecard: Cyprian Keyes Golf Club"
+ ],
+ "red_water_osm": [
+  "w778242680",
+  "w1256010372",
+  "w1255792643",
+  "w1255799543",
+  "w1255799544",
+  "w1572284673",
+  "w1572284675"
+ ],
+ "red_water_note": "Seven waters inside the boundary mapped only as natural=water or natural=wetland (open wet meadows and a marsh, and three ponds by the clubhouse between 1, 18 and the par-3 course): red penalty areas (standing default, COURSE_BUILD 4.1); otherwise they would play as rough. The wooded swamp along Sewall Brook between 3/4/14 and 5/10 (w86095496, MassGIS 'wooded swamp deciduous') stays woods, with its trees (Pumpkin Ridge / Highland precedent); the brook through it is a red channel.",
+ "flatten_wetlands": false,
+ "laz": {
+  "paths": [
+   "raw/laz/*.laz"
+  ],
+  "classes": [
+   3,
+   4,
+   5
+  ],
+  "units": "m",
+  "source": "2021 USGS Lidar: Central Eastern Massachusetts (3DEP project MA_CentralEastern_2021_B21), tiles 19TBG274690, 276690, 274689, 276689 (published 2022-10-13), clipped to the world + 100 m with pipeline/intake.py laz (classes 3-5); NAD83(2011) / UTM 19N, NAVD88 (Geoid18) metres; flown spring 2021, leaf-off; fetched by the GitHub Actions fetch workflow 2026-10-31 (release data-cyprian_keyes)",
+  "label": "2021 USGS lidar, leaf-off",
+  "leaf_off": true
+ }
+}

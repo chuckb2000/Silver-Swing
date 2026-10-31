@@ -1,0 +1,38 @@
+{
+ "release": "data-burlington_cc",
+ "note": "Build inputs fetched by the GitHub Actions workflow (fetch.json). In git: raw/overpass.geojson, raw/osm.geojson and raw/vt_a23_dem_1m.tif (7 MB clip). Here: the Overpass export, the 1 m DEM tile and the two lidar tiles, each clipped to the world (class 1) by pipeline/intake.py laz.",
+ "files": [
+  {
+   "asset": "burlington_cc_overpass.geojson",
+   "sha256": "cc2e83d062704d97c2fd6fbe600a6ac3a606a97fdb9f3d3e7f510dadf4c4fba7",
+   "run": "python3 pipeline/intake.py osm burlington_cc {file}",
+   "outputs": {
+    "raw/overpass.geojson": "a53c15a46e485a3ce197fd9ef99d6e87f1a41e8e811a5f867b5bb269539c8a0e"
+   }
+  },
+  {
+   "asset": "USGS_1M_18_x64y493_VT_Statewide_A23.tif",
+   "sha256": "32a8b75a34ab931131353ba2f62819b219becad2107ff3e7a78318522abb2c05",
+   "run": "python3 pipeline/intake.py raster burlington_cc {file} --out raw/vt_a23_dem_1m.tif",
+   "outputs": {
+    "raw/vt_a23_dem_1m.tif": "a0225853e7f0857e2db7bb2c9af6eb37c30bdbc596d8ffe8d4e3c62265da0300"
+   }
+  },
+  {
+   "asset": "USGS_LPC_VT_Statewide_A23_N2177E4445.laz",
+   "sha256": "101b8f2b5a713174ec3df723b46bf14afbb2f82bcab027e2dba183b8ea9cf79b",
+   "run": "python3 pipeline/intake.py laz burlington_cc {file} --classes 1 --out raw/laz/burlington_cc_n2177e4445.laz",
+   "outputs": {
+    "raw/laz/burlington_cc_n2177e4445.laz": "e9501062c4a0b18be9d312c6d7320cce76f9b2657f081158439223c7d74d98b8"
+   }
+  },
+  {
+   "asset": "USGS_LPC_VT_Statewide_A23_N2191E4445.laz",
+   "sha256": "9f586d25c47bf7d468a5cac48333de9fde2548056f79552bd471738134b7e495",
+   "run": "python3 pipeline/intake.py laz burlington_cc {file} --classes 1 --out raw/laz/burlington_cc_n2191e4445.laz",
+   "outputs": {
+    "raw/laz/burlington_cc_n2191e4445.laz": "6a930b3cac27eedabbb8d89e29305d4c6b939ca556c1dfdbb1a28f909bb39a9d"
+   }
+  }
+ ]
+}
