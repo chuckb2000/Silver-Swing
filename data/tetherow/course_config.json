@@ -97,7 +97,7 @@
       "total_yd": 3759
     }
   ],
-  "default_tee": "Black",
+  "default_tee": "Kidd",
   "scorecard_source": "Stymie (stymie.golf, Tetherow Golf Club, read 2026-10-31): per-hole yardages for every set, par, men's handicap row, ratings. Its Kidd row (7,298) matches 18Birdies' Kidd per-hole card and its ratings (75.2/150, Black 73.7/145) match 18Birdies'; 18Birdies totals Black 6,955. The handicap row matches 18Birdies and OpenGolfAPI. GolfPass's card is older (Kidd 7,283 with 17 at 167; Black 6,933; a different handicap row; ratings 74.9/141) and is not used. No club card online was found. Unverified third-party card. Sage_Red and Red ratings are the women's (the men's rows on Stymie are the Junior/Red 65.2 ones, unlabeled).",
   "penalty_default": "red",
   "driving_range_is_ob": true,
