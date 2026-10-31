@@ -35,11 +35,18 @@ after an edit runs only what the edit reaches.
    --break-system-packages`, `cd game && npm install`.
 2. **Scouting.** If `docs/scouting/<id>/` exists, read it: the facts, the scorecard
    and the download list are done. Otherwise work them out (4.3, 5.3).
-3. **Intake message** (4.2): the standing defaults (4.1) you'll use, the data
-   request (5), and only the questions that are really open. Start on what doesn't
-   wait for the answer: `course_config.json` (3.3; copy a finished course's),
+3. **Downloads through GitHub Actions, first** (5.0), before the intake message:
+   `python3 pipeline/remote_fetch.py new <id> --box S W N E --osm --dem --lidar
+   --list`, commit `data/<id>/fetch.json`, push your branch, `python3
+   pipeline/remote_fetch.py wait <id>`. A runner puts the Overpass export and the
+   USGS 3DEP tiles into the release `data-<id>`; you read the OSM coverage yourself.
+   Then the **intake message** (4.2): the standing defaults (4.1) you'll use, what
+   the workflow fetched, the data request for only what it can't get (5), and only
+   the questions that are really open. Start on what doesn't wait for the answer: `course_config.json` (3.3; copy a finished course's),
    `scorecard.csv` (5.3), the logo idea (12).
-4. **Files arrive** (5.6). Put each into `raw/` with a `release.json` entry, using
+4. **Files arrive** (5.6): `python3 pipeline/remote_fetch.py pull <id>` for the
+   workflow's, the release for the developer's. Put each into `raw/` with a
+   `release.json` entry (the fetch log has every file's sha256), using
    `pipeline/intake.py` instead of writing scripts: `intake.py osm` (Overpass
    exports), `intake.py ortho` (photo exports placed by their request boxes),
    `intake.py laz` (lidar tiles or a NOAA zip, clipped to the world), `intake.py
@@ -135,8 +142,9 @@ after the merge, so two chats never overwrite each other's builds.
 ### 0.2 How to talk to the developer
 
 - Succinct, factual, plain words. No enthusiasm or filler.
-- The developer makes the calls on open items, plays the game, and downloads
-  anything the sandbox can't reach.
+- The developer makes the calls on open items and plays the game. Downloads go
+  through the fetch workflow first (5.0); the developer downloads only what it
+  can't get (a site you sign in to, an order sent by email, photos, a printed card).
 - Ask in batches. Each question gives the facts, the options and a recommendation.
 - Never claim a check passed that you didn't run.
 
@@ -169,8 +177,10 @@ after the merge, so two chats never overwrite each other's builds.
 6. **Non-commercial** project. Attribution for every data source goes into
    `course.json` and the credits.
 7. **Respect refused fetches.** If WebFetch or a download is refused, don't
-   retry through curl, Python, mirrors or caches. Tell the developer and ask for
-   the file or another source.
+   retry through curl, Python, mirrors, caches or the fetch workflow. Tell the
+   developer and ask for the file or another source. The workflow (5.0) is for
+   public open data the sandbox's network simply can't reach (Overpass, USGS,
+   state portals), never for a site that refused or forbids automated downloads.
 8. Don't put the developer's email or personal details in any file, URL or
    request.
 
@@ -422,7 +432,8 @@ intake message (4.2), and change one only when the developer says so.
 Send the developer one message with:
 
 1. the course as you found it: name, town, OSM coverage if you could check it;
-2. the **data request** (section 5): exact files and download steps;
+2. what the fetch workflow (5.0) brought, and the **data request** (section 5)
+   for only what it couldn't: exact files and download steps;
 3. the defaults from 4.1 you will use, as a short list they can correct;
 4. only the questions that are genuinely open (a scorecard you can't find, a
    water hazard you can't place, two sources that disagree), each with a
@@ -447,16 +458,63 @@ Then start on whatever doesn't wait for the answer.
 
 ## 5. Phase 2 — data acquisition
 
-Write the developer one **data request**: exact files, extent (lat/lon box,
-WGS84), and step-by-step download instructions they can follow without GIS
-experience. Put the instructions in `data/<id>/DATA_REQUEST.md` too.
+### 5.0 GitHub Actions first (developer, 2026-10-29)
+
+The sandbox can't reach Overpass, USGS or most data sites, and its proxy blocks
+the GitHub Actions API, but a push starts a workflow and a release can be read.
+`.github/workflows/fetch-data.yml` runs `pipeline/remote_fetch.py` on a GitHub
+runner (open internet) whenever a branch other than `main` changes a
+`data/<id>/fetch.json`; it downloads each item and attaches it to the release
+`data-<id>` (made if missing), with `fetch-log-<id>.json` saying what came. **Use
+it before asking the developer for anything it can fetch.**
+
+```
+python3 pipeline/remote_fetch.py new <id> --box S W N E --osm --dem --lidar --list
+git add data/<id>/fetch.json && git commit -m "<id>: fetch request" && git push
+python3 pipeline/remote_fetch.py wait <id>        # prints the log; exit 0 = all came
+python3 pipeline/remote_fetch.py pull <id>        # -> data/<id>/incoming/ (not in git)
+```
+
+- **Box:** latitude/longitude, south west north east: the course boundary + 200 m
+  (4.3). Without a boundary yet, a box round the course from its address is fine
+  for the first Overpass export; tighten it afterwards.
+- **What it fetches:** `osm_box` (the standard Overpass export, 5.1, converted as
+  Overpass Turbo converts it), `overpass` (any query), `url` (any direct public
+  link: a state lidar tile, a NAIP tile, a DOGAMI file), `tnm` (USGS 3DEP 1 m DEM,
+  1/3" DEM, lidar LAZ). The request format is at the top of
+  `pipeline/remote_fetch.py`.
+- **3DEP in two pushes:** first with `--list` (each product's title, size and date
+  in the log, nothing downloaded); then pick one project (the newest that covers
+  the course; DEM and lidar from the same project), set `"only": "<project>"`, take
+  out `"list"`, push again. Tiles from neighbouring projects whose footprints touch
+  the box are listed too: don't download them all.
+- **Reruns are cheap:** an item already in the release is skipped unless it has
+  `"force": true`, so push the request again after any change.
+- **Speed:** Overpass takes a minute; a 300 MB DEM tile about five; USGS lidar
+  comes at about 15 MB a minute. `wait --minutes 120` for big lidar.
+- **Not for it:** anything behind a sign-in, a NOAA Data Access Viewer order
+  (emailed), Google or Bing screenshots, photos of a printed scorecard, a page
+  that forbids automated download. Those go to the developer (below).
+- **When it fails:** the log says which item and why (the sandbox can't read the
+  job's own output). An Overpass "no elements" is a wrong box (south, west, north,
+  east). If the job never writes a log, tell the developer: the run is under the
+  repository's Actions tab.
+
+Then write the developer one **data request** for only what the workflow can't get:
+exact files, extent (lat/lon box, WGS84), and step-by-step download instructions
+they can follow without GIS experience. Put the instructions in
+`data/<id>/DATA_REQUEST.md` too.
 
 ### 5.1 Layout: OpenStreetMap
 
-Option A (the default; easiest for the developer): Overpass Turbo
-(overpass-turbo.eu), paste this, run, Export → GeoJSON, upload it to the release;
-`python3 pipeline/intake.py osm <id> <export.geojson>` (a `release.json` "run" line)
-writes `raw/overpass.geojson` with only the features near the world:
+The default: `osm_box` in `data/<id>/fetch.json` (5.0), which runs the standard
+export in `pipeline/remote_fetch.py` (`OSM_QUERY`: the query below plus scrub,
+heath, sand, cliffs, farmland, walls and fences). Then `python3 pipeline/intake.py
+osm <id> <export.geojson>` (a `release.json` "run" line) writes
+`raw/overpass.geojson` with only the features near the world.
+
+Fallback when the workflow can't run (the developer, by hand): Overpass Turbo
+(overpass-turbo.eu), paste this, run, Export → GeoJSON, upload it to the release:
 
 ```
 [out:json][timeout:120];
@@ -486,8 +544,9 @@ Avoid it: GDAL's OSM driver turns closed tee ways into lines.
 
 ### 5.2 Elevation
 
-Bare earth (required): USGS 3DEP 1 m DEM tiles from the USGS National Map
-downloader, or a better state product (Maryland: the state's lidar/elevation
+Bare earth (required): USGS 3DEP 1 m DEM tiles, through the fetch workflow
+(`tnm` "dem1m", 5.0), or a better state product (a `url` item when it has direct
+links; the developer when it doesn't) (Maryland: the state's lidar/elevation
 portal; Oregon: DOGAMI). Record product name, date, resolution, CRS and
 vertical units.
 
@@ -495,7 +554,7 @@ Canopy (strongly preferred, it places the trees): one of
 - a canopy height model raster (some states publish one; DOGAMI does);
 - a first-return / highest-hit DSM raster (then CHM = DSM − DTM);
 - the lidar point cloud (LAZ) for the extent, from the same 3DEP project
-  (then build a highest-return grid with PDAL in the sandbox).
+  (`tnm` "lpc", 5.0; then `intake.py laz` clips it).
 
 Check what exists for that location first (search the web; don't guess
 product names), then name the exact product in the request.
@@ -538,10 +597,11 @@ export's course polygons and size; the same file uploaded twice; the scorecard
 
 ### 5.6 Large files: the release and `make fetch`
 
-Files over about 50 MB (lidar zips, state-wide rasters) don't go in git. The
-developer uploads them to a GitHub release of the repository (the sandbox
-can't upload release assets), and `data/<id>/release.json` says what each one
-is and where it goes, so anyone can rebuild the course with one command:
+Files over about 50 MB (lidar zips, state-wide rasters) don't go in git. They go
+in a GitHub release of the repository: the fetch workflow (5.0) puts its downloads
+in `data-<id>`, and the developer uploads the rest (the sandbox itself can't upload
+release assets). `data/<id>/release.json` says what each one is and where it goes,
+so anyone can rebuild the course with one command:
 
 ```jsonc
 {

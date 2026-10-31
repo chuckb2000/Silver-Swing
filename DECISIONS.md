@@ -1480,6 +1480,33 @@ never came and the tap did nothing. Now (`applyUpdate` in `src/save/offline.ts`)
 waiting, if any, is asked to take over and the page reloads when it has or after 1.5 s; with none
 waiting it reloads at once. The page loads network-first, so the reload is the new version.
 
+## Downloads through GitHub Actions first (developer, 2026-10-29/30)
+
+"You didn't tell me about GitHub Action! I've been downloading a bunch of files you can
+download!" Then: "update any code in the repo to reflect the fact that Github action is to be
+used as the first possible resource", with new starting instructions for course chats.
+
+The sandbox's network allows only package registries and GitHub, and its proxy refuses the
+GitHub Actions API (no starting a workflow, no reading a run). A push and a release are both
+allowed, so: `.github/workflows/fetch-data.yml` runs on any push (not to `main`) that changes
+`data/<id>/fetch.json`, and `pipeline/remote_fetch.py run` downloads each item on the runner
+and attaches it to the release `data-<id>`, with `fetch-log-<id>.json` (each item ok or the
+error, each file's size and sha256), which is all the sandbox can see of the run. Items:
+`osm_box` (the standard export, `OSM_QUERY`, converted with osmtogeojson as Overpass Turbo
+does), `overpass`, `url`, and `tnm` (USGS 3DEP 1 m DEM, 1/3" DEM, lidar LAZ; `list` first,
+then `only` one project, since neighbouring projects' tiles touch any box). Items already in
+the release are skipped, so pushing again fetches only what is new. In the sandbox: `new` writes
+the request, `wait` prints the log, `pull` downloads into `data/<id>/incoming/` (ignored by git).
+
+Tested 2026-10-29/30 (release `fetch-test`): Overpass for Oswego Lake (1,168 features; s01
+reads it), a 3DEP listing, two 1 m DEM tiles (~300 MB) and LAZ tiles (USGS lidar is slow, about
+15 MB a minute, and one host timed out: reported in the log, the rest kept going).
+
+docs/COURSE_BUILD.md 5.0 is the procedure; the developer is asked only for what the workflow
+can't get (sign-ins, emailed orders, screenshots, card photos). Rule 1.7 now says the workflow
+is never a way round a refused or forbidden download: it is for public data the sandbox's
+network can't reach. docs/COURSE_CHAT_START.md is the message that starts a course chat.
+
 ## The default tees are the longest set (developer, 2026-10-31)
 
 Every course's default tees (`course.json` `defaultTee`, from `default_tee` in course_config)
