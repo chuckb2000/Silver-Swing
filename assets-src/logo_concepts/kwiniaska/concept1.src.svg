@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <title>Kwiniaska - Concept 1: The Ridge Holstein</title>
+  <defs>
+    <clipPath id="head"><path d="M9 6.5 Q16 3.6 23 6.5 L24 14 Q24.4 19 22.6 21.5 L9.4 21.5 Q7.6 19 8 14 Z"/></clipPath>
+    <clipPath id="muz"><ellipse cx="16" cy="24.2" rx="7.4" ry="5.2"/></clipPath>
+  </defs>
+  <!-- ears, out to the sides; pink inside -->
+  <ellipse cx="6" cy="11.6" rx="4.2" ry="2.5" fill="#1f1c1e" transform="rotate(-14 6 11.6)"/>
+  <ellipse cx="6.4" cy="11.9" rx="2.5" ry="1.2" fill="#d08680" transform="rotate(-14 6.4 11.9)"/>
+  <ellipse cx="26" cy="11.6" rx="4.2" ry="2.5" fill="#f4f2ec" transform="rotate(14 26 11.6)"/>
+  <ellipse cx="25.6" cy="11.9" rx="2.5" ry="1.2" fill="#d08680" transform="rotate(14 25.6 11.9)"/>
+  <!-- a yellow ear tag -->
+  <rect x="27" y="13" width="2" height="2" fill="#f2c230"/>
+  <!-- the head: white, shaded lower right, black patches -->
+  <path d="M9 6.5 Q16 3.6 23 6.5 L24 14 Q24.4 19 22.6 21.5 L9.4 21.5 Q7.6 19 8 14 Z" fill="#f4f2ec"/>
+  <g clip-path="url(#head)">
+    <path d="M20 4 L26 4 L26 22 L18.5 22 Q22 15 20 4 Z" fill="#d6d2c6"/>
+    <path d="M7 4 L15.6 4 Q16.4 8 14.8 10.4 Q13.6 13.4 15 17.4 Q12 18.6 7 18 Z" fill="#1f1c1e"/>
+    <path d="M19.4 4 L26 4 L26 9.6 Q22.6 10.8 20.6 8.6 Q19.2 6.8 19.4 4 Z" fill="#1f1c1e"/>
+  </g>
+  <!-- eyes with a glint; the left one ringed so it reads on the black patch -->
+  <rect x="10" y="12" width="4" height="4" fill="#5b5458"/>
+  <rect x="11" y="13" width="2" height="3" fill="#0b0a0b"/>
+  <rect x="11" y="13" width="1" height="1" fill="#ffffff"/>
+  <rect x="19" y="13" width="2" height="3" fill="#0b0a0b"/>
+  <rect x="19" y="13" width="1" height="1" fill="#ffffff"/>
+  <!-- the pink muzzle, shaded below, two nostrils -->
+  <ellipse cx="16" cy="24.2" rx="7.4" ry="5.2" fill="#eab1a6"/>
+  <ellipse cx="17.2" cy="26.4" rx="7.4" ry="4.4" fill="#cf8a80" clip-path="url(#muz)"/>
+  <ellipse cx="16" cy="23.6" rx="6.2" ry="3.6" fill="#eab1a6" clip-path="url(#muz)"/>
+  <ellipse cx="12.8" cy="24.6" rx="1.4" ry="1.1" fill="#5c2f2c"/>
+  <ellipse cx="19.2" cy="24.6" rx="1.4" ry="1.1" fill="#5c2f2c"/>
+  <rect x="11" y="21.2" width="3" height="1" fill="#f6d2ca"/>
+</svg>

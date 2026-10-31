@@ -1,0 +1,53 @@
+{
+  "name": "Aberdeen (northwest Indiana parkland, high summer)",
+  "note": "Course theme palette (<= 32 colours), same keys as pnw.json plus F0-F2. The Course at Aberdeen, Valparaiso IN (Hurdzan, 1997): Kentucky bluegrass and bent turf in high summer, a touch bluer than the New England themes; lush blue-green bluegrass rough (F0-F2); bright tan-white bunker sand; dark, tea-tinted wetland ponds (W0-W2). Trees in assets-src/trees_aberdeen.py: bur oak, sugar maple, silver maple / cottonwood at the wetland edges, blue spruce and white pine by the houses. Course chat 2026-10-31, from the setting (no club imagery). Shadows are a 35% black overlay on top of these.",
+  "colors": {
+    "G0": "#183629",
+    "G1": "#214b34",
+    "G2": "#2a6239",
+    "G3": "#35773e",
+    "G4": "#418b45",
+    "G5": "#4e9e4c",
+    "G6": "#5caf55",
+    "G7": "#6cbf5f",
+    "G8": "#7ecc6c",
+    "G9": "#a3dc8b",
+    "L0": "#5a7a44",
+    "L1": "#6b8d4b",
+    "L2": "#7f9f57",
+    "S0": "#cdbf9c",
+    "S1": "#ede4c8",
+    "S2": "#f9f5e6",
+    "W0": "#22413f",
+    "W1": "#2e5853",
+    "W2": "#6a8f84",
+    "K0": "#26272d",
+    "K1": "#53545c",
+    "K2": "#7a7b83",
+    "K3": "#b3aa97",
+    "K4": "#d9d1bf",
+    "B0": "#45311f",
+    "B1": "#6b4a31",
+    "B2": "#8a5b40",
+    "R0": "#4b586a",
+    "WH": "#f6f6f2",
+    "F0": "#3f6440",
+    "F1": "#4c7746",
+    "F2": "#5c8a4f"
+  },
+  "trees": {
+    "conifer": "trees_aberdeen:conifer",
+    "deciduous": "trees_aberdeen:deciduous"
+  },
+  "lut": {
+    "rough": [
+      "F0",
+      "F1",
+      "F2",
+      "F2"
+    ]
+  },
+  "minimap": {
+    "rough": "#4c7746"
+  }
+}

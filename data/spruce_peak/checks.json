@@ -1,0 +1,84 @@
+{
+ "note": "per-course settings for game/tests/unit/course_play.test.ts (the every-course checks); docs/COURSE_BUILD.md 8.2",
+ "wind_mph": [
+  1,
+  9
+ ],
+ "water": {
+  "penalty": "red",
+  "count": 1
+ },
+ "tees": {
+  "sets": [
+   "Black",
+   "Blue"
+  ]
+ },
+ "tee_shot_clear": {
+  "sets": [
+   "Black",
+   "Blue"
+  ]
+ },
+ "yardage": {
+  "range_yd": {
+   "8 Black": [
+    513,
+    515
+   ],
+   "8 Blue": [
+    513,
+    515
+   ]
+  },
+  "why": "developer 2026-10-31: accepted as marked. 8 Black is the developer's mark from the tracing desk (data/spruce_peak/desk/hole08.json, on the OSM back box w1058393549; 8 x 6 m pad on the marked centroid, tee_pos=mark): 514 yd against 606 (-15.2 %), held to 513-515. 8 Blue plays from the same tee (developer 2026-10-31): 514 against 559 (-8.0 %), held to 513-515. 4 Black (363 vs 381, -4.8 %) and 13 Black (243 vs 252, -3.6 %), also marked, are inside the 8 % line and need no allowance"
+ },
+ "points": [
+  {
+   "x": 590,
+   "y": 450,
+   "surface": "water",
+   "ob": false,
+   "why": "the pond in the middle of the course: a red penalty area, not out of bounds"
+  },
+  {
+   "x": 470,
+   "y": 1330,
+   "not": "ob",
+   "why": "the 13th (tee shot over the woods to the green), outside OSM's boundary: joined to it"
+  },
+  {
+   "x": 245,
+   "y": 757,
+   "not": "ob",
+   "why": "the woods between the 10th tee and its fairway: in bounds (boundary grown into the woods)"
+  },
+  {
+   "x": 1057.4,
+   "y": 637.3,
+   "surface": "tee",
+   "inside": true,
+   "why": "the developer's Black tee on 4 (tracing desk, 2026-10-31): a tee box under the mark, in bounds"
+  },
+  {
+   "x": 786.0,
+   "y": 173.9,
+   "surface": "tee",
+   "inside": true,
+   "why": "the developer's Black tee on 8 (tracing desk, 2026-10-31): a tee box under the mark, in bounds"
+  },
+  {
+   "x": 352.8,
+   "y": 1447.4,
+   "surface": "tee",
+   "inside": true,
+   "why": "the developer's Black tee on 13 (tracing desk, 2026-10-31): a tee box under the mark, in bounds"
+  }
+ ],
+ "default_aim": {
+  "skip": [
+   16
+  ],
+  "why": "16 drops 31 m from tee to green (Blue 160 yd): the auto club (a 6-iron, no allowance for the drop; fix/auto-club-downhill is not on main) flies a perfect shot 50 m past the pin into the woods beyond the green. Request to the design chat; not a data problem"
+ }
+}

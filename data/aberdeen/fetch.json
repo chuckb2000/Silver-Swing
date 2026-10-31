@@ -1,0 +1,48 @@
+{
+ "items": [
+  {
+   "name": "aberdeen_overpass.geojson",
+   "osm_box": [
+    41.41,
+    -87.15,
+    41.47,
+    -87.07
+   ]
+  },
+  {
+   "name": "aberdeen_dem1m",
+   "tnm": {
+    "dataset": "dem1m",
+    "bbox": [
+     -87.1263,
+     41.4345,
+     -87.1017,
+     41.4507
+    ],
+    "only": "IN_Indiana_Statewide_LiDAR_2017_B17"
+   }
+  },
+  {
+   "name": "aberdeen_lpc",
+   "tnm": {
+    "dataset": "lpc",
+    "bbox": [
+     -87.1263,
+     41.4345,
+     -87.1017,
+     41.4507
+    ],
+    "only": "IN_Indiana_Statewide_LiDAR_2017_B17"
+   }
+  },
+  {
+   "name": "aberdeen_naip.jpg",
+   "url": "https://imagery.nationalmap.gov/arcgis/rest/services/USGSNAIPImagery/ImageServer/exportImage?bbox=489351,4586900,491601,4588892&bboxSR=32616&imageSR=32616&size=3750,3320&format=jpg&f=image"
+  },
+  {
+   "name": "aberdeen_club_home.html",
+   "url": "https://www.golfataberdeen.com/"
+  }
+ ],
+ "note": "second push: retry lidar tile in2018_29452250 (HTTP 429 on the first run)"
+}

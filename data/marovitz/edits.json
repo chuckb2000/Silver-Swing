@@ -1,0 +1,27 @@
+{
+  "add": [
+    {
+      "from": "proposed/clock_tower.geojson",
+      "ids": [
+        "w53582240_building"
+      ],
+      "tags": {},
+      "reason": "The Waveland Clock Tower (OSM w53582240, building=public) is tagged golf=clubhouse, which s01 reads as an unknown golf feature, so it was not drawn as a building. The copy (id w53582240_building) is the same OSM outline and tags without golf=clubhouse, read as a building (an immovable obstruction inside the boundary). Course chat, 2026-10-31."
+    }
+  ],
+  "tags": [
+    {
+      "osm": "w114835188",
+      "set": {
+        "penalty": "red"
+      },
+      "reason": "Marovitz Golf Pond by the 6th green (golf=water_hazard, which exports yellow): red, the standing default (COURSE_BUILD 4.1: every penalty area red). Course chat, 2026-10-31."
+    }
+  ],
+  "drop": [
+    {
+      "osm": "w53582240",
+      "reason": "replaced by the building copy in proposed/clock_tower.geojson (see add)."
+    }
+  ]
+}
