@@ -10,30 +10,36 @@
    ]
   },
   {
-   "name": "spruce_peak_dem1m",
-   "tnm": {
-    "dataset": "dem1m",
-    "bbox": [
-     -72.808,
-     44.508,
-     -72.75,
-     44.548
-    ],
-    "list": true
-   }
+   "name": "spruce_peak_vcgi_dem_1m.tif",
+   "url": "https://maps.vcgi.vermont.gov/arcgis/rest/services/EGC_services/IMG_VCGI_LIDARDEM_SP_NOCACHE_v1/ImageServer/exportImage?bbox=676300,4932150,677900,4934300&bboxSR=32618&imageSR=32618&size=1600,2150&format=tiff&pixelType=F32&interpolation=RSP_BilinearInterpolation&f=image"
   },
   {
-   "name": "spruce_peak_lpc",
-   "tnm": {
-    "dataset": "lpc",
-    "bbox": [
-     -72.808,
-     44.508,
-     -72.75,
-     44.548
-    ],
-    "list": true
-   }
+   "name": "spruce_peak_vcgi_dsm_1m.tif",
+   "url": "https://maps.vcgi.vermont.gov/arcgis/rest/services/EGC_services/IMG_VCGI_LIDARDSM_SP_NOCACHE_V1/ImageServer/exportImage?bbox=676300,4932150,677900,4934300&bboxSR=32618&imageSR=32618&size=1600,2150&format=tiff&pixelType=F32&interpolation=RSP_BilinearInterpolation&f=image"
+  },
+  {
+   "name": "spruce_peak_vcgi_clr_0_676300_4932150_677100_4933225.jpg",
+   "url": "https://maps.vcgi.vermont.gov/arcgis/rest/services/EGC_services/IMG_VCGI_CLR2021_2025_SP_NOCACHE/ImageServer/exportImage?bbox=676300,4932150,677100,4933225&bboxSR=32618&imageSR=32618&size=2667,3583&format=jpg&bandIds=0,1,2&interpolation=RSP_BilinearInterpolation&f=image"
+  },
+  {
+   "name": "spruce_peak_vcgi_clr_1_677100_4932150_677900_4933225.jpg",
+   "url": "https://maps.vcgi.vermont.gov/arcgis/rest/services/EGC_services/IMG_VCGI_CLR2021_2025_SP_NOCACHE/ImageServer/exportImage?bbox=677100,4932150,677900,4933225&bboxSR=32618&imageSR=32618&size=2667,3583&format=jpg&bandIds=0,1,2&interpolation=RSP_BilinearInterpolation&f=image"
+  },
+  {
+   "name": "spruce_peak_vcgi_clr_2_676300_4933225_677100_4934300.jpg",
+   "url": "https://maps.vcgi.vermont.gov/arcgis/rest/services/EGC_services/IMG_VCGI_CLR2021_2025_SP_NOCACHE/ImageServer/exportImage?bbox=676300,4933225,677100,4934300&bboxSR=32618&imageSR=32618&size=2667,3583&format=jpg&bandIds=0,1,2&interpolation=RSP_BilinearInterpolation&f=image"
+  },
+  {
+   "name": "spruce_peak_vcgi_clr_3_677100_4933225_677900_4934300.jpg",
+   "url": "https://maps.vcgi.vermont.gov/arcgis/rest/services/EGC_services/IMG_VCGI_CLR2021_2025_SP_NOCACHE/ImageServer/exportImage?bbox=677100,4933225,677900,4934300&bboxSR=32618&imageSR=32618&size=2667,3583&format=jpg&bandIds=0,1,2&interpolation=RSP_BilinearInterpolation&f=image"
+  },
+  {
+   "name": "spruce_peak_vcgi_cir_676300_4932150_677900_4934300.tif",
+   "url": "https://maps.vcgi.vermont.gov/arcgis/rest/services/EGC_services/IMG_VCGI_CIR2021_2025_SP_NOCACHE/ImageServer/exportImage?bbox=676300,4932150,677900,4934300&bboxSR=32618&imageSR=32618&size=2667,3583&format=tiff&interpolation=RSP_BilinearInterpolation&f=image"
+  },
+  {
+   "name": "spruce_peak_naip_676300_4932150_677900_4934300.jpg",
+   "url": "https://imagery.nationalmap.gov/arcgis/rest/services/USGSNAIPImagery/ImageServer/exportImage?bbox=676300,4932150,677900,4934300&bboxSR=32618&imageSR=32618&size=2667,3583&format=jpg&f=image"
   }
  ]
 }
