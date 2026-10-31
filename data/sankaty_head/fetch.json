@@ -10,30 +10,56 @@
    ]
   },
   {
-   "name": "sankaty_head_dem1m",
-   "tnm": {
-    "dataset": "dem1m",
-    "bbox": [
-     -69.997,
-     41.27,
-     -69.955,
-     41.302
-    ],
-    "list": true
-   }
+   "name": "sandy2013_19TDF170690.laz",
+   "url": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/New_England_CMGP_SANDY_LiDAR/MA_NE_CMGP_Sandy_Z19_A1_2015/LAZ/USGS_LPC_New_England_CMGP_SANDY_LiDAR_19TDF170690.laz"
   },
   {
-   "name": "sankaty_head_lpc",
-   "tnm": {
-    "dataset": "lpc",
-    "bbox": [
-     -69.997,
-     41.27,
-     -69.955,
-     41.302
-    ],
-    "list": true
-   }
+   "name": "sandy2013_19TDF170705.laz",
+   "url": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/New_England_CMGP_SANDY_LiDAR/MA_NE_CMGP_Sandy_Z19_A1_2015/LAZ/USGS_LPC_New_England_CMGP_SANDY_LiDAR_19TDF170705.laz"
+  },
+  {
+   "name": "sandy2013_19TDF185690.laz",
+   "url": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/New_England_CMGP_SANDY_LiDAR/MA_NE_CMGP_Sandy_Z19_A1_2015/LAZ/USGS_LPC_New_England_CMGP_SANDY_LiDAR_19TDF185690.laz"
+  },
+  {
+   "name": "sandy2013_19TDF185705.laz",
+   "url": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/New_England_CMGP_SANDY_LiDAR/MA_NE_CMGP_Sandy_Z19_A1_2015/LAZ/USGS_LPC_New_England_CMGP_SANDY_LiDAR_19TDF185705.laz"
+  },
+  {
+   "name": "USGS_1m_x41y457_MA_NE_CMGP_Sandy_Z19_2013.tif",
+   "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/1m/Projects/MA_NE_CMGP_Sandy_Z19_2013/TIFF/USGS_1m_x41y457_MA_NE_CMGP_Sandy_Z19_2013.tif"
+  },
+  {
+   "name": "USGS_1m_x41y458_MA_NE_CMGP_Sandy_Z19_2013.tif",
+   "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/1m/Projects/MA_NE_CMGP_Sandy_Z19_2013/TIFF/USGS_1m_x41y458_MA_NE_CMGP_Sandy_Z19_2013.tif"
+  },
+  {
+   "name": "naip_418241_4568980_418853_4570104.jpg",
+   "url": "https://imagery.nationalmap.gov/arcgis/rest/services/USGSNAIPImagery/ImageServer/exportImage?bbox=418241,4568980,418853,4570104&bboxSR=32619&imageSR=32619&size=2040,3747&format=jpg&f=image"
+  },
+  {
+   "name": "naip_418241_4570104_418853_4571228.jpg",
+   "url": "https://imagery.nationalmap.gov/arcgis/rest/services/USGSNAIPImagery/ImageServer/exportImage?bbox=418241,4570104,418853,4571228&bboxSR=32619&imageSR=32619&size=2040,3747&format=jpg&f=image"
+  },
+  {
+   "name": "naip_418853_4568980_419465_4570104.jpg",
+   "url": "https://imagery.nationalmap.gov/arcgis/rest/services/USGSNAIPImagery/ImageServer/exportImage?bbox=418853,4568980,419465,4570104&bboxSR=32619&imageSR=32619&size=2040,3747&format=jpg&f=image"
+  },
+  {
+   "name": "naip_418853_4570104_419465_4571228.jpg",
+   "url": "https://imagery.nationalmap.gov/arcgis/rest/services/USGSNAIPImagery/ImageServer/exportImage?bbox=418853,4570104,419465,4571228&bboxSR=32619&imageSR=32619&size=2040,3747&format=jpg&f=image"
+  },
+  {
+   "name": "noaa9551_list1.xml",
+   "url": "https://noaa-nos-coastal-lidar-pds.s3.amazonaws.com/?prefix=laz/geoid18/9551/&max-keys=1000"
+  },
+  {
+   "name": "noaa9552_list1.xml",
+   "url": "https://noaa-nos-coastal-lidar-pds.s3.amazonaws.com/?prefix=dem/MA_Nantucket_DEM_2018_9552/&max-keys=1000"
+  },
+  {
+   "name": "naip_info.json",
+   "url": "https://imagery.nationalmap.gov/arcgis/rest/services/USGSNAIPImagery/ImageServer?f=pjson"
   }
  ]
 }
