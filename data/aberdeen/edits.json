@@ -1,0 +1,13 @@
+{
+ "add": [
+  {
+   "from": "proposed/clubhouse.geojson",
+   "ids": ["w1032598389_building"],
+   "tags": {},
+   "reason": "the clubhouse is mapped golf=clubhouse + building=yes, which s01 reads as a golf feature, not a building; copied as a building (audit: 'add building=yes'), original dropped (as at Wannamoisett)"
+  }
+ ],
+ "drop": [
+  {"osm": "w1032598389", "reason": "replaced by its copy as a building (proposed/clubhouse.geojson)"}
+ ]
+}

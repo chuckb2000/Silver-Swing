@@ -1,0 +1,46 @@
+{
+  "id": "aberdeen",
+  "name": "The Course at Aberdeen",
+  "location": "Valparaiso, Porter County, Indiana",
+  "state": "IN",
+  "architects": "Dr. Michael Hurdzan (1997; the club's site); third-party listings (GolfPass, golfn) credit Jack Kidwell, Hurdzan's partner in Kidwell & Hurdzan",
+  "theme": "aberdeen",
+  "epsg": 32616,
+  "osm_sources": [
+    "raw/overpass.geojson"
+  ],
+  "boundary_name": "",
+  "dtm": {
+    "path": "raw/usgs_dem_2017_1m_clip.tif",
+    "units": "m",
+    "source": "USGS 3DEP 1 m DEM, project IN_Indiana_Statewide_LiDAR_2017_B17 (tiles x48y459 and x49y459, published 2021-07-04), mosaicked and clipped to the world + 100 m by data/aberdeen/clip_dem.py; EPSG:26916 (NAD83 / UTM 16N), NAVD88 metres; fetched by the GitHub Actions workflow 2026-10-31 (release data-aberdeen)"
+  },
+  "world": {
+    "x0": 489452,
+    "y0": 4587000,
+    "width": 2048,
+    "height": 1792,
+    "note": "OSM course boundary (relation 15570452) bbox 1,668 x 1,356 m in EPSG:32616 + scenery, rounded out to whole 256 m chunks and centred: 2,048 m east-west (190 m each side; the 2,048 m limit), 1,792 m north-south (218 m each side)"
+  },
+  "tee_sets": [
+    {"name": "Black", "playable": true, "rating": 73.0, "slope": 134, "total_yd": 6917},
+    {"name": "Gold", "playable": true, "rating": 71.4, "slope": 131, "total_yd": 6573},
+    {"name": "Green", "playable": false, "rating": 69.5, "slope": 127, "total_yd": 6151},
+    {"name": "White", "playable": false, "rating": 64.4, "slope": 105, "total_yd": 4949}
+  ],
+  "default_tee": "Gold",
+  "scorecard_source": "GolfingRecord (golfingrecord.com/golf-scorecard/24964743-0f86-4ac0-9d4d-37e5969a2378), retrieved 2026-10-31; unverified third-party listing (the club's site, golfataberdeen.com/course, says four sets of tees and has no card). Its Black, Gold, Green and White rows add up to the rated totals (6,917 / 6,573 / 6,151 / 4,949). Conflicts: GolfPass and 18Birdies give Black 12 as 406 (total 6,905) and GolfPass Gold 6 as 146 and 18 as 379 (total 6,543, against its own tee table's 6,573); GolfPass and 18Birdies also list a Blue tee (5,670 yd, 67.0/116) and combination tees that the club's four sets don't include. Ratings: Black, Gold, Green men's (all sources agree); White men's 64.4/105 from 18Birdies (68.3/120 is the women's rating). Stroke index: the men's row (all sources agree). Built from Black and Gold (developer's overnight call: the back tees and the set in front of them when there is no Blue; course chat's reading that the club has no Blue tee).",
+  "penalty_default": "red",
+  "driving_range_is_ob": true,
+  "trees_off_fairways_m": 2,
+  "wind_mph": {
+    "minMph": 2,
+    "maxMph": 10
+  },
+  "attribution": [
+    "Map data © OpenStreetMap contributors (ODbL)",
+    "Elevation and trees: U.S. Geological Survey 3D Elevation Program (2017-2018 Indiana statewide lidar)",
+    "Scorecard: GolfingRecord (third-party listing)"
+  ],
+  "notes": "Overnight build 2026-10-30/31 without the developer (calls logged in validation_report.md and docs/courses/aberdeen.md). Wind 2-10 mph is the course chat's call: no standing band for the Midwest; open, flat inland northwest Indiana 15 km from Lake Michigan, a little windier than inland New England (1-9), like the tidal-river band (2-10)."
+}
