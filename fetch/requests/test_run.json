@@ -1,8 +1,0 @@
-{
-  "release": "fetch-test",
-  "items": [
-    {"name": "test_overpass.geojson", "overpass": "[out:json][timeout:120][bbox:45.405,-122.705,45.415,-122.690];(nwr[\"leisure\"=\"golf_course\"];nwr[\"golf\"];);out geom;"},
-    {"name": "test_dem", "tnm": {"dataset": "dem1m", "bbox": [-76.755, 39.295, -76.745, 39.305], "max": 4}},
-    {"name": "test_lidar", "tnm": {"dataset": "lpc", "bbox": [-76.752, 39.298, -76.748, 39.302], "max": 4}}
-  ]
-}

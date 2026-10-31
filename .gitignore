@@ -31,3 +31,6 @@ data/*/raw/**/*.zip
 # course lists made from the courses (game/scripts/course-lists.mjs: build, dev server, tests, s10)
 game/public/courses/index.json
 game/public/sprites/title/index.json
+
+# downloads pulled from a release by pipeline/remote_fetch.py (they go into raw/ through intake.py)
+data/*/incoming/

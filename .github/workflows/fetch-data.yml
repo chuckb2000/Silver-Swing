@@ -1,15 +1,16 @@
-# Downloads for course building (developer, 2026-10-29): the sandbox Claude works
-# in can't reach Overpass, USGS or most data sites, and can't start a workflow
-# through the GitHub API either, but it can push a branch and read a release. So:
-# push a request file (fetch/requests/<name>.json) to a branch named fetch/...,
-# this job downloads what it asks for and attaches the files to the release it
-# names, with fetch-log-<name>.json saying what happened. pipeline/remote_fetch.py
-# has the request format.
+# Downloads for course building, the first way to get a course's data (developer,
+# 2026-10-29). The sandbox Claude works in can't reach Overpass, USGS or most data
+# sites, and can't start a workflow through the GitHub API, but it can push a branch
+# and read a release. So a course chat commits data/<id>/fetch.json and pushes its
+# branch (any branch but main); this job downloads what the request asks for and
+# attaches the files to the course's release (data-<id>), with fetch-log-<id>.json
+# saying what happened. pipeline/remote_fetch.py has the request format and the
+# sandbox side (new, wait, pull); docs/COURSE_BUILD.md 5.0 the procedure.
 name: fetch course data
 on:
   push:
-    branches: ['fetch/**']
-    paths: ['fetch/requests/*.json']
+    branches-ignore: [main]
+    paths: ['data/*/fetch.json', 'fetch/requests/*.json']
   workflow_dispatch:
 permissions:
   contents: write
@@ -32,4 +33,4 @@ jobs:
       - name: fetch
         env:
           GH_TOKEN: ${{ github.token }}
-        run: python3 pipeline/remote_fetch.py --changed "${{ github.event.before }}"
+        run: python3 pipeline/remote_fetch.py run --before "${{ github.event.before }}"
