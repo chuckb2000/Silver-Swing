@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="512" height="512">
+  <title>Rancho San Joaquin - Concept 1: The Marsh Avocet</title>
+  <defs>
+    <clipPath id="under"><rect x="0" y="17" width="32" height="15" /></clipPath>
+    <path id="body" d="M12.4 15.6 C13.2 12.8 16.8 11.8 20.6 12.1 C24 12.4 27.4 12.4 30.6 11.2 C30 14.6 27.6 17.8 23.6 19.2 C19.8 20.4 15.4 20.2 13.6 18.4 C12.8 17.6 12.2 16.6 12.4 15.6 Z" />
+  </defs>
+  
+  <g id="outline"><path d="M8 27.6 C12 25.8 26 25.8 30 27.6 C26 29.8 12 29.8 8 27.6 Z" fill="#0d1620" stroke="#0d1620" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+  <path d="M12 27.2 C16 26.4 22 26.4 26 27.2 L25 27.8 C21 27.2 17 27.2 13 27.8 Z" fill="#0d1620" stroke="#0d1620" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+  
+  <path d="M18.6 19.6 L18.2 27.2 L19.6 27.2 L20 19.6 Z" fill="#0d1620" stroke="#0d1620" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+  <path d="M21.8 19.6 L23.8 23.4 L23.2 27.2 L24.6 27.2 L25.2 23.2 L23.2 19.2 Z" fill="#0d1620" stroke="#0d1620" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+  
+  <use href="#body" fill="#0d1620" stroke="#0d1620" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+  <use href="#body" fill="#0d1620" clip-path="url(#under)" stroke="#0d1620" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+  
+  <path d="M14.8 13.6 C18 12.2 22 12.6 25 13.6 L24.4 15.2 C21.4 14.4 18 14.2 15.4 15.2 Z" fill="#0d1620" stroke="#0d1620" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+  <path d="M23.8 13.8 C26.2 13.8 28.8 12.8 30.6 11.2 C30 14.2 28.2 16.2 25.8 17.4 L23.4 15.8 Z" fill="#0d1620" stroke="#0d1620" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+  
+  <path d="M14.4 16.4 C12.6 14.6 11.4 12.6 11 10 L8.8 10.4 C9.4 13.4 11 15.8 13 17.8 Z" fill="#0d1620" stroke="#0d1620" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+  <path d="M14.4 16.4 C12.6 14.6 11.4 12.6 11 10 L10.2 10.2 C10.6 12.8 12 15 13.8 17 Z" fill="#0d1620" stroke="#0d1620" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+  <circle cx="9.8" cy="8.4" r="2.3" fill="#0d1620" stroke="#0d1620" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+  <path d="M12 7.6 A2.3 2.3 0 0 1 9.8 10.7 A2.3 2.3 0 0 1 8 10 C9.8 10 11.4 9.2 12 7.6 Z" fill="#0d1620" stroke="#0d1620" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+  <rect x="9.2" y="7.4" width="1.2" height="1.2" fill="#0d1620" stroke="#0d1620" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+  
+  <path d="M8 9.4 C6 9.6 3.6 9.2 1.4 6.6 L2.2 6.2 C4.2 8 6 8.4 8 8.2 Z" fill="#0d1620" stroke="#0d1620" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+</g><path d="M8 27.6 C12 25.8 26 25.8 30 27.6 C26 29.8 12 29.8 8 27.6 Z" fill="#3f7fb8" />
+  <path d="M12 27.2 C16 26.4 22 26.4 26 27.2 L25 27.8 C21 27.2 17 27.2 13 27.8 Z" fill="#8cc6ea" />
+  
+  <path d="M18.6 19.6 L18.2 27.2 L19.6 27.2 L20 19.6 Z" fill="#86a9c2" />
+  <path d="M21.8 19.6 L23.8 23.4 L23.2 27.2 L24.6 27.2 L25.2 23.2 L23.2 19.2 Z" fill="#5f8299" />
+  
+  <use href="#body" fill="#f6f4ec" />
+  <use href="#body" fill="#c9c9c1" clip-path="url(#under)" />
+  
+  <path d="M14.8 13.6 C18 12.2 22 12.6 25 13.6 L24.4 15.2 C21.4 14.4 18 14.2 15.4 15.2 Z" fill="#222226" />
+  <path d="M23.8 13.8 C26.2 13.8 28.8 12.8 30.6 11.2 C30 14.2 28.2 16.2 25.8 17.4 L23.4 15.8 Z" fill="#222226" />
+  
+  <path d="M14.4 16.4 C12.6 14.6 11.4 12.6 11 10 L8.8 10.4 C9.4 13.4 11 15.8 13 17.8 Z" fill="#c8753c" />
+  <path d="M14.4 16.4 C12.6 14.6 11.4 12.6 11 10 L10.2 10.2 C10.6 12.8 12 15 13.8 17 Z" fill="#a65a2a" />
+  <circle cx="9.8" cy="8.4" r="2.3" fill="#d8884a" />
+  <path d="M12 7.6 A2.3 2.3 0 0 1 9.8 10.7 A2.3 2.3 0 0 1 8 10 C9.8 10 11.4 9.2 12 7.6 Z" fill="#a65a2a" />
+  <rect x="9.2" y="7.4" width="1.2" height="1.2" fill="#1a1a1a" />
+  
+  <path d="M8 9.4 C6 9.6 3.6 9.2 1.4 6.6 L2.2 6.2 C4.2 8 6 8.4 8 8.2 Z" fill="#26262a" />
+</svg>

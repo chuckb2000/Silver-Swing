@@ -1,0 +1,32 @@
+{
+ "tags": [
+  {
+   "osm": "w688003643",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "standing default (COURSE_BUILD 4.1): every penalty area red; OSM maps it golf=water_hazard (yellow)"
+  },
+  {
+   "osm": "w688003644",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "standing default (COURSE_BUILD 4.1): every penalty area red; OSM maps it golf=water_hazard (yellow)"
+  },
+  {
+   "osm": "w688003645",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "standing default (COURSE_BUILD 4.1): every penalty area red; OSM maps it golf=water_hazard (yellow)"
+  },
+  {
+   "osm": "w688003649",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "standing default (COURSE_BUILD 4.1): every penalty area red; OSM maps it golf=water_hazard (yellow)"
+  }
+ ]
+}
