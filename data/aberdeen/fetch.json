@@ -1,0 +1,39 @@
+{
+ "items": [
+  {
+   "name": "aberdeen_overpass.geojson",
+   "osm_box": [
+    41.41,
+    -87.15,
+    41.47,
+    -87.07
+   ]
+  },
+  {
+   "name": "aberdeen_dem1m",
+   "tnm": {
+    "dataset": "dem1m",
+    "bbox": [
+     -87.15,
+     41.41,
+     -87.07,
+     41.47
+    ],
+    "list": true
+   }
+  },
+  {
+   "name": "aberdeen_lpc",
+   "tnm": {
+    "dataset": "lpc",
+    "bbox": [
+     -87.15,
+     41.41,
+     -87.07,
+     41.47
+    ],
+    "list": true
+   }
+  }
+ ]
+}
