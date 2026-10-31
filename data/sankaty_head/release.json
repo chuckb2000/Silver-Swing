@@ -1,0 +1,62 @@
+{
+ "release": "data-sankaty_head",
+ "note": "Build inputs for Sankaty Head; `make fetch NAME=sankaty_head` puts them in place. All fetched by the GitHub Actions workflow (data/sankaty_head/fetch.json) on 2026-10-31: the standard Overpass export (raw/overpass.geojson is also committed), the two USGS 3DEP 1 m DEM tiles of MA_NE_CMGP_Sandy_Z19_2013 (mosaicked and cut by make_dem.py; raw/dem_3dep_2013_1m.tif is also committed), and four USGS NAIP exportImage JPEGs (EPSG:32619 boxes in their names) placed by intake.py ortho.",
+ "files": [
+  {
+   "asset": "sankaty_head_overpass.geojson",
+   "sha256": "320567cbad21063e551ebde2c65094e24fd056f8a001e573747731704f0af83e",
+   "run": "python3 pipeline/intake.py osm sankaty_head {file}",
+   "outputs": {
+    "raw/overpass.geojson": "33355891967668490cdeefb6eb55ee253642f95174b2f22d5374de0b05756c6f"
+   }
+  },
+  {
+   "asset": "USGS_1m_x41y457_MA_NE_CMGP_Sandy_Z19_2013.tif",
+   "sha256": "5acfcd4882f489eb83fc58cb433b6cabbbfdf872c67219d0cf714152e881c982",
+   "to": "build/dem/",
+   "outputs": {
+    "build/dem/USGS_1m_x41y457_MA_NE_CMGP_Sandy_Z19_2013.tif": "5acfcd4882f489eb83fc58cb433b6cabbbfdf872c67219d0cf714152e881c982"
+   }
+  },
+  {
+   "asset": "USGS_1m_x41y458_MA_NE_CMGP_Sandy_Z19_2013.tif",
+   "sha256": "646f7d4ace30a5dea06d42a1ec43cb87cfda566aabcfa80a40845f0ce2e1d0b6",
+   "run": "python3 data/sankaty_head/make_dem.py data/sankaty_head/build/dem/USGS_1m_x41y457_MA_NE_CMGP_Sandy_Z19_2013.tif {file}",
+   "outputs": {
+    "raw/dem_3dep_2013_1m.tif": "f1aeedaf5862b9417cd7c923e9febf8bda49499345ef4b7c3f3d0fa5e93cc876"
+   }
+  },
+  {
+   "asset": "naip_418241_4568980_418853_4570104.jpg",
+   "sha256": "99e7838313c328241dff5339b990cf50e935278fb7b5c7f800a26506ec5745ed",
+   "to": "build/naip/",
+   "outputs": {
+    "build/naip/naip_418241_4568980_418853_4570104.jpg": "99e7838313c328241dff5339b990cf50e935278fb7b5c7f800a26506ec5745ed"
+   }
+  },
+  {
+   "asset": "naip_418241_4570104_418853_4571228.jpg",
+   "sha256": "346c9f8d109ce32ddba7decc46885cf4fb8dff17b2f5815d0e6a632a1c476c71",
+   "to": "build/naip/",
+   "outputs": {
+    "build/naip/naip_418241_4570104_418853_4571228.jpg": "346c9f8d109ce32ddba7decc46885cf4fb8dff17b2f5815d0e6a632a1c476c71"
+   }
+  },
+  {
+   "asset": "naip_418853_4568980_419465_4570104.jpg",
+   "sha256": "718c55c1649a39626d3f66d05951d87dc03966c830c352b2ebd112ab3f1f0d65",
+   "to": "build/naip/",
+   "outputs": {
+    "build/naip/naip_418853_4568980_419465_4570104.jpg": "718c55c1649a39626d3f66d05951d87dc03966c830c352b2ebd112ab3f1f0d65"
+   }
+  },
+  {
+   "asset": "naip_418853_4570104_419465_4571228.jpg",
+   "sha256": "913b3606819db36bb463c8b6dd8d1e5d71b1f86b8389c05cb0f29d1dae0396ed",
+   "run": "python3 pipeline/intake.py ortho sankaty_head data/sankaty_head/build/naip/naip_418241_4568980_418853_4570104.jpg 418241 4568980 418853 4570104 data/sankaty_head/build/naip/naip_418241_4570104_418853_4571228.jpg 418241 4570104 418853 4571228 data/sankaty_head/build/naip/naip_418853_4568980_419465_4570104.jpg 418853 4568980 419465 4570104 {file} 418853 4570104 419465 4571228 --out raw/naip_03m.tif",
+   "outputs": {
+    "raw/naip_03m.tif": "47b69d71ced4959c7cd9f68482cbf94df2880cf77545823f40bda9a58d1358d8"
+   }
+  }
+ ]
+}
