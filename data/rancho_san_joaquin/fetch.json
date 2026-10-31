@@ -30,10 +30,6 @@
    "url": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/CA_CaliforniaGaps_B23/CA_CaliforniaGaps_2_B23/LAZ/USGS_LPC_CA_CaliforniaGaps_B23_11SMT423724.laz"
   },
   {
-   "name": "USGS_LPC_CA_CaliforniaGaps_B23_11SMT423725.laz",
-   "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/LPC/Projects/CA_CaliforniaGaps_B23/CA_CaliforniaGaps_2_B23/LAZ/USGS_LPC_CA_CaliforniaGaps_B23_11SMT423725.laz"
-  },
-  {
    "name": "USGS_LPC_CA_CaliforniaGaps_B23_11SMT423726.laz",
    "url": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/CA_CaliforniaGaps_B23/CA_CaliforniaGaps_2_B23/LAZ/USGS_LPC_CA_CaliforniaGaps_B23_11SMT423726.laz"
   },
@@ -60,6 +56,19 @@
   {
    "name": "RanchoSanJoaquin-Scorecard-print.pdf",
    "url": "https://www.ranchosanjoaquin.com/wp-content/uploads/sites/31/2021/06/RanchoSanJoaquin-Scorecard-print.pdf"
+  },
+  {
+   "name": "lidar_423725",
+   "tnm": {
+    "dataset": "lpc",
+    "bbox": [
+     -117.82624,
+     33.66573,
+     -117.8241,
+     33.66755
+    ],
+    "only": "11SMT423725"
+   }
   }
  ]
 }
