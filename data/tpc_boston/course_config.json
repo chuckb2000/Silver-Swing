@@ -52,7 +52,7 @@
       "total_yd": 6990
     }
   ],
-  "default_tee": "Black",
+  "default_tee": "Gold",
   "scorecard_source": "The club's 2024 printed scorecard (2024_Scorecard.pdf in GitHub release data-tpc-boston; also tpc.com/boston/wp-content/uploads/sites/20/2024/11/2024_Scorecard.pdf), checked against the rendered card 2026-10-21: every row adds up to its printed total. Par 72 (hole 14 a par 4); Championship 7,282 77.2/154, Gold 6,990 74.6/144, Black 6,454 72.1/139, Blended 6,213 70.9/135 (total only), White 6,035 70.1/132, Blue 5,147 66.1/122 (men). OSM, Wikipedia and Stymie carry the tour card (par 73, hole 14 a par 5, another stroke index); Stymie's Black 72.4/139 and Gold 74.7/145 are not used. Built from the Black and Gold tees, Black the default (developer, 2026-10-20; the card's Blue is the forward set).",
   "penalty_default": "red",
   "red_water_osm": [
