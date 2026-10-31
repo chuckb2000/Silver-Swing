@@ -14,6 +14,8 @@
      c. less, from the ground added in (b) only, strips along roads (ROAD_M either side of each
         highway that isn't a footway/path/track) and round every building (BUILDING_M), so houses,
         the lodge and the access roads stay out of bounds.
+   The developer's Black tee on 13 (tracing desk, 2026-10-31; make_desk_tees.py) is one of the
+   13th's features for (a), so the join reaches it (run make_desk_tees.py first).
    The developer can choose OSM's line as it is (see docs/courses/spruce_peak.md, open items).
 
     python3 data/spruce_peak/make_proposals.py
@@ -67,7 +69,12 @@ def main():
     h13 = gu[gu.osm.isin(HOLE13)]
     if len(h13) != len(HOLE13):
         raise SystemExit(f"13th hole features missing: {set(HOLE13) - set(h13.osm)}")
-    feat = unary_union(list(h13.geometry)).buffer(TEE_MARGIN_M)
+    geoms13 = list(h13.geometry)
+    desk = HERE / "proposed" / "desk_tees.geojson"  # the developer's Black tee on 13 (2026-10-31), 88 m behind the OSM tee
+    if desk.exists():
+        d13 = gpd.read_file(desk).to_crs(EPSG)
+        geoms13 += list(d13[d13.osm == "desk_tee_13"].geometry)
+    feat = unary_union(geoms13).buffer(TEE_MARGIN_M)
     edge = poly.exterior.intersection(feat.buffer(REACH_M))
     pts = [c for p in getattr(feat, "geoms", [feat]) for c in p.exterior.coords]
     pts += [c for part in getattr(edge, "geoms", [edge]) for c in part.coords]

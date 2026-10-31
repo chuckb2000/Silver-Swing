@@ -1,0 +1,10 @@
+{
+"type": "FeatureCollection",
+"name": "desk_tees",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+"features": [
+{ "type": "Feature", "properties": { "osm": "desk_tee_4", "kind": "tee", "tags": { "golf": "tee", "hole": "4", "tee_set": "Black", "tee_pos": "mark", "source": "tracing desk (developer 2026-10-31)", "note": "developer's mark (11 m2) grown to an 8 x 6 m pad on its centroid" } }, "geometry": { "type": "Polygon", "coordinates": [ [ [ -72.767242450630576, 44.528180977019865 ], [ -72.767186811446649, 44.528144489680102 ], [ -72.767118802796958, 44.52819755812645 ], [ -72.767174441986327, 44.528234045499218 ], [ -72.767242450630576, 44.528180977019865 ] ] ] } },
+{ "type": "Feature", "properties": { "osm": "desk_tee_8", "kind": "tee", "tags": { "golf": "tee", "hole": "8", "tee_set": "Black", "tee_pos": "mark", "source": "tracing desk (developer 2026-10-31)", "note": "developer's mark (8 m2) grown to an 8 x 6 m pad on its centroid" } }, "geometry": { "type": "Polygon", "coordinates": [ [ [ -72.770783977903847, 44.524126462794385 ], [ -72.770813623643008, 44.524076807129184 ], [ -72.770721077250187, 44.524048529104263 ], [ -72.770691431448597, 44.524098184744354 ], [ -72.770783977903847, 44.524126462794385 ] ] ] } },
+{ "type": "Feature", "properties": { "osm": "desk_tee_13", "kind": "tee", "tags": { "golf": "tee", "hole": "13", "tee_set": "Black", "tee_pos": "mark", "source": "tracing desk (developer 2026-10-31)", "note": "developer's mark (30 m2) grown to an 8 x 6 m pad on its centroid" } }, "geometry": { "type": "Polygon", "coordinates": [ [ [ -72.775761983933648, 44.535605291584801 ], [ -72.775702283339669, 44.535638338431525 ], [ -72.775763887195509, 44.535695273334504 ], [ -72.775823587815353, 44.535662226456338 ], [ -72.775761983933648, 44.535605291584801 ] ] ] } }
+]
+}

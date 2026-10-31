@@ -12,7 +12,7 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 | 2 | 3 | Blue | 210 | 220.3 | +10.3 | +4.9% | flag | 215.1 | +2.4% | pass |
 | 3 | 4 | Black | 415 | 404.8 | -10.2 | -2.5% | pass | 404.8 | -2.5% | pass |
 | 3 | 4 | Blue | 365 | 357.4 | -7.6 | -2.1% | pass | 357.4 | -2.1% | pass |
-| 4 | 4 | Black | 381 | 337.4 | -43.6 | -11.4% | FAIL | 337.4 | -11.4% | FAIL |
+| 4 | 4 | Black | 381 | 362.6 | -18.4 | -4.8% | flag | 362.6 | -4.8% | flag |
 | 4 | 4 | Blue | 358 | 337.2 | -20.8 | -5.8% | flag | 338.6 | -5.4% | flag |
 | 5 | 4 | Black | 338 | 325.7 | -12.3 | -3.7% | flag | 326.9 | -3.3% | flag |
 | 5 | 4 | Blue | 321 | 325.7 | +4.7 | +1.5% | pass | 325.7 | +1.5% | pass |
@@ -20,7 +20,7 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 | 6 | 3 | Blue | 155 | 159.2 | +4.2 | +2.7% | pass | 159.2 | +2.7% | pass |
 | 7 | 4 | Black | 333 | 322.0 | -11.0 | -3.3% | flag | 324.7 | -2.5% | pass |
 | 7 | 4 | Blue | 314 | 322.0 | +8.0 | +2.6% | pass | 322.0 | +2.6% | pass |
-| 8 | 5 | Black | 606 | 514.4 | -91.6 | -15.1% | FAIL | 514.4 | -15.1% | FAIL |
+| 8 | 5 | Black | 606 | 514.0 | -92.0 | -15.2% | FAIL | 514.0 | -15.2% | FAIL |
 | 8 | 5 | Blue | 559 | 513.5 | -45.5 | -8.1% | FAIL | 517.6 | -7.4% | flag |
 | 9 | 4 | Black | 339 | 334.9 | -4.1 | -1.2% | pass | 334.9 | -1.2% | pass |
 | 9 | 4 | Blue | 317 | 314.0 | -3.0 | -1.0% | pass | 314.0 | -1.0% | pass |
@@ -30,7 +30,7 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 | 11 | 5 | Blue | 480 | 470.1 | -9.9 | -2.1% | pass | 470.1 | -2.1% | pass |
 | 12 | 4 | Black | 359 | 341.2 | -17.8 | -5.0% | flag | 345.2 | -3.8% | flag |
 | 12 | 4 | Blue | 342 | 341.2 | -0.8 | -0.2% | pass | 341.2 | -0.2% | pass |
-| 13 | 3 | Black | 252 | 156.1 | -95.9 | -38.0% | FAIL | 156.1 | -38.0% | FAIL |
+| 13 | 3 | Black | 252 | 242.9 | -9.1 | -3.6% | flag | 242.9 | -3.6% | flag |
 | 13 | 3 | Blue | 160 | 154.7 | -5.3 | -3.3% | flag | 156.0 | -2.5% | pass |
 | 14 | 4 | Black | 394 | 375.3 | -18.7 | -4.8% | flag | 377.9 | -4.1% | flag |
 | 14 | 4 | Blue | 380 | 375.3 | -4.7 | -1.2% | pass | 375.3 | -1.2% | pass |
@@ -42,7 +42,7 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 | 17 | 4 | Blue | 266 | 262.5 | -3.5 | -1.3% | pass | 262.5 | -1.3% | pass |
 | 18 | 5 | Black | 495 | 488.2 | -6.8 | -1.4% | pass | 488.2 | -1.4% | pass |
 | 18 | 5 | Blue | 475 | 471.8 | -3.2 | -0.7% | pass | 471.8 | -0.7% | pass |
-| **total** | 144 | | **12298** | **11860** | -438 | -3.6% | | **11889** | -3.3% | |
+| **total** | 144 | | **12298** | **11972** | -326 | -2.7% | | **12001** | -2.4% | |
 
 ## Open items
 
@@ -50,32 +50,33 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 2. Hole 2: no golf=pin on its green; the centre pin is the green's centre (proposal).
 3. Hole 3: no golf=pin on its green; the centre pin is the green's centre (proposal).
 4. Hole 4: no golf=pin on its green; the centre pin is the green's centre (proposal).
-5. Hole 4 (Black): no mapped tee box within 8% of the card; the tee is the start point of the OSM hole line (337 yd). The Black tee box is not in OSM - trace it to confirm.
-6. Hole 4 (Black): measured 337 yd vs card 381 (-11.4%) - FAIL, needs a decision.
+5. Hole 4 (Black): measured 363 yd vs card 381 (-4.8%) even with the virtual tee at the best spot in its box; accepted for play.
+6. Hole 4 (Black): tee box desk_tee_4 assigned by the developer (tagged hole=4, tee_set=Black in edited/course.geojson).
 7. Hole 4 (Blue): measured 339 yd vs card 358 (-5.4%) even with the virtual tee at the best spot in its box; accepted for play.
-8. Hole 5: no golf=pin on its green; the centre pin is the green's centre (proposal).
-9. Hole 5 (Black): measured 327 yd vs card 338 (-3.3%) even with the virtual tee at the best spot in its box; accepted for play.
-10. Hole 6: no golf=pin on its green; the centre pin is the green's centre (proposal).
-11. Hole 8: no golf=pin on its green; the centre pin is the green's centre (proposal).
-12. Hole 8 (Black): no mapped tee box within 8% of the card; the tee is the start point of the OSM hole line (514 yd). The Black tee box is not in OSM - trace it to confirm.
-13. Hole 8 (Black): measured 514 yd vs card 606 (-15.1%) - FAIL, needs a decision.
-14. Hole 8 (Blue): measured 518 yd vs card 559 (-7.4%) even with the virtual tee at the best spot in its box; accepted for play.
-15. Hole 9: no golf=pin on its green; the centre pin is the green's centre (proposal).
-16. Hole 10: no golf=pin on its green; the centre pin is the green's centre (proposal).
-17. Hole 10 (Blue): measured 340 yd vs card 321 (+5.8%) even with the virtual tee at the best spot in its box; accepted for play.
-18. Hole 11: no golf=pin on its green; the centre pin is the green's centre (proposal).
-19. Hole 12: no golf=pin on its green; the centre pin is the green's centre (proposal).
-20. Hole 12 (Black): measured 345 yd vs card 359 (-3.8%) even with the virtual tee at the best spot in its box; accepted for play.
-21. Hole 13: no golf=pin on its green; the centre pin is the green's centre (proposal).
-22. Hole 13 (Black): no mapped tee box within 8% of the card; the tee is the start point of the OSM hole line (156 yd). The Black tee box is not in OSM - trace it to confirm.
-23. Hole 13 (Black): measured 156 yd vs card 252 (-38.0%) - FAIL, needs a decision.
-24. Hole 14: no golf=pin on its green; the centre pin is the green's centre (proposal).
-25. Hole 14 (Black): measured 378 yd vs card 394 (-4.1%) even with the virtual tee at the best spot in its box; accepted for play.
-26. Hole 15: no golf=pin on its green; the centre pin is the green's centre (proposal).
-27. Hole 16: no golf=pin on its green; the centre pin is the green's centre (proposal).
-28. Hole 17: OSM par 3 differs from scorecard par 4; using scorecard.
-29. Hole 17 (Black): measured 268 yd vs card 279 (-4.0%) even with the virtual tee at the best spot in its box; accepted for play.
-30. Hole 18: no golf=pin on its green; the centre pin is the green's centre (proposal).
+8. Hole 4 (Blue): tee box w1058376518 assigned by the developer (tagged hole=4, tee_set=Blue in edited/course.geojson).
+9. Hole 5: no golf=pin on its green; the centre pin is the green's centre (proposal).
+10. Hole 5 (Black): measured 327 yd vs card 338 (-3.3%) even with the virtual tee at the best spot in its box; accepted for play.
+11. Hole 6: no golf=pin on its green; the centre pin is the green's centre (proposal).
+12. Hole 8: no golf=pin on its green; the centre pin is the green's centre (proposal).
+13. Hole 8 (Black): measured 514 yd vs card 606 (-15.2%) - FAIL, needs a decision.
+14. Hole 8 (Black): tee box desk_tee_8 assigned by the developer (tagged hole=8, tee_set=Black in edited/course.geojson).
+15. Hole 8 (Blue): measured 518 yd vs card 559 (-7.4%) even with the virtual tee at the best spot in its box; accepted for play.
+16. Hole 9: no golf=pin on its green; the centre pin is the green's centre (proposal).
+17. Hole 10: no golf=pin on its green; the centre pin is the green's centre (proposal).
+18. Hole 10 (Blue): measured 340 yd vs card 321 (+5.8%) even with the virtual tee at the best spot in its box; accepted for play.
+19. Hole 11: no golf=pin on its green; the centre pin is the green's centre (proposal).
+20. Hole 12: no golf=pin on its green; the centre pin is the green's centre (proposal).
+21. Hole 12 (Black): measured 345 yd vs card 359 (-3.8%) even with the virtual tee at the best spot in its box; accepted for play.
+22. Hole 13: no golf=pin on its green; the centre pin is the green's centre (proposal).
+23. Hole 13 (Black): measured 243 yd vs card 252 (-3.6%) even with the virtual tee at the best spot in its box; accepted for play.
+24. Hole 13 (Black): tee box desk_tee_13 assigned by the developer (tagged hole=13, tee_set=Black in edited/course.geojson).
+25. Hole 14: no golf=pin on its green; the centre pin is the green's centre (proposal).
+26. Hole 14 (Black): measured 378 yd vs card 394 (-4.1%) even with the virtual tee at the best spot in its box; accepted for play.
+27. Hole 15: no golf=pin on its green; the centre pin is the green's centre (proposal).
+28. Hole 16: no golf=pin on its green; the centre pin is the green's centre (proposal).
+29. Hole 17: OSM par 3 differs from scorecard par 4; using scorecard.
+30. Hole 17 (Black): measured 268 yd vs card 279 (-4.0%) even with the virtual tee at the best spot in its box; accepted for play.
+31. Hole 18: no golf=pin on its green; the centre pin is the green's centre (proposal).
 
 ## Playability adjustments
 
@@ -96,7 +97,7 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 
 ## Tree detection (2023 Vermont lidar surface model)
 
-- 35559 trees detected in the world extent (5377 inside the course), 18081 conifers / 17478 deciduous; median height 13.6 m, max 30.2 m.
+- 35559 trees detected in the world extent (5434 inside the course), 18081 conifers / 17478 deciduous; median height 13.6 m, max 30.2 m.
 - Dropped: 148 tops on building footprints, 0 over the lake, 48 tiny crowns.
 - Dropped on playing surfaces (spec 5.4): 1 -> bunker w1058402483 (6.2 m)
 - OSM natural=tree points matched by a detected tree within 4 m: 0 of 0.
@@ -133,11 +134,11 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 | 1 | 5 | yes | yes (4 near) | yes | yes | NO | 10 | 0 |
 | 2 | 3 | yes | yes (3 near) | yes | yes | NO | 3 | 0 |
 | 3 | 4 | yes | yes (3 near) | yes | yes | NO | 3 | 1 |
-| 4 | 4 | yes | yes (3 near) | yes | yes | NO | 4 | 0 |
+| 4 | 4 | yes | yes (4 near) | yes | yes | NO | 4 | 0 |
 | 5 | 4 | yes | yes (4 near) | yes | yes | NO | 3 | 1 |
 | 6 | 3 | yes | yes (4 near) | yes | yes | NO | 1 | 1 |
 | 7 | 4 | yes | yes (4 near) | yes | yes | yes | 3 | 1 |
-| 8 | 5 | yes | yes (3 near) | yes | yes | NO | 7 | 0 |
+| 8 | 5 | yes | yes (4 near) | yes | yes | NO | 7 | 0 |
 | 9 | 4 | yes | yes (2 near) | yes | yes | NO | 4 | 1 |
 | 10 | 4 | yes | yes (3 near) | yes | yes | NO | 2 | 0 |
 | 11 | 5 | yes | yes (2 near) | yes | yes | NO | 4 | 0 |
@@ -175,5 +176,5 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 - golf=path: 19 feature(s) (w1058406517, w1058406518, w1058406519, w1058406520 ...) -> cart path: retag golf=cartpath in edits.json
 - fairway w1058406515 at (273, 708) is more than 30 m from every hole line (a range or practice area mapped as fairway?)
 
-Totals: 72 tees, 19 greens, 24 fairways, 49 bunkers, 1 water hazards, 2 pins, 19 cart paths, 0 OSM tree points.
+Totals: 75 tees, 19 greens, 24 fairways, 49 bunkers, 1 water hazards, 2 pins, 19 cart paths, 0 OSM tree points.
 

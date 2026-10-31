@@ -21,12 +21,21 @@
   ]
  },
  "yardage": {
-  "max": {
-   "4 Black": 0.12,
-   "8 Black": 0.16,
-   "13 Black": 0.39
+  "range_yd": {
+   "4 Black": [
+    361,
+    364
+   ],
+   "8 Black": [
+    512,
+    516
+   ],
+   "13 Black": [
+    241,
+    244
+   ]
   },
-  "why": "no tee box mapped (OSM) or found (lidar pads, photo) at the card distance: 4 Black 337 yd against 381 (-11.4 %), 8 Black 514 against 606 (-15.1 %), 13 Black 156 against 252 (-38.0 %); played from the farthest-back mapped box (course chat 2026-10-31, overnight call, open item for the developer)"
+  "why": "developer 2026-10-31: accepted as marked. The Black tees on 4, 8 and 13 are the developer's marks from the tracing desk (data/spruce_peak/desk/, 8 x 6 m pads on the marked centroids, tee_pos=mark): 4 Black 363 yd against 381 (-4.8 %), 8 Black 514 against 606 (-15.2 %), 13 Black 243 against 252 (-3.6 %); each held to its measured yardage within 1-2 yd"
  },
  "points": [
   {
