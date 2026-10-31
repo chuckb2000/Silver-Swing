@@ -71,5 +71,7 @@
  ],
  "red_water_note": "the irrigation pond beside the 14th and 15th (OSM natural=water, untagged): a red penalty area (standing default)",
  "fescue_areas": "proposed/native.geojson",
- "fescue_note": "the unirrigated native grass between the holes, read from the NAIP photo by data/meadow_club/make_native.py (art only: straw-coloured rough; physics is rough)"
+ "fescue_note": "the unirrigated native grass between the holes, read from the NAIP photo by data/meadow_club/make_native.py (art only: straw-coloured rough; physics is rough)",
+ "range_art": "rough",
+ "range_art_note": "the practice range in the middle of the course (between 10, 12 and 18) is out of bounds; drawn as rough with OB stakes so it doesn't look playable (as at Oregon Golf Club, developer's call there)"
 }
