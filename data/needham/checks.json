@@ -1,0 +1,26 @@
+{
+  "note": "per-course settings for game/tests/unit/course_play.test.ts (the every-course checks); docs/COURSE_BUILD.md 8.2. Needham is nine greens played twice (holes 10-18 = 1-9 from the second-nine tees).",
+  "wind_mph": [
+    1,
+    9
+  ],
+  "tees": {
+    "sets": [
+      "Blue/White",
+      "White/Green"
+    ]
+  },
+  "tee_shot_clear": {
+    "sets": [
+      "Blue/White",
+      "White/Green"
+    ]
+  },
+  "default_aim": {
+    "skip": [
+      6,
+      15
+    ],
+    "why": "holes 6 and 15 (398/379 yd par 4): the pond in the fairway (OSM w310168725, red) is 226-265 m from the tee, where a perfect driver ends; the real hole is a lay-up off the tee (course chat 2026-10-31, the developer to confirm)"
+  }
+}

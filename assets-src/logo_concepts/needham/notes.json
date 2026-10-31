@@ -1,0 +1,30 @@
+{
+  "id": "needham",
+  "course": "Needham Golf Club",
+  "place": "Needham, Massachusetts",
+  "facts": [
+    {"fact": "The town bought the Colburn farm in 1899 to protect its watershed; the Water Commissioners' certificate of 28 March 1923 made it the club's land, leased from the town ever since.", "source": "https://www.massgolf.org/news/needham-golf-club-centennial-2023/"},
+    {"fact": "OSM tags the course land owner=Town Of Needham, protected=perpetuity.", "source": "OpenStreetMap relation 13156245"},
+    {"fact": "Designed by Wayne Stiles; the 2026 scorecard says 'A Wayne Stiles Design', 1923.", "source": "https://needhamgolfclub.com/documents/20124/110138/NEEDHAM_2026.pdf/"},
+    {"fact": "The club's own logo is two pine trees with a red flag; this logo avoids pines and flags.", "source": "the 2026 scorecard (viewed for reference only)"}
+  ],
+  "current": {"subject": "none (new course, 2026-10-31)", "keep": "", "weaknesses": ""},
+  "concepts": [
+    {
+      "n": 1,
+      "name": "The Town Pump",
+      "rationale": "The course is the town's watershed land: a red cast-iron pitcher pump on a granite plinth, a drop of water falling from its spout.",
+      "references": ["Town watershed land, 1899; Water Commissioners' certificate, 1923 (facts)"],
+      "symbolism": "Town water, town land, a club that started with a water board's certificate.",
+      "interpretation": "The pump itself is an interpretation: no pump on the course is claimed.",
+      "typography": "Libre Baskerville, for the name.",
+      "lockup": {"font": "Libre Baskerville", "weight": 400, "case": "none", "tracking": "0.02em", "line2": null, "line1": "Needham Golf Club"},
+      "palette": [{"hex": "#b3322b", "name": "pump red"}, {"hex": "#8b8d93", "name": "granite"}, {"hex": "#2f7fd0", "name": "water"}],
+      "strengths": "A single bold object, red on the green course card; reads at 1x.",
+      "tradeoffs": "The watershed story needs telling; a golfer won't guess it from the pump."
+    }
+  ],
+  "pick": 1,
+  "chosen": 1,
+  "recommendation": "Concept 1 (course chat, overnight 2026-10-31; the developer may change it)."
+}
