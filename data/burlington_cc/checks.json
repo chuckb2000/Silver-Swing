@@ -1,0 +1,12 @@
+{
+ "note": "per-course settings for game/tests/unit/course_play.test.ts (the every-course checks); docs/COURSE_BUILD.md 8.2",
+ "wind_mph": [1, 10],
+ "water": {"penalty": "red", "count": 5, "ids": ["channel_w1011484692"]},
+ "tees": {"sets": ["Black", "Blue"]},
+ "tee_shot_clear": {"sets": ["Black", "Blue"]},
+ "no_tree_in_fairway": true,
+ "points": [
+  {"x": 340, "y": 1223, "surface": "water", "inside": true, "why": "the brook between the pond by the 11th green and the pond in front of the 3rd and 12th tees (lidar channel, pending the developer)"},
+  {"x": 454, "y": 692, "surface": "water", "inside": true, "why": "the pond along 13 and 15"}
+ ]
+}

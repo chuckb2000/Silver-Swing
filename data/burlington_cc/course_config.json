@@ -15,6 +15,18 @@
   "units": "m",
   "source": "USGS 3DEP 1 m DEM, project VT_Statewide_A23 (tile USGS_1M_18_x64y493_VT_Statewide_A23, published 2026-03-31), fetched by the GitHub Actions workflow (release data-burlington_cc) and cut to the world + 100 m by pipeline/intake.py raster; EPSG:26918 (NAD83 / UTM 18N), NAVD88 m"
  },
+ "laz": {
+  "paths": [
+   "raw/laz/*.laz"
+  ],
+  "classes": [
+   1
+  ],
+  "units": "m",
+  "source": "USGS 3DEP lidar VT_Statewide_A23 (workunit VT_Statewide_2_A23), tiles N2177E4445 and N2191E4445, flown 21 April 2023 (GPS times; leaf-off); class 1 (unclassified: vegetation and structures; the project delivers only classes 1, 2, 7, 18); NAD83(2011) / Vermont (EPSG:6589, m), NAVD88 (GEOID18) m; fetched by the GitHub Actions workflow (release data-burlington_cc), each tile clipped to the world + 100 m by pipeline/intake.py laz",
+  "label": "2023 USGS Vermont lidar, leaf-off",
+  "leaf_off": true
+ },
  "world": {
   "x0": 642905,
   "y0": 4923487,
@@ -77,8 +89,9 @@
  },
  "attribution": [
   "Map data © OpenStreetMap contributors (ODbL)",
-  "Elevation and trees: U.S. Geological Survey 3D Elevation Program (VT_Statewide_A23 lidar)",
+  "Elevation and trees: U.S. Geological Survey 3D Elevation Program (2023 Vermont statewide lidar, VT_Statewide_A23)",
   "Scorecard: GolfPass and 18Birdies (unverified)"
  ],
- "notes": "Course chat, 2026-10-30 (overnight; the developer asleep, calls logged in docs/courses/burlington_cc.md): tee sets Black (the tips) and Blue (developer's overnight rule: the back set and Blue; here Blue is the shortest set, 4,799 yd), default Blue. Standing defaults: every penalty area red, the OSM boundary as OB, trees from lidar. Wind 1-10 mph: inland New England is 1-9; one more for the hilltop above Lake Champlain (course chat's call)."
+ "notes": "Course chat, 2026-10-30 (overnight; the developer asleep, calls logged in docs/courses/burlington_cc.md): tee sets Black (the tips) and Blue (developer's overnight rule: the back set and Blue; here Blue is the shortest set, 4,799 yd), default Blue. Standing defaults: every penalty area red, the OSM boundary as OB, trees from lidar. Wind 1-10 mph: inland New England is 1-9; one more for the hilltop above Lake Champlain (course chat's call).",
+ "roof_last_share": 0.85
 }
