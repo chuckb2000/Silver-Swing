@@ -1,0 +1,62 @@
+{
+ "release": "data-spruce_peak",
+ "note": "Build inputs not kept in git for Spruce Peak, all fetched by the GitHub Actions workflow (fetch.json) into the release data-spruce_peak; `make fetch NAME=spruce_peak` puts them in place. In git: raw/overpass.geojson. Here: the VCGI 2023 lidar DEM and DSM (1 m, EPSG:32618), the VCGI 0.3 m colour orthos (four tiles) and a NAIP export.",
+ "files": [
+  {
+   "asset": "spruce_peak_vcgi_dem_1m.tif",
+   "sha256": "a29d36742cfbc3878a5b8435c718580c39ac1c840b78691080c20140050acf55",
+   "run": "cp {file} data/spruce_peak/raw/vcgi_dem_1m.tif",
+   "outputs": {
+    "raw/vcgi_dem_1m.tif": "a29d36742cfbc3878a5b8435c718580c39ac1c840b78691080c20140050acf55"
+   }
+  },
+  {
+   "asset": "spruce_peak_vcgi_dsm_1m.tif",
+   "sha256": "9d4039745f9f5a98597bcbb24303ae5d5493f39e884b068a7418640516b9e74e",
+   "run": "cp {file} data/spruce_peak/raw/vcgi_dsm_1m.tif",
+   "outputs": {
+    "raw/vcgi_dsm_1m.tif": "9d4039745f9f5a98597bcbb24303ae5d5493f39e884b068a7418640516b9e74e"
+   }
+  },
+  {
+   "asset": "spruce_peak_vcgi_clr_0_676300_4932150_677100_4933225.jpg",
+   "sha256": "b93b6bb32cc254a03a9fb8db4a649280f7324a50d758c2125267142981fdbaea",
+   "to": "raw/ortho_src/",
+   "outputs": {
+    "raw/ortho_src/spruce_peak_vcgi_clr_0_676300_4932150_677100_4933225.jpg": "b93b6bb32cc254a03a9fb8db4a649280f7324a50d758c2125267142981fdbaea"
+   }
+  },
+  {
+   "asset": "spruce_peak_vcgi_clr_1_677100_4932150_677900_4933225.jpg",
+   "sha256": "abbf8e69d9107a578dc1a84f02ce2f8ac37ad4e9f04351f4ed909510d460ea4a",
+   "to": "raw/ortho_src/",
+   "outputs": {
+    "raw/ortho_src/spruce_peak_vcgi_clr_1_677100_4932150_677900_4933225.jpg": "abbf8e69d9107a578dc1a84f02ce2f8ac37ad4e9f04351f4ed909510d460ea4a"
+   }
+  },
+  {
+   "asset": "spruce_peak_vcgi_clr_2_676300_4933225_677100_4934300.jpg",
+   "sha256": "6349481d94845e813b7a5722b780773e6743c45dbad8ae82669b41300ff468e9",
+   "to": "raw/ortho_src/",
+   "outputs": {
+    "raw/ortho_src/spruce_peak_vcgi_clr_2_676300_4933225_677100_4934300.jpg": "6349481d94845e813b7a5722b780773e6743c45dbad8ae82669b41300ff468e9"
+   }
+  },
+  {
+   "asset": "spruce_peak_vcgi_clr_3_677100_4933225_677900_4934300.jpg",
+   "sha256": "b9db7080ba68caee0cb2bf1089aa9759c8c1a63fb6eec6eae81df29abb7e7a8b",
+   "run": "python3 pipeline/intake.py ortho spruce_peak data/spruce_peak/raw/ortho_src/spruce_peak_vcgi_clr_0_676300_4932150_677100_4933225.jpg 676300 4932150 677100 4933225 data/spruce_peak/raw/ortho_src/spruce_peak_vcgi_clr_1_677100_4932150_677900_4933225.jpg 677100 4932150 677900 4933225 data/spruce_peak/raw/ortho_src/spruce_peak_vcgi_clr_2_676300_4933225_677100_4934300.jpg 676300 4933225 677100 4934300 {file} 677100 4933225 677900 4934300 --out raw/vcgi_clr_03m.tif",
+   "outputs": {
+    "raw/vcgi_clr_03m.tif": "9291dba949ca3be72bf12d61e012ca4e024aaf0c4c3693557c17397bbe160060"
+   }
+  },
+  {
+   "asset": "spruce_peak_naip_676300_4932150_677900_4934300.jpg",
+   "sha256": "77d0ebf6dac5636e5ff754abdd49dd185f7f28a77d0c1055cae28131168f2c28",
+   "run": "python3 pipeline/intake.py ortho spruce_peak {file} 676300 4932150 677900 4934300 --out raw/naip_06m.tif",
+   "outputs": {
+    "raw/naip_06m.tif": "318b8689d5cb200aad4a20b6a70ca35d0a026d5c792ef2d56b49b8cf7dabe4f1"
+   }
+  }
+ ]
+}
