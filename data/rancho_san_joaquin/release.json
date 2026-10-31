@@ -1,0 +1,94 @@
+{
+ "release": "data-rancho_san_joaquin",
+ "note": "Build inputs not kept in git for Rancho San Joaquin; `make fetch NAME=rancho_san_joaquin` puts them in place (pipeline/fetch_raw.py). In git: raw/overpass.geojson. Here: the USGS 3DEP 1 m DEM tile (CA_CaliforniaGaps_B23) clipped to the world + 100 m, USDA NAIP at 0.5 m (checking only), the club's printed scorecard, and the CA_CaliforniaGaps_B23 lidar tiles (1 km) each clipped to the world + 100 m.",
+ "files": [
+  {
+   "asset": "USGS_1M_11_x42y373_CA_CaliforniaGaps_B23.tif",
+   "sha256": "149889d76c396c541a6bc9e0afca1a1828cb4cd1988caef5e6adf5d8537825ea",
+   "run": "python3 pipeline/intake.py raster rancho_san_joaquin {file} --out raw/USGS_1M_rancho_san_joaquin.tif",
+   "outputs": {
+    "raw/USGS_1M_rancho_san_joaquin.tif": "c888b660bd9a4f482124708a68a36d68061d32f9f65b745e1221a3a434a337c7"
+   }
+  },
+  {
+   "asset": "naip_rsj.jpg",
+   "sha256": "501d4feb19b03edd85915dc005aaeea05bf1b989e8e2a9cb67d89852e345705f",
+   "run": "python3 pipeline/intake.py ortho rancho_san_joaquin {file} 422044 3724254 423452 3726174 --out raw/naip_05m.tif",
+   "outputs": {
+    "raw/naip_05m.tif": "d9411c2a112cac2745a5d83c120e50d959b320ceb55447e737adbc1eef044992"
+   }
+  },
+  {
+   "asset": "RanchoSanJoaquin-Scorecard-Inside.jpg",
+   "sha256": "28efe1d5700e3559fb66e43e10d7417e86def69701ce1860bdc0715d40d0a598",
+   "to": "raw/card/",
+   "outputs": {
+    "raw/card/RanchoSanJoaquin-Scorecard-Inside.jpg": "28efe1d5700e3559fb66e43e10d7417e86def69701ce1860bdc0715d40d0a598"
+   }
+  },
+  {
+   "asset": "RanchoSanJoaquin-Scorecard-outside.jpg",
+   "sha256": "c587067f2bb711204349c85a4ad4c8aa0c48cc7f6d13422a1026a5f71e7953d0",
+   "to": "raw/card/",
+   "outputs": {
+    "raw/card/RanchoSanJoaquin-Scorecard-outside.jpg": "c587067f2bb711204349c85a4ad4c8aa0c48cc7f6d13422a1026a5f71e7953d0"
+   }
+  },
+  {
+   "asset": "RanchoSanJoaquin-Scorecard-print.pdf",
+   "sha256": "ed5da77b7b127c4bf0bca9b059068459defa6be3c2ce39698e9dd0d5597b2b2b",
+   "to": "raw/card/",
+   "outputs": {
+    "raw/card/RanchoSanJoaquin-Scorecard-print.pdf": "ed5da77b7b127c4bf0bca9b059068459defa6be3c2ce39698e9dd0d5597b2b2b"
+   }
+  },
+  {
+   "asset": "USGS_LPC_CA_CaliforniaGaps_B23_11SMT422724.laz",
+   "sha256": "06a7213e3523b9bc72f8668797028f50c4ffb051f76a6369d83b7c261a6ad583",
+   "run": "python3 pipeline/intake.py laz rancho_san_joaquin {file} --out raw/laz/rancho_san_joaquin_422724.laz --keep-evlrs",
+   "outputs": {
+    "raw/laz/rancho_san_joaquin_422724.laz": "c2620bd280d7eacb0beb9f5afa1f58e8a312799057bba7d9e4c46e82b1f64e06"
+   }
+  },
+  {
+   "asset": "USGS_LPC_CA_CaliforniaGaps_B23_11SMT422725.laz",
+   "sha256": "d1b075ca53b6743186430f4b4d921283bda35c2fbf9210139ae132aee9c59aee",
+   "run": "python3 pipeline/intake.py laz rancho_san_joaquin {file} --out raw/laz/rancho_san_joaquin_422725.laz --keep-evlrs",
+   "outputs": {
+    "raw/laz/rancho_san_joaquin_422725.laz": "ed9d06a096edf7f749c2c339033fdc29c05d3d7f4e574344aafac6bf7a600ac2"
+   }
+  },
+  {
+   "asset": "USGS_LPC_CA_CaliforniaGaps_B23_11SMT422726.laz",
+   "sha256": "79ac76fa3f9eb3d2040844f12ea8407b10e651627881a095d0836b92f94f8e68",
+   "run": "python3 pipeline/intake.py laz rancho_san_joaquin {file} --out raw/laz/rancho_san_joaquin_422726.laz --keep-evlrs",
+   "outputs": {
+    "raw/laz/rancho_san_joaquin_422726.laz": "0cf3ae76b0d931a0af0fae652c1a4c121bc44389ff384070bcd1d0f6c8be6ac0"
+   }
+  },
+  {
+   "asset": "USGS_LPC_CA_CaliforniaGaps_B23_11SMT423724.laz",
+   "sha256": "f027cd6ec0eb627e2f10086e0e746d987e1405bd720f7900e0eb665707a5f86c",
+   "run": "python3 pipeline/intake.py laz rancho_san_joaquin {file} --out raw/laz/rancho_san_joaquin_423724.laz --keep-evlrs",
+   "outputs": {
+    "raw/laz/rancho_san_joaquin_423724.laz": "c478aa4bff1ca541f2b3b86df24391c8afa593f8b9d6caf780f8d92699873810"
+   }
+  },
+  {
+   "asset": "USGS_LPC_CA_CaliforniaGaps_B23_11SMT423726.laz",
+   "sha256": "111eef16334ad390a912a0551cd83bd52354a9fd5f1eb24906874702af4f3b93",
+   "run": "python3 pipeline/intake.py laz rancho_san_joaquin {file} --out raw/laz/rancho_san_joaquin_423726.laz --keep-evlrs",
+   "outputs": {
+    "raw/laz/rancho_san_joaquin_423726.laz": "f52479d37b2ba3062c9eebb5577404340e740f33704b9763cdcd9fe5724de03b"
+   }
+  },
+  {
+   "asset": "USGS_LPC_CA_CaliforniaGaps_B23_11SMT423725.laz",
+   "sha256": "28f8cf121d129d5f455bffa4b382b62b0293a0300e9f52524ac7b8eb11d81397",
+   "run": "python3 pipeline/intake.py laz rancho_san_joaquin {file} --out raw/laz/rancho_san_joaquin_423725.laz --keep-evlrs",
+   "outputs": {
+    "raw/laz/rancho_san_joaquin_423725.laz": "14d196b7385b281c0b9fbfb1d91e23aa1e61219ffff79c69493fd70536ea8972"
+   }
+  }
+ ]
+}

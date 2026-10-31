@@ -1,0 +1,39 @@
+{
+ "note": "per-course settings for game/tests/unit/course_play.test.ts (the every-course checks); docs/COURSE_BUILD.md 8.2",
+ "wind_mph": [
+  3,
+  14
+ ],
+ "water": {
+  "count": 1,
+  "ids": [
+   "w114835188"
+  ]
+ },
+ "tees": {
+  "sets": [
+   "Blue",
+   "White"
+  ]
+ },
+ "tee_shot_clear": {
+  "sets": [
+   "Blue",
+   "White"
+  ]
+ },
+ "points": [
+  {
+   "x": 700,
+   "y": 900,
+   "ob": true,
+   "why": "Lake Michigan east of the course is outside the boundary (out of bounds)"
+  },
+  {
+   "x": 430,
+   "y": 915,
+   "not": "ob",
+   "why": "the middle of the 5th fairway is in play"
+  }
+ ]
+}

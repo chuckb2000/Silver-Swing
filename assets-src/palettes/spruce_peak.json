@@ -1,0 +1,58 @@
+{
+  "name": "Spruce Peak (Stowe, Vermont, early October)",
+  "note": "Course theme palette (32 colours, same keys as pnw.json plus F0-F2). The Mountain Course at Spruce Peak, Stowe VT, drawn in the first week of October, peak foliage on the Green Mountains: cool-season turf still a bright, slightly blue green (G4-G9); rough a deeper green (G2-G4); the meadows and ski trails around the course (OB grass, L0-L2) gone olive-gold; leaf litter under the hardwoods (B0-B2, russet); white sand with a grey cast (S0-S2, crushed granite); a dark slate-blue mountain pond (W0-W2); grey schist ledge and gravel paths (K). Trees in assets-src/trees_spruce_peak.py: red spruce and balsam fir as narrow dark spires, sugar maple in red-orange, yellow and paper birch in gold, beech and late maples still green with a turning patch. The colours by variant are a drawing choice, not a surveyed species (the lidar gives only crown shape). Shadows are a 35% black overlay on top of these.",
+  "colors": {
+    "G0": "#16301f",
+    "G1": "#1f4327",
+    "G2": "#2a592f",
+    "G3": "#346d36",
+    "G4": "#41823d",
+    "G5": "#4f9645",
+    "G6": "#5ea84f",
+    "G7": "#70b85a",
+    "G8": "#84c768",
+    "G9": "#a9d98c",
+    "L0": "#6a6a35",
+    "L1": "#80803f",
+    "L2": "#99954d",
+    "S0": "#bdb9ab",
+    "S1": "#e2dfd3",
+    "S2": "#f5f3ea",
+    "W0": "#1f3442",
+    "W1": "#2c4a5a",
+    "W2": "#6a8b9a",
+    "K0": "#25272c",
+    "K1": "#4f535a",
+    "K2": "#767a80",
+    "K3": "#a9a69c",
+    "K4": "#d2cfc4",
+    "B0": "#3a2414",
+    "B1": "#7a3f1b",
+    "B2": "#9e5a26",
+    "R0": "#4b586a",
+    "WH": "#f6f6f2",
+    "F0": "#7d7a3a",
+    "F1": "#9a9246",
+    "F2": "#b4a957"
+  },
+  "lut": {
+    "ob_woods": ["G0", "G0", "B0", "G1"]
+  },
+  "minimap": {
+    "rough": "#346d36",
+    "woods": "#2a3d22",
+    "ob_woods": "#263820",
+    "ob": "#80803f",
+    "water": "#2c4a5a",
+    "ob_water": "#2c4a5a",
+    "bunker": "#e2dfd3"
+  },
+  "minimap_trees": {
+    "conifer": ["#0e2a22", "#1f4a3a"],
+    "deciduous": ["#8a2e14", "#d0802a"]
+  },
+  "trees": {
+    "conifer": "trees_spruce_peak:conifer",
+    "deciduous": "trees_spruce_peak:deciduous"
+  }
+}

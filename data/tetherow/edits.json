@@ -1,0 +1,836 @@
+{
+ "add": [
+  {
+   "from": "proposed/retag.geojson",
+   "ids": [
+    "water_w316852138"
+   ],
+   "tags": {},
+   "reason": "a pond of the neighbouring Broken Top Club, wholly outside the boundary, mapped as a golf penalty area: kept as off-course water (s03: neighbours' penalty areas)"
+  },
+  {
+   "from": "proposed/retag.geojson",
+   "ids": [
+    "water_w762164026"
+   ],
+   "tags": {},
+   "reason": "a pond of the neighbouring Broken Top Club, wholly outside the boundary, mapped as a golf penalty area: kept as off-course water (s03: neighbours' penalty areas)"
+  },
+  {
+   "from": "proposed/retag.geojson",
+   "ids": [
+    "water_w762164028"
+   ],
+   "tags": {},
+   "reason": "a pond of the neighbouring Broken Top Club, wholly outside the boundary, mapped as a golf penalty area: kept as off-course water (s03: neighbours' penalty areas)"
+  },
+  {
+   "from": "proposed/retag.geojson",
+   "ids": [
+    "cp_w1226918720"
+   ],
+   "tags": {},
+   "reason": "golf=path (a footway) inside the boundary: a cart path, free relief (s03)"
+  },
+  {
+   "from": "proposed/retag.geojson",
+   "ids": [
+    "cp_w1226918721"
+   ],
+   "tags": {},
+   "reason": "golf=path (a footway) inside the boundary: a cart path, free relief (s03)"
+  },
+  {
+   "from": "proposed/retag.geojson",
+   "ids": [
+    "cp_w1226918722"
+   ],
+   "tags": {},
+   "reason": "golf=path (a footway) inside the boundary: a cart path, free relief (s03)"
+  },
+  {
+   "from": "proposed/retag.geojson",
+   "ids": [
+    "cp_w1226918757"
+   ],
+   "tags": {},
+   "reason": "golf=path (a footway) inside the boundary: a cart path, free relief (s03)"
+  },
+  {
+   "from": "proposed/retag.geojson",
+   "ids": [
+    "cp_w1226924887"
+   ],
+   "tags": {},
+   "reason": "golf=path (a footway) inside the boundary: a cart path, free relief (s03)"
+  },
+  {
+   "from": "proposed/retag.geojson",
+   "ids": [
+    "cp_w1226924899"
+   ],
+   "tags": {},
+   "reason": "golf=path (a footway) inside the boundary: a cart path, free relief (s03)"
+  },
+  {
+   "from": "proposed/retag.geojson",
+   "ids": [
+    "cp_w1226924920"
+   ],
+   "tags": {},
+   "reason": "golf=path (a footway) inside the boundary: a cart path, free relief (s03)"
+  },
+  {
+   "from": "proposed/retag.geojson",
+   "ids": [
+    "cp_w1226924929"
+   ],
+   "tags": {},
+   "reason": "golf=path (a footway) inside the boundary: a cart path, free relief (s03)"
+  },
+  {
+   "from": "proposed/retag.geojson",
+   "ids": [
+    "range_tetherow"
+   ],
+   "tags": {},
+   "reason": "Tetherow's range: OSM maps its target greens, tee strip and turf but no range outline; the hull of those features + 4 m (COURSE_LESSONS 2, range). Out of bounds (standing default)"
+  },
+  {
+   "from": "proposed/retag.geojson",
+   "ids": [
+    "tee_w676296570"
+   ],
+   "tags": {},
+   "reason": "a tee pad on hole 4's line mapped as golf=fairway (30 m2; OSIP 2024 shows a separate mown pad in the native grass): copied as a tee (COURSE_LESSONS 2; s03)"
+  },
+  {
+   "from": "proposed/retag.geojson",
+   "ids": [
+    "tee_w676305936"
+   ],
+   "tags": {},
+   "reason": "a tee pad on hole 6's line mapped as golf=fairway (87 m2; OSIP 2024 shows a separate mown pad in the native grass): copied as a tee (COURSE_LESSONS 2; s03)"
+  },
+  {
+   "from": "proposed/retag.geojson",
+   "ids": [
+    "tee_w676305918"
+   ],
+   "tags": {},
+   "reason": "a tee pad on hole 5's line mapped as golf=fairway (93 m2; OSIP 2024 shows a separate mown pad in the native grass): copied as a tee (COURSE_LESSONS 2; s03)"
+  },
+  {
+   "from": "proposed/retag.geojson",
+   "ids": [
+    "tee_w676305919"
+   ],
+   "tags": {},
+   "reason": "a tee pad on hole 5's line mapped as golf=fairway (35 m2; OSIP 2024 shows a separate mown pad in the native grass): copied as a tee (COURSE_LESSONS 2; s03)"
+  },
+  {
+   "from": "proposed/retag.geojson",
+   "ids": [
+    "tee_w676305921"
+   ],
+   "tags": {},
+   "reason": "a tee pad on hole 5's line mapped as golf=fairway (76 m2; OSIP 2024 shows a separate mown pad in the native grass): copied as a tee (COURSE_LESSONS 2; s03)"
+  },
+  {
+   "from": "proposed/retag.geojson",
+   "ids": [
+    "tee_w676305922"
+   ],
+   "tags": {},
+   "reason": "a tee pad on hole 5's line mapped as golf=fairway (113 m2; OSIP 2024 shows a separate mown pad in the native grass): copied as a tee (COURSE_LESSONS 2; s03)"
+  },
+  {
+   "from": "proposed/retag.geojson",
+   "ids": [
+    "tee_w676305929"
+   ],
+   "tags": {},
+   "reason": "a tee pad on hole 6's line mapped as golf=fairway (73 m2; OSIP 2024 shows a separate mown pad in the native grass): copied as a tee (COURSE_LESSONS 2; s03)"
+  },
+  {
+   "from": "proposed/retag.geojson",
+   "ids": [
+    "tee_w676305930"
+   ],
+   "tags": {},
+   "reason": "a tee pad on hole 6's line mapped as golf=fairway (44 m2; OSIP 2024 shows a separate mown pad in the native grass): copied as a tee (COURSE_LESSONS 2; s03)"
+  },
+  {
+   "from": "proposed/retag.geojson",
+   "ids": [
+    "tee_w676305931"
+   ],
+   "tags": {},
+   "reason": "a tee pad on hole 6's line mapped as golf=fairway (27 m2; OSIP 2024 shows a separate mown pad in the native grass): copied as a tee (COURSE_LESSONS 2; s03)"
+  },
+  {
+   "from": "proposed/retag.geojson",
+   "ids": [
+    "tee_w754338806"
+   ],
+   "tags": {},
+   "reason": "a tee pad on hole 3's line mapped as golf=fairway (43 m2; OSIP 2024 shows a separate mown pad in the native grass): copied as a tee (COURSE_LESSONS 2; s03)"
+  }
+ ],
+ "tags": [
+  {
+   "osm": "w780645565",
+   "set": {
+    "par": "5"
+   },
+   "reason": "the card (Stymie, 18Birdies, GolfPass, OpenGolfAPI) makes 9 a par 5 of 532 yd (Kidd); the OSM line measures 524 yd; OSM's par=4 is a tagging error"
+  },
+  {
+   "osm": "w676305928",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "all water red (standing default, COURSE_BUILD.md 4.1)"
+  },
+  {
+   "osm": "w895748322",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "all water red (standing default, COURSE_BUILD.md 4.1)"
+  },
+  {
+   "osm": "w754093488",
+   "set": {
+    "sand": "waste"
+   },
+   "reason": "pumice waste area (1810 m2, irregular, grass and shrubs through it in the OSIP 2024 photo), not a bunker: waste sand"
+  },
+  {
+   "osm": "w754095427",
+   "set": {
+    "sand": "waste"
+   },
+   "reason": "pumice waste area (1241 m2, irregular, grass and shrubs through it in the OSIP 2024 photo), not a bunker: waste sand"
+  },
+  {
+   "osm": "w754096950",
+   "set": {
+    "sand": "waste"
+   },
+   "reason": "pumice waste area (2463 m2, irregular, grass and shrubs through it in the OSIP 2024 photo), not a bunker: waste sand"
+  },
+  {
+   "osm": "w754123988",
+   "set": {
+    "sand": "waste"
+   },
+   "reason": "pumice waste area (1376 m2, irregular, grass and shrubs through it in the OSIP 2024 photo), not a bunker: waste sand"
+  },
+  {
+   "osm": "w754124090",
+   "set": {
+    "sand": "waste"
+   },
+   "reason": "pumice waste area (930 m2, irregular, grass and shrubs through it in the OSIP 2024 photo), not a bunker: waste sand"
+  },
+  {
+   "osm": "w754127075",
+   "set": {
+    "sand": "waste"
+   },
+   "reason": "pumice waste area (1019 m2, irregular, grass and shrubs through it in the OSIP 2024 photo), not a bunker: waste sand"
+  },
+  {
+   "osm": "w754131533",
+   "set": {
+    "sand": "waste"
+   },
+   "reason": "pumice waste area (519 m2, irregular, grass and shrubs through it in the OSIP 2024 photo), not a bunker: waste sand"
+  },
+  {
+   "osm": "w754389937",
+   "set": {
+    "sand": "waste"
+   },
+   "reason": "pumice waste area (604 m2, irregular, grass and shrubs through it in the OSIP 2024 photo), not a bunker: waste sand"
+  },
+  {
+   "osm": "w754687875",
+   "set": {
+    "sand": "waste"
+   },
+   "reason": "pumice waste area (620 m2, irregular, grass and shrubs through it in the OSIP 2024 photo), not a bunker: waste sand"
+  }
+ ],
+ "drop": [
+  {
+   "osm": "n7120945807",
+   "reason": "Broken Top Club's pin (or a stream line of its pond), wholly outside the Tetherow boundary; that club has no course polygon in OSM, so its features would read as Tetherow's"
+  },
+  {
+   "osm": "n7121497870",
+   "reason": "Broken Top Club's pin (or a stream line of its pond), wholly outside the Tetherow boundary; that club has no course polygon in OSM, so its features would read as Tetherow's"
+  },
+  {
+   "osm": "n7122768810",
+   "reason": "Broken Top Club's pin (or a stream line of its pond), wholly outside the Tetherow boundary; that club has no course polygon in OSM, so its features would read as Tetherow's"
+  },
+  {
+   "osm": "n7122769098",
+   "reason": "Broken Top Club's pin (or a stream line of its pond), wholly outside the Tetherow boundary; that club has no course polygon in OSM, so its features would read as Tetherow's"
+  },
+  {
+   "osm": "n7122863243",
+   "reason": "Broken Top Club's pin (or a stream line of its pond), wholly outside the Tetherow boundary; that club has no course polygon in OSM, so its features would read as Tetherow's"
+  },
+  {
+   "osm": "n7122863534",
+   "reason": "Broken Top Club's pin (or a stream line of its pond), wholly outside the Tetherow boundary; that club has no course polygon in OSM, so its features would read as Tetherow's"
+  },
+  {
+   "osm": "n7123633022",
+   "reason": "Broken Top Club's pin (or a stream line of its pond), wholly outside the Tetherow boundary; that club has no course polygon in OSM, so its features would read as Tetherow's"
+  },
+  {
+   "osm": "n7123682547",
+   "reason": "Broken Top Club's pin (or a stream line of its pond), wholly outside the Tetherow boundary; that club has no course polygon in OSM, so its features would read as Tetherow's"
+  },
+  {
+   "osm": "n7123683281",
+   "reason": "Broken Top Club's pin (or a stream line of its pond), wholly outside the Tetherow boundary; that club has no course polygon in OSM, so its features would read as Tetherow's"
+  },
+  {
+   "osm": "n7124799174",
+   "reason": "Broken Top Club's pin (or a stream line of its pond), wholly outside the Tetherow boundary; that club has no course polygon in OSM, so its features would read as Tetherow's"
+  },
+  {
+   "osm": "r14169361",
+   "reason": "Broken Top Club's rough (or a stream line of its pond), wholly outside the Tetherow boundary; that club has no course polygon in OSM, so its features would read as Tetherow's"
+  },
+  {
+   "osm": "r14169362",
+   "reason": "Broken Top Club's fairway (or a stream line of its pond), wholly outside the Tetherow boundary; that club has no course polygon in OSM, so its features would read as Tetherow's"
+  },
+  {
+   "osm": "r14169365",
+   "reason": "Broken Top Club's fairway (or a stream line of its pond), wholly outside the Tetherow boundary; that club has no course polygon in OSM, so its features would read as Tetherow's"
+  },
+  {
+   "osm": "r14169369",
+   "reason": "Broken Top Club's fairway (or a stream line of its pond), wholly outside the Tetherow boundary; that club has no course polygon in OSM, so its features would read as Tetherow's"
+  },
+  {
+   "osm": "r21711148",
+   "reason": "Broken Top Club's fairway (or a stream line of its pond), wholly outside the Tetherow boundary; that club has no course polygon in OSM, so its features would read as Tetherow's"
+  },
+  {
+   "osm": "r21711149",
+   "reason": "Broken Top Club's rough (or a stream line of its pond), wholly outside the Tetherow boundary; that club has no course polygon in OSM, so its features would read as Tetherow's"
+  },
+  {
+   "osm": "w316852138",
+   "reason": "Broken Top Club's water_hazard (or a stream line of its pond), wholly outside the Tetherow boundary; that club has no course polygon in OSM, so its features would read as Tetherow's"
+  },
+  {
+   "osm": "w762143988",
+   "reason": "Broken Top Club's tee (or a stream line of its pond), wholly outside the Tetherow boundary; that club has no course polygon in OSM, so its features would read as Tetherow's"
+  },
+  {
+   "osm": "w762143989",
+   "reason": "Broken Top Club's tee (or a stream line of its pond), wholly outside the Tetherow boundary; that club has no course polygon in OSM, so its features would read as Tetherow's"
+  },
+  {
+   "osm": "w762143990",
+   "reason": "Broken Top Club's tee (or a stream line of its pond), wholly outside the Tetherow boundary; that club has no course polygon in OSM, so its features would read as Tetherow's"
+  },
+  {
+   "osm": "w762143991",
+   "reason": "Broken Top Club's bunker (or a stream line of its pond), wholly outside the Tetherow boundary; that club has no course polygon in OSM, so its features would read as Tetherow's"
+  },
+  {
+   "osm": "w762143992",
+   "reason": "Broken Top Club's bunker (or a stream line of its pond), wholly outside the Tetherow boundary; that club has no course polygon in OSM, so its features would read as Tetherow's"
+  },
+  {
+   "osm": "w762143993",
+   "reason": "Broken Top Club's bunker (or a stream line of its pond), wholly outside the Tetherow boundary; that club has no course polygon in OSM, so its features would read as Tetherow's"
+  },
+  {
+   "osm": "w762143994",
+   "reason": "Broken Top Club's green (or a stream line of its pond), wholly outside the Tetherow boundary; that club has no course polygon in OSM, so its features would read as Tetherow's"
+  },
+  {
+   "osm": "w762143996",
+   "reason": "Broken Top Club's hole (or a stream line of its pond), wholly outside the Tetherow boundary; that club has no course polygon in OSM, so its features would read as Tetherow's"
+  },
+  {
+   "osm": "w762143997",
+   "reason": "Broken Top Club's cartpath (or a stream line of its pond), wholly outside the Tetherow boundary; that club has no course polygon in OSM, so its features would read as Tetherow's"
+  },
+  {
+   "osm": "w762164018",
+   "reason": "Broken Top Club's tee (or a stream line of its pond), wholly outside the Tetherow boundary; that club has no course polygon in OSM, so its features would read as Tetherow's"
+  },
+  {
+   "osm": "w762164019",
+   "reason": "Broken Top Club's tee (or a stream line of its pond), wholly outside the Tetherow boundary; that club has no course polygon in OSM, so its features would read as Tetherow's"
+  },
+  {
+   "osm": "w762164020",
+   "reason": "Broken Top Club's green (or a stream line of its pond), wholly outside the Tetherow boundary; that club has no course polygon in OSM, so its features would read as Tetherow's"
+  },
+  {
+   "osm": "w762164022",
+   "reason": "Broken Top Club's bunker (or a stream line of its pond), wholly outside the Tetherow boundary; that club has no course polygon in OSM, so its features would read as Tetherow's"
+  },
+  {
+   "osm": "w762164023",
+   "reason": "Broken Top Club's bunker (or a stream line of its pond), wholly outside the Tetherow boundary; that club has no course polygon in OSM, so its features would read as Tetherow's"
+  },
+  {
+   "osm": "w762164024",
+   "reason": "Broken Top Club's bunker (or a stream line of its pond), wholly outside the Tetherow boundary; that club has no course polygon in OSM, so its features would read as Tetherow's"
+  },
+  {
+   "osm": "w762164025",
+   "reason": "Broken Top Club's hole (or a stream line of its pond), wholly outside the Tetherow boundary; that club has no course polygon in OSM, so its features would read as Tetherow's"
+  },
+  {
+   "osm": "w762164026",
+   "reason": "Broken Top Club's water_hazard (or a stream line of its pond), wholly outside the Tetherow boundary; that club has no course polygon in OSM, so its features would read as Tetherow's"
+  },
+  {
+   "osm": "w762164028",
+   "reason": "Broken Top Club's water_hazard (or a stream line of its pond), wholly outside the Tetherow boundary; that club has no course polygon in OSM, so its features would read as Tetherow's"
+  },
+  {
+   "osm": "w762164029",
+   "reason": "Broken Top Club's tee (or a stream line of its pond), wholly outside the Tetherow boundary; that club has no course polygon in OSM, so its features would read as Tetherow's"
+  },
+  {
+   "osm": "w762293194",
+   "reason": "Broken Top Club's tee (or a stream line of its pond), wholly outside the Tetherow boundary; that club has no course polygon in OSM, so its features would read as Tetherow's"
+  },
+  {
+   "osm": "w762293195",
+   "reason": "Broken Top Club's tee (or a stream line of its pond), wholly outside the Tetherow boundary; that club has no course polygon in OSM, so its features would read as Tetherow's"
+  },
+  {
+   "osm": "w762293196",
+   "reason": "Broken Top Club's bunker (or a stream line of its pond), wholly outside the Tetherow boundary; that club has no course polygon in OSM, so its features would read as Tetherow's"
+  },
+  {
+   "osm": "w762293197",
+   "reason": "Broken Top Club's green (or a stream line of its pond), wholly outside the Tetherow boundary; that club has no course polygon in OSM, so its features would read as Tetherow's"
+  },
+  {
+   "osm": "w762293198",
+   "reason": "Broken Top Club's fairway (or a stream line of its pond), wholly outside the Tetherow boundary; that club has no course polygon in OSM, so its features would read as Tetherow's"
+  },
+  {
+   "osm": "w762293199",
+   "reason": "Broken Top Club's hole (or a stream line of its pond), wholly outside the Tetherow boundary; that club has no course polygon in OSM, so its features would read as Tetherow's"
+  },
+  {
+   "osm": "w762293200",
+   "reason": "Broken Top Club's bunker (or a stream line of its pond), wholly outside the Tetherow boundary; that club has no course polygon in OSM, so its features would read as Tetherow's"
+  },
+  {
+   "osm": "w762293201",
+   "reason": "Broken Top Club's bunker (or a stream line of its pond), wholly outside the Tetherow boundary; that club has no course polygon in OSM, so its features would read as Tetherow's"
+  },
+  {
+   "osm": "w762293202",
+   "reason": "Broken Top Club's green (or a stream line of its pond), wholly outside the Tetherow boundary; that club has no course polygon in OSM, so its features would read as Tetherow's"
+  },
+  {
+   "osm": "w762293203",
+   "reason": "Broken Top Club's tee (or a stream line of its pond), wholly outside the Tetherow boundary; that club has no course polygon in OSM, so its features would read as Tetherow's"
+  },
+  {
+   "osm": "w762293204",
+   "reason": "Broken Top Club's tee (or a stream line of its pond), wholly outside the Tetherow boundary; that club has no course polygon in OSM, so its features would read as Tetherow's"
+  },
+  {
+   "osm": "w762293205",
+   "reason": "Broken Top Club's tee (or a stream line of its pond), wholly outside the Tetherow boundary; that club has no course polygon in OSM, so its features would read as Tetherow's"
+  },
+  {
+   "osm": "w762293206",
+   "reason": "Broken Top Club's tee (or a stream line of its pond), wholly outside the Tetherow boundary; that club has no course polygon in OSM, so its features would read as Tetherow's"
+  },
+  {
+   "osm": "w762293207",
+   "reason": "Broken Top Club's fairway (or a stream line of its pond), wholly outside the Tetherow boundary; that club has no course polygon in OSM, so its features would read as Tetherow's"
+  },
+  {
+   "osm": "w762293208",
+   "reason": "Broken Top Club's hole (or a stream line of its pond), wholly outside the Tetherow boundary; that club has no course polygon in OSM, so its features would read as Tetherow's"
+  },
+  {
+   "osm": "w762303881",
+   "reason": "Broken Top Club's tee (or a stream line of its pond), wholly outside the Tetherow boundary; that club has no course polygon in OSM, so its features would read as Tetherow's"
+  },
+  {
+   "osm": "w762303882",
+   "reason": "Broken Top Club's tee (or a stream line of its pond), wholly outside the Tetherow boundary; that club has no course polygon in OSM, so its features would read as Tetherow's"
+  },
+  {
+   "osm": "w762303883",
+   "reason": "Broken Top Club's tee (or a stream line of its pond), wholly outside the Tetherow boundary; that club has no course polygon in OSM, so its features would read as Tetherow's"
+  },
+  {
+   "osm": "w762303884",
+   "reason": "Broken Top Club's green (or a stream line of its pond), wholly outside the Tetherow boundary; that club has no course polygon in OSM, so its features would read as Tetherow's"
+  },
+  {
+   "osm": "w762303885",
+   "reason": "Broken Top Club's fairway (or a stream line of its pond), wholly outside the Tetherow boundary; that club has no course polygon in OSM, so its features would read as Tetherow's"
+  },
+  {
+   "osm": "w762303886",
+   "reason": "Broken Top Club's bunker (or a stream line of its pond), wholly outside the Tetherow boundary; that club has no course polygon in OSM, so its features would read as Tetherow's"
+  },
+  {
+   "osm": "w762303887",
+   "reason": "Broken Top Club's bunker (or a stream line of its pond), wholly outside the Tetherow boundary; that club has no course polygon in OSM, so its features would read as Tetherow's"
+  },
+  {
+   "osm": "w762303888",
+   "reason": "Broken Top Club's bunker (or a stream line of its pond), wholly outside the Tetherow boundary; that club has no course polygon in OSM, so its features would read as Tetherow's"
+  },
+  {
+   "osm": "w762303889",
+   "reason": "Broken Top Club's bunker (or a stream line of its pond), wholly outside the Tetherow boundary; that club has no course polygon in OSM, so its features would read as Tetherow's"
+  },
+  {
+   "osm": "w762303890",
+   "reason": "Broken Top Club's hole (or a stream line of its pond), wholly outside the Tetherow boundary; that club has no course polygon in OSM, so its features would read as Tetherow's"
+  },
+  {
+   "osm": "w762303891",
+   "reason": "Broken Top Club's green (or a stream line of its pond), wholly outside the Tetherow boundary; that club has no course polygon in OSM, so its features would read as Tetherow's"
+  },
+  {
+   "osm": "w762303892",
+   "reason": "Broken Top Club's tee (or a stream line of its pond), wholly outside the Tetherow boundary; that club has no course polygon in OSM, so its features would read as Tetherow's"
+  },
+  {
+   "osm": "w762303893",
+   "reason": "Broken Top Club's tee (or a stream line of its pond), wholly outside the Tetherow boundary; that club has no course polygon in OSM, so its features would read as Tetherow's"
+  },
+  {
+   "osm": "w762303894",
+   "reason": "Broken Top Club's tee (or a stream line of its pond), wholly outside the Tetherow boundary; that club has no course polygon in OSM, so its features would read as Tetherow's"
+  },
+  {
+   "osm": "w762303895",
+   "reason": "Broken Top Club's tee (or a stream line of its pond), wholly outside the Tetherow boundary; that club has no course polygon in OSM, so its features would read as Tetherow's"
+  },
+  {
+   "osm": "w762303896",
+   "reason": "Broken Top Club's fairway (or a stream line of its pond), wholly outside the Tetherow boundary; that club has no course polygon in OSM, so its features would read as Tetherow's"
+  },
+  {
+   "osm": "w762303897",
+   "reason": "Broken Top Club's hole (or a stream line of its pond), wholly outside the Tetherow boundary; that club has no course polygon in OSM, so its features would read as Tetherow's"
+  },
+  {
+   "osm": "w762379058",
+   "reason": "Broken Top Club's tee (or a stream line of its pond), wholly outside the Tetherow boundary; that club has no course polygon in OSM, so its features would read as Tetherow's"
+  },
+  {
+   "osm": "w762379059",
+   "reason": "Broken Top Club's tee (or a stream line of its pond), wholly outside the Tetherow boundary; that club has no course polygon in OSM, so its features would read as Tetherow's"
+  },
+  {
+   "osm": "w762379060",
+   "reason": "Broken Top Club's tee (or a stream line of its pond), wholly outside the Tetherow boundary; that club has no course polygon in OSM, so its features would read as Tetherow's"
+  },
+  {
+   "osm": "w762379061",
+   "reason": "Broken Top Club's tee (or a stream line of its pond), wholly outside the Tetherow boundary; that club has no course polygon in OSM, so its features would read as Tetherow's"
+  },
+  {
+   "osm": "w762379062",
+   "reason": "Broken Top Club's bunker (or a stream line of its pond), wholly outside the Tetherow boundary; that club has no course polygon in OSM, so its features would read as Tetherow's"
+  },
+  {
+   "osm": "w762379063",
+   "reason": "Broken Top Club's bunker (or a stream line of its pond), wholly outside the Tetherow boundary; that club has no course polygon in OSM, so its features would read as Tetherow's"
+  },
+  {
+   "osm": "w762379064",
+   "reason": "Broken Top Club's bunker (or a stream line of its pond), wholly outside the Tetherow boundary; that club has no course polygon in OSM, so its features would read as Tetherow's"
+  },
+  {
+   "osm": "w762379065",
+   "reason": "Broken Top Club's bunker (or a stream line of its pond), wholly outside the Tetherow boundary; that club has no course polygon in OSM, so its features would read as Tetherow's"
+  },
+  {
+   "osm": "w762379066",
+   "reason": "Broken Top Club's green (or a stream line of its pond), wholly outside the Tetherow boundary; that club has no course polygon in OSM, so its features would read as Tetherow's"
+  },
+  {
+   "osm": "w762399481",
+   "reason": "Broken Top Club's hole (or a stream line of its pond), wholly outside the Tetherow boundary; that club has no course polygon in OSM, so its features would read as Tetherow's"
+  },
+  {
+   "osm": "w762399482",
+   "reason": "Broken Top Club's green (or a stream line of its pond), wholly outside the Tetherow boundary; that club has no course polygon in OSM, so its features would read as Tetherow's"
+  },
+  {
+   "osm": "w762399483",
+   "reason": "Broken Top Club's bunker (or a stream line of its pond), wholly outside the Tetherow boundary; that club has no course polygon in OSM, so its features would read as Tetherow's"
+  },
+  {
+   "osm": "w762399484",
+   "reason": "Broken Top Club's bunker (or a stream line of its pond), wholly outside the Tetherow boundary; that club has no course polygon in OSM, so its features would read as Tetherow's"
+  },
+  {
+   "osm": "w762399485",
+   "reason": "Broken Top Club's bunker (or a stream line of its pond), wholly outside the Tetherow boundary; that club has no course polygon in OSM, so its features would read as Tetherow's"
+  },
+  {
+   "osm": "w762399486",
+   "reason": "Broken Top Club's bunker (or a stream line of its pond), wholly outside the Tetherow boundary; that club has no course polygon in OSM, so its features would read as Tetherow's"
+  },
+  {
+   "osm": "w762399487",
+   "reason": "Broken Top Club's bunker (or a stream line of its pond), wholly outside the Tetherow boundary; that club has no course polygon in OSM, so its features would read as Tetherow's"
+  },
+  {
+   "osm": "w762399488",
+   "reason": "Broken Top Club's tee (or a stream line of its pond), wholly outside the Tetherow boundary; that club has no course polygon in OSM, so its features would read as Tetherow's"
+  },
+  {
+   "osm": "w762399489",
+   "reason": "Broken Top Club's tee (or a stream line of its pond), wholly outside the Tetherow boundary; that club has no course polygon in OSM, so its features would read as Tetherow's"
+  },
+  {
+   "osm": "w762399490",
+   "reason": "Broken Top Club's tee (or a stream line of its pond), wholly outside the Tetherow boundary; that club has no course polygon in OSM, so its features would read as Tetherow's"
+  },
+  {
+   "osm": "w762399491",
+   "reason": "Broken Top Club's tee (or a stream line of its pond), wholly outside the Tetherow boundary; that club has no course polygon in OSM, so its features would read as Tetherow's"
+  },
+  {
+   "osm": "w762399492",
+   "reason": "Broken Top Club's fairway (or a stream line of its pond), wholly outside the Tetherow boundary; that club has no course polygon in OSM, so its features would read as Tetherow's"
+  },
+  {
+   "osm": "w762399493",
+   "reason": "Broken Top Club's hole (or a stream line of its pond), wholly outside the Tetherow boundary; that club has no course polygon in OSM, so its features would read as Tetherow's"
+  },
+  {
+   "osm": "w762399494",
+   "reason": "Broken Top Club's tee (or a stream line of its pond), wholly outside the Tetherow boundary; that club has no course polygon in OSM, so its features would read as Tetherow's"
+  },
+  {
+   "osm": "w762399495",
+   "reason": "Broken Top Club's tee (or a stream line of its pond), wholly outside the Tetherow boundary; that club has no course polygon in OSM, so its features would read as Tetherow's"
+  },
+  {
+   "osm": "w762399496",
+   "reason": "Broken Top Club's tee (or a stream line of its pond), wholly outside the Tetherow boundary; that club has no course polygon in OSM, so its features would read as Tetherow's"
+  },
+  {
+   "osm": "w762399497",
+   "reason": "Broken Top Club's tee (or a stream line of its pond), wholly outside the Tetherow boundary; that club has no course polygon in OSM, so its features would read as Tetherow's"
+  },
+  {
+   "osm": "w762399498",
+   "reason": "Broken Top Club's bunker (or a stream line of its pond), wholly outside the Tetherow boundary; that club has no course polygon in OSM, so its features would read as Tetherow's"
+  },
+  {
+   "osm": "w762399499",
+   "reason": "Broken Top Club's bunker (or a stream line of its pond), wholly outside the Tetherow boundary; that club has no course polygon in OSM, so its features would read as Tetherow's"
+  },
+  {
+   "osm": "w762399500",
+   "reason": "Broken Top Club's bunker (or a stream line of its pond), wholly outside the Tetherow boundary; that club has no course polygon in OSM, so its features would read as Tetherow's"
+  },
+  {
+   "osm": "w762399501",
+   "reason": "Broken Top Club's green (or a stream line of its pond), wholly outside the Tetherow boundary; that club has no course polygon in OSM, so its features would read as Tetherow's"
+  },
+  {
+   "osm": "w762399504",
+   "reason": "Broken Top Club's hole (or a stream line of its pond), wholly outside the Tetherow boundary; that club has no course polygon in OSM, so its features would read as Tetherow's"
+  },
+  {
+   "osm": "w762399507",
+   "reason": "Broken Top Club's cartpath (or a stream line of its pond), wholly outside the Tetherow boundary; that club has no course polygon in OSM, so its features would read as Tetherow's"
+  },
+  {
+   "osm": "w762399508",
+   "reason": "Broken Top Club's driving_range (or a stream line of its pond), wholly outside the Tetherow boundary; that club has no course polygon in OSM, so its features would read as Tetherow's"
+  },
+  {
+   "osm": "w762517478",
+   "reason": "Broken Top Club's bunker (or a stream line of its pond), wholly outside the Tetherow boundary; that club has no course polygon in OSM, so its features would read as Tetherow's"
+  },
+  {
+   "osm": "w762517479",
+   "reason": "Broken Top Club's green (or a stream line of its pond), wholly outside the Tetherow boundary; that club has no course polygon in OSM, so its features would read as Tetherow's"
+  },
+  {
+   "osm": "w762517480",
+   "reason": "Broken Top Club's fairway (or a stream line of its pond), wholly outside the Tetherow boundary; that club has no course polygon in OSM, so its features would read as Tetherow's"
+  },
+  {
+   "osm": "w762517481",
+   "reason": "Broken Top Club's hole (or a stream line of its pond), wholly outside the Tetherow boundary; that club has no course polygon in OSM, so its features would read as Tetherow's"
+  },
+  {
+   "osm": "w762767719",
+   "reason": "Broken Top Club's tee (or a stream line of its pond), wholly outside the Tetherow boundary; that club has no course polygon in OSM, so its features would read as Tetherow's"
+  },
+  {
+   "osm": "w762767720",
+   "reason": "Broken Top Club's tee (or a stream line of its pond), wholly outside the Tetherow boundary; that club has no course polygon in OSM, so its features would read as Tetherow's"
+  },
+  {
+   "osm": "w762767721",
+   "reason": "Broken Top Club's cartpath (or a stream line of its pond), wholly outside the Tetherow boundary; that club has no course polygon in OSM, so its features would read as Tetherow's"
+  },
+  {
+   "osm": "w985408436",
+   "reason": "Broken Top Club's golf_other (or a stream line of its pond), wholly outside the Tetherow boundary; that club has no course polygon in OSM, so its features would read as Tetherow's"
+  },
+  {
+   "osm": "w1226918720",
+   "reason": "replaced by its cart-path copy cp_w1226918720"
+  },
+  {
+   "osm": "w1226918721",
+   "reason": "replaced by its cart-path copy cp_w1226918721"
+  },
+  {
+   "osm": "w1226918722",
+   "reason": "replaced by its cart-path copy cp_w1226918722"
+  },
+  {
+   "osm": "w1226918757",
+   "reason": "replaced by its cart-path copy cp_w1226918757"
+  },
+  {
+   "osm": "w1226924887",
+   "reason": "replaced by its cart-path copy cp_w1226924887"
+  },
+  {
+   "osm": "w1226924899",
+   "reason": "replaced by its cart-path copy cp_w1226924899"
+  },
+  {
+   "osm": "w1226924920",
+   "reason": "replaced by its cart-path copy cp_w1226924920"
+  },
+  {
+   "osm": "w1226924929",
+   "reason": "replaced by its cart-path copy cp_w1226924929"
+  },
+  {
+   "osm": "r17260236",
+   "reason": "a target green, tee strip or turf of the driving range (now one range polygon, range_tetherow)"
+  },
+  {
+   "osm": "w754727421",
+   "reason": "a target green, tee strip or turf of the driving range (now one range polygon, range_tetherow)"
+  },
+  {
+   "osm": "w930491745",
+   "reason": "a target green, tee strip or turf of the driving range (now one range polygon, range_tetherow)"
+  },
+  {
+   "osm": "w754718212",
+   "reason": "a target green, tee strip or turf of the driving range (now one range polygon, range_tetherow)"
+  },
+  {
+   "osm": "w754718213",
+   "reason": "a target green, tee strip or turf of the driving range (now one range polygon, range_tetherow)"
+  },
+  {
+   "osm": "w754718214",
+   "reason": "a target green, tee strip or turf of the driving range (now one range polygon, range_tetherow)"
+  },
+  {
+   "osm": "w754718215",
+   "reason": "a target green, tee strip or turf of the driving range (now one range polygon, range_tetherow)"
+  },
+  {
+   "osm": "w754718216",
+   "reason": "a target green, tee strip or turf of the driving range (now one range polygon, range_tetherow)"
+  },
+  {
+   "osm": "w754718217",
+   "reason": "a target green, tee strip or turf of the driving range (now one range polygon, range_tetherow)"
+  },
+  {
+   "osm": "w754718218",
+   "reason": "a target green, tee strip or turf of the driving range (now one range polygon, range_tetherow)"
+  },
+  {
+   "osm": "w754718220",
+   "reason": "a target green, tee strip or turf of the driving range (now one range polygon, range_tetherow)"
+  },
+  {
+   "osm": "w754718221",
+   "reason": "a target green, tee strip or turf of the driving range (now one range polygon, range_tetherow)"
+  },
+  {
+   "osm": "w676296570",
+   "reason": "replaced by its tee copy tee_w676296570"
+  },
+  {
+   "osm": "w676305936",
+   "reason": "replaced by its tee copy tee_w676305936"
+  },
+  {
+   "osm": "w676305918",
+   "reason": "replaced by its tee copy tee_w676305918"
+  },
+  {
+   "osm": "w676305919",
+   "reason": "replaced by its tee copy tee_w676305919"
+  },
+  {
+   "osm": "w676305921",
+   "reason": "replaced by its tee copy tee_w676305921"
+  },
+  {
+   "osm": "w676305922",
+   "reason": "replaced by its tee copy tee_w676305922"
+  },
+  {
+   "osm": "w676305929",
+   "reason": "replaced by its tee copy tee_w676305929"
+  },
+  {
+   "osm": "w676305930",
+   "reason": "replaced by its tee copy tee_w676305930"
+  },
+  {
+   "osm": "w676305931",
+   "reason": "replaced by its tee copy tee_w676305931"
+  },
+  {
+   "osm": "w754338806",
+   "reason": "replaced by its tee copy tee_w754338806"
+  },
+  {
+   "osm": "w1091654143",
+   "reason": "mapped stream / pool by the hole 4 tees: dry, shrub-filled channel in the OSIP 2024 photo; a line has no width to play as a penalty area (open item)"
+  },
+  {
+   "osm": "w1091654145",
+   "reason": "mapped stream / pool by the hole 4 tees: dry, shrub-filled channel in the OSIP 2024 photo; a line has no width to play as a penalty area (open item)"
+  },
+  {
+   "osm": "w1091654144",
+   "reason": "mapped stream / pool by the hole 4 tees: dry, shrub-filled channel in the OSIP 2024 photo; a line has no width to play as a penalty area (open item)"
+  }
+ ]
+}

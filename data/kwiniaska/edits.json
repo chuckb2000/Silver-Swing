@@ -1,0 +1,52 @@
+{
+ "tags": [
+  {
+   "osm": "w1228363919",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "standing default (COURSE_BUILD 4.1): every penalty area red; OSM maps it golf=water_hazard (yellow)"
+  },
+  {
+   "osm": "w1228363920",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "standing default (COURSE_BUILD 4.1): every penalty area red; OSM maps it golf=water_hazard (yellow)"
+  },
+  {
+   "osm": "w1228363921",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "standing default (COURSE_BUILD 4.1): every penalty area red; OSM maps it golf=water_hazard (yellow)"
+  },
+  {
+   "osm": "w1066608748",
+   "set": {
+    "building": "yes"
+   },
+   "reason": "golf=clubhouse already carries building=yes in OSM; tagged again so the audit reads it as a building"
+  }
+ ],
+ "drop": [
+  {
+   "osm": "w1228417008",
+   "reason": "The Kwini Club Practice Facility (5353 Spear St), a separate leisure=golf_course polygon north of the course with no hole lines: the driving range and practice greens, out of bounds (standing default: the range is OB). The course's OB line is w65856105"
+  }
+ ],
+ "add": [
+  {
+   "from": "proposed/channels_lidar.geojson",
+   "ids": [
+    "channel_w626918930"
+   ],
+   "tags": {
+    "penalty": "red",
+    "flatten": "no",
+    "approved": "pending"
+   },
+   "reason": "Munroe Brook (OSM w626918930, a stream line only) runs 620 m through the course across holes 12-15 in a wooded gully; penalty area proposed from the 2023 lidar DEM channel by pipeline/propose_channels.py (4,869 m2, mean width 5.5 m) and checked against the VCGI photo (it follows the visible creek). Red (standing default), flatten=no (the bed falls). Course chat 2026-10-30, made under the developer's 'make the call' instruction: PENDING the developer's approval"
+  }
+ ]
+}
