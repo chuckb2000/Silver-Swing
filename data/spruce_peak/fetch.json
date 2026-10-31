@@ -1,0 +1,39 @@
+{
+ "items": [
+  {
+   "name": "spruce_peak_overpass.geojson",
+   "osm_box": [
+    44.508,
+    -72.808,
+    44.548,
+    -72.75
+   ]
+  },
+  {
+   "name": "spruce_peak_dem1m",
+   "tnm": {
+    "dataset": "dem1m",
+    "bbox": [
+     -72.808,
+     44.508,
+     -72.75,
+     44.548
+    ],
+    "list": true
+   }
+  },
+  {
+   "name": "spruce_peak_lpc",
+   "tnm": {
+    "dataset": "lpc",
+    "bbox": [
+     -72.808,
+     44.508,
+     -72.75,
+     44.548
+    ],
+    "list": true
+   }
+  }
+ ]
+}
