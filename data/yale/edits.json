@@ -570,6 +570,10 @@
   {
    "osm": "n7157816970",
    "reason": "golf=tee point (tee marker); the pads are tee polygons now (s06 needs polygons)"
+  },
+  {
+   "osm": "n2908414153",
+   "reason": "hole 9's OSM pin stands 16 m east of the long Biarritz green's centre, outside the close-up putting view (course_play.test.ts); the centre pin is the green's centre instead and the game adds the other hole locations (pins.ts)"
   }
  ],
  "tags": [
