@@ -491,6 +491,16 @@ def main():
             raise SystemExit(f"[s05] drop_trees: no detected tree within 2 m of ({d['x']}, {d['y']}) (nearest {dist[k]:.1f} m)")
         t_ = trees.pop(k)
         removed.append({"x": t_["x"], "y": t_["y"], "h": t_["h"], "r": t_["r"], "type": t_["type"], "reason": d["reason"]})
+    # optional (course_config.json move_trees): single trees the developer asked to move, each
+    # {"x", "y", "to": [x, y], "reason"} in local metres; the detected tree within 2 m of (x, y)
+    # keeps its height, crown and type and stands at "to" (Victoria 13, developer 2026-10-31)
+    for d in cfg.get("move_trees") or []:
+        dist = [np.hypot(t_["x"] - d["x"], t_["y"] - d["y"]) for t_ in trees]
+        k = int(np.argmin(dist))
+        if dist[k] > 2.0:
+            raise SystemExit(f"[s05] move_trees: no detected tree within 2 m of ({d['x']}, {d['y']}) (nearest {dist[k]:.1f} m)")
+        trees[k]["x"], trees[k]["y"] = round(float(d["to"][0]), 2), round(float(d["to"][1]), 2)
+        print(f"[s05] moved the tree at ({d['x']}, {d['y']}) to ({d['to'][0]}, {d['to'][1]}): {d['reason']}")
 
     # optional (course_config.json trees_need_ortho, pipeline/gorse.py): drop lidar trees the
     # newer orthophoto doesn't show (the lidar is older than parts of the course)

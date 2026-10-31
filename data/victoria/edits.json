@@ -164,20 +164,29 @@
  ],
  "add": [
   {
-   "from": "proposed/sea.geojson",
+   "from": "proposed/sea_split.geojson",
    "ids": [
-    "sea"
+    "sea_in",
+    "sea_out"
    ],
    "tags": {},
-   "reason": "OSM maps the Strait only as natural=coastline ways; pipeline/propose_sea.py makes the sea side one water feature, a red penalty area (config red_water_osm; standing default every penalty area red, as at Newport and Cypress Point)"
+   "reason": "OSM maps the Strait only as natural=coastline ways (pipeline/propose_sea.py -> proposed/sea.geojson). Developer 2026-10-31: the ocean is a water hazard, with a drawing of the OB line: make_sea_ob.py splits the sea at that line, sea_in a red penalty area inside the boundary, sea_out beyond it (out of bounds, drawn as water, no stakes)"
   },
   {
-   "from": "proposed/boundary.geojson",
+   "from": "proposed/shore.geojson",
    "ids": [
-    "bd_r2579054"
+    "shore_strait"
    ],
    "tags": {},
-   "reason": "the OSM boundary plus the edges of four OSM tee boxes it clipped (2-30 m2 each; s03 audit), so no teed ball is out of bounds (data/victoria/make_boundary.py)"
+   "reason": "developer 2026-10-31 ('the ocean is a water hazard, not out of bounds', Street View photo: red stakes along the turf edge by 7): the rocks, gorse and beach between the course boundary and the sea (make_shore.py: outside the boundary, within 60 m of the sea and 120 m of the boundary, clear of roads and houses, not across Beach Drive) are part of the same red penalty area as the sea, drawn as rock (config rock_water_osm)"
+  },
+  {
+   "from": "proposed/boundary_sea.geojson",
+   "ids": [
+    "bd_r2579054_sea"
+   ],
+   "tags": {},
+   "reason": "the OSM boundary plus the edges of four OSM tee boxes it clipped (make_boundary.py), extended over the sea inside the developer's OB line (make_sea_ob.py, developer 2026-10-31)"
   }
  ],
  "drop": [

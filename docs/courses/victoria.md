@@ -45,10 +45,15 @@ game shows under "other" until the design chat adds it (open item 1).
     -   scorecard: the club's "Scorecard 2025" PDF; ratings from 18Birdies.
     -   LidarBC's point-cloud index was also fetched; the LAZ wasn't needed (the HRDEM DSM gives
         the canopy).
--   **Water:** the sea (`proposed/sea.geojson`, from OSM's coastline, `red_water_osm`): a red
-    penalty area inside and outside the boundary. No ponds. Out of bounds: the OSM boundary
-    (plus the edges of four tee boxes it clipped, `make_boundary.py`) and Beach Drive, the
-    public road through the course (`ob_highways: ["secondary"]`).
+-   **Water:** the sea, from OSM's coastline (`proposed/sea.geojson`), split at the developer's
+    out-of-bounds line (`make_sea_ob.py` -> `proposed/sea_split.geojson`): `sea_in`, south-east
+    of the line, is a red penalty area inside the boundary; `sea_out` (the bay north of the line
+    from the 7th, behind the Beach Drive houses, and the sea west of the line from the 3rd) is out
+    of bounds, drawn as water with no stakes. The rocky shore between the turf and the sea by the
+    7th (`shore_strait`, `make_shore.py`, drawn as rock) is part of the red penalty area. No ponds.
+    Out of bounds: the OSM boundary (plus the edges of four tee boxes it clipped,
+    `make_boundary.py`) extended over `sea_in` (`proposed/boundary_sea.geojson`), and Beach Drive,
+    the public road through the course (`ob_highways: ["secondary"]`).
 -   **Trees:** 1,518 found in the canopy model, 515 on the course, 1,508 exported (503 dropped
     as buildings). Types from crown shape only: 41 conifer, 1,477 deciduous (drawn as Garry
     oak). s06b dropped 10 trees from tee shots: one 21 m tree 37 m in front of the 4th Gold
@@ -88,13 +93,24 @@ the second set.
     Columbia.
 -   Standing defaults (COURSE_BUILD 4.1): every penalty area red, the OSM boundary as OB,
     trees from the canopy model, trees in a perfect tee shot's way removed and listed.
--   Course chat's calls (2026-10-31, for the developer to confirm; open items): the sea a red
-    penalty area; Beach Drive out of bounds; the boundary widened to four clipped tee boxes;
+-   2026-10-31 (afternoon): "the ocean is a water hazard, not out of bounds" (a Street View photo
+    of the red stakes along the shore by the 7th), then a drawing of the OB line: from the coast
+    below the 7th due east to the edge of the world, and from the coast at the 3rd south to the
+    edge; "don't put OB stakes in the water". Built as described under Water; the line through the
+    sea shows only as a faint edge between the two waters, with no stakes (`no_stakes_osm`).
+-   2026-10-31: "this tree needs to be moved" (a screenshot with an arrow): the 18.8 m oak at the
+    right of the 13th's approach, whose crown hung over the fairway, moved about 11 m south-west
+    into the trees beside it (`move_trees`).
+-   Course chat's calls (2026-10-31, for the developer to confirm; open items): Beach Drive out of bounds; the boundary widened to four clipped tee boxes;
     theme `victoria`; card hole 4.
 
 ## New pipeline keys or theme
 
--   No new pipeline keys. Config keys used: `ob_highways`, `red_water_osm`, `dsm`.
+-   New pipeline keys (2026-10-31; no other course uses them): `move_trees` (s05: a detected
+    tree within 2 m of `x, y` keeps its height, crown and type and stands at `to`) and
+    `no_stakes_osm` (s09/s09b: no OB stakes whose out-of-bounds side lies in these features, as
+    for `rock_water_osm`). Config keys used: `ob_highways`, `red_water_osm`, `rock_water_osm`,
+    `no_stakes_osm`, `move_trees`, `dsm`.
 -   New theme `victoria` (`assets-src/palettes/victoria.json`, `assets-src/trees_victoria.py`,
     `game/public/sprites/trees_victoria*`): the island's dry-summer turf from the 2025 ortho
     (grey-green fairways, paler greens, olive-khaki rough), white sand, the dark blue-grey strait,
@@ -114,8 +130,9 @@ the second set.
     runs past 7 and 13. No local rule was found online; built as OB (a public road; the club
     ended tee shots across it in 1923). Option: cart path with free relief (the 4.1 default for
     roads inside a boundary). Recommendation: keep OB.
-3.  **The sea as a red penalty area**, also beyond the boundary (as Cypress Point and
-    Newport). The rock shore between the boundary and the water stays OB. Recommendation: keep.
+3.  **The sea:** settled by the developer, 2026-10-31 (red penalty area inside the drawn OB
+    line, out of bounds beyond it; the rock shore by the 7th red). The faint line in the water
+    where the two meet is the surface edge outline; it can be hidden if it reads as a stake line.
 4.  **Rock outcrops play as rough.** The bare-rock knolls by 6-10 aren't mapped in OSM and
     there is no rock surface; they draw and play as rough. Option: trace them from the ortho as
     an art-only rock paint (needs a pipeline key). Recommendation: leave for now.
