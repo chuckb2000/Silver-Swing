@@ -175,6 +175,62 @@
   {
    "name": "s3_lpc_se_d22_sub.xml",
    "url": "https://prd-tnm.s3.amazonaws.com/?list-type=2&max-keys=50&prefix=StagedProducts/Elevation/LPC/Projects/OR_SouthEast_D22/"
+  },
+  {
+   "name": "s3_lpc_se_1.xml",
+   "url": "https://prd-tnm.s3.amazonaws.com/?list-type=2&prefix=StagedProducts/Elevation/LPC/Projects/OR_SouthEast_D22/OR_SouthEast_1_D22/LAZ/USGS_LPC_OR_SouthEast_D22_10TFP4"
+  },
+  {
+   "name": "s3_lpc_se_2.xml",
+   "url": "https://prd-tnm.s3.amazonaws.com/?list-type=2&prefix=StagedProducts/Elevation/LPC/Projects/OR_SouthEast_D22/OR_SouthEast_2_D22/LAZ/USGS_LPC_OR_SouthEast_D22_10TFP4"
+  },
+  {
+   "name": "s3_lpc_se_3.xml",
+   "url": "https://prd-tnm.s3.amazonaws.com/?list-type=2&prefix=StagedProducts/Elevation/LPC/Projects/OR_SouthEast_D22/OR_SouthEast_3_D22/LAZ/USGS_LPC_OR_SouthEast_D22_10TFP4"
+  },
+  {
+   "name": "s3_lpc_se_4.xml",
+   "url": "https://prd-tnm.s3.amazonaws.com/?list-type=2&prefix=StagedProducts/Elevation/LPC/Projects/OR_SouthEast_D22/OR_SouthEast_4_D22/LAZ/USGS_LPC_OR_SouthEast_D22_10TFP4"
+  },
+  {
+   "name": "s3_lpc_se_5.xml",
+   "url": "https://prd-tnm.s3.amazonaws.com/?list-type=2&prefix=StagedProducts/Elevation/LPC/Projects/OR_SouthEast_D22/OR_SouthEast_5_D22/LAZ/USGS_LPC_OR_SouthEast_D22_10TFP4"
+  },
+  {
+   "name": "s3_lpc_se_6.xml",
+   "url": "https://prd-tnm.s3.amazonaws.com/?list-type=2&prefix=StagedProducts/Elevation/LPC/Projects/OR_SouthEast_D22/OR_SouthEast_6_D22/LAZ/USGS_LPC_OR_SouthEast_D22_10TFP4"
+  },
+  {
+   "name": "s3_lpc_se_7.xml",
+   "url": "https://prd-tnm.s3.amazonaws.com/?list-type=2&prefix=StagedProducts/Elevation/LPC/Projects/OR_SouthEast_D22/OR_SouthEast_7_D22/LAZ/USGS_LPC_OR_SouthEast_D22_10TFP4"
+  },
+  {
+   "name": "s3_lpc_se_8.xml",
+   "url": "https://prd-tnm.s3.amazonaws.com/?list-type=2&prefix=StagedProducts/Elevation/LPC/Projects/OR_SouthEast_D22/OR_SouthEast_8_D22/LAZ/USGS_LPC_OR_SouthEast_D22_10TFP4"
+  },
+  {
+   "name": "s3_lpc_se_9.xml",
+   "url": "https://prd-tnm.s3.amazonaws.com/?list-type=2&prefix=StagedProducts/Elevation/LPC/Projects/OR_SouthEast_D22/OR_SouthEast_9_D22/LAZ/USGS_LPC_OR_SouthEast_D22_10TFP4"
+  },
+  {
+   "name": "s3_lpc_se_10.xml",
+   "url": "https://prd-tnm.s3.amazonaws.com/?list-type=2&prefix=StagedProducts/Elevation/LPC/Projects/OR_SouthEast_D22/OR_SouthEast_10_D22/LAZ/USGS_LPC_OR_SouthEast_D22_10TFP4"
+  },
+  {
+   "name": "s3_lpc_se_11.xml",
+   "url": "https://prd-tnm.s3.amazonaws.com/?list-type=2&prefix=StagedProducts/Elevation/LPC/Projects/OR_SouthEast_D22/OR_SouthEast_11_D22/LAZ/USGS_LPC_OR_SouthEast_D22_10TFP4"
+  },
+  {
+   "name": "s3_lpc_se_12.xml",
+   "url": "https://prd-tnm.s3.amazonaws.com/?list-type=2&prefix=StagedProducts/Elevation/LPC/Projects/OR_SouthEast_D22/OR_SouthEast_12_D22/LAZ/USGS_LPC_OR_SouthEast_D22_10TFP4"
+  },
+  {
+   "name": "s3_lpc_se_13.xml",
+   "url": "https://prd-tnm.s3.amazonaws.com/?list-type=2&prefix=StagedProducts/Elevation/LPC/Projects/OR_SouthEast_D22/OR_SouthEast_13_D22/LAZ/USGS_LPC_OR_SouthEast_D22_10TFP4"
+  },
+  {
+   "name": "s3_lpc_se_14.xml",
+   "url": "https://prd-tnm.s3.amazonaws.com/?list-type=2&prefix=StagedProducts/Elevation/LPC/Projects/OR_SouthEast_D22/OR_SouthEast_14_D22/LAZ/USGS_LPC_OR_SouthEast_D22_10TFP4"
   }
  ]
 }
