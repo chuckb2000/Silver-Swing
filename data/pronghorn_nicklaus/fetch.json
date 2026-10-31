@@ -79,12 +79,24 @@
    "url": "https://maps.deschutes.org/arcgis/rest/services/Dial2_Taxlots/MapServer?f=json"
   },
   {
-   "name": "dial2_taxlots_l0.geojson",
-   "url": "https://maps.deschutes.org/arcgis/rest/services/Dial2_Taxlots/MapServer/0/query?geometry=-121.19%2C44.175%2C-121.155%2C44.200&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=%2A&returnGeometry=true&outSR=4326&f=geojson&where=1%3D1"
+   "name": "dogami_hh2011_ft.tif",
+   "url": "https://gis.dogami.oregon.gov/arcgis/rest/services/lidar/DIGITAL_SURFACE_MODEL_MOSAIC/ImageServer/exportImage?bbox=644600,4893000,647400,4895800&bboxSR=32610&imageSR=32610&size=2800,2800&format=tiff&pixelType=F32&noData=-9999&interpolation=RSP_BilinearInterpolation&mosaicRule=%7B%22mosaicMethod%22%3A%22esriMosaicLockRaster%22%2C%22lockRasterIds%22%3A%5B489%5D%7D&f=image"
   },
   {
-   "name": "dial2_taxlots_l1.geojson",
-   "url": "https://maps.deschutes.org/arcgis/rest/services/Dial2_Taxlots/MapServer/1/query?geometry=-121.19%2C44.175%2C-121.155%2C44.200&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=%2A&returnGeometry=true&outSR=4326&f=geojson&where=1%3D1"
+   "name": "dogami_be2011_ft.tif",
+   "url": "https://gis.dogami.oregon.gov/arcgis/rest/services/lidar/DIGITAL_TERRAIN_MODEL_MOSAIC/ImageServer/exportImage?bbox=644600,4893000,647400,4895800&bboxSR=32610&imageSR=32610&size=2800,2800&format=tiff&pixelType=F32&noData=-9999&interpolation=RSP_BilinearInterpolation&mosaicRule=%7B%22mosaicMethod%22%3A%22esriMosaicLockRaster%22%2C%22lockRasterIds%22%3A%5B111%5D%7D&f=image"
+  },
+  {
+   "name": "dogami_be2023_odf_ft.tif",
+   "url": "https://gis.dogami.oregon.gov/arcgis/rest/services/lidar/DIGITAL_TERRAIN_MODEL_MOSAIC/ImageServer/exportImage?bbox=644600,4893000,647400,4895800&bboxSR=32610&imageSR=32610&size=2800,2800&format=tiff&pixelType=F32&noData=-9999&interpolation=RSP_BilinearInterpolation&mosaicRule=%7B%22mosaicMethod%22%3A%22esriMosaicLockRaster%22%2C%22lockRasterIds%22%3A%5B207%5D%7D&f=image"
+  },
+  {
+   "name": "dogami_tiles_service.json",
+   "url": "https://gis.dogami.oregon.gov/arcgis/rest/services/lidar/Downloadable_Tiles/MapServer?f=json"
+  },
+  {
+   "name": "dial2_taxlots.json",
+   "url": "https://maps.deschutes.org/arcgis/rest/services/Dial2_Taxlots/MapServer/0/query?geometry=-121.19%2C44.175%2C-121.155%2C44.200&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=%2A&returnGeometry=true&outSR=4326&f=json&where=1%3D1"
   }
  ]
 }
