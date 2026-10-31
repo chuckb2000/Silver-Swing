@@ -1,0 +1,39 @@
+{
+ "items": [
+  {
+   "name": "marovitz_overpass.geojson",
+   "osm_box": [
+    41.936,
+    -87.652,
+    41.962,
+    -87.622
+   ]
+  },
+  {
+   "name": "marovitz_dem1m",
+   "tnm": {
+    "dataset": "dem1m",
+    "bbox": [
+     -87.652,
+     41.936,
+     -87.622,
+     41.962
+    ],
+    "list": true
+   }
+  },
+  {
+   "name": "marovitz_lpc",
+   "tnm": {
+    "dataset": "lpc",
+    "bbox": [
+     -87.652,
+     41.936,
+     -87.622,
+     41.962
+    ],
+    "list": true
+   }
+  }
+ ]
+}
