@@ -11,8 +11,8 @@ the GitHub Actions fetch workflow (release `data-burlington_cc`): the Overpass e
 1 m DEM and two lidar tiles of `VT_Statewide_A23` (flown 21 April 2023, leaf-off, class 1 only).
 Two tee sets, Black (the tips) and Blue (default), per the developer's overnight rule. New theme
 `burlington_cc` (Vermont hardwoods in the fall) and logo. Every hole of both sets is within 3 % of
-the card after s06's tee placement except 12 Blue (+3.4 %, accepted flag); Black 6,450 yd built
-against 6,471, Blue 4,817 against 4,799. `course_play.test.ts -t burlington_cc`: 13 passed. Test
+the card after s06's tee placement except 12 Blue (+3.4 %, accepted flag); Black 6,444 yd built
+against 6,471, Blue 4,818 against 4,799. `course_play.test.ts -t burlington_cc`: 13 passed. Test
 totals for the branch are in the pull request.
 
 ## Facts
@@ -45,9 +45,9 @@ Stroke indexes from 18Birdies (they match OSM); ratings men's (18Birdies).
 | Par | 4 | 4 | 3 | 4 | 5 | 4 | 5 | 3 | 4 | 36 | 3 | 4 | 4 | 4 | 3 | 4 | 4 | 4 | 5 | 35 | 71 |
 | HCP | 5 | 7 | 15 | 11 | 13 | 3 | 1 | 17 | 9 | | 16 | 8 | 4 | 2 | 18 | 14 | 12 | 6 | 10 | | |
 | Black | 386 | 336 | 186 | 382 | 490 | 341 | 562 | 198 | 366 | 3247 | 214 | 325 | 440 | 410 | 154 | 416 | 382 | 372 | 511 | 3224 | 6471 |
-| Built | 383 | 328 | 189 | 384 | 494 | 337 | 565 | 193 | 367 | 3040 | 210 | 323 | 435 | 407 | 153 | 422 | 392 | 368 | 506 | 3216 | 6450 |
+| Built | 383 | 328 | 189 | 384 | 494 | 337 | 565 | 193 | 367 | 3240 | 210 | 323 | 435 | 407 | 153 | 422 | 380 | 368 | 506 | 3204 | 6444 |
 | Blue | 307 | 268 | 97 | 293 | 409 | 255 | 405 | 116 | 260 | 2410 | 130 | 261 | 342 | 248 | 95 | 354 | 287 | 267 | 405 | 2389 | 4799 |
-| Built | 307 | 264 | 99 | 292 | 412 | 249 | 410 | 115 | 258 | 2406 | 130 | 256 | 354 | 249 | 95 | 363 | 290 | 268 | 406 | 2411 | 4817 |
+| Built | 307 | 264 | 99 | 292 | 412 | 249 | 410 | 115 | 259 | 2407 | 130 | 256 | 354 | 249 | 95 | 363 | 290 | 268 | 406 | 2411 | 4818 |
 
 Black 71.6/134, Gold 69.8/132 (6,101), Grey 67.9/128 (5,699), Green 66.9/120 (5,497), Aqua 64.5/114
 (5,052), Blue 63.3/111. Gold, Grey, Green and Aqua are in `scorecard.csv`, not built.
