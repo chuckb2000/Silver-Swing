@@ -1,0 +1,13 @@
+{
+ "items": [
+  {
+   "name": "victoria_overpass.geojson",
+   "osm_box": [
+    48.403,
+    -123.318,
+    48.432,
+    -123.283
+   ]
+  }
+ ]
+}
