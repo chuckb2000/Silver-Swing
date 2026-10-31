@@ -1,0 +1,39 @@
+{
+ "items": [
+  {
+   "name": "cyprian_keyes_overpass.geojson",
+   "osm_box": [
+    42.318,
+    -71.75,
+    42.358,
+    -71.696
+   ]
+  },
+  {
+   "name": "cyprian_keyes_dem1m",
+   "tnm": {
+    "dataset": "dem1m",
+    "bbox": [
+     -71.75,
+     42.318,
+     -71.696,
+     42.358
+    ],
+    "list": true
+   }
+  },
+  {
+   "name": "cyprian_keyes_lpc",
+   "tnm": {
+    "dataset": "lpc",
+    "bbox": [
+     -71.75,
+     42.318,
+     -71.696,
+     42.358
+    ],
+    "list": true
+   }
+  }
+ ]
+}
