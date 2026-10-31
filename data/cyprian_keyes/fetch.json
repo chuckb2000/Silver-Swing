@@ -10,30 +10,36 @@
    ]
   },
   {
-   "name": "cyprian_keyes_dem1m",
-   "tnm": {
-    "dataset": "dem1m",
-    "bbox": [
-     -71.75,
-     42.318,
-     -71.696,
-     42.358
-    ],
-    "list": true
-   }
+   "name": "cyprian_keyes_club_home.html",
+   "url": "https://www.cypriankeyes.com/"
   },
   {
-   "name": "cyprian_keyes_lpc",
-   "tnm": {
-    "dataset": "lpc",
-    "bbox": [
-     -71.75,
-     42.318,
-     -71.696,
-     42.358
-    ],
-    "list": true
-   }
+   "name": "massgis_coq2023_index.zip",
+   "url": "https://s3.us-east-1.amazonaws.com/download.massgis.digital.mass.gov/images/coq2023_15cm_jp2/COQ2023INDEX_POLY.zip"
+  },
+  {
+   "name": "USGS_1M_19_x27y470_MA_CentralEastern_2021_B21.tif",
+   "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/1m/Projects/MA_CentralEastern_2021_B21/TIFF/USGS_1M_19_x27y470_MA_CentralEastern_2021_B21.tif"
+  },
+  {
+   "name": "USGS_1M_19_x27y469_MA_CentralEastern_2021_B21.tif",
+   "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/1m/Projects/MA_CentralEastern_2021_B21/TIFF/USGS_1M_19_x27y469_MA_CentralEastern_2021_B21.tif"
+  },
+  {
+   "name": "USGS_LPC_MA_CentralEastern_2021_B21_19TBG274690.laz",
+   "url": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/MA_CentralEastern_2021_B21/MA_CentralEastern_1_2021/LAZ/USGS_LPC_MA_CentralEastern_2021_B21_19TBG274690.laz"
+  },
+  {
+   "name": "USGS_LPC_MA_CentralEastern_2021_B21_19TBG276690.laz",
+   "url": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/MA_CentralEastern_2021_B21/MA_CentralEastern_1_2021/LAZ/USGS_LPC_MA_CentralEastern_2021_B21_19TBG276690.laz"
+  },
+  {
+   "name": "USGS_LPC_MA_CentralEastern_2021_B21_19TBG274689.laz",
+   "url": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/MA_CentralEastern_2021_B21/MA_CentralEastern_1_2021/LAZ/USGS_LPC_MA_CentralEastern_2021_B21_19TBG274689.laz"
+  },
+  {
+   "name": "USGS_LPC_MA_CentralEastern_2021_B21_19TBG276689.laz",
+   "url": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/MA_CentralEastern_2021_B21/MA_CentralEastern_1_2021/LAZ/USGS_LPC_MA_CentralEastern_2021_B21_19TBG276689.laz"
   }
  ]
 }
