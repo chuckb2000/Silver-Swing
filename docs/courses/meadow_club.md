@@ -14,6 +14,15 @@ Blue tees, Blue the default. New theme `meadow_club`. Measured with the virtual 
 6,684 yd against 6,734 on the card, Blue 6,548 against 6,608; 17 of 18 holes within 3 %, hole 15
 at -3.8 % (flag).
 
+On the branch (2026-10-31): `course_play.test.ts -t meadow_club` 12 passed; `npm test` 1,384
+passed, 2 failed, both from the course not yet being in `DAILY_ROSTER` (`player.test.ts` "is in
+the daily rotation", and `tour.test.ts` "a hole drawn sits out the next rounds of its par", whose
+rest window counts every course's holes but draws only from the rotation; both pass with
+`meadow_club` added to the roster, which `make land` does); `npm run build` passed; `npm run e2e`
+17 passed. `make fetch` from an empty `raw/laz/` reproduced every clip, and `make course
+ARGS=--fresh` after the pin left git clean. Not done: the per-hole Playwright looks (8.3); the
+whole course was checked on a render of the exported terrain with the trees drawn over it.
+
 The first worker was stopped by the account's usage limit at about 00:15; a second one finished
 the lidar, card, checks and hand-off on 2026-10-31.
 
