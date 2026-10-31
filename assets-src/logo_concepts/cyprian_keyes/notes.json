@@ -1,0 +1,62 @@
+{
+ "id": "cyprian_keyes",
+ "course": "Cyprian Keyes Golf Club",
+ "place": "Boylston, Massachusetts",
+ "facts": [
+  {
+   "fact": "Cyprian Keyes built his house on the site in 1734; he was a deacon of the Shrewsbury North Parish (later Boylston) church and a selectman when Boylston was incorporated in 1743. The house was later the Keyes-Dakin House, then Barlin Acres (NRHP 1982).",
+   "source": "https://en.wikipedia.org/wiki/Barlin_Acres"
+  },
+  {
+   "fact": "Cyprian Keyes was a founding member of the Town of Boylston and served as Selectman, Assessor and Town Clerk; flooring from the 1734 house was reclaimed for the clubhouse foyer.",
+   "source": "https://www.boylstonhistory.org/images/Keyes homesteadh.pdf"
+  },
+  {
+   "fact": "The golf club (opened 11 August 1997, Mark Mungeam) stands on the estate; the clubhouse is on the site of the house.",
+   "source": "https://en.wikipedia.org/wiki/Cyprian_Keyes_Golf_Club"
+  }
+ ],
+ "current": {
+  "subject": "none: a new course (course chat 2026-10-31)",
+  "keep": "",
+  "weaknesses": ""
+ },
+ "concepts": [
+  {
+   "n": 1,
+   "name": "The Deacon's Key",
+   "rationale": "An old hand-forged brass key with a golf ball set in its bow: the Keyes name, and the 1734 homestead the course is built around.",
+   "references": [
+    "https://en.wikipedia.org/wiki/Barlin_Acres",
+    "https://www.boylstonhistory.org/images/Keyes homesteadh.pdf"
+   ],
+   "symbolism": "The key is a pun on the family name and a colonial door key of the kind an 18th-century house would have.",
+   "interpretation": "The key's form is invented; no Keyes artefact is depicted.",
+   "palette": [
+    {
+     "hex": "#c99a38",
+     "name": "brass"
+    },
+    {
+     "hex": "#a57a26",
+     "name": "brass shade"
+    },
+    {
+     "hex": "#f0d27a",
+     "name": "lit brass"
+    },
+    {
+     "hex": "#f5f4ee",
+     "name": "ball"
+    },
+    {
+     "hex": "#cfcec5",
+     "name": "ball shade"
+    }
+   ],
+   "strengths": "One subject on the diagonal, readable at 32 px; the name in a picture without letters.",
+   "tradeoffs": "A key is a general symbol; it says Keyes, not Boylston."
+  }
+ ],
+ "recommendation": "Concept 1 (course chat 2026-10-31, under the developer's permission for overnight logos)."
+}

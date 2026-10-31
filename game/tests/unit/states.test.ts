@@ -16,7 +16,7 @@ describe('course states', () => {
     expect(stateOf(info('d', 'D', 'Truro', 'ma'))).toBe('MA');
     expect(stateOf(info('e', 'E', 'Nowhere'))).toBe(OTHER_STATE);
     expect(stateName('MA')).toBe('Massachusetts');
-    expect(Object.keys(STATES)).toHaveLength(51);
+    expect(Object.keys(STATES)).toHaveLength(52);
   });
 
   it('groups courses by state, states and courses A-Z, unknown last', () => {
