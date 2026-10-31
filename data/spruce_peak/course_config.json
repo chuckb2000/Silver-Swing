@@ -1,0 +1,84 @@
+{
+ "id": "spruce_peak",
+ "name": "The Mountain Course at Spruce Peak",
+ "location": "Stowe, Lamoille County, Vermont",
+ "state": "VT",
+ "architects": "Bob Cupp (2007), for the Stowe Mountain Club at Spruce Peak",
+ "theme": "spruce_peak",
+ "epsg": 32618,
+ "osm_sources": [
+  "raw/overpass.geojson"
+ ],
+ "boundary_name": "The Mountain Course at Spruce Peak",
+ "dtm": {
+  "path": "raw/vcgi_dem_1m.tif",
+  "units": "m",
+  "source": "Vermont Center for Geographic Information (VCGI) lidar DEM image service IMG_VCGI_LIDARDEM_SP_NOCACHE_v1 (hydro-flattened bare earth from the spring 2023 statewide QL1 lidar, 0.35 m, EPSG:32145), exported at 1 m in EPSG:32618 (bilinear) by the GitHub Actions fetch on 2026-10-31; NAVD88 m; three voids in the export by the 11th green (45 cells, 100-160 m below the ground) filled with their 9 x 9 median by data/spruce_peak/fix_dem.py"
+ },
+ "dsm": {
+  "path": "raw/vcgi_dsm_1m.tif",
+  "units": "m",
+  "source": "VCGI lidar DSM image service IMG_VCGI_LIDARDSM_SP_NOCACHE_V1 (first-return surface, spring 2023 statewide QL1 lidar, 0.35 m, EPSG:32145), exported at 1 m in EPSG:32618 (bilinear) by the GitHub Actions fetch on 2026-10-31; CHM = DSM - DTM",
+  "label": "2023 Vermont lidar surface model"
+ },
+ "ortho": {
+  "path": "raw/vcgi_clr_03m.tif",
+  "source": "VCGI colour orthophoto image service IMG_VCGI_CLR2021_2025_SP_NOCACHE (0.3 m statewide orthos 2021-2025, leaf-on), exported as four JPEGs at 0.3 m in EPSG:32618 by the GitHub Actions fetch on 2026-10-31, placed by their request boxes with pipeline/intake.py ortho"
+ },
+ "world": {
+  "x0": 676362,
+  "y0": 4932328,
+  "width": 1280,
+  "height": 1536,
+  "note": "bbox of the OSM boundary (way 510265958) and every golf feature (hole 13 lies just outside the boundary) in UTM 18N, 875 x 1,267 m, plus scenery, whole 256 m chunks, centred: 1,280 m east-west (202 m each side), 1,536 m north-south (134 m each side)"
+ },
+ "tee_sets": [
+  {
+   "name": "Black",
+   "playable": true,
+   "rating": 72.1,
+   "slope": 141,
+   "total_yd": 6411
+  },
+  {
+   "name": "Blue",
+   "playable": true,
+   "rating": 70.0,
+   "slope": 132,
+   "total_yd": 5887
+  }
+ ],
+ "default_tee": "Black",
+ "scorecard_source": "Per hole: Stymie (stymie.golf, Stowe Mountain Club), read 2026-10-31, all five sets (Black 6,411, Blue 5,887, White 5,442, Green 4,742, Red 4,018); rows add up. Black per hole also GolfPass, 18Birdies and OpenGolfAPI (identical). Totals and ratings 18Birdies (Black 72.1/141, Blue 70.0/132; Stymie prints 73.7/151 and 71.2/146). Stroke index GolfPass/18Birdies/OpenGolfAPI (Stymie swaps 10 and 18). GolfPass's per-hole Blue row adds to 5,824 and its tee table says 6,041: not used. Unverified third-party; no club card online (private club).",
+ "driving_range_is_ob": true,
+ "wind_mph": {
+  "minMph": 1,
+  "maxMph": 9
+ },
+ "penalty_default": "red",
+ "trees_off_fairways_m": 2,
+ "attribution": [
+  "Map data © OpenStreetMap contributors (ODbL)",
+  "Elevation, trees and orthophoto: Vermont Center for Geographic Information (2023 Vermont statewide lidar; Vermont orthoimagery)",
+  "Scorecard: Stymie and 18Birdies (unverified)"
+ ],
+ "notes": "Course chat, 2026-10-31 (developer asleep, overnight calls): tees Black (the tips) and Blue (default); standing defaults otherwise (every penalty area red, OSM boundary OB, trees from lidar, fairway trees removed); wind 1-9 mph (inland New England, mountain); theme spruce_peak (its own: northern spruce-fir and hardwood forest).",
+ "green_tilt": [
+  {
+   "hole": 7,
+   "max_tilt": 0.015,
+   "bumps": 0
+  },
+  {
+   "hole": 16,
+   "max_tilt": 0.02,
+   "bumps": 0
+  },
+  {
+   "hole": 17,
+   "max_tilt": 0.015,
+   "bumps": 0
+  }
+ ],
+ "green_tilt_note": "7 (136 m2), 16 and 17 (144 m2) are small greens as mapped (checked on the 0.3 m photo): a gentler plane and no random bumps, so each keeps at least three hole locations (pins.test.ts; COURSE_LESSONS 4)"
+}

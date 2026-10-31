@@ -1,0 +1,236 @@
+{
+ "note": "Edits to the OSM layout for Cyprian Keyes, written by data/cyprian_keyes/make_edits.py; built into edited/course.geojson by pipeline/merge_edits.py.",
+ "add": [
+  {
+   "from": "proposed/paths_as_cartpaths.geojson",
+   "ids": [
+    "w1256000245_cartpath",
+    "w1256006367_cartpath",
+    "w1256010373_cartpath",
+    "w1256010374_cartpath",
+    "w778871935_cartpath",
+    "w778871937_cartpath",
+    "w778871941_cartpath",
+    "w778871944_cartpath",
+    "w779078159_cartpath",
+    "w971520759_cartpath",
+    "w971520760_cartpath"
+   ],
+   "reason": "golf=path ways inside the boundary (course paths and the bridges over the brooks), not read by s01: copied as golf=cartpath (free relief, drawn as a path)"
+  },
+  {
+   "from": "proposed/clubhouse.geojson",
+   "ids": [
+    "w212179116_building"
+   ],
+   "reason": "the clubhouse is mapped golf=clubhouse + building=yes, which s01 reads as a golf feature: copied as a building (audit: 'add building=yes')"
+  },
+  {
+   "from": "proposed/channels_lidar.geojson",
+   "ids": [
+    "channel_w971520745",
+    "channel_w971520747",
+    "channel_w971520749",
+    "channel_w971520751"
+   ],
+   "tags": {
+    "golf": "lateral_water_hazard",
+    "penalty": "red",
+    "flatten": "no"
+   },
+   "reason": "course chat 2026-10-31, pending the developer's approval: Sewall Brook and its feeder streams, mapped in OSM only as waterway=stream lines near the hole lines (audit), as red penalty areas from the DEM channel along them (pipeline/propose_channels.py: 3-4 m wide, 0.1-0.3 m deep); every penalty area red (standing default); flatten=no keeps the falling bed"
+  }
+ ],
+ "tags": [
+  {
+   "osm": "w1256012343",
+   "set": {
+    "hole": "11",
+    "tee_set": "White"
+   },
+   "reason": "course chat 2026-10-31, pending the developer's approval: hole 11's White tee (card 131 yd) is not on the hole line; this box, 40 m north-east of the line, is 127 yd from the green on the 2023 MassGIS photo (the next box, w1256012344, ~101 yd, would be Green/Gold 109/99). Without it White 11 measured 187 yd (+43 %)"
+  }
+ ],
+ "drop": [
+  {
+   "osm": "w29782873",
+   "reason": "The Haven Country Club's boundary (the neighbouring course to the north-east, at the world's east edge): not part of Cyprian Keyes; its land stays out of bounds"
+  },
+  {
+   "osm": "r19743340",
+   "reason": "The Haven Country Club's fairway (inside its boundary): not part of Cyprian Keyes"
+  },
+  {
+   "osm": "r19743342",
+   "reason": "The Haven Country Club's fairway (inside its boundary): not part of Cyprian Keyes"
+  },
+  {
+   "osm": "w1019476470",
+   "reason": "The Haven Country Club's bunker (inside its boundary): not part of Cyprian Keyes"
+  },
+  {
+   "osm": "w1019476472",
+   "reason": "The Haven Country Club's bunker (inside its boundary): not part of Cyprian Keyes"
+  },
+  {
+   "osm": "w1019476473",
+   "reason": "The Haven Country Club's bunker (inside its boundary): not part of Cyprian Keyes"
+  },
+  {
+   "osm": "w1019476474",
+   "reason": "The Haven Country Club's bunker (inside its boundary): not part of Cyprian Keyes"
+  },
+  {
+   "osm": "w1019476475",
+   "reason": "The Haven Country Club's green (inside its boundary): not part of Cyprian Keyes"
+  },
+  {
+   "osm": "w1019476477",
+   "reason": "The Haven Country Club's hole (inside its boundary): not part of Cyprian Keyes"
+  },
+  {
+   "osm": "w1019487202",
+   "reason": "The Haven Country Club's tee (inside its boundary): not part of Cyprian Keyes"
+  },
+  {
+   "osm": "w1019487203",
+   "reason": "The Haven Country Club's tee (inside its boundary): not part of Cyprian Keyes"
+  },
+  {
+   "osm": "w1019487204",
+   "reason": "The Haven Country Club's tee (inside its boundary): not part of Cyprian Keyes"
+  },
+  {
+   "osm": "w1019487205",
+   "reason": "The Haven Country Club's tee (inside its boundary): not part of Cyprian Keyes"
+  },
+  {
+   "osm": "w1019487206",
+   "reason": "The Haven Country Club's bunker (inside its boundary): not part of Cyprian Keyes"
+  },
+  {
+   "osm": "w1019487207",
+   "reason": "The Haven Country Club's bunker (inside its boundary): not part of Cyprian Keyes"
+  },
+  {
+   "osm": "w1019487208",
+   "reason": "The Haven Country Club's bunker (inside its boundary): not part of Cyprian Keyes"
+  },
+  {
+   "osm": "w1019487211",
+   "reason": "The Haven Country Club's hole (inside its boundary): not part of Cyprian Keyes"
+  },
+  {
+   "osm": "w1019510569",
+   "reason": "The Haven Country Club's tee (inside its boundary): not part of Cyprian Keyes"
+  },
+  {
+   "osm": "w1019510570",
+   "reason": "The Haven Country Club's tee (inside its boundary): not part of Cyprian Keyes"
+  },
+  {
+   "osm": "w1019510571",
+   "reason": "The Haven Country Club's tee (inside its boundary): not part of Cyprian Keyes"
+  },
+  {
+   "osm": "w1019510572",
+   "reason": "The Haven Country Club's tee (inside its boundary): not part of Cyprian Keyes"
+  },
+  {
+   "osm": "w1019510573",
+   "reason": "The Haven Country Club's water_hazard (inside its boundary): not part of Cyprian Keyes"
+  },
+  {
+   "osm": "w1019510578",
+   "reason": "The Haven Country Club's hole (inside its boundary): not part of Cyprian Keyes"
+  },
+  {
+   "osm": "w1020067342",
+   "reason": "The Haven Country Club's green (inside its boundary): not part of Cyprian Keyes"
+  },
+  {
+   "osm": "w1255799549",
+   "reason": "hole line of the 9-hole par-3 course (Par3 - 9): only the Championship 18 is built; without its line the green is a wrong green (relief required) and the tee is mown ground in play"
+  },
+  {
+   "osm": "w1255799550",
+   "reason": "hole line of the 9-hole par-3 course (Par3 - 7): only the Championship 18 is built; without its line the green is a wrong green (relief required) and the tee is mown ground in play"
+  },
+  {
+   "osm": "w1255799551",
+   "reason": "hole line of the 9-hole par-3 course (Par3 - 8): only the Championship 18 is built; without its line the green is a wrong green (relief required) and the tee is mown ground in play"
+  },
+  {
+   "osm": "w1255799552",
+   "reason": "hole line of the 9-hole par-3 course (Par3 - 6): only the Championship 18 is built; without its line the green is a wrong green (relief required) and the tee is mown ground in play"
+  },
+  {
+   "osm": "w1255799553",
+   "reason": "hole line of the 9-hole par-3 course (Par3 - 5): only the Championship 18 is built; without its line the green is a wrong green (relief required) and the tee is mown ground in play"
+  },
+  {
+   "osm": "w1255799554",
+   "reason": "hole line of the 9-hole par-3 course (Par3 - 4): only the Championship 18 is built; without its line the green is a wrong green (relief required) and the tee is mown ground in play"
+  },
+  {
+   "osm": "w1255799555",
+   "reason": "hole line of the 9-hole par-3 course (Par3 - 3): only the Championship 18 is built; without its line the green is a wrong green (relief required) and the tee is mown ground in play"
+  },
+  {
+   "osm": "w1255799556",
+   "reason": "hole line of the 9-hole par-3 course (Par3 - 2): only the Championship 18 is built; without its line the green is a wrong green (relief required) and the tee is mown ground in play"
+  },
+  {
+   "osm": "w1255799557",
+   "reason": "hole line of the 9-hole par-3 course (Par3 - 1): only the Championship 18 is built; without its line the green is a wrong green (relief required) and the tee is mown ground in play"
+  },
+  {
+   "osm": "w1256000245",
+   "reason": "replaced by its copy as golf=cartpath (proposed/paths_as_cartpaths.geojson)"
+  },
+  {
+   "osm": "w1256006367",
+   "reason": "replaced by its copy as golf=cartpath (proposed/paths_as_cartpaths.geojson)"
+  },
+  {
+   "osm": "w1256010373",
+   "reason": "replaced by its copy as golf=cartpath (proposed/paths_as_cartpaths.geojson)"
+  },
+  {
+   "osm": "w1256010374",
+   "reason": "replaced by its copy as golf=cartpath (proposed/paths_as_cartpaths.geojson)"
+  },
+  {
+   "osm": "w778871935",
+   "reason": "replaced by its copy as golf=cartpath (proposed/paths_as_cartpaths.geojson)"
+  },
+  {
+   "osm": "w778871937",
+   "reason": "replaced by its copy as golf=cartpath (proposed/paths_as_cartpaths.geojson)"
+  },
+  {
+   "osm": "w778871941",
+   "reason": "replaced by its copy as golf=cartpath (proposed/paths_as_cartpaths.geojson)"
+  },
+  {
+   "osm": "w778871944",
+   "reason": "replaced by its copy as golf=cartpath (proposed/paths_as_cartpaths.geojson)"
+  },
+  {
+   "osm": "w779078159",
+   "reason": "replaced by its copy as golf=cartpath (proposed/paths_as_cartpaths.geojson)"
+  },
+  {
+   "osm": "w971520759",
+   "reason": "replaced by its copy as golf=cartpath (proposed/paths_as_cartpaths.geojson)"
+  },
+  {
+   "osm": "w971520760",
+   "reason": "replaced by its copy as golf=cartpath (proposed/paths_as_cartpaths.geojson)"
+  },
+  {
+   "osm": "w212179116",
+   "reason": "replaced by its copy as a building (proposed/clubhouse.geojson)"
+  }
+ ]
+}

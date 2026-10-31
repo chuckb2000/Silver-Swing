@@ -1,0 +1,24 @@
+{
+ "note": "per-course settings for game/tests/unit/course_play.test.ts (the every-course checks); docs/COURSE_BUILD.md 8.2",
+ "wind_mph": [
+  3,
+  14
+ ],
+ "water": {
+  "penalty": "red"
+ },
+ "points": [
+  {
+   "x": 389.0,
+   "y": 495.2,
+   "ob": true,
+   "why": "Beach Drive, the public road through the course: out of bounds (config ob_highways, course chat's call 2026-10-31, open item)"
+  },
+  {
+   "x": 600,
+   "y": 150,
+   "surface": "water",
+   "why": "the sea south of the 5th tee: a red penalty area (proposed/sea.geojson, red_water_osm)"
+  }
+ ]
+}

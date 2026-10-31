@@ -308,6 +308,10 @@ def build_layout(name, cfg, lay, g):
             if ti is not None:
                 tpoly = tees.loc[ti].geometry
                 tee_pt = box_centre(tpoly)[0]
+                if tees.loc[ti].tags.get("tee_pos") == "mark":
+                    # the developer's tee as marked (tracing desk; tag tee_pos=mark): the box's centroid,
+                    # never moved, so the mark sets the yardage (Spruce Peak 4, 8, 13 Black, 2026-10-31)
+                    tee_pt = tpoly.centroid
                 tee_osm = tees.loc[ti].osm
                 m, _ = path_from(tee_pt, L, gc)
             else:
@@ -321,7 +325,16 @@ def build_layout(name, cfg, lay, g):
             diff = (real_yd - card_yd) / card_yd * 100
             adj_pt, adj_m = tee_pt, m
             pos = tees.loc[ti].tags.get("tee_pos") if ti is not None else None
-            if pos in ("back", "front") and tpoly is not None:
+            if pos == "centroid" and tpoly is not None:
+                # the developer's tee "accepted as marked" (tag tee_pos=centroid): the tee is the box's
+                # centroid and is measured from there; no virtual-tee move (Aquidneck 8, 2026-10-31)
+                c_ = tpoly.centroid
+                tee_pt = c_ if tpoly.contains(c_) else tee_pt
+                m, _ = path_from(tee_pt, L, gc)
+                real_yd = m / YD
+                diff = (real_yd - card_yd) / card_yd * 100
+                adj_pt, adj_m = tee_pt, m
+            elif pos in ("back", "front") and tpoly is not None:
                 # the developer's placement inside the box (tag tee_pos=back|front)
                 p_, m_ = end_point_in(tpoly, L, gc, back=(pos == "back"))
                 adj_pt, adj_m = p_, m_
@@ -331,7 +344,7 @@ def build_layout(name, cfg, lay, g):
                     "real_yd": rnd(real_yd, 1), "adjusted_yd": rnd(adj_m / YD, 1), "card_yd": card_yd,
                     "reason": f"developer: tee at the {pos} of the tee box {tee_osm} (tag tee_pos={pos})",
                 })
-            elif status(diff) != "pass" and tpoly is not None:
+            elif status(diff) != "pass" and tpoly is not None and pos != "mark":
                 best = best_point_in(tpoly, L, gc, target)  # on the box's centre line, well inside it
                 if best and abs(best[2] - target) < abs(m - target) - 0.5:
                     adj_pt, adj_m = best[1], best[2]
@@ -341,7 +354,7 @@ def build_layout(name, cfg, lay, g):
                         "real_yd": rnd(real_yd, 1), "adjusted_yd": rnd(adj_m / YD, 1), "card_yd": card_yd,
                         "reason": f"measured {real_yd:.0f} yd from the tee-box centre vs {card_yd:.0f} on the card ({diff:+.1f}%); moved the virtual tee along the middle of the real tee polygon {tee_osm} (on its centre line, at least {END_MARGIN_M:g} m from its back and front)",
                     })
-            if tpoly is not None and pos not in ("back", "front") and not keeps_tee_trees(cfg, lay, n):
+            if tpoly is not None and pos not in ("back", "front", "centroid", "mark") and not keeps_tee_trees(cfg, lay, n):
                 _, cl = path_from(adj_pt, L, gc)
                 if not tee_clear(adj_pt, cl, pin):
                     cur = RANK[status((adj_m - target) / target * 100)]

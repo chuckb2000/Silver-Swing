@@ -1,0 +1,46 @@
+{
+ "release": "data-cyprian_keyes",
+ "note": "Build inputs not kept in git for Cyprian Keyes; `make fetch NAME=cyprian_keyes` puts them in place (pipeline/fetch_raw.py). Every asset was downloaded into the release by the GitHub Actions fetch workflow (data/cyprian_keyes/fetch.json, docs/COURSE_BUILD.md 5.0). In git: raw/overpass.geojson (cut from the Overpass export by intake.py osm). The four 3DEP lidar tiles (MA_CentralEastern_2021_B21) are clipped together into raw/laz/cyprian_keyes_clip.laz (classes 3-5); the first three wait in incoming/ for the fourth's run line (incoming/ is not in git; delete it afterwards). The MassGIS 2023 orthophoto tiles (19TBG745905/760905/745890/760890.zip) are in the release too; data/cyprian_keyes/make_ortho.py mosaics them into build/ for review only (not a build input).",
+ "files": [
+  {
+   "asset": "USGS_1M_19_x27y470_MA_CentralEastern_2021_B21.tif",
+   "sha256": "f9eb29e34dd23e0e2edcec5c086d8d7fa204063f4f58f700c7c893fd20cf521a",
+   "run": "python3 pipeline/intake.py raster cyprian_keyes {file} --out raw/USGS_1M_cyprian_keyes.tif",
+   "outputs": {
+    "raw/USGS_1M_cyprian_keyes.tif": "9a4b664321104e7e59ed4be50ce34b2307fa93f89d52a2fbb3e2f45ef9be051b"
+   }
+  },
+  {
+   "asset": "USGS_LPC_MA_CentralEastern_2021_B21_19TBG274690.laz",
+   "sha256": "b6a91127ced7984e72d9097f3f3faa16155f660f9c88364e0ec65e71a5049a36",
+   "to": "incoming/",
+   "outputs": {
+    "incoming/USGS_LPC_MA_CentralEastern_2021_B21_19TBG274690.laz": "b6a91127ced7984e72d9097f3f3faa16155f660f9c88364e0ec65e71a5049a36"
+   }
+  },
+  {
+   "asset": "USGS_LPC_MA_CentralEastern_2021_B21_19TBG276690.laz",
+   "sha256": "cddc5f2acf49fec64d6e0a4e63a7d38f8f92cdd323e97bd3e60e0058bc8753ab",
+   "to": "incoming/",
+   "outputs": {
+    "incoming/USGS_LPC_MA_CentralEastern_2021_B21_19TBG276690.laz": "cddc5f2acf49fec64d6e0a4e63a7d38f8f92cdd323e97bd3e60e0058bc8753ab"
+   }
+  },
+  {
+   "asset": "USGS_LPC_MA_CentralEastern_2021_B21_19TBG274689.laz",
+   "sha256": "f2c80cc25dfba71ca5ca392b594381f09f69de427af779ce48c89b9795737322",
+   "to": "incoming/",
+   "outputs": {
+    "incoming/USGS_LPC_MA_CentralEastern_2021_B21_19TBG274689.laz": "f2c80cc25dfba71ca5ca392b594381f09f69de427af779ce48c89b9795737322"
+   }
+  },
+  {
+   "asset": "USGS_LPC_MA_CentralEastern_2021_B21_19TBG276689.laz",
+   "sha256": "b01df9b65cccf959b020f43c2377e47ee979838a4c5daad2d751aabbf63371ea",
+   "run": "python3 pipeline/intake.py laz cyprian_keyes data/cyprian_keyes/incoming/USGS_LPC_MA_CentralEastern_2021_B21_19TBG274690.laz data/cyprian_keyes/incoming/USGS_LPC_MA_CentralEastern_2021_B21_19TBG276690.laz data/cyprian_keyes/incoming/USGS_LPC_MA_CentralEastern_2021_B21_19TBG274689.laz {file} --classes 3,4,5",
+   "outputs": {
+    "raw/laz/cyprian_keyes_clip.laz": "9cf75f78248d4d1304452704e17677f23995c850740f09461c7a0794f61ad34e"
+   }
+  }
+ ]
+}

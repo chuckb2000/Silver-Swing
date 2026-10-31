@@ -1,0 +1,4 @@
+# build inputs kept in the release data-victoria; `make fetch NAME=victoria` puts them here (release.json)
+raw/hrdem_dtm_1m.tif
+raw/hrdem_dsm_1m.tif
+raw/crd_ortho2025_05m.tif

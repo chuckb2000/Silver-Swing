@@ -1,0 +1,54 @@
+{
+ "items": [
+  {
+   "name": "marovitz_overpass.geojson",
+   "osm_box": [
+    41.936,
+    -87.652,
+    41.967,
+    -87.622
+   ]
+  },
+  {
+   "name": "marovitz_scorecard_2025.pdf",
+   "url": "https://sydneymarovitz.cpdgolf.com/wp-content/uploads/sites/9687/2025/08/sydney-marovitz-10.20.pdf"
+  },
+  {
+   "name": "marovitz_naip_stac.json",
+   "url": "https://planetarycomputer.microsoft.com/api/stac/v1/search?collections=naip&bbox=-87.650,41.948,-87.634,41.965&limit=50"
+  },
+  {
+   "name": "marovitz_dem1m",
+   "tnm": {
+    "dataset": "dem1m",
+    "bbox": [
+     -87.652,
+     41.936,
+     -87.622,
+     41.962
+    ],
+    "only": "x44y465"
+   }
+  },
+  {
+   "name": "USGS_LPC_IL_4_County_QL1_LiDAR_2016_B16_LAS_17259250.laz",
+   "url": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/IL_4_County_QL1_LiDAR_2016_B16/IL_4County_Cook_2017/LAZ/USGS_LPC_IL_4_County_QL1_LiDAR_2016_B16_LAS_17259250.laz"
+  },
+  {
+   "name": "USGS_LPC_IL_4_County_QL1_LiDAR_2016_B16_LAS_17259275.laz",
+   "url": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/IL_4_County_QL1_LiDAR_2016_B16/IL_4County_Cook_2017/LAZ/USGS_LPC_IL_4_County_QL1_LiDAR_2016_B16_LAS_17259275.laz"
+  },
+  {
+   "name": "USGS_LPC_IL_4_County_QL1_LiDAR_2016_B16_LAS_17009250.laz",
+   "url": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/IL_4_County_QL1_LiDAR_2016_B16/IL_4County_Cook_2017/LAZ/USGS_LPC_IL_4_County_QL1_LiDAR_2016_B16_LAS_17009250.laz"
+  },
+  {
+   "name": "USGS_LPC_IL_4_County_QL1_LiDAR_2016_B16_LAS_17009275.laz",
+   "url": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/IL_4_County_QL1_LiDAR_2016_B16/IL_4County_Cook_2017/LAZ/USGS_LPC_IL_4_County_QL1_LiDAR_2016_B16_LAS_17009275.laz"
+  },
+  {
+   "name": "m_4108703_ne_16_030_20230710_20240209.tif",
+   "url": "https://naipeuwest.blob.core.windows.net/naip/v002/il/2023/il_030cm_2023/41087/m_4108703_ne_16_030_20230710_20240209.tif"
+  }
+ ]
+}

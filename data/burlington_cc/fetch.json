@@ -1,0 +1,55 @@
+{
+ "note": "Burlington CC: Overpass export, the VT_Statewide_A23 1 m DEM tile and the two A23 lidar tiles over the course (tile names are tile centres in VT State Plane m)",
+ "items": [
+  {
+   "name": "burlington_cc_overpass.geojson",
+   "osm_box": [
+    44.435,
+    -73.222,
+    44.475,
+    -73.168
+   ]
+  },
+  {
+   "name": "burlington_cc_dem1m",
+   "tnm": {
+    "dataset": "dem1m",
+    "bbox": [
+     -73.204,
+     44.4503,
+     -73.1872,
+     44.469
+    ],
+    "only": "VT_Statewide_A23"
+   }
+  },
+  {
+   "name": "burlington_cc_lpc_N2177E4445",
+   "tnm": {
+    "dataset": "lpc",
+    "bbox": [
+     -73.204,
+     44.4503,
+     -73.1872,
+     44.469
+    ],
+    "only": "VT_Statewide_A23_N2177E4445",
+    "max": 40
+   }
+  },
+  {
+   "name": "burlington_cc_lpc_N2191E4445",
+   "tnm": {
+    "dataset": "lpc",
+    "bbox": [
+     -73.204,
+     44.4503,
+     -73.1872,
+     44.469
+    ],
+    "only": "VT_Statewide_A23_N2191E4445",
+    "max": 40
+   }
+  }
+ ]
+}

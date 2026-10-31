@@ -1,0 +1,46 @@
+{
+ "id": "burlington_cc",
+ "course": "Burlington Country Club",
+ "place": "Burlington, Vermont",
+ "facts": [
+  {
+   "fact": "Vermont is the largest producer of maple syrup in the United States; sap is collected in buckets hung on taps (spiles) in sugar maples in late winter.",
+   "source": "https://en.wikipedia.org/wiki/Maple_syrup"
+  },
+  {
+   "fact": "A Donald Ross course (1924), restored by Dr. Michael Hurdzan (1998), beside the University of Vermont.",
+   "source": "https://www.golfpass.com/courses/28945-burlington-country-club/scorecard-and-layout; https://www.top100golfcourses.com/golf-course/burlington-country-club"
+  },
+  {
+   "fact": "The course is tree-lined by northern hardwoods with white pine and hemlock (the lidar finds mostly broadleaf crowns).",
+   "source": "data/burlington_cc/build/trees_report.json"
+  }
+ ],
+ "current": {
+  "subject": "none: a new course (course chat 2026-10-30, overnight; the developer gave the course chats a free hand with logos)",
+  "keep": "",
+  "weaknesses": ""
+ },
+ "concepts": [
+  {
+   "n": 1,
+   "name": "Sugaring Season",
+   "rationale": "A galvanised sap bucket hung on a sugar maple's spile, heaped with golf balls instead of sap, and a scarlet maple leaf: Vermont's sugarbush and the course's hardwoods, with a golfer's wink.",
+   "references": [
+    "https://en.wikipedia.org/wiki/Maple_syrup"
+   ],
+   "symbolism": "The bucket is Vermont; the balls in place of sap are the game.",
+   "interpretation": "The golf balls in the bucket are a joke, not history.",
+   "palette": [
+    {"hex": "#7a6d62", "name": "maple bark"},
+    {"hex": "#a9b2b8", "name": "galvanised bucket"},
+    {"hex": "#f4f3ec", "name": "ball"},
+    {"hex": "#cf3b1b", "name": "sugar maple leaf, scarlet"},
+    {"hex": "#f07a32", "name": "sugar maple leaf, orange"}
+   ],
+   "strengths": "Reads at 32 px as a bucket of balls; says Vermont without words; no other course uses the subject.",
+   "tradeoffs": "Says Vermont more than Burlington (Lake Champlain's 'Champ' was the other idea; it is close to a local team's mascot, so not drawn)."
+  }
+ ],
+ "recommendation": "Concept 1 (the only one drawn tonight)."
+}
