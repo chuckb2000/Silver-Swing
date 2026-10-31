@@ -1,4 +1,5 @@
 {
+ "note": "Burlington CC: Overpass export, the VT_Statewide_A23 1 m DEM tile and the two A23 lidar tiles over the course (tile names are tile centres in VT State Plane m)",
  "items": [
   {
    "name": "burlington_cc_overpass.geojson",
