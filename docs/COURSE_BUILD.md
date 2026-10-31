@@ -241,7 +241,7 @@ and DECISIONS.md.
   "world": {"x0": 0, "y0": 0, "width": 1536, "height": 1024, "note": "how it was chosen"},
   "lake_level_max_m": null,             // optional: flatten a large off-course lake below this elevation
   "tee_sets": [{"name": "Blue", "playable": true, "rating": 0, "slope": 0, "total_yd": 0}],
-  "default_tee": "Blue",
+  "default_tee": "Blue",                 // the longest set built (4.1)
   "scorecard_source": "where, when, verified or not",
   "driving_range_is_ob": true,
   "wind_mph": {"minMph": 1, "maxMph": 7},
@@ -405,7 +405,7 @@ intake message (4.2), and change one only when the developer says so.
 
 | Question | Default |
 |---|---|
-| Tee sets | Blue only. If the card has no Blue, the set whose total is closest to 6,300 yd (the club distances in CLAUDE.md 7.1 suit it). Other sets go in `scorecard.csv` but are not built |
+| Tee sets | the longest set (the tips), and it is the default: `"default_tee"` is the longest set built (developer, 2026-10-31; `courses.test.ts` checks it). Other sets go in `scorecard.csv`; build them only when asked |
 | Penalty areas | every one red (ponds, creeks, lakes, rivers beside the course) |
 | Out of bounds | the OSM course boundary. Roads inside it are cart paths (free relief). The driving range is out of bounds |
 | Pins | none needed: the game sets up to four per green (`pins.ts`); the course needs a green and its centre |
