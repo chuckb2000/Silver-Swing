@@ -1,0 +1,33 @@
+{
+ "release": "data-yale",
+ "items": [
+  {
+   "name": "s3_ct2023_projects.xml",
+   "url": "https://prd-tnm.s3.amazonaws.com/?list-type=2&delimiter=/&prefix=StagedProducts/Elevation/LPC/Projects/CT_2023Statewide_C25/"
+  },
+  {
+   "name": "s3_ct2023_lpc_root.xml",
+   "url": "https://prd-tnm.s3.amazonaws.com/?list-type=2&delimiter=/&prefix=StagedProducts/Elevation/LPC/Projects/&start-after=StagedProducts/Elevation/LPC/Projects/CT_2023&max-keys=20"
+  },
+  {
+   "name": "noaa_10296_blocks.xml",
+   "url": "https://noaa-nos-coastal-lidar-pds.s3.amazonaws.com/?list-type=2&delimiter=/&prefix=laz/geoid18/10296/"
+  },
+  {
+   "name": "USGS_LPC_CT_2023Statewide_C25_935675_sw.laz",
+   "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/LPC/Projects/CT_2023Statewide_C25/CT_2023Statewide_1_C25/LAZ/USGS_LPC_CT_2023Statewide_C25_935675_sw.laz"
+  },
+  {
+   "name": "USGS_LPC_CT_2023Statewide_C25_930670_ne.laz",
+   "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/LPC/Projects/CT_2023Statewide_C25/CT_2023Statewide_1_C25/LAZ/USGS_LPC_CT_2023Statewide_C25_930670_ne.laz"
+  },
+  {
+   "name": "USGS_LPC_CT_2023Statewide_C25_935675_sw.laz",
+   "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/LPC/Projects/CT_2023Statewide_C25/CT_2023Statewide_C25/LAZ/USGS_LPC_CT_2023Statewide_C25_935675_sw.laz"
+  },
+  {
+   "name": "USGS_LPC_CT_2023Statewide_C25_930670_ne.laz",
+   "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/LPC/Projects/CT_2023Statewide_C25/CT_2023Statewide_C25/LAZ/USGS_LPC_CT_2023Statewide_C25_930670_ne.laz"
+  }
+ ]
+}
