@@ -1,0 +1,39 @@
+{
+ "items": [
+  {
+   "name": "aquidneck_overpass.geojson",
+   "osm_box": [
+    41.586,
+    -71.284,
+    41.617,
+    -71.246
+   ]
+  },
+  {
+   "name": "aquidneck_dem1m",
+   "tnm": {
+    "dataset": "dem1m",
+    "bbox": [
+     -71.284,
+     41.586,
+     -71.246,
+     41.617
+    ],
+    "list": true
+   }
+  },
+  {
+   "name": "aquidneck_lpc",
+   "tnm": {
+    "dataset": "lpc",
+    "bbox": [
+     -71.284,
+     41.586,
+     -71.246,
+     41.617
+    ],
+    "list": true
+   }
+  }
+ ]
+}
