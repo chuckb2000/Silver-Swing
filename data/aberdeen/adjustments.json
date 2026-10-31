@@ -1,0 +1,182 @@
+[
+ {
+  "hole": 1,
+  "tee_set": "Gold",
+  "step": 2,
+  "type": "tee_position",
+  "from": [
+   795.72,
+   903.46
+  ],
+  "to": [
+   796.5,
+   902.75
+  ],
+  "real_yd": 385.4,
+  "adjusted_yd": 384.7,
+  "card_yd": 390.0,
+  "reason": "tee shot: a perfect drive at the middle of the fairway clipped a tree near the tee; moved 1.1 m along the middle of the real tee polygon w1032398422 to the nearest clear spot"
+ },
+ {
+  "hole": 4,
+  "tee_set": "Black",
+  "step": 2,
+  "type": "tee_position",
+  "from": [
+   274.94,
+   835.56
+  ],
+  "to": [
+   274.5,
+   832.5
+  ],
+  "real_yd": 386.9,
+  "adjusted_yd": 390.2,
+  "card_yd": 410.0,
+  "reason": "measured 387 yd from the tee-box centre vs 410 on the card (-5.6%); moved the virtual tee along the middle of the real tee polygon w1032402107 (on its centre line, at least 2.5 m from its back and front)"
+ },
+ {
+  "hole": 6,
+  "tee_set": "Gold",
+  "step": 2,
+  "type": "tee_position",
+  "from": [
+   776.46,
+   1101.24
+  ],
+  "to": [
+   781.0,
+   1098.25
+  ],
+  "real_yd": 145.1,
+  "adjusted_yd": 151.0,
+  "card_yd": 157.0,
+  "reason": "measured 145 yd from the tee-box centre vs 157 on the card (-7.6%); moved the virtual tee along the middle of the real tee polygon w1032403023 (on its centre line, at least 2.5 m from its back and front)"
+ },
+ {
+  "hole": 7,
+  "tee_set": "Gold",
+  "step": 2,
+  "type": "tee_position",
+  "from": [
+   826.75,
+   1126.41
+  ],
+  "to": [
+   829.25,
+   1125.25
+  ],
+  "real_yd": 340.8,
+  "adjusted_yd": 343.6,
+  "card_yd": 365.0,
+  "reason": "measured 341 yd from the tee-box centre vs 365 on the card (-6.6%); moved the virtual tee along the middle of the real tee polygon w1032404359 (on its centre line, at least 2.5 m from its back and front)"
+ },
+ {
+  "hole": 8,
+  "tee_set": "Black",
+  "step": 2,
+  "type": "tee_position",
+  "from": [
+   628.07,
+   1349.14
+  ],
+  "to": [
+   628.25,
+   1349.25
+  ],
+  "real_yd": 196.8,
+  "adjusted_yd": 196.7,
+  "card_yd": 201.0,
+  "reason": "tee shot: a perfect drive at the middle of the fairway clipped a tree near the tee; moved 0.2 m along the middle of the real tee polygon w1032586923 to the nearest clear spot"
+ },
+ {
+  "hole": 8,
+  "tee_set": "Gold",
+  "step": 2,
+  "type": "tee_position",
+  "from": [
+   635.53,
+   1363.43
+  ],
+  "to": [
+   635.5,
+   1361.5
+  ],
+  "real_yd": 180.4,
+  "adjusted_yd": 182.5,
+  "card_yd": 187.0,
+  "reason": "measured 180 yd from the tee-box centre vs 187 on the card (-3.5%); moved the virtual tee along the middle of the real tee polygon w1032586924 (on its centre line, at least 2.5 m from its back and front)"
+ },
+ {
+  "hole": 11,
+  "tee_set": "Black",
+  "step": 2,
+  "type": "tee_position",
+  "from": [
+   1435.57,
+   1219.7
+  ],
+  "to": [
+   1434.5,
+   1210.75
+  ],
+  "real_yd": 179.9,
+  "adjusted_yd": 189.6,
+  "card_yd": 195.0,
+  "reason": "measured 180 yd from the tee-box centre vs 195 on the card (-7.8%); moved the virtual tee along the middle of the real tee polygon w1032598396 (on its centre line, at least 2.5 m from its back and front)"
+ },
+ {
+  "hole": 11,
+  "tee_set": "Gold",
+  "step": 2,
+  "type": "tee_position",
+  "from": [
+   1435.57,
+   1219.7
+  ],
+  "to": [
+   1435.5,
+   1223.0
+  ],
+  "real_yd": 179.9,
+  "adjusted_yd": 176.3,
+  "card_yd": 172.0,
+  "reason": "measured 180 yd from the tee-box centre vs 172 on the card (+4.6%); moved the virtual tee along the middle of the real tee polygon w1032598396 (on its centre line, at least 2.5 m from its back and front)"
+ },
+ {
+  "hole": 14,
+  "tee_set": "Black",
+  "step": 2,
+  "type": "tee_position",
+  "from": [
+   1526.52,
+   681.05
+  ],
+  "to": [
+   1526.25,
+   664.5
+  ],
+  "real_yd": 405.6,
+  "adjusted_yd": 416.8,
+  "card_yd": 437.0,
+  "reason": "measured 406 yd from the tee-box centre vs 437 on the card (-7.2%); moved the virtual tee along the middle of the real tee polygon w1032603678 (on its centre line, at least 2.5 m from its back and front)"
+ },
+ {
+  "hole": 14,
+  "tee_set": "Gold",
+  "step": 2,
+  "type": "tee_position",
+  "from": [
+   1526.52,
+   681.05
+  ],
+  "to": [
+   1526.5,
+   670.75
+  ],
+  "real_yd": 405.6,
+  "adjusted_yd": 412.5,
+  "card_yd": 423.0,
+  "reason": "measured 406 yd from the tee-box centre vs 423 on the card (-4.1%); moved the virtual tee along the middle of the real tee polygon w1032603678 (on its centre line, at least 2.5 m from its back and front)"
+ }
+]

@@ -1,0 +1,8 @@
+{
+"type": "FeatureCollection",
+"name": "not_trees",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+"features": [
+{ "type": "Feature", "properties": { "name": "transmission line right-of-way", "reason": "lidar crowns 20-49 m tall in rows along the high-voltage line (conductors and towers; remove_wires does not catch the multi-conductor line); course chat 2026-10-31" }, "geometry": { "type": "Polygon", "coordinates": [ [ [ -87.116470918347389, 41.439687862730928 ], [ -87.116471195492466, 41.439842874485976 ], [ -87.116547984507449, 41.439911017732953 ], [ -87.116471404691339, 41.439959882015465 ], [ -87.116492263204776, 41.451622828070164 ], [ -87.116133089413196, 41.45162319121583 ], [ -87.116112263009541, 41.439942178543269 ], [ -87.106830367591584, 41.43170385093044 ], [ -87.107104253206259, 41.431529105718489 ], [ -87.116296715811487, 41.439688038958671 ], [ -87.116470918347389, 41.439687862730928 ] ] ] } }
+]
+}
