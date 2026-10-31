@@ -1,0 +1,37 @@
+{
+ "release": "data-yale",
+ "items": [
+  {
+   "name": "naip_catalog_yale.json",
+   "url": "https://imagery.nationalmap.gov/arcgis/rest/services/USGSNAIPImagery/ImageServer/query?geometry=668600,4576200&geometryType=esriGeometryPoint&inSR=32618&spatialRel=esriSpatialRelIntersects&outFields=*&returnGeometry=false&f=json"
+  },
+  {
+   "name": "apfo_naip_info.json",
+   "url": "https://gis.apfo.usda.gov/arcgis/rest/services/NAIP/USDA_CONUS_PRIME/ImageServer?f=json"
+  },
+  {
+   "name": "apfo_naip_catalog_yale.json",
+   "url": "https://gis.apfo.usda.gov/arcgis/rest/services/NAIP/USDA_CONUS_PRIME/ImageServer/query?geometry=668600,4576200&geometryType=esriGeometryPoint&inSR=32618&spatialRel=esriSpatialRelIntersects&outFields=*&returnGeometry=false&f=json"
+  },
+  {
+   "name": "yale_apfo_naip.jpg",
+   "url": "https://gis.apfo.usda.gov/arcgis/rest/services/NAIP/USDA_CONUS_PRIME/ImageServer/exportImage?bbox=667962,4575281,669242,4577073&bboxSR=32618&imageSR=32618&size=2134,2987&format=jpg&f=image"
+  },
+  {
+   "name": "ctnaip2023_info.json",
+   "url": "https://cteco.uconn.edu/ctraster/rest/services/images/NAIP_2023/ImageServer?f=json"
+  },
+  {
+   "name": "yale_ctnaip2023_0.jpg",
+   "url": "https://cteco.uconn.edu/ctraster/rest/services/images/NAIP_2023/ImageServer/exportImage?bbox=667962,4575281,669242,4575879&bboxSR=32618&imageSR=32618&size=4267,1993&format=jpg&f=image"
+  },
+  {
+   "name": "yale_ctnaip2023_1.jpg",
+   "url": "https://cteco.uconn.edu/ctraster/rest/services/images/NAIP_2023/ImageServer/exportImage?bbox=667962,4575879,669242,4576477&bboxSR=32618&imageSR=32618&size=4267,1993&format=jpg&f=image"
+  },
+  {
+   "name": "yale_ctnaip2023_2.jpg",
+   "url": "https://cteco.uconn.edu/ctraster/rest/services/images/NAIP_2023/ImageServer/exportImage?bbox=667962,4576477,669242,4577075&bboxSR=32618&imageSR=32618&size=4267,1993&format=jpg&f=image"
+  }
+ ]
+}
