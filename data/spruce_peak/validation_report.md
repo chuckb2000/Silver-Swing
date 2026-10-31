@@ -21,7 +21,7 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 | 7 | 4 | Black | 333 | 322.0 | -11.0 | -3.3% | flag | 324.7 | -2.5% | pass |
 | 7 | 4 | Blue | 314 | 322.0 | +8.0 | +2.6% | pass | 322.0 | +2.6% | pass |
 | 8 | 5 | Black | 606 | 514.0 | -92.0 | -15.2% | FAIL | 514.0 | -15.2% | FAIL |
-| 8 | 5 | Blue | 559 | 513.5 | -45.5 | -8.1% | FAIL | 517.6 | -7.4% | flag |
+| 8 | 5 | Blue | 559 | 514.0 | -45.0 | -8.0% | FAIL | 514.0 | -8.0% | FAIL |
 | 9 | 4 | Black | 339 | 334.9 | -4.1 | -1.2% | pass | 334.9 | -1.2% | pass |
 | 9 | 4 | Blue | 317 | 314.0 | -3.0 | -1.0% | pass | 314.0 | -1.0% | pass |
 | 10 | 4 | Black | 351 | 341.2 | -9.8 | -2.8% | pass | 341.2 | -2.8% | pass |
@@ -42,7 +42,7 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 | 17 | 4 | Blue | 266 | 262.5 | -3.5 | -1.3% | pass | 262.5 | -1.3% | pass |
 | 18 | 5 | Black | 495 | 488.2 | -6.8 | -1.4% | pass | 488.2 | -1.4% | pass |
 | 18 | 5 | Blue | 475 | 471.8 | -3.2 | -0.7% | pass | 471.8 | -0.7% | pass |
-| **total** | 144 | | **12298** | **11972** | -326 | -2.7% | | **12001** | -2.4% | |
+| **total** | 144 | | **12298** | **11972** | -326 | -2.6% | | **11997** | -2.4% | |
 
 ## Open items
 
@@ -60,23 +60,24 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 12. Hole 8: no golf=pin on its green; the centre pin is the green's centre (proposal).
 13. Hole 8 (Black): measured 514 yd vs card 606 (-15.2%) - FAIL, needs a decision.
 14. Hole 8 (Black): tee box desk_tee_8 assigned by the developer (tagged hole=8, tee_set=Black in edited/course.geojson).
-15. Hole 8 (Blue): measured 518 yd vs card 559 (-7.4%) even with the virtual tee at the best spot in its box; accepted for play.
-16. Hole 9: no golf=pin on its green; the centre pin is the green's centre (proposal).
-17. Hole 10: no golf=pin on its green; the centre pin is the green's centre (proposal).
-18. Hole 10 (Blue): measured 340 yd vs card 321 (+5.8%) even with the virtual tee at the best spot in its box; accepted for play.
-19. Hole 11: no golf=pin on its green; the centre pin is the green's centre (proposal).
-20. Hole 12: no golf=pin on its green; the centre pin is the green's centre (proposal).
-21. Hole 12 (Black): measured 345 yd vs card 359 (-3.8%) even with the virtual tee at the best spot in its box; accepted for play.
-22. Hole 13: no golf=pin on its green; the centre pin is the green's centre (proposal).
-23. Hole 13 (Black): measured 243 yd vs card 252 (-3.6%) even with the virtual tee at the best spot in its box; accepted for play.
-24. Hole 13 (Black): tee box desk_tee_13 assigned by the developer (tagged hole=13, tee_set=Black in edited/course.geojson).
-25. Hole 14: no golf=pin on its green; the centre pin is the green's centre (proposal).
-26. Hole 14 (Black): measured 378 yd vs card 394 (-4.1%) even with the virtual tee at the best spot in its box; accepted for play.
-27. Hole 15: no golf=pin on its green; the centre pin is the green's centre (proposal).
-28. Hole 16: no golf=pin on its green; the centre pin is the green's centre (proposal).
-29. Hole 17: OSM par 3 differs from scorecard par 4; using scorecard.
-30. Hole 17 (Black): measured 268 yd vs card 279 (-4.0%) even with the virtual tee at the best spot in its box; accepted for play.
-31. Hole 18: no golf=pin on its green; the centre pin is the green's centre (proposal).
+15. Hole 8 (Blue): measured 514 yd vs card 559 (-8.0%) - FAIL, needs a decision.
+16. Hole 8 (Blue): tee box desk_tee_8 assigned by the developer (tagged hole=8, tee_set=Blue in edited/course.geojson).
+17. Hole 9: no golf=pin on its green; the centre pin is the green's centre (proposal).
+18. Hole 10: no golf=pin on its green; the centre pin is the green's centre (proposal).
+19. Hole 10 (Blue): measured 340 yd vs card 321 (+5.8%) even with the virtual tee at the best spot in its box; accepted for play.
+20. Hole 11: no golf=pin on its green; the centre pin is the green's centre (proposal).
+21. Hole 12: no golf=pin on its green; the centre pin is the green's centre (proposal).
+22. Hole 12 (Black): measured 345 yd vs card 359 (-3.8%) even with the virtual tee at the best spot in its box; accepted for play.
+23. Hole 13: no golf=pin on its green; the centre pin is the green's centre (proposal).
+24. Hole 13 (Black): measured 243 yd vs card 252 (-3.6%) even with the virtual tee at the best spot in its box; accepted for play.
+25. Hole 13 (Black): tee box desk_tee_13 assigned by the developer (tagged hole=13, tee_set=Black in edited/course.geojson).
+26. Hole 14: no golf=pin on its green; the centre pin is the green's centre (proposal).
+27. Hole 14 (Black): measured 378 yd vs card 394 (-4.1%) even with the virtual tee at the best spot in its box; accepted for play.
+28. Hole 15: no golf=pin on its green; the centre pin is the green's centre (proposal).
+29. Hole 16: no golf=pin on its green; the centre pin is the green's centre (proposal).
+30. Hole 17: OSM par 3 differs from scorecard par 4; using scorecard.
+31. Hole 17 (Black): measured 268 yd vs card 279 (-4.0%) even with the virtual tee at the best spot in its box; accepted for play.
+32. Hole 18: no golf=pin on its green; the centre pin is the green's centre (proposal).
 
 ## Playability adjustments
 
@@ -86,7 +87,6 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 - Hole 4 (Blue): measured 337 yd from the tee-box centre vs 358 on the card (-5.8%); moved the virtual tee along the middle of the real tee polygon w1058376518 (on its centre line, at least 2.5 m from its back and front) -> 338.6 yd (real 337.2 yd).
 - Hole 5 (Black): measured 326 yd from the tee-box centre vs 338 on the card (-3.7%); moved the virtual tee along the middle of the real tee polygon w1058376526 (on its centre line, at least 2.5 m from its back and front) -> 326.9 yd (real 325.7 yd).
 - Hole 7 (Black): measured 322 yd from the tee-box centre vs 333 on the card (-3.3%); moved the virtual tee along the middle of the real tee polygon w1058378232 (on its centre line, at least 2.5 m from its back and front) -> 324.7 yd (real 322.0 yd).
-- Hole 8 (Blue): measured 513 yd from the tee-box centre vs 559 on the card (-8.1%); moved the virtual tee along the middle of the real tee polygon w1058393549 (on its centre line, at least 2.5 m from its back and front) -> 517.6 yd (real 513.5 yd).
 - Hole 10 (Blue): measured 341 yd from the tee-box centre vs 321 on the card (+6.3%); moved the virtual tee along the middle of the real tee polygon w1058395772 (on its centre line, at least 2.5 m from its back and front) -> 339.6 yd (real 341.2 yd).
 - Hole 12 (Black): measured 341 yd from the tee-box centre vs 359 on the card (-5.0%); moved the virtual tee along the middle of the real tee polygon w1058397262 (on its centre line, at least 2.5 m from its back and front) -> 345.2 yd (real 341.2 yd).
 - Hole 13 (Blue): measured 155 yd from the tee-box centre vs 160 on the card (-3.3%); moved the virtual tee along the middle of the real tee polygon w1058397270 (on its centre line, at least 2.5 m from its back and front) -> 156.0 yd (real 154.7 yd).

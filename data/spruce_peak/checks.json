@@ -25,9 +25,13 @@
    "8 Black": [
     513,
     515
+   ],
+   "8 Blue": [
+    513,
+    515
    ]
   },
-  "why": "developer 2026-10-31: accepted as marked. 8 Black is the developer's mark from the tracing desk (data/spruce_peak/desk/hole08.json, on the OSM back box w1058393549; 8 x 6 m pad on the marked centroid, tee_pos=mark): 514 yd against 606 (-15.2 %), held to 513-515. 4 Black (363 vs 381, -4.8 %) and 13 Black (243 vs 252, -3.6 %), also marked, are inside the 8 % line and need no allowance"
+  "why": "developer 2026-10-31: accepted as marked. 8 Black is the developer's mark from the tracing desk (data/spruce_peak/desk/hole08.json, on the OSM back box w1058393549; 8 x 6 m pad on the marked centroid, tee_pos=mark): 514 yd against 606 (-15.2 %), held to 513-515. 8 Blue plays from the same tee (developer 2026-10-31): 514 against 559 (-8.0 %), held to 513-515. 4 Black (363 vs 381, -4.8 %) and 13 Black (243 vs 252, -3.6 %), also marked, are inside the 8 % line and need no allowance"
  },
  "points": [
   {

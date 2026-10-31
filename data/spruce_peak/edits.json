@@ -66,6 +66,13 @@
     "tee_set": "Blue"
    },
    "reason": "developer 2026-10-31 marked the Black tee on 4 about 25 m behind this box (desk_tee_4); the Blue tee stays on this box, where it was built before (the card puts Blue 23 yd ahead of Black), rather than moving back onto the Black pad"
+  },
+  {
+   "osm": "desk_tee_8",
+   "set": {
+    "tee_set": "Black;Blue"
+   },
+   "reason": "developer 2026-10-31: Blue and Black play from the same tee on 8, the developer's Black mark (514 yd; Blue's card 559, -8.0 %, accepted). Before, Blue's virtual tee moved to the back of w1058393549 toward its card and played 3.6 yd longer than Black"
   }
  ],
  "drop": [

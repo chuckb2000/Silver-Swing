@@ -12,8 +12,9 @@ Actions fetch); photo the VCGI 0.3 m orthos. Two tee sets: Black (the tips) and 
 default). Theme `spruce_peak` (new): Stowe in the first week of October, spruce spires and red,
 gold and turning hardwoods. The Black tees on 4, 8 and 13 are the developer's marks from the
 tracing desk (2026-10-31, accepted as marked); Black: 8 fails against the card (-15.2 %,
-accepted), the rest within 8 %; Blue: every hole within 8 % (8 at -7.4 %, 10 +5.8 %, 4 -5.4 %).
-Built totals Black 6,156 yd (card 6,411), Blue 5,844 (card 5,887).
+accepted), the rest within 8 %; Blue: 8 plays from the same tee as Black (-8.0 %, accepted),
+every other hole within 8 % (10 +5.8 %, 4 -5.4 %).
+Built totals Black 6,156 yd (card 6,411), Blue 5,840 (card 5,887).
 
 ## Facts
 
@@ -59,7 +60,7 @@ club card online.
 | Black | 499 | 228 | 415 | 381 | 338 | 194 | 333 | 606 | 339 | 3,333 | 351 | 506 | 359 | 252 | 394 | 271 | 171 | 279 | 495 | 3,078 | 6,411 |
 | Built | 486 | 222 | 405 | 363 | 327 | 194 | 325 | 514 | 335 | 3,171 | 341 | 492 | 345 | 243 | 378 | 264 | 166 | 268 | 488 | 2,985 | 6,156 |
 | Blue | 451 | 210 | 365 | 358 | 321 | 155 | 314 | 559 | 317 | 3,050 | 321 | 480 | 342 | 160 | 380 | 253 | 160 | 266 | 475 | 2,837 | 5,887 |
-| Built | 456 | 215 | 357 | 339 | 326 | 159 | 322 | 518 | 314 | 3,006 | 340 | 470 | 341 | 156 | 375 | 258 | 164 | 262 | 472 | 2,838 | 5,844 |
+| Built | 456 | 215 | 357 | 339 | 326 | 159 | 322 | 514 | 314 | 3,002 | 340 | 470 | 341 | 156 | 375 | 258 | 164 | 262 | 472 | 2,838 | 5,840 |
 
 Ratings: Black 72.1/141, Blue 70.0/132 (18Birdies; Stymie prints 73.7/151 and 71.2/146).
 Not built: White 5,442, Green 4,742, Red 4,018 (in `scorecard.csv`). OSM tags 17 as a par 3;
@@ -113,11 +114,10 @@ Blue (the developer, 2026-10-30: "the furthest back tees and the blue tees"; Blu
     w1058406517's loop, is 726 m away), so nothing was cut. Blue on 4 stays on w1058376518
     (tagged hole=4, tee_set=Blue; untagged, s06 could pick the Black pad for Blue: 363 yd is 1.4 %
     from Blue's card).
-3.  **Blue on 8** -7.4 % (518 vs 559): the mapped back box is the only one near the card;
-    the card may count a longer route. Recommendation: accept. Since the Black mark on 8 is on
-    the same box, Blue's virtual tee (moved 3 m to the back of the box toward its card) now plays
-    3.6 yd longer than Black (517.6 vs 514.0). Options: leave it; or put Blue at the box centre
-    (513.5 yd, -8.1 %). Recommendation: leave it.
+3.  **Blue on 8** (decided 2026-10-31): Blue plays from the same tee as Black, the developer's
+    mark (`desk_tee_8` tagged `tee_set=Black;Blue` in `edits.json`): 514 yd against 559
+    (-8.0 %), accepted (`checks.json` 513-515). Before, Blue's virtual tee sat at the back of
+    w1058393549 (518 yd, -7.4 %), 3.6 yd longer than Black.
 4.  **Blue card row.** Stymie's per-hole Blue (5,887, matches 18Birdies' total) used; GolfPass
     has 5,824 per hole and 6,041 in its tee table. Recommendation: keep until a card photo.
 5.  **Stroke index 10/18:** GolfPass, 18Birdies, OpenGolfAPI 7/9 (used); Stymie 9/7.
