@@ -10,30 +10,40 @@
    ]
   },
   {
-   "name": "kwiniaska_dem1m",
-   "tnm": {
-    "dataset": "dem1m",
-    "bbox": [
-     -73.235,
-     44.355,
-     -73.16,
-     44.415
-    ],
-    "list": true
-   }
+   "name": "kwiniaska_home.html",
+   "url": "https://kwiniaska.com/"
   },
   {
-   "name": "kwiniaska_lpc",
-   "tnm": {
-    "dataset": "lpc",
-    "bbox": [
-     -73.235,
-     44.355,
-     -73.16,
-     44.415
-    ],
-    "list": true
-   }
+   "name": "kwiniaska_sitemap.xml",
+   "url": "https://kwiniaska.com/sitemap.xml"
+  },
+  {
+   "name": "kwiniaska_naip.jpg",
+   "url": "https://imagery.nationalmap.gov/arcgis/rest/services/USGSNAIPImagery/ImageServer/exportImage?bbox=643040,4916547,644064,4917827&bboxSR=32618&imageSR=32618&size=2048,2560&format=jpg&f=image"
+  },
+  {
+   "name": "kwiniaska_vcgi.jpg",
+   "url": "https://maps.vcgi.vermont.gov/arcgis/rest/services/EGC_services/IMG_VCGI_CLR2021_2025_SP_NOCACHE/ImageServer/exportImage?bbox=643040,4916547,644064,4917827&bboxSR=32618&imageSR=32618&size=2048,2560&format=jpg&bandIds=0,1,2&f=image"
+  },
+  {
+   "name": "USGS_1M_18_x64y492_VT_Statewide_A23.tif",
+   "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/1m/Projects/VT_Statewide_A23/TIFF/USGS_1M_18_x64y492_VT_Statewide_A23.tif"
+  },
+  {
+   "name": "USGS_LPC_VT_Statewide_A23_N2107E4445.laz",
+   "url": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/VT_Statewide_A23/VT_Statewide_2_A23/LAZ/USGS_LPC_VT_Statewide_A23_N2107E4445.laz"
+  },
+  {
+   "name": "USGS_LPC_VT_Statewide_A23_N2093E4445.laz",
+   "url": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/VT_Statewide_A23/VT_Statewide_2_A23/LAZ/USGS_LPC_VT_Statewide_A23_N2093E4445.laz"
+  },
+  {
+   "name": "USGS_LPC_VT_Statewide_A23_N2107E4431.laz",
+   "url": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/VT_Statewide_A23/VT_Statewide_2_A23/LAZ/USGS_LPC_VT_Statewide_A23_N2107E4431.laz"
+  },
+  {
+   "name": "USGS_LPC_VT_Statewide_A23_N2093E4431.laz",
+   "url": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/VT_Statewide_A23/VT_Statewide_2_A23/LAZ/USGS_LPC_VT_Statewide_A23_N2093E4431.laz"
   }
  ]
 }
