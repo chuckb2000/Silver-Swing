@@ -1,0 +1,79 @@
+{
+  "name": "Sankaty Head (Armstrong's moorland links on Nantucket's east end)",
+  "note": "Course theme palette (<= 32 colours; same keys as pnw.json plus F0-F2). Sankaty Head Golf Club, Siasconset, Nantucket, from NAIP and the course's descriptions (LINKS Magazine: sandy, gravelly, treeless, windswept and firm; Urbina's restoration returned bluegrass to native fescue and cleared scrub oak between fairways): firm green fairways and greens; a mown band; then blond, wind-combed fescue (F0-F2), paler and yellower than Eastward Ho!'s copper heath; pale island sand; the grey-blue Atlantic; dark scrub and bayberry (G0-G2); 'Sconset lawns out of bounds (L0-L2). Trees in assets-src/trees_sankaty_head.py: Japanese black pine and pitch pine windbreaks, red cedar, scrub oak and bayberry. Shadows are a 35% black overlay on top of these.",
+  "colors": {
+    "G0": "#1c2e1c",
+    "G1": "#283f24",
+    "G2": "#34522b",
+    "G3": "#426a33",
+    "G4": "#4d873a",
+    "G5": "#5a9b42",
+    "G6": "#68ae4a",
+    "G7": "#79bf53",
+    "G8": "#8dcd61",
+    "G9": "#b2df88",
+    "L0": "#4e5c30",
+    "L1": "#5f6e39",
+    "L2": "#728244",
+    "S0": "#cbb894",
+    "S1": "#eadfc3",
+    "S2": "#f7f1e1",
+    "W0": "#1d4a6e",
+    "W1": "#2b628c",
+    "W2": "#5a8db5",
+    "K0": "#26272d",
+    "K1": "#55565d",
+    "K2": "#7d7e86",
+    "K3": "#b5ad9a",
+    "K4": "#dbd3c1",
+    "B0": "#4a3424",
+    "B1": "#6f5038",
+    "B2": "#93704f",
+    "R0": "#5b5e66",
+    "WH": "#f6f6f2",
+    "F0": "#7b6c3f",
+    "F1": "#9a8751",
+    "F2": "#b8a367"
+  },
+  "lut": {
+    "rough": [
+      "F0",
+      "F1",
+      "F2",
+      "F2"
+    ],
+    "rough_band": [
+      "G3",
+      "G4",
+      "G5",
+      "G5"
+    ]
+  },
+  "aliases": {
+    "TUFT": "G3"
+  },
+  "minimap": {
+    "ob": "#5f6e39",
+    "rough": "#9a8751",
+    "woods": "#283f24",
+    "ob_woods": "#223822",
+    "water": "#2b628c",
+    "ob_water": "#2b628c",
+    "bunker": "#eadfc3",
+    "ob_sand": "#eadfc3"
+  },
+  "minimap_trees": {
+    "conifer": [
+      "#21422a",
+      "#3c6d3a"
+    ],
+    "deciduous": [
+      "#31481e",
+      "#567631"
+    ]
+  },
+  "trees": {
+    "conifer": "trees_sankaty_head:conifer",
+    "deciduous": "trees_sankaty_head:deciduous"
+  }
+}
