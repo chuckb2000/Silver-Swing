@@ -1,0 +1,39 @@
+{
+ "items": [
+  {
+   "name": "rancho_san_joaquin_overpass.geojson",
+   "osm_box": [
+    33.64,
+    -117.862,
+    33.684,
+    -117.81
+   ]
+  },
+  {
+   "name": "rancho_san_joaquin_dem1m",
+   "tnm": {
+    "dataset": "dem1m",
+    "bbox": [
+     -117.862,
+     33.64,
+     -117.81,
+     33.684
+    ],
+    "list": true
+   }
+  },
+  {
+   "name": "rancho_san_joaquin_lpc",
+   "tnm": {
+    "dataset": "lpc",
+    "bbox": [
+     -117.862,
+     33.64,
+     -117.81,
+     33.684
+    ],
+    "list": true
+   }
+  }
+ ]
+}
