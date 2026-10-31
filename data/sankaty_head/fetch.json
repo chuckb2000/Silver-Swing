@@ -52,6 +52,18 @@
   {
    "name": "noaa9551_list2.xml",
    "url": "https://noaa-nos-coastal-lidar-pds.s3.amazonaws.com/?prefix=laz/geoid18/9551/&max-keys=1000&marker=laz/geoid18/9551/20180501_7750011125.copc.laz"
+  },
+  {
+   "name": "noaa9551_minmax.csv",
+   "url": "https://noaa-nos-coastal-lidar-pds.s3.amazonaws.com/laz/geoid18/9551/minmax_ma2018_nantucket_m9551.csv"
+  },
+  {
+   "name": "noaa9551_index.html",
+   "url": "https://noaa-nos-coastal-lidar-pds.s3.amazonaws.com/laz/geoid18/9551/index.html"
+  },
+  {
+   "name": "noaa9551_stac_7750011125.json",
+   "url": "https://noaa-nos-coastal-lidar-pds.s3.amazonaws.com/laz/geoid18/9551/stac/20180501_7750011125.copc.json"
   }
  ]
 }
