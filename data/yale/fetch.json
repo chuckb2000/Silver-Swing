@@ -10,19 +10,6 @@
    ]
   },
   {
-   "name": "yale_dem1m",
-   "tnm": {
-    "dataset": "dem1m",
-    "bbox": [
-     -72.9948,
-     41.3101,
-     -72.9763,
-     41.3288
-    ],
-    "list": true
-   }
-  },
-  {
    "name": "yale_lpc",
    "tnm": {
     "dataset": "lpc",
@@ -32,7 +19,8 @@
      -72.9763,
      41.3288
     ],
-    "list": true
+    "only": "CT_2023Statewide_C25",
+    "max": 10
    }
   },
   {
@@ -64,16 +52,24 @@
    "url": "https://noaa-nos-coastal-lidar-pds.s3.amazonaws.com/?list-type=2&prefix=laz/geoid18/10296/&max-keys=1000"
   },
   {
-   "name": "noaa_10296_ept.json",
-   "url": "https://noaa-nos-coastal-lidar-pds.s3.amazonaws.com/entwine/geoid18/10296/ept.json"
-  },
-  {
-   "name": "yale_usace_notice.pdf",
-   "url": "https://media.defense.gov/2023/Jul/26/2003268324/-1/-1/1/NAE-2022-00115-PN.PDF"
-  },
-  {
    "name": "cteco_services.json",
    "url": "https://cteco.uconn.edu/ctraster/rest/services/images?f=json"
+  },
+  {
+   "name": "yale_ctnaip2023_0.jpg",
+   "url": "https://cteco.uconn.edu/ctraster/rest/services/images/NAIP_2023/ImageServer/exportImage?bbox=667962,4575281,669242,4575879&bboxSR=32618&imageSR=32618&size=4267,1993&format=jpg&f=image"
+  },
+  {
+   "name": "yale_ctnaip2023_1.jpg",
+   "url": "https://cteco.uconn.edu/ctraster/rest/services/images/NAIP_2023/ImageServer/exportImage?bbox=667962,4575879,669242,4576477&bboxSR=32618&imageSR=32618&size=4267,1993&format=jpg&f=image"
+  },
+  {
+   "name": "yale_ctnaip2023_2.jpg",
+   "url": "https://cteco.uconn.edu/ctraster/rest/services/images/NAIP_2023/ImageServer/exportImage?bbox=667962,4576477,669242,4577075&bboxSR=32618&imageSR=32618&size=4267,1993&format=jpg&f=image"
+  },
+  {
+   "name": "ctnaip2023_info.json",
+   "url": "https://cteco.uconn.edu/ctraster/rest/services/images/NAIP_2023/ImageServer?f=json"
   }
  ]
 }
