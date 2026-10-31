@@ -74,6 +74,18 @@
   {
    "name": "ref_hole09_18.webp",
    "url": "https://needhamgolfclub.com/documents/20124/102456/Hole+9+%26+18.webp/cdec7963-a61a-a4c6-b39c-a56189a2ba58?t=1773949814139"
+  },
+  {
+   "name": "USGS_1M_19_x31y469_MA_CentralEastern_2021_B21.tif",
+   "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/1m/Projects/MA_CentralEastern_2021_B21/TIFF/USGS_1M_19_x31y469_MA_CentralEastern_2021_B21.tif"
+  },
+  {
+   "name": "USGS_LPC_MA_CentralEastern_2021_B21_19TCG316681.laz",
+   "url": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/MA_CentralEastern_2021_B21/MA_CentralEastern_1_2021/LAZ/USGS_LPC_MA_CentralEastern_2021_B21_19TCG316681.laz"
+  },
+  {
+   "name": "USGS_LPC_MA_CentralEastern_2021_B21_19TCG316683.laz",
+   "url": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/MA_CentralEastern_2021_B21/MA_CentralEastern_1_2021/LAZ/USGS_LPC_MA_CentralEastern_2021_B21_19TCG316683.laz"
   }
  ]
 }
