@@ -28,19 +28,19 @@
   },
   {
    "name": "USGS_LPC_CA_NoCAL_2018_w2285n1981.laz",
-   "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/LPC/Projects/CA_NoCAL_3DEP_Supp_Funding_2018_D18/CA_NoCal_Wildfires_B5b_QL1_2018/LAZ/USGS_LPC_CA_NoCAL_3DEP_Supp_Funding_2018_D18_w2285n1981.laz"
+   "url": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/CA_NoCAL_3DEP_Supp_Funding_2018_D18/CA_NoCal_Wildfires_B5b_QL1_2018/LAZ/USGS_LPC_CA_NoCAL_3DEP_Supp_Funding_2018_D18_w2285n1981.laz"
   },
   {
    "name": "USGS_LPC_CA_NoCAL_2018_w2286n1982.laz",
-   "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/LPC/Projects/CA_NoCAL_3DEP_Supp_Funding_2018_D18/CA_NoCal_Wildfires_B5b_QL1_2018/LAZ/USGS_LPC_CA_NoCAL_3DEP_Supp_Funding_2018_D18_w2286n1982.laz"
+   "url": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/CA_NoCAL_3DEP_Supp_Funding_2018_D18/CA_NoCal_Wildfires_B5b_QL1_2018/LAZ/USGS_LPC_CA_NoCAL_3DEP_Supp_Funding_2018_D18_w2286n1982.laz"
   },
   {
    "name": "USGS_LPC_CA_NoCAL_2018_w2287n1981.laz",
-   "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/LPC/Projects/CA_NoCAL_3DEP_Supp_Funding_2018_D18/CA_NoCal_Wildfires_B5b_QL1_2018/LAZ/USGS_LPC_CA_NoCAL_3DEP_Supp_Funding_2018_D18_w2287n1981.laz"
+   "url": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/CA_NoCAL_3DEP_Supp_Funding_2018_D18/CA_NoCal_Wildfires_B5b_QL1_2018/LAZ/USGS_LPC_CA_NoCAL_3DEP_Supp_Funding_2018_D18_w2287n1981.laz"
   },
   {
-   "name": "USGS_LPC_CA_NoCAL_2018_w2287n1980.laz",
-   "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/LPC/Projects/CA_NoCAL_3DEP_Supp_Funding_2018_D18/CA_NoCal_Wildfires_B5b_QL1_2018/LAZ/USGS_LPC_CA_NoCAL_3DEP_Supp_Funding_2018_D18_w2287n1980.laz"
+   "name": "s3_lpc_listing.xml",
+   "url": "https://prd-tnm.s3.amazonaws.com/?prefix=StagedProducts/Elevation/LPC/Projects/CA_NoCAL_3DEP_Supp_Funding_2018_D18/&max-keys=50"
   }
  ]
 }
