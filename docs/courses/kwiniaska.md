@@ -13,7 +13,7 @@ nothing was traced. Every download came through the GitHub Actions fetch workflo
 NAIP. Two tee sets, Black (the tips, default) and Gold. New theme `kwiniaska` and a Holstein logo.
 Gold is within 8 % of the card on every hole (5,148 yd built against 5,235); Black is 5,583 against
 5,810, with five holes 8.4-11.9 % short because their Black boxes aren't mapped (accepted, open
-item 1). `course_play.test.ts -t kwiniaska` and `courses.test.ts -t kwiniaska`: 16 passed. Every
+item 1). `course_play.test.ts`, `courses.test.ts` and `pins.test.ts` with `-t kwiniaska`: 17 passed. Every
 hole was looked at in the game from Gold, and holes 1-10 from Black. Branch test totals are in the
 pull request.
 
@@ -94,7 +94,9 @@ Made by the course chats under the overnight "make the call"; each can be revers
 6.  **Hole lines 12, 15 and 18** start 56-74 m from the Gold box that matches the card; measured
     from that box.
 7.  **Theme, logo and card hole** (13, rotating 3, 7, 16): course chat's choices.
-8.  **The rebuild's 67 extra trees** on the south edge of the world (outside the course): the
+8.  **Green 17 without bumps** (`green_tilt`, bumps 0): with one bump this small green (fitted tilt
+    6.2 %) kept only its centre pin and failed `pins.test.ts`; now 3.8 % at most.
+9.  **The rebuild's 67 extra trees** on the south edge of the world (outside the course): the
     first chat's lidar clip wasn't in `release.json`; the reproducible clip is used.
 
 ## New pipeline keys or theme
@@ -128,5 +130,7 @@ Made by the course chats under the overnight "make the call"; each can be revers
 -   On a course renovated after its OSM mapping, check that the missing back tees aren't simply
     absent on the ground before searching the lidar: here road, woods and the car park sit right
     behind the line starts.
+-   Run `pins.test.ts -t <id>` with the course test, not only in the full suite: green 17 failed it
+    and nothing else caught it.
 -   Check `main` for new developer calls before handing off: the default-tee rule changed during
     the overnight build and is enforced by a test.

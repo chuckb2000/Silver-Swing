@@ -75,5 +75,13 @@
   "bright_max": 95,
   "share": 0.5,
   "note": "Kwiniaska: the class-1 lidar's last-return split called the dark evergreen rows broadleaves; the VCGI photo is leaf-off, so only conifers are green in the woods (course chat 2026-10-30, checked on crops of the photo)."
- }
+ },
+ "green_tilt": [
+  {
+   "hole": 17,
+   "max_tilt": 0.025,
+   "bumps": 0,
+   "why": "a small green (fitted tilt 6.2 %): with a bump it kept only its centre pin (pins.test.ts); the slope is its feature (COURSE_LESSONS 4)"
+  }
+ ]
 }

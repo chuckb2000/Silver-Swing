@@ -115,6 +115,7 @@ Each was made under the developer's overnight "make the call" instruction; each 
 13. **Theme and logo:** a new theme `kwiniaska` (a Champlain Valley ridge at the first colour: sugar and red maples, paper birch, eastern white pine and hemlock, fescue-gold rough; `assets-src/palettes/kwiniaska.json`, `assets-src/trees_kwiniaska.py`) and an original logo, a Holstein's head for the Caldwells' dairy farm (`assets-src/course_logos/kwiniaska.py`). Card hole 13 (rotating 3, 7, 16). All the course chat's choices.
 14. **Other 3-8 % flags** (tee moved within its real box where that helped; see the table and the adjustments below): Black 2, 3, 7, 10, 12, 13, 17, 18; Gold 3, 6, 9, 11, 12, 13, 18. Accepted for play.
 15. **Lidar inputs reproduced.** The first chat's lidar clips were not in `release.json`; the second chat added both tiles (N2107E4445, N2093E4445) with their clip commands and hashes, so `make fetch` now restores them. The rebuild from those clips (world + 100 m, the standard margin) has 8,790 trees against the first build's 8,723: 67 more along the south edge of the world, outside the course (1,136 inside, unchanged). The rebuild is the one committed.
+16. **Green 17 shaped without bumps** (`green_tilt` hole 17, bumps 0, tilt cap 2.5 %): with its one random bump the small green kept only its centre pin and failed `pins.test.ts`; now max slope 3.8 %, 1.5 % within 3 m of the pin. Second chat, 2026-10-31.
 
 ## Playability adjustments
 
@@ -152,7 +153,7 @@ Each was made under the developer's overnight "make the call" instruction; each 
 | green | hole | fitted tilt % | used tilt % | bumps | max slope % | max slope within 3 m of pin % |
 |---|---|---|---|---|---|---|
 | w1228365187 | 13 | 3.8 | 2.5 | 1 | 5.3 | 1.5 |
-| w1228365188 | 17 | 6.2 | 2.5 | 1 | 4.6 | 1.5 |
+| w1228365188 | 17 | 6.2 | 2.5 | 0 | 3.8 | 1.5 |
 | w1228365189 | 1 | 2.1 | 2.1 | 2 | 4.1 | 1.5 |
 | w1228365190 | 2 | 4.9 | 2.5 | 1 | 3.6 | 1.5 |
 | w1228365191 | 3 | 4.6 | 2.5 | 2 | 5.4 | 1.5 |
