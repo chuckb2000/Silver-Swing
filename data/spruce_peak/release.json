@@ -5,9 +5,9 @@
   {
    "asset": "spruce_peak_vcgi_dem_1m.tif",
    "sha256": "a29d36742cfbc3878a5b8435c718580c39ac1c840b78691080c20140050acf55",
-   "run": "cp {file} data/spruce_peak/raw/vcgi_dem_1m.tif",
+   "run": "python3 data/spruce_peak/fix_dem.py {file}",
    "outputs": {
-    "raw/vcgi_dem_1m.tif": "a29d36742cfbc3878a5b8435c718580c39ac1c840b78691080c20140050acf55"
+    "raw/vcgi_dem_1m.tif": "c1ca6e9ea8e4804891452d14106263f519d4bb375d08342ad7021586958740f1"
    }
   },
   {

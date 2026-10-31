@@ -1,0 +1,53 @@
+{
+ "note": "Edits to the OSM layout for Spruce Peak (course chat, 2026-10-31); proposals from data/spruce_peak/make_proposals.py",
+ "add": [
+  {
+   "from": "proposed/paths_as_cartpaths.geojson",
+   "ids": [
+    "w1058406517_cartpath",
+    "w1058406518_cartpath",
+    "w1058406519_cartpath",
+    "w1058406520_cartpath",
+    "w1058406521_cartpath",
+    "w1058406522_cartpath",
+    "w1058406523_cartpath",
+    "w1058406524_cartpath",
+    "w1058406525_cartpath",
+    "w1058406526_cartpath",
+    "w1058406527_cartpath",
+    "w1058406528_cartpath",
+    "w1058406529_cartpath",
+    "w1058406530_cartpath",
+    "w1058406531_cartpath",
+    "w1058406532_cartpath",
+    "w1058406533_cartpath",
+    "w1058406534_cartpath",
+    "w1058406535_cartpath"
+   ],
+   "reason": "19 golf=path ways (the course's cart paths) inside the boundary, not read by s01: copied as golf=cartpath (free relief, drawn as paths)"
+  },
+  {
+   "from": "proposed/boundary.geojson",
+   "ids": [
+    "bd_w510265958"
+   ],
+   "reason": "course chat 2026-10-31 (developer asleep: overnight call, open item): OSM's boundary traces only the mown turf and leaves out the 13th hole and the woods the 10th tee shot carries; joined to the 13th and grown 20 m into the woods, less road strips and buildings (make_proposals.py). Replaces the OSM boundary"
+  }
+ ],
+ "tags": [
+  {
+   "osm": "w458067715",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "the pond in the middle of the course (golf=water_hazard, would export yellow): red, standing default (COURSE_BUILD 4.1)"
+  }
+ ],
+ "drop": [
+  {
+   "osm": "w510265958",
+   "reason": "replaced by bd_w510265958 (the same boundary joined to the 13th and grown into the woods)"
+  }
+ ],
+ "extend_start": []
+}

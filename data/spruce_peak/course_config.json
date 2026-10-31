@@ -13,7 +13,7 @@
  "dtm": {
   "path": "raw/vcgi_dem_1m.tif",
   "units": "m",
-  "source": "Vermont Center for Geographic Information (VCGI) lidar DEM image service IMG_VCGI_LIDARDEM_SP_NOCACHE_v1 (hydro-flattened bare earth from the spring 2023 statewide QL1 lidar, 0.35 m, EPSG:32145), exported at 1 m in EPSG:32618 (bilinear) by the GitHub Actions fetch on 2026-10-31; NAVD88 m"
+  "source": "Vermont Center for Geographic Information (VCGI) lidar DEM image service IMG_VCGI_LIDARDEM_SP_NOCACHE_v1 (hydro-flattened bare earth from the spring 2023 statewide QL1 lidar, 0.35 m, EPSG:32145), exported at 1 m in EPSG:32618 (bilinear) by the GitHub Actions fetch on 2026-10-31; NAVD88 m; three voids in the export by the 11th green (45 cells, 100-160 m below the ground) filled with their 9 x 9 median by data/spruce_peak/fix_dem.py"
  },
  "dsm": {
   "path": "raw/vcgi_dsm_1m.tif",
