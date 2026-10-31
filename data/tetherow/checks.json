@@ -1,0 +1,9 @@
+{
+ "note": "per-course settings for game/tests/unit/course_play.test.ts (the every-course checks); docs/COURSE_BUILD.md 8.2",
+ "wind_mph": [1, 9],
+ "water": {"count": 2},
+ "tees": {"sets": ["Kidd", "Black"]},
+ "tee_shot_clear": {"sets": ["Kidd", "Black"]},
+ "centre_line_clear": {},
+ "inside_boundary": true
+}
