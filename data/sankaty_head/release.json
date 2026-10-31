@@ -1,0 +1,286 @@
+{
+ "release": "data-sankaty_head",
+ "note": "Build inputs for Sankaty Head; `make fetch NAME=sankaty_head` puts them in place. All fetched by the GitHub Actions workflow (data/sankaty_head/fetch.json) on 2026-10-31: the standard Overpass export (raw/overpass.geojson is also committed), the two USGS 3DEP 1 m DEM tiles of MA_NE_CMGP_Sandy_Z19_2013 (mosaicked and cut by make_dem.py; raw/dem_3dep_2013_1m.tif is also committed), and four USGS NAIP exportImage JPEGs (EPSG:32619 boxes in their names) placed by intake.py ortho. Lidar: the 28 NOAA 2018 Nantucket COPC tiles over the world (dataset 9551), clipped by intake.py laz --classes 1.",
+ "files": [
+  {
+   "asset": "sankaty_head_overpass.geojson",
+   "sha256": "320567cbad21063e551ebde2c65094e24fd056f8a001e573747731704f0af83e",
+   "run": "python3 pipeline/intake.py osm sankaty_head {file}",
+   "outputs": {
+    "raw/overpass.geojson": "33355891967668490cdeefb6eb55ee253642f95174b2f22d5374de0b05756c6f"
+   }
+  },
+  {
+   "asset": "USGS_1m_x41y457_MA_NE_CMGP_Sandy_Z19_2013.tif",
+   "sha256": "5acfcd4882f489eb83fc58cb433b6cabbbfdf872c67219d0cf714152e881c982",
+   "to": "build/dem/",
+   "outputs": {
+    "build/dem/USGS_1m_x41y457_MA_NE_CMGP_Sandy_Z19_2013.tif": "5acfcd4882f489eb83fc58cb433b6cabbbfdf872c67219d0cf714152e881c982"
+   }
+  },
+  {
+   "asset": "USGS_1m_x41y458_MA_NE_CMGP_Sandy_Z19_2013.tif",
+   "sha256": "646f7d4ace30a5dea06d42a1ec43cb87cfda566aabcfa80a40845f0ce2e1d0b6",
+   "run": "python3 data/sankaty_head/make_dem.py data/sankaty_head/build/dem/USGS_1m_x41y457_MA_NE_CMGP_Sandy_Z19_2013.tif {file}",
+   "outputs": {
+    "raw/dem_3dep_2013_1m.tif": "f1aeedaf5862b9417cd7c923e9febf8bda49499345ef4b7c3f3d0fa5e93cc876"
+   }
+  },
+  {
+   "asset": "naip_418241_4568980_418853_4570104.jpg",
+   "sha256": "99e7838313c328241dff5339b990cf50e935278fb7b5c7f800a26506ec5745ed",
+   "to": "build/naip/",
+   "outputs": {
+    "build/naip/naip_418241_4568980_418853_4570104.jpg": "99e7838313c328241dff5339b990cf50e935278fb7b5c7f800a26506ec5745ed"
+   }
+  },
+  {
+   "asset": "naip_418241_4570104_418853_4571228.jpg",
+   "sha256": "346c9f8d109ce32ddba7decc46885cf4fb8dff17b2f5815d0e6a632a1c476c71",
+   "to": "build/naip/",
+   "outputs": {
+    "build/naip/naip_418241_4570104_418853_4571228.jpg": "346c9f8d109ce32ddba7decc46885cf4fb8dff17b2f5815d0e6a632a1c476c71"
+   }
+  },
+  {
+   "asset": "naip_418853_4568980_419465_4570104.jpg",
+   "sha256": "718c55c1649a39626d3f66d05951d87dc03966c830c352b2ebd112ab3f1f0d65",
+   "to": "build/naip/",
+   "outputs": {
+    "build/naip/naip_418853_4568980_419465_4570104.jpg": "718c55c1649a39626d3f66d05951d87dc03966c830c352b2ebd112ab3f1f0d65"
+   }
+  },
+  {
+   "asset": "naip_418853_4570104_419465_4571228.jpg",
+   "sha256": "913b3606819db36bb463c8b6dd8d1e5d71b1f86b8389c05cb0f29d1dae0396ed",
+   "run": "python3 pipeline/intake.py ortho sankaty_head data/sankaty_head/build/naip/naip_418241_4568980_418853_4570104.jpg 418241 4568980 418853 4570104 data/sankaty_head/build/naip/naip_418241_4570104_418853_4571228.jpg 418241 4570104 418853 4571228 data/sankaty_head/build/naip/naip_418853_4568980_419465_4570104.jpg 418853 4568980 419465 4570104 {file} 418853 4570104 419465 4571228 --out raw/naip_03m.tif",
+   "outputs": {
+    "raw/naip_03m.tif": "47b69d71ced4959c7cd9f68482cbf94df2880cf77545823f40bda9a58d1358d8"
+   }
+  },
+  {
+   "asset": "noaa2018_20180501_7837510375.copc.laz",
+   "sha256": "29c2d1d0fedc6cf7f18841dcf64aeaf52e7caf8df48643c1e09f17305b591845",
+   "to": "build/laz/",
+   "outputs": {
+    "build/laz/noaa2018_20180501_7837510375.copc.laz": "29c2d1d0fedc6cf7f18841dcf64aeaf52e7caf8df48643c1e09f17305b591845"
+   }
+  },
+  {
+   "asset": "noaa2018_20180501_7837510500.copc.laz",
+   "sha256": "d9dfe5bc7c7218a67544acba350ec4e7c23243303a2fbb3ebf716be01c462450",
+   "to": "build/laz/",
+   "outputs": {
+    "build/laz/noaa2018_20180501_7837510500.copc.laz": "d9dfe5bc7c7218a67544acba350ec4e7c23243303a2fbb3ebf716be01c462450"
+   }
+  },
+  {
+   "asset": "noaa2018_20180501_7850010250.copc.laz",
+   "sha256": "4d77c2baef70c9db5cc4c8ad6a03395eb96f281495fad9685b3d99a122eae66a",
+   "to": "build/laz/",
+   "outputs": {
+    "build/laz/noaa2018_20180501_7850010250.copc.laz": "4d77c2baef70c9db5cc4c8ad6a03395eb96f281495fad9685b3d99a122eae66a"
+   }
+  },
+  {
+   "asset": "noaa2018_20180501_7850010375.copc.laz",
+   "sha256": "70b789a789b78eb2d39e6ebc4a1be8c39a995974e48e860886b7770f590bd5ba",
+   "to": "build/laz/",
+   "outputs": {
+    "build/laz/noaa2018_20180501_7850010375.copc.laz": "70b789a789b78eb2d39e6ebc4a1be8c39a995974e48e860886b7770f590bd5ba"
+   }
+  },
+  {
+   "asset": "noaa2018_20180501_7850010500.copc.laz",
+   "sha256": "141ad93a57acec6e4c0ee04b409d45cdddc165f14d7b75496a355539ede0b20e",
+   "to": "build/laz/",
+   "outputs": {
+    "build/laz/noaa2018_20180501_7850010500.copc.laz": "141ad93a57acec6e4c0ee04b409d45cdddc165f14d7b75496a355539ede0b20e"
+   }
+  },
+  {
+   "asset": "noaa2018_20180501_7862509750.copc.laz",
+   "sha256": "00dcbc3eacc89263aafab0ef1d58bfb1855151be384ef4b3f71b1b310f573b54",
+   "to": "build/laz/",
+   "outputs": {
+    "build/laz/noaa2018_20180501_7862509750.copc.laz": "00dcbc3eacc89263aafab0ef1d58bfb1855151be384ef4b3f71b1b310f573b54"
+   }
+  },
+  {
+   "asset": "noaa2018_20180501_7862509875.copc.laz",
+   "sha256": "c702ad11b67ee14f674126601f62f99af052c9a473c881292c687311437f7472",
+   "to": "build/laz/",
+   "outputs": {
+    "build/laz/noaa2018_20180501_7862509875.copc.laz": "c702ad11b67ee14f674126601f62f99af052c9a473c881292c687311437f7472"
+   }
+  },
+  {
+   "asset": "noaa2018_20180501_7862510000.copc.laz",
+   "sha256": "28c00691c21f821236af731e49b2cf3c938c62d78dcdf8f1ea26f40e185a3c80",
+   "to": "build/laz/",
+   "outputs": {
+    "build/laz/noaa2018_20180501_7862510000.copc.laz": "28c00691c21f821236af731e49b2cf3c938c62d78dcdf8f1ea26f40e185a3c80"
+   }
+  },
+  {
+   "asset": "noaa2018_20180501_7862510125.copc.laz",
+   "sha256": "6c1e9ee858191d53c3fb7a46660ecdcbbede164179d38daa4eec86f604345054",
+   "to": "build/laz/",
+   "outputs": {
+    "build/laz/noaa2018_20180501_7862510125.copc.laz": "6c1e9ee858191d53c3fb7a46660ecdcbbede164179d38daa4eec86f604345054"
+   }
+  },
+  {
+   "asset": "noaa2018_20180501_7862510250.copc.laz",
+   "sha256": "d9f3cd51386c0a894a4cbfc044ede28dbcd769fec5b0213b4f8a98646adc1a08",
+   "to": "build/laz/",
+   "outputs": {
+    "build/laz/noaa2018_20180501_7862510250.copc.laz": "d9f3cd51386c0a894a4cbfc044ede28dbcd769fec5b0213b4f8a98646adc1a08"
+   }
+  },
+  {
+   "asset": "noaa2018_20180501_7862510375.copc.laz",
+   "sha256": "eca43381e3d4c3eb8c9132c61cc6900c1467ea5dfad02ef3653cf241b3b6bfb9",
+   "to": "build/laz/",
+   "outputs": {
+    "build/laz/noaa2018_20180501_7862510375.copc.laz": "eca43381e3d4c3eb8c9132c61cc6900c1467ea5dfad02ef3653cf241b3b6bfb9"
+   }
+  },
+  {
+   "asset": "noaa2018_20180501_7862510500.copc.laz",
+   "sha256": "34c1e2ab89e6cde7ff6f07f12e8ca389c9a75d067f36adc75eeda635cd660c18",
+   "to": "build/laz/",
+   "outputs": {
+    "build/laz/noaa2018_20180501_7862510500.copc.laz": "34c1e2ab89e6cde7ff6f07f12e8ca389c9a75d067f36adc75eeda635cd660c18"
+   }
+  },
+  {
+   "asset": "noaa2018_20180501_7875009750.copc.laz",
+   "sha256": "f4d02fb91317e37e3907b4fa16f78e53ec3249ce9c0890a8981b33f2d77f85e3",
+   "to": "build/laz/",
+   "outputs": {
+    "build/laz/noaa2018_20180501_7875009750.copc.laz": "f4d02fb91317e37e3907b4fa16f78e53ec3249ce9c0890a8981b33f2d77f85e3"
+   }
+  },
+  {
+   "asset": "noaa2018_20180501_7875009875.copc.laz",
+   "sha256": "ea581d9fefa81fa125a50a5546c715d601839974864a4c0787fb97cf62f18acc",
+   "to": "build/laz/",
+   "outputs": {
+    "build/laz/noaa2018_20180501_7875009875.copc.laz": "ea581d9fefa81fa125a50a5546c715d601839974864a4c0787fb97cf62f18acc"
+   }
+  },
+  {
+   "asset": "noaa2018_20180501_7875010000.copc.laz",
+   "sha256": "5e16712f3fc459795540d97ac33abf3a5f1323f0b65d8f724eab8f9ac7079c5c",
+   "to": "build/laz/",
+   "outputs": {
+    "build/laz/noaa2018_20180501_7875010000.copc.laz": "5e16712f3fc459795540d97ac33abf3a5f1323f0b65d8f724eab8f9ac7079c5c"
+   }
+  },
+  {
+   "asset": "noaa2018_20180501_7875010125.copc.laz",
+   "sha256": "e158de7dbffac396384d72adf94088bdd89ad2787fb5c1fddb6749fae576500a",
+   "to": "build/laz/",
+   "outputs": {
+    "build/laz/noaa2018_20180501_7875010125.copc.laz": "e158de7dbffac396384d72adf94088bdd89ad2787fb5c1fddb6749fae576500a"
+   }
+  },
+  {
+   "asset": "noaa2018_20180501_7875010250.copc.laz",
+   "sha256": "d3650a05ee716adfb9bc6da390a3ebadeda1bcf1c39d7c90c3654af8eb4927c1",
+   "to": "build/laz/",
+   "outputs": {
+    "build/laz/noaa2018_20180501_7875010250.copc.laz": "d3650a05ee716adfb9bc6da390a3ebadeda1bcf1c39d7c90c3654af8eb4927c1"
+   }
+  },
+  {
+   "asset": "noaa2018_20180501_7875010375.copc.laz",
+   "sha256": "ec134dddc195e7bddbb38903d84d4edc160e389e76321c0ab3656052aa55f706",
+   "to": "build/laz/",
+   "outputs": {
+    "build/laz/noaa2018_20180501_7875010375.copc.laz": "ec134dddc195e7bddbb38903d84d4edc160e389e76321c0ab3656052aa55f706"
+   }
+  },
+  {
+   "asset": "noaa2018_20180501_7875010500.copc.laz",
+   "sha256": "3d5cf4c8a100e234f9bed5015a9baee2b89cbda2fab1240fe741fa880012362e",
+   "to": "build/laz/",
+   "outputs": {
+    "build/laz/noaa2018_20180501_7875010500.copc.laz": "3d5cf4c8a100e234f9bed5015a9baee2b89cbda2fab1240fe741fa880012362e"
+   }
+  },
+  {
+   "asset": "noaa2018_20180502_7837509750.copc.laz",
+   "sha256": "2171842068d883183693e2b9bc219a302bed0d54506298ebc5607c990cfa7d57",
+   "to": "build/laz/",
+   "outputs": {
+    "build/laz/noaa2018_20180502_7837509750.copc.laz": "2171842068d883183693e2b9bc219a302bed0d54506298ebc5607c990cfa7d57"
+   }
+  },
+  {
+   "asset": "noaa2018_20180502_7837509875.copc.laz",
+   "sha256": "7271b2998632f8d3bad51625e812a7f316b842108897d89cc9c8d399f25db238",
+   "to": "build/laz/",
+   "outputs": {
+    "build/laz/noaa2018_20180502_7837509875.copc.laz": "7271b2998632f8d3bad51625e812a7f316b842108897d89cc9c8d399f25db238"
+   }
+  },
+  {
+   "asset": "noaa2018_20180502_7837510000.copc.laz",
+   "sha256": "6690c110239ee1b66a81db03e7fe39decacab83628ec4fa5d912aaa4abac567a",
+   "to": "build/laz/",
+   "outputs": {
+    "build/laz/noaa2018_20180502_7837510000.copc.laz": "6690c110239ee1b66a81db03e7fe39decacab83628ec4fa5d912aaa4abac567a"
+   }
+  },
+  {
+   "asset": "noaa2018_20180502_7837510125.copc.laz",
+   "sha256": "c28ffa9cf47eeb6dc582c273eb09fa89892e3fbe7018037d48372987bf31455c",
+   "to": "build/laz/",
+   "outputs": {
+    "build/laz/noaa2018_20180502_7837510125.copc.laz": "c28ffa9cf47eeb6dc582c273eb09fa89892e3fbe7018037d48372987bf31455c"
+   }
+  },
+  {
+   "asset": "noaa2018_20180502_7837510250.copc.laz",
+   "sha256": "1f7a6592db8d568ad5cf37039ee9a789892817a05122af41e1f1aff1e305276a",
+   "to": "build/laz/",
+   "outputs": {
+    "build/laz/noaa2018_20180502_7837510250.copc.laz": "1f7a6592db8d568ad5cf37039ee9a789892817a05122af41e1f1aff1e305276a"
+   }
+  },
+  {
+   "asset": "noaa2018_20180502_7850009750.copc.laz",
+   "sha256": "1051f861b061cbaa5f4986ff537f0f5bb1e55422ec7cecf0785af9e52fe0a7f1",
+   "to": "build/laz/",
+   "outputs": {
+    "build/laz/noaa2018_20180502_7850009750.copc.laz": "1051f861b061cbaa5f4986ff537f0f5bb1e55422ec7cecf0785af9e52fe0a7f1"
+   }
+  },
+  {
+   "asset": "noaa2018_20180502_7850009875.copc.laz",
+   "sha256": "17d571ace3dc1adc9dbf4b585e912fc129a5ee95db017c095bf6a801b70c93a6",
+   "to": "build/laz/",
+   "outputs": {
+    "build/laz/noaa2018_20180502_7850009875.copc.laz": "17d571ace3dc1adc9dbf4b585e912fc129a5ee95db017c095bf6a801b70c93a6"
+   }
+  },
+  {
+   "asset": "noaa2018_20180502_7850010000.copc.laz",
+   "sha256": "f7335af71833ddfceba5a76a5e67deba431d333b12932042b89b4ed3ce71c369",
+   "to": "build/laz/",
+   "outputs": {
+    "build/laz/noaa2018_20180502_7850010000.copc.laz": "f7335af71833ddfceba5a76a5e67deba431d333b12932042b89b4ed3ce71c369"
+   }
+  },
+  {
+   "asset": "noaa2018_20180502_7850010125.copc.laz",
+   "sha256": "68159be90da64cd0e0482c97b37ee3d91515823ad402743811524f39c27bb7b4",
+   "run": "python3 pipeline/intake.py laz sankaty_head data/sankaty_head/build/laz/noaa2018_20180501_7837510375.copc.laz data/sankaty_head/build/laz/noaa2018_20180501_7837510500.copc.laz data/sankaty_head/build/laz/noaa2018_20180501_7850010250.copc.laz data/sankaty_head/build/laz/noaa2018_20180501_7850010375.copc.laz data/sankaty_head/build/laz/noaa2018_20180501_7850010500.copc.laz data/sankaty_head/build/laz/noaa2018_20180501_7862509750.copc.laz data/sankaty_head/build/laz/noaa2018_20180501_7862509875.copc.laz data/sankaty_head/build/laz/noaa2018_20180501_7862510000.copc.laz data/sankaty_head/build/laz/noaa2018_20180501_7862510125.copc.laz data/sankaty_head/build/laz/noaa2018_20180501_7862510250.copc.laz data/sankaty_head/build/laz/noaa2018_20180501_7862510375.copc.laz data/sankaty_head/build/laz/noaa2018_20180501_7862510500.copc.laz data/sankaty_head/build/laz/noaa2018_20180501_7875009750.copc.laz data/sankaty_head/build/laz/noaa2018_20180501_7875009875.copc.laz data/sankaty_head/build/laz/noaa2018_20180501_7875010000.copc.laz data/sankaty_head/build/laz/noaa2018_20180501_7875010125.copc.laz data/sankaty_head/build/laz/noaa2018_20180501_7875010250.copc.laz data/sankaty_head/build/laz/noaa2018_20180501_7875010375.copc.laz data/sankaty_head/build/laz/noaa2018_20180501_7875010500.copc.laz data/sankaty_head/build/laz/noaa2018_20180502_7837509750.copc.laz data/sankaty_head/build/laz/noaa2018_20180502_7837509875.copc.laz data/sankaty_head/build/laz/noaa2018_20180502_7837510000.copc.laz data/sankaty_head/build/laz/noaa2018_20180502_7837510125.copc.laz data/sankaty_head/build/laz/noaa2018_20180502_7837510250.copc.laz data/sankaty_head/build/laz/noaa2018_20180502_7850009750.copc.laz data/sankaty_head/build/laz/noaa2018_20180502_7850009875.copc.laz data/sankaty_head/build/laz/noaa2018_20180502_7850010000.copc.laz {file} --classes 1",
+   "outputs": {
+    "raw/laz/sankaty_head_clip.laz": "8e0f567b7b1738bb56cf0ed9369ab03445aff5aeea6ce2652266e1dcedd0beb3"
+   }
+  }
+ ]
+}

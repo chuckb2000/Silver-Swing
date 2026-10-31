@@ -1,0 +1,46 @@
+{
+ "items": [
+  {
+   "name": "meadow_club_overpass.geojson",
+   "osm_box": [
+    37.955,
+    -122.637,
+    37.984,
+    -122.598
+   ]
+  },
+  {
+   "name": "meadow_club_dem1m",
+   "tnm": {
+    "dataset": "dem1m",
+    "bbox": [
+     -122.637,
+     37.955,
+     -122.598,
+     37.984
+    ],
+    "only": "x53y421_CA_NoCal_Wildfires_B5b_QL1_2018"
+   }
+  },
+  {
+   "name": "meadow_club_naip.jpg",
+   "url": "https://imagery.nationalmap.gov/arcgis/rest/services/USGSNAIPImagery/ImageServer/exportImage?bbox=532695,4201650,534687,4203386&bboxSR=32610&imageSR=32610&size=3320,2893&format=jpg&f=image"
+  },
+  {
+   "name": "USGS_LPC_CA_NoCAL_2018_w2285n1981.laz",
+   "url": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/CA_NoCAL_3DEP_Supp_Funding_2018_D18/CA_NoCal_Wildfires_B5b_QL1_2018/LAZ/USGS_LPC_CA_NoCAL_3DEP_Supp_Funding_2018_D18_w2285n1981.laz"
+  },
+  {
+   "name": "USGS_LPC_CA_NoCAL_2018_w2286n1982.laz",
+   "url": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/CA_NoCAL_3DEP_Supp_Funding_2018_D18/CA_NoCal_Wildfires_B5b_QL1_2018/LAZ/USGS_LPC_CA_NoCAL_3DEP_Supp_Funding_2018_D18_w2286n1982.laz"
+  },
+  {
+   "name": "USGS_LPC_CA_NoCAL_2018_w2287n1981.laz",
+   "url": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/CA_NoCAL_3DEP_Supp_Funding_2018_D18/CA_NoCal_Wildfires_B5b_QL1_2018/LAZ/USGS_LPC_CA_NoCAL_3DEP_Supp_Funding_2018_D18_w2287n1981.laz"
+  },
+  {
+   "name": "s3_lpc_listing.xml",
+   "url": "https://prd-tnm.s3.amazonaws.com/?prefix=StagedProducts/Elevation/LPC/Projects/CA_NoCAL_3DEP_Supp_Funding_2018_D18/&max-keys=50"
+  }
+ ]
+}

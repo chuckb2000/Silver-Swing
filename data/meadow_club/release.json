@@ -1,0 +1,62 @@
+{
+ "release": "data-meadow_club",
+ "note": "Lidar not kept in git; `make fetch NAME=meadow_club` downloads the 2018 USGS tiles the GitHub Actions workflow put in the release and clips each to the world (class 1). In git: the OSM export, the DEM clip, the NAIP photo is art reference only.",
+ "files": [
+  {
+   "asset": "USGS_LPC_CA_NoCAL_2018_w2285n1981.laz",
+   "sha256": "48e550a2bf16cec480b0c0627793264e22d8f1151b473141fb9db4fa3f1db00d",
+   "run": "python3 pipeline/intake.py laz meadow_club {file} --classes 1 --out raw/laz/meadow_club_w2285n1981.laz",
+   "outputs": {
+    "raw/laz/meadow_club_w2285n1981.laz": "c093211170ae73a6d5f5c3a7e4f207cfb60418d5a54637d7ff47d29be2bd0d6b"
+   }
+  },
+  {
+   "asset": "USGS_LPC_CA_NoCAL_2018_w2285n1982.laz",
+   "sha256": "7cc1e00bf2394e69d8c1c70a8e2b58025e2516ff03b2cb0e48d84717eb4c6877",
+   "run": "python3 pipeline/intake.py laz meadow_club {file} --classes 1 --out raw/laz/meadow_club_w2285n1982.laz",
+   "outputs": {
+    "raw/laz/meadow_club_w2285n1982.laz": "dd13f05495ec6875b73d615fff25f14a0126c3c1b8981f3bcfac5c2cad5ff261"
+   }
+  },
+  {
+   "asset": "USGS_LPC_CA_NoCAL_2018_w2286n1980.laz",
+   "sha256": "24a9859d7d9156ca1af95c427fe10001bf951fefaf51e7b7111cacd7e6678e9f",
+   "run": "python3 pipeline/intake.py laz meadow_club {file} --classes 1 --out raw/laz/meadow_club_w2286n1980.laz",
+   "outputs": {
+    "raw/laz/meadow_club_w2286n1980.laz": "9497a09ac639651d604a7475b85a22a1935d09582f603c8fce46bec5c81eb859"
+   }
+  },
+  {
+   "asset": "USGS_LPC_CA_NoCAL_2018_w2286n1981.laz",
+   "sha256": "6eb7bcff07c934328bc792b1abc0e417af838d45368c5178519f39962f259300",
+   "run": "python3 pipeline/intake.py laz meadow_club {file} --classes 1 --out raw/laz/meadow_club_w2286n1981.laz",
+   "outputs": {
+    "raw/laz/meadow_club_w2286n1981.laz": "f0938f24ca885267ee622c55a15d873bc867f0674487bb910179fcb204140c93"
+   }
+  },
+  {
+   "asset": "USGS_LPC_CA_NoCAL_2018_w2286n1982.laz",
+   "sha256": "dd3a6efd7ab5d1f7321226034d5b2f8d651be888e0d69ce89385a2064cfb024d",
+   "run": "python3 pipeline/intake.py laz meadow_club {file} --classes 1 --out raw/laz/meadow_club_w2286n1982.laz",
+   "outputs": {
+    "raw/laz/meadow_club_w2286n1982.laz": "31fa53d9498fe2cab87dc360211a99a3bdec8ef7bc4ff3caa69be4d83b878677"
+   }
+  },
+  {
+   "asset": "USGS_LPC_CA_NoCAL_2018_w2287n1981.laz",
+   "sha256": "9e36aaf64a23fe2b12838ca0223fcfb647624248fb826ff1a2751d7fa304c2e9",
+   "run": "python3 pipeline/intake.py laz meadow_club {file} --classes 1 --out raw/laz/meadow_club_w2287n1981.laz",
+   "outputs": {
+    "raw/laz/meadow_club_w2287n1981.laz": "10a190d33046bbd35470f2091dd9554efc19f605890547de469546555c80d9ba"
+   }
+  },
+  {
+   "asset": "USGS_LPC_CA_NoCAL_2018_w2287n1982.laz",
+   "sha256": "f7b7ad02b25bc104740db7b17c971c93ab13ede15629fcf517da8df07b6ed436",
+   "run": "python3 pipeline/intake.py laz meadow_club {file} --classes 1 --out raw/laz/meadow_club_w2287n1982.laz",
+   "outputs": {
+    "raw/laz/meadow_club_w2287n1982.laz": "70d9c5d979bfee67928638cb06d2b0bc961a7988f530548d4b140e3e0c882777"
+   }
+  }
+ ]
+}
