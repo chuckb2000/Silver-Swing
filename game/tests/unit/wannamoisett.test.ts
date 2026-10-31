@@ -19,11 +19,11 @@ const json = course.json;
 const TEES = json.teeSets.map((t) => t.name);
 
 describe('Wannamoisett: course list, tees and layout', () => {
-  it('is an 18-hole par-69 course in Rhode Island, Blue tees by default, Black also built', () => {
+  it('is an 18-hole par-69 course in Rhode Island, Black tees (the longest) by default, Blue also built', () => {
     expect(registry().find((c) => c.id === ID)?.state).toBe('RI');
     expect(json.holes.map((h) => h.number)).toEqual(Array.from({ length: 18 }, (_, i) => i + 1));
     expect(json.holes.reduce((a, h) => a + h.par, 0)).toBe(69);
-    expect(json.defaultTee).toBe('Blue');
+    expect(json.defaultTee).toBe('Black'); // the longest set (developer, 2026-10-31; was Blue)
     expect(TEES).toEqual(['Blue', 'Black']);
     expect(json.theme).toBe('seekonk');
   });
