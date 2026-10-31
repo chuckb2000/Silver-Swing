@@ -1,0 +1,39 @@
+{
+ "items": [
+  {
+   "name": "burlington_cc_overpass.geojson",
+   "osm_box": [
+    44.435,
+    -73.222,
+    44.475,
+    -73.168
+   ]
+  },
+  {
+   "name": "burlington_cc_dem1m",
+   "tnm": {
+    "dataset": "dem1m",
+    "bbox": [
+     -73.222,
+     44.435,
+     -73.168,
+     44.475
+    ],
+    "list": true
+   }
+  },
+  {
+   "name": "burlington_cc_lpc",
+   "tnm": {
+    "dataset": "lpc",
+    "bbox": [
+     -73.222,
+     44.435,
+     -73.168,
+     44.475
+    ],
+    "list": true
+   }
+  }
+ ]
+}
