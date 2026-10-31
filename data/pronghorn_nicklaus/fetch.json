@@ -19,21 +19,52 @@
      -121.13,
      44.215
     ],
-    "list": true
+    "only": "x64y490"
    }
   },
   {
-   "name": "pronghorn_nicklaus_lpc",
-   "tnm": {
-    "dataset": "lpc",
-    "bbox": [
-     -121.215,
-     44.16,
-     -121.13,
-     44.215
-    ],
-    "list": true
-   }
+   "name": "dogami_lidar_services.json",
+   "url": "https://gis.dogami.oregon.gov/arcgis/rest/services/lidar?f=json"
+  },
+  {
+   "name": "dogami_identify.json",
+   "url": "https://gis.dogami.oregon.gov/arcgis/rest/services/lidar/DIGITAL_TERRAIN_MODEL_MOSAIC/ImageServer/identify?geometry=%7B%22x%22%3A646000%2C%22y%22%3A4894400%2C%22spatialReference%22%3A%7B%22wkid%22%3A32610%7D%7D&geometryType=esriGeometryPoint&returnCatalogItems=true&f=json"
+  },
+  {
+   "name": "dogami_dtm_ft.tif",
+   "url": "https://gis.dogami.oregon.gov/arcgis/rest/services/lidar/DIGITAL_TERRAIN_MODEL_MOSAIC/ImageServer/exportImage?bbox=644600,4893000,647400,4895800&bboxSR=32610&imageSR=32610&size=2800,2800&format=tiff&pixelType=F32&noData=-9999&interpolation=RSP_BilinearInterpolation&f=image"
+  },
+  {
+   "name": "dogami_chm_ft.tif",
+   "url": "https://gis.dogami.oregon.gov/arcgis/rest/services/lidar/CANOPY_HEIGHT_MODEL_MOSAIC/ImageServer/exportImage?bbox=644600,4893000,647400,4895800&bboxSR=32610&imageSR=32610&size=2800,2800&format=tiff&pixelType=F32&noData=-9999&interpolation=RSP_BilinearInterpolation&f=image"
+  },
+  {
+   "name": "osip2024_nw.jpg",
+   "url": "https://imagery.oregonexplorer.info/arcgis/rest/services/OSIP_2024/OSIP_2024_WM/ImageServer/exportImage?bbox=644600,4894400,646000,4895800&bboxSR=32610&imageSR=32610&size=2800,2800&format=jpg&f=image"
+  },
+  {
+   "name": "osip2024_ne.jpg",
+   "url": "https://imagery.oregonexplorer.info/arcgis/rest/services/OSIP_2024/OSIP_2024_WM/ImageServer/exportImage?bbox=646000,4894400,647400,4895800&bboxSR=32610&imageSR=32610&size=2800,2800&format=jpg&f=image"
+  },
+  {
+   "name": "osip2024_sw.jpg",
+   "url": "https://imagery.oregonexplorer.info/arcgis/rest/services/OSIP_2024/OSIP_2024_WM/ImageServer/exportImage?bbox=644600,4893000,646000,4894400&bboxSR=32610&imageSR=32610&size=2800,2800&format=jpg&f=image"
+  },
+  {
+   "name": "osip2024_se.jpg",
+   "url": "https://imagery.oregonexplorer.info/arcgis/rest/services/OSIP_2024/OSIP_2024_WM/ImageServer/exportImage?bbox=646000,4893000,647400,4894400&bboxSR=32610&imageSR=32610&size=2800,2800&format=jpg&f=image"
+  },
+  {
+   "name": "naip_box.jpg",
+   "url": "https://imagery.nationalmap.gov/arcgis/rest/services/USGSNAIPImagery/ImageServer/exportImage?bbox=644600,4893000,647400,4895800&bboxSR=32610&imageSR=32610&size=4000,4000&format=jpg&f=image"
+  },
+  {
+   "name": "deschutes_services.json",
+   "url": "https://maps.deschutes.org/server/rest/services?f=json"
+  },
+  {
+   "name": "deschutes_services_arcgis.json",
+   "url": "https://maps.deschutes.org/arcgis/rest/services?f=json"
   }
  ]
 }
