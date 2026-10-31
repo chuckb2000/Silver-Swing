@@ -34,20 +34,36 @@
    "reason": "Narragansett Bay, west of 17 and 18: OSM maps it only as a coastline way (fetched as aquidneck_coastline.geojson and merged into raw/overpass.geojson), so it drew as plain ground. Built by pipeline/propose_sea.py; a red penalty area (red_water_osm)."
   },
   {
-   "from": "proposed/desk.geojson",
+   "from": "proposed/approved.geojson",
    "ids": [
-    "desk_tee_8_gold"
+    "desk_8_bluetee_0"
    ],
    "tags": {},
-   "reason": "Hole 8 Gold (233 yd): the developer marked the Gold tee in the tracing desk, 2026-10-31 (data/aquidneck/desk/hole08.json), 'acceptable as I've saved them'. Added as a tee box (96 m2) so there is a tee under the mark; it measures about 212 yd to the green centre (-8.8 %), accepted by the developer."
+   "reason": "Hole 8 Gold (233 yd): the developer marked the Gold tee in the tracing desk, 2026-10-31 (data/aquidneck/desk/hole08.json, local metres), accepted as marked: a tee box (96 m2) at that mark, golf=tee hole=8 tee_set=Gold tee_pos=centroid (pipeline/desk_to_proposed.py with trace_spec.json desk tee Gold); the game's tee is its centroid. About 212 yd to the green centre (-9 %), accepted by the developer (checks.json)."
   },
   {
-   "from": "proposed/desk.geojson",
+   "from": "proposed/aquidneck.geojson",
+   "ids": [
+    "hole8_desk_tee"
+   ],
+   "tags": {},
+   "reason": "hole 8's line starts at the centroid of the developer's Gold desk tee (make_proposed.py); OSM's w951590882 started on the Green box. Replaces w951590882."
+  },
+  {
+   "from": "proposed/aquidneck.geojson",
    "ids": [
     "hole9_bend"
    ],
    "tags": {},
-   "reason": "hole 9's OSM line (w951590893) runs up the fairway's right edge through the woods, so a drive down it hits real trees (course_play centre-line check). Replaced by the same tee and green points with one bend on the fairway's main axis 250 yd out (23 m left of the old line); measures 483 yd straight-line (was 480)."
+   "reason": "hole 9's OSM line (w951590893) runs up the fairway's right edge through the woods, so a drive down it hits real trees (course_play centre-line check). Replaced by the same tee and green points with one bend on the main axis of fairway w951590886, 250 yd out, 23 m left of the old line (make_proposed.py)."
+  },
+  {
+   "from": "proposed/aquidneck.geojson",
+   "ids": [
+    "w940801546_building"
+   ],
+   "tags": {},
+   "reason": "the clubhouse is mapped golf=clubhouse + building=yes, which s01 reads as a golf feature, not a building (a building=yes tag edit does not change that): copied as a building (as Newport), original dropped. Without it the art drew lidar 'trees' on its roof beside the 18th green."
   }
  ],
  "tags": [
@@ -57,13 +73,6 @@
     "flatten": "no"
    },
    "reason": "the wetland inside the boundary keeps its lidar ground (it is a red penalty area through red_water_osm in course_config.json)"
-  },
-  {
-   "osm": "w940801546",
-   "set": {
-    "building": "yes"
-   },
-   "reason": "the clubhouse (golf=clubhouse) drawn as a building (audit check)"
   },
   {
    "osm": "w951593850",
@@ -79,27 +88,70 @@
     "hole": "8",
     "tee_set": "Green"
    },
-   "reason": "hole 8 Green: the only mapped box (180 yd from its centre; about 190 from its back; Green card 192). Gold plays from the developer's desk tee (desk_tee_8_gold) since 2026-10-31"
+   "reason": "hole 8 Green: the only mapped box (180 yd from its centre; about 190 from its back; Green card 192). Gold plays from the developer's desk tee (desk_8_bluetee_0, proposed/approved.geojson) since 2026-10-31"
   },
   {
    "osm": "w208859706",
    "set": {
     "penalty": "red"
    },
-   "reason": "golf=water_hazard (yellow in OSM's tagging); every penalty area red by the standing default"
-  }
- ],
- "extend_start": [
+   "reason": "golf=water_hazard (yellow in OSM's tagging): every penalty area red by the standing default (COURSE_BUILD 4.1); config penalty_default is not read by the pipeline"
+  },
   {
-   "osm": "w951590882",
-   "extend_m": 29.5,
-   "reason": "hole 8's line starts on the Green box; moved back 29.5 m along its first segment so it starts in the developer's Gold desk tee (desk_tee_8_gold), 2.5 m from that box's centre"
+   "osm": "w208859710",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "golf=water_hazard (yellow in OSM's tagging): every penalty area red by the standing default (COURSE_BUILD 4.1); config penalty_default is not read by the pipeline"
+  },
+  {
+   "osm": "w940801550",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "golf=water_hazard (yellow in OSM's tagging): every penalty area red by the standing default (COURSE_BUILD 4.1); config penalty_default is not read by the pipeline"
+  },
+  {
+   "osm": "w940801551",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "golf=water_hazard (yellow in OSM's tagging): every penalty area red by the standing default (COURSE_BUILD 4.1); config penalty_default is not read by the pipeline"
+  },
+  {
+   "osm": "w940801552",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "golf=water_hazard (yellow in OSM's tagging): every penalty area red by the standing default (COURSE_BUILD 4.1); config penalty_default is not read by the pipeline"
+  },
+  {
+   "osm": "w940801553",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "golf=water_hazard (yellow in OSM's tagging): every penalty area red by the standing default (COURSE_BUILD 4.1); config penalty_default is not read by the pipeline"
+  },
+  {
+   "osm": "w951593823",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "golf=water_hazard (yellow in OSM's tagging): every penalty area red by the standing default (COURSE_BUILD 4.1); config penalty_default is not read by the pipeline"
   }
  ],
  "drop": [
   {
    "osm": "w951590893",
-   "reason": "replaced by hole9_bend (proposed/desk.geojson)"
+   "reason": "replaced by hole9_bend (proposed/aquidneck.geojson)"
+  },
+  {
+   "osm": "w951590882",
+   "reason": "replaced by hole8_desk_tee (proposed/aquidneck.geojson), which starts on the developer's Gold tee"
+  },
+  {
+   "osm": "w940801546",
+   "reason": "replaced by its copy as a building (w940801546_building, proposed/aquidneck.geojson)"
   }
  ]
 }

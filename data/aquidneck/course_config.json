@@ -23,9 +23,10 @@
    1
   ],
   "units": "ft",
-  "source": "USGS 3DEP lidar point cloud, project RI_Statewide_D22 (2022 Rhode Island statewide lidar), 2,500-ft tiles in NAD83(2011) / Rhode Island (ftUS), NAVD88 ftUS; fetched by the GitHub Actions workflow (release data-aquidneck) from rockyweb.usgs.gov and clipped to the world + 100 m by pipeline/intake.py laz --classes 1 (the project has no vegetation classes: 1 unclassified, 2 ground, 7 noise, 17 bridge deck, 18 high noise); flown spring 2022 (leaf-off); returns more than 45 m above the ground dropped (max_height_m: birds and wires)",
-  "label": "2022 USGS Rhode Island statewide lidar",
-  "max_height_m": 45
+  "source": "USGS 3DEP lidar point cloud, project RI_Statewide_D22 (2022 Rhode Island statewide lidar), 2,500-ft tiles in NAD83(2011) / Rhode Island (ftUS), NAVD88 ftUS; fetched by the GitHub Actions workflow (release data-aquidneck) from rockyweb.usgs.gov and clipped to the world + 100 m by pipeline/intake.py laz --classes 1 (the project has no vegetation classes: 1 unclassified, 2 ground, 7 noise, 17 bridge deck, 18 high noise); flown 28 March 2022 (GPS times; leaf-off: tree types from the share of last returns, as Newport and Wannamoisett); returns more than 45 m above the ground dropped (max_height_m: birds and wires)",
+  "label": "2022 USGS Rhode Island statewide lidar, leaf-off",
+  "max_height_m": 45,
+  "leaf_off": true
  },
  "ortho": {
   "path": "raw/ortho_naip.tif",
@@ -77,5 +78,7 @@
   "w940801562",
   "sea"
  ],
- "red_water_osm_note": "natural=water/wetland inside the boundary with no golf tag, which played as rough: the pond between the 17th tees and green (w208859700) and the wetland at (610, 1309) local (w940801562); red penalty areas (standing default); Narragansett Bay (sea, from the coastline, propose_sea.py)"
+ "red_water_osm_note": "natural=water/wetland inside the boundary with no golf tag, which played as rough: the pond between the 17th tees and green (w208859700) and the wetland at (610, 1309) local (w940801562); red penalty areas (standing default); Narragansett Bay (sea, from the coastline, propose_sea.py)",
+ "roof_last_share": 0.85,
+ "roof_last_share_note": "class-1 lidar holds roofs; OSM maps few of the houses round the course: crowns whose returns are 85 %+ last returns are roofs, not trees (as Newport and Wannamoisett, same 2022 flight)"
 }

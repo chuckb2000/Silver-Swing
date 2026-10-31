@@ -26,14 +26,6 @@
    }
   },
   {
-   "asset": "lpc_387500_192500.laz",
-   "sha256": "653707c696d7b32a00505077eeb140758e38abc51f8a8230fe1c890cdfc81107",
-   "run": "python3 pipeline/intake.py laz aquidneck {file} --classes 1 --out raw/laz/aquidneck_387500_192500.laz",
-   "outputs": {
-    "raw/laz/aquidneck_387500_192500.laz": "20356e98e632168bb9ca0f70853fa3428e5abf22d2a988aa44066ef193108a01"
-   }
-  },
-  {
    "asset": "lpc_390000_185000.laz",
    "sha256": "8cae1f9e99758b5b1a0280ad96f15953dc5db4647100b9b0f10b719d6a4cc818",
    "run": "python3 pipeline/intake.py laz aquidneck {file} --classes 1 --out raw/laz/aquidneck_390000_185000.laz",

@@ -73,24 +73,6 @@
  },
  {
   "hole": 8,
-  "tee_set": "Gold",
-  "step": 2,
-  "type": "tee_position",
-  "from": [
-   1179.21,
-   1069.47
-  ],
-  "to": [
-   1181.25,
-   1072.75
-  ],
-  "real_yd": 212.0,
-  "adjusted_yd": 215.9,
-  "card_yd": 233.0,
-  "reason": "measured 212 yd from the tee-box centre vs 233 on the card (-9.0%); moved the virtual tee along the middle of the real tee polygon desk_tee_8_gold (on its centre line, at least 2.5 m from its back and front)"
- },
- {
-  "hole": 8,
   "tee_set": "Green",
   "step": 2,
   "type": "tee_position",

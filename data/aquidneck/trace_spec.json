@@ -1,1 +1,1 @@
-{"ortho": "raw/ortho_naip.tif", "desk": {"tee": "Gold", "ref": "Green"}}
+{"ortho": "raw/ortho_naip.tif", "desk": {"tee": "Gold", "ref": "Green", "tee_pos": "centroid"}}

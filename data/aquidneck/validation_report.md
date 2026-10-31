@@ -20,7 +20,7 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 | 6 | 4 | Green | 399 | 415.1 | +16.1 | +4.0% | flag | 408.9 | +2.5% | pass |
 | 7 | 4 | Gold | 395 | 385.5 | -9.5 | -2.4% | pass | 385.5 | -2.4% | pass |
 | 7 | 4 | Green | 385 | 385.5 | +0.5 | +0.1% | pass | 385.5 | +0.1% | pass |
-| 8 | 3 | Gold | 233 | 212.0 | -21.0 | -9.0% | FAIL | 215.9 | -7.4% | flag |
+| 8 | 3 | Gold | 233 | 212.5 | -20.5 | -8.8% | FAIL | 212.5 | -8.8% | FAIL |
 | 8 | 3 | Green | 192 | 166.2 | -25.8 | -13.4% | FAIL | 187.2 | -2.5% | pass |
 | 9 | 5 | Gold | 500 | 488.3 | -11.7 | -2.3% | pass | 488.3 | -2.3% | pass |
 | 9 | 5 | Green | 490 | 488.3 | -1.7 | -0.3% | pass | 488.3 | -0.3% | pass |
@@ -42,7 +42,7 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 | 17 | 3 | Green | 177 | 140.9 | -36.1 | -20.4% | FAIL | 163.3 | -7.7% | flag |
 | 18 | 4 | Gold | 280 | 248.8 | -31.2 | -11.1% | FAIL | 273.3 | -2.4% | pass |
 | 18 | 4 | Green | 275 | 248.8 | -26.2 | -9.5% | FAIL | 268.3 | -2.4% | pass |
-| **total** | 142 | | **13000** | **12649** | -351 | -2.7% | | **12782** | -1.7% | |
+| **total** | 142 | | **13000** | **12649** | -351 | -2.7% | | **12779** | -1.7% | |
 
 ## Open items
 
@@ -56,8 +56,8 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 8. Hole 6: no golf=pin on its green; the centre pin is the green's centre (proposal).
 9. Hole 7: no golf=pin on its green; the centre pin is the green's centre (proposal).
 10. Hole 8: no golf=pin on its green; the centre pin is the green's centre (proposal).
-11. Hole 8 (Gold): measured 216 yd vs card 233 (-7.4%) even with the virtual tee at the best spot in its box; accepted for play.
-12. Hole 8 (Gold): tee box desk_tee_8_gold assigned by the developer (tagged hole=8, tee_set=Gold in edited/course.geojson).
+11. Hole 8 (Gold): measured 213 yd vs card 233 (-8.8%) - FAIL, needs a decision.
+12. Hole 8 (Gold): tee box desk_8_bluetee_0 assigned by the developer (tagged hole=8, tee_set=Gold in edited/course.geojson).
 13. Hole 8 (Green): tee box w916005839 assigned by the developer (tagged hole=8, tee_set=Green in edited/course.geojson).
 14. Hole 9: no golf=pin on its green; the centre pin is the green's centre (proposal).
 15. Hole 10: no golf=pin on its green; the centre pin is the green's centre (proposal).
@@ -80,7 +80,6 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 - Hole 3 (Gold): measured 369 yd from the tee-box centre vs 382 on the card (-3.4%); moved the virtual tee along the middle of the real tee polygon tee_3_gold (on its centre line, at least 2.5 m from its back and front) -> 372.6 yd (real 368.9 yd).
 - Hole 5 (Gold): measured 150 yd from the tee-box centre vs 163 on the card (-7.7%); moved the virtual tee along the middle of the real tee polygon w915497827 (on its centre line, at least 2.5 m from its back and front) -> 152.7 yd (real 150.4 yd).
 - Hole 6 (Green): measured 415 yd from the tee-box centre vs 399 on the card (+4.0%); moved the virtual tee along the middle of the real tee polygon w916004001 (on its centre line, at least 2.5 m from its back and front) -> 408.9 yd (real 415.1 yd).
-- Hole 8 (Gold): measured 212 yd from the tee-box centre vs 233 on the card (-9.0%); moved the virtual tee along the middle of the real tee polygon desk_tee_8_gold (on its centre line, at least 2.5 m from its back and front) -> 215.9 yd (real 212.0 yd).
 - Hole 8 (Green): measured 166 yd from the tee-box centre vs 192 on the card (-13.4%); moved the virtual tee along the middle of the real tee polygon w916005839 (on its centre line, at least 2.5 m from its back and front) -> 187.2 yd (real 166.2 yd).
 - Hole 10 (Green): measured 379 yd from the tee-box centre vs 400 on the card (-5.2%); moved the virtual tee along the middle of the real tee polygon w951593793 (on its centre line, at least 2.5 m from its back and front) -> 390.1 yd (real 379.3 yd).
 - Hole 13 (Gold): measured 427 yd from the tee-box centre vs 444 on the card (-3.7%); moved the virtual tee along the middle of the real tee polygon w915497821 (on its centre line, at least 2.5 m from its back and front) -> 433.1 yd (real 427.5 yd).
@@ -90,13 +89,13 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 - Hole 18 (Gold): measured 249 yd from the tee-box centre vs 280 on the card (-11.1%); moved the virtual tee along the middle of the real tee polygon w951593855 (on its centre line, at least 2.5 m from its back and front) -> 273.3 yd (real 248.8 yd).
 - Hole 18 (Green): measured 249 yd from the tee-box centre vs 275 on the card (-9.5%); moved the virtual tee along the middle of the real tee polygon w951593855 (on its centre line, at least 2.5 m from its back and front) -> 268.3 yd (real 248.8 yd).
 
-## Tree detection (2022 USGS Rhode Island statewide lidar)
+## Tree detection (2022 USGS Rhode Island statewide lidar, leaf-off)
 
-- 19697 trees detected in the world extent (5473 inside the course), 3359 conifers / 16338 deciduous; median height 13.8 m, max 44.8 m.
-- Dropped: 394 tops on building footprints, 0 over the lake, 127 tiny crowns.
+- 18807 trees detected in the world extent (5430 inside the course), 5100 conifers / 13707 deciduous; median height 14.1 m, max 44.8 m.
+- Dropped: 428 tops on building footprints, 0 over the lake, 127 tiny crowns.
 - Dropped on playing surfaces (spec 5.4): 1 -> tee w951593855 (8.1 m)
 - OSM natural=tree points matched by a detected tree within 4 m: 24 of 43.
-- Conifer vs deciduous is inferred from crown shape only (no leaf-off imagery); see build/trees_preview.png.
+- Conifer (pitch pine) vs deciduous (oak) from the leaf-off lidar: share of a crown's vegetation returns that were the last return of their pulse, split at Otsu's threshold 0.280 (4933 of 18623 crowns with >= 20 returns are conifers); the other 184 small crowns keep the crown-shape rule. Crowns with a share >= 0.85 (856) are solid surfaces, i.e. roofs of houses OSM doesn't map, and are not trees (config roof_last_share). See build/trees_preview.png.
 
 # Green shaping checks
 
@@ -170,7 +169,6 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 ## Checks from earlier courses
 
 - hole line w951593863 (ref 18): 13 % outside the boundary
-- golf=clubhouse: 1 feature(s) (w940801546) -> a building: add building=yes
 - pool w940802256 at (314, 1384), 153 m2, is inside the boundary but not a penalty area: it plays as rough (tag it golf=lateral_water_hazard in edits.json, or list it in red_water_osm)
 
 Totals: 49 tees, 19 greens, 26 fairways, 40 bunkers, 7 water hazards, 0 pins, 16 cart paths, 43 OSM tree points.

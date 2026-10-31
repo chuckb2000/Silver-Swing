@@ -8,7 +8,7 @@
   "max": {
    "8": 0.09
   },
-  "why": "8 Gold (233 yd on the card) plays from the developer's desk tee (desk_tee_8_gold, 2026-10-31), about 216 yd with the virtual tee at the back of that box (-7.4 %): developer 2026-10-31: accepted as marked"
+  "why": "8 Gold (233 yd on the card) plays from the centroid of the developer's desk tee (desk_8_bluetee_0, tee_pos=centroid; 2026-10-31), 212.5 yd (-8.8 %): developer 2026-10-31, accepted as marked"
  },
  "tees": {
   "sets": [
@@ -39,24 +39,17 @@
    "why": "the practice ground (the boundary's southern lobe) is out of bounds"
   },
   {
-   "x": 1179.2,
-   "y": 1070.0,
+   "x": 1179.16,
+   "y": 1069.97,
    "surface": "tee",
    "inside": true,
-   "why": "the developer's Gold tee on 8 (tracing desk, 2026-10-31; centroid of desk/hole08.json) has a tee box under it"
-  },
-  {
-   "x": 1181.25,
-   "y": 1072.75,
-   "surface": "tee",
-   "inside": true,
-   "why": "the game's 8 Gold tee (virtual tee at the back of desk_tee_8_gold) is on that box"
+   "why": "the developer's Gold tee on 8 (tracing desk, 2026-10-31; the centroid of desk/hole08.json, which is also the game's 8 Gold tee) has a tee box under it"
   }
  ],
  "trees": [
   {
-   "x": 1179.2,
-   "y": 1070.0,
+   "x": 1179.16,
+   "y": 1069.97,
    "r": 7,
    "absent": true,
    "why": "no tree stands on the developer's 8 Gold tee box (developer 2026-10-31: 'always a tee box under where I marked the tee')"
