@@ -25,7 +25,7 @@
       5
     ],
     "units": "ft",
-    "source": "USGS 3DEP lidar point cloud IL_4_County_QL1_LiDAR_2016_B16 (IL_4County_Cook_2017), tiles LAS_1700{9225,9250,9275} and LAS_1725{9225,9250,9275}, clipped to the world + 100 m by pipeline/intake.py laz; fetched by the GitHub Actions fetch workflow 2026-10-31 (release data-marovitz)",
+    "source": "USGS 3DEP lidar point cloud IL_4_County_QL1_LiDAR_2016_B16 (IL_4County_Cook_2017, flown 17-18 April 2017, leaf-off), tiles LAS_17009250 and LAS_17009275, classes 3-5, clipped to the world + 100 m by pipeline/intake.py laz; NAD83(2011) / Illinois East US survey feet, NAVD88 feet; fetched by the GitHub Actions fetch workflow 2026-10-31 (release data-marovitz). The east-column tiles (LAS_17259250, LAS_17259275: the lakeshore strip east of x = 446,830 m) did not download (rockyweb 429/timeout, S3 404), so the 110 m-wide east edge of the course has no lidar trees",
     "label": "2017 USGS lidar (Cook County)"
   },
   "world": {
@@ -35,6 +35,7 @@
     "height": 1536,
     "note": "OSM course boundary way/24951326 bbox (464 x 1,114 m) + scenery, rounded out to whole 256 m chunks and centred: 768 m east-west (152 m each side), 1,536 m north-south (211 m each side)"
   },
+  "lake_level_max_m": 175.65,
   "tee_sets": [
     {
       "name": "Blue",
@@ -72,5 +73,52 @@
     "Elevation and trees: U.S. Geological Survey 3D Elevation Program (2017 Cook County lidar)",
     "Scorecard: Sydney R. Marovitz Golf Course (Chicago Park District)"
   ],
-  "notes": "Overnight build 2026-10-30/31 (developer asleep; calls made by the course chat and logged in validation_report.md and docs/courses/marovitz.md): Blue and White built, Blue default; card pars win over OSM (hole 2 par 5); all water red; Lake Michigan and the harbours are outside the boundary (out of bounds); wind 3-14 mph by analogy with the open-coast band (the course sits on the open Lake Michigan shore); new theme marovitz (urban lakefront parkland: elm, honey locust, cottonwood, spruce; Lake Michigan teal water)."
+  "notes": "Overnight build 2026-10-30/31 (developer asleep; calls made by the course chat and logged in validation_report.md and docs/courses/marovitz.md): Blue and White built, Blue default; card pars win over OSM (hole 2 par 5); all water red; Lake Michigan and the harbours are outside the boundary (out of bounds); wind 3-14 mph by analogy with the open-coast band (the course sits on the open Lake Michigan shore); new theme marovitz (urban lakefront parkland: elm, honey locust, cottonwood, spruce; Lake Michigan teal water).",
+  "drop_trees": [
+    {
+      "x": 89.5,
+      "y": 498.5,
+      "reason": "course chat 2026-10-31: a 67 m 'tree' among the Lake View high-rises west of Lake Shore Drive (outside the boundary, away from play): a tower roof or structure the OSM footprints miss, not a tree"
+    },
+    {
+      "x": 159.5,
+      "y": 546.5,
+      "reason": "course chat 2026-10-31: a 66 m 'tree' among the Lake View high-rises west of Lake Shore Drive (outside the boundary, away from play): a tower roof or structure the OSM footprints miss, not a tree"
+    },
+    {
+      "x": 1.5,
+      "y": 1138.5,
+      "reason": "course chat 2026-10-31: a 79 m 'tree' among the Lake View high-rises west of Lake Shore Drive (outside the boundary, away from play): a tower roof or structure the OSM footprints miss, not a tree"
+    },
+    {
+      "x": 8.5,
+      "y": 1138.5,
+      "reason": "course chat 2026-10-31: a 79 m 'tree' among the Lake View high-rises west of Lake Shore Drive (outside the boundary, away from play): a tower roof or structure the OSM footprints miss, not a tree"
+    },
+    {
+      "x": 18.5,
+      "y": 1138.5,
+      "reason": "course chat 2026-10-31: a 79 m 'tree' among the Lake View high-rises west of Lake Shore Drive (outside the boundary, away from play): a tower roof or structure the OSM footprints miss, not a tree"
+    },
+    {
+      "x": 5.5,
+      "y": 1203.5,
+      "reason": "course chat 2026-10-31: a 79 m 'tree' among the Lake View high-rises west of Lake Shore Drive (outside the boundary, away from play): a tower roof or structure the OSM footprints miss, not a tree"
+    },
+    {
+      "x": 15.5,
+      "y": 1203.5,
+      "reason": "course chat 2026-10-31: a 79 m 'tree' among the Lake View high-rises west of Lake Shore Drive (outside the boundary, away from play): a tower roof or structure the OSM footprints miss, not a tree"
+    },
+    {
+      "x": 18.5,
+      "y": 1286.5,
+      "reason": "course chat 2026-10-31: a 53 m 'tree' among the Lake View high-rises west of Lake Shore Drive (outside the boundary, away from play): a tower roof or structure the OSM footprints miss, not a tree"
+    },
+    {
+      "x": 38.5,
+      "y": 1309.5,
+      "reason": "course chat 2026-10-31: a 52 m 'tree' among the Lake View high-rises west of Lake Shore Drive (outside the boundary, away from play): a tower roof or structure the OSM footprints miss, not a tree"
+    }
+  ]
 }
