@@ -15,6 +15,18 @@
   "units": "m",
   "source": "USGS 3DEP 1 m DEM, tile x31y461, project RI_Statewide_D22 (2022 Rhode Island statewide lidar), published 2024-01-26, UTM 19N NAD83, NAVD88 m; fetched by the GitHub Actions workflow (release data-aquidneck), clipped to the world + 100 m with pipeline/intake.py raster"
  },
+ "laz": {
+  "paths": [
+   "raw/laz/*.laz"
+  ],
+  "classes": [
+   1
+  ],
+  "units": "ft",
+  "source": "USGS 3DEP lidar point cloud, project RI_Statewide_D22 (2022 Rhode Island statewide lidar), 2,500-ft tiles in NAD83(2011) / Rhode Island (ftUS), NAVD88 ftUS; fetched by the GitHub Actions workflow (release data-aquidneck) from rockyweb.usgs.gov and clipped to the world + 100 m by pipeline/intake.py laz --classes 1 (the project has no vegetation classes: 1 unclassified, 2 ground, 7 noise, 17 bridge deck, 18 high noise); flown spring 2022 (leaf-off); returns more than 45 m above the ground dropped (max_height_m: birds and wires)",
+  "label": "2022 USGS Rhode Island statewide lidar",
+  "max_height_m": 45
+ },
  "world": {
   "x0": 310395,
   "y0": 4607497,
@@ -48,10 +60,17 @@
   "maxMph": 12
  },
  "attribution": [
-  "Map data © OpenStreetMap contributors (ODbL)",
+  "Map data \u00a9 OpenStreetMap contributors (ODbL)",
   "Elevation and trees: U.S. Geological Survey 3D Elevation Program (RI_Statewide_D22, 2022 Rhode Island statewide lidar)",
   "Photo for checking: USDA NAIP via the USGS National Map",
   "Scorecard: GolfPass (unverified)"
  ],
- "notes": "Course chat, 2026-10-31 (developer asleep, standing defaults and the developer's overnight calls): every penalty area red, OSM boundary as OB, driving range OB, trees from lidar, Gold + Green built with Green the default, wind 2-12 mph (Narragansett Bay shore). Theme newport (the same island and the same coastal mix of pine, maple and oak; Newport Country Club's theme)."
+ "notes": "Course chat, 2026-10-31 (developer asleep, standing defaults and the developer's overnight calls): every penalty area red, OSM boundary as OB, driving range OB, trees from lidar, Gold + Green built with Green the default, wind 2-12 mph (Narragansett Bay shore). Theme newport (the same island and the same coastal mix of pine, maple and oak; Newport Country Club's theme).",
+ "range_art": "rough",
+ "range_art_note": "the practice ground (the boundary's southern lobe) is out of bounds; drawn as rough with OB stakes so it does not look playable (as at Oregon Golf Club and Meadow Club)",
+ "red_water_osm": [
+  "w208859700",
+  "w940801562"
+ ],
+ "red_water_osm_note": "natural=water/wetland inside the boundary with no golf tag, which played as rough: the pond between the 17th tees and green (w208859700) and the wetland at (610, 1309) local (w940801562); red penalty areas (standing default)"
 }

@@ -1,0 +1,61 @@
+{
+ "note": "Edits to the OSM layout for The Aquidneck Club, built into edited/course.geojson by pipeline/merge_edits.py (run by make course). Course chat, 2026-10-31 (developer asleep; the developer's overnight calls: trace carefully, pick-build-flag). Proposals from data/aquidneck/make_proposed.py.",
+ "add": [
+  {
+   "from": "proposed/aquidneck.geojson",
+   "ids": [
+    "tee_17_gold"
+   ],
+   "tags": {},
+   "reason": "Hole 17 Gold (202 yd) has no mapped box: OSM's two boxes are 143 and 153 yd from the green. A raised flat pad (0.45 m above its surround in the 2022 bare-earth DEM) south-east of them, with a mown top and a footpath from the cart path on NAIP, sits about 199 yd from the green centre. Its flat top (30 m2 at the DEM's 1 m cell) grown by 1 m. Traced; listed for the developer's check."
+  },
+  {
+   "from": "proposed/aquidneck.geojson",
+   "ids": [
+    "tee_3_gold"
+   ],
+   "tags": {},
+   "reason": "Hole 3 Gold (382 yd) has no mapped box: the hole line starts at the 350-yd box (w915497828). A raised flat pad (0.40 m, 67 m2) west of the cart path behind it, about 372 yd to the green centre. Flat top from the 2022 DEM grown by 1 m. Traced; listed for the developer's check."
+  },
+  {
+   "from": "proposed/aquidneck.geojson",
+   "ids": [
+    "range_aquidneck"
+   ],
+   "tags": {},
+   "reason": "OSM maps no driving range, but the course boundary's southern lobe is the practice ground on NAIP (range tee, covered bays, target greens, short-game area, car park). Out of bounds by the standing default: the boundary south of y = 540 m local (35 m south of the 1st tee boxes)."
+  }
+ ],
+ "tags": [
+  {
+   "osm": "w940801562",
+   "set": {
+    "flatten": "no"
+   },
+   "reason": "the wetland inside the boundary keeps its lidar ground (it is a red penalty area through red_water_osm in course_config.json)"
+  },
+  {
+   "osm": "w940801546",
+   "set": {
+    "building": "yes"
+   },
+   "reason": "the clubhouse (golf=clubhouse) drawn as a building (audit check)"
+  },
+  {
+   "osm": "w951593850",
+   "set": {
+    "hole": "17",
+    "tee_set": "Green"
+   },
+   "reason": "hole 17 Green (177 yd): the larger of the two OSM boxes (153 yd from its centre) is the only box near the card; assigned so the virtual tee can use its back; still short (flag)"
+  },
+  {
+   "osm": "w916005839",
+   "set": {
+    "hole": "8",
+    "tee_set": "Gold;Green"
+   },
+   "reason": "hole 8: the only mapped box (180 yd from its centre; about 190 from its back; Green card 192). No box is found at the Gold 233 yd in OSM, the DEM or NAIP, so Gold plays from the back of this box too (flag)"
+  }
+ ]
+}
