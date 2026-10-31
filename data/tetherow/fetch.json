@@ -44,6 +44,34 @@
   {
    "name": "dogami_chm_info.json",
    "url": "https://gis.dogami.oregon.gov/arcgis/rest/services/lidar/CANOPY_HEIGHT_MODEL_MOSAIC/ImageServer/identify?geometry=631400,4876700&geometryType=esriGeometryPoint&sr=32610&returnCatalogItems=true&f=json"
+  },
+  {
+   "name": "wrd_taxlots_info.json",
+   "url": "https://gis.wrd.state.or.us/server/rest/services/tax/Tax_Lots_Public_View_WGS84/MapServer?f=pjson"
+  },
+  {
+   "name": "wrd_taxlots_l0.geojson",
+   "url": "https://gis.wrd.state.or.us/server/rest/services/tax/Tax_Lots_Public_View_WGS84/MapServer/0/query?where=1%3D1&geometry=-121.3715,44.0235,-121.3490,44.0410&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=*&returnGeometry=true&outSR=4326&f=geojson"
+  },
+  {
+   "name": "wrd_taxlots_l1.geojson",
+   "url": "https://gis.wrd.state.or.us/server/rest/services/tax/Tax_Lots_Public_View_WGS84/MapServer/1/query?where=1%3D1&geometry=-121.3715,44.0235,-121.3490,44.0410&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=*&returnGeometry=true&outSR=4326&f=geojson"
+  },
+  {
+   "name": "odf_taxlots_info.json",
+   "url": "https://gis.odf.oregon.gov/ags1/rest/services/WebMercator/StatewideTaxLots/MapServer?f=pjson"
+  },
+  {
+   "name": "odf_taxlots_l0.geojson",
+   "url": "https://gis.odf.oregon.gov/ags1/rest/services/WebMercator/StatewideTaxLots/MapServer/0/query?where=1%3D1&geometry=-121.3715,44.0235,-121.3490,44.0410&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=*&returnGeometry=true&outSR=4326&f=geojson"
+  },
+  {
+   "name": "deschutes_trow_info.json",
+   "url": "https://services2.arcgis.com/McQ0OlIABe29rJJy/ArcGIS/rest/services/Taxlots_with_Right_of_Way_Public/FeatureServer?f=pjson"
+  },
+  {
+   "name": "deschutes_trow_l0.geojson",
+   "url": "https://services2.arcgis.com/McQ0OlIABe29rJJy/ArcGIS/rest/services/Taxlots_with_Right_of_Way_Public/FeatureServer/0/query?where=1%3D1&geometry=-121.3715,44.0235,-121.3490,44.0410&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=*&returnGeometry=true&outSR=4326&f=geojson"
   }
  ]
 }
