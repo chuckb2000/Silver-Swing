@@ -1,0 +1,63 @@
+{
+ "id": "rancho_san_joaquin",
+ "name": "Rancho San Joaquin Golf Course",
+ "location": "Irvine, Orange County, California",
+ "state": "CA",
+ "architects": "William F. Bell (1964); some listings add Robert Muir Graves",
+ "theme": "strawberry_farms",
+ "epsg": 32611,
+ "osm_sources": [
+  "raw/overpass.geojson"
+ ],
+ "boundary_name": "Rancho Irvine Golf Course",
+ "dtm": {
+  "path": "raw/USGS_1M_rancho_san_joaquin.tif",
+  "units": "m",
+  "source": "USGS 3DEP 1 m DEM, project CA_CaliforniaGaps_B23 (tile USGS_1M_11_x42y373_CA_CaliforniaGaps_B23, published 2025-08-20; from the 2023 California Gaps lidar), NAD83 / UTM 11N (EPSG:26911), NAVD88 m; fetched by the GitHub Actions workflow into the release data-rancho_san_joaquin, clipped to the world + 100 m with pipeline/intake.py raster"
+ },
+ "world": {
+  "x0": 422108,
+  "y0": 3724318,
+  "width": 1280,
+  "height": 1792,
+  "note": "OSM course boundary (way 171532123) bbox 1,007 x 1,391 m in UTM 11N (x 422244-423251, y 3724519-3725910) + about 120 m of scenery, rounded out to whole 256 m chunks and centred: 1,280 m east-west (136 m each side), 1,792 m north-south (200 m each side)"
+ },
+ "tee_sets": [
+  {
+   "name": "Black",
+   "playable": true,
+   "rating": 70.8,
+   "slope": 128,
+   "total_yd": 6431
+  },
+  {
+   "name": "Blue",
+   "playable": true,
+   "rating": 69.7,
+   "slope": 125,
+   "total_yd": 6158
+  },
+  {
+   "name": "White",
+   "playable": false,
+   "rating": 67.6,
+   "slope": 119,
+   "total_yd": 5709
+  }
+ ],
+ "default_tee": "Blue",
+ "scorecard_source": "greenskeeper.org scorecard (greenskeeper.org/southern_california/orange_county/Rancho_San_Joaquin_Golf_Course/scorecard.cfm, read 2026-10-31): Black/Blue/White per hole, men's par and stroke index; rows add up to 6431/6158/5709, the same totals GolfPass gives for its Back/Middle/Forward tees. Ratings: greenskeeper men's Black 70.8/128, Blue 69.7/125, White 67.6/119 (GolfPass: Back 70.5/126, Middle 69.4/123, Forward 66.5/116). Unverified third-party card: the club site (ranchosanjoaquin.com) is not reachable from the sandbox. Older card (golfingrecord, GolfPass per-hole table): Gold 6389, Blue 6154/6155, White 5624. Built: Black (back tees) and Blue (developer's overnight call: back tees and Blue, default Blue).",
+ "wind_mph": {
+  "minMph": 2,
+  "maxMph": 10
+ },
+ "attribution": [
+  "Map data © OpenStreetMap contributors (ODbL)",
+  "Elevation: U.S. Geological Survey 3D Elevation Program (1 m DEM, 2023 California Gaps lidar)"
+ ],
+ "notes": "Course chat, 2026-10-31 (overnight, developer asleep: calls logged in docs/courses/rancho_san_joaquin.md). Standing defaults: every penalty area red, the OSM boundary as OB, trees from lidar, trees_off_fairways_m 2. Wind 2-10 mph as Strawberry Farms (inland Orange County, about 7 km from the sea). Theme strawberry_farms reused unchanged (the other Irvine course).",
+ "penalty_default": "red",
+ "driving_range_is_ob": true,
+ "trees_off_fairways_m": 2,
+ "range_art": "rough"
+}
