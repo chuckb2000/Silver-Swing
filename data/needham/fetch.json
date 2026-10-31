@@ -1,39 +1,79 @@
 {
  "items": [
   {
-   "name": "needham_overpass.geojson",
+   "name": "needham_overpass2.geojson",
    "osm_box": [
-    42.276,
-    -71.272,
-    42.316,
-    -71.22
+    42.258,
+    -71.245,
+    42.292,
+    -71.195
    ]
   },
   {
-   "name": "needham_dem1m",
+   "name": "needham_dem1m_b",
    "tnm": {
     "dataset": "dem1m",
     "bbox": [
-     -71.272,
-     42.276,
-     -71.22,
-     42.316
+     -71.245,
+     42.258,
+     -71.195,
+     42.292
     ],
     "list": true
    }
   },
   {
-   "name": "needham_lpc",
+   "name": "needham_lpc_b",
    "tnm": {
     "dataset": "lpc",
     "bbox": [
-     -71.272,
-     42.276,
-     -71.22,
-     42.316
+     -71.245,
+     42.258,
+     -71.195,
+     42.292
     ],
     "list": true
    }
+  },
+  {
+   "name": "needham_card_2026.pdf",
+   "url": "https://needhamgolfclub.com/documents/20124/110138/NEEDHAM_2026.pdf/"
+  },
+  {
+   "name": "ref_hole01_10.png",
+   "url": "https://needhamgolfclub.com/documents/20124/102456/Hole+1+and+10+image.png/873a375a-e24e-9558-d143-b215eba8368a?t=1773934164488"
+  },
+  {
+   "name": "ref_hole02_11.png",
+   "url": "https://needhamgolfclub.com/documents/20124/102456/Hole+2+and+11.png/0e2c069d-e09c-7bb3-9253-ee011dff1569?t=1773934635319"
+  },
+  {
+   "name": "ref_hole03_12.png",
+   "url": "https://needhamgolfclub.com/documents/20124/102456/Hole+3+and+12.png/206ca40b-1637-3400-4cb9-191a860f0a28?t=1773935169366"
+  },
+  {
+   "name": "ref_hole04_13.png",
+   "url": "https://needhamgolfclub.com/documents/20124/102456/Hole+4+and+13.png/bf213027-03f3-8b2b-e89b-514c7bc6d02b?t=1773936244850"
+  },
+  {
+   "name": "ref_hole05_14.jpg",
+   "url": "https://needhamgolfclub.com/documents/20124/102456/Hole+5+and+14+new.jpg/08967b3c-9ba9-21b5-264d-d54b66180baa?t=1776086323023"
+  },
+  {
+   "name": "ref_hole06_15.png",
+   "url": "https://needhamgolfclub.com/documents/20124/102456/Hole+6+%26+15.png/c8ab2ee8-54fa-49eb-c113-48c53fcb9ee6?t=1773948018280"
+  },
+  {
+   "name": "ref_hole07_16.png",
+   "url": "https://needhamgolfclub.com/documents/20124/102456/Hole+7+%26+16.png/3dee972a-f089-9927-599e-b74ddcd3318a?t=1773948535713"
+  },
+  {
+   "name": "ref_hole08_17.png",
+   "url": "https://needhamgolfclub.com/documents/20124/102456/Hole+8+%26+17.png/d842923a-ffcf-01fc-c8d0-02e3dce9d21f?t=1773949568254"
+  },
+  {
+   "name": "ref_hole09_18.webp",
+   "url": "https://needhamgolfclub.com/documents/20124/102456/Hole+9+%26+18.webp/cdec7963-a61a-a4c6-b39c-a56189a2ba58?t=1773949814139"
   }
  ]
 }
