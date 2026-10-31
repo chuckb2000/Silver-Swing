@@ -85,7 +85,7 @@ export function initialCourseId(courses: CourseInfo[], last: string): string | n
   return courses[0]?.id ?? null;
 }
 
-/** US states (and DC) by postal code. */
+/** US states, DC and Canadian provinces by postal code. */
 export const STATES: Record<string, string> = {
   AL: 'Alabama', AK: 'Alaska', AZ: 'Arizona', AR: 'Arkansas', CA: 'California', CO: 'Colorado', CT: 'Connecticut',
   DE: 'Delaware', DC: 'District of Columbia', FL: 'Florida', GA: 'Georgia', HI: 'Hawaii', ID: 'Idaho', IL: 'Illinois',
@@ -95,7 +95,11 @@ export const STATES: Record<string, string> = {
   NC: 'North Carolina', ND: 'North Dakota', OH: 'Ohio', OK: 'Oklahoma', OR: 'Oregon', PA: 'Pennsylvania',
   RI: 'Rhode Island', SC: 'South Carolina', SD: 'South Dakota', TN: 'Tennessee', TX: 'Texas', UT: 'Utah',
   VT: 'Vermont', VA: 'Virginia', WA: 'Washington', WV: 'West Virginia', WI: 'Wisconsin', WY: 'Wyoming',
+  BC: 'British Columbia', // Victoria Golf Club (2026-10-31)
 };
+
+/** The provinces among STATES: with one on offer, the course screen says "state or province". */
+export const PROVINCES = new Set(['BC']);
 
 export const OTHER_STATE = '--';
 

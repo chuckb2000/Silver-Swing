@@ -46,8 +46,9 @@ export class MyGolfScene extends MenuScene {
     const bw = Math.floor((pw - 16 - 4) / 3);
     items.forEach(([k, lab], i) => this.root.add(new Button(this, x0 + 8 + i * (bw + 2), y0 + 24, bw, 14, lab, () => { tab = k; page = 0; this.rebuild(); }, { color: tab === k ? 'orange' : 'grey' })));
     this.root.add(new Button(this, x0 + 6, y0 + ph - 20, 44, 15, 'back', () => this.back(), { color: 'grey' }));
-    // cross-country golf, kept apart from everything else here (developer, 2026-10-27)
-    this.root.add(new Button(this, x0 + 54, y0 + ph - 20, 70, 15, 'bonus mode', () => this.scene.start('bonus'), { color: 'orange' }));
+    // cross-country golf, kept apart from everything else here (developer, 2026-10-27); on the stats page
+    // only: the passport and milestones put their page arrows there (developer, 2026-10-31)
+    if (tab === 'stats') this.root.add(new Button(this, x0 + 54, y0 + ph - 20, 70, 15, 'bonus mode', () => this.scene.start('bonus'), { color: 'orange' }));
     const g = this.gen;
     if (!this.rounds) {
       this.root.add(txt(this, x0 + pw / 2, y0 + 70, 'adding up your rounds...', { origin: [0.5, 0], color: COLORS.dim }));

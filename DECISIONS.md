@@ -1506,3 +1506,15 @@ docs/COURSE_BUILD.md 5.0 is the procedure; the developer is asked only for what 
 can't get (sign-ins, emailed orders, screenshots, card photos). Rule 1.7 now says the workflow
 is never a way round a refused or forbidden download: it is for public data the sandbox's
 network can't reach. docs/COURSE_CHAT_START.md is the message that starts a course chat.
+
+## The default tees are the longest set (developer, 2026-10-31)
+
+Every course's default tees (`course.json` `defaultTee`, from `default_tee` in course_config)
+are its longest set built. 45 of the 47 already were; TPC Boston went from Black to Gold and
+Wannamoisett from Blue to Black (both rebuilt with their pinned pipelines; only `defaultTee`
+and the files drawn from the default tee changed). `courses.test.ts` fails for a course whose
+default isn't its longest set, so new courses follow (COURSE_BUILD 4.1: build the tips).
+The daily of 2026-10-29 (TPC Boston, back nine) keeps the Black tees it was played from
+(`DAILY_PICKS`), so that day's board stands. A device that remembered either course on its
+old default goes to the longest set once (`OLD_DEFAULT_TEES` in `save/store.ts`); a set a
+player chooses after that is kept.

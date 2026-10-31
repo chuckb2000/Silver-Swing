@@ -1,0 +1,30 @@
+{
+ "release": "data-victoria",
+ "note": "Build inputs kept in the release data-victoria (fetched there by the GitHub Actions workflow, data/victoria/fetch.json); `make fetch NAME=victoria` puts them in raw/. In git: raw/overpass.geojson.",
+ "files": [
+  {
+   "asset": "hrdem_dtm_1m.tif",
+   "sha256": "d7c3a2b45b0a05dac3e81cb832032fff674930e9962822c5b533572e17d74749",
+   "run": "python3 pipeline/intake.py raster victoria {file} --out raw/hrdem_dtm_1m.tif --fill-sea",
+   "outputs": {
+    "raw/hrdem_dtm_1m.tif": "71e2c9a51885c9667505dd080835d99faddbb24b0f94e15ad069bed9ae3b9687"
+   }
+  },
+  {
+   "asset": "hrdem_dsm_1m.tif",
+   "sha256": "93ce80d59018337b74eceabe7141b458213162dad812c639949f5966766c9660",
+   "run": "python3 pipeline/intake.py raster victoria {file} --out raw/hrdem_dsm_1m.tif --fill-sea",
+   "outputs": {
+    "raw/hrdem_dsm_1m.tif": "fa8cf805f8624e8e071f5502d0490b404728b3c613706a0f19fc8e7c403f9036"
+   }
+  },
+  {
+   "asset": "crd_ortho2025_05m.jpg",
+   "sha256": "387e62a66f9b6c2136fdede2a07a7b66d1c436e8130ff8e30dd1cf6645fefa86",
+   "run": "python3 pipeline/intake.py ortho victoria {file} 477300 5361700 478550 5363200 --out raw/crd_ortho2025_05m.tif",
+   "outputs": {
+    "raw/crd_ortho2025_05m.tif": "12024d31963ef952161d62510ef2333c7fa8b2b12490485376532bdb9c57aae3"
+   }
+  }
+ ]
+}
