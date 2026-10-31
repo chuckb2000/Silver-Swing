@@ -107,6 +107,13 @@
     "p_tee16_back"
    ],
    "reason": "hole 2's forward (Blue) pad traced from NAIP (291 yd, card 300); hole 16's Championship tee on the 1st tee's mown lobe (379 yd, card 390): see make_proposed.py"
+  },
+  {
+   "from": "proposed/desk_tees.geojson",
+   "ids": [
+    "desk_tee_12"
+   ],
+   "reason": "developer 2026-10-31: the Championship tees marked in the tracing desk (data/sankaty_head/desk/), accepted as marked; marks under 60 m2 grown to an 8 x 6 m pad on the developer's centroid so a tee box stands under each (make_desk_tees.py)"
   }
  ],
  "drop": [

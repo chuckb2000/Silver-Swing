@@ -9,7 +9,8 @@ OSM maps the whole course: 18 hole lines, every green, 54 tees, 89 bunkers, cart
 Bare earth is the USGS 3DEP 1 m DEM (post-Sandy coastal lidar, 2013). Trees come from the NOAA 2018
 Nantucket lidar (28 tiles, flown 1-2 May 2018). The ortho is USDA NAIP. Everything was fetched by the
 GitHub Actions workflow. Two tee sets are built: Championship (the tips) and Blue, the default. Both are
-within 1.5 % of the card in total. Only Championship 12 is more than 8 % off (open item 1). The course
+within 1.5 % of the card in total. No hole is more than 8 % off since the developer marked the
+12th's Championship tee (2026-10-31, below). The course
 uses its own theme, `sankaty_head` (blond fescue moor, island scrub). Checks on the branch:
 `course_play.test.ts -t sankaty_head` 13 passed; `npm test` and `npm run e2e` results are in the pull
 request.
@@ -53,7 +54,7 @@ card online (private club). GolfLink has the same per-hole yards. Par 71.
 | Par | 4 | 4 | 3 | 5 | 4 | 3 | 4 | 5 | 4 | 36 | 4 | 4 | 3 | 4 | 3 | 4 | 4 | 5 | 4 | 35 | 71 |
 | HCP | 5 | 15 | 13 | 3 | 7 | 17 | 11 | 1 | 9 | | 8 | 10 | 18 | 6 | 16 | 2 | 14 | 12 | 4 | | |
 | Championship | 400 | 395 | 200 | 520 | 420 | 180 | 410 | 565 | 285 | 3375 | 425 | 450 | 225 | 380 | 150 | 410 | 390 | 540 | 385 | 3355 | 6730 |
-| Built | 401 | 389 | 194 | 517 | 411 | 178 | 400 | 564 | 283 | | 425 | 449 | 204 | 370 | 146 | 412 | 380 | 526 | 396 | | 6644 |
+| Built | 401 | 389 | 194 | 517 | 411 | 178 | 400 | 564 | 283 | | 425 | 449 | 227 | 370 | 146 | 412 | 380 | 526 | 396 | | 6667 |
 | Blue | 355 | 300 | 180 | 405 | 360 | 135 | 350 | 410 | 260 | 2755 | 360 | 350 | 160 | 325 | 110 | 360 | 315 | 450 | 340 | 2770 | 5525 |
 | Built | 347 | 293 | 174 | 399 | 356 | 131 | 342 | 409 | 256 | | 357 | 350 | 158 | 319 | 107 | 360 | 308 | 448 | 336 | | 5451 |
 
@@ -75,6 +76,14 @@ are the course chat's design.
 -   **Tees added or assigned:**
     -   1 and 12: tee boxes on the mown tee ground at the line starts (`p_tee1`, `p_tee12`).
         OSM maps that ground as fairway.
+    -   12 Championship (developer, 2026-10-31): the developer marked the real back tee in the
+        tracing desk (`desk/hole12.json`, 41 m2): "they are acceptable as I've saved them. Make
+        sure that there is actually always a tee box under where I marked the tee."
+        `make_desk_tees.py` grows the mark to an 8 x 6 m pad (`desk_tee_12`) on its centroid,
+        long side along the hole line's first segment; the virtual tee stands on that centroid.
+        227.4 yd against the card's 225 (+1.1 %, was 204). The pad is 10.8 m from the 11th
+        green, clear of its fringe; no tree within 38 m. `checks.json` holds it at 226-229 yd:
+        "developer 2026-10-31: accepted as marked".
     -   9: OSM's two fairway-tagged pads, retagged as tees.
     -   2 Blue: a mown pad by Polpis Road, traced corner by corner from NAIP (`p_tee2_fwd`,
         291 yd).
@@ -100,21 +109,16 @@ are the course chat's design.
 
 Details are in `data/sankaty_head/validation_report.md`.
 
-1.  **Championship 12 is 204 yd against 225 (-9.3 %).** The only teeing ground is the striped
-    strip by the 11th green. The card's extra 20 yd would put the tee in the 11th green's
-    surround. Options:
-    -   accept;
-    -   move the tee onto the surround (not a mapped tee);
-    -   get a photo or word from the club.
-
-    Recommendation: accept. `checks.json` allows it.
+1.  **Championship 12:** closed 2026-10-31. The developer marked the tee in the tracing desk;
+    227.4 yd against 225 (was 204, -9.3 %).
 2.  **Stroke index.** OSM's hole lines (11, 9, 15, 5, 3, 17, 7, 1, 13 | 4, 6, 16, 10, 18, 8, 12,
     2, 14) differ from GolfPass's (used). Recommendation: keep GolfPass until there's a photo of
     the card.
 3.  **Tee names and totals.** GolfLink calls the 6,730 row Black. GolfPass's tee table gives
     Black 6,625 and Blue 5,580. Recommendation: keep the per-hole rows, which add up to 6,730 and
     5,525.
-4.  **Traced or assigned tees** (above): 2 Blue, 16 Championship, and 1 and 12 at the line starts.
+4.  **Traced or assigned tees** (above): 2 Blue, 16 Championship, and 1 and 12 at the line starts
+    (12 Championship is the developer's own mark).
     Recommendation: look at them when you play.
 5.  **Small flags:**
     -   3: both sets about -3 %.

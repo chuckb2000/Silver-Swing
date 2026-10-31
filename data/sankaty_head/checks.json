@@ -1,6 +1,6 @@
 {
  "note": "per-course settings for game/tests/unit/course_play.test.ts (the every-course checks); docs/COURSE_BUILD.md 8.2",
- "yardage": {"max": {"12": 0.10}, "why": "12 Championship (225) has no tee box beyond the mown strip by the 11th green: built from the box at the line start, 204 yd (open item)"},
+ "yardage": {"range_yd": {"12 Championship": [226, 229]}, "why": "12 Championship: the tee the developer marked in the tracing desk (desk_tee_12, 8 x 6 m pad on the mark's centroid), 227.4 yd vs card 225 (+1.1 %); developer 2026-10-31: accepted as marked"},
  "wind_mph": [3, 14],
  "water": {"count": 1},
  "tees": {"sets": ["Championship", "Blue"]},
