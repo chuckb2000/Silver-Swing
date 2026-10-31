@@ -1,0 +1,39 @@
+{
+ "items": [
+  {
+   "name": "needham_overpass.geojson",
+   "osm_box": [
+    42.276,
+    -71.272,
+    42.316,
+    -71.22
+   ]
+  },
+  {
+   "name": "needham_dem1m",
+   "tnm": {
+    "dataset": "dem1m",
+    "bbox": [
+     -71.272,
+     42.276,
+     -71.22,
+     42.316
+    ],
+    "list": true
+   }
+  },
+  {
+   "name": "needham_lpc",
+   "tnm": {
+    "dataset": "lpc",
+    "bbox": [
+     -71.272,
+     42.276,
+     -71.22,
+     42.316
+    ],
+    "list": true
+   }
+  }
+ ]
+}
