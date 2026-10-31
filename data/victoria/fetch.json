@@ -124,6 +124,18 @@
   {
    "name": "victoria_coastline.geojson",
    "overpass": "[out:json][timeout:300];(way[\"natural\"=\"coastline\"](48.390,-123.335,48.445,-123.265);way[\"place\"=\"islet\"](48.390,-123.335,48.445,-123.265);way[\"place\"=\"island\"](48.390,-123.335,48.445,-123.265););out geom;"
+  },
+  {
+   "name": "golfpass_26795_card.html",
+   "url": "https://www.golfpass.com/courses/26795-victoria-golf-club/scorecard-and-layout"
+  },
+  {
+   "name": "golfpass_26795.html",
+   "url": "https://www.golfpass.com/travel-advisor/courses/26795-victoria-golf-club"
+  },
+  {
+   "name": "bluegolf_card.html",
+   "url": "https://course.bluegolf.com/bluegolf/course/course/victoriagc/detailedscorecard.htm"
   }
  ]
 }
