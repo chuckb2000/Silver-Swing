@@ -1,0 +1,31 @@
+{
+ "id": "sankaty_head",
+ "course": "Sankaty Head Golf Club",
+ "place": "Siasconset, Nantucket, Massachusetts",
+ "facts": [
+  {"fact": "Nantucket lightship baskets began aboard the lightship stationed at the Nantucket shoals (station from 1854, baskets from the 1860s); production aboard ended about 1900 and the craft went on on the island. Rattan cane and weavers over staves, a solid wooden base, a wooden bail riveted to the rim; purse baskets with a lid; ivory whale lid ornaments from the 1940s.", "source": "https://en.wikipedia.org/wiki/Nantucket_lightship_basket"},
+  {"fact": "The club's holes carry nautical names (from OpenStreetMap's hole names: 1 Outward Bound, 7 Cross Rip, 8 Come About, 9 Gray Lady, 18 Thar She Blows).", "source": "data/sankaty_head/raw/overpass.geojson (OSM golf=hole names)"},
+  {"fact": "Cross Rip was a lightship station in Nantucket Sound.", "source": "https://uslhs.org/gr/light_lists/lightship_list.php?id=1"},
+  {"fact": "Highland Links already uses a lighthouse; Sankaty Head Light stands beside the course.", "source": "assets-src/logo_concepts/README.md; data/sankaty_head/raw/overpass.geojson (man_made=lighthouse)"}
+ ],
+ "current": {"subject": "none: a new course (course chat 2026-10-31)", "keep": "", "weaknesses": ""},
+ "concepts": [
+  {
+   "n": 1,
+   "name": "The Lightship Basket",
+   "rationale": "Nantucket's own craft instead of the lighthouse every Sankaty picture shows (and Highland Links already has): a lidded lightship basket with an ivory sperm whale on the lid, for the island's whaling past and the club's nautical hole names.",
+   "references": ["https://en.wikipedia.org/wiki/Nantucket_lightship_basket", "https://uslhs.org/gr/light_lists/lightship_list.php?id=1"],
+   "symbolism": "The basket: the island and its lightships; the whale: Nantucket whaling.",
+   "interpretation": "The link to the golf club is through the island and the hole names, not a documented club tradition.",
+   "palette": [
+    {"hex": "#e2b46c", "name": "rattan"}, {"hex": "#bd8a47", "name": "rattan shade"}, {"hex": "#f3d79c", "name": "weaver"},
+    {"hex": "#9a6a33", "name": "stave"}, {"hex": "#9c6634", "name": "lid"}, {"hex": "#7a4a26", "name": "lid edge"},
+    {"hex": "#bd8448", "name": "lit wood"}, {"hex": "#8a5a2e", "name": "bail"}, {"hex": "#6e4222", "name": "base"},
+    {"hex": "#5a3418", "name": "dark wood"}, {"hex": "#f1e8d2", "name": "ivory"}, {"hex": "#cfc2a4", "name": "ivory shade"}
+   ],
+   "strengths": "Unique to Nantucket; reads as a basket at 32 px; warm colours stand out from the green card.",
+   "tradeoffs": "The whale is small at 1x (a pale shape with an eye and flukes)."
+  }
+ ],
+ "recommendation": 1
+}
