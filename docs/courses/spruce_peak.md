@@ -10,9 +10,10 @@ bunker; no pins), so nothing was traced except two centre pins. Bare earth and c
 VCGI 2023 statewide lidar (DEM and DSM image services, exported at 1 m through the GitHub
 Actions fetch); photo the VCGI 0.3 m orthos. Two tee sets: Black (the tips) and Blue (the
 default). Theme `spruce_peak` (new): Stowe in the first week of October, spruce spires and red,
-gold and turning hardwoods. Black: 3 holes fail against the card (no back tee mapped or found on
-4, 8, 13), 5 flag 3-6 %; Blue: every hole within 8 % (8 at -7.4 %, 10 +5.8 %, 4 -5.4 %).
-Built totals Black 6,043 yd (card 6,411), Blue 5,844 (card 5,887).
+gold and turning hardwoods. The Black tees on 4, 8 and 13 are the developer's marks from the
+tracing desk (2026-10-31, accepted as marked); Black: 8 fails against the card (-15.2 %,
+accepted), the rest within 8 %; Blue: every hole within 8 % (8 at -7.4 %, 10 +5.8 %, 4 -5.4 %).
+Built totals Black 6,156 yd (card 6,411), Blue 5,844 (card 5,887).
 
 ## Facts
 
@@ -38,7 +39,8 @@ Built totals Black 6,043 yd (card 6,411), Blue 5,844 (card 5,887).
 -   **Out of bounds:** OSM's boundary (w510265958) traces only the mown turf along the tree
     lines and leaves out the 13th. Built with a joined and grown boundary
     (`make_proposals.py`): joined to the 13th, grown 20 m into the woods, less 5 m strips along
-    roads and 6 m round buildings (47.6 ha -> 59.1 ha). Open item 1.
+    roads and 6 m round buildings (47.6 ha -> 59.8 ha; the join also takes in the developer's Black
+    tee pad on 13, which stood outside OSM's line). Open item 1.
 -   **Trees:** 35,559 from the lidar CHM (DSM - DTM), 5,377 inside the boundary, heights p50
     13.6 m, max 30.2 m; 148 dropped on buildings. Types by crown shape only (18,081 conifer,
     17,478 deciduous); summer photo, no leaf-off. `trees_off_fairways_m` 2; s06b: every tee
@@ -55,7 +57,7 @@ club card online.
 | Par | 5 | 3 | 4 | 4 | 4 | 3 | 4 | 5 | 4 | 36 | 4 | 5 | 4 | 3 | 4 | 4 | 3 | 4 | 5 | 36 | 72 |
 | HCP | 6 | 16 | 4 | 18 | 12 | 10 | 14 | 2 | 8 | | 7 | 1 | 13 | 15 | 3 | 11 | 17 | 5 | 9 | | |
 | Black | 499 | 228 | 415 | 381 | 338 | 194 | 333 | 606 | 339 | 3,333 | 351 | 506 | 359 | 252 | 394 | 271 | 171 | 279 | 495 | 3,078 | 6,411 |
-| Built | 486 | 222 | 405 | 337 | 327 | 194 | 325 | 514 | 335 | 3,145 | 341 | 492 | 345 | 156 | 378 | 264 | 166 | 268 | 488 | 2,898 | 6,043 |
+| Built | 486 | 222 | 405 | 363 | 327 | 194 | 325 | 514 | 335 | 3,171 | 341 | 492 | 345 | 243 | 378 | 264 | 166 | 268 | 488 | 2,985 | 6,156 |
 | Blue | 451 | 210 | 365 | 358 | 321 | 155 | 314 | 559 | 317 | 3,050 | 321 | 480 | 342 | 160 | 380 | 253 | 160 | 266 | 475 | 2,837 | 5,887 |
 | Built | 456 | 215 | 357 | 339 | 326 | 159 | 322 | 518 | 314 | 3,006 | 340 | 470 | 341 | 156 | 375 | 258 | 164 | 262 | 472 | 2,838 | 5,844 |
 
@@ -71,7 +73,11 @@ Blue (the developer, 2026-10-30: "the furthest back tees and the blue tees"; Blu
 
 -   2026-10-30 (before the overnight run): build the tips and Blue; trace what OSM lacks with
     care; a hole over 8 % or conflicting sources: pick the best-supported option, build, flag.
--   Everything below "Open items" was decided by the course chat overnight and waits for the
+-   2026-10-31: the Black tees on 4, 8 and 13 marked in the tracing desk
+    (`data/spruce_peak/desk/hole04.json`, `hole08.json`, `hole13.json`): "acceptable as I saved
+    them (some of the gap is how doglegs are measured)"; always a tee box under each mark, the
+    tee on the marked centroid; yardages accepted as marked (open item 2).
+-   Everything else below "Open items" was decided by the course chat overnight and waits for the
     developer.
 
 ## New pipeline keys or theme
@@ -81,8 +87,15 @@ Blue (the developer, 2026-10-30: "the furthest back tees and the blue tees"; Blu
     pnw cone at 70 % width (spires); deciduous variant 0 sugar maple red, 1 birch gold on a pale
     trunk, 2 beech green with an orange patch; leaf-litter russet mixed into the off-course
     woods floor (`lut.ob_woods`). Colours by variant are a drawing choice.
--   No new config keys and no pipeline change. Course scripts: `fix_dem.py` (DEM voids),
-    `make_proposals.py` (cart paths, boundary, two centre pins).
+-   Pipeline change (2026-10-31): `s06_holes.py` reads the tag `tee_pos=mark` on a tee box (the
+    developer's marked tee): the tee is the box's centroid and is never moved (no move toward the
+    card, no move for a blocked tee shot; s06b drops any tree in the way instead). No new config
+    keys. Course scripts: `fix_dem.py` (DEM voids), `make_desk_tees.py` (the desk marks as tee
+    boxes: `python3 data/spruce_peak/make_desk_tees.py spruce_peak Black`; a mark under 60 m2 grows
+    to an 8 x 6 m pad on its centroid, long side along the hole line leaving the mark; tags
+    golf=tee, hole, tee_set=Black, tee_pos=mark, source "tracing desk (developer 2026-10-31)"),
+    `make_proposals.py` (cart paths, boundary with the 13 pad, two centre pins; run after
+    `make_desk_tees.py`).
 
 ## Open items
 
@@ -90,15 +103,21 @@ Blue (the developer, 2026-10-30: "the furthest back tees and the blue tees"; Blu
     and grown 20 m into the woods (roads and houses stay OB). Options: (a) as built; (b) OSM's
     line plus only the 13th (every ball in the trees is OB); (c) a wider band. Recommendation:
     (a).
-2.  **Black tees on 4, 8 and 13** (FAIL): no box at the card distance in OSM, the lidar pads
-    or the photo; Black plays from the farthest mapped box: 4 337 yd (card 381), 8 514 (606),
-    13 156 (252). On 4 a raised pad by the 3rd green (lidar_tee_2, 365 yd) and the 17th's
-    box w1058402468 (379 yd through the bend) would fit, but both mean driving over the 3rd
-    green: not used. Accepted in `checks.json`. Options: accept; or the developer places the
-    tees (DATA_REQUEST.md 2). Recommendation: accept until a photo or description says where
-    they are.
+2.  **Black tees on 4, 8 and 13** (resolved 2026-10-31): the developer's marks, each grown to an
+    8 x 6 m pad on the exact centroid (marks 11, 8 and 30 m2). 4: 363 yd (card 381, -4.8 %,
+    was 337); 8: 514 (606, -15.2 %; the mark is on OSM's back box w1058393549, so unchanged from
+    514); 13: 243 (252, -3.6 %, was 156). Accepted as marked; `checks.json` keeps an allowance
+    only for 8 (513-515 yd). The 4 pad sits in the trees east of the 3rd green (no lidar tree on
+    it); the 13 pad is on a mown patch beside the base-area building, outside OSM's boundary,
+    now joined into it. No practice green is mapped there (OSM's only practice green,
+    w1058406517's loop, is 726 m away), so nothing was cut. Blue on 4 stays on w1058376518
+    (tagged hole=4, tee_set=Blue; untagged, s06 could pick the Black pad for Blue: 363 yd is 1.4 %
+    from Blue's card).
 3.  **Blue on 8** -7.4 % (518 vs 559): the mapped back box is the only one near the card;
-    the card may count a longer route. Recommendation: accept.
+    the card may count a longer route. Recommendation: accept. Since the Black mark on 8 is on
+    the same box, Blue's virtual tee (moved 3 m to the back of the box toward its card) now plays
+    3.6 yd longer than Black (517.6 vs 514.0). Options: leave it; or put Blue at the box centre
+    (513.5 yd, -8.1 %). Recommendation: leave it.
 4.  **Blue card row.** Stymie's per-hole Blue (5,887, matches 18Birdies' total) used; GolfPass
     has 5,824 per hole and 6,041 in its tee table. Recommendation: keep until a card photo.
 5.  **Stroke index 10/18:** GolfPass, 18Birdies, OpenGolfAPI 7/9 (used); Stymie 9/7.
@@ -120,6 +139,25 @@ Blue (the developer, 2026-10-30: "the furthest back tees and the blue tees"; Blu
     front/back extra spots, so the sheet takes 5 centre pins (limit 4). Smallest change: count
     the limit as `max(4, holes with fewer than 3 middle-or-extra spots)`, or let the test skip
     courses whose median green is under ~300 m2.
+
+## Black tees from the desk (2026-10-31)
+
+-   Re-pinned (`pipeline_pin.json`, pipeline ab60db9a with `tee_pos=mark`, assets-src 727bc152);
+    `make course NAME=spruce_peak ARGS=--fresh` ran all 15 steps and `git status` showed no change.
+-   For 4, 8 and 13 Black: the game's tee (`course.json`) is inside its pad, within 6 mm of the
+    mark's centroid (coordinates rounded to 1 cm), and the centre line starts there; the surface
+    map is tee on every pixel of each pad (190-192 of 192); no tree trunk or crown on any pad;
+    s06b: every tee shot at the middle of the fairway clears the trees (no tree dropped). Every
+    other hole and set measures as before.
+-   `npx vitest run tests/unit/course_play.test.ts -t spruce_peak`: 12 passed.
+-   `npm test`: 1,383 passed, 3 failed: `player.test.ts` "the real rotation" and `tour.test.ts`
+    "a hole drawn sits out" (spruce_peak not yet in `DAILY_ROSTER`; `make land` adds it), and
+    `pins.test.ts` "mixes front, middle and back" (spruce_peak seed 1, 5 centre pins; open item 6).
+-   `npm run e2e`: 17 passed (run with the sandbox's Chromium headless shell 1243 through
+    `PLAYWRIGHT_BROWSERS_PATH`; the repository's Playwright 1.56 looks for build 1194).
+-   Not merged with `main`: `main` now has "default tees are the longest set" (`courses.test.ts`),
+    and this course's default is Blue (the developer's call, 2026-10-30). After merging `main`,
+    either `default_tee` becomes Black or the test needs an exception: the developer's call.
 
 ## Hand-off checks (2026-10-31)
 
