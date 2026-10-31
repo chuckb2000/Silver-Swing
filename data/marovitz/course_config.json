@@ -25,7 +25,7 @@
       5
     ],
     "units": "ft",
-    "source": "USGS 3DEP lidar point cloud IL_4_County_QL1_LiDAR_2016_B16 (IL_4County_Cook_2017, flown 17-18 April 2017, leaf-off), tiles LAS_17009250 and LAS_17009275, classes 3-5, clipped to the world + 100 m by pipeline/intake.py laz; NAD83(2011) / Illinois East US survey feet, NAVD88 feet; fetched by the GitHub Actions fetch workflow 2026-10-31 (release data-marovitz). The east-column tiles (LAS_17259250, LAS_17259275: the lakeshore strip east of x = 446,830 m) did not download (rockyweb 429/timeout, S3 404), so the 110 m-wide east edge of the course has no lidar trees",
+    "source": "USGS 3DEP lidar point cloud IL_4_County_QL1_LiDAR_2016_B16 (IL_4County_Cook_2017, flown 17-18 April 2017), tiles LAS_17009250, LAS_17009275, LAS_17259250 and LAS_17259275, classes 3-5, clipped to the world + 100 m by pipeline/intake.py laz; NAD83(2011) / Illinois East US survey feet, NAVD88 feet; fetched by the GitHub Actions fetch workflow 2026-10-31 (release data-marovitz)",
     "label": "2017 USGS lidar (Cook County)"
   },
   "world": {

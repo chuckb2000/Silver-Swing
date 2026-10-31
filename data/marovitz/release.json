@@ -1,6 +1,6 @@
 {
  "release": "data-marovitz",
- "note": "Build inputs not kept in git for Sydney R. Marovitz; `make fetch NAME=marovitz` puts them in place (pipeline/fetch_raw.py). In git: raw/overpass.geojson (intake.py osm of marovitz_overpass.geojson) and raw/usgs_dem_1m_clip.tif (intake.py raster --fill-sea of USGS_1M_16_x44y465_IL_4_County_QL1_LiDAR_2016_B16.tif). Here: the lidar clip from two 3DEP tiles (IL_4_County_QL1_LiDAR_2016_B16, Cook 2017), classes 3-5. The first tile goes to incoming/ (not in git), the second runs the clip of both.",
+ "note": "Build inputs not kept in git for Sydney R. Marovitz; `make fetch NAME=marovitz` puts them in place (pipeline/fetch_raw.py). In git: raw/overpass.geojson (intake.py osm of marovitz_overpass.geojson) and raw/usgs_dem_1m_clip.tif (intake.py raster --fill-sea of USGS_1M_16_x44y465_IL_4_County_QL1_LiDAR_2016_B16.tif). Here: the lidar clip from four 3DEP tiles (IL_4_County_QL1_LiDAR_2016_B16, Cook 2017), classes 3-5. Three tiles go to incoming/ (not in git); the fourth runs the clip of all four.",
  "files": [
   {
    "asset": "USGS_LPC_IL_4_County_QL1_LiDAR_2016_B16_LAS_17009250.laz",
@@ -11,11 +11,27 @@
    }
   },
   {
+   "asset": "USGS_LPC_IL_4_County_QL1_LiDAR_2016_B16_LAS_17259250.laz",
+   "sha256": "c826486ee8a0ed2c630caaf4f2a9317f92652fa59ac651a9d3378a394b1f196f",
+   "to": "incoming/",
+   "outputs": {
+    "incoming/USGS_LPC_IL_4_County_QL1_LiDAR_2016_B16_LAS_17259250.laz": "c826486ee8a0ed2c630caaf4f2a9317f92652fa59ac651a9d3378a394b1f196f"
+   }
+  },
+  {
+   "asset": "USGS_LPC_IL_4_County_QL1_LiDAR_2016_B16_LAS_17259275.laz",
+   "sha256": "9b7e21195a7a02e39daaacf599bb3fdd35df794cb79a508ae15cfdd431fcfb84",
+   "to": "incoming/",
+   "outputs": {
+    "incoming/USGS_LPC_IL_4_County_QL1_LiDAR_2016_B16_LAS_17259275.laz": "9b7e21195a7a02e39daaacf599bb3fdd35df794cb79a508ae15cfdd431fcfb84"
+   }
+  },
+  {
    "asset": "USGS_LPC_IL_4_County_QL1_LiDAR_2016_B16_LAS_17009275.laz",
    "sha256": "4002b30528551fde95b80812a0dd534594cfb96e9230c0f16d06e083ec29eab0",
-   "run": "python3 pipeline/intake.py laz marovitz data/marovitz/incoming/USGS_LPC_IL_4_County_QL1_LiDAR_2016_B16_LAS_17009250.laz {file} --classes 3,4,5",
+   "run": "python3 pipeline/intake.py laz marovitz data/marovitz/incoming/USGS_LPC_IL_4_County_QL1_LiDAR_2016_B16_LAS_17009250.laz data/marovitz/incoming/USGS_LPC_IL_4_County_QL1_LiDAR_2016_B16_LAS_17259250.laz data/marovitz/incoming/USGS_LPC_IL_4_County_QL1_LiDAR_2016_B16_LAS_17259275.laz {file} --classes 3,4,5",
    "outputs": {
-    "raw/laz/marovitz_clip.laz": "2a8e9544ee56bfcd334c8017e14ef80e6b3ac661a80126df0da647f3a8076611"
+    "raw/laz/marovitz_clip.laz": "91298a21c8a2ce610fa855e5a37d3705147a9ac12f79b68be5c71e2981428000"
    }
   }
  ]
