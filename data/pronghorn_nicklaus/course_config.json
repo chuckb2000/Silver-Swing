@@ -94,5 +94,11 @@
   "h_max_m": 1.5,
   "h_default_m": 1.0,
   "note": "sagebrush and bitterbrush, not gorse: bushes from the OSIP 2024 photo (pipeline/gorse.py with the Silvies sage colour rule, V up to 150 for the paler pumice ground), 7 m apart, kept 3 m off mown grass; no penal ground (bushes only, as at Silvies); drawn by the theme's desert_bush painter"
+ },
+ "chm": {
+  "path": "proposed/photo_canopy_m.tif",
+  "units": "m",
+  "label": "canopy from the OSIP 2024 photo (heights estimated)",
+  "source": "Not lidar: no canopy or point cloud reaches the course (DOGAMI canopy/highest-hit services return no data here; the 2011 and 2002 flights have a void; USGS OR_SouthEast_D22 has no tiles in 10TFP 45-46/93-95). Crowns from the Oregon Statewide Imagery Program 2024 photo by colour (make_photo_canopy.py), heights a dome per crown from its size, 3.5-12 m: estimated, not measured (CLAUDE.md 5.4 step 2, RGB only, lower confidence)"
  }
 }

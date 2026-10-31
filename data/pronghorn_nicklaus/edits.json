@@ -70,6 +70,55 @@
     "tee_set": "Blue;Black"
    },
    "reason": "the westernmost of 16's five pads, 56 m behind the line start: 530 yd vs card 571/542 (no pad further back on the photo; Blue stays a flag)"
+  },
+  {
+   "osm": "r11166236",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "golf=water_hazard (would export yellow): red, standing default (COURSE_BUILD 4.1)"
+  },
+  {
+   "osm": "w810902393",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "golf=water_hazard (would export yellow): red, standing default (COURSE_BUILD 4.1)"
+  },
+  {
+   "osm": "w810902394",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "golf=water_hazard (would export yellow): red, standing default (COURSE_BUILD 4.1)"
+  },
+  {
+   "osm": "w810902395",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "golf=water_hazard (would export yellow): red, standing default (COURSE_BUILD 4.1)"
+  },
+  {
+   "osm": "w810902396",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "golf=water_hazard (would export yellow): red, standing default (COURSE_BUILD 4.1)"
+  },
+  {
+   "osm": "w810902397",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "golf=water_hazard (would export yellow): red, standing default (COURSE_BUILD 4.1)"
+  },
+  {
+   "osm": "w810902398",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "golf=water_hazard (would export yellow): red, standing default (COURSE_BUILD 4.1)"
   }
  ],
  "drop": [
