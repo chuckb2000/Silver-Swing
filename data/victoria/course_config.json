@@ -48,7 +48,7 @@
    "total_yd": 5899
   }
  ],
- "default_tee": "Blue",
+ "default_tee": "Gold",
  "scorecard_source": "The club's own printed card, 'Scorecard 2025' PDF on victoriagolf.com (fetched by the GitHub Actions workflow 2026-10-31): Gold 6,157, Blue 5,899, White 5,574, Green 5,033, men's par 70 and men's handicap, women's par 72 and handicap; every row adds up to its printed totals. No rating or slope on the club's card; men's ratings from 18Birdies (read 2026-10-31, unverified): Gold 6,156 yd 70.3/135, Blue 5,825 yd 68.9/131 (its Blue total is an older card's; the club's 2025 card says 5,899). Built: Gold (the tips) and Blue (developer, 2026-10-30: the furthest-back tees and Blue; Blue the default).",
  "driving_range_is_ob": true,
  "wind_mph": {

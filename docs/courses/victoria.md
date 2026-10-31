@@ -9,7 +9,7 @@ below). OSM maps the whole course: 18 hole lines, greens, fairways, 44 tee boxes
 and the paths, all lining up with the 2025 orthophoto, so nothing was traced. Elevation and
 trees come from Natural Resources Canada's HRDEM (DTM and DSM, 1 m, from the 2018-19 Vancouver
 Island lidar), fetched by the GitHub Actions workflow through NRCan's WCS. The scorecard is the
-club's own 2025 card (PDF). Tee sets built: Gold (the tips) and Blue (the default). A new theme,
+club's own 2025 card (PDF). Tee sets built: Gold (the tips, the default) and Blue. A new theme,
 `victoria`. Every hole is within 3 % of the card after moving tees within their boxes (10
 flags before that, no fails); Gold plays 6,100 yd against 6,157 on the card, Blue 5,927 against
 5,899. Checks on the branch (2026-10-31): `course_play.test.ts -t victoria` 12 passed; `npm test`
@@ -77,7 +77,8 @@ prints Blue as 5,825 yd, an older card; the club's 2025 card says 5,899).
 
 ## Default tee
 
-Blue (developer, 2026-10-30: build the furthest-back tees and Blue, Blue the default). Gold is
+Gold, the longest set (developer, 2026-10-31: every course defaults to its longest tees; it was
+Blue, the developer's call of 2026-10-30, until the design chat changed it at the merge). Blue is
 the second set.
 
 ## The developer's calls
