@@ -36,13 +36,13 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 | 14 | 4 | White | 382 | 374.7 | -7.3 | -1.9% | pass | 374.7 | -1.9% | pass |
 | 15 | 3 | Gold | 142 | 146.7 | +4.7 | +3.3% | flag | 146.7 | +3.3% | flag |
 | 15 | 3 | White | 120 | 100.1 | -19.9 | -16.6% | FAIL | 117.0 | -2.5% | pass |
-| 16 | 4 | Gold | 392 | 388.4 | -3.6 | -0.9% | pass | 388.4 | -0.9% | pass |
+| 16 | 4 | Gold | 392 | 388.4 | -3.6 | -0.9% | pass | 387.4 | -1.2% | pass |
 | 16 | 4 | White | 367 | 369.8 | +2.8 | +0.8% | pass | 369.8 | +0.8% | pass |
 | 17 | 4 | Gold | 372 | 354.6 | -17.4 | -4.7% | flag | 362.9 | -2.4% | pass |
 | 17 | 4 | White | 361 | 354.6 | -6.4 | -1.8% | pass | 354.6 | -1.8% | pass |
-| 18 | 3 | Gold | 173 | 178.8 | +5.8 | +3.4% | flag | 177.3 | +2.5% | pass |
-| 18 | 3 | White | 145 | 176.9 | +31.9 | +22.0% | FAIL | 176.9 | +22.0% | FAIL |
-| **total** | 140 | | **12588** | **12494** | -94 | -0.8% | | **12582** | -0.0% | |
+| 18 | 3 | Gold | 173 | 178.9 | +5.9 | +3.4% | flag | 177.3 | +2.5% | pass |
+| 18 | 3 | White | 145 | 147.4 | +2.4 | +1.6% | pass | 147.4 | +1.6% | pass |
+| **total** | 140 | | **12588** | **12464** | -124 | -1.0% | | **12552** | -0.3% | |
 
 ## Open items
 
@@ -53,8 +53,8 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 5. Hole 14 (White): tee box tee14_white assigned by the developer (tagged hole=14, tee_set=White in edited/course.geojson).
 6. Hole 15 (Gold): no mapped tee box within 8% of the card; the tee is the start point of the OSM hole line (147 yd). The Gold tee box is not in OSM - trace it to confirm.
 7. Hole 15 (Gold): measured 147 yd vs card 142 (+3.3%) even with the virtual tee at the best spot in its box; accepted for play.
-8. Hole 18 (White): no mapped tee box within 8% of the card; the tee is the start point of the OSM hole line (177 yd). The White tee box is not in OSM - trace it to confirm.
-9. Hole 18 (White): measured 177 yd vs card 145 (+22.0%) - FAIL, needs a decision.
+8. Hole 18 (Gold): tee box tee_w1041819911_back assigned by the developer (tagged hole=18, tee_set=Gold in edited/course.geojson).
+9. Hole 18 (White): tee box tee_w1041819911_front assigned by the developer (tagged hole=18, tee_set=White in edited/course.geojson).
 
 ## Playability adjustments
 
@@ -68,16 +68,17 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 - Hole 9 (White): measured 490 yd from the tee-box centre vs 471 on the card (+4.1%); moved the virtual tee along the middle of the real tee polygon w1041579774 (on its centre line, at least 2.5 m from its back and front) -> 482.7 yd (real 490.2 yd).
 - Hole 11 (Gold): measured 373 yd from the tee-box centre vs 390 on the card (-4.3%); moved the virtual tee along the middle of the real tee polygon w1041760189 (on its centre line, at least 2.5 m from its back and front) -> 380.3 yd (real 373.2 yd).
 - Hole 15 (White): measured 100 yd from the tee-box centre vs 120 on the card (-16.6%); moved the virtual tee along the middle of the real tee polygon w1041814070 (on its centre line, at least 2.5 m from its back and front) -> 117.0 yd (real 100.1 yd).
+- Hole 16 (Gold): tee shot: a perfect drive at the middle of the fairway clipped a tree near the tee; moved 1.5 m along the middle of the real tee polygon w1041957622 to the nearest clear spot -> 387.4 yd (real 388.4 yd).
 - Hole 17 (Gold): measured 355 yd from the tee-box centre vs 372 on the card (-4.7%); moved the virtual tee along the middle of the real tee polygon w1041819905 (on its centre line, at least 2.5 m from its back and front) -> 362.9 yd (real 354.6 yd).
-- Hole 18 (Gold): measured 179 yd from the tee-box centre vs 173 on the card (+3.4%); moved the virtual tee along the middle of the real tee polygon w1041819911 (on its centre line, at least 2.5 m from its back and front) -> 177.3 yd (real 178.8 yd).
+- Hole 18 (Gold): measured 179 yd from the tee-box centre vs 173 on the card (+3.4%); moved the virtual tee along the middle of the real tee polygon tee_w1041819911_back (on its centre line, at least 2.5 m from its back and front) -> 177.3 yd (real 178.9 yd).
 
-## Tree detection (OSM fallback (no lidar))
+## Tree detection (2020 USGS Santa Cruz County lidar)
 
-- 8705 trees detected in the world extent (75 inside the course), 4314 conifers / 4391 deciduous; median height 10.0 m, max 14.0 m.
-- Dropped: 0 tops on building footprints, 0 over the lake, 0 tiny crowns.
-- Dropped on playing surfaces (spec 5.4): 0 -> 
-- OSM natural=tree points matched by a detected tree within 4 m: 0 of 120.
-- LOWER FIDELITY: no canopy raster. Trees are OSM natural=tree points plus a seeded Poisson-disk fill of OSM woods every 6 m; heights 6-14 m and type (50% conifer) are drawn at random, not measured.
+- 23089 trees detected in the world extent (1330 inside the course), 4106 conifers / 18983 deciduous; median height 11.6 m, max 69.1 m.
+- Dropped: 537 tops on building footprints, 0 over the lake, 189 tiny crowns.
+- Dropped on playing surfaces (spec 5.4): 9 -> pool w1211505707 (11.9 m), pool w1211505707 (11.1 m), bunker w1018843124 (4.9 m), pool w1211505707 (10.6 m), bunker w1041957630 (11.0 m), bunker w1041760181 (12.9 m), bunker w1041819909 (12.0 m), bunker w1041814058 (43.9 m), bunker w1041814058 (16.8 m)
+- OSM natural=tree points matched by a detected tree within 4 m: 52 of 120.
+- Conifer vs deciduous is inferred from crown shape only (no leaf-off imagery); see build/trees_preview.png.
 
 # Green shaping checks
 
@@ -126,7 +127,7 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 | 15 | 3 | yes | yes (2 near) | - | yes | yes | 8 | 1 |
 | 16 | 4 | yes | yes (2 near) | yes | yes | yes | 7 | 1 |
 | 17 | 4 | yes | yes (2 near) | yes | yes | yes | 3 | 0 |
-| 18 | 3 | yes | yes (2 near) | yes | yes | yes | 4 | 1 |
+| 18 | 3 | yes | yes (3 near) | yes | yes | yes | 4 | 1 |
 
 ## Missing or suspect features
 
@@ -136,9 +137,7 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 
 ## Checks from earlier courses
 
-- the world is 1536 x 2304 m, over the 2,048 m limit (COURSE_BUILD 10: stop and ask)
-- fairway r14043909 at (1025, 1285) is more than 30 m from every hole line (a range or practice area mapped as fairway?)
-- fairway w1041848694 at (1068, 1146) is more than 30 m from every hole line (a range or practice area mapped as fairway?)
+- none
 
-Totals: 35 tees, 21 greens, 22 fairways, 91 bunkers, 2 water hazards, 18 pins, 27 cart paths, 120 OSM tree points.
+Totals: 36 tees, 21 greens, 20 fairways, 91 bunkers, 2 water hazards, 18 pins, 27 cart paths, 120 OSM tree points.
 

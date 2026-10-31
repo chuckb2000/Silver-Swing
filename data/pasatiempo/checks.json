@@ -1,7 +1,21 @@
 {
- "note": "per-course settings for course_play.test.ts (Pasatiempo, overnight build 2026-10-31)",
- "yardage": {"max": {"18 White": 0.23}, "why": "18 White: OSM maps no White box on the par-3 18th (card 145 yd); it plays from the line start, 177 yd. Accepted overnight (validation_report.md open items); the developer decides."},
- "wind_mph": [2, 10],
- "water": {"count": 2, "ids": ["channel_w42855499", "channel_w265532264"]},
- "tee_shot_clear": {"sets": ["Gold", "White"]}
+ "note": "per-course settings for game/tests/unit/course_play.test.ts (the every-course checks; docs/COURSE_BUILD.md 8.2). max_tree_h_m 70: 35 lidar crowns of 60-69 m (2020 lidar): groves of tall conifers and eucalyptus in the barrancas and along the west edge, dense canopy on the 2022 NAIP photo, not wires or roofs (looked at 2026-10-31)",
+ "wind_mph": [
+  2,
+  10
+ ],
+ "water": {
+  "count": 2,
+  "ids": [
+   "channel_w42855499",
+   "channel_w265532264"
+  ]
+ },
+ "tee_shot_clear": {
+  "sets": [
+   "Gold",
+   "White"
+  ]
+ },
+ "max_tree_h_m": 70
 }

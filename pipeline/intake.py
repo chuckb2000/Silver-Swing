@@ -219,6 +219,9 @@ def cmd_laz(name: str, args: list[str]):
             hdr.scales, hdr.offsets = h0.scales, h0.offsets
             for v in h0.vlrs:
                 hdr.vlrs.append(v)
+            for v in (h0.evlrs or []):  # LAS 1.4 tiles that keep their CRS in an EVLR (USGS CA 2020: Pasatiempo)
+                if isinstance(v, laspy.vlrs.known.WktCoordinateSystemVlr):
+                    hdr.vlrs.append(v)
             hdr.creation_date = h0.creation_date   # the source's date, not today's (the clip's hash stays put)
             hdr.global_encoding = h0.global_encoding
             crs = h0.parse_crs()

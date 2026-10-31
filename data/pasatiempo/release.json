@@ -17,6 +17,86 @@
    "outputs": {
     "raw/USGS_1M_pasatiempo_2020.tif": "5d70b10da2866ff186d1603a5c8f4e010981c3fc073243c4bde1817c883793e0"
    }
+  },
+  {
+   "asset": "USGS_LPC_CA_SantaCruzCounty_2020_A20_112822.laz",
+   "sha256": "ccf8bd576c3e7da655667fffc3607d9ce58d60aca7a73fe29c9948baac2bf784",
+   "run": "python3 pipeline/intake.py laz pasatiempo {file} --out raw/laz/pasatiempo_112822.laz",
+   "outputs": {
+    "raw/laz/pasatiempo_112822.laz": "89abcf09879a11430cced58bb988d4c00c51c83808b406f349a6d9b071647648"
+   }
+  },
+  {
+   "asset": "USGS_LPC_CA_SantaCruzCounty_2020_A20_112825.laz",
+   "sha256": "6d59788b95b8aa12f9d61594d453f9790c5a29de13d11597df11446d29d81da1",
+   "run": "python3 pipeline/intake.py laz pasatiempo {file} --out raw/laz/pasatiempo_112825.laz",
+   "outputs": {
+    "raw/laz/pasatiempo_112825.laz": "e164018bdd15ec37a913fc94abb45be8722fb058f2c16120f28340f7919733ff"
+   }
+  },
+  {
+   "asset": "USGS_LPC_CA_SantaCruzCounty_2020_A20_112827.laz",
+   "sha256": "2dcccc430467abebc4e137661a89649635d511286719c3dfd874d0ead92a79ab",
+   "run": "python3 pipeline/intake.py laz pasatiempo {file} --out raw/laz/pasatiempo_112827.laz",
+   "outputs": {
+    "raw/laz/pasatiempo_112827.laz": "8661badf8dc06c3812af5fbb8ab4cd7850249f8f80b27d29764534f7347c8fd9"
+   }
+  },
+  {
+   "asset": "USGS_LPC_CA_SantaCruzCounty_2020_A20_112830.laz",
+   "sha256": "3dbad0d82a26624902236abbee67db895f195513d9fc0350e664f1853b72512f",
+   "run": "python3 pipeline/intake.py laz pasatiempo {file} --out raw/laz/pasatiempo_112830.laz",
+   "outputs": {
+    "raw/laz/pasatiempo_112830.laz": "b4401d2da03c71c22e2531430bc7336f476f29307e8b4a5a41134f38ec1b8c78"
+   }
+  },
+  {
+   "asset": "USGS_LPC_CA_SantaCruzCounty_2020_A20_115822.laz",
+   "sha256": "d6be2e85a9fc91a5c1ce8ac72a53344295e327c3013c4363881ea3c6e898b9e3",
+   "run": "python3 pipeline/intake.py laz pasatiempo {file} --out raw/laz/pasatiempo_115822.laz",
+   "outputs": {
+    "raw/laz/pasatiempo_115822.laz": "e2acec29dea2f9a1f8207b7afc0ec3caaa2940035fd9c92393b68407877ada91"
+   }
+  },
+  {
+   "asset": "USGS_LPC_CA_SantaCruzCounty_2020_A20_115825.laz",
+   "sha256": "5454b89ac35f6e020fac74f5ba0808773b9419e76b7d248f396799da9a7e62c3",
+   "run": "python3 pipeline/intake.py laz pasatiempo {file} --out raw/laz/pasatiempo_115825.laz",
+   "outputs": {
+    "raw/laz/pasatiempo_115825.laz": "1b5588fba2d6f0fdf844438484b791d58329e02e471346b0d8b277947cb4cd2d"
+   }
+  },
+  {
+   "asset": "USGS_LPC_CA_SantaCruzCounty_2020_A20_115827.laz",
+   "sha256": "ef3ef1c413947176d35b922fe7ea691e021e9cc872c04a5c71cf374ff21b1c7c",
+   "run": "python3 pipeline/intake.py laz pasatiempo {file} --out raw/laz/pasatiempo_115827.laz",
+   "outputs": {
+    "raw/laz/pasatiempo_115827.laz": "e98a7c35b8344bad42dd7edc1d65b2994bc6df893652a00bc1ee65dc2a083ae8"
+   }
+  },
+  {
+   "asset": "USGS_LPC_CA_SantaCruzCounty_2020_A20_115830.laz",
+   "sha256": "0010a2dbbb3f834abbaf27827237135630ccbc60df50546960eaddef5e7de252",
+   "run": "python3 pipeline/intake.py laz pasatiempo {file} --out raw/laz/pasatiempo_115830.laz",
+   "outputs": {
+    "raw/laz/pasatiempo_115830.laz": "07db2214763143299a43a9fbfd03af4b1ed33d0ce2a226b090e1090f7c41321e"
+   }
+  },
+  {
+   "asset": "USGS_LPC_CA_SantaCruzCounty_2020_A20_117822.laz",
+   "sha256": "4999ce207aa0c3150a39009c1711ac2297513fa6cbc4063687366921c171e5f3",
+   "run": "python3 pipeline/intake.py laz pasatiempo {file} --out raw/laz/pasatiempo_117822.laz",
+   "outputs": {
+    "raw/laz/pasatiempo_117822.laz": "7aa17c2d6a1a79b30bdb2f22209de2409b318a7532ef76ae8bd194635a5b0363"
+   }
+  },
+  {
+   "asset": "USGS_LPC_CA_SantaCruzCounty_2020_A20_117825.laz",
+   "sha256": "e8838451720be4657ec20380588f9239f86729fbc8535a05f8bb32235ecdc576",
+   "run": "python3 pipeline/intake.py laz pasatiempo {file} --out raw/laz/pasatiempo_117825.laz",
+   "outputs": {
+    "raw/laz/pasatiempo_117825.laz": "32592c99ff11c01d6fdd8dea779841ef1bb6426439c777bf4e0e1eed789ab0f0"
+   }
   }
  ]
 }

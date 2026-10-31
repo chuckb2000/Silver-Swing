@@ -15,12 +15,24 @@
     "units": "m",
     "source": "USGS 3DEP 1 m DEM, project CA_SantaCruzCounty_2020_A20 (tile USGS_1M_10_x58y410, published 2021-06-10), NAD83 / UTM 10N, NAVD88 metres; fetched by the GitHub Actions workflow 2026-10-31 and clipped to the world + 100 m by intake.py raster"
   },
+  "laz": {
+    "paths": [
+      "raw/laz/*.laz"
+    ],
+    "classes": [
+      1
+    ],
+    "units": "ft",
+    "source": "2020 USGS Lidar: CA Santa Cruz County (project CA_SantaCruzCounty_2020_A20), 12 tiles 2,500 ft square from rockyweb.usgs.gov, fetched by the GitHub Actions workflow 2026-10-31 (release data-pasatiempo), each clipped to the world + 100 m by intake.py laz; NAD83(2011) / California zone 3 (US ft), NAVD88 (Geoid12B) US ft; flown 2-14 April 2020 (GPS times; header date 2020-07-21); class 1 (unclassified: vegetation and structures; the project has no vegetation classes)",
+    "label": "2020 USGS Santa Cruz County lidar"
+  },
   "world": {
     "x0": 585737,
     "y0": 4094438,
     "width": 1536,
     "height": 2304,
-    "note": "OSM course boundary (relation 13921737, 1,051 x 2,056 m in EPSG:32610) + 120 m of scenery, rounded out to whole 256 m chunks and centred. 2,304 m north-south is over the 2,048 m guideline (COURSE_BUILD.md 6.1): the boundary alone is 2,056 m tall. Same height as ogc and tpc_boston (strawberry_farms is 2,816), which load and play; developer's call pending (validation_report open items)."
+    "note": "OSM course boundary (relation 13921737, 1,051 x 2,056 m in EPSG:32610) + 120 m of scenery, rounded out to whole 256 m chunks and centred. 2,304 m north-south is over the 2,048 m guideline (COURSE_BUILD.md 6.1): the boundary alone is 2,056 m tall. Same height as ogc and tpc_boston (strawberry_farms is 2,816), which load and play; developer's call pending (validation_report open items).",
+    "over_limit_approved": "course chat 2026-10-31, under the developer's rule for this build (make the call, log it); pending the developer (validation_report.md open items)"
   },
   "tee_sets": [
     {
@@ -38,7 +50,7 @@
       "total_yd": 6093
     }
   ],
-  "default_tee": "White",
+  "default_tee": "Gold",
   "scorecard_source": "The club's printed Gentlemen's Card (Golf ScoreCards Inc., printed 4/2026; images scorecard_1/4__large.jpg from pasatiempo.com, fetched by the GitHub Actions workflow 2026-10-31, release data-pasatiempo): Gold, Gold/White, White, White/Green and Green rows, men's par and handicap, ratings Gold 72.7/143, Gold/White 71.5/139, White 70.7/138, White/Green 69.5/135, Green 68.5/133; every row adds up to its printed totals. Team Match, Green/Hollins and Hollins (not on the gentlemen's card) are Stymie's rows (unverified, not built). The card's handicaps differ from Stymie/GolfPass on holes 6/7 and 12/13 (swapped), and its White/Green row on 1, 9 and 16: the card is used. Par 70 (35-35).",
   "penalty_default": "red",
   "driving_range_is_ob": true,
@@ -47,9 +59,16 @@
     "maxMph": 10
   },
   "attribution": [
-    "Map data \u00a9 OpenStreetMap contributors (ODbL)",
+    "Map data © OpenStreetMap contributors (ODbL)",
     "Elevation and trees: U.S. Geological Survey 3D Elevation Program (CA Santa Cruz County 2020 lidar)",
     "Imagery: USDA National Agriculture Imagery Program (NAIP)"
   ],
-  "notes": "Overnight build 2026-10-30/31 (developer asleep; calls logged in validation_report.md and docs/courses/pasatiempo.md). Tee sets: the back set (Gold) and the set just forward of it (White; the card has no Blue and Gold/White is a combo of the two); default White. Wind 2-10 mph: inland coastal hills ~4 km from Monterey Bay, as at Stanford."
+  "notes": "Overnight build 2026-10-30/31 (developer asleep; calls logged in validation_report.md and docs/courses/pasatiempo.md). Tee sets: the back set (Gold) and the set just forward of it (White; the card has no Blue and Gold/White is a combo of the two); default Gold, the longest set (main, developer 2026-10-31). Wind 2-10 mph: inland coastal hills ~4 km from Monterey Bay, as at Stanford.",
+  "remove_wires": {
+    "min_len_m": 40,
+    "max_width_m": 3.0,
+    "rise_m": 3.0,
+    "note": "power lines cross holes 6 and 17 (the club's local rule; OSM power=line ways in the release's power export); s05 removes wires from the canopy model before finding trees"
+  },
+  "trees_off_fairways_m": 2
 }
