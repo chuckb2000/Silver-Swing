@@ -1,0 +1,31 @@
+{
+ "id": "meadow_club",
+ "course": "Meadow Club",
+ "place": "Fairfax, Marin County, California",
+ "facts": [
+  {"fact": "Alister MacKenzie's first American design, opened 1927, built with his West Coast associate Robert Hunter, in a valley of Mount Tamalpais above Fairfax.", "source": "https://thefriedegg.com/course-profile-meadow-club/"},
+  {"fact": "The bunker shapes differ from MacKenzie's other Northern California courses: the team took them from the oak trees on the surrounding hillsides, where other MacKenzie work took cues from clouds (Geoff Shackelford, quoted by The Fried Egg).", "source": "https://thefriedegg.com/course-profile-meadow-club/"},
+  {"fact": "Valley oaks dot the hillsides round the course.", "source": "https://thefriedegg.com/course-profile-meadow-club/"},
+  {"fact": "The leaf is a generic valley-oak leaf drawn as a bunker; no particular bunker on the course is shaped like it (interpretation).", "source": "course chat 2026-10-30"}
+ ],
+ "current": {"subject": "none: a new course (course chat 2026-10-30)", "keep": "", "weaknesses": ""},
+ "concepts": [
+  {
+   "n": 1,
+   "name": "The Oak-Leaf Bunker",
+   "rationale": "The course's own design story in one picture: a bunker in the shape of the hillside oaks it was modelled on, cut into foothill turf, with a ball beside it.",
+   "references": ["https://thefriedegg.com/course-profile-meadow-club/"],
+   "symbolism": "Sand for MacKenzie's bunkering, the lobed leaf for the valley oaks of the Marin foothills.",
+   "interpretation": "The exact leaf shape and the round turf patch are drawing choices.",
+   "palette": [
+    {"hex": "#4c7b2c", "name": "turf"}, {"hex": "#6c9b3c", "name": "lit turf"},
+    {"hex": "#f1e4bf", "name": "lit sand"}, {"hex": "#d3bd86", "name": "shaded sand"},
+    {"hex": "#a88d55", "name": "raked rib"}, {"hex": "#7a5a2e", "name": "leaf stalk"},
+    {"hex": "#ffffff", "name": "ball"}, {"hex": "#2f5420", "name": "ball shadow"}
+   ],
+   "strengths": "Specific to Meadow Club's history; reads as a leaf and as sand at 32 px.",
+   "tradeoffs": "The bunker-as-leaf idea needs the story to be fully understood."
+  }
+ ],
+ "recommendation": "Concept 1 (the only one drawn)."
+}
