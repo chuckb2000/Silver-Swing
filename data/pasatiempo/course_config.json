@@ -79,5 +79,17 @@
     "v_max": 120,
     "min_share": 0.1,
     "note": "the 2020 lidar (class 1: trees and roofs) against the May 2022 NAIP: drops 1,517 crowns (about 70 inside the boundary); looked at 2026-10-31 over the photo: most are roofs of unmapped houses and crowns over open grass, a few at canopy edges"
-  }
+  },
+  "drop_trees": [
+    {
+      "x": 1066.5,
+      "y": 276.5,
+      "reason": "course chat 2026-10-31: a 13 m 'tree' (crown 2.4 m) in the fairway shared by 4 and 5; the May 2022 NAIP shows plain mown grass there, no crown or shadow (a pole or a stray return in the class-1 lidar)"
+    },
+    {
+      "x": 499.5,
+      "y": 1507.5,
+      "reason": "course chat 2026-10-31: a 9 m 'tree' over the front-left edge of the 10th green; the May 2022 NAIP shows the cart path and dry grass there, no crown (the scouting also has a tree by the 10th green removed in 2023-24)"
+    }
+  ]
 }
