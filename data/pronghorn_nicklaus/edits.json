@@ -1,0 +1,97 @@
+{
+ "note": "Edits to the OSM layout for Pronghorn Nicklaus; built into edited/course.geojson by pipeline/merge_edits.py.",
+ "add": [
+  {
+   "from": "proposed/boundary.geojson",
+   "ids": [
+    "pronghorn_boundary"
+   ],
+   "reason": "OSM has no leisure=golf_course at Pronghorn: the out-of-bounds line is the Nicklaus play grown (make_boundary.py; proposal)"
+  },
+  {
+   "from": "proposed/cartpath_loop.geojson",
+   "ids": [
+    "w971035287_line"
+   ],
+   "reason": "OSM w971035287 is a closed cart path loop that s01 reads as a 46 ha cart-path area; the same way as a line"
+  },
+  {
+   "from": "proposed/clubhouse.geojson",
+   "ids": [
+    "w810650025_building"
+   ],
+   "reason": "the clubhouse (golf=clubhouse + building=yes) is read by s01 as golf_other; the same outline as a building"
+  },
+  {
+   "from": "proposed/traced_tees.geojson",
+   "ids": [
+    "trace_tee_18"
+   ],
+   "reason": "hole 18's back tee pad (where OSM's 18 line starts) is not mapped: traced from the OSIP 2024 photo (trace_tees.py); Blue and Black play from it (471 yd vs card 482/470)"
+  }
+ ],
+ "tags": [
+  {
+   "osm": "w814291795",
+   "set": {
+    "hole": "5",
+    "tee_set": "Blue;Black"
+   },
+   "reason": "the round pad 67 m behind OSM's 5 line start, south of the 4th green: 461 yd vs card 467/460 (OSM's line starts at the Copper box, 386 yd)"
+  },
+  {
+   "osm": "w814291790",
+   "set": {
+    "hole": "6",
+    "tee_set": "Blue"
+   },
+   "reason": "the pad 63 m behind OSM's 6 line start, by the maintenance yard: 506 yd vs card 511 (the line starts at the Black box, 446 yd vs 457)"
+  },
+  {
+   "osm": "w816336122",
+   "set": {
+    "hole": "12",
+    "tee_set": "Blue;Black"
+   },
+   "reason": "the pad 61 m behind OSM's 12 line start: 333 yd vs card 342/332 (the line starts at the Copper/Gold box, 269 yd)"
+  },
+  {
+   "osm": "w816312149",
+   "set": {
+    "hole": "13",
+    "tee_set": "Blue;Black"
+   },
+   "reason": "the pad 51 m behind OSM's 13 line start: 379 yd vs card 378/366 (the line starts at the Copper box, 327 yd)"
+  },
+  {
+   "osm": "w816551378",
+   "set": {
+    "hole": "16",
+    "tee_set": "Blue;Black"
+   },
+   "reason": "the westernmost of 16's five pads, 56 m behind the line start: 530 yd vs card 571/542 (no pad further back on the photo; Blue stays a flag)"
+  }
+ ],
+ "drop": [
+  {
+   "osm": "w971035287",
+   "reason": "replaced by its line copy (add above)"
+  },
+  {
+   "osm": "w812712530",
+   "reason": "a Fazio course hole line (no ref/par), outside the Nicklaus course"
+  },
+  {
+   "osm": "w816572525",
+   "reason": "a Fazio course hole line (ref 17, no par), outside the Nicklaus course"
+  },
+  {
+   "osm": "w816572539",
+   "reason": "a Fazio course hole line (no ref/par), outside the Nicklaus course"
+  },
+  {
+   "osm": "w810650025",
+   "reason": "replaced by its building copy"
+  }
+ ]
+}
