@@ -10,7 +10,12 @@ pin, 19 tee boxes, fairways, 39 bunkers and the pond. Elevation from the USGS 3D
 trees from the 2017 Cook County lidar (four tiles), all fetched by the GitHub Actions workflow.
 Two tee sets built, Blue (the back set, default) and White; every hole passes except White 1
 (-4.0 %) and White 7 (+5.4 %), both flags. New theme `marovitz` and a clock-tower logo.
-`course_play.test.ts -t marovitz`: 12 passed.
+`course_play.test.ts -t marovitz`: 12 passed. After the pin, a fresh rebuild (`ARGS=--fresh`, all
+15 steps) left `git status` clean. In-game look (Blue, robot round on the built game, all four
+lidar tiles): every hole's tee shot and first putt seen, no page errors; trees, pond, lakefront,
+bunkers and greens read correctly. `npm test` (after the pin): 1384 passed, 2 failed, both the
+rotation checks `make land` clears (`player.test.ts` "marovitz is in the daily rotation",
+`tour.test.ts` "a hole drawn sits out the next rounds of its par"). `npm run e2e`: 17 passed.
 
 ## Facts
 
