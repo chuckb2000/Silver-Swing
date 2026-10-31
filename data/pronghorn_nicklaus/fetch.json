@@ -1,0 +1,252 @@
+{
+ "items": [
+  {
+   "name": "pronghorn_nicklaus_overpass.geojson",
+   "osm_box": [
+    44.16,
+    -121.215,
+    44.215,
+    -121.13
+   ]
+  },
+  {
+   "name": "pronghorn_nicklaus_dem1m",
+   "tnm": {
+    "dataset": "dem1m",
+    "bbox": [
+     -121.215,
+     44.16,
+     -121.13,
+     44.215
+    ],
+    "only": "x64y490"
+   }
+  },
+  {
+   "name": "dogami_lidar_services.json",
+   "url": "https://gis.dogami.oregon.gov/arcgis/rest/services/lidar?f=json"
+  },
+  {
+   "name": "dogami_identify.json",
+   "url": "https://gis.dogami.oregon.gov/arcgis/rest/services/lidar/DIGITAL_TERRAIN_MODEL_MOSAIC/ImageServer/identify?geometry=%7B%22x%22%3A646000%2C%22y%22%3A4894400%2C%22spatialReference%22%3A%7B%22wkid%22%3A32610%7D%7D&geometryType=esriGeometryPoint&returnCatalogItems=true&f=json"
+  },
+  {
+   "name": "dogami_dtm_ft.tif",
+   "url": "https://gis.dogami.oregon.gov/arcgis/rest/services/lidar/DIGITAL_TERRAIN_MODEL_MOSAIC/ImageServer/exportImage?bbox=644600,4893000,647400,4895800&bboxSR=32610&imageSR=32610&size=2800,2800&format=tiff&pixelType=F32&noData=-9999&interpolation=RSP_BilinearInterpolation&f=image"
+  },
+  {
+   "name": "dogami_chm_ft.tif",
+   "url": "https://gis.dogami.oregon.gov/arcgis/rest/services/lidar/CANOPY_HEIGHT_MODEL_MOSAIC/ImageServer/exportImage?bbox=644600,4893000,647400,4895800&bboxSR=32610&imageSR=32610&size=2800,2800&format=tiff&pixelType=F32&noData=-9999&interpolation=RSP_BilinearInterpolation&f=image"
+  },
+  {
+   "name": "osip2024_nw.jpg",
+   "url": "https://imagery.oregonexplorer.info/arcgis/rest/services/OSIP_2024/OSIP_2024_WM/ImageServer/exportImage?bbox=644600,4894400,646000,4895800&bboxSR=32610&imageSR=32610&size=2800,2800&format=jpg&f=image"
+  },
+  {
+   "name": "osip2024_ne.jpg",
+   "url": "https://imagery.oregonexplorer.info/arcgis/rest/services/OSIP_2024/OSIP_2024_WM/ImageServer/exportImage?bbox=646000,4894400,647400,4895800&bboxSR=32610&imageSR=32610&size=2800,2800&format=jpg&f=image"
+  },
+  {
+   "name": "osip2024_sw.jpg",
+   "url": "https://imagery.oregonexplorer.info/arcgis/rest/services/OSIP_2024/OSIP_2024_WM/ImageServer/exportImage?bbox=644600,4893000,646000,4894400&bboxSR=32610&imageSR=32610&size=2800,2800&format=jpg&f=image"
+  },
+  {
+   "name": "osip2024_se.jpg",
+   "url": "https://imagery.oregonexplorer.info/arcgis/rest/services/OSIP_2024/OSIP_2024_WM/ImageServer/exportImage?bbox=646000,4893000,647400,4894400&bboxSR=32610&imageSR=32610&size=2800,2800&format=jpg&f=image"
+  },
+  {
+   "name": "naip_box.jpg",
+   "url": "https://imagery.nationalmap.gov/arcgis/rest/services/USGSNAIPImagery/ImageServer/exportImage?bbox=644600,4893000,647400,4895800&bboxSR=32610&imageSR=32610&size=4000,4000&format=jpg&f=image"
+  },
+  {
+   "name": "deschutes_services.json",
+   "url": "https://maps.deschutes.org/server/rest/services?f=json"
+  },
+  {
+   "name": "deschutes_services_arcgis.json",
+   "url": "https://maps.deschutes.org/arcgis/rest/services?f=json"
+  },
+  {
+   "name": "dogami_dsm_ft.tif",
+   "url": "https://gis.dogami.oregon.gov/arcgis/rest/services/lidar/DIGITAL_SURFACE_MODEL_MOSAIC/ImageServer/exportImage?bbox=644600,4893000,647400,4895800&bboxSR=32610&imageSR=32610&size=2800,2800&format=tiff&pixelType=F32&noData=-9999&interpolation=RSP_BilinearInterpolation&f=image"
+  },
+  {
+   "name": "dogami_dsm_identify.json",
+   "url": "https://gis.dogami.oregon.gov/arcgis/rest/services/lidar/DIGITAL_SURFACE_MODEL_MOSAIC/ImageServer/identify?geometry=%7B%22x%22%3A646000%2C%22y%22%3A4894400%2C%22spatialReference%22%3A%7B%22wkid%22%3A32610%7D%7D&geometryType=esriGeometryPoint&returnCatalogItems=true&f=json"
+  },
+  {
+   "name": "dial2_taxlots_service.json",
+   "url": "https://maps.deschutes.org/arcgis/rest/services/Dial2_Taxlots/MapServer?f=json"
+  },
+  {
+   "name": "dogami_hh2011_ft.tif",
+   "url": "https://gis.dogami.oregon.gov/arcgis/rest/services/lidar/DIGITAL_SURFACE_MODEL_MOSAIC/ImageServer/exportImage?bbox=644600,4893000,647400,4895800&bboxSR=32610&imageSR=32610&size=2800,2800&format=tiff&pixelType=F32&noData=-9999&interpolation=RSP_BilinearInterpolation&mosaicRule=%7B%22mosaicMethod%22%3A%22esriMosaicLockRaster%22%2C%22lockRasterIds%22%3A%5B489%5D%7D&f=image"
+  },
+  {
+   "name": "dogami_be2011_ft.tif",
+   "url": "https://gis.dogami.oregon.gov/arcgis/rest/services/lidar/DIGITAL_TERRAIN_MODEL_MOSAIC/ImageServer/exportImage?bbox=644600,4893000,647400,4895800&bboxSR=32610&imageSR=32610&size=2800,2800&format=tiff&pixelType=F32&noData=-9999&interpolation=RSP_BilinearInterpolation&mosaicRule=%7B%22mosaicMethod%22%3A%22esriMosaicLockRaster%22%2C%22lockRasterIds%22%3A%5B111%5D%7D&f=image"
+  },
+  {
+   "name": "dogami_be2023_odf_ft.tif",
+   "url": "https://gis.dogami.oregon.gov/arcgis/rest/services/lidar/DIGITAL_TERRAIN_MODEL_MOSAIC/ImageServer/exportImage?bbox=644600,4893000,647400,4895800&bboxSR=32610&imageSR=32610&size=2800,2800&format=tiff&pixelType=F32&noData=-9999&interpolation=RSP_BilinearInterpolation&mosaicRule=%7B%22mosaicMethod%22%3A%22esriMosaicLockRaster%22%2C%22lockRasterIds%22%3A%5B207%5D%7D&f=image"
+  },
+  {
+   "name": "dogami_tiles_service.json",
+   "url": "https://gis.dogami.oregon.gov/arcgis/rest/services/lidar/Downloadable_Tiles/MapServer?f=json"
+  },
+  {
+   "name": "dial2_taxlots.json",
+   "url": "https://maps.deschutes.org/arcgis/rest/services/Dial2_Taxlots/MapServer/0/query?geometry=-121.19%2C44.175%2C-121.155%2C44.200&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=%2A&returnGeometry=true&outSR=4326&f=json&where=1%3D1"
+  },
+  {
+   "name": "dogami_tiles_query.json",
+   "url": "https://gis.dogami.oregon.gov/arcgis/rest/services/lidar/Downloadable_Tiles/MapServer/0/query?geometry=645173%2C4893509%2C646965%2C4895301&geometryType=esriGeometryEnvelope&inSR=32610&spatialRel=esriSpatialRelIntersects&outFields=%2A&returnGeometry=false&f=json&where=1%3D1"
+  },
+  {
+   "name": "pronghorn_nicklaus_lpc",
+   "tnm": {
+    "dataset": "lpc",
+    "bbox": [
+     -121.19,
+     44.175,
+     -121.155,
+     44.2
+    ],
+    "list": true
+   }
+  },
+  {
+   "name": "dogami_chm_identify.json",
+   "url": "https://gis.dogami.oregon.gov/arcgis/rest/services/lidar/CANOPY_HEIGHT_MODEL_MOSAIC/ImageServer/identify?geometry=%7B%22x%22%3A646000%2C%22y%22%3A4894400%2C%22spatialReference%22%3A%7B%22wkid%22%3A32610%7D%7D&geometryType=esriGeometryPoint&returnCatalogItems=true&f=json"
+  },
+  {
+   "name": "dogami_chm_small_ft.tif",
+   "url": "https://gis.dogami.oregon.gov/arcgis/rest/services/lidar/CANOPY_HEIGHT_MODEL_MOSAIC/ImageServer/exportImage?bbox=645173,4893509,646965,4895301&bboxSR=32610&imageSR=32610&size=1792,1792&format=tiff&pixelType=F32&noData=-9999&f=image"
+  },
+  {
+   "name": "dogami_chm_catalog.json",
+   "url": "https://gis.dogami.oregon.gov/arcgis/rest/services/lidar/CANOPY_HEIGHT_MODEL_MOSAIC/ImageServer/query?where=1%3D1&geometry=645173%2C4893509%2C646965%2C4895301&geometryType=esriGeometryEnvelope&inSR=32610&spatialRel=esriSpatialRelIntersects&outFields=OBJECTID%2CName%2CZOrder%2CCategory&returnGeometry=false&f=json"
+  },
+  {
+   "name": "dogami_dsm_catalog.json",
+   "url": "https://gis.dogami.oregon.gov/arcgis/rest/services/lidar/DIGITAL_SURFACE_MODEL_MOSAIC/ImageServer/query?where=1%3D1&geometry=645173%2C4893509%2C646965%2C4895301&geometryType=esriGeometryEnvelope&inSR=32610&spatialRel=esriSpatialRelIntersects&outFields=OBJECTID%2CName%2CZOrder%2CCategory&returnGeometry=false&f=json"
+  },
+  {
+   "name": "dogami_chm2011_lock_ft.tif",
+   "url": "https://gis.dogami.oregon.gov/arcgis/rest/services/lidar/CANOPY_HEIGHT_MODEL_MOSAIC/ImageServer/exportImage?bbox=645173%2C4893509%2C646965%2C4895301&bboxSR=32610&imageSR=32610&size=1792%2C1792&format=tiff&pixelType=F32&noData=-9999&f=image&mosaicRule=%7B%22mosaicMethod%22%3A+%22esriMosaicLockRaster%22%2C+%22lockRasterIds%22%3A+%5B396%5D%7D"
+  },
+  {
+   "name": "dogami_chm2011_where_ft.tif",
+   "url": "https://gis.dogami.oregon.gov/arcgis/rest/services/lidar/CANOPY_HEIGHT_MODEL_MOSAIC/ImageServer/exportImage?bbox=645173%2C4893509%2C646965%2C4895301&bboxSR=32610&imageSR=32610&size=1792%2C1792&format=tiff&pixelType=F32&noData=-9999&f=image&mosaicRule=%7B%22mosaicMethod%22%3A+%22esriMosaicNone%22%2C+%22where%22%3A+%22Name+LIKE+%27OLC_DESCHUTES_2011%25%27%22%7D"
+  },
+  {
+   "name": "dogami_hh2011_where_ft.tif",
+   "url": "https://gis.dogami.oregon.gov/arcgis/rest/services/lidar/DIGITAL_SURFACE_MODEL_MOSAIC/ImageServer/exportImage?bbox=645173%2C4893509%2C646965%2C4895301&bboxSR=32610&imageSR=32610&size=1792%2C1792&format=tiff&pixelType=F32&noData=-9999&f=image&mosaicRule=%7B%22mosaicMethod%22%3A+%22esriMosaicNone%22%2C+%22where%22%3A+%22Name+LIKE+%27OLC_DESCHUTES_2011%25%27%22%7D"
+  },
+  {
+   "name": "pronghorn_nicklaus_lpc2",
+   "tnm": {
+    "dataset": "lpc",
+    "bbox": [
+     -121.2,
+     44.17,
+     -121.15,
+     44.21
+    ],
+    "list": true
+   }
+  },
+  {
+   "name": "dogami_chm2002_lock_ft.tif",
+   "url": "https://gis.dogami.oregon.gov/arcgis/rest/services/lidar/CANOPY_HEIGHT_MODEL_MOSAIC/ImageServer/exportImage?bbox=645173%2C4893509%2C646965%2C4895301&bboxSR=32610&imageSR=32610&size=1792%2C1792&format=tiff&pixelType=F32&noData=-9999&f=image&mosaicRule=%7B%22mosaicMethod%22%3A+%22esriMosaicLockRaster%22%2C+%22lockRasterIds%22%3A+%5B379%5D%7D"
+  },
+  {
+   "name": "s3_lpc_or_projects.xml",
+   "url": "https://prd-tnm.s3.amazonaws.com/?list-type=2&delimiter=/&prefix=StagedProducts/Elevation/LPC/Projects/OR_"
+  },
+  {
+   "name": "s3_1m_or_southeast.xml",
+   "url": "https://prd-tnm.s3.amazonaws.com/?list-type=2&delimiter=/&prefix=StagedProducts/Elevation/1m/Projects/OR_SouthEast"
+  },
+  {
+   "name": "s3_lpc_se_d22.xml",
+   "url": "https://prd-tnm.s3.amazonaws.com/?list-type=2&delimiter=/&prefix=StagedProducts/Elevation/LPC/Projects/OR_SouthEast_D22/"
+  },
+  {
+   "name": "s3_lpc_se_d22_sub.xml",
+   "url": "https://prd-tnm.s3.amazonaws.com/?list-type=2&max-keys=50&prefix=StagedProducts/Elevation/LPC/Projects/OR_SouthEast_D22/"
+  },
+  {
+   "name": "se_d22_1_links.txt",
+   "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/LPC/Projects/OR_SouthEast_D22/OR_SouthEast_1_D22/0_file_download_links.txt"
+  },
+  {
+   "name": "se_d22_2_links.txt",
+   "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/LPC/Projects/OR_SouthEast_D22/OR_SouthEast_2_D22/0_file_download_links.txt"
+  },
+  {
+   "name": "se_d22_3_links.txt",
+   "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/LPC/Projects/OR_SouthEast_D22/OR_SouthEast_3_D22/0_file_download_links.txt"
+  },
+  {
+   "name": "se_d22_4_links.txt",
+   "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/LPC/Projects/OR_SouthEast_D22/OR_SouthEast_4_D22/0_file_download_links.txt"
+  },
+  {
+   "name": "se_d22_5_links.txt",
+   "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/LPC/Projects/OR_SouthEast_D22/OR_SouthEast_5_D22/0_file_download_links.txt"
+  },
+  {
+   "name": "se_d22_6_links.txt",
+   "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/LPC/Projects/OR_SouthEast_D22/OR_SouthEast_6_D22/0_file_download_links.txt"
+  },
+  {
+   "name": "se_d22_7_links.txt",
+   "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/LPC/Projects/OR_SouthEast_D22/OR_SouthEast_7_D22/0_file_download_links.txt"
+  },
+  {
+   "name": "se_d22_8_links.txt",
+   "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/LPC/Projects/OR_SouthEast_D22/OR_SouthEast_8_D22/0_file_download_links.txt"
+  },
+  {
+   "name": "se_d22_9_links.txt",
+   "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/LPC/Projects/OR_SouthEast_D22/OR_SouthEast_9_D22/0_file_download_links.txt"
+  },
+  {
+   "name": "se_d22_10_links.txt",
+   "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/LPC/Projects/OR_SouthEast_D22/OR_SouthEast_10_D22/0_file_download_links.txt"
+  },
+  {
+   "name": "se_d22_11_links.txt",
+   "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/LPC/Projects/OR_SouthEast_D22/OR_SouthEast_11_D22/0_file_download_links.txt"
+  },
+  {
+   "name": "se_d22_12_links.txt",
+   "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/LPC/Projects/OR_SouthEast_D22/OR_SouthEast_12_D22/0_file_download_links.txt"
+  },
+  {
+   "name": "se_d22_13_links.txt",
+   "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/LPC/Projects/OR_SouthEast_D22/OR_SouthEast_13_D22/0_file_download_links.txt"
+  },
+  {
+   "name": "se_d22_14_links.txt",
+   "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/LPC/Projects/OR_SouthEast_D22/OR_SouthEast_14_D22/0_file_download_links.txt"
+  },
+  {
+   "name": "s3_lpc_blmfires.xml",
+   "url": "https://prd-tnm.s3.amazonaws.com/?list-type=2&delimiter=/&prefix=StagedProducts/Elevation/LPC/Projects/OR_2023OLC_BLM_Fires_C25/"
+  },
+  {
+   "name": "blmfires_links.txt",
+   "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/LPC/Projects/OR_2023OLC_BLM_Fires_C25/0_file_download_links.txt"
+  },
+  {
+   "name": "OR_NorthEastGaps_D24_links.txt",
+   "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/LPC/Projects/OR_NorthEastGaps_D24/0_file_download_links.txt"
+  },
+  {
+   "name": "OR_Western_D23_links.txt",
+   "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/LPC/Projects/OR_Western_D23/0_file_download_links.txt"
+  }
+ ]
+}

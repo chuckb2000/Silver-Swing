@@ -230,7 +230,8 @@ describe('daily round (item 4)', () => {
     // RANDOM_DAILY_FROM join on their own day; the pool then is every course in by that day)
     for (const c of all.filter((c) => (c.holes === 9 || c.holes === 18) && DAILY_ROSTER[c.id])) {
       const from = DAILY_ROSTER[c.id] > RANDOM_DAILY_FROM ? DAILY_ROSTER[c.id] : RANDOM_DAILY_FROM;
-      const n = all.filter((o) => (o.holes === 9 || o.holes === 18) && DAILY_ROSTER[o.id] && DAILY_ROSTER[o.id] <= from).length;
+      // two rotations of the whole rotation as it stands (courses keep joining, so a rotation grows meanwhile)
+      const n = all.filter((o) => (o.holes === 9 || o.holes === 18) && DAILY_ROSTER[o.id]).length;
       const i0 = days.indexOf(from);
       expect(plans.slice(i0, i0 + 2 * n).map((p) => p.courseId), `${c.id} within two rotations of ${from}`).toContain(c.id);
     }

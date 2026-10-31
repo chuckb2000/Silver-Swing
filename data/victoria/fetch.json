@@ -1,0 +1,177 @@
+{
+ "items": [
+  {
+   "name": "victoria_overpass.geojson",
+   "osm_box": [
+    48.403,
+    -123.318,
+    48.432,
+    -123.283
+   ]
+  },
+  {
+   "name": "lidarbc_fs.json",
+   "url": "https://services6.arcgis.com/ubm4tcTYICKBpist/ArcGIS/rest/services/LiDARBC_Map_Base/FeatureServer?f=json"
+  },
+  {
+   "name": "lidarbc_l0.json",
+   "url": "https://services6.arcgis.com/ubm4tcTYICKBpist/ArcGIS/rest/services/LiDARBC_Map_Base/FeatureServer/0/query?geometry=-123.300,48.418&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=*&returnGeometry=false&f=json"
+  },
+  {
+   "name": "lidarbc_l1.json",
+   "url": "https://services6.arcgis.com/ubm4tcTYICKBpist/ArcGIS/rest/services/LiDARBC_Map_Base/FeatureServer/1/query?geometry=-123.300,48.418&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=*&returnGeometry=false&f=json"
+  },
+  {
+   "name": "lidarbc_l2.json",
+   "url": "https://services6.arcgis.com/ubm4tcTYICKBpist/ArcGIS/rest/services/LiDARBC_Map_Base/FeatureServer/2/query?geometry=-123.300,48.418&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=*&returnGeometry=false&f=json"
+  },
+  {
+   "name": "lidarbc_l3.json",
+   "url": "https://services6.arcgis.com/ubm4tcTYICKBpist/ArcGIS/rest/services/LiDARBC_Map_Base/FeatureServer/3/query?geometry=-123.300,48.418&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=*&returnGeometry=false&f=json"
+  },
+  {
+   "name": "lidarbc_l4.json",
+   "url": "https://services6.arcgis.com/ubm4tcTYICKBpist/ArcGIS/rest/services/LiDARBC_Map_Base/FeatureServer/4/query?geometry=-123.300,48.418&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=*&returnGeometry=false&f=json"
+  },
+  {
+   "name": "lidarbc_l5.json",
+   "url": "https://services6.arcgis.com/ubm4tcTYICKBpist/ArcGIS/rest/services/LiDARBC_Map_Base/FeatureServer/5/query?geometry=-123.300,48.418&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=*&returnGeometry=false&f=json"
+  },
+  {
+   "name": "hrdem_stac.json",
+   "url": "https://datacube.services.geo.ca/stac/api/search?bbox=-123.318,48.403,-123.283,48.432&limit=100"
+  },
+  {
+   "name": "stac_collections.json",
+   "url": "https://datacube.services.geo.ca/stac/api/collections"
+  },
+  {
+   "name": "crd_services.json",
+   "url": "https://mapservices.crd.bc.ca/arcgis/rest/services?f=json"
+  },
+  {
+   "name": "crd_imagery.json",
+   "url": "https://mapservices.crd.bc.ca/arcgis/rest/services/Imagery?f=json"
+  },
+  {
+   "name": "club_home.html",
+   "url": "https://www.victoriagolf.com/"
+  },
+  {
+   "name": "arcgis_ubm4_services.json",
+   "url": "https://services6.arcgis.com/ubm4tcTYICKBpist/ArcGIS/rest/services?f=json"
+  },
+  {
+   "name": "hrdem_lidar_stac.json",
+   "url": "https://datacube.services.geo.ca/stac/api/search?collections=hrdem-lidar&bbox=-123.318,48.403,-123.283,48.432&limit=100"
+  },
+  {
+   "name": "hrdem_mosaic_stac.json",
+   "url": "https://datacube.services.geo.ca/stac/api/search?collections=hrdem-mosaic-1m&bbox=-123.318,48.403,-123.283,48.432&limit=100"
+  },
+  {
+   "name": "club_golf.html",
+   "url": "https://www.victoriagolf.com/web/pages/golf"
+  },
+  {
+   "name": "club_history.html",
+   "url": "https://www.victoriagolf.com/web/pages/history"
+  },
+  {
+   "name": "club_club.html",
+   "url": "https://www.victoriagolf.com/web/pages/club"
+  },
+  {
+   "name": "club_sitemap.html",
+   "url": "https://www.victoriagolf.com/web/pages/sitemap"
+  },
+  {
+   "name": "club_policies.html",
+   "url": "https://www.victoriagolf.com/web/pages/golf-and-course-policies"
+  },
+  {
+   "name": "club_highres.pdf",
+   "url": "https://www.victoriagolf.com/documents/20124/322400/4898+Victoria+Golf+Club+-+High+Res.pdf/d5b2896f-7145-8f82-7b95-0de9bc1d8612?t=1725911863452"
+  },
+  {
+   "name": "crd_ortho2025.json",
+   "url": "https://mapservices.crd.bc.ca/arcgis/rest/services/OrthoImagery2025/MapServer?f=json"
+  },
+  {
+   "name": "crd_ortholatest.json",
+   "url": "https://mapservices.crd.bc.ca/arcgis/rest/services/OrthoImageryLatest/MapServer?f=json"
+  },
+  {
+   "name": "crd_contours.json",
+   "url": "https://mapservices.crd.bc.ca/arcgis/rest/services/CRDcontours/MapServer?f=json"
+  },
+  {
+   "name": "hrdem_dtm_1m.tif",
+   "url": "https://datacube.services.geo.ca/ows/elevation?SERVICE=WCS&VERSION=1.1.1&REQUEST=GetCoverage&FORMAT=image/geotiff&IDENTIFIER=dtm&BOUNDINGBOX=477300,5361700,478550,5363200,urn:ogc:def:crs:EPSG::32610&GRIDBASECRS=urn:ogc:def:crs:EPSG::32610&GRIDOFFSETS=1,-1&GRIDORIGIN=477300,5363200"
+  },
+  {
+   "name": "hrdem_dsm_1m.tif",
+   "url": "https://datacube.services.geo.ca/ows/elevation?SERVICE=WCS&VERSION=1.1.1&REQUEST=GetCoverage&FORMAT=image/geotiff&IDENTIFIER=dsm&BOUNDINGBOX=477300,5361700,478550,5363200,urn:ogc:def:crs:EPSG::32610&GRIDBASECRS=urn:ogc:def:crs:EPSG::32610&GRIDOFFSETS=1,-1&GRIDORIGIN=477300,5363200"
+  },
+  {
+   "name": "crd_ortho2025_05m.jpg",
+   "url": "https://mapservices.crd.bc.ca/arcgis/rest/services/OrthoImagery2025/MapServer/export?bbox=477300,5361700,478550,5363200&bboxSR=32610&imageSR=32610&size=2500,3000&format=jpg&transparent=false&dpi=96&f=image"
+  },
+  {
+   "name": "wcs_caps.xml",
+   "url": "https://datacube.services.geo.ca/ows/elevation?service=wcs&request=GetCapabilities"
+  },
+  {
+   "name": "victoria_coastline.geojson",
+   "overpass": "[out:json][timeout:300];(way[\"natural\"=\"coastline\"](48.390,-123.335,48.445,-123.265);way[\"place\"=\"islet\"](48.390,-123.335,48.445,-123.265);way[\"place\"=\"island\"](48.390,-123.335,48.445,-123.265););out geom;"
+  },
+  {
+   "name": "golfpass_26795_card.html",
+   "url": "https://www.golfpass.com/courses/26795-victoria-golf-club/scorecard-and-layout"
+  },
+  {
+   "name": "golfpass_26795.html",
+   "url": "https://www.golfpass.com/travel-advisor/courses/26795-victoria-golf-club"
+  },
+  {
+   "name": "bluegolf_card.html",
+   "url": "https://course.bluegolf.com/bluegolf/course/course/victoriagc/detailedscorecard.htm"
+  },
+  {
+   "name": "lidarbc_s3.json",
+   "url": "https://services6.arcgis.com/ubm4tcTYICKBpist/ArcGIS/rest/services/LiDAR_BC_S3_Public/FeatureServer?f=json"
+  },
+  {
+   "name": "lidarbc_s3_l0.json",
+   "url": "https://services6.arcgis.com/ubm4tcTYICKBpist/ArcGIS/rest/services/LiDAR_BC_S3_Public/FeatureServer/0/query?geometry=477300,5361700,478550,5363200&geometryType=esriGeometryEnvelope&inSR=32610&spatialRel=esriSpatialRelIntersects&outFields=*&returnGeometry=false&f=json"
+  },
+  {
+   "name": "lidarbc_s3_l1.json",
+   "url": "https://services6.arcgis.com/ubm4tcTYICKBpist/ArcGIS/rest/services/LiDAR_BC_S3_Public/FeatureServer/1/query?geometry=477300,5361700,478550,5363200&geometryType=esriGeometryEnvelope&inSR=32610&spatialRel=esriSpatialRelIntersects&outFields=*&returnGeometry=false&f=json"
+  },
+  {
+   "name": "lidarbc_s3_l2.json",
+   "url": "https://services6.arcgis.com/ubm4tcTYICKBpist/ArcGIS/rest/services/LiDAR_BC_S3_Public/FeatureServer/2/query?geometry=477300,5361700,478550,5363200&geometryType=esriGeometryEnvelope&inSR=32610&spatialRel=esriSpatialRelIntersects&outFields=*&returnGeometry=false&f=json"
+  },
+  {
+   "name": "lidarbc_s3_l3.json",
+   "url": "https://services6.arcgis.com/ubm4tcTYICKBpist/ArcGIS/rest/services/LiDAR_BC_S3_Public/FeatureServer/3/query?geometry=477300,5361700,478550,5363200&geometryType=esriGeometryEnvelope&inSR=32610&spatialRel=esriSpatialRelIntersects&outFields=*&returnGeometry=false&f=json"
+  },
+  {
+   "name": "lidarbc_s3_l4.json",
+   "url": "https://services6.arcgis.com/ubm4tcTYICKBpist/ArcGIS/rest/services/LiDAR_BC_S3_Public/FeatureServer/4/query?geometry=477300,5361700,478550,5363200&geometryType=esriGeometryEnvelope&inSR=32610&spatialRel=esriSpatialRelIntersects&outFields=*&returnGeometry=false&f=json"
+  },
+  {
+   "name": "club_scorecard_2025.pdf",
+   "url": "https://www.victoriagolf.com/documents/20124/386685/Scorecard+2025%281%29.pdf/8bda7020-cb7b-9b55-0d6b-9fefd671ac13?t=1753125362199"
+  },
+  {
+   "name": "club_layout_large.jpg",
+   "url": "https://www.victoriagolf.com/documents/20124/65012/course-layout-large.jpg/58fc9030-1132-3ede-4a43-9c70e0bd097e"
+  },
+  {
+   "name": "club_logo.png",
+   "url": "https://www.victoriagolf.com/image/company_logo?img_id=83921&t=1792050629390"
+  }
+ ]
+}
