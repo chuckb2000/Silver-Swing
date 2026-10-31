@@ -1,0 +1,76 @@
+{
+ "note": "Edits to the OSM layout for Pasatiempo, built into edited/course.geojson by pipeline/merge_edits.py (run by make course). Overnight build 2026-10-30/31: the developer was asleep and said to make the calls; every proposal here is tagged approved=pending and listed in validation_report.md (open items) and docs/courses/pasatiempo.md (developer's calls pending). To undo one, delete its entry and rebuild.",
+ "add": [
+  {
+   "from": "proposed/channels_clipped.geojson",
+   "ids": [
+    "channel_w42855499",
+    "channel_w265532264"
+   ],
+   "tags": {
+    "golf": "lateral_water_hazard",
+    "penalty": "red",
+    "flatten": "no",
+    "proposed": "lidar",
+    "approved": "pending (overnight call 2026-10-31)"
+   },
+   "reason": "The barrancas: OSM maps the creeks only as lines (Pasatiempo Creek w42855499 along 13's left, between 14/15 and 16 and short right of the 16th green; the unnamed stream w265532264 in the ravine in front of the 10th tee and the 18th green). Penalty areas from the channel the 2020 lidar DEM shows along them (propose_channels.py, then clip_channels.py: the boundary + 25 m), red (standing default; the club's card makes 18 yellow), flatten=no so the bed keeps falling. The club's local rules name penalty areas on 16 and 18 (and 11, below)."
+  },
+  {
+   "from": "proposed/tee14_white.geojson",
+   "ids": [
+    "tee14_white"
+   ],
+   "tags": {
+    "hole": "14",
+    "tee_set": "White",
+    "approved": "pending (overnight call 2026-10-31)"
+   },
+   "reason": "Hole 14 White tee. OSM maps w1041814063 as a bunker, but the NAIP photo shows a mown tee rectangle there (no sand), on the hole line 48 m ahead of the Gold tee; the 2020 lidar DEM also shows a raised levelled pad (propose_tees.py). From it the hole measures about 377 yd against 382 on the card. Made by make_tee14.py; the bunker is dropped below."
+  },
+  {
+   "from": "proposed/tee18_split.geojson",
+   "ids": [
+    "tee_w1041819911_front",
+    "tee_w1041819911_back"
+   ],
+   "tags": {
+    "approved": "pending (course chat 2026-10-31)"
+   },
+   "reason": "Hole 18: the long curved teeing ground w1041819911 runs 138-185 yd from the green centre; Gold (173) is in its back part, White (145) at its front tip. s06 gave the whole strip to Gold and played White from the line start (177 yd, +22 %). Cut across at 139 m (152 yd) from the green centre: front piece White, back piece Gold (make_tee18_split.py; the Cypress Point method). The pieces are the OSM box; nothing is drawn."
+  },
+  {
+   "from": "proposed/range.geojson",
+   "ids": [
+    "range_w1041848694",
+    "range_r14043909"
+   ],
+   "tags": {
+    "approved": "pending (course chat 2026-10-31)"
+   },
+   "reason": "The practice range east of hole 1: OSM maps the 120 m mown strip w1041848694 and its hitting area r14043909 as golf=fairway belonging to no hole; the scouting has the club's range left of hole 1, out of bounds, and the NAIP photo shows the strip with a hitting area at the clubhouse end. Copied as golf=driving_range (make_range.py), so it is out of bounds (standing default)."
+  }
+ ],
+ "drop": [
+  {
+   "osm": "w1211505823",
+   "reason": "a 0.01 ha leisure=golf_course sliver with no holes (audit); the OB line is the club's relation r13921737"
+  },
+  {
+   "osm": "w1041814063",
+   "reason": "the 14th's White tee mis-tagged as a bunker (see the add above)"
+  },
+  {
+   "osm": "w1041819911",
+   "reason": "replaced by its two pieces (tee18_split, add above)"
+  },
+  {
+   "osm": "w1041848694",
+   "reason": "the practice range (range add above)"
+  },
+  {
+   "osm": "r14043909",
+   "reason": "the range's hitting area (range add above)"
+  }
+ ]
+}

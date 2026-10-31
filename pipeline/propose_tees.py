@@ -180,6 +180,8 @@ def main():
         d.line(pts, fill=(255, 40, 40), width=1)
         d.text(pts[0], str(hrow.tags.get("ref", "?")), fill=(255, 255, 0))
     for geom in osm_tees:
+        if geom.geom_type != "Polygon":  # a tee mapped as a point (Pasatiempo 12)
+            continue
         d.line([P(x, y) for x, y in geom.exterior.coords], fill=(0, 220, 255), width=2)
     for f in feats:
         d.line([P(x, y) for x, y in f["poly"].exterior.coords], fill=(255, 0, 255) if f["within_8pct"] else (150, 80, 150), width=2)
