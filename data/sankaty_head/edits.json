@@ -99,6 +99,14 @@
     "p_sea"
    ],
    "reason": "the sea polygon, tagged golf=lateral_water_hazard in OSM, lies almost wholly outside the boundary: plain water (out of bounds), as the audit suggests"
+  },
+  {
+   "from": "proposed/sankaty.geojson",
+   "ids": [
+    "p_tee2_fwd",
+    "p_tee16_back"
+   ],
+   "reason": "hole 2's forward (Blue) pad traced from NAIP (291 yd, card 300); hole 16's Championship tee on the 1st tee's mown lobe (379 yd, card 390): see make_proposed.py"
   }
  ],
  "drop": [
@@ -405,6 +413,24 @@
   {
    "osm": "w843610721",
    "reason": "copied as p_sea (natural=water)"
+  }
+ ],
+ "tags": [
+  {
+   "osm": "w873273605",
+   "set": {
+    "hole": "1",
+    "tee_set": "Blue"
+   },
+   "reason": "the box 25 m west of the 1st's line (OSM tee): 346 yd to the green, card Blue 355; s06 looks only within 25 m of the line"
+  },
+  {
+   "osm": "w844645521",
+   "set": {
+    "hole": "17",
+    "tee_set": "Blue"
+   },
+   "reason": "the box 27 m right of the 17th's line (OSM tee): 447 yd, card Blue 450; the line start is the 540-yd tee"
   }
  ]
 }

@@ -218,6 +218,11 @@ def cmd_laz(name: str, args: list[str]):
             hdr = laspy.LasHeader(point_format=h0.point_format, version=h0.version)
             hdr.scales, hdr.offsets = h0.scales, h0.offsets
             for v in h0.vlrs:
+                # a COPC tile (NOAA Digital Coast's *.copc.laz) carries COPC info/hierarchy records
+                # that laspy can't write; the clip is a plain LAZ, so they are left out (Sankaty
+                # Head, 2026-10-31; any input that worked before has none, so nothing else changes)
+                if getattr(v, "user_id", "") == "copc":
+                    continue
                 hdr.vlrs.append(v)
             hdr.creation_date = h0.creation_date   # the source's date, not today's (the clip's hash stays put)
             hdr.global_encoding = h0.global_encoding

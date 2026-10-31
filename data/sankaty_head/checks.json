@@ -1,0 +1,10 @@
+{
+ "note": "per-course settings for game/tests/unit/course_play.test.ts (the every-course checks); docs/COURSE_BUILD.md 8.2",
+ "yardage": {"max": {"12": 0.10}, "why": "12 Championship (225) has no tee box beyond the mown strip by the 11th green: built from the box at the line start, 204 yd (open item)"},
+ "wind_mph": [3, 14],
+ "water": {"count": 1},
+ "tees": {"sets": ["Championship", "Blue"]},
+ "tee_shot_clear": {"sets": ["Championship", "Blue"]},
+ "centre_line_clear": {},
+ "inside_boundary": true
+}

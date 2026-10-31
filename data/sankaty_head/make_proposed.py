@@ -17,6 +17,11 @@ Every feature comes from mapped OSM geometry or from a point on a hole line, nev
 - p_sea: the Atlantic polygon OSM tags golf=lateral_water_hazard (w843610721, 3 km2, almost all
   outside the boundary; the audit's "neighbour's penalty area"), as plain natural=water: beyond the
   boundary it is out of bounds and drawn as sea.
+- p_tee2_fwd: hole 2's forward tee, a mown square pad (about 8.5 x 8 m) on the north-east side of
+  Polpis Road by the cart-path junction, traced corner by corner from the NAIP photo (2026-10-31);
+  291 yd to the 2nd green (Blue 300, Yellow 295). Not in OSM.
+- p_tee16_back: a copy of p_tee1 for hole 16's Championship tee: the 16th's line run backwards
+  reaches the 1st tee's mown lobe by the clubhouse at 379 yd (card 390); no other ground there.
 - p_tee1, p_tee12: tee boxes on the mown "infinity" tees (Urbina's restoration lowered the tees to
   fairway height: LINKS Magazine) where the hole line starts: a 12 x 8 m box (hole 1, on the mown
   lobe north of the practice putting green) and a 20 x 6 m box (hole 12, on the narrow mown strip
@@ -63,6 +68,9 @@ feats = [
     ("p_tee1", "tee", {"golf": "tee", "source": "course chat: box on the mown tee at the hole 1 line start (NAIP)"}, tee_box(1, 12, 8, 6)),
     ("p_tee12", "tee", {"golf": "tee", "source": "course chat: box on the mown strip at the hole 12 line start (NAIP)"}, tee_box(12, 20, 6, 10)),
 ]
+PAD2 = [(418810.08, 4570505.62), (418816.08, 4570498.55), (418811.28, 4570493.88), (418804.48, 4570499.42)]
+feats.append(("p_tee2_fwd", "tee", {"golf": "tee", "hole": "2", "tee_set": "Blue", "source": "course chat: traced from NAIP (USGS exportImage), mown pad by Polpis Road"}, Polygon(PAD2)))
+feats.append(("p_tee16_back", "tee", {"golf": "tee", "hole": "16", "tee_set": "Championship", "source": "course chat: copy of p_tee1 (the 1st tee's mown lobe), the 16th's line run backwards"}, tee_box(1, 12, 8, 6)))
 feats.append(("p_sea", "water", {"natural": "water", "source": "OSM w843610721 (golf=lateral_water_hazard), as natural=water"}, by["w843610721"].geometry))
 for r in g.itertuples():
     if r.tags.get("golf") == "path":

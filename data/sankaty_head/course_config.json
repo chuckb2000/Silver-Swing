@@ -57,5 +57,19 @@
   "Imagery: USDA NAIP via the USGS National Map",
   "Scorecard: GolfPass (unverified)"
  ],
- "notes": "Course chat, 2026-10-31 (developer asleep, overnight calls): standing defaults (every penalty area red, OSM boundary as OB, trees from lidar, fairway trees removed), wind 3-14 (open coast), tees Championship + Blue (Blue default)."
+ "notes": "Course chat, 2026-10-31 (developer asleep, overnight calls): standing defaults (every penalty area red, OSM boundary as OB, trees from lidar, fairway trees removed), wind 3-14 (open coast), tees Championship + Blue (Blue default).",
+ "laz": {
+  "paths": [
+   "raw/laz/*.laz"
+  ],
+  "classes": [
+   1
+  ],
+  "units": "m",
+  "source": "NOAA Digital Coast dataset 9551, 2018 USGS Lidar: Nantucket (MA2018 Nantucket), flown 1-2 May 2018; 28 COPC tiles (about 387 m) on the noaa-nos-coastal-lidar-pds S3 bucket, fetched by the GitHub Actions workflow (release data-sankaty_head), clipped to the world + 100 m by pipeline/intake.py laz --classes 1 (the project has only 1 unclassified, 2 ground, 7/9/10: no vegetation classes); NAD83(2011) / UTM 19N, NAVD88 m",
+  "label": "2018 USGS Nantucket lidar",
+  "max_height_m": 30
+ },
+ "range_art": "rough",
+ "range_art_note": "the practice ground east of the clubhouse is out of bounds (standing default); NAIP shows mostly blond rough with one mown hitting strip, so it is drawn as rough with OB stakes rather than striped fairway (as at Oregon Golf Club and Meadow Club)"
 }
