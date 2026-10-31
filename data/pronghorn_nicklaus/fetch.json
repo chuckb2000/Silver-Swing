@@ -167,6 +167,14 @@
   {
    "name": "s3_1m_or_southeast.xml",
    "url": "https://prd-tnm.s3.amazonaws.com/?list-type=2&delimiter=/&prefix=StagedProducts/Elevation/1m/Projects/OR_SouthEast"
+  },
+  {
+   "name": "s3_lpc_se_d22.xml",
+   "url": "https://prd-tnm.s3.amazonaws.com/?list-type=2&delimiter=/&prefix=StagedProducts/Elevation/LPC/Projects/OR_SouthEast_D22/"
+  },
+  {
+   "name": "s3_lpc_se_d22_sub.xml",
+   "url": "https://prd-tnm.s3.amazonaws.com/?list-type=2&max-keys=50&prefix=StagedProducts/Elevation/LPC/Projects/OR_SouthEast_D22/"
   }
  ]
 }
