@@ -1,0 +1,162 @@
+{
+ "note": "written by data/burlington_cc/make_edits.py; merge_edits.py applies it at every build",
+ "add": [
+  {
+   "from": "proposed/paths_as_cartpaths.geojson",
+   "ids": [
+    "w1011553250_cartpath",
+    "w1011553252_cartpath",
+    "w1011553253_cartpath",
+    "w1011556685_cartpath",
+    "w1011556687_cartpath",
+    "w1011556688_cartpath",
+    "w1011556817_cartpath",
+    "w1011559500_cartpath",
+    "w1011569862_cartpath",
+    "w1011569863_cartpath",
+    "w1011569864_cartpath",
+    "w1011569865_cartpath",
+    "w1011574538_cartpath",
+    "w1011574558_cartpath",
+    "w1011576382_cartpath",
+    "w1011576383_cartpath"
+   ],
+   "tags": {},
+   "reason": "golf=path + highway=path inside the boundary (the course's cart paths, two of them surface=asphalt), not read by s01: copied as golf=cartpath (free relief, drawn as a path)"
+  },
+  {
+   "from": "proposed/clubhouse_building.geojson",
+   "ids": [
+    "w1011484685_building"
+   ],
+   "tags": {},
+   "reason": "the clubhouse is tagged golf=clubhouse + building=yes, which s01 files under the golf key (not drawn, not an obstruction): copied as a building"
+  },
+  {
+   "from": "proposed/brook.geojson",
+   "ids": [
+    "channel_w1011484692"
+   ],
+   "tags": {
+    "flatten": "no"
+   },
+   "reason": "the 64 m brook (OSM stream line w1011484692) between the pond by the 11th green and the pond in front of the 3rd and 12th tees, only a line in OSM: a 2.5 m strip along the line with the cart paths and their two bridges kept clear (data/burlington_cc/make_brook.py). Developer 2026-10-31: a tiny little creek with bridges over it (the 8 m lidar channel from propose_channels.py covered both bridges). Red like every penalty area; flatten=no keeps the bed's fall"
+  },
+  {
+   "from": "proposed/brook.geojson",
+   "ids": [
+    "bridge_north",
+    "bridge_south"
+   ],
+   "reason": "developer 2026-10-31: two cart-path bridges cross the brook; OSM's paths stop at each bank, so these join the facing path ends (make_brook.py) and are cart path (free relief), not water"
+  }
+ ],
+ "tags": [
+  {
+   "osm": "r13536122",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "every penalty area is red (developer's standing default, COURSE_BUILD.md 4.1); s10 reads golf=water_hazard as yellow otherwise"
+  },
+  {
+   "osm": "w1011013883",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "every penalty area is red (developer's standing default, COURSE_BUILD.md 4.1); s10 reads golf=water_hazard as yellow otherwise"
+  },
+  {
+   "osm": "w1011013884",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "every penalty area is red (developer's standing default, COURSE_BUILD.md 4.1); s10 reads golf=water_hazard as yellow otherwise"
+  },
+  {
+   "osm": "w1011559509",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "every penalty area is red (developer's standing default, COURSE_BUILD.md 4.1); s10 reads golf=water_hazard as yellow otherwise"
+  },
+  {
+   "osm": "w1011574555",
+   "set": {
+    "hole": "7",
+    "tee_set": "Black"
+   },
+   "reason": "hole 7 Black tee (course chat, 2026-10-30): the 108 m2 box 41 m behind the line's start, on the line run backwards, measures 563 yd against the card's 562; s06 looks only 40 m behind a line start for an untagged box, so it took the 519 yd box (-5.5 %)"
+  }
+ ],
+ "drop": [
+  {
+   "osm": "w1011553250",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1011553252",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1011553253",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1011556685",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1011556687",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1011556688",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1011556817",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1011559500",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1011569862",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1011569863",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1011569864",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1011569865",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1011574538",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1011574558",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1011576382",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1011576383",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1011484685",
+   "reason": "replaced by its building copy (add above)"
+  }
+ ]
+}

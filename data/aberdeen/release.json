@@ -1,0 +1,46 @@
+{
+ "release": "data-aberdeen",
+ "note": "Build inputs not kept in git for The Course at Aberdeen; `make fetch NAME=aberdeen` puts them in place (pipeline/fetch_raw.py). In git: raw/overpass.geojson, raw/osm.geojson and raw/usgs_dem_2017_1m_clip.tif (data/aberdeen/clip_dem.py from the two 3DEP DEM tiles in this release). Here: the lidar tiles (each clipped to the world, class 1) and the NAIP photo (USGS NAIP ImageServer exportImage, 0.6 m, EPSG:32616 box 489351 4586900 491601 4588892).",
+ "files": [
+  {
+   "asset": "USGS_LPC_IN_Indiana_Statewide_LiDAR_2017_B17_in2018_29402250_12.laz",
+   "sha256": "bdc933dc2811acee2d88812e97a30cd9b495e98ca0972dfe0f8d33f3792298a1",
+   "run": "python3 pipeline/intake.py laz aberdeen {file} --classes 1 --out raw/laz/aberdeen_29402250.laz",
+   "outputs": {
+    "raw/laz/aberdeen_29402250.laz": "cd4935ed7ed6a288828083abf18f61226dd24bc53b9818d75c344bc00a27073b"
+   }
+  },
+  {
+   "asset": "USGS_LPC_IN_Indiana_Statewide_LiDAR_2017_B17_in2018_29402255_12.laz",
+   "sha256": "f7da7d2daaa9fb831b59bf4defe16b8335519225ee4e1815a0b881415a1d3d52",
+   "run": "python3 pipeline/intake.py laz aberdeen {file} --classes 1 --out raw/laz/aberdeen_29402255.laz",
+   "outputs": {
+    "raw/laz/aberdeen_29402255.laz": "ea8fb9abc18931f0df6e4773c07c1ec7ac1d45e267b61863a88f41c6d8076cf3"
+   }
+  },
+  {
+   "asset": "USGS_LPC_IN_Indiana_Statewide_LiDAR_2017_B17_in2018_29452255_12.laz",
+   "sha256": "9f28f959ba1cddf9e2bb876b56bcd2cef30688275286158d5e86c3c8613a9b0b",
+   "run": "python3 pipeline/intake.py laz aberdeen {file} --classes 1 --out raw/laz/aberdeen_29452255.laz",
+   "outputs": {
+    "raw/laz/aberdeen_29452255.laz": "c60a009a39a62b09ae8984b2c68942d5232dc183e2650f654760f01ec71b5f5d"
+   }
+  },
+  {
+   "asset": "USGS_LPC_IN_Indiana_Statewide_LiDAR_2017_B17_in2018_29452250_12.laz",
+   "sha256": "76a817d8417c09e34b40bba90490ede5ed155f6831e5c78288a245fcd9674d23",
+   "run": "python3 pipeline/intake.py laz aberdeen {file} --classes 1 --out raw/laz/aberdeen_29452250.laz",
+   "outputs": {
+    "raw/laz/aberdeen_29452250.laz": "9eee61df6a5467f39759c1197308b8d045b8e0fc43003c470fd195dcbaff484f"
+   }
+  },
+  {
+   "asset": "aberdeen_naip.jpg",
+   "sha256": "d137db4bc75ed02d121d347b8d370d10600a193f1d7303267206c50a31334f75",
+   "run": "python3 pipeline/intake.py ortho aberdeen {file} 489351 4586900 491601 4588892 --out raw/naip_06m.tif",
+   "outputs": {
+    "raw/naip_06m.tif": "edab7065c0c9483e8cef96a8bf48d8afc77fdea7722cb311a1ff7a2f4e1c7301"
+   }
+  }
+ ]
+}

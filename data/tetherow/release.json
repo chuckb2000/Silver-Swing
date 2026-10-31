@@ -1,0 +1,18 @@
+{
+ "release": "data-tetherow",
+ "note": "Build inputs for Tetherow; `make fetch NAME=tetherow` puts them in place. All fetched by the GitHub Actions workflow (data/tetherow/fetch.json) on 2026-10-31. tetherow_overpass.geojson = the standard Overpass export of the box 44.012,-121.392,44.050,-121.338 (raw/overpass.geojson is also committed). dogami_dtm_ft.tif / dogami_chm_ft.tif = DOGAMI DIGITAL_TERRAIN_MODEL_MOSAIC / CANOPY_HEIGHT_MODEL_MOSAIC, exportImage at 1 m, box x 630400-632400 / y 4875630-4877880 EPSG:32610, feet. osip2024_n/s.jpg = OSIP 2024 halves at 0.5 m (north y 4876755-4877880, south y 4875630-4876755). usgs_dem_m.tif (3DEPElevation exportImage, same box, metres) and naip_1m.jpg (USGS NAIP exportImage, same box, 1 m) are in the release as checks, not used.",
+ "files": [
+  {"asset": "tetherow_overpass.geojson", "sha256": "d9ced9dadb4b04a57057c60715f80aa1c73b38d31be00bbd52191055ebb2f2a3",
+   "run": "python3 pipeline/intake.py osm tetherow {file}",
+   "outputs": {"raw/overpass.geojson": "1c7c09b1a0f77414a72f7c3af95b993cdde91c202004d6c68039850cc21348b3"}},
+  {"asset": "dogami_dtm_ft.tif", "sha256": "5ed4b6c8a37c79a0ddc408a2288be96d69cef058c6f1c5eefd9f1b4e04386051",
+   "to": "raw/", "outputs": {"raw/dogami_dtm_ft.tif": "5ed4b6c8a37c79a0ddc408a2288be96d69cef058c6f1c5eefd9f1b4e04386051"}},
+  {"asset": "dogami_chm_ft.tif", "sha256": "2ac73e6e338dd8602843bf24f5ef66c79969632a9269296ee709af2b012e0131",
+   "to": "raw/", "outputs": {"raw/dogami_chm_ft.tif": "2ac73e6e338dd8602843bf24f5ef66c79969632a9269296ee709af2b012e0131"}},
+  {"asset": "osip2024_n.jpg", "sha256": "21f910e43772f2f4c9d528c5a8a409b1fe9368027cc3e9a7805ae1a02c96052c",
+   "to": "build/osip/", "outputs": {"build/osip/osip2024_n.jpg": "21f910e43772f2f4c9d528c5a8a409b1fe9368027cc3e9a7805ae1a02c96052c"}},
+  {"asset": "osip2024_s.jpg", "sha256": "d27b969f6fe197601ea3e7a2e6d18c5056299501e5171e08bce9f70739136201",
+   "run": "python3 pipeline/intake.py ortho tetherow data/tetherow/build/osip/osip2024_n.jpg 630400 4876755 632400 4877880 {file} 630400 4875630 632400 4876755 --out raw/osip2024_05m.tif",
+   "outputs": {"raw/osip2024_05m.tif": "b9028c004f48d312dd125aeb60728121bdfb568dd0aa9113ab3d444db83e950e"}}
+ ]
+}

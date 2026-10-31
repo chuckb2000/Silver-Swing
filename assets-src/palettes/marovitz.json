@@ -1,0 +1,54 @@
+{
+  "name": "Marovitz (Chicago lakefront parkland)",
+  "note": "Course theme palette (<= 32 colours), same keys as pnw.json. Sydney R. Marovitz, Lincoln Park, Chicago: a 1932 park course on land filled in from Lake Michigan. Cool-season bluegrass/rye turf in a slightly bluer green than pnw; bright white-tan bunker sand; Lake Michigan's clear near-shore teal (the theme's main difference from every other set: the lake fills the east side of the world); rough F0-F2 a cool mid green. Trees in assets-src/trees_marovitz.py: American elm, honey locust and cottonwood, with blue spruce and Austrian pine. Shadows are a 35% black overlay on top of these. Course chat, 2026-10-31.",
+  "colors": {
+    "G0": "#173828",
+    "G1": "#1f4d32",
+    "G2": "#286438",
+    "G3": "#32793d",
+    "G4": "#3e8d44",
+    "G5": "#4ba04b",
+    "G6": "#59b153",
+    "G7": "#69c05d",
+    "G8": "#7acd6a",
+    "G9": "#9fdc8a",
+    "L0": "#567a42",
+    "L1": "#678d48",
+    "L2": "#7aa053",
+    "S0": "#cdbf9c",
+    "S1": "#eee6cf",
+    "S2": "#faf6ea",
+    "W0": "#16677f",
+    "W1": "#1f8199",
+    "W2": "#62bccb",
+    "K0": "#26272d",
+    "K1": "#55565e",
+    "K2": "#7c7d85",
+    "K3": "#b6ae9c",
+    "K4": "#dbd4c3",
+    "B0": "#4a3324",
+    "B1": "#734d34",
+    "B2": "#93613f",
+    "R0": "#545c69",
+    "WH": "#f6f6f2",
+    "F0": "#3c6a3c",
+    "F1": "#4a7d42",
+    "F2": "#5a8f4a"
+  },
+  "lut": {
+    "rough": ["F0", "F1", "F2", "F2"]
+  },
+  "minimap": {
+    "rough": "#4a7d42",
+    "water": "#1f8199",
+    "ob_water": "#1f8199"
+  },
+  "minimap_trees": {
+    "conifer": ["#173a3a", "#36675f"],
+    "deciduous": ["#1f4a20", "#4a8a38"]
+  },
+  "trees": {
+    "conifer": "trees_marovitz:conifer",
+    "deciduous": "trees_marovitz:deciduous"
+  }
+}

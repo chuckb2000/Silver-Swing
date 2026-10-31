@@ -1,0 +1,21 @@
+{
+  "name": "Tetherow (high desert, Bend)",
+  "note": "Course theme palette (<= 32 colours; same keys as pnw.json plus F0-F2). Tetherow, Bend OR, 3,700-3,900 ft on the east flank of the Cascades: firm fescue fairways and greens a dry, slightly yellow green against the native ground (sampled from the OSIP 2024 photo: fairway #98a55c, green #acb275, native #9d9984, pumice bunkers #cec7ac, ponds #435856); the native rough of bunchgrass and fescue on pumice, cured to a cool grey-tan (F0-F2, inside config fescue_areas; the mown rough beside the fairways in G3-G5); off the course (L0-L2) the grey-olive sage steppe; pale grey-cream pumice sand (S0-S2), lighter and greyer than beach sand; dark teal ponds. Trees: ponderosa pine and western juniper; bushes sage, bitterbrush, manzanita and heather (assets-src/trees_tetherow.py). Hues pushed toward the game's saturated style. Shadows are a 35% black overlay on top of these.",
+  "colors": {
+    "G0": "#1b2c1f", "G1": "#283f27", "G2": "#37552f", "G3": "#476b37",
+    "G4": "#5a7f3f", "G5": "#6c9147", "G6": "#80a250", "G7": "#93b25c",
+    "G8": "#a6c06a", "G9": "#c5d692",
+    "L0": "#6a6c55", "L1": "#7c7e64", "L2": "#8e9074",
+    "S0": "#b3a98f", "S1": "#d4cdb6", "S2": "#ebe5d2",
+    "W0": "#203e47", "W1": "#2f5560", "W2": "#668c92",
+    "K0": "#2a2a2c", "K1": "#58585a", "K2": "#807e7a", "K3": "#b4aa96", "K4": "#d8cfbc",
+    "B0": "#4a3020", "B1": "#70482e", "B2": "#93633f",
+    "R0": "#5c5b60", "WH": "#f6f5ef",
+    "F0": "#8a8467", "F1": "#a29b7d", "F2": "#b7af92"
+  },
+  "lut": {"rough": ["F0", "F1", "F2", "F2"], "rough_band": ["G3", "G4", "G5", "G5"]},
+  "aliases": {"TUFT": "F0"},
+  "minimap": {"ob": "#7c7e64", "rough": "#a29b7d", "woods": "#37552f", "ob_woods": "#2f4a2c", "water": "#2f5560", "ob_water": "#2f5560", "bunker": "#d4cdb6", "ob_sand": "#d4cdb6"},
+  "minimap_trees": {"conifer": ["#13261b", "#386838"], "deciduous": ["#1f2c26", "#536c59"], "shrub": ["#4a5443", "#9ba68c"]},
+  "trees": {"conifer": "trees_tetherow:ponderosa", "deciduous": "trees_tetherow:juniper", "shrub": "trees_tetherow:desert_bush"}
+}

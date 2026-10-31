@@ -29,6 +29,8 @@ export interface Settings {
   showTips: boolean;
   courseId: string;  // last course chosen on the new-round screen
   tees: Record<string, string>; // tee set last chosen, per course id
+  /** the remembered old default tees have gone to the longest set (2026-10-31), once */
+  teesLongest?: boolean;
   playerKey: string; // this device's private key for its names on the shared boards (save/identity.ts)
   hideFromBoards: boolean; // keep this player off every shared leaderboard (server /api/hide; developer, 2026-10-20)
   hideSent: boolean | null; // the hide choice the server last confirmed (null: never sent)
@@ -93,10 +95,20 @@ async function remove(key: string): Promise<void> {
   try { window.localStorage.removeItem(`local-golf:${key}`); } catch { /* ignore */ }
 }
 
+/** Courses whose default tees changed to their longest set on 2026-10-31, and the old default. */
+const OLD_DEFAULT_TEES: Record<string, string> = { tpc_boston: 'Black', wannamoisett: 'Blue' };
+
 export async function loadSettings(): Promise<Settings> {
   const s = await read<Partial<Settings>>('settings');
   const out = { ...DEFAULT_SETTINGS, ...(s ?? {}) };
   if (!out.tees || typeof out.tees !== 'object') out.tees = {};
+  // the default tees became the longest set (developer, 2026-10-31): a course remembered on its old,
+  // shorter default goes to the longest; a set the player chose stays
+  if (!out.teesLongest) {
+    for (const [id, old] of Object.entries(OLD_DEFAULT_TEES)) if (out.tees[id] === old) delete out.tees[id];
+    out.teesLongest = true; // once: a shorter set chosen from now on is kept
+    if (s) await write('settings', out);
+  }
   // no longer settings (developer, 2026-10-20): yards, no latency offset, stroke-and-distance OB
   out.units = 'yd';
   out.latencyMs = 0;

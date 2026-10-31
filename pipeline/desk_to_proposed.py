@@ -5,8 +5,9 @@ shapes from the tracing desk into an approved proposals file.
 
 Reads data/<course>/desk/hole<NN>.json (what the developer saved in the
 tracing-desk page: greens, fairways, bunkers and tee boxes per hole, and the
-hole's Blue tee box (`bluetee`, written as golf=tee + hole + tee_set=Blue so
-s06 uses it for that hole), in local metres) and data/<course>/proposed/traced.geojson (for the parts the desk does
+hole's marked tee box (`bluetee`, written as golf=tee + hole + tee_set=<trace_spec
+"desk" "tee", default Blue, which must be one of the course's tee sets> so s06 uses it
+for that hole; trace_spec "desk" "tee_pos" adds tee_pos, e.g. centroid), in local metres) and data/<course>/proposed/traced.geojson (for the parts the desk does
 not edit: water, penalty areas, the grown boundary), and writes
 proposed/approved.geojson (WGS84) with:
   - every desk shape, tagged golf=<kind>, approved=developer <date>;
@@ -59,6 +60,16 @@ def main():
     offered = json.load(open(offered_path)) if offered_path.exists() else {}
     replaced = []
 
+    # The desk's "bluetee" is the tee set the page asked the developer to mark (desk_export.py: trace_spec
+    # "desk" "tee", default Blue). Tag that set, and refuse a set the course doesn't have: a course with no
+    # Blue tees whose spec named none was tagged tee_set=Blue, which s06 ignores (Aquidneck 8, 2026-10-31).
+    desk = spec.get("desk", {})
+    sets = [t["name"] for t in cfg.get("tee_sets", [])] or [t["name"] for lay in cfg.get("layouts", []) for t in lay.get("tee_sets", [])]
+    tee_set = desk.get("tee") or ("Blue" if "Blue" in sets or not sets else None)
+    if tee_set is None or (sets and tee_set not in sets):
+        raise SystemExit(f"[desk] trace_spec.json \"desk\": {{\"tee\": ...}} must name the tee set marked in the desk "
+                         f"(got {tee_set!r}; the course's sets: {sets})")
+
     feats = []
     greens, tees = {}, {}
     dg_pages = {f"{a}-{b}" for a, b in (dg["holes"] for dg in spec.get("double_greens", []))}
@@ -89,8 +100,10 @@ def main():
                 del tags["hole"]
             if f.get("id") in offered.get(k, []):
                 tags["replaces"] = f["id"]
-            if f["kind"] == "bluetee":  # the developer's Blue tee for this hole (s06: tagged hole + tee_set wins)
-                tags["tee_set"] = spec.get("desk", {}).get("tee", "Blue")  # trace_spec "desk": the tee set marked (default Blue)
+            if f["kind"] == "bluetee":  # the developer's marked tee for this hole (s06: tagged hole + tee_set wins)
+                tags["tee_set"] = tee_set
+                if desk.get("tee_pos"):  # trace_spec "desk" "tee_pos": centroid|back|front (s06), e.g. a tee "accepted as marked"
+                    tags["tee_pos"] = desk["tee_pos"]
             if f.get("id", "").startswith("tr_"):
                 tags["traced_from"] = f["id"]
             prefix = f"desk_{k}_{f['kind']}_"

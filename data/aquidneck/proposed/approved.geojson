@@ -1,0 +1,8 @@
+{
+"type": "FeatureCollection",
+"name": "approved",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+"features": [
+{ "type": "Feature", "properties": { "osm": "desk_8_bluetee_0", "kind": "tee", "tags": { "golf": "tee", "hole": "8", "source": "tracing desk (developer)", "approved": "developer 2026-10-31", "tee_set": "Gold", "tee_pos": "centroid" } }, "geometry": { "type": "Polygon", "coordinates": [ [ [ -71.261290257895112, 41.606634194716079 ], [ -71.261307216568923, 41.606535690723724 ], [ -71.261187456630864, 41.60654255069538 ], [ -71.261190663631851, 41.606634353331486 ], [ -71.261290257895112, 41.606634194716079 ] ] ] } }
+]
+}

@@ -1,0 +1,53 @@
+{
+ "id": "rancho_san_joaquin",
+ "course": "Rancho San Joaquin Golf Course",
+ "place": "Irvine, California",
+ "facts": [
+  {
+   "fact": "The San Joaquin Marsh, about 300 acres of restored ponds and wetland in the flood plain of San Diego Creek, lies just west of the course (OSM: the Ponds 1-6 and A-E beside the course boundary).",
+   "source": "https://en.wikipedia.org/wiki/San_Joaquin_Marsh_Wildlife_Sanctuary; data/rancho_san_joaquin/raw/overpass.geojson"
+  },
+  {
+   "fact": "The American avocet is photographed at the UC San Joaquin Marsh Reserve, a ten-minute walk from UC Irvine.",
+   "source": "https://ucnature.org/reserves/san-joaquin-marsh-reserve/"
+  },
+  {
+   "fact": "The course has lakes in play (three or four by different accounts).",
+   "source": "https://www.imgprestige.com/rancho-san-joaquin; https://www.destinationirvine.com/blog/rancho-san-joaquin-a-legacy-course/"
+  }
+ ],
+ "current": {
+  "subject": "none: a new course (course chat 2026-10-31)",
+  "keep": "",
+  "weaknesses": ""
+ },
+ "concepts": [
+  {
+   "n": 1,
+   "name": "The Marsh Avocet",
+   "rationale": "An American avocet in breeding colours (cinnamon head and neck, black-and-white back, long upturned bill, blue-grey legs) wading in a pond: the bird of the marsh next door, and the course's own lakes.",
+   "references": [
+    "https://ucnature.org/reserves/san-joaquin-marsh-reserve/",
+    "https://en.wikipedia.org/wiki/San_Joaquin_Marsh_Wildlife_Sanctuary"
+   ],
+   "symbolism": "The marsh and the lakes; a shorebird not used by any other course in the game (Oregon Golf Club has a great blue heron, Bandon Preserve a snowy plover).",
+   "interpretation": "The choice of bird is the course chat's; nothing says the club uses it. The club's own logo was not looked at (its site is not reachable from the sandbox); an avocet is not a known mark of the club.",
+   "palette": [
+    {"hex": "#d8884a", "name": "cinnamon head"},
+    {"hex": "#c8753c", "name": "neck"},
+    {"hex": "#a65a2a", "name": "neck shade"},
+    {"hex": "#f6f4ec", "name": "white body"},
+    {"hex": "#c9c9c1", "name": "body shade"},
+    {"hex": "#222226", "name": "black back"},
+    {"hex": "#26262a", "name": "bill"},
+    {"hex": "#86a9c2", "name": "near leg"},
+    {"hex": "#5f8299", "name": "far leg"},
+    {"hex": "#3f7fb8", "name": "pond"},
+    {"hex": "#8cc6ea", "name": "ripple"}
+   ],
+   "strengths": "The upturned bill and the cinnamon head read at 32 px; it says marsh and Southern California water birds.",
+   "tradeoffs": "A wading bird is close in kind to Oregon Golf Club's heron; the colours and the bill keep it distinct."
+  }
+ ],
+ "recommendation": "Concept 1 (the only one drawn; overnight build, the developer's permission to design the logo)."
+}

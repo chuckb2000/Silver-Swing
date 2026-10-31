@@ -9,7 +9,7 @@ course: release.json "run" lines call it, so `make fetch` rebuilds raw/ from the
     python3 pipeline/intake.py ortho <id> IMAGE x0 y0 x1 y1 [IMAGE x0 y0 x1 y1 ...] [--epsg N] [--out raw/ortho.tif]
         Orthophoto exports (JPEG/PNG, no georeferencing) placed by their request boxes (course
         EPSG unless --epsg), mosaicked and cut to the world + 100 m -> a GeoTIFF.
-    python3 pipeline/intake.py laz <id> SRC.laz|SRC.zip [...] [--margin 100] [--classes 1,3,4,5] [--drop-extra] [--out raw/laz/<id>_clip.laz]
+    python3 pipeline/intake.py laz <id> SRC.laz|SRC.zip [...] [--margin 100] [--classes 1,3,4,5] [--drop-extra] [--out raw/laz/<id>_clip.laz] [--keep-evlrs]
         Lidar tiles (or a NOAA zip of them) -> one LAZ of the points in the world + margin,
         in the files' own CRS, re-quantised onto the first tile's scale and offset, with the
         source's creation date (so the clip's hash is the same any day: Chambers Bay).
@@ -224,6 +224,9 @@ def cmd_laz(name: str, args: list[str]):
             hdr.scales, hdr.offsets = h0.scales, h0.offsets
             for v in h0.vlrs:
                 hdr.vlrs.append(v)
+            if "--keep-evlrs" in args:  # LAS 1.4 tiles that keep their CRS (WKT) in an EVLR (CA_CaliforniaGaps_B23):
+                for v in h0.evlrs or []:  # carried as ordinary VLRs, which every reader checks
+                    hdr.vlrs.append(v)
             hdr.creation_date = h0.creation_date   # the source's date, not today's (the clip's hash stays put)
             hdr.global_encoding = h0.global_encoding
             crs = h0.parse_crs()

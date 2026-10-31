@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <title>Needham - The Town Pump</title>
+  <!-- the handle, raised to the upper left -->
+  <path d="M3 4.2 L5 2.6 L13.6 9 L12 10.8 Z" fill="#7b1f1b"/>
+  <path d="M3 4.2 L5 2.6 L13.6 9 L13 9.8 Z" fill="#c64236"/>
+  <circle cx="4" cy="3.4" r="1.8" fill="#7b1f1b"/>
+  <circle cx="3.6" cy="3" r="1.1" fill="#d65a48"/>
+  <!-- the cap -->
+  <rect x="10.4" y="7.2" width="10.2" height="2.6" fill="#9b2a24"/>
+  <rect x="10.4" y="7.2" width="10.2" height="1.1" fill="#d65a48"/>
+  <rect x="12.6" y="5.2" width="5.8" height="2.2" fill="#b3322b"/>
+  <rect x="12.6" y="5.2" width="2.4" height="2.2" fill="#d65a48"/>
+  <!-- the barrel: lit left, shaded right -->
+  <rect x="11.6" y="9.8" width="7.8" height="13.6" fill="#b3322b"/>
+  <rect x="11.6" y="9.8" width="2.4" height="13.6" fill="#d65a48"/>
+  <rect x="17.2" y="9.8" width="2.2" height="13.6" fill="#7b1f1b"/>
+  <rect x="11.6" y="15.4" width="7.8" height="1.2" fill="#7b1f1b"/>
+  <!-- the spout to the right, turned down -->
+  <path d="M19.4 11.2 L26.2 12.4 L26.2 15.2 L19.4 14.6 Z" fill="#9b2a24"/>
+  <path d="M19.4 11.2 L26.2 12.4 L26.2 13.4 L19.4 12.6 Z" fill="#d65a48"/>
+  <rect x="24.2" y="14.6" width="2.2" height="1.6" fill="#7b1f1b"/>
+  <!-- the drop of water falling from it -->
+  <path d="M25.4 18.4 C24 21 23.2 22.2 23.2 23.8 C23.2 25.4 24.2 26.6 25.4 26.6 C26.6 26.6 27.8 25.4 27.8 23.8 C27.8 22.2 26.8 21 25.4 18.4 Z" fill="#2f7fd0"/>
+  <path d="M25.4 18.4 C24 21 23.2 22.2 23.2 23.8 L24.6 23.8 C24.6 22.8 25 21.6 25.4 20.2 Z" fill="#8ec8f2"/>
+  <rect x="24" y="23.2" width="1.2" height="1.6" fill="#e6f4fd"/>
+  <!-- the granite plinth -->
+  <rect x="7" y="23.4" width="14.6" height="5.8" fill="#8b8d93"/>
+  <rect x="7" y="23.4" width="14.6" height="1.4" fill="#c4c6cb"/>
+  <rect x="7" y="23.4" width="1.4" height="5.8" fill="#b2b4b9"/>
+  <rect x="19.6" y="24.8" width="2" height="4.4" fill="#66686e"/>
+  <rect x="13.8" y="26.2" width="1" height="3" fill="#66686e"/>
+</svg>

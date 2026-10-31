@@ -1,0 +1,34 @@
+{
+ "id": "victoria",
+ "course": "Victoria Golf Club",
+ "place": "Oak Bay, British Columbia",
+ "facts": [
+  {"fact": "Founded in 1893 on its present site in Oak Bay; the oldest 18-hole course in Canada in its original location. Began as 14 holes, 18 by 1895; the layout played today was settled in the mid-1920s.", "source": "https://www.victoriagolf.com/ (home page, read 2026-10-31 through the fetch workflow, release data-victoria club_home.html)"},
+  {"fact": "The course sits on a rocky point at the south-east tip of Vancouver Island, overlooking the Strait of Juan de Fuca.", "source": "https://en.wikipedia.org/wiki/Victoria_Golf_Club"},
+  {"fact": "Oak Bay is named for its Garry oaks (Quercus garryana); the Olympic Mountains of Washington stand across the strait, south of the course (interpretation of the setting, standard geography).", "source": "general geography; course chat 2026-10-31"},
+  {"fact": "The club's own crest is not used or imitated (interpretation).", "source": "course chat 2026-10-31"}
+ ],
+ "current": {"subject": "none: a new course (course chat 2026-10-31)", "keep": "", "weaknesses": ""},
+ "concepts": [
+  {
+   "n": 1,
+   "name": "The Garry Oak on the Point",
+   "rationale": "The two things every round at Victoria shows: the Garry oaks on the rock outcrops, and the Olympic Mountains across the strait.",
+   "references": ["https://en.wikipedia.org/wiki/Victoria_Golf_Club"],
+   "symbolism": "Oak for Oak Bay, rock for the point, mountains for the view south.",
+   "interpretation": "A composed scene, not a particular tree.",
+   "typography": "",
+   "lockup": {},
+   "palette": [
+    {"hex": "#2c5828", "name": "oak shade"}, {"hex": "#4c873a", "name": "oak"}, {"hex": "#7aae4c", "name": "oak light"},
+    {"hex": "#4a3a2a", "name": "trunk"}, {"hex": "#7d654a", "name": "trunk light"},
+    {"hex": "#545961", "name": "rock"}, {"hex": "#878c94", "name": "rock light"},
+    {"hex": "#2b6890", "name": "strait"}, {"hex": "#5f99bc", "name": "swell"},
+    {"hex": "#7d95b2", "name": "Olympics"}, {"hex": "#62799a", "name": "Olympics shade"}, {"hex": "#eef2f6", "name": "snow"}
+   ],
+   "strengths": "Says where it is: an oak, a rock and the mountains across the water. Reads at 32 px.",
+   "tradeoffs": "A scene rather than one object; the mountains are small at 1x."
+  }
+ ],
+ "recommendation": "Concept 1 (the only concept; a new course)."
+}

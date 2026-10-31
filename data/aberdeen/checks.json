@@ -1,0 +1,13 @@
+{
+ "note": "per-course settings for game/tests/unit/course_play.test.ts (the every-course checks); docs/COURSE_BUILD.md 8.2",
+ "yardage": {
+  "max": {
+   "7": 0.13
+  },
+  "why": "7: the Black tee box isn't mapped in OSM and no raised pad shows in the DEM behind the mapped boxes; the Black tee is the hole line's start, 340 yd against the card's 387 (-12 %). Accepted overnight by the course chat (developer's overnight call: accept > 8 % with a reason); pending the developer"
+ },
+ "wind_mph": [
+  2,
+  10
+ ]
+}

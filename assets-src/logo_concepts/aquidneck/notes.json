@@ -1,0 +1,49 @@
+{
+ "id": "aquidneck",
+ "course": "The Aquidneck Club",
+ "place": "Portsmouth, Aquidneck Island, Rhode Island",
+ "facts": [
+  {
+   "fact": "The course is routed over ground where the Battle of Rhode Island was fought (29 August 1778).",
+   "source": "https://www.top100golfcourses.com/golf-course/aquidneck-club"
+  },
+  {
+   "fact": "The Lookout, between the 3rd and 4th holes, marks the site of the 1778 battle; the 18th runs along Narragansett Bay on the right.",
+   "source": "https://skygolf76.blogspot.com/2013/04/the-carnegie-abbey-club-portsmouth.html"
+  },
+  {
+   "fact": "Opened in 2000 as the Carnegie Abbey Club (Donald Steel); renamed The Aquidneck Club after members bought it.",
+   "source": "https://golfnewsri.com/2023/05/29/course-review-the-aquidneck-club-may-26-2023/"
+  }
+ ],
+ "current": {
+  "subject": "none: a new course (course chat 2026-10-31)",
+  "keep": "",
+  "weaknesses": ""
+ },
+ "concepts": [
+  {
+   "n": 1,
+   "name": "The 1778 Field Gun",
+   "rationale": "A bronze field gun on its oak carriage above a run of Narragansett Bay waves: the battle fought across the course's ground, and the bay along the 18th.",
+   "references": [
+    "https://www.top100golfcourses.com/golf-course/aquidneck-club",
+    "https://skygolf76.blogspot.com/2013/04/the-carnegie-abbey-club-portsmouth.html"
+   ],
+   "symbolism": "",
+   "interpretation": "The gun is a generic 18th-century field piece, not a particular gun from the battle.",
+   "palette": [
+    {"hex": "#b8863b", "name": "bronze"},
+    {"hex": "#e3b860", "name": "bronze highlight"},
+    {"hex": "#93602f", "name": "oak"},
+    {"hex": "#2e2a26", "name": "iron tyre"},
+    {"hex": "#2c5d84", "name": "Narragansett Bay"},
+    {"hex": "#e4eff5", "name": "foam"}
+   ],
+   "strengths": "One subject, no badge or background, in the house style; a subject no other course in the game uses. Not the club's own emblem.",
+   "tradeoffs": "The wheel's four spokes are only just readable at 1x."
+  }
+ ],
+ "recommendation": "Concept 1.",
+ "chosen": 1
+}
