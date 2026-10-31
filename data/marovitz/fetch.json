@@ -7,8 +7,7 @@
     -87.652,
     41.967,
     -87.622
-   ],
-   "force": true
+   ]
   },
   {
    "name": "marovitz_scorecard_2025.pdf",
@@ -54,6 +53,10 @@
   {
    "name": "USGS_LPC_IL_4_County_QL1_LiDAR_2016_B16_LAS_17259225.laz",
    "url": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/IL_4_County_QL1_LiDAR_2016_B16/IL_4County_Cook_2017/LAZ/USGS_LPC_IL_4_County_QL1_LiDAR_2016_B16_LAS_17259225.laz"
+  },
+  {
+   "name": "m_4108703_ne_16_030_20230710_20240209.tif",
+   "url": "https://naipeuwest.blob.core.windows.net/naip/v002/il/2023/il_030cm_2023/41087/m_4108703_ne_16_030_20230710_20240209.tif"
   }
  ]
 }
