@@ -70,6 +70,14 @@
   {
    "name": "ctnaip2023_info.json",
    "url": "https://cteco.uconn.edu/ctraster/rest/services/images/NAIP_2023/ImageServer?f=json"
+  },
+  {
+   "name": "tnm_s3_ct2023_list.xml",
+   "url": "https://prd-tnm.s3.amazonaws.com/?list-type=2&prefix=StagedProducts/Elevation/LPC/Projects/CT_2023Statewide_C25/&delimiter=/"
+  },
+  {
+   "name": "tnm_s3_ct2023_find.xml",
+   "url": "https://prd-tnm.s3.amazonaws.com/?list-type=2&prefix=StagedProducts/Elevation/LPC/Projects/CT_2023Statewide_C25/&max-keys=5"
   }
  ]
 }
