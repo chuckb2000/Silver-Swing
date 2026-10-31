@@ -1,0 +1,76 @@
+{
+  "id": "marovitz",
+  "name": "Sydney R. Marovitz Golf Course",
+  "location": "Lincoln Park lakefront, Chicago, Cook County, Illinois",
+  "state": "IL",
+  "architects": "Edward B. Dearie Jr. (1932, as Waveland Golf Course; club website sydneymarovitz.cpdgolf.com/the-course)",
+  "theme": "marovitz",
+  "epsg": 32616,
+  "osm_sources": [
+    "raw/overpass.geojson"
+  ],
+  "boundary_name": "Sydney R. Marovitz Golf Course",
+  "dtm": {
+    "path": "raw/usgs_dem_1m_clip.tif",
+    "units": "m",
+    "source": "USGS 3DEP 1 m DEM, project IL_4_County_QL1_LiDAR_2016_B16, tile x44y465 (published 2024-11-18), clipped to the world + 100 m by pipeline/intake.py raster; fetched by the GitHub Actions fetch workflow 2026-10-31 (release data-marovitz)"
+  },
+  "laz": {
+    "paths": [
+      "raw/laz/*.laz"
+    ],
+    "classes": [
+      3,
+      4,
+      5
+    ],
+    "units": "ft",
+    "source": "USGS 3DEP lidar point cloud IL_4_County_QL1_LiDAR_2016_B16 (IL_4County_Cook_2017), tiles LAS_1700{9225,9250,9275} and LAS_1725{9225,9250,9275}, clipped to the world + 100 m by pipeline/intake.py laz; fetched by the GitHub Actions fetch workflow 2026-10-31 (release data-marovitz)",
+    "label": "2017 USGS lidar (Cook County)"
+  },
+  "world": {
+    "x0": 446340,
+    "y0": 4644373,
+    "width": 768,
+    "height": 1536,
+    "note": "OSM course boundary way/24951326 bbox (464 x 1,114 m) + scenery, rounded out to whole 256 m chunks and centred: 768 m east-west (152 m each side), 1,536 m north-south (211 m each side)"
+  },
+  "tee_sets": [
+    {
+      "name": "Blue",
+      "playable": true,
+      "rating": 35.5,
+      "slope": 127,
+      "total_yd": 3265
+    },
+    {
+      "name": "White",
+      "playable": true,
+      "rating": 34.4,
+      "slope": 122,
+      "total_yd": 3034
+    },
+    {
+      "name": "Red",
+      "playable": false,
+      "rating": 31.9,
+      "slope": 110,
+      "total_yd": 2493
+    }
+  ],
+  "default_tee": "Blue",
+  "scorecard_source": "Club scorecard PDF (sydneymarovitz.cpdgolf.com, wp-content/uploads/sites/9687/2025/08/sydney-marovitz-10.20.pdf), read 2026-10-31; a copy is in the release data-marovitz (marovitz_scorecard_2025.pdf). Ratings are the card's men's 9-hole figures (women's on the card: Blue 38.4/138, White 37.1/133, Red 34.1/120). Conflicts (not used): GolfLink Blue 3,240 (35.1/117) and Red 3,156; Hole19 White 2,774 and Red 2,279; OSM hole 2 par 4 (card par 5). Built: Blue and White (developer's overnight call 2026-10-30: the back set, which is Blue, and the next set forward).",
+  "penalty_default": "red",
+  "driving_range_is_ob": true,
+  "trees_off_fairways_m": 2,
+  "wind_mph": {
+    "minMph": 3,
+    "maxMph": 14
+  },
+  "attribution": [
+    "Map data © OpenStreetMap contributors (ODbL)",
+    "Elevation and trees: U.S. Geological Survey 3D Elevation Program (2017 Cook County lidar)",
+    "Scorecard: Sydney R. Marovitz Golf Course (Chicago Park District)"
+  ],
+  "notes": "Overnight build 2026-10-30/31 (developer asleep; calls made by the course chat and logged in validation_report.md and docs/courses/marovitz.md): Blue and White built, Blue default; card pars win over OSM (hole 2 par 5); all water red; Lake Michigan and the harbours are outside the boundary (out of bounds); wind 3-14 mph by analogy with the open-coast band (the course sits on the open Lake Michigan shore); new theme marovitz (urban lakefront parkland: elm, honey locust, cottonwood, spruce; Lake Michigan teal water)."
+}
