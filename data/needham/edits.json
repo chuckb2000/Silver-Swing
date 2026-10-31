@@ -1,32 +1,6 @@
 {
- "note": "Needham is nine holes played twice from different tees; the card's 18 is holes 1-18 on the nine greens (make_second_nine.py writes the second nine). Tee boxes chosen per hole and set by the club card's yardages (validation_report.md 'Tee boxes'); course chat 2026-10-31, pending the developer's approval.",
+ "note": "Needham is nine holes, built as its nine (Highland Links style; developer 2026-10-31): rounds are 9 or 18 twice around. Tee boxes chosen per hole and set (Blue, White) by the club card's yardages (validation_report.md); course chat 2026-10-31, pending the developer's approval.",
  "add": [
-  {
-   "from": "proposed/second_nine.geojson",
-   "ids": [
-    "w1271805356_n18",
-    "w1271805357_n17",
-    "w1271805358_n16",
-    "w1271805359_n15",
-    "w1271805360_n14",
-    "w1271805361_n13",
-    "w1271805362_n12",
-    "w1271805363_n11",
-    "w1271805364_n10",
-    "w1271766427_t10",
-    "w1271766426_t10",
-    "w1271766416_t11",
-    "w1271766413_t12",
-    "w1271766409_t13",
-    "w1271766405_t14",
-    "w1271766408_t15",
-    "w1271766423_t16",
-    "w1271766422_t17",
-    "w1271766412_t18"
-   ],
-   "tags": {},
-   "reason": "holes 10-18 = holes 1-9 from the second-nine tees (club card 2026): copies of the OSM hole lines, and copies of the tee boxes those holes use, tagged hole/tee_set"
-  },
   {
    "from": "proposed/channels_lidar.geojson",
    "ids": [
@@ -53,129 +27,129 @@
    "osm": "w1271766428",
    "set": {
     "hole": "1",
-    "tee_set": "Blue/White"
+    "tee_set": "Blue"
    },
-   "reason": "hole 1 Blue/White tee (front nine), by the card's yardage"
+   "reason": "hole 1 Blue tee, by the card's yardage"
   },
   {
    "osm": "w1271766427",
    "set": {
     "hole": "1",
-    "tee_set": "White/Green"
+    "tee_set": "White"
    },
-   "reason": "hole 1 White/Green tee (front nine), by the card's yardage"
+   "reason": "hole 1 White tee, by the card's yardage"
   },
   {
    "osm": "w1271766415",
    "set": {
     "hole": "2",
-    "tee_set": "Blue/White"
+    "tee_set": "Blue"
    },
-   "reason": "hole 2 Blue/White tee (front nine), by the card's yardage"
+   "reason": "hole 2 Blue tee, by the card's yardage"
   },
   {
    "osm": "w1271766416",
    "set": {
     "hole": "2",
-    "tee_set": "White/Green"
+    "tee_set": "White"
    },
-   "reason": "hole 2 White/Green tee (front nine), by the card's yardage"
+   "reason": "hole 2 White tee, by the card's yardage"
   },
   {
    "osm": "w1271766414",
    "set": {
     "hole": "3",
-    "tee_set": "Blue/White"
+    "tee_set": "Blue"
    },
-   "reason": "hole 3 Blue/White tee (front nine), by the card's yardage"
+   "reason": "hole 3 Blue tee, by the card's yardage"
   },
   {
    "osm": "w1271766413",
    "set": {
     "hole": "3",
-    "tee_set": "White/Green"
+    "tee_set": "White"
    },
-   "reason": "hole 3 White/Green tee (front nine), by the card's yardage"
+   "reason": "hole 3 White tee, by the card's yardage"
   },
   {
    "osm": "w1271766409",
    "set": {
     "hole": "4",
-    "tee_set": "Blue/White;White/Green"
+    "tee_set": "Blue;White"
    },
-   "reason": "hole 4 Blue/White and White/Green tee (front nine), by the card's yardage"
+   "reason": "hole 4 Blue and White tee, by the card's yardage"
   },
   {
    "osm": "w1271766404",
    "set": {
     "hole": "5",
-    "tee_set": "Blue/White"
+    "tee_set": "Blue"
    },
-   "reason": "hole 5 Blue/White tee (front nine), by the card's yardage"
+   "reason": "hole 5 Blue tee, by the card's yardage"
   },
   {
    "osm": "w1271766405",
    "set": {
     "hole": "5",
-    "tee_set": "White/Green"
+    "tee_set": "White"
    },
-   "reason": "hole 5 White/Green tee (front nine), by the card's yardage"
+   "reason": "hole 5 White tee, by the card's yardage"
   },
   {
    "osm": "w1271766407",
    "set": {
     "hole": "6",
-    "tee_set": "Blue/White"
+    "tee_set": "Blue"
    },
-   "reason": "hole 6 Blue/White tee (front nine), by the card's yardage"
+   "reason": "hole 6 Blue tee, by the card's yardage"
   },
   {
    "osm": "w1271766408",
    "set": {
     "hole": "6",
-    "tee_set": "White/Green"
+    "tee_set": "White"
    },
-   "reason": "hole 6 White/Green tee (front nine), by the card's yardage"
+   "reason": "hole 6 White tee, by the card's yardage"
   },
   {
    "osm": "w1271766424",
    "set": {
     "hole": "7",
-    "tee_set": "Blue/White"
+    "tee_set": "Blue"
    },
-   "reason": "hole 7 Blue/White tee (front nine), by the card's yardage"
+   "reason": "hole 7 Blue tee, by the card's yardage"
   },
   {
    "osm": "w1271766423",
    "set": {
     "hole": "7",
-    "tee_set": "White/Green"
+    "tee_set": "White"
    },
-   "reason": "hole 7 White/Green tee (front nine), by the card's yardage"
+   "reason": "hole 7 White tee, by the card's yardage"
   },
   {
    "osm": "w1271766421",
    "set": {
     "hole": "8",
-    "tee_set": "Blue/White"
+    "tee_set": "Blue"
    },
-   "reason": "hole 8 Blue/White tee (front nine), by the card's yardage"
+   "reason": "hole 8 Blue tee, by the card's yardage"
   },
   {
    "osm": "w1271766422",
    "set": {
     "hole": "8",
-    "tee_set": "White/Green"
+    "tee_set": "White"
    },
-   "reason": "hole 8 White/Green tee (front nine), by the card's yardage"
+   "reason": "hole 8 White tee, by the card's yardage"
   },
   {
    "osm": "w1271766412",
    "set": {
     "hole": "9",
-    "tee_set": "Blue/White;White/Green"
+    "tee_set": "Blue;White"
    },
-   "reason": "hole 9 Blue/White and White/Green tee (front nine), by the card's yardage"
+   "reason": "hole 9 Blue and White tee, by the card's yardage"
   }
  ],
  "drop": [

@@ -1,32 +1,34 @@
 ## Developer's calls pending (overnight build 2026-10-30/31; the course chat's calls, each reversible)
 
-1. **Nine greens played as the card's 18.** Needham is nine holes played twice from different tees; the
-   club's 2026 card prints two nines with different yardages and stroke indexes (Blue/White: 3,109 out,
-   2,961 in). Built as 18 holes: holes 10-18 are copies of the OSM lines 1-9 (`make_second_nine.py`,
-   `proposed/second_nine.geojson`) ending on the same greens, each played from its second-nine tee. The
-   game already plays an 18-hole course with front 9 / back 9 / 18, so no game change was needed.
-   Option: a 9-hole course with one tee set and "18 twice around" (Highland Links), which loses the
-   second-nine yardages. Recommendation: keep the 18.
-2. **Tee sets.** The card has no plain Blue: Blue/Gold (6,115, par 70, men 70.2/128), Blue/White (6,070,
-   par 72, 69.8/129), White/Green (5,848, par 72, 68.5/124), Red/Yellow (5,433, par 72, ladies 72.0/123).
-   The back-most set, Blue/Gold, has other pars on two holes (8: a 206-yd par 3; 10: a 401-yd par 4), and
-   the game has one par per hole, so it is not built (design request: per-tee pars). Built: Blue/White (the
-   Blue set, default) and White/Green (the next set forward). Red/Yellow and Blue/Gold are in
-   `scorecard_full.csv`. Stroke index: the men's Blue/White and White/Green row.
-3. **Tee boxes chosen by the card's yardages** (OSM tags no tee colours): `edits.json` tags each front-nine
-   box `hole`/`tee_set`, and the second nine uses tagged copies. Pending the developer's approval.
-4. **Holes moved within their boxes** (s06; real and adjusted yardage in the table above): 2 and 11 (184 yd
-   from the box 169 yd away, moved to 179), 14 White/Green (308 from a long box shared with hole 5,
-   +11.4 % from its middle, +2.4 % moved). These were > 8 % before the move; after it all are within 3 %.
-   Hole 18 White/Green stays +4.2 % (523 vs 502): one large box (w1271766412) serves 9 and 18 for every
-   set; the card's forward tee there is not mapped. Accepted as a flag.
+1. **Built as a nine (developer, 2026-10-31, 09:20: "build it in the Highland Links style because
+   it's a nine-hole course").** Needham is nine holes; the club's 2026 card prints them twice from other
+   tees. Built: the card's rows 1-9 only, which the game plays as 9 or 18 twice around. Dropped: the
+   card's 18 on nine greens (holes 10-18 replaying 1-9 from the second-nine tees: the hole-line and
+   tee-box copies of `make_second_nine.py`, now `make_clubhouse.py`, which keeps only the clubhouse
+   building) and the 18-hole tee sets Blue/White and White/Green. The second-nine tees (rows 10-18:
+   Gold, and White, Green and Yellow as the back nine) are in `scorecard_full.csv`, not built.
+2. **Tee sets.** On rows 1-9 the card has Blue (front of Blue/White and Blue/Gold), White (front of
+   White/Green) and Red (front of Red/Yellow). Blue is the furthest back, so Blue (default, par 36, 3,109)
+   and White (the next set forward, par 36, 2,961) are built; Red (2,887) is in `scorecard.csv`, not
+   built. Gold exists only on rows 10-18 (Blue/Gold's back nine, 3,096, hole 1 a 401-yd par 4) and
+   Blue/Gold's front nine differs from Blue only on hole 8 (a 206-yd par 3): neither is built. All three
+   nine-hole sets have the same pars, so **the design request for per-tee pars is no longer needed for
+   this layout** (only if Gold or Blue/Gold were ever wanted). Ratings: the card rates only 18-hole
+   combinations; each set carries the one that starts on it (men Blue/White 69.8/129 for Blue,
+   White/Green 68.5/124 for White, ladies Red/Yellow 72.0/123 for Red). Stroke index: the men's
+   Blue/White row 1-9.
+3. **Tee boxes chosen by the card's yardages** (OSM tags no tee colours): `edits.json` tags each box
+   `hole`/`tee_set` (Blue, White); the same boxes as the earlier 18-hole build's front nine. Pending the
+   developer's approval.
+4. **Holes moved within their boxes** (s06; real and adjusted yardage in the table above). Hole 9 White
+   (514) and Blue (525) share one large box (w1271766412); the card's forward tee there is not mapped.
 5. **Water, all red** (standing default): the four ponds inside the boundary (OSM `natural=water` only,
    `red_water_osm`) and Alder Brook in two pieces (w310169385 south, w310169388 north of the road) as
    penalty areas traced from the channel in the 2021 DEM (`propose_channels.py`). The card's local rules
    name yellow water hazards and red lateral hazards but not which is which. The MassGIS wooded swamps
    and wet meadow (`natural=wetland`, 2007) on the west side are rough with their lidar ground, not water.
-6. **Hole 6 / 15 pond.** The pond in the fairway (w310168725) is 226-265 m from the tee, where a perfect
-   drive ends: `checks.json` skips holes 6 and 15 in the default-aim test. The real hole is a lay-up with
+6. **Hole 6 pond.** The pond in the fairway (w310168725) is 226-265 m from the tee, where a perfect
+   drive ends: `checks.json` skips hole 6 in the default-aim test. The real hole is a lay-up with
    a hybrid or long iron.
 7. **Out of bounds:** the OSM boundary (relation 13156245, two parts joined across the road, 7 m gap,
    `join_boundary_parts`). The card: "off club property & beyond chain link fences on holes 6, 7, & 8".

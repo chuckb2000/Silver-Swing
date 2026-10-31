@@ -42,29 +42,29 @@
   },
   "tee_sets": [
     {
-      "name": "Blue/White",
+      "name": "Blue",
       "playable": true,
       "rating": 69.8,
       "slope": 129,
-      "total_yd": 6070
+      "total_yd": 3109
     },
     {
-      "name": "White/Green",
+      "name": "White",
       "playable": true,
       "rating": 68.5,
       "slope": 124,
-      "total_yd": 5848
+      "total_yd": 2961
     },
     {
-      "name": "Red/Yellow",
+      "name": "Red",
       "playable": false,
       "rating": 72.0,
       "slope": 123,
-      "total_yd": 5433
+      "total_yd": 2887
     }
   ],
-  "default_tee": "Blue/White",
-  "scorecard_source": "Club scorecard PDF (needhamgolfclub.com/documents/20124/110138/NEEDHAM_2026.pdf, printed 2026, fetched through the GitHub workflow 2026-10-31), agrees with the club's Explore the Course page. Nine holes played twice from different tees: the card's 18 is built as holes 1-18 on the nine greens (holes 10-18 = holes 1-9 from the second-nine tees). Built: Blue/White (par 72, 6,070, men 69.8/129) and White/Green (par 72, 5,848, men 68.5/124); Red/Yellow (ladies 72.0/123) is in scorecard.csv, not built. Blue/Gold (par 70, 6,115, men 70.2/128; hole 8 is a 206-yd par 3 and hole 10 a 401-yd par 4) is not built: the game has one par per hole, so it needs per-tee pars (design request). Stroke index: the men's Blue/White and White/Green row. Full card in scorecard_full.csv.",
+  "default_tee": "Blue",
+  "scorecard_source": "Club scorecard PDF (needhamgolfclub.com/documents/20124/110138/NEEDHAM_2026.pdf, printed 2026, fetched through the GitHub workflow 2026-10-31), agrees with the club's Explore the Course page. Built as 9 holes, the card's rows 1-9 (Highland Links style; developer 2026-10-31): rounds are 9 or 18 twice around. Blue = the front nine of Blue/White (par 36, 3,109), White = the front nine of White/Green (par 36, 2,961), both built; Red = the front nine of Red/Yellow (2,887) in scorecard.csv, not built. The card rates only 18-hole combinations, so each set carries the 18-hole rating of the combination that starts on it (men Blue/White 69.8/129, White/Green 68.5/124; ladies Red/Yellow 72.0/123); the game reads a 9-hole rating of 45 or more as an 18-hole one. Not built: the second-nine tees (rows 10-18: Gold, White and Green as the card's back nine, Yellow) and the 18-hole combinations; Blue/Gold's front nine differs from Blue only on hole 8 (a 206-yd par 3), not built. Stroke index: the men's Blue/White row 1-9 (odd numbers). Full card in scorecard_full.csv.",
   "penalty_default": "red",
   "red_water_osm": [
     "w91082682",
@@ -84,6 +84,6 @@
     "Elevation and trees: U.S. Geological Survey 3D Elevation Program (2021 Central Eastern Massachusetts lidar)",
     "Scorecard: Needham Golf Club (club scorecard, 2026)"
   ],
-  "notes": "Overnight build 2026-10-30/31 (developer asleep; calls logged in validation_report.md and docs/courses/needham.md). Standing defaults: all water red, OB = the course boundary, bayside theme, wind 1-9 mph (inland New England).",
+  "notes": "Overnight build 2026-10-30/31 (developer asleep; calls logged in validation_report.md and docs/courses/needham.md); rebuilt as a nine 2026-10-31 (developer's call). Standing defaults: all water red, OB = the course boundary, bayside theme, wind 1-9 mph (inland New England).",
   "flatten_wetlands": false
 }
