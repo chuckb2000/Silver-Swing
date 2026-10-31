@@ -1,0 +1,33 @@
+{
+ "id": "kwiniaska",
+ "course": "Kwiniaska Golf Club",
+ "place": "Shelburne, Vermont",
+ "facts": [
+  {"fact": "The club was founded by Brad and May Caldwell of Shelburne, who moved from the Boston area to Shelburne in the 1960s to dairy farm; Brad Caldwell concluded that a golf course would pay better than farming.", "source": "https://www.vtcng.com/thecitizenvt/community/obituaries/kwini-turns-50/article_7b04ad1b-f47d-5e0d-a2c6-fe04035ca195.html"},
+  {"fact": "The course sits on a ridge above Shelburne village with views of the Green Mountains and, across Lake Champlain, the Adirondacks; redesigned by PB Dye, the new layout opened in May 2020 (par 70).", "source": "https://kwiniaska.com/ (via the fetch workflow, release data-kwiniaska kwiniaska_home.html); 2021 club handbook https://files.constantcontact.com/62699bd1101/c7628afa-c594-4a3c-8533-243b5d6bc421.pdf"}
+ ],
+ "current": {"subject": "none: a new course (course chat 2026-10-30)", "keep": "", "weaknesses": ""},
+ "concepts": [
+  {
+   "n": 1,
+   "name": "The Ridge Holstein",
+   "rationale": "A Holstein's head for the founders' dairy farm and Vermont's dairy country; read at 32 px by its black-and-white patches and pink muzzle.",
+   "references": ["https://www.vtcng.com/thecitizenvt/community/obituaries/kwini-turns-50/article_7b04ad1b-f47d-5e0d-a2c6-fe04035ca195.html"],
+   "symbolism": "the Caldwells' dairy farm, and Vermont dairy country around Shelburne",
+   "interpretation": "The breed and the yellow ear tag are interpretation: the source says only that the founders came to dairy farm.",
+   "palette": [
+    {"hex": "#f4f2ec", "name": "white coat"},
+    {"hex": "#d6d2c6", "name": "coat shade"},
+    {"hex": "#1f1c1e", "name": "black patches"},
+    {"hex": "#eab1a6", "name": "muzzle"},
+    {"hex": "#cf8a80", "name": "muzzle shade"},
+    {"hex": "#d08680", "name": "inner ear"},
+    {"hex": "#f2c230", "name": "ear tag"}
+   ],
+   "strengths": "A subject no other course has; reads at 1x; says Vermont without a maple leaf or a mountain.",
+   "tradeoffs": "Nothing about golf or the lake views."
+  }
+ ],
+ "chosen": 1,
+ "recommendation": "Concept 1 (developer's blanket permission, 2026-10-30 overnight brief; pending the developer's look)."
+}
