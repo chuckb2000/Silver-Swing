@@ -55,8 +55,8 @@
    "total_yd": 6325
   }
  ],
- "default_tee": "Green",
- "scorecard_source": "GolfPass (golfpass.com/courses/28943-the-aquidneck-club/scorecard-and-layout), read 2026-10-31: seven sets per hole (Gold, Gold/Green, Green, Green/White, White, Yellow, Red), par 71, men's and women's stroke index (column handicap_w); every row adds up to the tee table's totals. Men's ratings from the same table (Gold 72.5/132, Green 70.6/128). OpenGolfAPI (from OSM) has the same Gold row and men's index. 18Birdies has the same Gold row and totals but a different men's stroke index (open item). Unverified: the club publishes no card. Built: Gold (the tips) and Green (one step forward; the card has no Blue; developer, 2026-10-30). Other sets in scorecard.csv, not built.",
+ "default_tee": "Gold",
+ "scorecard_source": "GolfPass (golfpass.com/courses/28943-the-aquidneck-club/scorecard-and-layout), read 2026-10-31: seven sets per hole (Gold, Gold/Green, Green, Green/White, White, Yellow, Red), par 71, men's and women's stroke index (column handicap_w); every row adds up to the tee table's totals. Men's ratings from the same table (Gold 72.5/132, Green 70.6/128). OpenGolfAPI (from OSM) has the same Gold row and men's index. 18Birdies has the same Gold row and totals but a different men's stroke index (open item). Unverified: the club publishes no card. Built: Gold (the tips, the default: the longest set, developer 2026-10-31, courses.test.ts) and Green (one step forward; the card has no Blue; developer, 2026-10-30). Other sets in scorecard.csv, not built.",
  "driving_range_is_ob": true,
  "penalty_default": "red",
  "trees_off_fairways_m": 2,
@@ -70,7 +70,7 @@
   "Photo for checking: USDA NAIP via the USGS National Map",
   "Scorecard: GolfPass (unverified)"
  ],
- "notes": "Course chat, 2026-10-31 (developer asleep, standing defaults and the developer's overnight calls): every penalty area red, OSM boundary as OB, driving range OB, trees from lidar, Gold + Green built with Green the default, wind 2-12 mph (Narragansett Bay shore). Theme newport (the same island and the same coastal mix of pine, maple and oak; Newport Country Club's theme).",
+ "notes": "Course chat, 2026-10-31 (developer asleep, standing defaults and the developer's overnight calls): every penalty area red, OSM boundary as OB, driving range OB, trees from lidar, Gold + Green built, Gold the default (the longest set: main's rule of 2026-10-31; was Green), wind 2-12 mph (Narragansett Bay shore). Theme newport (the same island and the same coastal mix of pine, maple and oak; Newport Country Club's theme).",
  "range_art": "rough",
  "range_art_note": "the practice ground (the boundary's southern lobe) is out of bounds; drawn as rough with OB stakes so it does not look playable (as at Oregon Golf Club and Meadow Club)",
  "red_water_osm": [
