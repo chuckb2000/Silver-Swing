@@ -1,0 +1,410 @@
+{
+ "add": [
+  {
+   "from": "proposed/sankaty.geojson",
+   "ids": [
+    "p_range"
+   ],
+   "reason": "the practice ground east of the clubhouse is a driving range: out of bounds (standing default); OSM maps it as rough + fairway pieces (make_proposed.py)"
+  },
+  {
+   "from": "proposed/sankaty.geojson",
+   "ids": [
+    "p_tee9_back",
+    "p_tee9_fwd"
+   ],
+   "reason": "hole 9's two tee pads south of Polpis Road, mapped as golf=fairway; NAIP shows tee rectangles and the 9th's line starts on the back one"
+  },
+  {
+   "from": "proposed/sankaty.geojson",
+   "ids": [
+    "p_tee1",
+    "p_tee12"
+   ],
+   "reason": "tee boxes on the mown (fairway-height) tees at the hole 1 and hole 12 line starts: OSM maps the ground as fairway, not as a tee (make_proposed.py; listed in validation_report.md)"
+  },
+  {
+   "from": "proposed/sankaty.geojson",
+   "ids": [
+    "p_path_w1000414467",
+    "p_path_w1249454455",
+    "p_path_w1249469049",
+    "p_path_w1249469050",
+    "p_path_w1249469051",
+    "p_path_w1249469056",
+    "p_path_w1249469057",
+    "p_path_w1249485323",
+    "p_path_w1249485324",
+    "p_path_w1249485326",
+    "p_path_w1249485327",
+    "p_path_w1249485328",
+    "p_path_w1249485329",
+    "p_path_w1249485330",
+    "p_path_w1249485331",
+    "p_path_w1249485332",
+    "p_path_w1249507809",
+    "p_path_w1249507812",
+    "p_path_w1249507813",
+    "p_path_w1256628925",
+    "p_path_w1256642546",
+    "p_path_w1256642548",
+    "p_path_w1256687616",
+    "p_path_w1256687619",
+    "p_path_w844031585",
+    "p_path_w844031586",
+    "p_path_w844031587",
+    "p_path_w844031588",
+    "p_path_w844612317",
+    "p_path_w844612320",
+    "p_path_w871617461",
+    "p_path_w871617462",
+    "p_path_w871617463",
+    "p_path_w871617464",
+    "p_path_w871617475",
+    "p_path_w871617476",
+    "p_path_w871617478",
+    "p_path_w871619463",
+    "p_path_w871621731",
+    "p_path_w871621745",
+    "p_path_w871621746",
+    "p_path_w874192248",
+    "p_path_w874192256",
+    "p_path_w874192258",
+    "p_path_w874192262",
+    "p_path_w874192263",
+    "p_path_w874192264",
+    "p_path_w874395411",
+    "p_path_w874395412",
+    "p_path_w874395413",
+    "p_path_w874395417",
+    "p_path_w874395418",
+    "p_path_w874395419",
+    "p_path_w874395420",
+    "p_path_w874395421",
+    "p_path_w874395422",
+    "p_path_w874403296",
+    "p_path_w874403297",
+    "p_path_w874403298",
+    "p_path_w874403303",
+    "p_path_w874403304",
+    "p_path_w874403308",
+    "p_path_w874403310",
+    "p_path_w874403316"
+   ],
+   "reason": "OSM's golf=path lines (highway=path/footway) are the crushed-shell/sand cart paths in NAIP: cart paths (free relief); the audit's suggestion, done as copies with kind cartpath (make_proposed.py)"
+  },
+  {
+   "from": "proposed/sankaty.geojson",
+   "ids": [
+    "p_sea"
+   ],
+   "reason": "the sea polygon, tagged golf=lateral_water_hazard in OSM, lies almost wholly outside the boundary: plain water (out of bounds), as the audit suggests"
+  }
+ ],
+ "drop": [
+  {
+   "osm": "w295320131",
+   "reason": "Nantucket Golf Club's boundary, the neighbouring course south-west of Sankaty Head, partly inside the world (audit: every leisure=golf_course becomes a boundary)"
+  },
+  {
+   "osm": "w839411248",
+   "reason": "Nantucket Golf Club's hole 1 line (unnamed; outside Sankaty Head's boundary)"
+  },
+  {
+   "osm": "w839411249",
+   "reason": "Nantucket Golf Club's hole 2 line (unnamed; outside Sankaty Head's boundary)"
+  },
+  {
+   "osm": "w843609205",
+   "reason": "retagged as a tee (p_tee9_back)"
+  },
+  {
+   "osm": "w843609206",
+   "reason": "retagged as a tee (p_tee9_fwd)"
+  },
+  {
+   "osm": "w871621737",
+   "reason": "the practice field outline, now part of the driving range p_range"
+  },
+  {
+   "osm": "w871621736",
+   "reason": "the range's hitting area, now part of p_range"
+  },
+  {
+   "osm": "w871621735",
+   "reason": "a strip at the range's north-east end, now part of p_range"
+  },
+  {
+   "osm": "w871621732",
+   "reason": "a target green on the driving range (OB)"
+  },
+  {
+   "osm": "w871621733",
+   "reason": "a target green on the driving range (OB)"
+  },
+  {
+   "osm": "w871621734",
+   "reason": "a target green on the driving range (OB)"
+  },
+  {
+   "osm": "w1000414467",
+   "reason": "copied as cart path p_path_w1000414467"
+  },
+  {
+   "osm": "w1249454455",
+   "reason": "copied as cart path p_path_w1249454455"
+  },
+  {
+   "osm": "w1249469049",
+   "reason": "copied as cart path p_path_w1249469049"
+  },
+  {
+   "osm": "w1249469050",
+   "reason": "copied as cart path p_path_w1249469050"
+  },
+  {
+   "osm": "w1249469051",
+   "reason": "copied as cart path p_path_w1249469051"
+  },
+  {
+   "osm": "w1249469056",
+   "reason": "copied as cart path p_path_w1249469056"
+  },
+  {
+   "osm": "w1249469057",
+   "reason": "copied as cart path p_path_w1249469057"
+  },
+  {
+   "osm": "w1249485323",
+   "reason": "copied as cart path p_path_w1249485323"
+  },
+  {
+   "osm": "w1249485324",
+   "reason": "copied as cart path p_path_w1249485324"
+  },
+  {
+   "osm": "w1249485326",
+   "reason": "copied as cart path p_path_w1249485326"
+  },
+  {
+   "osm": "w1249485327",
+   "reason": "copied as cart path p_path_w1249485327"
+  },
+  {
+   "osm": "w1249485328",
+   "reason": "copied as cart path p_path_w1249485328"
+  },
+  {
+   "osm": "w1249485329",
+   "reason": "copied as cart path p_path_w1249485329"
+  },
+  {
+   "osm": "w1249485330",
+   "reason": "copied as cart path p_path_w1249485330"
+  },
+  {
+   "osm": "w1249485331",
+   "reason": "copied as cart path p_path_w1249485331"
+  },
+  {
+   "osm": "w1249485332",
+   "reason": "copied as cart path p_path_w1249485332"
+  },
+  {
+   "osm": "w1249507809",
+   "reason": "copied as cart path p_path_w1249507809"
+  },
+  {
+   "osm": "w1249507812",
+   "reason": "copied as cart path p_path_w1249507812"
+  },
+  {
+   "osm": "w1249507813",
+   "reason": "copied as cart path p_path_w1249507813"
+  },
+  {
+   "osm": "w1256628925",
+   "reason": "copied as cart path p_path_w1256628925"
+  },
+  {
+   "osm": "w1256642546",
+   "reason": "copied as cart path p_path_w1256642546"
+  },
+  {
+   "osm": "w1256642548",
+   "reason": "copied as cart path p_path_w1256642548"
+  },
+  {
+   "osm": "w1256687616",
+   "reason": "copied as cart path p_path_w1256687616"
+  },
+  {
+   "osm": "w1256687619",
+   "reason": "copied as cart path p_path_w1256687619"
+  },
+  {
+   "osm": "w844031585",
+   "reason": "copied as cart path p_path_w844031585"
+  },
+  {
+   "osm": "w844031586",
+   "reason": "copied as cart path p_path_w844031586"
+  },
+  {
+   "osm": "w844031587",
+   "reason": "copied as cart path p_path_w844031587"
+  },
+  {
+   "osm": "w844031588",
+   "reason": "copied as cart path p_path_w844031588"
+  },
+  {
+   "osm": "w844612317",
+   "reason": "copied as cart path p_path_w844612317"
+  },
+  {
+   "osm": "w844612320",
+   "reason": "copied as cart path p_path_w844612320"
+  },
+  {
+   "osm": "w871617461",
+   "reason": "copied as cart path p_path_w871617461"
+  },
+  {
+   "osm": "w871617462",
+   "reason": "copied as cart path p_path_w871617462"
+  },
+  {
+   "osm": "w871617463",
+   "reason": "copied as cart path p_path_w871617463"
+  },
+  {
+   "osm": "w871617464",
+   "reason": "copied as cart path p_path_w871617464"
+  },
+  {
+   "osm": "w871617475",
+   "reason": "copied as cart path p_path_w871617475"
+  },
+  {
+   "osm": "w871617476",
+   "reason": "copied as cart path p_path_w871617476"
+  },
+  {
+   "osm": "w871617478",
+   "reason": "copied as cart path p_path_w871617478"
+  },
+  {
+   "osm": "w871619463",
+   "reason": "copied as cart path p_path_w871619463"
+  },
+  {
+   "osm": "w871621731",
+   "reason": "copied as cart path p_path_w871621731"
+  },
+  {
+   "osm": "w871621745",
+   "reason": "copied as cart path p_path_w871621745"
+  },
+  {
+   "osm": "w871621746",
+   "reason": "copied as cart path p_path_w871621746"
+  },
+  {
+   "osm": "w874192248",
+   "reason": "copied as cart path p_path_w874192248"
+  },
+  {
+   "osm": "w874192256",
+   "reason": "copied as cart path p_path_w874192256"
+  },
+  {
+   "osm": "w874192258",
+   "reason": "copied as cart path p_path_w874192258"
+  },
+  {
+   "osm": "w874192262",
+   "reason": "copied as cart path p_path_w874192262"
+  },
+  {
+   "osm": "w874192263",
+   "reason": "copied as cart path p_path_w874192263"
+  },
+  {
+   "osm": "w874192264",
+   "reason": "copied as cart path p_path_w874192264"
+  },
+  {
+   "osm": "w874395411",
+   "reason": "copied as cart path p_path_w874395411"
+  },
+  {
+   "osm": "w874395412",
+   "reason": "copied as cart path p_path_w874395412"
+  },
+  {
+   "osm": "w874395413",
+   "reason": "copied as cart path p_path_w874395413"
+  },
+  {
+   "osm": "w874395417",
+   "reason": "copied as cart path p_path_w874395417"
+  },
+  {
+   "osm": "w874395418",
+   "reason": "copied as cart path p_path_w874395418"
+  },
+  {
+   "osm": "w874395419",
+   "reason": "copied as cart path p_path_w874395419"
+  },
+  {
+   "osm": "w874395420",
+   "reason": "copied as cart path p_path_w874395420"
+  },
+  {
+   "osm": "w874395421",
+   "reason": "copied as cart path p_path_w874395421"
+  },
+  {
+   "osm": "w874395422",
+   "reason": "copied as cart path p_path_w874395422"
+  },
+  {
+   "osm": "w874403296",
+   "reason": "copied as cart path p_path_w874403296"
+  },
+  {
+   "osm": "w874403297",
+   "reason": "copied as cart path p_path_w874403297"
+  },
+  {
+   "osm": "w874403298",
+   "reason": "copied as cart path p_path_w874403298"
+  },
+  {
+   "osm": "w874403303",
+   "reason": "copied as cart path p_path_w874403303"
+  },
+  {
+   "osm": "w874403304",
+   "reason": "copied as cart path p_path_w874403304"
+  },
+  {
+   "osm": "w874403308",
+   "reason": "copied as cart path p_path_w874403308"
+  },
+  {
+   "osm": "w874403310",
+   "reason": "copied as cart path p_path_w874403310"
+  },
+  {
+   "osm": "w874403316",
+   "reason": "copied as cart path p_path_w874403316"
+  },
+  {
+   "osm": "w843610721",
+   "reason": "copied as p_sea (natural=water)"
+  }
+ ]
+}

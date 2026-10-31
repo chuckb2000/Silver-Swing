@@ -1,0 +1,61 @@
+{
+ "id": "sankaty_head",
+ "name": "Sankaty Head Golf Club",
+ "location": "Siasconset, Nantucket, Massachusetts",
+ "state": "MA",
+ "architects": "H. Emerson Armstrong (1923); restoration by Jim Urbina (c. 2019-2020)",
+ "theme": "sankaty_head",
+ "epsg": 32619,
+ "osm_sources": [
+  "raw/overpass.geojson"
+ ],
+ "boundary_name": "Sankaty Head Golf Club",
+ "dtm": {
+  "path": "raw/dem_3dep_2013_1m.tif",
+  "units": "m",
+  "source": "USGS 3DEP 1 m DEM, project MA_NE_CMGP_Sandy_Z19_2013 (post-Sandy coastal lidar, 2013), tiles x41y457 and x41y458 mosaicked and cut to the world + 100 m by data/sankaty_head/make_dem.py; EPSG:26919 (NAD83 / UTM 19N), NAVD88 metres; fetched through the GitHub Actions workflow 2026-10-31 (release data-sankaty_head)"
+ },
+ "ortho": {
+  "path": "raw/naip_03m.tif",
+  "source": "USDA NAIP via the USGS National Map ImageServer (USGSNAIPImagery, 0.3 m service resolution, mostly 0.6 m imagery), four JPEG exports in EPSG:32619 fetched through the GitHub Actions workflow 2026-10-31, placed by their request boxes and mosaicked by pipeline/intake.py ortho; flight year not stated by the service"
+ },
+ "world": {
+  "x0": 418341,
+  "y0": 4569080,
+  "width": 1024,
+  "height": 2048,
+  "note": "OSM course boundary (way 295320135) bbox 754 x 1,730 m in UTM 19N + scenery, whole 256 m chunks, centred: 1,024 m east-west (135 m west and east), 2,048 m north-south (the 2,048 m limit: 159 m south and north)"
+ },
+ "tee_sets": [
+  {
+   "name": "Championship",
+   "playable": true,
+   "rating": 72.6,
+   "slope": 126,
+   "total_yd": 6730
+  },
+  {
+   "name": "Blue",
+   "playable": true,
+   "rating": 67.2,
+   "slope": 118,
+   "total_yd": 5525
+  }
+ ],
+ "default_tee": "Blue",
+ "scorecard_source": "GolfPass scorecard (golfpass.com/courses/7253-sankaty-head-golf-club/scorecard-and-layout), read 2026-10-31: seven tee columns per hole (Champ., Black, White, White/Blue, Blue, Yellow, Family), par 71, men's handicap row; rows add up (Championship 6,730, Blue 5,525). GolfLink (golflink.com) has the same per-hole yardages and calls the 6,730 row Black (72.6/126) and Blue 5,525 67.2/118; GolfPass's tee table gives Black 6,625 72.6/126 and Blue 5,580 67.2/118. Unverified; no club card online (private club). Built: the tips (Championship) and Blue (developer, 2026-10-30: back tees and Blue; Blue the default).",
+ "penalty_default": "red",
+ "driving_range_is_ob": true,
+ "wind_mph": {
+  "minMph": 3,
+  "maxMph": 14
+ },
+ "trees_off_fairways_m": 2,
+ "attribution": [
+  "Map data \u00a9 OpenStreetMap contributors (ODbL)",
+  "Elevation and lidar: U.S. Geological Survey 3D Elevation Program",
+  "Imagery: USDA NAIP via the USGS National Map",
+  "Scorecard: GolfPass (unverified)"
+ ],
+ "notes": "Course chat, 2026-10-31 (developer asleep, overnight calls): standing defaults (every penalty area red, OSM boundary as OB, trees from lidar, fairway trees removed), wind 3-14 (open coast), tees Championship + Blue (Blue default)."
+}
