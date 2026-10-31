@@ -55,7 +55,7 @@
       "total_yd": 7054
     }
   ],
-  "default_tee": "Long",
+  "default_tee": "Championship",
   "scorecard_source": "The course's post-restoration card (2026): the developer's screenshot of the 'Yale Golf Course Yardage' page (release yale-data, Screenshot.2026-10-24.140812.png), per hole for Championship, Long, Regular and Short with par and stroke index; every row adds up to its printed total. Matches GolfPass's per-hole card and 18Birdies' ratings and stroke index (docs/scouting/yale on branch scouting/new-courses). Men's ratings: Championship 74.7/144, Long 71.5/139, Regular 68.9/130, Short 64.5/110. Built from Championship (the tips) and Long (next forward; there is no Blue), Long the default (developer, 2026-10-30).",
   "penalty_default": "red",
   "driving_range_is_ob": true,
