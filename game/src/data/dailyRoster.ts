@@ -72,6 +72,14 @@ export const DAILY_ROSTER: Readonly<Record<string, string>> = {
   strawberry_farms: '2026-10-26',
   // landed 2026-10-26 (pipeline/land.py)
   presidio: '2026-10-27',
+  // landed 2026-10-31 (pipeline/land.py)
+  victoria: '2026-11-01',
+  // landed 2026-10-31 (pipeline/land.py)
+  needham: '2026-11-01',
+  // landed 2026-10-31 (pipeline/land.py)
+  cyprian_keyes: '2026-11-01',
+  // landed 2026-10-31 (pipeline/land.py)
+  pronghorn_nicklaus: '2026-11-01',
 };
 
 /**
@@ -81,4 +89,6 @@ export const DAILY_ROSTER: Readonly<Record<string, string>> = {
 export const DAILY_PICKS: Readonly<Record<string, DailyPick>> = {
   '2026-10-21': { courseId: 'oswego_lake', length: 'back' }, // developer, 2026-10-20: "the back 9 at Oswego Lake"
   '2026-10-25': { courseId: 'sandpines', length: 'front' }, // developer, 2026-10-25: an Oregon course today, the random draw from tomorrow
+  // the day's draw, kept on the Black tees it was played from: TPC Boston's default became the longer Gold (2026-10-31)
+  '2026-10-29': { courseId: 'tpc_boston', length: 'back', tee: 'Black' },
 };

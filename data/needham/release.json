@@ -1,0 +1,30 @@
+{
+ "release": "data-needham",
+ "note": "build inputs not kept in git; `make fetch NAME=needham` puts them in place (pipeline/fetch_raw.py). The GitHub fetch workflow downloaded these into the release (fetch.json, fetch-log-needham.json). The DEM clip is also in git (raw/usgs_dem_2021_1m_clip.tif, 3 MB), so its entry is only needed if it goes missing.",
+ "files": [
+  {
+   "asset": "needham_overpass2.geojson",
+   "sha256": "c222a967a0b511f8a9414ad9208f856c4221bbe83cba4a1605fd82d6de222419",
+   "run": "python3 pipeline/intake.py osm needham {file}",
+   "outputs": {
+    "raw/overpass.geojson": "3ead0a416857694c2c7505134fd0c5ac8cafd0b63a2e447b304aa4c774af3040"
+   }
+  },
+  {
+   "asset": "USGS_1M_19_x31y469_MA_CentralEastern_2021_B21.tif",
+   "sha256": "e27cd38919e44bacdb11403e7e4768dd8bbea50b70c501027256dcde8aa088c6",
+   "run": "python3 pipeline/intake.py raster needham {file} --out raw/usgs_dem_2021_1m_clip.tif",
+   "outputs": {
+    "raw/usgs_dem_2021_1m_clip.tif": "bedc811a54908f56cc395a87cb5922bd744c10f2a8821692ed8c3328ca3b924f"
+   }
+  },
+  {
+   "asset": "USGS_LPC_MA_CentralEastern_2021_B21_19TCG316681.laz",
+   "sha256": "dd979ab31a37ec4afe1876148f8b6426c78bca920c11ee34366b0aed76c74a2a",
+   "run": "python3 pipeline/intake.py laz needham {file} --classes 3,4,5 --out raw/laz/needham_316681.laz",
+   "outputs": {
+    "raw/laz/needham_316681.laz": "5a674e8b3840a83a7e9acca5ebf257c0d787854f82b5ba464ea0e8b8a3105070"
+   }
+  }
+ ]
+}

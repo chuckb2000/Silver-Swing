@@ -1,0 +1,74 @@
+{
+ "id": "victoria",
+ "name": "Victoria Golf Club",
+ "location": "Oak Bay, Capital Regional District, British Columbia",
+ "state": "BC",
+ "architects": "laid out by the club's founders (1893, on the Gonzales Point / Harling Point shore); later work by the club, including an 1890s-1920s extension across Gonzales Point; architects of record not confirmed by the sources read",
+ "theme": "victoria",
+ "epsg": 32610,
+ "osm_sources": [
+  "raw/overpass.geojson"
+ ],
+ "boundary_name": "Victoria Golf Club",
+ "dtm": {
+  "path": "raw/hrdem_dtm_1m.tif",
+  "units": "m",
+  "source": "Natural Resources Canada HRDEM (CanElevation), project BC-Vancouver_Island_Sunshine_Coast_2018-1m (lidar flown 2018-2019), DTM 1 m, via the NRCan datacube WCS (datacube.services.geo.ca/ows/elevation, coverage dtm) as a GeoTIFF in EPSG:32610, CGVD2013 m; fetched by the GitHub Actions workflow 2026-10-31; open sea (nodata) filled from its rim by intake.py raster --fill-sea"
+ },
+ "dsm": {
+  "path": "raw/hrdem_dsm_1m.tif",
+  "units": "m",
+  "source": "Natural Resources Canada HRDEM (CanElevation), same project, DSM 1 m (first-return surface), via the same WCS (coverage dsm); open sea filled as the DTM",
+  "label": "2018-19 lidar surface model (NRCan HRDEM)"
+ },
+ "ortho": {
+  "path": "raw/crd_ortho2025_05m.tif",
+  "source": "Capital Regional District 2025 orthophoto (mapservices.crd.bc.ca OrthoImagery2025 MapServer export, 0.5 m, EPSG:32610), fetched by the GitHub Actions workflow 2026-10-31, placed by its request box with pipeline/intake.py ortho"
+ },
+ "world": {
+  "x0": 477412,
+  "y0": 5361801,
+  "width": 1024,
+  "height": 1280,
+  "note": "OSM course boundary (relation 2579054) bbox 701 x 913 m in UTM 10N + scenery, whole 256 m chunks, centred on the boundary: 1,024 m east-west (162 m each side), 1,280 m north-south (184 m each side); inside the HRDEM/ortho download box 477300-478550 E, 5361700-5363200 N"
+ },
+ "tee_sets": [
+  {
+   "name": "Gold",
+   "playable": true,
+   "rating": 70.3,
+   "slope": 135,
+   "total_yd": 6157
+  },
+  {
+   "name": "Blue",
+   "playable": true,
+   "rating": 68.9,
+   "slope": 131,
+   "total_yd": 5899
+  }
+ ],
+ "default_tee": "Gold",
+ "scorecard_source": "The club's own printed card, 'Scorecard 2025' PDF on victoriagolf.com (fetched by the GitHub Actions workflow 2026-10-31): Gold 6,157, Blue 5,899, White 5,574, Green 5,033, men's par 70 and men's handicap, women's par 72 and handicap; every row adds up to its printed totals. No rating or slope on the club's card; men's ratings from 18Birdies (read 2026-10-31, unverified): Gold 6,156 yd 70.3/135, Blue 5,825 yd 68.9/131 (its Blue total is an older card's; the club's 2025 card says 5,899). Built: Gold (the tips) and Blue (developer, 2026-10-30: the furthest-back tees and Blue; Blue the default).",
+ "driving_range_is_ob": true,
+ "wind_mph": {
+  "minMph": 3,
+  "maxMph": 14
+ },
+ "attribution": [
+  "Map data \u00a9 OpenStreetMap contributors (ODbL)",
+  "Elevation and trees: contains information licensed under the Open Government Licence \u2013 Canada (Natural Resources Canada, HRDEM)",
+  "Orthophoto: Capital Regional District (2025)"
+ ],
+ "notes": "Course chat, 2026-10-30/31 (developer asleep, calls made and listed in docs/courses/victoria.md): standing defaults (every penalty area red, OSM boundary as OB, trees from lidar); tees Gold + Blue, Blue default; wind 3-14 mph (open coast on Juan de Fuca / Haro Strait); course-select state British Columbia (developer approved; the game's state list needs 'BC', a design-chat request).",
+ "penalty_default": "red",
+ "trees_off_fairways_m": 2,
+ "red_water_osm": [
+  "sea"
+ ],
+ "red_water_note": "the sea (proposed/sea.geojson, from OSM's coastline): a red penalty area wherever it lies (standing default; Cypress Point, Newport)",
+ "ob_highways": [
+  "secondary"
+ ],
+ "ob_highways_note": "Beach Drive (highway=secondary, a public road) crosses the course between 3/12 and 4/11 and past 7/13: out of bounds (the club ended tee shots across it in 1923, club history page); a call for the developer"
+}
