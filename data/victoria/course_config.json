@@ -4,7 +4,7 @@
  "location": "Oak Bay, Capital Regional District, British Columbia",
  "state": "BC",
  "architects": "laid out by the club's founders (1893, on the Gonzales Point / Harling Point shore); later work by the club, including an 1890s-1920s extension across Gonzales Point; architects of record not confirmed by the sources read",
- "theme": "puget",
+ "theme": "victoria",
  "epsg": 32610,
  "osm_sources": [
   "raw/overpass.geojson"
@@ -56,11 +56,19 @@
   "maxMph": 14
  },
  "attribution": [
-  "Map data © OpenStreetMap contributors (ODbL)",
-  "Elevation and trees: contains information licensed under the Open Government Licence – Canada (Natural Resources Canada, HRDEM)",
+  "Map data \u00a9 OpenStreetMap contributors (ODbL)",
+  "Elevation and trees: contains information licensed under the Open Government Licence \u2013 Canada (Natural Resources Canada, HRDEM)",
   "Orthophoto: Capital Regional District (2025)"
  ],
  "notes": "Course chat, 2026-10-30/31 (developer asleep, calls made and listed in docs/courses/victoria.md): standing defaults (every penalty area red, OSM boundary as OB, trees from lidar); tees Gold + Blue, Blue default; wind 3-14 mph (open coast on Juan de Fuca / Haro Strait); course-select state British Columbia (developer approved; the game's state list needs 'BC', a design-chat request).",
  "penalty_default": "red",
- "trees_off_fairways_m": 2
+ "trees_off_fairways_m": 2,
+ "red_water_osm": [
+  "sea"
+ ],
+ "red_water_note": "the sea (proposed/sea.geojson, from OSM's coastline): a red penalty area wherever it lies (standing default; Cypress Point, Newport)",
+ "ob_highways": [
+  "secondary"
+ ],
+ "ob_highways_note": "Beach Drive (highway=secondary, a public road) crosses the course between 3/12 and 4/11 and past 7/13: out of bounds (the club ended tee shots across it in 1923, club history page); a call for the developer"
 }
