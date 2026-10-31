@@ -14,9 +14,9 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 | 3 | 3 | Black | 233 | 247.6 | +14.6 | +6.3% | flag | 238.7 | +2.5% | pass |
 | 4 | 4 | Blue | 331 | 328.9 | -2.1 | -0.6% | pass | 328.9 | -0.6% | pass |
 | 4 | 4 | Black | 324 | 328.9 | +4.9 | +1.5% | pass | 328.9 | +1.5% | pass |
-| 5 | 4 | Blue | 467 | 390.0 | -77.0 | -16.5% | FAIL | 390.0 | -16.5% | FAIL |
-| 5 | 4 | Black | 460 | 390.0 | -70.0 | -15.2% | FAIL | 390.0 | -15.2% | FAIL |
-| 6 | 4 | Blue | 511 | 447.1 | -63.9 | -12.5% | FAIL | 447.1 | -12.5% | FAIL |
+| 5 | 4 | Blue | 467 | 463.8 | -3.2 | -0.7% | pass | 463.8 | -0.7% | pass |
+| 5 | 4 | Black | 460 | 463.8 | +3.8 | +0.8% | pass | 463.8 | +0.8% | pass |
+| 6 | 4 | Blue | 511 | 506.1 | -4.9 | -0.9% | pass | 506.1 | -0.9% | pass |
 | 6 | 4 | Black | 457 | 448.9 | -8.1 | -1.8% | pass | 448.9 | -1.8% | pass |
 | 7 | 3 | Blue | 187 | 180.5 | -6.5 | -3.5% | flag | 182.4 | -2.5% | pass |
 | 7 | 3 | Black | 155 | 155.3 | +0.3 | +0.2% | pass | 155.3 | +0.2% | pass |
@@ -28,49 +28,42 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 | 10 | 4 | Black | 432 | 428.8 | -3.2 | -0.7% | pass | 428.8 | -0.7% | pass |
 | 11 | 4 | Blue | 462 | 450.5 | -11.5 | -2.5% | pass | 450.5 | -2.5% | pass |
 | 11 | 4 | Black | 426 | 415.5 | -10.5 | -2.5% | pass | 415.5 | -2.5% | pass |
-| 12 | 4 | Blue | 342 | 267.7 | -74.3 | -21.7% | FAIL | 267.7 | -21.7% | FAIL |
-| 12 | 4 | Black | 332 | 267.7 | -64.3 | -19.4% | FAIL | 267.7 | -19.4% | FAIL |
-| 13 | 4 | Blue | 378 | 319.2 | -58.8 | -15.6% | FAIL | 319.2 | -15.6% | FAIL |
-| 13 | 4 | Black | 366 | 319.2 | -46.8 | -12.8% | FAIL | 319.2 | -12.8% | FAIL |
+| 12 | 4 | Blue | 342 | 333.0 | -9.0 | -2.6% | pass | 333.0 | -2.6% | pass |
+| 12 | 4 | Black | 332 | 333.0 | +1.0 | +0.3% | pass | 333.0 | +0.3% | pass |
+| 13 | 4 | Blue | 378 | 375.9 | -2.1 | -0.6% | pass | 375.9 | -0.6% | pass |
+| 13 | 4 | Black | 366 | 375.9 | +9.9 | +2.7% | pass | 375.9 | +2.7% | pass |
 | 14 | 3 | Blue | 173 | 169.2 | -3.8 | -2.2% | pass | 169.2 | -2.2% | pass |
 | 14 | 3 | Black | 167 | 169.2 | +2.2 | +1.3% | pass | 169.2 | +1.3% | pass |
 | 15 | 5 | Blue | 543 | 527.1 | -15.9 | -2.9% | pass | 527.1 | -2.9% | pass |
 | 15 | 5 | Black | 529 | 527.1 | -1.9 | -0.4% | pass | 527.1 | -0.4% | pass |
-| 16 | 5 | Blue | 571 | 471.1 | -99.9 | -17.5% | FAIL | 471.1 | -17.5% | FAIL |
-| 16 | 5 | Black | 542 | 501.4 | -40.6 | -7.5% | flag | 503.0 | -7.2% | flag |
+| 16 | 5 | Blue | 571 | 531.2 | -39.8 | -7.0% | flag | 534.0 | -6.5% | flag |
+| 16 | 5 | Black | 542 | 531.2 | -10.8 | -2.0% | pass | 531.2 | -2.0% | pass |
 | 17 | 3 | Blue | 205 | 201.2 | -3.8 | -1.8% | pass | 201.2 | -1.8% | pass |
 | 17 | 3 | Black | 195 | 201.2 | +6.2 | +3.2% | flag | 199.8 | +2.5% | pass |
-| 18 | 4 | Blue | 482 | 471.3 | -10.7 | -2.2% | pass | 471.3 | -2.2% | pass |
-| 18 | 4 | Black | 470 | 471.3 | +1.3 | +0.3% | pass | 471.3 | +0.3% | pass |
-| **total** | 144 | | **14428** | **13784** | -644 | -4.5% | | **13777** | -4.5% | |
+| 18 | 4 | Blue | 482 | 476.7 | -5.3 | -1.1% | pass | 476.7 | -1.1% | pass |
+| 18 | 4 | Black | 470 | 476.7 | +6.7 | +1.4% | pass | 476.7 | +1.4% | pass |
+| **total** | 144 | | **14428** | **14336** | -92 | -0.6% | | **14330** | -0.7% | |
 
 ## Open items
 
-1. Hole 5 (Blue): no mapped tee box within 8% of the card; the tee is the start point of the OSM hole line (390 yd). The Blue tee box is not in OSM - trace it to confirm.
-2. Hole 5 (Blue): measured 390 yd vs card 467 (-16.5%) - FAIL, needs a decision.
-3. Hole 5 (Black): no mapped tee box within 8% of the card; the tee is the start point of the OSM hole line (390 yd). The Black tee box is not in OSM - trace it to confirm.
-4. Hole 5 (Black): measured 390 yd vs card 460 (-15.2%) - FAIL, needs a decision.
-5. Hole 6 (Blue): no mapped tee box within 8% of the card; the tee is the start point of the OSM hole line (447 yd). The Blue tee box is not in OSM - trace it to confirm.
-6. Hole 6 (Blue): measured 447 yd vs card 511 (-12.5%) - FAIL, needs a decision.
-7. Hole 12 (Blue): no mapped tee box within 8% of the card; the tee is the start point of the OSM hole line (268 yd). The Blue tee box is not in OSM - trace it to confirm.
-8. Hole 12 (Blue): measured 268 yd vs card 342 (-21.7%) - FAIL, needs a decision.
-9. Hole 12 (Black): no mapped tee box within 8% of the card; the tee is the start point of the OSM hole line (268 yd). The Black tee box is not in OSM - trace it to confirm.
-10. Hole 12 (Black): measured 268 yd vs card 332 (-19.4%) - FAIL, needs a decision.
-11. Hole 13 (Blue): no mapped tee box within 8% of the card; the tee is the start point of the OSM hole line (319 yd). The Blue tee box is not in OSM - trace it to confirm.
-12. Hole 13 (Blue): measured 319 yd vs card 378 (-15.6%) - FAIL, needs a decision.
-13. Hole 13 (Black): no mapped tee box within 8% of the card; the tee is the start point of the OSM hole line (319 yd). The Black tee box is not in OSM - trace it to confirm.
-14. Hole 13 (Black): measured 319 yd vs card 366 (-12.8%) - FAIL, needs a decision.
-15. Hole 16 (Blue): no mapped tee box within 8% of the card; the tee is the start point of the OSM hole line (471 yd). The Blue tee box is not in OSM - trace it to confirm.
-16. Hole 16 (Blue): measured 471 yd vs card 571 (-17.5%) - FAIL, needs a decision.
-17. Hole 16 (Black): measured 503 yd vs card 542 (-7.2%) even with the virtual tee at the best spot in its box; accepted for play.
-18. Hole 18 (Blue): no mapped tee box within 8% of the card; the tee is the start point of the OSM hole line (471 yd). The Blue tee box is not in OSM - trace it to confirm.
-19. Hole 18 (Black): no mapped tee box within 8% of the card; the tee is the start point of the OSM hole line (471 yd). The Black tee box is not in OSM - trace it to confirm.
+1. Hole 5 (Blue): tee box w814291795 assigned by the developer (tagged hole=5, tee_set=Blue in edited/course.geojson).
+2. Hole 5 (Black): tee box w814291795 assigned by the developer (tagged hole=5, tee_set=Black in edited/course.geojson).
+3. Hole 6 (Blue): tee box w814291790 assigned by the developer (tagged hole=6, tee_set=Blue in edited/course.geojson).
+4. Hole 12 (Blue): tee box w816336122 assigned by the developer (tagged hole=12, tee_set=Blue in edited/course.geojson).
+5. Hole 12 (Black): tee box w816336122 assigned by the developer (tagged hole=12, tee_set=Black in edited/course.geojson).
+6. Hole 13 (Blue): tee box w816312149 assigned by the developer (tagged hole=13, tee_set=Blue in edited/course.geojson).
+7. Hole 13 (Black): tee box w816312149 assigned by the developer (tagged hole=13, tee_set=Black in edited/course.geojson).
+8. Hole 16 (Blue): measured 534 yd vs card 571 (-6.5%) even with the virtual tee at the best spot in its box; accepted for play.
+9. Hole 16 (Blue): tee box w816551378 assigned by the developer (tagged hole=16, tee_set=Blue in edited/course.geojson).
+10. Hole 16 (Black): tee box w816551378 assigned by the developer (tagged hole=16, tee_set=Black in edited/course.geojson).
+11. Hole 18 (Blue): tee box trace_tee_18 assigned by the developer (tagged hole=18, tee_set=Blue in edited/course.geojson).
+12. Hole 18 (Black): tee box trace_tee_18 assigned by the developer (tagged hole=18, tee_set=Black in edited/course.geojson).
 
 ## Playability adjustments
 
 - Hole 3 (Black): measured 248 yd from the tee-box centre vs 233 on the card (+6.3%); moved the virtual tee along the middle of the real tee polygon w814291805 (on its centre line, at least 2.5 m from its back and front) -> 238.7 yd (real 247.6 yd).
 - Hole 7 (Blue): measured 181 yd from the tee-box centre vs 187 on the card (-3.5%); moved the virtual tee along the middle of the real tee polygon w814291779 (on its centre line, at least 2.5 m from its back and front) -> 182.4 yd (real 180.5 yd).
-- Hole 16 (Black): measured 501 yd from the tee-box centre vs 542 on the card (-7.5%); moved the virtual tee along the middle of the real tee polygon w816551380 (on its centre line, at least 2.5 m from its back and front) -> 503.0 yd (real 501.4 yd).
+- Hole 16 (Blue): measured 531 yd from the tee-box centre vs 571 on the card (-7.0%); moved the virtual tee along the middle of the real tee polygon w816551378 (on its centre line, at least 2.5 m from its back and front) -> 534.0 yd (real 531.2 yd).
 - Hole 17 (Black): measured 201 yd from the tee-box centre vs 195 on the card (+3.2%); moved the virtual tee along the middle of the real tee polygon w810902406 (on its centre line, at least 2.5 m from its back and front) -> 199.8 yd (real 201.2 yd).
 
 ## Tree detection (OSM fallback (no lidar))
@@ -136,11 +129,10 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 | 15 | 5 | yes | yes (2 near) | yes | yes | yes | 5 | 0 |
 | 16 | 5 | yes | yes (3 near) | yes | yes | yes | 4 | 0 |
 | 17 | 3 | yes | yes (3 near) | yes | yes | yes | 3 | 0 |
-| 18 | 4 | yes | NO (1 near) | yes | yes | yes | 2 | 1 |
+| 18 | 4 | yes | yes (2 near) | yes | yes | yes | 2 | 1 |
 
 ## Missing or suspect features
 
-- hole 18: no tee polygon at the start of the hole line (nearest 48.3 m)
 - green w812712529 at (753, 805) is not the end of any hole line (practice green?) -> treated as a wrong green
 - green w814309110 at (564, 1220) is not the end of any hole line (practice green?) -> treated as a wrong green
 - green w814309117 at (688, 1394) is not the end of any hole line (practice green?) -> treated as a wrong green
@@ -166,5 +158,5 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 - penalty area w810902395 lies mostly outside the boundary (a neighbour's? redraw as natural=water)
 - penalty area w810902398 lies mostly outside the boundary (a neighbour's? redraw as natural=water)
 
-Totals: 106 tees, 29 greens, 30 fairways, 142 bunkers, 7 water hazards, 21 pins, 12 cart paths, 0 OSM tree points.
+Totals: 107 tees, 29 greens, 30 fairways, 142 bunkers, 7 water hazards, 21 pins, 12 cart paths, 0 OSM tree points.
 
