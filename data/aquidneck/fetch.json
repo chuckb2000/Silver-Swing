@@ -23,6 +23,26 @@
    }
   },
   {
+   "name": "naip_s.jpg",
+   "url": "https://imagery.nationalmap.gov/arcgis/rest/services/USGSNAIPImagery/ImageServer/exportImage?bbox=310294,4607397,312030,4608571&bboxSR=32619&imageSR=32619&size=3472,2348&format=jpg&f=image"
+  },
+  {
+   "name": "naip_n.jpg",
+   "url": "https://imagery.nationalmap.gov/arcgis/rest/services/USGSNAIPImagery/ImageServer/exportImage?bbox=310294,4608571,312030,4609745&bboxSR=32619&imageSR=32619&size=3472,2348&format=jpg&f=image"
+  },
+  {
+   "name": "rigis_imagery_services.json",
+   "url": "https://maps.edc.uri.edu/rigis/rest/services/imagery?f=pjson"
+  },
+  {
+   "name": "naip_service_info.json",
+   "url": "https://imagery.nationalmap.gov/arcgis/rest/services/USGSNAIPImagery/ImageServer?f=pjson"
+  },
+  {
+   "name": "aquidneck_coastline.geojson",
+   "overpass": "[out:json][timeout:180][bbox:41.580,-71.290,41.622,-71.240];(way[\"natural\"=\"coastline\"];);out geom;"
+  },
+  {
    "name": "lpc_387500_185000.laz",
    "url": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/RI_Statewide_D22/RI_Statewide_1_D22/LAZ/USGS_LPC_RI_Statewide_D22_387500_185000.laz"
   },
@@ -44,51 +64,31 @@
   },
   {
    "name": "lpc_390000_187500.laz",
-   "url": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/RI_Statewide_D22/RI_Statewide_1_D22/LAZ/USGS_LPC_RI_Statewide_D22_390000_187500.laz"
+   "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/LPC/Projects/RI_Statewide_D22/RI_Statewide_1_D22/LAZ/USGS_LPC_RI_Statewide_D22_390000_187500.laz"
   },
   {
    "name": "lpc_390000_190000.laz",
-   "url": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/RI_Statewide_D22/RI_Statewide_1_D22/LAZ/USGS_LPC_RI_Statewide_D22_390000_190000.laz"
+   "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/LPC/Projects/RI_Statewide_D22/RI_Statewide_1_D22/LAZ/USGS_LPC_RI_Statewide_D22_390000_190000.laz"
   },
   {
    "name": "lpc_390000_192500.laz",
-   "url": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/RI_Statewide_D22/RI_Statewide_1_D22/LAZ/USGS_LPC_RI_Statewide_D22_390000_192500.laz"
+   "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/LPC/Projects/RI_Statewide_D22/RI_Statewide_1_D22/LAZ/USGS_LPC_RI_Statewide_D22_390000_192500.laz"
   },
   {
    "name": "lpc_392500_185000.laz",
-   "url": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/RI_Statewide_D22/RI_Statewide_1_D22/LAZ/USGS_LPC_RI_Statewide_D22_392500_185000.laz"
+   "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/LPC/Projects/RI_Statewide_D22/RI_Statewide_1_D22/LAZ/USGS_LPC_RI_Statewide_D22_392500_185000.laz"
   },
   {
    "name": "lpc_392500_187500.laz",
-   "url": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/RI_Statewide_D22/RI_Statewide_1_D22/LAZ/USGS_LPC_RI_Statewide_D22_392500_187500.laz"
+   "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/LPC/Projects/RI_Statewide_D22/RI_Statewide_1_D22/LAZ/USGS_LPC_RI_Statewide_D22_392500_187500.laz"
   },
   {
    "name": "lpc_392500_190000.laz",
-   "url": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/RI_Statewide_D22/RI_Statewide_1_D22/LAZ/USGS_LPC_RI_Statewide_D22_392500_190000.laz"
+   "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/LPC/Projects/RI_Statewide_D22/RI_Statewide_1_D22/LAZ/USGS_LPC_RI_Statewide_D22_392500_190000.laz"
   },
   {
    "name": "lpc_392500_192500.laz",
-   "url": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/RI_Statewide_D22/RI_Statewide_1_D22/LAZ/USGS_LPC_RI_Statewide_D22_392500_192500.laz"
-  },
-  {
-   "name": "naip_s.jpg",
-   "url": "https://imagery.nationalmap.gov/arcgis/rest/services/USGSNAIPImagery/ImageServer/exportImage?bbox=310294,4607397,312030,4608571&bboxSR=32619&imageSR=32619&size=3472,2348&format=jpg&f=image"
-  },
-  {
-   "name": "naip_n.jpg",
-   "url": "https://imagery.nationalmap.gov/arcgis/rest/services/USGSNAIPImagery/ImageServer/exportImage?bbox=310294,4608571,312030,4609745&bboxSR=32619&imageSR=32619&size=3472,2348&format=jpg&f=image"
-  },
-  {
-   "name": "rigis_imagery_services.json",
-   "url": "https://maps.edc.uri.edu/rigis/rest/services/imagery?f=pjson"
-  },
-  {
-   "name": "naip_service_info.json",
-   "url": "https://imagery.nationalmap.gov/arcgis/rest/services/USGSNAIPImagery/ImageServer?f=pjson"
-  },
-  {
-   "name": "aquidneck_coastline.geojson",
-   "overpass": "[out:json][timeout:180][bbox:41.580,-71.290,41.622,-71.240];(way[\"natural\"=\"coastline\"];);out geom;"
+   "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/LPC/Projects/RI_Statewide_D22/RI_Statewide_1_D22/LAZ/USGS_LPC_RI_Statewide_D22_392500_192500.laz"
   }
  ]
 }
