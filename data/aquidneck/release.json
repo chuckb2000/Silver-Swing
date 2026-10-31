@@ -1,0 +1,109 @@
+{
+ "release": "data-aquidneck",
+ "files": [
+  {
+   "asset": "lpc_387500_185000.laz",
+   "sha256": "c9b1c7bc26442b0dc33ae40377e27ef73ce0e3e4580b6d1b505029c8bf2da3c9",
+   "run": "python3 pipeline/intake.py laz aquidneck {file} --classes 1 --out raw/laz/aquidneck_387500_185000.laz",
+   "outputs": {
+    "raw/laz/aquidneck_387500_185000.laz": "fb96bc206a621be66afc6ae852b14dcf0b09111f4ea24654ec3eb996b160a4c2"
+   }
+  },
+  {
+   "asset": "lpc_387500_187500.laz",
+   "sha256": "78ccfd7df9fcda33312b34c11bbe9d0c852ed2312434180a771a9cd150fa77bc",
+   "run": "python3 pipeline/intake.py laz aquidneck {file} --classes 1 --out raw/laz/aquidneck_387500_187500.laz",
+   "outputs": {
+    "raw/laz/aquidneck_387500_187500.laz": "4492ce30ee5f51d21d36b9baa5da6925d496ea28da4c6c021503bd1fe6635178"
+   }
+  },
+  {
+   "asset": "lpc_387500_190000.laz",
+   "sha256": "3fce64078af9008f5816cc7034e20f92da6b3a75b9dcdcc1f42404d67e32843f",
+   "run": "python3 pipeline/intake.py laz aquidneck {file} --classes 1 --out raw/laz/aquidneck_387500_190000.laz",
+   "outputs": {
+    "raw/laz/aquidneck_387500_190000.laz": "9a0b7bcbfd6eb84a4ef82b11a1364527f479d70bce3edd59fa703ff6cc1545a9"
+   }
+  },
+  {
+   "asset": "lpc_390000_185000.laz",
+   "sha256": "8cae1f9e99758b5b1a0280ad96f15953dc5db4647100b9b0f10b719d6a4cc818",
+   "run": "python3 pipeline/intake.py laz aquidneck {file} --classes 1 --out raw/laz/aquidneck_390000_185000.laz",
+   "outputs": {
+    "raw/laz/aquidneck_390000_185000.laz": "b15c9134d7f5acf1596b20e98ef50e147550fe116c4ab68d3e9038979c3ce25a"
+   }
+  },
+  {
+   "asset": "lpc_390000_187500.laz",
+   "sha256": "f3943c5f3dc79c6b939f97aa922e24566e2ba72f8437723b64ff2155a4402a3c",
+   "run": "python3 pipeline/intake.py laz aquidneck {file} --classes 1 --out raw/laz/aquidneck_390000_187500.laz",
+   "outputs": {
+    "raw/laz/aquidneck_390000_187500.laz": "aa47e85c6f4c4e3f0be41c80f3e6d10300744d8b24d9bd46d814cd2f2a533585"
+   }
+  },
+  {
+   "asset": "lpc_390000_190000.laz",
+   "sha256": "ba5958c3939a5bceb5a18f90ba091741f12a7b9bba24c91ac02958e83bed4d3f",
+   "run": "python3 pipeline/intake.py laz aquidneck {file} --classes 1 --out raw/laz/aquidneck_390000_190000.laz",
+   "outputs": {
+    "raw/laz/aquidneck_390000_190000.laz": "955fae7d6a7feb8b991d068ab4e951727cb92c8d08b60a512c32017171626653"
+   }
+  },
+  {
+   "asset": "lpc_390000_192500.laz",
+   "sha256": "ee3d11e08a1735dc6be8d4408bd006fceb0ad6f415f792027cde7a47a58537f8",
+   "run": "python3 pipeline/intake.py laz aquidneck {file} --classes 1 --out raw/laz/aquidneck_390000_192500.laz",
+   "outputs": {
+    "raw/laz/aquidneck_390000_192500.laz": "7ed212e28d447b62c2c2e6aef9c76ad3ef0ccc0d44a3ea46004c5f9ca4d723a3"
+   }
+  },
+  {
+   "asset": "lpc_392500_185000.laz",
+   "sha256": "bbe52488b3027734df608f9e9f7ff4a263b78b201d4b9271c763fba8092a020e",
+   "run": "python3 pipeline/intake.py laz aquidneck {file} --classes 1 --out raw/laz/aquidneck_392500_185000.laz",
+   "outputs": {
+    "raw/laz/aquidneck_392500_185000.laz": "4471365441db871ac412e2fb5047b480a77b79169bfa54278a212fd7a07cc3d5"
+   }
+  },
+  {
+   "asset": "lpc_392500_187500.laz",
+   "sha256": "1447823d0a1cb10ee7a78464cd4570e0fa47e4417233fcf3d86dbf37fee1faf3",
+   "run": "python3 pipeline/intake.py laz aquidneck {file} --classes 1 --out raw/laz/aquidneck_392500_187500.laz",
+   "outputs": {
+    "raw/laz/aquidneck_392500_187500.laz": "b5f1fd98d3e1092bf5f1a1fcac115764461cc15fd982a68b694d2c2f9372976e"
+   }
+  },
+  {
+   "asset": "USGS_LPC_RI_Statewide_D22_392500_190000.laz",
+   "sha256": "45b8244a639897a5569eefc07409868369aff297c08267f3757420d790369c7c",
+   "run": "python3 pipeline/intake.py laz aquidneck {file} --classes 1 --out raw/laz/aquidneck_392500_190000.laz",
+   "outputs": {
+    "raw/laz/aquidneck_392500_190000.laz": "11473d28930fdecf64725ddbe1cf7eb7f4064cbe909eb5e1a16d272952560cb6"
+   }
+  },
+  {
+   "asset": "lpc_392500_192500.laz",
+   "sha256": "ed34d9cc3b1132d538daea68fb67eec4c094f2731e7fef2d7791307babb2438f",
+   "run": "python3 pipeline/intake.py laz aquidneck {file} --classes 1 --out raw/laz/aquidneck_392500_192500.laz",
+   "outputs": {
+    "raw/laz/aquidneck_392500_192500.laz": "2fa42c707ff88fe3d7aa049790d73e8de22cc0473ce27704afd4935045feecb2"
+   }
+  },
+  {
+   "asset": "naip_s.jpg",
+   "sha256": "212affff372dec61f672f3fb1bdf9795e858ad50fcf2451220961696cc0602a7",
+   "to": "raw/ortho_src/",
+   "outputs": {
+    "raw/ortho_src/naip_s.jpg": "212affff372dec61f672f3fb1bdf9795e858ad50fcf2451220961696cc0602a7"
+   }
+  },
+  {
+   "asset": "naip_n.jpg",
+   "sha256": "f8d7eadd28276c7428dad844b596e092271cb4534c11056d224c32a022c22e61",
+   "run": "python3 pipeline/intake.py ortho aquidneck data/aquidneck/raw/ortho_src/naip_s.jpg 310294 4607397 312030 4608571 {file} 310294 4608571 312030 4609745 --out raw/ortho_naip.tif",
+   "outputs": {
+    "raw/ortho_naip.tif": "7344f542f13bc46561de4d3a89adde5a9d0d654fdce1fe6905fc603e61539d59"
+   }
+  }
+ ]
+}
