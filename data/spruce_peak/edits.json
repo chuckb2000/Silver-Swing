@@ -31,7 +31,7 @@
    "ids": [
     "bd_w510265958"
    ],
-   "reason": "course chat 2026-10-31 (developer asleep: overnight call, open item): OSM's boundary traces only the mown turf and leaves out the 13th hole and the woods the 10th tee shot carries; joined to the 13th and grown 20 m into the woods, less road strips and buildings (make_proposals.py). Replaces the OSM boundary"
+   "reason": "course chat 2026-10-31 (developer asleep: overnight call, open item): OSM's boundary traces only the mown turf and leaves out the 13th hole and the woods the 10th tee shot carries; joined to the 13th (with the developer's Black tee pad on 13, desk_tee_13, 2026-10-31, which stood outside it) and grown 20 m into the woods, less road strips and buildings (make_proposals.py). Replaces the OSM boundary"
   },
   {
    "from": "proposed/pins.geojson",
@@ -48,7 +48,7 @@
     "desk_tee_8",
     "desk_tee_13"
    ],
-   "reason": "developer 2026-10-31: the Black tees marked in the tracing desk (data/spruce_peak/desk/), accepted as marked; marks under 60 m2 (4: 10.9, 8: 7.8, 13: 29.8 m2) grown to an 8 x 6 m pad on the developer's centroid, long side along the hole line's first segment, so a tee box stands under each; tagged tee_pos=mark so the tee stays on the developer's centroid (make_desk_tees.py; run before make_proposals.py, whose boundary takes in the 13th's pad)"
+   "reason": "developer 2026-10-31: the Black tees marked in the tracing desk (data/spruce_peak/desk/), accepted as marked; marks under 60 m2 (4: 10.9, 8: 7.8, 13: 29.8 m2) grown to an 8 x 6 m pad on the developer's centroid, long side along the hole line leaving the mark, so a tee box stands under each; tagged tee_pos=mark so the tee stays on the developer's centroid (make_desk_tees.py; run before make_proposals.py, whose boundary takes in the 13th's pad)"
   }
  ],
  "tags": [

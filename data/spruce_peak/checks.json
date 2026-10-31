@@ -22,20 +22,12 @@
  },
  "yardage": {
   "range_yd": {
-   "4 Black": [
-    361,
-    364
-   ],
    "8 Black": [
-    512,
-    516
-   ],
-   "13 Black": [
-    241,
-    244
+    513,
+    515
    ]
   },
-  "why": "developer 2026-10-31: accepted as marked. The Black tees on 4, 8 and 13 are the developer's marks from the tracing desk (data/spruce_peak/desk/, 8 x 6 m pads on the marked centroids, tee_pos=mark): 4 Black 363 yd against 381 (-4.8 %), 8 Black 514 against 606 (-15.2 %), 13 Black 243 against 252 (-3.6 %); each held to its measured yardage within 1-2 yd"
+  "why": "developer 2026-10-31: accepted as marked. 8 Black is the developer's mark from the tracing desk (data/spruce_peak/desk/hole08.json, on the OSM back box w1058393549; 8 x 6 m pad on the marked centroid, tee_pos=mark): 514 yd against 606 (-15.2 %), held to 513-515. 4 Black (363 vs 381, -4.8 %) and 13 Black (243 vs 252, -3.6 %), also marked, are inside the 8 % line and need no allowance"
  },
  "points": [
   {
@@ -56,6 +48,27 @@
    "y": 757,
    "not": "ob",
    "why": "the woods between the 10th tee and its fairway: in bounds (boundary grown into the woods)"
+  },
+  {
+   "x": 1057.4,
+   "y": 637.3,
+   "surface": "tee",
+   "inside": true,
+   "why": "the developer's Black tee on 4 (tracing desk, 2026-10-31): a tee box under the mark, in bounds"
+  },
+  {
+   "x": 786.0,
+   "y": 173.9,
+   "surface": "tee",
+   "inside": true,
+   "why": "the developer's Black tee on 8 (tracing desk, 2026-10-31): a tee box under the mark, in bounds"
+  },
+  {
+   "x": 352.8,
+   "y": 1447.4,
+   "surface": "tee",
+   "inside": true,
+   "why": "the developer's Black tee on 13 (tracing desk, 2026-10-31): a tee box under the mark, in bounds"
   }
  ],
  "default_aim": {

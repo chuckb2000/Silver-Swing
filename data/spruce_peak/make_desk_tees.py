@@ -9,7 +9,9 @@ tagged hole=<n> and tee_set=<tee set>, so s06 uses it for that hole and set
 whatever its distance. The developer: "they are acceptable as I've saved them.
 Make sure that there is actually always a tee box under where I marked the tee."
 A mark under 60 m2 is grown to an 8 x 6 m pad on the developer's centroid, its
-long side along the hole line's first segment; a larger mark is kept as drawn.
+long side along the hole line as s06 draws it from that centroid (to the first bend
+of the OSM line ahead of the mark, or to the green's centre on a straight hole:
+s06_holes.path_from); a larger mark is kept as drawn.
 Each box is tagged tee_pos=mark: s06 puts the tee at the box's centroid (the
 developer's) and never moves it, so the mark sets the yardage.
 """
@@ -23,7 +25,7 @@ from pathlib import Path
 
 import geopandas as gpd
 from shapely.affinity import rotate, translate
-from shapely.geometry import Polygon, box
+from shapely.geometry import Point, Polygon, box
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "pipeline"))
@@ -39,7 +41,9 @@ def main():
     world = World(cfg)
     epsg = cfg["epsg"]
     lay = gpd.read_file(cdir / "edited" / "course.geojson").to_crs(epsg)
-    holes = lay[lay.tags.apply(lambda t: (json.loads(t) if isinstance(t, str) else t).get("golf") == "hole")]
+    tagsof = lambda t: json.loads(t) if isinstance(t, str) else t  # noqa: E731
+    holes = lay[lay.tags.apply(lambda t: tagsof(t).get("golf") == "hole")]
+    greens = lay[lay.tags.apply(lambda t: tagsof(t).get("golf") == "green")]
     feats = []
     for path in sorted(glob.glob(str(cdir / "desk" / "hole*.json"))):
         d = json.load(open(path))
@@ -51,8 +55,17 @@ def main():
         c = poly.centroid
         row = holes[holes.tags.apply(lambda t: str((json.loads(t) if isinstance(t, str) else t).get("ref")) == n)]
         line = row.geometry.iloc[0]
-        (ax, ay), (bx, by) = line.coords[0], line.coords[1]
-        ang = math.degrees(math.atan2(by - ay, bx - ax))
+        # the line of play leaving the mark, as s06 measures it (path_from): the first bend of the
+        # hole line more than 1 m ahead of the mark's projection, else the green's centre
+        s0 = line.project(c)
+        ahead = [p for p in line.coords[1:-1] if line.project(Point(p)) > s0 + 1.0]
+        if ahead:
+            bx, by = ahead[0]
+        else:
+            gp = greens.geometry.loc[greens.distance(Point(line.coords[-1])).idxmin()]
+            gc = gp.centroid if gp.contains(gp.centroid) else gp.representative_point()
+            bx, by = gc.x, gc.y
+        ang = math.degrees(math.atan2(by - c.y, bx - c.x))
         grown = poly.area < MIN_AREA
         if grown:
             pad = box(-PAD_L / 2, -PAD_W / 2, PAD_L / 2, PAD_W / 2)
