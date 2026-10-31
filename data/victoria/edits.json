@@ -1,0 +1,189 @@
+{
+ "tags": [
+  {
+   "osm": "w1115583850",
+   "set": {
+    "golf": "cartpath"
+   },
+   "reason": "OSM tags the course's paths golf=path, which s01 doesn't read (audit); they are the cart and walking paths: golf=cartpath"
+  },
+  {
+   "osm": "w1115583852",
+   "set": {
+    "golf": "cartpath"
+   },
+   "reason": "OSM tags the course's paths golf=path, which s01 doesn't read (audit); they are the cart and walking paths: golf=cartpath"
+  },
+  {
+   "osm": "w1115593324",
+   "set": {
+    "golf": "cartpath"
+   },
+   "reason": "OSM tags the course's paths golf=path, which s01 doesn't read (audit); they are the cart and walking paths: golf=cartpath"
+  },
+  {
+   "osm": "w1115593327",
+   "set": {
+    "golf": "cartpath"
+   },
+   "reason": "OSM tags the course's paths golf=path, which s01 doesn't read (audit); they are the cart and walking paths: golf=cartpath"
+  },
+  {
+   "osm": "w1115593329",
+   "set": {
+    "golf": "cartpath"
+   },
+   "reason": "OSM tags the course's paths golf=path, which s01 doesn't read (audit); they are the cart and walking paths: golf=cartpath"
+  },
+  {
+   "osm": "w1115593332",
+   "set": {
+    "golf": "cartpath"
+   },
+   "reason": "OSM tags the course's paths golf=path, which s01 doesn't read (audit); they are the cart and walking paths: golf=cartpath"
+  },
+  {
+   "osm": "w1115593338",
+   "set": {
+    "golf": "cartpath"
+   },
+   "reason": "OSM tags the course's paths golf=path, which s01 doesn't read (audit); they are the cart and walking paths: golf=cartpath"
+  },
+  {
+   "osm": "w1115593346",
+   "set": {
+    "golf": "cartpath"
+   },
+   "reason": "OSM tags the course's paths golf=path, which s01 doesn't read (audit); they are the cart and walking paths: golf=cartpath"
+  },
+  {
+   "osm": "w1115593350",
+   "set": {
+    "golf": "cartpath"
+   },
+   "reason": "OSM tags the course's paths golf=path, which s01 doesn't read (audit); they are the cart and walking paths: golf=cartpath"
+  },
+  {
+   "osm": "w1115593351",
+   "set": {
+    "golf": "cartpath"
+   },
+   "reason": "OSM tags the course's paths golf=path, which s01 doesn't read (audit); they are the cart and walking paths: golf=cartpath"
+  },
+  {
+   "osm": "w1115593352",
+   "set": {
+    "golf": "cartpath"
+   },
+   "reason": "OSM tags the course's paths golf=path, which s01 doesn't read (audit); they are the cart and walking paths: golf=cartpath"
+  },
+  {
+   "osm": "w1115593353",
+   "set": {
+    "golf": "cartpath"
+   },
+   "reason": "OSM tags the course's paths golf=path, which s01 doesn't read (audit); they are the cart and walking paths: golf=cartpath"
+  },
+  {
+   "osm": "w1115600049",
+   "set": {
+    "golf": "cartpath"
+   },
+   "reason": "OSM tags the course's paths golf=path, which s01 doesn't read (audit); they are the cart and walking paths: golf=cartpath"
+  },
+  {
+   "osm": "w1115614415",
+   "set": {
+    "golf": "cartpath"
+   },
+   "reason": "OSM tags the course's paths golf=path, which s01 doesn't read (audit); they are the cart and walking paths: golf=cartpath"
+  },
+  {
+   "osm": "w1115614417",
+   "set": {
+    "golf": "cartpath"
+   },
+   "reason": "OSM tags the course's paths golf=path, which s01 doesn't read (audit); they are the cart and walking paths: golf=cartpath"
+  },
+  {
+   "osm": "w1115614419",
+   "set": {
+    "golf": "cartpath"
+   },
+   "reason": "OSM tags the course's paths golf=path, which s01 doesn't read (audit); they are the cart and walking paths: golf=cartpath"
+  },
+  {
+   "osm": "w259286107",
+   "set": {
+    "golf": "cartpath"
+   },
+   "reason": "OSM tags the course's paths golf=path, which s01 doesn't read (audit); they are the cart and walking paths: golf=cartpath"
+  },
+  {
+   "osm": "w259286108",
+   "set": {
+    "golf": "cartpath"
+   },
+   "reason": "OSM tags the course's paths golf=path, which s01 doesn't read (audit); they are the cart and walking paths: golf=cartpath"
+  },
+  {
+   "osm": "w259286109",
+   "set": {
+    "golf": "cartpath"
+   },
+   "reason": "OSM tags the course's paths golf=path, which s01 doesn't read (audit); they are the cart and walking paths: golf=cartpath"
+  },
+  {
+   "osm": "w259286342",
+   "set": {
+    "golf": "cartpath"
+   },
+   "reason": "OSM tags the course's paths golf=path, which s01 doesn't read (audit); they are the cart and walking paths: golf=cartpath"
+  },
+  {
+   "osm": "w259286345",
+   "set": {
+    "golf": "cartpath"
+   },
+   "reason": "OSM tags the course's paths golf=path, which s01 doesn't read (audit); they are the cart and walking paths: golf=cartpath"
+  },
+  {
+   "osm": "w259626884",
+   "set": {
+    "golf": "cartpath"
+   },
+   "reason": "OSM tags the course's paths golf=path, which s01 doesn't read (audit); they are the cart and walking paths: golf=cartpath"
+  },
+  {
+   "osm": "w313637845",
+   "set": {
+    "golf": "cartpath"
+   },
+   "reason": "OSM tags the course's paths golf=path, which s01 doesn't read (audit); they are the cart and walking paths: golf=cartpath"
+  }
+ ],
+ "add": [
+  {
+   "from": "proposed/sea.geojson",
+   "ids": [
+    "sea"
+   ],
+   "tags": {},
+   "reason": "OSM maps the Strait only as natural=coastline ways; pipeline/propose_sea.py makes the sea side one water feature, a red penalty area (config red_water_osm; standing default every penalty area red, as at Newport and Cypress Point)"
+  },
+  {
+   "from": "proposed/boundary.geojson",
+   "ids": [
+    "bd_r2579054"
+   ],
+   "tags": {},
+   "reason": "the OSM boundary plus the edges of four OSM tee boxes it clipped (2-30 m2 each; s03 audit), so no teed ball is out of bounds (data/victoria/make_boundary.py)"
+  }
+ ],
+ "drop": [
+  {
+   "osm": "r2579054",
+   "reason": "replaced by proposed/boundary.geojson (tee box edges added back)"
+  }
+ ]
+}

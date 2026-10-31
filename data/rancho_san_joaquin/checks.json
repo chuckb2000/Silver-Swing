@@ -1,0 +1,22 @@
+{
+ "note": "per-course settings for game/tests/unit/course_play.test.ts (the every-course checks); docs/COURSE_BUILD.md 8.2",
+ "yardage": {
+  "max": {
+   "2 Black": 0.11,
+   "13 Black": 0.09
+  },
+  "why": "the Black tee boxes on 2 and 13 are not in OSM, the lidar pad finder gave none, and the NAIP photo shows a cart path, fence and bare lot behind 2's line start and the road and houses behind 13's; those holes play from the start of the OSM hole line, 10.3 % and 8.1 % short. Accepted by the course chat 2026-10-31 under the developer's overnight 'make the call'; validation_report.md open items"
+ },
+ "wind_mph": [
+  2,
+  10
+ ],
+ "water": {
+  "ids": [
+   "w688003643",
+   "w688003644",
+   "w688003645",
+   "w688003649"
+  ]
+ }
+}

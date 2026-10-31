@@ -1,0 +1,161 @@
+{
+ "note": "Needham is nine holes, built as its nine (Highland Links style; developer 2026-10-31): rounds are 9 or 18 twice around. Tee boxes chosen per hole and set (Blue, White) by the club card's yardages (validation_report.md); course chat 2026-10-31, pending the developer's approval.",
+ "add": [
+  {
+   "from": "proposed/channels_lidar.geojson",
+   "ids": [
+    "channel_w310169385",
+    "channel_w310169388"
+   ],
+   "tags": {
+    "penalty": "red",
+    "flatten": "no"
+   },
+   "reason": "Alder Brook (OSM waterway w310169385 south of the road, w310169388 on the north part) as red penalty areas from the channel the 2021 DEM shows (propose_channels.py); the card's local rules name red lateral hazards. Course chat 2026-10-31, pending the developer's approval. Not w310169386/w310169387: no channel in the DEM there (culvert under the road and the pond's outlet)."
+  },
+  {
+   "from": "proposed/clubhouse.geojson",
+   "ids": [
+    "w214634834_building"
+   ],
+   "tags": {},
+   "reason": "the clubhouse is mapped golf=clubhouse only (read as golf_other): a building copy so it is drawn (s03 check)"
+  }
+ ],
+ "tags": [
+  {
+   "osm": "w1271766428",
+   "set": {
+    "hole": "1",
+    "tee_set": "Blue"
+   },
+   "reason": "hole 1 Blue tee, by the card's yardage"
+  },
+  {
+   "osm": "w1271766427",
+   "set": {
+    "hole": "1",
+    "tee_set": "White"
+   },
+   "reason": "hole 1 White tee, by the card's yardage"
+  },
+  {
+   "osm": "w1271766415",
+   "set": {
+    "hole": "2",
+    "tee_set": "Blue"
+   },
+   "reason": "hole 2 Blue tee, by the card's yardage"
+  },
+  {
+   "osm": "w1271766416",
+   "set": {
+    "hole": "2",
+    "tee_set": "White"
+   },
+   "reason": "hole 2 White tee, by the card's yardage"
+  },
+  {
+   "osm": "w1271766414",
+   "set": {
+    "hole": "3",
+    "tee_set": "Blue"
+   },
+   "reason": "hole 3 Blue tee, by the card's yardage"
+  },
+  {
+   "osm": "w1271766413",
+   "set": {
+    "hole": "3",
+    "tee_set": "White"
+   },
+   "reason": "hole 3 White tee, by the card's yardage"
+  },
+  {
+   "osm": "w1271766409",
+   "set": {
+    "hole": "4",
+    "tee_set": "Blue;White"
+   },
+   "reason": "hole 4 Blue and White tee, by the card's yardage"
+  },
+  {
+   "osm": "w1271766404",
+   "set": {
+    "hole": "5",
+    "tee_set": "Blue"
+   },
+   "reason": "hole 5 Blue tee, by the card's yardage"
+  },
+  {
+   "osm": "w1271766405",
+   "set": {
+    "hole": "5",
+    "tee_set": "White"
+   },
+   "reason": "hole 5 White tee, by the card's yardage"
+  },
+  {
+   "osm": "w1271766407",
+   "set": {
+    "hole": "6",
+    "tee_set": "Blue"
+   },
+   "reason": "hole 6 Blue tee, by the card's yardage"
+  },
+  {
+   "osm": "w1271766408",
+   "set": {
+    "hole": "6",
+    "tee_set": "White"
+   },
+   "reason": "hole 6 White tee, by the card's yardage"
+  },
+  {
+   "osm": "w1271766424",
+   "set": {
+    "hole": "7",
+    "tee_set": "Blue"
+   },
+   "reason": "hole 7 Blue tee, by the card's yardage"
+  },
+  {
+   "osm": "w1271766423",
+   "set": {
+    "hole": "7",
+    "tee_set": "White"
+   },
+   "reason": "hole 7 White tee, by the card's yardage"
+  },
+  {
+   "osm": "w1271766421",
+   "set": {
+    "hole": "8",
+    "tee_set": "Blue"
+   },
+   "reason": "hole 8 Blue tee, by the card's yardage"
+  },
+  {
+   "osm": "w1271766422",
+   "set": {
+    "hole": "8",
+    "tee_set": "White"
+   },
+   "reason": "hole 8 White tee, by the card's yardage"
+  },
+  {
+   "osm": "w1271766412",
+   "set": {
+    "hole": "9",
+    "tee_set": "Blue;White"
+   },
+   "reason": "hole 9 Blue and White tee, by the card's yardage"
+  }
+ ],
+ "drop": [
+  {
+   "osm": "w214634834",
+   "reason": "replaced by its building copy (proposed/clubhouse.geojson)"
+  }
+ ]
+}
