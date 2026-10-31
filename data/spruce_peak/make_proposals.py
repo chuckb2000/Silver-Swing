@@ -24,7 +24,7 @@ import json
 from pathlib import Path
 
 import geopandas as gpd
-from shapely.geometry import LineString, MultiPoint
+from shapely.geometry import LineString, MultiPoint, Point
 from shapely.ops import unary_union
 
 HERE = Path(__file__).resolve().parent
@@ -91,6 +91,22 @@ def main():
     gpd.GeoDataFrame({"osm": ["bd_" + BOUNDARY], "kind": [row.kind],
                       "tags": [json.dumps({**row.tags, "note": f"OSM turf boundary joined to the 13th and grown {GROW_M:.0f} m into the woods, less roads and buildings (make_proposals.py)"})]},
                      geometry=[joined], crs=EPSG).to_crs(4326).to_file(out / "boundary.geojson", driver="GeoJSON")
+    # 3. centre pins on the two smallest greens (7: 136 m2, 17: 144 m2): the centre of the area
+    #    10 ft inside the edge, at the middle of its long axis, so the game finds two more hole
+    #    locations 15 ft either side
+    pins = []
+    for hole, gid in (("7", "w1058378239"), ("17", "w1058402474")):
+        green = gu[gu.osm == gid].geometry.iloc[0]
+        inner = green.buffer(-3.048)
+        r = list(inner.minimum_rotated_rectangle.exterior.coords)
+        a, b = (r[0], r[1]) if Point(r[0]).distance(Point(r[1])) > Point(r[1]).distance(Point(r[2])) else (r[1], r[2])
+        n = Point(a).distance(Point(b))
+        ux, uy = (b[0] - a[0]) / n, (b[1] - a[1]) / n
+        c0 = inner.centroid
+        chord = LineString([(c0.x - 40 * ux, c0.y - 40 * uy), (c0.x + 40 * ux, c0.y + 40 * uy)]).intersection(inner)
+        c = chord.interpolate(0.5, normalized=True)  # the middle of the long axis, so both ends are as far
+        pins.append({"osm": f"pin_{hole}", "kind": "pin", "tags": json.dumps({"golf": "pin", "hole": hole, "note": "centre of the green 10 ft inside its edge (make_proposals.py)"}), "geometry": c})
+    gpd.GeoDataFrame(pins, crs=EPSG).to_crs(4326).to_file(out / "pins.geojson", driver="GeoJSON")
     print(f"[proposals] boundary {poly.area / 1e4:.1f} ha -> {joined.area / 1e4:.1f} ha (13th joined: +{(base.area - poly.area) / 1e4:.2f} ha)")
 
 

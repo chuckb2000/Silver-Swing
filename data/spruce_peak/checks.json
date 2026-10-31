@@ -1,0 +1,58 @@
+{
+ "note": "per-course settings for game/tests/unit/course_play.test.ts (the every-course checks); docs/COURSE_BUILD.md 8.2",
+ "wind_mph": [
+  1,
+  9
+ ],
+ "water": {
+  "penalty": "red",
+  "count": 1
+ },
+ "tees": {
+  "sets": [
+   "Black",
+   "Blue"
+  ]
+ },
+ "tee_shot_clear": {
+  "sets": [
+   "Black",
+   "Blue"
+  ]
+ },
+ "yardage": {
+  "max": {
+   "4 Black": 0.12,
+   "8 Black": 0.16,
+   "13 Black": 0.39
+  },
+  "why": "no tee box mapped (OSM) or found (lidar pads, photo) at the card distance: 4 Black 337 yd against 381 (-11.4 %), 8 Black 514 against 606 (-15.1 %), 13 Black 156 against 252 (-38.0 %); played from the farthest-back mapped box (course chat 2026-10-31, overnight call, open item for the developer)"
+ },
+ "points": [
+  {
+   "x": 590,
+   "y": 450,
+   "surface": "water",
+   "ob": false,
+   "why": "the pond in the middle of the course: a red penalty area, not out of bounds"
+  },
+  {
+   "x": 470,
+   "y": 1330,
+   "not": "ob",
+   "why": "the 13th (tee shot over the woods to the green), outside OSM's boundary: joined to it"
+  },
+  {
+   "x": 245,
+   "y": 757,
+   "not": "ob",
+   "why": "the woods between the 10th tee and its fairway: in bounds (boundary grown into the woods)"
+  }
+ ],
+ "default_aim": {
+  "skip": [
+   16
+  ],
+  "why": "16 drops 31 m from tee to green (Blue 160 yd): the auto club (a 6-iron, no allowance for the drop; fix/auto-club-downhill is not on main) flies a perfect shot 50 m past the pin into the woods beyond the green. Request to the design chat; not a data problem"
+ }
+}

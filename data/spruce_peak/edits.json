@@ -32,6 +32,14 @@
     "bd_w510265958"
    ],
    "reason": "course chat 2026-10-31 (developer asleep: overnight call, open item): OSM's boundary traces only the mown turf and leaves out the 13th hole and the woods the 10th tee shot carries; joined to the 13th and grown 20 m into the woods, less road strips and buildings (make_proposals.py). Replaces the OSM boundary"
+  },
+  {
+   "from": "proposed/pins.geojson",
+   "ids": [
+    "pin_7",
+    "pin_17"
+   ],
+   "reason": "7 and 17 are small greens (136 and 144 m2, checked on the photo); their centre pins sit at the middle of the area 10 ft inside the edge, so the game fits two more hole locations (pins.test.ts). Every other green's pin is its centre (s06 proposal)"
   }
  ],
  "tags": [

@@ -62,5 +62,23 @@
   "Elevation, trees and orthophoto: Vermont Center for Geographic Information (2023 Vermont statewide lidar; Vermont orthoimagery)",
   "Scorecard: Stymie and 18Birdies (unverified)"
  ],
- "notes": "Course chat, 2026-10-31 (developer asleep, overnight calls): tees Black (the tips) and Blue (default); standing defaults otherwise (every penalty area red, OSM boundary OB, trees from lidar, fairway trees removed); wind 1-9 mph (inland New England, mountain); theme spruce_peak (its own: northern spruce-fir and hardwood forest)."
+ "notes": "Course chat, 2026-10-31 (developer asleep, overnight calls): tees Black (the tips) and Blue (default); standing defaults otherwise (every penalty area red, OSM boundary OB, trees from lidar, fairway trees removed); wind 1-9 mph (inland New England, mountain); theme spruce_peak (its own: northern spruce-fir and hardwood forest).",
+ "green_tilt": [
+  {
+   "hole": 7,
+   "max_tilt": 0.015,
+   "bumps": 0
+  },
+  {
+   "hole": 16,
+   "max_tilt": 0.02,
+   "bumps": 0
+  },
+  {
+   "hole": 17,
+   "max_tilt": 0.015,
+   "bumps": 0
+  }
+ ],
+ "green_tilt_note": "7 (136 m2), 16 and 17 (144 m2) are small greens as mapped (checked on the 0.3 m photo): a gentler plane and no random bumps, so each keeps at least three hole locations (pins.test.ts; COURSE_LESSONS 4)"
 }
