@@ -59,7 +59,7 @@
       "total_yd": 6732
     }
   ],
-  "default_tee": "Blue",
+  "default_tee": "Black",
   "scorecard_source": "No club card yet. Per-hole yardages: GolfPass scorecard (retrieved 2026-10-19): Blue = its 'Blue' column (6,417), Black = its 'Black' column (6,732), which matches the developer's screenshot of a scorecard site (release data-wannamoisett, 'Blue 6732 yds (135/72.8) for Men') number for number. Pars from both (par 69). Stroke index from the developer's screenshot (agrees with OSM on holes 1-9; GolfPass/OpenGolfAPI give another order). Ratings/slopes from the GolfPass tee table: 6,732-yd set 72.8/135 (also on the screenshot), 6,427-yd set 71.3/132 (the GolfPass card prints Black 73.5/130, Blue 71.9/127). The club website now lists Black 6,901 / Blue 6,430 / White 6,132 after new tees were built; per-hole figures for those are not available. Unverified.",
   "penalty_default": "red",
   "driving_range_is_ob": true,

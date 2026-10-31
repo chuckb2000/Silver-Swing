@@ -1,0 +1,21 @@
+{
+  "name": "Pronghorn (high desert juniper woodland, Bend)",
+  "note": "Course theme palette (<= 32 colours; same keys as pnw.json plus F0-F2), made from the silvies palette and checked against the OSIP 2024 photo of the course (2026-10-31: fairways #5f8857 median, greens #6f8f60, bunkers #cbc19a, ponds #172646, native ground #998c71). Pronghorn, Bend OR, about 3,200 ft up on the east side of the Cascades: irrigated fairways, greens and a mown band of rough a clear green against the desert; the native ground of the rough (bunchgrass, sage and bitterbrush on pumice soil) a grey-tan, greyer and paler than Silvies' gold (F0-F2, inside config fescue_areas); off the course (L0-L2) the same desert a shade darker and more olive, so out of bounds reads apart from the rough; pale buff sand; deep navy ponds; grey basalt and stucco. Trees: western juniper in two growth forms, sage and bitterbrush as the theme's bush (assets-src/trees_pronghorn.py). Shadows are a 35% black overlay on top of these.",
+  "colors": {
+    "G0": "#1a2e22", "G1": "#26422b", "G2": "#345834", "G3": "#436e3a",
+    "G4": "#538340", "G5": "#649748", "G6": "#76a951", "G7": "#89b95c",
+    "G8": "#9dc86b", "G9": "#bfdc94",
+    "L0": "#76705a", "L1": "#878068", "L2": "#989077",
+    "S0": "#b8ad8a", "S1": "#d8cfaf", "S2": "#ede6d0",
+    "W0": "#1b3150", "W1": "#29466c", "W2": "#5f7fa3",
+    "K0": "#2a2a2c", "K1": "#58585a", "K2": "#807e7a", "K3": "#b4aa96", "K4": "#d8cfbc",
+    "B0": "#4a3020", "B1": "#70482e", "B2": "#93633f",
+    "R0": "#5a5a62", "WH": "#f6f5ef",
+    "F0": "#8f8265", "F1": "#a6997b", "F2": "#bcae8f"
+  },
+  "lut": {"rough": ["F0", "F1", "F2", "F2"], "rough_band": ["G3", "G4", "G5", "G5"]},
+  "aliases": {"TUFT": "F0"},
+  "minimap": {"ob": "#878068", "rough": "#a6997b", "woods": "#345834", "ob_woods": "#2f4e30", "water": "#29466c", "ob_water": "#29466c", "bunker": "#d8cfaf", "ob_sand": "#d8cfaf"},
+  "minimap_trees": {"conifer": ["#152620", "#4b6d55"], "deciduous": ["#1a2724", "#566b5c"], "shrub": ["#4a5443", "#9ba68c"]},
+  "trees": {"conifer": "trees_pronghorn:upright", "deciduous": "trees_pronghorn:old_juniper", "shrub": "trees_pronghorn:desert_bush"}
+}

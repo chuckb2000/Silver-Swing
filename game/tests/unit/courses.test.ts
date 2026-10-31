@@ -45,6 +45,11 @@ describe('course registry', () => {
         expect(json.attribution.length).toBeGreaterThan(0);
       });
 
+      it('the default tees are the longest set (developer, 2026-10-31)', () => {
+        const longest = [...json.teeSets].sort((a, b) => b.totalYd - a.totalYd)[0];
+        expect(json.defaultTee, `set "default_tee": "${longest.name}" in course_config.json`).toBe(longest.name);
+      });
+
       it('has every file the game loads', () => {
         const files = [json.height.file, json.surface.file, json.trees.file, json.maps.overview, 'height.json', ...json.maps.holes.map((m) => m.file)];
         for (let j = 0; j < json.terrain.rows; j++) for (let i = 0; i < json.terrain.cols; i++) {
