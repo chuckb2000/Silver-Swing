@@ -74,6 +74,8 @@ export const DAILY_ROSTER: Readonly<Record<string, string>> = {
   presidio: '2026-10-27',
   // landed 2026-10-31 (pipeline/land.py)
   victoria: '2026-11-01',
+  // landed 2026-10-31 (pipeline/land.py)
+  needham: '2026-11-01',
 };
 
 /**
