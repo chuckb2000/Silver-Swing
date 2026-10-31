@@ -93,5 +93,7 @@
   "Scorecard: GolfPass and 18Birdies (unverified)"
  ],
  "notes": "Course chat, 2026-10-30 (overnight; the developer asleep, calls logged in docs/courses/burlington_cc.md): tee sets Black (the tips) and Blue (developer's overnight rule: the back set and Blue; here Blue is the shortest set, 4,799 yd), default Blue. Standing defaults: every penalty area red, the OSM boundary as OB, trees from lidar. Wind 1-10 mph: inland New England is 1-9; one more for the hilltop above Lake Champlain (course chat's call).",
- "roof_last_share": 0.85
+ "roof_last_share": 0.85,
+ "tee_shot_margin_m": 2.0,
+ "tee_shot_margin_note": "course chat 2026-10-30: the game's tee-shot test found a 36.7 m crown 31 m out on 16 Black that s06b's own check passed by centimetres; 2 m extra vertical clearance lets s06b drop it (1 m was not enough) (logged in the report)"
 }

@@ -23,7 +23,7 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 | 8 | 3 | Black | 198 | 177.4 | -20.6 | -10.4% | FAIL | 193.1 | -2.5% | pass |
 | 8 | 3 | Blue | 116 | 114.8 | -1.2 | -1.1% | pass | 114.8 | -1.1% | pass |
 | 9 | 4 | Black | 366 | 366.9 | +0.9 | +0.2% | pass | 366.9 | +0.2% | pass |
-| 9 | 4 | Blue | 260 | 258.1 | -1.9 | -0.7% | pass | 258.1 | -0.7% | pass |
+| 9 | 4 | Blue | 260 | 258.1 | -1.9 | -0.7% | pass | 258.8 | -0.5% | pass |
 | 10 | 3 | Black | 214 | 210.5 | -3.5 | -1.6% | pass | 210.5 | -1.6% | pass |
 | 10 | 3 | Blue | 130 | 130.4 | +0.4 | +0.3% | pass | 130.4 | +0.3% | pass |
 | 11 | 4 | Black | 325 | 322.8 | -2.2 | -0.7% | pass | 322.8 | -0.7% | pass |
@@ -36,13 +36,13 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 | 14 | 3 | Blue | 95 | 94.6 | -0.4 | -0.4% | pass | 94.6 | -0.4% | pass |
 | 15 | 4 | Black | 416 | 422.2 | +6.2 | +1.5% | pass | 422.2 | +1.5% | pass |
 | 15 | 4 | Blue | 354 | 364.8 | +10.8 | +3.1% | flag | 362.8 | +2.5% | pass |
-| 16 | 4 | Black | 382 | 391.6 | +9.6 | +2.5% | pass | 386.2 | +1.1% | pass |
+| 16 | 4 | Black | 382 | 391.6 | +9.6 | +2.5% | pass | 379.5 | -0.7% | pass |
 | 16 | 4 | Blue | 287 | 290.5 | +3.5 | +1.2% | pass | 290.5 | +1.2% | pass |
 | 17 | 4 | Black | 372 | 368.1 | -3.9 | -1.1% | pass | 368.1 | -1.1% | pass |
 | 17 | 4 | Blue | 267 | 268.4 | +1.4 | +0.5% | pass | 268.4 | +0.5% | pass |
 | 18 | 5 | Black | 511 | 505.9 | -5.1 | -1.0% | pass | 505.9 | -1.0% | pass |
 | 18 | 5 | Blue | 405 | 405.5 | +0.5 | +0.1% | pass | 405.5 | +0.1% | pass |
-| **total** | 142 | | **11270** | **11256** | -14 | -0.1% | | **11268** | -0.0% | |
+| **total** | 142 | | **11270** | **11256** | -14 | -0.1% | | **11262** | -0.1% | |
 
 ## Open items
 
@@ -85,9 +85,10 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 
 - Hole 2 (Black): measured 323 yd from the tee-box centre vs 336 on the card (-3.9%); moved the virtual tee along the middle of the real tee polygon w1011556684 (on its centre line, at least 2.5 m from its back and front) -> 327.7 yd (real 323.0 yd).
 - Hole 8 (Black): measured 177 yd from the tee-box centre vs 198 on the card (-10.4%); moved the virtual tee along the middle of the real tee polygon w1011576372 (on its centre line, at least 2.5 m from its back and front) -> 193.1 yd (real 177.4 yd).
+- Hole 9 (Blue): tee shot: a perfect drive at the middle of the fairway clipped a tree near the tee; moved 0.7 m along the middle of the real tee polygon w1011576376 to the nearest clear spot -> 258.8 yd (real 258.1 yd).
 - Hole 12 (Blue): measured 355 yd from the tee-box centre vs 342 on the card (+3.9%); moved the virtual tee along the middle of the real tee polygon w1011559508 (on its centre line, at least 2.5 m from its back and front) -> 353.7 yd (real 355.5 yd).
 - Hole 15 (Blue): measured 365 yd from the tee-box centre vs 354 on the card (+3.1%); moved the virtual tee along the middle of the real tee polygon w1011569860 (on its centre line, at least 2.5 m from its back and front) -> 362.8 yd (real 364.8 yd).
-- Hole 16 (Black): tee shot: a perfect drive at the middle of the fairway clipped a tree near the tee; moved 5.0 m along the middle of the real tee polygon w1011569874 to the nearest clear spot -> 386.2 yd (real 391.6 yd).
+- Hole 16 (Black): tee shot: a perfect drive at the middle of the fairway clipped a tree near the tee; moved 11.2 m along the middle of the real tee polygon w1011569874 to the nearest clear spot -> 379.5 yd (real 391.6 yd).
 
 ## Tree detection (2023 USGS Vermont lidar, leaf-off)
 
