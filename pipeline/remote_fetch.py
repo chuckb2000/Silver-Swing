@@ -218,6 +218,10 @@ def tnm(item: dict, tag: str, have: set[str], force: bool) -> list[dict]:
     listing = WORK / f"{item['name']}.tnm.json"
     get(f"{TNM}?{urllib.parse.urlencode(q)}", listing)
     found = [x for x in json.loads(listing.read_text()).get("items", []) if x.get("downloadURL")]
+    # TNM can list one product many times (VT_Statewide_A23: every lidar tile 27 times,
+    # Burlington CC 2026-10-30): keep each download URL once.
+    seen: set[str] = set()
+    found = [x for x in found if not (x["downloadURL"] in seen or seen.add(x["downloadURL"]))]
     only = t.get("only")
     if only:
         found = [x for x in found if only in x.get("title", "") or only in x["downloadURL"]]

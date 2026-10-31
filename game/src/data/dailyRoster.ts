@@ -94,6 +94,8 @@ export const DAILY_ROSTER: Readonly<Record<string, string>> = {
   aberdeen: '2026-11-01',
   // landed 2026-10-31 (pipeline/land.py)
   aquidneck: '2026-11-01',
+  // landed 2026-10-31 (pipeline/land.py)
+  burlington_cc: '2026-11-01',
 };
 
 /**
