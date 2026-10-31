@@ -163,7 +163,6 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 
 ## Checks from earlier courses
 
-- hole line w963469864 (ref 5): 17 % outside the boundary
 - golf=cartpath: 23 feature(s) (w1115583850, w1115583852, w1115593324, w1115593327 ...) -> not read by the pipeline
 - hole line w963469855 (ref 1) starts within 10 m of a green (the previous green?)
 

@@ -18,7 +18,32 @@
    "x": 600,
    "y": 150,
    "surface": "water",
-   "why": "the sea south of the 5th tee: a red penalty area (proposed/sea.geojson, red_water_osm)"
+   "why": "the sea south of the 5th tee: inside the developer's OB line, a red penalty area (sea_in, make_sea_ob.py)"
+  },
+  {
+   "x": 900,
+   "y": 500,
+   "surface": "water",
+   "why": "the sea south-east of the 8th-10th, inside the developer's OB line (developer 2026-10-31): red penalty area, not OB",
+   "inside": true
+  },
+  {
+   "x": 900,
+   "y": 650,
+   "ob": true,
+   "why": "the sea north of the developer's OB line from the 7th (the bay behind the Beach Drive houses): out of bounds"
+  },
+  {
+   "x": 100,
+   "y": 50,
+   "ob": true,
+   "why": "the sea west of the developer's OB line from the 3rd: out of bounds"
+  },
+  {
+   "x": 659.4,
+   "y": 667.9,
+   "surface": "water",
+   "why": "the rocky shore by the 7th, between the turf and the sea (shore_strait, make_shore.py): red penalty area (developer 2026-10-31, photo of the red stakes)"
   }
  ]
 }

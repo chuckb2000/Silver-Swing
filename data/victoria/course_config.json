@@ -64,11 +64,30 @@
  "penalty_default": "red",
  "trees_off_fairways_m": 2,
  "red_water_osm": [
-  "sea"
+  "sea_in",
+  "shore_strait"
  ],
- "red_water_note": "the sea (proposed/sea.geojson, from OSM's coastline): a red penalty area wherever it lies (standing default; Cypress Point, Newport)",
+ "red_water_note": "the sea inside the developer's OB line (sea_in, make_sea_ob.py) and the rocky shore between the boundary and the sea by the 7th (shore_strait, make_shore.py): one red penalty area. The sea beyond the line (sea_out: the bay behind the Beach Drive houses north of the 7th, and west of the 3rd) is out of bounds (developer 2026-10-31)",
  "ob_highways": [
   "secondary"
  ],
- "ob_highways_note": "Beach Drive (highway=secondary, a public road) crosses the course between 3/12 and 4/11 and past 7/13: out of bounds (the club ended tee shots across it in 1923, club history page); a call for the developer"
+ "ob_highways_note": "Beach Drive (highway=secondary, a public road) crosses the course between 3/12 and 4/11 and past 7/13: out of bounds (the club ended tee shots across it in 1923, club history page); a call for the developer",
+ "rock_water_osm": [
+  "shore_strait"
+ ],
+ "no_stakes_osm": [
+  "sea_out"
+ ],
+ "no_stakes_osm_note": "no OB stakes where the line runs through or along the sea beyond it (developer 2026-10-31: \"don't put OB stakes in the water\"); s09/s09b skip stakes whose OB side is in these features, as for rock_water_osm/red_water_osm",
+ "move_trees": [
+  {
+   "x": 454.5,
+   "y": 798.5,
+   "to": [
+    444.6,
+    793.3
+   ],
+   "reason": "developer 2026-10-31 (screenshot with an arrow): the 18.8 m oak at the right of the 13th's approach, whose crown hung over the fairway, moved about 11 m south-west into the trees beside it"
+  }
+ ]
 }
