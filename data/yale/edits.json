@@ -61,6 +61,21 @@
    ],
    "tags": {},
    "reason": "OSM maps Yale's tee pads as small golf=fairway ways and the tees themselves as points; data/yale/make_tees.py copies each pad as a tee polygon and tags the pad nearest the 2026 card for Long and Championship (hole, tee_set); hole 12's back pad traced from the 2023 lidar DEM, hole 14's strip cut at its green marker"
+  },
+  {
+   "from": "proposed/channels_lidar.geojson",
+   "ids": [
+    "channel_w824708345",
+    "channel_w1058435181",
+    "channel_w1058435179",
+    "channel_w1058435183"
+   ],
+   "tags": {
+    "golf": "lateral_water_hazard",
+    "penalty": "red",
+    "flatten": "no"
+   },
+   "reason": "streams OSM maps only as lines, within 30 m of hole lines (s03): along the inside of 6's dogleg (the 'Burnside') and the brook beside 11, 12 and 18; channels from the 2023 DEM (pipeline/propose_channels.py); red like all water (standing default); flatten=no keeps the falling bed. Left out: the parts outside the OSM boundary (w824708346 above the 6th green, w1043294986 into Griest Pond behind the 9th tee, w1058435186 east of 12; out of bounds there anyway), the 6 m stub w1058435182 and the piped parts (tunnel=culvert/flooded: w1058435178, 180, 184)"
   }
  ],
  "drop": [
@@ -564,6 +579,34 @@
     "building": "yes"
    },
    "reason": "golf=clubhouse: drawn as a building (s03 check)"
+  },
+  {
+   "osm": "w283268706",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "Ray Bishop Pond (Griest Pond): carry on 1 and 9; every penalty area red (standing default, COURSE_BUILD 4.1)"
+  },
+  {
+   "osm": "w283530541",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "pond between 3 and 4; every penalty area red (standing default, COURSE_BUILD 4.1)"
+  },
+  {
+   "osm": "w283530830",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "pond in front of 17's tee; every penalty area red (standing default, COURSE_BUILD 4.1)"
+  },
+  {
+   "osm": "w283711525",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "pond by 13; every penalty area red (standing default, COURSE_BUILD 4.1)"
   }
  ]
 }

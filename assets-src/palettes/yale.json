@@ -1,0 +1,53 @@
+{
+  "name": "Yale (Connecticut hardwood hills, high summer)",
+  "note": "Course theme palette (<= 32 colours), same keys as pnw.json. Yale Golf Course, New Haven CT: Raynor's 1926 course cut through a rocky, steep, deep-green hardwood forest (oak, maple, hickory, beech, with white pine and hemlock). Made from seekonk (course chat, 2026-10-31): the turf a shade cooler and deeper, a darker rough (the woods' shade), tan-gold fescue tones for native grass, white sand, still grey-green ponds, grey ledge in the K tones. Trees in assets-src/trees_yale.py. Shadows are a 35% black overlay on top of these.",
+  "colors": {
+    "G0": "#172f24",
+    "G1": "#20432e",
+    "G2": "#295934",
+    "G3": "#336e39",
+    "G4": "#3f823f",
+    "G5": "#4b9546",
+    "G6": "#58a64e",
+    "G7": "#69b657",
+    "G8": "#7bc463",
+    "G9": "#9ed37f",
+    "L0": "#5a7038",
+    "L1": "#6a823e",
+    "L2": "#7d944a",
+    "S0": "#cdc6ad",
+    "S1": "#ede9da",
+    "S2": "#faf8f0",
+    "W0": "#283f3e",
+    "W1": "#345550",
+    "W2": "#6f8c84",
+    "K0": "#25262b",
+    "K1": "#4f5157",
+    "K2": "#77797e",
+    "K3": "#a9a69c",
+    "K4": "#d2cec3",
+    "B0": "#3e2c1d",
+    "B1": "#62452e",
+    "B2": "#80573c",
+    "R0": "#465365",
+    "WH": "#f6f6f2",
+    "F0": "#3c5a33",
+    "F1": "#4a6a38",
+    "F2": "#5a7a40"
+  },
+  "trees": {
+    "conifer": "trees_yale:conifer",
+    "deciduous": "trees_yale:deciduous"
+  },
+  "lut": {
+    "rough": [
+      "F0",
+      "F1",
+      "F2",
+      "F2"
+    ]
+  },
+  "minimap": {
+    "rough": "#4a6a38"
+  }
+}
