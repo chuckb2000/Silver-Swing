@@ -25,6 +25,22 @@
    "outputs": {
     "raw/naip_05m.tif": "e9af1ad9c14116a5c710e77cc7fdd25f8627ba62d864da8c170711d3defe0486"
    }
+  },
+  {
+   "asset": "USGS_LPC_VT_Statewide_A23_N2107E4445.laz",
+   "sha256": "c0c371410ba05bbe3c9fb2d963479a35a36c7978f9f8f5b48dd2b0c634aa6022",
+   "run": "python3 pipeline/intake.py laz kwiniaska {file} --out raw/laz/kwiniaska_N2107E4445.laz",
+   "outputs": {
+    "raw/laz/kwiniaska_N2107E4445.laz": "988b0c6640666f67f9592112f5d07f7ce33c67b2d13c113b53b7e4696123299c"
+   }
+  },
+  {
+   "asset": "USGS_LPC_VT_Statewide_A23_N2093E4445.laz",
+   "sha256": "110b7fc014e8142ddf1c0a5f9580e9ef33bf09a07fd274ba3c06e3e39fa81097",
+   "run": "python3 pipeline/intake.py laz kwiniaska {file} --out raw/laz/kwiniaska_N2093E4445.laz",
+   "outputs": {
+    "raw/laz/kwiniaska_N2093E4445.laz": "ea73bb78ad2cf31affb9c04ab3b9563c794f6ecf1913d70896848dc6365237f1"
+   }
   }
  ]
 }
