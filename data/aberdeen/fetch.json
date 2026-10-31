@@ -43,5 +43,6 @@
    "name": "aberdeen_club_home.html",
    "url": "https://www.golfataberdeen.com/"
   }
- ]
+ ],
+ "note": "second push: retry lidar tile in2018_29452250 (HTTP 429 on the first run)"
 }

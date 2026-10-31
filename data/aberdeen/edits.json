@@ -2,12 +2,43 @@
  "add": [
   {
    "from": "proposed/clubhouse.geojson",
-   "ids": ["w1032598389_building"],
+   "ids": [
+    "w1032598389_building"
+   ],
    "tags": {},
    "reason": "the clubhouse is mapped golf=clubhouse + building=yes, which s01 reads as a golf feature, not a building; copied as a building (audit: 'add building=yes'), original dropped (as at Wannamoisett)"
   }
  ],
  "drop": [
-  {"osm": "w1032598389", "reason": "replaced by its copy as a building (proposed/clubhouse.geojson)"}
+  {
+   "osm": "w1032598389",
+   "reason": "replaced by its copy as a building (proposed/clubhouse.geojson)"
+  }
+ ],
+ "tags": [
+  {
+   "osm": "w1032402649",
+   "set": {
+    "hole": "5",
+    "tee_set": "Gold"
+   },
+   "reason": "course chat 2026-10-31: the 506 yd box in front of the Black box (527 yd) is Gold's (card 518; -2.3%); s06 put Gold on the Black box (+2.4%), leaving no distinct Gold tee"
+  },
+  {
+   "osm": "w1032403023",
+   "set": {
+    "hole": "6",
+    "tee_set": "Gold"
+   },
+   "reason": "course chat 2026-10-31: the large box at 139 yd (centroid; 371 m2) is the only box between the Black (172) and Green (110) boxes; card Gold 157 (GolfingRecord) or 146 (GolfPass). Without the tag s06 put Gold on the Black box (+9.4%). Pending the developer"
+  },
+  {
+   "osm": "w1032607409",
+   "set": {
+    "hole": "18",
+    "tee_set": "Gold"
+   },
+   "reason": "course chat 2026-10-31: the 389 yd box in front of the Black box (405 yd) is Gold's (card 398, -2.3%; GolfPass 379); s06 put Gold on the Black box"
+  }
  ]
 }
