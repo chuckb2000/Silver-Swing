@@ -1,0 +1,39 @@
+{
+ "items": [
+  {
+   "name": "sankaty_head_overpass.geojson",
+   "osm_box": [
+    41.27,
+    -69.997,
+    41.302,
+    -69.955
+   ]
+  },
+  {
+   "name": "sankaty_head_dem1m",
+   "tnm": {
+    "dataset": "dem1m",
+    "bbox": [
+     -69.997,
+     41.27,
+     -69.955,
+     41.302
+    ],
+    "list": true
+   }
+  },
+  {
+   "name": "sankaty_head_lpc",
+   "tnm": {
+    "dataset": "lpc",
+    "bbox": [
+     -69.997,
+     41.27,
+     -69.955,
+     41.302
+    ],
+    "list": true
+   }
+  }
+ ]
+}
