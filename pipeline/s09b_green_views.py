@@ -344,7 +344,7 @@ def render_art(surf, z, grid: Grid, g, holes, trees, buildings, boundary, P, lut
     if (cfg or {}).get("rock_water_osm"):  # no OB stakes where the boundary meets the penalty areas
         from shapely.prepared import prep as _prep  # outside it (Cypress Point's shore and sea)
         from shapely.ops import unary_union as _uu
-        _ids = list(cfg["rock_water_osm"]) + list(cfg.get("red_water_osm") or [])
+        _ids = list(cfg["rock_water_osm"]) + list(cfg.get("red_water_osm") or []) + list(cfg.get("no_stakes_osm") or [])  # no_stakes_osm: water beyond the OB line (Victoria)
         no_stakes = _prep(_uu(list(g[g.osm.isin(_ids)].geometry)).buffer(1.0))
     for ring, poly, ob_inside in stake_lines(parts, g, cfg or {}):
         for s_ in np.arange(0, ring.length, 9.0):
