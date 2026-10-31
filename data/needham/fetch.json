@@ -85,7 +85,8 @@
   },
   {
    "name": "USGS_LPC_MA_CentralEastern_2021_B21_19TCG316683.laz",
-   "url": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/MA_CentralEastern_2021_B21/MA_CentralEastern_1_2021/LAZ/USGS_LPC_MA_CentralEastern_2021_B21_19TCG316683.laz"
+   "url": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/MA_CentralEastern_2021_B21/MA_CentralEastern_1_2021/LAZ/USGS_LPC_MA_CentralEastern_2021_B21_19TCG316683.laz",
+   "retry": 1
   }
  ]
 }
