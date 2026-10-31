@@ -8,6 +8,54 @@
     48.432,
     -123.283
    ]
+  },
+  {
+   "name": "lidarbc_fs.json",
+   "url": "https://services6.arcgis.com/ubm4tcTYICKBpist/ArcGIS/rest/services/LiDARBC_Map_Base/FeatureServer?f=json"
+  },
+  {
+   "name": "lidarbc_l0.json",
+   "url": "https://services6.arcgis.com/ubm4tcTYICKBpist/ArcGIS/rest/services/LiDARBC_Map_Base/FeatureServer/0/query?geometry=-123.300,48.418&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=*&returnGeometry=false&f=json"
+  },
+  {
+   "name": "lidarbc_l1.json",
+   "url": "https://services6.arcgis.com/ubm4tcTYICKBpist/ArcGIS/rest/services/LiDARBC_Map_Base/FeatureServer/1/query?geometry=-123.300,48.418&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=*&returnGeometry=false&f=json"
+  },
+  {
+   "name": "lidarbc_l2.json",
+   "url": "https://services6.arcgis.com/ubm4tcTYICKBpist/ArcGIS/rest/services/LiDARBC_Map_Base/FeatureServer/2/query?geometry=-123.300,48.418&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=*&returnGeometry=false&f=json"
+  },
+  {
+   "name": "lidarbc_l3.json",
+   "url": "https://services6.arcgis.com/ubm4tcTYICKBpist/ArcGIS/rest/services/LiDARBC_Map_Base/FeatureServer/3/query?geometry=-123.300,48.418&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=*&returnGeometry=false&f=json"
+  },
+  {
+   "name": "lidarbc_l4.json",
+   "url": "https://services6.arcgis.com/ubm4tcTYICKBpist/ArcGIS/rest/services/LiDARBC_Map_Base/FeatureServer/4/query?geometry=-123.300,48.418&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=*&returnGeometry=false&f=json"
+  },
+  {
+   "name": "lidarbc_l5.json",
+   "url": "https://services6.arcgis.com/ubm4tcTYICKBpist/ArcGIS/rest/services/LiDARBC_Map_Base/FeatureServer/5/query?geometry=-123.300,48.418&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=*&returnGeometry=false&f=json"
+  },
+  {
+   "name": "hrdem_stac.json",
+   "url": "https://datacube.services.geo.ca/stac/api/search?bbox=-123.318,48.403,-123.283,48.432&limit=100"
+  },
+  {
+   "name": "stac_collections.json",
+   "url": "https://datacube.services.geo.ca/stac/api/collections"
+  },
+  {
+   "name": "crd_services.json",
+   "url": "https://mapservices.crd.bc.ca/arcgis/rest/services?f=json"
+  },
+  {
+   "name": "crd_imagery.json",
+   "url": "https://mapservices.crd.bc.ca/arcgis/rest/services/Imagery?f=json"
+  },
+  {
+   "name": "club_home.html",
+   "url": "https://www.victoriagolf.com/"
   }
  ]
 }
