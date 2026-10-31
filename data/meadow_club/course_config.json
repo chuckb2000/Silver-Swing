@@ -50,7 +50,7 @@
    "total_yd": 6608
   }
  ],
- "default_tee": "Blue",
+ "default_tee": "Black",
  "scorecard_source": "Stymie (stymie.golf, Meadow Club, Fairfax), read 2026-10-30: every tee set per hole (Black, Blue, White, Gold, Red, Green, combos), par 71, men's stroke index, ratings/slopes; every row adds up to its printed total. Unverified third-party card (private club, no club card online). GolfPass (read the same day) has the same totals and pars but prints hole 12 as 374 in its rows (which then add to 6,726 / 6,600, not its own totals 6,734 / 6,608) and rates Black 72.7/137, Blue 72.2/134. Built: Black (the tips) and Blue (developer, 2026-10-30: the furthest-back tees and Blue); Blue is the default. White, Gold, Red and Green are in scorecard.csv but not built.",
  "penalty_default": "red",
  "driving_range_is_ob": true,
