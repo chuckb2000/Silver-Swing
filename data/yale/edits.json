@@ -1,0 +1,636 @@
+{
+ "add": [
+  {
+   "from": "proposed/tees.geojson",
+   "ids": [
+    "tee_trace12",
+    "tee_w285156450",
+    "tee_w285156451",
+    "tee_w285156452",
+    "tee_w285156455",
+    "tee_w285156458",
+    "tee_w285156460",
+    "tee_w285156461",
+    "tee_w285156464",
+    "tee_w285156465",
+    "tee_w285156466",
+    "tee_w285156467",
+    "tee_w285156469",
+    "tee_w287209653",
+    "tee_w287209655",
+    "tee_w287209657",
+    "tee_w287209658",
+    "tee_w287209659",
+    "tee_w287209661",
+    "tee_w287209662",
+    "tee_w287209663",
+    "tee_w287209665",
+    "tee_w287209668",
+    "tee_w287211683",
+    "tee_w287211685",
+    "tee_w287211686",
+    "tee_w287211688",
+    "tee_w287211689",
+    "tee_w287211690",
+    "tee_w287211691",
+    "tee_w287211693",
+    "tee_w287211694",
+    "tee_w287211695",
+    "tee_w287211696",
+    "tee_w287211697",
+    "tee_w287211698",
+    "tee_w287211700_back",
+    "tee_w287211700_front0",
+    "tee_w287211701",
+    "tee_w734021722",
+    "tee_w734021723",
+    "tee_w734021724",
+    "tee_w734021725",
+    "tee_w734021730",
+    "tee_w734021735",
+    "tee_w734021744",
+    "tee_w734021748",
+    "tee_w734021749",
+    "tee_w734027539",
+    "tee_w734027540",
+    "tee_w734027543",
+    "tee_w734027546",
+    "tee_w734027548",
+    "tee_w734027556",
+    "tee_w734027557"
+   ],
+   "tags": {},
+   "reason": "OSM maps Yale's tee pads as small golf=fairway ways and the tees themselves as points; data/yale/make_tees.py copies each pad as a tee polygon and tags the pad nearest the 2026 card for Long and Championship (hole, tee_set); hole 12's back pad traced from the 2023 lidar DEM, hole 14's strip cut at its green marker"
+  },
+  {
+   "from": "proposed/channels_lidar.geojson",
+   "ids": [
+    "channel_w824708345",
+    "channel_w1058435181",
+    "channel_w1058435179",
+    "channel_w1058435183"
+   ],
+   "tags": {
+    "golf": "lateral_water_hazard",
+    "penalty": "red",
+    "flatten": "no"
+   },
+   "reason": "streams OSM maps only as lines, within 30 m of hole lines (s03): along the inside of 6's dogleg (the 'Burnside') and the brook beside 11, 12 and 18; channels from the 2023 DEM (pipeline/propose_channels.py); red like all water (standing default); flatten=no keeps the falling bed. Left out: the parts outside the OSM boundary (w824708346 above the 6th green, w1043294986 into Griest Pond behind the 9th tee, w1058435186 east of 12; out of bounds there anyway), the 6 m stub w1058435182 and the piped parts (tunnel=culvert/flooded: w1058435178, 180, 184)"
+  },
+  {
+   "from": "proposed/desk_tees.geojson",
+   "ids": [
+    "desk_tee_1",
+    "desk_tee_10",
+    "desk_tee_17"
+   ],
+   "reason": "developer 2026-10-31: the Championship tees marked in the tracing desk (data/yale/desk/), accepted as marked; marks under 60 m2 grown to an 8 x 6 m pad on the developer's centroid so a tee box stands under each (make_desk_tees.py)"
+  },
+  {
+   "from": "proposed/practice_green_cut.geojson",
+   "ids": [
+    "w284013715_cut"
+   ],
+   "reason": "developer 2026-10-31: the Championship tee on 1 was marked on the practice green behind the clubhouse; the green is cut back 2.5 m clear of the tee pad (its 1.5 m fringe stays off the tee) so a tee box stands there (cut_practice_green.py)"
+  }
+ ],
+ "drop": [
+  {
+   "osm": "w285156450",
+   "reason": "tee pad mapped as golf=fairway; added as a tee polygon from proposed/tees.geojson"
+  },
+  {
+   "osm": "w285156451",
+   "reason": "tee pad mapped as golf=fairway; added as a tee polygon from proposed/tees.geojson"
+  },
+  {
+   "osm": "w285156452",
+   "reason": "tee pad mapped as golf=fairway; added as a tee polygon from proposed/tees.geojson"
+  },
+  {
+   "osm": "w285156455",
+   "reason": "tee pad mapped as golf=fairway; added as a tee polygon from proposed/tees.geojson"
+  },
+  {
+   "osm": "w285156458",
+   "reason": "tee pad mapped as golf=fairway; added as a tee polygon from proposed/tees.geojson"
+  },
+  {
+   "osm": "w285156460",
+   "reason": "tee pad mapped as golf=fairway; added as a tee polygon from proposed/tees.geojson"
+  },
+  {
+   "osm": "w285156461",
+   "reason": "tee pad mapped as golf=fairway; added as a tee polygon from proposed/tees.geojson"
+  },
+  {
+   "osm": "w285156464",
+   "reason": "tee pad mapped as golf=fairway; added as a tee polygon from proposed/tees.geojson"
+  },
+  {
+   "osm": "w285156465",
+   "reason": "tee pad mapped as golf=fairway; added as a tee polygon from proposed/tees.geojson"
+  },
+  {
+   "osm": "w285156466",
+   "reason": "tee pad mapped as golf=fairway; added as a tee polygon from proposed/tees.geojson"
+  },
+  {
+   "osm": "w285156467",
+   "reason": "tee pad mapped as golf=fairway; added as a tee polygon from proposed/tees.geojson"
+  },
+  {
+   "osm": "w285156469",
+   "reason": "tee pad mapped as golf=fairway; added as a tee polygon from proposed/tees.geojson"
+  },
+  {
+   "osm": "w287209653",
+   "reason": "tee pad mapped as golf=fairway; added as a tee polygon from proposed/tees.geojson"
+  },
+  {
+   "osm": "w287209655",
+   "reason": "tee pad mapped as golf=fairway; added as a tee polygon from proposed/tees.geojson"
+  },
+  {
+   "osm": "w287209657",
+   "reason": "tee pad mapped as golf=fairway; added as a tee polygon from proposed/tees.geojson"
+  },
+  {
+   "osm": "w287209658",
+   "reason": "tee pad mapped as golf=fairway; added as a tee polygon from proposed/tees.geojson"
+  },
+  {
+   "osm": "w287209659",
+   "reason": "tee pad mapped as golf=fairway; added as a tee polygon from proposed/tees.geojson"
+  },
+  {
+   "osm": "w287209661",
+   "reason": "tee pad mapped as golf=fairway; added as a tee polygon from proposed/tees.geojson"
+  },
+  {
+   "osm": "w287209662",
+   "reason": "tee pad mapped as golf=fairway; added as a tee polygon from proposed/tees.geojson"
+  },
+  {
+   "osm": "w287209663",
+   "reason": "tee pad mapped as golf=fairway; added as a tee polygon from proposed/tees.geojson"
+  },
+  {
+   "osm": "w287209665",
+   "reason": "tee pad mapped as golf=fairway; added as a tee polygon from proposed/tees.geojson"
+  },
+  {
+   "osm": "w287209668",
+   "reason": "tee pad mapped as golf=fairway; added as a tee polygon from proposed/tees.geojson"
+  },
+  {
+   "osm": "w287211683",
+   "reason": "tee pad mapped as golf=fairway; added as a tee polygon from proposed/tees.geojson"
+  },
+  {
+   "osm": "w287211685",
+   "reason": "tee pad mapped as golf=fairway; added as a tee polygon from proposed/tees.geojson"
+  },
+  {
+   "osm": "w287211686",
+   "reason": "tee pad mapped as golf=fairway; added as a tee polygon from proposed/tees.geojson"
+  },
+  {
+   "osm": "w287211688",
+   "reason": "tee pad mapped as golf=fairway; added as a tee polygon from proposed/tees.geojson"
+  },
+  {
+   "osm": "w287211689",
+   "reason": "tee pad mapped as golf=fairway; added as a tee polygon from proposed/tees.geojson"
+  },
+  {
+   "osm": "w287211690",
+   "reason": "tee pad mapped as golf=fairway; added as a tee polygon from proposed/tees.geojson"
+  },
+  {
+   "osm": "w287211691",
+   "reason": "tee pad mapped as golf=fairway; added as a tee polygon from proposed/tees.geojson"
+  },
+  {
+   "osm": "w287211693",
+   "reason": "tee pad mapped as golf=fairway; added as a tee polygon from proposed/tees.geojson"
+  },
+  {
+   "osm": "w287211694",
+   "reason": "tee pad mapped as golf=fairway; added as a tee polygon from proposed/tees.geojson"
+  },
+  {
+   "osm": "w287211695",
+   "reason": "tee pad mapped as golf=fairway; added as a tee polygon from proposed/tees.geojson"
+  },
+  {
+   "osm": "w287211696",
+   "reason": "tee pad mapped as golf=fairway; added as a tee polygon from proposed/tees.geojson"
+  },
+  {
+   "osm": "w287211697",
+   "reason": "tee pad mapped as golf=fairway; added as a tee polygon from proposed/tees.geojson"
+  },
+  {
+   "osm": "w287211698",
+   "reason": "tee pad mapped as golf=fairway; added as a tee polygon from proposed/tees.geojson"
+  },
+  {
+   "osm": "w287211700",
+   "reason": "tee pad mapped as golf=fairway; added as a tee polygon from proposed/tees.geojson"
+  },
+  {
+   "osm": "w287211701",
+   "reason": "tee pad mapped as golf=fairway; added as a tee polygon from proposed/tees.geojson"
+  },
+  {
+   "osm": "w734021722",
+   "reason": "tee pad mapped as golf=fairway; added as a tee polygon from proposed/tees.geojson"
+  },
+  {
+   "osm": "w734021723",
+   "reason": "tee pad mapped as golf=fairway; added as a tee polygon from proposed/tees.geojson"
+  },
+  {
+   "osm": "w734021724",
+   "reason": "tee pad mapped as golf=fairway; added as a tee polygon from proposed/tees.geojson"
+  },
+  {
+   "osm": "w734021725",
+   "reason": "tee pad mapped as golf=fairway; added as a tee polygon from proposed/tees.geojson"
+  },
+  {
+   "osm": "w734021730",
+   "reason": "tee pad mapped as golf=fairway; added as a tee polygon from proposed/tees.geojson"
+  },
+  {
+   "osm": "w734021735",
+   "reason": "tee pad mapped as golf=fairway; added as a tee polygon from proposed/tees.geojson"
+  },
+  {
+   "osm": "w734021744",
+   "reason": "tee pad mapped as golf=fairway; added as a tee polygon from proposed/tees.geojson"
+  },
+  {
+   "osm": "w734021748",
+   "reason": "tee pad mapped as golf=fairway; added as a tee polygon from proposed/tees.geojson"
+  },
+  {
+   "osm": "w734021749",
+   "reason": "tee pad mapped as golf=fairway; added as a tee polygon from proposed/tees.geojson"
+  },
+  {
+   "osm": "w734027539",
+   "reason": "tee pad mapped as golf=fairway; added as a tee polygon from proposed/tees.geojson"
+  },
+  {
+   "osm": "w734027540",
+   "reason": "tee pad mapped as golf=fairway; added as a tee polygon from proposed/tees.geojson"
+  },
+  {
+   "osm": "w734027543",
+   "reason": "tee pad mapped as golf=fairway; added as a tee polygon from proposed/tees.geojson"
+  },
+  {
+   "osm": "w734027546",
+   "reason": "tee pad mapped as golf=fairway; added as a tee polygon from proposed/tees.geojson"
+  },
+  {
+   "osm": "w734027548",
+   "reason": "tee pad mapped as golf=fairway; added as a tee polygon from proposed/tees.geojson"
+  },
+  {
+   "osm": "w734027556",
+   "reason": "tee pad mapped as golf=fairway; added as a tee polygon from proposed/tees.geojson"
+  },
+  {
+   "osm": "w734027557",
+   "reason": "tee pad mapped as golf=fairway; added as a tee polygon from proposed/tees.geojson"
+  },
+  {
+   "osm": "n2888304162",
+   "reason": "golf=tee point (tee marker); the pads are tee polygons now (s06 needs polygons)"
+  },
+  {
+   "osm": "n2888304163",
+   "reason": "golf=tee point (tee marker); the pads are tee polygons now (s06 needs polygons)"
+  },
+  {
+   "osm": "n2888304173",
+   "reason": "golf=tee point (tee marker); the pads are tee polygons now (s06 needs polygons)"
+  },
+  {
+   "osm": "n2888313962",
+   "reason": "golf=tee point (tee marker); the pads are tee polygons now (s06 needs polygons)"
+  },
+  {
+   "osm": "n2888313969",
+   "reason": "golf=tee point (tee marker); the pads are tee polygons now (s06 needs polygons)"
+  },
+  {
+   "osm": "n2888313977",
+   "reason": "golf=tee point (tee marker); the pads are tee polygons now (s06 needs polygons)"
+  },
+  {
+   "osm": "n2888313982",
+   "reason": "golf=tee point (tee marker); the pads are tee polygons now (s06 needs polygons)"
+  },
+  {
+   "osm": "n2888313989",
+   "reason": "golf=tee point (tee marker); the pads are tee polygons now (s06 needs polygons)"
+  },
+  {
+   "osm": "n2888314404",
+   "reason": "golf=tee point (tee marker); the pads are tee polygons now (s06 needs polygons)"
+  },
+  {
+   "osm": "n2888314406",
+   "reason": "golf=tee point (tee marker); the pads are tee polygons now (s06 needs polygons)"
+  },
+  {
+   "osm": "n2888314423",
+   "reason": "golf=tee point (tee marker); the pads are tee polygons now (s06 needs polygons)"
+  },
+  {
+   "osm": "n2888314424",
+   "reason": "golf=tee point (tee marker); the pads are tee polygons now (s06 needs polygons)"
+  },
+  {
+   "osm": "n2888314428",
+   "reason": "golf=tee point (tee marker); the pads are tee polygons now (s06 needs polygons)"
+  },
+  {
+   "osm": "n2888314430",
+   "reason": "golf=tee point (tee marker); the pads are tee polygons now (s06 needs polygons)"
+  },
+  {
+   "osm": "n2888314434",
+   "reason": "golf=tee point (tee marker); the pads are tee polygons now (s06 needs polygons)"
+  },
+  {
+   "osm": "n2888314435",
+   "reason": "golf=tee point (tee marker); the pads are tee polygons now (s06 needs polygons)"
+  },
+  {
+   "osm": "n2888314438",
+   "reason": "golf=tee point (tee marker); the pads are tee polygons now (s06 needs polygons)"
+  },
+  {
+   "osm": "n2888314445",
+   "reason": "golf=tee point (tee marker); the pads are tee polygons now (s06 needs polygons)"
+  },
+  {
+   "osm": "n2888314450",
+   "reason": "golf=tee point (tee marker); the pads are tee polygons now (s06 needs polygons)"
+  },
+  {
+   "osm": "n2888314456",
+   "reason": "golf=tee point (tee marker); the pads are tee polygons now (s06 needs polygons)"
+  },
+  {
+   "osm": "n2888314463",
+   "reason": "golf=tee point (tee marker); the pads are tee polygons now (s06 needs polygons)"
+  },
+  {
+   "osm": "n2888314464",
+   "reason": "golf=tee point (tee marker); the pads are tee polygons now (s06 needs polygons)"
+  },
+  {
+   "osm": "n2908414104",
+   "reason": "golf=tee point (tee marker); the pads are tee polygons now (s06 needs polygons)"
+  },
+  {
+   "osm": "n2908414106",
+   "reason": "golf=tee point (tee marker); the pads are tee polygons now (s06 needs polygons)"
+  },
+  {
+   "osm": "n2908414107",
+   "reason": "golf=tee point (tee marker); the pads are tee polygons now (s06 needs polygons)"
+  },
+  {
+   "osm": "n2908414112",
+   "reason": "golf=tee point (tee marker); the pads are tee polygons now (s06 needs polygons)"
+  },
+  {
+   "osm": "n2908414121",
+   "reason": "golf=tee point (tee marker); the pads are tee polygons now (s06 needs polygons)"
+  },
+  {
+   "osm": "n2908414122",
+   "reason": "golf=tee point (tee marker); the pads are tee polygons now (s06 needs polygons)"
+  },
+  {
+   "osm": "n2908414123",
+   "reason": "golf=tee point (tee marker); the pads are tee polygons now (s06 needs polygons)"
+  },
+  {
+   "osm": "n2908414128",
+   "reason": "golf=tee point (tee marker); the pads are tee polygons now (s06 needs polygons)"
+  },
+  {
+   "osm": "n2908414136",
+   "reason": "golf=tee point (tee marker); the pads are tee polygons now (s06 needs polygons)"
+  },
+  {
+   "osm": "n2908414141",
+   "reason": "golf=tee point (tee marker); the pads are tee polygons now (s06 needs polygons)"
+  },
+  {
+   "osm": "n2908414148",
+   "reason": "golf=tee point (tee marker); the pads are tee polygons now (s06 needs polygons)"
+  },
+  {
+   "osm": "n2908414150",
+   "reason": "golf=tee point (tee marker); the pads are tee polygons now (s06 needs polygons)"
+  },
+  {
+   "osm": "n2908414156",
+   "reason": "golf=tee point (tee marker); the pads are tee polygons now (s06 needs polygons)"
+  },
+  {
+   "osm": "n2908414162",
+   "reason": "golf=tee point (tee marker); the pads are tee polygons now (s06 needs polygons)"
+  },
+  {
+   "osm": "n2908414163",
+   "reason": "golf=tee point (tee marker); the pads are tee polygons now (s06 needs polygons)"
+  },
+  {
+   "osm": "n2908414173",
+   "reason": "golf=tee point (tee marker); the pads are tee polygons now (s06 needs polygons)"
+  },
+  {
+   "osm": "n2908414180",
+   "reason": "golf=tee point (tee marker); the pads are tee polygons now (s06 needs polygons)"
+  },
+  {
+   "osm": "n2908414181",
+   "reason": "golf=tee point (tee marker); the pads are tee polygons now (s06 needs polygons)"
+  },
+  {
+   "osm": "n2908414186",
+   "reason": "golf=tee point (tee marker); the pads are tee polygons now (s06 needs polygons)"
+  },
+  {
+   "osm": "n2908414191",
+   "reason": "golf=tee point (tee marker); the pads are tee polygons now (s06 needs polygons)"
+  },
+  {
+   "osm": "n2908414198",
+   "reason": "golf=tee point (tee marker); the pads are tee polygons now (s06 needs polygons)"
+  },
+  {
+   "osm": "n2908414203",
+   "reason": "golf=tee point (tee marker); the pads are tee polygons now (s06 needs polygons)"
+  },
+  {
+   "osm": "n2908414209",
+   "reason": "golf=tee point (tee marker); the pads are tee polygons now (s06 needs polygons)"
+  },
+  {
+   "osm": "n2908414210",
+   "reason": "golf=tee point (tee marker); the pads are tee polygons now (s06 needs polygons)"
+  },
+  {
+   "osm": "n2908429144",
+   "reason": "golf=tee point (tee marker); the pads are tee polygons now (s06 needs polygons)"
+  },
+  {
+   "osm": "n2908429146",
+   "reason": "golf=tee point (tee marker); the pads are tee polygons now (s06 needs polygons)"
+  },
+  {
+   "osm": "n2908429148",
+   "reason": "golf=tee point (tee marker); the pads are tee polygons now (s06 needs polygons)"
+  },
+  {
+   "osm": "n2908429156",
+   "reason": "golf=tee point (tee marker); the pads are tee polygons now (s06 needs polygons)"
+  },
+  {
+   "osm": "n2908429157",
+   "reason": "golf=tee point (tee marker); the pads are tee polygons now (s06 needs polygons)"
+  },
+  {
+   "osm": "n2908429159",
+   "reason": "golf=tee point (tee marker); the pads are tee polygons now (s06 needs polygons)"
+  },
+  {
+   "osm": "n2908429164",
+   "reason": "golf=tee point (tee marker); the pads are tee polygons now (s06 needs polygons)"
+  },
+  {
+   "osm": "n2908429165",
+   "reason": "golf=tee point (tee marker); the pads are tee polygons now (s06 needs polygons)"
+  },
+  {
+   "osm": "n2908429176",
+   "reason": "golf=tee point (tee marker); the pads are tee polygons now (s06 needs polygons)"
+  },
+  {
+   "osm": "n2908429177",
+   "reason": "golf=tee point (tee marker); the pads are tee polygons now (s06 needs polygons)"
+  },
+  {
+   "osm": "n2908429190",
+   "reason": "golf=tee point (tee marker); the pads are tee polygons now (s06 needs polygons)"
+  },
+  {
+   "osm": "n2908429196",
+   "reason": "golf=tee point (tee marker); the pads are tee polygons now (s06 needs polygons)"
+  },
+  {
+   "osm": "n2908429198",
+   "reason": "golf=tee point (tee marker); the pads are tee polygons now (s06 needs polygons)"
+  },
+  {
+   "osm": "n2908429306",
+   "reason": "golf=tee point (tee marker); the pads are tee polygons now (s06 needs polygons)"
+  },
+  {
+   "osm": "n2908429312",
+   "reason": "golf=tee point (tee marker); the pads are tee polygons now (s06 needs polygons)"
+  },
+  {
+   "osm": "n2908429321",
+   "reason": "golf=tee point (tee marker); the pads are tee polygons now (s06 needs polygons)"
+  },
+  {
+   "osm": "n2908429324",
+   "reason": "golf=tee point (tee marker); the pads are tee polygons now (s06 needs polygons)"
+  },
+  {
+   "osm": "n2908429332",
+   "reason": "golf=tee point (tee marker); the pads are tee polygons now (s06 needs polygons)"
+  },
+  {
+   "osm": "n2908429338",
+   "reason": "golf=tee point (tee marker); the pads are tee polygons now (s06 needs polygons)"
+  },
+  {
+   "osm": "n2908429344",
+   "reason": "golf=tee point (tee marker); the pads are tee polygons now (s06 needs polygons)"
+  },
+  {
+   "osm": "n2908429353",
+   "reason": "golf=tee point (tee marker); the pads are tee polygons now (s06 needs polygons)"
+  },
+  {
+   "osm": "n2908429359",
+   "reason": "golf=tee point (tee marker); the pads are tee polygons now (s06 needs polygons)"
+  },
+  {
+   "osm": "n2908429362",
+   "reason": "golf=tee point (tee marker); the pads are tee polygons now (s06 needs polygons)"
+  },
+  {
+   "osm": "n7157816970",
+   "reason": "golf=tee point (tee marker); the pads are tee polygons now (s06 needs polygons)"
+  },
+  {
+   "osm": "n2908414153",
+   "reason": "hole 9's OSM pin stands 16 m east of the long Biarritz green's centre, outside the close-up putting view (course_play.test.ts); the centre pin is the green's centre instead and the game adds the other hole locations (pins.ts)"
+  },
+  {
+   "osm": "w284013715",
+   "reason": "replaced by w284013715_cut (the practice green less the developer's tee on 1)"
+  }
+ ],
+ "tags": [
+  {
+   "osm": "w283933871",
+   "set": {
+    "building": "yes"
+   },
+   "reason": "golf=clubhouse: drawn as a building (s03 check)"
+  },
+  {
+   "osm": "w283268706",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "Ray Bishop Pond (Griest Pond): carry on 1 and 9; every penalty area red (standing default, COURSE_BUILD 4.1)"
+  },
+  {
+   "osm": "w283530541",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "pond between 3 and 4; every penalty area red (standing default, COURSE_BUILD 4.1)"
+  },
+  {
+   "osm": "w283530830",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "pond in front of 17's tee; every penalty area red (standing default, COURSE_BUILD 4.1)"
+  },
+  {
+   "osm": "w283711525",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "pond by 13; every penalty area red (standing default, COURSE_BUILD 4.1)"
+  }
+ ]
+}

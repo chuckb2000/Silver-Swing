@@ -9,7 +9,7 @@ course: release.json "run" lines call it, so `make fetch` rebuilds raw/ from the
     python3 pipeline/intake.py ortho <id> IMAGE x0 y0 x1 y1 [IMAGE x0 y0 x1 y1 ...] [--epsg N] [--out raw/ortho.tif]
         Orthophoto exports (JPEG/PNG, no georeferencing) placed by their request boxes (course
         EPSG unless --epsg), mosaicked and cut to the world + 100 m -> a GeoTIFF.
-    python3 pipeline/intake.py laz <id> SRC.laz|SRC.zip [...] [--margin 100] [--classes 1,3,4,5] [--out raw/laz/<id>_clip.laz] [--keep-evlrs]
+    python3 pipeline/intake.py laz <id> SRC.laz|SRC.zip [...] [--margin 100] [--classes 1,3,4,5] [--drop-extra] [--out raw/laz/<id>_clip.laz] [--keep-evlrs]
         Lidar tiles (or a NOAA zip of them) -> one LAZ of the points in the world + margin,
         in the files' own CRS, re-quantised onto the first tile's scale and offset, with the
         source's creation date (so the clip's hash is the same any day: Chambers Bay).
@@ -209,13 +209,18 @@ def cmd_laz(name: str, args: list[str]):
     classes = opt(args, "--classes")
     classes = np.array([int(c) for c in classes.split(",")]) if classes else None
     box_ = world_box(cfg, args, margin)
+    # --drop-extra: write the standard point format only (Yale's CT 2023 tiles carry 21 undocumented
+    # extra bytes that laspy writes back as an ExtraBytes VLR it can't read again)
+    drop_extra = "--drop-extra" in args
+    args = [a for a in args if a != "--drop-extra"]
     with tempfile.TemporaryDirectory() as td:
         srcs = _laz_sources(args, td)
         if not srcs:
             sys.exit("[intake] laz: no .laz/.las files")
         with laspy.open(srcs[0]) as r0:
             h0 = r0.header
-            hdr = laspy.LasHeader(point_format=h0.point_format, version=h0.version)
+            pf = laspy.PointFormat(h0.point_format.id) if drop_extra else h0.point_format
+            hdr = laspy.LasHeader(point_format=pf, version=h0.version)
             hdr.scales, hdr.offsets = h0.scales, h0.offsets
             for v in h0.vlrs:
                 # a COPC tile (NOAA Digital Coast's *.copc.laz) carries COPC info/hierarchy records
@@ -240,6 +245,7 @@ def cmd_laz(name: str, args: list[str]):
                 n = 0
                 with laspy.open(s) as r:
                     same = r.header.scales.tolist() == hdr.scales.tolist() and r.header.offsets.tolist() == hdr.offsets.tolist()
+                    same = same and not drop_extra
                     for c in r.chunk_iterator(5_000_000):
                         x, y = np.asarray(c.x), np.asarray(c.y)
                         keep = (x >= bx0) & (x <= bx1) & (y >= by0) & (y <= by1)
@@ -250,7 +256,7 @@ def cmd_laz(name: str, args: list[str]):
                         pts = c[keep]
                         if not same:  # another tile's offsets: re-quantise on the first's
                             o = laspy.ScaleAwarePointRecord.zeros(len(pts), header=hdr)
-                            for d in pts.point_format.dimension_names:
+                            for d in (o.point_format.dimension_names if drop_extra else pts.point_format.dimension_names):
                                 if d not in ("X", "Y", "Z"):
                                     o[d] = pts[d]
                             o.x, o.y, o.z = np.asarray(pts.x), np.asarray(pts.y), np.asarray(pts.z)
