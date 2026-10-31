@@ -48,7 +48,7 @@
    "total_yd": 5887
   }
  ],
- "default_tee": "Blue",
+ "default_tee": "Black",
  "scorecard_source": "Per hole: Stymie (stymie.golf, Stowe Mountain Club), read 2026-10-31, all five sets (Black 6,411, Blue 5,887, White 5,442, Green 4,742, Red 4,018); rows add up. Black per hole also GolfPass, 18Birdies and OpenGolfAPI (identical). Totals and ratings 18Birdies (Black 72.1/141, Blue 70.0/132; Stymie prints 73.7/151 and 71.2/146). Stroke index GolfPass/18Birdies/OpenGolfAPI (Stymie swaps 10 and 18). GolfPass's per-hole Blue row adds to 5,824 and its tee table says 6,041: not used. Unverified third-party; no club card online (private club).",
  "driving_range_is_ob": true,
  "wind_mph": {
