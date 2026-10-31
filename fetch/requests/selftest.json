@@ -1,7 +1,0 @@
-{
- "release": "fetch-test",
- "items": [
-  {"name": "oswego_lake_overpass.geojson", "osm_box": [45.4150, -122.6966, 45.4244, -122.6767]},
-  {"name": "oswego_dem_list", "tnm": {"dataset": "dem1m", "bbox": [-122.6966, 45.4150, -122.6767, 45.4244], "list": true}}
- ]
-}

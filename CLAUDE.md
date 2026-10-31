@@ -681,6 +681,15 @@ DECISIONS.md with the reason.
     boundary, by gross strokes, no par shown; round length `xc`, kept off every other board and
     list. DECISIONS.md "Cross-country golf, the bonus mode".
 
+-   **Downloads through GitHub Actions (design chat, 2026-10-30):** branch
+    `design/fetch-actions`: `.github/workflows/fetch-data.yml` and
+    `pipeline/remote_fetch.py` (`new`, `wait`, `pull`); a pushed
+    `data/<id>/fetch.json` gets the Overpass export, 3DEP DEM and lidar
+    and direct links into the release `data-<id>`, with a log the sandbox
+    reads. docs/COURSE_BUILD.md 5.0; the starting message for a course chat
+    is docs/COURSE_CHAT_START.md. DECISIONS.md "Downloads through GitHub
+    Actions first".
+
 -   **Next task:** Item 1 of the player improvements (swing coach) is on
     `design/coach`, unmerged. Also: the third playtest (putting, yellow
     misses), the club's printed scorecard and the hole 3 Blue tee box. New courses: a separate chat following docs/COURSE_BUILD.md
@@ -715,8 +724,9 @@ DECISIONS.md with the reason.
 
 -   **Claude\'s role:** Claude writes all game code, generates all art
     and sound programmatically, writes the data pipeline, and validates
-    course data. The developer playtests, makes the calls on open items,
-    and runs any download Claude\'s environment can\'t reach.
+    course data. Downloads go through the GitHub Actions fetch workflow
+    first (5.1 network note). The developer playtests, makes the calls on
+    open items, and downloads only what that workflow can\'t reach.
 
 **Hard rules**
 
@@ -951,10 +961,16 @@ geometry never goes into OpenStreetMap (OSM forbids it). Tracing Bing or
 Esri imagery inside an OSM editor and contributing to OSM is permitted by
 Microsoft and Esri and stays an option.
 
-**Network note:** Claude\'s environment may block Overpass, USGS or
-DOGAMI downloads. If so, Claude writes the download script and the
-developer runs it locally and uploads the files, or the developer
-downloads them by hand. Never stall on this; ask.
+**Network note:** Claude\'s environment blocks Overpass, USGS and most
+data sites, and its proxy blocks the GitHub Actions API. **GitHub Actions
+first** (developer, 2026-10-29): a course chat commits
+`data/<id>/fetch.json` and pushes its branch; the workflow
+`.github/workflows/fetch-data.yml` runs `pipeline/remote_fetch.py` on a
+GitHub runner, which downloads the Overpass export, USGS 3DEP DEM and
+lidar tiles and any direct public link into the release `data-<id>`,
+with a log the sandbox reads (docs/COURSE_BUILD.md 5.0). The developer
+downloads only what the workflow can't get (a sign-in, an emailed
+order, screenshots, a printed card). Never stall on this; ask.
 
 **5.2 Relevant OSM tags**
 
@@ -1761,6 +1777,10 @@ lands: `ls docs/courses/` is the list. The first course, Oswego Lake, is
 /game/functions/api/scores.ts ← Cloudflare Pages Function: shared leaderboard
 
 /game/public/courses/index.json ← the course list (written by pipeline s10)
+
+/.github/workflows/fetch-data.yml ← downloads on a GitHub runner (pipeline/remote_fetch.py)
+
+/docs/COURSE_CHAT_START.md ← the message that starts a course chat
 
 /Makefile ← make dev \| make test \| make course NAME=x \| make intake NAME=x \| make land NAME=x \| make pins \| make assets
 
