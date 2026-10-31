@@ -97,6 +97,18 @@
   {
    "name": "USGS_LPC_CA_SantaCruzCounty_2020_A20_117830.laz",
    "url": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/CA_SantaCruzCounty_2020_A20/CA_SantaCruzCounty_2020/LAZ/USGS_LPC_CA_SantaCruzCounty_2020_A20_117830.laz"
+  },
+  {
+   "name": "pasatiempo_naip_apfo_north.jpg",
+   "url": "https://gis.apfo.usda.gov/arcgis/rest/services/NAIP/USDA_CONUS_PRIME/ImageServer/exportImage?bbox=585637,4095590,587373,4096842&bboxSR=32610&imageSR=32610&size=2893,2087&format=jpg&f=image"
+  },
+  {
+   "name": "pasatiempo_naip_apfo_south.jpg",
+   "url": "https://gis.apfo.usda.gov/arcgis/rest/services/NAIP/USDA_CONUS_PRIME/ImageServer/exportImage?bbox=585637,4094338,587373,4095590&bboxSR=32610&imageSR=32610&size=2893,2087&format=jpg&f=image"
+  },
+  {
+   "name": "pasatiempo_naip_apfo_identify.json",
+   "url": "https://gis.apfo.usda.gov/arcgis/rest/services/NAIP/USDA_CONUS_PRIME/ImageServer/identify?geometry=%7B%22x%22%3A-122.026%2C%22y%22%3A37.004%2C%22spatialReference%22%3A%7B%22wkid%22%3A4326%7D%7D&geometryType=esriGeometryPoint&returnGeometry=false&returnCatalogItems=true&returnPixelValues=false&f=json"
   }
  ]
 }
