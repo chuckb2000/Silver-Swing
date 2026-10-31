@@ -26,6 +26,10 @@
    "url": "https://kwiniaska.com/sitemap-1.xml"
   },
   {
+   "name": "kwiniaska_club_logo_reference.png",
+   "url": "https://kwiniaska.com/wp-content/uploads/2022/03/cropped-logo2.png"
+  },
+  {
    "name": "kwiniaska_naip.jpg",
    "url": "https://imagery.nationalmap.gov/arcgis/rest/services/USGSNAIPImagery/ImageServer/exportImage?bbox=643040,4916547,644064,4917827&bboxSR=32618&imageSR=32618&size=2048,2560&format=jpg&f=image"
   },
