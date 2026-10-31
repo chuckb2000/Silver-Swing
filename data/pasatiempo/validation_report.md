@@ -56,6 +56,30 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 8. Hole 18 (Gold): tee box tee_w1041819911_back assigned by the developer (tagged hole=18, tee_set=Gold in edited/course.geojson).
 9. Hole 18 (White): tee box tee_w1041819911_front assigned by the developer (tagged hole=18, tee_set=White in edited/course.geojson).
 
+## Other open items (Pasatiempo Golf Club)
+
+Built 2026-10-30/31 by two course chats while the developer was away. The developer's rule for this build: make the call, log it (facts, options, choice), keep going. Every item below is a call the developer has not yet seen; each has a recommendation. docs/courses/pasatiempo.md lists the same under "Developer's calls pending".
+
+1. **Default tee Gold** (the longest set). The hand-off said White (the second set, as there is no Blue), but main now requires the longest set as the default (developer, 2026-10-31; `courses.test.ts`). Both Gold and White are built and playable. Recommendation: keep.
+2. **World 1,536 x 2,304 m**, over the 2,048 m guideline (COURSE_BUILD 10): the OSM boundary alone is 2,056 m north to south. Same height as ogc and tpc_boston, which load and play. `world.over_limit_approved` names the course chat, pending the developer. Recommendation: accept.
+3. **Scorecard:** the club's printed Gentlemen's Card (printed 4/2026; release `data-pasatiempo`, `pasatiempo_scorecard_1.jpg` and `_4.jpg`). Every row adds up to its printed totals. Its handicaps differ from Stymie/GolfPass on 6/7 and 12/13 (swapped) and its White/Green row on 1, 9 and 16: the card is used. Team Match, Green/Hollins and Hollins are Stymie's rows (not on the gentlemen's card; not built).
+4. **Hole 18 tees** (course chat): the long curved teeing ground w1041819911 runs 138-185 yd from the green centre. It is cut at 152 yd (`make_tee18_split.py`): the front piece is White (147 yd against 145, +1.6 %), the back piece Gold (177 yd against 173, +2.5 % after the tee move). Before, White played from the line start, 177 yd (+22 %). Options: (a) the cut; (b) accept White at 177 yd; (c) trace a White box. Recommendation: (a).
+5. **Hole 14 White tee** (first chat): OSM w1041814063 is tagged as a bunker, but the 2022 NAIP shows a mown tee rectangle and the 2020 DEM a raised pad, 48 m ahead of the Gold tee; copied as the White tee (375 yd against 382). Recommendation: keep.
+6. **Real yardages under 8 % only after a tee move:** 3 Gold (box centre 189 yd, card 222; played 216), 4 Gold (345, card 378; played 369) and 15 White (100, card 120; played 117). Each moves the tee along the middle of its long OSM box (CLAUDE.md 5.6 step 2). The boxes may be several tees mapped as one. Recommendation: accept.
+7. **No Gold box mapped on 5, 8 and 15:** the tee is the OSM hole line's start (191, 177 and 147 yd against 190, 176 and 142). 15 Gold is +3.3 % (flag, accepted). Recommendation: accept.
+8. **Hole 2's line starts 65 m from its only matching box** (w1112015734): measured from the box, through the line's bend points. Gold 420 yd (-2.3 %), White 410 yd (+1.8 % after the tee move).
+9. **Barrancas, red** (first chat): penalty areas along Pasatiempo Creek (w42855499: 13 left, between 14/15 and 16, short right of the 16th green) and the stream in front of the 10th tee and the 18th green (w265532264), from the channel the 2020 DEM shows along the OSM lines (`propose_channels.py`, `clip_channels.py`), `flatten=no`. The club's card makes 18 yellow; the standing default makes it red. Recommendation: keep red.
+10. **Hole 11's barranca is not a penalty area.** The club stakes one (Local Rule B-2) across the 11th, between 11 and 12, but OSM has no stream or polygon there; the ravine is wooded and plays as rough and trees. Options: (a) leave; (b) a penalty area proposed from the DEM ravine, listed for approval. Recommendation: (a) unless the developer wants it staked.
+11. **The practice range** (course chat): OSM maps a 120 m mown strip east of hole 1 and its hitting area at the clubhouse end as `golf=fairway` belonging to no hole. The scouting has the club's range left of hole 1, out of bounds. Copied as `golf=driving_range` (`make_range.py`), so it is out of bounds (standing default) and drawn as the range. Recommendation: keep.
+12. **Roads inside the course play as cart paths** (standing default). The club's local rule makes the paved roads and culverts on 2, 5, 6, 8 and 9 out of bounds; the game can't make a road OB for some holes only. Recommendation: keep.
+13. **Trees: 2020 lidar, older than the 2023-24 restoration.** The scouting lists removals since then (Monterey pines near 2 and 3, a large tree right of the 6th green, trees round the 15th green, a tree in the 10th's greenside bunker). The trees standing in rebuilt bunkers are dropped by s05; the others are not located in any data we have (the USGS NAIP is May 2022). Recommendation: remove them in a later pass when a newer photo is available (see the PR for the USDA NAIP fetch).
+14. **Tall trees:** 35 crowns of 60-69 m (groves of tall conifers and eucalyptus in the barrancas and on the west edge, dense canopy on the photo). `checks.json` allows 70 m. Recommendation: accept.
+15. **Roofs read as trees off the course.** The lidar has no vegetation classes (class 1 holds trees and buildings) and OSM maps few of the houses round the course, so some unmapped roofs outside the boundary carry a tree. They are scenery. Recommendation: accept.
+16. **Power lines** cross 6 and 17 (club's local rule): `remove_wires` takes them out of the canopy model before the tree search. No line-shaped tree rows remain on the course.
+17. **Greens:** OSM's greens and bunkers may predate the 2023-24 rebuild of every green and bunker; no photo after the rebuild is in the data. The robot rounds and `pins.test.ts` pass on them. Recommendation: playtest; trace changes later if a newer photo shows them.
+18. **Wind 2-10 mph** (a "California coast, inland hills" band, as at Stanford).
+19. **Theme `pasatiempo` and logo** (a footbridge over a barranca with a flag on the far bank; original, not the club's emblem): developer to look. **Course card:** hole 16, rotating with 15, 18 and 3 (course chat's pick).
+
 ## Playability adjustments
 
 - Hole 2 (White): measured 420 yd from the tee-box centre vs 403 on the card (+4.3%); moved the virtual tee along the middle of the real tee polygon w1112015734 (on its centre line, at least 2.5 m from its back and front) -> 410.3 yd (real 420.2 yd).
@@ -74,8 +98,8 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 
 ## Tree detection (2020 USGS Santa Cruz County lidar)
 
-- 23089 trees detected in the world extent (1330 inside the course), 4106 conifers / 18983 deciduous; median height 11.6 m, max 69.1 m.
-- Dropped: 537 tops on building footprints, 0 over the lake, 189 tiny crowns.
+- 22773 trees detected in the world extent (1258 inside the course), 4499 conifers / 18274 deciduous; median height 12.2 m, max 76.1 m.
+- Dropped: 618 tops on building footprints, 0 over the lake, 200 tiny crowns.
 - Dropped on playing surfaces (spec 5.4): 9 -> pool w1211505707 (11.9 m), pool w1211505707 (11.1 m), bunker w1018843124 (4.9 m), pool w1211505707 (10.6 m), bunker w1041957630 (11.0 m), bunker w1041760181 (12.9 m), bunker w1041819909 (12.0 m), bunker w1041814058 (43.9 m), bunker w1041814058 (16.8 m)
 - OSM natural=tree points matched by a detected tree within 4 m: 52 of 120.
 - Conifer vs deciduous is inferred from crown shape only (no leaf-off imagery); see build/trees_preview.png.

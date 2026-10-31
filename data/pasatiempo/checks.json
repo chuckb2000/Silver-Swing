@@ -1,5 +1,5 @@
 {
- "note": "per-course settings for game/tests/unit/course_play.test.ts (the every-course checks; docs/COURSE_BUILD.md 8.2). max_tree_h_m 70: 35 lidar crowns of 60-69 m (2020 lidar): groves of tall conifers and eucalyptus in the barrancas and along the west edge, dense canopy on the 2022 NAIP photo, not wires or roofs (looked at 2026-10-31)",
+ "note": "per-course settings for game/tests/unit/course_play.test.ts (the every-course checks; docs/COURSE_BUILD.md 8.2). max_tree_h_m 80: 79 lidar crowns of 60-76 m (2020 lidar), in the forest groves of tall conifers and eucalyptus in the barrancas and along the world's west and east edges, all under dense canopy on the 2022 NAIP photo, not wires or roofs (looked at 2026-10-31)",
  "wind_mph": [
   2,
   10
@@ -17,5 +17,5 @@
    "White"
   ]
  },
- "max_tree_h_m": 70
+ "max_tree_h_m": 80
 }

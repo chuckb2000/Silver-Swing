@@ -97,6 +97,22 @@
    "outputs": {
     "raw/laz/pasatiempo_117825.laz": "32592c99ff11c01d6fdd8dea779841ef1bb6426439c777bf4e0e1eed789ab0f0"
    }
+  },
+  {
+   "asset": "USGS_LPC_CA_SantaCruzCounty_2020_A20_117827.laz",
+   "sha256": "38bc0890b264f172ccb9dfbac840f2d59936afa5d01f26a7f66411c95b3b9444",
+   "run": "python3 pipeline/intake.py laz pasatiempo {file} --out raw/laz/pasatiempo_117827.laz",
+   "outputs": {
+    "raw/laz/pasatiempo_117827.laz": "93ee155c2e99a3231b4c39895fe80de8fe8095a0a00db7014ae876922a762113"
+   }
+  },
+  {
+   "asset": "USGS_LPC_CA_SantaCruzCounty_2020_A20_117830.laz",
+   "sha256": "77571d55477647c8a08e6dc68eccd97a23d59162193a3086ed285f2211fb048d",
+   "run": "python3 pipeline/intake.py laz pasatiempo {file} --out raw/laz/pasatiempo_117830.laz",
+   "outputs": {
+    "raw/laz/pasatiempo_117830.laz": "1112bd19940a21a664e096f40d23800212b386ed262c8f271204c32140e93ff6"
+   }
   }
  ]
 }

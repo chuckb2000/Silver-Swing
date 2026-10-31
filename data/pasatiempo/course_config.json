@@ -26,6 +26,10 @@
     "source": "2020 USGS Lidar: CA Santa Cruz County (project CA_SantaCruzCounty_2020_A20), 12 tiles 2,500 ft square from rockyweb.usgs.gov, fetched by the GitHub Actions workflow 2026-10-31 (release data-pasatiempo), each clipped to the world + 100 m by intake.py laz; NAD83(2011) / California zone 3 (US ft), NAVD88 (Geoid12B) US ft; flown 2-14 April 2020 (GPS times; header date 2020-07-21); class 1 (unclassified: vegetation and structures; the project has no vegetation classes)",
     "label": "2020 USGS Santa Cruz County lidar"
   },
+  "ortho": {
+    "path": "raw/naip2022.tif",
+    "source": "USDA NAIP, 19 May 2022 (m_3712264_se_10_060_20220519), 0.6 m RGB, exported from the USGS National Map NAIP ImageServer by the GitHub Actions workflow (release data-pasatiempo, pasatiempo_naip_usgs_north/south.jpg), placed by intake.py ortho; the clip is committed (raw/naip2022.tif, deterministic: the same command gives the same file)"
+  },
   "world": {
     "x0": 585737,
     "y0": 4094438,
@@ -70,5 +74,10 @@
     "rise_m": 3.0,
     "note": "power lines cross holes 6 and 17 (the club's local rule; OSM power=line ways in the release's power export); s05 removes wires from the canopy model before finding trees"
   },
-  "trees_off_fairways_m": 2
+  "trees_off_fairways_m": 2,
+  "trees_need_ortho": {
+    "v_max": 120,
+    "min_share": 0.1,
+    "note": "the 2020 lidar (class 1: trees and roofs) against the May 2022 NAIP: drops 1,517 crowns (about 70 inside the boundary); looked at 2026-10-31 over the photo: most are roofs of unmapped houses and crowns over open grass, a few at canopy edges"
+  }
 }

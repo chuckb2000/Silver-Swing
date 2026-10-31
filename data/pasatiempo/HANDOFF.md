@@ -1,5 +1,7 @@
 # Hand-off: Pasatiempo Golf Club (`pasatiempo`), 2026-10-31
 
+**Finished 2026-10-31 by the second chat** (lidar, the 18th tee split, the range, card, docs, pull request). The state is in `docs/courses/pasatiempo.md` and `validation_report.md`; this file is kept for the record.
+
 The first chat started this course overnight, then ran out of time. Read this file, then `git log`, `data/pasatiempo/validation_report.md`, `course_config.json` and `edits.json`. The scouting notes are on `origin/scouting/new-courses` under `docs/scouting/pasatiempo/`. Don't redo work that is already finished.
 
 ## Done
