@@ -56,6 +56,54 @@
   {
    "name": "club_home.html",
    "url": "https://www.victoriagolf.com/"
+  },
+  {
+   "name": "arcgis_ubm4_services.json",
+   "url": "https://services6.arcgis.com/ubm4tcTYICKBpist/ArcGIS/rest/services?f=json"
+  },
+  {
+   "name": "hrdem_lidar_stac.json",
+   "url": "https://datacube.services.geo.ca/stac/api/search?collections=hrdem-lidar&bbox=-123.318,48.403,-123.283,48.432&limit=100"
+  },
+  {
+   "name": "hrdem_mosaic_stac.json",
+   "url": "https://datacube.services.geo.ca/stac/api/search?collections=hrdem-mosaic-1m&bbox=-123.318,48.403,-123.283,48.432&limit=100"
+  },
+  {
+   "name": "club_golf.html",
+   "url": "https://www.victoriagolf.com/web/pages/golf"
+  },
+  {
+   "name": "club_history.html",
+   "url": "https://www.victoriagolf.com/web/pages/history"
+  },
+  {
+   "name": "club_club.html",
+   "url": "https://www.victoriagolf.com/web/pages/club"
+  },
+  {
+   "name": "club_sitemap.html",
+   "url": "https://www.victoriagolf.com/web/pages/sitemap"
+  },
+  {
+   "name": "club_policies.html",
+   "url": "https://www.victoriagolf.com/web/pages/golf-and-course-policies"
+  },
+  {
+   "name": "club_highres.pdf",
+   "url": "https://www.victoriagolf.com/documents/20124/322400/4898+Victoria+Golf+Club+-+High+Res.pdf/d5b2896f-7145-8f82-7b95-0de9bc1d8612?t=1725911863452"
+  },
+  {
+   "name": "crd_ortho2025.json",
+   "url": "https://mapservices.crd.bc.ca/arcgis/rest/services/OrthoImagery2025/MapServer?f=json"
+  },
+  {
+   "name": "crd_ortholatest.json",
+   "url": "https://mapservices.crd.bc.ca/arcgis/rest/services/OrthoImageryLatest/MapServer?f=json"
+  },
+  {
+   "name": "crd_contours.json",
+   "url": "https://mapservices.crd.bc.ca/arcgis/rest/services/CRDcontours/MapServer?f=json"
   }
  ]
 }
