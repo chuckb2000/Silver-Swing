@@ -1,6 +1,24 @@
 [
  {
   "hole": 1,
+  "tee_set": "Long",
+  "step": 2,
+  "type": "tee_position",
+  "from": [
+   629.44,
+   915.47
+  ],
+  "to": [
+   624.25,
+   917.75
+  ],
+  "real_yd": 399.8,
+  "adjusted_yd": 395.0,
+  "card_yd": 396.0,
+  "reason": "tee shot: a perfect drive at the middle of the fairway clipped a tree near the tee; moved 5.7 m along the middle of the real tee polygon tee_w734021722 to the nearest clear spot"
+ },
+ {
+  "hole": 1,
   "tee_set": "Championship",
   "step": 2,
   "type": "tee_position",
@@ -34,6 +52,24 @@
   "adjusted_yd": 321.3,
   "card_yd": 303.0,
   "reason": "measured 324 yd from the tee-box centre vs 303 on the card (+7.0%); moved the virtual tee along the middle of the real tee polygon tee_w285156455 (on its centre line, at least 2.5 m from its back and front)"
+ },
+ {
+  "hole": 4,
+  "tee_set": "Championship",
+  "step": 2,
+  "type": "tee_position",
+  "from": [
+   595.44,
+   513.22
+  ],
+  "to": [
+   592.5,
+   512.5
+  ],
+  "real_yd": 435.0,
+  "adjusted_yd": 434.0,
+  "card_yd": 432.0,
+  "reason": "tee shot: a perfect drive at the middle of the fairway clipped a tree near the tee; moved 3.0 m along the middle of the real tee polygon tee_w285156461 to the nearest clear spot"
  },
  {
   "hole": 5,

@@ -6,14 +6,14 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 
 | hole | par | tee set | card yd | measured yd | diff yd | diff % | status | adjusted yd | adj. diff % | adj. status |
 |---|---|---|---|---|---|---|---|---|---|---|
-| 1 | 4 | Long | 396 | 399.8 | +3.8 | +0.9% | pass | 399.8 | +0.9% | pass |
+| 1 | 4 | Long | 396 | 399.8 | +3.8 | +0.9% | pass | 395.0 | -0.3% | pass |
 | 1 | 4 | Championship | 468 | 407.8 | -60.2 | -12.9% | FAIL | 408.4 | -12.7% | FAIL |
 | 2 | 4 | Long | 364 | 362.1 | -1.9 | -0.5% | pass | 362.1 | -0.5% | pass |
 | 2 | 4 | Championship | 387 | 382.2 | -4.8 | -1.3% | pass | 382.2 | -1.3% | pass |
 | 3 | 4 | Long | 303 | 324.2 | +21.2 | +7.0% | flag | 321.3 | +6.0% | flag |
 | 3 | 4 | Championship | 388 | 399.2 | +11.2 | +2.9% | pass | 399.2 | +2.9% | pass |
 | 4 | 4 | Long | 415 | 418.7 | +3.7 | +0.9% | pass | 418.7 | +0.9% | pass |
-| 4 | 4 | Championship | 432 | 435.0 | +3.0 | +0.7% | pass | 435.0 | +0.7% | pass |
+| 4 | 4 | Championship | 432 | 435.0 | +3.0 | +0.7% | pass | 434.0 | +0.5% | pass |
 | 5 | 3 | Long | 139 | 136.0 | -3.0 | -2.1% | pass | 136.0 | -2.1% | pass |
 | 5 | 3 | Championship | 146 | 136.0 | -10.0 | -6.8% | flag | 142.4 | -2.5% | pass |
 | 6 | 4 | Long | 413 | 422.8 | +9.8 | +2.4% | pass | 422.8 | +2.4% | pass |
@@ -42,7 +42,7 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 | 17 | 4 | Championship | 488 | 416.4 | -71.6 | -14.7% | FAIL | 432.6 | -11.4% | FAIL |
 | 18 | 5 | Long | 570 | 565.5 | -4.5 | -0.8% | pass | 565.5 | -0.8% | pass |
 | 18 | 5 | Championship | 611 | 578.4 | -32.6 | -5.3% | flag | 579.3 | -5.2% | flag |
-| **total** | 140 | | **13415** | **12927** | -488 | -3.6% | | **13062** | -2.6% | |
+| **total** | 140 | | **13415** | **12927** | -488 | -3.6% | | **13056** | -2.7% | |
 
 ## Open items
 
@@ -97,8 +97,10 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 
 ## Playability adjustments
 
+- Hole 1 (Long): tee shot: a perfect drive at the middle of the fairway clipped a tree near the tee; moved 5.7 m along the middle of the real tee polygon tee_w734021722 to the nearest clear spot -> 395.0 yd (real 399.8 yd).
 - Hole 1 (Championship): measured 408 yd from the tee-box centre vs 468 on the card (-12.9%); moved the virtual tee along the middle of the real tee polygon tee_w734021723 (on its centre line, at least 2.5 m from its back and front) -> 408.4 yd (real 407.8 yd).
 - Hole 3 (Long): measured 324 yd from the tee-box centre vs 303 on the card (+7.0%); moved the virtual tee along the middle of the real tee polygon tee_w285156455 (on its centre line, at least 2.5 m from its back and front) -> 321.3 yd (real 324.2 yd).
+- Hole 4 (Championship): tee shot: a perfect drive at the middle of the fairway clipped a tree near the tee; moved 3.0 m along the middle of the real tee polygon tee_w285156461 to the nearest clear spot -> 434.0 yd (real 435.0 yd).
 - Hole 5 (Championship): measured 136 yd from the tee-box centre vs 146 on the card (-6.8%); moved the virtual tee along the middle of the real tee polygon tee_w285156450 (on its centre line, at least 2.5 m from its back and front) -> 142.4 yd (real 136.0 yd).
 - Hole 6 (Championship): measured 423 yd from the tee-box centre vs 449 on the card (-5.8%); moved the virtual tee along the middle of the real tee polygon tee_w285156465 (on its centre line, at least 2.5 m from its back and front) -> 423.7 yd (real 422.8 yd).
 - Hole 7 (Long): measured 349 yd from the tee-box centre vs 360 on the card (-3.0%); moved the virtual tee along the middle of the real tee polygon tee_w734021749 (on its centre line, at least 2.5 m from its back and front) -> 351.1 yd (real 349.1 yd).
@@ -115,13 +117,14 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 - Hole 17 (Championship): measured 416 yd from the tee-box centre vs 488 on the card (-14.7%); moved the virtual tee along the middle of the real tee polygon tee_w287211701 (on its centre line, at least 2.5 m from its back and front) -> 432.6 yd (real 416.4 yd).
 - Hole 18 (Championship): measured 578 yd from the tee-box centre vs 611 on the card (-5.3%); moved the virtual tee along the middle of the real tee polygon tee_w287211698 (on its centre line, at least 2.5 m from its back and front) -> 579.3 yd (real 578.4 yd).
 
-## Tree detection (OSM fallback (no lidar))
+## Tree detection (lidar point cloud)
 
-- 19614 trees detected in the world extent (0 inside the course), 9705 conifers / 9909 deciduous; median height 10.0 m, max 14.0 m.
-- Dropped: 0 tops on building footprints, 0 over the lake, 0 tiny crowns.
-- Dropped on playing surfaces (spec 5.4): 0 -> 
+- 13952 trees detected in the world extent (2236 inside the course), 1274 conifers / 12678 deciduous; median height 22.8 m, max 43.7 m.
+- Dropped: 253 tops on building footprints, 0 over the lake, 43 tiny crowns.
+- Dropped on playing surfaces (spec 5.4): 80 -> water_hazard w283711525 (21.0 m), water_hazard w283711525 (20.8 m), water_hazard w283711525 (10.5 m), water_hazard w283711525 (16.8 m), water_hazard w283711525 (15.5 m), water_hazard w283711525 (15.9 m), tee tee_w285156461 (22.0 m), tee tee_w734021735 (21.9 m), tee tee_w734021735 (22.0 m), water_hazard w283530541 (21.8 m), water_hazard w283530541 (22.0 m), water_hazard w283530541 (21.8 m), water_hazard w283530541 (21.8 m), water_hazard w283530541 (22.0 m), water_hazard w283530541 (22.2 m), water_hazard w283530541 (21.9 m), water_hazard w283530541 (21.9 m), water_hazard w283530541 (21.9 m), water_hazard w283530541 (21.8 m), water_hazard w283530541 (21.9 m), water_hazard w283530541 (21.9 m), water_hazard w283530541 (21.8 m), water_hazard w283530541 (22.0 m), water_hazard w283530541 (21.9 m), water_hazard w283530541 (21.9 m), water_hazard w283530541 (21.9 m), water_hazard w283530541 (21.9 m), water_hazard w283530541 (21.8 m), water_hazard w283530541 (21.9 m), water_hazard w283530541 (22.1 m), water_hazard w283530541 (22.0 m), water_hazard w283530541 (22.0 m), water_hazard w283530541 (21.9 m), water_hazard w283530541 (21.9 m), water_hazard w283530541 (22.2 m), water_hazard w283530541 (21.9 m), water_hazard w283530541 (21.9 m), water_hazard w283530541 (21.9 m), water_hazard w283530541 (21.9 m), water_hazard w283530541 (22.0 m), water_hazard w283530541 (22.1 m), water_hazard w283530541 (22.0 m), water_hazard w283530541 (22.0 m), water_hazard w283530541 (22.0 m), water_hazard w283530541 (22.0 m), water_hazard w283530541 (22.0 m), water_hazard w283530541 (21.8 m), water_hazard w283530541 (21.9 m), water_hazard w283530541 (22.2 m), water_hazard w283530541 (22.0 m), water_hazard w283530541 (21.9 m), water_hazard w283530541 (22.0 m), water_hazard w283530541 (21.8 m), water_hazard w283530541 (21.9 m), water_hazard w283530541 (21.9 m), water_hazard w283530541 (21.9 m), water_hazard w283530541 (22.0 m), water_hazard w283530541 (21.9 m), water_hazard w283530541 (22.0 m), water_hazard w283530541 (21.9 m), water_hazard w283530541 (21.9 m), water_hazard w283530541 (21.9 m), water_hazard w283530541 (21.9 m), tee tee_w285156466 (22.0 m), tee tee_w734021722 (21.8 m), tee tee_w285156466 (21.9 m), tee tee_w285156466 (21.9 m), tee tee_w285156466 (21.9 m), tee tee_w734021744 (21.8 m), water_hazard w283268706 (8.8 m), water_hazard w283268706 (20.1 m), water_hazard w283268706 (20.0 m), water_hazard w283268706 (18.3 m), water_hazard w283268706 (19.7 m), water_hazard w283268706 (6.8 m), water_hazard w283268706 (6.3 m), water_hazard w283268706 (7.1 m), water_hazard w283268706 (7.9 m), water_hazard w283268706 (21.2 m), water_hazard w283268706 (19.3 m)
+- Dropped from tee shots (s06b): 3 -> 13 Long (22.2 m tree, 34.4 m from the tee), 1 Championship (21.9 m tree, 40.2 m from the tee), 1 Championship (21.9 m tree, 40.5 m from the tee)
 - OSM natural=tree points matched by a detected tree within 4 m: 0 of 0.
-- LOWER FIDELITY: no canopy raster. Trees are OSM natural=tree points plus a seeded Poisson-disk fill of OSM woods every 6 m; heights 6-14 m and type (50% conifer) are drawn at random, not measured.
+- Conifer (pitch pine) vs deciduous (oak) from the leaf-off lidar: share of a crown's vegetation returns that were the last return of their pulse, split at Otsu's threshold 0.201 (419 of 11441 crowns with >= 20 returns are conifers); the other 2514 small crowns keep the crown-shape rule. See build/trees_preview.png.
 
 # Green shaping checks
 

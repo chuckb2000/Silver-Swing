@@ -1,1 +1,1 @@
-{"frames":{},"meta":{"image":"g02n_trees.png","size":{"w":1024,"h":1},"scale":"1"},"trees":[]}
+{"frames":{"d_64_172_0":{"frame":{"x":0,"y":0,"w":66,"h":172},"rotated":false,"trimmed":false,"spriteSourceSize":{"x":0,"y":0,"w":66,"h":172},"sourceSize":{"w":66,"h":172}}},"meta":{"image":"g02n_trees.png","size":{"w":1024,"h":256},"scale":"1"},"trees":[{"f":"d_64_172_0","x":477.5,"y":905.5}]}
