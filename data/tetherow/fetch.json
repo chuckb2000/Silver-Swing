@@ -1,0 +1,39 @@
+{
+ "items": [
+  {
+   "name": "tetherow_overpass.geojson",
+   "osm_box": [
+    44.012,
+    -121.392,
+    44.05,
+    -121.338
+   ]
+  },
+  {
+   "name": "tetherow_dem1m",
+   "tnm": {
+    "dataset": "dem1m",
+    "bbox": [
+     -121.392,
+     44.012,
+     -121.338,
+     44.05
+    ],
+    "list": true
+   }
+  },
+  {
+   "name": "tetherow_lpc",
+   "tnm": {
+    "dataset": "lpc",
+    "bbox": [
+     -121.392,
+     44.012,
+     -121.338,
+     44.05
+    ],
+    "list": true
+   }
+  }
+ ]
+}
