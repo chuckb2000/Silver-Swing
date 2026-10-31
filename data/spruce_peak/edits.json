@@ -1,0 +1,85 @@
+{
+ "note": "Edits to the OSM layout for Spruce Peak (course chat, 2026-10-31); proposals from data/spruce_peak/make_proposals.py",
+ "add": [
+  {
+   "from": "proposed/paths_as_cartpaths.geojson",
+   "ids": [
+    "w1058406517_cartpath",
+    "w1058406518_cartpath",
+    "w1058406519_cartpath",
+    "w1058406520_cartpath",
+    "w1058406521_cartpath",
+    "w1058406522_cartpath",
+    "w1058406523_cartpath",
+    "w1058406524_cartpath",
+    "w1058406525_cartpath",
+    "w1058406526_cartpath",
+    "w1058406527_cartpath",
+    "w1058406528_cartpath",
+    "w1058406529_cartpath",
+    "w1058406530_cartpath",
+    "w1058406531_cartpath",
+    "w1058406532_cartpath",
+    "w1058406533_cartpath",
+    "w1058406534_cartpath",
+    "w1058406535_cartpath"
+   ],
+   "reason": "19 golf=path ways (the course's cart paths) inside the boundary, not read by s01: copied as golf=cartpath (free relief, drawn as paths)"
+  },
+  {
+   "from": "proposed/boundary.geojson",
+   "ids": [
+    "bd_w510265958"
+   ],
+   "reason": "course chat 2026-10-31 (developer asleep: overnight call, open item): OSM's boundary traces only the mown turf and leaves out the 13th hole and the woods the 10th tee shot carries; joined to the 13th (with the developer's Black tee pad on 13, desk_tee_13, 2026-10-31, which stood outside it) and grown 20 m into the woods, less road strips and buildings (make_proposals.py). Replaces the OSM boundary"
+  },
+  {
+   "from": "proposed/pins.geojson",
+   "ids": [
+    "pin_7",
+    "pin_17"
+   ],
+   "reason": "7 and 17 are small greens (136 and 144 m2, checked on the photo); their centre pins sit at the middle of the area 10 ft inside the edge, so the game fits two more hole locations (pins.test.ts). Every other green's pin is its centre (s06 proposal)"
+  },
+  {
+   "from": "proposed/desk_tees.geojson",
+   "ids": [
+    "desk_tee_4",
+    "desk_tee_8",
+    "desk_tee_13"
+   ],
+   "reason": "developer 2026-10-31: the Black tees marked in the tracing desk (data/spruce_peak/desk/), accepted as marked; marks under 60 m2 (4: 10.9, 8: 7.8, 13: 29.8 m2) grown to an 8 x 6 m pad on the developer's centroid, long side along the hole line leaving the mark, so a tee box stands under each; tagged tee_pos=mark so the tee stays on the developer's centroid (make_desk_tees.py; run before make_proposals.py, whose boundary takes in the 13th's pad)"
+  }
+ ],
+ "tags": [
+  {
+   "osm": "w458067715",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "the pond in the middle of the course (golf=water_hazard, would export yellow): red, standing default (COURSE_BUILD 4.1)"
+  },
+  {
+   "osm": "w1058376518",
+   "set": {
+    "hole": "4",
+    "tee_set": "Blue"
+   },
+   "reason": "developer 2026-10-31 marked the Black tee on 4 about 25 m behind this box (desk_tee_4); the Blue tee stays on this box, where it was built before (the card puts Blue 23 yd ahead of Black), rather than moving back onto the Black pad"
+  },
+  {
+   "osm": "desk_tee_8",
+   "set": {
+    "tee_set": "Black;Blue"
+   },
+   "reason": "developer 2026-10-31: Blue and Black play from the same tee on 8, the developer's Black mark (514 yd; Blue's card 559, -8.0 %, accepted). Before, Blue's virtual tee moved to the back of w1058393549 toward its card and played 3.6 yd longer than Black"
+  }
+ ],
+ "drop": [
+  {
+   "osm": "w510265958",
+   "reason": "replaced by bd_w510265958 (the same boundary joined to the 13th and grown into the woods)"
+  }
+ ],
+ "extend_start": []
+}

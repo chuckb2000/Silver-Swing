@@ -1,0 +1,89 @@
+{
+  "id": "needham",
+  "name": "Needham Golf Club",
+  "location": "Needham, Norfolk County, Massachusetts",
+  "state": "MA",
+  "architects": "Wayne Stiles (club scorecard 2026: \"A Wayne Stiles Design\", 1923)",
+  "theme": "bayside",
+  "epsg": 32619,
+  "osm_sources": [
+    "raw/overpass.geojson"
+  ],
+  "boundary_name": "Needham Golf Club",
+  "dtm": {
+    "path": "raw/usgs_dem_2021_1m_clip.tif",
+    "units": "m",
+    "source": "USGS 3DEP 1 m DEM, project MA_CentralEastern_2021_B21 (2021 USGS Lidar: Central Eastern Massachusetts, flown spring 2021, leaf-off), tile x31y469 (USGS_1M_19_x31y469_MA_CentralEastern_2021_B21.tif, published 2023-01-15), clipped to the world + 100 m by pipeline/intake.py raster; EPSG:26919 (NAD83 / UTM 19N), NAVD88 metres; fetched by the GitHub workflow 2026-10-31 (release data-needham)"
+  },
+  "laz": {
+    "paths": [
+      "raw/laz/*.laz"
+    ],
+    "classes": [
+      3,
+      4,
+      5
+    ],
+    "units": "m",
+    "source": "USGS 3DEP lidar point cloud, project MA_CentralEastern_2021_B21 (2021 USGS Lidar: Central Eastern Massachusetts, leaf-off spring 2021), tile 19TCG316681 (x 316500-318000, y 4681500-4683000), classes 3-5 clipped to the world + 100 m by pipeline/intake.py laz; NAD83(2011) / UTM 19N, NAVD88 (Geoid18) metres; fetched by the GitHub workflow 2026-10-31 (release data-needham). The world's top 91 m (y > 4683000, scenery north of the course) is on tile 19TCG316683, whose download timed out: no trees there.",
+    "label": "2021 USGS lidar, leaf-off",
+    "leaf_off": true
+  },
+  "world": {
+    "x0": 316669,
+    "y0": 4682067,
+    "width": 1024,
+    "height": 1024,
+    "note": "OSM course boundary (relation 13156245, two parts) bbox 700 x 690 m (E 316830-317531, N 4682233-4682924) + scenery, rounded out to 4 x 4 chunks of 256 m and centred: about 160 m on every side"
+  },
+  "join_boundary_parts": {
+    "max_gap_m": 12,
+    "note": "The OSM boundary (relation 13156245) has two parts 7 m apart across the road between them: holes 7 and 8 north of it, the rest south. Both in play; the game's OB polygon joins them across the road (common.game_boundary); the road strip stays out of bounds on the surface map. No hole plays across it."
+  },
+  "tee_sets": [
+    {
+      "name": "Blue",
+      "playable": true,
+      "rating": 69.8,
+      "slope": 129,
+      "total_yd": 3109
+    },
+    {
+      "name": "White",
+      "playable": true,
+      "rating": 68.5,
+      "slope": 124,
+      "total_yd": 2961
+    },
+    {
+      "name": "Red",
+      "playable": false,
+      "rating": 72.0,
+      "slope": 123,
+      "total_yd": 2887
+    }
+  ],
+  "default_tee": "Blue",
+  "scorecard_source": "Club scorecard PDF (needhamgolfclub.com/documents/20124/110138/NEEDHAM_2026.pdf, printed 2026, fetched through the GitHub workflow 2026-10-31), agrees with the club's Explore the Course page. Built as 9 holes, the card's rows 1-9 (Highland Links style; developer 2026-10-31): rounds are 9 or 18 twice around. Blue = the front nine of Blue/White (par 36, 3,109), White = the front nine of White/Green (par 36, 2,961), both built; Red = the front nine of Red/Yellow (2,887) in scorecard.csv, not built. The card rates only 18-hole combinations, so each set carries the 18-hole rating of the combination that starts on it (men Blue/White 69.8/129, White/Green 68.5/124; ladies Red/Yellow 72.0/123); the game reads a 9-hole rating of 45 or more as an 18-hole one. Not built: the second-nine tees (rows 10-18: Gold, White and Green as the card's back nine, Yellow) and the 18-hole combinations; Blue/Gold's front nine differs from Blue only on hole 8 (a 206-yd par 3), not built. Stroke index: the men's Blue/White row 1-9 (odd numbers). Full card in scorecard_full.csv.",
+  "penalty_default": "red",
+  "red_water_osm": [
+    "w91082682",
+    "w310168725",
+    "w310168745",
+    "w310168747"
+  ],
+  "water_note": "The four ponds inside the boundary are OSM natural=water only: red penalty areas through red_water_osm (standing default: all water red; the card's local rules say yellow stakes mark water hazards and red lateral ones, and no source says which pond is which). The MassGIS wooded swamps and wet meadow (natural=wetland, 2007 1:12,000) are not penalty areas: rough and trees, with their lidar ground (flatten_wetlands false).",
+  "driving_range_is_ob": true,
+  "wind_mph": {
+    "minMph": 1,
+    "maxMph": 9
+  },
+  "trees_off_fairways_m": 2,
+  "attribution": [
+    "Map data © OpenStreetMap contributors (ODbL)",
+    "Elevation and trees: U.S. Geological Survey 3D Elevation Program (2021 Central Eastern Massachusetts lidar)",
+    "Scorecard: Needham Golf Club (club scorecard, 2026)"
+  ],
+  "notes": "Overnight build 2026-10-30/31 (developer asleep; calls logged in validation_report.md and docs/courses/needham.md); rebuilt as a nine 2026-10-31 (developer's call). Standing defaults: all water red, OB = the course boundary, bayside theme, wind 1-9 mph (inland New England).",
+  "flatten_wetlands": false
+}

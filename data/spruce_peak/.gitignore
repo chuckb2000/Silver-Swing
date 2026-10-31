@@ -1,0 +1,6 @@
+# build inputs kept in the GitHub release data-spruce_peak; `make fetch NAME=spruce_peak` puts them here (release.json)
+raw/vcgi_dem_1m.tif
+raw/vcgi_dsm_1m.tif
+raw/vcgi_clr_03m.tif
+raw/naip_06m.tif
+raw/ortho_src/

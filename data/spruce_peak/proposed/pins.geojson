@@ -1,0 +1,9 @@
+{
+"type": "FeatureCollection",
+"name": "pins",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+"features": [
+{ "type": "Feature", "properties": { "osm": "pin_7", "kind": "pin", "tags": { "golf": "pin", "hole": "7", "note": "centre of the green 10 ft inside its edge (make_proposals.py)" } }, "geometry": { "type": "Point", "coordinates": [ -72.770351590283411, 44.524117206739454 ] } },
+{ "type": "Feature", "properties": { "osm": "pin_17", "kind": "pin", "tags": { "golf": "pin", "hole": "17", "note": "centre of the green 10 ft inside its edge (make_proposals.py)" } }, "geometry": { "type": "Point", "coordinates": [ -72.770165853722872, 44.52916390789904 ] } }
+]
+}

@@ -74,6 +74,22 @@ export const DAILY_ROSTER: Readonly<Record<string, string>> = {
   presidio: '2026-10-27',
   // landed 2026-10-31 (pipeline/land.py)
   victoria: '2026-11-01',
+  // landed 2026-10-31 (pipeline/land.py)
+  needham: '2026-11-01',
+  // landed 2026-10-31 (pipeline/land.py)
+  cyprian_keyes: '2026-11-01',
+  // landed 2026-10-31 (pipeline/land.py)
+  pronghorn_nicklaus: '2026-11-01',
+  // landed 2026-10-31 (pipeline/land.py)
+  marovitz: '2026-11-01',
+  // landed 2026-10-31 (pipeline/land.py)
+  kwiniaska: '2026-11-01',
+  // landed 2026-10-31 (pipeline/land.py)
+  rancho_san_joaquin: '2026-11-01',
+  // landed 2026-10-31 (pipeline/land.py)
+  tetherow: '2026-11-01',
+  // landed 2026-10-31 (pipeline/land.py)
+  spruce_peak: '2026-11-01',
 };
 
 /**

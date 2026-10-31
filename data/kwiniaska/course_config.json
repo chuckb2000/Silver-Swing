@@ -1,0 +1,87 @@
+{
+ "id": "kwiniaska",
+ "name": "Kwiniaska Golf Club",
+ "location": "Shelburne, Chittenden County, Vermont",
+ "state": "VT",
+ "architects": "A. Bradford Caldwell (1964); redesigned by P.B. Dye, new layout opened May 2020",
+ "theme": "kwiniaska",
+ "epsg": 32618,
+ "osm_sources": [
+  "raw/overpass.geojson"
+ ],
+ "boundary_name": "Kwiniaska Golf Club",
+ "dtm": {
+  "path": "raw/USGS_1M_kwiniaska.tif",
+  "units": "m",
+  "source": "USGS 3DEP 1 m DEM, project VT_Statewide_A23 (Vermont statewide lidar, 2023), tile USGS_1M_18_x64y492_VT_Statewide_A23 (published 2026-03-31), NAD83 / UTM 18N (EPSG:26918), NAVD88 m; release data-kwiniaska, clipped to the world + 100 m by pipeline/intake.py raster"
+ },
+ "ortho": {
+  "path": "raw/vcgi_05m.tif",
+  "source": "VCGI Color Vermont orthoimagery 2021-2025 (IMG_VCGI_CLR2021_2025_SP_NOCACHE ImageServer, maps.vcgi.vermont.gov; leaf-off spring flight), exported through the fetch workflow at 0.5 m in EPSG:32618 for the world box (release data-kwiniaska: kwiniaska_vcgi.jpg), placed by pipeline/intake.py ortho; flight year not stated by the export. NAIP (USGS NAIPImagery ImageServer, leaf-on) is raw/naip_05m.tif, used for checking only"
+ },
+ "laz": {
+  "paths": [
+   "raw/laz/*.laz"
+  ],
+  "classes": [
+   1
+  ],
+  "units": "m",
+  "source": "USGS 3DEP lidar, project VT_Statewide_A23 (workunit VT_Statewide_2_A23; QL1), flown about 21 April 2023 (GPS times; leaf-off); NAD83(2011) / Vermont (EPSG:6589, m), NAVD88 (GEOID18) m; class 1 (unclassified: vegetation and structures; the project has no vegetation classes); tiles N2107E4445 and N2093E4445 (release data-kwiniaska), clipped to the world + 100 m with pipeline/intake.py laz",
+  "label": "2023 USGS Vermont statewide lidar, leaf-off",
+  "leaf_off": true
+ },
+ "world": {
+  "x0": 643040,
+  "y0": 4916547,
+  "width": 1024,
+  "height": 1280,
+  "note": "OSM course boundary (way 65856105) bbox 562 x 881 m in UTM 18N + ~120 m scenery, whole 256 m chunks, centred: 1,024 m east-west (231 m each side), 1,280 m north-south (200 m each side; the Kwini Club practice facility, out of bounds, fits inside to the north)"
+ },
+ "tee_sets": [
+  {
+   "name": "Black",
+   "playable": true,
+   "rating": 68.1,
+   "slope": 120,
+   "total_yd": 5810
+  },
+  {
+   "name": "Gold",
+   "playable": true,
+   "rating": 65.1,
+   "slope": 113,
+   "total_yd": 5235
+  }
+ ],
+ "default_tee": "Black",
+ "scorecard_source": "The club's printed scorecard (Golf Associates, (c) 2024; supplied by the developer 2026-10-31, data/kwiniaska/raw/card/kwiniaska_scorecard.png): the par-70 PB Dye layout (opened May 2020), per-hole Black, Black/Gold, Gold, Gold/White and White rows, par, men's and women's handicap; every row adds up to its printed totals (5,810 / 5,446 / 5,235 / 4,855 / 4,493). It agrees with the GolfPass and 18Birdies rows used before on par, men's stroke index, Black and Gold hole for hole; it corrects White (1: 267, 3: 291, 11: 287; GolfPass had 242, 294, 308) and Gold/White (8: 397, 18: 275; GolfPass had 456, 322). The card has no ratings: 18Birdies' Black 68.1/120, Gold 65.1/113, White 62.2/104 (men). The older par-72 card (Blue 6,848, 72.7/129) is the pre-2020 Caldwell layout and is not built. Built: Black (the back tees) and Gold (the next set forward; the card has no Blue; developer's overnight call 2026-10-30); default Black (the longest set, developer 2026-10-31).",
+ "wind_mph": {
+  "minMph": 2,
+  "maxMph": 10
+ },
+ "attribution": [
+  "Map data \u00a9 OpenStreetMap contributors (ODbL)"
+ ],
+ "penalty_default": "red",
+ "driving_range_is_ob": true,
+ "trees_off_fairways_m": 2,
+ "rough_band_m": 4.0,
+ "rough_band_note": "a mown band of rough along the fairways, then the longer fescue the photos show beside many holes (art only)",
+ "roof_last_share": 0.95,
+ "tree_type_ortho": {
+  "path": "raw/vcgi_05m.tif",
+  "exg_min": 12,
+  "bright_max": 95,
+  "share": 0.5,
+  "note": "Kwiniaska: the class-1 lidar's last-return split called the dark evergreen rows broadleaves; the VCGI photo is leaf-off, so only conifers are green in the woods (course chat 2026-10-30, checked on crops of the photo)."
+ },
+ "green_tilt": [
+  {
+   "hole": 17,
+   "max_tilt": 0.025,
+   "bumps": 0,
+   "why": "a small green (fitted tilt 6.2 %): with a bump it kept only its centre pin (pins.test.ts); the slope is its feature (COURSE_LESSONS 4)"
+  }
+ ]
+}

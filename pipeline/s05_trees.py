@@ -511,6 +511,39 @@ def main():
             t_["type"] = cfg["tree_type"]
         type_method = (f"Every lidar tree is typed {cfg['tree_type']} (course_config tree_type: "
                        f"{cfg.get('tree_type_note', 'set for this course')}).")
+    # optional (course_config.json tree_type_ortho; Kwiniaska): a leaf-off colour orthophoto types
+    # the trees: a crown whose core (half its radius) is mostly dark green pixels (2G-R-B above
+    # exg_min, mean of R, G, B below bright_max) is a conifer, otherwise deciduous (bare). For class-1
+    # lidar where the last-return split (leaf_off_shares) misreads dense evergreen rows as
+    # broadleaves. Without the key: nothing.
+    tto = cfg.get("tree_type_ortho")
+    if tto and trees:
+        from common import course_dir
+        with rasterio.open(course_dir(name) / tto.get("path", (cfg.get("ortho") or {}).get("path", ""))) as src:
+            rgb = src.read([1, 2, 3]).astype(float)
+            inv = ~src.transform
+        exg_min, bmax, share = float(tto.get("exg_min", 12)), float(tto.get("bright_max", 95)), float(tto.get("share", 0.5))
+        nc = 0
+        for t_ in trees:
+            if t_.get("roof"):
+                continue
+            col, row = inv * (t_["x"] + world.x0, t_["y"] + world.y0)
+            rpx = max(1.5, 0.5 * t_["r"]) / abs(src.transform.a)
+            r0, r1 = int(max(0, row - rpx)), int(min(rgb.shape[1], row + rpx + 1))
+            c0, c1 = int(max(0, col - rpx)), int(min(rgb.shape[2], col + rpx + 1))
+            if r1 <= r0 or c1 <= c0:
+                continue
+            yy, xx = np.mgrid[r0:r1, c0:c1]
+            m = (yy - row) ** 2 + (xx - col) ** 2 <= rpx * rpx
+            if not m.any():
+                continue
+            R, G, B = (rgb[k, r0:r1, c0:c1][m] for k in range(3))
+            dark_green = ((2 * G - R - B) > exg_min) & ((R + G + B) / 3 < bmax)
+            t_["type"] = "conifer" if dark_green.mean() > share else "deciduous"
+            nc += t_["type"] == "conifer"
+        type_method = (f"Conifer vs deciduous from the leaf-off orthophoto (course_config tree_type_ortho): a crown whose "
+                       f"core is mostly dark green (2G-R-B > {exg_min:g}, brightness < {bmax:g}) is a conifer; "
+                       f"{nc} of {len(trees)} crowns. {tto.get('note', '')}").strip()
     if any(t_.get("roof") for t_ in trees):
         dropped["roof"] = sum(1 for t_ in trees if t_.get("roof"))
         trees = [t_ for t_ in trees if not t_.get("roof")]
