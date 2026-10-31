@@ -743,6 +743,11 @@ developer found tees at the edge of their boxes):
   least 2.5 m, or half the box's inscribed radius, from the edge (at
   most 70 % of that radius on a narrow box).
 
+- **A tee tagged `tee_pos=back` or `front`** goes to that end of the box's
+  centre line; **`tee_pos=centroid`** (a tee the developer marked in the
+  tracing desk, Yale 2026-10-31) stands on the box's centroid and is never
+  moved, for the card or for trees (s06b still reports a blocked tee shot).
+
 So a tee on the box edge in a screenshot is a pipeline bug, not a data
 problem. The tee assignment between boxes still uses the centroids.
 `s08_surface.py` rounds fairway corners (σ = 4 m along the outline;

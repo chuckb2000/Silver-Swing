@@ -12,8 +12,9 @@ lidar from the same 2023 flight, 5 tiles. Two tiles that cover about a third of 
 not arrived, so the canopy there comes from the NAIP photo (`trees_ortho`). Two tee sets:
 Championship (the tips) and Long (one step forward; the card has no Blue), with Long as the
 default. Every dataset was made before the 2023-26 Hanse/Wagner restoration. Long matches the
-2026 card on 17 holes within 3 %, and hole 3 is flagged. Championship fails on 1, 9, 10 and 17,
-because the restoration's new back tees aren't in any open data. New theme `yale`, a plough-horse
+2026 card on 17 holes within 3 %, and hole 3 is flagged. Championship 1, 10 and 17 play from
+the tees the developer marked in the tracing desk (2026-10-31); 9 still fails, because the
+restoration's new back tee there isn't in any open data. New theme `yale`, a plough-horse
 logo, and the Biarritz 9th on the card. `course_play.test.ts -t yale`: 13 passed.
 
 ## Facts
@@ -44,7 +45,8 @@ logo, and the Biarritz 9th on the card. `course_play.test.ts -t yale`: 13 passed
     these, 2,794 came from the photo fill where the two lidar tiles are missing. Types come
     from the leaf-off returns: 1,274 conifers (white pine and hemlock) and 12,678 broadleaf.
     s05 dropped 80 trees on playing surfaces, `trees_off_fairways_m` 2 dropped the trees in
-    fairways, and s06b dropped 3 from tee shots (13 Long, 1 Championship). The lidar predates
+    fairways, and s06b dropped 3 from tee shots (13 Long, and two on 10 Championship from the
+    developer's tee, 25.6 and 28.0 m tall, 56 and 43 m out). The lidar predates
     the 2024-25 corridor clearing (1,000-1,500 trees cut), so some cut trees still stand in the
     game (open item 3).
 
@@ -59,7 +61,7 @@ ratings and stroke index.
 | Par | 4 | 4 | 4 | 4 | 3 | 4 | 4 | 4 | 3 | 34 | 4 | 4 | 4 | 3 | 4 | 3 | 5 | 4 | 5 | 36 | 70 |
 | HCP | 5 | 15 | 11 | 1 | 17 | 3 | 13 | 7 | 9 | | 2 | 14 | 8 | 10 | 12 | 18 | 16 | 4 | 6 | | |
 | Championship | 468 | 387 | 388 | 432 | 146 | 449 | 404 | 417 | 247 | 3,338 | 461 | 379 | 415 | 233 | 384 | 198 | 547 | 488 | 611 | 3,716 | 7,054 |
-| Built | 408 | 382 | 399 | 434 | 142 | 424 | 373 | 409 | 208 | | 419 | 374 | 402 | 235 | 368 | 189 | 539 | 433 | 579 | | 6,718 |
+| Built | 431 | 382 | 399 | 434 | 142 | 424 | 373 | 409 | 208 | | 464 | 374 | 402 | 235 | 368 | 189 | 539 | 432 | 579 | | 6,784 |
 | Long | 396 | 364 | 303 | 415 | 139 | 413 | 360 | 372 | 206 | 2,968 | 408 | 337 | 388 | 209 | 369 | 188 | 501 | 423 | 570 | 3,393 | 6,361 |
 | Built | 395 | 362 | 321 | 419 | 136 | 423 | 351 | 372 | 201 | | 411 | 329 | 398 | 206 | 360 | 186 | 488 | 416 | 566 | | 6,338 |
 
@@ -80,6 +82,18 @@ forward of the tips when there is no Blue.
     from the back of the pre-restoration boxes, 9-17 % short, with the allowance in
     `checks.json`. Hole 3 Long +6 % is accepted. The traced tees are listed in open item 2.
     The card hole is 9.
+-   2026-10-31: the developer marked the Championship tees on 1, 10 and 17 in the tracing desk
+    (`data/yale/desk/`; 9 not saved, so it stays as built): "they are acceptable as I've saved
+    them. Make sure that there is actually always a tee box under where I marked the tee."
+    `make_desk_tees.py` writes them to `proposed/desk_tees.geojson` (`desk_tee_<n>`, source
+    "tracing desk (developer 2026-10-31)", `tee_pos=centroid`, so the game's tee stands on the
+    mark's centroid and isn't moved). Marks 1 (134 m2) and 10 (157 m2) are as drawn; 17's
+    (16 m2) is grown to an 8 x 6 m pad on its centroid, long side along the hole line's first
+    segment. Mark 1 lay on the practice green behind the clubhouse (OSM w284013715), so that
+    green is cut back 2.5 m clear of the pad (`cut_practice_green.py`, 415 -> 149 m2). No mark
+    is on a path or road. Built yardages, accepted as marked (`checks.json` `range_yd`): 1
+    431 yd (card 468, -8.0 %), 10 464 (461, +0.6 %), 17 432 (488, -11.6 %). The old pads stay
+    the Long tees.
 
 ## New pipeline keys or theme
 
@@ -103,8 +117,8 @@ forward of the tips when there is no Blue.
     (`make_tees.py`, `proposed/tees.geojson`). The 12th's back tee (`tee_trace12`) was traced
     from the DEM pad, and 14's back box was split off (`tee_w287211700_back`).
     Recommendation: check 12 and 14 on the next play.
-3.  **Pre-restoration data:** the new back tees on 1, 6, 9, 10 and 17 and the longer 7 aren't
-    mapped. The 3rd green (rebuilt as a double punchbowl), the double fairways on 3 and 18,
+3.  **Pre-restoration data:** the new back tees on 6 and 9 and the longer 7 aren't mapped (1,
+    10 and 17 are the developer's desk marks). The 3rd green (rebuilt as a double punchbowl), the double fairways on 3 and 18,
     and the 2024-25 tree clearing are not shown either. Recommendation: build as is now. Later,
     either take Google Earth screenshots with control points (DATA_REQUEST.md) or wait for
     Connecticut's 2026 flight.

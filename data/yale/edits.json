@@ -76,6 +76,22 @@
     "flatten": "no"
    },
    "reason": "streams OSM maps only as lines, within 30 m of hole lines (s03): along the inside of 6's dogleg (the 'Burnside') and the brook beside 11, 12 and 18; channels from the 2023 DEM (pipeline/propose_channels.py); red like all water (standing default); flatten=no keeps the falling bed. Left out: the parts outside the OSM boundary (w824708346 above the 6th green, w1043294986 into Griest Pond behind the 9th tee, w1058435186 east of 12; out of bounds there anyway), the 6 m stub w1058435182 and the piped parts (tunnel=culvert/flooded: w1058435178, 180, 184)"
+  },
+  {
+   "from": "proposed/desk_tees.geojson",
+   "ids": [
+    "desk_tee_1",
+    "desk_tee_10",
+    "desk_tee_17"
+   ],
+   "reason": "developer 2026-10-31: the Championship tees marked in the tracing desk (data/yale/desk/), accepted as marked; marks under 60 m2 grown to an 8 x 6 m pad on the developer's centroid so a tee box stands under each (make_desk_tees.py)"
+  },
+  {
+   "from": "proposed/practice_green_cut.geojson",
+   "ids": [
+    "w284013715_cut"
+   ],
+   "reason": "developer 2026-10-31: the Championship tee on 1 was marked on the practice green behind the clubhouse; the green is cut back 2.5 m clear of the tee pad (its 1.5 m fringe stays off the tee) so a tee box stands there (cut_practice_green.py)"
   }
  ],
  "drop": [
@@ -574,6 +590,10 @@
   {
    "osm": "n2908414153",
    "reason": "hole 9's OSM pin stands 16 m east of the long Biarritz green's centre, outside the close-up putting view (course_play.test.ts); the centre pin is the green's centre instead and the game adds the other hole locations (pins.ts)"
+  },
+  {
+   "osm": "w284013715",
+   "reason": "replaced by w284013715_cut (the practice green less the developer's tee on 1)"
   }
  ],
  "tags": [

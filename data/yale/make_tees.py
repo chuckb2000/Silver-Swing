@@ -50,7 +50,7 @@ PADS = [
 
 # hole -> {set: pad}. "trace12" and "w287211700_back" are made below.
 ASSIGN = {
-    1: {"Long": "w734021722", "Championship": "w734021723"},
+    1: {"Long": "w734021722"},  # Championship: the developer's desk tee (make_desk_tees.py)
     2: {"Long": "w734021730", "Championship": "w734021748"},
     3: {"Long": "w285156455", "Championship": "w285156466"},
     4: {"Long": "w734021735", "Championship": "w285156461"},
@@ -59,14 +59,14 @@ ASSIGN = {
     7: {"Long": "w734021749", "Championship": "w734021749"},
     8: {"Long": "w287209665", "Championship": "w287209657"},
     9: {"Long": "w287209653", "Championship": "w287209653"},
-    10: {"Long": "w734027539", "Championship": "w734027539"},
+    10: {"Long": "w734027539"},  # Championship: desk tee
     11: {"Long": "w287209662", "Championship": "w287209655"},
     12: {"Long": "trace12", "Championship": "trace12"},
     13: {"Long": "w287211690", "Championship": "w734027548"},
     14: {"Long": "w287211700_back", "Championship": "w287211700_back"},
     15: {"Long": "w287211685", "Championship": "w287211685"},
     16: {"Long": "w287211686", "Championship": "w285156451"},
-    17: {"Long": "w287211701", "Championship": "w287211701"},
+    17: {"Long": "w287211701"},  # Championship: desk tee
     18: {"Long": "w287211694", "Championship": "w287211698"},
 }
 

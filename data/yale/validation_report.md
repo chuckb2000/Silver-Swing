@@ -7,7 +7,7 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 | hole | par | tee set | card yd | measured yd | diff yd | diff % | status | adjusted yd | adj. diff % | adj. status |
 |---|---|---|---|---|---|---|---|---|---|---|
 | 1 | 4 | Long | 396 | 399.8 | +3.8 | +0.9% | pass | 395.0 | -0.3% | pass |
-| 1 | 4 | Championship | 468 | 407.8 | -60.2 | -12.9% | FAIL | 408.4 | -12.7% | FAIL |
+| 1 | 4 | Championship | 468 | 430.6 | -37.4 | -8.0% | flag | 430.6 | -8.0% | flag |
 | 2 | 4 | Long | 364 | 362.1 | -1.9 | -0.5% | pass | 362.1 | -0.5% | pass |
 | 2 | 4 | Championship | 387 | 382.2 | -4.8 | -1.3% | pass | 382.2 | -1.3% | pass |
 | 3 | 4 | Long | 303 | 324.2 | +21.2 | +7.0% | flag | 321.3 | +6.0% | flag |
@@ -25,7 +25,7 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 | 9 | 3 | Long | 206 | 189.2 | -16.8 | -8.1% | FAIL | 200.9 | -2.5% | pass |
 | 9 | 3 | Championship | 247 | 189.2 | -57.8 | -23.4% | FAIL | 208.0 | -15.8% | FAIL |
 | 10 | 4 | Long | 408 | 410.7 | +2.7 | +0.7% | pass | 410.7 | +0.7% | pass |
-| 10 | 4 | Championship | 461 | 410.7 | -50.3 | -10.9% | FAIL | 418.7 | -9.2% | FAIL |
+| 10 | 4 | Championship | 461 | 463.5 | +2.5 | +0.6% | pass | 463.5 | +0.6% | pass |
 | 11 | 4 | Long | 337 | 319.5 | -17.5 | -5.2% | flag | 328.6 | -2.5% | pass |
 | 11 | 4 | Championship | 379 | 374.2 | -4.8 | -1.3% | pass | 374.2 | -1.3% | pass |
 | 12 | 4 | Long | 388 | 401.2 | +13.2 | +3.4% | flag | 397.6 | +2.5% | pass |
@@ -39,16 +39,16 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 | 16 | 5 | Long | 501 | 487.7 | -13.3 | -2.7% | pass | 487.7 | -2.7% | pass |
 | 16 | 5 | Championship | 547 | 538.8 | -8.2 | -1.5% | pass | 538.8 | -1.5% | pass |
 | 17 | 4 | Long | 423 | 416.4 | -6.6 | -1.6% | pass | 416.4 | -1.6% | pass |
-| 17 | 4 | Championship | 488 | 416.4 | -71.6 | -14.7% | FAIL | 432.6 | -11.4% | FAIL |
+| 17 | 4 | Championship | 488 | 431.5 | -56.5 | -11.6% | FAIL | 431.5 | -11.6% | FAIL |
 | 18 | 5 | Long | 570 | 565.5 | -4.5 | -0.8% | pass | 565.5 | -0.8% | pass |
 | 18 | 5 | Championship | 611 | 578.4 | -32.6 | -5.3% | flag | 579.3 | -5.2% | flag |
-| **total** | 140 | | **13415** | **12927** | -488 | -3.6% | | **13056** | -2.7% | |
+| **total** | 140 | | **13415** | **13018** | -397 | -3.0% | | **13122** | -2.2% | |
 
 ## Open items
 
 1. Hole 1 (Long): tee box tee_w734021722 assigned by the developer (tagged hole=1, tee_set=Long in edited/course.geojson).
-2. Hole 1 (Championship): measured 408 yd vs card 468 (-12.7%) - FAIL, needs a decision.
-3. Hole 1 (Championship): tee box tee_w734021723 assigned by the developer (tagged hole=1, tee_set=Championship in edited/course.geojson).
+2. Hole 1 (Championship): measured 431 yd vs card 468 (-8.0%) even with the virtual tee at the best spot in its box; accepted for play.
+3. Hole 1 (Championship): tee box desk_tee_1 assigned by the developer (tagged hole=1, tee_set=Championship in edited/course.geojson).
 4. Hole 2 (Long): tee box tee_w734021730 assigned by the developer (tagged hole=2, tee_set=Long in edited/course.geojson).
 5. Hole 2 (Championship): tee box tee_w734021748 assigned by the developer (tagged hole=2, tee_set=Championship in edited/course.geojson).
 6. Hole 3 (Long): measured 321 yd vs card 303 (+6.0%) even with the virtual tee at the best spot in its box; accepted for play.
@@ -71,34 +71,32 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 23. Hole 9 (Championship): measured 208 yd vs card 247 (-15.8%) - FAIL, needs a decision.
 24. Hole 9 (Championship): tee box tee_w287209653 assigned by the developer (tagged hole=9, tee_set=Championship in edited/course.geojson).
 25. Hole 10 (Long): tee box tee_w734027539 assigned by the developer (tagged hole=10, tee_set=Long in edited/course.geojson).
-26. Hole 10 (Championship): measured 419 yd vs card 461 (-9.2%) - FAIL, needs a decision.
-27. Hole 10 (Championship): tee box tee_w734027539 assigned by the developer (tagged hole=10, tee_set=Championship in edited/course.geojson).
-28. Hole 11 (Long): tee box tee_w287209662 assigned by the developer (tagged hole=11, tee_set=Long in edited/course.geojson).
-29. Hole 11 (Championship): tee box tee_w287209655 assigned by the developer (tagged hole=11, tee_set=Championship in edited/course.geojson).
-30. Hole 12 (Long): tee box tee_trace12 assigned by the developer (tagged hole=12, tee_set=Long in edited/course.geojson).
-31. Hole 12 (Championship): measured 403 yd vs card 415 (-3.0%) even with the virtual tee at the best spot in its box; accepted for play.
-32. Hole 12 (Championship): tee box tee_trace12 assigned by the developer (tagged hole=12, tee_set=Championship in edited/course.geojson).
-33. Hole 13 (Long): tee box tee_w287211690 assigned by the developer (tagged hole=13, tee_set=Long in edited/course.geojson).
-34. Hole 13 (Championship): tee box tee_w734027548 assigned by the developer (tagged hole=13, tee_set=Championship in edited/course.geojson).
-35. Hole 14 (Long): tee box tee_w287211700_back assigned by the developer (tagged hole=14, tee_set=Long in edited/course.geojson).
-36. Hole 14 (Championship): measured 368 yd vs card 384 (-4.1%) even with the virtual tee at the best spot in its box; accepted for play.
-37. Hole 14 (Championship): tee box tee_w287211700_back assigned by the developer (tagged hole=14, tee_set=Championship in edited/course.geojson).
-38. Hole 15 (Long): tee box tee_w287211685 assigned by the developer (tagged hole=15, tee_set=Long in edited/course.geojson).
-39. Hole 15 (Championship): measured 189 yd vs card 198 (-4.5%) even with the virtual tee at the best spot in its box; accepted for play.
-40. Hole 15 (Championship): tee box tee_w287211685 assigned by the developer (tagged hole=15, tee_set=Championship in edited/course.geojson).
-41. Hole 16 (Long): tee box tee_w287211686 assigned by the developer (tagged hole=16, tee_set=Long in edited/course.geojson).
-42. Hole 16 (Championship): tee box tee_w285156451 assigned by the developer (tagged hole=16, tee_set=Championship in edited/course.geojson).
-43. Hole 17 (Long): tee box tee_w287211701 assigned by the developer (tagged hole=17, tee_set=Long in edited/course.geojson).
-44. Hole 17 (Championship): measured 433 yd vs card 488 (-11.4%) - FAIL, needs a decision.
-45. Hole 17 (Championship): tee box tee_w287211701 assigned by the developer (tagged hole=17, tee_set=Championship in edited/course.geojson).
-46. Hole 18 (Long): tee box tee_w287211694 assigned by the developer (tagged hole=18, tee_set=Long in edited/course.geojson).
-47. Hole 18 (Championship): measured 579 yd vs card 611 (-5.2%) even with the virtual tee at the best spot in its box; accepted for play.
-48. Hole 18 (Championship): tee box tee_w287211698 assigned by the developer (tagged hole=18, tee_set=Championship in edited/course.geojson).
+26. Hole 10 (Championship): tee box desk_tee_10 assigned by the developer (tagged hole=10, tee_set=Championship in edited/course.geojson).
+27. Hole 11 (Long): tee box tee_w287209662 assigned by the developer (tagged hole=11, tee_set=Long in edited/course.geojson).
+28. Hole 11 (Championship): tee box tee_w287209655 assigned by the developer (tagged hole=11, tee_set=Championship in edited/course.geojson).
+29. Hole 12 (Long): tee box tee_trace12 assigned by the developer (tagged hole=12, tee_set=Long in edited/course.geojson).
+30. Hole 12 (Championship): measured 403 yd vs card 415 (-3.0%) even with the virtual tee at the best spot in its box; accepted for play.
+31. Hole 12 (Championship): tee box tee_trace12 assigned by the developer (tagged hole=12, tee_set=Championship in edited/course.geojson).
+32. Hole 13 (Long): tee box tee_w287211690 assigned by the developer (tagged hole=13, tee_set=Long in edited/course.geojson).
+33. Hole 13 (Championship): tee box tee_w734027548 assigned by the developer (tagged hole=13, tee_set=Championship in edited/course.geojson).
+34. Hole 14 (Long): tee box tee_w287211700_back assigned by the developer (tagged hole=14, tee_set=Long in edited/course.geojson).
+35. Hole 14 (Championship): measured 368 yd vs card 384 (-4.1%) even with the virtual tee at the best spot in its box; accepted for play.
+36. Hole 14 (Championship): tee box tee_w287211700_back assigned by the developer (tagged hole=14, tee_set=Championship in edited/course.geojson).
+37. Hole 15 (Long): tee box tee_w287211685 assigned by the developer (tagged hole=15, tee_set=Long in edited/course.geojson).
+38. Hole 15 (Championship): measured 189 yd vs card 198 (-4.5%) even with the virtual tee at the best spot in its box; accepted for play.
+39. Hole 15 (Championship): tee box tee_w287211685 assigned by the developer (tagged hole=15, tee_set=Championship in edited/course.geojson).
+40. Hole 16 (Long): tee box tee_w287211686 assigned by the developer (tagged hole=16, tee_set=Long in edited/course.geojson).
+41. Hole 16 (Championship): tee box tee_w285156451 assigned by the developer (tagged hole=16, tee_set=Championship in edited/course.geojson).
+42. Hole 17 (Long): tee box tee_w287211701 assigned by the developer (tagged hole=17, tee_set=Long in edited/course.geojson).
+43. Hole 17 (Championship): measured 432 yd vs card 488 (-11.6%) - FAIL, needs a decision.
+44. Hole 17 (Championship): tee box desk_tee_17 assigned by the developer (tagged hole=17, tee_set=Championship in edited/course.geojson).
+45. Hole 18 (Long): tee box tee_w287211694 assigned by the developer (tagged hole=18, tee_set=Long in edited/course.geojson).
+46. Hole 18 (Championship): measured 579 yd vs card 611 (-5.2%) even with the virtual tee at the best spot in its box; accepted for play.
+47. Hole 18 (Championship): tee box tee_w287211698 assigned by the developer (tagged hole=18, tee_set=Championship in edited/course.geojson).
 
 ## Playability adjustments
 
 - Hole 1 (Long): tee shot: a perfect drive at the middle of the fairway clipped a tree near the tee; moved 5.7 m along the middle of the real tee polygon tee_w734021722 to the nearest clear spot -> 395.0 yd (real 399.8 yd).
-- Hole 1 (Championship): measured 408 yd from the tee-box centre vs 468 on the card (-12.9%); moved the virtual tee along the middle of the real tee polygon tee_w734021723 (on its centre line, at least 2.5 m from its back and front) -> 408.4 yd (real 407.8 yd).
 - Hole 3 (Long): measured 324 yd from the tee-box centre vs 303 on the card (+7.0%); moved the virtual tee along the middle of the real tee polygon tee_w285156455 (on its centre line, at least 2.5 m from its back and front) -> 321.3 yd (real 324.2 yd).
 - Hole 4 (Championship): tee shot: a perfect drive at the middle of the fairway clipped a tree near the tee; moved 3.0 m along the middle of the real tee polygon tee_w285156461 to the nearest clear spot -> 434.0 yd (real 435.0 yd).
 - Hole 5 (Championship): measured 136 yd from the tee-box centre vs 146 on the card (-6.8%); moved the virtual tee along the middle of the real tee polygon tee_w285156450 (on its centre line, at least 2.5 m from its back and front) -> 142.4 yd (real 136.0 yd).
@@ -107,22 +105,20 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 - Hole 7 (Championship): measured 349 yd from the tee-box centre vs 404 on the card (-13.6%); moved the virtual tee along the middle of the real tee polygon tee_w734021749 (on its centre line, at least 2.5 m from its back and front) -> 372.9 yd (real 349.1 yd).
 - Hole 9 (Long): measured 189 yd from the tee-box centre vs 206 on the card (-8.1%); moved the virtual tee along the middle of the real tee polygon tee_w287209653 (on its centre line, at least 2.5 m from its back and front) -> 200.9 yd (real 189.2 yd).
 - Hole 9 (Championship): measured 189 yd from the tee-box centre vs 247 on the card (-23.4%); moved the virtual tee along the middle of the real tee polygon tee_w287209653 (on its centre line, at least 2.5 m from its back and front) -> 208.0 yd (real 189.2 yd).
-- Hole 10 (Championship): measured 411 yd from the tee-box centre vs 461 on the card (-10.9%); moved the virtual tee along the middle of the real tee polygon tee_w734027539 (on its centre line, at least 2.5 m from its back and front) -> 418.7 yd (real 410.7 yd).
 - Hole 11 (Long): measured 320 yd from the tee-box centre vs 337 on the card (-5.2%); moved the virtual tee along the middle of the real tee polygon tee_w287209662 (on its centre line, at least 2.5 m from its back and front) -> 328.6 yd (real 319.5 yd).
 - Hole 12 (Long): measured 401 yd from the tee-box centre vs 388 on the card (+3.4%); moved the virtual tee along the middle of the real tee polygon tee_trace12 (on its centre line, at least 2.5 m from its back and front) -> 397.6 yd (real 401.2 yd).
 - Hole 12 (Championship): measured 401 yd from the tee-box centre vs 415 on the card (-3.3%); moved the virtual tee along the middle of the real tee polygon tee_trace12 (on its centre line, at least 2.5 m from its back and front) -> 402.5 yd (real 401.2 yd).
 - Hole 14 (Long): measured 345 yd from the tee-box centre vs 369 on the card (-6.6%); moved the virtual tee along the middle of the real tee polygon tee_w287211700_back (on its centre line, at least 2.5 m from its back and front) -> 359.8 yd (real 344.6 yd).
 - Hole 14 (Championship): measured 345 yd from the tee-box centre vs 384 on the card (-10.3%); moved the virtual tee along the middle of the real tee polygon tee_w287211700_back (on its centre line, at least 2.5 m from its back and front) -> 368.1 yd (real 344.6 yd).
 - Hole 15 (Championship): measured 186 yd from the tee-box centre vs 198 on the card (-6.0%); moved the virtual tee along the middle of the real tee polygon tee_w287211685 (on its centre line, at least 2.5 m from its back and front) -> 189.1 yd (real 186.2 yd).
-- Hole 17 (Championship): measured 416 yd from the tee-box centre vs 488 on the card (-14.7%); moved the virtual tee along the middle of the real tee polygon tee_w287211701 (on its centre line, at least 2.5 m from its back and front) -> 432.6 yd (real 416.4 yd).
 - Hole 18 (Championship): measured 578 yd from the tee-box centre vs 611 on the card (-5.3%); moved the virtual tee along the middle of the real tee polygon tee_w287211698 (on its centre line, at least 2.5 m from its back and front) -> 579.3 yd (real 578.4 yd).
 
 ## Tree detection (lidar point cloud)
 
-- 13952 trees detected in the world extent (2236 inside the course), 1274 conifers / 12678 deciduous; median height 22.8 m, max 43.7 m.
+- 13952 trees detected in the world extent (2237 inside the course), 1276 conifers / 12676 deciduous; median height 22.8 m, max 43.7 m.
 - Dropped: 253 tops on building footprints, 0 over the lake, 43 tiny crowns.
 - Dropped on playing surfaces (spec 5.4): 80 -> water_hazard w283711525 (21.0 m), water_hazard w283711525 (20.8 m), water_hazard w283711525 (10.5 m), water_hazard w283711525 (16.8 m), water_hazard w283711525 (15.5 m), water_hazard w283711525 (15.9 m), tee tee_w285156461 (22.0 m), tee tee_w734021735 (21.9 m), tee tee_w734021735 (22.0 m), water_hazard w283530541 (21.8 m), water_hazard w283530541 (22.0 m), water_hazard w283530541 (21.8 m), water_hazard w283530541 (21.8 m), water_hazard w283530541 (22.0 m), water_hazard w283530541 (22.2 m), water_hazard w283530541 (21.9 m), water_hazard w283530541 (21.9 m), water_hazard w283530541 (21.9 m), water_hazard w283530541 (21.8 m), water_hazard w283530541 (21.9 m), water_hazard w283530541 (21.9 m), water_hazard w283530541 (21.8 m), water_hazard w283530541 (22.0 m), water_hazard w283530541 (21.9 m), water_hazard w283530541 (21.9 m), water_hazard w283530541 (21.9 m), water_hazard w283530541 (21.9 m), water_hazard w283530541 (21.8 m), water_hazard w283530541 (21.9 m), water_hazard w283530541 (22.1 m), water_hazard w283530541 (22.0 m), water_hazard w283530541 (22.0 m), water_hazard w283530541 (21.9 m), water_hazard w283530541 (21.9 m), water_hazard w283530541 (22.2 m), water_hazard w283530541 (21.9 m), water_hazard w283530541 (21.9 m), water_hazard w283530541 (21.9 m), water_hazard w283530541 (21.9 m), water_hazard w283530541 (22.0 m), water_hazard w283530541 (22.1 m), water_hazard w283530541 (22.0 m), water_hazard w283530541 (22.0 m), water_hazard w283530541 (22.0 m), water_hazard w283530541 (22.0 m), water_hazard w283530541 (22.0 m), water_hazard w283530541 (21.8 m), water_hazard w283530541 (21.9 m), water_hazard w283530541 (22.2 m), water_hazard w283530541 (22.0 m), water_hazard w283530541 (21.9 m), water_hazard w283530541 (22.0 m), water_hazard w283530541 (21.8 m), water_hazard w283530541 (21.9 m), water_hazard w283530541 (21.9 m), water_hazard w283530541 (21.9 m), water_hazard w283530541 (22.0 m), water_hazard w283530541 (21.9 m), water_hazard w283530541 (22.0 m), water_hazard w283530541 (21.9 m), water_hazard w283530541 (21.9 m), water_hazard w283530541 (21.9 m), water_hazard w283530541 (21.9 m), tee tee_w285156466 (22.0 m), tee tee_w734021722 (21.8 m), tee tee_w285156466 (21.9 m), tee tee_w285156466 (21.9 m), tee tee_w285156466 (21.9 m), tee tee_w734021744 (21.8 m), water_hazard w283268706 (8.8 m), water_hazard w283268706 (20.1 m), water_hazard w283268706 (20.0 m), water_hazard w283268706 (18.3 m), water_hazard w283268706 (19.7 m), water_hazard w283268706 (6.8 m), water_hazard w283268706 (6.3 m), water_hazard w283268706 (7.1 m), water_hazard w283268706 (7.9 m), water_hazard w283268706 (21.2 m), water_hazard w283268706 (19.3 m)
-- Dropped from tee shots (s06b): 3 -> 13 Long (22.2 m tree, 34.4 m from the tee), 1 Championship (21.9 m tree, 40.2 m from the tee), 1 Championship (21.9 m tree, 40.5 m from the tee)
+- Dropped from tee shots (s06b): 3 -> 13 Long (22.2 m tree, 34.4 m from the tee), 10 Championship (25.6 m tree, 56.1 m from the tee), 10 Championship (28.0 m tree, 43.1 m from the tee)
 - OSM natural=tree points matched by a detected tree within 4 m: 0 of 0.
 - Conifer (pitch pine) vs deciduous (oak) from the leaf-off lidar: share of a crown's vegetation returns that were the last return of their pulse, split at Otsu's threshold 0.201 (419 of 11441 crowns with >= 20 returns are conifers); the other 2514 small crowns keep the crown-shape rule. See build/trees_preview.png.
 
@@ -138,11 +134,10 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 | w284013709 | 18 | 1.4 | 1.4 | 2 | 3.0 | 1.4 |
 | w284013711 | 4 | 2.9 | 2.5 | 2 | 5.0 | 1.5 |
 | w284013713 | 2 | 2.9 | 2.5 | 1 | 3.8 | 1.5 |
-| w284013715 | practice | 1.8 | 1.8 | 1 | 2.8 | 0.0 |
 | w284013717 | practice | 4.0 | 2.5 | 1 | 3.5 | 0.0 |
 | w734021726 | 9 | 3.5 | 2.5 | 1 | 3.8 | 1.5 |
 | w734021728 | 1 | 2.1 | 2.1 | 2 | 4.4 | 1.5 |
-| w734021737 | practice | 2.4 | 2.4 | 1 | 3.5 | 0.0 |
+| w734021737 | practice | 2.4 | 2.4 | 1 | 3.6 | 0.0 |
 | w734021742 | 5 | 2.3 | 2.3 | 1 | 3.4 | 1.5 |
 | w734021747 | 6 | 1.5 | 1.5 | 2 | 2.7 | 1.5 |
 | w734027536 | 7 | 5.8 | 2.5 | 2 | 5.0 | 1.5 |
@@ -151,12 +146,13 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 | w734027549 | 13 | 4.0 | 2.5 | 1 | 3.8 | 1.5 |
 | w734027552 | 15 | 4.7 | 2.5 | 1 | 3.5 | 1.5 |
 | w734027554 | 16 | 2.6 | 2.5 | 2 | 4.0 | 1.5 |
+| w284013715_cut | practice | 1.7 | 1.7 | 1 | 2.7 | 0.0 |
 
 # OSM coverage audit
 
 | hole | par (OSM) | hole line | tee at line start | fairway | green | pin | bunkers <40 m | water <40 m |
 |---|---|---|---|---|---|---|---|---|
-| 1 | 4 | yes | yes (4 near) | yes | yes | yes | 4 | 2 |
+| 1 | 4 | yes | yes (5 near) | yes | yes | yes | 4 | 2 |
 | 2 | 4 | yes | yes (2 near) | yes | yes | yes | 4 | 0 |
 | 3 | 4 | yes | yes (2 near) | yes | yes | yes | 1 | 1 |
 | 4 | 4 | yes | yes (2 near) | yes | yes | yes | 5 | 1 |
@@ -172,15 +168,15 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 | 14 | 4 | yes | yes (2 near) | yes | yes | yes | 0 | 0 |
 | 15 | 3 | yes | yes (5 near) | yes | yes | yes | 2 | 0 |
 | 16 | 5 | yes | yes (6 near) | yes | yes | yes | 2 | 0 |
-| 17 | 4 | yes | yes (3 near) | yes | yes | yes | 5 | 1 |
+| 17 | 4 | yes | yes (4 near) | yes | yes | yes | 5 | 1 |
 | 18 | 5 | yes | yes (2 near) | yes | yes | yes | 3 | 3 |
 
 ## Missing or suspect features
 
 - hole 9: no golf=pin inside its green
-- green w284013715 at (667, 905) is not the end of any hole line (practice green?) -> treated as a wrong green
 - green w284013717 at (698, 950) is not the end of any hole line (practice green?) -> treated as a wrong green
 - green w734021737 at (743, 925) is not the end of any hole line (practice green?) -> treated as a wrong green
+- green w284013715_cut at (668, 906) is not the end of any hole line (practice green?) -> treated as a wrong green
 
 ## Checks from earlier courses
 
@@ -191,5 +187,5 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 - waterway w1058435184 (stream): 65 m of it within 30 m of a hole line isn't in a penalty area (pipeline/propose_channels.py makes one; or say it's dry)
 - waterway w1058435186 (stream): 67 m of it within 30 m of a hole line isn't in a penalty area (pipeline/propose_channels.py makes one; or say it's dry)
 
-Totals: 55 tees, 21 greens, 26 fairways, 48 bunkers, 8 water hazards, 17 pins, 4 cart paths, 0 OSM tree points.
+Totals: 58 tees, 21 greens, 26 fairways, 48 bunkers, 8 water hazards, 17 pins, 4 cart paths, 0 OSM tree points.
 
