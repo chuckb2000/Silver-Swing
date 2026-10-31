@@ -97,6 +97,31 @@
   {
    "name": "dial2_taxlots.json",
    "url": "https://maps.deschutes.org/arcgis/rest/services/Dial2_Taxlots/MapServer/0/query?geometry=-121.19%2C44.175%2C-121.155%2C44.200&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=%2A&returnGeometry=true&outSR=4326&f=json&where=1%3D1"
+  },
+  {
+   "name": "dogami_tiles_query.json",
+   "url": "https://gis.dogami.oregon.gov/arcgis/rest/services/lidar/Downloadable_Tiles/MapServer/0/query?geometry=645173%2C4893509%2C646965%2C4895301&geometryType=esriGeometryEnvelope&inSR=32610&spatialRel=esriSpatialRelIntersects&outFields=%2A&returnGeometry=false&f=json&where=1%3D1"
+  },
+  {
+   "name": "pronghorn_nicklaus_lpc",
+   "tnm": {
+    "dataset": "lpc",
+    "bbox": [
+     -121.19,
+     44.175,
+     -121.155,
+     44.2
+    ],
+    "list": true
+   }
+  },
+  {
+   "name": "dogami_chm_identify.json",
+   "url": "https://gis.dogami.oregon.gov/arcgis/rest/services/lidar/CANOPY_HEIGHT_MODEL_MOSAIC/ImageServer/identify?geometry=%7B%22x%22%3A646000%2C%22y%22%3A4894400%2C%22spatialReference%22%3A%7B%22wkid%22%3A32610%7D%7D&geometryType=esriGeometryPoint&returnCatalogItems=true&f=json"
+  },
+  {
+   "name": "dogami_chm_small_ft.tif",
+   "url": "https://gis.dogami.oregon.gov/arcgis/rest/services/lidar/CANOPY_HEIGHT_MODEL_MOSAIC/ImageServer/exportImage?bbox=645173,4893509,646965,4895301&bboxSR=32610&imageSR=32610&size=1792,1792&format=tiff&pixelType=F32&noData=-9999&f=image"
   }
  ]
 }
