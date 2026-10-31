@@ -1,0 +1,54 @@
+{
+ "note": "per-course settings for course_play.test.ts (docs/COURSE_BUILD.md 8.2)",
+ "yardage": {
+  "max": {
+   "7 Championship": 0.09,
+   "9 Championship": 0.17
+  },
+  "range_yd": {
+   "1 Championship": [
+    430,
+    431.5
+   ],
+   "10 Championship": [
+    462.5,
+    464.5
+   ],
+   "17 Championship": [
+    430.5,
+    432.5
+   ]
+  },
+  "why": "Championship tees built by the 2023-26 Hanse restoration are in no data: 7 and 9 play from the back of the pre-restoration tee boxes (validation_report.md, docs/courses/yale.md). 1, 10 and 17 play from the tees the developer marked in the tracing desk (developer 2026-10-31: accepted as marked): 431, 464 and 432 yd against the card's 468, 461 and 488."
+ },
+ "wind_mph": [
+  1,
+  9
+ ],
+ "water": {
+  "penalty": "red"
+ },
+ "tee_shot_clear": {
+  "sets": [
+   "Long",
+   "Championship"
+  ]
+ },
+ "inside_boundary": true,
+ "points": [
+  {
+   "x": 631,
+   "y": 1075,
+   "surface": "water",
+   "inside": true,
+   "why": "Griest Pond (Ray Bishop Pond), the carry on 1 and 9"
+  },
+  {
+   "x": 541,
+   "y": 707,
+   "surface": "water",
+   "inside": true,
+   "why": "the pond between 3 and 4"
+  }
+ ]
+}

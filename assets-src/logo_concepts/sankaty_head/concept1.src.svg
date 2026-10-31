@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <title>Sankaty Head - Concept 1: The Lightship Basket</title>
+  <defs>
+    <clipPath id="right"><rect x="17" y="0" width="15" height="32"/></clipPath>
+    <clipPath id="body"><path d="M5 14.5 L27 14.5 L25.6 27.4 C22 28.6 10 28.6 6.4 27.4 Z"/></clipPath>
+  </defs>
+  <!-- the bail: a bent wooden handle riveted to ears on the rim -->
+  <path d="M5.4 15 C5.2 6.6 9.8 2.6 16 2.6 C22.2 2.6 26.8 6.6 26.6 15 L24.4 15 C24.6 8.2 21 4.8 16 4.8 C11 4.8 7.4 8.2 7.6 15 Z" fill="#8a5a2e"/>
+  <path d="M5.4 15 C5.2 6.6 9.8 2.6 16 2.6 L16 3.8 C10.8 3.8 6.6 7.4 6.6 15 Z" fill="#bd8448"/>
+  <!-- the body: rattan cane over staves, slightly tapered -->
+  <path d="M5 14.5 L27 14.5 L25.6 27.4 C22 28.6 10 28.6 6.4 27.4 Z" fill="#e2b46c"/>
+  <path d="M5 14.5 L27 14.5 L25.6 27.4 C22 28.6 10 28.6 6.4 27.4 Z" fill="#bd8a47" clip-path="url(#right)"/>
+  <!-- staves -->
+  <g fill="#9a6a33" clip-path="url(#body)">
+    <rect x="8" y="14" width="1" height="15"/>
+    <rect x="11" y="14" width="1" height="15"/>
+    <rect x="14" y="14" width="1" height="15"/>
+    <rect x="17" y="14" width="1" height="15"/>
+    <rect x="20" y="14" width="1" height="15"/>
+    <rect x="23" y="14" width="1" height="15"/>
+  </g>
+  <!-- weavers -->
+  <g fill="#f3d79c" clip-path="url(#body)">
+    <rect x="4" y="18" width="13" height="1"/>
+    <rect x="4" y="21" width="13" height="1"/>
+  </g>
+  <g fill="#e2b46c" clip-path="url(#body)">
+    <rect x="17" y="18" width="12" height="1"/>
+    <rect x="17" y="21" width="12" height="1"/>
+  </g>
+  <!-- the turned wooden base -->
+  <path d="M6.2 24.4 L25.8 24.4 L25.6 27.4 C22 28.6 10 28.6 6.4 27.4 Z" fill="#6e4222"/>
+  <path d="M6.2 24.4 L17 24.4 L17 28.3 C12 28.3 8.4 28 6.4 27.4 Z" fill="#8a5a2e"/>
+  <!-- the wooden lid and rim -->
+  <path d="M3.6 13.6 C3.6 10.6 9 9 16 9 C23 9 28.4 10.6 28.4 13.6 L28.4 15.2 C28.4 16 23 16.8 16 16.8 C9 16.8 3.6 16 3.6 15.2 Z" fill="#7a4a26"/>
+  <path d="M3.6 13.6 C3.6 10.6 9 9 16 9 C23 9 28.4 10.6 28.4 13.6 C28.4 14.4 23 15.2 16 15.2 C9 15.2 3.6 14.4 3.6 13.6 Z" fill="#9c6634"/>
+  <path d="M5 13 C5.6 11.2 10 10.2 16 10.2 L16 11.2 C11 11.2 7.2 11.8 5 13 Z" fill="#bd8448"/>
+  <!-- the ivory whale on the lid: a sperm whale, blunt head left, flukes raised right -->
+  <path d="M9.6 13.2 L22 13.2 L22 13.8 L9.6 13.8 Z" fill="#5a3418"/>
+  <path d="M9.4 11.6 C9.4 10.4 10.2 9.8 12 9.8 L16.6 9.8 C18.4 10 19.6 10.8 20.6 11.8 L22.6 9.6 L23.6 9.6 L22.4 12 L23.8 13.2 L22.4 13.2 L20.8 12.6 C19.4 13.2 17.6 13.2 15 13.2 L11.4 13.2 C10 13.2 9.4 12.6 9.4 11.6 Z" fill="#f1e8d2"/>
+  <path d="M10.4 12.6 L20.4 12.6 L20.8 12.6 C19.4 13.2 17.6 13.2 15 13.2 L11.4 13.2 C10.8 13.2 10.6 13 10.4 12.6 Z" fill="#cfc2a4"/>
+  <rect x="11" y="10.8" width="1" height="1" fill="#5a3418"/>
+  <!-- the rivets on the ears -->
+  <rect x="5" y="15.6" width="2" height="2" fill="#f1e8d2"/>
+  <rect x="25" y="15.6" width="2" height="2" fill="#cfc2a4"/>
+</svg>

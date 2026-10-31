@@ -1,0 +1,79 @@
+{
+  "name": "Kwiniaska (Vermont ridge, Champlain Valley, first colour)",
+  "note": "Course theme palette (<= 32 colours; same keys as pnw.json plus F0-F2). Kwiniaska Golf Club, Shelburne, Vermont (course chat 2026-10-30, from the VCGI leaf-off and NAIP leaf-on photos): cool Kentucky-bluegrass greens on the fairways and greens; a mown band of rough (G3-G5) then rough with a golden cast of the fescue and goldenrod the photos show beside the holes (F0-F2); a mossy, leaf-littered floor under the hardwood woods (G0-G2); Champlain Valley hay fields beyond the boundary (L0-L2); creamy-white bunker sand; dark slate-blue ponds; grey Vermont granite and slate in the paths and roofs. Trees in assets-src/trees_kwiniaska.py: sugar maple, paper birch, ash and oak mostly still green, a few maples turning (flame orange) or gone scarlet, white pine and hemlock. Shadows are a 35% black overlay on top of these.",
+  "colors": {
+    "G0": "#26301c",
+    "G1": "#34411f",
+    "G2": "#455226",
+    "G3": "#3f6e34",
+    "G4": "#4a823b",
+    "G5": "#569544",
+    "G6": "#63a64d",
+    "G7": "#72b757",
+    "G8": "#84c562",
+    "G9": "#a9d98a",
+    "L0": "#5c6a32",
+    "L1": "#6b7a3a",
+    "L2": "#7d8b45",
+    "S0": "#cfc4a2",
+    "S1": "#ece4cb",
+    "S2": "#f8f4e6",
+    "W0": "#22404f",
+    "W1": "#2f5566",
+    "W2": "#6a8e9c",
+    "K0": "#24252b",
+    "K1": "#505158",
+    "K2": "#78797f",
+    "K3": "#b1ab9c",
+    "K4": "#d8d2c2",
+    "B0": "#46311f",
+    "B1": "#6b4b31",
+    "B2": "#8c6444",
+    "R0": "#4f5560",
+    "WH": "#f6f6f2",
+    "F0": "#4e6a33",
+    "F1": "#5e7c3a",
+    "F2": "#708e45"
+  },
+  "lut": {
+    "rough": [
+      "F0",
+      "F1",
+      "F2",
+      "F2"
+    ],
+    "rough_band": [
+      "G3",
+      "G4",
+      "G5",
+      "G5"
+    ]
+  },
+  "aliases": {
+    "TUFT": "G3"
+  },
+  "minimap": {
+    "ob": "#6b7a3a",
+    "rough": "#5e7c3a",
+    "woods": "#34411f",
+    "ob_woods": "#2c3a1b",
+    "water": "#2f5566",
+    "ob_water": "#2f5566",
+    "bunker": "#ece4cb",
+    "ob_sand": "#ece4cb"
+  },
+  "minimap_trees": {
+    "conifer": [
+      "#1a4136",
+      "#306953"
+    ],
+    "deciduous": [
+      "#2b5420",
+      "#4f8935"
+    ]
+  },
+  "trees": {
+    "conifer": "trees_kwiniaska:conifer",
+    "deciduous": "trees_kwiniaska:deciduous"
+  }
+}

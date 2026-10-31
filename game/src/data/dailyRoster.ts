@@ -72,6 +72,36 @@ export const DAILY_ROSTER: Readonly<Record<string, string>> = {
   strawberry_farms: '2026-10-26',
   // landed 2026-10-26 (pipeline/land.py)
   presidio: '2026-10-27',
+  // landed 2026-10-31 (pipeline/land.py)
+  victoria: '2026-11-01',
+  // landed 2026-10-31 (pipeline/land.py)
+  needham: '2026-11-01',
+  // landed 2026-10-31 (pipeline/land.py)
+  cyprian_keyes: '2026-11-01',
+  // landed 2026-10-31 (pipeline/land.py)
+  pronghorn_nicklaus: '2026-11-01',
+  // landed 2026-10-31 (pipeline/land.py)
+  marovitz: '2026-11-01',
+  // landed 2026-10-31 (pipeline/land.py)
+  kwiniaska: '2026-11-01',
+  // landed 2026-10-31 (pipeline/land.py)
+  rancho_san_joaquin: '2026-11-01',
+  // landed 2026-10-31 (pipeline/land.py)
+  tetherow: '2026-11-01',
+  // landed 2026-10-31 (pipeline/land.py)
+  spruce_peak: '2026-11-01',
+  // landed 2026-10-31 (pipeline/land.py)
+  aberdeen: '2026-11-01',
+  // landed 2026-10-31 (pipeline/land.py)
+  aquidneck: '2026-11-01',
+  // landed 2026-10-31 (pipeline/land.py)
+  burlington_cc: '2026-11-01',
+  // landed 2026-10-31 (pipeline/land.py)
+  sankaty_head: '2026-11-01',
+  // landed 2026-10-31 (pipeline/land.py)
+  meadow_club: '2026-11-01',
+  // landed 2026-10-31 (pipeline/land.py)
+  yale: '2026-11-01',
 };
 
 /**

@@ -1,0 +1,104 @@
+{
+ "id": "pronghorn_nicklaus",
+ "name": "Pronghorn - Nicklaus Course",
+ "location": "Bend, Deschutes County, Oregon",
+ "state": "OR",
+ "architects": "Jack Nicklaus (Jack Nicklaus Signature course, opened 2004; Pronghorn, renamed Juniper Preserve in 2022)",
+ "theme": "pronghorn",
+ "epsg": 32610,
+ "osm_sources": [
+  "raw/overpass.geojson"
+ ],
+ "boundary_name": "Pronghorn Nicklaus",
+ "dtm": {
+  "path": "raw/dogami_dtm_ft.tif",
+  "units": "ft",
+  "source": "DOGAMI lidar DIGITAL_TERRAIN_MODEL_MOSAIC (bare earth; projects at the course, newest first: OLC_ODF_PRIVATE_FOREST_ACCORDS_2023_DESCHUTES, OR_SOUTHEAST_2023_USGS_3DEP_12_S_PRINEVILLE_MAURY, OLC_DESCHUTES_2011, DESCHUTES_2002), exportImage at 1 m in EPSG:32610, box x 644600-647400 / y 4893000-4895800, fetched by the GitHub Actions workflow 2026-10-31 (release data-pronghorn_nicklaus, dogami_dtm_ft.tif)"
+ },
+ "ortho": {
+  "path": "raw/osip2024_05m.tif",
+  "source": "Oregon Statewide Imagery Program 2024 (OSIP_2024_WM exportImage), JPEG at 0.5 m in four quarters of the box x 644600-647400 / y 4893000-4895800 EPSG:32610, placed by their request boxes (pipeline/intake.py ortho); fetched by the GitHub Actions workflow 2026-10-31"
+ },
+ "world": {
+  "x0": 645173,
+  "y0": 4893509,
+  "width": 1792,
+  "height": 1792,
+  "note": "PROVISIONAL (intake): bbox of the Nicklaus golf features near its 18 OSM hole lines (x 645397-646740, y 4893660-4895150) + 120 m, rounded up to 7 x 256 m, centred"
+ },
+ "penalty_default": "red",
+ "driving_range_is_ob": true,
+ "wind_mph": {
+  "minMph": 2,
+  "maxMph": 10
+ },
+ "trees_off_fairways_m": 2,
+ "tee_sets": [
+  {
+   "name": "Blue",
+   "playable": true,
+   "rating": 75.2,
+   "slope": 151,
+   "total_yd": 7379
+  },
+  {
+   "name": "Black",
+   "playable": true,
+   "rating": 73.8,
+   "slope": 147,
+   "total_yd": 7049
+  },
+  {
+   "name": "Copper",
+   "playable": false,
+   "rating": 71.3,
+   "slope": 143,
+   "total_yd": 6533
+  },
+  {
+   "name": "Gold",
+   "playable": false,
+   "rating": 68.9,
+   "slope": 135,
+   "total_yd": 6000
+  },
+  {
+   "name": "Silver",
+   "playable": false,
+   "rating": 0,
+   "slope": 0,
+   "total_yd": 5256
+  }
+ ],
+ "default_tee": "Blue",
+ "scorecard_source": "Greenskeeper.org, Pronghorn Golf Club (Nicklaus Course) scorecard (read 2026-10-31): tee names Blue/Black/Copper/Gold/Silver, men's ratings and slopes, pars and men's handicaps; every row adds up to its total. GolfPass (read 2026-10-31) has the same yardages for every hole under the names Tips/Black/Rust/Gold/Silver with slightly different ratings (Tips 75.0/148, Black 73.5/145, Rust 70.8/138, Gold 68.5/128, Silver 65.4/119): open item. Silver is the women's set (Silver - Ladies 70.8/131); no men's rating. Unverified (third party; no club card online).",
+ "attribution": [
+  "Map data \u00a9 OpenStreetMap contributors (ODbL)",
+  "Elevation: Oregon Department of Geology and Mineral Industries (DOGAMI) lidar",
+  "Imagery check: Oregon Statewide Imagery Program 2024"
+ ],
+ "fescue_areas": "proposed/fescue.geojson",
+ "gorse": {
+  "v_min": 80,
+  "v_max": 150,
+  "gr_min": -14,
+  "bg_min": -30,
+  "bg_max": -8,
+  "min_z_m": 0,
+  "clear_m": 3.0,
+  "spacing_m": 7.0,
+  "jitter": 0.4,
+  "r_min_m": 0.9,
+  "r_max_m": 1.6,
+  "h_min_m": 0.6,
+  "h_max_m": 1.5,
+  "h_default_m": 1.0,
+  "note": "sagebrush and bitterbrush, not gorse: bushes from the OSIP 2024 photo (pipeline/gorse.py with the Silvies sage colour rule, V up to 150 for the paler pumice ground), 7 m apart, kept 3 m off mown grass; no penal ground (bushes only, as at Silvies); drawn by the theme's desert_bush painter"
+ },
+ "chm": {
+  "path": "proposed/photo_canopy_m.tif",
+  "units": "m",
+  "label": "canopy from the OSIP 2024 photo (heights estimated)",
+  "source": "Not lidar: no canopy or point cloud reaches the course (DOGAMI canopy/highest-hit services return no data here; the 2011 and 2002 flights have a void; USGS OR_SouthEast_D22 has no tiles in 10TFP 45-46/93-95). Crowns from the Oregon Statewide Imagery Program 2024 photo by colour (make_photo_canopy.py), heights a dome per crown from its size, 3.5-12 m: estimated, not measured (CLAUDE.md 5.4 step 2, RGB only, lower confidence)"
+ }
+}

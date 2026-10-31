@@ -40,7 +40,7 @@ Test counts on the branch are in the pull request.
         rockyweb, flown 2-14 April 2020, NAD83(2011) California zone 3 US ft, LAS
         1.4 with the CRS in an EVLR; class 1 (unclassified) holds the vegetation and
         the buildings. Each tile is clipped to the world + 100 m by `intake.py laz`
-        into `raw/laz/pasatiempo_<tile>.laz`; one `release.json` entry per tile.
+        into `raw/laz/pasatiempo_<tile>.laz` (`--keep-evlrs`); one `release.json` entry per tile.
     -   Photo: USDA NAIP, 19 May 2022, 0.6 m, from the USGS National Map service,
         placed by `intake.py ortho` (`raw/naip2022.tif`, committed). A newer NAIP
         from the USDA service failed to download (connection reset).
@@ -114,9 +114,8 @@ where each has its facts, options and a recommendation.
 ## New pipeline keys or theme
 
 -   No new config key.
--   `pipeline/intake.py` (`laz`): copies a CRS kept in an EVLR (LAS 1.4) into the
-    clip's VLRs; the USGS California tiles keep it there and the clips had none.
-    Clips of tiles with the CRS in a VLR are unchanged.
+-   No change to `pipeline/intake.py`: main's `intake.py laz --keep-evlrs` (merged 2026-10-31) carries the
+    tiles' CRS, which they keep in an EVLR; every `release.json` lidar entry uses it.
 -   `pipeline/propose_tees.py`: skips a tee mapped as a point when drawing (2 lines;
     Pasatiempo 12).
 -   New theme `pasatiempo`: `assets-src/palettes/pasatiempo.json` and
@@ -133,8 +132,8 @@ developer are listed above under "Developer's calls pending".
 
 ## Lessons
 
--   **USGS LAS 1.4 tiles can keep their CRS in an EVLR.** `intake.py laz` dropped it,
-    and `make intake` then reported "no CRS" for every clip. Fixed in `intake.py`.
+-   **USGS LAS 1.4 tiles can keep their CRS in an EVLR.** Clip them with
+    `intake.py laz ... --keep-evlrs`, or `make intake` reports "no CRS" for every clip.
 -   **rockyweb lidar is slow** (about 18 minutes a 110-170 MB tile on the runner);
     twelve tiles took about three hours. Start the lidar first and build without it.
 -   **Vite's dev server stops serving a course's terrain after a rebuild** (the PNGs

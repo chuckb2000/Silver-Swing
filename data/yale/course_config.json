@@ -1,0 +1,76 @@
+{
+  "id": "yale",
+  "name": "Yale Golf Course",
+  "location": "New Haven (Upper Westville), New Haven County, Connecticut",
+  "state": "CT",
+  "architects": "Seth Raynor with Charles Blair Macdonald (consultant) and Charles Banks (construction), opened 1926; Roger Rulewich (1990s); restored by Gil Hanse and Jim Wagner, reopened 28 April 2026",
+  "theme": "yale",
+  "epsg": 32618,
+  "osm_sources": [
+    "raw/overpass.geojson"
+  ],
+  "boundary_name": "Yale Golf Course",
+  "dtm": {
+    "path": "raw/ct2023_dem.tif",
+    "units": "ft",
+    "source": "Connecticut 2023 statewide lidar bare-earth DEM (CT ECO ImageServer elevation/Statewide2023, 2 ft source pixels, flown spring 2023, QL1), exported at 1 m in WGS 84 / UTM 18N (EPSG:32618), NAVD88 feet; fetched by the GitHub Actions workflow 2026-10-31 (release data-yale, yale_ct2023_dem.tif)"
+  },
+  "laz": {
+    "paths": [
+      "raw/laz/*.laz"
+    ],
+    "classes": [
+      3,
+      4,
+      5
+    ],
+    "units": "ft",
+    "leaf_off": true,
+    "source": "USGS 3DEP lidar CT_2023Statewide_C25 (Connecticut statewide 2023, QL1, flown 22 Mar - 7 May 2023, leaf-off; the same flight as NOAA Digital Coast 10296), tiles clipped to the world by intake.py laz --drop-extra"
+  },
+  "ortho": {
+    "path": "raw/ortho_naip.tif",
+    "source": "USDA NAIP via the USGS National Map ImageServer (exportImage, 0.6 m, EPSG:32618; release data-yale yale_naip.jpg), placed by its request box with pipeline/intake.py ortho; flight year not stated by the service (CT's newest NAIP is summer 2023)"
+  },
+  "world": {
+    "x0": 667962,
+    "y0": 4575281,
+    "width": 1280,
+    "height": 1792,
+    "note": "OSM course boundary bbox (way 43437312, 943 x 1,478 m) + scenery, rounded out to whole 256 m chunks and centred: 1,280 m east-west (168 m each side), 1,792 m north-south (157 m each side)"
+  },
+  "tee_sets": [
+    {
+      "name": "Long",
+      "playable": true,
+      "rating": 71.5,
+      "slope": 139,
+      "total_yd": 6361
+    },
+    {
+      "name": "Championship",
+      "playable": true,
+      "rating": 74.7,
+      "slope": 144,
+      "total_yd": 7054
+    }
+  ],
+  "default_tee": "Championship",
+  "scorecard_source": "The course's post-restoration card (2026): the developer's screenshot of the 'Yale Golf Course Yardage' page (release yale-data, Screenshot.2026-10-24.140812.png), per hole for Championship, Long, Regular and Short with par and stroke index; every row adds up to its printed total. Matches GolfPass's per-hole card and 18Birdies' ratings and stroke index (docs/scouting/yale on branch scouting/new-courses). Men's ratings: Championship 74.7/144, Long 71.5/139, Regular 68.9/130, Short 64.5/110. Built from Championship (the tips) and Long (next forward; there is no Blue), Long the default (developer, 2026-10-30).",
+  "penalty_default": "red",
+  "driving_range_is_ob": true,
+  "trees_off_fairways_m": 2,
+  "wind_mph": {
+    "minMph": 1,
+    "maxMph": 9
+  },
+  "attribution": [
+    "Map data © OpenStreetMap contributors (ODbL)",
+    "Elevation: Connecticut 2023 statewide lidar (CT ECO, UConn / CT DEEP)",
+    "Trees: U.S. Geological Survey 3D Elevation Program (CT_2023Statewide_C25 lidar)",
+    "Imagery checked: CT ECO 2023 orthophotos, USDA NAIP",
+    "Scorecard: Yale Golf Course (2026 card)"
+  ],
+  "notes": "Overnight build (developer away, 2026-10-30/31): standing defaults (COURSE_BUILD.md 4.1) except the tee sets (developer: the back tees plus the set one step forward when there is no Blue). Every penalty area red; OSM boundary is OB; range OB; trees from lidar with trees on fairways removed (trees_off_fairways_m 2); wind 1-9 mph (inland New England, wooded, about 5 km from Long Island Sound). New theme yale (approved by the scouting kickoff). All data predate the 2023-26 Hanse restoration.",
+  "trees_ortho": true
+}

@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="512" height="512">
+  <title>Spruce Peak - Concept 1: The Single Chair</title>
+  <defs>
+    <clipPath id="sprR"><rect x="7.5" y="0" width="24" height="32" /></clipPath>
+    <clipPath id="chairR"><rect x="21" y="0" width="12" height="32" /></clipPath>
+  </defs>
+  
+  <g id="outline"><path d="M7.5 7 L10 12 L8.8 12 L11.4 17.4 L10 17.4 L12.8 23.4 L11.2 23.4 L13.6 28.6 L1.4 28.6 L3.8 23.4 L2.2 23.4 L5 17.4 L3.6 17.4 L6.2 12 L5 12 Z" fill="#0d1620" stroke="#0d1620" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+  <path d="M7.5 7 L10 12 L8.8 12 L11.4 17.4 L10 17.4 L12.8 23.4 L11.2 23.4 L13.6 28.6 L1.4 28.6 L3.8 23.4 L2.2 23.4 L5 17.4 L3.6 17.4 L6.2 12 L5 12 Z" fill="#0d1620" clip-path="url(#sprR)" stroke="#0d1620" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+  <rect x="6.6" y="28.6" width="1.8" height="2" fill="#0d1620" stroke="#0d1620" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+  
+  <path d="M1 4.6 L31 2 L31 3.6 L1 6.2 Z" fill="#0d1620" stroke="#0d1620" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+  
+  <rect x="18.6" y="2.4" width="3.6" height="2.6" fill="#0d1620" stroke="#0d1620" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+  <rect x="19.6" y="4.8" width="1.6" height="5.4" fill="#0d1620" stroke="#0d1620" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+  
+  <path d="M14 10 L26.8 10 L26.8 24 L25.2 24 L25.2 11.6 L15.6 11.6 L15.6 24 L14 24 Z" fill="#0d1620" stroke="#0d1620" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+  <path d="M14 10 L26.8 10 L26.8 11.6 L14 11.6 Z" fill="#0d1620" stroke="#0d1620" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+  
+  <rect x="16.4" y="12.6" width="8" height="6" fill="#0d1620" stroke="#0d1620" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+  <rect x="15.6" y="19.4" width="9.6" height="3" fill="#0d1620" stroke="#0d1620" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+  <rect x="21" y="12.6" width="3.4" height="6" fill="#0d1620" stroke="#0d1620" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+  <rect x="21" y="19.4" width="4.2" height="3" fill="#0d1620" stroke="#0d1620" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+  <rect x="15.6" y="19.4" width="9.6" height="1" fill="#0d1620" stroke="#0d1620" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+  <rect x="16.4" y="12.6" width="1" height="6" fill="#0d1620" stroke="#0d1620" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+  
+  <rect x="17" y="22.4" width="1.4" height="5" fill="#0d1620" stroke="#0d1620" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+  <rect x="22.4" y="22.4" width="1.4" height="5" fill="#0d1620" stroke="#0d1620" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+  <rect x="16" y="26.6" width="8.8" height="1.6" fill="#0d1620" stroke="#0d1620" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+</g><path d="M7.5 7 L10 12 L8.8 12 L11.4 17.4 L10 17.4 L12.8 23.4 L11.2 23.4 L13.6 28.6 L1.4 28.6 L3.8 23.4 L2.2 23.4 L5 17.4 L3.6 17.4 L6.2 12 L5 12 Z" fill="#2a6a52" />
+  <path d="M7.5 7 L10 12 L8.8 12 L11.4 17.4 L10 17.4 L12.8 23.4 L11.2 23.4 L13.6 28.6 L1.4 28.6 L3.8 23.4 L2.2 23.4 L5 17.4 L3.6 17.4 L6.2 12 L5 12 Z" fill="#163f31" clip-path="url(#sprR)" />
+  <rect x="6.6" y="28.6" width="1.8" height="2" fill="#4a3324" />
+  
+  <path d="M1 4.6 L31 2 L31 3.6 L1 6.2 Z" fill="#3b3e44" />
+  
+  <rect x="18.6" y="2.4" width="3.6" height="2.6" fill="#9a9ea4" />
+  <rect x="19.6" y="4.8" width="1.6" height="5.4" fill="#70747a" />
+  
+  <path d="M14 10 L26.8 10 L26.8 24 L25.2 24 L25.2 11.6 L15.6 11.6 L15.6 24 L14 24 Z" fill="#70747a" />
+  <path d="M14 10 L26.8 10 L26.8 11.6 L14 11.6 Z" fill="#9a9ea4" />
+  
+  <rect x="16.4" y="12.6" width="8" height="6" fill="#c8402c" />
+  <rect x="15.6" y="19.4" width="9.6" height="3" fill="#c8402c" />
+  <rect x="21" y="12.6" width="3.4" height="6" fill="#8f2a1c" />
+  <rect x="21" y="19.4" width="4.2" height="3" fill="#8f2a1c" />
+  <rect x="15.6" y="19.4" width="9.6" height="1" fill="#e8694a" />
+  <rect x="16.4" y="12.6" width="1" height="6" fill="#e8694a" />
+  
+  <rect x="17" y="22.4" width="1.4" height="5" fill="#70747a" />
+  <rect x="22.4" y="22.4" width="1.4" height="5" fill="#70747a" />
+  <rect x="16" y="26.6" width="8.8" height="1.6" fill="#9a9ea4" />
+</svg>

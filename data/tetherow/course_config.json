@@ -1,0 +1,135 @@
+{
+  "id": "tetherow",
+  "name": "Tetherow",
+  "location": "Bend, Deschutes County, Oregon",
+  "state": "OR",
+  "architects": "David McLay Kidd (opened 2008); playability changes 2014-2018 under the club (greens 7 and 17 enlarged, bunkers filled on 1, 5 and 13, waste areas for native areas)",
+  "theme": "tetherow",
+  "epsg": 32610,
+  "osm_sources": [
+    "raw/overpass.geojson"
+  ],
+  "boundary_name": "Tetherow Golf Club",
+  "dtm": {
+    "path": "raw/dogami_dtm_ft.tif",
+    "units": "ft",
+    "source": "DOGAMI lidar DIGITAL_TERRAIN_MODEL_MOSAIC (bare earth), exportImage f=image at 1 m in EPSG:32610, box x 630400-632400 / y 4875630-4877880, fetched by the GitHub Actions workflow 2026-10-31 (release data-tetherow, dogami_dtm_ft.tif). The lidar under it is the 2010 OLC Deschutes / Newberry flights (USGS 3DEP lists OR_DESCHUTES_NEWBERRY_CRATER_OLC_2010 and OR_DESCHUTES_OLC_2009_2011 over the box; no newer project)"
+  },
+  "chm": {
+    "path": "raw/dogami_chm_ft.tif",
+    "units": "ft",
+    "source": "DOGAMI lidar CANOPY_HEIGHT_MODEL_MOSAIC (highest hit minus bare earth), exportImage f=image at 1 m in EPSG:32610, same box, fetched by the GitHub Actions workflow 2026-10-31 (release data-tetherow, dogami_chm_ft.tif); 2010 flight",
+    "label": "DOGAMI canopy height model"
+  },
+  "ortho": {
+    "path": "raw/osip2024_05m.tif",
+    "source": "Oregon Statewide Imagery Program 2024 (OSIP_2024_WM), two JPEG exportImage halves at 0.5 m placed by their request boxes (intake.py ortho), fetched by the GitHub Actions workflow 2026-10-31 (release data-tetherow)"
+  },
+  "world": {
+    "x0": 630501,
+    "y0": 4875731,
+    "width": 1792,
+    "height": 2048,
+    "note": "OSM course boundary (way 780645556) box 1,352 x 1,638 m, x 630721-632073 / y 4875936-4877574, plus 205-220 m of scenery each side, rounded out to whole 256 m chunks and centred"
+  },
+  "tee_sets": [
+    {
+      "name": "Kidd",
+      "playable": true,
+      "rating": 75.2,
+      "slope": 150,
+      "total_yd": 7298
+    },
+    {
+      "name": "Black",
+      "playable": true,
+      "rating": 73.7,
+      "slope": 145,
+      "total_yd": 6961
+    },
+    {
+      "name": "Black_Tan",
+      "playable": false,
+      "rating": 71.9,
+      "slope": 142,
+      "total_yd": 6618
+    },
+    {
+      "name": "Tan",
+      "playable": false,
+      "rating": 71.4,
+      "slope": 139,
+      "total_yd": 6490
+    },
+    {
+      "name": "Tan_Sage",
+      "playable": false,
+      "rating": 70.5,
+      "slope": 136,
+      "total_yd": 6293
+    },
+    {
+      "name": "Sage",
+      "playable": false,
+      "rating": 69.2,
+      "slope": 133,
+      "total_yd": 6064
+    },
+    {
+      "name": "Sage_Red",
+      "playable": false,
+      "rating": 73.0,
+      "slope": 143,
+      "total_yd": 5644
+    },
+    {
+      "name": "Red",
+      "playable": false,
+      "rating": 70.9,
+      "slope": 135,
+      "total_yd": 5283
+    },
+    {
+      "name": "Junior",
+      "playable": false,
+      "rating": 60.5,
+      "slope": 106,
+      "total_yd": 3759
+    }
+  ],
+  "default_tee": "Kidd",
+  "scorecard_source": "Stymie (stymie.golf, Tetherow Golf Club, read 2026-10-31): per-hole yardages for every set, par, men's handicap row, ratings. Its Kidd row (7,298) matches 18Birdies' Kidd per-hole card and its ratings (75.2/150, Black 73.7/145) match 18Birdies'; 18Birdies totals Black 6,955. The handicap row matches 18Birdies and OpenGolfAPI. GolfPass's card is older (Kidd 7,283 with 17 at 167; Black 6,933; a different handicap row; ratings 74.9/141) and is not used. No club card online was found. Unverified third-party card. Sage_Red and Red ratings are the women's (the men's rows on Stymie are the Junior/Red 65.2 ones, unlabeled).",
+  "penalty_default": "red",
+  "driving_range_is_ob": true,
+  "trees_off_fairways_m": 2,
+  "wind_mph": {
+    "minMph": 1,
+    "maxMph": 9
+  },
+  "attribution": [
+    "Map data © OpenStreetMap contributors (ODbL)",
+    "Elevation and canopy height: Oregon Department of Geology and Mineral Industries (DOGAMI) lidar",
+    "Imagery: Oregon Statewide Imagery Program 2024",
+    "Scorecard: Stymie / 18Birdies (third-party)"
+  ],
+  "notes": "Developer's calls 2026-10-30 (overnight): build the back tees (Kidd) and the set one forward of them (Black; the card has no Blue); Black is the default. All water red; the OSM boundary is out of bounds; the driving range is out of bounds; fairway trees removed. Wind 1-9 mph: inland high desert at 3,700-3,900 ft on the east flank of the Cascades, afternoon breezes but no sea wind.",
+  "waste_sand": true,
+  "fescue_areas": "proposed/native.geojson",
+  "gorse": {
+    "v_min": 45,
+    "v_max": 105,
+    "gr_min": -8,
+    "bg_min": -30,
+    "bg_max": 2,
+    "min_z_m": 0,
+    "clear_m": 2.0,
+    "spacing_m": 6.0,
+    "jitter": 0.4,
+    "r_min_m": 0.8,
+    "r_max_m": 1.5,
+    "h_min_m": 0.5,
+    "h_max_m": 1.6,
+    "h_default_m": 0.9,
+    "note": "desert shrubs, not gorse: sage, bitterbrush and manzanita from the OSIP 2024 photo (pipeline/gorse.py; its colour rule tuned to the dark shrubs in the grey-tan native ground: smoothed V 45-105, G-R above -8, B-G -30 to +2; the irrigated turf has B-G near -70), 6 m apart, kept 2 m off mown grass; no penal ground (bushes only; course chat's call, 2026-10-31); drawn by the theme's desert_bush painter"
+  }
+}

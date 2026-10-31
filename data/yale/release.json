@@ -1,0 +1,54 @@
+{
+ "release": "data-yale",
+ "note": "build inputs not kept in git; `make fetch NAME=yale` puts them in place. The DEM (raw/ct2023_dem.tif) and the Overpass export (raw/overpass.geojson) are in git. Two lidar quadrants that touch the course (935675_sw, 930670_ne) had not arrived by the build; trees there come from the photo (trees_ortho).",
+ "files": [
+  {
+   "asset": "yale_naip.jpg",
+   "sha256": "ed07c5cd3a1b0e0dc5fde47eb1eb59c7fb8e4bf43409b37ba784f57fd1ca47ca",
+   "run": "python3 pipeline/intake.py ortho yale {file} 667800 4575100 669400 4577300 --out raw/ortho_naip.tif",
+   "outputs": {
+    "raw/ortho_naip.tif": "f5312dc723e60187e037a52d5b0ce096209c60e2f8939ce21bbbc6d4159ea1fb"
+   }
+  },
+  {
+   "asset": "USGS_LPC_CT_2023Statewide_C25_930675_ne.laz",
+   "sha256": "57fb36760e8126ed6c34d3c95a17714108d7bf4045dda47efac3c4e7c13acc52",
+   "run": "python3 pipeline/intake.py laz yale {file} --drop-extra --out raw/laz/yale_930675_ne.laz",
+   "outputs": {
+    "raw/laz/yale_930675_ne.laz": "0565343b43a9d560e2f496b75ff91a5c3ec11f835e4d5a8531630d7b2b39b32c"
+   }
+  },
+  {
+   "asset": "USGS_LPC_CT_2023Statewide_C25_930675_se.laz",
+   "sha256": "5009d00d921190ad4f76de1d4f924dc956a8e054c1d177fe9cb0b15ebd2cb535",
+   "run": "python3 pipeline/intake.py laz yale {file} --drop-extra --out raw/laz/yale_930675_se.laz",
+   "outputs": {
+    "raw/laz/yale_930675_se.laz": "ad091bda102434e5e2bad788d8aeeaea0b45f175dd26518102b93b74d4f2d923"
+   }
+  },
+  {
+   "asset": "USGS_LPC_CT_2023Statewide_C25_930680_se.laz",
+   "sha256": "864bf6673f3cdb9e4ffd0d69c6df717e83b48f6484060361004655373ec39cea",
+   "run": "python3 pipeline/intake.py laz yale {file} --drop-extra --out raw/laz/yale_930680_se.laz",
+   "outputs": {
+    "raw/laz/yale_930680_se.laz": "d85d415e13b104e6a50778efa8ddeacfe191d58fbc2e6a9d7c9f098e5f25a6d5"
+   }
+  },
+  {
+   "asset": "USGS_LPC_CT_2023Statewide_C25_935670_nw.laz",
+   "sha256": "62b05f7f3f723754cbedd17eaa8b2689cb439f053b37b4b1288774abb7d09dad",
+   "run": "python3 pipeline/intake.py laz yale {file} --drop-extra --out raw/laz/yale_935670_nw.laz",
+   "outputs": {
+    "raw/laz/yale_935670_nw.laz": "936d11e76e65c506e8a25df96627a91fca7a1699ff8b07053c69da61f62f6377"
+   }
+  },
+  {
+   "asset": "USGS_LPC_CT_2023Statewide_C25_935675_nw.laz",
+   "sha256": "fd23040451399e8cd35e7772bbfa5087d42732df9a81283d7164925c0c687725",
+   "run": "python3 pipeline/intake.py laz yale {file} --drop-extra --out raw/laz/yale_935675_nw.laz",
+   "outputs": {
+    "raw/laz/yale_935675_nw.laz": "8898d9c1f7fbc7dd1ae24dff5368149de9f0d5e404a0195ba5056247bc862c8e"
+   }
+  }
+ ]
+}

@@ -1,0 +1,99 @@
+{
+ "id": "burlington_cc",
+ "name": "Burlington Country Club",
+ "location": "Burlington, Chittenden County, Vermont",
+ "state": "VT",
+ "architects": "Donald Ross (1924); restored by Dr. Michael Hurdzan (1998) (GolfPass; unverified)",
+ "theme": "burlington_cc",
+ "epsg": 32618,
+ "osm_sources": [
+  "raw/overpass.geojson"
+ ],
+ "boundary_name": "Burlington Country Club",
+ "dtm": {
+  "path": "raw/vt_a23_dem_1m.tif",
+  "units": "m",
+  "source": "USGS 3DEP 1 m DEM, project VT_Statewide_A23 (tile USGS_1M_18_x64y493_VT_Statewide_A23, published 2026-03-31), fetched by the GitHub Actions workflow (release data-burlington_cc) and cut to the world + 100 m by pipeline/intake.py raster; EPSG:26918 (NAD83 / UTM 18N), NAVD88 m"
+ },
+ "laz": {
+  "paths": [
+   "raw/laz/*.laz"
+  ],
+  "classes": [
+   1
+  ],
+  "units": "m",
+  "source": "USGS 3DEP lidar VT_Statewide_A23 (workunit VT_Statewide_2_A23), tiles N2177E4445 and N2191E4445, flown 21 April 2023 (GPS times; leaf-off); class 1 (unclassified: vegetation and structures; the project delivers only classes 1, 2, 7, 18); NAD83(2011) / Vermont (EPSG:6589, m), NAVD88 (GEOID18) m; fetched by the GitHub Actions workflow (release data-burlington_cc), each tile clipped to the world + 100 m by pipeline/intake.py laz",
+  "label": "2023 USGS Vermont lidar, leaf-off",
+  "leaf_off": true
+ },
+ "world": {
+  "x0": 642905,
+  "y0": 4923487,
+  "width": 1280,
+  "height": 2048,
+  "note": "OSM course boundary (relation 158485) bbox 824 x 1,607 m in UTM 18N + ~120 m scenery, rounded out to whole 256 m chunks and centred: 1,280 m east-west (228 m each side), 2,048 m north-south (220 m each side; the 2,048 m limit)"
+ },
+ "tee_sets": [
+  {
+   "name": "Black",
+   "playable": true,
+   "rating": 71.6,
+   "slope": 134,
+   "total_yd": 6471
+  },
+  {
+   "name": "Blue",
+   "playable": false,
+   "rating": 63.3,
+   "slope": 111,
+   "total_yd": 4799
+  },
+  {
+   "name": "Gold",
+   "playable": true,
+   "rating": 69.8,
+   "slope": 132,
+   "total_yd": 6101
+  },
+  {
+   "name": "Grey",
+   "playable": false,
+   "rating": 67.9,
+   "slope": 128,
+   "total_yd": 5699
+  },
+  {
+   "name": "Green",
+   "playable": false,
+   "rating": 66.9,
+   "slope": 120,
+   "total_yd": 5497
+  },
+  {
+   "name": "Aqua",
+   "playable": false,
+   "rating": 64.5,
+   "slope": 114,
+   "total_yd": 5052
+  }
+ ],
+ "default_tee": "Black",
+ "scorecard_source": "GolfPass scorecard page (golfpass.com/courses/28945-burlington-country-club/scorecard-and-layout), read 2026-10-30: per-hole yards for Black, Gold, Grey, Green, Aqua and Blue, every row adds up to its total; men's ratings/slopes from 18Birdies (they agree with GolfPass except Grey 128 and Aqua, which GolfPass lists only for women). Stroke indexes from 18Birdies, which agree with the OSM hole lines; GolfPass and GolfingRecord give other indexes (open item). Black per hole also on 18Birdies and OpenGolfAPI (same). GolfingRecord's Blue 2 (368) is a typo (its Blue total is then 4,899 against 4,799 everywhere else). Unverified third-party card; the club's site was not reachable.",
+ "penalty_default": "red",
+ "driving_range_is_ob": true,
+ "trees_off_fairways_m": 2,
+ "wind_mph": {
+  "minMph": 1,
+  "maxMph": 10
+ },
+ "attribution": [
+  "Map data © OpenStreetMap contributors (ODbL)",
+  "Elevation and trees: U.S. Geological Survey 3D Elevation Program (2023 Vermont statewide lidar, VT_Statewide_A23)",
+  "Scorecard: GolfPass and 18Birdies (unverified)"
+ ],
+ "notes": "Course chat, 2026-10-30 (overnight; the developer asleep, calls logged in docs/courses/burlington_cc.md): tee sets Black (the tips) and Blue (developer's overnight rule: the back set and Blue; here Blue is the shortest set, 4,799 yd), default Blue. Standing defaults: every penalty area red, the OSM boundary as OB, trees from lidar. Wind 1-10 mph: inland New England is 1-9; one more for the hilltop above Lake Champlain (course chat's call).",
+ "roof_last_share": 0.85,
+ "tee_shot_margin_m": 2.0,
+ "tee_shot_margin_note": "course chat 2026-10-30: the game's tee-shot test found a 36.7 m crown 31 m out on 16 Black that s06b's own check passed by centimetres; 2 m extra vertical clearance lets s06b drop it (1 m was not enough) (logged in the report)"
+}

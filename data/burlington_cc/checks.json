@@ -1,0 +1,57 @@
+{
+ "note": "per-course settings for game/tests/unit/course_play.test.ts (the every-course checks); docs/COURSE_BUILD.md 8.2",
+ "wind_mph": [
+  1,
+  10
+ ],
+ "water": {
+  "penalty": "red",
+  "count": 5,
+  "ids": [
+   "channel_w1011484692"
+  ]
+ },
+ "tees": {
+  "sets": [
+   "Black",
+   "Gold"
+  ]
+ },
+ "tee_shot_clear": {
+  "sets": [
+   "Black",
+   "Gold"
+  ]
+ },
+ "no_tree_in_fairway": true,
+ "points": [
+  {
+   "x": 340,
+   "y": 1223,
+   "surface": "water",
+   "inside": true,
+   "why": "the brook between the pond by the 11th green and the pond in front of the 3rd and 12th tees (2.5 m strip along the OSM stream, developer 2026-10-31)"
+  },
+  {
+   "x": 454,
+   "y": 692,
+   "surface": "water",
+   "inside": true,
+   "why": "the pond along 13 and 15"
+  },
+  {
+   "x": 343.7,
+   "y": 1247.7,
+   "surface": "cartpath",
+   "inside": true,
+   "why": "the north cart-path bridge over the brook (developer 2026-10-31: the brook had covered it)"
+  },
+  {
+   "x": 338.9,
+   "y": 1217.3,
+   "surface": "cartpath",
+   "inside": true,
+   "why": "the south cart-path bridge over the brook (developer 2026-10-31)"
+  }
+ ]
+}

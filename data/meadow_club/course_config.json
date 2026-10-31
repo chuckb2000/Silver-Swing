@@ -1,0 +1,77 @@
+{
+ "id": "meadow_club",
+ "name": "Meadow Club",
+ "location": "Fairfax, Marin County, California",
+ "state": "CA",
+ "architects": "Alister MacKenzie with Robert Hunter (opened 1927; MacKenzie's first US design); restoration by Mike DeVries from 1999",
+ "theme": "meadow_club",
+ "epsg": 32610,
+ "osm_sources": [
+  "raw/overpass.geojson"
+ ],
+ "boundary_name": "Meadow Club",
+ "dtm": {
+  "path": "raw/usgs_dem_2018_1m_clip.tif",
+  "units": "m",
+  "source": "USGS 3DEP 1 m DEM, tile x53y421, project CA_NoCal_Wildfires_B5b_QL1_2018 (published 2020-01-14), UTM 10N NAD83, NAVD88 m; fetched by the GitHub Actions workflow (release data-meadow_club) and clipped to the world + 100 m by pipeline/intake.py raster"
+ },
+ "laz": {
+  "paths": [
+   "raw/laz/*.laz"
+  ],
+  "classes": [
+   1
+  ],
+  "units": "m",
+  "source": "USGS 3DEP lidar point cloud, project CA_NoCal_Wildfires_B5b_QL1_2018 (CA_NoCAL_3DEP_Supp_Funding_2018_D18), 1 km tiles in NAD83(2011) / Conus Albers, NAVD88 m; fetched by the GitHub Actions workflow (release data-meadow_club) from rockyweb.usgs.gov and clipped to the world + 100 m by pipeline/intake.py laz --classes 1 (the project has no vegetation classes: 1 unclassified, 2 ground, 7 noise); flown 3 January - 18 February 2019 (GPS times); returns more than 65 m above the ground dropped (max_height_m: birds and wires; the tallest crowns on the site are about 55 m)",
+  "label": "2018 USGS Northern California QL1 lidar",
+  "max_height_m": 65
+ },
+ "world": {
+  "x0": 532795,
+  "y0": 4201750,
+  "width": 1792,
+  "height": 1536,
+  "note": "OSM course boundary (way 44421428) bbox 1,498 x 1,088 m in UTM 10N + ~120 m scenery, whole 256 m chunks, centred: 1,792 m east-west (~147 m each side), 1,536 m north-south (~224 m each side)"
+ },
+ "tee_sets": [
+  {
+   "name": "Black",
+   "playable": true,
+   "rating": 72.8,
+   "slope": 136,
+   "total_yd": 6734
+  },
+  {
+   "name": "Blue",
+   "playable": true,
+   "rating": 72.0,
+   "slope": 135,
+   "total_yd": 6608
+  }
+ ],
+ "default_tee": "Black",
+ "scorecard_source": "Stymie (stymie.golf, Meadow Club, Fairfax), read 2026-10-30: every tee set per hole (Black, Blue, White, Gold, Red, Green, combos), par 71, men's stroke index, ratings/slopes; every row adds up to its printed total. Unverified third-party card (private club, no club card online). GolfPass (read the same day) has the same totals and pars but prints hole 12 as 374 in its rows (which then add to 6,726 / 6,600, not its own totals 6,734 / 6,608) and rates Black 72.7/137, Blue 72.2/134. Built: Black (the tips) and Blue (developer, 2026-10-30: the furthest-back tees and Blue); Blue is the default. White, Gold, Red and Green are in scorecard.csv but not built.",
+ "penalty_default": "red",
+ "driving_range_is_ob": true,
+ "trees_off_fairways_m": 2,
+ "wind_mph": {
+  "minMph": 1,
+  "maxMph": 9
+ },
+ "attribution": [
+  "Map data \u00a9 OpenStreetMap contributors (ODbL)",
+  "Elevation and trees: U.S. Geological Survey 3D Elevation Program (2018 Northern California QL1 lidar)",
+  "Imagery: USDA NAIP via USGS The National Map",
+  "Scorecard: Stymie (third-party)"
+ ],
+ "notes": "Course chat, 2026-10-30 (overnight, developer asleep): not scouted. Standing defaults: every penalty area red, the OSM boundary as OB, trees from lidar, trees standing in fairways dropped (trees_off_fairways_m 2). Tees: Black (tips) and Blue, Blue default (developer, 2026-10-30). Wind 1-9 mph: a sheltered inland valley in the Marin foothills (between the inland PNW and the bay bands). Theme meadow_club: Stanford's peninsula theme (the same Bay Area oak woodland, redwoods and golden summer hills) with the rough's F0-F2 turned straw for the native grass between the holes.",
+ "red_water_osm": [
+  "w480129896"
+ ],
+ "red_water_note": "the irrigation pond beside the 14th and 15th (OSM natural=water, untagged): a red penalty area (standing default)",
+ "fescue_areas": "proposed/native.geojson",
+ "fescue_note": "the unirrigated native grass between the holes, read from the NAIP photo by data/meadow_club/make_native.py (art only: straw-coloured rough; physics is rough)",
+ "range_art": "rough",
+ "range_art_note": "the practice range in the middle of the course (between 10, 12 and 18) is out of bounds; drawn as rough with OB stakes so it doesn't look playable (as at Oregon Golf Club, developer's call there)"
+}

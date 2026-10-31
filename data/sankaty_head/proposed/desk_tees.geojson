@@ -1,0 +1,8 @@
+{
+"type": "FeatureCollection",
+"name": "desk_tees",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+"features": [
+{ "type": "Feature", "properties": { "osm": "desk_tee_12", "kind": "tee", "tags": { "golf": "tee", "hole": "12", "tee_set": "Championship", "source": "tracing desk (developer 2026-10-31)", "note": "developer's mark (41 m2) grown to an 8 x 6 m pad on its centroid" } }, "geometry": { "type": "Polygon", "coordinates": [ [ [ -69.968636496268658, 41.271808637517701 ], [ -69.968680521418918, 41.271794679766657 ], [ -69.968724546550135, 41.271780721998937 ], [ -69.968696795691031, 41.271730899836342 ], [ -69.968652770586957, 41.271744857593255 ], [ -69.968608745463882, 41.27175881533352 ], [ -69.968636496268658, 41.271808637517701 ] ] ] } }
+]
+}

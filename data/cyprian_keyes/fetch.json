@@ -1,0 +1,85 @@
+{
+ "items": [
+  {
+   "name": "cyprian_keyes_overpass.geojson",
+   "osm_box": [
+    42.318,
+    -71.75,
+    42.358,
+    -71.696
+   ]
+  },
+  {
+   "name": "cyprian_keyes_club_home.html",
+   "url": "https://www.cypriankeyes.com/"
+  },
+  {
+   "name": "Championship-18-hole-Scorecard.jpg",
+   "url": "https://www.cypriankeyes.com/images/documents/Championship-18-hole-Scorecard.jpg"
+  },
+  {
+   "name": "cyprian_keyes_club_scorecards.html",
+   "url": "https://www.cypriankeyes.com/golf-course/scorecards"
+  },
+  {
+   "name": "cyprian_keyes_club_championship.html",
+   "url": "https://www.cypriankeyes.com/golf-course/18-hole-championship-course"
+  },
+  {
+   "name": "cyprian_keyes_club_history.html",
+   "url": "https://www.cypriankeyes.com/about-us/history-acclaim"
+  },
+  {
+   "name": "cyprian_keyes_club_par3.html",
+   "url": "https://www.cypriankeyes.com/golf-course/9-hole-par-3"
+  },
+  {
+   "name": "cyprian_keyes_club_logo_large.png",
+   "url": "https://www.cypriankeyes.com/images/default/logo-large.png"
+  },
+  {
+   "name": "19TBG745905.zip",
+   "url": "https://s3.us-east-1.amazonaws.com/download.massgis.digital.mass.gov/images/coq2023_15cm_jp2/19TBG745905.zip"
+  },
+  {
+   "name": "19TBG760905.zip",
+   "url": "https://s3.us-east-1.amazonaws.com/download.massgis.digital.mass.gov/images/coq2023_15cm_jp2/19TBG760905.zip"
+  },
+  {
+   "name": "19TBG745890.zip",
+   "url": "https://s3.us-east-1.amazonaws.com/download.massgis.digital.mass.gov/images/coq2023_15cm_jp2/19TBG745890.zip"
+  },
+  {
+   "name": "19TBG760890.zip",
+   "url": "https://s3.us-east-1.amazonaws.com/download.massgis.digital.mass.gov/images/coq2023_15cm_jp2/19TBG760890.zip"
+  },
+  {
+   "name": "massgis_coq2023_index.zip",
+   "url": "https://s3.us-east-1.amazonaws.com/download.massgis.digital.mass.gov/images/coq2023_15cm_jp2/COQ2023INDEX_POLY.zip"
+  },
+  {
+   "name": "USGS_1M_19_x27y470_MA_CentralEastern_2021_B21.tif",
+   "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/1m/Projects/MA_CentralEastern_2021_B21/TIFF/USGS_1M_19_x27y470_MA_CentralEastern_2021_B21.tif"
+  },
+  {
+   "name": "USGS_1M_19_x27y469_MA_CentralEastern_2021_B21.tif",
+   "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/1m/Projects/MA_CentralEastern_2021_B21/TIFF/USGS_1M_19_x27y469_MA_CentralEastern_2021_B21.tif"
+  },
+  {
+   "name": "USGS_LPC_MA_CentralEastern_2021_B21_19TBG274690.laz",
+   "url": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/MA_CentralEastern_2021_B21/MA_CentralEastern_1_2021/LAZ/USGS_LPC_MA_CentralEastern_2021_B21_19TBG274690.laz"
+  },
+  {
+   "name": "USGS_LPC_MA_CentralEastern_2021_B21_19TBG276690.laz",
+   "url": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/MA_CentralEastern_2021_B21/MA_CentralEastern_1_2021/LAZ/USGS_LPC_MA_CentralEastern_2021_B21_19TBG276690.laz"
+  },
+  {
+   "name": "USGS_LPC_MA_CentralEastern_2021_B21_19TBG274689.laz",
+   "url": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/MA_CentralEastern_2021_B21/MA_CentralEastern_1_2021/LAZ/USGS_LPC_MA_CentralEastern_2021_B21_19TBG274689.laz"
+  },
+  {
+   "name": "USGS_LPC_MA_CentralEastern_2021_B21_19TBG276689.laz",
+   "url": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/MA_CentralEastern_2021_B21/MA_CentralEastern_1_2021/LAZ/USGS_LPC_MA_CentralEastern_2021_B21_19TBG276689.laz"
+  }
+ ]
+}

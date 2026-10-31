@@ -1,0 +1,151 @@
+{
+ "add": [
+  {
+   "from": "proposed/clubhouse.geojson",
+   "ids": [
+    "w1032598389_building"
+   ],
+   "tags": {},
+   "reason": "the clubhouse is mapped golf=clubhouse + building=yes, which s01 reads as a golf feature, not a building; copied as a building (audit: 'add building=yes'), original dropped (as at Wannamoisett)"
+  },
+  {
+   "from": "proposed/channels_lidar.geojson",
+   "ids": [
+    "channel_w1032607403",
+    "channel_w1032607404",
+    "channel_w1032609010",
+    "channel_w1050129955",
+    "channel_w1050129961"
+   ],
+   "tags": {
+    "golf": "lateral_water_hazard",
+    "penalty": "red",
+    "flatten": "no"
+   },
+   "reason": "course chat 2026-10-31 (pending the developer): the streams OSM maps only as lines near holes 13, 15, 17 and 18 (the drainage that crosses the 17th between tee and green, through a wooded wetland swale on the NAIP photo) as red penalty areas from the DEM channel along them (pipeline/propose_channels.py; standing default: all water red); flatten=no keeps the falling bed"
+  }
+ ],
+ "drop": [
+  {
+   "osm": "w1032598389",
+   "reason": "replaced by its copy as a building (proposed/clubhouse.geojson)"
+  }
+ ],
+ "tags": [
+  {
+   "osm": "w1032402649",
+   "set": {
+    "hole": "5",
+    "tee_set": "Gold"
+   },
+   "reason": "course chat 2026-10-31: the 506 yd box in front of the Black box (527 yd) is Gold's (card 518; -2.3%); s06 put Gold on the Black box (+2.4%), leaving no distinct Gold tee"
+  },
+  {
+   "osm": "w1032403023",
+   "set": {
+    "hole": "6",
+    "tee_set": "Gold"
+   },
+   "reason": "course chat 2026-10-31: the large box at 139 yd (centroid; 371 m2) is the only box between the Black (172) and Green (110) boxes; card Gold 157 (GolfingRecord) or 146 (GolfPass). Without the tag s06 put Gold on the Black box (+9.4%). Pending the developer"
+  },
+  {
+   "osm": "w1032607409",
+   "set": {
+    "hole": "18",
+    "tee_set": "Gold"
+   },
+   "reason": "course chat 2026-10-31: the 389 yd box in front of the Black box (405 yd) is Gold's (card 398, -2.3%; GolfPass 379); s06 put Gold on the Black box"
+  },
+  {
+   "osm": "w1032396752",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "standing default (COURSE_BUILD 4.1): every penalty area red; OSM golf=water_hazard would export yellow"
+  },
+  {
+   "osm": "w1032400946",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "standing default (COURSE_BUILD 4.1): every penalty area red; OSM golf=water_hazard would export yellow"
+  },
+  {
+   "osm": "w1032402112",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "standing default (COURSE_BUILD 4.1): every penalty area red; OSM golf=water_hazard would export yellow"
+  },
+  {
+   "osm": "w1032402113",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "standing default (COURSE_BUILD 4.1): every penalty area red; OSM golf=water_hazard would export yellow"
+  },
+  {
+   "osm": "w1032402114",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "standing default (COURSE_BUILD 4.1): every penalty area red; OSM golf=water_hazard would export yellow"
+  },
+  {
+   "osm": "w1032591329",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "standing default (COURSE_BUILD 4.1): every penalty area red; OSM golf=water_hazard would export yellow"
+  },
+  {
+   "osm": "w1032598382",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "standing default (COURSE_BUILD 4.1): every penalty area red; OSM golf=water_hazard would export yellow"
+  },
+  {
+   "osm": "w1032598383",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "standing default (COURSE_BUILD 4.1): every penalty area red; OSM golf=water_hazard would export yellow"
+  },
+  {
+   "osm": "w1032599769",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "standing default (COURSE_BUILD 4.1): every penalty area red; OSM golf=water_hazard would export yellow"
+  },
+  {
+   "osm": "w1032602418",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "standing default (COURSE_BUILD 4.1): every penalty area red; OSM golf=water_hazard would export yellow"
+  },
+  {
+   "osm": "w1032607402",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "standing default (COURSE_BUILD 4.1): every penalty area red; OSM golf=water_hazard would export yellow"
+  },
+  {
+   "osm": "w1032607405",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "standing default (COURSE_BUILD 4.1): every penalty area red; OSM golf=water_hazard would export yellow"
+  },
+  {
+   "osm": "w673637228",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "standing default (COURSE_BUILD 4.1): every penalty area red; OSM golf=water_hazard would export yellow"
+  }
+ ]
+}
