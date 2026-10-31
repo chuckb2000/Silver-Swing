@@ -19,21 +19,92 @@
      -122.005553,
      37.020393
     ],
-    "list": true
+    "only": "CA_SantaCruzCounty_2020_A20"
    }
   },
   {
-   "name": "pasatiempo_lpc",
-   "tnm": {
-    "dataset": "lpc",
-    "bbox": [
-     -122.046435,
-     36.987605,
-     -122.005553,
-     37.020393
-    ],
-    "list": true
-   }
+   "name": "USGS_LPC_CA_SantaCruzCounty_2020_A20_112822.laz",
+   "url": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/CA_SantaCruzCounty_2020_A20/CA_SantaCruzCounty_2020/LAZ/USGS_LPC_CA_SantaCruzCounty_2020_A20_112822.laz"
+  },
+  {
+   "name": "USGS_LPC_CA_SantaCruzCounty_2020_A20_112825.laz",
+   "url": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/CA_SantaCruzCounty_2020_A20/CA_SantaCruzCounty_2020/LAZ/USGS_LPC_CA_SantaCruzCounty_2020_A20_112825.laz"
+  },
+  {
+   "name": "USGS_LPC_CA_SantaCruzCounty_2020_A20_112827.laz",
+   "url": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/CA_SantaCruzCounty_2020_A20/CA_SantaCruzCounty_2020/LAZ/USGS_LPC_CA_SantaCruzCounty_2020_A20_112827.laz"
+  },
+  {
+   "name": "USGS_LPC_CA_SantaCruzCounty_2020_A20_112830.laz",
+   "url": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/CA_SantaCruzCounty_2020_A20/CA_SantaCruzCounty_2020/LAZ/USGS_LPC_CA_SantaCruzCounty_2020_A20_112830.laz"
+  },
+  {
+   "name": "USGS_LPC_CA_SantaCruzCounty_2020_A20_115822.laz",
+   "url": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/CA_SantaCruzCounty_2020_A20/CA_SantaCruzCounty_2020/LAZ/USGS_LPC_CA_SantaCruzCounty_2020_A20_115822.laz"
+  },
+  {
+   "name": "USGS_LPC_CA_SantaCruzCounty_2020_A20_115825.laz",
+   "url": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/CA_SantaCruzCounty_2020_A20/CA_SantaCruzCounty_2020/LAZ/USGS_LPC_CA_SantaCruzCounty_2020_A20_115825.laz"
+  },
+  {
+   "name": "USGS_LPC_CA_SantaCruzCounty_2020_A20_115827.laz",
+   "url": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/CA_SantaCruzCounty_2020_A20/CA_SantaCruzCounty_2020/LAZ/USGS_LPC_CA_SantaCruzCounty_2020_A20_115827.laz"
+  },
+  {
+   "name": "USGS_LPC_CA_SantaCruzCounty_2020_A20_115830.laz",
+   "url": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/CA_SantaCruzCounty_2020_A20/CA_SantaCruzCounty_2020/LAZ/USGS_LPC_CA_SantaCruzCounty_2020_A20_115830.laz"
+  },
+  {
+   "name": "USGS_LPC_CA_SantaCruzCounty_2020_A20_117822.laz",
+   "url": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/CA_SantaCruzCounty_2020_A20/CA_SantaCruzCounty_2020/LAZ/USGS_LPC_CA_SantaCruzCounty_2020_A20_117822.laz"
+  },
+  {
+   "name": "USGS_LPC_CA_SantaCruzCounty_2020_A20_117825.laz",
+   "url": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/CA_SantaCruzCounty_2020_A20/CA_SantaCruzCounty_2020/LAZ/USGS_LPC_CA_SantaCruzCounty_2020_A20_117825.laz"
+  },
+  {
+   "name": "USGS_LPC_CA_SantaCruzCounty_2020_A20_117827.laz",
+   "url": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/CA_SantaCruzCounty_2020_A20/CA_SantaCruzCounty_2020/LAZ/USGS_LPC_CA_SantaCruzCounty_2020_A20_117827.laz"
+  },
+  {
+   "name": "USGS_LPC_CA_SantaCruzCounty_2020_A20_117830.laz",
+   "url": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/CA_SantaCruzCounty_2020_A20/CA_SantaCruzCounty_2020/LAZ/USGS_LPC_CA_SantaCruzCounty_2020_A20_117830.laz"
+  },
+  {
+   "name": "pasatiempo_naip_usgs_north.jpg",
+   "url": "https://imagery.nationalmap.gov/arcgis/rest/services/USGSNAIPImagery/ImageServer/exportImage?bbox=585637,4095590,587373,4096842&bboxSR=32610&imageSR=32610&size=2893,2087&format=jpg&f=image"
+  },
+  {
+   "name": "pasatiempo_naip_usda_north.tif",
+   "url": "https://gis.apfo.usda.gov/arcgis/rest/services/NAIP/USDA_CONUS_PRIME/ImageServer/exportImage?bbox=585637,4095590,587373,4096842&bboxSR=32610&imageSR=32610&size=2893,2087&format=tiff&f=image"
+  },
+  {
+   "name": "pasatiempo_naip_usgs_south.jpg",
+   "url": "https://imagery.nationalmap.gov/arcgis/rest/services/USGSNAIPImagery/ImageServer/exportImage?bbox=585637,4094338,587373,4095590&bboxSR=32610&imageSR=32610&size=2893,2087&format=jpg&f=image"
+  },
+  {
+   "name": "pasatiempo_naip_usda_south.tif",
+   "url": "https://gis.apfo.usda.gov/arcgis/rest/services/NAIP/USDA_CONUS_PRIME/ImageServer/exportImage?bbox=585637,4094338,587373,4095590&bboxSR=32610&imageSR=32610&size=2893,2087&format=tiff&f=image"
+  },
+  {
+   "name": "pasatiempo_naip_usgs_identify.json",
+   "url": "https://imagery.nationalmap.gov/arcgis/rest/services/USGSNAIPImagery/ImageServer/identify?geometry=%7B%22x%22%3A-122.026%2C%22y%22%3A37.004%2C%22spatialReference%22%3A%7B%22wkid%22%3A4326%7D%7D&geometryType=esriGeometryPoint&returnGeometry=false&returnCatalogItems=true&returnPixelValues=false&f=json"
+  },
+  {
+   "name": "pasatiempo_naip_usda_identify.json",
+   "url": "https://gis.apfo.usda.gov/arcgis/rest/services/NAIP/USDA_CONUS_PRIME/ImageServer/identify?geometry=%7B%22x%22%3A-122.026%2C%22y%22%3A37.004%2C%22spatialReference%22%3A%7B%22wkid%22%3A4326%7D%7D&geometryType=esriGeometryPoint&returnGeometry=false&returnCatalogItems=true&returnPixelValues=false&f=json"
+  },
+  {
+   "name": "pasatiempo_scorecard_page.html",
+   "url": "https://www.pasatiempo.com/golf/scorecard-and-local-rules"
+  },
+  {
+   "name": "pasatiempo_scorecard_1.jpg",
+   "url": "https://www.pasatiempo.com/images/uploads/20/scorecard_1__large.jpg"
+  },
+  {
+   "name": "pasatiempo_scorecard_4.jpg",
+   "url": "https://www.pasatiempo.com/images/uploads/20/scorecard_4__large.jpg"
   }
  ]
 }
