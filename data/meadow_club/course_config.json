@@ -15,6 +15,18 @@
   "units": "m",
   "source": "USGS 3DEP 1 m DEM, tile x53y421, project CA_NoCal_Wildfires_B5b_QL1_2018 (published 2020-01-14), UTM 10N NAD83, NAVD88 m; fetched by the GitHub Actions workflow (release data-meadow_club) and clipped to the world + 100 m by pipeline/intake.py raster"
  },
+ "laz": {
+  "paths": [
+   "raw/laz/*.laz"
+  ],
+  "classes": [
+   1
+  ],
+  "units": "m",
+  "source": "USGS 3DEP lidar point cloud, project CA_NoCal_Wildfires_B5b_QL1_2018 (CA_NoCAL_3DEP_Supp_Funding_2018_D18), 1 km tiles in NAD83(2011) / Conus Albers, NAVD88 m; fetched by the GitHub Actions workflow (release data-meadow_club) from rockyweb.usgs.gov and clipped to the world + 100 m by pipeline/intake.py laz --classes 1 (the project has no vegetation classes: 1 unclassified, 2 ground, 7 noise); flown 3 January - 18 February 2019 (GPS times); returns more than 65 m above the ground dropped (max_height_m: birds and wires; the tallest crowns on the site are about 55 m)",
+  "label": "2018 USGS Northern California QL1 lidar",
+  "max_height_m": 65
+ },
  "world": {
   "x0": 532795,
   "y0": 4201750,
@@ -48,7 +60,7 @@
   "maxMph": 9
  },
  "attribution": [
-  "Map data © OpenStreetMap contributors (ODbL)",
+  "Map data \u00a9 OpenStreetMap contributors (ODbL)",
   "Elevation and trees: U.S. Geological Survey 3D Elevation Program (2018 Northern California QL1 lidar)",
   "Imagery: USDA NAIP via USGS The National Map",
   "Scorecard: Stymie (third-party)"

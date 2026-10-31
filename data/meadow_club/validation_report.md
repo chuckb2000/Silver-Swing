@@ -19,7 +19,7 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 | 6 | 4 | Black | 454 | 452.6 | -1.4 | -0.3% | pass | 452.6 | -0.3% | pass |
 | 6 | 4 | Blue | 415 | 413.0 | -2.0 | -0.5% | pass | 413.0 | -0.5% | pass |
 | 7 | 4 | Black | 436 | 432.1 | -3.9 | -0.9% | pass | 432.1 | -0.9% | pass |
-| 7 | 4 | Blue | 417 | 411.1 | -5.9 | -1.4% | pass | 411.1 | -1.4% | pass |
+| 7 | 4 | Blue | 417 | 411.1 | -5.9 | -1.4% | pass | 410.7 | -1.5% | pass |
 | 8 | 3 | Black | 165 | 164.5 | -0.5 | -0.3% | pass | 164.5 | -0.3% | pass |
 | 8 | 3 | Blue | 165 | 164.5 | -0.5 | -0.3% | pass | 164.5 | -0.3% | pass |
 | 9 | 4 | Black | 464 | 464.2 | +0.2 | +0.1% | pass | 464.2 | +0.1% | pass |
@@ -42,7 +42,7 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 | 17 | 4 | Blue | 405 | 404.2 | -0.8 | -0.2% | pass | 404.2 | -0.2% | pass |
 | 18 | 4 | Black | 363 | 340.7 | -22.3 | -6.1% | flag | 354.0 | -2.5% | pass |
 | 18 | 4 | Blue | 363 | 340.7 | -22.3 | -6.1% | flag | 354.0 | -2.5% | pass |
-| **total** | 142 | | **13342** | **13152** | -190 | -1.4% | | **13233** | -0.8% | |
+| **total** | 142 | | **13342** | **13152** | -190 | -1.4% | | **13232** | -0.8% | |
 
 ## Open items
 
@@ -53,6 +53,7 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 
 - Hole 1 (Black): measured 469 yd from the tee-box centre vs 492 on the card (-4.7%); moved the virtual tee along the middle of the real tee polygon w686692593 (on its centre line, at least 2.5 m from its back and front) -> 479.7 yd (real 469.0 yd).
 - Hole 1 (Blue): measured 469 yd from the tee-box centre vs 492 on the card (-4.7%); moved the virtual tee along the middle of the real tee polygon w686692593 (on its centre line, at least 2.5 m from its back and front) -> 479.7 yd (real 469.0 yd).
+- Hole 7 (Blue): tee shot: a perfect drive at the middle of the fairway clipped a tree near the tee; moved 0.6 m along the middle of the real tee polygon w687681671 to the nearest clear spot -> 410.7 yd (real 411.1 yd).
 - Hole 11 (Black): measured 138 yd from the tee-box centre vs 152 on the card (-9.1%); moved the virtual tee along the middle of the real tee polygon w687640541 (on its centre line, at least 2.5 m from its back and front) -> 148.2 yd (real 138.2 yd).
 - Hole 11 (Blue): measured 138 yd from the tee-box centre vs 152 on the card (-9.1%); moved the virtual tee along the middle of the real tee polygon w687640541 (on its centre line, at least 2.5 m from its back and front) -> 148.2 yd (real 138.2 yd).
 - Hole 12 (Black): measured 369 yd from the tee-box centre vs 382 on the card (-3.4%); moved the virtual tee along the middle of the real tee polygon w687680605 (on its centre line, at least 2.5 m from its back and front) -> 372.5 yd (real 369.0 yd).
@@ -62,13 +63,13 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 - Hole 18 (Black): measured 341 yd from the tee-box centre vs 363 on the card (-6.1%); moved the virtual tee along the middle of the real tee polygon w687417941 (on its centre line, at least 2.5 m from its back and front) -> 354.0 yd (real 340.7 yd).
 - Hole 18 (Blue): measured 341 yd from the tee-box centre vs 363 on the card (-6.1%); moved the virtual tee along the middle of the real tee polygon w687417941 (on its centre line, at least 2.5 m from its back and front) -> 354.0 yd (real 340.7 yd).
 
-## Tree detection (OSM fallback (no lidar))
+## Tree detection (2018 USGS Northern California QL1 lidar)
 
-- 3939 trees detected in the world extent (0 inside the course), 2004 conifers / 1935 deciduous; median height 9.9 m, max 14.0 m.
-- Dropped: 0 tops on building footprints, 0 over the lake, 0 tiny crowns.
-- Dropped on playing surfaces (spec 5.4): 0 -> 
+- 19836 trees detected in the world extent (1914 inside the course), 2762 conifers / 17074 deciduous; median height 14.3 m, max 58.1 m.
+- Dropped: 238 tops on building footprints, 0 over the lake, 58 tiny crowns.
+- Dropped on playing surfaces (spec 5.4): 3 -> bunker w686693916 (19.6 m), bunker w686693916 (18.9 m), tee w686692593 (14.6 m)
 - OSM natural=tree points matched by a detected tree within 4 m: 0 of 0.
-- LOWER FIDELITY: no canopy raster. Trees are OSM natural=tree points plus a seeded Poisson-disk fill of OSM woods every 6 m; heights 6-14 m and type (50% conifer) are drawn at random, not measured.
+- Conifer vs deciduous is inferred from crown shape only (no leaf-off imagery); see build/trees_preview.png.
 
 # Green shaping checks
 

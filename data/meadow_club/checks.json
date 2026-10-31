@@ -1,0 +1,11 @@
+{
+ "note": "per-course settings for game/tests/unit/course_play.test.ts (the every-course checks); docs/COURSE_BUILD.md 8.2",
+ "wind_mph": [1, 9],
+ "water": {"penalty": "red", "min_count": 7},
+ "tees": {"sets": ["Black", "Blue"]},
+ "tee_shot_clear": {"sets": ["Black", "Blue"]},
+ "points": [
+  {"x": 1198.9, "y": 296.6, "surface": "water", "inside": true, "why": "the pond beside the 14th and 15th greens (red_water_osm)"},
+  {"x": 684.1, "y": 912.6, "ob": true, "why": "the practice range between the 10th, 12th and 18th is out of bounds (standing default; edits.json)"}
+ ]
+}
