@@ -27,32 +27,20 @@
    "url": "https://imagery.nationalmap.gov/arcgis/rest/services/USGSNAIPImagery/ImageServer/exportImage?bbox=532695,4201650,534687,4203386&bboxSR=32610&imageSR=32610&size=3320,2893&format=jpg&f=image"
   },
   {
-   "name": "USGS_LPC_CA_NoCAL_2018_w2286n1981.laz",
-   "url": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/CA_NoCAL_3DEP_Supp_Funding_2018_D18/CA_NoCal_Wildfires_B5b_QL1_2018/LAZ/USGS_LPC_CA_NoCAL_3DEP_Supp_Funding_2018_D18_w2286n1981.laz"
+   "name": "USGS_LPC_CA_NoCAL_2018_w2285n1981.laz",
+   "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/LPC/Projects/CA_NoCAL_3DEP_Supp_Funding_2018_D18/CA_NoCal_Wildfires_B5b_QL1_2018/LAZ/USGS_LPC_CA_NoCAL_3DEP_Supp_Funding_2018_D18_w2285n1981.laz"
   },
   {
    "name": "USGS_LPC_CA_NoCAL_2018_w2286n1982.laz",
-   "url": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/CA_NoCAL_3DEP_Supp_Funding_2018_D18/CA_NoCal_Wildfires_B5b_QL1_2018/LAZ/USGS_LPC_CA_NoCAL_3DEP_Supp_Funding_2018_D18_w2286n1982.laz"
+   "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/LPC/Projects/CA_NoCAL_3DEP_Supp_Funding_2018_D18/CA_NoCal_Wildfires_B5b_QL1_2018/LAZ/USGS_LPC_CA_NoCAL_3DEP_Supp_Funding_2018_D18_w2286n1982.laz"
   },
   {
    "name": "USGS_LPC_CA_NoCAL_2018_w2287n1981.laz",
-   "url": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/CA_NoCAL_3DEP_Supp_Funding_2018_D18/CA_NoCal_Wildfires_B5b_QL1_2018/LAZ/USGS_LPC_CA_NoCAL_3DEP_Supp_Funding_2018_D18_w2287n1981.laz"
+   "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/LPC/Projects/CA_NoCAL_3DEP_Supp_Funding_2018_D18/CA_NoCal_Wildfires_B5b_QL1_2018/LAZ/USGS_LPC_CA_NoCAL_3DEP_Supp_Funding_2018_D18_w2287n1981.laz"
   },
   {
-   "name": "USGS_LPC_CA_NoCAL_2018_w2287n1982.laz",
-   "url": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/CA_NoCAL_3DEP_Supp_Funding_2018_D18/CA_NoCal_Wildfires_B5b_QL1_2018/LAZ/USGS_LPC_CA_NoCAL_3DEP_Supp_Funding_2018_D18_w2287n1982.laz"
-  },
-  {
-   "name": "USGS_LPC_CA_NoCAL_2018_w2286n1980.laz",
-   "url": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/CA_NoCAL_3DEP_Supp_Funding_2018_D18/CA_NoCal_Wildfires_B5b_QL1_2018/LAZ/USGS_LPC_CA_NoCAL_3DEP_Supp_Funding_2018_D18_w2286n1980.laz"
-  },
-  {
-   "name": "USGS_LPC_CA_NoCAL_2018_w2285n1981.laz",
-   "url": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/CA_NoCAL_3DEP_Supp_Funding_2018_D18/CA_NoCal_Wildfires_B5b_QL1_2018/LAZ/USGS_LPC_CA_NoCAL_3DEP_Supp_Funding_2018_D18_w2285n1981.laz"
-  },
-  {
-   "name": "USGS_LPC_CA_NoCAL_2018_w2285n1982.laz",
-   "url": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/CA_NoCAL_3DEP_Supp_Funding_2018_D18/CA_NoCal_Wildfires_B5b_QL1_2018/LAZ/USGS_LPC_CA_NoCAL_3DEP_Supp_Funding_2018_D18_w2285n1982.laz"
+   "name": "USGS_LPC_CA_NoCAL_2018_w2287n1980.laz",
+   "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/LPC/Projects/CA_NoCAL_3DEP_Supp_Funding_2018_D18/CA_NoCal_Wildfires_B5b_QL1_2018/LAZ/USGS_LPC_CA_NoCAL_3DEP_Supp_Funding_2018_D18_w2287n1980.laz"
   }
  ]
 }
