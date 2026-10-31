@@ -1,0 +1,29 @@
+{
+ "note": "per-course settings for game/tests/unit/course_play.test.ts (the every-course checks); docs/COURSE_BUILD.md 8.2",
+ "wind_mph": [
+  1,
+  9
+ ],
+ "water": {
+  "penalty": "red"
+ },
+ "tees": {
+  "sets": [
+   "Blue",
+   "White"
+  ]
+ },
+ "tee_shot_clear": {
+  "sets": [
+   "Blue",
+   "White"
+  ]
+ },
+ "default_aim": {
+  "skip": [
+   2,
+   4
+  ],
+  "why": "hole 2 (dogleg left, 383 yd): the default driver aim at the OSM bend point (236 yd out) runs through the corner into the trees beyond it. Hole 4 (par 5, 500 yd): the default driver finishes in the OSM pond (w778877369) beside the landing area. Both are where the OSM hole line bends; a real tee shot takes less club. Open items for the developer (move the bend points or accept), course chat 2026-10-31"
+ }
+}
