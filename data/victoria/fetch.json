@@ -104,6 +104,26 @@
   {
    "name": "crd_contours.json",
    "url": "https://mapservices.crd.bc.ca/arcgis/rest/services/CRDcontours/MapServer?f=json"
+  },
+  {
+   "name": "hrdem_dtm_1m.tif",
+   "url": "https://datacube.services.geo.ca/ows/elevation?SERVICE=WCS&VERSION=1.1.1&REQUEST=GetCoverage&FORMAT=image/geotiff&IDENTIFIER=dtm&BOUNDINGBOX=477300,5361700,478550,5363200,urn:ogc:def:crs:EPSG::32610&GRIDBASECRS=urn:ogc:def:crs:EPSG::32610&GRIDOFFSETS=1,-1&GRIDORIGIN=477300,5363200"
+  },
+  {
+   "name": "hrdem_dsm_1m.tif",
+   "url": "https://datacube.services.geo.ca/ows/elevation?SERVICE=WCS&VERSION=1.1.1&REQUEST=GetCoverage&FORMAT=image/geotiff&IDENTIFIER=dsm&BOUNDINGBOX=477300,5361700,478550,5363200,urn:ogc:def:crs:EPSG::32610&GRIDBASECRS=urn:ogc:def:crs:EPSG::32610&GRIDOFFSETS=1,-1&GRIDORIGIN=477300,5363200"
+  },
+  {
+   "name": "crd_ortho2025_05m.jpg",
+   "url": "https://mapservices.crd.bc.ca/arcgis/rest/services/OrthoImagery2025/MapServer/export?bbox=477300,5361700,478550,5363200&bboxSR=32610&imageSR=32610&size=2500,3000&format=jpg&transparent=false&dpi=96&f=image"
+  },
+  {
+   "name": "wcs_caps.xml",
+   "url": "https://datacube.services.geo.ca/ows/elevation?service=wcs&request=GetCapabilities"
+  },
+  {
+   "name": "victoria_coastline.geojson",
+   "overpass": "[out:json][timeout:300];(way[\"natural\"=\"coastline\"](48.390,-123.335,48.445,-123.265);way[\"place\"=\"islet\"](48.390,-123.335,48.445,-123.265);way[\"place\"=\"island\"](48.390,-123.335,48.445,-123.265););out geom;"
   }
  ]
 }
