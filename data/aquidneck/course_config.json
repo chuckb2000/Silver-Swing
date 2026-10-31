@@ -1,0 +1,57 @@
+{
+ "id": "aquidneck",
+ "name": "The Aquidneck Club",
+ "location": "Portsmouth, Newport County, Rhode Island",
+ "state": "RI",
+ "architects": "Donald Steel and Tom Mackenzie (opened 2000 as the Carnegie Abbey Club; renamed The Aquidneck Club after its members bought it)",
+ "theme": "newport",
+ "epsg": 32619,
+ "osm_sources": [
+  "raw/overpass.geojson"
+ ],
+ "boundary_name": "The Aquidneck Club",
+ "dtm": {
+  "path": "raw/usgs_1m_x31y461_clip.tif",
+  "units": "m",
+  "source": "USGS 3DEP 1 m DEM, tile x31y461, project RI_Statewide_D22 (2022 Rhode Island statewide lidar), published 2024-01-26, UTM 19N NAD83, NAVD88 m; fetched by the GitHub Actions workflow (release data-aquidneck), clipped to the world + 100 m with pipeline/intake.py raster"
+ },
+ "world": {
+  "x0": 310395,
+  "y0": 4607497,
+  "width": 1536,
+  "height": 2048,
+  "note": "OSM course boundary (way 325263047) bbox 1,139 x 1,801 m in UTM 19N + scenery, whole 256 m chunks, centred: 1,536 m east-west (199 m each side), 2,048 m north-south (the 2,048 m limit: 123 m south and north)"
+ },
+ "tee_sets": [
+  {
+   "name": "Gold",
+   "playable": true,
+   "rating": 72.5,
+   "slope": 132,
+   "total_yd": 6675
+  },
+  {
+   "name": "Green",
+   "playable": true,
+   "rating": 70.6,
+   "slope": 128,
+   "total_yd": 6325
+  }
+ ],
+ "default_tee": "Green",
+ "scorecard_source": "GolfPass (golfpass.com/courses/28943-the-aquidneck-club/scorecard-and-layout), read 2026-10-31: seven sets per hole (Gold, Gold/Green, Green, Green/White, White, Yellow, Red), par 71, men's and women's stroke index (column handicap_w); every row adds up to the tee table's totals. Men's ratings from the same table (Gold 72.5/132, Green 70.6/128). OpenGolfAPI (from OSM) has the same Gold row and men's index. 18Birdies has the same Gold row and totals but a different men's stroke index (open item). Unverified: the club publishes no card. Built: Gold (the tips) and Green (one step forward; the card has no Blue; developer, 2026-10-30). Other sets in scorecard.csv, not built.",
+ "driving_range_is_ob": true,
+ "penalty_default": "red",
+ "trees_off_fairways_m": 2,
+ "wind_mph": {
+  "minMph": 2,
+  "maxMph": 12
+ },
+ "attribution": [
+  "Map data © OpenStreetMap contributors (ODbL)",
+  "Elevation and trees: U.S. Geological Survey 3D Elevation Program (RI_Statewide_D22, 2022 Rhode Island statewide lidar)",
+  "Photo for checking: USDA NAIP via the USGS National Map",
+  "Scorecard: GolfPass (unverified)"
+ ],
+ "notes": "Course chat, 2026-10-31 (developer asleep, standing defaults and the developer's overnight calls): every penalty area red, OSM boundary as OB, driving range OB, trees from lidar, Gold + Green built with Green the default, wind 2-12 mph (Narragansett Bay shore). Theme newport (the same island and the same coastal mix of pine, maple and oak; Newport Country Club's theme)."
+}

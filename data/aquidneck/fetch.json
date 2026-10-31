@@ -85,6 +85,10 @@
   {
    "name": "naip_service_info.json",
    "url": "https://imagery.nationalmap.gov/arcgis/rest/services/USGSNAIPImagery/ImageServer?f=pjson"
+  },
+  {
+   "name": "aquidneck_coastline.geojson",
+   "overpass": "[out:json][timeout:180][bbox:41.580,-71.290,41.622,-71.240];(way[\"natural\"=\"coastline\"];);out geom;"
   }
  ]
 }
