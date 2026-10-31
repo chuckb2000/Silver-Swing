@@ -72,6 +72,8 @@ export const DAILY_ROSTER: Readonly<Record<string, string>> = {
   strawberry_farms: '2026-10-26',
   // landed 2026-10-26 (pipeline/land.py)
   presidio: '2026-10-27',
+  // landed 2026-10-31 (pipeline/land.py)
+  victoria: '2026-11-01',
 };
 
 /**
