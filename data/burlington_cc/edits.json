@@ -33,15 +33,22 @@
    "reason": "the clubhouse is tagged golf=clubhouse + building=yes, which s01 files under the golf key (not drawn, not an obstruction): copied as a building"
   },
   {
-   "from": "proposed/channels_lidar.geojson",
+   "from": "proposed/brook.geojson",
    "ids": [
     "channel_w1011484692"
    ],
    "tags": {
-    "flatten": "no",
-    "approved": "pending"
+    "flatten": "no"
    },
-   "reason": "course chat 2026-10-30, pending the developer's approval: the 64 m brook (OSM stream line w1011484692) between the pond by the 11th green and the pond in front of the 3rd and 12th tees is only a line in OSM; the lidar DEM shows its channel (pipeline/propose_channels.py: about 8 m wide, 0.8 m deep). Red like every penalty area (standing default); flatten=no keeps the bed's fall between the two ponds"
+   "reason": "the 64 m brook (OSM stream line w1011484692) between the pond by the 11th green and the pond in front of the 3rd and 12th tees, only a line in OSM: a 2.5 m strip along the line with the cart paths and their two bridges kept clear (data/burlington_cc/make_brook.py). Developer 2026-10-31: a tiny little creek with bridges over it (the 8 m lidar channel from propose_channels.py covered both bridges). Red like every penalty area; flatten=no keeps the bed's fall"
+  },
+  {
+   "from": "proposed/brook.geojson",
+   "ids": [
+    "bridge_north",
+    "bridge_south"
+   ],
+   "reason": "developer 2026-10-31: two cart-path bridges cross the brook; OSM's paths stop at each bank, so these join the facing path ends (make_brook.py) and are cart path (free relief), not water"
   }
  ],
  "tags": [

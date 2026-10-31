@@ -7,79 +7,66 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 | hole | par | tee set | card yd | measured yd | diff yd | diff % | status | adjusted yd | adj. diff % | adj. status |
 |---|---|---|---|---|---|---|---|---|---|---|
 | 1 | 4 | Black | 386 | 383.0 | -3.0 | -0.8% | pass | 383.0 | -0.8% | pass |
-| 1 | 4 | Blue | 307 | 307.4 | +0.4 | +0.1% | pass | 307.4 | +0.1% | pass |
+| 1 | 4 | Gold | 368 | 366.7 | -1.3 | -0.4% | pass | 366.7 | -0.4% | pass |
 | 2 | 4 | Black | 336 | 323.0 | -13.0 | -3.9% | flag | 327.7 | -2.5% | pass |
-| 2 | 4 | Blue | 268 | 264.3 | -3.7 | -1.4% | pass | 264.3 | -1.4% | pass |
+| 2 | 4 | Gold | 326 | 323.0 | -3.0 | -0.9% | pass | 323.0 | -0.9% | pass |
 | 3 | 3 | Black | 186 | 189.1 | +3.1 | +1.7% | pass | 189.1 | +1.7% | pass |
-| 3 | 3 | Blue | 97 | 99.0 | +2.0 | +2.1% | pass | 99.0 | +2.1% | pass |
+| 3 | 3 | Gold | 168 | 170.0 | +2.0 | +1.2% | pass | 170.0 | +1.2% | pass |
 | 4 | 4 | Black | 382 | 384.1 | +2.1 | +0.6% | pass | 384.1 | +0.6% | pass |
-| 4 | 4 | Blue | 293 | 292.3 | -0.7 | -0.2% | pass | 292.3 | -0.2% | pass |
+| 4 | 4 | Gold | 344 | 335.5 | -8.5 | -2.5% | pass | 335.5 | -2.5% | pass |
 | 5 | 5 | Black | 490 | 493.5 | +3.5 | +0.7% | pass | 493.5 | +0.7% | pass |
-| 5 | 5 | Blue | 409 | 412.4 | +3.4 | +0.8% | pass | 412.4 | +0.8% | pass |
+| 5 | 5 | Gold | 476 | 477.7 | +1.7 | +0.4% | pass | 477.7 | +0.4% | pass |
 | 6 | 4 | Black | 341 | 336.9 | -4.1 | -1.2% | pass | 336.9 | -1.2% | pass |
-| 6 | 4 | Blue | 255 | 249.0 | -6.0 | -2.4% | pass | 249.0 | -2.4% | pass |
+| 6 | 4 | Gold | 311 | 307.0 | -4.0 | -1.3% | pass | 307.0 | -1.3% | pass |
 | 7 | 5 | Black | 562 | 564.6 | +2.6 | +0.5% | pass | 564.6 | +0.5% | pass |
-| 7 | 5 | Blue | 405 | 409.9 | +4.9 | +1.2% | pass | 409.9 | +1.2% | pass |
+| 7 | 5 | Gold | 516 | 510.6 | -5.4 | -1.0% | pass | 510.6 | -1.0% | pass |
 | 8 | 3 | Black | 198 | 177.4 | -20.6 | -10.4% | FAIL | 193.1 | -2.5% | pass |
-| 8 | 3 | Blue | 116 | 114.8 | -1.2 | -1.1% | pass | 114.8 | -1.1% | pass |
+| 8 | 3 | Gold | 185 | 177.4 | -7.6 | -4.1% | flag | 180.5 | -2.5% | pass |
 | 9 | 4 | Black | 366 | 366.9 | +0.9 | +0.2% | pass | 366.9 | +0.2% | pass |
-| 9 | 4 | Blue | 260 | 258.1 | -1.9 | -0.7% | pass | 258.8 | -0.5% | pass |
+| 9 | 4 | Gold | 340 | 342.4 | +2.4 | +0.7% | pass | 342.4 | +0.7% | pass |
 | 10 | 3 | Black | 214 | 210.5 | -3.5 | -1.6% | pass | 210.5 | -1.6% | pass |
-| 10 | 3 | Blue | 130 | 130.4 | +0.4 | +0.3% | pass | 130.4 | +0.3% | pass |
+| 10 | 3 | Gold | 195 | 195.7 | +0.7 | +0.4% | pass | 195.7 | +0.4% | pass |
 | 11 | 4 | Black | 325 | 322.8 | -2.2 | -0.7% | pass | 322.8 | -0.7% | pass |
-| 11 | 4 | Blue | 261 | 256.4 | -4.6 | -1.8% | pass | 256.4 | -1.8% | pass |
+| 11 | 4 | Gold | 304 | 298.9 | -5.1 | -1.7% | pass | 298.9 | -1.7% | pass |
 | 12 | 4 | Black | 440 | 435.1 | -4.9 | -1.1% | pass | 435.1 | -1.1% | pass |
-| 12 | 4 | Blue | 342 | 355.5 | +13.5 | +3.9% | flag | 353.7 | +3.4% | flag |
+| 12 | 4 | Gold | 428 | 426.8 | -1.2 | -0.3% | pass | 426.8 | -0.3% | pass |
 | 13 | 4 | Black | 410 | 406.7 | -3.3 | -0.8% | pass | 406.7 | -0.8% | pass |
-| 13 | 4 | Blue | 248 | 248.6 | +0.6 | +0.2% | pass | 248.6 | +0.2% | pass |
+| 13 | 4 | Gold | 400 | 406.7 | +6.7 | +1.7% | pass | 406.7 | +1.7% | pass |
 | 14 | 3 | Black | 154 | 153.3 | -0.7 | -0.5% | pass | 153.3 | -0.5% | pass |
-| 14 | 3 | Blue | 95 | 94.6 | -0.4 | -0.4% | pass | 94.6 | -0.4% | pass |
+| 14 | 3 | Gold | 134 | 144.5 | +10.5 | +7.9% | flag | 144.5 | +7.9% | flag |
 | 15 | 4 | Black | 416 | 422.2 | +6.2 | +1.5% | pass | 422.2 | +1.5% | pass |
-| 15 | 4 | Blue | 354 | 364.8 | +10.8 | +3.1% | flag | 362.8 | +2.5% | pass |
+| 15 | 4 | Gold | 387 | 387.7 | +0.7 | +0.2% | pass | 387.7 | +0.2% | pass |
 | 16 | 4 | Black | 382 | 391.6 | +9.6 | +2.5% | pass | 379.5 | -0.7% | pass |
-| 16 | 4 | Blue | 287 | 290.5 | +3.5 | +1.2% | pass | 290.5 | +1.2% | pass |
+| 16 | 4 | Gold | 364 | 391.6 | +27.6 | +7.6% | flag | 373.0 | +2.5% | pass |
 | 17 | 4 | Black | 372 | 368.1 | -3.9 | -1.1% | pass | 368.1 | -1.1% | pass |
-| 17 | 4 | Blue | 267 | 268.4 | +1.4 | +0.5% | pass | 268.4 | +0.5% | pass |
+| 17 | 4 | Gold | 358 | 368.1 | +10.1 | +2.8% | pass | 368.1 | +2.8% | pass |
 | 18 | 5 | Black | 511 | 505.9 | -5.1 | -1.0% | pass | 505.9 | -1.0% | pass |
-| 18 | 5 | Blue | 405 | 405.5 | +0.5 | +0.1% | pass | 405.5 | +0.1% | pass |
-| **total** | 142 | | **11270** | **11256** | -14 | -0.1% | | **11262** | -0.1% | |
+| 18 | 5 | Gold | 497 | 505.9 | +8.9 | +1.8% | pass | 505.9 | +1.8% | pass |
+| **total** | 142 | | **12572** | **12571** | -1 | -0.0% | | **12564** | -0.1% | |
 
 ## Open items
 
 1. Hole 1: no golf=pin on its green; the centre pin is the green's centre (proposal).
-2. Hole 1: the OSM hole line starts 53 m from the Blue tee box (w1011553257), and only that box matches the card; the line was probably drawn from another tee. Measured from the Blue box through the line's bend points.
-3. Hole 2: no golf=pin on its green; the centre pin is the green's centre (proposal).
-4. Hole 2: the OSM hole line starts 62 m from the Blue tee box (w1011015404), and only that box matches the card; the line was probably drawn from another tee. Measured from the Blue box through the line's bend points.
-5. Hole 3: no golf=pin on its green; the centre pin is the green's centre (proposal).
-6. Hole 3: the OSM hole line starts 64 m from the Blue tee box (w1011023303), and only that box matches the card; the line was probably drawn from another tee. Measured from the Blue box through the line's bend points.
-7. Hole 4: no golf=pin on its green; the centre pin is the green's centre (proposal).
-8. Hole 5: no golf=pin on its green; the centre pin is the green's centre (proposal).
-9. Hole 5: the OSM hole line starts 65 m from the Blue tee box (w1011569870), and only that box matches the card; the line was probably drawn from another tee. Measured from the Blue box through the line's bend points.
-10. Hole 6: no golf=pin on its green; the centre pin is the green's centre (proposal).
-11. Hole 6: the OSM hole line starts 59 m from the Blue tee box (w1011574543), and only that box matches the card; the line was probably drawn from another tee. Measured from the Blue box through the line's bend points.
-12. Hole 7: no golf=pin on its green; the centre pin is the green's centre (proposal).
-13. Hole 7 (Black): tee box w1011574555 assigned by the developer (tagged hole=7, tee_set=Black in edited/course.geojson).
-14. Hole 7: the OSM hole line starts 103 m from the Blue tee box (w1011574550), and only that box matches the card; the line was probably drawn from another tee. Measured from the Blue box through the line's bend points.
-15. Hole 8: no golf=pin on its green; the centre pin is the green's centre (proposal).
-16. Hole 8: the OSM hole line starts 66 m from the Blue tee box (w1011576371), and only that box matches the card; the line was probably drawn from another tee. Measured from the Blue box through the line's bend points.
-17. Hole 9: no golf=pin on its green; the centre pin is the green's centre (proposal).
-18. Hole 9: the OSM hole line starts 75 m from the Blue tee box (w1011576376), and only that box matches the card; the line was probably drawn from another tee. Measured from the Blue box through the line's bend points.
-19. Hole 10: no golf=pin on its green; the centre pin is the green's centre (proposal).
-20. Hole 10: the OSM hole line starts 60 m from the Blue tee box (w1011015401), and only that box matches the card; the line was probably drawn from another tee. Measured from the Blue box through the line's bend points.
-21. Hole 11: no golf=pin on its green; the centre pin is the green's centre (proposal).
-22. Hole 12: no golf=pin on its green; the centre pin is the green's centre (proposal).
-23. Hole 12 (Blue): measured 354 yd vs card 342 (+3.4%) even with the virtual tee at the best spot in its box; accepted for play.
-24. Hole 12: the OSM hole line starts 74 m from the Blue tee box (w1011559508), and only that box matches the card; the line was probably drawn from another tee. Measured from the Blue box through the line's bend points.
-25. Hole 13: no golf=pin on its green; the centre pin is the green's centre (proposal).
-26. Hole 13: the OSM hole line starts 143 m from the Blue tee box (w1011569850), and only that box matches the card; the line was probably drawn from another tee. Measured from the Blue box through the line's bend points.
-27. Hole 14: no golf=pin on its green; the centre pin is the green's centre (proposal).
-28. Hole 15: no golf=pin on its green; the centre pin is the green's centre (proposal).
-29. Hole 16: no golf=pin on its green; the centre pin is the green's centre (proposal).
-30. Hole 16: the OSM hole line starts 80 m from the Blue tee box (w1011569872), and only that box matches the card; the line was probably drawn from another tee. Measured from the Blue box through the line's bend points.
-31. Hole 17: no golf=pin on its green; the centre pin is the green's centre (proposal).
-32. Hole 17: the OSM hole line starts 90 m from the Blue tee box (w1011574537), and only that box matches the card; the line was probably drawn from another tee. Measured from the Blue box through the line's bend points.
-33. Hole 18: no golf=pin on its green; the centre pin is the green's centre (proposal).
-34. Hole 18: the OSM hole line starts 92 m from the Blue tee box (w1011574548), and only that box matches the card; the line was probably drawn from another tee. Measured from the Blue box through the line's bend points.
+2. Hole 2: no golf=pin on its green; the centre pin is the green's centre (proposal).
+3. Hole 3: no golf=pin on its green; the centre pin is the green's centre (proposal).
+4. Hole 4: no golf=pin on its green; the centre pin is the green's centre (proposal).
+5. Hole 5: no golf=pin on its green; the centre pin is the green's centre (proposal).
+6. Hole 6: no golf=pin on its green; the centre pin is the green's centre (proposal).
+7. Hole 7: no golf=pin on its green; the centre pin is the green's centre (proposal).
+8. Hole 7 (Black): tee box w1011574555 assigned by the developer (tagged hole=7, tee_set=Black in edited/course.geojson).
+9. Hole 8: no golf=pin on its green; the centre pin is the green's centre (proposal).
+10. Hole 9: no golf=pin on its green; the centre pin is the green's centre (proposal).
+11. Hole 10: no golf=pin on its green; the centre pin is the green's centre (proposal).
+12. Hole 11: no golf=pin on its green; the centre pin is the green's centre (proposal).
+13. Hole 12: no golf=pin on its green; the centre pin is the green's centre (proposal).
+14. Hole 13: no golf=pin on its green; the centre pin is the green's centre (proposal).
+15. Hole 14: no golf=pin on its green; the centre pin is the green's centre (proposal).
+16. Hole 14 (Gold): no mapped tee box within 8% of the card; the tee is the start point of the OSM hole line (145 yd). The Gold tee box is not in OSM - trace it to confirm.
+17. Hole 14 (Gold): measured 145 yd vs card 134 (+7.9%) even with the virtual tee at the best spot in its box; accepted for play.
+18. Hole 15: no golf=pin on its green; the centre pin is the green's centre (proposal).
+19. Hole 16: no golf=pin on its green; the centre pin is the green's centre (proposal).
+20. Hole 17: no golf=pin on its green; the centre pin is the green's centre (proposal).
+21. Hole 18: no golf=pin on its green; the centre pin is the green's centre (proposal).
 
 ## Open items and the course chat's calls (Burlington Country Club)
 
@@ -106,10 +93,9 @@ Built overnight 2026-10-30/31 while the developer was asleep ("make the calls yo
 
 - Hole 2 (Black): measured 323 yd from the tee-box centre vs 336 on the card (-3.9%); moved the virtual tee along the middle of the real tee polygon w1011556684 (on its centre line, at least 2.5 m from its back and front) -> 327.7 yd (real 323.0 yd).
 - Hole 8 (Black): measured 177 yd from the tee-box centre vs 198 on the card (-10.4%); moved the virtual tee along the middle of the real tee polygon w1011576372 (on its centre line, at least 2.5 m from its back and front) -> 193.1 yd (real 177.4 yd).
-- Hole 9 (Blue): tee shot: a perfect drive at the middle of the fairway clipped a tree near the tee; moved 0.7 m along the middle of the real tee polygon w1011576376 to the nearest clear spot -> 258.8 yd (real 258.1 yd).
-- Hole 12 (Blue): measured 355 yd from the tee-box centre vs 342 on the card (+3.9%); moved the virtual tee along the middle of the real tee polygon w1011559508 (on its centre line, at least 2.5 m from its back and front) -> 353.7 yd (real 355.5 yd).
-- Hole 15 (Blue): measured 365 yd from the tee-box centre vs 354 on the card (+3.1%); moved the virtual tee along the middle of the real tee polygon w1011569860 (on its centre line, at least 2.5 m from its back and front) -> 362.8 yd (real 364.8 yd).
+- Hole 8 (Gold): measured 177 yd from the tee-box centre vs 185 on the card (-4.1%); moved the virtual tee along the middle of the real tee polygon w1011576372 (on its centre line, at least 2.5 m from its back and front) -> 180.5 yd (real 177.4 yd).
 - Hole 16 (Black): tee shot: a perfect drive at the middle of the fairway clipped a tree near the tee; moved 11.2 m along the middle of the real tee polygon w1011569874 to the nearest clear spot -> 379.5 yd (real 391.6 yd).
+- Hole 16 (Gold): measured 392 yd from the tee-box centre vs 364 on the card (+7.6%); moved the virtual tee along the middle of the real tee polygon w1011569874 (on its centre line, at least 2.5 m from its back and front) -> 373.0 yd (real 391.6 yd).
 
 ## Tree detection (2023 USGS Vermont lidar, leaf-off)
 
@@ -221,5 +207,5 @@ Built overnight 2026-10-30/31 while the developer was asleep ("make the calls yo
 - waterway w1125769333 (stream): 14 m of it within 30 m of a hole line isn't in a penalty area (pipeline/propose_channels.py makes one; or say it's dry)
 - waterway w1125769335 (stream): 31 m of it within 30 m of a hole line isn't in a penalty area (pipeline/propose_channels.py makes one; or say it's dry)
 
-Totals: 60 tees, 21 greens, 22 fairways, 59 bunkers, 5 water hazards, 0 pins, 16 cart paths, 82 OSM tree points.
+Totals: 60 tees, 21 greens, 22 fairways, 59 bunkers, 5 water hazards, 0 pins, 18 cart paths, 82 OSM tree points.
 
