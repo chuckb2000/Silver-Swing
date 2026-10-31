@@ -78,7 +78,7 @@
    "total_yd": 5052
   }
  ],
- "default_tee": "Gold",
+ "default_tee": "Black",
  "scorecard_source": "GolfPass scorecard page (golfpass.com/courses/28945-burlington-country-club/scorecard-and-layout), read 2026-10-30: per-hole yards for Black, Gold, Grey, Green, Aqua and Blue, every row adds up to its total; men's ratings/slopes from 18Birdies (they agree with GolfPass except Grey 128 and Aqua, which GolfPass lists only for women). Stroke indexes from 18Birdies, which agree with the OSM hole lines; GolfPass and GolfingRecord give other indexes (open item). Black per hole also on 18Birdies and OpenGolfAPI (same). GolfingRecord's Blue 2 (368) is a typo (its Blue total is then 4,899 against 4,799 everywhere else). Unverified third-party card; the club's site was not reachable.",
  "penalty_default": "red",
  "driving_range_is_ob": true,
