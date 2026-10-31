@@ -231,6 +231,22 @@
   {
    "name": "se_d22_14_links.txt",
    "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/LPC/Projects/OR_SouthEast_D22/OR_SouthEast_14_D22/0_file_download_links.txt"
+  },
+  {
+   "name": "s3_lpc_blmfires.xml",
+   "url": "https://prd-tnm.s3.amazonaws.com/?list-type=2&delimiter=/&prefix=StagedProducts/Elevation/LPC/Projects/OR_2023OLC_BLM_Fires_C25/"
+  },
+  {
+   "name": "blmfires_links.txt",
+   "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/LPC/Projects/OR_2023OLC_BLM_Fires_C25/0_file_download_links.txt"
+  },
+  {
+   "name": "OR_NorthEastGaps_D24_links.txt",
+   "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/LPC/Projects/OR_NorthEastGaps_D24/0_file_download_links.txt"
+  },
+  {
+   "name": "OR_Western_D23_links.txt",
+   "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/LPC/Projects/OR_Western_D23/0_file_download_links.txt"
   }
  ]
 }
