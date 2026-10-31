@@ -1,0 +1,13 @@
+{
+ "note": "per-course settings for game/tests/unit/course_play.test.ts (the every-course checks); docs/COURSE_BUILD.md 8.2",
+ "wind_mph": [2, 12],
+ "yardage": {"max": {"8": 0.2}, "why": "8 Gold (233 yd on the card) plays from the back of the only mapped box, about 189 yd: no Gold box is found in OSM, the 2022 DEM or NAIP (open item)"},
+ "tees": {"sets": ["Gold", "Green"]},
+ "tee_shot_clear": {"sets": ["Gold", "Green"]},
+ "centre_line_clear": {},
+ "inside_boundary": true,
+ "points": [
+  {"x": 444, "y": 1770, "surface": "water", "inside": true, "why": "the pond between the 17th tees and green is a red penalty area (OSM natural=water only; red_water_osm)"},
+  {"x": 800, "y": 300, "ob": true, "why": "the practice ground (the boundary's southern lobe) is out of bounds"}
+ ]
+}

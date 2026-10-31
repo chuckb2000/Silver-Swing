@@ -70,7 +70,8 @@
  "range_art_note": "the practice ground (the boundary's southern lobe) is out of bounds; drawn as rough with OB stakes so it does not look playable (as at Oregon Golf Club and Meadow Club)",
  "red_water_osm": [
   "w208859700",
-  "w940801562"
+  "w940801562",
+  "sea"
  ],
- "red_water_osm_note": "natural=water/wetland inside the boundary with no golf tag, which played as rough: the pond between the 17th tees and green (w208859700) and the wetland at (610, 1309) local (w940801562); red penalty areas (standing default)"
+ "red_water_osm_note": "natural=water/wetland inside the boundary with no golf tag, which played as rough: the pond between the 17th tees and green (w208859700) and the wetland at (610, 1309) local (w940801562); red penalty areas (standing default); Narragansett Bay (sea, from the coastline, propose_sea.py)"
 }

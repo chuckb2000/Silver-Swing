@@ -24,6 +24,14 @@
    ],
    "tags": {},
    "reason": "OSM maps no driving range, but the course boundary's southern lobe is the practice ground on NAIP (range tee, covered bays, target greens, short-game area, car park). Out of bounds by the standing default: the boundary south of y = 540 m local (35 m south of the 1st tee boxes)."
+  },
+  {
+   "from": "proposed/sea.geojson",
+   "ids": [
+    "sea"
+   ],
+   "tags": {},
+   "reason": "Narragansett Bay, west of 17 and 18: OSM maps it only as a coastline way (fetched as aquidneck_coastline.geojson and merged into raw/overpass.geojson), so it drew as plain ground. Built by pipeline/propose_sea.py; a red penalty area (red_water_osm)."
   }
  ],
  "tags": [

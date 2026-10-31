@@ -89,6 +89,34 @@
   {
    "name": "lpc_392500_192500.laz",
    "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/LPC/Projects/RI_Statewide_D22/RI_Statewide_1_D22/LAZ/USGS_LPC_RI_Statewide_D22_392500_192500.laz"
+  },
+  {
+   "name": "lpc_tnm_390000_190000",
+   "tnm": {
+    "dataset": "lpc",
+    "bbox": [
+     -71.284,
+     41.586,
+     -71.246,
+     41.617
+    ],
+    "only": "390000_190000",
+    "max": 2
+   }
+  },
+  {
+   "name": "lpc_tnm_392500_190000",
+   "tnm": {
+    "dataset": "lpc",
+    "bbox": [
+     -71.284,
+     41.586,
+     -71.246,
+     41.617
+    ],
+    "only": "392500_190000",
+    "max": 2
+   }
   }
  ]
 }
