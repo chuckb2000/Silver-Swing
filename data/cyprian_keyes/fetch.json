@@ -14,6 +14,22 @@
    "url": "https://www.cypriankeyes.com/"
   },
   {
+   "name": "cyprian_keyes_club_scorecards.html",
+   "url": "https://www.cypriankeyes.com/golf-course/scorecards"
+  },
+  {
+   "name": "cyprian_keyes_club_championship.html",
+   "url": "https://www.cypriankeyes.com/golf-course/18-hole-championship-course"
+  },
+  {
+   "name": "cyprian_keyes_club_history.html",
+   "url": "https://www.cypriankeyes.com/about-us/history-acclaim"
+  },
+  {
+   "name": "cyprian_keyes_club_par3.html",
+   "url": "https://www.cypriankeyes.com/golf-course/9-hole-par-3"
+  },
+  {
    "name": "massgis_coq2023_index.zip",
    "url": "https://s3.us-east-1.amazonaws.com/download.massgis.digital.mass.gov/images/coq2023_15cm_jp2/COQ2023INDEX_POLY.zip"
   },
