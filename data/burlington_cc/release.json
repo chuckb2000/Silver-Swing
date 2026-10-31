@@ -1,0 +1,22 @@
+{
+ "release": "data-burlington_cc",
+ "note": "Build inputs fetched by the GitHub Actions workflow (fetch.json). In git: raw/overpass.geojson, raw/osm.geojson and raw/vt_a23_dem_1m.tif (7 MB clip). Here: the Overpass export, the 1 m DEM tile, and the lidar tiles (clipped to the world by pipeline/intake.py laz).",
+ "files": [
+  {
+   "asset": "burlington_cc_overpass.geojson",
+   "sha256": "cc2e83d062704d97c2fd6fbe600a6ac3a606a97fdb9f3d3e7f510dadf4c4fba7",
+   "run": "python3 pipeline/intake.py osm burlington_cc {file}",
+   "outputs": {
+    "raw/overpass.geojson": "a53c15a46e485a3ce197fd9ef99d6e87f1a41e8e811a5f867b5bb269539c8a0e"
+   }
+  },
+  {
+   "asset": "USGS_1M_18_x64y493_VT_Statewide_A23.tif",
+   "sha256": "32a8b75a34ab931131353ba2f62819b219becad2107ff3e7a78318522abb2c05",
+   "run": "python3 pipeline/intake.py raster burlington_cc {file} --out raw/vt_a23_dem_1m.tif",
+   "outputs": {
+    "raw/vt_a23_dem_1m.tif": "a0225853e7f0857e2db7bb2c9af6eb37c30bdbc596d8ffe8d4e3c62265da0300"
+   }
+  }
+ ]
+}

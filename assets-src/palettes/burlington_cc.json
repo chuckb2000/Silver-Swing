@@ -1,0 +1,67 @@
+{
+  "name": "Burlington CC (Vermont hardwoods in the fall)",
+  "note": "Course theme palette (<= 32 colours; same keys as pnw.json plus F0-F2). Burlington Country Club, Vermont: a 1924 Donald Ross parkland course on the hill above Lake Champlain, tree-lined by northern hardwoods (sugar and red maple, paper birch) with white pine and hemlock, drawn at Vermont's peak foliage. The turf stays green: fairways and greens as bayside, a deeper, cooler mown parkland rough (F0-F2: no native grass); the woods' floor is maple leaf litter (G0-G2: woods and out-of-bounds woods, warmer and redder than George Wright's russet); white sand; Champlain blue-grey water; grey paths; dark slate roofs. Trees in assets-src/trees_burlington_cc.py. Shadows are a 35% black overlay on top of these. Course chat, 2026-10-30.",
+  "colors": {
+    "G0": "#3a2015",
+    "G1": "#57301b",
+    "G2": "#714022",
+    "G3": "#36783d",
+    "G4": "#428c43",
+    "G5": "#4f9f4a",
+    "G6": "#5db052",
+    "G7": "#6dc05b",
+    "G8": "#7ecd68",
+    "G9": "#a2dd85",
+    "L0": "#536e3b",
+    "L1": "#627f41",
+    "L2": "#74924b",
+    "S0": "#cbc0a2",
+    "S1": "#eee7d0",
+    "S2": "#f9f6ea",
+    "W0": "#22445a",
+    "W1": "#2f5d78",
+    "W2": "#6891a8",
+    "K0": "#26272d",
+    "K1": "#53545c",
+    "K2": "#7a7b83",
+    "K3": "#b1ab9c",
+    "K4": "#d8d2c3",
+    "B0": "#43301f",
+    "B1": "#684830",
+    "B2": "#8a5e40",
+    "R0": "#4a5160",
+    "WH": "#f6f6f2",
+    "F0": "#3d6936",
+    "F1": "#4a7a3c",
+    "F2": "#598b45"
+  },
+  "lut": {
+    "rough": [
+      "F0",
+      "F1",
+      "F2",
+      "F2"
+    ]
+  },
+  "minimap": {
+    "rough": "#4a7a3c",
+    "woods": "#7a3e1e",
+    "ob_woods": "#6a3519",
+    "water": "#2f5d78",
+    "ob_water": "#2f5d78"
+  },
+  "minimap_trees": {
+    "conifer": [
+      "#15332a",
+      "#2a5a40"
+    ],
+    "deciduous": [
+      "#8a2e14",
+      "#e08a2a"
+    ]
+  },
+  "trees": {
+    "conifer": "trees_burlington_cc:conifer",
+    "deciduous": "trees_burlington_cc:deciduous"
+  }
+}
