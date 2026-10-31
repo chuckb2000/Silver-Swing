@@ -102,6 +102,8 @@ export const DAILY_ROSTER: Readonly<Record<string, string>> = {
   meadow_club: '2026-11-01',
   // landed 2026-10-31 (pipeline/land.py)
   yale: '2026-11-01',
+  // landed 2026-10-31 (pipeline/land.py)
+  pasatiempo: '2026-11-01',
 };
 
 /**
