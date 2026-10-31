@@ -84,8 +84,25 @@ edits["tags"].append({"osm": "w780645565", "set": {"par": "5"},
                       "reason": "the card (Stymie, 18Birdies, GolfPass, OpenGolfAPI) makes 9 a par 5 of 532 yd (Kidd); the OSM line measures 524 yd; OSM's par=4 is a tagging error"})
 
 # 5. Water inside the boundary: red (standing default).
-for oid in ["w676305928", "w895748322", "w1091654144"]:
+for oid in ["w676305928", "w895748322"]:
     edits["tags"].append({"osm": oid, "set": {"penalty": "red"}, "reason": "all water red (standing default, COURSE_BUILD.md 4.1)"})
+
+# 6. The large irregular sandy areas OSM maps as golf=bunker (519-2,463 m2, every one over
+#    450 m2; the bunkers proper are 16-420 m2): pumice waste areas with bunchgrass and shrubs
+#    growing through them (OSIP 2024), the "waste areas" the club put in for native areas
+#    (golfcoursearchitecture.net, Tetherow improvements). Waste sand, a general area
+#    (config waste_sand; CLAUDE.md waste sand).
+for i, r in gu[(gu.kind == "bunker")].iterrows():
+    if r.geometry.area > 450 and inside_share(r.geometry) > 0.5:
+        edits["tags"].append({"osm": r.osm, "set": {"sand": "waste"},
+                              "reason": f"pumice waste area ({round(r.geometry.area)} m2, irregular, grass and shrubs through it in the OSIP 2024 photo), not a bunker: waste sand"})
+
+# 7. The stream OSM maps from the hole 6 pond north-east past the hole 4 tees (two
+#    golf=lateral_water_hazard lines, 68 and 55 m, and a 101 m2 pool between them): the
+#    OSIP 2024 photo shows a dry, shrubby channel with no water, and a line has no width
+#    to play as a penalty area. Dropped; listed as an open item.
+for oid in ["w1091654143", "w1091654145", "w1091654144"]:
+    edits["drop"].append({"osm": oid, "reason": "mapped stream / pool by the hole 4 tees: dry, shrub-filled channel in the OSIP 2024 photo; a line has no width to play as a penalty area (open item)"})
 
 (C / "proposed").mkdir(exist_ok=True)
 gpd.GeoDataFrame(retag, geometry="geometry", crs=4326).assign(tags=lambda d: d.tags.apply(json.dumps)).to_file(

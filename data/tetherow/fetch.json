@@ -18,10 +18,6 @@
    "url": "https://gis.dogami.oregon.gov/arcgis/rest/services/lidar/CANOPY_HEIGHT_MODEL_MOSAIC/ImageServer/exportImage?bbox=630400,4875630,632400,4877880&bboxSR=32610&imageSR=32610&size=2000,2250&format=tiff&pixelType=F32&noData=-9999&interpolation=RSP_BilinearInterpolation&f=image"
   },
   {
-   "name": "dogami_hh_ft.tif",
-   "url": "https://gis.dogami.oregon.gov/arcgis/rest/services/lidar/HIGHEST_HIT_MOSAIC/ImageServer/exportImage?bbox=630400,4875630,632400,4877880&bboxSR=32610&imageSR=32610&size=2000,2250&format=tiff&pixelType=F32&noData=-9999&interpolation=RSP_BilinearInterpolation&f=image"
-  },
-  {
    "name": "usgs_dem_m.tif",
    "url": "https://elevation.nationalmap.gov/arcgis/rest/services/3DEPElevation/ImageServer/exportImage?bbox=630400,4875630,632400,4877880&bboxSR=32610&imageSR=32610&size=2000,2250&format=tiff&pixelType=F32&noData=-9999&interpolation=RSP_BilinearInterpolation&f=image"
   },
@@ -50,28 +46,12 @@
    "url": "https://gis.wrd.state.or.us/server/rest/services/tax/Tax_Lots_Public_View_WGS84/MapServer?f=pjson"
   },
   {
-   "name": "wrd_taxlots_l0.geojson",
-   "url": "https://gis.wrd.state.or.us/server/rest/services/tax/Tax_Lots_Public_View_WGS84/MapServer/0/query?where=1%3D1&geometry=-121.3715,44.0235,-121.3490,44.0410&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=*&returnGeometry=true&outSR=4326&f=geojson"
+   "name": "wrd_taxlots_l2.geojson",
+   "url": "https://gis.wrd.state.or.us/server/rest/services/tax/Tax_Lots_Public_View_WGS84/MapServer/2/query?where=1%3D1&geometry=-121.3715,44.0235,-121.3490,44.0410&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=*&returnGeometry=true&outSR=4326&f=geojson"
   },
   {
-   "name": "wrd_taxlots_l1.geojson",
+   "name": "wrd_taxlot_roads.geojson",
    "url": "https://gis.wrd.state.or.us/server/rest/services/tax/Tax_Lots_Public_View_WGS84/MapServer/1/query?where=1%3D1&geometry=-121.3715,44.0235,-121.3490,44.0410&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=*&returnGeometry=true&outSR=4326&f=geojson"
-  },
-  {
-   "name": "odf_taxlots_info.json",
-   "url": "https://gis.odf.oregon.gov/ags1/rest/services/WebMercator/StatewideTaxLots/MapServer?f=pjson"
-  },
-  {
-   "name": "odf_taxlots_l0.geojson",
-   "url": "https://gis.odf.oregon.gov/ags1/rest/services/WebMercator/StatewideTaxLots/MapServer/0/query?where=1%3D1&geometry=-121.3715,44.0235,-121.3490,44.0410&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=*&returnGeometry=true&outSR=4326&f=geojson"
-  },
-  {
-   "name": "deschutes_trow_info.json",
-   "url": "https://services2.arcgis.com/McQ0OlIABe29rJJy/ArcGIS/rest/services/Taxlots_with_Right_of_Way_Public/FeatureServer?f=pjson"
-  },
-  {
-   "name": "deschutes_trow_l0.geojson",
-   "url": "https://services2.arcgis.com/McQ0OlIABe29rJJy/ArcGIS/rest/services/Taxlots_with_Right_of_Way_Public/FeatureServer/0/query?where=1%3D1&geometry=-121.3715,44.0235,-121.3490,44.0410&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=*&returnGeometry=true&outSR=4326&f=geojson"
   }
  ]
 }

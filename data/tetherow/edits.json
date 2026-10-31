@@ -200,11 +200,67 @@
    "reason": "all water red (standing default, COURSE_BUILD.md 4.1)"
   },
   {
-   "osm": "w1091654144",
+   "osm": "w754093488",
    "set": {
-    "penalty": "red"
+    "sand": "waste"
    },
-   "reason": "all water red (standing default, COURSE_BUILD.md 4.1)"
+   "reason": "pumice waste area (1810 m2, irregular, grass and shrubs through it in the OSIP 2024 photo), not a bunker: waste sand"
+  },
+  {
+   "osm": "w754095427",
+   "set": {
+    "sand": "waste"
+   },
+   "reason": "pumice waste area (1241 m2, irregular, grass and shrubs through it in the OSIP 2024 photo), not a bunker: waste sand"
+  },
+  {
+   "osm": "w754096950",
+   "set": {
+    "sand": "waste"
+   },
+   "reason": "pumice waste area (2463 m2, irregular, grass and shrubs through it in the OSIP 2024 photo), not a bunker: waste sand"
+  },
+  {
+   "osm": "w754123988",
+   "set": {
+    "sand": "waste"
+   },
+   "reason": "pumice waste area (1376 m2, irregular, grass and shrubs through it in the OSIP 2024 photo), not a bunker: waste sand"
+  },
+  {
+   "osm": "w754124090",
+   "set": {
+    "sand": "waste"
+   },
+   "reason": "pumice waste area (930 m2, irregular, grass and shrubs through it in the OSIP 2024 photo), not a bunker: waste sand"
+  },
+  {
+   "osm": "w754127075",
+   "set": {
+    "sand": "waste"
+   },
+   "reason": "pumice waste area (1019 m2, irregular, grass and shrubs through it in the OSIP 2024 photo), not a bunker: waste sand"
+  },
+  {
+   "osm": "w754131533",
+   "set": {
+    "sand": "waste"
+   },
+   "reason": "pumice waste area (519 m2, irregular, grass and shrubs through it in the OSIP 2024 photo), not a bunker: waste sand"
+  },
+  {
+   "osm": "w754389937",
+   "set": {
+    "sand": "waste"
+   },
+   "reason": "pumice waste area (604 m2, irregular, grass and shrubs through it in the OSIP 2024 photo), not a bunker: waste sand"
+  },
+  {
+   "osm": "w754687875",
+   "set": {
+    "sand": "waste"
+   },
+   "reason": "pumice waste area (620 m2, irregular, grass and shrubs through it in the OSIP 2024 photo), not a bunker: waste sand"
   }
  ],
  "drop": [
@@ -763,6 +819,18 @@
   {
    "osm": "w754338806",
    "reason": "replaced by its tee copy tee_w754338806"
+  },
+  {
+   "osm": "w1091654143",
+   "reason": "mapped stream / pool by the hole 4 tees: dry, shrub-filled channel in the OSIP 2024 photo; a line has no width to play as a penalty area (open item)"
+  },
+  {
+   "osm": "w1091654145",
+   "reason": "mapped stream / pool by the hole 4 tees: dry, shrub-filled channel in the OSIP 2024 photo; a line has no width to play as a penalty area (open item)"
+  },
+  {
+   "osm": "w1091654144",
+   "reason": "mapped stream / pool by the hole 4 tees: dry, shrub-filled channel in the OSIP 2024 photo; a line has no width to play as a penalty area (open item)"
   }
  ]
 }
