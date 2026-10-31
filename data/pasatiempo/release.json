@@ -1,0 +1,22 @@
+{
+ "release": "data-pasatiempo",
+ "note": "build inputs from the GitHub Actions fetch workflow (data/pasatiempo/fetch.json, release data-pasatiempo). The Overpass export and the clipped DEM are also committed in raw/ (small), so `make fetch NAME=pasatiempo` only restores a missing one; the lidar tiles are clipped one by one into raw/laz/ (not in git).",
+ "files": [
+  {
+   "asset": "pasatiempo_overpass.geojson",
+   "sha256": "c0ea9e8d07b752e714d07fe80c57b80d9bcab2bae5e888e936a58853390de23b",
+   "run": "python3 pipeline/intake.py osm pasatiempo {file}",
+   "outputs": {
+    "raw/overpass.geojson": "392f9b01c67d76a80820a3b0f75316b724780dfc023ac292b211ac48840a1fe7"
+   }
+  },
+  {
+   "asset": "USGS_1M_10_x58y410_CA_SantaCruzCounty_2020_A20.tif",
+   "sha256": "944184b0436b09537ec67abf70486dad7489a90c43eb4d0f20669fb839b9e785",
+   "run": "python3 pipeline/intake.py raster pasatiempo {file} --out raw/USGS_1M_pasatiempo_2020.tif",
+   "outputs": {
+    "raw/USGS_1M_pasatiempo_2020.tif": "5d70b10da2866ff186d1603a5c8f4e010981c3fc073243c4bde1817c883793e0"
+   }
+  }
+ ]
+}

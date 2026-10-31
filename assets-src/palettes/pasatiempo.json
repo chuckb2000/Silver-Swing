@@ -1,0 +1,54 @@
+{
+  "name": "Pasatiempo (Santa Cruz hills: Monterey pine and cypress, oaks, white sand, golden barrancas)",
+  "note": "Course theme palette (<= 32 colours; same keys as pnw.json plus F0-F2 for the rough). Pasatiempo Golf Club, Santa Cruz CA, in the hills ~4 km above Monterey Bay: firm, warm, slightly yellow-green summer fairways; newly rebuilt bentgrass greens (G8-G9); a mid-olive rough; MacKenzie's flashed bunkers in bright near-white sand (S0-S2, whiter than the peninsula's cream); dark pine and cypress duff under the trees (G0-G2); and off the course the golden-tan summer grass of the barranca banks and hillsides (L0-L2, the out-of-bounds ground); a shaded, dark creek. From published descriptions (the scouting's theme notes: 'glistening white sand', cypress-lined fairways, summer-dry hills) and NAIP; no club imagery used. Trees in assets-src/trees_pasatiempo.py: Monterey pine, coast redwood and eucalyptus; coast live oak and Monterey cypress. Shadows are a 35% black overlay on top of these.",
+  "colors": {
+    "G0": "#1b2a17",
+    "G1": "#27391c",
+    "G2": "#344c24",
+    "G3": "#46702f",
+    "G4": "#518937",
+    "G5": "#5f9a3e",
+    "G6": "#6eaa46",
+    "G7": "#80ba50",
+    "G8": "#8fca5f",
+    "G9": "#b5df8a",
+    "L0": "#9a8248",
+    "L1": "#b39b5b",
+    "L2": "#cbb472",
+    "S0": "#bdb8aa",
+    "S1": "#e9e6dc",
+    "S2": "#fbfaf4",
+    "W0": "#22382f",
+    "W1": "#30493f",
+    "W2": "#6b877b",
+    "K0": "#26272d",
+    "K1": "#53545c",
+    "K2": "#7a7b83",
+    "K3": "#b3aa97",
+    "K4": "#d9d1bf",
+    "B0": "#46301f",
+    "B1": "#6d4a31",
+    "B2": "#8c5a40",
+    "R0": "#5a5550",
+    "WH": "#f6f6f2",
+    "F0": "#4a6630",
+    "F1": "#587a38",
+    "F2": "#688c41"
+  },
+  "lut": {
+    "rough": [
+      "F0",
+      "F1",
+      "F2",
+      "F2"
+    ]
+  },
+  "minimap": {
+    "ob": "#b39b5b",
+    "rough": "#587a38"
+  },
+  "trees": {
+    "conifer": "trees_pasatiempo:conifer",
+    "deciduous": "trees_pasatiempo:deciduous"
+  }
+}

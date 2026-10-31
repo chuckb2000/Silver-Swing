@@ -1,0 +1,7 @@
+{
+ "note": "per-course settings for course_play.test.ts (Pasatiempo, overnight build 2026-10-31)",
+ "yardage": {"max": {"18 White": 0.23}, "why": "18 White: OSM maps no White box on the par-3 18th (card 145 yd); it plays from the line start, 177 yd. Accepted overnight (validation_report.md open items); the developer decides."},
+ "wind_mph": [2, 10],
+ "water": {"count": 2, "ids": ["channel_w42855499", "channel_w265532264"]},
+ "tee_shot_clear": {"sets": ["Gold", "White"]}
+}
