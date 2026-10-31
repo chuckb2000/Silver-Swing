@@ -53,7 +53,8 @@ Test counts on the branch are in the pull request.
     range east of hole 1. Roads inside the boundary are cart paths.
 -   **Trees:** 22,773 from the 2020 lidar (1,258 inside the boundary); 1,517 crowns
     the 2022 photo doesn't show dropped (`trees_need_ortho`), 618 tops on mapped
-    buildings, 9 in bunkers and pools; power lines taken out first (`remove_wires`).
+    buildings, 9 in bunkers and pools, and 2 with no crown on the photo (`drop_trees`: one in
+    the 4/5 fairway, one over the 10th green); power lines taken out first (`remove_wires`).
     None more than 2 m inside a fairway (`trees_off_fairways_m`), and every tee shot
     at the middle of the fairway clears the trees. Types from crown shape only; the theme draws them as Monterey
     pine, redwood, eucalyptus, coast live oak and Monterey cypress.
@@ -108,8 +109,9 @@ where each has its facts, options and a recommendation.
 6.  The barrancas on 10/18 and 13-16 red (the card makes 18 yellow) (item 9); the
     11th's barranca not drawn (no data) (item 10).
 7.  The mown strip east of hole 1 is the practice range, out of bounds (item 11).
-8.  The photo check against the 2022 NAIP (item 13), trees up to 76 m (item 14).
-9.  Card hole 16, rotating with 15, 18 and 3; theme and logo (item 19).
+8.  The photo check against the 2022 NAIP (item 13), trees up to 76 m (item 14), two
+    phantom trees removed on 4/5 and 10 (item 18).
+9.  Card hole 16, rotating with 15, 18 and 3; theme and logo (item 20).
 
 ## New pipeline keys or theme
 

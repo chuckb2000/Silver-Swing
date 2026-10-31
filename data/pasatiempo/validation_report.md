@@ -77,8 +77,9 @@ Built 2026-10-30/31 by two course chats while the developer was away. The develo
 15. **Roofs read as trees.** The lidar has no vegetation classes (class 1 holds trees and buildings) and OSM maps few of the houses round the course; s05 drops 618 tops on mapped buildings and the photo check most of the rest, but some unmapped roofs outside the boundary may still carry a tree. Scenery only. Recommendation: accept.
 16. **Power lines** cross 6 and 17 (club's local rule): `remove_wires` takes 118 wire pieces (7.7 km) out of the canopy model before the tree search.
 17. **Greens:** OSM's greens and bunkers may predate the 2023-24 rebuild of every green and bunker; no photo after the rebuild is in the data. The robot rounds and `pins.test.ts` pass on them. Recommendation: playtest; trace changes later if a newer photo shows them.
-18. **Wind 2-10 mph** (a "California coast, inland hills" band, as at Stanford).
-19. **Theme `pasatiempo` and logo** (a footbridge over a barranca with a flag on the far bank; original, not the club's emblem): developer to look. **Course card:** hole 16, rotating with 15, 18 and 3 (course chat's pick).
+18. **Trees in fairways and by the greens** (course chat, checked hole by hole over the 2022 photo): two lidar "trees" with no crown on the photo were removed (`drop_trees`): a 13 m one in the fairway shared by 4 and 5 and a 9 m one over the front-left edge of the 10th green. The rest that reach a fairway edge or overhang a green are real on the photo: right of the 5th green, north of the 12th green, left of the 13th green, behind the 15th and 16th greens, on the 13th and 17th fairway edges, and the barranca woods short of the 11th and 18th greens. The large tree behind the 15th green may be one of the 2023-24 removals. Recommendation: keep; remove the 15th's if a newer photo shows it gone.
+19. **Wind 2-10 mph** (a "California coast, inland hills" band, as at Stanford).
+20. **Theme `pasatiempo` and logo** (a footbridge over a barranca with a flag on the far bank; original, not the club's emblem): developer to look. **Course card:** hole 16, rotating with 15, 18 and 3 (course chat's pick).
 
 ## Playability adjustments
 
@@ -98,7 +99,7 @@ Built 2026-10-30/31 by two course chats while the developer was away. The develo
 
 ## Tree detection (2020 USGS Santa Cruz County lidar)
 
-- 22773 trees detected in the world extent (1258 inside the course), 4499 conifers / 18274 deciduous; median height 12.2 m, max 76.1 m.
+- 22771 trees detected in the world extent (1256 inside the course), 4499 conifers / 18272 deciduous; median height 12.2 m, max 76.1 m.
 - Dropped: 618 tops on building footprints, 0 over the lake, 200 tiny crowns.
 - Dropped on playing surfaces (spec 5.4): 9 -> pool w1211505707 (11.9 m), pool w1211505707 (11.1 m), bunker w1018843124 (4.9 m), pool w1211505707 (10.6 m), bunker w1041957630 (11.0 m), bunker w1041760181 (12.9 m), bunker w1041819909 (12.0 m), bunker w1041814058 (43.9 m), bunker w1041814058 (16.8 m)
 - OSM natural=tree points matched by a detected tree within 4 m: 52 of 120.
