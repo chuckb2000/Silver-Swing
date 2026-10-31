@@ -88,6 +88,8 @@ export const DAILY_ROSTER: Readonly<Record<string, string>> = {
   rancho_san_joaquin: '2026-11-01',
   // landed 2026-10-31 (pipeline/land.py)
   tetherow: '2026-11-01',
+  // landed 2026-10-31 (pipeline/land.py)
+  spruce_peak: '2026-11-01',
 };
 
 /**
