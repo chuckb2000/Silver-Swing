@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <title>Meadow Club - Concept 1: The Oak-Leaf Bunker</title>
+  <!-- the turf the bunker is cut into -->
+  <path d="M2.6 17.2 C2.2 9.4 7.6 3.4 15.4 2.8 C22.6 2.4 29.2 7.6 29.4 14.8 C29.6 22.8 24.4 29.2 16.4 29.4 C8.8 29.6 3 24.6 2.6 17.2 Z" fill="#4c7b2c"/>
+  <path d="M2.6 17.2 C2.2 9.4 7.6 3.4 15.4 2.8 C20.4 2.5 24.8 4.6 27.4 8.2 C19 7.6 9.6 11.4 4.4 23 C3.3 21.2 2.7 19.3 2.6 17.2 Z" fill="#6c9b3c"/>
+  <!-- the sand: a valley oak leaf, round lobes either side of the rib -->
+  <circle cx="15.26" cy="22.18" r="2.90" fill="#d3bd86"/><circle cx="19.77" cy="17.95" r="3.00" fill="#d3bd86"/><circle cx="23.02" cy="13.14" r="2.30" fill="#d3bd86"/>
+  <path d="M9.28 22.92 L11.51 18.43 L15.74 13.92 L21.03 9.47 L24.06 8.14 L22.73 11.17 L18.28 16.46 L13.77 20.69 Z" fill="#d3bd86"/>
+  <circle cx="10.02" cy="16.94" r="2.90" fill="#f1e4bf"/><circle cx="14.25" cy="12.43" r="3.00" fill="#f1e4bf"/><circle cx="19.06" cy="9.18" r="2.30" fill="#f1e4bf"/><circle cx="23.90" cy="8.30" r="2.20" fill="#f1e4bf"/>
+  <path d="M9.95 22.25 L22.72 9.48" stroke="#a88d55" stroke-width="1" fill="none"/>
+  <path d="M9.95 22.25 L5.58 26.62" stroke="#7a5a2e" stroke-width="1.8" fill="none"/>
+  <!-- a ball on the turf beside it -->
+  <circle cx="23.2" cy="22.2" r="1.9" fill="#2f5420"/>
+  <circle cx="22.6" cy="21.6" r="1.9" fill="#ffffff"/>
+</svg>
