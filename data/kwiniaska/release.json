@@ -1,0 +1,46 @@
+{
+ "release": "data-kwiniaska",
+ "note": "Build inputs not kept in git for Kwiniaska; `make fetch NAME=kwiniaska` puts them in place (pipeline/fetch_raw.py). In git: raw/overpass.geojson. Here: the USGS 3DEP 1 m DEM tile (VT_Statewide_A23) clipped to the world + 100 m, the VCGI 2021-2025 colour orthophoto and USDA NAIP (both exported at 0.5 m in EPSG:32618 for the world box), and the VT_Statewide_A23 lidar tiles clipped to the world.",
+ "files": [
+  {
+   "asset": "USGS_1M_18_x64y492_VT_Statewide_A23.tif",
+   "sha256": "9abd41459cffadd6bdb223eba2787fb5a6f7bcf94d743f59938e04d80abd6afc",
+   "run": "python3 pipeline/intake.py raster kwiniaska {file} --out raw/USGS_1M_kwiniaska.tif",
+   "outputs": {
+    "raw/USGS_1M_kwiniaska.tif": "e3b8b622012ef0f51bacc3d3aa8e7d378589357462d97e99561dd1ee0abddeeb"
+   }
+  },
+  {
+   "asset": "kwiniaska_vcgi.jpg",
+   "sha256": "a45b2d4983b943cb2011654dc36edd7fd6c3b2973b74e867c90dcbb31046cb03",
+   "run": "python3 pipeline/intake.py ortho kwiniaska {file} 643040 4916547 644064 4917827 --out raw/vcgi_05m.tif",
+   "outputs": {
+    "raw/vcgi_05m.tif": "73967cfc536d8344b8631a5e5b8bba2f4816eb6f314e32b1b59922755b15f7ca"
+   }
+  },
+  {
+   "asset": "kwiniaska_naip.jpg",
+   "sha256": "3c20800a941ad394615065b64441ae91f8cd7fdf6acf6966b2411ac7d63bfc2d",
+   "run": "python3 pipeline/intake.py ortho kwiniaska {file} 643040 4916547 644064 4917827 --out raw/naip_05m.tif",
+   "outputs": {
+    "raw/naip_05m.tif": "e9af1ad9c14116a5c710e77cc7fdd25f8627ba62d864da8c170711d3defe0486"
+   }
+  },
+  {
+   "asset": "USGS_LPC_VT_Statewide_A23_N2107E4445.laz",
+   "sha256": "c0c371410ba05bbe3c9fb2d963479a35a36c7978f9f8f5b48dd2b0c634aa6022",
+   "run": "python3 pipeline/intake.py laz kwiniaska {file} --out raw/laz/kwiniaska_N2107E4445.laz",
+   "outputs": {
+    "raw/laz/kwiniaska_N2107E4445.laz": "988b0c6640666f67f9592112f5d07f7ce33c67b2d13c113b53b7e4696123299c"
+   }
+  },
+  {
+   "asset": "USGS_LPC_VT_Statewide_A23_N2093E4445.laz",
+   "sha256": "110b7fc014e8142ddf1c0a5f9580e9ef33bf09a07fd274ba3c06e3e39fa81097",
+   "run": "python3 pipeline/intake.py laz kwiniaska {file} --out raw/laz/kwiniaska_N2093E4445.laz",
+   "outputs": {
+    "raw/laz/kwiniaska_N2093E4445.laz": "ea73bb78ad2cf31affb9c04ab3b9563c794f6ecf1913d70896848dc6365237f1"
+   }
+  }
+ ]
+}

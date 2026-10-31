@@ -1,0 +1,9 @@
+{
+ "note": "per-course settings for game/tests/unit/course_play.test.ts (the every-course checks); docs/COURSE_BUILD.md 8.2. Hole 16 Blue is 6.5 % short of the card even from the back of its box (accepted, validation_report.md).",
+ "wind_mph": [2, 10],
+ "water": {"count": 7},
+ "tees": {"sets": ["Blue", "Black"]},
+ "tee_shot_clear": {"sets": ["Blue", "Black"]},
+ "centre_line_clear": {},
+ "inside_boundary": true
+}
