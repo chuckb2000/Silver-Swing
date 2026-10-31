@@ -121,6 +121,19 @@ Blue (the developer, 2026-10-30: "the furthest back tees and the blue tees"; Blu
     the limit as `max(4, holes with fewer than 3 middle-or-extra spots)`, or let the test skip
     courses whose median green is under ~300 m2.
 
+## Hand-off checks (2026-10-31)
+
+-   Pinned (`pipeline_pin.json`, pipeline 033befaf, assets-src 727bc152); `make course
+    NAME=spruce_peak ARGS=--fresh` ran all 15 steps and `git status` showed no change.
+-   `npx vitest run`: 1,383 passed, 3 failed. `pins.test.ts` "mixes front, middle and back"
+    (spruce_peak, open item 6, request 2). `player.test.ts` "the real rotation" and
+    `tour.test.ts` "a hole drawn sits out the next rounds of its par": both because spruce_peak
+    is not yet in `DAILY_ROSTER`; with it added locally both files pass (38/38), so
+    `make land` clears them. `tour.test.ts` passes with the course left out.
+-   `npx playwright test`: 17 passed.
+-   In game: every hole loaded from the Blue tee and its overview looked right (screenshots
+    in the sandbox, not kept).
+
 ## Lessons
 
 -   VCGI (Vermont) serves its 2023 lidar DEM and DSM as ArcGIS ImageServers with exportImage:
