@@ -42,7 +42,7 @@
    "total_yd": 5525
   }
  ],
- "default_tee": "Blue",
+ "default_tee": "Championship",
  "scorecard_source": "GolfPass scorecard (golfpass.com/courses/7253-sankaty-head-golf-club/scorecard-and-layout), read 2026-10-31: seven tee columns per hole (Champ., Black, White, White/Blue, Blue, Yellow, Family), par 71, men's handicap row; rows add up (Championship 6,730, Blue 5,525). GolfLink (golflink.com) has the same per-hole yardages and calls the 6,730 row Black (72.6/126) and Blue 5,525 67.2/118; GolfPass's tee table gives Black 6,625 72.6/126 and Blue 5,580 67.2/118. Unverified; no club card online (private club). Built: the tips (Championship) and Blue (developer, 2026-10-30: back tees and Blue; Blue the default).",
  "penalty_default": "red",
  "driving_range_is_ob": true,
