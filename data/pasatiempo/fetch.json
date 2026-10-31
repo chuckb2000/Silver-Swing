@@ -1,0 +1,39 @@
+{
+ "items": [
+  {
+   "name": "pasatiempo_overpass.geojson",
+   "osm_box": [
+    36.987605,
+    -122.046435,
+    37.020393,
+    -122.005553
+   ]
+  },
+  {
+   "name": "pasatiempo_dem1m",
+   "tnm": {
+    "dataset": "dem1m",
+    "bbox": [
+     -122.046435,
+     36.987605,
+     -122.005553,
+     37.020393
+    ],
+    "list": true
+   }
+  },
+  {
+   "name": "pasatiempo_lpc",
+   "tnm": {
+    "dataset": "lpc",
+    "bbox": [
+     -122.046435,
+     36.987605,
+     -122.005553,
+     37.020393
+    ],
+    "list": true
+   }
+  }
+ ]
+}
