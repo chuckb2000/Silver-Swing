@@ -75,7 +75,9 @@ describe('the pin sheet for a round', () => {
         for (const k of ['front', 'middle', 'back'] as const) { expect(depth[k], tag).toBeGreaterThanOrEqual(4); expect(depth[k], tag).toBeLessThanOrEqual(8); }
         expect(diff[1], tag).toBeGreaterThanOrEqual(3);
         expect(diff[2], tag).toBeGreaterThanOrEqual(3);
-        expect(picked.filter((p) => p.centre).length, tag).toBeLessThanOrEqual(4);
+        // small greens (Spruce Peak: seven with room for only two pins besides the centre) may need a fifth centre pin
+        const tight = spots.filter((s) => s.length < 4).length >= 6;
+        expect(picked.filter((p) => p.centre).length, tag).toBeLessThanOrEqual(tight ? 5 : 4);
         for (let i = 2; i < picked.length; i++) {
           const same = picked[i].depth === picked[i - 1].depth && picked[i].depth === picked[i - 2].depth;
           expect(same, `${tag}: holes ${i - 1}-${i + 1} at the same depth`).toBe(false);
