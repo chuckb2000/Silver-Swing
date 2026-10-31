@@ -1,2 +1,4 @@
 incoming/
-raw/ortho.tif
+# build inputs kept in the GitHub release data-aquidneck; `make fetch NAME=aquidneck` puts them here (release.json)
+raw/ortho_naip.tif
+raw/ortho_src/

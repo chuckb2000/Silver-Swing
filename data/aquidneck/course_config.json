@@ -27,6 +27,10 @@
   "label": "2022 USGS Rhode Island statewide lidar",
   "max_height_m": 45
  },
+ "ortho": {
+  "path": "raw/ortho_naip.tif",
+  "source": "USDA NAIP via the USGS National Map ImageServer (exportImage, two halves naip_s.jpg and naip_n.jpg in release data-aquidneck, 0.5 m, EPSG:32619), placed by their request boxes with pipeline/intake.py ortho (release.json); used by the tracing desk only; flight year not stated by the service"
+ },
  "world": {
   "x0": 310395,
   "y0": 4607497,
@@ -60,7 +64,7 @@
   "maxMph": 12
  },
  "attribution": [
-  "Map data \u00a9 OpenStreetMap contributors (ODbL)",
+  "Map data © OpenStreetMap contributors (ODbL)",
   "Elevation and trees: U.S. Geological Survey 3D Elevation Program (RI_Statewide_D22, 2022 Rhode Island statewide lidar)",
   "Photo for checking: USDA NAIP via the USGS National Map",
   "Scorecard: GolfPass (unverified)"

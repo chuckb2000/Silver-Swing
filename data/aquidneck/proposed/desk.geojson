@@ -1,0 +1,77 @@
+{
+ "type": "FeatureCollection",
+ "features": [
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       -71.26129025789511,
+       41.60663419471608
+      ],
+      [
+       -71.26130721656892,
+       41.606535690723724
+      ],
+      [
+       -71.26118745663086,
+       41.60654255069538
+      ],
+      [
+       -71.26119066363185,
+       41.606634353331486
+      ],
+      [
+       -71.26129025789511,
+       41.60663419471608
+      ]
+     ]
+    ]
+   },
+   "properties": {
+    "osm": "desk_tee_8_gold",
+    "kind": "tee",
+    "tags": {
+     "golf": "tee",
+     "hole": "8",
+     "tee_set": "Gold",
+     "source": "tracing desk (developer 2026-10-31)",
+     "approved": "developer 2026-10-31",
+     "note": "the developer's Gold tee for hole 8, marked in the tracing desk (data/aquidneck/desk/hole08.json, local metres)"
+    }
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "LineString",
+    "coordinates": [
+     [
+      -71.2621248,
+      41.605472799999994
+     ],
+     [
+      -71.26254938187115,
+      41.6075049228728
+     ],
+     [
+      -71.2624065,
+      41.609418999999995
+     ]
+    ]
+   },
+   "properties": {
+    "osm": "hole9_bend",
+    "kind": "hole",
+    "tags": {
+     "golf": "hole",
+     "par": "5",
+     "ref": "9",
+     "note": "OSM line w951590893 with one bend on the fairway main axis 250 yd from the tee (pipeline/fairway_axis.py): the OSM line ran along the woods on the fairway right edge"
+    }
+   }
+  }
+ ]
+}

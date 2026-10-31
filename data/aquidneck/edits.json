@@ -32,6 +32,22 @@
    ],
    "tags": {},
    "reason": "Narragansett Bay, west of 17 and 18: OSM maps it only as a coastline way (fetched as aquidneck_coastline.geojson and merged into raw/overpass.geojson), so it drew as plain ground. Built by pipeline/propose_sea.py; a red penalty area (red_water_osm)."
+  },
+  {
+   "from": "proposed/desk.geojson",
+   "ids": [
+    "desk_tee_8_gold"
+   ],
+   "tags": {},
+   "reason": "Hole 8 Gold (233 yd): the developer marked the Gold tee in the tracing desk, 2026-10-31 (data/aquidneck/desk/hole08.json), 'acceptable as I've saved them'. Added as a tee box (96 m2) so there is a tee under the mark; it measures about 212 yd to the green centre (-8.8 %), accepted by the developer."
+  },
+  {
+   "from": "proposed/desk.geojson",
+   "ids": [
+    "hole9_bend"
+   ],
+   "tags": {},
+   "reason": "hole 9's OSM line (w951590893) runs up the fairway's right edge through the woods, so a drive down it hits real trees (course_play centre-line check). Replaced by the same tee and green points with one bend on the fairway's main axis 250 yd out (23 m left of the old line); measures 483 yd straight-line (was 480)."
   }
  ],
  "tags": [
@@ -61,9 +77,29 @@
    "osm": "w916005839",
    "set": {
     "hole": "8",
-    "tee_set": "Gold;Green"
+    "tee_set": "Green"
    },
-   "reason": "hole 8: the only mapped box (180 yd from its centre; about 190 from its back; Green card 192). No box is found at the Gold 233 yd in OSM, the DEM or NAIP, so Gold plays from the back of this box too (flag)"
+   "reason": "hole 8 Green: the only mapped box (180 yd from its centre; about 190 from its back; Green card 192). Gold plays from the developer's desk tee (desk_tee_8_gold) since 2026-10-31"
+  },
+  {
+   "osm": "w208859706",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "golf=water_hazard (yellow in OSM's tagging); every penalty area red by the standing default"
+  }
+ ],
+ "extend_start": [
+  {
+   "osm": "w951590882",
+   "extend_m": 29.5,
+   "reason": "hole 8's line starts on the Green box; moved back 29.5 m along its first segment so it starts in the developer's Gold desk tee (desk_tee_8_gold), 2.5 m from that box's centre"
+  }
+ ],
+ "drop": [
+  {
+   "osm": "w951590893",
+   "reason": "replaced by hole9_bend (proposed/desk.geojson)"
   }
  ]
 }
