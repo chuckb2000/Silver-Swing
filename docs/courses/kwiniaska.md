@@ -95,7 +95,9 @@ Made by the course chats under the overnight "make the call"; each can be revers
     Black box in OSM, no convincing lidar pad, and the photo shows road, woods, car park or cart
     path directly behind the line start.
 4.  **Munroe Brook** added as a red penalty area from the lidar channel (`approved: pending`).
-5.  **Hole 5 Black** tees from the box at the start of hole 4's line (-0.9 %).
+5.  **Hole 5 Black** tees from box w1228366521, below the cart path (developer, 2026-11-01, in the
+    game; the overnight build had used the 4th's tee box under the trees): 545 yd vs 564 (-3.4 %, flag),
+    tagged `hole=5`, `tee_set=Black` in `edits.json`.
 6.  **Hole lines 12, 15 and 18** start 56-74 m from the Gold box that matches the card; measured
     from that box.
 7.  **Theme, logo and card hole** (13, rotating 3, 7, 16): course chat's choices.

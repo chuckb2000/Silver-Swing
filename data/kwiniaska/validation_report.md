@@ -14,7 +14,7 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 | 3 | 4 | Gold | 337 | 319.1 | -17.9 | -5.3% | flag | 320.0 | -5.1% | flag |
 | 4 | 3 | Black | 118 | 104.2 | -13.8 | -11.7% | FAIL | 104.2 | -11.7% | FAIL |
 | 4 | 3 | Gold | 101 | 104.1 | +3.1 | +3.1% | flag | 103.3 | +2.3% | pass |
-| 5 | 5 | Black | 564 | 558.8 | -5.2 | -0.9% | pass | 558.8 | -0.9% | pass |
+| 5 | 5 | Black | 564 | 530.7 | -33.3 | -5.9% | flag | 544.6 | -3.4% | flag |
 | 5 | 5 | Gold | 510 | 496.0 | -14.0 | -2.7% | pass | 498.2 | -2.3% | pass |
 | 6 | 3 | Black | 172 | 157.1 | -14.9 | -8.7% | FAIL | 157.1 | -8.7% | FAIL |
 | 6 | 3 | Gold | 168 | 157.1 | -10.9 | -6.5% | flag | 160.5 | -4.5% | flag |
@@ -42,7 +42,7 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 | 17 | 4 | Gold | 282 | 285.8 | +3.8 | +1.3% | pass | 285.8 | +1.3% | pass |
 | 18 | 4 | Black | 390 | 371.7 | -18.3 | -4.7% | flag | 373.1 | -4.3% | flag |
 | 18 | 4 | Gold | 322 | 296.5 | -25.5 | -7.9% | flag | 299.9 | -6.9% | flag |
-| **total** | 140 | | **11045** | **10653** | -392 | -3.5% | | **10730** | -2.9% | |
+| **total** | 140 | | **11045** | **10625** | -420 | -3.8% | | **10715** | -3.0% | |
 
 ## Open items
 
@@ -58,43 +58,45 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 10. Hole 4 (Black): no mapped tee box within 8% of the card; the tee is the start point of the OSM hole line (104 yd). The Black tee box is not in OSM - trace it to confirm.
 11. Hole 4 (Black): measured 104 yd vs card 118 (-11.7%) - FAIL, needs a decision.
 12. Hole 5: no golf=pin on its green; the centre pin is the green's centre (proposal).
-13. Hole 6: no golf=pin on its green; the centre pin is the green's centre (proposal).
-14. Hole 6 (Black): no mapped tee box within 8% of the card; the tee is the start point of the OSM hole line (157 yd). The Black tee box is not in OSM - trace it to confirm.
-15. Hole 6 (Black): measured 157 yd vs card 172 (-8.7%) - FAIL, needs a decision.
-16. Hole 6 (Gold): measured 161 yd vs card 168 (-4.5%) even with the virtual tee at the best spot in its box; accepted for play.
-17. Hole 7: no golf=pin on its green; the centre pin is the green's centre (proposal).
-18. Hole 7 (Black): measured 437 yd vs card 460 (-4.9%) even with the virtual tee at the best spot in its box; accepted for play.
-19. Hole 8: no golf=pin on its green; the centre pin is the green's centre (proposal).
-20. Hole 9: no golf=pin on its green; the centre pin is the green's centre (proposal).
-21. Hole 9 (Black): no mapped tee box within 8% of the card; the tee is the start point of the OSM hole line (114 yd). The Black tee box is not in OSM - trace it to confirm.
-22. Hole 9 (Black): measured 114 yd vs card 129 (-11.9%) - FAIL, needs a decision.
-23. Hole 9 (Gold): no mapped tee box within 8% of the card; the tee is the start point of the OSM hole line (114 yd). The Gold tee box is not in OSM - trace it to confirm.
-24. Hole 9 (Gold): measured 114 yd vs card 118 (-3.7%) even with the virtual tee at the best spot in its box; accepted for play.
-25. Hole 10: no golf=pin on its green; the centre pin is the green's centre (proposal).
-26. Hole 10 (Black): measured 385 yd vs card 398 (-3.3%) even with the virtual tee at the best spot in its box; accepted for play.
-27. Hole 11: no golf=pin on its green; the centre pin is the green's centre (proposal).
-28. Hole 11 (Gold): measured 292 yd vs card 307 (-5.0%) even with the virtual tee at the best spot in its box; accepted for play.
-29. Hole 12: no golf=pin on its green; the centre pin is the green's centre (proposal).
-30. Hole 12 (Black): measured 302 yd vs card 321 (-6.0%) even with the virtual tee at the best spot in its box; accepted for play.
-31. Hole 12 (Gold): measured 248 yd vs card 256 (-3.2%) even with the virtual tee at the best spot in its box; accepted for play.
-32. Hole 12: the OSM hole line starts 56 m from the Gold tee box (w1228366538), and only that box matches the card; the line was probably drawn from another tee. Measured from the Gold box through the line's bend points.
-33. Hole 13: no golf=pin on its green; the centre pin is the green's centre (proposal).
-34. Hole 13 (Black): measured 128 yd vs card 123 (+4.4%) even with the virtual tee at the best spot in its box; accepted for play.
-35. Hole 13 (Gold): no mapped tee box within 8% of the card; the tee is the start point of the OSM hole line (115 yd). The Gold tee box is not in OSM - trace it to confirm.
-36. Hole 13 (Gold): measured 115 yd vs card 111 (+4.0%) even with the virtual tee at the best spot in its box; accepted for play.
-37. Hole 14: no golf=pin on its green; the centre pin is the green's centre (proposal).
-38. Hole 14 (Black): no mapped tee box within 8% of the card; the tee is the start point of the OSM hole line (174 yd). The Black tee box is not in OSM - trace it to confirm.
-39. Hole 14 (Black): measured 174 yd vs card 192 (-9.2%) - FAIL, needs a decision.
-40. Hole 15: no golf=pin on its green; the centre pin is the green's centre (proposal).
-41. Hole 15: the OSM hole line starts 74 m from the Gold tee box (w1228366503), and only that box matches the card; the line was probably drawn from another tee. Measured from the Gold box through the line's bend points.
-42. Hole 16: no golf=pin on its green; the centre pin is the green's centre (proposal).
-43. Hole 17: no golf=pin on its green; the centre pin is the green's centre (proposal).
-44. Hole 17 (Black): no mapped tee box within 8% of the card; the tee is the start point of the OSM hole line (286 yd). The Black tee box is not in OSM - trace it to confirm.
-45. Hole 17 (Black): measured 286 yd vs card 299 (-4.5%) even with the virtual tee at the best spot in its box; accepted for play.
-46. Hole 18: no golf=pin on its green; the centre pin is the green's centre (proposal).
-47. Hole 18 (Black): measured 373 yd vs card 390 (-4.3%) even with the virtual tee at the best spot in its box; accepted for play.
-48. Hole 18 (Gold): measured 300 yd vs card 322 (-6.9%) even with the virtual tee at the best spot in its box; accepted for play.
-49. Hole 18: the OSM hole line starts 67 m from the Gold tee box (w1228366526), and only that box matches the card; the line was probably drawn from another tee. Measured from the Gold box through the line's bend points.
+13. Hole 5 (Black): measured 545 yd vs card 564 (-3.4%) even with the virtual tee at the best spot in its box; accepted for play.
+14. Hole 5 (Black): tee box w1228366521 assigned by the developer (tagged hole=5, tee_set=Black in edited/course.geojson).
+15. Hole 6: no golf=pin on its green; the centre pin is the green's centre (proposal).
+16. Hole 6 (Black): no mapped tee box within 8% of the card; the tee is the start point of the OSM hole line (157 yd). The Black tee box is not in OSM - trace it to confirm.
+17. Hole 6 (Black): measured 157 yd vs card 172 (-8.7%) - FAIL, needs a decision.
+18. Hole 6 (Gold): measured 161 yd vs card 168 (-4.5%) even with the virtual tee at the best spot in its box; accepted for play.
+19. Hole 7: no golf=pin on its green; the centre pin is the green's centre (proposal).
+20. Hole 7 (Black): measured 437 yd vs card 460 (-4.9%) even with the virtual tee at the best spot in its box; accepted for play.
+21. Hole 8: no golf=pin on its green; the centre pin is the green's centre (proposal).
+22. Hole 9: no golf=pin on its green; the centre pin is the green's centre (proposal).
+23. Hole 9 (Black): no mapped tee box within 8% of the card; the tee is the start point of the OSM hole line (114 yd). The Black tee box is not in OSM - trace it to confirm.
+24. Hole 9 (Black): measured 114 yd vs card 129 (-11.9%) - FAIL, needs a decision.
+25. Hole 9 (Gold): no mapped tee box within 8% of the card; the tee is the start point of the OSM hole line (114 yd). The Gold tee box is not in OSM - trace it to confirm.
+26. Hole 9 (Gold): measured 114 yd vs card 118 (-3.7%) even with the virtual tee at the best spot in its box; accepted for play.
+27. Hole 10: no golf=pin on its green; the centre pin is the green's centre (proposal).
+28. Hole 10 (Black): measured 385 yd vs card 398 (-3.3%) even with the virtual tee at the best spot in its box; accepted for play.
+29. Hole 11: no golf=pin on its green; the centre pin is the green's centre (proposal).
+30. Hole 11 (Gold): measured 292 yd vs card 307 (-5.0%) even with the virtual tee at the best spot in its box; accepted for play.
+31. Hole 12: no golf=pin on its green; the centre pin is the green's centre (proposal).
+32. Hole 12 (Black): measured 302 yd vs card 321 (-6.0%) even with the virtual tee at the best spot in its box; accepted for play.
+33. Hole 12 (Gold): measured 248 yd vs card 256 (-3.2%) even with the virtual tee at the best spot in its box; accepted for play.
+34. Hole 12: the OSM hole line starts 56 m from the Gold tee box (w1228366538), and only that box matches the card; the line was probably drawn from another tee. Measured from the Gold box through the line's bend points.
+35. Hole 13: no golf=pin on its green; the centre pin is the green's centre (proposal).
+36. Hole 13 (Black): measured 128 yd vs card 123 (+4.4%) even with the virtual tee at the best spot in its box; accepted for play.
+37. Hole 13 (Gold): no mapped tee box within 8% of the card; the tee is the start point of the OSM hole line (115 yd). The Gold tee box is not in OSM - trace it to confirm.
+38. Hole 13 (Gold): measured 115 yd vs card 111 (+4.0%) even with the virtual tee at the best spot in its box; accepted for play.
+39. Hole 14: no golf=pin on its green; the centre pin is the green's centre (proposal).
+40. Hole 14 (Black): no mapped tee box within 8% of the card; the tee is the start point of the OSM hole line (174 yd). The Black tee box is not in OSM - trace it to confirm.
+41. Hole 14 (Black): measured 174 yd vs card 192 (-9.2%) - FAIL, needs a decision.
+42. Hole 15: no golf=pin on its green; the centre pin is the green's centre (proposal).
+43. Hole 15: the OSM hole line starts 74 m from the Gold tee box (w1228366503), and only that box matches the card; the line was probably drawn from another tee. Measured from the Gold box through the line's bend points.
+44. Hole 16: no golf=pin on its green; the centre pin is the green's centre (proposal).
+45. Hole 17: no golf=pin on its green; the centre pin is the green's centre (proposal).
+46. Hole 17 (Black): no mapped tee box within 8% of the card; the tee is the start point of the OSM hole line (286 yd). The Black tee box is not in OSM - trace it to confirm.
+47. Hole 17 (Black): measured 286 yd vs card 299 (-4.5%) even with the virtual tee at the best spot in its box; accepted for play.
+48. Hole 18: no golf=pin on its green; the centre pin is the green's centre (proposal).
+49. Hole 18 (Black): measured 373 yd vs card 390 (-4.3%) even with the virtual tee at the best spot in its box; accepted for play.
+50. Hole 18 (Gold): measured 300 yd vs card 322 (-6.9%) even with the virtual tee at the best spot in its box; accepted for play.
+51. Hole 18: the OSM hole line starts 67 m from the Gold tee box (w1228366526), and only that box matches the card; the line was probably drawn from another tee. Measured from the Gold box through the line's bend points.
 
 ## Developer's calls pending (made overnight 2026-10-30/31 by the course chats)
 
@@ -106,7 +108,7 @@ Each was made under the developer's overnight "make the call" instruction; each 
 4. **Black tees missing on 1, 4, 6, 9 and 14 (fail, accepted).** OSM has no Black tee box on these holes, so the Black tee is the start of the OSM hole line (the Gold box or beside it): 1: 325 vs 355 yd (-8.4 %), 4: 104 vs 118 (-11.7 %), 6: 157 vs 172 (-8.7 %), 9: 114 vs 129 (-11.9 %), 14: 174 vs 192 (-9.2 %). The lidar pad finder (proposed/tees_lidar.geojson, 143 raised pads on this rolling ground) gave no convincing box behind these tees (the only candidates within 70 m are 26-48 m2 pads), so nothing was added. The second chat (2026-10-31) looked at each of the five tee areas on the VCGI photo with the OSM boxes and the lidar pads drawn on: behind the line start there is Spear Street (1), woods (4), the clubhouse car park (6), a cart path and the 8th green (9), and nothing within 16-20 m behind on 14 (the nearest box, 62 m back, belongs to another hole). No back tee is visible, so the call stands. Accepted for play with checks.json yardage entries. Options: (a) keep as is (Black plays short on five holes); (b) the developer traces the five Black boxes in QGIS over raw/vcgi_05m.tif (VCGI leaf-off 2021-25, 0.5 m) or supplies Google screenshots of each tee area (behind the Gold box, 15-30 m back along the hole line), each with 3-4 control points (pixel -> lat/lon) spread across the image; (c) scale the holes (at most 5 %, not enough for 4 and 9). **Recommendation: (b).**
 5. **Other tees not in OSM:** Black on 17 (286 vs 299, -4.5 %) and Gold on 9 (114 vs 118, -3.7 %) and 13 (115 vs 111, +4.0 %) play from the start of the OSM hole line. Flags only; trace with item 4.
 6. **Hole lines that start away from the Gold box:** 12 (56 m), 15 (74 m) and 18 (67 m). The Gold box that matches the card was used and the line's bend points followed from there. 18 Gold is 300 vs 322 yd (-6.9 %). Check with item 4's tracing.
-7. **Hole 5 Black** tees from box w1228366519, the box at the start of hole 4's line (558.8 vs 564 yd, -0.9 %). Plausible (a back tee beside the 4th tee), unconfirmed.
+7. **Hole 5 Black** tees from box w1228366521, below the cart path (developer, 2026-11-01, playing the course: the overnight build put it on the 4th's tee box w1228366519 under the trees). 544.6 yd with the tee at the back of the box vs 564 on the card (-3.4 %, flag; 530.7 from the box centre). Accepted: the developer placed the tee.
 8. **Munroe Brook** (OSM w626918930, a stream line only) crosses holes 12-15 in a wooded gully. Penalty area `channel_w626918930` proposed from the 2023 lidar channel (propose_channels.py; 4,869 m2, mean width 5.5 m), checked against the VCGI photo; red; `approved: pending`. Options: keep, change colour, or drop it (edits.json `add`). Recommendation: keep.
 9. **All water red** (standing default): OSM tags the three ponds golf=water_hazard (yellow). Change per pond in edits.json if the club's card says otherwise.
 10. **The Kwini Club practice facility** (5353 Spear St, OSM w1228417008, a separate golf_course polygon north of the course) is dropped from the layout and out of bounds, like every range.
@@ -123,6 +125,7 @@ Each was made under the developer's overnight "make the call" instruction; each 
 - Hole 3 (Black): measured 361 yd from the tee-box centre vs 397 on the card (-9.1%); moved the virtual tee along the middle of the real tee polygon w1228366516 (on its centre line, at least 2.5 m from its back and front) -> 377.2 yd (real 360.8 yd).
 - Hole 3 (Gold): measured 319 yd from the tee-box centre vs 337 on the card (-5.3%); moved the virtual tee along the middle of the real tee polygon w1228366517 (on its centre line, at least 2.5 m from its back and front) -> 320.0 yd (real 319.1 yd).
 - Hole 4 (Gold): measured 104 yd from the tee-box centre vs 101 on the card (+3.1%); moved the virtual tee along the middle of the real tee polygon w1228366519 (on its centre line, at least 2.5 m from its back and front) -> 103.3 yd (real 104.1 yd).
+- Hole 5 (Black): measured 531 yd from the tee-box centre vs 564 on the card (-5.9%); moved the virtual tee along the middle of the real tee polygon w1228366521 (on its centre line, at least 2.5 m from its back and front) -> 544.6 yd (real 530.7 yd).
 - Hole 5 (Gold): tee shot: a perfect drive at the middle of the fairway clipped a tree near the tee; moved 2.0 m along the middle of the real tee polygon w1228366520 to the nearest clear spot -> 498.2 yd (real 496.0 yd).
 - Hole 6 (Gold): measured 157 yd from the tee-box centre vs 168 on the card (-6.5%); moved the virtual tee along the middle of the real tee polygon w1228366507 (on its centre line, at least 2.5 m from its back and front) -> 160.5 yd (real 157.1 yd).
 - Hole 7 (Black): measured 435 yd from the tee-box centre vs 460 on the card (-5.5%); moved the virtual tee along the middle of the real tee polygon w1228366528 (on its centre line, at least 2.5 m from its back and front) -> 437.3 yd (real 434.7 yd).
@@ -141,10 +144,10 @@ Each was made under the developer's overnight "make the call" instruction; each 
 
 ## Tree detection (2023 USGS Vermont statewide lidar, leaf-off)
 
-- 8790 trees detected in the world extent (1136 inside the course), 1395 conifers / 7395 deciduous; median height 17.2 m, max 33.2 m.
+- 8792 trees detected in the world extent (1138 inside the course), 1395 conifers / 7397 deciduous; median height 17.2 m, max 33.2 m.
 - Dropped: 314 tops on building footprints, 0 over the lake, 181 tiny crowns.
 - Dropped on playing surfaces (spec 5.4): 4 -> tee w1228417007 (22.0 m), tee w1228417007 (19.2 m), tee w1228417007 (20.7 m), water_hazard w1228363920 (13.8 m)
-- Dropped from tee shots (s06b): 3 -> 18 Black (16.2 m tree, 41.6 m from the tee), 5 Black (19.8 m tree, 39.4 m from the tee), 5 Black (21.6 m tree, 19.3 m from the tee)
+- Dropped from tee shots (s06b): 1 -> 18 Black (16.2 m tree, 41.6 m from the tee)
 - OSM natural=tree points matched by a detected tree within 4 m: 0 of 0.
 - Conifer vs deciduous from the leaf-off orthophoto (course_config tree_type_ortho): a crown whose core is mostly dark green (2G-R-B > 12, brightness < 95) is a conifer; 1395 of 8947 crowns. Kwiniaska: the class-1 lidar's last-return split called the dark evergreen rows broadleaves; the VCGI photo is leaf-off, so only conifers are green in the woods (course chat 2026-10-30, checked on crops of the photo).
 
