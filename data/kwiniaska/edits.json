@@ -27,6 +27,21 @@
     "building": "yes"
    },
    "reason": "golf=clubhouse already carries building=yes in OSM; tagged again so the audit reads it as a building"
+  },
+  {
+   "osm": "w1228366521",
+   "set": {
+    "tee_set": "Black",
+    "hole": "5"
+   },
+   "reason": "developer 2026-11-01 (in the game): hole 5's back tee is this box, below the cart path, not the 4th's tee box w1228366519 under the trees that the overnight build used"
+  },
+  {
+   "osm": "w1228366519",
+   "set": {
+    "hole": "4"
+   },
+   "reason": "the 4th's tee box (developer 2026-11-01: not hole 5's back tee)"
   }
  ],
  "drop": [
