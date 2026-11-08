@@ -78,6 +78,13 @@ Blue (the developer, 2026-10-30: "the furthest back tees and the blue tees"; Blu
     (`data/spruce_peak/desk/hole04.json`, `hole08.json`, `hole13.json`): "acceptable as I saved
     them (some of the gap is how doglegs are measured)"; always a tee box under each mark, the
     tee on the marked centroid; yardages accepted as marked (open item 2).
+-   2026-11-08: "The 6th green ... is too small" (a game screenshot and a Google view). OSM's
+    green was only the round end under the bunker (169 m2). The developer traced it on the
+    tracing desk (`desk/hole06.json`): a green of about 320 m2 (the round end and the first part
+    of the tongue) and the fairway round it out to the end of the tongue by the pond
+    (`make_desk_green6.py` -> `proposed/desk_green6.geojson`; OSM's green w1058378229 and fairway
+    r19828147 dropped). Hole 6: Black 187 yd from the box centre, 189 adjusted (card 194);
+    Blue 152 (card 155).
 -   Everything else below "Open items" was decided by the course chat overnight and waits for the
     developer.
 
@@ -135,7 +142,7 @@ Blue (the developer, 2026-10-30: "the furthest back tees and the blue tees"; Blu
 
 1.  Auto club on steep holes: merge `fix/auto-club-downhill` (or equivalent), so 16's default
     club allows for the 31 m drop; then drop `default_aim.skip` from `checks.json`.
-2.  `pins.test.ts` "mixes front, middle and back": spruce_peak's small greens leave mostly
+2.  (Settled 2026-11-08: with the 6th green its real size, `pins.test.ts` passes.) `pins.test.ts` "mixes front, middle and back": spruce_peak's small greens leave mostly
     front/back extra spots, so the sheet takes 5 centre pins (limit 4). Smallest change: count
     the limit as `max(4, holes with fewer than 3 middle-or-extra spots)`, or let the test skip
     courses whose median green is under ~300 m2.
