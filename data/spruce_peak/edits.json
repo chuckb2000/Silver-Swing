@@ -49,6 +49,15 @@
     "desk_tee_13"
    ],
    "reason": "developer 2026-10-31: the Black tees marked in the tracing desk (data/spruce_peak/desk/), accepted as marked; marks under 60 m2 (4: 10.9, 8: 7.8, 13: 29.8 m2) grown to an 8 x 6 m pad on the developer's centroid, long side along the hole line leaving the mark, so a tee box stands under each; tagged tee_pos=mark so the tee stays on the developer's centroid (make_desk_tees.py; run before make_proposals.py, whose boundary takes in the 13th's pad)"
+  },
+  {
+   "from": "proposed/desk_green6.geojson",
+   "ids": [
+    "desk_green_6",
+    "desk_fairway_6"
+   ],
+   "tags": {},
+   "reason": "developer 2026-11-08, tracing desk: the 6th green (about 330 m2) and the fairway round it out to the end of the tongue by the pond (make_desk_green6.py from desk/hole06.json)"
   }
  ],
  "tags": [
@@ -79,6 +88,14 @@
   {
    "osm": "w510265958",
    "reason": "replaced by bd_w510265958 (the same boundary joined to the 13th and grown into the woods)"
+  },
+  {
+   "osm": "w1058378229",
+   "reason": "developer 2026-11-08: the 6th green is too small; OSM's green is only the round end under the bunker (169 m2). Replaced by the developer's green from the tracing desk (desk_green_6, make_desk_green6.py)"
+  },
+  {
+   "osm": "r19828147",
+   "reason": "developer 2026-11-08 (tracing desk): OSM's fairway round the 6th green, redrawn by the developer as desk_fairway_6"
   }
  ],
  "extend_start": []
