@@ -16,8 +16,8 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 | 4 | 4 | Blue | 358 | 337.2 | -20.8 | -5.8% | flag | 338.6 | -5.4% | flag |
 | 5 | 4 | Black | 338 | 325.7 | -12.3 | -3.7% | flag | 326.9 | -3.3% | flag |
 | 5 | 4 | Blue | 321 | 325.7 | +4.7 | +1.5% | pass | 325.7 | +1.5% | pass |
-| 6 | 3 | Black | 194 | 194.4 | +0.4 | +0.2% | pass | 194.4 | +0.2% | pass |
-| 6 | 3 | Blue | 155 | 159.2 | +4.2 | +2.7% | pass | 159.2 | +2.7% | pass |
+| 6 | 3 | Black | 194 | 187.2 | -6.8 | -3.5% | flag | 189.1 | -2.5% | pass |
+| 6 | 3 | Blue | 155 | 151.7 | -3.3 | -2.1% | pass | 151.7 | -2.1% | pass |
 | 7 | 4 | Black | 333 | 322.0 | -11.0 | -3.3% | flag | 324.7 | -2.5% | pass |
 | 7 | 4 | Blue | 314 | 322.0 | +8.0 | +2.6% | pass | 322.0 | +2.6% | pass |
 | 8 | 5 | Black | 606 | 514.0 | -92.0 | -15.2% | FAIL | 514.0 | -15.2% | FAIL |
@@ -42,7 +42,7 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 | 17 | 4 | Blue | 266 | 262.5 | -3.5 | -1.3% | pass | 262.5 | -1.3% | pass |
 | 18 | 5 | Black | 495 | 488.2 | -6.8 | -1.4% | pass | 488.2 | -1.4% | pass |
 | 18 | 5 | Blue | 475 | 471.8 | -3.2 | -0.7% | pass | 471.8 | -0.7% | pass |
-| **total** | 144 | | **12298** | **11972** | -326 | -2.6% | | **11997** | -2.4% | |
+| **total** | 144 | | **12298** | **11958** | -340 | -2.8% | | **11984** | -2.6% | |
 
 ## Open items
 
@@ -86,6 +86,7 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 - Hole 2 (Blue): measured 220 yd from the tee-box centre vs 210 on the card (+4.9%); moved the virtual tee along the middle of the real tee polygon w1058376507 (on its centre line, at least 2.5 m from its back and front) -> 215.1 yd (real 220.3 yd).
 - Hole 4 (Blue): measured 337 yd from the tee-box centre vs 358 on the card (-5.8%); moved the virtual tee along the middle of the real tee polygon w1058376518 (on its centre line, at least 2.5 m from its back and front) -> 338.6 yd (real 337.2 yd).
 - Hole 5 (Black): measured 326 yd from the tee-box centre vs 338 on the card (-3.7%); moved the virtual tee along the middle of the real tee polygon w1058376526 (on its centre line, at least 2.5 m from its back and front) -> 326.9 yd (real 325.7 yd).
+- Hole 6 (Black): measured 187 yd from the tee-box centre vs 194 on the card (-3.5%); moved the virtual tee along the middle of the real tee polygon w1058378224 (on its centre line, at least 2.5 m from its back and front) -> 189.1 yd (real 187.2 yd).
 - Hole 7 (Black): measured 322 yd from the tee-box centre vs 333 on the card (-3.3%); moved the virtual tee along the middle of the real tee polygon w1058378232 (on its centre line, at least 2.5 m from its back and front) -> 324.7 yd (real 322.0 yd).
 - Hole 10 (Blue): measured 341 yd from the tee-box centre vs 321 on the card (+6.3%); moved the virtual tee along the middle of the real tee polygon w1058395772 (on its centre line, at least 2.5 m from its back and front) -> 339.6 yd (real 341.2 yd).
 - Hole 12 (Black): measured 341 yd from the tee-box centre vs 359 on the card (-5.0%); moved the virtual tee along the middle of the real tee polygon w1058397262 (on its centre line, at least 2.5 m from its back and front) -> 345.2 yd (real 341.2 yd).
@@ -112,7 +113,6 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 | w1058376517 | 3 | 5.5 | 2.5 | 2 | 5.9 | 1.5 |
 | w1058376524 | 4 | 1.8 | 1.8 | 2 | 3.1 | 1.5 |
 | w1058376532 | 5 | 2.4 | 2.4 | 1 | 4.5 | 1.5 |
-| w1058378229 | 6 | 4.1 | 2.5 | 0 | 3.6 | 1.5 |
 | w1058378239 | 7 | 1.6 | 1.5 | 0 | 1.5 | 1.5 |
 | w1058393561 | 8 | 4.4 | 2.5 | 2 | 5.7 | 1.5 |
 | w1058393571 | 9 | 4.6 | 2.5 | 1 | 4.5 | 1.5 |
@@ -125,7 +125,8 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 | w1058399976 | 16 | 2.9 | 2.0 | 0 | 2.6 | 1.5 |
 | w1058402474 | 17 | 5.3 | 1.5 | 0 | 1.5 | 1.5 |
 | w1058402488 | 18 | 1.4 | 1.4 | 1 | 2.3 | 1.4 |
-| w1058406514 | practice | 2.1 | 2.1 | 1 | 3.0 | 0.0 |
+| w1058406514 | practice | 2.1 | 2.1 | 2 | 3.3 | 0.0 |
+| desk_green_6 | 6 | 1.3 | 1.3 | 2 | 2.4 | 1.3 |
 
 # OSM coverage audit
 
