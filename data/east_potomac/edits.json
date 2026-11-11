@@ -4,7 +4,6 @@
   {
    "from": "proposed/tees_lidar.geojson",
    "ids": [
-    "lidar_tee_1",
     "lidar_tee_3",
     "lidar_tee_4",
     "lidar_tee_6",
@@ -43,9 +42,27 @@
     "assigned_by": "the course chat at the developer's request (2026-10-20: the 13 tee was in the wrong place, with no tee box under the ball)"
    },
    "reason": "Blue 13 back tee: a long, narrow raised pad (56 x 9 m, 0.5 m above its surroundings, 4.9 % median slope) against the seawall, 85 m SSE of the 12 green and 28 m west of the OSM hole line; the NPS 2016 map draws the 13 tee box there. Blue and White play from it (no separate box mapped). Replaces the 2026-10-19 extend_start, which put the tee on open ground 28 m east of the pad."
+  },
+  {
+   "from": "proposed/tee_9.geojson",
+   "ids": [
+    "w926822952_tee"
+   ],
+   "tags": {
+    "hole": "9",
+    "tee_set": "Blue;White",
+    "layout": "east_potomac_blue",
+    "assigned_by": "the developer (2026-11-10: screenshot of where the Blue 9 tee should be)"
+   },
+   "reason": "Blue 9 tee box: OSM maps it as a small fairway (w926822952, about 7.5 x 44 m beside the cart path, east of the old tee). The developer marked it as the tee (2026-11-10). It replaces lidar_tee_1, a 53 m2 lidar pad left of the path that put the ball on the wrong side (dropped from the lidar tee list)."
   }
  ],
  "tags": [],
- "drop": [],
+ "drop": [
+  {
+   "osm": "w926822952",
+   "reason": "mapped golf=fairway in OSM; it is the Blue 9 tee box (added as w926822952_tee from proposed/tee_9.geojson)"
+  }
+ ],
  "extend_start": []
 }

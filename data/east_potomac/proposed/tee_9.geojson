@@ -1,0 +1,44 @@
+{
+ "type": "FeatureCollection",
+ "features": [
+  {
+   "type": "Feature",
+   "properties": {
+    "osm": "w926822952_tee",
+    "kind": "tee",
+    "tags": {
+     "golf": "tee",
+     "landuse": "grass",
+     "source": "OSM way w926822952 (mapped golf=fairway), the Blue 9 tee box: the developer's screenshot, 2026-11-10; slightly raised (about 0.2 m) in the lidar"
+    }
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       -77.0264222,
+       38.8715337
+      ],
+      [
+       -77.0264303,
+       38.871137
+      ],
+      [
+       -77.0263471,
+       38.8711307
+      ],
+      [
+       -77.0263498,
+       38.8715316
+      ],
+      [
+       -77.0264222,
+       38.8715337
+      ]
+     ]
+    ]
+   }
+  }
+ ]
+}

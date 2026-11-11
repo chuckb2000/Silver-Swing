@@ -102,7 +102,9 @@ data/east_potomac/validation_report.md)
 2.  Blue 15 Blue tee (-8.7 %) and Red course 8 (+9.9 %) are over 8 %,
     accepted for play by the developer; Blue 6 Blue, Red 5
     and Red 6 are flags.
-3.  19 tee boxes come from lidar pads (`edits.json`), approved.
+3.  18 tee boxes come from lidar pads (`edits.json`), approved. Blue 9 plays
+    from its box east of the cart path (OSM had it as a fairway; developer,
+    2026-11-10): Blue 329 yd (-7.7 %), White 329 (-2.2 %).
 4.  Forward (Red) tees of the White and Red courses not built.
 5.  Blue course ratings unverified; Red course unrated.
 6.  Lidar year of the DC files not recorded.

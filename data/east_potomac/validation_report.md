@@ -24,8 +24,8 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 | 7 | 4 | White | 297 | 300.5 | +3.5 | +1.2% | pass | 300.5 | +1.2% | pass |
 | 8 | 3 | Blue | 210 | 213.8 | +3.8 | +1.8% | pass | 213.8 | +1.8% | pass |
 | 8 | 3 | White | 196 | 213.8 | +17.8 | +9.1% | FAIL | 200.8 | +2.5% | pass |
-| 9 | 4 | Blue | 356 | 341.1 | -14.9 | -4.2% | flag | 343.7 | -3.5% | flag |
-| 9 | 4 | White | 336 | 341.1 | +5.1 | +1.5% | pass | 341.1 | +1.5% | pass |
+| 9 | 4 | Blue | 356 | 340.3 | -15.7 | -4.4% | flag | 328.6 | -7.7% | flag |
+| 9 | 4 | White | 336 | 340.3 | +4.3 | +1.3% | pass | 328.5 | -2.2% | pass |
 | 10 | 4 | Blue | 311 | 293.9 | -17.1 | -5.5% | flag | 301.7 | -3.0% | pass |
 | 10 | 4 | White | 302 | 293.9 | -8.1 | -2.7% | pass | 293.9 | -2.7% | pass |
 | 11 | 3 | Blue | 191 | 190.6 | -0.4 | -0.2% | pass | 190.6 | -0.2% | pass |
@@ -44,7 +44,7 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 | 17 | 5 | White | 546 | 562.0 | +16.0 | +2.9% | pass | 562.0 | +2.9% | pass |
 | 18 | 4 | Blue | 393 | 349.8 | -43.2 | -11.0% | FAIL | 383.2 | -2.5% | pass |
 | 18 | 4 | White | 371 | 349.8 | -21.2 | -5.7% | flag | 361.8 | -2.5% | pass |
-| **total** | 144 | | **12825** | **12415** | -410 | -3.2% | | **12629** | -1.5% | |
+| **total** | 144 | | **12825** | **12413** | -412 | -3.2% | | **12602** | -1.7% | |
 
 ### Open items
 
@@ -52,14 +52,16 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 2. Hole 5 (Blue): measured 281 yd vs card 291 (-3.3%) even with the virtual tee at the best spot in its box; accepted for play.
 3. Hole 6 (Blue): no mapped tee box within 8% of the card; the tee is the start point of the OSM hole line (513 yd). The Blue tee box is not in OSM - trace it to confirm.
 4. Hole 6 (Blue): measured 513 yd vs card 547 (-6.1%) even with the virtual tee at the best spot in its box; accepted for play.
-5. Hole 9 (Blue): measured 344 yd vs card 356 (-3.5%) even with the virtual tee at the best spot in its box; accepted for play.
-6. Hole 11 (White): measured 173 yd vs card 167 (+3.8%) even with the virtual tee at the best spot in its box; accepted for play.
-7. Hole 12: the OSM hole line starts 56 m from the White tee box (w926825916), and only that box matches the card; the line was probably drawn from another tee. Measured from the White box through the line's bend points.
-8. Hole 13 (Blue): tee box lidar_tee_13_back assigned by the course chat at the developer's request (2026-10-20: the 13 tee was in the wrong place, with no tee box under the ball) (tagged hole=13, tee_set=Blue in edited/course.geojson).
-9. Hole 13 (White): tee box lidar_tee_13_back assigned by the course chat at the developer's request (2026-10-20: the 13 tee was in the wrong place, with no tee box under the ball) (tagged hole=13, tee_set=White in edited/course.geojson).
-10. Hole 15 (Blue): no mapped tee box within 8% of the card; the tee is the start point of the OSM hole line (159 yd). The Blue tee box is not in OSM - trace it to confirm.
-11. Hole 15 (Blue): measured 159 yd vs card 174 (-8.7%) - FAIL, needs a decision.
-12. Hole 16 (Blue): measured 416 yd vs card 432 (-3.6%) even with the virtual tee at the best spot in its box; accepted for play.
+5. Hole 9 (Blue): measured 329 yd vs card 356 (-7.7%) even with the virtual tee at the best spot in its box; accepted for play.
+6. Hole 9 (Blue): tee box w926822952_tee assigned by the developer (2026-11-10: screenshot of where the Blue 9 tee should be) (tagged hole=9, tee_set=Blue in edited/course.geojson).
+7. Hole 9 (White): tee box w926822952_tee assigned by the developer (2026-11-10: screenshot of where the Blue 9 tee should be) (tagged hole=9, tee_set=White in edited/course.geojson).
+8. Hole 11 (White): measured 173 yd vs card 167 (+3.8%) even with the virtual tee at the best spot in its box; accepted for play.
+9. Hole 12: the OSM hole line starts 56 m from the White tee box (w926825916), and only that box matches the card; the line was probably drawn from another tee. Measured from the White box through the line's bend points.
+10. Hole 13 (Blue): tee box lidar_tee_13_back assigned by the course chat at the developer's request (2026-10-20: the 13 tee was in the wrong place, with no tee box under the ball) (tagged hole=13, tee_set=Blue in edited/course.geojson).
+11. Hole 13 (White): tee box lidar_tee_13_back assigned by the course chat at the developer's request (2026-10-20: the 13 tee was in the wrong place, with no tee box under the ball) (tagged hole=13, tee_set=White in edited/course.geojson).
+12. Hole 15 (Blue): no mapped tee box within 8% of the card; the tee is the start point of the OSM hole line (159 yd). The Blue tee box is not in OSM - trace it to confirm.
+13. Hole 15 (Blue): measured 159 yd vs card 174 (-8.7%) - FAIL, needs a decision.
+14. Hole 16 (Blue): measured 416 yd vs card 432 (-3.6%) even with the virtual tee at the best spot in its box; accepted for play.
 
 ## East Potomac White Course
 
@@ -118,7 +120,7 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 2. **Blue 15 Blue tee: 159 yd vs 174 (-8.7%): accepted for play** (developer, 2026-10-19) until the Blue box is traced.
 3. **Blue 6 Blue tee: 513 yd vs 547 (-6.1%): flag, accepted for play.** The White tee is a lidar pad (499 yd vs 507). Recommendation: accept.
 4. **Red course 8 (White tee): 122 yd vs 111 (+9.9%): accepted for play** (developer, 2026-10-19); Red 5 (160 vs 171, -6.6%) and Red 6 (119 vs 126, -5.6%) are flags. No tee box is mapped or visible in the lidar for these three (par-3 tees on grade); the tee is the start of the OSM hole line.
-5. **19 tee boxes come from the lidar, not OSM** (approved by the developer, 2026-10-19) (`edits.json`, `proposed/tees_lidar.geojson`, picture `proposed/tees_lidar.png`). Each is a raised, levelled pad on the tee-shot axis of a hole that has no matching OSM tee, within 8% of the card. Tagged `proposed=lidar`, `approved=developer 2026-10-19`. To drop one, delete its id from `edits.json` and rebuild.
+5. **18 tee boxes come from the lidar, not OSM** (approved by the developer, 2026-10-19; a 19th, `lidar_tee_1` on Blue 9, was dropped on 2026-11-10, item 17) (`edits.json`, `proposed/tees_lidar.geojson`, picture `proposed/tees_lidar.png`). Each is a raised, levelled pad on the tee-shot axis of a hole that has no matching OSM tee, within 8% of the card. Tagged `proposed=lidar`, `approved=developer 2026-10-19`. To drop one, delete its id from `edits.json` and rebuild.
 6. **Forward (Red) tees of the White and Red courses are not built.** Most are in neither OSM nor the lidar, and three holes per course fail the 8% check from the White boxes. The game plays both 9-hole courses from the White tees (and only offers each course's default tee anyway). Recommendation: leave until the tees are traced.
 7. **Blue course ratings/slopes are unverified.** GolfNow/TeeOff: Blue 70.5/115, White 68.7/111; stymie.golf: Blue 70.0/112, White 68.2/107. Used GolfNow. The Red course has no rating (par-3 course); the game shows 0 / 0. Recommendation: confirm from the club or USGA NCRDB.
 8. **White course card total is a misprint** (2943 printed; the holes add up to 2,493). The build uses the hole yardages.
@@ -129,7 +131,8 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 13. **Practice greens:** six greens (the Practice Holes and the putting greens) are not on any hole and are wrong greens.
 14. **Fairways run into the greens** (developer, 2026-10-19). OSM fairways stopped short of 19 greens (rough between fairway and fringe) or met them with ragged corners. `s02b_approaches.py` adds an approach on every hole that has a fairway on its line: the convex hull of the fairway's last 20 m (within a corridor along the hole line) and the front half of the green, minus the green, other greens and tees (35 approaches, about 6,000 m2; gaps were 0-11 m). Bunkers, fringe and paths still paint on top. Listed in `build/approaches.json`.
 15. **No trees in fairways** (developer, 2026-10-19). Trees whose top stands more than 2 m inside a fairway (approaches included) are dropped (`trees_off_fairways_m`): 8 trees, listed under Tree detection. Trees at the edges, whose crowns overhang the fairway, stay.
-16. **Tee shots clear the trees** (developer, 2026-10-19: aiming at the middle of the fairway on Blue 1, the trees around the tee box were in the way). Every course build now checks that a perfect drive at the middle of the fairway touches no tree within 60 m of the tee (s06 / s06b). Seven blocked tees moved 1-8 m to the nearest clear spot in their own box, every one still within 3 % of the card (Blue 1, 5, 10, 16; White 5, 11, 12; see Playability adjustments). Where no spot in the box is clear, s06b takes out the trees in the way: 2 trees on Blue 9 (listed under Tree detection).
+16. **Tee shots clear the trees** (developer, 2026-10-19: aiming at the middle of the fairway on Blue 1, the trees around the tee box were in the way). Every course build now checks that a perfect drive at the middle of the fairway touches no tree within 60 m of the tee (s06 / s06b). Seven blocked tees moved 1-8 m to the nearest clear spot in their own box, every one still within 3 % of the card (Blue 1, 5, 10, 16; White 5, 11, 12; see Playability adjustments). Where no spot in the box is clear, s06b takes out the trees in the way: 2 trees on Blue 9 (listed under Tree detection). 
+17. **Blue 9 plays from its tee box east of the cart path** (developer, 2026-11-10, with a screenshot). OSM maps that box as a small fairway (w926822952, about 7.5 x 44 m); `edits.json` adds it as a tee for both sets (`proposed/tee_9.geojson`) and drops the fairway and the old lidar pad `lidar_tee_1` west of the path. The back of the box measures 341 yd (Blue card 356). The tee-shot check moves both tees 12 m up the box, clear of a 20.5 m tree at the box's front left that sits on the line from the back: Blue 329 yd (-7.7 %, flag), White 329 (card 336, -2.2 %). Removing that tree (`drop_trees`) would put Blue at the back of the box, 341 yd (-4.2 %).
 
 ## Playability adjustments
 
@@ -143,7 +146,9 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 - Hole 5 (Blue course, Blue): tee shot: a perfect drive at the middle of the fairway clipped a tree near the tee; moved 0.8 m along the middle of the real tee polygon lidar_tee_6 to the nearest clear spot -> 281.5 yd (real 275.0 yd).
 - Hole 5 (Blue course, White): measured 275 yd from the tee-box centre vs 286 on the card (-3.8%); moved the virtual tee along the middle of the real tee polygon lidar_tee_6 (on its centre line, at least 2.5 m from its back and front) -> 278.9 yd (real 275.0 yd).
 - Hole 8 (Blue course, White): measured 214 yd from the tee-box centre vs 196 on the card (+9.1%); moved the virtual tee along the middle of the real tee polygon w926822948 (on its centre line, at least 2.5 m from its back and front) -> 200.8 yd (real 213.8 yd).
-- Hole 9 (Blue course, Blue): measured 341 yd from the tee-box centre vs 356 on the card (-4.2%); moved the virtual tee along the middle of the real tee polygon lidar_tee_1 (on its centre line, at least 2.5 m from its back and front) -> 343.7 yd (real 341.1 yd).
+- Hole 9 (Blue course, Blue): measured 340 yd from the tee-box centre vs 356 on the card (-4.4%); moved the virtual tee along the middle of the real tee polygon w926822952_tee (on its centre line, at least 2.5 m from its back and front) -> 341.4 yd (real 340.3 yd).
+- Hole 9 (Blue course, Blue): tee shot: a perfect drive at the middle of the fairway clipped a tree near the tee; moved 11.8 m along the middle of the real tee polygon w926822952_tee to the nearest clear spot -> 328.6 yd (real 340.3 yd).
+- Hole 9 (Blue course, White): tee shot: a perfect drive at the middle of the fairway clipped a tree near the tee; moved 10.7 m along the middle of the real tee polygon w926822952_tee to the nearest clear spot -> 328.5 yd (real 340.3 yd).
 - Hole 10 (Blue course, Blue): measured 294 yd from the tee-box centre vs 311 on the card (-5.5%); moved the virtual tee along the middle of the real tee polygon lidar_tee_12 (on its centre line, at least 2.5 m from its back and front) -> 301.7 yd (real 293.9 yd).
 - Hole 11 (Blue course, White): measured 180 yd from the tee-box centre vs 167 on the card (+7.9%); moved the virtual tee along the middle of the real tee polygon w926825917 (on its centre line, at least 2.5 m from its back and front) -> 172.6 yd (real 180.2 yd).
 - Hole 11 (Blue course, White): tee shot: a perfect drive at the middle of the fairway clipped a tree near the tee; moved 1.1 m along the middle of the real tee polygon w926825917 to the nearest clear spot -> 173.4 yd (real 180.2 yd).
@@ -166,12 +171,11 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 
 ## Tree detection (DC lidar normalized surface model)
 
-- 4172 trees detected in the world extent (1635 inside the course), 385 conifers / 2782 deciduous / 1005 flowering cherries; median height 11.3 m, max 48.0 m.
+- 4174 trees detected in the world extent (1637 inside the course), 385 conifers / 2783 deciduous / 1006 flowering cherries; median height 11.3 m, max 48.0 m.
 - Dropped: 816 tops on building footprints, 0 over the lake, 13 tiny crowns.
 - Dropped on playing surfaces (spec 5.4): 15 -> green w926822934 (33.1 m), tee lidar_tee_22 (17.0 m), tee lidar_tee_22 (18.4 m), fairway w926826615 (22.0 m), fairway w926819269 (25.9 m), fairway w926819263 (21.1 m), fairway w926819263 (15.8 m), fairway r19842887 (17.4 m), fairway r19842887 (13.1 m), green w926833409 (19.6 m), green w926833395 (12.1 m), fairway r19842886 (19.6 m), tee lidar_tee_12 (9.6 m), tee lidar_tee_12 (10.0 m), fairway w926830866 (10.0 m)
-- Dropped from tee shots (s06b): 2 -> Blue 9 Blue (8.5 m tree, 6.5 m from the tee), Blue 9 Blue/Blue 9 White (9.1 m tree, 15.9 m from the tee)
 - OSM natural=tree points matched by a detected tree within 4 m: 380 of 1199.
-- Conifer vs deciduous is inferred from crown shape only (no leaf-off imagery); see build/trees_preview.png. Cherries (theme flair, species not measured): deciduous trees <= 12 m outside the golf boundary, within 45 m of open water and 100 m of the boundary (867 trees); 138 more deciduous trees (the most cherry-like by the same measures) are drawn as cherries to fill the sprite slots, 0 cherries are drawn plain.
+- Conifer vs deciduous is inferred from crown shape only (no leaf-off imagery); see build/trees_preview.png. Cherries (theme flair, species not measured): deciduous trees <= 12 m outside the golf boundary, within 45 m of open water and 100 m of the boundary (867 trees); 139 more deciduous trees (the most cherry-like by the same measures) are drawn as cherries to fill the sprite slots, 0 cherries are drawn plain.
 
 # Green shaping checks
 
@@ -234,7 +238,7 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 | 6 | 5 | yes | yes (1 near) | yes | yes | yes | 1 | 0 |
 | 7 | 4 | yes | yes (2 near) | yes | yes | yes | 2 | 0 |
 | 8 | 3 | yes | yes (2 near) | yes | yes | yes | 2 | 0 |
-| 9 | 4 | yes | NO (0 near) | yes | yes | yes | 3 | 0 |
+| 9 | 4 | yes | yes (1 near) | yes | yes | yes | 3 | 0 |
 | 10 | 4 | yes | yes (3 near) | yes | yes | yes | 0 | 0 |
 | 11 | 3 | yes | yes (4 near) | yes | yes | yes | 1 | 0 |
 | 12 | 5 | yes | yes (4 near) | yes | yes | yes | 1 | 0 |
@@ -284,7 +288,6 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 - Blue: hole 6: hole line carries handicap=5 (compare with scorecard)
 - Blue: hole 7: hole line carries handicap=15 (compare with scorecard)
 - Blue: hole 8: hole line carries handicap=9 (compare with scorecard)
-- Blue: hole 9: no tee polygon at the start of the hole line (nearest 26.5 m)
 - Blue: hole 9: hole line carries handicap=11 (compare with scorecard)
 - Blue: hole 10: hole line carries handicap=16 (compare with scorecard)
 - Blue: hole 11: hole line carries handicap=14 (compare with scorecard)
@@ -314,5 +317,5 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 
 - golf=clubhouse: 1 feature(s) (w66418626) -> a building: add building=yes
 
-Totals: 53 tees, 42 greens, 93 fairways, 52 bunkers, 0 water hazards, 39 pins, 12 cart paths, 1199 OSM tree points.
+Totals: 53 tees, 42 greens, 92 fairways, 52 bunkers, 0 water hazards, 39 pins, 12 cart paths, 1199 OSM tree points.
 
