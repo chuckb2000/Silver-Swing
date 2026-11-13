@@ -38,6 +38,26 @@
   {
    "name": "chicago_golf_naip_stac.json",
    "url": "https://planetarycomputer.microsoft.com/api/stac/v1/search?collections=naip&bbox=-88.1238,41.8385,-88.1088,41.8525&limit=50"
+  },
+  {
+   "name": "bluegolf_chicagogc_scorecard.html",
+   "url": "https://course.bluegolf.com/bluegolf/course/course/chicagogc/detailedscorecard.htm"
+  },
+  {
+   "name": "bluegolf_chicagogc_overview.html",
+   "url": "https://course.bluegolf.com/bluegolf/course/course/chicagogc/overview.htm"
+  },
+  {
+   "name": "bluegolf_search_chicago.html",
+   "url": "https://course.bluegolf.com/bluegolf/course/search/index.htm?q=Chicago+Golf+Club"
+  },
+  {
+   "name": "ncrdb_home.html",
+   "url": "https://ncrdb.usga.org/"
+  },
+  {
+   "name": "ncrdb_search_chicago.html",
+   "url": "https://ncrdb.usga.org/NCRDB/?CourseName=Chicago%20Golf&State=IL"
   }
  ]
 }
