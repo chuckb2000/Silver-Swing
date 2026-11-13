@@ -46,4 +46,13 @@ Only if A isn't possible. About 15 minutes.
 
 ## What arrived
 
-(filled in when the files come)
+The developer made the repository public (2026-11-12, 23:31); the re-run fetched everything
+except as noted (release `data-reserve`):
+
+- Overpass export; the 3DEP 1 m DEM OR_PortlandMetro_B24 (tile x50y504, 384 MB, clipped into
+  raw/); the OSIP 2024 photo in four 0.5 m quarters.
+- DOGAMI DTM/CHM at 3000 x 3000: HTTP 500. The canopy model in two halves of the world + 100 m
+  (1992 x 1124 each) worked; its catalog says OLC_METRO_2014.
+- 3DEP point cloud OR_PortlandMetro_B24 (12 tiles): rockyweb.usgs.gov sent one 47 MB tile in
+  about 50 minutes; the same names on the USGS S3 bucket (prd-tnm) are 404. Not used; the
+  trees come from the DOGAMI canopy model checked against the 2024 photo.
