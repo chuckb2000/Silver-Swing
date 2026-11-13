@@ -1676,3 +1676,22 @@ or a round counts (`systems/game/holiday.ts` is pure and tested; the drawing is
   an 8 is a "snowman" at Christmas; each with its picture and a sound.
 - The original portrait had a dark line along its top (its outline wrapped round the image);
   fixed while adding the hats.
+
+## Joined boundaries with layouts, double-green views, two steadier browser tests (Olympic Club chat, 2026-11-13)
+
+- **Boundary parts with layouts:** `join_boundary_parts` was ignored on a course with `layouts`
+  (the boundary was cut to its largest part), so the Olympic Club's Cliffs, across Skyline
+  Boulevard from the Lake course, had to be a course of its own. `play_boundary` now keeps every
+  part with the setting, as for a single layout, and `game_boundary` joins them across the road
+  (the strip stays out of bounds on the surface map).
+- **Double greens as one polygon:** when two holes of a layout end on the same green, each hole's
+  putting views (s09b) centre on its own pin (they centred on the green's middle, so the Cliffs'
+  OSM pins fell outside them and were dropped), and the game finds each hole's extra pins on its
+  own half of the green, nearer its own pin than the other hole's (`pins.ts`). No course on main
+  has such a green, so no pin sheet changes.
+- **Browser tests:** "a reload while the ball is in the air" waited a fixed 300 ms for the save; it
+  now waits for the saved stroke itself. The swing-length tap test waited frames and 300 ms
+  after the first tap, so on a busy machine the cursor reached the end of the bar first; it now
+  presses as soon as the cursor moves, on the easy (slowest) meter. Both passed 3-4 times in a
+  row with the CPU kept busy.
+

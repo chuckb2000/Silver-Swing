@@ -118,3 +118,30 @@ describe('the pin sheet for a round', () => {
     expect([old.pin.x, old.pin.y]).toEqual(course.json.holes[3].pin);
   });
 });
+
+describe('a double green mapped as one polygon for two holes (design chat, 2026-11-13)', () => {
+  it("each hole's pins stay on its own half", () => {
+    // the biggest green on the courses, given to a second hole with its pin on the far side of it
+    let best: { id: string; area: number; hole: number } | null = null;
+    for (const { id, course } of courses) {
+      for (const h of course.json.holes) {
+        const g = course.terrain.greens.find((m) => m.def.id === h.greenId);
+        if (g && (!best || g.poly.area() > best.area)) best = { id, area: g.poly.area(), hole: h.number };
+      }
+    }
+    const plain = loadCourseFiles(best!.id);
+    const a = plain.json.holes.find((h) => h.number === best!.hole)!;
+    const spots = coursePins(plain, plain.json.defaultTee)[plain.json.holes.indexOf(a)];
+    const far = spots.slice(1).reduce((m, s) => (Math.hypot(s.x - a.pin[0], s.y - a.pin[1]) > Math.hypot(m.x - a.pin[0], m.y - a.pin[1]) ? s : m));
+    const bNo = plain.json.holes.find((h) => h.number !== a.number)!.number;
+    const dbl = loadCourseFiles(best!.id, (j) => ({ ...j, holes: j.holes.map((h) => (h.number === bNo ? { ...h, greenId: a.greenId, pin: [far.x, far.y] as [number, number] } : h)) }));
+    const ha = dbl.json.holes.find((h) => h.number === a.number)!, hb = dbl.json.holes.find((h) => h.number === bNo)!;
+    const pins = coursePins(dbl, dbl.json.defaultTee);
+    const d = (s: { x: number; y: number }, p: number[]) => Math.hypot(s.x - p[0], s.y - p[1]);
+    const pa = pins[dbl.json.holes.indexOf(ha)], pb = pins[dbl.json.holes.indexOf(hb)];
+    expect(pa.length).toBeGreaterThanOrEqual(2);
+    expect(pb.length).toBeGreaterThanOrEqual(2);
+    for (const s of pa) expect(d(s, ha.pin)).toBeLessThanOrEqual(d(s, hb.pin));
+    for (const s of pb) expect(d(s, hb.pin)).toBeLessThanOrEqual(d(s, ha.pin));
+  });
+});

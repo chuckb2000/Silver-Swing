@@ -81,6 +81,9 @@ test('a swing tapped while the camera is still moving to the shot starts when th
     const ps = g.scene.getScene('play');
     return ps.state === 'aim' && !ps.fading && !ps.zooming;
   });
+  // the slowest meter (easy): the presses below must land before the cursor reaches the end of the
+  // bar by itself, also on a busy machine
+  await page.evaluate(() => { (window as any).__golf.settings.difficulty = 'easy'; });
   await tapButton(page, 'title', 'practice', 60_000, aiming);
   await page.waitForFunction(() => {
     const ps = window.__game.scene.getScene('play');
@@ -144,6 +147,9 @@ test('after the first tap, a press on a button beside the swing button (swing le
     const ps = g.scene.getScene('play');
     return ps.state === 'aim' && !ps.fading && !ps.zooming;
   });
+  // the slowest meter (easy): the presses below must land before the cursor reaches the end of the
+  // bar by itself, also on a busy machine
+  await page.evaluate(() => { (window as any).__golf.settings.difficulty = 'easy'; });
   await tapButton(page, 'title', 'practice', 60_000, aiming);
   await page.waitForFunction(() => {
     const ps = window.__game.scene.getScene('play');
@@ -154,9 +160,8 @@ test('after the first tap, a press on a button beside the swing button (swing le
   await settle(page);
   const scale0 = await page.evaluate(() => window.__game.scene.getScene('play').swingScale);
   await page.mouse.click(swing.x + swing.w / 2, swing.y + swing.h / 2);
-  await page.waitForFunction(() => window.__game.scene.getScene('play').meter?.phase === 'power', null, { timeout: 10_000 });
-  await settle(page, 4);
-  await page.waitForTimeout(300);
+  // as soon as the cursor is on its way (a fixed wait plus frames overran the bar on a busy machine)
+  await page.waitForFunction(() => { const m = window.__game.scene.getScene('play').meter; return m?.phase === 'power' && m.position(performance.now()) > 5; }, null, { polling: 10, timeout: 10_000 });
   // tap 2 lands on the swing-length button next to the swing button: power is set, the length stays
   await page.mouse.click(scale.x + scale.w / 2, scale.y + scale.h / 2);
   await page.waitForFunction(() => window.__game.scene.getScene('play').meter?.phase !== 'power', null, { timeout: 5_000 });
@@ -172,8 +177,8 @@ test('after the first tap, a press on a button beside the swing button (swing le
   const menu = await buttonBox(page, 'hud', 'menu');
   await settle(page);
   await page.mouse.click(swing.x + swing.w / 2, swing.y + swing.h / 2);
-  await page.waitForFunction(() => window.__game.scene.getScene('play').state === 'swing', null, { timeout: 10_000 });
-  await settle(page, 4);
+  await page.waitForFunction(() => window.__game.scene.getScene('play').state === 'swing', null, { polling: 10, timeout: 10_000 });
+  await settle(page, 1);
   await page.mouse.click(menu.x + menu.w / 2, menu.y + menu.h / 2);
   await page.waitForFunction(() => window.__game.scene.getScene('play').hud.modalOpen(), null, { timeout: 10_000 });
   expect(await page.evaluate(() => window.__game.scene.getScene('play').state)).toBe('aim');
