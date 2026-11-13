@@ -1,0 +1,19 @@
+{
+  "name": "Heron Lakes (wetland parkland on the Columbia floodplain)",
+  "note": "Course theme palette (<= 32 colours), same keys as pnw.json. Heron Lakes Golf Club, West Delta Park, on the Columbia River floodplain in North Portland among sloughs, ponds and the Force Lake wetlands (course chat, 2026-11-13). From the OSIP 2024 summer photo (fairway #91a679, green #92ab82, water #617271, rough #8b9a75): mown turf a soft sage green, the rough between the holes and on Great Blue's mounds drier and more olive-tan; bunker sand pale grey; the ponds and sloughs a still, murky green-grey. Trees: mostly planted broadleaves (Oregon ash, black cottonwood, willow) with some Douglas fir (trees_heron_lakes.py; a drawing choice, the lidar gives only crown shape). Shadows are a 35% black overlay on top of these.",
+  "colors": {
+    "G0": "#203421", "G1": "#2b4729", "G2": "#385c33", "G3": "#45703c",
+    "G4": "#538346", "G5": "#629651", "G6": "#71a65c", "G7": "#81b568",
+    "G8": "#94c277", "G9": "#b8d79a",
+    "L0": "#6a7a45", "L1": "#7d8c4e", "L2": "#919d5a",
+    "S0": "#b0ae9a", "S1": "#d0cdb9", "S2": "#e8e6d6",
+    "W0": "#38514f", "W1": "#476462", "W2": "#71908a",
+    "K0": "#25262c", "K1": "#52535b", "K2": "#797a82", "K3": "#b0a896", "K4": "#d8d0be",
+    "B0": "#46301f", "B1": "#6d4a31", "B2": "#8c5a40",
+    "R0": "#4a5768", "WH": "#f6f6f2"
+  },
+  "trees": {
+    "conifer": "trees_heron_lakes:conifer",
+    "deciduous": "trees_heron_lakes:deciduous"
+  }
+}
