@@ -85,7 +85,7 @@
     "path_8",
     "path_9"
    ],
-   "reason": "PROPOSAL, waiting for the developer's OK: the gravel and dirt walking paths OSM doesn't map, read from the NAIP 2023 photo (make_paths.py); golf=cartpath lines, 2.4 m wide"
+   "reason": "the gravel and dirt walking paths OSM doesn't map, read from the NAIP 2023 photo (make_paths.py), approved by the developer 2026-11-13 (\"paths and fescue looks great\"); golf=cartpath lines, 2.4 m wide"
   }
  ]
 }

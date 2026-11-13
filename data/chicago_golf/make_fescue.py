@@ -1,7 +1,7 @@
 """Chicago Golf Club: the native fescue of the rough, from the NAIP 2023 photo.
 
 Course-chat helper (not a `make course` step; its output is a proposal, used only
-after the developer approves it):
+after the developer approves it; approved 2026-11-13, "paths and fescue looks great"):
 
     python3 data/chicago_golf/make_fescue.py     (after s02: reads build/course_local.geojson)
 
