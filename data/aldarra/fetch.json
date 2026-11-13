@@ -63,12 +63,14 @@
   {
    "name": "USGS_LPC_WA_KingCounty_2021_B21_King_2158.laz",
    "url": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/WA_KingCounty_2021_B21/WA_KingCo_2_2021/LAZ/USGS_LPC_WA_KingCounty_2021_B21_King_2158.laz",
-   "note": "retry: timed out on the first run"
+   "note": "retry: timed out on the first run",
+   "retry": 2
   },
   {
    "name": "USGS_LPC_WA_KingCounty_2021_B21_King_2159.laz",
    "url": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/WA_KingCounty_2021_B21/WA_KingCo_2_2021/LAZ/USGS_LPC_WA_KingCounty_2021_B21_King_2159.laz",
-   "note": "retry: timed out on the first run"
+   "note": "retry: timed out on the first run",
+   "retry": 2
   },
   {
    "name": "USGS_LPC_WA_KingCounty_2021_B21_King_2229.laz",
@@ -83,7 +85,8 @@
   {
    "name": "USGS_LPC_WA_KingCounty_2021_B21_King_2231.laz",
    "url": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/WA_KingCounty_2021_B21/WA_KingCo_1_2021/LAZ/USGS_LPC_WA_KingCounty_2021_B21_King_2231.laz",
-   "note": "retry: timed out on the first run"
+   "note": "retry: timed out on the first run",
+   "retry": 2
   }
  ]
 }
