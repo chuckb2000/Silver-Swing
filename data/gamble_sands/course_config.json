@@ -42,13 +42,13 @@
   {
    "name": "Medal",
    "playable": true,
-   "rating": 74.8,
-   "slope": 131,
-   "total_yd": 7305
+   "rating": 73.4,
+   "slope": 120,
+   "total_yd": 7151
   }
  ],
  "default_tee": "Medal",
- "scorecard_source": "18Birdies, Gamble Sands course page (read 2026-11-13): Medal tees 7,305 yd, men's rating 74.8 / slope 131, pars and the one handicap row it shows; unverified (third party; the club's own card is not online). Other sources disagree: Greenskeeper.org (read 2026-11-13) has the same Medal yardages except 1 (422) and 2 (301), total 7,169, 74.2/128; GolfPass (read 2026-11-13) has an older Medal row (7,151, 73.4/120) with different yardages on most holes and a different men's handicap row (7 11 1 15 5 13 3 17 9 / 14 6 18 12 2 8 10 4 16; 18Birdies' row equals GolfPass's women's). 18Birdies is used because its 1 and 2 match the mapped tees (open item). Pars agree in all three; OSM's hole lines tag 5, 11, 13 and 14 with other pars (the card is used).",
+ "scorecard_source": "The club's printed scorecard (dated 07/24), photographed and sent by the developer 2026-11-13: Medal 7,151 yd 73.4/120, Back 6,664 70.7/114, Sands 6,389 69.4/111, Regular 6,113 (m 68.6/109, l 73.9/120), Intermediate 5,623 (m 66.0/103, l 70.9/113), Forward 4,804 66.4/102; par and handicap rows; every row adds up to its total. Same as GolfPass. Local rules on the card: all sandy areas are played as waste areas (through the green); all desert areas are red penalty areas, their edge where grass and desert meet (Model Local Rule B-1). OSM's hole lines tag 5, 11, 13 and 14 with other pars (the card is used).",
  "penalty_default": "red",
  "driving_range_is_ob": true,
  "wind_mph": {
@@ -80,5 +80,7 @@
   "h_max_m": 1.5,
   "h_default_m": 1.0,
   "note": "sagebrush and rabbitbrush, not gorse: bushes from the NAIP photo (pipeline/gorse.py; dark scrub on the pale sand), 7 m apart, kept 3 m off mown grass; no penal ground (bushes only, as at Pronghorn and Silvies); drawn by the theme's steppe_bush painter"
- }
+ },
+ "waste_sand": true,
+ "waste_sand_note": "the card's local rule: all sandy areas at Gamble Sands are played as waste areas. Every OSM bunker is tagged sand=waste in edits.json (s08: surface 18, general area)"
 }
