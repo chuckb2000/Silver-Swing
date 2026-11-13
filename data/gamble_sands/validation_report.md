@@ -63,43 +63,39 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 
 ## Other open items (Gamble Sands)
 
-Calls the course chat made on 2026-11-13; the developer has not seen them. Each has the
-facts, the options and a recommendation.
+Calls made on 2026-11-13 with the developer (the club's card and his screenshots) or by the
+course chat; each with a recommendation.
 
-1. **Scorecard.** Three third-party cards disagree. 18Birdies: Medal 7,305 yd, 74.8/131.
-   Greenskeeper.org: the same but 1 = 422 and 2 = 301 (7,169, 74.2/128). GolfPass: an older
-   Medal row (7,151, 73.4/120) with other yardages on most holes. Pars agree. Built from
-   18Birdies, whose 1 (518) and 2 (341) match the mapped tees (496 and 333 yd built); its
-   handicap row equals GolfPass's women's row. Options: keep 18Birdies; switch to another
-   card; a photo of the club's printed card. Recommendation: keep it until a printed card
-   turns up.
-2. **Hole 6 (par 3) is 15.7 % short:** 223 yd from the mapped tee beside the 5th green
-   against 265 on every card. Nothing behind that box but the 5th green. Options: accept;
-   a developer screenshot showing a back tee. Recommendation: accept.
-3. **Hole 12 is 13.2 % short:** 289 yd from the round tee next to the 11th green against
-   333. Recommendation: accept (no other pad on the photo).
-4. **Hole 14 is 23.5 % short:** the OSM line starts on a small round mown pad (mapped as
-   fairway, copied as the tee: `proposed/tee14.geojson`), 334 yd from the green against
-   437. The NAIP photo shows only sage behind it toward the 13th green. Options: accept;
-   a screenshot showing the back tee. Recommendation: accept for now; this is the hole most
-   likely to be mapped wrong.
-5. **Hole 18 is 8.6 % long:** 615 yd from the round tee behind the 17th green against 566.
-   The Medal tee is probably a forward box in the fairway that OSM does not map.
-   Recommendation: accept.
-6. **Penalty area w947744580, left of the 14th green:** OSM maps a dry sandy wash as a
-   lateral water hazard, so the game plays it as a red penalty area and draws it as water.
-   Options: keep it (red); redraw it as sand (bunker) or waste sand. Recommendation: waste
-   sand (the photo shows bare sand, no water).
-7. **The stream w947239360** crossing toward 14 is a dry wash: no penalty area made.
-8. **Lidar covers only the west third.** The 2021 North Central Washington project stops
-   at x 302246 (EPSG:32611); east of it no trees are found (the photo shows hardly any).
-   The bushes (sagebrush, rabbitbrush) come from the NAIP photo everywhere
-   (`pipeline/gorse.py`, bushes only, no penal lie). Tree types from crown shape.
-9. **Quicksands**, the resort's 14-hole par-3 course north-east of the clubhouse, is
-   dropped from the layout (its polygon and hole lines): it is out of bounds, its greens
-   drawn as greens.
-10. **Card hole, theme and logo:** card hole 2 (rotating 4, 12, 9); new theme
-    `gamble_sands`; logo an apple on a sand mound. All the course chat's picks.
+1. **Scorecard:** the club's printed card (07/24), sent by the developer: Medal 7,151 yd,
+   73.4/120. The six tee rows are in `scorecard.csv`; Medal is built (6,977 yd).
+2. **Tees on the fairway (developer, 2026-11-13: "the tee boxes look like they are
+   effectively part of the fairway").** On 1, 12 and 18 the mapped boxes were 13-17 %
+   off the card; a 5 m Medal tee is placed where the card distance falls on the hole line,
+   on mown grass in the NAIP photo (`proposed/tees_fairway.geojson`): 1 the top of the
+   fairway below the path by the clubhouse, 12 the mown apron south of the 11th green,
+   18 the fairway north of the 17th green. All three now pass.
+3. **Hole 6 (par 3) is 15.4 % short:** 223 yd from the mapped box beside the 5th green
+   against 264. The card distance falls on the 5th green itself, so no fairway tee fits.
+   Recommendation: accept as mapped, unless the developer can point to the back tee.
+4. **Hole 14 is 23.8 % short:** 339 yd from the small round pad where OSM's line starts
+   (mapped as fairway, copied as a tee: `proposed/tee14.geojson`) against 445. 106 yd
+   further back along the line is sage near the 13th green. Recommendation: accept as
+   mapped unless the developer can say where the back tee is (the hole line may be drawn
+   from the wrong pad).
+5. **Sand (the card's local rule: all sandy areas are waste areas).** Every bunker is
+   tagged `sand=waste` with `"waste_sand": true` (surface 18: general area, playable), and
+   the dry wash left of the 14th green, which OSM maps as a lateral water hazard, is waste
+   sand too (`proposed/wash14.geojson`).
+6. **Desert as a red penalty area (the card's Model Local Rule B-1)** needs a game change:
+   see "Request for the design chat" in `docs/courses/gamble_sands.md`. Until then the
+   desert plays as rough.
+7. **Lidar covers only the west third** (the project ends at x 302246): no trees east of
+   it (the photo shows hardly any). Sage and rabbitbrush bushes come from the NAIP photo
+   (`gorse` key, bushes only).
+8. **Quicksands** (the resort's 14-hole par-3 course) is dropped from the layout and is
+   out of bounds.
+9. **Card hole, theme and logo:** card hole 2 (rotating 4, 12, 9); theme `gamble_sands`;
+   logo an apple on a sand mound. The course chat's picks.
 
 ## Playability adjustments
 
