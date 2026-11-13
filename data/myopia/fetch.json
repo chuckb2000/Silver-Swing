@@ -10,17 +10,12 @@
    ]
   },
   {
-   "name": "myopia_dem1m",
-   "tnm": {
-    "dataset": "dem1m",
-    "bbox": [
-     -70.8693,
-     42.6001,
-     -70.8455,
-     42.6194
-    ],
-    "list": true
-   }
+   "name": "usgs_dem_m.tif",
+   "url": "https://elevation.nationalmap.gov/arcgis/rest/services/3DEPElevation/ImageServer/exportImage?bbox=346700,4718100,348600,4720200&bboxSR=32619&imageSR=32619&size=1900,2100&format=tiff&pixelType=F32&noData=-9999&interpolation=RSP_BilinearInterpolation&f=image"
+  },
+  {
+   "name": "usgs_dem_identify.json",
+   "url": "https://elevation.nationalmap.gov/arcgis/rest/services/3DEPElevation/ImageServer/identify?geometry=%7B%22x%22%3A347650%2C%22y%22%3A4719150%2C%22spatialReference%22%3A%7B%22wkid%22%3A32619%7D%7D&geometryType=esriGeometryPoint&returnCatalogItems=true&f=json"
   },
   {
    "name": "myopia_lpc",
@@ -32,7 +27,7 @@
      -70.8455,
      42.6194
     ],
-    "list": true
+    "only": "MA_CentralEastern_1_2021"
    }
   },
   {
