@@ -690,6 +690,13 @@ DECISIONS.md with the reason.
     is docs/COURSE_CHAT_START.md. DECISIONS.md "Downloads through GitHub
     Actions first".
 
+-   **Holiday themes (design chat, 2026-11-13):** branch `design/holidays`,
+    a mock-up for review, unmerged: Thanksgiving week and 15-31 December
+    dress the title, every course (restyled at load, no rebuild), the golfer
+    and the flag (`systems/game/holiday.ts`, `ui/holidayArt.ts`,
+    `HolidayFxScene`, `assets-src/holiday.py`); `?holiday=` previews one.
+    DECISIONS.md "Holiday themes, a mock-up".
+
 -   **Next task:** Item 1 of the player improvements (swing coach) is on
     `design/coach`, unmerged. Also: the third playtest (putting, yellow
     misses), the club's printed scorecard and the hole 3 Blue tee box. New courses: a separate chat following docs/COURSE_BUILD.md

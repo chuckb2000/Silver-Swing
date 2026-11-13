@@ -33,6 +33,8 @@ import { decodePath } from '../systems/match/path';
 import { CLOCK } from '../systems/match/types';
 import type { Action, HoleResult, HoleSnap, Logged, Seat } from '../systems/match/types';
 import type { SendResult } from '../net/matchClient';
+import { charTex, holidayTeeDecor } from '../ui/holidayArt';
+import { holidayFx } from './HolidayFxScene';
 
 export type PlayState = 'loading' | 'intro' | 'aim' | 'swing' | 'flight' | 'settle' | 'relief' | 'drop' | 'holed' | 'replay' | 'done'
   // live match play: the other player's turn, a move waiting for the server, between holes, the match over, and "decide what's next"
@@ -93,6 +95,7 @@ export class PlayScene extends Phaser.Scene {
   private golfer!: Phaser.GameObjects.Image;
   private flag!: Phaser.GameObjects.Sprite;
   private cup!: Phaser.GameObjects.Image;
+  private teeDecor: { frame: string; side: number; ahead: number; img: Phaser.GameObjects.Image }[] = [];
   private teeMarkers: Phaser.GameObjects.Image[] = [];
   private marker!: Phaser.GameObjects.Image;
   private puttTarget!: Phaser.GameObjects.Image;
@@ -211,10 +214,10 @@ export class PlayScene extends Phaser.Scene {
     this.slopeLayer = this.add.graphics().setDepth(DEPTH.ground + 2);
     this.reliefGfx = this.add.graphics().setDepth(DEPTH.ground + 3);
     this.cup = this.add.image(0, 0, 'ui', 'cup').setDepth(DEPTH.ground + 1);
-    this.flag = this.add.sprite(0, 0, 'ui', 'flag_0').setOrigin(0.25, 1);
+    this.flag = this.add.sprite(0, 0, charTex(this, 'flag_0'), 'flag_0').setOrigin(0.25, 1);
     this.shadow = this.add.image(0, 0, 'ui', 'ball_shadow').setOrigin(0.5, 0.5).setDepth(DEPTH.shadow);
     this.ball = this.add.image(0, 0, 'ui', 'ball').setOrigin(0.5, 0.5);
-    this.golfer = this.add.image(0, 0, 'ui', 'golfer_side_address').setOrigin(9 / 20, 20 / 22);
+    this.golfer = this.add.image(0, 0, charTex(this, 'golfer_side_address'), 'golfer_side_address').setOrigin(9 / 20, 20 / 22);
     this.marker = this.add.image(0, 0, 'ui', 'landing').setDepth(DEPTH.overlay + 2);
     this.puttTarget = this.add.image(0, 0, 'ui', 'putt_target').setDepth(DEPTH.overlay + 2).setVisible(false);
     this.dropMarker = this.add.image(0, 0, 'ui', 'cross').setDepth(DEPTH.overlay + 3).setVisible(false);
@@ -222,6 +225,8 @@ export class PlayScene extends Phaser.Scene {
     this.otherBall = this.add.image(0, 0, 'ui', 'ball').setOrigin(0.5, 0.5).setVisible(false);
     this.otherMark = this.add.image(0, 0, 'ui', 'arrow_down').setOrigin(0.5, 1).setDepth(DEPTH.overlay + 1).setVisible(false);
     for (let i = 0; i < 2; i++) this.teeMarkers.push(this.add.image(0, 0, 'ui', 'tee_marker').setOrigin(0.5, 1));
+    // a holiday's things beside the tee: a hay bale, pumpkins and a corn shock, or presents
+    this.teeDecor = holidayTeeDecor().map((d) => ({ ...d, img: this.add.image(0, 0, 'holiday', d.frame).setOrigin(0.5, 1).setVisible(false) }));
     for (let i = 0; i < 100; i++) this.dots.push(this.add.image(0, 0, 'ui', 'aim_dot').setDepth(DEPTH.overlay).setVisible(false).setAlpha(0.85));
     for (let i = 0; i < 8; i++) this.ticks.push(this.add.image(0, 0, 'ui', 'aim_tick').setDepth(DEPTH.overlay + 1).setVisible(false));
     for (let i = 0; i < 70; i++) this.trail.push(this.add.image(0, 0, 'ui', 'trail').setDepth(DEPTH.flight - 1).setVisible(false));
@@ -271,6 +276,7 @@ export class PlayScene extends Phaser.Scene {
       else if (data?.resume) this.resumeShot(); else this.startHoleIntro(false);
     });
     this.scene.launch('hud');
+    holidayFx(this); // falling snow or leaves on a holiday, under the HUD
     this.events.once('shutdown', () => this.scene.stop('hud'));
     // leaving the course ends this page's line to the match (the match goes on: "continue" on the title)
     this.events.once('shutdown', () => {
@@ -2433,6 +2439,18 @@ export class PlayScene extends Phaser.Scene {
       const s = i === 0 ? 2.6 : -2.6;
       const p = this.px(t.x + nx * s + (dx / L) * 1.2, t.y + ny * s + (dy / L) * 1.2);
       this.teeMarkers[i].setPosition(Math.round(p.x), Math.round(p.y)).setDepth(p.y).setVisible(show && this.level === COURSE);
+    }
+    // each on open grass: left out where its spot is under a tree, in water or sand, or off the course
+    const c = this.round.course;
+    const open = (x: number, y: number) => {
+      const sf = c.terrain.surface(x, y);
+      return (sf === SURF.rough || sf === SURF.tee || sf === SURF.fairway) && !c.obstacles.hidesPoint(x, y) && c.boundary.contains(x, y);
+    };
+    for (const d of this.teeDecor) {
+      const x = t.x + nx * d.side + (dx / L) * d.ahead, y = t.y + ny * d.side + (dy / L) * d.ahead;
+      const ok = open(x, y);
+      const p = this.px(x, y);
+      d.img.setPosition(Math.round(p.x), Math.round(p.y)).setDepth(p.y).setVisible(ok && show && this.level === COURSE && !this.practice);
     }
   }
 

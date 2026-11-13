@@ -22,6 +22,7 @@ import { liveMatchesAvailable, myMatches } from '../match/live';
 import { lobby, startLobby } from '../match/challenge';
 import { allPostsDialog, courseLabel, installChallengePopups, myPostDialog, openToChallenge, postDialog } from '../ui/challengeUi';
 import { minutesLeft } from '../systems/match/lobby';
+import { holidayFx } from './HolidayFxScene';
 
 const SHOW_MS = 9000;   // each course on screen
 const FADE_MS = 1400;   // cross-fade
@@ -80,6 +81,21 @@ export class TitleScene extends MenuScene {
     this.tourNow = !!data?.tour;
   }
 
+  /**
+   * A holiday on the title: santa's hat on the trophy at Christmas; at Thanksgiving a turkey in the
+   * bottom corner.
+   */
+  private holidayTitle(tx: number, ty: number, tw: number) {
+    if (!app.holiday || !this.textures.exists('holiday')) return;
+    if (app.holiday === 'christmas') {
+      this.root.add(this.add.image(tx + Math.round(tw / 2) - 17, ty - 9, 'holiday', 'santa_hat').setOrigin(0, 0));
+    } else {
+      // the turkey stands in the bottom corner, above the footer
+      const t = this.textures.get('holiday').get('turkey');
+      this.root.add(this.add.image(app.view.w - t.width - 10, app.view.h - t.height - 18, 'holiday', 'turkey').setOrigin(0, 0));
+    }
+  }
+
   create() {
     this.flyover = false;
     this.shown = [];
@@ -89,6 +105,7 @@ export class TitleScene extends MenuScene {
     this.scale.on('resize', this.layoutShade, this);
     this.events.once('shutdown', () => { this.scale.off('resize', this.layoutShade, this); this.shade = null; this.shown = []; });
     void this.startMaps();
+    holidayFx(this); // falling snow or leaves on a holiday
     whenUpdateReady(() => { if (this.sys.isActive()) this.rebuild(); });
     setVolume(app.settings.volume, app.settings.muted);
     this.input.once('pointerdown', () => { void initAudio(); });
@@ -419,8 +436,10 @@ export class TitleScene extends MenuScene {
       one.setX(left + trophy.width + tgap + Math.round(one.width / 2));
       this.root.add(one);
       placed = true;
+      this.holidayTitle(left, Math.max(2, top - 16), trophy.width);
     } else if (trophy && H >= 330) {
       this.root.add(this.add.image(cx - Math.round(trophy.width / 2), 4, 'trophy').setOrigin(0, 0));
+      this.holidayTitle(cx - Math.round(trophy.width / 2), 4, trophy.width);
       top = Math.max(top, trophy.height + 14);
       one.setY(top);
     }
@@ -442,7 +461,9 @@ export class TitleScene extends MenuScene {
     const small = W < 330; // a phone: the course count at 1x, and everything under it moves up by the line it saves
     this.root.add(txt(this, cx, top + 46 + dy, sub, { origin: [0.5, 0], scale: small ? 1 : 2, color: COLORS.yellow }));
     if (small) dy -= 9;
-    this.root.add(txt(this, cx, top + 66 + dy, 'real courses, rebuilt from map and lidar data', { origin: [0.5, 0], color: COLORS.dim }));
+    // a holiday's greeting in place of the line about the data
+    const greeting = app.holiday === 'christmas' ? 'merry christmas!' : app.holiday === 'thanksgiving' ? 'happy thanksgiving!' : '';
+    this.root.add(txt(this, cx, top + 66 + dy, greeting || 'real courses, rebuilt from map and lidar data', { origin: [0.5, 0], color: greeting ? (app.holiday === 'christmas' ? COLORS.red : COLORS.orangeHi) : COLORS.dim }));
     const snap = await peekSnapshot();
     // built again meanwhile (a phone turning, an update): that build draws the menu, not this one (two menus,
     // and two footers turning at once, skipped every other tip)

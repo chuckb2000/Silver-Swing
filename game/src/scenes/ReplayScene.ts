@@ -15,6 +15,7 @@ import { HZ, SimEvent, SimResult } from '../systems/physics/sim';
 import { SURF } from '../systems/physics/surfaces';
 import { CourseView, DEPTH } from '../ui/courseView';
 import { Button, COLORS, Panel, txt } from '../ui/widgets';
+import { charTex } from '../ui/holidayArt';
 
 const SLOW = 0.35;
 const SLOW_MS = 2600;
@@ -89,7 +90,7 @@ export class ReplayScene extends Phaser.Scene {
     if (holed) this.pin = { x: holed.x, y: holed.y };
     const c = this.px(this.pin.x, this.pin.y);
     this.add.image(Math.round(c.x), Math.round(c.y), 'ui', 'cup').setDepth(DEPTH.ground + 1);
-    this.flag = this.add.sprite(Math.round(c.x), Math.round(c.y) + 0.5, 'ui', 'flag_0').setOrigin(0.25, 1).setDepth(c.y);
+    this.flag = this.add.sprite(Math.round(c.x), Math.round(c.y) + 0.5, charTex(this, 'flag_0'), 'flag_0').setOrigin(0.25, 1).setDepth(c.y);
     this.shadow = this.add.image(0, 0, 'ui', 'ball_shadow').setDepth(DEPTH.shadow);
     this.ball = this.add.image(0, 0, 'ui', 'ball');
     // the golfer at the spot, after the swing, facing along the shot
@@ -125,7 +126,7 @@ export class ReplayScene extends Phaser.Scene {
     const b = this.px(at.x, at.y);
     const ox = facing === 'side' ? (flip ? 7 : -7) : 0, oy = facing === 'front' ? -3 : facing === 'back' ? 4 : 0;
     const putter = this.h.club.toLowerCase().includes('putter');
-    const g = this.add.image(Math.round(b.x + ox), Math.round(b.y + oy), 'ui', `golfer_${facing}_${putter ? 'address' : 'follow'}`)
+    const g = this.add.image(Math.round(b.x + ox), Math.round(b.y + oy), charTex(this, 'golfer_side_idle'), `golfer_${facing}_${putter ? 'address' : 'follow'}`)
       .setOrigin(9 / 20, 20 / 22).setFlipX(flip);
     g.setDepth(g.y);
   }
