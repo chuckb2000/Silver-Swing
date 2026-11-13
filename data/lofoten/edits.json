@@ -2,11 +2,11 @@
  "note": "Edits to the OSM layout for Lofoten Links; built into edited/course.geojson by pipeline/merge_edits.py.",
  "add": [
   {
-   "from": "proposed/sea.geojson",
+   "from": "proposed/sea_shore.geojson",
    "ids": [
     "sea"
    ],
-   "reason": "the Norwegian Sea from OSM's coastline (pipeline/propose_sea.py): a red penalty area wherever it lies (red_water_osm; developer's brief 2026-11-13: the sea is a penalty area), including the inlets the holes play over"
+   "reason": "the Norwegian Sea from OSM's coastline (pipeline/propose_sea.py) with the bare shore up to the boundary (make_shore.py): a red penalty area wherever it lies (red_water_osm; developer's brief 2026-11-13: the sea is a penalty area), including the inlets the holes play over"
   },
   {
    "from": "proposed/boundary.geojson",
