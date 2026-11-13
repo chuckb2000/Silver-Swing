@@ -1,0 +1,631 @@
+{
+ "note": "Edits to the OSM layout for the Old Course, written by make_edits.py (generic resort edits, then course_edits.json); built into edited/course.geojson by pipeline/merge_edits.py.",
+ "add": [
+  {
+   "from": "proposed/paths_as_cartpaths.geojson",
+   "ids": [
+    "w1053387957_cartpath",
+    "w1053387958_cartpath",
+    "w1053387960_cartpath",
+    "w1053387961_cartpath",
+    "w1053387963_cartpath",
+    "w1053387964_cartpath",
+    "w1053387966_cartpath",
+    "w1053387970_cartpath",
+    "w1053387972_cartpath",
+    "w133791336_cartpath",
+    "w133791340_cartpath",
+    "w133791343_cartpath",
+    "w1338625211_cartpath",
+    "w1338625212_cartpath",
+    "w1338625213_cartpath",
+    "w1338625214_cartpath",
+    "w220750764_cartpath",
+    "w220750767_cartpath",
+    "w220750778_cartpath",
+    "w220750786_cartpath"
+   ],
+   "reason": "20 golf=path ways inside the boundary, not read by s01: copied as golf=cartpath (free relief, drawn as paths)"
+  },
+  {
+   "from": "proposed/clubhouses_as_buildings.geojson",
+   "ids": [
+    "r19594439_building",
+    "w1147638655_building",
+    "w1429535357_building",
+    "w1429535364_building",
+    "w1429535368_building",
+    "w263959967_building",
+    "w275301666_building",
+    "w297397760_building"
+   ],
+   "reason": "8 golf=clubhouse buildings (s01 reads the golf tag first, so not as buildings): copied as buildings"
+  },
+  {
+   "from": "proposed/greens_split.geojson",
+   "ids": [
+    "p_green_5",
+    "p_green_13",
+    "p_green_4",
+    "p_green_14",
+    "p_green_2",
+    "p_green_16",
+    "p_green_3",
+    "p_green_15",
+    "p_green_6",
+    "p_green_12",
+    "p_green_7",
+    "p_green_11",
+    "p_green_8",
+    "p_green_10"
+   ],
+   "reason": "the seven double greens (2/16, 3/15, 4/14, 5/13, 6/12, 7/11, 8/10; OSM maps each as one polygon with a pin for each hole) cut into one part per hole by split_double_greens.py (perpendicular bisector of the two holes' OSM pins; each hole line ends on its own pin), so each hole has its own centre, pin spots and putting views; the game treats the two halves as one putting surface (round.ts greenPartners: no wrong-green relief on the other half)"
+  },
+  {
+   "from": "proposed/sea.geojson",
+   "ids": [
+    "sea"
+   ],
+   "reason": "the North Sea (St Andrews Bay) and the Eden estuary from OSM's coastline (pipeline/propose_sea.py): a red penalty area wherever it lies (red_water_osm; developer's brief 2026-11-13: the Eden estuary is a penalty area)"
+  },
+  {
+   "from": "proposed/links_boundary.geojson",
+   "ids": [
+    "links_boundary"
+   ],
+   "reason": "the OB line: the Old, New and Jubilee polygons joined and cut to the world (make_boundary.py): out of bounds by the town, the Old Course Hotel, the wall and fence right of 14-16 and the Links' outer edge (developer's brief and the 2026 card's local rule 1); a shot onto the New or Jubilee Course is in play"
+  }
+ ],
+ "tags": [
+  {
+   "osm": "w1429804901",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "unnamed (golf=water_hazard): every penalty area red (standing default)"
+  },
+  {
+   "osm": "w1429804902",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "unnamed (golf=water_hazard): every penalty area red (standing default)"
+  },
+  {
+   "osm": "w1429804903",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "unnamed (golf=water_hazard): every penalty area red (standing default)"
+  },
+  {
+   "osm": "w1429804904",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "unnamed (golf=water_hazard): every penalty area red (standing default)"
+  },
+  {
+   "osm": "w1429804905",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "unnamed (golf=water_hazard): every penalty area red (standing default)"
+  },
+  {
+   "osm": "w180275548",
+   "set": {
+    "hole": "8",
+    "tee_set": "Black"
+   },
+   "reason": "the 8th's large teeing ground (591 m2): its back is where the Black card (170 yd) falls; the box OSM puts at the line's start (w294611908) measures 186-188 yd, +10.6 % (the Open tee, not on the 2026 card)"
+  }
+ ],
+ "drop": [
+  {
+   "osm": "w158718157",
+   "reason": "Eden Course (leisure=golf_course): another course of the St Andrews Links; the out-of-bounds line is the Old Course's own polygon"
+  },
+  {
+   "osm": "w158718555",
+   "reason": "Strathtyrum Course (leisure=golf_course): another course of the St Andrews Links; the out-of-bounds line is the Old Course's own polygon"
+  },
+  {
+   "osm": "w158718591",
+   "reason": "Balgove Course (leisure=golf_course): another course of the St Andrews Links; the out-of-bounds line is the Old Course's own polygon"
+  },
+  {
+   "osm": "w68283334",
+   "reason": "New Course (leisure=golf_course): another course of the St Andrews Links; the out-of-bounds line is the Old Course's own polygon"
+  },
+  {
+   "osm": "w68283454",
+   "reason": "Jubilee Course (leisure=golf_course): another course of the St Andrews Links; the out-of-bounds line is the Old Course's own polygon"
+  },
+  {
+   "osm": "w1132555549",
+   "reason": "an unnamed line (ref 1): another course's hole line; its surfaces stay as mapped"
+  },
+  {
+   "osm": "w1132555550",
+   "reason": "an unnamed line (ref 2): another course's hole line; its surfaces stay as mapped"
+  },
+  {
+   "osm": "w1132555551",
+   "reason": "an unnamed line (ref 3): another course's hole line; its surfaces stay as mapped"
+  },
+  {
+   "osm": "w1132555552",
+   "reason": "an unnamed line (ref 4): another course's hole line; its surfaces stay as mapped"
+  },
+  {
+   "osm": "w1132555553",
+   "reason": "an unnamed line (ref 5): another course's hole line; its surfaces stay as mapped"
+  },
+  {
+   "osm": "w1132555554",
+   "reason": "an unnamed line (ref 6): another course's hole line; its surfaces stay as mapped"
+  },
+  {
+   "osm": "w1132555555",
+   "reason": "an unnamed line (ref 7): another course's hole line; its surfaces stay as mapped"
+  },
+  {
+   "osm": "w1132555556",
+   "reason": "an unnamed line (ref 8): another course's hole line; its surfaces stay as mapped"
+  },
+  {
+   "osm": "w1132555557",
+   "reason": "an unnamed line (ref 9): another course's hole line; its surfaces stay as mapped"
+  },
+  {
+   "osm": "w1132555558",
+   "reason": "an unnamed line (ref 10): another course's hole line; its surfaces stay as mapped"
+  },
+  {
+   "osm": "w1132555559",
+   "reason": "an unnamed line (ref 11): another course's hole line; its surfaces stay as mapped"
+  },
+  {
+   "osm": "w1132555560",
+   "reason": "an unnamed line (ref 12): another course's hole line; its surfaces stay as mapped"
+  },
+  {
+   "osm": "w1132555561",
+   "reason": "an unnamed line (ref 13): another course's hole line; its surfaces stay as mapped"
+  },
+  {
+   "osm": "w1132555562",
+   "reason": "an unnamed line (ref 14): another course's hole line; its surfaces stay as mapped"
+  },
+  {
+   "osm": "w1132555563",
+   "reason": "an unnamed line (ref 15): another course's hole line; its surfaces stay as mapped"
+  },
+  {
+   "osm": "w1132555564",
+   "reason": "an unnamed line (ref 16): another course's hole line; its surfaces stay as mapped"
+  },
+  {
+   "osm": "w1132555565",
+   "reason": "an unnamed line (ref 17): another course's hole line; its surfaces stay as mapped"
+  },
+  {
+   "osm": "w1132555566",
+   "reason": "an unnamed line (ref 18): another course's hole line; its surfaces stay as mapped"
+  },
+  {
+   "osm": "w1286689638",
+   "reason": "an unnamed line (ref 16): another course's hole line; its surfaces stay as mapped"
+  },
+  {
+   "osm": "w1286689639",
+   "reason": "an unnamed line (ref 12): another course's hole line; its surfaces stay as mapped"
+  },
+  {
+   "osm": "w1286689640",
+   "reason": "an unnamed line (ref 10): another course's hole line; its surfaces stay as mapped"
+  },
+  {
+   "osm": "w1286689641",
+   "reason": "an unnamed line (ref 11): another course's hole line; its surfaces stay as mapped"
+  },
+  {
+   "osm": "w1286689642",
+   "reason": "an unnamed line (ref 5): another course's hole line; its surfaces stay as mapped"
+  },
+  {
+   "osm": "w1286689643",
+   "reason": "an unnamed line (ref 6): another course's hole line; its surfaces stay as mapped"
+  },
+  {
+   "osm": "w1286689645",
+   "reason": "an unnamed line (ref 1): another course's hole line; its surfaces stay as mapped"
+  },
+  {
+   "osm": "w1286689646",
+   "reason": "an unnamed line (ref 4): another course's hole line; its surfaces stay as mapped"
+  },
+  {
+   "osm": "w1286689647",
+   "reason": "an unnamed line (ref 7): another course's hole line; its surfaces stay as mapped"
+  },
+  {
+   "osm": "w1286689648",
+   "reason": "an unnamed line (ref 2): another course's hole line; its surfaces stay as mapped"
+  },
+  {
+   "osm": "w1286689650",
+   "reason": "an unnamed line (ref 3): another course's hole line; its surfaces stay as mapped"
+  },
+  {
+   "osm": "w1286689651",
+   "reason": "an unnamed line (ref 13): another course's hole line; its surfaces stay as mapped"
+  },
+  {
+   "osm": "w1286689652",
+   "reason": "an unnamed line (ref 8): another course's hole line; its surfaces stay as mapped"
+  },
+  {
+   "osm": "w1286689653",
+   "reason": "an unnamed line (ref 17): another course's hole line; its surfaces stay as mapped"
+  },
+  {
+   "osm": "w1286689654",
+   "reason": "an unnamed line (ref 18): another course's hole line; its surfaces stay as mapped"
+  },
+  {
+   "osm": "w1286689655",
+   "reason": "an unnamed line (ref 9): another course's hole line; its surfaces stay as mapped"
+  },
+  {
+   "osm": "w1388767653",
+   "reason": "an unnamed line (ref 1): another course's hole line; its surfaces stay as mapped"
+  },
+  {
+   "osm": "w1388767654",
+   "reason": "an unnamed line (ref 2): another course's hole line; its surfaces stay as mapped"
+  },
+  {
+   "osm": "w1388767655",
+   "reason": "an unnamed line (ref 3): another course's hole line; its surfaces stay as mapped"
+  },
+  {
+   "osm": "w1388767656",
+   "reason": "an unnamed line (ref 4): another course's hole line; its surfaces stay as mapped"
+  },
+  {
+   "osm": "w1388767657",
+   "reason": "an unnamed line (ref 5): another course's hole line; its surfaces stay as mapped"
+  },
+  {
+   "osm": "w1388767658",
+   "reason": "an unnamed line (ref 6): another course's hole line; its surfaces stay as mapped"
+  },
+  {
+   "osm": "w1388767659",
+   "reason": "an unnamed line (ref 7): another course's hole line; its surfaces stay as mapped"
+  },
+  {
+   "osm": "w1388767660",
+   "reason": "an unnamed line (ref 8): another course's hole line; its surfaces stay as mapped"
+  },
+  {
+   "osm": "w1388767661",
+   "reason": "an unnamed line (ref 9): another course's hole line; its surfaces stay as mapped"
+  },
+  {
+   "osm": "w1388773919",
+   "reason": "an unnamed line (ref 1): another course's hole line; its surfaces stay as mapped"
+  },
+  {
+   "osm": "w1388773920",
+   "reason": "an unnamed line (ref 2): another course's hole line; its surfaces stay as mapped"
+  },
+  {
+   "osm": "w1388773921",
+   "reason": "an unnamed line (ref 3): another course's hole line; its surfaces stay as mapped"
+  },
+  {
+   "osm": "w1388773922",
+   "reason": "an unnamed line (ref 4): another course's hole line; its surfaces stay as mapped"
+  },
+  {
+   "osm": "w1388773923",
+   "reason": "an unnamed line (ref 5): another course's hole line; its surfaces stay as mapped"
+  },
+  {
+   "osm": "w1388773924",
+   "reason": "an unnamed line (ref 6): another course's hole line; its surfaces stay as mapped"
+  },
+  {
+   "osm": "w1388773925",
+   "reason": "an unnamed line (ref 7): another course's hole line; its surfaces stay as mapped"
+  },
+  {
+   "osm": "w1388773926",
+   "reason": "an unnamed line (ref 8): another course's hole line; its surfaces stay as mapped"
+  },
+  {
+   "osm": "w1388773927",
+   "reason": "an unnamed line (ref 9): another course's hole line; its surfaces stay as mapped"
+  },
+  {
+   "osm": "w1388773928",
+   "reason": "an unnamed line (ref 10): another course's hole line; its surfaces stay as mapped"
+  },
+  {
+   "osm": "w1388773930",
+   "reason": "an unnamed line (ref 11): another course's hole line; its surfaces stay as mapped"
+  },
+  {
+   "osm": "w1388773933",
+   "reason": "an unnamed line (ref 14): another course's hole line; its surfaces stay as mapped"
+  },
+  {
+   "osm": "w1388773934",
+   "reason": "an unnamed line (ref 15): another course's hole line; its surfaces stay as mapped"
+  },
+  {
+   "osm": "w1388773935",
+   "reason": "an unnamed line (ref 16): another course's hole line; its surfaces stay as mapped"
+  },
+  {
+   "osm": "w1388773937",
+   "reason": "an unnamed line (ref 17): another course's hole line; its surfaces stay as mapped"
+  },
+  {
+   "osm": "w1388773938",
+   "reason": "an unnamed line (ref 18): another course's hole line; its surfaces stay as mapped"
+  },
+  {
+   "osm": "w815764440",
+   "reason": "Willie Auchterlonie (ref 1): another course's hole line; its surfaces stay as mapped"
+  },
+  {
+   "osm": "w815767182",
+   "reason": "Whinny Knowe (ref 2): another course's hole line; its surfaces stay as mapped"
+  },
+  {
+   "osm": "w815773278",
+   "reason": "The Skelp (ref 3): another course's hole line; its surfaces stay as mapped"
+  },
+  {
+   "osm": "w815791611",
+   "reason": "Crossgate (ref 4): another course's hole line; its surfaces stay as mapped"
+  },
+  {
+   "osm": "w815791616",
+   "reason": "Willie Whitelaw (ref 14): another course's hole line; its surfaces stay as mapped"
+  },
+  {
+   "osm": "w815792108",
+   "reason": "Hackie's Barra' (ref 5): another course's hole line; its surfaces stay as mapped"
+  },
+  {
+   "osm": "w815794382",
+   "reason": "Playfair (ref 6): another course's hole line; its surfaces stay as mapped"
+  },
+  {
+   "osm": "w815801500",
+   "reason": "The Butts (ref 12): another course's hole line; its surfaces stay as mapped"
+  },
+  {
+   "osm": "w815801508",
+   "reason": "Hale Bopp (ref 13): another course's hole line; its surfaces stay as mapped"
+  },
+  {
+   "osm": "w815802412",
+   "reason": "Steel's Gem (ref 15): another course's hole line; its surfaces stay as mapped"
+  },
+  {
+   "osm": "w815804605",
+   "reason": "Freddie Tait (ref 16): another course's hole line; its surfaces stay as mapped"
+  },
+  {
+   "osm": "w815804614",
+   "reason": "Ladyhead (ref 17): another course's hole line; its surfaces stay as mapped"
+  },
+  {
+   "osm": "w815805572",
+   "reason": "Honeyman's Howe (ref 18): another course's hole line; its surfaces stay as mapped"
+  },
+  {
+   "osm": "w1223215410",
+   "reason": "another course's green wholly outside the world box (s07/s09 cannot shape a green off the map)"
+  },
+  {
+   "osm": "w1223215412",
+   "reason": "another course's green wholly outside the world box (s07/s09 cannot shape a green off the map)"
+  },
+  {
+   "osm": "w1223227107",
+   "reason": "another course's green wholly outside the world box (s07/s09 cannot shape a green off the map)"
+  },
+  {
+   "osm": "w1223351405",
+   "reason": "another course's green wholly outside the world box (s07/s09 cannot shape a green off the map)"
+  },
+  {
+   "osm": "w1223382394",
+   "reason": "another course's green wholly outside the world box (s07/s09 cannot shape a green off the map)"
+  },
+  {
+   "osm": "w1223384780",
+   "reason": "another course's green wholly outside the world box (s07/s09 cannot shape a green off the map)"
+  },
+  {
+   "osm": "w815794380",
+   "reason": "another course's green wholly outside the world box (s07/s09 cannot shape a green off the map)"
+  },
+  {
+   "osm": "w815801498",
+   "reason": "another course's green wholly outside the world box (s07/s09 cannot shape a green off the map)"
+  },
+  {
+   "osm": "w815801506",
+   "reason": "another course's green wholly outside the world box (s07/s09 cannot shape a green off the map)"
+  },
+  {
+   "osm": "w1053387957",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1053387958",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1053387960",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1053387961",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1053387963",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1053387964",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1053387966",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1053387970",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1053387972",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w133791336",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w133791340",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w133791343",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1338625211",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1338625212",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1338625213",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w1338625214",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w220750764",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w220750767",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w220750778",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "w220750786",
+   "reason": "replaced by its golf=cartpath copy (add above)"
+  },
+  {
+   "osm": "r19594439",
+   "reason": "replaced by its building copy (add above)"
+  },
+  {
+   "osm": "w1147638655",
+   "reason": "replaced by its building copy (add above)"
+  },
+  {
+   "osm": "w1429535357",
+   "reason": "replaced by its building copy (add above)"
+  },
+  {
+   "osm": "w1429535364",
+   "reason": "replaced by its building copy (add above)"
+  },
+  {
+   "osm": "w1429535368",
+   "reason": "replaced by its building copy (add above)"
+  },
+  {
+   "osm": "w263959967",
+   "reason": "replaced by its building copy (add above)"
+  },
+  {
+   "osm": "w275301666",
+   "reason": "replaced by its building copy (add above)"
+  },
+  {
+   "osm": "w297397760",
+   "reason": "replaced by its building copy (add above)"
+  },
+  {
+   "osm": "w180275738",
+   "reason": "replaced by its two halves (add above)"
+  },
+  {
+   "osm": "w180275732",
+   "reason": "replaced by its two halves (add above)"
+  },
+  {
+   "osm": "w180275725",
+   "reason": "replaced by its two halves (add above)"
+  },
+  {
+   "osm": "w180275728",
+   "reason": "replaced by its two halves (add above)"
+  },
+  {
+   "osm": "w236999257",
+   "reason": "replaced by its two halves (add above)"
+  },
+  {
+   "osm": "w294611906",
+   "reason": "replaced by its two halves (add above)"
+  },
+  {
+   "osm": "w180275531",
+   "reason": "replaced by its two halves (add above)"
+  },
+  {
+   "osm": "w1223358376",
+   "reason": "another course's feature crossing the world edge (s09 cannot draw a green or tee cut by the edge)"
+  },
+  {
+   "osm": "w1223382408",
+   "reason": "another course's feature crossing the world edge (s09 cannot draw a green or tee cut by the edge)"
+  },
+  {
+   "osm": "w1223382412",
+   "reason": "another course's feature crossing the world edge (s09 cannot draw a green or tee cut by the edge)"
+  },
+  {
+   "osm": "w858213780",
+   "reason": "another course's feature crossing the world edge (s09 cannot draw a green or tee cut by the edge)"
+  },
+  {
+   "osm": "w1019045811",
+   "reason": "the Old Course's own polygon, replaced as the OB line by links_boundary (add above)"
+  }
+ ],
+ "extend_start": []
+}

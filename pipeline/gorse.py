@@ -97,9 +97,14 @@ def gorse_area(cfg, world, g, chm: np.ndarray) -> np.ndarray:
     from rasterio.features import rasterize
     p = params(cfg)
     H, W = chm.shape
-    veg05 = scrub_class(ortho_on_world(cfg, world), p)              # rows north->south, 0.5 m
-    veg = veg05[:2 * H, :2 * W].reshape(H, 2, W, 2).mean(axis=(1, 3)) >= 0.5
-    veg = np.flipud(veg)                                            # rows south->north
+    if cfg.get("ortho"):
+        veg05 = scrub_class(ortho_on_world(cfg, world), p)          # rows north->south, 0.5 m
+        veg = veg05[:2 * H, :2 * W].reshape(H, 2, W, 2).mean(axis=(1, 3)) >= 0.5
+        veg = np.flipud(veg)                                        # rows south->north
+    else:
+        # no orthophoto (the Old Course: no open imagery of Scotland): the thickets are only the
+        # `extra_areas` (mapped scrub), below
+        veg = np.zeros((H, W), bool)
     bdir = build_dir(cfg["id"])
     z = np.load(bdir / "height_base.npy")[:H, :W]
     lake = np.load(bdir / "lake_mask.npy")[:H, :W]
