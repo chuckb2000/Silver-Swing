@@ -20,6 +20,7 @@ export abstract class MenuScene extends Phaser.Scene {
     if (this.flyover) ensureBg(this);
     uiCamera(this.cameras.main);
     this.root = this.add.container(0, 0);
+    this.gen++; // a build of an earlier visit still waiting on the network is not this visit's
     void this.build();
     this.scale.on('resize', this.onResize, this);
     this.events.once('shutdown', () => this.scale.off('resize', this.onResize, this));

@@ -66,6 +66,11 @@ function modal(title: string, onClose: () => void) {
     dim.remove();
     onClose();
   };
+  // a press or a release on the dialog stays in it (as domDialog.ts): Phaser also listens on the
+  // window, and "copy" or "close" was a tap on the leaderboard row or tab underneath as well
+  for (const node of [dim, box]) {
+    for (const t of ['mousedown', 'mouseup', 'pointerdown', 'pointerup', 'touchstart', 'touchend'] as const) node.addEventListener(t, (e) => e.stopPropagation());
+  }
   window.addEventListener('keydown', onKey, true);
   window.addEventListener('keyup', onKey, true);
   document.body.appendChild(dim);

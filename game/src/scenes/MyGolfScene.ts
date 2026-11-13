@@ -14,7 +14,7 @@ import { playerStats } from '../save/stats';
 import { handicapOf, hcpCourses, indexLabel, ownHcpRounds } from '../systems/game/handicap';
 import { toPar } from '../systems/rules/scoring';
 import { ensureImages } from '../ui/shareCard';
-import { Button, COLORS, Panel, txt } from '../ui/widgets';
+import { Button, COLORS, fitHeading, Panel, txt } from '../ui/widgets';
 import { lengthLabel, shapeById } from './flow';
 import { isFullRound } from '../systems/game/lengths';
 import { MenuScene } from './menu';
@@ -41,7 +41,8 @@ export class MyGolfScene extends MenuScene {
     const x0 = Math.round((W - pw) / 2), y0 = 4;
     this.root.add(new Panel(this, x0, y0, pw, ph, 0.9));
     const who = app.settings.playerName === DEFAULT_NAME ? 'this device' : app.settings.playerName;
-    this.root.add(txt(this, x0 + pw / 2, y0 + 5, `my golf  ·  ${who}`, { origin: [0.5, 0], scale: 2, maxWidth: pw - 16 }));
+    // (at 1x when the name makes it too wide: wrapped at 2x it covered the tabs)
+    this.root.add(fitHeading(txt(this, x0 + pw / 2, y0 + 5, `my golf  ·  ${who}`, { origin: [0.5, 0] }), pw - 16));
     const items: [typeof tab, string][] = [['stats', 'stats'], ['passport', 'passport'], ['milestones', 'milestones']];
     const bw = Math.floor((pw - 16 - 4) / 3);
     items.forEach(([k, lab], i) => this.root.add(new Button(this, x0 + 8 + i * (bw + 2), y0 + 24, bw, 14, lab, () => { tab = k; page = 0; this.rebuild(); }, { color: tab === k ? 'orange' : 'grey' })));
@@ -88,14 +89,16 @@ export class MyGolfScene extends MenuScene {
       ['rounds', String(st.rounds)], ['fairways', pct(st.fairwayPct)], ['greens in reg.', pct(st.girPct)],
       ['putts / 18', one(st.puttsPer18)], ['penalties / 18', one(st.penaltiesPer18)],
     ];
-    const bw = Math.floor((pw - 16 - 4 * (boxes.length - 1)) / boxes.length);
+    // six in a row, or two rows of three on a phone (41-wide boxes: "greens in reg." ran into its neighbours)
+    const per = pw < 340 ? 3 : boxes.length;
+    const bw = Math.floor((pw - 16 - 4 * (per - 1)) / per);
     boxes.forEach(([lab, v], i) => {
-      const bx = x0 + 8 + i * (bw + 4);
-      this.root.add(new Panel(this, bx, y, bw, 30, 0.6));
-      this.root.add(txt(this, bx + bw / 2, y + 3, v, { origin: [0.5, 0], scale: 2, color: COLORS.yellow }));
-      this.root.add(txt(this, bx + bw / 2, y + 21, lab, { origin: [0.5, 0], color: COLORS.dim }));
+      const bx = x0 + 8 + (i % per) * (bw + 4), by = y + Math.floor(i / per) * 34;
+      this.root.add(new Panel(this, bx, by, bw, 30, 0.6));
+      this.root.add(txt(this, bx + bw / 2, by + 3, v, { origin: [0.5, 0], scale: 2, color: COLORS.yellow }));
+      this.root.add(txt(this, bx + bw / 2, by + 21, lab, { origin: [0.5, 0], color: COLORS.dim }));
     });
-    y += 36;
+    y += 36 + 34 * (Math.ceil(boxes.length / per) - 1);
     // the last rounds, to par per 18 holes: a bar per round (under par up, over par down)
     const rec = st.recent;
     const gx = x0 + 8, gw = pw - 16, gh = 34;
@@ -118,14 +121,18 @@ export class MyGolfScene extends MenuScene {
     if (last) this.root.add(txt(this, gx + gw - 2, y + 2, `last: ${toPar(Math.round(last.toPar18))}`, { origin: [1, 0], color: COLORS.dim }));
     y += gh + 6;
     // per course: rounds, averages, best
-    const cols = [x0 + 8, x0 + 150, x0 + 190, x0 + 236, x0 + 282];
-    ['course', 'rounds', 'avg 18', 'avg 9', 'best'].forEach((t, i) => this.root.add(txt(this, cols[i], y, t, { color: COLORS.dim })));
+    // columns from the right edge (fixed places put "best" off a phone's screen); a phone drops "avg 9"
+    const narrow = pw < 340;
+    const cols = narrow ? [x0 + 8, x0 + pw - 166, x0 + pw - 126, -1, x0 + pw - 78]
+      : pw < 360 ? [x0 + 8, x0 + pw - 210, x0 + pw - 170, x0 + pw - 124, x0 + pw - 78] : [x0 + 8, x0 + 150, x0 + 190, x0 + 236, x0 + 282];
+    const nameLen = Math.max(8, Math.min(22, Math.floor((cols[1] - cols[0] - 6) / 5.5)));
+    ['course', 'rounds', 'avg 18', 'avg 9', 'best'].forEach((t, i) => { if (cols[i] >= 0) this.root.add(txt(this, cols[i], y, t, { color: COLORS.dim })); });
     const n = Math.max(1, Math.floor((bottom - (y + 11)) / 11));
     st.courses.slice(0, n).forEach((c, i) => {
       const yy = y + 11 * (i + 1);
       const best = c.best ? `${c.best.gross} (${toPar(c.best.toPar)}) ${isFullRound(c.best.length) ? '' : lengthLabel(c.best.length, shapeById(c.best.course))}` : '-';
-      [this.courseName(c.course).slice(0, 22), String(c.rounds), c.avg18 === null ? '-' : c.avg18.toFixed(1), c.avg9 === null ? '-' : c.avg9.toFixed(1), best]
-        .forEach((v, j) => this.root.add(txt(this, cols[j], yy, v, { color: j === 4 ? COLORS.yellow : COLORS.white })));
+      [this.courseName(c.course).slice(0, nameLen), String(c.rounds), c.avg18 === null ? '-' : c.avg18.toFixed(1), c.avg9 === null ? '-' : c.avg9.toFixed(1), best]
+        .forEach((v, j) => { if (cols[j] >= 0) this.root.add(txt(this, cols[j], yy, v, { color: j === 4 ? COLORS.yellow : COLORS.white })); });
     });
   }
 
