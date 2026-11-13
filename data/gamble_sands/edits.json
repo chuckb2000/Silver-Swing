@@ -1,0 +1,81 @@
+{
+ "drop": [
+  {
+   "osm": "w1551387386",
+   "reason": "Quicksands at Gamble Sands course polygon: another course (the resort's 14-hole par-3 course); the OB line is the Gamble Sands polygon"
+  },
+  {
+   "osm": "w1551387389",
+   "reason": "Quicksands hole 1: another course's hole line (its tees and greens stay as mapped surfaces)"
+  },
+  {
+   "osm": "w1551387397",
+   "reason": "Quicksands hole 2: another course's hole line (its tees and greens stay as mapped surfaces)"
+  },
+  {
+   "osm": "w1551387400",
+   "reason": "Quicksands hole 3: another course's hole line (its tees and greens stay as mapped surfaces)"
+  },
+  {
+   "osm": "w1551387403",
+   "reason": "Quicksands hole 4: another course's hole line (its tees and greens stay as mapped surfaces)"
+  },
+  {
+   "osm": "w1551387406",
+   "reason": "Quicksands hole 5: another course's hole line (its tees and greens stay as mapped surfaces)"
+  },
+  {
+   "osm": "w1551387409",
+   "reason": "Quicksands hole 6: another course's hole line (its tees and greens stay as mapped surfaces)"
+  },
+  {
+   "osm": "w1551387412",
+   "reason": "Quicksands hole 7: another course's hole line (its tees and greens stay as mapped surfaces)"
+  },
+  {
+   "osm": "w1551387415",
+   "reason": "Quicksands hole 8: another course's hole line (its tees and greens stay as mapped surfaces)"
+  },
+  {
+   "osm": "w1551387418",
+   "reason": "Quicksands hole 9: another course's hole line (its tees and greens stay as mapped surfaces)"
+  },
+  {
+   "osm": "w1551440418",
+   "reason": "Quicksands hole 10: another course's hole line (its tees and greens stay as mapped surfaces)"
+  },
+  {
+   "osm": "w1551440422",
+   "reason": "Quicksands hole 11: another course's hole line (its tees and greens stay as mapped surfaces)"
+  },
+  {
+   "osm": "w1551440425",
+   "reason": "Quicksands hole 12: another course's hole line (its tees and greens stay as mapped surfaces)"
+  },
+  {
+   "osm": "w1551440428",
+   "reason": "Quicksands hole 13: another course's hole line (its tees and greens stay as mapped surfaces)"
+  },
+  {
+   "osm": "w1551440431",
+   "reason": "Quicksands hole 14: another course's hole line (its tees and greens stay as mapped surfaces)"
+  },
+  {
+   "osm": "w946572440",
+   "reason": "replaced by its copy as a tee (add, proposed/tee14.geojson)"
+  }
+ ],
+ "add": [
+  {
+   "from": "proposed/tee14.geojson",
+   "ids": [
+    "w946572440_tee"
+   ],
+   "tags": {
+    "hole": "14",
+    "tee_set": "Medal"
+   },
+   "reason": "hole 14: the small round mown pad where the OSM hole line starts is mapped as golf=fairway; it is the teeing ground (photo: a 16 m mown circle in the sage, cart path beside it), so it is copied as a tee; tagged hole 14 / Medal so s06 measures from it (it is 24 % short of the card: open item)"
+  }
+ ]
+}
