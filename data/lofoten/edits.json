@@ -1,0 +1,65 @@
+{
+ "note": "Edits to the OSM layout for Lofoten Links; built into edited/course.geojson by pipeline/merge_edits.py.",
+ "add": [
+  {
+   "from": "proposed/sea.geojson",
+   "ids": [
+    "sea"
+   ],
+   "reason": "the Norwegian Sea from OSM's coastline (pipeline/propose_sea.py): a red penalty area wherever it lies (red_water_osm; developer's brief 2026-11-13: the sea is a penalty area), including the inlets the holes play over"
+  }
+ ],
+ "tags": [
+  {
+   "osm": "r5312937",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "Hallingshaugvatnet (golf=lateral_water_hazard): every penalty area red (standing default)"
+  },
+  {
+   "osm": "w1354204015",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "unnamed (golf=lateral_water_hazard): every penalty area red (standing default)"
+  },
+  {
+   "osm": "w1354204016",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "unnamed (golf=lateral_water_hazard): every penalty area red (standing default)"
+  },
+  {
+   "osm": "w1354204040",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "unnamed (golf=lateral_water_hazard): every penalty area red (standing default)"
+  },
+  {
+   "osm": "w169743915",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "Arvikvatnet (golf=lateral_water_hazard): every penalty area red (standing default)"
+  },
+  {
+   "osm": "w355816869",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "Gløstjønna (golf=water_hazard): every penalty area red (standing default)"
+  },
+  {
+   "osm": "w355818460",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "unnamed (golf=lateral_water_hazard): every penalty area red (standing default)"
+  }
+ ],
+ "drop": [],
+ "extend_start": []
+}

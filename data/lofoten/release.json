@@ -1,0 +1,22 @@
+{
+ "release": "data-lofoten",
+ "note": "Build inputs not kept in git for Lofoten Links; `make fetch NAME=lofoten` puts them in place. In git: raw/overpass.geojson (intake.py osm of lofoten_overpass.geojson and lofoten_coastline.geojson). Here: Kartverket's national DTM and DOM 1 m (WCS 1.0.0 GetCoverage of nhm_dtm_topo_25833 and nhm_dom_topo_25833 over EPSG:25833 462800-466000 E, 7579600-7582700 N; CC BY 4.0), clipped to the world + 100 m by pipeline/intake.py raster.",
+ "files": [
+  {
+   "asset": "kv_dtm_a_v100.tif",
+   "sha256": "1fcc416e93a5c240747475d818f1a52bc65839dcbfe3d52dd6bdc25a18d0b305",
+   "run": "python3 pipeline/intake.py raster lofoten {file} --out raw/dtm_clip.tif",
+   "outputs": {
+    "raw/dtm_clip.tif": "a8b2e3945248d3d5496c28a2b1f10fb8b9b6ecc57a740c449831a48bd4a51a55"
+   }
+  },
+  {
+   "asset": "kv_dom_a_v100.tif",
+   "sha256": "b619063cf6f36261f12731f5d49418918558e385a7bbfe439d32d63e608a4ee6",
+   "run": "python3 pipeline/intake.py raster lofoten {file} --out raw/dsm_clip.tif",
+   "outputs": {
+    "raw/dsm_clip.tif": "5b8db34ffc5c4aa7a7d2270e0b950c751afa2e75884751d359486db2d2c43a66"
+   }
+  }
+ ]
+}
