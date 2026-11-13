@@ -1,0 +1,53 @@
+{
+ "name": "Shaughnessy Golf and Country Club",
+ "location": "Vancouver (Southlands, on the North Arm of the Fraser River), British Columbia",
+ "state": "BC",
+ "architects": "A. Vernon Macan (1960, the club's present course; founded 1911 as Shaughnessy Heights Golf Club)",
+ "theme": "shaughnessy",
+ "boundary_name": "Shaughnessy Golf Course",
+ "dtm": {
+  "path": "raw/hrdem_dtm_1m.tif",
+  "units": "m",
+  "source": "Natural Resources Canada HRDEM (CanElevation) DTM 1 m via the NRCan datacube WCS (datacube.services.geo.ca/ows/elevation, coverage dtm) in EPSG:32610, CGVD2013 m; lidar projects at the course BC-Vancouver_Island_Sunshine_Coast_2018 (2018-19), BC-Lower_Mainland_2016 and VILLE_VANCOUVER 2013; fetched by the GitHub Actions workflow 2026-11-13 (release data-shaughnessy)"
+ },
+ "dsm": {
+  "path": "raw/hrdem_dsm_1m.tif",
+  "units": "m",
+  "source": "Natural Resources Canada HRDEM, the same projects, DSM 1 m (first-return surface), via the same WCS (coverage dsm)",
+  "label": "lidar surface model (NRCan HRDEM)"
+ },
+ "tee_sets": [
+  {
+   "name": "Black",
+   "playable": true,
+   "rating": 74.8,
+   "slope": 134,
+   "total_yd": 7045
+  }
+ ],
+ "default_tee": "Black",
+ "scorecard_source": "Third-party (no card on the club's site found): GolfPass (course 26767) per-hole par, men's handicap and Black/Blue/White/White-Green yardages, read 2026-11-13; each row adds up to its total (Black 7,045, par 73). Ratings from the same page's tee table. Unverified against a printed card.",
+ "driving_range_is_ob": true,
+ "trees_off_fairways_m": 2,
+ "wind_mph": {
+  "minMph": 2,
+  "maxMph": 10
+ },
+ "attribution": [
+  "Map data \u00a9 OpenStreetMap contributors (ODbL)",
+  "Elevation and trees: contains information licensed under the Open Government Licence \u2013 Canada (Natural Resources Canada, HRDEM)"
+ ],
+ "notes": "Standing defaults (COURSE_BUILD.md 4.1), 2026-11-13: the longest tee set (Black) and it is the default; all water red; OB = the OSM course boundary, roads inside it are cart paths, the driving range is OB; wind 2-10 mph (on the Fraser River near its mouth); trees from the HRDEM surface model (DSM - DTM), trees in fairways or in the way of a centre-line drive removed and listed. Theme shaughnessy (new; the course chat's design).",
+ "id": "shaughnessy",
+ "epsg": 32610,
+ "world": {
+  "x0": 483753,
+  "y0": 5452810,
+  "width": 2048,
+  "height": 1536,
+  "note": "OSM course boundary bbox (1749 x 1070 m, relation/1425001) + at least 120 m of scenery, rounded out to whole 256 m chunks and centred (149 m west/east, 233 m south/north)"
+ },
+ "osm_sources": [
+  "raw/overpass.geojson"
+ ]
+}

@@ -1,0 +1,30 @@
+{
+ "release": "data-shaughnessy",
+ "note": "Build inputs for Shaughnessy; `make fetch NAME=shaughnessy` puts them in place. All fetched by the GitHub Actions workflow (data/shaughnessy/fetch.json) on 2026-11-13. shaughnessy_overpass.geojson = the standard Overpass export of the box 49.2269,-123.2253,49.2422,-123.1923. hrdem_dtm_1m.tif / hrdem_dsm_1m.tif = Natural Resources Canada HRDEM (CanElevation) DTM and DSM at 1 m through the NRCan datacube WCS (coverages dtm, dsm), EPSG:32610, CGVD2013 metres; lidar projects there: BC-Vancouver_Island_Sunshine_Coast_2018, BC-Lower_Mainland_2016 and the City of Vancouver's 2013 survey (hrdem_lidar_stac.json). No orthophoto.",
+ "files": [
+  {
+   "asset": "shaughnessy_overpass.geojson",
+   "sha256": "d30fb21c547577251ae584bcfc8275984841fb0318ff8fb75f991608daeeb9be",
+   "run": "python3 pipeline/intake.py osm shaughnessy {file}",
+   "outputs": {
+    "raw/overpass.geojson": "7df0141ec43c7944fdf5d64573932de10da03bb6a96b0494ec917aa53ce8f812"
+   }
+  },
+  {
+   "asset": "hrdem_dtm_1m.tif",
+   "sha256": "80184763d095b70fe86605c282294641f5afca3a2caab21b592a2da118de867d",
+   "to": "raw/",
+   "outputs": {
+    "raw/hrdem_dtm_1m.tif": "80184763d095b70fe86605c282294641f5afca3a2caab21b592a2da118de867d"
+   }
+  },
+  {
+   "asset": "hrdem_dsm_1m.tif",
+   "sha256": "f09a7b3d366b3e81a7426814fc8e7e211178ba7919dff546861daf42151012ce",
+   "to": "raw/",
+   "outputs": {
+    "raw/hrdem_dsm_1m.tif": "f09a7b3d366b3e81a7426814fc8e7e211178ba7919dff546861daf42151012ce"
+   }
+  }
+ ]
+}
