@@ -71,6 +71,9 @@ Course chat's calls (listed for the developer):
 -   Nine `natural=water` ponds and creek pieces inside the boundary made red penalty areas
     with `red_water_osm` (standing default: every penalty area red).
 -   The clubhouse (`golf=clubhouse`) copied as a building.
+-   `checks.json`: the 12th's default aim is skipped. 12 drives along the edge of the
+    valley forest; after merging main (2026-11-13) the game's default aim for a perfect
+    drive finishes a few metres into OSM's woods on the right (it passed before).
 -   Card hole: the 14th, its green on a point in the pond; rotation 14, 11, 18, 7.
 
 ## New pipeline keys or theme
@@ -90,6 +93,8 @@ Course chat's calls (listed for the developer):
     can place the Black tee (it may be new since the photo).
 2.  **Third-party card; OSM's stroke indexes differ.** Recommend a photo of the printed card
     when convenient.
+3.  **12's tee shot:** the default aim finds the woods at the forest edge (above). Options:
+    (a) leave it (recommended: the edge is real); (b) a design-chat look at the default aim.
 
 ## Lessons
 
