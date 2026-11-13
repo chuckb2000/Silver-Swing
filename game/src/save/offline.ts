@@ -39,6 +39,9 @@ export function registerOffline() {
         } else offer(w);
       };
       // the first worker takes over at once; later ones wait to be offered
+      // (once it has, everything this page loaded before it is fetched again through it, so the game
+      // opens offline after a single visit: the files of that first load were never in its caches)
+      if (!navigator.serviceWorker.controller) navigator.serviceWorker.addEventListener('controllerchange', () => void rewarm(true), { once: true });
       if (reg.waiting && navigator.serviceWorker.controller) void waiting(reg.waiting);
       else if (reg.waiting) reg.waiting.postMessage('skip-waiting');
       reg.addEventListener('updatefound', () => {
@@ -97,7 +100,7 @@ async function pageIsCurrent(): Promise<boolean> {
  * keeps them, and the game still opens offline. Courses and sprites have their
  * own caches, which stay.
  */
-async function rewarm() {
+async function rewarm(all = false) {
   const base = new URL(navigator.serviceWorker.controller?.scriptURL ?? 'sw.js', location.href);
   const scope = base.pathname.replace(/[^/]*$/, '');
   // the course list's versions too: the worker finds a kept course's cache by them (offline as well)
@@ -106,7 +109,9 @@ async function rewarm() {
     const u = new URL(e.name);
     if (u.origin !== location.origin || !u.pathname.startsWith(scope)) continue;
     const path = u.pathname.slice(scope.length);
-    if (/^(api|sprites|icons)\//.test(path) || /^courses\/[a-z0-9_]+\//.test(path)) continue;
+    if (/^api\//.test(path)) continue;
+    // an update keeps its sprites and courses (their own caches); a first visit has none of them yet
+    if (!all && (/^(sprites|icons)\//.test(path) || /^courses\/[a-z0-9_]+\//.test(path))) continue;
     urls.add(u.href);
   }
   for (const u of urls) { try { await fetch(u); } catch { /* offline again: next time */ } }

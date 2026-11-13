@@ -236,8 +236,18 @@ export class PlayScene extends Phaser.Scene {
     this.input.on('pointerdownoutside', (p: Phaser.Input.Pointer) => {
       if (this.state === 'swing' && !this.hud.modalOpen() && !p.rightButtonDown()) this.tap(p.event?.timeStamp ?? performance.now());
     });
-    this.input.on('wheel', (_p: unknown, _o: unknown, _dx: number, dy: number) => {
-      if (this.state === 'aim') this.cycleClub(dy > 0 ? 1 : -1);
+    // one club per notch: a trackpad sends dozens of small events per swipe, so they add up
+    // to a step and at most one step lands per 110 ms; nothing behind an open panel
+    let wheelSum = 0, wheelAt = 0;
+    this.input.on('wheel', (p: Phaser.Input.Pointer, _o: unknown, _dx: number, dy: number) => {
+      if (this.state !== 'aim' || this.hud.modalOpen()) { wheelSum = 0; return; }
+      const now = p.event?.timeStamp ?? performance.now();
+      if (now - wheelAt > 400) wheelSum = 0;
+      wheelSum += dy;
+      if (Math.abs(wheelSum) < 40 || now - wheelAt < 110) return;
+      wheelAt = now;
+      this.cycleClub(wheelSum > 0 ? 1 : -1);
+      wheelSum = 0;
     });
     // any first interaction unlocks audio
     musicFor('round');
@@ -318,7 +328,14 @@ export class PlayScene extends Phaser.Scene {
     this.cut(() => {
       this.hud.hideIntro();
       this.intro = null;
-      if (this.match) { this.state = 'idle'; this.matchSettleView(); return; }
+      if (this.match) {
+        // the view comes back at the tee (matchSettleView waits for the fade, then eases from wherever this left it)
+        this.state = 'idle';
+        const f = this.aimFraming();
+        this.rig.jump(f.x, f.y);
+        this.matchSettleView();
+        return;
+      }
       this.beginShot(false, true);
     });
   }
@@ -343,6 +360,8 @@ export class PlayScene extends Phaser.Scene {
     this.placeTeeMarkers(r.ball.teedUp);
     this.updateLanding();
     this.slopeDirty = true;
+    // the putting art still loading (a round opened on a green): update() cuts to it when it arrives
+    this.lateGreen = this.isPutting() && !this.green.isReady(r.courseHole);
     const green = this.wantGreenView();
     const level = green ? this.green.level(r.courseHole, green) : this.isPutting() ? DROP : COURSE;
     const changes = green !== this.green.layer || level !== this.level;
@@ -357,6 +376,7 @@ export class PlayScene extends Phaser.Scene {
     }
     const finish = (snap: boolean) => {
       if (changes) this.applyView(green, level);
+      this.placeTeeMarkers(r.ball.teedUp); // again in the view being shown (a re-tee from a putting or drop view)
       this.resetBallSprite();
       this.placePin();
       this.updateBallSprite(r.ball.x, r.ball.y, 0);
@@ -373,6 +393,30 @@ export class PlayScene extends Phaser.Scene {
 
   isPutting(): boolean {
     return this.club.kind === 'putter';
+  }
+
+  /** the stroke was set up before the hole's putting art had loaded */
+  private lateGreen = false;
+
+  /** The putting art has arrived for a putt set up without it: cut to the putting view. */
+  private showLateGreen() {
+    if (!this.lateGreen || this.fading || this.zooming || this.hud.modalOpen()) return;
+    if (!this.isPutting() || this.green.visible) { this.lateGreen = false; return; }
+    if (!this.green.isReady(this.round.courseHole)) return;
+    this.lateGreen = false;
+    const green = this.wantGreenView();
+    if (!green) return;
+    const level = this.green.level(this.round.courseHole, green);
+    this.cut(() => {
+      this.applyView(green, level);
+      this.resetBallSprite();
+      this.placePin();
+      this.updateBallSprite(this.round.ball.x, this.round.ball.y, 0);
+      this.updateGolfer();
+      this.updateLanding();
+      const f = this.aimFraming();
+      this.rig.jump(f.x, f.y);
+    });
   }
 
   /** Scale argument for the round engine: putter metres or swing length. */
@@ -437,6 +481,7 @@ export class PlayScene extends Phaser.Scene {
       if (level !== COURSE && level !== DROP) level = DROP;
     }
     this.setLevel(level);
+    this.slopeLayer.clear(); // marks drawn for another view's scale (redrawn while putting)
     this.slopeDirty = true;
   }
 
@@ -532,8 +577,9 @@ export class PlayScene extends Phaser.Scene {
       if (this.state === 'replay') { this.endReplay(); return; }
     }
     if (this.state === 'replay' && k === 'Escape') { this.endReplay(); return; }
-    if (k === 'Tab' || k === 'm' || k === 'M') { e.preventDefault(); this.hud.toggleOverview(); return; }
-    if (k === 'c' || k === 'C') { this.hud.toggleCard(); return; }
+    // (the practice ground has no card and no hole to look over: its buttons are hidden, so are the keys)
+    if (k === 'Tab' || k === 'm' || k === 'M') { e.preventDefault(); if (!this.practice) this.hud.toggleOverview(); return; }
+    if (k === 'c' || k === 'C') { if (!this.practice) this.hud.toggleCard(); return; }
     if (k === 'Escape') { this.hud.togglePause(); return; }
     if (this.state !== 'aim') return;
     if (e.repeat) return;
@@ -775,6 +821,7 @@ export class PlayScene extends Phaser.Scene {
   private startFlight() {
     const r = this.round;
     this.state = 'flight';
+    this.flightAt = performance.now();
     this.playT = 0;
     this.evIdx = 0;
     for (const t of this.trail) t.setVisible(false);
@@ -825,7 +872,7 @@ export class PlayScene extends Phaser.Scene {
     if (this.isPutting()) {
       sfx('putt');
       this.lastStrikeLabel = '';
-      if (this.shot!.putt) this.hud.puttFeedback(this.shot!.putt, this.strikePower);
+      if (this.shot!.putt) this.hud.puttFeedback(this.shot!.putt, this.strikePower, this.shot!.scale);
     } else if (this.shot!.strike) {
       const st = this.shot!.strike;
       sfx('whoosh', 0.7);
@@ -843,8 +890,12 @@ export class PlayScene extends Phaser.Scene {
     this.preroll = null;
   }
 
+  /** when the flight began: a swing tap that arrives just after the meter fired is not a skip */
+  private flightAt = 0;
+
   fastForward() {
     if (this.state !== 'flight' || !this.sim) return;
+    if (performance.now() - this.flightAt < 350) return;
     if (this.preroll) this.strike();
     this.playT = Math.max(this.playT, (this.sim.n / HZ) * 1000 - 200);
   }
@@ -865,6 +916,7 @@ export class PlayScene extends Phaser.Scene {
       if (f.t > f.T + f.hold) this.skipIntro();
     } else if (this.state === 'aim' || this.state === 'swing' || this.state === 'drop' || this.state === 'relief' || this.state === 'watch') {
       if (this.state === 'aim' && !this.hud.modalOpen()) this.keyAim(dt);
+      if (this.lateGreen && (this.state === 'aim' || this.state === 'watch')) this.showLateGreen();
       if ((((this.state === 'aim' || this.state === 'watch') && !this.explore) || this.state === 'drop' || this.state === 'relief') && !this.zooming) {
         const f = this.aimFraming();
         this.rig.target(f.x, f.y);
@@ -1023,7 +1075,8 @@ export class PlayScene extends Phaser.Scene {
       this.marker.setVisible(false);
       this.puttTarget.setVisible(false);
       const lineM = this.puttLineM();
-      const step = 3 / L / PX_PER_M; // metres between dots (3 texels)
+      // metres between dots: 3 texels, wider when the line is longer than the dots can cover at that spacing
+      const step = Math.max(3 / L / PX_PER_M, lineM / (this.dots.length - 2));
       const cupClear = (this.cupDrawR() + 1.5) / L; // world px around the drawn cup kept free of dots
       const c = this.px(r.pin.x, r.pin.y);
       const bwp = this.px(r.ball.x, r.ball.y);
@@ -1111,7 +1164,8 @@ export class PlayScene extends Phaser.Scene {
 
   private stepPlayback(dt: number) {
     const sim = this.sim!;
-    const putt = this.isPutting();
+    // the stroke on screen (a rewatched drive is not a putt because the putter is in hand now)
+    const putt = this.shot ? this.shot.club.kind === 'putter' : this.isPutting();
     const landT = sim.landing ? sim.landing.t * 1000 : 0;
     const total = (sim.n / HZ) * 1000;
     const remaining = total - this.playT;
@@ -1243,7 +1297,7 @@ export class PlayScene extends Phaser.Scene {
     this.hud.closeModal();
     this.state = 'replay';
     const g = this.golfer;
-    this.replayFrom = { layer: this.green.visible ? this.green.layer : null, level: this.level, stroke,
+    this.replayFrom = { layer: this.green.visible ? this.green.layer : null, level: this.level, stroke, cam: { x: this.rig.x, y: this.rig.y }, ball: this.ballState(),
       golfer: { x: g.x, y: g.y, frame: g.frame.name, flip: g.flipX, alpha: g.alpha, visible: g.visible } };
     this.shot = stroke.shot;
     this.sim = sim;
@@ -1255,8 +1309,16 @@ export class PlayScene extends Phaser.Scene {
     else this.replayPass(1);
   }
 
+  /** How the ball is drawn now (kept across a rewatch). */
+  private ballState() {
+    return { sunk: this.holing, wx: this.round.ball.x, wy: this.round.ball.y, visible: this.ball.visible, shadow: this.shadow.visible, hidden: this.ballHidden };
+  }
+
   private replayFrom: {
     layer: GreenLayer | null; level: number; stroke: PlayedStroke;
+    /** where the camera was, and how the ball was drawn (in the cup, or picked up) */
+    cam: { x: number; y: number };
+    ball: ReturnType<PlayScene['ballState']>;
     golfer: { x: number; y: number; frame: string; flip: boolean; alpha: number; visible: boolean };
   } | null = null;
 
@@ -1273,7 +1335,7 @@ export class PlayScene extends Phaser.Scene {
     this.state = 'replay';
     this.matchReplaying = true;
     const g = this.golfer;
-    this.replayFrom = { layer: this.green.visible ? this.green.layer : null, level: this.level, stroke: st.stroke,
+    this.replayFrom = { layer: this.green.visible ? this.green.layer : null, level: this.level, stroke: st.stroke, cam: { x: this.rig.x, y: this.rig.y }, ball: this.ballState(),
       golfer: { x: g.x, y: g.y, frame: g.frame.name, flip: g.flipX, alpha: g.alpha, visible: g.visible } };
     this.shot = st.shot;
     this.sim = st.sim;
@@ -1316,7 +1378,8 @@ export class PlayScene extends Phaser.Scene {
 
   /** Back to the hole-complete panel, the ball in the cup. */
   endReplay() {
-    if (this.state !== 'replay') return;
+    // not during the cut that opens it (a double tap on "rewatch"): the replay would start under the panel
+    if (this.state !== 'replay' || !this.replaying) return;
     this.replaying = null;
     const back = this.replayFrom;
     this.replayFrom = null;
@@ -1340,6 +1403,7 @@ export class PlayScene extends Phaser.Scene {
       }
       this.resetBallSprite();
       this.updateBallSprite(this.round.ball.x, this.round.ball.y, 0);
+      if (back) this.rig.jump(back.cam.x, back.cam.y);
       this.hud.reshowMatchHole();
       return;
     }
@@ -1350,12 +1414,22 @@ export class PlayScene extends Phaser.Scene {
       this.golfer.setFrame(g.frame).setFlipX(g.flip).setPosition(g.x, g.y).setDepth(g.y).setAlpha(g.alpha).setVisible(g.visible);
     }
     this.resetBallSprite();
-    const pin = this.round.pin;
-    this.updateBallSprite(pin.x, pin.y, 0);
-    const c = this.px(pin.x, pin.y);
-    this.holing = true;
-    this.shadow.setVisible(false);
-    this.ball.setPosition(c.x, c.y + 1 / this.level).setScale(0.55 / this.level).setAlpha(0.75).setDepth(DEPTH.ground + 1.5);
+    // the view as it was under the panel (the replay may have ended anywhere on the hole)
+    if (back) this.rig.jump(back.cam.x, back.cam.y);
+    if (back && !back.ball.sunk) {
+      // a hole given or picked up (casual rules): the ball as it lay, not in the cup
+      this.updateBallSprite(back.ball.wx, back.ball.wy, 0);
+      this.ball.setVisible(back.ball.visible);
+      this.shadow.setVisible(back.ball.shadow);
+      this.ballHidden = back.ball.hidden;
+    } else {
+      const pin = this.round.pin;
+      this.updateBallSprite(pin.x, pin.y, 0);
+      const c = this.px(pin.x, pin.y);
+      this.holing = true;
+      this.shadow.setVisible(false);
+      this.ball.setPosition(c.x, c.y + 1 / this.level).setScale(0.55 / this.level).setAlpha(0.75).setDepth(DEPTH.ground + 1.5);
+    }
     this.hud.reshowHoled();
   }
 
@@ -1529,6 +1603,7 @@ export class PlayScene extends Phaser.Scene {
       if (this.match) { this.matchRelief(a, a.center); return; }
       this.round.applyRelief(a, a.center);
       this.hud.hideRelief();
+      if (this.maxScoreNow()) return;
       this.hud.flash(a.penalty ? `+${a.penalty} penalty` : 'free relief', 0xffd84a);
       this.beginShot(false);
       return;
@@ -1584,8 +1659,23 @@ export class PlayScene extends Phaser.Scene {
     this.dropMarker.setVisible(false);
     this.reliefArea = null;
     this.hud.hideRelief();
+    if (this.maxScoreNow()) return;
     this.hud.flash(a.penalty ? `dropped: +${a.penalty} penalty` : 'dropped: free relief', 0xffd84a);
     this.beginShot(false);
+  }
+
+  /**
+   * Casual "max 2x par": a penalty drop (an unplayable ball) that brings the score to the cap ends the
+   * hole there, as a stroke into water at the cap does (one more stroke had to be played first).
+   */
+  private maxScoreNow(): boolean {
+    const r = this.round;
+    if (this.match || this.practice || !r.cfg.settings.maxDoublePar || r.tally.strokes < r.hole.par * 2) return false;
+    const score = r.finishHole(true);
+    this.state = 'holed';
+    this.hud.showHoled(score, false, true);
+    void saveSnapshot(r);
+    return true;
   }
 
   cancelDrop() {
