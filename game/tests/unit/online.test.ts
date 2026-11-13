@@ -242,8 +242,10 @@ describe('hide me from the leaderboards (developer, 2026-10-20)', () => {
     const pars = [4, 4, 4, 4, 4, 4, 4, 4, 4];
     // today's daily (the server takes a daily round only around its day: a fixed date failed two days on)
     const day = new Date().toISOString().slice(0, 10);
-    const mine = { ...scored('m1', 'charlie', [2, 3, 4, 4, 4, 4, 4, 4, 4], pars), owner: KEY_A, daily: day };
-    const theirs = { ...scored('t1', 'sam', [3, 4, 4, 4, 4, 4, 4, 4, 4], pars), owner: KEY_B, daily: day };
+    // (played on that day: a daily round counts for the day its own date says)
+    const date = new Date().toISOString();
+    const mine = { ...scored('m1', 'charlie', [2, 3, 4, 4, 4, 4, 4, 4, 4], pars), owner: KEY_A, daily: day, date };
+    const theirs = { ...scored('t1', 'sam', [3, 4, 4, 4, 4, 4, 4, 4, 4], pars), owner: KEY_B, daily: day, date };
     await handlePost(db, JSON.stringify([mine, theirs]));
     const ids = async () => {
       resetFeedCache();

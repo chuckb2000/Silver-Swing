@@ -3,7 +3,7 @@
 // offline. Built into dist/ with this build's id (scripts/artifact-page.mjs).
 //   - the page and app files: the network first, this device when offline;
 //     Vite's hashed files (assets/) from this device once fetched
-//   - sprites: this device, refreshed in the background
+//   - sprites: the network when it answers in 2.5 s, else this device
 //   - courses/<id>/*: this device, in a cache per course version
 //     (courses/versions.json, a hash of the course's files written by the
 //     build); a rebuilt course gets a new cache and the old one is dropped
@@ -96,11 +96,18 @@ async function cacheFirst(req, name) {
   return res;
 }
 
-async function staleWhileRevalidate(req, name) {
+// The network's copy when it answers within `ms`, else this device's (always, offline). The sprites
+// were served from this device and refreshed behind (so the first visit after a deploy ran the new
+// code with the old sprite sheet and font, a frame added by that deploy missing until the next visit).
+async function freshOrKept(req, name, ms) {
   const cache = await caches.open(name);
   const hit = await cache.match(req);
-  const fresh = fetch(req).then((res) => { if (res.ok) cache.put(req, res.clone()); return res; }).catch(() => hit);
-  return hit ?? fresh;
+  const net = fetch(req).then((res) => {
+    if (res.ok) cache.put(req, res.clone());
+    return res.ok || !hit ? res : hit;
+  });
+  if (!hit) return net;
+  return Promise.race([net.catch(() => hit), new Promise((resolve) => setTimeout(() => resolve(hit), ms))]);
 }
 
 self.addEventListener('fetch', (e) => {
@@ -115,6 +122,6 @@ self.addEventListener('fetch', (e) => {
   if (path === VERSIONS) { e.respondWith(courseVersions(true).then((v) => new Response(JSON.stringify(v), { headers: { 'content-type': 'application/json' } }))); return; }
   if (path.startsWith('assets/')) { e.respondWith(cacheFirst(req, APP)); return; }
   if (path.startsWith('music/') && path.endsWith('.mp3')) { e.respondWith(cacheFirst(req, MUSIC)); return; }
-  if (path.startsWith('sprites/') || path.startsWith('icons/')) { e.respondWith(staleWhileRevalidate(req, SPRITES)); return; }
+  if (path.startsWith('sprites/') || path.startsWith('icons/')) { e.respondWith(freshOrKept(req, SPRITES, 2500)); return; }
   e.respondWith(networkFirst(req)); // the page, index.json, manifest
 });

@@ -8,6 +8,7 @@ import { loadSettings, saveSettings } from '../save/store';
 import { OPEN_COURSE_KEY } from './CourseSelectScene';
 import { calibrateAll } from '../systems/physics/calibrate';
 import { flushUploads } from '../save/online';
+import { setVolume } from '../audio/sfx';
 import { parseMatchCode } from '../match/live';
 
 export class BootScene extends Phaser.Scene {
@@ -40,6 +41,9 @@ export class BootScene extends Phaser.Scene {
       app.settings = settings;
       app.courses = courses;
       applyScale(this.game); // the saved pixel-size setting
+      // the saved sound setting, before anything can play: a start that skips the title screen (a match
+      // link, a reload into the new-round screen) played at the default volume for a muted player
+      setVolume(settings.volume, settings.muted);
       // after a "reload" on the course screen, open the course that was being loaded
       let open = '';
       try { open = sessionStorage.getItem(OPEN_COURSE_KEY) ?? ''; sessionStorage.removeItem(OPEN_COURSE_KEY); } catch { /* blocked */ }
