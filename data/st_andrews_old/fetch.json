@@ -1,0 +1,13 @@
+{
+ "items": [
+  {
+   "name": "st_andrews_old_overpass.geojson",
+   "osm_box": [
+    56.336,
+    -2.848,
+    56.362,
+    -2.792
+   ]
+  }
+ ]
+}
