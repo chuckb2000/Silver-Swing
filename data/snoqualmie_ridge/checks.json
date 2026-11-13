@@ -1,0 +1,7 @@
+{
+ "note": "per-course settings for game/tests/unit/course_play.test.ts (docs/COURSE_BUILD.md 8.2).",
+ "wind_mph": [1, 9],
+ "tees": {"sets": ["Mt. Si"]},
+ "tee_shot_clear": {"sets": ["Mt. Si"]},
+ "inside_boundary": true
+}
