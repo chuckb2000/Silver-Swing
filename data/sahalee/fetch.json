@@ -1,0 +1,51 @@
+{
+ "items": [
+  {
+   "name": "sahalee_overpass.geojson",
+   "osm_box": [
+    47.6253,
+    -122.067,
+    47.6444,
+    -122.044
+   ]
+  },
+  {
+   "name": "sahalee_dem1m",
+   "tnm": {
+    "dataset": "dem1m",
+    "bbox": [
+     -122.067,
+     47.6253,
+     -122.044,
+     47.6444
+    ],
+    "list": true
+   }
+  },
+  {
+   "name": "sahalee_lpc",
+   "tnm": {
+    "dataset": "lpc",
+    "bbox": [
+     -122.067,
+     47.6253,
+     -122.044,
+     47.6444
+    ],
+    "list": true
+   }
+  },
+  {
+   "name": "naip_570100_5275100.jpg",
+   "url": "https://imagery.nationalmap.gov/arcgis/rest/services/USGSNAIPImagery/ImageServer/exportImage?bbox=570100,5275100,571800,5277100&bboxSR=32610&imageSR=32610&size=2833,3333&format=jpg&f=image"
+  },
+  {
+   "name": "naip_570100_5277100.jpg",
+   "url": "https://imagery.nationalmap.gov/arcgis/rest/services/USGSNAIPImagery/ImageServer/exportImage?bbox=570100,5277100,571800,5277200&bboxSR=32610&imageSR=32610&size=2833,166&format=jpg&f=image"
+  },
+  {
+   "name": "naip_info.json",
+   "url": "https://imagery.nationalmap.gov/arcgis/rest/services/USGSNAIPImagery/ImageServer?f=pjson"
+  }
+ ]
+}
