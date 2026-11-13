@@ -15,6 +15,14 @@ checks from OSIP 2024, all fetched by the GitHub Actions workflow. Tee set built
 sternwheeler. After the virtual tees moved within their boxes, 17 holes are within 3 % of
 the card and hole 6 is -7.9 % (flag, a long strip of a box); 6,675 yd built against 6,823.
 
+## Checks
+
+- `course_play.test.ts -t columbia_edgewater`: 12 passed.
+- `npm test`: 1739 passed, 2 failed: `player.test.ts` "the real rotation" and `tour.test.ts` "a hole drawn sits out" fail until `make land` adds the course to the daily rotation.
+- `npm run e2e`: 16 passed, 1 failed: "course data is exact when the browser adds noise" loads Aberdeen (the first course); Aberdeen has 68,428 OB pixels inside its boundary on main too, so not this branch.
+- Pinned; a `--fresh` rebuild left git clean.
+- Every hole looked at in the game (tee view, overview, first shot, putting view).
+
 ## Facts
 
 -   **Location:** 2220 NE Marine Drive, Portland, Multnomah County, Oregon, on the old
