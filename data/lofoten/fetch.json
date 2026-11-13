@@ -1,0 +1,13 @@
+{
+ "items": [
+  {
+   "name": "lofoten_overpass.geojson",
+   "osm_box": [
+    68.328,
+    14.1,
+    68.354,
+    14.17
+   ]
+  }
+ ]
+}
