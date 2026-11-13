@@ -4,7 +4,7 @@ import { app } from '../app';
 import { Difficulty } from '../data/difficulty';
 import { ratingText, teeFor } from '../data/registry';
 import { saveSettings } from '../save/store';
-import { Button, COLORS, Panel, setTxt, txt } from '../ui/widgets';
+import { Button, COLORS, fitHeading, Panel, setTxt, txt } from '../ui/widgets';
 import { shortName } from '../save/milestones';
 import { confirmDiscard, editName, hasName, lengthLabel, lengthsFor, RoundLength, startRound, withName } from './flow';
 import { createLiveMatch, newMatchConfig } from '../match/live';
@@ -50,7 +50,7 @@ export class SetupScene extends MenuScene {
     this.root.add(new Panel(this, x0, y0, pw, ph, 0.9));
     // answering someone's challenge: the match is offered to them (src/match/challenge.ts)
     const offering = this.matchMode ? currentOffering() : null;
-    this.root.add(txt(this, x0 + pw / 2, y0 + 6, offering ? `challenge ${offering.to}` : this.matchMode ? 'new match' : 'new round', { origin: [0.5, 0], scale: 2, maxWidth: pw - 12 }));
+    this.root.add(fitHeading(txt(this, x0 + pw / 2, y0 + 6, offering ? `challenge ${offering.to}` : this.matchMode ? 'new match' : 'new round', { origin: [0.5, 0] }), pw - 12));
     const purpose = this.matchMode ? 'match' : 'play';
     if (!app.course) { this.scene.start('courses', { purpose, from: 'title' }); return; } // a course load failed
     const c = app.course.json;

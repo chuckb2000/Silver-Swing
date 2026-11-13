@@ -74,12 +74,12 @@
   "green_tiers": [
     {
       "hole": 13,
-      "drop_m": 1.37,
-      "width_m": 5.0,
+      "drop_m": 1.0,
+      "width_m": 8.0,
       "low_side": "front",
       "line_frac": 0.3,
       "pin": "upper_tier",
-      "note": "developer 2026-10-19: tiered green, the front little bit about 4-5 ft below the back, the back portion bigger; modelled as a 1.37 m (4.5 ft) step across the line of play, 30% of the green's depth from its front edge, pin in the middle of the upper (back) tier"
+      "note": "developer 2026-10-19: tiered green, the front little bit about 4-5 ft below the back, the back portion bigger; modelled as a 1.37 m (4.5 ft) step across the line of play, 30% of the green's depth from its front edge, pin in the middle of the upper (back) tier. Developer 2026-11-13: too steep, flatten it a bit: the step is now 1.0 m (3.3 ft) over 8 m (was 1.37 m over 5 m: about 41 % at its steepest, now about 19 %, 12.5 % on average)"
     }
   ],
   "wind_mph": {

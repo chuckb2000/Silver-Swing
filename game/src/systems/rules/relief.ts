@@ -38,6 +38,8 @@ export interface CourseCtx {
   hole: Pt;
   holeGreen: Polygon;
   otherGreens: Polygon[];
+  /** a spot no ball can lie on, whatever the surface (inside a tree trunk) */
+  blocked?: (x: number, y: number) => boolean;
 }
 
 const dist = (a: Pt, b: Pt) => Math.hypot(a.x - b.x, a.y - b.y);
@@ -50,6 +52,8 @@ export function playable(ctx: CourseCtx, p: Pt): boolean {
   const s = t.surface(p.x, p.y);
   if (isOB(s) || isWater(s) || s === SURF.building) return false;
   if (ctx.otherGreens.some((g) => g.contains(p.x, p.y))) return false;
+  // (free relief from a cart path was sometimes offered inside the trunk of the tree beside it)
+  if (ctx.blocked?.(p.x, p.y)) return false;
   return true;
 }
 
@@ -160,7 +164,9 @@ export function freeReliefArea(ctx: CourseCtx, ball: Pt, cond: (x: number, y: nu
     return dist(p, hole) >= ballDist - 1e-6;
   };
   let npcr: Pt | null = null;
-  for (let r = 0.2; r < 40 && !npcr; r += 0.1) {
+  // (in steps of 10 cm out to 40 m, then coarser out to 90 m: a ball on the roofs of a clubhouse
+  // complex found no relief within 40 m and was left to be played from the building)
+  for (let r = 0.2; r < 90 && !npcr; r += r < 40 ? 0.1 : 0.5) {
     const n = Math.max(8, Math.ceil((2 * Math.PI * r) / 0.1));
     let best: Pt | null = null;
     let bestScore = Infinity;
