@@ -1,8 +1,7 @@
-"""Heron Lakes Golf Club logo (the club, both courses): a pond at the edge of the Columbia
-floodplain, cattails and a lily pad in bloom against the water, on a round badge. The two
-courses' logos carry their herons (heron_lakes_great_blue.py, heron_lakes_greenback.py). An
-original drawing; the club's own marks are not used.
-`python3 assets-src/logos.py heron_lakes` writes game/public/sprites/logos/heron_lakes.png.
+"""Heron Lakes Golf Club logo: a clump of cattails and a water lily in a pond, the wetland
+of West Delta Park the two courses are cut from. An original drawing; the club's own marks
+are not used. `python3 assets-src/logos.py heron_lakes` writes
+game/public/sprites/logos/heron_lakes.png (assets-src/course_logos/README.md).
 """
 import numpy as np
 from logos import EDGE, S, grid, outlined, paint, poly, rgba, seg, shade
@@ -11,40 +10,38 @@ from logos import EDGE, S, grid, outlined, paint, poly, rgba, seg, shade
 def cattails(c: dict) -> np.ndarray:
     X, Y = grid()
     img = np.zeros((S, S, 4), np.uint8)
-    r2 = (X - 16) ** 2 + (Y - 16) ** 2
-    disc = r2 <= 14.5 ** 2
-    paint(img, disc, c["rim"])
-    inner = r2 <= 13.2 ** 2
-    paint(img, inner, c["sky"])
-    water = inner & (Y >= 18.0)
-    paint(img, water, c["water"])
-    paint(img, water & (Y >= 25.0), c["water_dark"])
-    for wx, wy in ((8.0, 21.0), (22.0, 27.0)):
-        paint(img, inner & (np.abs(Y - wy) < 0.5) & (np.abs(X - wx) < 2.0), c["water_light"])
-    # the far bank
-    paint(img, inner & (Y >= 16.5) & (Y < 18.0), c["bank"])
-    # cattails: stalks, leaves and brown heads
-    for sx, top, lean in ((7.5, 6.0, -0.6), (10.5, 4.5, 0.2), (13.0, 7.5, 0.5)):
-        paint(img, seg(X, Y, sx, 22.0, sx + lean, top, 0.45) & inner, c["stalk"])
-        head = (np.abs(X - (sx + lean * 0.85)) <= 0.9) & (Y >= top + 1.2) & (Y <= top + 5.2)
-        paint(img, head & inner, c["head"])
-        paint(img, head & (X < sx + lean * 0.85) & inner, c["head_light"])
-    for a, b2, c2, d in ((6.0, 22.0, 3.0, 12.0), (12.0, 22.0, 16.5, 11.0), (9.0, 22.0, 8.5, 14.0)):
-        paint(img, seg(X, Y, a, b2, c2, d, 0.55) & inner, c["leaf"])
-    # a lily pad with a pink bloom
-    pad = (((X - 21.5) / 4.5) ** 2 + ((Y - 22.5) / 1.8) ** 2 <= 1) & ~((X > 21.5) & (np.abs(Y - 22.5) < 0.6) & (X < 26))
-    paint(img, pad & inner, c["pad"])
-    shade(img, pad & inner, c["pad_light"], None)
-    bloom = poly(X, Y, [(19.5, 21.6), (20.5, 19.0), (21.5, 20.6), (22.5, 18.6), (23.5, 20.6), (24.5, 19.0), (25.5, 21.6)])
-    paint(img, bloom & inner, c["bloom"])
-    paint(img, bloom & inner & (Y < 20.0), c["bloom_light"])
+    # the pond
+    pond = ((X - 16.0) / 15.0) ** 2 + ((Y - 26.5) / 4.0) ** 2 <= 1.0
+    paint(img, pond, c["water"])
+    paint(img, pond & (Y > 27.5), c["water_dark"])
+    paint(img, pond & (np.abs(Y - 25.5) < 0.5) & (np.abs(X - 26.0) < 2.0), c["water_light"])
+    # reeds: long blades leaning out
+    for x0, x1, top in ((9.0, 5.0, 6.0), (11.0, 10.0, 3.0), (13.0, 15.5, 5.0), (15.0, 19.0, 8.0), (10.0, 13.0, 9.0), (7.5, 3.5, 12.0)):
+        paint(img, seg(X, Y, x0, 26.0, x1, top, 0.55), c["reed"])
+    # cattail stems and heads
+    for sx, hx, top in ((8.5, 7.0, 4.0), (12.0, 12.5, 2.0), (16.0, 17.5, 6.0)):
+        paint(img, seg(X, Y, sx, 26.0, hx, top + 5.5, 0.45), c["stem"])
+        head = ((X - hx) / 1.3) ** 2 + ((Y - (top + 3.0)) / 3.0) ** 2 <= 1.0
+        paint(img, head, c["head"])
+        paint(img, head & (X < hx - 0.3), c["head_light"])
+        paint(img, seg(X, Y, hx, top - 1.5, hx, top, 0.3), c["stem"])
+    # a lily pad with a flower
+    pad = ((X - 23.5) / 5.0) ** 2 + ((Y - 25.5) / 2.0) ** 2 <= 1.0
+    pad &= ~(poly(X, Y, [(23.5, 25.5), (28.6, 24.6), (28.6, 26.4)]))
+    paint(img, pad, c["pad"])
+    paint(img, pad & (Y < 25.0), c["pad_light"])
+    flower = poly(X, Y, [(20.0, 24.5), (21.0, 20.5), (22.2, 23.0), (23.5, 19.5), (24.8, 23.0), (26.0, 20.5), (27.0, 24.5)])
+    paint(img, flower, c["petal"])
+    paint(img, flower & (Y > 23.0), c["petal_dark"])
+    paint(img, (np.abs(X - 23.5) < 1.0) & (np.abs(Y - 23.4) < 0.8), c["centre"])
     return outlined(img, c["edge"])
 
 
 LOGO = (cattails, {
-    "rim": rgba("#2f5a4a"), "sky": rgba("#cfe3dc"), "bank": rgba("#6f8a4c"),
     "water": rgba("#4f7a74"), "water_dark": rgba("#3c605b"), "water_light": rgba("#9cc4bb"),
-    "stalk": rgba("#4f7a32"), "leaf": rgba("#5f9440"), "head": rgba("#6b3f22"), "head_light": rgba("#8f5a32"),
-    "pad": rgba("#3f8a45"), "pad_light": rgba("#69b064"), "bloom": rgba("#e58fb0"), "bloom_light": rgba("#f8c6d8"),
+    "reed": rgba("#5f8f3a"), "stem": rgba("#4a6e2c"),
+    "head": rgba("#6b4024"), "head_light": rgba("#8f5a34"),
+    "pad": rgba("#3f7a3a"), "pad_light": rgba("#5f9a4a"),
+    "petal": rgba("#f4eef0"), "petal_dark": rgba("#e8b7c8"), "centre": rgba("#f0c23a"),
     "edge": EDGE,
 })
