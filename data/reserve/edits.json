@@ -59,6 +59,19 @@
     "w444869601_bldg"
    ],
    "reason": "golf=clubhouse as a building (drawn, and an obstruction); s01 reads the golf key first"
+  },
+  {
+   "from": "proposed/channels_lidar.geojson",
+   "ids": [
+    "channel_w68715363",
+    "channel_w68716759",
+    "channel_w68717747",
+    "channel_w737373096",
+    "channel_w737373098",
+    "channel_w737373099",
+    "channel_w737373100"
+   ],
+   "reason": "the North course's creek, mapped in OSM only as waterway=stream lines: its channel in the 2024 DEM along each line (pipeline/propose_channels.py) as red penalty areas (standing default: creeks red)"
   }
  ],
  "tags": [

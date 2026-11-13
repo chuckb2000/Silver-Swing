@@ -154,5 +154,17 @@
     "Imagery: Oregon Statewide Imagery Program 2024",
     "Scorecards: The Reserve Vineyards & Golf Club"
   ],
-  "notes": "Two courses on one property share one world (COURSE_BUILD.md 3.5), as at Pumpkin Ridge: each layout is exported as its own course (courses/<layout id>/) whose terrain, surface, height and overview files live in courses/reserve/. OSM maps one leisure=golf_course polygon for both courses, so each hole line carries layout=<id> (edits.json). Standing defaults (COURSE_BUILD.md 4.1), 2026-11-12: Green tees (the longest) built and the default on both; every water red; OB = the OSM course polygon; the driving range OB; wind 1-7 mph."
+  "notes": "Two courses on one property share one world (COURSE_BUILD.md 3.5), as at Pumpkin Ridge: each layout is exported as its own course (courses/<layout id>/) whose terrain, surface, height and overview files live in courses/reserve/. OSM maps one leisure=golf_course polygon for both courses, so each hole line carries layout=<id> (edits.json). Standing defaults (COURSE_BUILD.md 4.1), 2026-11-12: Green tees (the longest) built and the default on both; every water red; OB = the OSM course polygon; the driving range OB; wind 1-7 mph.",
+  "red_water_osm": [
+    "w68726253",
+    "w737373101",
+    "w737373102",
+    "w737373103",
+    "w737373104"
+  ],
+  "red_water_osm_note": "natural=water inside the boundary with no golf tag, which would play as rough: Ettinger Reservoir (w68726253, the long pond on the North course between the 6th/15th fairways and the 7th tee) and four small basins on the North course's creek (w737373101-104); red penalty areas (standing default). The creek itself: proposed/channels_lidar.geojson (edits.json).",
+  "flatten_wetlands": false,
+  "flatten_wetlands_note": "the wet meadow along the North course's creek (w737373105, 3.8 ha) and the marsh east of the South course (w905922607) are vegetated: they keep their lidar ground and play as rough (as Pumpkin Ridge's wetlands); the creek through the meadow is a red penalty area",
+  "fescue_areas": "proposed/fescue.geojson",
+  "fescue_areas_note": "native grass left long between the holes (wide on the North, smaller on the South), read from the OSIP 2024 photo by data/reserve/make_fescue.py: art only (straw tones F0-F2); plays as rough"
 }
