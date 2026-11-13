@@ -106,7 +106,8 @@ export function openToChallenge(scene: Phaser.Scene, done: () => void) {
 
 /** Your own post: the offers to it (accept or not now, each), stop looking, or keep at it. */
 export function myPostDialog(scene: Phaser.Scene, done: () => void) {
-  const p = lobby.posts.find((x) => x.id === lobby.mine);
+  // (not one past its time that the lobby hasn't closed yet: it showed "0 min left" and offers to accept)
+  const p = lobby.openPosts().find((x) => x.id === lobby.mine);
   if (!p) { done(); return; }
   const dlg = openDialog(scene, 330, done);
   Object.assign(dlg.box.style, { maxHeight: '80vh', overflowY: 'auto' });
@@ -176,8 +177,15 @@ export function allPostsDialog(game: Phaser.Game) {
 
 /** Accept an offer (this player joins its match straight away) or not. */
 function answerOffer(game: Phaser.Game, o: ChallengeOffer, accept: boolean) {
-  if (!lobby.answer(o.id, accept) || !accept) return;
-  goTo(game, 'match', { mode: 'join', code: o.code, auto: true });
+  if (!accept) { lobby.answer(o.id, false); return; }
+  // joined once the lobby says the offer was still there: an offer withdrawn (or run out) while its
+  // note was up put the player alone in a match nobody else was in, ready on the first tee, and five
+  // minutes later able to claim it as a win
+  void lobby.accept(o.id).then((r) => {
+    if (r === 'unsent') return;
+    if (r === 'gone') { toast({ title: 'that offer is no longer there', line: `${o.from} took it back, or it ran out`, ms: 5000 }); return; }
+    goTo(game, 'match', { mode: 'join', code: o.code, auto: true });
+  });
 }
 
 /** An offer to your post (a tap on its note): accept or not now. */

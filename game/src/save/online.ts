@@ -134,13 +134,14 @@ export function flushUploads(): Promise<number> {
           // keepalive: the request finishes even if the tab is closed or the phone locks right after the round
           const res = await timed(API, { method: 'POST', keepalive: true, headers: { 'content-type': 'application/json' }, body: JSON.stringify(batch.map((e) => ({ ...e, owner }))) }, 15_000);
           if (!res.ok) break;
-          const j = (await res.json().catch(() => ({}))) as { taken?: string[] };
+          const j = (await res.json().catch(() => ({}))) as { taken?: string[]; failed?: string[] };
           const taken = new Set(j.taken ?? []);
+          const failed = new Set(j.failed ?? []); // not stored this time (the server's own trouble): sent again later
           for (const e of batch) {
             if (taken.has(e.id)) nameConflicts.add(e.player);
-            else sent.add(e.id);
+            else if (!failed.has(e.id)) sent.add(e.id);
           }
-          n += batch.length - taken.size;
+          n += batch.length - taken.size - failed.size;
         } catch {
           break;
         }
@@ -174,17 +175,20 @@ export function flushEagles(): Promise<void> {
     eagling = (async () => {
       if (!(await onlineAvailable())) return;
       const list = await loadEagles();
-      const todo = list.filter((e) => !e.sent && e.player !== DEFAULT_NAME).slice(0, 8);
+      // (not those under a name another device holds: they stayed at the front of the queue and the
+      // eagles behind them were never sent)
+      const todo = list.filter((e) => !e.sent && e.player !== DEFAULT_NAME && !nameConflicts.has(e.player)).slice(0, 8);
       if (!todo.length) return;
       try {
         const body = todo.map(({ sent: _s, ...e }) => ({ ...e, owner: app.settings.playerKey }));
         const res = await timed(EAGLES, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body) }, 15_000);
         if (!res.ok) return;
-        const j = (await res.json().catch(() => ({}))) as { taken?: string[] };
+        const j = (await res.json().catch(() => ({}))) as { taken?: string[]; failed?: string[] };
         const taken = new Set(j.taken ?? []);
+        const failed = new Set(j.failed ?? []);
         for (const e of todo) {
           if (taken.has(e.id)) nameConflicts.add(e.player);
-          else e.sent = true;
+          else if (!failed.has(e.id)) e.sent = true;
         }
         await saveEagles(list);
       } catch { /* try again later */ }
@@ -229,17 +233,18 @@ export function flushHoleouts(): Promise<void> {
     holing = (async () => {
       if (!(await onlineAvailable())) return;
       const list = await loadHoleouts();
-      const todo = list.filter((h) => !h.sent && h.player !== DEFAULT_NAME).slice(0, 5);
+      const todo = list.filter((h) => !h.sent && h.player !== DEFAULT_NAME && !nameConflicts.has(h.player)).slice(0, 5);
       if (!todo.length) return;
       try {
         const body = todo.map(({ sent: _s, ...h }) => ({ ...h, owner: app.settings.playerKey }));
         const res = await timed(HOLEOUTS, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body) }, 15_000);
         if (!res.ok) return;
-        const j = (await res.json().catch(() => ({}))) as { taken?: string[] };
+        const j = (await res.json().catch(() => ({}))) as { taken?: string[]; failed?: string[] };
         const taken = new Set(j.taken ?? []);
+        const failed = new Set(j.failed ?? []);
         for (const h of todo) {
           if (taken.has(h.id)) nameConflicts.add(h.player);
-          else h.sent = true;
+          else if (!failed.has(h.id)) h.sent = true;
         }
         await saveHoleouts(list);
       } catch { /* try again later */ }
