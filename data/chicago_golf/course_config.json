@@ -39,13 +39,27 @@
     {
       "name": "Black",
       "playable": true,
-      "rating": 74.1,
-      "slope": 138,
+      "rating": 74.4,
+      "slope": 141,
       "total_yd": 6950
+    },
+    {
+      "name": "White",
+      "playable": false,
+      "rating": 72.5,
+      "slope": 137,
+      "total_yd": 6571
+    },
+    {
+      "name": "Red",
+      "playable": false,
+      "rating": 68.4,
+      "slope": 127,
+      "total_yd": 5664
     }
   ],
   "default_tee": "Black",
-  "scorecard_source": "UNVERIFIED (private club; no official card reachable): Black 6,950 yd from GHIN-based listings read 2026-11-13 (alister.vercel.app/clubs/chicago-golf-club-wheaton-il, drills.golf/course/chicago-golf-club-wheaton, stymie.golf), which agree hole by hole; rating 74.1/138 (stymie.golf) vs 74.4/141 (alister): 74.1/138 used pending BlueGolf and the USGA Course Rating database (developer asked 2026-11-13). Pars and stroke indexes also on GolfPass and AllSquare. Conflicts (not used): a 6,574-yd 'White' (GolfLink, 18Birdies, AllSquare) whose hole yardages disagree between sites.",
+  "scorecard_source": "The club's printed scorecard (photo posted by golfbycoop, Instagram, 2025-08-25, supplied by the developer 2026-11-13): Black 6,950 / White 6,571 / Red 5,664 yd, par 70, men's handicap row. Ratings from the USGA Course Rating and Slope Database (developer's screenshot, 2026-11-13): men's Black 74.4/141, White 72.5/137, Red 68.4/127 (women's Black 81.0/147, White 78.9/144, Red 74.2/133, par 72). Third-party sites give holes 11 and 12 handicaps 4 and 6; the card's 6 and 4 are used.",
   "penalty_default": "red",
   "driving_range_is_ob": true,
   "trees_off_fairways_m": 2,
