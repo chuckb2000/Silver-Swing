@@ -1,0 +1,47 @@
+{
+ "items": [
+  {
+   "name": "sfgc_overpass.geojson",
+   "osm_box": [
+    37.703,
+    -122.4872,
+    37.7166,
+    -122.4679
+   ]
+  },
+  {
+   "name": "sfgc_dem1m",
+   "tnm": {
+    "dataset": "dem1m",
+    "bbox": [
+     -122.4872,
+     37.703,
+     -122.4679,
+     37.7166
+    ],
+    "list": true
+   }
+  },
+  {
+   "name": "sfgc_lpc",
+   "tnm": {
+    "dataset": "lpc",
+    "bbox": [
+     -122.4872,
+     37.703,
+     -122.4679,
+     37.7166
+    ],
+    "list": true
+   }
+  },
+  {
+   "name": "naip_545200_4173000.jpg",
+   "url": "https://imagery.nationalmap.gov/arcgis/rest/services/USGSNAIPImagery/ImageServer/exportImage?bbox=545200,4173000,546900,4174500&bboxSR=32610&imageSR=32610&size=2833,2500&format=jpg&f=image"
+  },
+  {
+   "name": "naip_info.json",
+   "url": "https://imagery.nationalmap.gov/arcgis/rest/services/USGSNAIPImagery/ImageServer?f=pjson"
+  }
+ ]
+}
