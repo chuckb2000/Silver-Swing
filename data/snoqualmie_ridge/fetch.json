@@ -1,0 +1,59 @@
+{
+ "items": [
+  {
+   "name": "snoqualmie_ridge_overpass.geojson",
+   "osm_box": [
+    47.5272,
+    -121.8801,
+    47.5491,
+    -121.8411
+   ]
+  },
+  {
+   "name": "snoqualmie_ridge_dem1m",
+   "tnm": {
+    "dataset": "dem1m",
+    "bbox": [
+     -121.8801,
+     47.5272,
+     -121.8411,
+     47.5491
+    ],
+    "list": true
+   }
+  },
+  {
+   "name": "snoqualmie_ridge_lpc",
+   "tnm": {
+    "dataset": "lpc",
+    "bbox": [
+     -121.8801,
+     47.5272,
+     -121.8411,
+     47.5491
+    ],
+    "list": true
+   }
+  },
+  {
+   "name": "naip_584300_5264400.jpg",
+   "url": "https://imagery.nationalmap.gov/arcgis/rest/services/USGSNAIPImagery/ImageServer/exportImage?bbox=584300,5264400,586300,5266400&bboxSR=32610&imageSR=32610&size=3333,3333&format=jpg&f=image"
+  },
+  {
+   "name": "naip_584300_5266400.jpg",
+   "url": "https://imagery.nationalmap.gov/arcgis/rest/services/USGSNAIPImagery/ImageServer/exportImage?bbox=584300,5266400,586300,5266800&bboxSR=32610&imageSR=32610&size=3333,666&format=jpg&f=image"
+  },
+  {
+   "name": "naip_586300_5264400.jpg",
+   "url": "https://imagery.nationalmap.gov/arcgis/rest/services/USGSNAIPImagery/ImageServer/exportImage?bbox=586300,5264400,587200,5266400&bboxSR=32610&imageSR=32610&size=1500,3333&format=jpg&f=image"
+  },
+  {
+   "name": "naip_586300_5266400.jpg",
+   "url": "https://imagery.nationalmap.gov/arcgis/rest/services/USGSNAIPImagery/ImageServer/exportImage?bbox=586300,5266400,587200,5266800&bboxSR=32610&imageSR=32610&size=1500,666&format=jpg&f=image"
+  },
+  {
+   "name": "naip_info.json",
+   "url": "https://imagery.nationalmap.gov/arcgis/rest/services/USGSNAIPImagery/ImageServer?f=pjson"
+  }
+ ]
+}
