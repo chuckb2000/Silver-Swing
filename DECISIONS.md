@@ -1518,3 +1518,93 @@ The daily of 2026-10-29 (TPC Boston, back nine) keeps the Black tees it was play
 (`DAILY_PICKS`), so that day's board stands. A device that remembered either course on its
 old default goes to the longest set once (`OLD_DEFAULT_TEES` in `save/store.ts`); a set a
 player chooses after that is kept.
+
+## Overnight sweep, part 1: the play screen, the HUD and the menus (2026-11-13)
+
+A review of the play screen, the HUD, the widgets and the menus (six read-throughs, a robot
+that plays every hole of every course, and a script that opens every screen at phone, laptop
+and "bigger pixels" sizes and looks for things that overlap or leave the screen). 46 fixes;
+the pull request lists them. The ones that change what a player sees or does:
+
+- **Rewatch:** the view comes back where it was under the hole-complete panel; a rewatched
+  drive plays at flight speed with the following camera (it used the putter's while the putter
+  was in hand); a hole given or picked up shows the ball where it lay, not in the cup.
+- **A round opened on a green** cuts to the putting view once its art has loaded (it stayed in
+  the course view until the next stroke).
+- **The putt's aim line** reaches the hole on a long putt (the dots are spaced wider instead of
+  running out).
+- **Mouse wheel:** one club per notch (a trackpad swipe ran through the bag), nothing behind an
+  open panel. **A tap within 0.35 s of the ball being struck** is not a skip of the flight (a
+  late third tap skipped it).
+- **Open panels are drawn again when the window changes size or a phone turns** (pause menu,
+  quit question, overview, scorecard, the match's questions).
+- **Settings** shows its rows a page at a time when the screen is too short for them all
+  ("pixel size: bigger" on a laptop, a phone on its side).
+- **Headings at 2x drop to 1x when they don't fit** (`fitHeading`), instead of wrapping over
+  what is under them; a line that must fit takes the first of several wordings that does
+  (`setTxtFit`).
+- **"My golf" on a phone:** two rows of three stat boxes, columns placed from the right edge;
+  the course names are the list names ("ghost creek", "east po red").
+- **The summary's buttons are there at once** (they waited for the network), and "leaderboard"
+  from a summary opens the board that round is on (its length, tees, casual or not).
+- **The title's daily buttons follow the day** (a title left open past midnight started
+  yesterday's round).
+- **A course's pictures that fail to arrive are asked for twice more**; a course still missing
+  one is not shown with a hole in it (the load fails and the reload offer shows).
+- **The share picture's art takes the height the scorecard leaves** (a daily par round's list of
+  holes ran off the bottom).
+
+Left as it is, on purpose: a name dialog closed without a name still starts the round ("skip"),
+and the outdoor ambience keeps playing in the menus after a round.
+
+## Overnight sweep, part 2: rules, physics, saving, the shared board, live matches (2026-11-13)
+
+28 more fixes, from the same review; the pull request lists them. What changes for a player:
+
+- **The daily's pins are the same in every browser.** The pin sheet was shuffled with
+  `sort(() => rng.next() - 0.5)`, which draws a different number of random numbers in Chrome
+  and in Safari, so the two could get different sheets from one seed. It is a Fisher-Yates
+  shuffle now. Pin sheets for a given seed change once with this (the day it is merged, players
+  before and after the deploy can differ; rounds in progress keep the pins they started with).
+- **A ball wedged against a building stops** (it bounced in place for the 45 s limit before the
+  out-of-bounds or relief call: Stone Creek 8).
+- **No drop is offered inside a tree trunk**; free relief from buildings is looked for out to
+  90 m (40 m found none among a clubhouse's roofs).
+- **"On the green" is read from the surface map**, like the lie (the green's outline and the
+  map differ by part of a pixel: a ball there was fringe for its lie and green for its putt
+  and green in regulation, or the other way round).
+- **A punch shot drifts in the wind for the time it is in the air** (it drifted as a full
+  flight of six seconds would), and a fast low ball can't pass through a trunk between steps.
+- **Off the tee of a par 4 or 5, a shorter club is offered when the one for the distance can't
+  be kept dry or in bounds on any line the default aim tries** (Needham 6: water across the
+  fairway at driver length; the default drive went in every time). The driver stays in the
+  bag. A judgement call: say if the default should stay the driver.
+- **Casual "max 2x par"**: an unplayable ball that reaches the cap ends the hole there.
+- **Saving:** each value's two copies (IndexedDB, localStorage) carry the time they were
+  written and a read takes the newer (after one failed IndexedDB write, the next visit read
+  the old copy: a finished round missing, a cleared round back).
+- **The shared board:** a round the server couldn't store is sent again (it was marked as
+  sent); a daily round sent up to a week late counts for the day it was played; a name changed
+  on the summary reaches the board; the first request after a schema change asks the game to
+  send again instead of running out of queries part-way; "hide me" follows a change of player
+  code; an eagle or hole-out under a name another device holds no longer blocks the ones
+  behind it; the daily par rounds get no "best"/"record" badge and don't crowd rounds out of
+  the handicap list; a corrected card is never applied to a cross-country round.
+- **Offline copy:** the sprites come from the network when it answers within 2.5 s (the first
+  visit after a deploy ran the new code with the old sprite sheet), and a first visit is kept
+  for offline use (only an update was).
+- **Live matches:** accepting an offer waits for the lobby to say it was still there (an offer
+  withdrawn meanwhile put the player alone in a match they could later claim); a post past its
+  time no longer shows on its owner's title; a 19-hole match is recorded; a match with a full
+  log can still be conceded or claimed; a result that failed to send is sent again.
+
+## Langston 13's tier, flattened (developer, 2026-11-13)
+
+The step between the 13th green's tiers was 1.37 m (4.5 ft) over 5 m: about 41 % at its
+steepest, the steepest ground on any green but the dune greens at Bandon. The developer: "too
+steep and needs to be flattened out a bit". It is now 1.0 m (3.3 ft) over 8 m (config
+`green_tiers`: `drop_m` 1.0, `width_m` 8.0): about 19 % at its steepest, 12.5 % on average
+across the step. Langston was rebuilt with its pinned pipeline; only hole 13 changed (its
+green, the pin 0.8 m further onto the back tier, its putting views, its mini-map and one terrain
+chunk). A putt from 6 m short of the step to the centre pin (61 ft) gets up from about 70 %
+power; a weaker one rolls back down the step. Highland Links 9 stays as it is (developer).

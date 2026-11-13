@@ -48,6 +48,33 @@ export function setTxt(t: Phaser.GameObjects.BitmapText, s: string) {
   if (t.text !== c) t.setText(c);
 }
 
+/** The first of these strings that fits in `maxW` on one line (the last one whatever its width). */
+export function setTxtFit(t: Phaser.GameObjects.BitmapText, options: string[], maxW: number) {
+  t.setMaxWidth(0);
+  for (const s of options) {
+    setTxt(t, s);
+    if (t.width <= maxW) return;
+  }
+}
+
+/** A heading at scale 2 when it fits in `maxW`, at scale 1 (wrapped if it must) when it doesn't. */
+export function fitHeading<T extends Phaser.GameObjects.BitmapText>(t: T, maxW: number): T {
+  t.setMaxWidth(0).setScale(2);
+  if (t.width > maxW) t.setScale(1);
+  if (t.width > maxW) t.setMaxWidth(maxW);
+  return t;
+}
+
+/** How much taller than one line a card's title is when wrapped to `w` (0: it fits on one). */
+export function titleExtra(scene: Phaser.Scene, title: string, w: number): number {
+  const one = txt(scene, 0, 0, 'a');
+  const all = txt(scene, 0, 0, title, { maxWidth: w });
+  const extra = Math.max(0, Math.round(all.height - one.height));
+  one.destroy();
+  all.destroy();
+  return extra;
+}
+
 /** Snap a container's position to whole pixels (bitmap text stays crisp). */
 export function snap<T extends { x: number; y: number }>(o: T): T {
   o.x = Math.round(o.x);
@@ -125,6 +152,15 @@ export class Button extends Phaser.GameObjects.Container {
       this.draw();
       if (opts.onDown) {
         this.fire(p.event?.timeStamp ?? performance.now());
+        // its release may go to something drawn over it by then (the swing button under the
+        // HUD's tap catcher), so the look goes back on the scene's own release
+        const release = () => {
+          scene.input.off(Phaser.Input.Events.POINTER_UP, release);
+          scene.input.off(Phaser.Input.Events.POINTER_UP_OUTSIDE, release);
+          if (this.active && this.pressed) { this.pressed = false; this.draw(); }
+        };
+        scene.input.on(Phaser.Input.Events.POINTER_UP, release);
+        scene.input.on(Phaser.Input.Events.POINTER_UP_OUTSIDE, release);
         return;
       }
       // the press counts when it is let go on or near the button: a finger or a mouse that slid a little

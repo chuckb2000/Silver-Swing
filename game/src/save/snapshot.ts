@@ -71,6 +71,7 @@ export async function peekSnapshot(): Promise<{ cfg: RoundConfig; holeIndex: num
 async function loadSnapshot(): Promise<Snapshot | undefined> {
   const s = await loadRoundInProgress<Snapshot>();
   if (!s || s.v !== 1 || !s.cfg || !Array.isArray(s.scores)) return s;
+  if (s.cfg.xc || s.cfg.length === 'xc') return s; // cross-country legs are not the course's holes
   const f = fixScores(s.cfg.courseId, s.scores, slotHole({ length: s.cfg.length, holes: s.cfg.courseHoles }, s.cfg.holes));
   if (!f) return s;
   const fixed = { ...s, scores: f };
