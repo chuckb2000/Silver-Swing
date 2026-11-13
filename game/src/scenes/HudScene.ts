@@ -1244,6 +1244,7 @@ export class HudScene extends Phaser.Scene {
     this.closeModal();
     this.modal = kind;
     this.modalLayer.removeAll(true);
+    this.intro?.setVisible(false); // the fly-over's panel showed through the menu, the overview (and the card)
     // a panel over the course hides the banner ("in the hole!" showed above the hole-complete panel);
     // the relief panels keep it: it says why they opened ("out of bounds")
     if (kind !== 'relief' && kind !== 'drop') this.hideBanner();
@@ -1253,6 +1254,7 @@ export class HudScene extends Phaser.Scene {
     this.modal = null;
     this.redraw = null;
     this.modalLayer.removeAll(true);
+    if (!this.cardLayer) this.intro?.setVisible(true);
   }
 
   private cardLayer: Phaser.GameObjects.Container | null = null;
@@ -1265,6 +1267,7 @@ export class HudScene extends Phaser.Scene {
     this.modalBeforeCard = this.modal;
     if (this.modal) this.modalLayer.setVisible(false);
     this.modal = 'card';
+    this.intro?.setVisible(false);
     const layer = this.add.container(0, 0).setDepth(120);
     const dim = dimmer(this, 0.6);
     dim.on('pointerdown', () => this.closeCard());
@@ -1283,6 +1286,7 @@ export class HudScene extends Phaser.Scene {
     this.modal = this.modalBeforeCard;
     this.modalBeforeCard = null;
     this.modalLayer.setVisible(true);
+    if (!this.modal) this.intro?.setVisible(true);
     if (this.play.match) this.play.matchUnheld(); // what came while the card was open
   }
 

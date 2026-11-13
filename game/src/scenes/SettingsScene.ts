@@ -150,16 +150,14 @@ export class SettingsScene extends MenuScene {
         }, { color: 'grey' }));
         y += 17;
       });
-      rows.push(() => {
-        this.root.add(txt(this, x0 + pw / 2, y + 2, 'casual rounds go on their own leaderboard tab', { origin: [0.5, 0], color: COLORS.dim, maxWidth: pw - 12 }));
-        y += 13;
-      });
     }
     // as many rows as fit above the buttons; the rest on further pages
     const per = Math.max(3, Math.floor((y0 + ph - 22 - y) / 17));
     const pages = Math.ceil(rows.length / per);
     if (this.page >= pages) this.page = 0;
     rows.slice(this.page * per, (this.page + 1) * per).forEach((draw) => draw());
+    // (a line of explanation where there is room for it under the rows)
+    if (!inRound && y + 13 <= y0 + ph - 22) this.root.add(txt(this, x0 + pw / 2, y + 2, 'casual rounds go on their own leaderboard tab', { origin: [0.5, 0], color: COLORS.dim }));
     if (pages > 1) {
       const label = this.page + 1 < pages ? `more (${this.page + 1}/${pages})` : `first page (${pages}/${pages})`;
       this.root.add(new Button(this, Math.round(x0 + pw / 2 - 45), y0 + ph - 20, 90, 15, label, () => { this.page = (this.page + 1) % pages; this.rebuild(); }));
