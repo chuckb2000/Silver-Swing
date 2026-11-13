@@ -1,0 +1,62 @@
+{
+ "release": "data-crosswater",
+ "note": "Build inputs for Crosswater; `make fetch NAME=crosswater` puts them in place. All fetched by the GitHub Actions workflow (data/crosswater/fetch.json) on 2026-11-13. crosswater_overpass.geojson = the standard Overpass export of the box 43.8383,-121.46,43.8656,-121.4369. dogami_dtm_ft.tif / dogami_chm_ft.tif = DOGAMI DIGITAL_TERRAIN_MODEL_MOSAIC / CANOPY_HEIGHT_MODEL_MOSAIC exportImage at 1 m, box x 623800-625600 / y 4855100-4858100 EPSG:32610, feet. osip2024_*.jpg = OSIP 2024 at 0.5 m in four pieces named by their SW corner.",
+ "files": [
+  {
+   "asset": "crosswater_overpass.geojson",
+   "sha256": "35566b8e0cbb81c0971b2eaa74e1f12389e2900dfcd8082ef6c0083134aa772d",
+   "run": "python3 pipeline/intake.py osm crosswater {file}",
+   "outputs": {
+    "raw/overpass.geojson": "b4df74f69b6290aff9f03663724ffa08c8cc6518d1fb4201cb4e6207b0410afd"
+   }
+  },
+  {
+   "asset": "dogami_dtm_ft.tif",
+   "sha256": "8e487be3280534115fc3c249a4b2c1252267d68c1d4771fcbe83b7d54ddbfb41",
+   "to": "raw/",
+   "outputs": {
+    "raw/dogami_dtm_ft.tif": "8e487be3280534115fc3c249a4b2c1252267d68c1d4771fcbe83b7d54ddbfb41"
+   }
+  },
+  {
+   "asset": "dogami_chm_ft.tif",
+   "sha256": "f202f8ff1651f540ef423c72e99e8d741f0f7fb4cd02878e6d24b0acff0feb86",
+   "to": "raw/",
+   "outputs": {
+    "raw/dogami_chm_ft.tif": "f202f8ff1651f540ef423c72e99e8d741f0f7fb4cd02878e6d24b0acff0feb86"
+   }
+  },
+  {
+   "asset": "osip2024_623800_4855100.jpg",
+   "sha256": "58871ab676ca53d0313e24bfaaf2c0cd1bd3a3ecac4ebd68aa94546bbf5d85c9",
+   "to": "build/ortho/",
+   "outputs": {
+    "build/ortho/osip2024_623800_4855100.jpg": "58871ab676ca53d0313e24bfaaf2c0cd1bd3a3ecac4ebd68aa94546bbf5d85c9"
+   }
+  },
+  {
+   "asset": "osip2024_623800_4856600.jpg",
+   "sha256": "868e12b12f09b272176771de035dba947c7cbedde64d9129204290fa21928741",
+   "to": "build/ortho/",
+   "outputs": {
+    "build/ortho/osip2024_623800_4856600.jpg": "868e12b12f09b272176771de035dba947c7cbedde64d9129204290fa21928741"
+   }
+  },
+  {
+   "asset": "osip2024_625300_4855100.jpg",
+   "sha256": "9bcad19bdc3253c337124a35e4ed5f52e5d320e52aecf1fb0d1382d6e0caf3a6",
+   "to": "build/ortho/",
+   "outputs": {
+    "build/ortho/osip2024_625300_4855100.jpg": "9bcad19bdc3253c337124a35e4ed5f52e5d320e52aecf1fb0d1382d6e0caf3a6"
+   }
+  },
+  {
+   "asset": "osip2024_625300_4856600.jpg",
+   "sha256": "4315f14334024cfcba176f1fb273123bc262f5b8b51918170993a2ee601a9f7d",
+   "run": "python3 pipeline/intake.py ortho crosswater data/crosswater/build/ortho/osip2024_623800_4855100.jpg 623800 4855100 625300 4856600 data/crosswater/build/ortho/osip2024_623800_4856600.jpg 623800 4856600 625300 4858100 data/crosswater/build/ortho/osip2024_625300_4855100.jpg 625300 4855100 625600 4856600 {file} 625300 4856600 625600 4858100 --out raw/osip2024_05m.tif",
+   "outputs": {
+    "raw/osip2024_05m.tif": "71b6fd4f96bcde4c8ff6ac37e3ad14b1fca519b1f9fb71d580708f555522155a"
+   }
+  }
+ ]
+}
