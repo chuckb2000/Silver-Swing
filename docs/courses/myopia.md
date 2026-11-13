@@ -14,6 +14,14 @@ hunt country in late summer: tawny fescue rough, white pine, red oak, red maple,
 logo is a brass hunting horn with a red cord lying in the fescue. Every hole passes after the
 virtual tees moved within their boxes.
 
+## Checks
+
+- `course_play.test.ts -t myopia`: 11 passed.
+- `npm test`: 1764 passed, 2 failed: `player.test.ts` "the real rotation" and `tour.test.ts` "a hole drawn sits out" fail until `make land` adds the course to the daily rotation.
+- `npm run e2e`: 16 passed, 1 failed: smoke.spec "a reload while the ball is in the air keeps the stroke". It plays Oswego Lake, not this course; rerun alone it failed once and passed once, so it is flaky (it also failed on the Heron Lakes branch, PR #129).
+- Pinned; a `--fresh` rebuild left git clean.
+- Every hole looked at in the game (tee view, overview, first shot, putting view).
+
 ## Facts
 
 -   **Location:** South Hamilton (Hamilton), Essex County, Massachusetts. `state` MA.
