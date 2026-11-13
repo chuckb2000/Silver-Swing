@@ -37,6 +37,7 @@ export interface LieContext {
   teedUp: boolean;            // first stroke of the hole from the teeing area
   distToGreenEdge: number;    // metres to the current hole's green
   canopyBase: number | null;  // lowest canopy overhead (m above ground) or null
+  integral?: boolean;         // on an integral object (a road the local rules make part of the course)
 }
 
 const BASE: Record<LieKind, { dist: number; win: number; name: string }> = {
@@ -87,8 +88,9 @@ export function makeLie(ctx: LieContext, rng: Rng): Lie {
     lie.label = 'gorse';
     return lie;
   }
-  // under a canopy the shot is a punch, played automatically: say so (developer asked how to hit one)
-  const name = kind === 'trees' && lie.apexCap !== undefined ? 'punch' : b.name;
+  // under a canopy the shot is a punch, played automatically: say so (developer asked how to hit one);
+  // a cart path that's an integral object is a road, played as it lies (the Old Course's 17th)
+  const name = kind === 'trees' && lie.apexCap !== undefined ? 'punch' : kind === 'cartpath' && ctx.integral ? 'road' : b.name;
   // the lie's name only: the shorter carry shows the penalty (developer, 2026-10-20)
   lie.label = flyer ? `${name} flyer` : name;
   return lie;

@@ -1609,6 +1609,29 @@ green, the pin 0.8 m further onto the back tier, its putting views, its mini-map
 chunk). A putt from 6 m short of the step to the centre pin (61 ft) gets up from about 70 %
 power; a weaker one rolls back down the step. Highland Links 9 stays as it is (developer).
 
+## Integral objects: roads and walls played as they lie (Old Course chat, 2026-11-13)
+
+The Old Course's local rules make the road and wall behind the 17th green integral parts of the
+course, and so is Grannie Clark's Wynd across the 1st and 18th (developer, 2026-11-13: integral,
+as with the road on 17); the Road Hole is the course's best-known hole. The game gave free relief from every cart path and
+building. Now course.json may list `integral` areas (course_config `"integral"`: OSM features,
+lines buffered into strips, and/or rings traced by hand; s10 clips them to the boundary). A ball
+that stops on a cart path or building inside one plays as it lies (`Round.integralAt`): no relief
+is offered, the lie reads "road" with the cart path's physics, and the unplayable-ball options
+stay. Relief from an ordinary path beside one may end on it (an integral object isn't an
+obstruction). A wall is mapped as a thin building, so the ball strikes it. No other course
+changes: the list is opt-in, and finished courses are pinned to the pipeline that built them.
+
+## Europe is one place on the course select (developer, 2026-11-13)
+
+With courses coming in Scotland and Norway, the developer: the state selector's button for them
+should be "europe". Every course whose `state` is `EU`, or a European country, or whose location
+ends with one, goes under one "europe" button, after the states and provinces
+(`registry.ts` `stateOf`, `EUROPE`). With it on offer the heading reads "choose where to play",
+and the title counts "64 courses in 12 states and europe" (1x on a screen too narrow for that at
+2x). A US postal code always wins ("DE" is Delaware). Course chats set `"state": "EU"`
+(docs/COURSE_BUILD.md 12).
+
 ## Holiday themes (developer, 2026-11-13)
 
 The developer: "A thanksgiving theme for the week of thanksgiving, christmas theme for
