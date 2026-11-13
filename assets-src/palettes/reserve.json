@@ -1,0 +1,35 @@
+{
+  "name": "The Reserve (high summer in the Tualatin Valley wine country)",
+  "note": "Course theme palette (32 colours; same keys as pnw.json plus F0-F2, as pumpkin_ridge.json). The Reserve Vineyards & Golf Club, Aloha OR, drawn in high summer, as the OSIP 2024 photo shows it (July): irrigated turf a warm, sunlit green (photo: fairway #819462, green #939b67, mown rough #6e835d) in G3-G9; the native grass left long between the holes, wide on the links-style North course, gone blonde (photo #a29974; F0-F2, drawn where data/reserve/proposed/fescue.geojson says, config fescue_areas); the South course's bright white bunker sand (photo #d0d1c7; S0-S2); green-teal ponds (#3b4f5a; W0-W2); the dry grass fields round the course in summer gold (L0-L2); warm brown leaf litter under the oaks (B0-B1) and a claret accent for roofs (B2), the vineyard's colour. Trees: Douglas fir, and Oregon white oak, bigleaf maple and Oregon ash in full summer leaf (assets-src/trees_reserve.py). Shadows are a 35% black overlay on top of these.",
+  "colors": {
+    "G0": "#163120", "G1": "#204429", "G2": "#2d5b30", "G3": "#3c7134",
+    "G4": "#4f863a", "G5": "#629a40", "G6": "#76ad47", "G7": "#8abd51",
+    "G8": "#a0cc5e", "G9": "#c3df89",
+    "L0": "#7a7243", "L1": "#958a51", "L2": "#b0a263",
+    "S0": "#c4bfac", "S1": "#e7e3d5", "S2": "#f8f6ef",
+    "W0": "#21434a", "W1": "#2e5b5e", "W2": "#6c9c95",
+    "K0": "#26272d", "K1": "#53545c", "K2": "#7a7b83", "K3": "#b3aa97", "K4": "#d9d1bf",
+    "B0": "#3a2518", "B1": "#6c4630", "B2": "#86394a",
+    "R0": "#4b586a", "WH": "#f6f6f2",
+    "F0": "#9a8247", "F1": "#bc9f59", "F2": "#d6bb71"
+  },
+  "lut": {
+    "rough": ["F0", "F1", "F2", "F2"],
+    "rough_band": ["G3", "G4", "G5", "G5"]
+  },
+  "aliases": {
+    "TUFT": "F0"
+  },
+  "minimap": {
+    "rough": "#5e8a42", "woods": "#2d5b30", "ob_woods": "#24452c", "ob": "#968b52",
+    "water": "#2e5b5e", "ob_water": "#2e5b5e", "bunker": "#e7e3d5"
+  },
+  "minimap_trees": {
+    "conifer": ["#10302a", "#2a5c4a"],
+    "deciduous": ["#3b4f1d", "#6e8c34"]
+  },
+  "trees": {
+    "conifer": "trees_reserve:conifer",
+    "deciduous": "trees_reserve:deciduous"
+  }
+}
