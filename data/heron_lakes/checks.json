@@ -1,0 +1,8 @@
+{
+ "wind_mph": [1, 7],
+ "courses": {
+  "heron_lakes_greenback": {
+   "default_aim": {"skip": [8], "why": "Greenback 8 drives through a narrow chute in a real stand of firs (OSIP 2024 photo); a full driver down any line from the box reaches the trees at the dogleg. Open item for the developer."}
+  }
+ }
+}
