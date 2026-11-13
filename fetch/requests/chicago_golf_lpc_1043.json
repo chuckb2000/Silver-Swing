@@ -2,7 +2,7 @@
  "release": "data-chicago_golf",
  "items": [
   {
-   "name": "chicago_golf_lpc_1043",
+   "name": "chicago_golf_lpc_retry_1043",
    "tnm": {
     "dataset": "lpc",
     "bbox": [
@@ -12,6 +12,34 @@
      41.8534
     ],
     "only": "MidNorth_D22_1043",
+    "max": 8
+   }
+  },
+  {
+   "name": "chicago_golf_lpc_retry_1041",
+   "tnm": {
+    "dataset": "lpc",
+    "bbox": [
+     -88.1252,
+     41.8376,
+     -88.1072,
+     41.8534
+    ],
+    "only": "MidNorth_D22_1041",
+    "max": 8
+   }
+  },
+  {
+   "name": "chicago_golf_lpc_retry_1045",
+   "tnm": {
+    "dataset": "lpc",
+    "bbox": [
+     -88.1252,
+     41.8376,
+     -88.1072,
+     41.8534
+    ],
+    "only": "MidNorth_D22_1045",
     "max": 8
    }
   }
