@@ -156,6 +156,7 @@ export function ensureSchema(db: D1Like): Promise<void> {
         try { await db.prepare("UPDATE rounds SET tee = json_extract(data, '$.tee') WHERE tee IS NULL").run(); } catch { /* no JSON functions: the feed's badges skip them */ }
         await db.prepare("INSERT OR REPLACE INTO meta (k, v) VALUES ('schema', ?)").bind(SCHEMA_VERSION).run();
         migratedNow = true; // the setup used this request's queries; the backfill starts with the next one
+        upgradedNow = version !== null; // an existing board brought to a new schema (not a new, empty one)
       }
     })();
     ready.catch(() => { ready = null; });
@@ -165,14 +166,30 @@ export function ensureSchema(db: D1Like): Promise<void> {
 
 let backfilled = false;
 let migratedNow = false;
+let upgradedNow = false;
 
 /** Before every request: the tables exist, and a few old rounds are brought up to date. */
 export async function prepareDb(db: D1Like): Promise<void> {
+  upgradedNow = false; // set again below only by the request that does the upgrade
   await ensureSchema(db);
   if (migratedNow) { migratedNow = false; return; }
   if (await backfill(db)) return;
   await applyCardFixes(db);
 }
+
+/**
+ * For the requests that store things: true when this request has just moved an existing board to a new
+ * schema. That used most of the request's 50 database queries, so a batch of rounds on top of it ran
+ * out part-way; the game is asked to send again instead (503: it keeps what it sent as unsent).
+ */
+async function prepareForWrite(db: D1Like): Promise<boolean> {
+  await prepareDb(db);
+  const busy = upgradedNow;
+  upgradedNow = false;
+  return busy;
+}
+
+const SEND_AGAIN = () => json({ ok: false, error: 'the board was being updated: send again' }, 503);
 
 let cardFixed = false;
 /** Rounds rewritten per request by a card fix (each is one query; the free plan allows 50 per request). */
@@ -301,6 +318,7 @@ export function resetSchemaCache() {
   backfilled = false;
   cardFixed = false;
   migratedNow = false;
+  upgradedNow = false;
 }
 
 /** One claim check per name and device in a request (a batch is usually one player's rounds). */
@@ -350,8 +368,13 @@ function addDays(day: string, n: number): string {
  */
 async function dailyCounts(db: D1Like, e: LeaderboardEntry, owner: string | null, now: Date): Promise<boolean> {
   if (!e.daily || !isDay(e.daily) || !owner || e.casual || e.difficulty !== 'normal' || !(['front', 'back', '9'].includes(e.length) || /^nines:[a-z0-9_]+$/.test(e.length))) return false;
+  // the day it says it was played on (its own date, any time zone), sent within a week: a round played
+  // offline, or named a few days later, lost its place on the day's board when the day was compared
+  // with the time it arrived
   const t = Date.parse(`${e.daily}T12:00:00Z`);
-  if (Math.abs(t - now.getTime()) > 2 * 86_400_000) return false;
+  const played = Date.parse(e.date);
+  if (!Number.isFinite(played) || Math.abs(t - played) > 2 * 86_400_000) return false;
+  if (t - now.getTime() > 2 * 86_400_000 || now.getTime() - t > 8 * 86_400_000) return false;
   // the daily round and the day's par 3s / 4s / 5s (tour ids) each count once
   const tour = isTourId(e.course);
   const { results } = await db.prepare(`SELECT id FROM rounds WHERE daily = ? AND owner = ? AND course ${tour ? '' : 'NOT '}IN ('par3s', 'par4s', 'par5s') LIMIT 1`)
@@ -428,18 +451,21 @@ export async function handlePost(db: D1Like | undefined, body: string): Promise<
   if (!db) return json({ ok: false, error: 'no database bound (DB)' }, 503);
   const list = parseList(body);
   if (list instanceof Response) return list;
-  await prepareDb(db);
+  if (await prepareForWrite(db)) return SEND_AGAIN();
   const nowDate = new Date();
   const now = nowDate.toISOString();
   const claim = claimer(db);
   let added = 0, rejected = 0;
   const taken: string[] = [];
+  // rounds that could not be stored this time (a database error, the query limit): the game sends them
+  // again. A round that is refused for what it is counts as rejected and is not asked for again
+  const failed: string[] = [];
   // rounds the board already has (a device resending after an import): fine, not "taken", in one query
   const ids = list.map((r) => (r as { id?: unknown })?.id).filter((v): v is string => typeof v === 'string' && v.length <= 80);
-  const have = new Set<string>();
+  const have = new Map<string, { player: string; owner: string | null }>();
   if (ids.length) {
-    const { results } = await db.prepare(`SELECT id FROM rounds WHERE id IN (${ids.map(() => '?').join(', ')})`).bind(...ids).all<{ id: string }>();
-    for (const r of results) have.add(r.id);
+    const { results } = await db.prepare(`SELECT id, player, owner FROM rounds WHERE id IN (${ids.map(() => '?').join(', ')})`).bind(...ids).all<{ id: string; player: string; owner: string | null }>();
+    for (const r of results) have.set(r.id, { player: r.player, owner: r.owner });
   }
   for (const raw of list) {
     try {
@@ -451,6 +477,15 @@ export async function handlePost(db: D1Like | undefined, body: string): Promise<
         if (o) {
           await db.prepare('UPDATE rounds SET owner = ? WHERE id = ? AND owner IS NULL AND player IN (SELECT name FROM names WHERE owner = ?)')
             .bind(o, raw.id, o).run();
+          // the device's own round under another name of its own: the name was changed on the round's
+          // summary after it was sent (rounds go up as they finish), and the board kept the old one
+          const stored = have.get(raw.id)!;
+          const name = boardableName(raw.player);
+          if (name && stored.owner === o && stored.player !== name && (await claim(raw.player, o)) === 'ok') {
+            await db.prepare('UPDATE rounds SET player = ? WHERE id = ? AND owner = ?').bind(name, raw.id, o).run();
+            await db.prepare('UPDATE eagles SET player = ? WHERE round = ? AND owner = ?').bind(name, raw.id, o).run();
+            await db.prepare('UPDATE holeouts SET player = ? WHERE round = ? AND owner = ?').bind(name, raw.id, o).run();
+          }
         }
         continue;
       }
@@ -473,10 +508,13 @@ export async function handlePost(db: D1Like | undefined, body: string): Promise<
       // the round's eagles, in case the live report never arrived (the same ids: never twice)
       for (const ev of eaglesIn(clean, slotToHole(clean))) await insertEagle(db, ev, ownerOf(rawOwner), now);
     } catch {
-      rejected++; // one bad round doesn't hold up the rest
+      // one round doesn't hold up the rest; it was counted as rejected and the game marked it as
+      // sent, so a round lost to a passing error never reached the board
+      const id = (raw as { id?: unknown })?.id;
+      if (typeof id === 'string') failed.push(id); else rejected++;
     }
   }
-  return json({ ok: true, added, rejected, taken });
+  return json({ ok: true, added, rejected, taken, failed });
 }
 
 /** GET /api/eagles?limit=n: the most recent eagles (and better) on any course. */
@@ -501,12 +539,13 @@ export async function handleEaglesPost(db: D1Like | undefined, body: string): Pr
   if (!db) return json({ ok: false, error: 'no database bound (DB)' }, 503);
   const list = parseList(body);
   if (list instanceof Response) return list;
-  await prepareDb(db);
+  if (await prepareForWrite(db)) return SEND_AGAIN();
   const nowDate = new Date();
   const now = nowDate.toISOString();
   const claim = claimer(db);
   let added = 0, rejected = 0;
   const taken: string[] = [];
+  const failed: string[] = [];
   for (const raw of list) {
     try {
       if (!isEagle(raw)) { rejected++; continue; }
@@ -519,10 +558,11 @@ export async function handleEaglesPost(db: D1Like | undefined, body: string): Pr
       if (!fixed) continue; // no longer an eagle on the course's corrected card
       added += await insertEagle(db, { ...fixed, player: boardableName(fixed.player)!, date: sane(fixed.date, nowDate) }, ownerOf(rawOwner), now);
     } catch {
-      rejected++;
+      const id = (raw as { id?: unknown })?.id; // not stored this time: sent again (as rounds)
+      if (typeof id === 'string') failed.push(id); else rejected++;
     }
   }
-  return json({ ok: true, added, rejected, taken });
+  return json({ ok: true, added, rejected, taken, failed });
 }
 
 export interface BirdieRecord { player: string; course: string; birdies: number; made: number; length: string; tee: string; date: string; id: string }
@@ -589,12 +629,13 @@ export async function handleHoleoutsPost(db: D1Like | undefined, body: string): 
   if (!db) return json({ ok: false, error: 'no database bound (DB)' }, 503);
   const list = parseList(body);
   if (list instanceof Response) return list;
-  await prepareDb(db);
+  if (await prepareForWrite(db)) return SEND_AGAIN();
   const nowDate = new Date();
   const now = nowDate.toISOString();
   const claim = claimer(db);
   let added = 0, rejected = 0;
   const taken: string[] = [];
+  const failed: string[] = [];
   for (const raw of list) {
     try {
       if (!isHoleOut(raw)) { rejected++; continue; }
@@ -615,10 +656,11 @@ export async function handleHoleoutsPost(db: D1Like | undefined, body: string): 
         .run()) as { meta?: { changes?: number }; changes?: number };
       added += res?.meta?.changes ?? res?.changes ?? 0;
     } catch {
-      rejected++;
+      const id = (raw as { id?: unknown })?.id; // not stored this time: sent again (as rounds)
+      if (typeof id === 'string') failed.push(id); else rejected++;
     }
   }
-  return json({ ok: true, added, rejected, taken });
+  return json({ ok: true, added, rejected, taken, failed });
 }
 
 /** GET /api/names?name=x&owner=k: may this device use the name? POST the same to claim it. */
@@ -682,7 +724,8 @@ export async function handleRecentGet(db: D1Like | undefined, url: URL): Promise
     rows.push({
       id: r.id, player: name, course: r.course, length: r.length, tee: r.tee ?? '', gross: r.gross, toPar, holes,
       casual, daily: r.daily ?? null, date: r.date, received: r.received,
-      ...feedBadges(r.gross, casual, r.prev_best, r.prev_record),
+      // (the daily par 3s / 4s / 5s are different holes every day: no "best" or "record" across days)
+      ...(isTourId(r.course) ? { pb: false, record: false } : feedBadges(r.gross, casual, r.prev_best, r.prev_record)),
     });
   }
   const matches = await recentMatches(db, limit);
@@ -713,7 +756,7 @@ const MARGIN = /^(\d{1,2}&\d{1,2}|\d{1,2} up|at the \d{1,3}(st|nd|rd|th)|by forf
 export async function recordMatch(db: D1Like, code: string, r: MatchResult): Promise<'ok' | 'exists' | 'name' | 'invalid'> {
   if (!/^[a-z0-9]{4,12}$/.test(code) || (r.winner !== 0 && r.winner !== 1) || !Array.isArray(r.players) || !Array.isArray(r.owners)) return 'invalid';
   if (typeof r.margin !== 'string' || !MARGIN.test(r.margin) || !['holes', 'extra', 'conceded', 'forfeit'].includes(r.how)) return 'invalid';
-  if (!int(r.holes, 1, 18) || !int(r.played, 0, 99) || typeof r.courseId !== 'string' || r.courseId.length > 64 || typeof r.tee !== 'string' || r.tee.length > 40) return 'invalid';
+  if (!int(r.holes, 1, 27) || !int(r.played, 0, 99) || typeof r.courseId !== 'string' || r.courseId.length > 64 || typeof r.tee !== 'string' || r.tee.length > 40) return 'invalid';
   await prepareDb(db);
   const { results: have } = await db.prepare('SELECT code FROM matches WHERE code = ?').bind(code).all<{ code: string }>();
   if (have.length) return 'exists';
@@ -833,7 +876,8 @@ export async function handleHandicapsGet(db: D1Like | undefined): Promise<Respon
     if (!name) continue;
     let e: LeaderboardEntry;
     try { e = JSON.parse(r.data) as LeaderboardEntry; } catch { continue; }
-    if (!isEntry(e) || e.difficulty !== 'normal' || e.casual) continue;
+    // (the daily par rounds never count: left out before the cap, where they pushed counting rounds out)
+    if (!isEntry(e) || e.difficulty !== 'normal' || e.casual || isTourId(e.course)) continue;
     const key = r.owner ? `o:${r.owner}` : `n:${name}`;
     const g = by.get(key) ?? { name, list: [] }; // newest first: the first round's name is the latest
     if (g.list.length >= HCP_PER_PLAYER) continue;

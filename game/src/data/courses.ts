@@ -184,14 +184,15 @@ export async function loadCourse(scene: Phaser.Scene, id: string, progress?: Loa
     scene.cache.json.remove('treesMeta');
   }
   total = 3 + json.terrain.rows * json.terrain.cols + 1 + json.maps.holes.length + 4 + 2;
+  // the course's pictures by key: the terrain chunks, the overview and each hole's mini-map
+  const art = new Map<string, string>();
+  for (let j = 0; j < json.terrain.rows; j++) {
+    for (let i = 0; i < json.terrain.cols; i++) art.set(`chunk_${i}_${j}`, base + json.terrain.pattern.replace('{i}', String(i)).replace('{j}', String(j)));
+  }
+  art.set('overview', base + json.maps.overview);
+  for (const m of json.maps.holes) art.set(`mini_${m.hole}`, base + m.file);
   const failed2 = await runLoader(scene, (l) => {
-    for (let j = 0; j < json.terrain.rows; j++) {
-      for (let i = 0; i < json.terrain.cols; i++) {
-        l.image(`chunk_${i}_${j}`, base + json.terrain.pattern.replace('{i}', String(i)).replace('{j}', String(j)));
-      }
-    }
-    l.image('overview', base + json.maps.overview);
-    for (const m of json.maps.holes) l.image(`mini_${m.hole}`, base + m.file);
+    for (const [k, url] of art) l.image(k, url);
     if (trees.c.includes(2) && !scene.textures.exists('blossom')) l.atlas('blossom', 'sprites/blossom.png', 'sprites/blossom.json'); // flowering trees
     if (trees.c.includes(3)) { // flowering shrubs, or the theme's own bushes
       const sheet = json.shrubs || 'shrubs';
@@ -205,6 +206,17 @@ export async function loadCourse(scene: Phaser.Scene, id: string, progress?: Loa
     }
   }, () => tick());
   alive();
+  // a picture that didn't arrive (a connection that dropped for a moment) is asked for again, twice;
+  // a course with holes in its art, or a blank mini-map, is not played on: the caller offers a reload
+  let missing = failed2.filter((k) => art.has(k));
+  for (let attempt = 0; attempt < 2 && missing.length; attempt++) {
+    const again = missing;
+    await new Promise((r) => setTimeout(r, 400 * (attempt + 1)));
+    alive();
+    missing = (await runLoader(scene, (l) => { for (const k of again) if (!scene.textures.exists(k)) l.image(k, art.get(k)!); })).filter((k) => art.has(k));
+    alive();
+  }
+  if (missing.length) throw new Error(`course ${id}: could not load ${missing.length} of its pictures (${missing.slice(0, 3).join(', ')})`);
   if (wantTrees && (failed2.includes('trees') || failed2.includes('treesMeta')) && theme !== 'pnw') {
     // a theme without its own trees yet: use the original set
     console.warn(`no tree sprites for theme "${theme}", using pnw`);
