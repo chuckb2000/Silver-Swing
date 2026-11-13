@@ -110,7 +110,6 @@
 { "type": "Feature", "properties": { "osm": "n2449487155", "kind": "pin", "tags": { "golf": "pin" } }, "geometry": { "type": "Point", "coordinates": [ -2.819425, 56.3550272 ] } },
 { "type": "Feature", "properties": { "osm": "n2449487169", "kind": "pin", "tags": { "golf": "pin" } }, "geometry": { "type": "Point", "coordinates": [ -2.8234864, 56.3573745 ] } },
 { "type": "Feature", "properties": { "osm": "n2449487181", "kind": "pin", "tags": { "golf": "pin" } }, "geometry": { "type": "Point", "coordinates": [ -2.8030614, 56.3431243 ] } },
-{ "type": "Feature", "properties": { "osm": "n2449487192", "kind": "pin", "tags": { "golf": "pin" } }, "geometry": { "type": "Point", "coordinates": [ -2.8084681, 56.3431233 ] } },
 { "type": "Feature", "properties": { "osm": "n2449487209", "kind": "pin", "tags": { "golf": "pin" } }, "geometry": { "type": "Point", "coordinates": [ -2.813766, 56.3488857 ] } },
 { "type": "Feature", "properties": { "osm": "n2449487248", "kind": "pin", "tags": { "golf": "pin" } }, "geometry": { "type": "Point", "coordinates": [ -2.8123284, 56.3462103 ] } },
 { "type": "Feature", "properties": { "osm": "n2449487262", "kind": "pin", "tags": { "golf": "pin" } }, "geometry": { "type": "Point", "coordinates": [ -2.8081441, 56.3437844 ] } },

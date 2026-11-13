@@ -30,7 +30,8 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 
 1. Hole 4: the OSM hole line starts 60 m from the Black tee box (w180275735), and only that box matches the card; the line was probably drawn from another tee. Measured from the Black box through the line's bend points.
 2. Hole 8 (Black): tee box w180275548 assigned by the developer (tagged hole=8, tee_set=Black in edited/course.geojson).
-3. Hole 17 (Black): measured 431 yd vs card 449 (-3.9%) even with the virtual tee at the best spot in its box; accepted for play.
+3. Hole 17: no golf=pin on its green; the centre pin is the green's centre (proposal).
+4. Hole 17 (Black): measured 431 yd vs card 449 (-3.9%) even with the virtual tee at the best spot in its box; accepted for play.
 
 ## Playability adjustments
 
@@ -96,7 +97,7 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 | w1428246507 | practice | 1.5 | 1.5 | 2 | 2.9 | 0.0 |
 | w1428246508 | practice | 0.5 | 1.0 | 2 | 2.0 | 0.0 |
 | w180275525 | 9 | 0.4 | 1.0 | 1 | 2.7 | 1.0 |
-| w180275533 | 17 | 3.7 | 2.5 | 1 | 3.8 | 1.5 |
+| w180275533 | 17 | 3.7 | 2.5 | 1 | 3.7 | 1.5 |
 | w180275719 | 1 | 1.9 | 1.9 | 2 | 3.7 | 1.5 |
 | w236999240 | 18 | 3.9 | 2.5 | 2 | 3.8 | 1.5 |
 | w395543446 | practice | 1.8 | 1.8 | 2 | 2.7 | 0.0 |
@@ -161,7 +162,7 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 | 14 | 5 | yes | yes (3 near) | yes | yes | yes | 17 | 0 |
 | 15 | 4 | yes | yes (3 near) | yes | yes | yes | 9 | 0 |
 | 16 | 4 | yes | yes (3 near) | yes | yes | yes | 12 | 0 |
-| 17 | 4 | yes | yes (2 near) | yes | yes | yes | 7 | 0 |
+| 17 | 4 | yes | yes (2 near) | yes | yes | NO | 7 | 0 |
 | 18 | 4 | yes | yes (1 near) | yes | yes | yes | 1 | 3 |
 
 ## Missing or suspect features
@@ -171,6 +172,7 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 - hole 12: hole line carries handicap=3 (compare with scorecard)
 - hole 13: hole line carries handicap=11 (compare with scorecard)
 - hole 14: hole line carries handicap=1 (compare with scorecard)
+- hole 17: no golf=pin inside its green
 - green w1017480944 at (1554, 158) is not the end of any hole line (practice green?) -> treated as a wrong green
 - green w1018272953 at (912, 265) is not the end of any hole line (practice green?) -> treated as a wrong green
 - green w1018272957 at (874, 262) is not the end of any hole line (practice green?) -> treated as a wrong green
@@ -278,5 +280,5 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 - fairway w858552949 at (792, 1426) is more than 30 m from every hole line (a range or practice area mapped as fairway?)
 - hole line w294611915 (ref 12) starts within 10 m of a green (the previous green?)
 
-Totals: 170 tees, 88 greens, 113 fairways, 327 bunkers, 5 water hazards, 84 pins, 52 cart paths, 90 OSM tree points.
+Totals: 170 tees, 88 greens, 113 fairways, 327 bunkers, 5 water hazards, 83 pins, 52 cart paths, 90 OSM tree points.
 

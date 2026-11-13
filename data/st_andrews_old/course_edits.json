@@ -93,6 +93,10 @@
   {
    "osm": "w1019045811",
    "reason": "the Old Course's own polygon, replaced as the OB line by links_boundary (add above)"
+  },
+  {
+   "osm": "n2449487192",
+   "reason": "the Road Hole green is long and narrow: OSM's pin at its far right end (15 m from the centre) falls outside the close-up putting view, centred on the green; the centre pin is the green's centre instead (the game adds the other hole locations itself)"
   }
  ],
  "extend_start": []
