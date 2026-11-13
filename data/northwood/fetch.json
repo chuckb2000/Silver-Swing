@@ -23,21 +23,24 @@
    }
   },
   {
-   "name": "northwood_lpc",
-   "tnm": {
-    "dataset": "lpc",
-    "bbox": [
-     -122.999931,
-     38.475132,
-     -122.988328,
-     38.481944
-    ],
-    "only": "CA_NorthernCA_B22"
-   }
-  },
-  {
    "name": "northwood_naip_list.json",
    "url": "https://tnmaccess.nationalmap.gov/api/v1/products?datasets=USDA%20National%20Agriculture%20Imagery%20Program%20(NAIP)&bbox=-122.999931,38.475132,-122.988328,38.481944&max=50&outputFormat=JSON"
+  },
+  {
+   "name": "USGS_LPC_CA_NorthernCA_B22_10SEH0058.laz",
+   "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/LPC/Projects/CA_NorthernCA_B22/CA_NorthernCA_1_B22/LAZ/USGS_LPC_CA_NorthernCA_B22_10SEH0058.laz"
+  },
+  {
+   "name": "USGS_LPC_CA_NorthernCA_B22_10SEH0059.laz",
+   "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/LPC/Projects/CA_NorthernCA_B22/CA_NorthernCA_1_B22/LAZ/USGS_LPC_CA_NorthernCA_B22_10SEH0059.laz"
+  },
+  {
+   "name": "USGS_LPC_CA_NorthernCA_B22_10SEH0158.laz",
+   "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/LPC/Projects/CA_NorthernCA_B22/CA_NorthernCA_1_B22/LAZ/USGS_LPC_CA_NorthernCA_B22_10SEH0158.laz"
+  },
+  {
+   "name": "USGS_LPC_CA_NorthernCA_B22_10SEH0159.laz",
+   "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/LPC/Projects/CA_NorthernCA_B22/CA_NorthernCA_1_B22/LAZ/USGS_LPC_CA_NorthernCA_B22_10SEH0159.laz"
   }
  ]
 }
