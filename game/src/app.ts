@@ -5,6 +5,7 @@ import type { CourseInfo } from './data/courses';
 import { DEFAULT_SETTINGS, Settings } from './save/store';
 import type { Round } from './systems/game/round';
 import type { LiveMatch } from './match/live';
+import type { Holiday } from './systems/game/holiday';
 
 export const GAME_NAME = 'Silver Swings Golf';
 export const PX_PER_M = 2;
@@ -23,6 +24,8 @@ export const app = {
   /** view size in texels: the coordinate space of the HUD and menus */
   view: { w: 480, h: 270 },
   calibration: {} as Record<string, number>,
+  /** the holiday the game is dressed for (systems/game/holiday.ts), or null */
+  holiday: null as Holiday | null,
 };
 
 export function fmtDist(m: number, units = app.settings.units): string {

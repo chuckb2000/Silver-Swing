@@ -14,7 +14,11 @@ test('music starts on the first tap, and "sound: muted" pauses it', async ({ pag
   await page.mouse.click(5, 5);
   await page.waitForFunction(() => window.__music.playing === true, null, { timeout: 30_000 });
   const first = await page.evaluate(() => window.__music.track);
-  expect(['dawn', 'march', 'waltz', 'primetime', 'nocturne', 'coastal', 'birdie', 'hymn', 'finale']).toContain(first);
+  // the suite, or from 12 to 31 December the carols (developer, 2026-11-13)
+  const xmas = await page.evaluate(() => (window as any).__golf?.holiday === 'christmas');
+  expect(xmas
+    ? ['xmas_jingle', 'xmas_deck', 'xmas_silent', 'xmas_wish', 'xmas_joy', 'xmas_wenceslas']
+    : ['dawn', 'march', 'waltz', 'primetime', 'nocturne', 'coastal', 'birdie', 'hymn', 'finale']).toContain(first);
   // muted in settings: the music stops; sound on again: it carries on
   await page.evaluate(() => {
     const s = window.__game.scene.getScene('title');
