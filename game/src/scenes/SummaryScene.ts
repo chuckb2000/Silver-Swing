@@ -29,7 +29,11 @@ export class SummaryScene extends MenuScene {
 
   init(data: { entry: LeaderboardEntry }) {
     this.entry = data.entry;
+    this.sounded = false;
   }
+
+  /** the milestone / personal-best sound has played (once a visit, not on every redraw) */
+  private sounded = false;
 
   async build() {
     const W = app.view.w, H = app.view.h;
@@ -39,21 +43,49 @@ export class SummaryScene extends MenuScene {
     if (W >= 400) this.root.add(this.add.image(6, 4, 'ui', 'portrait').setOrigin(0, 0));
     const card = scorecard(this, r, W, H - 30);
     this.root.add(card);
+    const tour = isTourId(e.course);
+    const g = this.gen;
+    // the ways out first: the lines below wait on the network (up to 8 s each on a stalled connection),
+    // and a screen with no buttons looks frozen
+    // leaving the summary sends the round to the shared leaderboard
+    const leave = (to: string) => {
+      void flushUploads();
+      // cross-country's board is in bonus mode (developer, 2026-10-27: not on the leaderboards)
+      if (to === 'leaderboard' && e.length === 'xc') { this.scene.start('bonus', { courseId: e.course }); return; }
+      this.scene.start(to, to === 'leaderboard' ? (e.daily ? { view: 'daily', kind: tour ? 'tour' : 'round' } : { courseId: e.course, length: e.length, casual: e.casual, tee: e.tee }) : undefined);
+    };
+    const bw = Math.min(84, Math.floor((W - 20) / 4)); // four buttons fit a narrow phone
+    const bx = (i: number) => Math.round(W / 2 - 2 * bw - 6 + i * (bw + 4));
+    this.root.add(new Button(this, bx(0), H - 24, bw, 16, 'title', () => leave('title'), { color: 'grey' }));
+    this.root.add(new Button(this, bx(1), H - 24, bw, 16, bw < 70 ? 'board' : 'leaderboard', () => leave('leaderboard'), { color: 'grey' }));
+    // a picture of the card for the group chat (player improvements, item 2)
+    const share = new Button(this, bx(2), H - 24, bw, 16, 'share', async () => {
+      share.setEnabled(false);
+      const res = await shareRound(this, this.entry, this.rankLine);
+      if (!share.active) return;
+      share.setEnabled(true);
+      if (res === 'saved') share.setLabel('saved');
+      else if (res === 'copied') share.setLabel('copied');
+      else if (res === 'failed') share.setLabel('failed');
+    }, { color: 'grey' });
+    this.root.add(share);
+    this.root.add(new Button(this, bx(3), H - 24, bw, 16, e.daily ? 'my golf' : 'play again', () => leave(e.daily ? 'mygolf' : 'setup')));
     // milestones this round earned (first birdie, broke 90 at ..., every oregon course played)
     const local = await loadBoard();
-    if (!this.sys.isActive()) return;
+    // (a rebuild meanwhile, a resize or a new name, has its own build running: this one stops)
+    if (!this.isCurrentBuild(g)) return;
     const mine = local.filter((b) => b.player === e.player);
     const earned = earnedBy(e.id, milestonesOf(mine, milestoneCourses(), STATES));
     if (earned.length) {
-      sfx('great');
+      if (!this.sounded) sfx('great');
+      this.sounded = true;
       const line = earned.slice(0, 3).map((m) => m.text).join('  ·  ');
       this.root.add(txt(this, W / 2, 24, `milestone: ${line}`, { origin: [0.5, 0], color: COLORS.green, maxWidth: W - (W >= 400 ? 130 : 12) }));
     }
     // placing among friends when the site has a shared board (this round may not have arrived yet), else on this device
     const shared = e.daily ? await fetchDaily(e.daily) : await fetchBoard(e.course);
-    if (!this.sys.isActive()) return;
+    if (!this.isCurrentBuild(g)) return;
     const pool = shared ? (shared.some((b) => b.id === e.id) ? shared : [...shared, e]) : local;
-    const tour = isTourId(e.course);
     const dname = tour ? `daily ${tourName(e.course)}` : 'daily round';
     const where = e.daily ? (shared ? `in today's ${dname}` : `in today's ${dname} on this device`) : shared ? 'among friends' : 'on this device';
     // rounds with no name don't go on the boards (developer: nobody as "player"); this one is counted to show where it would be
@@ -66,10 +98,11 @@ export class SummaryScene extends MenuScene {
     const onBoard = board.filter((b) => b.player === e.player);
     const best = onBoard.length ? onBoard.slice().sort(compareRounds)[0] : null;
     const pb = !e.daily && best && best.id === e.id && onBoard.length > 1;
-    if (pb) sfx('great');
+    if (pb && !this.sounded) sfx('great');
+    if (pb) this.sounded = true;
     // a name another device holds: the round can't go on the shared board under it (say so, rather than a rank it won't get)
     const taken = shared && e.player !== DEFAULT_NAME && (await claimName(e.player)) === 'taken';
-    if (!this.sys.isActive()) return;
+    if (!this.isCurrentBuild(g)) return;
     const hidden = app.settings.hideFromBoards;
     const note = hidden
       ? 'you are hidden from the shared leaderboards (settings) - this round stays on your own boards'
@@ -97,29 +130,6 @@ export class SummaryScene extends MenuScene {
     // a short screen: the card moves up (not past the title) to clear the name button
     const over = (card.getData('bottom') as number) + 3 - ny;
     if (over > 0) card.y -= Math.min(over, Math.max(0, (card.getData('top') as number) - (earned.length ? 36 : 24)));
-    // leaving the summary sends the round to the shared leaderboard
-    const leave = (to: string) => {
-      void flushUploads();
-      // cross-country's board is in bonus mode (developer, 2026-10-27: not on the leaderboards)
-      if (to === 'leaderboard' && e.length === 'xc') { this.scene.start('bonus', { courseId: e.course }); return; }
-      this.scene.start(to, to === 'leaderboard' ? (e.daily ? { view: 'daily', kind: tour ? 'tour' : 'round' } : { courseId: e.course }) : undefined);
-    };
-    const bw = Math.min(84, Math.floor((W - 20) / 4)); // four buttons fit a narrow phone
-    const bx = (i: number) => Math.round(W / 2 - 2 * bw - 6 + i * (bw + 4));
-    this.root.add(new Button(this, bx(0), H - 24, bw, 16, 'title', () => leave('title'), { color: 'grey' }));
-    this.root.add(new Button(this, bx(1), H - 24, bw, 16, bw < 70 ? 'board' : 'leaderboard', () => leave('leaderboard'), { color: 'grey' }));
-    // a picture of the card for the group chat (player improvements, item 2)
-    const share = new Button(this, bx(2), H - 24, bw, 16, 'share', async () => {
-      share.setEnabled(false);
-      const res = await shareRound(this, this.entry, this.rankLine);
-      if (!share.active) return;
-      share.setEnabled(true);
-      if (res === 'saved') share.setLabel('saved');
-      else if (res === 'copied') share.setLabel('copied');
-      else if (res === 'failed') share.setLabel('failed');
-    }, { color: 'grey' });
-    this.root.add(share);
-    this.root.add(new Button(this, bx(3), H - 24, bw, 16, e.daily ? 'my golf' : 'play again', () => leave(e.daily ? 'mygolf' : 'setup')));
   }
 
   private rename() {

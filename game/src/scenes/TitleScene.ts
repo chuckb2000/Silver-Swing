@@ -63,6 +63,9 @@ export class TitleScene extends MenuScene {
   private shown: Shown[] = [];
   private shade: Phaser.GameObjects.Rectangle | null = null;
   private resuming = false;
+  /** the day the daily buttons were drawn for, and when that was last checked */
+  private builtDay = '';
+  private dayCheck = 0;
   /** Opened to start today's daily round (the leaderboard's "play today's round"). */
   private dailyNow = false;
   /** Opened to start today's par 3s / 4s / 5s (the leaderboard's "play today's round" there). */
@@ -299,6 +302,12 @@ export class TitleScene extends MenuScene {
 
   update(_t: number, dt: number) {
     const d = Math.min(dt, 100);
+    // a new day while the title is open: the daily buttons are today's
+    this.dayCheck += dt;
+    if (this.dayCheck > 20_000) {
+      this.dayCheck = 0;
+      if (this.builtDay && localDay() !== this.builtDay && !this.resuming) this.rebuild();
+    }
     const last = this.shown.length - 1;
     this.shown.forEach((s, i) => {
       s.t += d;
@@ -318,10 +327,25 @@ export class TitleScene extends MenuScene {
   private async withLoading(work: (progress: (f: number) => void) => Promise<boolean>) {
     if (this.resuming) return;
     this.resuming = true;
-    const W = app.view.w, H = app.view.h, cx = Math.round(W / 2);
+    let W = app.view.w, H = app.view.h, cx = Math.round(W / 2);
+    // its own layer over the menu: a window resized or a phone turned while it loads draws the menu
+    // again underneath (in the menu's own layer the cover was wiped and the menu was live mid-load)
+    const cover = this.add.container(0, 0).setDepth(500);
     const dim = this.add.rectangle(0, 0, W, H, 0x081018, 0.7).setOrigin(0, 0).setInteractive();
     const msg = txt(this, cx, H / 2 - 4, 'loading course...', { origin: [0.5, 0], scale: 2, color: COLORS.yellow });
-    this.root.add([dim, msg]);
+    cover.add([dim, msg]);
+    const extras: { x: number; y: number }[] = [];
+    const place = () => {
+      const dx = Math.round(app.view.w / 2) - cx, dy = Math.round(app.view.h / 2) - Math.round(H / 2);
+      W = app.view.w; H = app.view.h; cx = Math.round(W / 2);
+      dim.setSize(W, H);
+      (dim.input?.hitArea as Phaser.Geom.Rectangle | undefined)?.setSize(W, H);
+      msg.setPosition(cx, Math.round(H / 2 - 4));
+      for (const o of extras) { o.x += dx; o.y += dy; }
+    };
+    this.scale.on('resize', place);
+    const uncover = () => { this.scale.off('resize', place); if (cover.active) cover.destroy(); };
+    this.events.once('shutdown', uncover);
     let ok = false;
     let last = Date.now();
     let offered = false;
@@ -329,8 +353,10 @@ export class TitleScene extends MenuScene {
       delay: 1000, loop: true, callback: () => {
         if (offered || Date.now() - last < STALL_MS || !msg.active) return;
         offered = true; // stalled: offer what a player did by hand, a reload that opens the round
-        this.root.add(txt(this, cx, H / 2 + 14, 'this is taking a while - the connection may have stalled', { origin: [0.5, 0], color: COLORS.dim, maxWidth: W - 16 }));
-        this.root.add(new Button(this, cx - 40, H / 2 + 28, 80, 16, 'reload', () => window.location.reload()));
+        const t = txt(this, cx, H / 2 + 14, 'this is taking a while - the connection may have stalled', { origin: [0.5, 0], color: COLORS.dim, maxWidth: W - 16 });
+        const b = new Button(this, cx - 40, H / 2 + 28, 80, 16, 'reload', () => window.location.reload());
+        cover.add([t, b]);
+        extras.push(t, b);
       },
     });
     try {
@@ -342,7 +368,7 @@ export class TitleScene extends MenuScene {
     watch.remove();
     this.resuming = false;
     if (!app.course) { window.location.reload(); return; } // the load failed half way: start again on the last good course
-    if (!ok) this.rebuild();
+    if (!ok) { this.events.off('shutdown', uncover); uncover(); this.rebuild(); }
     else this.scene.stop('bg');
   }
 
@@ -455,8 +481,12 @@ export class TitleScene extends MenuScene {
     // the day's par 3s, 4s or 5s: nine holes of one par from all the courses (developer, 2026-10-27)
     const tp = tourPlan(localDay(), app.courses, DAILY_ROSTER);
     const dailies: [string, () => void][] = [];
-    if (plan && dc) dailies.push([`daily: ${shortName(dc.name)}`, () => this.playDaily(plan)]);
-    if (tp) dailies.push([`daily: ${tourName(tp.courseId)}`, () => this.playTour(tp)]);
+    // (a title left open past midnight: the button is for the day it was drawn on, so it is drawn again
+    // for today rather than starting yesterday's round)
+    this.builtDay = localDay();
+    const stale = () => { if (localDay() === this.builtDay) return false; this.rebuild(); return true; };
+    if (plan && dc) dailies.push([`daily: ${shortName(dc.name)}`, () => { if (!stale()) this.playDaily(plan); }]);
+    if (tp) dailies.push([`daily: ${tourName(tp.courseId)}`, () => { if (!stale()) this.playTour(tp); }]);
     // the two dailies side by side (developer, 2026-10-27), one under the other on a screen too narrow for both
     const dgap = 4;
     const dws = dailies.map(([label]) => {
@@ -517,7 +547,15 @@ export class TitleScene extends MenuScene {
     let lift = 0;
     if (over > 0) {
       lift = Math.min(over, Math.max(0, top - 20));
-      for (const o of this.root.list as unknown as { y: number }[]) o.y -= lift;
+      // still too long (big pixels on a laptop, with a round to continue, a name to set and a match
+      // button): the menu comes first, so everything goes up until its last row is on the screen, and
+      // whatever of the heading that pushes off the top is left out rather than cut in half
+      const more = Math.min(over - lift, Math.max(0, menuTop - lift - 2));
+      lift += more;
+      for (const o of this.root.list as unknown as { y: number; setVisible?: (v: boolean) => unknown }[]) {
+        o.y -= lift;
+        if (more > 0 && o.y < 0) o.setVisible?.(false);
+      }
     }
     if (matchesUp === true) {
       // the box of others looking for a match: beside the menu where there's room, else under it (lobbyPlace)
