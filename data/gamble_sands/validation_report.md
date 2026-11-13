@@ -72,6 +72,10 @@ course chat; each with a recommendation.
    on mown grass in the NAIP photo (`proposed/tees_fairway.geojson`): 1 the top of the
    fairway below the path by the clubhouse, 12 the mown apron south of the 11th green,
    18 the fairway north of the 17th green. All three now pass.
+   Two flags stay as measured: 7 plays 524 yd against 493 (+6.3 %) from the small round
+   pad at the top of its fairway (the line follows the right edge round the dogleg), and
+   13 plays 544 against 562 (-3.2 %). The same fairway-tee fix would bring 7 to the card;
+   recommendation: leave both, as flags are within what the build accepts.
 3. **Hole 6 (developer, 2026-11-13, tracing desk):** the Medal tee is the developer's mark at
    the back of the larger mapped tee box beside the 5th green (`desk/hole06.json`,
    `proposed/desk_tees.geojson`): 248 yd against 264 (-6.0 %), a flag, accepted.
