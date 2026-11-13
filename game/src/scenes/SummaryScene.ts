@@ -18,6 +18,7 @@ import { DAILY_PICKS, DAILY_ROSTER } from '../data/dailyRoster';
 import { shareRound } from '../ui/shareCard';
 import { lengthLabel, shapeById } from './flow';
 import { MenuScene } from './menu';
+import { charTex } from '../ui/holidayArt';
 
 export class SummaryScene extends MenuScene {
   private entry!: LeaderboardEntry;
@@ -40,7 +41,7 @@ export class SummaryScene extends MenuScene {
     const e = this.entry;
     const r = app.round!;
     this.root.add(txt(this, W / 2, 4, `round complete  ·  ${e.gross} (${toPar(e.toPar)})`, { origin: [0.5, 0], scale: 2, color: COLORS.yellow }));
-    if (W >= 400) this.root.add(this.add.image(6, 4, 'ui', 'portrait').setOrigin(0, 0));
+    if (W >= 400) this.root.add(this.add.image(6, 4, charTex(this, 'portrait'), 'portrait').setOrigin(0, 0));
     const card = scorecard(this, r, W, H - 30);
     this.root.add(card);
     const tour = isTourId(e.course);

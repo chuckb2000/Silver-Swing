@@ -10,6 +10,7 @@ import { calibrateAll } from '../systems/physics/calibrate';
 import { flushUploads } from '../save/online';
 import { setVolume } from '../audio/sfx';
 import { parseMatchCode } from '../match/live';
+import { holidayFromQuery, holidayOn } from '../systems/game/holiday';
 
 export class BootScene extends Phaser.Scene {
   constructor() {
@@ -28,6 +29,10 @@ export class BootScene extends Phaser.Scene {
     });
     this.load.once('complete', () => { this.load.off('progress'); label.destroy(); bar.destroy(); });
     this.load.atlas('ui', 'sprites/sprites.png', 'sprites/sprites.json');
+    // a holiday's dress (systems/game/holiday.ts): its date, or ?holiday= for a preview
+    const q = holidayFromQuery(window.location.search);
+    app.holiday = q ?? holidayOn(new Date());
+    if (app.holiday) this.load.atlas('holiday', `sprites/holiday_${app.holiday}.png`, `sprites/holiday_${app.holiday}.json`);
     this.load.bitmapFont('px', 'sprites/pxfont.png', 'sprites/pxfont.xml');
     this.load.image('trophy', 'sprites/trophy.png'); // the logo (assets-src/title_art.py)
   }

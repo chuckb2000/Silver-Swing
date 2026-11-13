@@ -1,7 +1,7 @@
 // The music's playing order (src/audio/playlist.ts) and its files
 // (public/music/index.json, written by assets-src/music/build_music.py).
 
-import { existsSync, readFileSync, statSync } from 'node:fs';
+import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { Playlist, shuffled } from '../../src/audio/playlist';
@@ -40,5 +40,21 @@ describe('the music', () => {
       expect(t.bytes).toBeLessThan(1.6e6);
       expect(t.seconds).toBeGreaterThan(90);
     }
+  });
+
+  it('six Christmas carols, each file there, and no file left over from either set', () => {
+    const dir = resolve(__dirname, '../../public/music');
+    type Index = { tracks: { id: string; file: string; seconds: number; bytes: number }[] };
+    const read = (f: string) => JSON.parse(readFileSync(join(dir, f), 'utf8')) as Index;
+    const xmas = read('christmas.json');
+    expect(xmas.tracks.map((t) => t.id)).toEqual(['xmas_jingle', 'xmas_deck', 'xmas_silent', 'xmas_wish', 'xmas_joy', 'xmas_wenceslas']);
+    for (const t of xmas.tracks) {
+      expect(existsSync(join(dir, t.file)), t.file).toBe(true);
+      expect(statSync(join(dir, t.file)).size).toBe(t.bytes);
+      expect(t.bytes).toBeLessThan(2e6);
+      expect(t.seconds).toBeGreaterThan(80);
+    }
+    const listed = new Set([...read('index.json').tracks, ...xmas.tracks].map((t) => t.file));
+    for (const f of readdirSync(dir).filter((f) => f.endsWith('.mp3'))) expect(listed.has(f), f).toBe(true);
   });
 });

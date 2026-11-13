@@ -266,7 +266,8 @@ def boundary_rings(g, cfg: dict):
 
 def play_boundary(g, cfg: dict):
     """The out-of-bounds line: the course boundary, or with layouts the union of
-    every leisure=golf_course polygon in the data (one property, one OB line)."""
+    every leisure=golf_course polygon in the data (one property, one OB line).
+    join_boundary_parts keeps every part in both cases (game_boundary joins them)."""
     b = g[g.kind == "boundary"]
     if not cfg.get("layouts"):
         if len(b) > 1 and joins_parts(cfg):
@@ -277,7 +278,10 @@ def play_boundary(g, cfg: dict):
         return b.geometry.iloc[0]
     from shapely.ops import unary_union
     u = unary_union(list(b.geometry))
-    if u.geom_type == "MultiPolygon":
+    # several layouts on boundary parts apart from each other (the Olympic Club's Cliffs, across
+    # Skyline Boulevard): with join_boundary_parts every part stays, and game_boundary joins them,
+    # as for a single layout; without it the largest part is the OB line, as before
+    if u.geom_type == "MultiPolygon" and not joins_parts(cfg):
         u = max(u.geoms, key=lambda p: p.area)
     return u
 
