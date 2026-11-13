@@ -827,7 +827,6 @@ export class PlayScene extends Phaser.Scene {
   private startFlight() {
     const r = this.round;
     this.state = 'flight';
-    this.flightAt = performance.now();
     this.playT = 0;
     this.evIdx = 0;
     for (const t of this.trail) t.setVisible(false);
@@ -896,12 +895,10 @@ export class PlayScene extends Phaser.Scene {
     this.preroll = null;
   }
 
-  /** when the flight began: a swing tap that arrives just after the meter fired is not a skip */
-  private flightAt = 0;
-
+  // a tap during the flight skips to where the ball ends, at once, also while the camera is still
+  // going back to the golfer (developer, 2026-11-13: the sweep's 0.35 s wait after the strike is gone)
   fastForward() {
     if (this.state !== 'flight' || !this.sim) return;
-    if (performance.now() - this.flightAt < 350) return;
     if (this.preroll) this.strike();
     this.playT = Math.max(this.playT, (this.sim.n / HZ) * 1000 - 200);
   }

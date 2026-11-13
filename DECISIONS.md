@@ -1534,8 +1534,8 @@ the pull request lists them. The ones that change what a player sees or does:
 - **The putt's aim line** reaches the hole on a long putt (the dots are spaced wider instead of
   running out).
 - **Mouse wheel:** one club per notch (a trackpad swipe ran through the bag), nothing behind an
-  open panel. **A tap within 0.35 s of the ball being struck** is not a skip of the flight (a
-  late third tap skipped it).
+  open panel. ~~A tap within 0.35 s of the ball being struck is not a skip of the flight~~
+  (undone the same day: "A tap skips the flight at once again").
 - **Open panels are drawn again when the window changes size or a phone turns** (pause menu,
   quit question, overview, scorecard, the match's questions).
 - **Settings** shows its rows a page at a time when the screen is too short for them all
@@ -1694,4 +1694,11 @@ or a round counts (`systems/game/holiday.ts` is pure and tested; the drawing is
   after the first tap, so on a busy machine the cursor reached the end of the bar first; it now
   presses as soon as the cursor moves, on the easy (slowest) meter. Both passed 3-4 times in a
   row with the CPU kept busy.
+
+## A tap skips the flight at once again (developer, 2026-11-13)
+
+The overnight sweep ignored taps for 0.35 s after the ball was struck (a late third tap had
+skipped the flight). The developer wants it as it was: a tap during the flight skips to where the
+ball ends straight away, also while the camera is still going back to the golfer. The wait is
+gone (`PlayScene.fastForward`).
 
