@@ -1,0 +1,19 @@
+{
+ "release": "data-chicago_golf",
+ "items": [
+  {
+   "name": "chicago_golf_lpc_1039",
+   "tnm": {
+    "dataset": "lpc",
+    "bbox": [
+     -88.1252,
+     41.8376,
+     -88.1072,
+     41.8534
+    ],
+    "only": "MidNorth_D22_1039",
+    "max": 8
+   }
+  }
+ ]
+}
