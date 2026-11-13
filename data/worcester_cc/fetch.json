@@ -10,17 +10,12 @@
    ]
   },
   {
-   "name": "worcester_cc_dem1m",
-   "tnm": {
-    "dataset": "dem1m",
-    "bbox": [
-     -71.7904,
-     42.3157,
-     -71.7715,
-     42.3323
-    ],
-    "list": true
-   }
+   "name": "usgs_dem_m.tif",
+   "url": "https://elevation.nationalmap.gov/arcgis/rest/services/3DEPElevation/ImageServer/exportImage?bbox=270100,4688600,271600,4690400&bboxSR=32619&imageSR=32619&size=1500,1800&format=tiff&pixelType=F32&noData=-9999&interpolation=RSP_BilinearInterpolation&f=image"
+  },
+  {
+   "name": "usgs_dem_identify.json",
+   "url": "https://elevation.nationalmap.gov/arcgis/rest/services/3DEPElevation/ImageServer/identify?geometry=%7B%22x%22%3A270850%2C%22y%22%3A4689500%2C%22spatialReference%22%3A%7B%22wkid%22%3A32619%7D%7D&geometryType=esriGeometryPoint&returnCatalogItems=true&f=json"
   },
   {
    "name": "worcester_cc_lpc",
@@ -32,7 +27,7 @@
      -71.7715,
      42.3323
     ],
-    "list": true
+    "only": "MA_CentralEastern_1_2021"
    }
   },
   {
