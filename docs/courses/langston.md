@@ -41,8 +41,10 @@ docs/requests/langston_design_requests.md.
 -   **Water:** Kingman Lake (red) beside 10-12 and 14-18, a carry from the
     hole 10 back tee and over the par-3 13th; the creek across hole 3
     (red, from the lidar). The Anacostia east of the island is out of bounds.
--   **Hole 13:** two-tier green (developer): a small front tier 1.37 m
-    (4.5 ft) below the bigger back tier; pin on the back tier.
+-   **Hole 13:** two-tier green (developer): a small front tier 1.0 m
+    (3.3 ft) below the bigger back tier, the step 8 m wide (about 19 % at
+    its steepest); pin on the back tier. It was 1.37 m over 5 m (about
+    41 %) until 2026-11-13, when the developer found it too steep.
 -   **Trees:** 12,929 from lidar (3,143 inside the boundary), 34 % pines by
     crown shape.
 

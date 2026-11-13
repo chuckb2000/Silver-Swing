@@ -69,6 +69,7 @@ export function fixScores(course: string, scores: HoleScore[], hole: (slot: numb
 
 /** A finished round with the fixes applied (par, to par, totals); null if nothing changed. */
 export function fixEntry<T extends LeaderboardEntry>(e: T, fixes: CardFix[] = CARD_FIXES): T | null {
+  if (e.length === 'xc') return null; // cross-country: a leg is not the hole of its number, and has no par
   const scores = fixScores(e.course, e.scores, slotHole(e), fixes);
   if (!scores) return null;
   const t = totals(scores);

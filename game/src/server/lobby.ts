@@ -194,6 +194,7 @@ export class LobbyCore {
     if (raw.length > LOBBY.maxMessage) { this.send(ws, { type: 'error', code: 'too_big', message: 'message too big' }); return; }
     let m: Record<string, unknown>;
     try { m = JSON.parse(raw); } catch { this.send(ws, { type: 'error', code: 'bad_json', message: 'bad message' }); return; }
+    if (!m || typeof m !== 'object') { this.send(ws, { type: 'error', code: 'bad_json', message: 'bad message' }); return; }
     if (m.type === 'ping') { ws.send(PONG); return; } // the auto-response normally answers it
     await this.serial(async () => {
       try {
