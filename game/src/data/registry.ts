@@ -104,24 +104,41 @@ export const PROVINCES = new Set(['BC']);
 export const OTHER_STATE = '--';
 
 /**
+ * Every course in Europe goes under one button, "europe", whatever its country (developer,
+ * 2026-11-13). A course says so with `"state": "EU"`, or a European country as its state or as
+ * the last part of its location ("St Andrews, Fife, Scotland").
+ */
+export const EUROPE = 'EU';
+const EUROPEAN = new Set([
+  'europe', 'eu', 'scotland', 'england', 'wales', 'northern ireland', 'ireland', 'united kingdom', 'uk', 'great britain',
+  'norway', 'norge', 'sweden', 'denmark', 'finland', 'iceland', 'faroe islands', 'france', 'spain', 'portugal', 'germany',
+  'netherlands', 'belgium', 'luxembourg', 'italy', 'switzerland', 'austria', 'liechtenstein', 'monaco', 'andorra',
+  'poland', 'czechia', 'czech republic', 'slovakia', 'hungary', 'slovenia', 'croatia', 'greece', 'cyprus', 'malta',
+  'estonia', 'latvia', 'lithuania', 'romania', 'bulgaria', 'serbia', 'montenegro', 'albania', 'north macedonia',
+  'bosnia and herzegovina', 'isle of man', 'jersey', 'guernsey', 'gibraltar',
+]);
+
+/**
  * A course's state as a postal code: its `state` field, or else the last part
  * of its location ("Lake Oswego, Clackamas County, Oregon" -> OR).
  */
 export function stateOf(c: Pick<CourseInfo, 'location'> & { state?: string }): string {
   const s = (c.state ?? '').trim().toUpperCase();
   if (STATES[s]) return s;
+  if (EUROPEAN.has(s.toLowerCase())) return EUROPE;
   const last = (c.location ?? '').split(',').pop()?.trim() ?? '';
   const code = last.toUpperCase();
   if (STATES[code]) return code;
+  if (EUROPEAN.has(last.toLowerCase())) return EUROPE;
   const byName = Object.keys(STATES).find((k) => STATES[k].toLowerCase() === last.toLowerCase());
   return byName ?? OTHER_STATE;
 }
 
 export function stateName(code: string): string {
-  return STATES[code] ?? 'other';
+  return code === EUROPE ? 'europe' : STATES[code] ?? 'other';
 }
 
-/** States that have courses, A-Z by name, each with its courses A-Z. */
+/** States that have courses, A-Z by name, each with its courses A-Z; then europe, then anything unknown. */
 export function coursesByState(courses: CourseInfo[]): { code: string; name: string; courses: CourseInfo[] }[] {
   const groups = new Map<string, CourseInfo[]>();
   for (const c of courses) {
@@ -131,5 +148,18 @@ export function coursesByState(courses: CourseInfo[]): { code: string; name: str
   }
   return [...groups.entries()]
     .map(([code, list]) => ({ code, name: stateName(code), courses: list.slice().sort((a, b) => a.name.localeCompare(b.name)) }))
-    .sort((a, b) => (a.code === OTHER_STATE ? 1 : b.code === OTHER_STATE ? -1 : a.name.localeCompare(b.name)));
+    .sort((a, b) => rank(a.code) - rank(b.code) || a.name.localeCompare(b.name));
+}
+
+const rank = (code: string) => (code === OTHER_STATE ? 2 : code === EUROPE ? 1 : 0);
+
+/** The title's line: "62 courses in 12 states", "64 courses in 12 states and europe". */
+export function courseCountText(courses: CourseInfo[]): string {
+  const n = courses.length;
+  if (n === 1) return courses[0].name;
+  const groups = coursesByState(courses).map((g) => g.code);
+  const states = groups.filter((c) => c !== EUROPE && c !== OTHER_STATE).length;
+  const eu = groups.includes(EUROPE);
+  if (!states) return `${n} courses${eu ? ' in europe' : ''}`;
+  return `${n} courses${states > 1 || eu ? ` in ${states} ${states === 1 ? 'state' : 'states'}` : ''}${eu ? ' and europe' : ''}`;
 }
