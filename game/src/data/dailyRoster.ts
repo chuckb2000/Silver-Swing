@@ -104,6 +104,46 @@ export const DAILY_ROSTER: Readonly<Record<string, string>> = {
   yale: '2026-11-01',
   // landed 2026-10-31 (pipeline/land.py)
   pasatiempo: '2026-11-01',
+  // landed 2026-11-13 (pipeline/land.py)
+  rose_city: '2026-11-14',
+  // landed 2026-11-13 (pipeline/land.py)
+  columbia_edgewater: '2026-11-14',
+  // landed 2026-11-13 (pipeline/land.py)
+  reserve_north: '2026-11-14',
+  reserve_south: '2026-11-14',
+  // landed 2026-11-13 (pipeline/land.py)
+  capilano: '2026-11-14',
+  // landed 2026-11-13 (pipeline/land.py)
+  northwood: '2026-11-14',
+  // landed 2026-11-13 (pipeline/land.py)
+  tokatee: '2026-11-14',
+  // landed 2026-11-13 (pipeline/land.py)
+  heron_lakes_great_blue: '2026-11-14',
+  heron_lakes_greenback: '2026-11-14',
+  // landed 2026-11-13 (pipeline/land.py)
+  eugene_cc: '2026-11-14',
+  // landed 2026-11-13 (pipeline/land.py)
+  shaughnessy: '2026-11-14',
+  // landed 2026-11-13 (pipeline/land.py)
+  gamble_sands: '2026-11-14',
+  // landed 2026-11-13 (pipeline/land.py)
+  wine_valley: '2026-11-14',
+  // landed 2026-11-13 (pipeline/land.py)
+  olympic_club_lake: '2026-11-14',
+  // landed 2026-11-13 (pipeline/land.py)
+  olympic_club_cliffs: '2026-11-14',
+  // landed 2026-11-13 (pipeline/land.py)
+  worcester_cc: '2026-11-14',
+  // landed 2026-11-13 (pipeline/land.py)
+  crosswater: '2026-11-14',
+  // landed 2026-11-13 (pipeline/land.py)
+  myopia: '2026-11-14',
+  // landed 2026-11-13 (pipeline/land.py)
+  lofoten: '2026-11-14',
+  // landed 2026-11-13 (pipeline/land.py)
+  tcc_brookline: '2026-11-14',
+  // landed 2026-11-13 (pipeline/land.py)
+  st_andrews_old: '2026-11-14',
 };
 
 /**
