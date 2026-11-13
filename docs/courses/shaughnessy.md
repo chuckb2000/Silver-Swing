@@ -14,6 +14,14 @@ default. New theme `shaughnessy` (silty Fraser water, tall firs and cedars); the
 tug towing a log boom on the Fraser. 6,879 yd built against 7,045: four holes (6, 8, 12,
 17) are more than 8 % short because their Black boxes are not mapped (open item 1).
 
+## Checks
+
+- `course_play.test.ts -t shaughnessy`: 11 passed.
+- `npm test`: 1751 passed, 2 failed: `player.test.ts` "the real rotation" and `tour.test.ts` "a hole drawn sits out", which fail until `make land` adds the course to the daily rotation.
+- `npm run e2e`: 17 passed.
+- Pinned; a `--fresh` rebuild left git clean.
+- Every hole played in the game (tee view, overview, first shot, putting view): 18 of 18 holed.
+
 ## Facts
 
 -   **Location:** 4300 SW Marine Drive, Vancouver (Southlands), British Columbia, Canada,
