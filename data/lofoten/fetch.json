@@ -40,6 +40,10 @@
   {
    "name": "kv_dom_1m_v201.tif",
    "url": "https://wcs.geonorge.no/skwms1/wcs.hoyde-dom-nhm-25833?service=WCS&version=2.0.1&request=GetCoverage&CoverageId=nhm_dom_topo_25833&format=image/tiff&subset=E(462800,466000)&subset=N(7579600,7582700)"
+  },
+  {
+   "name": "lofoten_coastline.geojson",
+   "overpass": "[out:json][timeout:180][bbox:68.320,14.080,68.362,14.190];(way[\"natural\"=\"coastline\"];);out geom;"
   }
  ]
 }
