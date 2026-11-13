@@ -72,6 +72,7 @@ export function askName(scene: Phaser.Scene, current: string, done: (name: strin
       if (!scene.sys.isActive()) { done(null); return; }
       if (key && key !== app.settings.playerKey) {
         app.settings.playerKey = key;
+        app.settings.hideSent = !app.settings.hideFromBoards; // the new code is told this device's "hide me" choice
         nameConflicts.clear();
         void saveSettings(app.settings);
       }

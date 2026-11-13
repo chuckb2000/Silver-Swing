@@ -254,7 +254,14 @@ export function pinSheet(spots: PinSpot[][], seed: number, greenOf: (i: number) 
     const pick = spots.map((s) => Math.floor(rng.next() * s.length));
     // a few passes of local improvement, holes visited in a random order
     for (let pass = 0; pass < 3; pass++) {
-      const order = spots.map((_, i) => i).sort(() => rng.next() - 0.5);
+      // a shuffle that draws the same numbers in every browser: sort() with a random comparator calls it a
+      // different number of times in Chrome and in Safari, so the two drew different sheets from one seed
+      // (the daily round's "same pins for everyone")
+      const order = spots.map((_, i) => i);
+      for (let k = order.length - 1; k > 0; k--) {
+        const j = Math.floor(rng.next() * (k + 1));
+        [order[k], order[j]] = [order[j], order[k]];
+      }
       for (const i of order) {
         let bi = pick[i], bc = Infinity;
         for (let k = 0; k < spots[i].length; k++) {
