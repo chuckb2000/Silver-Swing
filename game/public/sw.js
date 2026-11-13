@@ -8,7 +8,7 @@
 //     (courses/versions.json, a hash of the course's files written by the
 //     build); a rebuilt course gets a new cache and the old one is dropped
 //   - music/*.mp3: this device once fetched (each file's name carries its hash);
-//     music/index.json the network first
+//     music/index.json and music/christmas.json the network first
 //   - api/*: never cached (scores always go to the network)
 const BUILD = '__BUILD__';
 const APP = `app-${BUILD}`;
@@ -31,7 +31,10 @@ self.addEventListener('activate', (e) => {
     for (const k of await caches.keys()) if (k.startsWith('app-') && k !== APP) await caches.delete(k);
     // music files this build no longer has go (a movement made again has a new name)
     try {
-      const want = new Set(((await (await fetch('music/index.json', { cache: 'no-store' })).json()).tracks ?? []).map((t) => t.file));
+      const want = new Set();
+      for (const list of ['music/index.json', 'music/christmas.json']) { // the suite, and the Christmas carols
+        for (const t of (await (await fetch(list, { cache: 'no-store' })).json()).tracks ?? []) want.add(t.file);
+      }
       const mc = await caches.open(MUSIC);
       for (const r of await mc.keys()) if (!want.has(new URL(r.url).pathname.split('/').pop())) await mc.delete(r);
     } catch { /* offline: next time */ }
