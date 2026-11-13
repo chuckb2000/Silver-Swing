@@ -8,7 +8,7 @@ import { courseHoleFor } from '../systems/game/round';
 import type { MatchSession } from '../systems/match/session';
 import { holeNo, isExtra, ordinal, statusText } from '../systems/match/rules';
 import type { Seat } from '../systems/match/types';
-import { COLORS, Panel, txt } from './widgets';
+import { COLORS, Panel, titleExtra, txt } from './widgets';
 
 export function matchCard(scene: Phaser.Scene, ms: MatchSession, me: Seat | null, W: number, H: number): Phaser.GameObjects.Container {
   const c = scene.add.container(0, 0);
@@ -34,10 +34,12 @@ export function matchCard(scene: Phaser.Scene, ms: MatchSession, me: Seat | null
   const legend = txt(scene, x0, 0, `${statusText(s, me)}  ·  circled: won the hole  ·  match: holes up`, { color: COLORS.dim, maxWidth: tw });
   const extraTxt = extras.length ? txt(scene, x0, 0, `extra holes (${names[0]}-${names[1]}):  ${extraLine}`, { color: COLORS.white, maxWidth: tw }) : null;
   const tail = Math.ceil(legend.height) - 10 + (extraTxt ? Math.ceil(extraTxt.height) + 2 : 0);
-  const th = blockH * blocks.length + 30 + Math.max(0, tail);
+  const title = `${ms.course.json.name}  ·  ${s.cfg.tee.toLowerCase()} tees  ·  match play`;
+  const extra = titleExtra(scene, title, tw); // a long course name wraps: everything under it moves down
+  const th = blockH * blocks.length + 30 + Math.max(0, tail) + extra + 6 * Math.max(0, blocks.length - 1);
   const y0 = Math.max(4, Math.round((H - th) / 2) - 6);
   c.add(new Panel(scene, x0 - 6, y0 - 4, tw + 12, th + 8, 0.94));
-  c.add(txt(scene, x0, y0, `${ms.course.json.name}  ·  ${s.cfg.tee.toLowerCase()} tees  ·  match play`, { color: COLORS.dim, maxWidth: tw }));
+  c.add(txt(scene, x0, y0, title, { color: COLORS.dim, maxWidth: tw }));
   // the result and the standing after each hole, by scorecard hole number
   const byHole = new Map<number, { strokes: [number, number]; holed: [boolean, boolean]; winner: Seat | null; up: number }>();
   let up = 0;
@@ -48,7 +50,7 @@ export function matchCard(scene: Phaser.Scene, ms: MatchSession, me: Seat | null
   }
   const standing = (u: number) => (u === 0 ? 'as' : String(Math.abs(u)));
   blocks.forEach(([a, b, lab], k) => {
-    const yb = y0 + 14 + k * (blockH + 6);
+    const yb = y0 + 14 + extra + k * (blockH + 6);
     const g = scene.add.graphics();
     g.fillStyle(0xffffff, 0.06).fillRect(x0, yb, tw, rowH);
     g.fillStyle(0xffffff, 0.04).fillRect(x0, yb + rowH, tw, rowH);
@@ -96,7 +98,7 @@ export function matchCard(scene: Phaser.Scene, ms: MatchSession, me: Seat | null
     }
     void won;
   });
-  let yEnd = y0 + 14 + blocks.length * (blockH + 6) - 2;
+  let yEnd = y0 + 14 + extra + blocks.length * (blockH + 6) - 2;
   if (extraTxt) {
     c.add(extraTxt.setY(yEnd));
     yEnd += Math.ceil(extraTxt.height) + 2;

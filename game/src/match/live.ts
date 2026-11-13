@@ -182,8 +182,9 @@ const reporting = new Set<string>();
  * site takes the result from the match's server, once; both players' games
  * report it). Tried again from the match list until it has gone.
  */
-export async function reportMatch(code: string): Promise<void> {
-  if (reporting.has(code) || myMatches().find((m) => m.code === code)?.reported) return;
+export async function reportMatch(code: string): Promise<boolean> {
+  if (myMatches().find((m) => m.code === code)?.reported) return true;
+  if (reporting.has(code)) return false;
   reporting.add(code);
   try {
     const r = await fetch(`api/match/${code}/report`, { method: 'POST', keepalive: true });
@@ -192,10 +193,12 @@ export async function reportMatch(code: string): Promise<void> {
     if ((r.ok && j?.ok && j.finished) || r.status === 404) {
       const m = myMatches().find((x) => x.code === code);
       if (m) rememberMatch({ ...m, reported: true });
+      return true;
     }
-  } catch { /* offline: the match list tries again */ } finally {
+  } catch { /* offline: tried again */ } finally {
     reporting.delete(code);
   }
+  return false;
 }
 
 /** The move clock as this game shows it (CLOCK; null: nobody is waiting on anybody). */
@@ -380,8 +383,15 @@ export class LiveMatch {
   report() {
     if (this.reported || this.session?.state.phase !== 'finished') return;
     this.reported = true;
-    void reportMatch(this.code);
+    // a report that didn't get through is sent again from this page, a few times (it was left to the
+    // "play a friend" screen: a match won by forfeit, the other player gone, was never recorded)
+    void reportMatch(this.code).then((ok) => {
+      if (ok || this.reportTries++ >= 6) return;
+      setTimeout(() => { this.reported = false; this.report(); }, 15_000 * this.reportTries);
+    });
   }
+
+  private reportTries = 0;
 
   /** Called on every change (events, line, presence). */
   listen(f: () => void): () => void {

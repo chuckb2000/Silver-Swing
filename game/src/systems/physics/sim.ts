@@ -105,6 +105,7 @@ export function simulateShot(terrain: Terrain, obs: Obstacles | null, spec: Shot
   let canopyCooldown = 0;
   let lipArmed = true;
   let trunkSpeed = -1; // horizontal speed at the last trunk contact this step (-1: none)
+  let wallAt = { x: Infinity, y: Infinity }, wallRepeats = 0; // a ball held against a building
   const ux = Math.cos(spec.aim), uy = Math.sin(spec.aim);
   const rx = uy, ry = -ux;
 
@@ -118,7 +119,7 @@ export function simulateShot(terrain: Terrain, obs: Obstacles | null, spec: Shot
     if (f.apexCap !== undefined) A = Math.min(A, Math.max(1.5, f.apexCap));
     T = f.hang * (A / Math.max(0.01, f.apex)) ** 0.5; // a capped (punch) flight is quicker
     latCurve = C * Math.tan((f.curveDeg * Math.PI) / 180);
-    drift = w.cross * f.hang * 0.3;
+    drift = w.cross * T * 0.3; // by the time in the air: a punch kept under branches is up for a second or two, not six
   } else if (spec.rollSpeed !== undefined) {
     s.vx = ux * spec.rollSpeed;
     s.vy = uy * spec.rollSpeed;
@@ -158,10 +159,27 @@ export function simulateShot(terrain: Terrain, obs: Obstacles | null, spec: Shot
     if (!obs) return false;
     for (const k of obs.treesNear(s.x, s.y)) {
       const tr = obs.trees[k];
-      const dx = s.x - tr.x, dy = s.y - tr.y;
-      const d = Math.hypot(dx, dy);
+      let dx = s.x - tr.x, dy = s.y - tr.y;
+      let d = Math.hypot(dx, dy);
+      const R = TRUNK_R + BALL_R;
+      if (d >= R && stepLen > R) {
+        // a fast, low ball (a punch under the branches covers over a metre a step) can be on one side of
+        // a trunk at one step and on the other at the next: where this step's path first meets the trunk
+        const sx = s.x - px, sy = s.y - py, L2 = sx * sx + sy * sy;
+        const fx = px - tr.x, fy = py - tr.y;
+        const b = fx * sx + fy * sy, c = fx * fx + fy * fy - R * R;
+        const disc = b * b - L2 * c;
+        if (L2 > 0 && c > 0 && disc > 0) {
+          const u = (-b - Math.sqrt(disc)) / L2;
+          const zc = pz + (s.z - pz) * u;
+          if (u > 0 && u < 1 && zc - tr.base < tr.h && zc - tr.base > -0.1) {
+            s.x = px + sx * u; s.y = py + sy * u; s.z = zc;
+            dx = s.x - tr.x; dy = s.y - tr.y; d = Math.hypot(dx, dy) - 1e-6;
+          }
+        }
+      }
       const hz = s.z - tr.base;
-      if (d < TRUNK_R + BALL_R && hz < tr.h && hz > -0.1) {
+      if (d < R && hz < tr.h && hz > -0.1) {
         // trunk: reflect the horizontal velocity about the radial normal
         const nx = dx / (d || 1), ny = dy / (d || 1);
         const vn = s.vx * nx + s.vy * ny;
@@ -210,6 +228,9 @@ export function simulateShot(terrain: Terrain, obs: Obstacles | null, spec: Shot
       }
       s.x = e.x + e.nx * 0.15;
       s.y = e.y + e.ny * 0.15;
+      // put back to the same spot step after step (an inside corner, two buildings side by side): it is stuck
+      if (Math.hypot(s.x - wallAt.x, s.y - wallAt.y) < 0.05) wallRepeats++; else wallRepeats = 0;
+      wallAt = { x: s.x, y: s.y };
       events.push({ t, type: 'wall', x: s.x, y: s.y, z: s.z });
       return true;
     }
@@ -363,6 +384,12 @@ export function simulateShot(terrain: Terrain, obs: Obstacles | null, spec: Shot
         decelMult = 1;
         toRest();
       }
+    }
+    if (wallRepeats >= 8 && (phase as string) !== 'rest') {
+      // wedged against a building: it comes down where it is (it bounced there for the whole 45 s limit,
+      // thousands of wall hits, before the out-of-bounds or relief call)
+      s.z = terrain.z(s.x, s.y);
+      toRest();
     }
     record();
   }
