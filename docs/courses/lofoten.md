@@ -82,6 +82,8 @@ All 2026-11-13.
 -   New theme `lofoten` approved ("excited for the lofoten theme").
 -   Logo: the sea eagle ("let's do the bird").
 -   Location "Gimsøya, Vågan, Nordland, Norway", `state` EU.
+-   The yardage flags and hole 1 accepted: the holes are traced right, the card
+    measures its doglegs longer.
 
 Course chat's calls (listed for the developer):
 
@@ -111,6 +113,20 @@ Course chat's calls (listed for the developer):
 3.  **Ratings** are third-party (the card prints none).
 4.  **No heather bushes**: without an open photo the gorse/bush step has nothing
     to place them from; the rough is drawn as heather.
+
+## Tests
+
+Run 2026-11-13 on the branch merged with main (ef748e9d), pinned:
+
+-   `make course NAME=lofoten ARGS=--fresh`: 15 steps, `git status` unchanged.
+-   `course_play.test.ts -t lofoten`: 12/12.
+-   `npm test`: 1,765 passed, 2 failed, both from the daily rotation (the course
+    isn't in `dailyRoster.ts` until `make land`): `player.test.ts` "the real
+    rotation" and `tour.test.ts` "a hole drawn sits out" (the test counts every
+    course's holes in the pool; the plan leaves out courses not in the roster).
+    Both pass on main.
+-   `npm run e2e` (after `npm run build`): 14 passed, 3 failed on timing while the
+    machine was busy (clicks 135, smoke 226 and 335); each passed when run again.
 
 ## Lessons
 
