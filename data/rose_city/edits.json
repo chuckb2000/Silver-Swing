@@ -1,0 +1,41 @@
+{
+ "add": [
+  {
+   "from": "proposed/clubhouse.geojson",
+   "ids": [
+    "w450033780_building"
+   ],
+   "tags": {},
+   "reason": "the clubhouse is mapped golf=clubhouse + building=yes, which s01 reads as a golf feature, not a building; copied as a building (audit: 'add building=yes'), original dropped (as at Aberdeen)"
+  }
+ ],
+ "drop": [
+  {
+   "osm": "w450033780",
+   "reason": "replaced by its copy as a building (proposed/clubhouse.geojson)"
+  }
+ ],
+ "tags": [
+  {
+   "osm": "w450033762",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "standing default (COURSE_BUILD.md 4.1): every penalty area red"
+  },
+  {
+   "osm": "w450033764",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "standing default (COURSE_BUILD.md 4.1): every penalty area red"
+  },
+  {
+   "osm": "w450033766",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "standing default (COURSE_BUILD.md 4.1): every penalty area red"
+  }
+ ]
+}
