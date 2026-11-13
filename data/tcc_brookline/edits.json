@@ -1,0 +1,131 @@
+{
+ "tags": [
+  {
+   "osm": "w1272249188",
+   "set": {
+    "ref": "19"
+   },
+   "reason": "Primrose 1: the club's third nine, numbered 19 in the data (holes 19-27; course_config nines)"
+  },
+  {
+   "osm": "w1272249185",
+   "set": {
+    "ref": "20"
+   },
+   "reason": "Primrose 2: the club's third nine, numbered 20 in the data (holes 19-27; course_config nines)"
+  },
+  {
+   "osm": "w1272249186",
+   "set": {
+    "ref": "21"
+   },
+   "reason": "Primrose 3: the club's third nine, numbered 21 in the data (holes 19-27; course_config nines)"
+  },
+  {
+   "osm": "w1272249183",
+   "set": {
+    "ref": "23"
+   },
+   "reason": "Primrose 5: the club's third nine, numbered 23 in the data (holes 19-27; course_config nines)"
+  },
+  {
+   "osm": "w1272249187",
+   "set": {
+    "ref": "26"
+   },
+   "reason": "Primrose 8: the club's third nine, numbered 26 in the data (holes 19-27; course_config nines)"
+  },
+  {
+   "osm": "w1272249184",
+   "set": {
+    "ref": "27"
+   },
+   "reason": "Primrose 9: the club's third nine, numbered 27 in the data (holes 19-27; course_config nines)"
+  },
+  {
+   "osm": "w866021879",
+   "set": {
+    "par": "4"
+   },
+   "reason": "Main 2 is a 289-yd par 4 on the card (OSM tags par 3)"
+  }
+ ],
+ "drop": [
+  {
+   "osm": "w29838628",
+   "reason": "Robert T. Lynch Municipal Golf Course polygon: the neighbouring public course; out of bounds"
+  },
+  {
+   "osm": "w1106230221",
+   "reason": "Lynch Municipal hole line: another course's hole (its surfaces stay as mapped)"
+  },
+  {
+   "osm": "w1106335082",
+   "reason": "Lynch Municipal hole line: another course's hole (its surfaces stay as mapped)"
+  },
+  {
+   "osm": "w1106335088",
+   "reason": "Lynch Municipal hole line: another course's hole (its surfaces stay as mapped)"
+  },
+  {
+   "osm": "w1106361433",
+   "reason": "Lynch Municipal hole line: another course's hole (its surfaces stay as mapped)"
+  },
+  {
+   "osm": "w1106361440",
+   "reason": "Lynch Municipal hole line: another course's hole (its surfaces stay as mapped)"
+  },
+  {
+   "osm": "w1106377609",
+   "reason": "Lynch Municipal hole line: another course's hole (its surfaces stay as mapped)"
+  },
+  {
+   "osm": "w1106377615",
+   "reason": "Lynch Municipal hole line: another course's hole (its surfaces stay as mapped)"
+  },
+  {
+   "osm": "w1106377622",
+   "reason": "Lynch Municipal hole line: another course's hole (its surfaces stay as mapped)"
+  },
+  {
+   "osm": "w1106405631",
+   "reason": "Lynch Municipal hole line: another course's hole (its surfaces stay as mapped)"
+  },
+  {
+   "osm": "w1106405636",
+   "reason": "Lynch Municipal hole line: another course's hole (its surfaces stay as mapped)"
+  },
+  {
+   "osm": "w1106417896",
+   "reason": "Lynch Municipal hole line: another course's hole (its surfaces stay as mapped)"
+  },
+  {
+   "osm": "w1106473165",
+   "reason": "Lynch Municipal hole line: another course's hole (its surfaces stay as mapped)"
+  },
+  {
+   "osm": "w1106473172",
+   "reason": "Lynch Municipal hole line: another course's hole (its surfaces stay as mapped)"
+  },
+  {
+   "osm": "w1106588134",
+   "reason": "Lynch Municipal hole line: another course's hole (its surfaces stay as mapped)"
+  },
+  {
+   "osm": "w1106589421",
+   "reason": "Lynch Municipal hole line: another course's hole (its surfaces stay as mapped)"
+  },
+  {
+   "osm": "w1106592534",
+   "reason": "Lynch Municipal hole line: another course's hole (its surfaces stay as mapped)"
+  },
+  {
+   "osm": "w1106592542",
+   "reason": "Lynch Municipal hole line: another course's hole (its surfaces stay as mapped)"
+  },
+  {
+   "osm": "w1106598145",
+   "reason": "Lynch Municipal hole line: another course's hole (its surfaces stay as mapped)"
+  }
+ ]
+}
