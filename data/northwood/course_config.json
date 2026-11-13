@@ -78,6 +78,39 @@
       "x": 655.5,
       "y": 407.5,
       "reason": "course chat 2026-11-13 (standing default: tee-shot blockers removed): a 53 m redwood clump (lidar crown radius 16 m, likely two crowns merged) whose crown hangs over the 3rd's tee shot 48 m out; s06b's lowest-shot check misses it, the game's 8-iron clips it"
+    },
+    {
+      "x": 602.5,
+      "y": 453.5,
+      "reason": "course chat 2026-11-13: a 58 m redwood 8 m short of the 3rd green; drawn in the 3/4 view it covers most of the green, leaving one hole location (pins.test.ts needs 3). The developer may put it back"
+    },
+    {
+      "x": 296.5,
+      "y": 302.5,
+      "reason": "course chat 2026-11-13: a 54 m redwood 8 m behind (south of) the 6th green; drawn in the 3/4 view it covers the green, leaving too few hole locations (pins.test.ts needs 3). The developer may put it back"
+    },
+    {
+      "x": 291.5,
+      "y": 287.5,
+      "reason": "course chat 2026-11-13: a 58 m redwood 23 m behind (south of) the 6th green; drawn in the 3/4 view it covers the green, leaving too few hole locations (pins.test.ts needs 3). The developer may put it back"
+    },
+    {
+      "x": 293.5,
+      "y": 294.5,
+      "reason": "course chat 2026-11-13: a 54 m redwood 16 m behind (south of) the 6th green; drawn in the 3/4 view it covers the green, leaving too few hole locations (pins.test.ts needs 3). The developer may put it back"
+    },
+    {
+      "x": 748.5,
+      "y": 202.5,
+      "reason": "course chat 2026-11-13: a 31 m redwood 13 m behind (south of) the 8th green; drawn in the 3/4 view it covers the green, leaving too few hole locations (pins.test.ts needs 3). The developer may put it back"
     }
-  ]
+  ],
+  "green_tilt": [
+    {
+      "hole": 3,
+      "max_tilt": 0.025,
+      "bumps": 0
+    }
+  ],
+  "green_tilt_note": "hole 3: its two random undulations left only the centre pin spot (pins.test.ts needs 3); bumps 0 keeps the green's own 1.2 % tilt (COURSE_LESSONS 4)"
 }

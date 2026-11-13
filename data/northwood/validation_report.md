@@ -35,7 +35,7 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 
 ## Tree detection (2022 USGS lidar (Northern California B22))
 
-- 3901 trees detected in the world extent (312 inside the course), 1958 conifers / 1943 deciduous; median height 21.6 m, max 74.1 m.
+- 3896 trees detected in the world extent (307 inside the course), 1953 conifers / 1943 deciduous; median height 21.5 m, max 74.1 m.
 - Dropped: 178 tops on building footprints, 0 over the lake, 14 tiny crowns.
 - Dropped on playing surfaces (spec 5.4): 9 -> fairway r14096266 (59.4 m), fairway r14096265 (46.9 m), fairway r14096271 (51.0 m), fairway r14096271 (60.9 m), fairway r14096271 (40.2 m), fairway r14096271 (48.1 m), fairway r14096262 (53.4 m), fairway r14096262 (55.2 m), fairway r14096269 (56.4 m)
 - Dropped from tee shots (s06b): 3 -> 1 White (27.9 m tree, 55.7 m from the tee), 1 White (27.6 m tree, 66.1 m from the tee), 4 White (23.4 m tree, 45.6 m from the tee)
@@ -52,7 +52,7 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 | w675529950 | 6 | 3.9 | 2.5 | 2 | 5.6 | 1.5 |
 | w675529951 | 5 | 4.1 | 2.5 | 1 | 5.7 | 1.5 |
 | w675529956 | 1 | 3.3 | 2.5 | 2 | 4.9 | 1.5 |
-| w675529961 | 3 | 1.2 | 1.2 | 2 | 3.9 | 1.2 |
+| w675529961 | 3 | 1.2 | 1.2 | 0 | 1.2 | 1.2 |
 | w675529964 | 7 | 1.9 | 1.9 | 2 | 4.0 | 1.5 |
 | w675529965 | 2 | 1.3 | 1.3 | 1 | 2.5 | 1.3 |
 | w702005881 | practice | 0.9 | 1.0 | 1 | 2.0 | 0.0 |
