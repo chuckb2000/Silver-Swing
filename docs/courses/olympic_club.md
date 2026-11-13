@@ -15,7 +15,7 @@ B23, class 1, with roofs dropped by `roof_last_share`), all fetched by the GitHu
 workflow; the NAIP photo did not arrive, so nothing was checked against a photo. Tee set
 built: Champ (the longest, the post-2023 Hanse card); Black also playable. New theme
 `olympic_club` (dense cypress, pine and eucalyptus, deep fog-belt greens); logos for the
-club (a laurel wreath round a golf ball) and the Lake (a wind-bent cypress over Lake
+club (a cable car on its rails, for the downtown clubhouse on the Powell Street line) and the Lake (a wind-bent cypress over Lake
 Merced). All 18 holes pass after the virtual tees moved within their boxes: 7,178 yd built
 against 7,214.
 
