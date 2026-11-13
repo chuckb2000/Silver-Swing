@@ -57,51 +57,7 @@
   {
    "name": "dogami_chm_identify2.json",
    "url": "https://gis.dogami.oregon.gov/arcgis/rest/services/lidar/CANOPY_HEIGHT_MODEL_MOSAIC/ImageServer/identify?geometry=%7B%22x%22%3A506000%2C%22y%22%3A5036800%2C%22spatialReference%22%3A%7B%22wkid%22%3A32610%7D%7D&geometryType=esriGeometryPoint&returnCatalogItems=true&returnGeometry=false&f=json"
-  },
-  {
-   "name": "USGS_LPC_OR_PortlandMetro_B24_10TER000504750005035500.laz",
-   "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/LPC/Projects/OR_PortlandMetro_B24/OR_PortlandMetro_1_B24/LAZ/USGS_LPC_OR_PortlandMetro_B24_10TER000504750005035500.laz"
-  },
-  {
-   "name": "USGS_LPC_OR_PortlandMetro_B24_10TER000504750005036250.laz",
-   "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/LPC/Projects/OR_PortlandMetro_B24/OR_PortlandMetro_1_B24/LAZ/USGS_LPC_OR_PortlandMetro_B24_10TER000504750005036250.laz"
-  },
-  {
-   "name": "USGS_LPC_OR_PortlandMetro_B24_10TER000504750005037750.laz",
-   "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/LPC/Projects/OR_PortlandMetro_B24/OR_PortlandMetro_1_B24/LAZ/USGS_LPC_OR_PortlandMetro_B24_10TER000504750005037750.laz"
-  },
-  {
-   "name": "USGS_LPC_OR_PortlandMetro_B24_10TER000505500005035500.laz",
-   "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/LPC/Projects/OR_PortlandMetro_B24/OR_PortlandMetro_1_B24/LAZ/USGS_LPC_OR_PortlandMetro_B24_10TER000505500005035500.laz"
-  },
-  {
-   "name": "USGS_LPC_OR_PortlandMetro_B24_10TER000505500005036250.laz",
-   "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/LPC/Projects/OR_PortlandMetro_B24/OR_PortlandMetro_1_B24/LAZ/USGS_LPC_OR_PortlandMetro_B24_10TER000505500005036250.laz"
-  },
-  {
-   "name": "USGS_LPC_OR_PortlandMetro_B24_10TER000505500005037000.laz",
-   "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/LPC/Projects/OR_PortlandMetro_B24/OR_PortlandMetro_1_B24/LAZ/USGS_LPC_OR_PortlandMetro_B24_10TER000505500005037000.laz"
-  },
-  {
-   "name": "USGS_LPC_OR_PortlandMetro_B24_10TER000505500005037750.laz",
-   "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/LPC/Projects/OR_PortlandMetro_B24/OR_PortlandMetro_1_B24/LAZ/USGS_LPC_OR_PortlandMetro_B24_10TER000505500005037750.laz"
-  },
-  {
-   "name": "USGS_LPC_OR_PortlandMetro_B24_10TER000506250005035500.laz",
-   "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/LPC/Projects/OR_PortlandMetro_B24/OR_PortlandMetro_1_B24/LAZ/USGS_LPC_OR_PortlandMetro_B24_10TER000506250005035500.laz"
-  },
-  {
-   "name": "USGS_LPC_OR_PortlandMetro_B24_10TER000506250005036250.laz",
-   "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/LPC/Projects/OR_PortlandMetro_B24/OR_PortlandMetro_1_B24/LAZ/USGS_LPC_OR_PortlandMetro_B24_10TER000506250005036250.laz"
-  },
-  {
-   "name": "USGS_LPC_OR_PortlandMetro_B24_10TER000506250005037000.laz",
-   "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/LPC/Projects/OR_PortlandMetro_B24/OR_PortlandMetro_1_B24/LAZ/USGS_LPC_OR_PortlandMetro_B24_10TER000506250005037000.laz"
-  },
-  {
-   "name": "USGS_LPC_OR_PortlandMetro_B24_10TER000506250005037750.laz",
-   "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/LPC/Projects/OR_PortlandMetro_B24/OR_PortlandMetro_1_B24/LAZ/USGS_LPC_OR_PortlandMetro_B24_10TER000506250005037750.laz"
   }
  ],
- "note": "third push: the 3DEP lidar came at about 1 MB a minute from rockyweb.usgs.gov (one tile in 50 minutes), so that run was cancelled; the other eleven (names fixed: run 43427669449 asked for names with one 0 too many and got 404s) OR_PortlandMetro_B24 tiles are asked for from the USGS S3 bucket (prd-tnm), and DOGAMI's canopy height model in two halves of the world + 100 m (the 3000 x 3000 request failed) as the fallback for trees"
+ "note": "Fetched: Overpass export, 3DEP 1 m DEM (OR_PortlandMetro_B24), OSIP 2024 photo (four quarters), DOGAMI canopy height model (two halves of the world + 100 m; its catalog says OLC_METRO_2014). Not fetched: the 2024 3DEP point cloud. rockyweb.usgs.gov sent it at about 1 MB a minute (one 47 MB tile in 50 minutes, runs 43420503506 and 43430049359 cancelled), and the USGS S3 bucket (prd-tnm) has no copy (404). The trees come from the DOGAMI 2014 canopy model, checked against the 2024 photo (trees_need_ortho)."
 }

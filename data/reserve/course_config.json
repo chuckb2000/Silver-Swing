@@ -150,7 +150,8 @@
   },
   "attribution": [
     "Map data © OpenStreetMap contributors (ODbL)",
-    "Elevation and lidar: U.S. Geological Survey 3D Elevation Program (OR_PortlandMetro_B24)",
+    "Elevation: U.S. Geological Survey 3D Elevation Program (OR_PortlandMetro_B24)",
+    "Canopy heights: Oregon Department of Geology and Mineral Industries (DOGAMI) lidar",
     "Imagery: Oregon Statewide Imagery Program 2024",
     "Scorecards: The Reserve Vineyards & Golf Club"
   ],
@@ -166,5 +167,16 @@
   "flatten_wetlands": false,
   "flatten_wetlands_note": "the wet meadow along the North course's creek (w737373105, 3.8 ha) and the marsh east of the South course (w905922607) are vegetated: they keep their lidar ground and play as rough (as Pumpkin Ridge's wetlands); the creek through the meadow is a red penalty area",
   "fescue_areas": "proposed/fescue.geojson",
-  "fescue_areas_note": "native grass left long between the holes (wide on the North, smaller on the South), read from the OSIP 2024 photo by data/reserve/make_fescue.py: art only (straw tones F0-F2); plays as rough"
+  "fescue_areas_note": "native grass left long between the holes (wide on the North, smaller on the South), read from the OSIP 2024 photo by data/reserve/make_fescue.py: art only (straw tones F0-F2); plays as rough",
+  "chm": {
+    "path": "raw/dogami_chm_2014_ft.tif",
+    "units": "ft",
+    "label": "DOGAMI canopy height model (2014)",
+    "source": "DOGAMI lidar CANOPY_HEIGHT_MODEL_MOSAIC (highest hit minus bare earth; its catalog item here is OLC_METRO_2014), exportImage at 1 m in EPSG:32610 in two halves of the world + 100 m (x 505092-507084, y 5035806-5038054), fetched by the GitHub Actions workflow 2026-11-13 (release data-reserve) and joined by data/reserve/make_chm.py. The 2024 3DEP point cloud was too slow to fetch (DATA_REQUEST.md)."
+  },
+  "trees_need_ortho": {
+    "v_max": 120,
+    "min_share": 0.1,
+    "note": "the DOGAMI canopy model (2014) is ten years older than the OSIP 2024 photo: lidar crowns that are not dark canopy on the photo are dropped (pipeline/gorse.py missing_in_ortho), as at Pumpkin Ridge"
+  }
 }

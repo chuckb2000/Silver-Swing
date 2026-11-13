@@ -1,6 +1,6 @@
 {
  "release": "data-reserve",
- "note": "Build inputs not kept in git for The Reserve; `make fetch NAME=reserve` puts them in place (pipeline/fetch_raw.py). In git: raw/overpass.geojson, raw/osm.geojson and raw/usgs_b24_dem_1m.tif (pipeline/intake.py raster from USGS_1M_10_x50y504_OR_PortlandMetro_B24.tif in this release). Here: the OSIP 2024 photo in four 0.5 m JPEG quarters (exportImage, request boxes in EPSG:32610 below), mosaicked and clipped to the world + 100 m by intake.py ortho when the last quarter arrives, and the lidar tiles (each clipped to the world).",
+ "note": "Build inputs not kept in git for The Reserve; `make fetch NAME=reserve` puts them in place (pipeline/fetch_raw.py). In git: raw/overpass.geojson, raw/osm.geojson and raw/usgs_b24_dem_1m.tif (pipeline/intake.py raster from USGS_1M_10_x50y504_OR_PortlandMetro_B24.tif in this release). Here: the OSIP 2024 photo in four 0.5 m JPEG quarters (exportImage, request boxes in EPSG:32610 below), mosaicked and clipped to the world + 100 m by intake.py ortho when the last quarter arrives, and DOGAMI's canopy height model in two halves (exportImage, feet, 1 m, EPSG:32610; north y 5036930-5038054, south y 5035806-5036930, both x 505092-507084), joined by data/reserve/make_chm.py.",
  "files": [
   {
    "asset": "osip2024_sw.jpg",
@@ -32,6 +32,22 @@
    "run": "python3 data/reserve/make_ortho.py {file}",
    "outputs": {
     "raw/osip2024_05m.tif": "ff60f48d43b520ce211d81ff8f132252eaa7fc1868d43a4251c6d79f636b1c86"
+   }
+  },
+  {
+   "asset": "dogami_chm_ft_s.tif",
+   "sha256": "86026fb225c59119668e1cc052b8d8a5a53cf7acdf796a5891efef8137297b71",
+   "to": "raw/dogami_src/",
+   "outputs": {
+    "raw/dogami_src/dogami_chm_ft_s.tif": "86026fb225c59119668e1cc052b8d8a5a53cf7acdf796a5891efef8137297b71"
+   }
+  },
+  {
+   "asset": "dogami_chm_ft_n.tif",
+   "sha256": "0f38831adfee89935d8e052182f0226b7f22c4f9d193ce1ea247a2262280aba3",
+   "run": "python3 data/reserve/make_chm.py {file}",
+   "outputs": {
+    "raw/dogami_chm_2014_ft.tif": "850d08beadfe754aab694d989916492a461836ea6b09484b05ec59b28ffc1cfc"
    }
   }
  ]
