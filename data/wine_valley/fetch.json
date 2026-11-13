@@ -1,0 +1,51 @@
+{
+ "items": [
+  {
+   "name": "wine_valley_overpass.geojson",
+   "osm_box": [
+    46.0498,
+    -118.5167,
+    46.0673,
+    -118.4891
+   ]
+  },
+  {
+   "name": "wine_valley_dem1m",
+   "tnm": {
+    "dataset": "dem1m",
+    "bbox": [
+     -118.5167,
+     46.0498,
+     -118.4891,
+     46.0673
+    ],
+    "list": true
+   }
+  },
+  {
+   "name": "wine_valley_lpc",
+   "tnm": {
+    "dataset": "lpc",
+    "bbox": [
+     -118.5167,
+     46.0498,
+     -118.4891,
+     46.0673
+    ],
+    "list": true
+   }
+  },
+  {
+   "name": "naip_382700_5100700.jpg",
+   "url": "https://imagery.nationalmap.gov/arcgis/rest/services/USGSNAIPImagery/ImageServer/exportImage?bbox=382700,5100700,384700,5102600&bboxSR=32611&imageSR=32611&size=3333,3166&format=jpg&f=image"
+  },
+  {
+   "name": "naip_384700_5100700.jpg",
+   "url": "https://imagery.nationalmap.gov/arcgis/rest/services/USGSNAIPImagery/ImageServer/exportImage?bbox=384700,5100700,384800,5102600&bboxSR=32611&imageSR=32611&size=166,3166&format=jpg&f=image"
+  },
+  {
+   "name": "naip_info.json",
+   "url": "https://imagery.nationalmap.gov/arcgis/rest/services/USGSNAIPImagery/ImageServer?f=pjson"
+  }
+ ]
+}
