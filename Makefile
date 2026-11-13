@@ -4,7 +4,7 @@ NAMES ?=
 ARGS ?=
 PY   ?= python3
 
-.PHONY: dev build test e2e course fetch regress lists assets music cards all clean-course pins land intake
+.PHONY: dev build test e2e course fetch regress lists assets music carols cards all clean-course pins land intake
 
 dev:            ## run the game locally (Vite dev server)
 	cd game && npm run dev
@@ -23,6 +23,9 @@ assets:         ## regenerate sprites, UI art and the bitmap font
 
 music:          ## make the game's music again (about 15 min on two cores) -> game/public/music
 	$(PY) assets-src/music/build_music.py
+
+carols:         ## make the Christmas carols again (about 12 min on two cores) -> game/public/music
+	$(PY) assets-src/music/build_music.py --set christmas
 
 fetch:          ## put a course's build inputs that aren't in git (lidar, big DEMs) into data/$(NAME)/raw/
 	$(PY) pipeline/fetch_raw.py $(NAME)

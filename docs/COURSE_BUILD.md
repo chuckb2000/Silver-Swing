@@ -294,11 +294,20 @@ and DECISIONS.md.
   "range_art": "rough",                 // optional: draw the driving range as rough (no stripes) with OB stakes
                                         // along its edge; it stays out of bounds (s09, s09b, s10; Oregon Golf Club)
   "join_boundary_parts": {"max_gap_m": 16},  // optional: a boundary in several parts, all in play, with OB land between
-                                        // (Eastmoreland's road; Langdon Farms' highway, its parts mapped as separate ways)
+                                        // (Eastmoreland's road; Langdon Farms' highway, its parts mapped as separate ways);
+                                        // with "layouts" too: every leisure=golf_course part stays (the Olympic Club's Cliffs).
+                                        // A double green may be one polygon for two holes: each hole's putting views centre
+                                        // on its own pin and its pins stay on its own half (keep both OSM pins)
   "building_colours": {"w123": "#a3302a"},   // optional: buildings drawn in their own colour (Langdon Farms' red barns)
   "waste_sand": true,                   // optional: golf=bunker + sand=waste, and natural=sand inside the boundary, are
                                         // waste sand (surface 18): general area, not a bunker, no lip, sparse scrub tufts;
                                         // natural=sand outside stays ob_sand (s08, s09, s09b, s10; Cypress Point)
+  "integral": [{"name": "17th road and wall", "osm": ["w123", "w456"], "buffer_m": 3},
+               {"name": "Grannie Clark's Wynd", "lonlat": [[-2.80, 56.34], ...]}],
+                                        // optional: integral objects (local rules): a ball on a cart path or building
+                                        // inside one plays as it lies, no free relief; the lie reads "road". OSM
+                                        // features (lines buffered by buffer_m, default 0.5) and/or a ring traced by
+                                        // hand, clipped to the boundary (s10 -> course.json "integral"; Old Course)
   // more optional keys (read the code's comment before using one):
   "tee_grow_m": 0,                      // tee boxes drawn larger than mapped, metres per side (s02)
   "flatten_wetlands": true,             // false: vegetated wetlands keep their lidar ground (s04)
@@ -955,7 +964,10 @@ paths (relief), not OB, unless the developer says otherwise.
   the logo at 1x and enlarged before the card. An original drawing only: never
   the club's own logo, crest or trademark (CLAUDE.md 14).
 - **State:** add `"state": "<postal code>"` to `course_config.json`; s10
-  copies it into `course.json`, and the course list is made from that.
+  copies it into `course.json`, and the course list is made from that. A course
+  in Europe takes `"state": "EU"`, and its location ends with its country
+  ("St Andrews, Fife, Scotland"): the course select has one "europe" button for
+  every European course (developer, 2026-11-13).
 - **Card:** after the export, run `python3 assets-src/course_cards.py <id> --sheet`,
   look at the contact sheet of every green
   (`game/public/sprites/cards/_<id>_greens.png`, delete it afterwards), pick

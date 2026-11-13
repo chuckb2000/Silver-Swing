@@ -5,7 +5,7 @@
 
 import Phaser from 'phaser';
 import { app, GAME_NAME } from '../app';
-import { coursesByState } from '../data/registry';
+import { courseCountText } from '../data/registry';
 import { initAudio, setVolume } from '../audio/sfx';
 import { peekSnapshot } from '../save/snapshot';
 import { Button, COLORS, onTap, Panel, setTxt, txt } from '../ui/widgets';
@@ -22,6 +22,7 @@ import { liveMatchesAvailable, myMatches } from '../match/live';
 import { lobby, startLobby } from '../match/challenge';
 import { allPostsDialog, courseLabel, installChallengePopups, myPostDialog, openToChallenge, postDialog } from '../ui/challengeUi';
 import { minutesLeft } from '../systems/match/lobby';
+import { holidayFx } from './HolidayFxScene';
 
 const SHOW_MS = 9000;   // each course on screen
 const FADE_MS = 1400;   // cross-fade
@@ -80,8 +81,53 @@ export class TitleScene extends MenuScene {
     this.tourNow = !!data?.tour;
   }
 
+  /** Christmas: the string of lights along the top of the title (redrawn as they twinkle). */
+  private garland: Phaser.GameObjects.Graphics | null = null;
+  private garlandTick = 0;
+
+  /**
+   * A holiday on the title: santa's hat on the trophy and a string of lights along the top at
+   * Christmas; at Thanksgiving a turkey in the bottom corner.
+   */
+  private holidayTitle(tx: number, ty: number, tw: number) {
+    if (!app.holiday || !this.textures.exists('holiday')) return;
+    if (app.holiday === 'christmas') {
+      this.garland = this.add.graphics();
+      this.root.addAt(this.garland, 0); // behind the trophy, its hat and the name
+      this.drawGarland();
+      this.root.add(this.add.image(tx + Math.round(tw / 2) - 17, ty - 9, 'holiday', 'santa_hat').setOrigin(0, 0));
+    } else {
+      // the turkey stands in the bottom corner, above the footer
+      const t = this.textures.get('holiday').get('turkey');
+      this.root.add(this.add.image(app.view.w - t.width - 10, app.view.h - t.height - 18, 'holiday', 'turkey').setOrigin(0, 0));
+    }
+  }
+
+  /** The wire droops between hooks along the top edge; a bulb hangs every 12 px, one in five dim in turn. */
+  private drawGarland() {
+    const g = this.garland;
+    if (!g || !g.active) return;
+    g.clear();
+    const W = app.view.w;
+    const spans = Math.max(2, Math.round(W / 110));
+    const at = (x: number) => { const u = (x / W) * spans; return 1 + Math.round(7 * Math.sin((u - Math.floor(u)) * Math.PI)); };
+    g.fillStyle(0x16301e, 1);
+    for (let x = 0; x < W; x++) g.fillRect(x, at(x), 1, 1);
+    const cols = [0xff483c, 0xffd656, 0x56aaff, 0xff78d6, 0x60e678];
+    for (let k = 0, x = 6; x < W - 2; k++, x += 12) {
+      const y = at(x) + 1;
+      const c = cols[k % cols.length];
+      const on = (this.garlandTick + k * 3) % 5 !== 0;
+      g.fillStyle(0x3a4a3e, 1).fillRect(x, y, 2, 1); // the socket
+      g.fillStyle(on ? c : Phaser.Display.Color.ValueToColor(c).darken(55).color, 1).fillRect(x, y + 1, 2, 2).fillRect(x, y + 3, 2, 1);
+      if (on) g.fillStyle(0xffffff, 0.8).fillRect(x, y + 1, 1, 1);
+    }
+  }
+
   create() {
     this.flyover = false;
+    this.garland = null;
+    if (app.holiday === 'christmas') this.time.addEvent({ delay: 340, loop: true, callback: () => { this.garlandTick++; this.drawGarland(); } });
     this.shown = [];
     this.resuming = false;
     this.shade = this.add.rectangle(0, 0, 10, 10, 0x081018, SHADE).setOrigin(0, 0).setDepth(-1);
@@ -89,6 +135,7 @@ export class TitleScene extends MenuScene {
     this.scale.on('resize', this.layoutShade, this);
     this.events.once('shutdown', () => { this.scale.off('resize', this.layoutShade, this); this.shade = null; this.shown = []; });
     void this.startMaps();
+    holidayFx(this); // falling snow or leaves on a holiday
     whenUpdateReady(() => { if (this.sys.isActive()) this.rebuild(); });
     setVolume(app.settings.volume, app.settings.muted);
     this.input.once('pointerdown', () => { void initAudio(); });
@@ -419,8 +466,10 @@ export class TitleScene extends MenuScene {
       one.setX(left + trophy.width + tgap + Math.round(one.width / 2));
       this.root.add(one);
       placed = true;
+      this.holidayTitle(left, Math.max(2, top - 16), trophy.width);
     } else if (trophy && H >= 330) {
       this.root.add(this.add.image(cx - Math.round(trophy.width / 2), 4, 'trophy').setOrigin(0, 0));
+      this.holidayTitle(cx - Math.round(trophy.width / 2), 4, trophy.width);
       top = Math.max(top, trophy.height + 14);
       one.setY(top);
     }
@@ -436,13 +485,15 @@ export class TitleScene extends MenuScene {
       if (l1.width > W - 16) { l1.setScale(2); l2.setScale(2); l2.y = top + 20; dy = 20; }
       this.root.add([l1, l2]);
     }
-    const n = app.courses.length;
-    const states = coursesByState(app.courses).length;
-    const sub = n === 1 ? app.courses[0].name : `${n} courses${states > 1 ? ` in ${states} states` : ''}`;
-    const small = W < 330; // a phone: the course count at 1x, and everything under it moves up by the line it saves
-    this.root.add(txt(this, cx, top + 46 + dy, sub, { origin: [0.5, 0], scale: small ? 1 : 2, color: COLORS.yellow }));
+    const sub = courseCountText(app.courses);
+    let small = W < 330; // a phone: the course count at 1x, and everything under it moves up by the line it saves
+    const count = txt(this, cx, top + 46 + dy, sub, { origin: [0.5, 0], scale: small ? 1 : 2, color: COLORS.yellow });
+    if (!small && count.width > W - 16) { count.setScale(1); small = true; } // "... and europe" on a narrow screen
+    this.root.add(count);
     if (small) dy -= 9;
-    this.root.add(txt(this, cx, top + 66 + dy, 'real courses, rebuilt from map and lidar data', { origin: [0.5, 0], color: COLORS.dim }));
+    // a holiday's greeting in place of the line about the data
+    const greeting = app.holiday === 'christmas' ? 'merry christmas!' : app.holiday === 'thanksgiving' ? 'happy thanksgiving!' : '';
+    this.root.add(txt(this, cx, top + 66 + dy, greeting || 'real courses, rebuilt from map and lidar data', { origin: [0.5, 0], color: greeting ? (app.holiday === 'christmas' ? COLORS.red : COLORS.orangeHi) : COLORS.dim }));
     const snap = await peekSnapshot();
     // built again meanwhile (a phone turning, an update): that build draws the menu, not this one (two menus,
     // and two footers turning at once, skipped every other tip)
