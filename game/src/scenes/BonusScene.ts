@@ -8,7 +8,7 @@ import { fetchXcBoard, flushUploads, onlineAvailable } from '../save/online';
 import { compareRounds } from '../systems/rules/scoring';
 import { XC_MAX_YD, XC_MIN_YD } from '../systems/game/crossCountry';
 import { shareRound } from '../ui/shareCard';
-import { Button, COLORS, onTap, Panel, setTxt, txt } from '../ui/widgets';
+import { Button, COLORS, fitHeading, onTap, Panel, setTxt, txt } from '../ui/widgets';
 import { DEFAULT_NAME } from '../save/names';
 import { shortName } from '../save/milestones';
 import { MenuScene } from './menu';
@@ -49,7 +49,7 @@ export class BonusScene extends MenuScene {
     const pw = Math.min(420, W - 8), ph = H - 8;
     const x0 = Math.round((W - pw) / 2), y0 = 4;
     this.root.add(new Panel(this, x0, y0, pw, ph, 0.92));
-    this.root.add(txt(this, x0 + pw / 2, y0 + 5, 'cross-country golf', { origin: [0.5, 0], scale: 2, maxWidth: pw - 16 }));
+    this.root.add(fitHeading(txt(this, x0 + pw / 2, y0 + 5, 'cross-country golf', { origin: [0.5, 0] }), pw - 16));
     this.root.add(txt(this, x0 + pw / 2, y0 + 24, 'bonus mode', { origin: [0.5, 0], color: COLORS.dim }));
     let y = y0 + 38;
     for (const line of XC_RULES) {
@@ -162,9 +162,17 @@ export class BonusScene extends MenuScene {
     void confirmDiscard(this, this.root, () => withName(this, () => {
       this.busy = true;
       const W = app.view.w, H = app.view.h;
+      // its own layer over the screen: a resize draws the screen again underneath and the cover stays
       const dim = this.add.rectangle(0, 0, W, H, 0x081018, 0.7).setOrigin(0, 0).setInteractive();
       const msg = txt(this, W / 2, H / 2 - 4, 'loading course...', { origin: [0.5, 0], scale: 2, color: COLORS.yellow });
-      this.root.add([dim, msg]);
+      const cover = this.add.container(0, 0, [dim, msg]).setDepth(500);
+      const place = () => {
+        dim.setSize(app.view.w, app.view.h);
+        (dim.input?.hitArea as Phaser.Geom.Rectangle | undefined)?.setSize(app.view.w, app.view.h);
+        msg.setPosition(Math.round(app.view.w / 2), Math.round(app.view.h / 2 - 4));
+      };
+      this.scale.on('resize', place);
+      this.events.once('shutdown', () => { this.scale.off('resize', place); this.busy = false; if (cover.active) cover.destroy(); });
       void (async () => {
         try {
           await useCourse(this, courseSel, (f) => { if (msg.active) setTxt(msg, `loading course ${Math.round(f * 100)}%`); });

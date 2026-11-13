@@ -93,6 +93,15 @@ export class Obstacles {
     return false;
   }
 
+  /** Is (x, y) inside a tree trunk, or within `margin` of one? (no ball is dropped there) */
+  trunkAt(x: number, y: number, margin = 0.05): boolean {
+    for (const k of this.treesNear(x, y)) {
+      const t = this.trees[k];
+      if (Math.hypot(x - t.x, y - t.y) < TRUNK_R + margin) return true;
+    }
+    return false;
+  }
+
   /** Lowest canopy overhead at (x, y) above ground z, or null when in the open. */
   canopyOverhead(x: number, y: number): { base: number; tree: Tree } | null {
     let best: { base: number; tree: Tree } | null = null;
