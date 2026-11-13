@@ -1,5 +1,11 @@
 {
  "note": "per-course settings for game/tests/unit/course_play.test.ts (the every-course checks); docs/COURSE_BUILD.md 8.2",
+ "yardage": {
+  "max": {
+   "1": 0.1
+  },
+  "why": "developer, 2026-11-13: the holes are traced right; the card measures its doglegs longer than our tee-bend-green line (1 at -9.6 %, flags 3, 7, 13, 14, 16 at -4 to -6 %)"
+ },
  "wind_mph": [
   4,
   18

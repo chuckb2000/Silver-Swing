@@ -12,9 +12,9 @@ Kartverket's national DTM and DOM 1 m through their WCS (fetched by the GitHub
 Actions workflow). The sea is built from OSM's coastline and, with the bare shore up
 to the boundary, is one red penalty area the holes play over. New theme `lofoten`
 (heather, grey rock, white shell sand, cold sea; low birch); the logo is a
-white-tailed sea eagle. 61 tees: 11 holes within 3 % of the card, six flags
-(3, 7, 13, 14, 16 at −4 to −6 %, 2 at +2.5 % after the tee move) and hole 1 −9.6 %
-(no 61 box mapped), 6,469 yd against 6,662. See "Tests" for what ran.
+white-tailed sea eagle. 61 tees: 12 holes within 3 % of the card; the doglegs 1, 3, 7, 13, 14 and 16
+measure 4-10 % short (the card measures doglegs longer; accepted by the developer),
+6,469 yd against 6,662. See "Tests" for what ran.
 
 ## Facts
 
@@ -102,15 +102,14 @@ Course chat's calls (listed for the developer):
 
 ## Open items
 
-1.  **Hole 1 plays 298 yd against 329 (−9.6 %).** OSM maps no 61 tee box; the line
-    starts at a forward box. Recommend accepting it, or tracing the back tee from
-    a developer screenshot.
-2.  **Flags 3, 7, 13, 14, 16 (−4 to −6 %):** the 61 tees aren't mapped either.
-    Recommend accepting them.
-3.  **Greens 6, 10 and 12** sit on ground the DTM reads as 27-44 % steep (rock
+1.  **Hole 1 (−9.6 %) and flags 3, 7, 13, 14, 16 (−4 to −6 %): accepted** by the
+    developer (2026-11-13) after checking them on the tracing desk: the holes are
+    traced right; the card measures its doglegs longer than our tee-bend-green
+    line. All six are doglegs. Hole 1's limit is in `checks.json` (10 %).
+2.  **Greens 6, 10 and 12** sit on ground the DTM reads as 27-44 % steep (rock
     edges); shaped to 2.5 % like every green. Recommend playtesting.
-4.  **Ratings** are third-party (the card prints none).
-5.  **No heather bushes**: without an open photo the gorse/bush step has nothing
+3.  **Ratings** are third-party (the card prints none).
+4.  **No heather bushes**: without an open photo the gorse/bush step has nothing
     to place them from; the rough is drawn as heather.
 
 ## Lessons
