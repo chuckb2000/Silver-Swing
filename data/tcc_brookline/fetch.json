@@ -1,0 +1,47 @@
+{
+ "items": [
+  {
+   "name": "tcc_brookline_overpass.geojson",
+   "osm_box": [
+    42.305,
+    -71.1626,
+    42.3216,
+    -71.1378
+   ]
+  },
+  {
+   "name": "tcc_brookline_dem1m",
+   "tnm": {
+    "dataset": "dem1m",
+    "bbox": [
+     -71.1626,
+     42.305,
+     -71.1378,
+     42.3216
+    ],
+    "list": true
+   }
+  },
+  {
+   "name": "tcc_brookline_lpc",
+   "tnm": {
+    "dataset": "lpc",
+    "bbox": [
+     -71.1626,
+     42.305,
+     -71.1378,
+     42.3216
+    ],
+    "list": true
+   }
+  },
+  {
+   "name": "naip_321800_4685900.jpg",
+   "url": "https://imagery.nationalmap.gov/arcgis/rest/services/USGSNAIPImagery/ImageServer/exportImage?bbox=321800,4685900,323800,4687700&bboxSR=32619&imageSR=32619&size=3333,3000&format=jpg&f=image"
+  },
+  {
+   "name": "naip_info.json",
+   "url": "https://imagery.nationalmap.gov/arcgis/rest/services/USGSNAIPImagery/ImageServer?f=pjson"
+  }
+ ]
+}
