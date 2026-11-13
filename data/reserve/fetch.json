@@ -23,19 +23,6 @@
    }
   },
   {
-   "name": "reserve_lpc",
-   "tnm": {
-    "dataset": "lpc",
-    "bbox": [
-     -122.9335,
-     45.4767,
-     -122.9107,
-     45.495
-    ],
-    "only": "OR_PortlandMetro_B24"
-   }
-  },
-  {
    "name": "dogami_chm_identify.json",
    "url": "https://gis.dogami.oregon.gov/arcgis/rest/services/lidar/CANOPY_HEIGHT_MODEL_MOSAIC/ImageServer/identify?geometry=506400,5036800&geometryType=esriGeometryPoint&sr=32610&returnCatalogItems=true&f=json"
   },
@@ -58,7 +45,63 @@
   {
    "name": "osip_info.json",
    "url": "https://imagery.oregonexplorer.info/arcgis/rest/services/OSIP_2024/OSIP_2024_WM/ImageServer?f=json"
+  },
+  {
+   "name": "USGS_LPC_OR_PortlandMetro_B24_10TER0005047500005035500.laz",
+   "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/LPC/Projects/OR_PortlandMetro_B24/OR_PortlandMetro_1_B24/LAZ/USGS_LPC_OR_PortlandMetro_B24_10TER0005047500005035500.laz"
+  },
+  {
+   "name": "USGS_LPC_OR_PortlandMetro_B24_10TER0005047500005036250.laz",
+   "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/LPC/Projects/OR_PortlandMetro_B24/OR_PortlandMetro_1_B24/LAZ/USGS_LPC_OR_PortlandMetro_B24_10TER0005047500005036250.laz"
+  },
+  {
+   "name": "USGS_LPC_OR_PortlandMetro_B24_10TER0005047500005037750.laz",
+   "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/LPC/Projects/OR_PortlandMetro_B24/OR_PortlandMetro_1_B24/LAZ/USGS_LPC_OR_PortlandMetro_B24_10TER0005047500005037750.laz"
+  },
+  {
+   "name": "USGS_LPC_OR_PortlandMetro_B24_10TER0005055000005035500.laz",
+   "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/LPC/Projects/OR_PortlandMetro_B24/OR_PortlandMetro_1_B24/LAZ/USGS_LPC_OR_PortlandMetro_B24_10TER0005055000005035500.laz"
+  },
+  {
+   "name": "USGS_LPC_OR_PortlandMetro_B24_10TER0005055000005036250.laz",
+   "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/LPC/Projects/OR_PortlandMetro_B24/OR_PortlandMetro_1_B24/LAZ/USGS_LPC_OR_PortlandMetro_B24_10TER0005055000005036250.laz"
+  },
+  {
+   "name": "USGS_LPC_OR_PortlandMetro_B24_10TER0005055000005037000.laz",
+   "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/LPC/Projects/OR_PortlandMetro_B24/OR_PortlandMetro_1_B24/LAZ/USGS_LPC_OR_PortlandMetro_B24_10TER0005055000005037000.laz"
+  },
+  {
+   "name": "USGS_LPC_OR_PortlandMetro_B24_10TER0005055000005037750.laz",
+   "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/LPC/Projects/OR_PortlandMetro_B24/OR_PortlandMetro_1_B24/LAZ/USGS_LPC_OR_PortlandMetro_B24_10TER0005055000005037750.laz"
+  },
+  {
+   "name": "USGS_LPC_OR_PortlandMetro_B24_10TER0005062500005035500.laz",
+   "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/LPC/Projects/OR_PortlandMetro_B24/OR_PortlandMetro_1_B24/LAZ/USGS_LPC_OR_PortlandMetro_B24_10TER0005062500005035500.laz"
+  },
+  {
+   "name": "USGS_LPC_OR_PortlandMetro_B24_10TER0005062500005036250.laz",
+   "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/LPC/Projects/OR_PortlandMetro_B24/OR_PortlandMetro_1_B24/LAZ/USGS_LPC_OR_PortlandMetro_B24_10TER0005062500005036250.laz"
+  },
+  {
+   "name": "USGS_LPC_OR_PortlandMetro_B24_10TER0005062500005037000.laz",
+   "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/LPC/Projects/OR_PortlandMetro_B24/OR_PortlandMetro_1_B24/LAZ/USGS_LPC_OR_PortlandMetro_B24_10TER0005062500005037000.laz"
+  },
+  {
+   "name": "USGS_LPC_OR_PortlandMetro_B24_10TER0005062500005037750.laz",
+   "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/LPC/Projects/OR_PortlandMetro_B24/OR_PortlandMetro_1_B24/LAZ/USGS_LPC_OR_PortlandMetro_B24_10TER0005062500005037750.laz"
+  },
+  {
+   "name": "dogami_chm_ft_s.tif",
+   "url": "https://gis.dogami.oregon.gov/arcgis/rest/services/lidar/CANOPY_HEIGHT_MODEL_MOSAIC/ImageServer/exportImage?bbox=505092,5035806,507084,5036930&bboxSR=32610&imageSR=32610&size=1992,1124&format=tiff&pixelType=F32&noData=-9999&interpolation=RSP_BilinearInterpolation&f=image"
+  },
+  {
+   "name": "dogami_chm_ft_n.tif",
+   "url": "https://gis.dogami.oregon.gov/arcgis/rest/services/lidar/CANOPY_HEIGHT_MODEL_MOSAIC/ImageServer/exportImage?bbox=505092,5036930,507084,5038054&bboxSR=32610&imageSR=32610&size=1992,1124&format=tiff&pixelType=F32&noData=-9999&interpolation=RSP_BilinearInterpolation&f=image"
+  },
+  {
+   "name": "dogami_chm_identify2.json",
+   "url": "https://gis.dogami.oregon.gov/arcgis/rest/services/lidar/CANOPY_HEIGHT_MODEL_MOSAIC/ImageServer/identify?geometry=%7B%22x%22%3A506000%2C%22y%22%3A5036800%2C%22spatialReference%22%3A%7B%22wkid%22%3A32610%7D%7D&geometryType=esriGeometryPoint&returnCatalogItems=true&returnGeometry=false&f=json"
   }
  ],
- "note": "second push: 3DEP OR_PortlandMetro_B24 (the newest project; DEM and lidar) for the world x 505192-506984 / y 5035906-5037954 EPSG:32610. The DOGAMI exportImage items were dropped: the 3000 x 3000 request returned HTTP 500 on the first run, and the 2024 3DEP flight is newer than the DOGAMI mosaic."
+ "note": "third push: the 3DEP lidar came at about 1 MB a minute from rockyweb.usgs.gov (one tile in 50 minutes), so that run was cancelled; the other eleven OR_PortlandMetro_B24 tiles are asked for from the USGS S3 bucket (prd-tnm), and DOGAMI's canopy height model in two halves of the world + 100 m (the 3000 x 3000 request failed) as the fallback for trees"
 }
