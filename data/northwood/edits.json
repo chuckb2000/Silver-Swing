@@ -1,0 +1,125 @@
+{
+ "add": [
+  {
+   "from": "proposed/osm_retags.geojson",
+   "ids": [
+    "w1009239025_building"
+   ],
+   "tags": {},
+   "reason": "the clubhouse is mapped golf=clubhouse + building=yes, which s01 reads as a golf feature, not a building (s03: 'add building=yes'): copied as a building, original dropped (as at Aberdeen and Wannamoisett). make_proposals.py"
+  },
+  {
+   "from": "proposed/osm_retags.geojson",
+   "ids": [
+    "w1009239035_cartpath",
+    "w1009239036_cartpath",
+    "w1009239037_cartpath",
+    "w1009239038_cartpath",
+    "w1009239040_cartpath",
+    "w1009239041_cartpath",
+    "w1009249177_cartpath",
+    "w1009249179_cartpath",
+    "w675529941_cartpath",
+    "w675529948_cartpath",
+    "w675529957_cartpath",
+    "w675529958_cartpath",
+    "w675529959_cartpath",
+    "w675529960_cartpath",
+    "w675529966_cartpath",
+    "w675529967_cartpath",
+    "w675529968_cartpath",
+    "w675529969_cartpath",
+    "w675529970_cartpath",
+    "w675529971_cartpath"
+   ],
+   "tags": {},
+   "reason": "20 golf=path ways (highway=path, foot=designated) inside the boundary, which s01 doesn't read (s03: 'retag golf=cartpath'): copied as golf=cartpath (drawn as paths, free relief), originals dropped, as at Bandon Preserve. make_proposals.py"
+  }
+ ],
+ "drop": [
+  {
+   "osm": "w1009239025",
+   "reason": "replaced by its copy in proposed/osm_retags.geojson"
+  },
+  {
+   "osm": "w1009239035",
+   "reason": "replaced by its copy in proposed/osm_retags.geojson"
+  },
+  {
+   "osm": "w1009239036",
+   "reason": "replaced by its copy in proposed/osm_retags.geojson"
+  },
+  {
+   "osm": "w1009239037",
+   "reason": "replaced by its copy in proposed/osm_retags.geojson"
+  },
+  {
+   "osm": "w1009239038",
+   "reason": "replaced by its copy in proposed/osm_retags.geojson"
+  },
+  {
+   "osm": "w1009239040",
+   "reason": "replaced by its copy in proposed/osm_retags.geojson"
+  },
+  {
+   "osm": "w1009239041",
+   "reason": "replaced by its copy in proposed/osm_retags.geojson"
+  },
+  {
+   "osm": "w1009249177",
+   "reason": "replaced by its copy in proposed/osm_retags.geojson"
+  },
+  {
+   "osm": "w1009249179",
+   "reason": "replaced by its copy in proposed/osm_retags.geojson"
+  },
+  {
+   "osm": "w675529941",
+   "reason": "replaced by its copy in proposed/osm_retags.geojson"
+  },
+  {
+   "osm": "w675529948",
+   "reason": "replaced by its copy in proposed/osm_retags.geojson"
+  },
+  {
+   "osm": "w675529957",
+   "reason": "replaced by its copy in proposed/osm_retags.geojson"
+  },
+  {
+   "osm": "w675529958",
+   "reason": "replaced by its copy in proposed/osm_retags.geojson"
+  },
+  {
+   "osm": "w675529959",
+   "reason": "replaced by its copy in proposed/osm_retags.geojson"
+  },
+  {
+   "osm": "w675529960",
+   "reason": "replaced by its copy in proposed/osm_retags.geojson"
+  },
+  {
+   "osm": "w675529966",
+   "reason": "replaced by its copy in proposed/osm_retags.geojson"
+  },
+  {
+   "osm": "w675529967",
+   "reason": "replaced by its copy in proposed/osm_retags.geojson"
+  },
+  {
+   "osm": "w675529968",
+   "reason": "replaced by its copy in proposed/osm_retags.geojson"
+  },
+  {
+   "osm": "w675529969",
+   "reason": "replaced by its copy in proposed/osm_retags.geojson"
+  },
+  {
+   "osm": "w675529970",
+   "reason": "replaced by its copy in proposed/osm_retags.geojson"
+  },
+  {
+   "osm": "w675529971",
+   "reason": "replaced by its copy in proposed/osm_retags.geojson"
+  }
+ ]
+}
