@@ -1597,3 +1597,14 @@ and the outdoor ambience keeps playing in the menus after a round.
   withdrawn meanwhile put the player alone in a match they could later claim); a post past its
   time no longer shows on its owner's title; a 19-hole match is recorded; a match with a full
   log can still be conceded or claimed; a result that failed to send is sent again.
+
+## Langston 13's tier, flattened (developer, 2026-11-13)
+
+The step between the 13th green's tiers was 1.37 m (4.5 ft) over 5 m: about 41 % at its
+steepest, the steepest ground on any green but the dune greens at Bandon. The developer: "too
+steep and needs to be flattened out a bit". It is now 1.0 m (3.3 ft) over 8 m (config
+`green_tiers`: `drop_m` 1.0, `width_m` 8.0): about 19 % at its steepest, 12.5 % on average
+across the step. Langston was rebuilt with its pinned pipeline; only hole 13 changed (its
+green, the pin 0.8 m further onto the back tier, its putting views, its mini-map and one terrain
+chunk). A putt from 6 m short of the step to the centre pin (61 ft) gets up from about 70 %
+power; a weaker one rolls back down the step. Highland Links 9 stays as it is (developer).
