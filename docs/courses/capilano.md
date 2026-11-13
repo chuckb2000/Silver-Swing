@@ -84,6 +84,8 @@ Course chat's calls (listed for the developer):
     pin 58 m beyond it dropped.
 -   Wind 1-7 mph, not the coastal 2-10 proposed in the intake: the course is sheltered in
     forest on the mountain slope.
+-   The 7th green (290 m2) gets a gentler plane and no random bumps (`green_tilt`), so it
+    keeps three hole locations (`pins.test.ts`).
 -   `checks.json`: the 14th's default aim is skipped (OSM's woods begin a few metres behind
     the green; a perfect tee shot at the pin rolls into them).
 -   Card hole: the par-3 11th; rotation 11, 8, 4, 16.
