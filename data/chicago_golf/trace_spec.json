@@ -1,1 +1,1 @@
-{"ortho": "build/desk_art.tif", "desk": {"tee": "Black", "ref": "White"}, "note": "tracing desk only (no traced features): the background is the course art with the DTM relief (build/desk_art.tif, made by the course chat), as there is no open orthophoto in the build"}
+{"ortho": "build/desk_photo.tif", "desk": {"tee": "Black", "ref": "White"}, "note": "tracing desk only (no traced features): the background is the NAIP 2023 photo, its R, G, B bands (build/desk_photo.tif, from raw/naip2023_05m.tif, made by the course chat)"}

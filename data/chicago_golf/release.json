@@ -1,6 +1,6 @@
 {
  "release": "data-chicago_golf",
- "note": "Build inputs not kept in git for Chicago Golf Club; `make fetch NAME=chicago_golf` puts them in place. In git: raw/overpass.geojson (intake.py osm of chicago_golf_overpass.geojson) and raw/usgs_dem_1m_clip.tif (intake.py raster of the 3DEP tile below). The lidar clip is added when the IL_MidNorth_D22 tiles arrive.",
+ "note": "Build inputs not kept in git for Chicago Golf Club; `make fetch NAME=chicago_golf` puts them in place. In git: raw/overpass.geojson (intake.py osm of chicago_golf_overpass.geojson) and raw/usgs_dem_1m_clip.tif (intake.py raster of the 3DEP tile below). raw/naip2023_05m.tif is make_ortho.py of the two NAIP 2023 tiles (raw/naip/ keeps the tiles). The lidar clip is added when the IL_MidNorth_D22 tiles arrive.",
  "files": [
   {
    "asset": "USGS_1M_16_x40y464_IL_MidNorth_D22.tif",
@@ -8,6 +8,19 @@
    "run": "python3 pipeline/intake.py raster chicago_golf {file} --out raw/usgs_dem_1m_clip.tif",
    "outputs": {
     "raw/usgs_dem_1m_clip.tif": "a3effe4f62879426f4a3ecda66204c1629f8f14d52410345e88095d93e7ede6d"
+   }
+  },
+  {
+   "asset": "naip2023_4108815_ne.tif",
+   "sha256": "20cd9e8454eb7e3af59e3e9a89e3332d89cb272d7b3cb56a0ba7e2572f164273",
+   "run": "python3 data/chicago_golf/make_ortho.py {file}"
+  },
+  {
+   "asset": "naip2023_4108816_nw.tif",
+   "sha256": "7258f5f3a1c8f3705d5b3c82777a7fc4bfca5d93fd6db56b3b75f427ca54b819",
+   "run": "python3 data/chicago_golf/make_ortho.py {file}",
+   "outputs": {
+    "raw/naip2023_05m.tif": "831172e069fe544dc8b2da02686bda3eb13e074d3f146bc3997e65600e7d905b"
    }
   }
  ]

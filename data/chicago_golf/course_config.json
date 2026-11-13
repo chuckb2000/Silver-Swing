@@ -4,7 +4,7 @@
   "location": "Wheaton, DuPage County, Illinois",
   "state": "IL",
   "architects": "Charles Blair Macdonald (1895); rebuilt by Seth Raynor (1923)",
-  "theme": "marovitz",
+  "theme": "chicago_golf",
   "epsg": 32616,
   "osm_sources": [
     "raw/overpass.geojson"
@@ -14,6 +14,10 @@
     "path": "raw/usgs_dem_1m_clip.tif",
     "units": "m",
     "source": "USGS 3DEP 1 m DEM, project IL_MidNorth_D22, tile x40y464 (published 2023-10-31), clipped to the world + 100 m by pipeline/intake.py raster; fetched by the GitHub Actions fetch workflow 2026-11-13 (release data-chicago_golf)"
+  },
+  "ortho": {
+    "path": "raw/naip2023_05m.tif",
+    "source": "USDA NAIP 2023, 0.3 m, tiles m_4108815_ne and m_4108816_nw (16 and 24 August 2023; public domain), joined and warped to EPSG:32616 at 0.5 m by make_ortho.py; fetched by the GitHub Actions fetch workflow 2026-11-13 (release data-chicago_golf); lines up with OSM bunkers and greens within about 1.5 m"
   },
   "laz": {
     "paths": [
@@ -68,7 +72,9 @@
     "maxMph": 9
   },
   "attribution": [
-    "Map data © OpenStreetMap contributors (ODbL)",
-    "Elevation and trees: U.S. Geological Survey 3D Elevation Program (IL_MidNorth_D22 lidar)"
-  ]
+    "Map data \u00a9 OpenStreetMap contributors (ODbL)",
+    "Elevation and trees: U.S. Geological Survey 3D Elevation Program (IL_MidNorth_D22 lidar)",
+    "Aerial photo: USDA NAIP 2023"
+  ],
+  "fescue_areas": "proposed/fescue.geojson"
 }
