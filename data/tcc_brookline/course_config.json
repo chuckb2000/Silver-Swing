@@ -61,5 +61,13 @@
   "Map data © OpenStreetMap contributors (ODbL)",
   "Elevation and trees: U.S. Geological Survey 3D Elevation Program (Central Eastern Massachusetts 2021 lidar)",
   "Imagery check: USDA National Agriculture Imagery Program (NAIP)"
+ ],
+ "green_tilt": [
+  {
+   "hole": 4,
+   "max_tilt": 0.02,
+   "bumps": 0,
+   "note": "the 4th's small green (195 m2): tilt capped at 2 % and no random undulations, so the game finds three pin positions on it under 3 % (pins.test.ts; COURSE_LESSONS 4)"
+  }
  ]
 }
