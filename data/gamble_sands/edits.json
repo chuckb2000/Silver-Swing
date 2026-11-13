@@ -67,6 +67,10 @@
   {
    "osm": "w947744580",
    "reason": "replaced by its copy as waste sand (proposed/wash14.geojson)"
+  },
+  {
+   "osm": "w947440595",
+   "reason": "replaced by the redrawn 14th line (proposed/desk_tees.geojson)"
   }
  ],
  "add": [
@@ -75,11 +79,8 @@
    "ids": [
     "w946572440_tee"
    ],
-   "tags": {
-    "hole": "14",
-    "tee_set": "Medal"
-   },
-   "reason": "hole 14: the small round mown pad where the OSM hole line starts is mapped as golf=fairway; it is the teeing ground (photo: a 16 m mown circle in the sage, cart path beside it), so it is copied as a tee; tagged hole 14 / Medal so s06 measures from it (it is 24 % short of the card: open item)"
+   "tags": {},
+   "reason": "hole 14: the small round mown pad where the OSM hole line starts is mapped as golf=fairway; it is the teeing ground (photo: a 16 m mown circle in the sage, cart path beside it), so it is copied as a tee"
   },
   {
    "from": "proposed/wash14.geojson",
@@ -98,6 +99,16 @@
    ],
    "tags": {},
    "reason": "holes 1, 12 and 18: the developer (2026-11-13, with screenshots) says the tees are effectively part of the fairway; a 5 m tee is placed on the hole line at the card distance, on mown grass in the NAIP photo (1: the top of the fairway below the path by the clubhouse; 12: the mown apron south of the 11th green; 18: the fairway north of the 17th green)"
+  },
+  {
+   "from": "proposed/desk_tees.geojson",
+   "ids": [
+    "desk_14_tee",
+    "desk_6_tee",
+    "w947440595_fixed"
+   ],
+   "tags": {},
+   "reason": "holes 6 and 14: the developer's Medal tees from the tracing desk (2026-11-13); 14's line redrawn from that tee"
   }
  ],
  "tags": [

@@ -11,7 +11,7 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 | 3 | 5 | Medal | 632 | 622.0 | -10.0 | -1.6% | pass | 622.0 | -1.6% | pass |
 | 4 | 3 | Medal | 165 | 162.8 | -2.2 | -1.3% | pass | 162.8 | -1.3% | pass |
 | 5 | 4 | Medal | 501 | 481.1 | -19.9 | -4.0% | flag | 488.7 | -2.5% | pass |
-| 6 | 3 | Medal | 264 | 223.3 | -40.7 | -15.4% | FAIL | 223.3 | -15.4% | FAIL |
+| 6 | 3 | Medal | 264 | 248.2 | -15.8 | -6.0% | flag | 248.2 | -6.0% | flag |
 | 7 | 5 | Medal | 493 | 523.9 | +30.9 | +6.3% | flag | 520.2 | +5.5% | flag |
 | 8 | 4 | Medal | 310 | 304.4 | -5.6 | -1.8% | pass | 304.4 | -1.8% | pass |
 | 9 | 4 | Medal | 421 | 430.3 | +9.3 | +2.2% | pass | 430.3 | +2.2% | pass |
@@ -19,12 +19,12 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 | 11 | 4 | Medal | 426 | 436.2 | +10.2 | +2.4% | pass | 436.2 | +2.4% | pass |
 | 12 | 4 | Medal | 327 | 323.2 | -3.8 | -1.2% | pass | 323.2 | -1.2% | pass |
 | 13 | 5 | Medal | 562 | 544.0 | -18.0 | -3.2% | flag | 544.0 | -3.2% | flag |
-| 14 | 4 | Medal | 445 | 334.4 | -110.6 | -24.9% | FAIL | 339.0 | -23.8% | FAIL |
+| 14 | 4 | Medal | 445 | 439.0 | -6.0 | -1.4% | pass | 439.0 | -1.4% | pass |
 | 15 | 4 | Medal | 470 | 445.0 | -25.0 | -5.3% | flag | 458.3 | -2.5% | pass |
 | 16 | 3 | Medal | 220 | 215.3 | -4.7 | -2.1% | pass | 215.3 | -2.1% | pass |
 | 17 | 4 | Medal | 420 | 421.3 | +1.3 | +0.3% | pass | 421.3 | +0.3% | pass |
 | 18 | 5 | Medal | 578 | 578.5 | +0.5 | +0.1% | pass | 578.5 | +0.1% | pass |
-| **total** | 72 | | **7151** | **6948** | -203 | -2.8% | | **6979** | -2.4% | |
+| **total** | 72 | | **7151** | **7077** | -74 | -1.0% | | **7104** | -0.7% | |
 
 ## Open items
 
@@ -36,8 +36,8 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 6. Hole 5: no golf=pin on its green; the centre pin is the green's centre (proposal).
 7. Hole 5: OSM par 5 differs from scorecard par 4; using scorecard.
 8. Hole 6: no golf=pin on its green; the centre pin is the green's centre (proposal).
-9. Hole 6 (Medal): no mapped tee box within 8% of the card; the tee is the start point of the OSM hole line (223 yd). The Medal tee box is not in OSM - trace it to confirm.
-10. Hole 6 (Medal): measured 223 yd vs card 264 (-15.4%) - FAIL, needs a decision.
+9. Hole 6 (Medal): measured 248 yd vs card 264 (-6.0%) even with the virtual tee at the best spot in its box; accepted for play.
+10. Hole 6 (Medal): tee box desk_6_tee assigned by the developer (tagged hole=6, tee_set=Medal in edited/course.geojson).
 11. Hole 7: no golf=pin on its green; the centre pin is the green's centre (proposal).
 12. Hole 7 (Medal): measured 520 yd vs card 493 (+5.5%) even with the virtual tee at the best spot in its box; accepted for play.
 13. Hole 8: no golf=pin on its green; the centre pin is the green's centre (proposal).
@@ -52,14 +52,12 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 22. Hole 13 (Medal): no mapped tee box within 8% of the card; the tee is the start point of the OSM hole line (544 yd). The Medal tee box is not in OSM - trace it to confirm.
 23. Hole 13 (Medal): measured 544 yd vs card 562 (-3.2%) even with the virtual tee at the best spot in its box; accepted for play.
 24. Hole 14: no golf=pin on its green; the centre pin is the green's centre (proposal).
-25. Hole 14: OSM par 3 differs from scorecard par 4; using scorecard.
-26. Hole 14 (Medal): measured 339 yd vs card 445 (-23.8%) - FAIL, needs a decision.
-27. Hole 14 (Medal): tee box w946572440_tee assigned by the developer (tagged hole=14, tee_set=Medal in edited/course.geojson).
-28. Hole 15: no golf=pin on its green; the centre pin is the green's centre (proposal).
-29. Hole 16: no golf=pin on its green; the centre pin is the green's centre (proposal).
-30. Hole 17: no golf=pin on its green; the centre pin is the green's centre (proposal).
-31. Hole 18: no golf=pin on its green; the centre pin is the green's centre (proposal).
-32. Hole 18 (Medal): tee box tee_medal_18 assigned by the developer (tagged hole=18, tee_set=Medal in edited/course.geojson).
+25. Hole 14 (Medal): tee box desk_14_tee assigned by the developer (tagged hole=14, tee_set=Medal in edited/course.geojson).
+26. Hole 15: no golf=pin on its green; the centre pin is the green's centre (proposal).
+27. Hole 16: no golf=pin on its green; the centre pin is the green's centre (proposal).
+28. Hole 17: no golf=pin on its green; the centre pin is the green's centre (proposal).
+29. Hole 18: no golf=pin on its green; the centre pin is the green's centre (proposal).
+30. Hole 18 (Medal): tee box tee_medal_18 assigned by the developer (tagged hole=18, tee_set=Medal in edited/course.geojson).
 
 ## Other open items (Gamble Sands)
 
@@ -103,7 +101,6 @@ course chat; each with a recommendation.
 - Hole 5 (Medal): measured 481 yd from the tee-box centre vs 501 on the card (-4.0%); moved the virtual tee along the middle of the real tee polygon w1574723885 (on its centre line, at least 2.5 m from its back and front) -> 488.7 yd (real 481.1 yd).
 - Hole 7 (Medal): measured 524 yd from the tee-box centre vs 493 on the card (+6.3%); moved the virtual tee along the middle of the real tee polygon w1574723888 (on its centre line, at least 2.5 m from its back and front) -> 520.2 yd (real 523.9 yd).
 - Hole 10 (Medal): measured 154 yd from the tee-box centre vs 147 on the card (+4.5%); moved the virtual tee along the middle of the real tee polygon w1574723891 (on its centre line, at least 2.5 m from its back and front) -> 150.6 yd (real 153.6 yd).
-- Hole 14 (Medal): measured 334 yd from the tee-box centre vs 445 on the card (-24.9%); moved the virtual tee along the middle of the real tee polygon w946572440_tee (on its centre line, at least 2.5 m from its back and front) -> 339.0 yd (real 334.4 yd).
 - Hole 15 (Medal): measured 445 yd from the tee-box centre vs 470 on the card (-5.3%); moved the virtual tee along the middle of the real tee polygon w946566259 (on its centre line, at least 2.5 m from its back and front) -> 458.3 yd (real 445.0 yd).
 
 ## Tree detection (2021 USGS North Central Washington lidar)
@@ -159,7 +156,7 @@ course chat; each with a recommendation.
 | 3 | 5 | yes | yes (1 near) | yes | yes | NO | 4 | 0 |
 | 4 | 3 | yes | yes (1 near) | yes | yes | NO | 2 | 0 |
 | 5 | 5 | yes | yes (1 near) | yes | yes | NO | 3 | 0 |
-| 6 | 3 | yes | yes (2 near) | yes | yes | NO | 2 | 0 |
+| 6 | 3 | yes | yes (3 near) | yes | yes | NO | 2 | 0 |
 | 7 | 5 | yes | yes (1 near) | yes | yes | NO | 6 | 0 |
 | 8 | 4 | yes | yes (1 near) | yes | yes | NO | 4 | 0 |
 | 9 | 4 | yes | yes (1 near) | yes | yes | NO | 4 | 0 |
@@ -167,7 +164,7 @@ course chat; each with a recommendation.
 | 11 | 5 | yes | yes (1 near) | yes | yes | NO | 7 | 0 |
 | 12 | 4 | yes | yes (1 near) | yes | yes | NO | 6 | 0 |
 | 13 | 4 | yes | yes (1 near) | yes | yes | NO | 4 | 0 |
-| 14 | 3 | yes | yes (1 near) | yes | yes | NO | 3 | 0 |
+| 14 | 4 | yes | yes (1 near) | yes | yes | NO | 4 | 0 |
 | 15 | 4 | yes | yes (1 near) | yes | yes | NO | 3 | 0 |
 | 16 | 3 | yes | yes (1 near) | yes | yes | NO | 3 | 0 |
 | 17 | 4 | yes | yes (1 near) | yes | yes | NO | 3 | 0 |
@@ -210,7 +207,7 @@ course chat; each with a recommendation.
 ## Checks from earlier courses
 
 - penalty area w947235342 lies mostly outside the boundary (a neighbour's? redraw as natural=water)
-- waterway w947239360 (stream): 221 m of it within 30 m of a hole line isn't in a penalty area (pipeline/propose_channels.py makes one; or say it's dry)
+- waterway w947239360 (stream): 245 m of it within 30 m of a hole line isn't in a penalty area (pipeline/propose_channels.py makes one; or say it's dry)
 
-Totals: 37 tees, 31 greens, 13 fairways, 71 bunkers, 1 water hazards, 0 pins, 46 cart paths, 36 OSM tree points.
+Totals: 39 tees, 31 greens, 13 fairways, 71 bunkers, 1 water hazards, 0 pins, 46 cart paths, 36 OSM tree points.
 

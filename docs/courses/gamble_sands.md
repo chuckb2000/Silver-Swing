@@ -9,11 +9,11 @@ of the tees). OSM maps the whole course: 18 hole lines, every green, the fairway
 bunkers and most tee boxes (no pins). Elevation is the USGS 3DEP 1 m DEM
 (WA_NorthCentral_2021_B21); trees come from the same project's lidar, which covers only
 the west third; the sagebrush and rabbitbrush are bushes read from the NAIP photo. One tee
-set, Medal (the longest), from the club's printed card (7,151 yd, 73.4/120); built 6,977
+set, Medal (the longest), from the club's printed card (7,151 yd, 73.4/120); built 7,102
 yd. The tees are effectively part of the fairway (developer), so on 1, 12 and 18 the Medal
-tee is placed on the fairway at the card distance. All sand plays as waste sand, as the
-card's local rule says. Fourteen holes are within 3 %, 7 and 13 are flags (+5.5 %,
--3.2 %), 6 (-15.4 %) and 14 (-23.8 %) are accepted fails waiting for the developer.
+tee is placed on the fairway at the card distance; on 6 and 14 the developer marked the
+Medal tees in the tracing desk. All sand plays as waste sand, as the
+card's local rule says. Fifteen holes are within 3 %; 6, 7 and 13 are flags (-6.0 %, +5.5 %, -3.2 %).
 New theme `gamble_sands`; the logo is an apple on a sand mound. Every hole was looked at
 in the game (tee shot and overview).
 
@@ -56,7 +56,7 @@ The club's printed scorecard (dated 07/24), photographed and sent by the develop
 | Par | 4 | 4 | 5 | 3 | 4 | 3 | 5 | 4 | 4 | 36 | 3 | 4 | 4 | 5 | 4 | 4 | 3 | 4 | 5 | 36 | 72 |
 | HCP | 7 | 11 | 1 | 15 | 5 | 13 | 3 | 17 | 9 | | 14 | 6 | 18 | 12 | 2 | 8 | 10 | 4 | 16 | | |
 | Medal | 430 | 340 | 632 | 165 | 501 | 264 | 493 | 310 | 421 | 3556 | 147 | 426 | 327 | 562 | 445 | 470 | 220 | 420 | 578 | 3595 | 7151 |
-| Built | 429 | 332 | 622 | 163 | 489 | 223 | 520 | 304 | 430 | 3512 | 151 | 436 | 323 | 544 | 339 | 458 | 215 | 421 | 578 | 3465 | 6977 |
+| Built | 429 | 332 | 622 | 163 | 489 | 248 | 520 | 304 | 430 | 3537 | 151 | 436 | 323 | 544 | 439 | 458 | 215 | 421 | 578 | 3565 | 7102 |
 
 Medal 73.4/120; Back 70.7/114, Sands 69.4/111, Regular 68.6/109, Intermediate 66.0/103,
 Forward 66.4/102 (women's) are in `scorecard.csv`, not built. 18Birdies and
@@ -76,11 +76,13 @@ Medal, the longest set (standing default 4.1).
 -   2026-11-13: the club's printed card (photo); screenshots of 1, 6, 12 and 14: "the tee
     boxes look like they are effectively part of the fairway" (tees on 1, 12, 18 placed on
     the fairway at the card distance).
+-   2026-11-13: the Medal tees on 6 and 14 marked in the tracing desk
+    (`data/gamble_sands/desk/`); 14's moved 5 m onto the mown turf, its line redrawn.
 
 ### Developer's calls pending
 
-"Other open items" in `data/gamble_sands/validation_report.md`: 6 and 14 accepted as
-mapped (3, 4), the desert penalty-area request (6), card hole, theme and logo (9).
+"Other open items" in `data/gamble_sands/validation_report.md`: the desert penalty-area
+request (6), card hole, theme and logo (9).
 
 ### Request for the design chat
 
@@ -118,3 +120,6 @@ See "Developer's calls pending" above and `data/gamble_sands/validation_report.m
 -   **Check a lidar project's edge** (`intake.py laz` prints 0 points for tiles outside
     the world, and a tile's bounds end at the project's edge): here it ends inside the course.
 -   **`npm install` rewrites `game/package-lock.json`** in this sandbox; don't commit it.
+-   **A short tracing desk settles disputed tees fast**: the developer marked 6 and 14 in
+    two minutes. Check the mark against the photo and the mapped surfaces before using it
+    (14's was half on sand).

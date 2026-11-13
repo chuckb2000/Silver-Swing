@@ -1,11 +1,5 @@
 {
- "note": "per-course settings for game/tests/unit/course_play.test.ts (docs/COURSE_BUILD.md 8.2). Holes 6 and 14 are more than 8 % short of the club's card from the mapped tees: open items for the developer (validation_report.md); the tolerances below let the other checks run until he decides.",
- "yardage": {
-  "max": {
-   "6": 0.16,
-   "14": 0.24
-  }
- },
+ "note": "per-course settings for game/tests/unit/course_play.test.ts (docs/COURSE_BUILD.md 8.2).",
  "wind_mph": [
   1,
   7
