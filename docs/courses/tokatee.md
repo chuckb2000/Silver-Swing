@@ -14,6 +14,14 @@ logo is a McKenzie River drift boat. After the virtual tees moved within their b
 holes are within 3 % of the card; hole 17 plays 150 yd against the card's 195 (-23 %, open
 item 1); 6,769 yd built against 6,838.
 
+## Checks
+
+- `course_play.test.ts -t tokatee`: 12 passed (after hole 12's default aim was skipped; the hand-off run had it failing).
+- `npm test`: 1,751 passed, 3 failed: course_play's hole 12 default aim (since skipped, see above), and `player.test.ts` "the real rotation" and `tour.test.ts` "a hole drawn sits out", which fail until `make land` adds the course to the daily rotation.
+- `npm run e2e`: 17 passed.
+- Pinned; a `--fresh` rebuild left git clean.
+- Every hole looked at in the game (tee view, overview, first shot, putting view).
+
 ## Facts
 
 -   **Location:** 54947 McKenzie Highway, McKenzie Bridge (Blue River), Lane County,
