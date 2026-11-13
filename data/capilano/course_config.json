@@ -1,53 +1,61 @@
 {
-  "name": "Capilano Golf and Country Club",
-  "location": "West Vancouver (British Properties), British Columbia",
-  "state": "BC",
-  "architects": "Stanley Thompson (opened 1937), for the Guinness family's British Pacific Properties",
-  "theme": "capilano",
-  "boundary_name": "Capilano Golf & Country Club",
-  "dtm": {
-    "path": "raw/hrdem_dtm_1m.tif",
-    "units": "m",
-    "source": "Natural Resources Canada HRDEM (CanElevation) DTM 1 m via the NRCan datacube WCS (datacube.services.geo.ca/ows/elevation, coverage dtm) in EPSG:32610, CGVD2013 m; lidar projects at the course BC-Vancouver_Island_Sunshine_Coast_2018 (2018-19) and BC-Lower_Mainland_2016; fetched by the GitHub Actions workflow 2026-11-13 (release data-capilano)"
-  },
-  "dsm": {
-    "path": "raw/hrdem_dsm_1m.tif",
-    "units": "m",
-    "source": "Natural Resources Canada HRDEM, the same projects, DSM 1 m (first-return surface), via the same WCS (coverage dsm)",
-    "label": "lidar surface model (NRCan HRDEM)"
-  },
-  "tee_sets": [
-    {
-      "name": "Gold",
-      "playable": true,
-      "rating": 73.0,
-      "slope": 133,
-      "total_yd": 6723
-    }
-  ],
-  "default_tee": "Gold",
-  "scorecard_source": "Third-party (no card on the club's site found): GolfPass (course 26797) per-hole par, men's handicap and Gold/Blue/White yardages, read 2026-11-13; every row adds up to the page's totals (Gold 6,723; Blue 6,448; White 6,187). Gold rating/slope 73.0/133 from the same page's tee table (printed there against 6,706 yd). allsquaregolf.com gives the same card in metres (hole 1 shorter). Unverified against a printed card.",
-  "driving_range_is_ob": true,
-  "trees_off_fairways_m": 2,
-  "wind_mph": {
-    "minMph": 1,
-    "maxMph": 7
-  },
-  "attribution": [
-    "Map data \u00a9 OpenStreetMap contributors (ODbL)",
-    "Elevation and trees: contains information licensed under the Open Government Licence \u2013 Canada (Natural Resources Canada, HRDEM)"
-  ],
-  "notes": "Standing defaults (COURSE_BUILD.md 4.1), 2026-11-13: the longest tee set (Gold) and it is the default; all water red; OB = the OSM course boundary, roads inside it are cart paths, the driving range is OB; wind 1-7 mph (inland Pacific Northwest: the course is cut through forest on the North Shore slope, sheltered from the sea); trees from the HRDEM surface model (DSM - DTM), trees in fairways or in the way of a centre-line drive removed and listed. Theme capilano (new; the course chat's design).",
-  "id": "capilano",
-  "epsg": 32610,
-  "world": {
-    "x0": 490396,
-    "y0": 5465362,
-    "width": 1024,
-    "height": 2048,
-    "note": "OSM course boundary bbox (647 x 1,912 m, way/96680026): 188 m of scenery west/east; north/south the world is held to the 2,048 m limit, so 68 m of scenery beyond each end of the boundary (the usual 120 m would make it 2,304 m tall)"
-  },
-  "osm_sources": [
-    "raw/overpass.geojson"
-  ]
+ "name": "Capilano Golf and Country Club",
+ "location": "West Vancouver (British Properties), British Columbia",
+ "state": "BC",
+ "architects": "Stanley Thompson (opened 1937), for the Guinness family's British Pacific Properties",
+ "theme": "capilano",
+ "boundary_name": "Capilano Golf & Country Club",
+ "dtm": {
+  "path": "raw/hrdem_dtm_1m.tif",
+  "units": "m",
+  "source": "Natural Resources Canada HRDEM (CanElevation) DTM 1 m via the NRCan datacube WCS (datacube.services.geo.ca/ows/elevation, coverage dtm) in EPSG:32610, CGVD2013 m; lidar projects at the course BC-Vancouver_Island_Sunshine_Coast_2018 (2018-19) and BC-Lower_Mainland_2016; fetched by the GitHub Actions workflow 2026-11-13 (release data-capilano)"
+ },
+ "dsm": {
+  "path": "raw/hrdem_dsm_1m.tif",
+  "units": "m",
+  "source": "Natural Resources Canada HRDEM, the same projects, DSM 1 m (first-return surface), via the same WCS (coverage dsm)",
+  "label": "lidar surface model (NRCan HRDEM)"
+ },
+ "tee_sets": [
+  {
+   "name": "Gold",
+   "playable": true,
+   "rating": 73.0,
+   "slope": 133,
+   "total_yd": 6723
+  }
+ ],
+ "default_tee": "Gold",
+ "scorecard_source": "Third-party (no card on the club's site found): GolfPass (course 26797) per-hole par, men's handicap and Gold/Blue/White yardages, read 2026-11-13; every row adds up to the page's totals (Gold 6,723; Blue 6,448; White 6,187). Gold rating/slope 73.0/133 from the same page's tee table (printed there against 6,706 yd). allsquaregolf.com gives the same card in metres (hole 1 shorter). Unverified against a printed card.",
+ "driving_range_is_ob": true,
+ "trees_off_fairways_m": 2,
+ "wind_mph": {
+  "minMph": 1,
+  "maxMph": 7
+ },
+ "attribution": [
+  "Map data \u00a9 OpenStreetMap contributors (ODbL)",
+  "Elevation and trees: contains information licensed under the Open Government Licence \u2013 Canada (Natural Resources Canada, HRDEM)"
+ ],
+ "notes": "Standing defaults (COURSE_BUILD.md 4.1), 2026-11-13: the longest tee set (Gold) and it is the default; all water red; OB = the OSM course boundary, roads inside it are cart paths, the driving range is OB; wind 1-7 mph (inland Pacific Northwest: the course is cut through forest on the North Shore slope, sheltered from the sea); trees from the HRDEM surface model (DSM - DTM), trees in fairways or in the way of a centre-line drive removed and listed. Theme capilano (new; the course chat's design).",
+ "id": "capilano",
+ "epsg": 32610,
+ "world": {
+  "x0": 490396,
+  "y0": 5465362,
+  "width": 1024,
+  "height": 2048,
+  "note": "OSM course boundary bbox (647 x 1,912 m, way/96680026): 188 m of scenery west/east; north/south the world is held to the 2,048 m limit, so 68 m of scenery beyond each end of the boundary (the usual 120 m would make it 2,304 m tall)"
+ },
+ "osm_sources": [
+  "raw/overpass.geojson"
+ ],
+ "green_tilt": [
+  {
+   "hole": 7,
+   "max_tilt": 0.02,
+   "bumps": 0
+  }
+ ],
+ "green_tilt_note": "7 (290 m2): its random bumps left only two hole locations under 3 % (pins.test.ts); a gentler plane and no bumps, as COURSE_LESSONS says"
 }

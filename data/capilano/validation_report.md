@@ -78,7 +78,7 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 | w909468522 | 18 | 3.4 | 2.5 | 2 | 3.7 | 1.5 |
 | w909468524 | practice | 1.9 | 1.9 | 2 | 3.9 | 0.0 |
 | w909795963 | 6 | 2.5 | 2.5 | 2 | 4.1 | 1.5 |
-| w909795971 | 7 | 3.3 | 2.5 | 2 | 6.6 | 1.6 |
+| w909795971 | 7 | 3.3 | 2.0 | 0 | 2.6 | 1.5 |
 | w909798651 | 8 | 3.5 | 2.5 | 2 | 3.9 | 1.5 |
 
 # OSM coverage audit
