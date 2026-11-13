@@ -92,6 +92,10 @@
   {
    "name": "srsp_phase5_meta_list.xml",
    "url": "https://srsp-open-data.s3.eu-west-2.amazonaws.com/?list-type=2&prefix=lidar/phase-5/&delimiter=/"
+  },
+  {
+   "name": "st_andrews_old_coastline.geojson",
+   "overpass": "[out:json][timeout:180][bbox:56.330,-2.860,56.372,-2.780];(way[\"natural\"=\"coastline\"];);out geom;"
   }
  ]
 }
