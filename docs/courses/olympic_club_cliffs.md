@@ -45,9 +45,10 @@ the White boxes there aren't identified.
     4 w677765431, 5 w677770777, 6 w705218527, 7 w705214047 (each within 4 % of the card
     measured from it), 9 w863361130 (the back-most on its line; -5 %).
 -   OSM tags the 4th par 4; the Cliffs is nine par 3s.
--   The 5th and 7th share a double green; OSM's two pins on it are dropped, so both holes
-    use the green's centre (the close-up putting view is centred on the green and missed the
-    5th's pin).
+-   The 5th and 7th share a double green with OSM's two pins on it, both kept (design chat,
+    2026-11-13; it was rebuilt on the pipeline with double-green putting views). OSM's two hole
+    lines both end at the green's middle and the pins carry no hole number, so s06 gives both
+    holes the same pin, the west one (n6624454071).
 -   The 8th's small green (237 m2) gets a gentler plane and no random bumps, so it keeps
     three hole locations.
 -   Card: the double green (rotating 5, 3, 1, 9).
@@ -58,10 +59,14 @@ the White boxes there aren't identified.
     only box at the right distance is the 6th's Blue box (w705218527), 29 m off the 8th's line.
     Options: (a) share that box with the 8th (recommended if the two holes do share a tee);
     (b) leave it short; (c) trace the 8th's Blue box from a photo.
-2.  The double green: a design-chat change could centre a double green's putting views on
-    each hole's own pin, so OSM's two pins could stay.
+2.  The double green: both holes play to the west pin. The card fits the 5th to the west pin
+    (165 yd against 167) and the 7th to the east pin (n6624457256, 179 yd against 175); the
+    other way round is off by 12 and 3 yd. Giving each hole its own pin needs s06 to take a
+    hole number on a pin (a design-chat request). Recommended: 5th west, 7th east.
 3.  Third-party card; no photo checked.
 
 ## Build history
 
 -   2026-11-13: first build (course chat).
+-   2026-11-13: OSM's double-green pins back, re-pinned to the pipeline with double-green
+    putting views (design chat PR #140).
