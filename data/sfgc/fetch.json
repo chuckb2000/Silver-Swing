@@ -10,17 +10,12 @@
    ]
   },
   {
-   "name": "sfgc_dem1m",
-   "tnm": {
-    "dataset": "dem1m",
-    "bbox": [
-     -122.4872,
-     37.703,
-     -122.4679,
-     37.7166
-    ],
-    "list": true
-   }
+   "name": "usgs_dem_m.tif",
+   "url": "https://elevation.nationalmap.gov/arcgis/rest/services/3DEPElevation/ImageServer/exportImage?bbox=545200,4173000,546900,4174500&bboxSR=32610&imageSR=32610&size=1700,1500&format=tiff&pixelType=F32&noData=-9999&interpolation=RSP_BilinearInterpolation&f=image"
+  },
+  {
+   "name": "usgs_dem_identify.json",
+   "url": "https://elevation.nationalmap.gov/arcgis/rest/services/3DEPElevation/ImageServer/identify?geometry=%7B%22x%22%3A546050%2C%22y%22%3A4173750%2C%22spatialReference%22%3A%7B%22wkid%22%3A32610%7D%7D&geometryType=esriGeometryPoint&returnCatalogItems=true&f=json"
   },
   {
    "name": "sfgc_lpc",
@@ -32,7 +27,7 @@
      -122.4679,
      37.7166
     ],
-    "list": true
+    "only": "CA_SanFrancisco_1_B23"
    }
   },
   {
