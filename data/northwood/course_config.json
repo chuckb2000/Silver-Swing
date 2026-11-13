@@ -1,0 +1,62 @@
+{
+  "id": "northwood",
+  "name": "Northwood Golf Club",
+  "location": "Monte Rio, Sonoma County, California",
+  "state": "CA",
+  "architects": "Alister MacKenzie with Robert Hunter (1928), for the Bohemian Club; conceived by Jack Neville",
+  "theme": "redwoods",
+  "epsg": 32610,
+  "osm_sources": [
+    "raw/overpass.geojson"
+  ],
+  "boundary_name": "Northwood Golf Club",
+  "world": {
+    "x0": 500032,
+    "y0": 4258528,
+    "width": 1024,
+    "height": 768,
+    "note": "OSM course boundary (way 1246462624) bbox 621 x 429 m (E 500191-500812, N 4258697-4259126) + scenery, 4 x 3 chunks of 256 m: west edge 32 m east of E 500000 (the edge of the 3DEP DEM tile and lidar tiles fetched; s00 reads the world + 32 m), about 160 m west, 245 m east, 170 m north and south"
+  },
+  "dtm": {
+    "path": "raw/usgs_dem_b22_1m_clip.tif",
+    "units": "m",
+    "source": "USGS 3DEP 1 m DEM, project CA_NorthernCA_B22 (tile x50y426, published 2026-03-24), cut to the world + 100 m (the tile's west edge is E 499994, so 6 m on that side) by pipeline/intake.py raster; EPSG:26910 (NAD83 / UTM 10N), metres; fetched through the GitHub Actions workflow 2026-11-13 (release data-northwood)"
+  },
+  "tee_sets": [
+    {
+      "name": "White",
+      "playable": true,
+      "rating": 67.8,
+      "slope": 114,
+      "total_yd": 2893
+    },
+    {
+      "name": "Red",
+      "playable": false,
+      "rating": 69.0,
+      "slope": 121,
+      "total_yd": 2506
+    },
+    {
+      "name": "Gold",
+      "playable": false,
+      "rating": 60.0,
+      "slope": 100,
+      "total_yd": 1983
+    }
+  ],
+  "default_tee": "White",
+  "scorecard_source": "Third-party, unverified (no official card reachable): GreensKeeper.org scorecard page and golfingrecord.com, which agree (White 2,893, the total golf.com, GolfLink and GolfNow give), read 2026-11-12. GolfPass (course 2688) differs on White holes 1, 2, 4, 5 and 9 (2,888); Red (2,506) and Gold (1,983) agree everywhere. Ratings are the 18-hole figures (White 67.8/114, Red 69.0/121, Gold 60.0/100, GreensKeeper); GolfPass gives the nine as 33.9/114. Stroke index: the 9-hole SI of golfingrecord. Built: White, the longest set (4.1). Not built: Red, Gold.",
+  "penalty_default": "red",
+  "driving_range_is_ob": true,
+  "wind_mph": {
+    "minMph": 1,
+    "maxMph": 7
+  },
+  "trees_off_fairways_m": 2,
+  "attribution": [
+    "Map data \u00a9 OpenStreetMap contributors (ODbL)",
+    "Elevation and trees: U.S. Geological Survey 3D Elevation Program"
+  ],
+  "notes": "Standing defaults (COURSE_BUILD.md 4.1): the longest tee set as the default, all water red, OB = the course boundary, trees from lidar with fairway trees removed, wind 1-7 mph (a sheltered river valley in the redwoods). Theme `redwoods`, new for this course (developer's request, 2026-11-12)."
+}

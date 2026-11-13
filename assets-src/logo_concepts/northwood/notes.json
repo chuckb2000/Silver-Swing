@@ -1,0 +1,55 @@
+{
+ "id": "northwood",
+ "course": "Northwood Golf Club",
+ "place": "Monte Rio, California",
+ "facts": [
+  {
+   "fact": "A nine-hole course from 1928 by Alister MacKenzie and Robert Hunter, set among coast redwoods on an elbow of the Russian River, just north of the Bohemian Club's grove.",
+   "source": "https://golf.com/travel/northwood-golf-club-best-course-never-heard/"
+  },
+  {
+   "fact": "The club describes the course as nestled among majestic redwoods.",
+   "source": "https://startpage.mapquest.com/us/california/northwood-golf-club-303420901"
+  },
+  {
+   "fact": "Fire-hollowed bases ('goose pens') and sword ferns on a duff floor are common in coast redwood forest (general knowledge; not a claim about a particular tree at Northwood).",
+   "source": "interpretation"
+  },
+  {
+   "fact": "The club's own logo could not be found online; a whole redwood tree silhouette, the obvious mark for a club in the redwoods, is avoided, and so is anything of the Bohemian Club (its owl).",
+   "source": "course chat 2026-11-13"
+  }
+ ],
+ "current": {
+  "subject": "none: a new course (course chat 2026-11-13)",
+  "keep": "",
+  "weaknesses": ""
+ },
+ "concepts": [
+  {
+   "n": 1,
+   "name": "The Foot of the Giant",
+   "rationale": "Only the foot of a redwood fits in the badge: the flared, fluted cinnamon trunk runs off the top, so the tree reads as too tall to draw. A golf ball rests in the dark goose-pen hollow at its base, sword ferns either side on the red-brown duff.",
+   "references": [
+    "https://golf.com/travel/northwood-golf-club-best-course-never-heard/",
+    "course chat 2026-11-13"
+   ],
+   "symbolism": "The giants overhead are what Northwood is known for; the ball in the hollow is the golf among them.",
+   "interpretation": "The goose pen and the ferns are typical of the forest, not a particular tree on the course.",
+   "palette": [
+    {"hex": "#b8693f", "name": "lit bark"},
+    {"hex": "#8f4526", "name": "bark"},
+    {"hex": "#62301b", "name": "shaded bark"},
+    {"hex": "#3e1c10", "name": "flutes"},
+    {"hex": "#1c0d08", "name": "hollow"},
+    {"hex": "#f4f2ea", "name": "ball"},
+    {"hex": "#4f8d3e", "name": "sword fern"},
+    {"hex": "#5c3a22", "name": "duff"}
+   ],
+   "strengths": "One subject, no background, reads at 1x: the white ball in the black hollow, the red trunk. Not a tree silhouette, so unlike a club mark built on one.",
+   "tradeoffs": "At 16 px the ferns become two green tufts."
+  }
+ ],
+ "recommendation": "Concept 1.",
+ "chosen": 1
+}
