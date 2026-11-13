@@ -54,7 +54,7 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 6. Hole 10 (Royal): tee box lidar_tee_59 assigned by the course chat at the developer's request (lidar pad, edits.json) (tagged hole=10, tee_set=Royal in edited/course.geojson).
 7. Hole 13 (White): measured 145 yd vs card 152 (-4.5%) even with the virtual tee at the best spot in its box; accepted for play.
 8. Hole 13 (White): tee box lidar_tee_74 assigned by the course chat (lidar pad, edits.json; approved by the developer) (tagged hole=13, tee_set=White in edited/course.geojson).
-9. Hole 13: two-tiered green; the pin is moved from the OSM pin (1364.7, 1253.8), which is on or near the step, to the middle of the upper tier (1369.3, 1261.8) (config green_tiers pin=upper_tier).
+9. Hole 13: two-tiered green; the pin is moved from the OSM pin (1364.7, 1253.8), which is on or near the step, to the middle of the upper tier (1369.6, 1262.5) (config green_tiers pin=upper_tier).
 10. Hole 14 (White): measured 315 yd vs card 305 (+3.1%) even with the virtual tee at the best spot in its box; accepted for play.
 11. Hole 16 (Royal): measured 514 yd vs card 540 (-4.8%) even with the virtual tee at the best spot in its box; accepted for play.
 12. Hole 17 (Royal): tee box lidar_tee_30 assigned by the course chat (lidar pad, edits.json; approved by the developer) (tagged hole=17, tee_set=Royal in edited/course.geojson).
@@ -119,14 +119,14 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 | w1536671352 | 10 | 3.2 | 2.5 | 1 | 4.1 | 1.5 |
 | w1536677202 | 11 | 0.9 | 1.0 | 1 | 2.0 | 1.0 |
 | w1536677206 | 12 | 3.2 | 2.5 | 1 | 3.8 | 1.5 |
-| w1536679194 | 13 | 5.3 | 2.5 | 0 | 43.3 | 2.2 |
+| w1536679194 | 13 | 5.3 | 2.5 | 0 | 21.1 | 2.0 |
 | w1536679204 | 14 | 3.1 | 2.5 | 2 | 5.7 | 1.5 |
 | w1536680450 | 15 | 0.7 | 1.0 | 1 | 2.1 | 1.0 |
 | w1536680457 | 16 | 3.3 | 2.5 | 2 | 4.5 | 1.5 |
 | w1536681615 | 17 | 2.7 | 2.5 | 1 | 4.4 | 1.5 |
 | w1536681623 | 18 | 0.9 | 1.0 | 2 | 2.5 | 1.0 |
 
-- Hole 13: two-tiered green (developer 2026-10-19: tiered green, the front little bit about 4-5 ft below the back, the back portion bigger; modelled as a 1.37 m (4.5 ft) step across the line of play, 30% of the green's depth from its front edge, pin in the middle of the upper (back) tier): step 1.37 m over 5.0 m across the line of play, upper tier at the back; measured 1.56 m between points 4 m either side. The max slope above is the step itself, by design.
+- Hole 13: two-tiered green (developer 2026-10-19: tiered green, the front little bit about 4-5 ft below the back, the back portion bigger; modelled as a 1.37 m (4.5 ft) step across the line of play, 30% of the green's depth from its front edge, pin in the middle of the upper (back) tier. Developer 2026-11-13: too steep, flatten it a bit: the step is now 1.0 m (3.3 ft) over 8 m (was 1.37 m over 5 m: about 41 % at its steepest, now about 19 %, 12.5 % on average)): step 1.00 m over 8.0 m across the line of play, upper tier at the back; measured 1.19 m between points 4 m either side. The max slope above is the step itself, by design.
 
 # OSM coverage audit
 

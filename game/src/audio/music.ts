@@ -120,14 +120,24 @@ async function url(i: number): Promise<string | null> {
   }
 }
 
+/** a track is being fetched: every volume change asks for one while nothing plays, and the second
+ * request replaced the first track a moment after it started */
+let fetching = false;
+
 async function next() {
+  if (fetching) return;
+  fetching = true;
+  try { await advance(); } finally { fetching = false; }
+}
+
+async function advance(): Promise<void> {
   if (!el || !list || !wanted()) { current = -1; return; }
   const i = list.next();
   const u = await url(i);
   if (!u) {
     // can't get this one (offline): try the others, then give up until sound is turned on again
-    if (++failures < tracks.length) void next();
-    else { failures = 0; current = -1; }
+    if (++failures < tracks.length) return advance();
+    failures = 0; current = -1;
     return;
   }
   failures = 0;

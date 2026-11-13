@@ -62,37 +62,73 @@ function store(): UseStore | null {
   }
 }
 
+// Every value is kept twice, in IndexedDB and in localStorage, each with the time it was written
+// (`<key>:t`). A read takes the newer copy. Before, IndexedDB's copy always won: after one failed
+// IndexedDB write (a private window, a full disk, Safari reclaiming storage) the session wrote to
+// localStorage only, and the next visit read IndexedDB's old copy: a finished round gone from the
+// board, a cleared round in progress back again. A removal leaves its time too, so a copy the other
+// store still holds is known to be older than the removal.
+
+const lsGet = (k: string): string | null => { try { return window.localStorage.getItem(`local-golf:${k}`); } catch { return null; } };
+const lsSet = (k: string, v: string): boolean => { try { window.localStorage.setItem(`local-golf:${k}`, v); return true; } catch { return false; } };
+const lsDel = (k: string) => { try { window.localStorage.removeItem(`local-golf:${k}`); } catch { /* blocked */ } };
+const stampOf = (v: unknown): number => { const n = Number(v); return Number.isFinite(n) ? n : 0; };
+
+/** IndexedDB failed: after three in a row it is left alone for this visit; one success clears the count. */
+let idbErrors = 0;
+const idbFailed = () => { if (++idbErrors >= 3) idbOk = false; };
+
 async function read<T>(key: string): Promise<T | undefined> {
   const s = store();
+  let dbVal: T | undefined, dbT = 0, dbRead = false;
   if (s) {
     try {
-      const v = await get<T>(key, s);
-      if (v !== undefined) return v;
+      dbVal = await get<T>(key, s);
+      dbT = stampOf(await get<number>(`${key}:t`, s));
+      dbRead = true;
+      idbErrors = 0;
     } catch {
-      idbOk = false;
+      idbFailed();
     }
   }
-  try {
-    const raw = window.localStorage.getItem(`local-golf:${key}`);
-    if (raw) return JSON.parse(raw) as T;
-  } catch { /* storage blocked */ }
+  let lsVal: T | undefined;
+  const raw = lsGet(key);
+  if (raw) { try { lsVal = JSON.parse(raw) as T; } catch { /* a cut-off value: as if it wasn't there */ } }
+  const lsT = stampOf(lsGet(`${key}:t`));
+  if (dbVal !== undefined && (lsT <= dbT)) return dbVal;
+  if (lsVal !== undefined && (dbVal === undefined || lsT > dbT)) {
+    // localStorage has the newer copy: IndexedDB is brought up to date for the next visit
+    if (s && dbRead && lsT > dbT) { try { await set(key, lsVal, s); await set(`${key}:t`, lsT, s); } catch { idbFailed(); } }
+    return lsVal;
+  }
+  if (dbVal !== undefined) {
+    // removed after IndexedDB's copy was written (the removal reached localStorage only)
+    if (s) { try { await del(key, s); await set(`${key}:t`, lsT, s); } catch { idbFailed(); } }
+    return undefined;
+  }
   return mem.get(key) as T | undefined;
 }
 
 async function write(key: string, value: unknown): Promise<void> {
   mem.set(key, value);
+  const t = Date.now();
   const s = store();
   if (s) {
-    try { await set(key, value, s); } catch { idbOk = false; }
+    try { await set(key, value, s); await set(`${key}:t`, t, s); idbErrors = 0; } catch { idbFailed(); }
   }
-  try { window.localStorage.setItem(`local-golf:${key}`, JSON.stringify(value)); } catch { /* quota or blocked */ }
+  // (the time only with the value: a value too big for localStorage keeps its old, older-stamped copy)
+  let json: string | undefined;
+  try { json = JSON.stringify(value); } catch { /* not serialisable */ }
+  if (json !== undefined && lsSet(key, json)) lsSet(`${key}:t`, String(t));
 }
 
 async function remove(key: string): Promise<void> {
   mem.delete(key);
+  const t = Date.now();
   const s = store();
-  if (s) { try { await del(key, s); } catch { /* ignore */ } }
-  try { window.localStorage.removeItem(`local-golf:${key}`); } catch { /* ignore */ }
+  if (s) { try { await del(key, s); await set(`${key}:t`, t, s); idbErrors = 0; } catch { idbFailed(); } }
+  lsDel(key);
+  lsSet(`${key}:t`, String(t));
 }
 
 /** Courses whose default tees changed to their longest set on 2026-10-31, and the old default. */
@@ -157,6 +193,12 @@ export async function loadUploaded(): Promise<Set<string>> {
 }
 
 export const saveUploaded = (ids: Set<string>) => write('uploaded', [...ids]);
+
+/** A round changed after it was sent (its player's name): it goes up again with the next upload. */
+export async function sendAgain(id: string): Promise<void> {
+  const ids = await loadUploaded();
+  if (ids.delete(id)) await saveUploaded(ids);
+}
 
 export const loadRoundInProgress = <T>() => read<T>('round-in-progress');
 export const saveRoundInProgress = (snap: unknown) => write('round-in-progress', snap);

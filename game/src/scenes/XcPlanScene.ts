@@ -54,6 +54,11 @@ export class XcPlanScene extends Phaser.Scene {
     if (!r?.cfg.xc || !app.course || !r.needsLeg) { this.scene.start('title'); return; }
     musicFor('round');
     uiCamera(this.cameras.main);
+    // a window resized or a phone turned: laid out again (the map and the buttons kept their old places,
+    // "play this leg" off the screen going from portrait to landscape)
+    const onResize = () => { if (this.sys.isActive()) this.scene.restart(); };
+    this.scale.on('resize', onResize);
+    this.events.once('shutdown', () => this.scale.off('resize', onResize));
     this.cameras.main.setBackgroundColor('#14202a');
     this.tee = null;
     this.green = null;
