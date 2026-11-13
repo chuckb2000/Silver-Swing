@@ -1,0 +1,20 @@
+{
+ "id": "sfgc",
+ "state": "CA",
+ "epsg": 32610,
+ "wgs84": {
+  "south": 37.697896,
+  "west": -122.496111,
+  "north": 37.725095,
+  "east": -122.461875
+ },
+ "utm": {
+  "x0": 544421,
+  "y0": 4172433,
+  "x1": 547422,
+  "y1": 4175434,
+  "w": 3001,
+  "h": 3001
+ },
+ "note": "download box = estimated course extent + margin; the course chat sets the world from the OSM boundary"
+}

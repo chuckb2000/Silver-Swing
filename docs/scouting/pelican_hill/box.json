@@ -1,0 +1,20 @@
+{
+ "id": "pelican_hill",
+ "state": "CA",
+ "epsg": 32611,
+ "wgs84": {
+  "south": 33.570827,
+  "west": -117.866712,
+  "north": 33.607169,
+  "east": -117.82329
+ },
+ "utm": {
+  "x0": 419593,
+  "y0": 3714908,
+  "x1": 423590,
+  "y1": 3718905,
+  "w": 3997,
+  "h": 3997
+ },
+ "note": "download box = estimated course extent + margin; the course chat sets the world from the OSM boundary"
+}

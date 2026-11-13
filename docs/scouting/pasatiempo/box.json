@@ -1,0 +1,20 @@
+{
+ "id": "pasatiempo",
+ "state": "CA",
+ "epsg": 32610,
+ "wgs84": {
+  "south": 36.987605,
+  "west": -122.046435,
+  "north": 37.020393,
+  "east": -122.005553
+ },
+ "utm": {
+  "x0": 584859,
+  "y0": 4093959,
+  "x1": 588460,
+  "y1": 4097560,
+  "w": 3601,
+  "h": 3601
+ },
+ "note": "download box = estimated course extent + margin; the course chat sets the world from the OSM boundary"
+}

@@ -1,0 +1,60 @@
+{
+  "id": "fishers_island",
+  "name": "Fishers Island Club",
+  "short_name": "Fishers Island",
+  "town": "Fishers Island (Town of Southold)",
+  "county": "Suffolk",
+  "state": "NY",
+  "lat": 41.2800,
+  "lon": -71.9475,
+  "centre_source": "Wikipedia (41°16′48″N 71°56′51″W); Planet Golf 41.2799343, -71.9487709; OpenGolfAPI 41.2800152, -71.9478755 (probably the clubhouse; the course runs east of it)",
+  "epsg": 32619,
+  "holes": 18,
+  "par": 72,
+  "architects": ["Seth Raynor (1925-26)", "Charles Banks (completed 1926)"],
+  "opened": 1926,
+  "renovations": [
+    "2nd green lost in the 1938 hurricane, rebuilt",
+    "back tees added (a few hundred yards)",
+    "bunkers and green edges restored to original contours; Gil Hanse consulting (dates not found)",
+    "8th converted to a par 4 in the early 2000s (The Fried Egg; card listings still show par 5)",
+    "18th played as a par 5 at members' wish (Raynor's was a 433-yd par 4)"
+  ],
+  "access": "private",
+  "notable": ["Top100golfcourses world 20th, USA 10th", "Today's Golfer world top 21-30", "salt water in view from every tee and green", "no irrigation"],
+  "video_games": "none found",
+  "tees": [
+    {"name": "Blue", "yards": 6544, "rating": 71.8, "slope": 143, "par": 72, "gender": "M"},
+    {"name": "White", "yards": 6138, "rating": 0, "slope": 0, "par": 72, "gender": "M"},
+    {"name": "Gold", "yards": 5411, "rating": 0, "slope": 0, "par": 72, "gender": "M"},
+    {"name": "Red/Gold", "yards": 5306, "rating": 0, "slope": 0, "par": 72, "gender": "M"},
+    {"name": "Green", "yards": 4015, "rating": 0, "slope": 0, "par": 72, "gender": "M"},
+    {"name": "back (The Fried Egg list, tee name unknown)", "yards": 6636, "rating": 0, "slope": 0, "par": 70, "gender": "M"}
+  ],
+  "tees_note": "only Blue has a rating online (OpenGolfAPI); Wikipedia: 6,616 yd, rating 72.0, no slope; 0 = not found",
+  "default_tee": "Blue",
+  "theme": "coastal",
+  "new_theme_needed": false,
+  "wind_mph": [3, 14],
+  "special_ground": ["fescue rough (rough_band_m ~2-3)", "beaches and rocky shore inside the boundary: surface 16 ob_sand", "no irrigation: firm turf (gameplay only)"],
+  "water": "Long Island Sound / harbours on 1, 4, 5, 7 (salt marsh), 8 (Sound right, pond left), 9; ponds and marsh on 13, 14, 15, 16, 18 (reedy inlet); all red by default",
+  "layouts": [],
+  "box_m": [5901, 5601],
+  "lidar": {
+    "bare_earth": "NYS DEM_2024_Long_Island (1 m; extent reaches 41.31 N / 71.85 W, i.e. Fishers Island), requested in EPSG:26919; 3DEP fallback, 1 m tile probably USGS_1M_18_x75y458_<project> (project not confirmed)",
+    "canopy": "NYS Long Island 2024 LAS tiles (zone 18; reproject), class 1 = vegetation and structures; fallbacks NOAA DAV 10273 (2023 topobathy) and 4938 (2014)",
+    "flight_year": 2024,
+    "noaa_dav_id": 10273
+  },
+  "imagery": "NYS orthoimagery wms/Latest (orthos-np.its.ny.gov), 0.5 m JPEG in EPSG:26919; NAIP 1 m fallback",
+  "osm_coverage": "unknown",
+  "scorecard_status": "partial third-party: unlabeled per-hole row (6,503, taken as Blue 6,544) with par 72 and stroke index (OpenGolfAPI); back-tee list 6,636 par 70 with hole names (The Fried Egg); printed card wanted",
+  "open_questions": [
+    "par 72 or 70 (rec: 72)",
+    "Blue per-hole yardages unverified (rec: build from the OpenGolfAPI row, flag; card photo)",
+    "theme coastal instead of bayside (rec: coastal)",
+    "wind 3-14 open coast (rec: yes)",
+    "logo: sparkplug lighthouse (Latimer Reef, hole 7) (rec: yes)",
+    "if NYS 2024 lidar misses the island: NOAA DAV 10273, then 4938 (rec: yes)"
+  ]
+}

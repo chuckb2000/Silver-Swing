@@ -1,0 +1,20 @@
+{
+ "id": "fishers_island",
+ "state": "NY",
+ "epsg": 32619,
+ "wgs84": {
+  "south": 41.258901,
+  "west": -71.966336,
+  "north": 41.311081,
+  "east": -71.893702
+ },
+ "utm": {
+  "x0": 251682,
+  "y0": 4571736,
+  "x1": 257583,
+  "y1": 4577337,
+  "w": 5901,
+  "h": 5601
+ },
+ "note": "download box = estimated course extent + margin; the course chat sets the world from the OSM boundary"
+}

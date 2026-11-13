@@ -1,0 +1,59 @@
+{
+  "id": "shinnecock",
+  "name": "Shinnecock Hills Golf Club",
+  "short_name": "Shinnecock Hills",
+  "town": "Southampton",
+  "county": "Suffolk",
+  "state": "NY",
+  "lat": 40.894,
+  "lon": -72.440,
+  "centre_source": "Wikipedia (40°53′38″N 72°26′24″W); OpenGolfAPI map point 40.8942294785, -72.4388368376",
+  "epsg": 32618,
+  "holes": 18,
+  "par": 70,
+  "architects": ["William Flynn (Toomey & Flynn, 1931; built by Dick Wilson)", "Willie Davis (1891)", "Willie Dunn Jr. (1894-95)", "C. B. Macdonald and Seth Raynor (1916)"],
+  "opened": 1891,
+  "renovations": [
+    "Toomey & Flynn new course 1928-31 after Route 27 cut the old one (7th Redan of 1916 kept)",
+    "Coore & Crenshaw restoration 2012 (Golf Club Atlas; Wikipedia infobox 2013): trees removed, fairways widened, fescue rough restored, some greens enlarged",
+    "lengthened to 7,440 yd for the 2018 US Open",
+    "2026 US Open: fairway mowing lines moved out toward the bunkers; same length"
+  ],
+  "access": "private",
+  "notable": ["US Open 1896, 1986, 1995, 2004, 2018, 2026 (Wyndham Clark, 276, -4)", "US Amateur 1896", "US Women's Amateur 1900", "US Senior Amateur 1967", "Walker Cup 1977", "US Open and US Women's Open 2036", "USGA founding club; 1892 McKim, Mead & White clubhouse", "Top100golfcourses world 3rd-4th"],
+  "video_games": "PGA Tour 2K25 (licensed, Season 6 patch 15 April 2026, 126th US Open course, free; MyCAREER event course). Fan-made Links 2003 add-on 'Shinnecock Hills HD Tournament Edition' (Robert Miller, 2011). Not in EA Sports PGA Tour.",
+  "tees": [
+    {"name": "Red", "yards": 6940, "rating": 74.4, "slope": 140, "par": 70, "gender": "M"},
+    {"name": "Green", "yards": 6530, "rating": 72.3, "slope": 134, "par": 70, "gender": "M"},
+    {"name": "Blue", "yards": 6141, "rating": 70.3, "slope": 129, "par": 70, "gender": "M"},
+    {"name": "Blue", "yards": 6122, "rating": 76.3, "slope": 140, "par": 70, "gender": "F"},
+    {"name": "White", "yards": 5394, "rating": 67.1, "slope": 125, "par": 70, "gender": "M"},
+    {"name": "White", "yards": 5396, "rating": 72.5, "slope": 131, "par": 70, "gender": "F"}
+  ],
+  "tees_note": "Men's Red/Green/Blue from GolfPass/GolfNow (Green per-hole total prints 6,430); women's Blue and men's White from Stymie (a different card version: Blue 6,122, White 5,394); GolfPass's White 72.5/131 matches Stymie's women's White",
+  "default_tee": "Blue",
+  "theme": "coastal",
+  "new_theme_needed": false,
+  "wind_mph": [2, 12],
+  "special_ground": ["about 100 acres of native rough: fescues and little bluestem (rough_band_m ~2-3, fescue beyond)", "sandy blowouts outside the bunkers: surface 18 waste", "150+ bunkers"],
+  "water": "almost none: the 6th ('Pond') has a pond to check in OSM/ortho; red by default",
+  "layouts": [],
+  "shared_box_with": "ngla",
+  "neighbours_in_box": ["National Golf Links of America", "Southampton Golf Club", "Sebonack Golf Club"],
+  "box_m": [4601, 5401],
+  "lidar": {
+    "bare_earth": "NYS DEM_2024_Long_Island (1 m; shared download in docs/scouting/ngla/DATA_REQUEST.md); 3DEP fallback, project name not confirmed (tiles x71y453, x71y454)",
+    "canopy": "NYS Long Island 2024 LAS tiles (shared), class 1 = vegetation and structures; fallback NOAA DAV 4938",
+    "flight_year": 2024,
+    "noaa_dav_id": 4938
+  },
+  "imagery": "NYS orthoimagery wms/Latest, 0.5 m (shared); NAIP fallback",
+  "osm_coverage": "unknown",
+  "scorecard_status": "third-party per-hole card (GolfPass: 4 tees, pars, men's and women's stroke index); conflicting Stymie version; US Open 2018 and 2026 yardages; no official card online",
+  "open_questions": [
+    "theme coastal instead of bayside (rec: coastal)",
+    "GolfPass vs Stymie card (rec: GolfPass, Blue 6,141; printed card if possible)",
+    "build NGLA or Shinnecock first (rec: either; the second reuses the first's clips)",
+    "logo: fescue and little bluestem tuft (rec: yes)"
+  ]
+}

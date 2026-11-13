@@ -1,0 +1,80 @@
+{
+  "id": "newport",
+  "name": "Newport Country Club",
+  "short_name": "Newport",
+  "town": "Newport",
+  "county": "Newport",
+  "state": "RI",
+  "address": "280 Harrison Avenue, Newport, RI 02840",
+  "lat": 41.4622,
+  "lon": -71.348,
+  "centre_source": "Wikipedia 41.462, -71.347 and OSM's course point 41.46219, -71.34694 (via courses.opengolfapi.org); box centre nudged ~90 m west; box 3.4 x 3.0 km",
+  "epsg": 32619,
+  "holes": 18,
+  "par": 72,
+  "par_note": "card par 72 (36-36, GolfPass); championship par 70 (holes 1 and 12 as par 4s; 2024 U.S. Senior Open, nines reversed)",
+  "architects": ["William F. Davis (nine holes 1894; 18 holes 1897 or 1899)", "A. W. Tillinghast (1921 plan, remodel and seven new holes west of Harrison Avenue, work dated 1923 by the USGA)", "Ron Forse (restoration from 1995; USGA dates it 2005)"],
+  "opened": 1894,
+  "founded": 1893,
+  "renovations": [
+    "1921-1923 Tillinghast re-routing and remodel",
+    "Ron Forse restoration of Tillinghast greens and bunkers, from 1995 (2005 per USGA)",
+    "500+ yd of tees added over about two decades before 2024 (USGA)",
+    "green restoration under superintendent Charles Coen (from 2015); 5 miles of drainage pipe",
+    "no construction since 2020 found (USGA setup changes only for 2024)"
+  ],
+  "access": "private",
+  "notable": [
+    "one of the five founding clubs of the USGA (1894); Theodore Havemeyer the USGA's first president",
+    "first U.S. Amateur (Charles Blair Macdonald) and first U.S. Open (Horace Rawlins), October 1895",
+    "1995 U.S. Amateur (Tiger Woods)",
+    "2006 U.S. Women's Open (Annika Sorenstam, 18-hole playoff)",
+    "2020 U.S. Senior Open postponed (COVID-19); 2024 U.S. Senior Open (Richard Bland, playoff over Hiroyuki Fujita), 7,024 yd par 70, nines reversed",
+    "Golf Digest: America's Second 100 Greatest #145 (2025-26), #1 in Rhode Island"
+  ],
+  "video_games": "No licensed appearance found. A fan recreation, 'Newport CC LIDAR' by Laboroflove, for The Golf Club 2019 (golfsimulatorforum.com, 2022-11-14).",
+  "tees": [
+    {"name": "Black", "yards": 7109, "rating": 75.5, "slope": 135, "par": 72, "gender": "M", "note": "tee table: 7,083, par 70"},
+    {"name": "Black", "yards": 7109, "rating": 76.8, "slope": 137, "par": 72, "gender": "F"},
+    {"name": "Black/Red", "yards": 6761, "rating": 73.6, "slope": 131, "par": 72, "gender": "M"},
+    {"name": "Red", "yards": 6577, "rating": 72.5, "slope": 128, "par": 72, "gender": "M"},
+    {"name": "Red", "yards": 6577, "rating": 78.9, "slope": 139, "par": 72, "gender": "F"},
+    {"name": "Red/White", "yards": 6307, "rating": 71.2, "slope": 124, "par": 72, "gender": "M"},
+    {"name": "White", "yards": 6204, "rating": 70.7, "slope": 122, "par": 72, "gender": "M"},
+    {"name": "White", "yards": 6204, "rating": 76.8, "slope": 135, "par": 72, "gender": "F"},
+    {"name": "White/Blue", "yards": 5924, "rating": 69.9, "slope": 118, "par": 72, "gender": "M", "note": "four holes longer than White: don't build"},
+    {"name": "Blue", "yards": 5506, "rating": 67.4, "slope": 118, "par": 72, "gender": "M"},
+    {"name": "Blue", "yards": 5506, "rating": 73.1, "slope": 127, "par": 72, "gender": "F"}
+  ],
+  "default_tee": "White (recommended, 6,204 yd, 70.7/122): Blue, the 4.1 default by name, is the forward set here (5,506); White is the single set closest to 6,300 (as at TPC Boston). Developer to confirm.",
+  "theme": "coastal (Highland Links) as the starting point, or a new `newport` theme: tawny unirrigated fairways, olive-gold native fescue, coarse sand, grey-blue sea, few trees, low shrub thickets",
+  "new_theme_needed": false,
+  "wind_mph": [3, 14],
+  "special_ground": [
+    "native fescue / native-grass rough beside the mown rough (rough_band_m as at Highland Links), e.g. left of 2, right of 3, left of 17, both sides of 9",
+    "shrub thickets (one reviewer calls them gorse) right of 2 and both sides of 7 and 8; not the penal gorse surface unless the developer wants it",
+    "no waste sand known"
+  ],
+  "water": "Rhode Island Sound / Atlantic beyond Ocean Drive (left of 4; ocean close to 3); a creek down the left of 12; a hazard down the left of 16 and a wet burn at its green; a hidden water hazard left of 17 (hole name 'Pond'); all red (standing default)",
+  "out_of_bounds": "the OSM course boundary; reviews: left of 2, left of 3, left of 11, right of 16 (a brick wall); Harrison Avenue splits the course (holes 2-8 west of it)",
+  "roads": "Harrison Avenue crosses the course (between 1 and 2, and between 8 and 9); Ocean Drive along the shore; 10 plays over two clubhouse drives",
+  "hole_names": ["The First", "The Cop", "Ocean", "Graves Point", "Polo Shed", "Lookout", "Long Meadow", "Willows", "Orchard", "Quarry", "Harbour", "Valley", "Club", "Plateau", "Brenton Reef", "Island", "Pond", "Home"],
+  "layouts": [],
+  "lidar": {
+    "bare_earth": "USGS 3DEP 1 m, 2022 USGS Lidar: RI Statewide (RI_Statewide_D22), tile x30y460 (name not checked)",
+    "canopy": "NOAA Data Access Viewer point cloud, dataset 9981 (same survey), all classes (no vegetation class; trees from class 1 with OSM buildings removed, as at Triggs)",
+    "flight_year": 2022,
+    "noaa_dav_id": 9981
+  },
+  "imagery": "USDA NAIP via the USGS National Map (newest year the service holds)",
+  "osm_coverage": "the course is in OSM (opengolfapi credits its course point to OSM); holes, greens and tees unknown until the export",
+  "scorecard_status": "complete third-party per-hole card (GolfPass: 7 sets, par, men's and women's stroke index, ratings); conflicts with Wikipedia's undated card; club card not online",
+  "open_questions": [
+    "Default tee: White (6,204) instead of the forward Blue (5,506)? Recommendation: White",
+    "Scorecard: GolfPass and Wikipedia disagree hole by hole; recommendation: build on GolfPass, swap in the printed card if a photo turns up",
+    "Par: card 72 or championship 70? Recommendation: card 72",
+    "Theme: coastal or a new newport theme? Recommendation: new newport theme from coastal (tawny fairways)",
+    "Shrub thickets: rough/shrubs, not the penal gorse surface? Recommendation: not gorse",
+    "Logo: hickory club and gutty ball over waves (1895)"
+  ]
+}

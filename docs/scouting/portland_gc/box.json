@@ -1,0 +1,20 @@
+{
+ "id": "portland_gc",
+ "state": "OR",
+ "epsg": 32610,
+ "wgs84": {
+  "south": 45.461656,
+  "west": -122.78025,
+  "north": 45.488748,
+  "east": -122.741741
+ },
+ "utm": {
+  "x0": 517180,
+  "y0": 5034269,
+  "x1": 520181,
+  "y1": 5037270,
+  "w": 3001,
+  "h": 3001
+ },
+ "note": "download box = estimated course extent + margin; the course chat sets the world from the OSM boundary"
+}

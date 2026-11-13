@@ -1,0 +1,20 @@
+{
+ "id": "sahalee",
+ "state": "WA",
+ "epsg": 32610,
+ "wgs84": {
+  "south": 47.614978,
+  "west": -122.082902,
+  "north": 47.655009,
+  "east": -122.029068
+ },
+ "utm": {
+  "x0": 568918,
+  "y0": 5273964,
+  "x1": 572909,
+  "y1": 5278365,
+  "w": 3991,
+  "h": 4401
+ },
+ "note": "download box = estimated course extent + margin; the course chat sets the world from the OSM boundary"
+}

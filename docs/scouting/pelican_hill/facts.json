@@ -1,0 +1,81 @@
+{
+  "id": "pelican_hill",
+  "name": "Pelican Hill Golf Club (The Resort at Pelican Hill)",
+  "short_name": "Pelican Hill",
+  "town": "Newport Coast (Newport Beach)",
+  "county": "Orange",
+  "state": "CA",
+  "lat": 33.5849,
+  "lon": -117.8419,
+  "centre_source": "golf club point 33.5849264, -117.8418673 from OpenGolfAPI (course data from OpenStreetMap) and 33.585278, -117.841644 from Wander Golf; golf club 22800 Pelican Hill Rd S, resort 22701 Pelican Hill Rd S (geocoded 33.593782, -117.852537 by where2golf). The download box is centred between them at 33.5890, -117.8450, 4.0 x 4.0 km; no course map with coordinates was read, so DATA_REQUEST step 1 checks it",
+  "epsg": 32611,
+  "holes": 36,
+  "par": null,
+  "architects": ["Tom Fazio"],
+  "opened": 1991,
+  "renovations": [
+    "Ocean North opened 1993 (SCGA FORE)",
+    "Fazio 're-perfection' of both courses: closed 23 months 2005-2007, reopened November 2007 (hybrid Bermuda fairways and tees, rough to fescue/rye, bunkers changed or added, new irrigation, new driving range; SCGA FORE)",
+    "Brian Curley restoration 2025-2026: bunkers rebuilt and realigned, tees enlarged, green surrounds, Poa greens back to original shapes, trees replanted, vegetation cleared for ocean views, ~1 mile of cart paths; routing unchanged. Ocean South reopened mid-May 2026 (holes 4-12 reworked; fescued sand area on 7, sandy scrub to the tee on 11); Ocean North holes 1-3 and 13-18 closed, reopening November 2026 (SCGA FORE; FirstCallGolf 2026-10-02)"
+  ],
+  "access": "resort, open to the public",
+  "notable": [
+    "Golf Digest Best in State: Ocean South and Ocean North",
+    "Top 100 Golf Courses: Ocean North 43rd, Ocean South 45th in California"
+  ],
+  "video_games": "Links 2003 (Microsoft): 'Pelican Hill Golf Club (2003)', a real-course recreation listed on Links Corner (file Pelic2k3.crz, 2002); which course isn't stated, and it predates the 2005-07 rework",
+  "tees": [
+    {"course": "Ocean South", "name": "Black", "yards": 6580, "rating": 72.0, "slope": 133, "par": 70, "gender": "M"},
+    {"course": "Ocean South", "name": "Blue", "yards": 6323, "rating": 70.6, "slope": 130, "par": 70, "gender": "M"},
+    {"course": "Ocean South", "name": "White", "yards": 5929, "rating": 69.0, "slope": 125, "par": 70, "gender": "M"},
+    {"course": "Ocean South", "name": "White", "yards": 5929, "rating": 75.2, "slope": 138, "par": 74, "gender": "F"},
+    {"course": "Ocean South", "name": "Red", "yards": 5393, "rating": 66.6, "slope": 118, "par": 68, "gender": "M"},
+    {"course": "Ocean South", "name": "Red", "yards": 5393, "rating": 72.4, "slope": 132, "par": 71, "gender": "F"},
+    {"course": "Ocean South", "name": "Yellow", "yards": 4723, "rating": 63.6, "slope": 109, "par": 66, "gender": "M"},
+    {"course": "Ocean South", "name": "Yellow", "yards": 4723, "rating": 68.0, "slope": 119, "par": 70, "gender": "F"},
+    {"course": "Ocean North", "name": "Black", "yards": 6945, "rating": 73.5, "slope": 137, "par": 71, "gender": "M"},
+    {"course": "Ocean North", "name": "Blue", "yards": 6563, "rating": 71.6, "slope": 132, "par": 71, "gender": "M"},
+    {"course": "Ocean North", "name": "Blue", "yards": 6563, "rating": 78.5, "slope": 145, "par": 71, "gender": "F"},
+    {"course": "Ocean North", "name": "White", "yards": 6270, "rating": 70.1, "slope": 128, "par": 71, "gender": "M"},
+    {"course": "Ocean North", "name": "White", "yards": 6270, "rating": 76.6, "slope": 142, "par": 73, "gender": "F"},
+    {"course": "Ocean North", "name": "Red", "yards": 5810, "rating": 68.1, "slope": 122, "par": 70, "gender": "M"},
+    {"course": "Ocean North", "name": "Red", "yards": 5810, "rating": 74.0, "slope": 136, "par": 72, "gender": "F"},
+    {"course": "Ocean North", "name": "Yellow", "yards": 4951, "rating": 64.1, "slope": 111, "par": 68, "gender": "M"},
+    {"course": "Ocean North", "name": "Yellow", "yards": 4951, "rating": 69.3, "slope": 124, "par": 70, "gender": "F"}
+  ],
+  "tees_note": "yards from GolfPass (= the resort's Black yardages); ratings/slopes GolfPass and SCGA agree; tee pars from SCGA (GolfPass prints 70/71 for every tee); SCGA yardages differ slightly (scorecard_sources.md)",
+  "default_tee": "Blue (Ocean South 6,323 yd, 70.6/130; Ocean North 6,563 yd, 71.6/132)",
+  "theme": "socal (shared palette notes with Strawberry Farms) or a course theme pelican_hill",
+  "new_theme_needed": true,
+  "wind_mph": [3, 12],
+  "special_ground": [
+    "coastal sage scrub in canyons and on slopes (California gnatcatcher habitat: the original permit required 13.7 acres); canyon carries on South 18 (twice) and North 6, 17, 18; canyon right of North 5's green; barranca right on North 3; scrub on South 15, 18 and North 7, 9, 17, 18. Local rules (penalty area / ESA) not found",
+    "fescued sand area on South 7 and sandy scrub to the tee on South 11 (2026, after the data): waste ground",
+    "ice plant: not confirmed by any source read",
+    "South 13 has two greens (left and right)"
+  ],
+  "water": "a pond or stream on South 7 (right side) and North 17 (right side); a 'hazard' on South 5's aggressive line (type unknown). The Pacific lies beyond Pacific Coast Highway and Crystal Cove State Park, probably outside the boundary",
+  "layouts": [
+    {"id": "pelican_hill_south", "name": "Pelican Hill - Ocean South", "short": "Ocean South", "scorecard": "scorecard_ocean_south.csv", "status": "build first; card from GolfPass"},
+    {"id": "pelican_hill_north", "name": "Pelican Hill - Ocean North", "short": "Ocean North", "scorecard": "scorecard_ocean_north.csv", "status": "same pass if OSM maps its holes, else later; card from GolfPass"}
+  ],
+  "lidar": {
+    "bare_earth": "USGS 3DEP 1 m best available via the 3DEPElevation ImageServer (one file); 1 m DEM project not named (tiles x41y372, x42y372); Orange County's own DEM is the 2011 USGS lidar",
+    "canopy": "NOAA DAV clipped LAZ, '2011 USGS Lidar: Orange County (CA)' (classes 1 and 2), or a newer USGS dataset if the DAV lists one covering the box",
+    "flight_year": 2011,
+    "noaa_dav_id": 4793
+  },
+  "imagery": "USDA NAIP via the USGS National Map, 1 m (year shows on download)",
+  "osm_coverage": "at least a golf-course feature (OpenGolfAPI shows one OSM-derived point for both courses); holes and greens unknown until the Overpass export",
+  "scorecard_status": "complete third-party for both courses: GolfPass per hole, five tees (Black, Blue, White, Red, Yellow), totals check; Black matches the resort's own hole pages; ratings/slopes agree with SCGA; SCGA's yardages differ by 0.3-1.5 %; the resort's June 2022 PDFs not read",
+  "open_questions": [
+    "box: confirm with the Overpass map (DATA_REQUEST 1) before the big downloads; no course map with coordinates was read",
+    "build both layouts in one pass (Ocean South first) if OSM maps both courses' holes?",
+    "sage-scrub canyons: red penalty areas (likely ESAs, gnatcatcher habitat) or general area?",
+    "South 13's two greens: which is the hole's green?",
+    "2026 renovations after every dataset (bunkers, tees, cleared vegetation, South 7 fescued sand, South 11 scrub)",
+    "OSM may have one golf-course polygon for both courses: separate the holes with layout=<id> tags",
+    "ice plant: rough or gorse lie, if the imagery shows it",
+    "theme: socal shared with Strawberry Farms, or pelican_hill"
+  ]
+}

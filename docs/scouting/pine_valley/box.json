@@ -1,0 +1,20 @@
+{
+ "id": "pine_valley",
+ "state": "NJ",
+ "epsg": 32618,
+ "wgs84": {
+  "south": 39.767276,
+  "west": -74.992855,
+  "north": 39.803319,
+  "east": -74.946136
+ },
+ "utm": {
+  "x0": 500612,
+  "y0": 4401929,
+  "x1": 504611,
+  "y1": 4405928,
+  "w": 3999,
+  "h": 3999
+ },
+ "note": "download box = estimated course extent + margin; the course chat sets the world from the OSM boundary"
+}

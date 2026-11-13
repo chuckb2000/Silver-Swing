@@ -1,0 +1,20 @@
+{
+ "id": "strawberry_farms",
+ "state": "CA",
+ "epsg": 32611,
+ "wgs84": {
+  "south": 33.631424,
+  "west": -117.818134,
+  "north": 33.667767,
+  "east": -117.774678
+ },
+ "utm": {
+  "x0": 424153,
+  "y0": 3721590,
+  "x1": 428152,
+  "y1": 3725589,
+  "w": 3999,
+  "h": 3999
+ },
+ "note": "download box = estimated course extent + margin; the course chat sets the world from the OSM boundary"
+}

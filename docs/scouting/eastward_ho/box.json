@@ -1,0 +1,20 @@
+{
+ "id": "eastward_ho",
+ "state": "MA",
+ "epsg": 32619,
+ "wgs84": {
+  "south": 41.701709,
+  "west": -70.003376,
+  "north": 41.732687,
+  "east": -69.962029
+ },
+ "utm": {
+  "x0": 416555,
+  "y0": 4617144,
+  "x1": 419956,
+  "y1": 4620545,
+  "w": 3401,
+  "h": 3401
+ },
+ "note": "download box = estimated course extent + margin; the course chat sets the world from the OSM boundary"
+}

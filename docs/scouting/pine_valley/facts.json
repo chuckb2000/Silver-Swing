@@ -1,0 +1,57 @@
+{
+  "id": "pine_valley",
+  "name": "Pine Valley Golf Club",
+  "short_name": "Pine Valley",
+  "town": "Pine Hill (formerly the borough of Pine Valley); address 1 E Atlantic Ave, Pine Valley, NJ 08021",
+  "county": "Camden",
+  "state": "NJ",
+  "lat": 39.7853,
+  "lon": -74.9695,
+  "centre_source": "centre of the course's OSM features as listed by OpenGolfAPI (39.7853315591, -74.96945858); Wikipedia's 39.789, -74.972 (39°47'20\"N 74°58'19\"W) lies about 450 m north-west, probably the clubhouse",
+  "epsg": 32618,
+  "holes": 18,
+  "par": 70,
+  "architects": ["George A. Crump", "H. S. Colt (routing advice, 1913)", "C. H. Alison, Hugh and Alan Wilson (holes 12-15, 1919, group led by Howard Street)", "Perry Maxwell (8th green false front, left 9th green)"],
+  "opened": 1922,
+  "renovations": [
+    "1914-1915: holes 1-11 and 16-18 opened in stages; 12-15 built 1919; finished course 1922",
+    "late 1920s: thousands of trees planted to hold the sand",
+    "later minor changes by John Arthur Brown, Ernie Ransome and Gordon Brewer, with Tom Fazio (dates not found)",
+    "1992: 10-hole Short Course by Tom Fazio and Ernie Ransome",
+    "early 2000s: middle and back tees on 14 (forum report); other new back tees over time (totals 6,699 -> 7,057 -> 7,181/7,197/7,201)",
+    "tree and underbrush removal on 2, 5, 9, 10, 14 (Golf Club Atlas profile, date not given)"
+  ],
+  "access": "private",
+  "notable": ["Walker Cup 1936, 1985", "Crump Cup annually since 1922", "2034 Curtis Cup (USGA, announced July 2023)", "No. 1 GOLF Top 100 in the World 2025-26", "No. 1 Golf Digest America's 100 Greatest 2017-2025", "Hell's Half Acre (7th): Guinness record largest bunker"],
+  "video_games": "no licensed appearance found; fan-made Links 2003 recreation by Robert Miller (Links Corner, 2010)",
+  "tees": [
+    {"name": "Back", "yards": 7057, "rating": 75.6, "slope": 155, "par": 70, "gender": "M"},
+    {"name": "Regular", "yards": 6532, "rating": 72.8, "slope": 153, "par": 70, "gender": "M"},
+    {"name": "Championship (no per-hole card; Wikipedia)", "yards": 7201, "rating": 76.6, "slope": 155, "par": 70, "gender": "M"}
+  ],
+  "default_tee": "Regular",
+  "theme": "bayside",
+  "new_theme_needed": false,
+  "wind_mph": [1, 9],
+  "special_ground": ["unraked sand played as bunkers (hazards) by the club: waste_sand off", "sandy scrub / underbrush between holes (option: gorse-style scrub layer)", "Hell's Half Acre across the 7th fairway", "dual greens on 8 and 9"],
+  "water": "one lake system: carry on the 5th tee shot (pond by Crump's cabin), lake left of the 14th green (near-island green), carry on the 15th tee shot, lake left on 16, lake behind the 17th tee; all red",
+  "layouts": ["main course (18)", "Short Course (10 holes, par 31; possible later layout, no per-hole card)"],
+  "lidar": {
+    "bare_earth": "USGS 3DEP 1 m via the 3DEPElevation ImageServer; source 2015 DVRPC Lidar: Delaware Valley (USGS DE_DelawareValley_HD_2015, project Delaware_Valley_High_Density_QL2_LiDAR_BAA; NOAA DEM id 10301); tile x50y441, 1 m project name not confirmed",
+    "canopy": "NOAA DAV point cloud 9119 (2015 DVRPC Lidar: Delaware Valley (PA, NJ)), clipped LAZ, UTM 18 NAD83(2011) m, NAVD88 m",
+    "flight_year": 2015,
+    "noaa_dav_id": 9119
+  },
+  "imagery": "NAIP (USGS National Map) at 1 m; New Jersey 2020 1 ft leaf-off natural colour (maps.nj.gov Orthos_Natural_2020_NJ_WM MapServer export, flown 2 Apr - 5 May 2020), recommended",
+  "osm_coverage": "partial at least: 18 golf=hole lines with par, stroke index and dist (seen via OpenGolfAPI); other features unknown until the export",
+  "scorecard_status": "third-party (Stymie), Back and Regular per hole with stroke index and men's ratings; no official card, no women's ratings; totals conflict across sources",
+  "open_questions": [
+    "Sand as bunkers everywhere (recommended) or waste general area off the fairways?",
+    "Tee: Regular 6,532 (default, recommended) or Back 7,057?",
+    "Scrub between holes: woods/rough (recommended first) or a penal scrub layer?",
+    "Holes 8 and 9 have two greens: use the one the OSM line ends on (recommended)?",
+    "Theme: bayside (recommended) or a pine_barrens variant with tan sand?",
+    "Short Course as a later second layout if a card turns up?",
+    "Logo: Pine Barrens treefrog on a ball (recommended)?"
+  ]
+}

@@ -1,0 +1,57 @@
+{
+  "id": "sand_hills",
+  "name": "Sand Hills Golf Club",
+  "short_name": "Sand Hills",
+  "town": "Mullen",
+  "county": "Hooker",
+  "state": "NE",
+  "lat": 41.8703,
+  "lon": -101.1006,
+  "centre_source": "UNCONFIRMED: Stymie's map point (41.870339, -101.100577) for its 'Sand Hills Golf Club, Hwy 97 Mile Marker 55, Mullen' page, whose scorecard is another course's. DATA_REQUEST step 0 checks it against OSM before any download.",
+  "epsg": 32614,
+  "holes": 18,
+  "par": 71,
+  "architects": ["Bill Coore", "Ben Crenshaw"],
+  "opened": 1995,
+  "renovations": [],
+  "access": "private",
+  "notable": [
+    "Routed through natural sand blowouts in grass-covered dunes on an 8,000-acre site where the architects found 130 possible holes (golfcoursegurus)",
+    "golfcoursegurus: 3rd in Nebraska, 39th in the US, 30th in North America (that site's own lists); the national magazine rankings were not checked"
+  ],
+  "video_games": "Not checked (scouting's web-search budget ran out). No official appearance known.",
+  "tees": [
+    {"name": "Diamond", "yards": 7089, "rating": 73.0, "slope": 130, "par": 71, "gender": "M"},
+    {"name": "Square", "yards": 6432, "rating": 70.0, "slope": 127, "par": 71, "gender": "M"},
+    {"name": "Circle", "yards": 5040, "rating": 69.0, "slope": 117, "par": 71, "gender": "M"},
+    {"name": "Circle", "yards": 5040, "rating": 71.3, "slope": 128, "par": 71, "gender": "F"}
+  ],
+  "tees_note": "GolfPass tee table. Its per-hole rows (labelled Black/White/Red) add to 7,073 / 6,434 / 5,052; hole 15 Diamond 453 there vs 469 in a review explains the Diamond gap.",
+  "default_tee": "Square",
+  "theme": "sandhills (new)",
+  "new_theme_needed": true,
+  "wind_mph": [5, 15],
+  "wind_note": "proposed new 'plains' band: open grass-covered dunes with no shelter; a golf-season mean of about 10 mph (regional climatology from memory, unverified); calm rounds rare. Between open coast (3-14) and Bandon (8-16).",
+  "special_ground": ["natural blowout bunkers (golf=bunker: bunker)", "unmaintained blowout sand outside play, if OSM maps it as natural=sand: waste (surface 18, \"waste_sand\": true)", "native prairie-grass rough (rough)", "soapweed yucca clumps (theme bush)"],
+  "water": "none known on the course (no source mentions a pond or creek); confirm in OSM and the photo",
+  "layouts": [],
+  "lidar": {
+    "bare_earth": "USGS 3DEP via the 3DEPElevation ImageServer (tiles x32y464, x32y465, zone 14 if 1 m exists); project name, year and whether 1 m lidar covers the site not found during scouting",
+    "canopy": "not needed (almost treeless); OSM tree fallback; a NOAA DAV job only if the photo shows trees in play",
+    "flight_year": null,
+    "noaa_dav_id": null
+  },
+  "imagery": "USDA NAIP via the USGS National Map (1 m JPEG, four pieces)",
+  "osm_coverage": "unknown until the export",
+  "scorecard_status": "third-party per-hole (GolfPass), three tee sets, men's handicap only; hole 15 Diamond conflict (453 vs 469); no official card online",
+  "open_questions": [
+    "Confirm the location (DATA_REQUEST step 0) before downloading",
+    "World size: the routing may need more than 2,048 m on a side (COURSE_BUILD 10)",
+    "Is 1 m lidar available here? If only 10 m, the blowouts' shapes are lost",
+    "Blowouts: bunkers, or waste for unmaintained sand outside play",
+    "New theme sandhills (tan sand, prairie grass, yucca) vs reusing puget",
+    "Wind band 5-15 mph (new plains band)",
+    "Hole 15 Diamond 453 vs 469; no women's indexes; no official card",
+    "Logo: soapweed yucca in bloom on a dune crest"
+  ]
+}
