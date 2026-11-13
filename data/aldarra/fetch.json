@@ -49,6 +49,41 @@
   {
    "name": "naip_info.json",
    "url": "https://imagery.nationalmap.gov/arcgis/rest/services/USGSNAIPImagery/ImageServer?f=pjson"
+  },
+  {
+   "name": "USGS_LPC_WA_KingCounty_2021_B21_King_2087.laz",
+   "url": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/WA_KingCounty_2021_B21/WA_KingCo_2_2021/LAZ/USGS_LPC_WA_KingCounty_2021_B21_King_2087.laz",
+   "note": "retry: timed out on the first run"
+  },
+  {
+   "name": "USGS_LPC_WA_KingCounty_2021_B21_King_2088.laz",
+   "url": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/WA_KingCounty_2021_B21/WA_KingCo_2_2021/LAZ/USGS_LPC_WA_KingCounty_2021_B21_King_2088.laz",
+   "note": "retry: timed out on the first run"
+  },
+  {
+   "name": "USGS_LPC_WA_KingCounty_2021_B21_King_2158.laz",
+   "url": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/WA_KingCounty_2021_B21/WA_KingCo_2_2021/LAZ/USGS_LPC_WA_KingCounty_2021_B21_King_2158.laz",
+   "note": "retry: timed out on the first run"
+  },
+  {
+   "name": "USGS_LPC_WA_KingCounty_2021_B21_King_2159.laz",
+   "url": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/WA_KingCounty_2021_B21/WA_KingCo_2_2021/LAZ/USGS_LPC_WA_KingCounty_2021_B21_King_2159.laz",
+   "note": "retry: timed out on the first run"
+  },
+  {
+   "name": "USGS_LPC_WA_KingCounty_2021_B21_King_2229.laz",
+   "url": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/WA_KingCounty_2021_B21/WA_KingCo_1_2021/LAZ/USGS_LPC_WA_KingCounty_2021_B21_King_2229.laz",
+   "note": "retry: timed out on the first run"
+  },
+  {
+   "name": "USGS_LPC_WA_KingCounty_2021_B21_King_2230.laz",
+   "url": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/WA_KingCounty_2021_B21/WA_KingCo_1_2021/LAZ/USGS_LPC_WA_KingCounty_2021_B21_King_2230.laz",
+   "note": "retry: timed out on the first run"
+  },
+  {
+   "name": "USGS_LPC_WA_KingCounty_2021_B21_King_2231.laz",
+   "url": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/WA_KingCounty_2021_B21/WA_KingCo_1_2021/LAZ/USGS_LPC_WA_KingCounty_2021_B21_King_2231.laz",
+   "note": "retry: timed out on the first run"
   }
  ]
 }
