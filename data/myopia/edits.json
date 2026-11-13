@@ -260,5 +260,27 @@
    "reason": "golf=path, copied as a cart path (proposed/paths.geojson)"
   }
  ],
- "tags": []
+ "tags": [
+  {
+   "osm": "w1074606907",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "standing default (COURSE_BUILD 4.1): all water is red; OSM has it as golf=water_hazard (yellow)"
+  },
+  {
+   "osm": "w1074606910",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "standing default (COURSE_BUILD 4.1): all water is red; OSM has it as golf=water_hazard (yellow)"
+  },
+  {
+   "osm": "w1208394988",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "standing default (COURSE_BUILD 4.1): all water is red; OSM has it as golf=water_hazard (yellow)"
+  }
+ ]
 }

@@ -10,6 +10,20 @@
     "units": "m",
     "source": "USGS 3DEP 1 m DEM (3DEPElevation exportImage, project MA_CentralEastern_2021_B21, 2021 USGS Lidar: Central Eastern Massachusetts, leaf-off spring 2021), x 346700-348600 / y 4718100-4720200 EPSG:32619, NAVD88 metres, clipped to the world + 100 m by pipeline/intake.py raster; fetched by the GitHub Actions workflow 2026-11-13 (release data-myopia)"
   },
+  "laz": {
+    "paths": [
+      "raw/laz/*.laz"
+    ],
+    "classes": [
+      3,
+      4,
+      5
+    ],
+    "units": "m",
+    "source": "USGS 3DEP lidar point cloud, project MA_CentralEastern_2021_B21 (leaf-off spring 2021), 4 tiles, classes 3-5 clipped to the world + 100 m by pipeline/intake.py laz (CRS kept); fetched by the GitHub Actions workflow 2026-11-13 (release data-myopia; three tiles on retry runs)",
+    "label": "2021 USGS lidar, leaf-off",
+    "leaf_off": true
+  },
   "tee_sets": [
     {
       "name": "Red",
