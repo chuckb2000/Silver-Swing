@@ -60,6 +60,38 @@
   {
    "name": "srsp_list_phase6_dsm_NO.xml",
    "url": "https://srsp-open-data.s3.eu-west-2.amazonaws.com/?list-type=2&prefix=lidar/phase-6/dsm/27700/gridded/NO"
+  },
+  {
+   "name": "NO41NE_50CM_DTM_PHASE5.tif",
+   "url": "https://srsp-open-data.s3.eu-west-2.amazonaws.com/lidar/phase-5/dtm/27700/gridded/NO41NE_50CM_DTM_PHASE5.tif"
+  },
+  {
+   "name": "NO41NE_50CM_DSM_PHASE5.tif",
+   "url": "https://srsp-open-data.s3.eu-west-2.amazonaws.com/lidar/phase-5/dsm/27700/gridded/NO41NE_50CM_DSM_PHASE5.tif"
+  },
+  {
+   "name": "NO51NW_50CM_DTM_PHASE5.tif",
+   "url": "https://srsp-open-data.s3.eu-west-2.amazonaws.com/lidar/phase-5/dtm/27700/gridded/NO51NW_50CM_DTM_PHASE5.tif"
+  },
+  {
+   "name": "NO51NW_50CM_DSM_PHASE5.tif",
+   "url": "https://srsp-open-data.s3.eu-west-2.amazonaws.com/lidar/phase-5/dsm/27700/gridded/NO51NW_50CM_DSM_PHASE5.tif"
+  },
+  {
+   "name": "srsp_list_national_lidar_programme.xml",
+   "url": "https://srsp-open-data.s3.eu-west-2.amazonaws.com/?list-type=2&delimiter=/&prefix=lidar/national-lidar-programme/"
+  },
+  {
+   "name": "srsp_list_coastal.xml",
+   "url": "https://srsp-open-data.s3.eu-west-2.amazonaws.com/?list-type=2&delimiter=/&prefix=lidar/coastal/"
+  },
+  {
+   "name": "srsp_list_hes.xml",
+   "url": "https://srsp-open-data.s3.eu-west-2.amazonaws.com/?list-type=2&delimiter=/&prefix=lidar/hes/"
+  },
+  {
+   "name": "srsp_phase5_meta_list.xml",
+   "url": "https://srsp-open-data.s3.eu-west-2.amazonaws.com/?list-type=2&prefix=lidar/phase-5/&delimiter=/"
   }
  ]
 }
