@@ -1,0 +1,39 @@
+{
+  "name": "Rose City (an old Portland muni under firs and street trees)",
+  "note": "Course theme palette (<= 32 colours), same keys as pnw.json. Rose City Golf Course, NE Portland (course chat, 2026-11-13). From the OSIP 2024 photo: the turf a deep, slightly blue emerald, darker than pnw's (winter-wet ryegrass fairways and poa greens); rough a cool moss green; bunker sand a pale warm grey-tan; the three ponds (holes 10, 11, 14/15) dark slate. Trees: deep blue-green Douglas fir, olive Oregon white oak, bright bigleaf maple and, for a third of the broadleaf trees, the wine-red purple-leaf plums and copper beeches of the streets round the course (trees_rose_city.py; a drawing choice, the lidar gives only crown shape). Shadows are a 35% black overlay on top of these.",
+  "colors": {
+    "G0": "#17321f",
+    "G1": "#1f472c",
+    "G2": "#285e34",
+    "G3": "#317238",
+    "G4": "#3b863e",
+    "G5": "#469a45",
+    "G6": "#52ab4c",
+    "G7": "#5fbb55",
+    "G8": "#6ec862",
+    "G9": "#94d982",
+    "L0": "#4b7140",
+    "L1": "#5a8447",
+    "L2": "#6b9752",
+    "S0": "#b8ab8c",
+    "S1": "#d8ceb4",
+    "S2": "#ece6d4",
+    "W0": "#2a4a68",
+    "W1": "#375d7e",
+    "W2": "#6188a8",
+    "K0": "#25262c",
+    "K1": "#52535b",
+    "K2": "#797a82",
+    "K3": "#b0a896",
+    "K4": "#d8d0be",
+    "B0": "#4a2c22",
+    "B1": "#723f30",
+    "B2": "#93533d",
+    "R0": "#4a5768",
+    "WH": "#f6f4f2"
+  },
+  "trees": {
+    "conifer": "trees_rose_city:conifer",
+    "deciduous": "trees_rose_city:deciduous"
+  }
+}
