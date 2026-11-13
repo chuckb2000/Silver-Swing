@@ -19,6 +19,14 @@ club (a laurel wreath round a golf ball) and the Lake (a wind-bent cypress over 
 Merced). All 18 holes pass after the virtual tees moved within their boxes: 7,178 yd built
 against 7,214.
 
+## Checks
+
+- `course_play.test.ts -t olympic_club`: 22 passed (the Lake and the Cliffs).
+- `npm test`: 1769 passed, 2 failed: `player.test.ts` "the real rotation" and `tour.test.ts` "a hole drawn sits out" fail until `make land` adds the courses to the daily rotation.
+- `npm run e2e`: 17 passed.
+- Both data folders pinned; a `--fresh` rebuild of each left git clean.
+- Every hole looked at in the game: all 18 Lake holes and all 9 Cliffs holes (tee view, overview, first shot, putting view).
+
 ## Facts
 
 -   **Location:** 599 Skyline Boulevard, San Francisco, California, between Lake Merced
