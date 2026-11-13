@@ -23,8 +23,8 @@
    }
   },
   {
-   "name": "northwood_naip_list.json",
-   "url": "https://tnmaccess.nationalmap.gov/api/v1/products?datasets=USDA%20National%20Agriculture%20Imagery%20Program%20(NAIP)&bbox=-122.999931,38.475132,-122.988328,38.481944&max=50&outputFormat=JSON"
+   "name": "northwood_naip_list2.json",
+   "url": "https://tnmaccess.nationalmap.gov/api/v1/products?datasets=Imagery%20-%201%20meter%20(NAIP)&bbox=-122.999931,38.475132,-122.988328,38.481944&max=50&outputFormat=JSON"
   },
   {
    "name": "USGS_LPC_CA_NorthernCA_B22_10SEH0058.laz",
