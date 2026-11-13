@@ -23,24 +23,20 @@
    }
   },
   {
-   "name": "northwood_naip_list2.json",
-   "url": "https://tnmaccess.nationalmap.gov/api/v1/products?datasets=Imagery%20-%201%20meter%20(NAIP)&bbox=-122.999931,38.475132,-122.988328,38.481944&max=50&outputFormat=JSON"
-  },
-  {
    "name": "USGS_LPC_CA_NorthernCA_B22_10SEH0058.laz",
-   "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/LPC/Projects/CA_NorthernCA_B22/CA_NorthernCA_1_B22/LAZ/USGS_LPC_CA_NorthernCA_B22_10SEH0058.laz"
+   "url": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/CA_NorthernCA_B22/CA_NorthernCA_1_B22/LAZ/USGS_LPC_CA_NorthernCA_B22_10SEH0058.laz"
   },
   {
    "name": "USGS_LPC_CA_NorthernCA_B22_10SEH0059.laz",
-   "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/LPC/Projects/CA_NorthernCA_B22/CA_NorthernCA_1_B22/LAZ/USGS_LPC_CA_NorthernCA_B22_10SEH0059.laz"
+   "url": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/CA_NorthernCA_B22/CA_NorthernCA_1_B22/LAZ/USGS_LPC_CA_NorthernCA_B22_10SEH0059.laz"
   },
   {
    "name": "USGS_LPC_CA_NorthernCA_B22_10SEH0158.laz",
-   "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/LPC/Projects/CA_NorthernCA_B22/CA_NorthernCA_1_B22/LAZ/USGS_LPC_CA_NorthernCA_B22_10SEH0158.laz"
+   "url": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/CA_NorthernCA_B22/CA_NorthernCA_1_B22/LAZ/USGS_LPC_CA_NorthernCA_B22_10SEH0158.laz"
   },
   {
    "name": "USGS_LPC_CA_NorthernCA_B22_10SEH0159.laz",
-   "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/LPC/Projects/CA_NorthernCA_B22/CA_NorthernCA_1_B22/LAZ/USGS_LPC_CA_NorthernCA_B22_10SEH0159.laz"
+   "url": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/CA_NorthernCA_B22/CA_NorthernCA_1_B22/LAZ/USGS_LPC_CA_NorthernCA_B22_10SEH0159.laz"
   }
  ]
 }
