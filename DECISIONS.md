@@ -1597,3 +1597,82 @@ and the outdoor ambience keeps playing in the menus after a round.
   withdrawn meanwhile put the player alone in a match they could later claim); a post past its
   time no longer shows on its owner's title; a 19-hole match is recorded; a match with a full
   log can still be conceded or claimed; a result that failed to send is sent again.
+
+## Langston 13's tier, flattened (developer, 2026-11-13)
+
+The step between the 13th green's tiers was 1.37 m (4.5 ft) over 5 m: about 41 % at its
+steepest, the steepest ground on any green but the dune greens at Bandon. The developer: "too
+steep and needs to be flattened out a bit". It is now 1.0 m (3.3 ft) over 8 m (config
+`green_tiers`: `drop_m` 1.0, `width_m` 8.0): about 19 % at its steepest, 12.5 % on average
+across the step. Langston was rebuilt with its pinned pipeline; only hole 13 changed (its
+green, the pin 0.8 m further onto the back tier, its putting views, its mini-map and one terrain
+chunk). A putt from 6 m short of the step to the centre pin (61 ft) gets up from about 70 %
+power; a weaker one rolls back down the step. Highland Links 9 stays as it is (developer).
+
+## Integral objects: roads and walls played as they lie (Old Course chat, 2026-11-13)
+
+The Old Course's local rules make the road and wall behind the 17th green integral parts of the
+course, and so is Grannie Clark's Wynd across the 1st and 18th (developer, 2026-11-13: integral,
+as with the road on 17); the Road Hole is the course's best-known hole. The game gave free relief from every cart path and
+building. Now course.json may list `integral` areas (course_config `"integral"`: OSM features,
+lines buffered into strips, and/or rings traced by hand; s10 clips them to the boundary). A ball
+that stops on a cart path or building inside one plays as it lies (`Round.integralAt`): no relief
+is offered, the lie reads "road" with the cart path's physics, and the unplayable-ball options
+stay. Relief from an ordinary path beside one may end on it (an integral object isn't an
+obstruction). A wall is mapped as a thin building, so the ball strikes it. No other course
+changes: the list is opt-in, and finished courses are pinned to the pipeline that built them.
+
+## Europe is one place on the course select (developer, 2026-11-13)
+
+With courses coming in Scotland and Norway, the developer: the state selector's button for them
+should be "europe". Every course whose `state` is `EU`, or a European country, or whose location
+ends with one, goes under one "europe" button, after the states and provinces
+(`registry.ts` `stateOf`, `EUROPE`). With it on offer the heading reads "choose where to play",
+and the title counts "64 courses in 12 states and europe" (1x on a screen too narrow for that at
+2x). A US postal code always wins ("DE" is Delaware). Course chats set `"state": "EU"`
+(docs/COURSE_BUILD.md 12).
+
+## Holiday themes (developer, 2026-11-13)
+
+The developer: "A thanksgiving theme for the week of thanksgiving, christmas theme for
+christmas ... Maybe for christmas there can be like ornaments in the trees". After the first
+mock-up: Thanksgiving from the Saturday before to the Sunday after, Christmas 12-31 December,
+no way for players to turn it off, the ball must show on snow, public-domain Christmas music
+made like the suite, twinkling lights and string lights. Nothing here changes how a ball flies
+or a round counts (`systems/game/holiday.ts` is pure and tested; the drawing is
+`ui/holidayArt.ts`).
+
+- **When:** Thanksgiving from the Saturday before the fourth Thursday of November to the Sunday
+  after (nine days), and 12-31 December (`CHRISTMAS_FROM`, `CHRISTMAS_TO`), by the player's local
+  date. No setting turns it off (developer). `?holiday=thanksgiving` or `?holiday=christmas`
+  shows one on any other day (previews, screenshots); there is no `?holiday=off`.
+- **Courses:** restyled when a course or a putting view loads, from the textures already there,
+  so no course is rebuilt and every course gets it. Thanksgiving turns the broadleaf trees
+  orange, red and gold (conifers stay green) and lays leaves on the rough under them;
+  Christmas puts snow on the treetops, baubles, strings of lights and a star on most conifers
+  in the trees, string lights along every roof (the clubhouse's and the houses' around the
+  course), and snow in dithered patches on the rough and woods (never on fairways, greens, tees,
+  sand, water or roofs). Hay, pumpkins and corn (Thanksgiving) or presents (Christmas) stand
+  beside the tee, only where there is open grass.
+- **Lights:** the trees' lights stay lit and steady: twinkling trees all over the course were
+  too distracting (developer). The roofs' string lights chase round in threes, about three times
+  a second (`HolidayFxScene` calls `twinkle()`: each roof picture redraws the few texels of its
+  lights and is sent to the GPU again); the title's string of lights twinkles.
+- **The ball on snow:** white on white couldn't be seen; on a snowy spot the ball at rest (and
+  the other player's, and a replay's) is drawn with a dark outline (`ball_snow`).
+- **Golfer and flag:** a pilgrim's hat or Santa's hat on the golfer and the portrait; an orange
+  flag or a candy-cane pin.
+- **Title:** "happy thanksgiving!" or "merry christmas!" under the course count (developer:
+  just that); a turkey in the corner, or Santa's hat on the trophy and a string of lights along
+  the top; leaves or snow falling over the menus and the course, drifting with the hole's wind
+  (`HolidayFxScene`, under the HUD).
+- **Music:** from 12 to 31 December six carols play instead of the suite (`music/christmas.json`,
+  `assets-src/music/carols.py`, `make carols`): Jingle Bells (Pierpont, 1857), Deck the Halls
+  (Welsh traditional), Silent Night (Gruber, 1818), We Wish You a Merry Christmas (English
+  traditional), Joy to the World (Mason's "Antioch", 1839) and Good King Wenceslas (Piae
+  Cantiones, 1582): every tune long out of copyright, arranged here and synthesized with the
+  suite's instruments plus sleigh bells; about 11 minutes. The offline copy keeps both sets.
+- **Notes on the hole-complete panel:** three birdies in a row is a "turkey" at Thanksgiving;
+  an 8 is a "snowman" at Christmas; each with its picture and a sound.
+- The original portrait had a dark line along its top (its outline wrapped round the image);
+  fixed while adding the hats.

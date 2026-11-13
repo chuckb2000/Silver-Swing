@@ -11,6 +11,7 @@ import { PX_PER_M } from '../app';
 import type { CourseRuntime, GreenLayerJson } from '../data/course';
 import type { Rect } from './cameraRig';
 import { DEPTH } from './courseView';
+import { dressGreenView } from './holidayArt';
 
 export type GreenLayer = 'far' | 'near' | 'close';
 export const GREEN_LAYERS: GreenLayer[] = ['far', 'near', 'close'];
@@ -75,7 +76,11 @@ export class GreenView {
         load.image(this.key(hole, l, 'art'), base + d.file);
         load.atlas(this.key(hole, l, 'trees'), base + d.treesImage, base + d.trees);
       }
-      load.once(Phaser.Loader.Events.COMPLETE, () => resolve(this.isReady(hole)));
+      load.once(Phaser.Loader.Events.COMPLETE, () => {
+        // a holiday's trees and ground in the putting views too (ui/holidayArt.ts)
+        for (const l of this.layers(hole)) dressGreenView(this.scene, this.course, this.key(hole, l, 'art'), this.key(hole, l, 'trees'), this.def(hole, l)!);
+        resolve(this.isReady(hole));
+      });
       load.start();
     });
     this.loading.set(hole, p);

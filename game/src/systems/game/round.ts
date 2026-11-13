@@ -323,7 +323,7 @@ export class Round {
     const canopy = this.course.obstacles.canopyOverhead(this.ball.x, this.ball.y);
     const edge = this.onHoleGreen() ? 0 : Math.min(...this.holeGreens.map((g) => g.edgeDistance(this.ball.x, this.ball.y)));
     const r = this.rng.fork(9000 + this.holeNumber * 100 + this.shotNo);
-    this.lie = makeLie({ surface: s, teedUp: this.ball.teedUp, distToGreenEdge: edge, canopyBase: canopy ? canopy.base : null }, r);
+    this.lie = makeLie({ surface: s, teedUp: this.ball.teedUp, distToGreenEdge: edge, canopyBase: canopy ? canopy.base : null, integral: this.integralAt(this.ball) }, r);
   }
 
   /** The lie costs something (rough, punch, gorse, bunkers...): the info panel shows it in yellow. */
@@ -650,12 +650,17 @@ export class Round {
       const o = this.open({ kind: 'wrong_green' });
       if (o.kind !== 'rest') return o;
     }
-    if (s === SURF.cartpath || s === SURF.building) {
+    if ((s === SURF.cartpath || s === SURF.building) && !this.integralAt(end)) {
       const o = this.open({ kind: 'cartpath' });
       if (o.kind !== 'rest') return o;
     }
     this.refreshLie();
     return { kind: 'rest' };
+  }
+
+  /** Inside an integral object (course.json integral): a road or wall played as it lies. */
+  integralAt(p: { x: number; y: number }): boolean {
+    return this.course.integral.some((a) => a.contains(p.x, p.y));
   }
 
   /** The water polygon (penalty area) at a point, if any. */
@@ -699,9 +704,10 @@ export class Round {
         return area ? { kind: 'wrong_green', area } : { kind: 'rest' };
       }
       case 'cartpath': {
+        // an integral object isn't an obstruction: relief from a path beside it may end on it
         const area = freeReliefArea(ctx, end, (x, y) => {
           const q = this.course.terrain.surface(x, y);
-          return q === SURF.cartpath || q === SURF.building;
+          return (q === SURF.cartpath || q === SURF.building) && !this.integralAt({ x, y });
         }, 'cart path: free relief');
         return area ? { kind: 'cartpath', area } : { kind: 'rest' };
       }

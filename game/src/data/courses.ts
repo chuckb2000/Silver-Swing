@@ -2,6 +2,7 @@
 // one course's files on demand. Only one course is in memory at a time:
 // switching unloads the previous course's textures and data first.
 
+import { dressCourse } from '../ui/holidayArt';
 import Phaser from 'phaser';
 import { app } from '../app';
 import { buildRuntime, CourseJson, CourseRuntime, decodeHeights, decodeSurface, HeightMeta } from './course';
@@ -249,6 +250,7 @@ export async function loadCourse(scene: Phaser.Scene, id: string, progress?: Loa
   const bad = surface.find((v) => !known.has(v));
   if (bad !== undefined) console.warn(`surface map has an unknown id ${bad}: the course data did not decode exactly`);
   app.course = buildRuntime(json, heights, hmeta, surface, trees, base);
+  dressCourse(scene, app.course); // a holiday's trees and ground (ui/holidayArt.ts); nothing on other days
   progress?.(1);
   return app.course;
 }
