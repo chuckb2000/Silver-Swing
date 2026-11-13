@@ -10,17 +10,12 @@
    ]
   },
   {
-   "name": "gamble_sands_dem1m",
-   "tnm": {
-    "dataset": "dem1m",
-    "bbox": [
-     -119.6652,
-     48.0537,
-     -119.6384,
-     48.0803
-    ],
-    "list": true
-   }
+   "name": "usgs_dem_m.tif",
+   "url": "https://elevation.nationalmap.gov/arcgis/rest/services/3DEPElevation/ImageServer/exportImage?bbox=301500,5325700,303400,5328600&bboxSR=32611&imageSR=32611&size=1900,2900&format=tiff&pixelType=F32&noData=-9999&interpolation=RSP_BilinearInterpolation&f=image"
+  },
+  {
+   "name": "usgs_dem_identify.json",
+   "url": "https://elevation.nationalmap.gov/arcgis/rest/services/3DEPElevation/ImageServer/identify?geometry=%7B%22x%22%3A302450%2C%22y%22%3A5327150%2C%22spatialReference%22%3A%7B%22wkid%22%3A32611%7D%7D&geometryType=esriGeometryPoint&returnCatalogItems=true&f=json"
   },
   {
    "name": "gamble_sands_lpc",
@@ -32,7 +27,7 @@
      -119.6384,
      48.0803
     ],
-    "list": true
+    "only": "WA_NorthCentral_2_2021"
    }
   },
   {
