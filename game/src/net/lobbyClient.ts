@@ -191,6 +191,7 @@ export class LobbyClient {
         break;
       case 'offerGone':
         this.offers = this.offers.filter((o) => o.id !== n.offer);
+        this.answering.get(n.offer)?.(n.why === 'accepted' ? 'accepted' : 'gone');
         break;
       case 'sent':
         this.sent = [...this.sent.filter((o) => o.id !== n.offer.id), n.offer];
@@ -205,6 +206,8 @@ export class LobbyClient {
         this.online = n.n;
         break;
       case 'error':
+        // "that offer is no longer there": the answer to an accept that came too late
+        if (n.code === 'no_offer') for (const f of [...this.answering.values()]) f('gone');
         this.emit({ kind: 'error', code: n.code, message: n.message });
         break;
     }
@@ -223,4 +226,25 @@ export class LobbyClient {
   withdraw(offer: string): boolean { return this.send({ type: 'withdraw', offer }); }
 
   answer(offer: string, accept: boolean): boolean { return this.send({ type: 'answer', offer, accept }); }
+
+  private answering = new Map<string, (r: 'accepted' | 'gone') => void>();
+
+  /**
+   * Accept an offer and hear what the lobby made of it: 'accepted', 'gone' (withdrawn or run out
+   * meanwhile: nobody is in that match) or 'unsent' (no line). No word within `waitMs` counts as
+   * accepted, as before the lobby's answer was waited for.
+   */
+  accept(offer: string, waitMs = 4000): Promise<'accepted' | 'gone' | 'unsent'> {
+    if (!this.answer(offer, true)) return Promise.resolve('unsent');
+    return new Promise((resolve) => {
+      const done = (r: 'accepted' | 'gone') => {
+        if (this.answering.get(offer) !== done) return;
+        this.answering.delete(offer);
+        clearTimeout(timer);
+        resolve(r);
+      };
+      const timer = setTimeout(() => done('accepted'), waitMs);
+      this.answering.set(offer, done);
+    });
+  }
 }

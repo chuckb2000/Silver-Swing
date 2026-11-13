@@ -178,8 +178,9 @@ export class TitleScene extends MenuScene {
   private setChallengeButton() {
     const b = this.chButton;
     if (!b || !b.active) return;
-    const mine = lobby.mine ? lobby.posts.find((p) => p.id === lobby.mine) : undefined;
-    const n = lobby.offers.length;
+    // (still open by the lobby's clock: a quiet lobby closes a post only when something next reaches it)
+    const mine = lobby.mine ? lobby.openPosts().find((p) => p.id === lobby.mine) : undefined;
+    const n = mine ? lobby.offers.length : 0;
     // offers to answer: they wait here once their note has gone (a tap: accept or not now, each)
     b.setLabel(!mine ? 'open to a challenge' : n ? `${n} offer${n > 1 ? 's' : ''} for you` : `looking: ${minutesLeft(mine, lobby.lobbyNow())} min`);
     b.setColor(mine ? 'orange' : 'grey');
@@ -307,6 +308,7 @@ export class TitleScene extends MenuScene {
     if (this.dayCheck > 20_000) {
       this.dayCheck = 0;
       if (this.builtDay && localDay() !== this.builtDay && !this.resuming) this.rebuild();
+      this.setChallengeButton(); // its minutes left, and gone when its time is up
     }
     const last = this.shown.length - 1;
     this.shown.forEach((s, i) => {

@@ -247,7 +247,8 @@ export class Round {
     // the other half of a shared green is not a wrong green (Langdon 9/18)
     const partners = greenPartners(this.course).get(this.hole.greenId) ?? [];
     for (const [id, p] of this.course.greenPolys) if (id !== this.hole.greenId && !partners.includes(id)) others.push(p);
-    return { terrain: this.course.terrain, boundary: this.course.boundary, hole: this.pin, holeGreen: this.holeGreen, otherGreens: others };
+    const obs = this.course.obstacles;
+    return { terrain: this.course.terrain, boundary: this.course.boundary, hole: this.pin, holeGreen: this.holeGreen, otherGreens: others, blocked: (x, y) => obs.trunkAt(x, y) };
   }
 
   startHole(index: number) {
@@ -305,8 +306,15 @@ export class Round {
     return this.course.terrain.surface(p.x, p.y);
   }
 
+  /**
+   * On this hole's green: by the surface map, which is what the lie is read from (the green's outline
+   * and the map differ by part of a pixel along the edge, and a ball there was "fringe" for its lie and
+   * "on the green" for its putt and green in regulation, or the other way round), on or within a
+   * pixel of this hole's outline (not another green's).
+   */
   onHoleGreen(p: { x: number; y: number } = this.ball): boolean {
-    return this.holeGreens.some((g) => g.contains(p.x, p.y));
+    if (this.course.terrain.surface(p.x, p.y) !== SURF.green) return false;
+    return this.holeGreens.some((g) => g.contains(p.x, p.y) || g.edgeDistance(p.x, p.y) < 0.75);
   }
 
   refreshLie() {
@@ -339,7 +347,34 @@ export class Round {
       // in gorse every club carries the same capped distance: take the shortest (a wedge to hack out)
       if (err < bestErr || (this.lie.carryCap !== undefined && err <= bestErr + 1e-9)) { bestErr = err; best = c; }
     }
-    return best;
+    return this.teeLayUp(best);
+  }
+
+  private layUps = new Map<string, Club>();
+
+  /**
+   * Off the tee of a par 4 or 5: when the club for the distance can't be kept dry or in bounds on any
+   * line the default aim would try (water across the fairway at driver length: Needham 6, where the
+   * default tee shot went in the water every time), the longest shorter club that can. The player can
+   * still take the driver.
+   */
+  private teeLayUp(best: Club): Club {
+    if (!this.ball.teedUp || this.hole.par < 4 || best.kind === 'putter' || this.cfg.practice || this.cfg.xc) return best;
+    const key = `${this.holeNumber}:${this.ball.x.toFixed(1)},${this.ball.y.toFixed(1)}:${best.id}:${this.wind.vx.toFixed(2)},${this.wind.vy.toFixed(2)}`;
+    const hit = this.layUps.get(key);
+    if (hit) return hit;
+    const lines = (c: Club) => [0, 2, -2, 4, -4, 6, -6, 8, -8, 10, -10, 12, -12, 14, -14, 16, -16].map((k) => this.lineEnd(c, this.lineAim(c, 1) + (k * Math.PI) / 180, 1));
+    let pick = best;
+    // (one flight on almost every tee: the other lines are only tried when the straight one is wet or out)
+    if (this.lineEnd(best, this.lineAim(best, 1), 1) === 'penalty' && !lines(best).includes('clear')) {
+      const bag = this.allowedClubs().filter((c) => c.kind !== 'putter');
+      const i = bag.findIndex((c) => c.id === best.id);
+      for (let k = i + 1; k <= Math.min(bag.length - 1, i + 4); k++) {
+        if (lines(bag[k]).includes('clear')) { pick = bag[k]; break; }
+      }
+    }
+    this.layUps.set(key, pick);
+    return pick;
   }
 
   /** The putter is the natural club on the green and on the fringe close to it. */
@@ -455,18 +490,23 @@ export class Round {
    * tree on screen (it would look like an aim at the tree).
    */
   private lineClear(c: Club, aim: number, scale: number): boolean {
+    return this.lineEnd(c, aim, scale) === 'clear';
+  }
+
+  /** Where a perfect strike on this line ends: clear, a penalty (water, out of bounds), or other trouble. */
+  private lineEnd(c: Club, aim: number, scale: number): 'clear' | 'penalty' | 'trouble' {
     // in the hole's steady wind (no gust): a line that is clear only in calm air is not offered
     const spec = this.flightSpec(c, aim, this.perfectStrike(c, scale), 0, { vx: this.wind.vx, vy: this.wind.vy });
     const sim = simulateShot(this.course.terrain, this.course.obstacles, spec, new AlwaysRng(1));
-    if (sim.holed) return true;
+    if (sim.holed) return 'clear';
     const s = sim.restSurface;
+    const end = sim.end;
+    if (sim.inWater || isWater(s) || isOB(s) || !this.course.boundary.contains(end.x, end.y)) return 'penalty';
     // the landing marker must not sit behind a tree on screen either
     const land = sim.landing;
-    if (land && this.course.obstacles.hidesPoint(land.x, land.y)) return false;
-    const end = sim.end;
-    return !sim.hitTree && !sim.inWater && !isWater(s) && !isOB(s) && s !== SURF.woods && s !== SURF.building
-      && this.course.boundary.contains(end.x, end.y)
-      && !this.courseCtx().otherGreens.some((g) => g.contains(end.x, end.y)); // nor on a wrong green
+    if (land && this.course.obstacles.hidesPoint(land.x, land.y)) return 'trouble';
+    return !sim.hitTree && s !== SURF.woods && s !== SURF.building
+      && !this.courseCtx().otherGreens.some((g) => g.contains(end.x, end.y)) ? 'clear' : 'trouble'; // nor on a wrong green
   }
 
   /**
@@ -711,6 +751,7 @@ export class Round {
     this.mulliganUsed = true;
     this.pending = null;
     this.strokes.pop(); // the stroke never happened, so it can't be watched again
+    this.lastStroke = null;
     const b = this.beforeShot;
     if (b) {
       // as if the last shot (and any penalty or drop after it) never happened

@@ -119,7 +119,14 @@ export class SettingsScene extends MenuScene {
       this.root.add(txt(this, vx, y + 3, keyCode(s.playerKey)));
       this.root.add(new Button(this, x0 + pw - 70, y, 62, 14, 'use another', () => {
         askCode(this, (k) => {
-          if (k && k !== s.playerKey) { s.playerKey = k; nameConflicts.clear(); save(); }
+          if (k && k !== s.playerKey) {
+            s.playerKey = k;
+            // the server knows "hide me" by player code: this code is told this device's choice afresh (a
+            // hidden device that took another code showed its rounds, with settings still saying hidden)
+            s.hideSent = !s.hideFromBoards;
+            nameConflicts.clear();
+            save();
+          }
         });
       }, { color: 'grey' }));
       y += 17;

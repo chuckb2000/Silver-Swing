@@ -1556,3 +1556,44 @@ the pull request lists them. The ones that change what a player sees or does:
 
 Left as it is, on purpose: a name dialog closed without a name still starts the round ("skip"),
 and the outdoor ambience keeps playing in the menus after a round.
+
+## Overnight sweep, part 2: rules, physics, saving, the shared board, live matches (2026-11-13)
+
+28 more fixes, from the same review; the pull request lists them. What changes for a player:
+
+- **The daily's pins are the same in every browser.** The pin sheet was shuffled with
+  `sort(() => rng.next() - 0.5)`, which draws a different number of random numbers in Chrome
+  and in Safari, so the two could get different sheets from one seed. It is a Fisher-Yates
+  shuffle now. Pin sheets for a given seed change once with this (the day it is merged, players
+  before and after the deploy can differ; rounds in progress keep the pins they started with).
+- **A ball wedged against a building stops** (it bounced in place for the 45 s limit before the
+  out-of-bounds or relief call: Stone Creek 8).
+- **No drop is offered inside a tree trunk**; free relief from buildings is looked for out to
+  90 m (40 m found none among a clubhouse's roofs).
+- **"On the green" is read from the surface map**, like the lie (the green's outline and the
+  map differ by part of a pixel: a ball there was fringe for its lie and green for its putt
+  and green in regulation, or the other way round).
+- **A punch shot drifts in the wind for the time it is in the air** (it drifted as a full
+  flight of six seconds would), and a fast low ball can't pass through a trunk between steps.
+- **Off the tee of a par 4 or 5, a shorter club is offered when the one for the distance can't
+  be kept dry or in bounds on any line the default aim tries** (Needham 6: water across the
+  fairway at driver length; the default drive went in every time). The driver stays in the
+  bag. A judgement call: say if the default should stay the driver.
+- **Casual "max 2x par"**: an unplayable ball that reaches the cap ends the hole there.
+- **Saving:** each value's two copies (IndexedDB, localStorage) carry the time they were
+  written and a read takes the newer (after one failed IndexedDB write, the next visit read
+  the old copy: a finished round missing, a cleared round back).
+- **The shared board:** a round the server couldn't store is sent again (it was marked as
+  sent); a daily round sent up to a week late counts for the day it was played; a name changed
+  on the summary reaches the board; the first request after a schema change asks the game to
+  send again instead of running out of queries part-way; "hide me" follows a change of player
+  code; an eagle or hole-out under a name another device holds no longer blocks the ones
+  behind it; the daily par rounds get no "best"/"record" badge and don't crowd rounds out of
+  the handicap list; a corrected card is never applied to a cross-country round.
+- **Offline copy:** the sprites come from the network when it answers within 2.5 s (the first
+  visit after a deploy ran the new code with the old sprite sheet), and a first visit is kept
+  for offline use (only an update was).
+- **Live matches:** accepting an offer waits for the lobby to say it was still there (an offer
+  withdrawn meanwhile put the player alone in a match they could later claim); a post past its
+  time no longer shows on its owner's title; a 19-hole match is recorded; a match with a full
+  log can still be conceded or claimed; a result that failed to send is sent again.
