@@ -222,6 +222,39 @@ def export_minimaps(holes, tee_of, surf, z_px, trees, world, green_by_osm, out):
     return minimaps
 
 
+
+def integral_areas(g, cfg, world, boundary):
+    """Integral objects (course_config "integral"; Old Course chat, 2026-11-13): roads, paths and walls
+    the local rules make part of the course. A ball on a cart path or building inside one plays as it
+    lies. Each entry: {"name": ..., "osm": [feature ids] with "buffer_m" (lines become strips), and/or
+    "lonlat": [[lon, lat], ...] (a ring traced by hand)}. Clipped to the boundary; course.json
+    "integral": [{"name", "poly"}], one entry per part."""
+    from pyproj import Transformer
+    from shapely.ops import unary_union
+    out = []
+    to_utm = Transformer.from_crs(4326, world.epsg, always_xy=True)
+    for it in cfg.get("integral") or []:
+        parts = []
+        ids = it.get("osm") or []
+        if ids:
+            sel = g[g.osm.isin(ids)]
+            missing = sorted(set(ids) - set(sel.osm))
+            if missing:
+                raise SystemExit(f"[s10] integral {it['name']!r}: no feature {missing} in course_local.geojson")
+            buf = float(it.get("buffer_m", 0.5))
+            parts += [geom.buffer(buf) for geom in sel.geometry]
+        if it.get("lonlat"):
+            ring = [world.to_local(*to_utm.transform(lon, lat)) for lon, lat in it["lonlat"]]
+            parts.append(Polygon(ring).buffer(0))
+        geom = unary_union(parts).intersection(boundary) if parts else None
+        if geom is None or geom.is_empty:
+            raise SystemExit(f"[s10] integral {it['name']!r}: nothing inside the boundary")
+        polys = [p for p in getattr(geom, "geoms", [geom]) if p.geom_type == "Polygon" and p.area >= 1]
+        for p in polys:
+            out.append({"name": it["name"], "poly": [[rnd(x), rnd(y)] for x, y in p.simplify(0.2).exterior.coords]})
+    return out
+
+
 def main():
     name = course_name_from_argv()
     cfg = load_config(name)
@@ -351,6 +384,8 @@ def main():
             buildings.append({"id": r.osm, "h": bh_by_osm.get(r.osm, 6.0), "inside": bool(boundary.intersects(poly)),
                               "poly": [[rnd(x, 1), rnd(y, 1)] for x, y in poly.simplify(0.3).exterior.coords]})
 
+    integral = integral_areas(g, cfg, world, boundary)
+
     for lay in lays:
         ldir = layout_dir(name, lay)
         lout = out_dir(lay["id"]) if shared else out
@@ -404,6 +439,8 @@ def main():
             course["nines"] = nines  # a club of three or more nines: the game offers each pair and each nine
         if theme_has_shrubs(cfg["theme"]):
             course["shrubs"] = f"shrubs_{cfg['theme']}"  # trees.json c: 3 drawn from the theme's own bushes (gorse)
+        if integral:
+            course["integral"] = integral  # roads, paths, walls played as they lie (no free relief)
         if cfg.get("practice"):
             course["practice"] = True  # the practice ground is opened from its own button, not the course list
         write_json(lout / "course.json", course)

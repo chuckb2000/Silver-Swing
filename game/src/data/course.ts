@@ -54,6 +54,11 @@ export interface CourseJson {
   nines?: { id: string; name: string; holes: number[] }[];
   /** the theme's own bush sheet for trees.json c: 3 (gorse and the like), instead of the flowering shrubs */
   shrubs?: string;
+  /**
+   * Integral objects (Old Course chat, 2026-11-13): roads, paths and walls the local rules make part of
+   * the course. A ball on a cart path or building inside one plays as it lies: no free relief.
+   */
+  integral?: { name: string; poly: number[][] }[];
 }
 
 export interface HeightMeta { cols: number; rows: number; res: number; min: number; max: number; samples: [number, number, number][] }
@@ -65,6 +70,8 @@ export interface CourseRuntime {
   boundary: Polygon;
   water: { id: string; penalty: 'red' | 'yellow'; poly: Polygon }[];
   greenPolys: Map<string, Polygon>;
+  /** the integral objects' areas (json.integral): no free relief inside them */
+  integral: Polygon[];
   baseUrl: string;
 }
 
@@ -113,6 +120,7 @@ export function buildRuntime(json: CourseJson, heights: Float32Array, hmeta: Hei
     boundary: new Polygon(json.boundary),
     water: json.water.map((w) => ({ id: w.id, penalty: w.penalty, poly: new Polygon(w.poly) })),
     greenPolys,
+    integral: (json.integral ?? []).map((a) => new Polygon(a.poly)),
     baseUrl,
   };
 }
