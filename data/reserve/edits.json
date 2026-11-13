@@ -1,0 +1,120 @@
+{
+ "add": [
+  {
+   "from": "proposed/routing.geojson",
+   "ids": [
+    "reserve_north_02",
+    "reserve_north_03",
+    "reserve_north_04",
+    "reserve_north_05",
+    "reserve_north_06",
+    "reserve_north_07",
+    "reserve_north_08",
+    "reserve_north_09",
+    "reserve_north_10",
+    "reserve_north_11",
+    "reserve_north_12",
+    "reserve_north_13",
+    "reserve_north_14",
+    "reserve_north_15",
+    "reserve_north_16",
+    "reserve_north_17",
+    "reserve_north_18",
+    "reserve_south_01",
+    "reserve_south_02",
+    "reserve_south_03",
+    "reserve_south_04",
+    "reserve_south_05",
+    "reserve_south_06",
+    "reserve_south_07",
+    "reserve_south_08",
+    "reserve_south_09",
+    "reserve_south_10",
+    "reserve_south_11",
+    "reserve_south_12",
+    "reserve_south_13",
+    "reserve_south_14",
+    "reserve_south_15",
+    "reserve_south_16",
+    "reserve_south_17",
+    "reserve_south_18"
+   ],
+   "reason": "PROPOSAL, awaiting the developer: the hole lines of both courses (OSM has only North 1's), from data/reserve/make_routing.py and routing_spec.json"
+  },
+  {
+   "from": "proposed/routing.geojson",
+   "ids": [
+    "w825461923_ne",
+    "w825461923_w",
+    "w903911626_n",
+    "w903911626_s",
+    "w903911594_e",
+    "w903911594_w"
+   ],
+   "reason": "shared greens cut in two (routing_spec.json 'splits'): North 8/17, South 11/17, South 3/5; each part is one hole's green (as at Langdon Farms 9/18)"
+  },
+  {
+   "from": "proposed/routing.geojson",
+   "ids": [
+    "w444869601_bldg"
+   ],
+   "reason": "golf=clubhouse as a building (drawn, and an obstruction); s01 reads the golf key first"
+  }
+ ],
+ "tags": [
+  {
+   "osm": "w825907441",
+   "set": {
+    "layout": "reserve_north",
+    "handicap": "7"
+   },
+   "reason": "OSM's only hole line (ref 1, par 5): North 1 (one course polygon for both courses, so each hole line carries its layout)"
+  }
+ ],
+ "drop": [
+  {
+   "osm": "w825461923",
+   "reason": "replaced by its two parts (add above)"
+  },
+  {
+   "osm": "w903911626",
+   "reason": "replaced by its two parts (add above)"
+  },
+  {
+   "osm": "w903911594",
+   "reason": "replaced by its two parts (add above)"
+  },
+  {
+   "osm": "w904355241",
+   "reason": "a target green inside the driving range (w722640816), which is out of bounds; not a hole's green"
+  },
+  {
+   "osm": "w904355242",
+   "reason": "a target green inside the driving range (w722640816), which is out of bounds; not a hole's green"
+  },
+  {
+   "osm": "w904355243",
+   "reason": "a target green inside the driving range (w722640816), which is out of bounds; not a hole's green"
+  },
+  {
+   "osm": "w904355244",
+   "reason": "a target green inside the driving range (w722640816), which is out of bounds; not a hole's green"
+  },
+  {
+   "osm": "w444869601",
+   "reason": "replaced by its building copy (add above)"
+  },
+  {
+   "osm": "w852545304",
+   "reason": "a hole line of Meriwether National Golf Course (the course to the west), inside the export's box"
+  },
+  {
+   "osm": "w852545311",
+   "reason": "a hole line of Meriwether National Golf Course (the course to the west), inside the export's box"
+  },
+  {
+   "osm": "w153474835",
+   "reason": "the leisure=golf_course polygon of Meriwether National Golf Course, the course to the west; The Reserve's own polygon (w136348508) is the boundary"
+  }
+ ]
+}
