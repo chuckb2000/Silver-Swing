@@ -1622,3 +1622,13 @@ stay. Relief from an ordinary path beside one may end on it (an integral object 
 obstruction). A wall is mapped as a thin building, so the ball strikes it. No other course
 changes: the list is opt-in, and finished courses are pinned to the pipeline that built them.
 
+## Europe is one place on the course select (developer, 2026-11-13)
+
+With courses coming in Scotland and Norway, the developer: the state selector's button for them
+should be "europe". Every course whose `state` is `EU`, or a European country, or whose location
+ends with one, goes under one "europe" button, after the states and provinces
+(`registry.ts` `stateOf`, `EUROPE`). With it on offer the heading reads "choose where to play",
+and the title counts "64 courses in 12 states and europe" (1x on a screen too narrow for that at
+2x). A US postal code always wins ("DE" is Delaware). Course chats set `"state": "EU"`
+(docs/COURSE_BUILD.md 12).
+

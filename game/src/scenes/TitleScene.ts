@@ -5,7 +5,7 @@
 
 import Phaser from 'phaser';
 import { app, GAME_NAME } from '../app';
-import { coursesByState } from '../data/registry';
+import { courseCountText } from '../data/registry';
 import { initAudio, setVolume } from '../audio/sfx';
 import { peekSnapshot } from '../save/snapshot';
 import { Button, COLORS, onTap, Panel, setTxt, txt } from '../ui/widgets';
@@ -436,11 +436,11 @@ export class TitleScene extends MenuScene {
       if (l1.width > W - 16) { l1.setScale(2); l2.setScale(2); l2.y = top + 20; dy = 20; }
       this.root.add([l1, l2]);
     }
-    const n = app.courses.length;
-    const states = coursesByState(app.courses).length;
-    const sub = n === 1 ? app.courses[0].name : `${n} courses${states > 1 ? ` in ${states} states` : ''}`;
-    const small = W < 330; // a phone: the course count at 1x, and everything under it moves up by the line it saves
-    this.root.add(txt(this, cx, top + 46 + dy, sub, { origin: [0.5, 0], scale: small ? 1 : 2, color: COLORS.yellow }));
+    const sub = courseCountText(app.courses);
+    let small = W < 330; // a phone: the course count at 1x, and everything under it moves up by the line it saves
+    const count = txt(this, cx, top + 46 + dy, sub, { origin: [0.5, 0], scale: small ? 1 : 2, color: COLORS.yellow });
+    if (!small && count.width > W - 16) { count.setScale(1); small = true; } // "... and europe" on a narrow screen
+    this.root.add(count);
     if (small) dy -= 9;
     this.root.add(txt(this, cx, top + 66 + dy, 'real courses, rebuilt from map and lidar data', { origin: [0.5, 0], color: COLORS.dim }));
     const snap = await peekSnapshot();
