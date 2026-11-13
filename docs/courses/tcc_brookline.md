@@ -33,9 +33,11 @@ Every hole was looked at in the game (tee shot and overview).
         `intake.py laz --keep-evlrs`.
     -   Photo: NAIP from the USGS National Map service (`raw/naip.tif`, committed).
     -   Card: 18Birdies (read 2026-11-13); GolfPass's Main par row compared.
+-   **Buildings:** OSM's 69 grandstands, tents and trailers from the 2022 U.S. Open are
+    dropped (bare turf on the photo); the 39 permanent buildings stay.
 -   **Water:** 21 OSM penalty areas, all red (standing default). Out of bounds: the OSM
     boundary; the Robert T. Lynch Municipal course to the west is another course (dropped).
--   **Trees:** 3,809 lidar trees inside the boundary; 72 on mapped playing surfaces and 5
+-   **Trees:** 3,831 lidar trees inside the boundary; 72 on mapped playing surfaces and 5
     in front of the 11th and 15th tees dropped. Types from crown shape.
 
 ## Scorecard
@@ -66,11 +68,12 @@ Blue: the longest set with per-hole yardages (standing default 4.1; Black has no
 ### Developer's calls pending
 
 "Other open items" in `data/tcc_brookline/validation_report.md`: the card and tee set (2),
-3's flag (3), card hole, theme and logo (8).
+3's flag (3), card hole, theme and logo (9).
 
 ## New pipeline keys or theme
 
--   No new config key, no pipeline change.
+-   No new config key, no pipeline change. `green_tilt` on the 4th (195 m2: 2 %, no
+    bumps) so it keeps three hole locations (`pins.test.ts`).
 -   New theme `tcc_brookline`: `assets-src/palettes/tcc_brookline.json`,
     `assets-src/trees_tcc_brookline.py` (eastern white pine; red oak and elm). Logo
     `assets-src/course_logos/tcc_brookline.py`.
