@@ -469,6 +469,8 @@ export class MatchRoomCore {
     if (raw.length > MAX_MESSAGE) { this.send(ws, { type: 'error', code: 'too_big', message: 'move too big' }); return; }
     let m: { type?: string; key?: string; since?: number; chat?: number; cid?: string; action?: Action; rules?: number; text?: string };
     try { m = JSON.parse(raw); } catch { this.send(ws, { type: 'error', code: 'bad_json', message: 'bad message' }); return; }
+    // (JSON that isn't an object, `null` say: reading its type threw out of the handler)
+    if (!m || typeof m !== 'object') { this.send(ws, { type: 'error', code: 'bad_json', message: 'bad message' }); return; }
     if (m.type === 'ping') { ws.send(PONG); return; } // the auto-response normally answers it
     try {
       const s = await this.load();
@@ -642,7 +644,10 @@ export class MatchRoomCore {
     if (seen !== undefined) return { type: 'ack', cid: id, seq: seen, seat: known, now: this.clock() };
     const action = cleanAction(raw);
     if (!action) return this.nack(id, 'bad_move', 'not a move this server knows');
-    if (s.seq >= MAX_EVENTS) return this.nack(id, 'full', 'this match is too long');
+    // a match with a full log takes no more strokes, but can still be ended (conceded, claimed): it
+    // could never finish or be recorded otherwise
+    const ends = action.t === 'claim' || (action.t === 'concede' && action.what === 'match');
+    if (s.seq >= MAX_EVENTS && !ends) return this.nack(id, 'full', 'this match is too long');
     let by: Seat | null = known;
     let player: MatchPlayer | null = null;
     if (action.t === 'join') {
