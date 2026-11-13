@@ -1612,8 +1612,8 @@ power; a weaker one rolls back down the step. Highland Links 9 stays as it is (d
 ## Integral objects: roads and walls played as they lie (Old Course chat, 2026-11-13)
 
 The Old Course's local rules make the road and wall behind the 17th green integral parts of the
-course (and Grannie Clark's Wynd across the 1st and 18th, the course chat's open item), and the
-Road Hole is the course's best-known hole. The game gave free relief from every cart path and
+course, and so is Grannie Clark's Wynd across the 1st and 18th (developer, 2026-11-13: integral,
+as with the road on 17); the Road Hole is the course's best-known hole. The game gave free relief from every cart path and
 building. Now course.json may list `integral` areas (course_config `"integral"`: OSM features,
 lines buffered into strips, and/or rings traced by hand; s10 clips them to the boundary). A ball
 that stops on a cart path or building inside one plays as it lies (`Round.integralAt`): no relief
