@@ -15,6 +15,14 @@ aspen and willow, dark river water); the logo is a cedar canoe and paddle on the
 hole passes or is a small flag after the virtual tees moved within their boxes: 7,648 yd
 built against 7,683.
 
+## Checks
+
+- `course_play.test.ts -t crosswater`: 11 passed.
+- `npm test`: 1754 passed, 2 failed: `player.test.ts` "the real rotation" and `tour.test.ts` "a hole drawn sits out" fail until `make land` adds the course to the daily rotation.
+- `npm run e2e`: 16 passed, 1 failed in the hand-off run: clicks.spec "after the first tap, a press on a button beside the swing button" (timing; another build was running on the machine). Rerun alone with nothing else running: clicks.spec 3 passed.
+- Pinned; a `--fresh` rebuild left git clean.
+- Every hole looked at in the game (tee view, overview, first shot, putting view).
+
 ## Facts
 
 -   **Location:** Sunriver, Deschutes County, Oregon, where the Deschutes and Little
