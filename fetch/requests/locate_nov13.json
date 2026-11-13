@@ -1,0 +1,9 @@
+{
+ "release": "data-locate-nov13",
+ "items": [
+  {
+   "name": "locate_nov13.geojson",
+   "overpass": "[out:json][timeout:900];\n(\n nwr[\"leisure\"=\"golf_course\"][\"name\"~\"Portland Golf Club|Columbia Edgewater|Riverside Golf|Heron Lakes|Rose City|Royal Oaks|Persimmon|Glendoveer|Forest Hills|Broadmoor\",i](45.25,-123.2,45.8,-122.3);\n nwr[\"leisure\"=\"golf_course\"][\"name\"~\"Crosswater|Pronghorn|Eugene Country|Tokatee|Black Butte|Brasada|Juniper\",i](43.5,-123.5,44.6,-120.8);\n nwr[\"leisure\"=\"golf_course\"][\"name\"~\"Sahalee|Gamble Sands|Seattle Golf|Wine Valley|Palouse Ridge|Snoqualmie|Gold Mountain|Home Course|Aldarra|Tumble Creek|Sand Point|Overlake|Jefferson Park\",i](45.9,-123.0,48.6,-117.0);\n nwr[\"leisure\"=\"golf_course\"][\"name\"~\"Capilano|Shaughnessy|Point Grey|Marine Drive|University Golf\",i](49.1,-123.35,49.45,-122.9);\n nwr[\"leisure\"=\"golf_course\"][\"name\"~\"^The Country Club$|Myopia|Kittansett|Worcester Country|Salem Country|Essex County|Brae Burn\",i](41.5,-71.9,42.75,-70.6);\n nwr[\"leisure\"=\"golf_course\"][\"name\"~\"Pebble Beach|San Francisco Golf|Olympic|Spyglass|Monterey Peninsula\",i](36.5,-122.6,37.8,-121.8);\n)->.c;\n.c out geom;\nforeach.c->.one(\n  .one map_to_area->.a;\n  way[\"golf\"~\"^(hole|green|tee|fairway|bunker)$\"](area.a);\n  out tags center;\n);"
+  }
+ ]
+}
