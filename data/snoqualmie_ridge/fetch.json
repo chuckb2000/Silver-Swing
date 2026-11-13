@@ -10,17 +10,12 @@
    ]
   },
   {
-   "name": "snoqualmie_ridge_dem1m",
-   "tnm": {
-    "dataset": "dem1m",
-    "bbox": [
-     -121.8801,
-     47.5272,
-     -121.8411,
-     47.5491
-    ],
-    "list": true
-   }
+   "name": "usgs_dem_m.tif",
+   "url": "https://elevation.nationalmap.gov/arcgis/rest/services/3DEPElevation/ImageServer/exportImage?bbox=584300,5264400,587200,5266800&bboxSR=32610&imageSR=32610&size=2900,2400&format=tiff&pixelType=F32&noData=-9999&interpolation=RSP_BilinearInterpolation&f=image"
+  },
+  {
+   "name": "usgs_dem_identify.json",
+   "url": "https://elevation.nationalmap.gov/arcgis/rest/services/3DEPElevation/ImageServer/identify?geometry=%7B%22x%22%3A585750%2C%22y%22%3A5265600%2C%22spatialReference%22%3A%7B%22wkid%22%3A32610%7D%7D&geometryType=esriGeometryPoint&returnCatalogItems=true&f=json"
   },
   {
    "name": "snoqualmie_ridge_lpc",
@@ -32,7 +27,7 @@
      -121.8411,
      47.5491
     ],
-    "list": true
+    "only": "WA_KingCo_2_2021"
    }
   },
   {
