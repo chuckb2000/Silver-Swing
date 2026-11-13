@@ -1,6 +1,26 @@
 {
  "items": [
   {
+   "name": "USGS_LPC_CA_SanFrancisco_B23_04500185.laz",
+   "url": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/CA_SanFrancisco_B23/CA_SanFrancisco_1_B23/LAZ/USGS_LPC_CA_SanFrancisco_B23_04500185.laz",
+   "note": "third run: still missing after two runs (rockyweb timed out)"
+  },
+  {
+   "name": "USGS_LPC_CA_SanFrancisco_B23_04550190.laz",
+   "url": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/CA_SanFrancisco_B23/CA_SanFrancisco_1_B23/LAZ/USGS_LPC_CA_SanFrancisco_B23_04550190.laz",
+   "note": "third run: still missing after two runs (rockyweb timed out)"
+  },
+  {
+   "name": "USGS_LPC_CA_SanFrancisco_B23_04600185.laz",
+   "url": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/CA_SanFrancisco_B23/CA_SanFrancisco_1_B23/LAZ/USGS_LPC_CA_SanFrancisco_B23_04600185.laz",
+   "note": "third run: still missing after two runs (rockyweb timed out)"
+  },
+  {
+   "name": "USGS_LPC_CA_SanFrancisco_B23_04600190.laz",
+   "url": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/CA_SanFrancisco_B23/CA_SanFrancisco_1_B23/LAZ/USGS_LPC_CA_SanFrancisco_B23_04600190.laz",
+   "note": "third run: still missing after two runs (rockyweb timed out)"
+  },
+  {
    "name": "sfgc_overpass.geojson",
    "osm_box": [
     37.703,
@@ -49,28 +69,8 @@
    "note": "retry: timed out on the first run"
   },
   {
-   "name": "USGS_LPC_CA_SanFrancisco_B23_04500185.laz",
-   "url": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/CA_SanFrancisco_B23/CA_SanFrancisco_1_B23/LAZ/USGS_LPC_CA_SanFrancisco_B23_04500185.laz",
-   "note": "retry: timed out on the first run"
-  },
-  {
-   "name": "USGS_LPC_CA_SanFrancisco_B23_04550190.laz",
-   "url": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/CA_SanFrancisco_B23/CA_SanFrancisco_1_B23/LAZ/USGS_LPC_CA_SanFrancisco_B23_04550190.laz",
-   "note": "retry: timed out on the first run"
-  },
-  {
    "name": "USGS_LPC_CA_SanFrancisco_B23_04550195.laz",
    "url": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/CA_SanFrancisco_B23/CA_SanFrancisco_1_B23/LAZ/USGS_LPC_CA_SanFrancisco_B23_04550195.laz",
-   "note": "retry: timed out on the first run"
-  },
-  {
-   "name": "USGS_LPC_CA_SanFrancisco_B23_04600185.laz",
-   "url": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/CA_SanFrancisco_B23/CA_SanFrancisco_1_B23/LAZ/USGS_LPC_CA_SanFrancisco_B23_04600185.laz",
-   "note": "retry: timed out on the first run"
-  },
-  {
-   "name": "USGS_LPC_CA_SanFrancisco_B23_04600190.laz",
-   "url": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/CA_SanFrancisco_B23/CA_SanFrancisco_1_B23/LAZ/USGS_LPC_CA_SanFrancisco_B23_04600190.laz",
    "note": "retry: timed out on the first run"
   },
   {
