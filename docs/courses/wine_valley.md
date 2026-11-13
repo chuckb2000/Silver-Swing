@@ -80,3 +80,5 @@ See "Developer's calls pending" and `data/wine_valley/validation_report.md`.
     bounds in the game test (s03 reports it); join the box onto the boundary.
 -   **A NAIP export strip outside the world** has a different pixel size and stops
     `intake.py ortho`; leave it out.
+-   **The step cache doesn't rerun s09b when `rough_band_m` is added**: the putting views
+    kept the old rough until `ARGS=--fresh`. Run a fresh build after an art key changes.
