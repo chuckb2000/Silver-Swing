@@ -8,6 +8,18 @@
     68.354,
     14.17
    ]
+  },
+  {
+   "name": "kv_dtm_caps.xml",
+   "url": "https://wcs.geonorge.no/skwms1/wcs.hoyde-dtm-nhm-25833?service=WCS&request=GetCapabilities&version=2.0.1"
+  },
+  {
+   "name": "kv_dom_caps.xml",
+   "url": "https://wcs.geonorge.no/skwms1/wcs.hoyde-dom-nhm-25833?service=WCS&request=GetCapabilities&version=2.0.1"
+  },
+  {
+   "name": "kv_dtm_guess.tif",
+   "url": "https://wcs.geonorge.no/skwms1/wcs.hoyde-dtm-nhm-25833?service=WCS&version=2.0.1&request=GetCoverage&CoverageId=nhm_dtm_topo_25833&format=image/tiff&subset=x(462800,466000)&subset=y(7579600,7582700)"
   }
  ]
 }
