@@ -13,6 +13,14 @@ longest), the default. New theme `eugene_cc` (deep fir greens with a gold maple 
 club's colours); the logo is a mallard drake on a pond (the developer's call). 6,848 yd built
 against 7,015; hole 9 is 9.8 % short (open item 1), 11 is a flag.
 
+## Checks
+
+- `course_play.test.ts -t eugene_cc`: 11 passed.
+- `npm test`: 1751 passed, 2 failed: `player.test.ts` "the real rotation" and `tour.test.ts` "a hole drawn sits out", which fail until `make land` adds the course to the daily rotation.
+- `npm run e2e`: 17 passed.
+- Pinned; a `--fresh` rebuild left git clean.
+- Every hole played in the game (tee view, overview, first shot, putting view): 18 of 18 holed.
+
 ## Facts
 
 -   **Location:** Eugene, Lane County, Oregon (Cal Young). `state` OR. Course id `eugene_cc`.
