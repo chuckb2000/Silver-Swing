@@ -10,17 +10,12 @@
    ]
   },
   {
-   "name": "aldarra_dem1m",
-   "tnm": {
-    "dataset": "dem1m",
-    "bbox": [
-     -121.9748,
-     47.574,
-     -121.9385,
-     47.5977
-    ],
-    "list": true
-   }
+   "name": "usgs_dem_m.tif",
+   "url": "https://elevation.nationalmap.gov/arcgis/rest/services/3DEPElevation/ImageServer/exportImage?bbox=577100,5269500,579800,5272100&bboxSR=32610&imageSR=32610&size=2700,2600&format=tiff&pixelType=F32&noData=-9999&interpolation=RSP_BilinearInterpolation&f=image"
+  },
+  {
+   "name": "usgs_dem_identify.json",
+   "url": "https://elevation.nationalmap.gov/arcgis/rest/services/3DEPElevation/ImageServer/identify?geometry=%7B%22x%22%3A578450%2C%22y%22%3A5270800%2C%22spatialReference%22%3A%7B%22wkid%22%3A32610%7D%7D&geometryType=esriGeometryPoint&returnCatalogItems=true&f=json"
   },
   {
    "name": "aldarra_lpc",
@@ -32,7 +27,7 @@
      -121.9385,
      47.5977
     ],
-    "list": true
+    "only": "WA_KingCounty_2021_B21"
    }
   },
   {
