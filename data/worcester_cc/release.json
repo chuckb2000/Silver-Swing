@@ -1,0 +1,70 @@
+{
+ "release": "data-worcester_cc",
+ "note": "Build inputs for Worcester Country Club; `make fetch NAME=worcester_cc` puts them in place. Fetched by the GitHub Actions workflow (data/worcester_cc/fetch.json) on 2026-11-13 (one lidar tile on a second run). worcester_cc_overpass.geojson = the standard Overpass export of the box 42.3157,-71.7904,42.3323,-71.7715. usgs_dem_m.tif = 3DEPElevation exportImage at 1 m, x 270100-271600 / y 4688600-4690400 EPSG:32619, metres (project MA_CentralEastern_2021_B21). naip_*.jpg = USGS NAIP exportImage. USGS_LPC_*.laz = 3DEP lidar MA_CentralEastern_2021_B21, classes 3-5 kept.",
+ "files": [
+  {
+   "asset": "worcester_cc_overpass.geojson",
+   "sha256": "b028809961c36dbcb247b8c5c99f516dd2294b9cdc8e26d47770e3f9a7eff904",
+   "run": "python3 pipeline/intake.py osm worcester_cc {file}",
+   "outputs": {
+    "raw/overpass.geojson": "4d6c2973cc4ec3b618b4f2cb5b448c847f8356180f38d7b3d7e54ba2fec9073a"
+   }
+  },
+  {
+   "asset": "usgs_dem_m.tif",
+   "sha256": "340f1ca0d39475e78994fb2df6629703640cba8e40288687034675c319fa42e4",
+   "run": "python3 pipeline/intake.py raster worcester_cc {file} --out raw/usgs_dem_1m.tif",
+   "outputs": {
+    "raw/usgs_dem_1m.tif": "3f8728f52b68ea3bcd8d31108e366dda273643e349e450ad14dc548a78c248b4"
+   }
+  },
+  {
+   "asset": "USGS_LPC_MA_CentralEastern_2021_B21_19TBG268687.laz",
+   "sha256": "cca436fc6659e736a75c46ff3bf9a575a3a295a611bcfba3832569669dabfd8a",
+   "run": "python3 pipeline/intake.py laz worcester_cc {file} --classes 3,4,5 --keep-evlrs --out raw/laz/wcc_19TBG268687.laz",
+   "outputs": {
+    "raw/laz/wcc_19TBG268687.laz": "e62c439cea0c3939c274a5b2116c019502f2aa7a46695f10e7f7233140808add"
+   }
+  },
+  {
+   "asset": "USGS_LPC_MA_CentralEastern_2021_B21_19TBG270687.laz",
+   "sha256": "2381e43bff6f6ea53837e47bb3270e4c57a3a3ba32d91a603238b49efb27c939",
+   "run": "python3 pipeline/intake.py laz worcester_cc {file} --classes 3,4,5 --keep-evlrs --out raw/laz/wcc_19TBG270687.laz",
+   "outputs": {
+    "raw/laz/wcc_19TBG270687.laz": "f4878b6136ff9df4deee983e6473499abe62b2b6a665b6db4c97ff1cc85385f2"
+   }
+  },
+  {
+   "asset": "USGS_LPC_MA_CentralEastern_2021_B21_19TBG270689.laz",
+   "sha256": "736f32e3044b1abd8f3b30fb0dab425d2c16cb257399eeff5eeb8b29c2b80401",
+   "run": "python3 pipeline/intake.py laz worcester_cc {file} --classes 3,4,5 --keep-evlrs --out raw/laz/wcc_19TBG270689.laz",
+   "outputs": {
+    "raw/laz/wcc_19TBG270689.laz": "7b41b3a9d111608ac503d1d614036b931d37327c67b91daeca51d13c22a1deab"
+   }
+  },
+  {
+   "asset": "USGS_LPC_MA_CentralEastern_2021_B21_19TBG271687.laz",
+   "sha256": "06074a6f3771864fc669f851e6d7d9648902ef1cf0269a4ec27bd263f6f1c381",
+   "run": "python3 pipeline/intake.py laz worcester_cc {file} --classes 3,4,5 --keep-evlrs --out raw/laz/wcc_19TBG271687.laz",
+   "outputs": {
+    "raw/laz/wcc_19TBG271687.laz": "b654c33ec064615567daa71904ea1947ea45c74741f82e2c5f4491597c1c7db4"
+   }
+  },
+  {
+   "asset": "USGS_LPC_MA_CentralEastern_2021_B21_19TBG271689.laz",
+   "sha256": "b04e1061d0d6fd8a0179e6b2a1cce27e4426ad8c44db0666550fb602a40b67a0",
+   "run": "python3 pipeline/intake.py laz worcester_cc {file} --classes 3,4,5 --keep-evlrs --out raw/laz/wcc_19TBG271689.laz",
+   "outputs": {
+    "raw/laz/wcc_19TBG271689.laz": "52d1279d1f7961bfffbcc88d4bc55673c44fb502a986511b69dc5fd32d3412cc"
+   }
+  },
+  {
+   "asset": "naip_270100_4688600.jpg",
+   "sha256": "7c41ea7bb36d09bb06ff34418b91f3b433555288e7fc5a5cd3163a14a971ddd2",
+   "run": "python3 pipeline/intake.py ortho worcester_cc  {file} 270100 4688600 271600 4690400 --out raw/naip_06m.tif",
+   "outputs": {
+    "raw/naip_06m.tif": "c2bb1abef3d9880adb04d141898e3c2602e23e89272660ed8cbfaf9dce109363"
+   }
+  }
+ ]
+}

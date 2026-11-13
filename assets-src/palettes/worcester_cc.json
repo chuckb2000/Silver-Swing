@@ -1,0 +1,53 @@
+{
+  "name": "Worcester CC (Ross parkland, New England early fall)",
+  "note": "Course theme palette (<= 32 colours), same keys as pnw.json. Worcester Country Club: Donald Ross's rolling parkland on a hilltop in central Massachusetts, early fall: a deep, slightly blue bent green, a lusher green rough than Myopia's fescue, white Ross sand, dark brook water, grey fieldstone walls; oaks, sugar and red maples starting to turn, white pine (assets-src/trees_worcester_cc.py). The course chat's design, 2026-11-13. Shadows are a 35% black overlay on top of these.",
+  "colors": {
+    "G0": "#19362a",
+    "G1": "#224a33",
+    "G2": "#2b5f39",
+    "G3": "#36733f",
+    "G4": "#428746",
+    "G5": "#4f994d",
+    "G6": "#5daa56",
+    "G7": "#6eb960",
+    "G8": "#82c76d",
+    "G9": "#a5d78c",
+    "L0": "#6a7a3c",
+    "L1": "#7d8c43",
+    "L2": "#93a04e",
+    "S0": "#cdbf9c",
+    "S1": "#ece3cb",
+    "S2": "#faf6ea",
+    "W0": "#23362e",
+    "W1": "#30493c",
+    "W2": "#6c8570",
+    "K0": "#25262b",
+    "K1": "#4f5157",
+    "K2": "#787a80",
+    "K3": "#a9a499",
+    "K4": "#d3cdbf",
+    "B0": "#47321f",
+    "B1": "#6d4b30",
+    "B2": "#8f5e3e",
+    "R0": "#5a3a3a",
+    "WH": "#f6f5f0",
+    "F0": "#3d5f30",
+    "F1": "#4a6f36",
+    "F2": "#5a803f"
+  },
+  "trees": {
+    "conifer": "trees_worcester_cc:conifer",
+    "deciduous": "trees_worcester_cc:deciduous"
+  },
+  "lut": {
+    "rough": [
+      "F0",
+      "F1",
+      "F2",
+      "F2"
+    ]
+  },
+  "minimap": {
+    "rough": "#4a6f36"
+  }
+}
