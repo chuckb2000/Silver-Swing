@@ -10,17 +10,12 @@
    ]
   },
   {
-   "name": "sahalee_dem1m",
-   "tnm": {
-    "dataset": "dem1m",
-    "bbox": [
-     -122.067,
-     47.6253,
-     -122.044,
-     47.6444
-    ],
-    "list": true
-   }
+   "name": "usgs_dem_m.tif",
+   "url": "https://elevation.nationalmap.gov/arcgis/rest/services/3DEPElevation/ImageServer/exportImage?bbox=570100,5275100,571800,5277200&bboxSR=32610&imageSR=32610&size=1700,2100&format=tiff&pixelType=F32&noData=-9999&interpolation=RSP_BilinearInterpolation&f=image"
+  },
+  {
+   "name": "usgs_dem_identify.json",
+   "url": "https://elevation.nationalmap.gov/arcgis/rest/services/3DEPElevation/ImageServer/identify?geometry=%7B%22x%22%3A570950%2C%22y%22%3A5276150%2C%22spatialReference%22%3A%7B%22wkid%22%3A32610%7D%7D&geometryType=esriGeometryPoint&returnCatalogItems=true&f=json"
   },
   {
    "name": "sahalee_lpc",
@@ -32,7 +27,7 @@
      -122.044,
      47.6444
     ],
-    "list": true
+    "only": "WA_KingCo_1_2021"
    }
   },
   {
