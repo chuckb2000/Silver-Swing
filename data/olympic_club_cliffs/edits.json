@@ -1,0 +1,526 @@
+{
+ "add": [
+  {
+   "from": "proposed/paths.geojson",
+   "ids": [
+    "w1422569486_cartpath",
+    "w1422588696_cartpath",
+    "w379840835_cartpath",
+    "w379840844_cartpath",
+    "w379840845_cartpath",
+    "w379840848_cartpath",
+    "w379840849_cartpath",
+    "w379840850_cartpath",
+    "w379840851_cartpath",
+    "w379952709_cartpath",
+    "w379952710_cartpath",
+    "w379956553_cartpath",
+    "w379956562_cartpath",
+    "w379956563_cartpath",
+    "w379956564_cartpath",
+    "w379960531_cartpath",
+    "w379960532_cartpath",
+    "w379960533_cartpath",
+    "w379960534_cartpath",
+    "w379960544_cartpath",
+    "w379960545_cartpath",
+    "w379960546_cartpath",
+    "w379960547_cartpath",
+    "w379960548_cartpath",
+    "w379963985_cartpath",
+    "w379963986_cartpath",
+    "w380016868_cartpath",
+    "w380016869_cartpath",
+    "w380016871_cartpath",
+    "w380016872_cartpath",
+    "w380016873_cartpath",
+    "w380016874_cartpath",
+    "w380016875_cartpath",
+    "w380016876_cartpath",
+    "w380016877_cartpath",
+    "w47972740_cartpath",
+    "w47972741_cartpath",
+    "w849185068_cartpath",
+    "w863359350_cartpath",
+    "w863359351_cartpath",
+    "w863359352_cartpath",
+    "w863359353_cartpath",
+    "w863359355_cartpath"
+   ],
+   "tags": {},
+   "reason": "golf=path ways (the audit: retag as cart paths): copied as cart paths, originals dropped"
+  },
+  {
+   "from": "proposed/clubhouse.geojson",
+   "ids": [
+    "w288978316_building"
+   ],
+   "tags": {},
+   "reason": "the clubhouse is mapped golf=clubhouse, which s01 reads as a golf feature: copied as a building, original dropped"
+  }
+ ],
+ "drop": [
+  {
+   "osm": "n6424557509",
+   "reason": "golf=pin of a neighbouring course (SFGC, TPC Harding Park, Lake Merced): outside the club's boundary"
+  },
+  {
+   "osm": "r16308125",
+   "reason": "golf=lateral_water_hazard of a neighbouring course (SFGC, TPC Harding Park, Lake Merced): outside the club's boundary"
+  },
+  {
+   "osm": "r19320937",
+   "reason": "golf=fairway of a neighbouring course (SFGC, TPC Harding Park, Lake Merced): outside the club's boundary"
+  },
+  {
+   "osm": "r19716390",
+   "reason": "golf=fairway of a neighbouring course (SFGC, TPC Harding Park, Lake Merced): outside the club's boundary"
+  },
+  {
+   "osm": "w16753068",
+   "reason": "leisure=golf_course of a neighbouring course (SFGC, TPC Harding Park, Lake Merced): outside the club's boundary"
+  },
+  {
+   "osm": "w16753994",
+   "reason": "leisure=golf_course of a neighbouring course (SFGC, TPC Harding Park, Lake Merced): outside the club's boundary"
+  },
+  {
+   "osm": "w170825886",
+   "reason": "golf=green of a neighbouring course (SFGC, TPC Harding Park, Lake Merced): outside the club's boundary"
+  },
+  {
+   "osm": "w678476086",
+   "reason": "Ocean 1: the Ocean course's hole line; the Ocean course is not built (the developer asked for the Lake and the Cliffs), its ground stays as scenery"
+  },
+  {
+   "osm": "w678476094",
+   "reason": "Ocean 2: the Ocean course's hole line; the Ocean course is not built (the developer asked for the Lake and the Cliffs), its ground stays as scenery"
+  },
+  {
+   "osm": "w678476097",
+   "reason": "Ocean 3: the Ocean course's hole line; the Ocean course is not built (the developer asked for the Lake and the Cliffs), its ground stays as scenery"
+  },
+  {
+   "osm": "w678476106",
+   "reason": "Ocean 4: the Ocean course's hole line; the Ocean course is not built (the developer asked for the Lake and the Cliffs), its ground stays as scenery"
+  },
+  {
+   "osm": "w680647654",
+   "reason": "Ocean 5: the Ocean course's hole line; the Ocean course is not built (the developer asked for the Lake and the Cliffs), its ground stays as scenery"
+  },
+  {
+   "osm": "w680647655",
+   "reason": "Ocean 6: the Ocean course's hole line; the Ocean course is not built (the developer asked for the Lake and the Cliffs), its ground stays as scenery"
+  },
+  {
+   "osm": "w680647656",
+   "reason": "Ocean 7: the Ocean course's hole line; the Ocean course is not built (the developer asked for the Lake and the Cliffs), its ground stays as scenery"
+  },
+  {
+   "osm": "w680647657",
+   "reason": "Ocean 8: the Ocean course's hole line; the Ocean course is not built (the developer asked for the Lake and the Cliffs), its ground stays as scenery"
+  },
+  {
+   "osm": "w680648768",
+   "reason": "Ocean 9: the Ocean course's hole line; the Ocean course is not built (the developer asked for the Lake and the Cliffs), its ground stays as scenery"
+  },
+  {
+   "osm": "w680648769",
+   "reason": "Ocean 10: the Ocean course's hole line; the Ocean course is not built (the developer asked for the Lake and the Cliffs), its ground stays as scenery"
+  },
+  {
+   "osm": "w680648772",
+   "reason": "Ocean 11: the Ocean course's hole line; the Ocean course is not built (the developer asked for the Lake and the Cliffs), its ground stays as scenery"
+  },
+  {
+   "osm": "w680648775",
+   "reason": "Ocean 12: the Ocean course's hole line; the Ocean course is not built (the developer asked for the Lake and the Cliffs), its ground stays as scenery"
+  },
+  {
+   "osm": "w680648776",
+   "reason": "Ocean 13: the Ocean course's hole line; the Ocean course is not built (the developer asked for the Lake and the Cliffs), its ground stays as scenery"
+  },
+  {
+   "osm": "w680648777",
+   "reason": "Ocean 14: the Ocean course's hole line; the Ocean course is not built (the developer asked for the Lake and the Cliffs), its ground stays as scenery"
+  },
+  {
+   "osm": "w680648778",
+   "reason": "Ocean 15: the Ocean course's hole line; the Ocean course is not built (the developer asked for the Lake and the Cliffs), its ground stays as scenery"
+  },
+  {
+   "osm": "w680648780",
+   "reason": "Ocean 16: the Ocean course's hole line; the Ocean course is not built (the developer asked for the Lake and the Cliffs), its ground stays as scenery"
+  },
+  {
+   "osm": "w680648781",
+   "reason": "Ocean 17: the Ocean course's hole line; the Ocean course is not built (the developer asked for the Lake and the Cliffs), its ground stays as scenery"
+  },
+  {
+   "osm": "w680648783",
+   "reason": "Ocean 18: the Ocean course's hole line; the Ocean course is not built (the developer asked for the Lake and the Cliffs), its ground stays as scenery"
+  },
+  {
+   "osm": "w682844777",
+   "reason": "golf=tee of a neighbouring course (SFGC, TPC Harding Park, Lake Merced): outside the club's boundary"
+  },
+  {
+   "osm": "w682844779",
+   "reason": "golf=tee of a neighbouring course (SFGC, TPC Harding Park, Lake Merced): outside the club's boundary"
+  },
+  {
+   "osm": "w685541529",
+   "reason": "golf=hole of a neighbouring course (SFGC, TPC Harding Park, Lake Merced): outside the club's boundary"
+  },
+  {
+   "osm": "w685545906",
+   "reason": "golf=hole of a neighbouring course (SFGC, TPC Harding Park, Lake Merced): outside the club's boundary"
+  },
+  {
+   "osm": "w687849568",
+   "reason": "golf=tee of a neighbouring course (SFGC, TPC Harding Park, Lake Merced): outside the club's boundary"
+  },
+  {
+   "osm": "w688801155",
+   "reason": "golf=hole of a neighbouring course (SFGC, TPC Harding Park, Lake Merced): outside the club's boundary"
+  },
+  {
+   "osm": "w854119629",
+   "reason": "golf=tee of a neighbouring course (SFGC, TPC Harding Park, Lake Merced): outside the club's boundary"
+  },
+  {
+   "osm": "w854119630",
+   "reason": "golf=tee of a neighbouring course (SFGC, TPC Harding Park, Lake Merced): outside the club's boundary"
+  },
+  {
+   "osm": "w854286820",
+   "reason": "golf=bunker of a neighbouring course (SFGC, TPC Harding Park, Lake Merced): outside the club's boundary"
+  },
+  {
+   "osm": "w854286821",
+   "reason": "golf=green of a neighbouring course (SFGC, TPC Harding Park, Lake Merced): outside the club's boundary"
+  },
+  {
+   "osm": "w855213328",
+   "reason": "golf=cartpath of a neighbouring course (SFGC, TPC Harding Park, Lake Merced): outside the club's boundary"
+  },
+  {
+   "osm": "w855213329",
+   "reason": "golf=cartpath of a neighbouring course (SFGC, TPC Harding Park, Lake Merced): outside the club's boundary"
+  },
+  {
+   "osm": "w855502650",
+   "reason": "golf=cartpath of a neighbouring course (SFGC, TPC Harding Park, Lake Merced): outside the club's boundary"
+  },
+  {
+   "osm": "w1422569486",
+   "reason": "golf=path, copied as a cart path (proposed/paths.geojson)"
+  },
+  {
+   "osm": "w1422588696",
+   "reason": "golf=path, copied as a cart path (proposed/paths.geojson)"
+  },
+  {
+   "osm": "w379840835",
+   "reason": "golf=path, copied as a cart path (proposed/paths.geojson)"
+  },
+  {
+   "osm": "w379840844",
+   "reason": "golf=path, copied as a cart path (proposed/paths.geojson)"
+  },
+  {
+   "osm": "w379840845",
+   "reason": "golf=path, copied as a cart path (proposed/paths.geojson)"
+  },
+  {
+   "osm": "w379840848",
+   "reason": "golf=path, copied as a cart path (proposed/paths.geojson)"
+  },
+  {
+   "osm": "w379840849",
+   "reason": "golf=path, copied as a cart path (proposed/paths.geojson)"
+  },
+  {
+   "osm": "w379840850",
+   "reason": "golf=path, copied as a cart path (proposed/paths.geojson)"
+  },
+  {
+   "osm": "w379840851",
+   "reason": "golf=path, copied as a cart path (proposed/paths.geojson)"
+  },
+  {
+   "osm": "w379952709",
+   "reason": "golf=path, copied as a cart path (proposed/paths.geojson)"
+  },
+  {
+   "osm": "w379952710",
+   "reason": "golf=path, copied as a cart path (proposed/paths.geojson)"
+  },
+  {
+   "osm": "w379956553",
+   "reason": "golf=path, copied as a cart path (proposed/paths.geojson)"
+  },
+  {
+   "osm": "w379956562",
+   "reason": "golf=path, copied as a cart path (proposed/paths.geojson)"
+  },
+  {
+   "osm": "w379956563",
+   "reason": "golf=path, copied as a cart path (proposed/paths.geojson)"
+  },
+  {
+   "osm": "w379956564",
+   "reason": "golf=path, copied as a cart path (proposed/paths.geojson)"
+  },
+  {
+   "osm": "w379960531",
+   "reason": "golf=path, copied as a cart path (proposed/paths.geojson)"
+  },
+  {
+   "osm": "w379960532",
+   "reason": "golf=path, copied as a cart path (proposed/paths.geojson)"
+  },
+  {
+   "osm": "w379960533",
+   "reason": "golf=path, copied as a cart path (proposed/paths.geojson)"
+  },
+  {
+   "osm": "w379960534",
+   "reason": "golf=path, copied as a cart path (proposed/paths.geojson)"
+  },
+  {
+   "osm": "w379960544",
+   "reason": "golf=path, copied as a cart path (proposed/paths.geojson)"
+  },
+  {
+   "osm": "w379960545",
+   "reason": "golf=path, copied as a cart path (proposed/paths.geojson)"
+  },
+  {
+   "osm": "w379960546",
+   "reason": "golf=path, copied as a cart path (proposed/paths.geojson)"
+  },
+  {
+   "osm": "w379960547",
+   "reason": "golf=path, copied as a cart path (proposed/paths.geojson)"
+  },
+  {
+   "osm": "w379960548",
+   "reason": "golf=path, copied as a cart path (proposed/paths.geojson)"
+  },
+  {
+   "osm": "w379963985",
+   "reason": "golf=path, copied as a cart path (proposed/paths.geojson)"
+  },
+  {
+   "osm": "w379963986",
+   "reason": "golf=path, copied as a cart path (proposed/paths.geojson)"
+  },
+  {
+   "osm": "w380016868",
+   "reason": "golf=path, copied as a cart path (proposed/paths.geojson)"
+  },
+  {
+   "osm": "w380016869",
+   "reason": "golf=path, copied as a cart path (proposed/paths.geojson)"
+  },
+  {
+   "osm": "w380016871",
+   "reason": "golf=path, copied as a cart path (proposed/paths.geojson)"
+  },
+  {
+   "osm": "w380016872",
+   "reason": "golf=path, copied as a cart path (proposed/paths.geojson)"
+  },
+  {
+   "osm": "w380016873",
+   "reason": "golf=path, copied as a cart path (proposed/paths.geojson)"
+  },
+  {
+   "osm": "w380016874",
+   "reason": "golf=path, copied as a cart path (proposed/paths.geojson)"
+  },
+  {
+   "osm": "w380016875",
+   "reason": "golf=path, copied as a cart path (proposed/paths.geojson)"
+  },
+  {
+   "osm": "w380016876",
+   "reason": "golf=path, copied as a cart path (proposed/paths.geojson)"
+  },
+  {
+   "osm": "w380016877",
+   "reason": "golf=path, copied as a cart path (proposed/paths.geojson)"
+  },
+  {
+   "osm": "w47972740",
+   "reason": "golf=path, copied as a cart path (proposed/paths.geojson)"
+  },
+  {
+   "osm": "w47972741",
+   "reason": "golf=path, copied as a cart path (proposed/paths.geojson)"
+  },
+  {
+   "osm": "w849185068",
+   "reason": "golf=path, copied as a cart path (proposed/paths.geojson)"
+  },
+  {
+   "osm": "w863359350",
+   "reason": "golf=path, copied as a cart path (proposed/paths.geojson)"
+  },
+  {
+   "osm": "w863359351",
+   "reason": "golf=path, copied as a cart path (proposed/paths.geojson)"
+  },
+  {
+   "osm": "w863359352",
+   "reason": "golf=path, copied as a cart path (proposed/paths.geojson)"
+  },
+  {
+   "osm": "w863359353",
+   "reason": "golf=path, copied as a cart path (proposed/paths.geojson)"
+  },
+  {
+   "osm": "w863359355",
+   "reason": "golf=path, copied as a cart path (proposed/paths.geojson)"
+  },
+  {
+   "osm": "w288978316",
+   "reason": "golf=clubhouse, copied as a building (proposed/clubhouse.geojson)"
+  },
+  {
+   "osm": "w1422569531",
+   "reason": "Lakes 8: a Lake hole line; the Lake is data/olympic_club, its ground stays as club property"
+  },
+  {
+   "osm": "w680757280",
+   "reason": "Lakes 1: a Lake hole line; the Lake is data/olympic_club, its ground stays as club property"
+  },
+  {
+   "osm": "w680757281",
+   "reason": "Lakes 2: a Lake hole line; the Lake is data/olympic_club, its ground stays as club property"
+  },
+  {
+   "osm": "w680757283",
+   "reason": "Lakes 3: a Lake hole line; the Lake is data/olympic_club, its ground stays as club property"
+  },
+  {
+   "osm": "w680757284",
+   "reason": "Lakes 4: a Lake hole line; the Lake is data/olympic_club, its ground stays as club property"
+  },
+  {
+   "osm": "w680757285",
+   "reason": "Lakes 5: a Lake hole line; the Lake is data/olympic_club, its ground stays as club property"
+  },
+  {
+   "osm": "w680757286",
+   "reason": "Lakes 6: a Lake hole line; the Lake is data/olympic_club, its ground stays as club property"
+  },
+  {
+   "osm": "w680757287",
+   "reason": "Lakes 7: a Lake hole line; the Lake is data/olympic_club, its ground stays as club property"
+  },
+  {
+   "osm": "w680757289",
+   "reason": "Lakes 9: a Lake hole line; the Lake is data/olympic_club, its ground stays as club property"
+  },
+  {
+   "osm": "w680757290",
+   "reason": "Lakes 10: a Lake hole line; the Lake is data/olympic_club, its ground stays as club property"
+  },
+  {
+   "osm": "w680757291",
+   "reason": "Lakes 11: a Lake hole line; the Lake is data/olympic_club, its ground stays as club property"
+  },
+  {
+   "osm": "w680757292",
+   "reason": "Lakes 12: a Lake hole line; the Lake is data/olympic_club, its ground stays as club property"
+  },
+  {
+   "osm": "w680757293",
+   "reason": "Lakes 13: a Lake hole line; the Lake is data/olympic_club, its ground stays as club property"
+  },
+  {
+   "osm": "w680757294",
+   "reason": "Lakes 14: a Lake hole line; the Lake is data/olympic_club, its ground stays as club property"
+  },
+  {
+   "osm": "w680757295",
+   "reason": "Lakes 15: a Lake hole line; the Lake is data/olympic_club, its ground stays as club property"
+  },
+  {
+   "osm": "w680757296",
+   "reason": "Lakes 16: a Lake hole line; the Lake is data/olympic_club, its ground stays as club property"
+  },
+  {
+   "osm": "w680757297",
+   "reason": "Lakes 17: a Lake hole line; the Lake is data/olympic_club, its ground stays as club property"
+  },
+  {
+   "osm": "w680757298",
+   "reason": "Lakes 18: a Lake hole line; the Lake is data/olympic_club, its ground stays as club property"
+  },
+  {
+   "osm": "n6624454071",
+   "reason": "Cliffs 5: OSM's pin sits 14 m from the middle of this large (1,350 m2) green, outside the close-up putting view; the game finds its own hole locations from the green's centre (pins.ts)"
+  },
+  {
+   "osm": "n6624457256",
+   "reason": "Cliffs 5: OSM's pin sits 14 m from the middle of this large (1,350 m2) green, outside the close-up putting view; the game finds its own hole locations from the green's centre (pins.ts)"
+  }
+ ],
+ "tags": [
+  {
+   "osm": "w705219468",
+   "set": {
+    "par": "3"
+   },
+   "reason": "a Cliffs hole line; OSM tags 4 par 4, the Cliffs is nine par 3s (GolfPass, Stymie)"
+  },
+  {
+   "osm": "w677765431",
+   "set": {
+    "hole": "4",
+    "tee_set": "Blue",
+    "assigned_by": "the course chat"
+   },
+   "reason": "Cliffs 4: OSM's hole line starts on a forward (White) box; the Blue box is 47 m behind the line's start, 22 m to its side; from its centre the hole measures 112 yd (card 114)"
+  },
+  {
+   "osm": "w677770777",
+   "set": {
+    "hole": "5",
+    "tee_set": "Blue",
+    "assigned_by": "the course chat"
+   },
+   "reason": "Cliffs 5: OSM's hole line starts on a forward (White) box; the Blue box is on the line's extension 49 m behind its start; 166 yd (card 167)"
+  },
+  {
+   "osm": "w705218527",
+   "set": {
+    "hole": "6",
+    "tee_set": "Blue",
+    "assigned_by": "the course chat"
+   },
+   "reason": "Cliffs 6: OSM's hole line starts on a forward (White) box; the Blue box is on the line's extension 85 m behind its start; 168 yd (card 166)"
+  },
+  {
+   "osm": "w705214047",
+   "set": {
+    "hole": "7",
+    "tee_set": "Blue",
+    "assigned_by": "the course chat"
+   },
+   "reason": "Cliffs 7: OSM's hole line starts on a forward (White) box; the Blue box is on the line's extension 70 m behind its start; 173 yd (card 175)"
+  },
+  {
+   "osm": "w863361130",
+   "set": {
+    "hole": "9",
+    "tee_set": "Blue",
+    "assigned_by": "the course chat"
+   },
+   "reason": "Cliffs 9: OSM's hole line starts on a forward (White) box; the Blue box is the back-most box on the line's extension, 46 m behind its start; 138 yd against the card's 154 (open item)"
+  }
+ ]
+}

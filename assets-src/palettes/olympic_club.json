@@ -1,0 +1,18 @@
+{
+  "name": "Olympic Club (cypress-lined fog belt and Pacific bluffs)",
+  "note": "Course theme palette (<= 32 colours), same keys as pnw.json. The Olympic Club, San Francisco: the Lake's narrow, tree-lined corridors of Monterey cypress, pine and eucalyptus on the slope down to Lake Merced, and the Cliffs on the bluffs above the Pacific. A deep, saturated poa/rye green with darker rough (F0-F2), bright off-white sand, the blue-grey Pacific (W0-W2), weathered grey-tan bluffs (K3-K4). Trees in assets-src/trees_olympic_club.py. The course chat's design, 2026-11-13. Shadows are a 35% black overlay on top of these.",
+  "colors": {
+    "G0": "#142b22", "G1": "#1b3c2b", "G2": "#225033", "G3": "#2b653b", "G4": "#357a43",
+    "G5": "#418e4b", "G6": "#4ea055", "G7": "#5eb060", "G8": "#72bf6d", "G9": "#98d28f",
+    "L0": "#3e5e37", "L1": "#4d7042", "L2": "#5e824e",
+    "S0": "#d2c6a8", "S1": "#efe8d6", "S2": "#fbf8ef",
+    "W0": "#1f4560", "W1": "#2c5d7c", "W2": "#6e98b0",
+    "K0": "#25272c", "K1": "#52555c", "K2": "#7b7e85", "K3": "#ab9f88", "K4": "#d4cab4",
+    "B0": "#3e2d1e", "B1": "#634631", "B2": "#86644a",
+    "R0": "#8a3a2e", "WH": "#f5f6f3",
+    "F0": "#264a2c", "F1": "#305a33", "F2": "#3b6a3c"
+  },
+  "trees": {"conifer": "trees_olympic_club:conifer", "deciduous": "trees_olympic_club:deciduous"},
+  "lut": {"rough": ["F0", "F1", "F2", "F2"]},
+  "minimap": {"rough": "#305a33", "water": "#2c5d7c", "ob_water": "#2c5d7c", "bunker": "#efe8d6", "ob_sand": "#efe8d6"}
+}
