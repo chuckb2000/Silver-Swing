@@ -122,7 +122,19 @@ Course chat's calls (listed for the developer):
 2.  **The burn is all red**; the card marks some of it yellow. Recommend keeping it.
 3.  **Hole 17 plays 431 yd against 449 (−3.9 %).** Recommend accepting the flag.
 4.  **Whins only where OSM maps scrub** (no open imagery to find more).
-5.  **States test:** `states.test.ts` fails until PR #128 (europe) merges.
+
+## Tests
+
+Run 2026-11-13 on the branch merged with main (ef748e9d), pinned:
+
+-   `make course NAME=st_andrews_old ARGS=--fresh`: 15 steps, `git status` unchanged.
+-   `course_play.test.ts -t st_andrews_old`: 12/12; `st_andrews_old.test.ts`: 5/5
+    (both roads integral, lie "road", no relief; a cart path elsewhere gives
+    relief; the wall at 17 is 1.5 m).
+-   `npm test`: 1,770 passed, 2 failed, both from the daily rotation (the course
+    isn't in `dailyRoster.ts` until `make land`): `player.test.ts` "the real
+    rotation" and `tour.test.ts` "a hole drawn sits out". Both pass on main.
+-   `npm run e2e` (after `npm run build`): 17/17.
 
 ## Lessons
 
