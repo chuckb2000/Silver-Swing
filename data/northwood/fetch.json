@@ -1,0 +1,39 @@
+{
+ "items": [
+  {
+   "name": "northwood_overpass.geojson",
+   "osm_box": [
+    38.466,
+    -123.012,
+    38.49,
+    -122.976
+   ]
+  },
+  {
+   "name": "northwood_dem1m",
+   "tnm": {
+    "dataset": "dem1m",
+    "bbox": [
+     -123.012,
+     38.466,
+     -122.976,
+     38.49
+    ],
+    "list": true
+   }
+  },
+  {
+   "name": "northwood_lpc",
+   "tnm": {
+    "dataset": "lpc",
+    "bbox": [
+     -123.012,
+     38.466,
+     -122.976,
+     38.49
+    ],
+    "list": true
+   }
+  }
+ ]
+}
