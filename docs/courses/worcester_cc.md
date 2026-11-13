@@ -14,6 +14,14 @@ parkland in early fall: oaks, sugar and red maples turning, white pine); the log
 maple in fall colour behind a fieldstone wall. Every hole passes or is a small flag after the
 virtual tees moved within their boxes.
 
+## Checks
+
+- `course_play.test.ts -t worcester_cc`: 11 passed.
+- `npm test`: 1751 passed, 2 failed: `player.test.ts` "the real rotation" and `tour.test.ts` "a hole drawn sits out" fail until `make land` adds the course to the daily rotation.
+- `npm run e2e`: 16 passed, 1 failed in the hand-off run: clicks.spec "after the first tap, a press on a button beside the swing button" (timing; another build was running on the machine). Rerun alone with nothing else running: clicks.spec 3 passed.
+- Pinned; a `--fresh` rebuild left git clean.
+- Every hole looked at in the game (tee view, overview, first shot, putting view).
+
 ## Facts
 
 -   **Location:** 2 Rice Street, Worcester, Massachusetts. `state` MA.
