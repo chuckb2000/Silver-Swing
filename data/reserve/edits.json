@@ -39,7 +39,7 @@
     "reserve_south_17",
     "reserve_south_18"
    ],
-   "reason": "PROPOSAL, awaiting the developer: the hole lines of both courses (OSM has only North 1's), from data/reserve/make_routing.py and routing_spec.json"
+   "reason": "the hole lines of both courses (OSM has only North 1's), from data/reserve/make_routing.py and routing_spec.json; routing confirmed by the developer 2026-11-13"
   },
   {
    "from": "proposed/routing.geojson",
@@ -72,6 +72,28 @@
     "channel_w737373100"
    ],
    "reason": "the North course's creek, mapped in OSM only as waterway=stream lines: its channel in the 2024 DEM along each line (pipeline/propose_channels.py) as red penalty areas (standing default: creeks red)"
+  },
+  {
+   "from": "proposed/tees_s16.geojson",
+   "ids": [
+    "s16_tee_green"
+   ],
+   "tags": {
+    "hole": "16",
+    "tee_set": "Green",
+    "layout": "reserve_south",
+    "assigned_by": "the developer (South 16's tees are in this strip, 2026-11-13)"
+   },
+   "reason": "South 16's Green box: not in OSM; the developer circled the strip south of South 15's green; the raised pad from the 2024 DEM (make_s16_tees.py), 333 yd to the green (card 334)"
+  },
+  {
+   "from": "proposed/tees_s16.geojson",
+   "ids": [
+    "s16_tee_black",
+    "s16_tee_tan",
+    "s16_tee_red"
+   ],
+   "reason": "South 16's other boxes in the same strip (DEM pads; 316, 288 and 244 yd vs the card's Black 318, Tan 295, Red 249): drawn, not played"
   }
  ],
  "tags": [
@@ -82,6 +104,62 @@
     "handicap": "7"
    },
    "reason": "OSM's only hole line (ref 1, par 5): North 1 (one course polygon for both courses, so each hole line carries its layout)"
+  },
+  {
+   "osm": "w1414312023",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "golf=water_hazard (yellow by its tag) as red: standing default, every penalty area red"
+  },
+  {
+   "osm": "w444869594",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "golf=water_hazard (yellow by its tag) as red: standing default, every penalty area red"
+  },
+  {
+   "osm": "w444963804",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "golf=water_hazard (yellow by its tag) as red: standing default, every penalty area red"
+  },
+  {
+   "osm": "w444963805",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "golf=water_hazard (yellow by its tag) as red: standing default, every penalty area red"
+  },
+  {
+   "osm": "w445007214",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "golf=water_hazard (yellow by its tag) as red: standing default, every penalty area red"
+  },
+  {
+   "osm": "w445007215",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "golf=water_hazard (yellow by its tag) as red: standing default, every penalty area red"
+  },
+  {
+   "osm": "w445007216",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "golf=water_hazard (yellow by its tag) as red: standing default, every penalty area red"
+  },
+  {
+   "osm": "w445007217",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "golf=water_hazard (yellow by its tag) as red: standing default, every penalty area red"
   }
  ],
  "drop": [

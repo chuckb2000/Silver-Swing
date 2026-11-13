@@ -1,5 +1,5 @@
 {
- "note": "Proposal (course chat, 2026-11-13): the routing of both courses. OSM maps every green and tee box but only North 1's hole line; each line here runs from the back-most mapped tee box of the hole (its centre) through any bend to its green (or its part of a shared green). Worked out from the club's cards: every hole's tee boxes lie on one line to its green at the card's yardages (Green, Black, Tan, Red), the next tee stands by the last green, and the tee boxes' long axes point at the green. Nothing here is approved until the developer says so.",
+ "note": "Proposal (course chat, 2026-11-13): the routing of both courses. OSM maps every green and tee box but only North 1's hole line; each line here runs from the back-most mapped tee box of the hole (its centre) through any bend to its green (or its part of a shared green). Worked out from the club's cards: every hole's tee boxes lie on one line to its green at the card's yardages (Green, Black, Tan, Red), the next tee stands by the last green, and the tee boxes' long axes point at the green. Nothing here is approved until the developer says so. The developer confirmed the routing and the shared greens on 2026-11-13, and put South 16's tees in the strip south of South 15's green (not on North 18's boxes).",
  "layouts": {
   "reserve_north": {
    "1": {
@@ -275,11 +275,11 @@
     "evidence": "tee boxes w904355290, w904355291, w904355292, w904355293"
    },
    "16": {
-    "tee": "w904355286",
+    "tee": "s16_tee_green",
     "green": "w904358577",
     "par": 4,
     "handicap": 8,
-    "evidence": "tee boxes w904355286, w904355287, w904355288"
+    "evidence": "tee boxes s16_tee_green, s16_tee_black, s16_tee_tan, s16_tee_red (not in OSM: the developer's circled strip south of South 15's green, 2026-11-13; pads from the DEM, make_s16_tees.py)"
    },
    "17": {
     "tee": "w903911640",
@@ -381,5 +381,8 @@
    }
   }
  ],
- "bend_note": "Bends only on the doglegs: on the hole's own fairway centre line (fairway_axis), in the landing zone or at the corner. North 17's is given as a point on the narrow fairway west of the pond (its fairway polygon runs round both sides of the ponds, so its main axis takes one side only)."
+ "bend_note": "Bends only on the doglegs: on the hole's own fairway centre line (fairway_axis), in the landing zone or at the corner. North 17's is given as a point on the narrow fairway west of the pond (its fairway polygon runs round both sides of the ponds, so its main axis takes one side only).",
+ "extra_sources": [
+  "proposed/tees_s16.geojson"
+ ]
 }

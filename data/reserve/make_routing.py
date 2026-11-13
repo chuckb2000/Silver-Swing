@@ -29,6 +29,7 @@ from pathlib import Path
 
 import geopandas as gpd
 import numpy as np
+import pandas as pd
 from shapely.geometry import LineString, Point
 from shapely.ops import split as ssplit
 
@@ -55,6 +56,10 @@ def main() -> None:
     spec = json.load(open(HERE / "routing_spec.json"))
     g = gpd.read_file(HERE / "raw" / "osm.geojson").to_crs(cfg["epsg"])
     g["tags"] = g["tags"].apply(lambda t: dict(t) if isinstance(t, dict) else json.loads(t))
+    for extra in spec.get("extra_sources", []):  # tee boxes OSM lacks (South 16: make_s16_tees.py)
+        e = gpd.read_file(HERE / extra).to_crs(cfg["epsg"])
+        e["tags"] = e["tags"].apply(lambda t: dict(t) if isinstance(t, dict) else json.loads(t))
+        g = gpd.GeoDataFrame(pd.concat([g, e[["osm", "kind", "tags", "geometry"]]], ignore_index=True), crs=g.crs)
     by = {r.osm: r for r in g.itertuples()}
 
     rows = []  # (osm, kind, tags, geometry in the course EPSG)
