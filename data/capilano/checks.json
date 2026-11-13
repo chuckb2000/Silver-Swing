@@ -1,0 +1,9 @@
+{
+ "note": "per-course settings for course_play.test.ts",
+ "wind_mph": [1, 7],
+ "water": {"count": 3},
+ "inside_boundary": true,
+ "default_aim": {"skip": [14], "why": "the par-3 14th: OSM's woods start a few metres behind the green and a perfect tee shot at the pin rolls through into them (open item: no photo to check the wood's edge)"},
+ "max_tree_h_m": 72,
+ "why_tall": "the tallest crowns (65-71 m) all stand on the rim of the Capilano River canyon at the world's east edge, outside the boundary: the canyon's old-growth Douglas firs are among the tallest near Vancouver, and the surface-minus-ground height may also be inflated on the canyon wall"
+}
