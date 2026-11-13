@@ -2,7 +2,7 @@
 
 import { app } from '../app';
 import { sfx } from '../audio/sfx';
-import { LeaderboardEntry, loadBoard, renameEagles, renameEntry, saveSettings } from '../save/store';
+import { LeaderboardEntry, loadBoard, renameEagles, renameEntry, saveSettings, sendAgain } from '../save/store';
 import { DEFAULT_NAME } from '../save/names';
 import { askName } from '../ui/nameInput';
 import { compareRounds, toPar } from '../systems/rules/scoring';
@@ -138,6 +138,7 @@ export class SummaryScene extends MenuScene {
       if (name === this.entry.player) { if (this.sys.isActive()) this.rebuild(); return; } // the same name, now this device's (player code)
       await renameEntry(this.entry.id, name);
       await renameEagles(this.entry.id, name);
+      await sendAgain(this.entry.id); // already on the shared board under the old name: sent again, the board renames it
       this.entry = { ...this.entry, player: name };
       app.settings.playerName = name; // and for the next rounds
       void saveSettings(app.settings);

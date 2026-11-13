@@ -1603,6 +1603,7 @@ export class PlayScene extends Phaser.Scene {
       if (this.match) { this.matchRelief(a, a.center); return; }
       this.round.applyRelief(a, a.center);
       this.hud.hideRelief();
+      if (this.maxScoreNow()) return;
       this.hud.flash(a.penalty ? `+${a.penalty} penalty` : 'free relief', 0xffd84a);
       this.beginShot(false);
       return;
@@ -1658,8 +1659,23 @@ export class PlayScene extends Phaser.Scene {
     this.dropMarker.setVisible(false);
     this.reliefArea = null;
     this.hud.hideRelief();
+    if (this.maxScoreNow()) return;
     this.hud.flash(a.penalty ? `dropped: +${a.penalty} penalty` : 'dropped: free relief', 0xffd84a);
     this.beginShot(false);
+  }
+
+  /**
+   * Casual "max 2x par": a penalty drop (an unplayable ball) that brings the score to the cap ends the
+   * hole there, as a stroke into water at the cap does (one more stroke had to be played first).
+   */
+  private maxScoreNow(): boolean {
+    const r = this.round;
+    if (this.match || this.practice || !r.cfg.settings.maxDoublePar || r.tally.strokes < r.hole.par * 2) return false;
+    const score = r.finishHole(true);
+    this.state = 'holed';
+    this.hud.showHoled(score, false, true);
+    void saveSnapshot(r);
+    return true;
   }
 
   cancelDrop() {
