@@ -14,12 +14,12 @@
    "tnm": {
     "dataset": "dem1m",
     "bbox": [
-     -122.948,
-     45.462,
-     -122.888,
-     45.5
+     -122.9335,
+     45.4767,
+     -122.9107,
+     45.495
     ],
-    "list": true
+    "only": "OR_PortlandMetro_B24"
    }
   },
   {
@@ -27,21 +27,13 @@
    "tnm": {
     "dataset": "lpc",
     "bbox": [
-     -122.948,
-     45.462,
-     -122.888,
-     45.5
+     -122.9335,
+     45.4767,
+     -122.9107,
+     45.495
     ],
-    "list": true
+    "only": "OR_PortlandMetro_B24"
    }
-  },
-  {
-   "name": "dogami_dtm_ft.tif",
-   "url": "https://gis.dogami.oregon.gov/arcgis/rest/services/lidar/DIGITAL_TERRAIN_MODEL_MOSAIC/ImageServer/exportImage?bbox=504900,5035300,507900,5038300&bboxSR=32610&imageSR=32610&size=3000,3000&format=tiff&pixelType=F32&noData=-9999&interpolation=RSP_BilinearInterpolation&f=image"
-  },
-  {
-   "name": "dogami_chm_ft.tif",
-   "url": "https://gis.dogami.oregon.gov/arcgis/rest/services/lidar/CANOPY_HEIGHT_MODEL_MOSAIC/ImageServer/exportImage?bbox=504900,5035300,507900,5038300&bboxSR=32610&imageSR=32610&size=3000,3000&format=tiff&pixelType=F32&noData=-9999&interpolation=RSP_BilinearInterpolation&f=image"
   },
   {
    "name": "dogami_chm_identify.json",
@@ -68,5 +60,5 @@
    "url": "https://imagery.oregonexplorer.info/arcgis/rest/services/OSIP_2024/OSIP_2024_WM/ImageServer?f=json"
   }
  ],
- "note": "first push: Overpass export, 3DEP lists, DOGAMI DTM/CHM and OSIP 2024 for x 504900-507900 / y 5035300-5038300 EPSG:32610 (clubhouse at Wikipedia's 45.485,-122.918 +- 1.5 km)"
+ "note": "second push: 3DEP OR_PortlandMetro_B24 (the newest project; DEM and lidar) for the world x 505192-506984 / y 5035906-5037954 EPSG:32610. The DOGAMI exportImage items were dropped: the 3000 x 3000 request returned HTTP 500 on the first run, and the 2024 3DEP flight is newer than the DOGAMI mosaic."
 }
