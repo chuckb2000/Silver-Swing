@@ -1,53 +1,158 @@
 {
  "tags": [
   {
-   "osm": "w1272249188",
-   "set": {
-    "ref": "19"
-   },
-   "reason": "Primrose 1: the club's third nine, numbered 19 in the data (holes 19-27; course_config nines)"
-  },
-  {
-   "osm": "w1272249185",
-   "set": {
-    "ref": "20"
-   },
-   "reason": "Primrose 2: the club's third nine, numbered 20 in the data (holes 19-27; course_config nines)"
-  },
-  {
-   "osm": "w1272249186",
-   "set": {
-    "ref": "21"
-   },
-   "reason": "Primrose 3: the club's third nine, numbered 21 in the data (holes 19-27; course_config nines)"
-  },
-  {
-   "osm": "w1272249183",
-   "set": {
-    "ref": "23"
-   },
-   "reason": "Primrose 5: the club's third nine, numbered 23 in the data (holes 19-27; course_config nines)"
-  },
-  {
-   "osm": "w1272249187",
-   "set": {
-    "ref": "26"
-   },
-   "reason": "Primrose 8: the club's third nine, numbered 26 in the data (holes 19-27; course_config nines)"
-  },
-  {
-   "osm": "w1272249184",
-   "set": {
-    "ref": "27"
-   },
-   "reason": "Primrose 9: the club's third nine, numbered 27 in the data (holes 19-27; course_config nines)"
-  },
-  {
    "osm": "w866021879",
    "set": {
     "par": "4"
    },
    "reason": "Main 2 is a 289-yd par 4 on the card (OSM tags par 3)"
+  },
+  {
+   "osm": "w1106335077",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "standing default (COURSE_BUILD 4.1): every penalty area red; OSM tags it golf=water_hazard (yellow)"
+  },
+  {
+   "osm": "w1106377633",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "standing default (COURSE_BUILD 4.1): every penalty area red; OSM tags it golf=water_hazard (yellow)"
+  },
+  {
+   "osm": "w1106405627",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "standing default (COURSE_BUILD 4.1): every penalty area red; OSM tags it golf=water_hazard (yellow)"
+  },
+  {
+   "osm": "w1106405628",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "standing default (COURSE_BUILD 4.1): every penalty area red; OSM tags it golf=water_hazard (yellow)"
+  },
+  {
+   "osm": "w1106417897",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "standing default (COURSE_BUILD 4.1): every penalty area red; OSM tags it golf=water_hazard (yellow)"
+  },
+  {
+   "osm": "w1106417898",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "standing default (COURSE_BUILD 4.1): every penalty area red; OSM tags it golf=water_hazard (yellow)"
+  },
+  {
+   "osm": "w1106473166",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "standing default (COURSE_BUILD 4.1): every penalty area red; OSM tags it golf=water_hazard (yellow)"
+  },
+  {
+   "osm": "w1106473168",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "standing default (COURSE_BUILD 4.1): every penalty area red; OSM tags it golf=water_hazard (yellow)"
+  },
+  {
+   "osm": "w1144953612",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "standing default (COURSE_BUILD 4.1): every penalty area red; OSM tags it golf=water_hazard (yellow)"
+  },
+  {
+   "osm": "w1150162176",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "standing default (COURSE_BUILD 4.1): every penalty area red; OSM tags it golf=water_hazard (yellow)"
+  },
+  {
+   "osm": "w1150959147",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "standing default (COURSE_BUILD 4.1): every penalty area red; OSM tags it golf=water_hazard (yellow)"
+  },
+  {
+   "osm": "w1150959148",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "standing default (COURSE_BUILD 4.1): every penalty area red; OSM tags it golf=water_hazard (yellow)"
+  },
+  {
+   "osm": "w1272186609",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "standing default (COURSE_BUILD 4.1): every penalty area red; OSM tags it golf=water_hazard (yellow)"
+  },
+  {
+   "osm": "w850530510",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "standing default (COURSE_BUILD 4.1): every penalty area red; OSM tags it golf=water_hazard (yellow)"
+  },
+  {
+   "osm": "w850530511",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "standing default (COURSE_BUILD 4.1): every penalty area red; OSM tags it golf=water_hazard (yellow)"
+  },
+  {
+   "osm": "w850543426",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "standing default (COURSE_BUILD 4.1): every penalty area red; OSM tags it golf=water_hazard (yellow)"
+  },
+  {
+   "osm": "w850546844",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "standing default (COURSE_BUILD 4.1): every penalty area red; OSM tags it golf=water_hazard (yellow)"
+  },
+  {
+   "osm": "w852358618",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "standing default (COURSE_BUILD 4.1): every penalty area red; OSM tags it golf=water_hazard (yellow)"
+  },
+  {
+   "osm": "w852358619",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "standing default (COURSE_BUILD 4.1): every penalty area red; OSM tags it golf=water_hazard (yellow)"
+  },
+  {
+   "osm": "w852358620",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "standing default (COURSE_BUILD 4.1): every penalty area red; OSM tags it golf=water_hazard (yellow)"
+  },
+  {
+   "osm": "w852358621",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "standing default (COURSE_BUILD 4.1): every penalty area red; OSM tags it golf=water_hazard (yellow)"
   }
  ],
  "drop": [
@@ -126,6 +231,306 @@
   {
    "osm": "w1106598145",
    "reason": "Lynch Municipal hole line: another course's hole (its surfaces stay as mapped)"
+  },
+  {
+   "osm": "w1272249188",
+   "reason": "Primrose 1 hole line: the Primrose nine is not built (developer, 2026-11-13); its surfaces stay as mapped"
+  },
+  {
+   "osm": "w1272249185",
+   "reason": "Primrose 2 hole line: the Primrose nine is not built (developer, 2026-11-13); its surfaces stay as mapped"
+  },
+  {
+   "osm": "w1272249186",
+   "reason": "Primrose 3 hole line: the Primrose nine is not built (developer, 2026-11-13); its surfaces stay as mapped"
+  },
+  {
+   "osm": "w1272249183",
+   "reason": "Primrose 5 hole line: the Primrose nine is not built (developer, 2026-11-13); its surfaces stay as mapped"
+  },
+  {
+   "osm": "w1272249187",
+   "reason": "Primrose 8 hole line: the Primrose nine is not built (developer, 2026-11-13); its surfaces stay as mapped"
+  },
+  {
+   "osm": "w1272249184",
+   "reason": "Primrose 9 hole line: the Primrose nine is not built (developer, 2026-11-13); its surfaces stay as mapped"
+  },
+  {
+   "osm": "w1150959127",
+   "reason": "temporary 2022 U.S. Open structure still in OSM (building=grandstand/tent/mobile_home on the course); not there in normal play"
+  },
+  {
+   "osm": "w1150959130",
+   "reason": "temporary 2022 U.S. Open structure still in OSM (building=grandstand/tent/mobile_home on the course); not there in normal play"
+  },
+  {
+   "osm": "w1150959132",
+   "reason": "temporary 2022 U.S. Open structure still in OSM (building=grandstand/tent/mobile_home on the course); not there in normal play"
+  },
+  {
+   "osm": "w1150959133",
+   "reason": "temporary 2022 U.S. Open structure still in OSM (building=grandstand/tent/mobile_home on the course); not there in normal play"
+  },
+  {
+   "osm": "w1150959134",
+   "reason": "temporary 2022 U.S. Open structure still in OSM (building=grandstand/tent/mobile_home on the course); not there in normal play"
+  },
+  {
+   "osm": "w1150959135",
+   "reason": "temporary 2022 U.S. Open structure still in OSM (building=grandstand/tent/mobile_home on the course); not there in normal play"
+  },
+  {
+   "osm": "w1150959136",
+   "reason": "temporary 2022 U.S. Open structure still in OSM (building=grandstand/tent/mobile_home on the course); not there in normal play"
+  },
+  {
+   "osm": "w1150959137",
+   "reason": "temporary 2022 U.S. Open structure still in OSM (building=grandstand/tent/mobile_home on the course); not there in normal play"
+  },
+  {
+   "osm": "w1150959138",
+   "reason": "temporary 2022 U.S. Open structure still in OSM (building=grandstand/tent/mobile_home on the course); not there in normal play"
+  },
+  {
+   "osm": "w1150959139",
+   "reason": "temporary 2022 U.S. Open structure still in OSM (building=grandstand/tent/mobile_home on the course); not there in normal play"
+  },
+  {
+   "osm": "w1150959140",
+   "reason": "temporary 2022 U.S. Open structure still in OSM (building=grandstand/tent/mobile_home on the course); not there in normal play"
+  },
+  {
+   "osm": "w1150959142",
+   "reason": "temporary 2022 U.S. Open structure still in OSM (building=grandstand/tent/mobile_home on the course); not there in normal play"
+  },
+  {
+   "osm": "w1150959143",
+   "reason": "temporary 2022 U.S. Open structure still in OSM (building=grandstand/tent/mobile_home on the course); not there in normal play"
+  },
+  {
+   "osm": "w1150959146",
+   "reason": "temporary 2022 U.S. Open structure still in OSM (building=grandstand/tent/mobile_home on the course); not there in normal play"
+  },
+  {
+   "osm": "w1150959149",
+   "reason": "temporary 2022 U.S. Open structure still in OSM (building=grandstand/tent/mobile_home on the course); not there in normal play"
+  },
+  {
+   "osm": "w1150959150",
+   "reason": "temporary 2022 U.S. Open structure still in OSM (building=grandstand/tent/mobile_home on the course); not there in normal play"
+  },
+  {
+   "osm": "w1150970183",
+   "reason": "temporary 2022 U.S. Open structure still in OSM (building=grandstand/tent/mobile_home on the course); not there in normal play"
+  },
+  {
+   "osm": "w1150970184",
+   "reason": "temporary 2022 U.S. Open structure still in OSM (building=grandstand/tent/mobile_home on the course); not there in normal play"
+  },
+  {
+   "osm": "w1150970186",
+   "reason": "temporary 2022 U.S. Open structure still in OSM (building=grandstand/tent/mobile_home on the course); not there in normal play"
+  },
+  {
+   "osm": "w1150970187",
+   "reason": "temporary 2022 U.S. Open structure still in OSM (building=grandstand/tent/mobile_home on the course); not there in normal play"
+  },
+  {
+   "osm": "w1150970188",
+   "reason": "temporary 2022 U.S. Open structure still in OSM (building=grandstand/tent/mobile_home on the course); not there in normal play"
+  },
+  {
+   "osm": "w1150970189",
+   "reason": "temporary 2022 U.S. Open structure still in OSM (building=grandstand/tent/mobile_home on the course); not there in normal play"
+  },
+  {
+   "osm": "w1150970192",
+   "reason": "temporary 2022 U.S. Open structure still in OSM (building=grandstand/tent/mobile_home on the course); not there in normal play"
+  },
+  {
+   "osm": "w1150970193",
+   "reason": "temporary 2022 U.S. Open structure still in OSM (building=grandstand/tent/mobile_home on the course); not there in normal play"
+  },
+  {
+   "osm": "w1150970196",
+   "reason": "temporary 2022 U.S. Open structure still in OSM (building=grandstand/tent/mobile_home on the course); not there in normal play"
+  },
+  {
+   "osm": "w1150970197",
+   "reason": "temporary 2022 U.S. Open structure still in OSM (building=grandstand/tent/mobile_home on the course); not there in normal play"
+  },
+  {
+   "osm": "w1150970198",
+   "reason": "temporary 2022 U.S. Open structure still in OSM (building=grandstand/tent/mobile_home on the course); not there in normal play"
+  },
+  {
+   "osm": "w1150970199",
+   "reason": "temporary 2022 U.S. Open structure still in OSM (building=grandstand/tent/mobile_home on the course); not there in normal play"
+  },
+  {
+   "osm": "w1150970200",
+   "reason": "temporary 2022 U.S. Open structure still in OSM (building=grandstand/tent/mobile_home on the course); not there in normal play"
+  },
+  {
+   "osm": "w1272199186",
+   "reason": "temporary 2022 U.S. Open structure still in OSM (building=grandstand/tent/mobile_home on the course); not there in normal play"
+  },
+  {
+   "osm": "w1272199195",
+   "reason": "temporary 2022 U.S. Open structure still in OSM (building=grandstand/tent/mobile_home on the course); not there in normal play"
+  },
+  {
+   "osm": "w1272199196",
+   "reason": "temporary 2022 U.S. Open structure still in OSM (building=grandstand/tent/mobile_home on the course); not there in normal play"
+  },
+  {
+   "osm": "w1272199197",
+   "reason": "temporary 2022 U.S. Open structure still in OSM (building=grandstand/tent/mobile_home on the course); not there in normal play"
+  },
+  {
+   "osm": "w1272199198",
+   "reason": "temporary 2022 U.S. Open structure still in OSM (building=grandstand/tent/mobile_home on the course); not there in normal play"
+  },
+  {
+   "osm": "w1272199199",
+   "reason": "temporary 2022 U.S. Open structure still in OSM (building=grandstand/tent/mobile_home on the course); not there in normal play"
+  },
+  {
+   "osm": "w1272199200",
+   "reason": "temporary 2022 U.S. Open structure still in OSM (building=grandstand/tent/mobile_home on the course); not there in normal play"
+  },
+  {
+   "osm": "w1272199201",
+   "reason": "temporary 2022 U.S. Open structure still in OSM (building=grandstand/tent/mobile_home on the course); not there in normal play"
+  },
+  {
+   "osm": "w1272207426",
+   "reason": "temporary 2022 U.S. Open structure still in OSM (building=grandstand/tent/mobile_home on the course); not there in normal play"
+  },
+  {
+   "osm": "w1272207434",
+   "reason": "temporary 2022 U.S. Open structure still in OSM (building=grandstand/tent/mobile_home on the course); not there in normal play"
+  },
+  {
+   "osm": "w1272207435",
+   "reason": "temporary 2022 U.S. Open structure still in OSM (building=grandstand/tent/mobile_home on the course); not there in normal play"
+  },
+  {
+   "osm": "w1272207436",
+   "reason": "temporary 2022 U.S. Open structure still in OSM (building=grandstand/tent/mobile_home on the course); not there in normal play"
+  },
+  {
+   "osm": "w1272207437",
+   "reason": "temporary 2022 U.S. Open structure still in OSM (building=grandstand/tent/mobile_home on the course); not there in normal play"
+  },
+  {
+   "osm": "w1272207438",
+   "reason": "temporary 2022 U.S. Open structure still in OSM (building=grandstand/tent/mobile_home on the course); not there in normal play"
+  },
+  {
+   "osm": "w1272207439",
+   "reason": "temporary 2022 U.S. Open structure still in OSM (building=grandstand/tent/mobile_home on the course); not there in normal play"
+  },
+  {
+   "osm": "w1272207442",
+   "reason": "temporary 2022 U.S. Open structure still in OSM (building=grandstand/tent/mobile_home on the course); not there in normal play"
+  },
+  {
+   "osm": "w1272207443",
+   "reason": "temporary 2022 U.S. Open structure still in OSM (building=grandstand/tent/mobile_home on the course); not there in normal play"
+  },
+  {
+   "osm": "w1272207447",
+   "reason": "temporary 2022 U.S. Open structure still in OSM (building=grandstand/tent/mobile_home on the course); not there in normal play"
+  },
+  {
+   "osm": "w1272207448",
+   "reason": "temporary 2022 U.S. Open structure still in OSM (building=grandstand/tent/mobile_home on the course); not there in normal play"
+  },
+  {
+   "osm": "w1272207449",
+   "reason": "temporary 2022 U.S. Open structure still in OSM (building=grandstand/tent/mobile_home on the course); not there in normal play"
+  },
+  {
+   "osm": "w1272207450",
+   "reason": "temporary 2022 U.S. Open structure still in OSM (building=grandstand/tent/mobile_home on the course); not there in normal play"
+  },
+  {
+   "osm": "w1272207452",
+   "reason": "temporary 2022 U.S. Open structure still in OSM (building=grandstand/tent/mobile_home on the course); not there in normal play"
+  },
+  {
+   "osm": "w1272207454",
+   "reason": "temporary 2022 U.S. Open structure still in OSM (building=grandstand/tent/mobile_home on the course); not there in normal play"
+  },
+  {
+   "osm": "w1272207455",
+   "reason": "temporary 2022 U.S. Open structure still in OSM (building=grandstand/tent/mobile_home on the course); not there in normal play"
+  },
+  {
+   "osm": "w1272207456",
+   "reason": "temporary 2022 U.S. Open structure still in OSM (building=grandstand/tent/mobile_home on the course); not there in normal play"
+  },
+  {
+   "osm": "w1272207457",
+   "reason": "temporary 2022 U.S. Open structure still in OSM (building=grandstand/tent/mobile_home on the course); not there in normal play"
+  },
+  {
+   "osm": "w1272207459",
+   "reason": "temporary 2022 U.S. Open structure still in OSM (building=grandstand/tent/mobile_home on the course); not there in normal play"
+  },
+  {
+   "osm": "w1272207468",
+   "reason": "temporary 2022 U.S. Open structure still in OSM (building=grandstand/tent/mobile_home on the course); not there in normal play"
+  },
+  {
+   "osm": "w1272207469",
+   "reason": "temporary 2022 U.S. Open structure still in OSM (building=grandstand/tent/mobile_home on the course); not there in normal play"
+  },
+  {
+   "osm": "w1272207470",
+   "reason": "temporary 2022 U.S. Open structure still in OSM (building=grandstand/tent/mobile_home on the course); not there in normal play"
+  },
+  {
+   "osm": "w1272207471",
+   "reason": "temporary 2022 U.S. Open structure still in OSM (building=grandstand/tent/mobile_home on the course); not there in normal play"
+  },
+  {
+   "osm": "w1272207472",
+   "reason": "temporary 2022 U.S. Open structure still in OSM (building=grandstand/tent/mobile_home on the course); not there in normal play"
+  },
+  {
+   "osm": "w1272207473",
+   "reason": "temporary 2022 U.S. Open structure still in OSM (building=grandstand/tent/mobile_home on the course); not there in normal play"
+  },
+  {
+   "osm": "w1272207476",
+   "reason": "temporary 2022 U.S. Open structure still in OSM (building=grandstand/tent/mobile_home on the course); not there in normal play"
+  },
+  {
+   "osm": "w1272207477",
+   "reason": "temporary 2022 U.S. Open structure still in OSM (building=grandstand/tent/mobile_home on the course); not there in normal play"
+  },
+  {
+   "osm": "w1272207478",
+   "reason": "temporary 2022 U.S. Open structure still in OSM (building=grandstand/tent/mobile_home on the course); not there in normal play"
+  },
+  {
+   "osm": "w1272207479",
+   "reason": "temporary 2022 U.S. Open structure still in OSM (building=grandstand/tent/mobile_home on the course); not there in normal play"
+  },
+  {
+   "osm": "w1272207480",
+   "reason": "temporary 2022 U.S. Open structure still in OSM (building=grandstand/tent/mobile_home on the course); not there in normal play"
+  },
+  {
+   "osm": "w1272207481",
+   "reason": "temporary 2022 U.S. Open structure still in OSM (building=grandstand/tent/mobile_home on the course); not there in normal play"
+  },
+  {
+   "osm": "w1272207482",
+   "reason": "temporary 2022 U.S. Open structure still in OSM (building=grandstand/tent/mobile_home on the course); not there in normal play"
   }
  ]
 }
