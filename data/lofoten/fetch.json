@@ -31,7 +31,7 @@
   },
   {
    "name": "kv_dom_describe.xml",
-   "url": "https://wcs.geonorge.no/skwms1/wcs.hoyde-dom-nhm-25833?service=WCS&version=2.0.1&request=DescribeCoverage&CoverageId=nhm_dom_25833"
+   "url": "https://wcs.geonorge.no/skwms1/wcs.hoyde-dom-nhm-25833?service=WCS&version=2.0.1&request=DescribeCoverage&CoverageId=nhm_dom_topo_25833"
   },
   {
    "name": "kv_dom_1m_v100.tif",
@@ -39,7 +39,7 @@
   },
   {
    "name": "kv_dom_1m_v201.tif",
-   "url": "https://wcs.geonorge.no/skwms1/wcs.hoyde-dom-nhm-25833?service=WCS&version=2.0.1&request=GetCoverage&CoverageId=nhm_dom_25833&format=image/tiff&subset=E(462800,466000)&subset=N(7579600,7582700)"
+   "url": "https://wcs.geonorge.no/skwms1/wcs.hoyde-dom-nhm-25833?service=WCS&version=2.0.1&request=GetCoverage&CoverageId=nhm_dom_topo_25833&format=image/tiff&subset=E(462800,466000)&subset=N(7579600,7582700)"
   }
  ]
 }
