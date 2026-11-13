@@ -18,6 +18,14 @@ in flight; a green heron on a snag). Great Blue builds 6,966 yd against 7,016 (o
 hole 11); Greenback 6,519 against 6,638 (two flags, holes 6 and 8, whose Black boxes are
 not mapped).
 
+## Checks
+
+- `course_play.test.ts -t heron_lakes`: 22 passed (both courses).
+- `npm test`: 1,769 passed, 2 failed: `player.test.ts` "the real rotation" and `tour.test.ts` "a hole drawn sits out", which fail until `make land` adds the courses to the daily rotation.
+- `npm run e2e`: 16 passed, 1 failed: "a reload while the ball is in the air keeps the stroke" (Oswego Lake; after the reload the round resumes with 0 strokes). It failed again in two runs on their own, so it is not just load. The same test passed on the Tokatee branch, which has the same main merged; I could not find a cause in this branch (it changes only course data). Flagged for the design chat.
+- Pinned; a `--fresh` rebuild left git clean.
+- Every hole of both courses played in the game (tee view, overview, first shot, putting view): 36 of 36 holed.
+
 ## Facts
 
 -   **Location:** West Delta Park, North Portland, Multnomah County, Oregon, on the
