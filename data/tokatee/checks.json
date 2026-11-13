@@ -1,0 +1,9 @@
+{
+ "note": "per-course settings for course_play.test.ts",
+ "yardage": {"max": {"17": 0.24}, "why": "17 plays 150 yd from its back-most mapped box against the card's 195 (Blue 125): no box at 195 yd in OSM or the 2024 photo (open item, the developer's call)"},
+ "wind_mph": [1, 7],
+ "water": {"count": 13},
+ "inside_boundary": true,
+ "max_tree_h_m": 78,
+ "why_tall": "the tallest crowns (65-77 m) are old-growth Douglas firs on the valley slope north of the course, 100-170 m outside the boundary (the McKenzie valley's old growth reaches such heights; the lidar may also read high on the steep slope)"
+}
