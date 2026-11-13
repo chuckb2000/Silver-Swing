@@ -1,0 +1,19 @@
+{
+  "name": "Capilano (a mountainside course cut through North Shore rainforest)",
+  "note": "Course theme palette (<= 32 colours), same keys as pnw.json. Capilano Golf and Country Club, West Vancouver, on the slope of Hollyburn Mountain above the Lions Gate (course chat, 2026-11-13). No open orthophoto was found, so the colours are a design, not sampled: a wet coastal-rainforest course, darker and bluer than pnw. Rough a deep moss green, the mown turf a cool, rich green, greens a lighter bent; bunker sand near white (Thompson's flashed white bunkers); water a cold slate. Trees: very tall Douglas fir and western red cedar in near-black blue-green (two conifer tones by variant), with bigleaf maple and red alder among them (trees_capilano.py; a drawing choice, the lidar gives only crown shape). Shadows are a 35% black overlay on top of these.",
+  "colors": {
+    "G0": "#122a1f", "G1": "#183b2a", "G2": "#205035", "G3": "#28643e",
+    "G4": "#317848", "G5": "#3b8c52", "G6": "#469e5c", "G7": "#53af67",
+    "G8": "#66bf76", "G9": "#8fd398",
+    "L0": "#3f6640", "L1": "#4c7848", "L2": "#5b8a52",
+    "S0": "#c6c0ad", "S1": "#e4e0d2", "S2": "#f7f5ee",
+    "W0": "#27435a", "W1": "#33566f", "W2": "#5c7f98",
+    "K0": "#24262c", "K1": "#4f525b", "K2": "#767a83", "K3": "#ada899", "K4": "#d6d0c0",
+    "B0": "#3c2c22", "B1": "#5f4433", "B2": "#7d5a44",
+    "R0": "#47566a", "WH": "#f5f6f4"
+  },
+  "trees": {
+    "conifer": "trees_capilano:conifer",
+    "deciduous": "trees_capilano:deciduous"
+  }
+}
