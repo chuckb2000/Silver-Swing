@@ -10,7 +10,7 @@ Course's boundary and golf features overlap the world and are dropped. Elevation
 canopy from DOGAMI lidar (DTM and CHM, feet), the photo for checks from OSIP 2024 (0.5 m);
 everything fetched by the GitHub Actions workflow. Tee set built: Championship (the
 longest), the default. New theme `eugene_cc` (deep fir greens with a gold maple for the
-club's colours); the logo is a giant fir over a green in emerald and gold. 6,848 yd built
+club's colours); the logo is a mallard drake on a pond (the developer's call). 6,848 yd built
 against 7,015; hole 9 is 9.8 % short (open item 1), 11 is a flag.
 
 ## Facts
