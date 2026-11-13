@@ -1,0 +1,46 @@
+{
+ "tracks": [
+  {
+   "id": "xmas_jingle",
+   "title": "jingle bells",
+   "file": "xmas_jingle-80c9b439.mp3",
+   "seconds": 115.3,
+   "bytes": 1383340
+  },
+  {
+   "id": "xmas_deck",
+   "title": "deck the halls",
+   "file": "xmas_deck-0e6c841a.mp3",
+   "seconds": 117.1,
+   "bytes": 1405596
+  },
+  {
+   "id": "xmas_silent",
+   "title": "silent night",
+   "file": "xmas_silent-5b027a4e.mp3",
+   "seconds": 139.2,
+   "bytes": 1670478
+  },
+  {
+   "id": "xmas_wish",
+   "title": "we wish you a merry christmas",
+   "file": "xmas_wish-aabb2c26.mp3",
+   "seconds": 94.9,
+   "bytes": 1138520
+  },
+  {
+   "id": "xmas_joy",
+   "title": "joy to the world",
+   "file": "xmas_joy-ac82e372.mp3",
+   "seconds": 108.5,
+   "bytes": 1302778
+  },
+  {
+   "id": "xmas_wenceslas",
+   "title": "good king wenceslas",
+   "file": "xmas_wenceslas-78332910.mp3",
+   "seconds": 130.5,
+   "bytes": 1565779
+  }
+ ]
+}
