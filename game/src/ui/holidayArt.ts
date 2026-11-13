@@ -3,12 +3,13 @@
 //
 //   thanksgiving  the broadleaf trees turn orange, red and yellow (conifers stay green), and their
 //                 leaves lie on the rough under them
-//   christmas     snow on the tops of the trees, baubles, twinkling lights and a star on most
-//                 conifers; string lights along every roof; snow lying in patches on the rough (the
+//   christmas     snow on the tops of the trees, baubles, lights and a star on most conifers;
+//                 string lights along every roof; snow lying in patches on the rough (the
 //                 fairways and greens are clear)
 //
-// The lights twinkle by redrawing their few texels in the dressed picture now and then (twinkle(),
-// from HolidayFxScene), so every view of a tree or a roof twinkles with no change of its own.
+// The roofs' string lights chase by redrawing their few texels in the dressed picture now and then
+// (twinkle(), from HolidayFxScene), so every view of a roof shows it with no change of its own. The
+// trees' lights stay steady: twinkling trees all over the course were too distracting (developer).
 //
 // The holiday's hats, flags and decorations are their own sprite sheet (assets-src/holiday.py);
 // the falling snow and leaves are HolidayFxScene.
@@ -141,7 +142,9 @@ export function dressTrees(scene: Phaser.Scene, key: string, ratio = 1) {
   if (!h) return;
   restyle(scene, key, (d, W, _H, frames) => {
     if (h === 'thanksgiving') { autumn(d, W, frames); return; }
-    return christmasTrees(d, W, frames, ratio);
+    // the trees' lights stay lit, steady: twinkling all over the course was too distracting
+    // (developer, 2026-11-13); only the roofs' string lights chase
+    christmasTrees(d, W, frames, ratio);
   });
 }
 

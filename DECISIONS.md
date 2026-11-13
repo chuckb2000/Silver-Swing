@@ -1631,10 +1631,10 @@ or a round counts (`systems/game/holiday.ts` is pure and tested; the drawing is
   course), and snow in dithered patches on the rough and woods (never on fairways, greens, tees,
   sand, water or roofs). Hay, pumpkins and corn (Thanksgiving) or presents (Christmas) stand
   beside the tee, only where there is open grass.
-- **Twinkling:** about three times a second (`HolidayFxScene` calls `twinkle()`), each dressed
-  picture redraws the few texels of its lights and is sent to the GPU again: the trees' lights
-  go dim one tick in five, each at its own time; the roofs' chase round in threes. Only the
-  pictures that have lights and still exist are touched.
+- **Lights:** the trees' lights stay lit and steady: twinkling trees all over the course were
+  too distracting (developer). The roofs' string lights chase round in threes, about three times
+  a second (`HolidayFxScene` calls `twinkle()`: each roof picture redraws the few texels of its
+  lights and is sent to the GPU again); the title's string of lights twinkles.
 - **The ball on snow:** white on white couldn't be seen; on a snowy spot the ball at rest (and
   the other player's, and a replay's) is drawn with a dark outline (`ball_snow`).
 - **Golfer and flag:** a pilgrim's hat or Santa's hat on the golfer and the portrait; an orange
