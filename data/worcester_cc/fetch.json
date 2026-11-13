@@ -1,0 +1,47 @@
+{
+ "items": [
+  {
+   "name": "worcester_cc_overpass.geojson",
+   "osm_box": [
+    42.3157,
+    -71.7904,
+    42.3323,
+    -71.7715
+   ]
+  },
+  {
+   "name": "worcester_cc_dem1m",
+   "tnm": {
+    "dataset": "dem1m",
+    "bbox": [
+     -71.7904,
+     42.3157,
+     -71.7715,
+     42.3323
+    ],
+    "list": true
+   }
+  },
+  {
+   "name": "worcester_cc_lpc",
+   "tnm": {
+    "dataset": "lpc",
+    "bbox": [
+     -71.7904,
+     42.3157,
+     -71.7715,
+     42.3323
+    ],
+    "list": true
+   }
+  },
+  {
+   "name": "naip_270100_4688600.jpg",
+   "url": "https://imagery.nationalmap.gov/arcgis/rest/services/USGSNAIPImagery/ImageServer/exportImage?bbox=270100,4688600,271600,4690400&bboxSR=32619&imageSR=32619&size=2500,3000&format=jpg&f=image"
+  },
+  {
+   "name": "naip_info.json",
+   "url": "https://imagery.nationalmap.gov/arcgis/rest/services/USGSNAIPImagery/ImageServer?f=pjson"
+  }
+ ]
+}
