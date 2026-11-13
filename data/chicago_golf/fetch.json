@@ -1,0 +1,39 @@
+{
+ "items": [
+  {
+   "name": "chicago_golf_overpass.geojson",
+   "osm_box": [
+    41.836,
+    -88.132,
+    41.862,
+    -88.1
+   ]
+  },
+  {
+   "name": "chicago_golf_dem1m",
+   "tnm": {
+    "dataset": "dem1m",
+    "bbox": [
+     -88.132,
+     41.836,
+     -88.1,
+     41.862
+    ],
+    "list": true
+   }
+  },
+  {
+   "name": "chicago_golf_lpc",
+   "tnm": {
+    "dataset": "lpc",
+    "bbox": [
+     -88.132,
+     41.836,
+     -88.1,
+     41.862
+    ],
+    "list": true
+   }
+  }
+ ]
+}
