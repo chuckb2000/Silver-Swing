@@ -459,14 +459,6 @@
   {
    "osm": "w680757298",
    "reason": "Lakes 18: a Lake hole line; the Lake is data/olympic_club, its ground stays as club property"
-  },
-  {
-   "osm": "n6624454071",
-   "reason": "Cliffs 5: OSM's pin sits 14 m from the middle of this large (1,350 m2) green, outside the close-up putting view; the game finds its own hole locations from the green's centre (pins.ts)"
-  },
-  {
-   "osm": "n6624457256",
-   "reason": "Cliffs 5: OSM's pin sits 14 m from the middle of this large (1,350 m2) green, outside the close-up putting view; the game finds its own hole locations from the green's centre (pins.ts)"
   }
  ],
  "tags": [

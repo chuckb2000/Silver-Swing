@@ -21,15 +21,13 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 
 1. Hole 2 (Blue): no mapped tee box within 8% of the card; the tee is the start point of the OSM hole line (163 yd). The Blue tee box is not in OSM - trace it to confirm.
 2. Hole 4 (Blue): tee box w677765431 assigned by the course chat (tagged hole=4, tee_set=Blue in edited/course.geojson).
-3. Hole 5: no golf=pin on its green; the centre pin is the green's centre (proposal).
-4. Hole 5 (Blue): tee box w677770777 assigned by the course chat (tagged hole=5, tee_set=Blue in edited/course.geojson).
-5. Hole 6 (Blue): tee box w705218527 assigned by the course chat (tagged hole=6, tee_set=Blue in edited/course.geojson).
-6. Hole 7: no golf=pin on its green; the centre pin is the green's centre (proposal).
-7. Hole 7 (Blue): tee box w705214047 assigned by the course chat (tagged hole=7, tee_set=Blue in edited/course.geojson).
-8. Hole 8 (Blue): no mapped tee box within 8% of the card; the tee is the start point of the OSM hole line (78 yd). The Blue tee box is not in OSM - trace it to confirm.
-9. Hole 8 (Blue): measured 78 yd vs card 171 (-54.2%) - FAIL, needs a decision.
-10. Hole 9 (Blue): measured 146 yd vs card 154 (-4.9%) even with the virtual tee at the best spot in its box; accepted for play.
-11. Hole 9 (Blue): tee box w863361130 assigned by the course chat (tagged hole=9, tee_set=Blue in edited/course.geojson).
+3. Hole 5 (Blue): tee box w677770777 assigned by the course chat (tagged hole=5, tee_set=Blue in edited/course.geojson).
+4. Hole 6 (Blue): tee box w705218527 assigned by the course chat (tagged hole=6, tee_set=Blue in edited/course.geojson).
+5. Hole 7 (Blue): tee box w705214047 assigned by the course chat (tagged hole=7, tee_set=Blue in edited/course.geojson).
+6. Hole 8 (Blue): no mapped tee box within 8% of the card; the tee is the start point of the OSM hole line (78 yd). The Blue tee box is not in OSM - trace it to confirm.
+7. Hole 8 (Blue): measured 78 yd vs card 171 (-54.2%) - FAIL, needs a decision.
+8. Hole 9 (Blue): measured 146 yd vs card 154 (-4.9%) even with the virtual tee at the best spot in its box; accepted for play.
+9. Hole 9 (Blue): tee box w863361130 assigned by the course chat (tagged hole=9, tee_set=Blue in edited/course.geojson).
 
 ## Playability adjustments
 
@@ -43,7 +41,7 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 - 4151 trees detected in the world extent (1918 inside the course), 586 conifers / 3565 deciduous; median height 9.8 m, max 40.3 m.
 - Dropped: 829 tops on building footprints, 0 over the lake, 66 tiny crowns.
 - Dropped on playing surfaces (spec 5.4): 14 -> bunker w380016723 (24.4 m), tee w680648767 (14.3 m), bunker w380016715 (5.4 m), green w1422569485 (12.8 m), green w1422569485 (13.5 m), fairway w1422569547 (5.4 m), fairway w864022904 (15.0 m), fairway w864022904 (12.1 m), fairway w864022904 (11.9 m), bunker w1289799783 (19.9 m), bunker w1422569514 (23.4 m), bunker w1422569522 (27.1 m), bunker w1422569561 (28.4 m), bunker w1422569551 (27.1 m)
-- Dropped from tee shots (s06b): 1 -> 5 Blue (21.5 m tree, 43.3 m from the tee)
+- Dropped from tee shots (s06b): 1 -> 7 Blue (21.5 m tree, 47.7 m from the tee)
 - OSM natural=tree points matched by a detected tree within 4 m: 0 of 67.
 - Conifer vs deciduous is inferred from crown shape only (no leaf-off imagery); see build/trees_preview.png.
 
@@ -51,7 +49,7 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 
 | green | hole | fitted tilt % | used tilt % | bumps | max slope % | max slope within 3 m of pin % |
 |---|---|---|---|---|---|---|
-| r19320933 | 7 | 4.5 | 2.5 | 2 | 4.1 | 1.5 |
+| r19320933 | 7 | 4.5 | 2.5 | 2 | 3.8 | 1.5 |
 | w1290589107 | practice | 1.9 | 1.9 | 2 | 2.9 | 0.0 |
 | w1290589109 | practice | 1.8 | 1.8 | 1 | 3.1 | 0.0 |
 | w1290589110 | practice | 2.7 | 2.5 | 2 | 3.9 | 0.0 |
@@ -111,16 +109,14 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 | 2 | 3 | yes | yes (1 near) | yes | yes | yes | 7 | 0 |
 | 3 | 3 | yes | yes (6 near) | - | yes | yes | 8 | 0 |
 | 4 | 3 | yes | yes (6 near) | - | yes | yes | 3 | 0 |
-| 5 | 3 | yes | yes (3 near) | yes | yes | NO | 13 | 0 |
+| 5 | 3 | yes | yes (3 near) | yes | yes | yes | 13 | 0 |
 | 6 | 3 | yes | yes (1 near) | yes | yes | yes | 5 | 0 |
-| 7 | 3 | yes | yes (2 near) | yes | yes | NO | 8 | 0 |
+| 7 | 3 | yes | yes (2 near) | yes | yes | yes | 8 | 0 |
 | 8 | 3 | yes | yes (1 near) | yes | yes | yes | 2 | 0 |
 | 9 | 3 | yes | yes (3 near) | yes | yes | yes | 5 | 0 |
 
 ## Missing or suspect features
 
-- hole 5: no golf=pin inside its green
-- hole 7: no golf=pin inside its green
 - green w1290589107 at (1049, 410) is not the end of any hole line (practice green?) -> treated as a wrong green
 - green w1290589109 at (1233, 380) is not the end of any hole line (practice green?) -> treated as a wrong green
 - green w1290589110 at (873, 657) is not the end of any hole line (practice green?) -> treated as a wrong green
@@ -205,5 +201,5 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 - fairway w864150448 at (658, 1209) is more than 30 m from every hole line (a range or practice area mapped as fairway?)
 - green r19320933 ends 2 hole lines (5, 7): a double green, split it so each hole has its own green and pin
 
-Totals: 184 tees, 51 greens, 43 fairways, 171 bunkers, 0 water hazards, 43 pins, 52 cart paths, 67 OSM tree points.
+Totals: 184 tees, 51 greens, 43 fairways, 171 bunkers, 0 water hazards, 45 pins, 52 cart paths, 67 OSM tree points.
 
