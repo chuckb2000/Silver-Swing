@@ -1,0 +1,264 @@
+{
+ "add": [
+  {
+   "from": "proposed/paths.geojson",
+   "ids": [
+    "w1201811782_cartpath",
+    "w1201811784_cartpath",
+    "w1201811785_cartpath",
+    "w1201811786_cartpath",
+    "w1201814546_cartpath",
+    "w1201814548_cartpath",
+    "w1201814549_cartpath",
+    "w1201815801_cartpath",
+    "w1208265774_cartpath",
+    "w1208265775_cartpath",
+    "w1208265776_cartpath",
+    "w1208267681_cartpath",
+    "w1208267682_cartpath",
+    "w1208267683_cartpath",
+    "w1208267684_cartpath",
+    "w1208267685_cartpath",
+    "w1208267686_cartpath",
+    "w1208267687_cartpath",
+    "w1208267688_cartpath",
+    "w1208267689_cartpath",
+    "w1208267690_cartpath",
+    "w1208267693_cartpath",
+    "w1208267694_cartpath",
+    "w1208267695_cartpath",
+    "w1208282073_cartpath",
+    "w1208282074_cartpath",
+    "w1208282075_cartpath",
+    "w1208282076_cartpath",
+    "w1208391569_cartpath",
+    "w1208391571_cartpath",
+    "w1208391572_cartpath",
+    "w1208391574_cartpath",
+    "w1208391575_cartpath",
+    "w1208391576_cartpath",
+    "w1208391577_cartpath",
+    "w1208391578_cartpath",
+    "w1208391580_cartpath",
+    "w1208391583_cartpath",
+    "w1208391584_cartpath",
+    "w1208391585_cartpath",
+    "w1208391586_cartpath",
+    "w1208391587_cartpath",
+    "w1208394989_cartpath",
+    "w1208394991_cartpath",
+    "w1208394994_cartpath",
+    "w1208394999_cartpath",
+    "w1208641211_cartpath",
+    "w1208641214_cartpath",
+    "w1208641222_cartpath",
+    "w1208641224_cartpath"
+   ],
+   "tags": {},
+   "reason": "golf=path ways (the audit: retag as cart paths): copied as cart paths, originals dropped"
+  }
+ ],
+ "drop": [
+  {
+   "osm": "w1201811782",
+   "reason": "golf=path, copied as a cart path (proposed/paths.geojson)"
+  },
+  {
+   "osm": "w1201811784",
+   "reason": "golf=path, copied as a cart path (proposed/paths.geojson)"
+  },
+  {
+   "osm": "w1201811785",
+   "reason": "golf=path, copied as a cart path (proposed/paths.geojson)"
+  },
+  {
+   "osm": "w1201811786",
+   "reason": "golf=path, copied as a cart path (proposed/paths.geojson)"
+  },
+  {
+   "osm": "w1201814546",
+   "reason": "golf=path, copied as a cart path (proposed/paths.geojson)"
+  },
+  {
+   "osm": "w1201814548",
+   "reason": "golf=path, copied as a cart path (proposed/paths.geojson)"
+  },
+  {
+   "osm": "w1201814549",
+   "reason": "golf=path, copied as a cart path (proposed/paths.geojson)"
+  },
+  {
+   "osm": "w1201815801",
+   "reason": "golf=path, copied as a cart path (proposed/paths.geojson)"
+  },
+  {
+   "osm": "w1208265774",
+   "reason": "golf=path, copied as a cart path (proposed/paths.geojson)"
+  },
+  {
+   "osm": "w1208265775",
+   "reason": "golf=path, copied as a cart path (proposed/paths.geojson)"
+  },
+  {
+   "osm": "w1208265776",
+   "reason": "golf=path, copied as a cart path (proposed/paths.geojson)"
+  },
+  {
+   "osm": "w1208267681",
+   "reason": "golf=path, copied as a cart path (proposed/paths.geojson)"
+  },
+  {
+   "osm": "w1208267682",
+   "reason": "golf=path, copied as a cart path (proposed/paths.geojson)"
+  },
+  {
+   "osm": "w1208267683",
+   "reason": "golf=path, copied as a cart path (proposed/paths.geojson)"
+  },
+  {
+   "osm": "w1208267684",
+   "reason": "golf=path, copied as a cart path (proposed/paths.geojson)"
+  },
+  {
+   "osm": "w1208267685",
+   "reason": "golf=path, copied as a cart path (proposed/paths.geojson)"
+  },
+  {
+   "osm": "w1208267686",
+   "reason": "golf=path, copied as a cart path (proposed/paths.geojson)"
+  },
+  {
+   "osm": "w1208267687",
+   "reason": "golf=path, copied as a cart path (proposed/paths.geojson)"
+  },
+  {
+   "osm": "w1208267688",
+   "reason": "golf=path, copied as a cart path (proposed/paths.geojson)"
+  },
+  {
+   "osm": "w1208267689",
+   "reason": "golf=path, copied as a cart path (proposed/paths.geojson)"
+  },
+  {
+   "osm": "w1208267690",
+   "reason": "golf=path, copied as a cart path (proposed/paths.geojson)"
+  },
+  {
+   "osm": "w1208267693",
+   "reason": "golf=path, copied as a cart path (proposed/paths.geojson)"
+  },
+  {
+   "osm": "w1208267694",
+   "reason": "golf=path, copied as a cart path (proposed/paths.geojson)"
+  },
+  {
+   "osm": "w1208267695",
+   "reason": "golf=path, copied as a cart path (proposed/paths.geojson)"
+  },
+  {
+   "osm": "w1208282073",
+   "reason": "golf=path, copied as a cart path (proposed/paths.geojson)"
+  },
+  {
+   "osm": "w1208282074",
+   "reason": "golf=path, copied as a cart path (proposed/paths.geojson)"
+  },
+  {
+   "osm": "w1208282075",
+   "reason": "golf=path, copied as a cart path (proposed/paths.geojson)"
+  },
+  {
+   "osm": "w1208282076",
+   "reason": "golf=path, copied as a cart path (proposed/paths.geojson)"
+  },
+  {
+   "osm": "w1208391569",
+   "reason": "golf=path, copied as a cart path (proposed/paths.geojson)"
+  },
+  {
+   "osm": "w1208391571",
+   "reason": "golf=path, copied as a cart path (proposed/paths.geojson)"
+  },
+  {
+   "osm": "w1208391572",
+   "reason": "golf=path, copied as a cart path (proposed/paths.geojson)"
+  },
+  {
+   "osm": "w1208391574",
+   "reason": "golf=path, copied as a cart path (proposed/paths.geojson)"
+  },
+  {
+   "osm": "w1208391575",
+   "reason": "golf=path, copied as a cart path (proposed/paths.geojson)"
+  },
+  {
+   "osm": "w1208391576",
+   "reason": "golf=path, copied as a cart path (proposed/paths.geojson)"
+  },
+  {
+   "osm": "w1208391577",
+   "reason": "golf=path, copied as a cart path (proposed/paths.geojson)"
+  },
+  {
+   "osm": "w1208391578",
+   "reason": "golf=path, copied as a cart path (proposed/paths.geojson)"
+  },
+  {
+   "osm": "w1208391580",
+   "reason": "golf=path, copied as a cart path (proposed/paths.geojson)"
+  },
+  {
+   "osm": "w1208391583",
+   "reason": "golf=path, copied as a cart path (proposed/paths.geojson)"
+  },
+  {
+   "osm": "w1208391584",
+   "reason": "golf=path, copied as a cart path (proposed/paths.geojson)"
+  },
+  {
+   "osm": "w1208391585",
+   "reason": "golf=path, copied as a cart path (proposed/paths.geojson)"
+  },
+  {
+   "osm": "w1208391586",
+   "reason": "golf=path, copied as a cart path (proposed/paths.geojson)"
+  },
+  {
+   "osm": "w1208391587",
+   "reason": "golf=path, copied as a cart path (proposed/paths.geojson)"
+  },
+  {
+   "osm": "w1208394989",
+   "reason": "golf=path, copied as a cart path (proposed/paths.geojson)"
+  },
+  {
+   "osm": "w1208394991",
+   "reason": "golf=path, copied as a cart path (proposed/paths.geojson)"
+  },
+  {
+   "osm": "w1208394994",
+   "reason": "golf=path, copied as a cart path (proposed/paths.geojson)"
+  },
+  {
+   "osm": "w1208394999",
+   "reason": "golf=path, copied as a cart path (proposed/paths.geojson)"
+  },
+  {
+   "osm": "w1208641211",
+   "reason": "golf=path, copied as a cart path (proposed/paths.geojson)"
+  },
+  {
+   "osm": "w1208641214",
+   "reason": "golf=path, copied as a cart path (proposed/paths.geojson)"
+  },
+  {
+   "osm": "w1208641222",
+   "reason": "golf=path, copied as a cart path (proposed/paths.geojson)"
+  },
+  {
+   "osm": "w1208641224",
+   "reason": "golf=path, copied as a cart path (proposed/paths.geojson)"
+  }
+ ],
+ "tags": []
+}
