@@ -4,7 +4,7 @@
   "assets-src": "694013c4bb367b3e00580f0d23385bf077f7ff38"
  },
  "build_key": "9c5c24b4dbdecaa6058f9e9f39a6f130441df1ff4b1a5cda4135b60e6cef0ab7",
- "commit": "a87cf928245375626057cd38d9d6f6d817d8de9c",
+ "commit": "daba6cb1a9293b3e6dff40737a2276d5cad60d0c",
  "date": "2026-11-13",
  "note": "the pipeline that built this course's committed files; pipeline/pins.py"
 }
