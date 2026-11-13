@@ -41,6 +41,21 @@
   {
    "name": "naip_info.json",
    "url": "https://imagery.nationalmap.gov/arcgis/rest/services/USGSNAIPImagery/ImageServer?f=pjson"
+  },
+  {
+   "name": "USGS_LPC_MA_CentralEastern_2021_B21_19TCH346717.laz",
+   "url": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/MA_CentralEastern_2021_B21/MA_CentralEastern_1_2021/LAZ/USGS_LPC_MA_CentralEastern_2021_B21_19TCH346717.laz",
+   "note": "retry: timed out on the first run"
+  },
+  {
+   "name": "USGS_LPC_MA_CentralEastern_2021_B21_19TCH346719.laz",
+   "url": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/MA_CentralEastern_2021_B21/MA_CentralEastern_1_2021/LAZ/USGS_LPC_MA_CentralEastern_2021_B21_19TCH346719.laz",
+   "note": "retry: timed out on the first run"
+  },
+  {
+   "name": "USGS_LPC_MA_CentralEastern_2021_B21_19TCH348719.laz",
+   "url": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/MA_CentralEastern_2021_B21/MA_CentralEastern_1_2021/LAZ/USGS_LPC_MA_CentralEastern_2021_B21_19TCH348719.laz",
+   "note": "retry: timed out on the first run"
   }
  ]
 }
