@@ -110,11 +110,9 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 
 ## Checks from earlier courses
 
-- tee w699713796 at (568, 1052): 13 m2 of it is outside the boundary, so out of bounds
-- hole line w699766829 (ref 3): 47 % outside the boundary
+- hole line w699766829 (ref 3): 46 % outside the boundary
 - hole line w699769063 (ref 17): 64 % outside the boundary (a neighbouring course's line?)
 - hole line w699770842 (ref 4): 10 % outside the boundary
-- hole line w699783963 (ref 10): 3 % outside the boundary
 - hole line w699847479 (ref 12): 30 % outside the boundary
 - hole line w699852600 (ref 14): 12 % outside the boundary
 - fairway w699864904 at (507, 613) is more than 30 m from every hole line (a range or practice area mapped as fairway?)

@@ -7,6 +7,13 @@
     "sea"
    ],
    "reason": "the Norwegian Sea from OSM's coastline (pipeline/propose_sea.py): a red penalty area wherever it lies (red_water_osm; developer's brief 2026-11-13: the sea is a penalty area), including the inlets the holes play over"
+  },
+  {
+   "from": "proposed/boundary.geojson",
+   "ids": [
+    "boundary"
+   ],
+   "reason": "the OB line: OSM relation 5314623 joined with its tee boxes grown 3 m (make_boundary.py), so the 3rd hole's back tee on the rocks is in bounds"
   }
  ],
  "tags": [
@@ -60,6 +67,11 @@
    "reason": "unnamed (golf=lateral_water_hazard): every penalty area red (standing default)"
   }
  ],
- "drop": [],
+ "drop": [
+  {
+   "osm": "r5314623",
+   "reason": "replaced as the OB line by `boundary` (add above)"
+  }
+ ],
  "extend_start": []
 }

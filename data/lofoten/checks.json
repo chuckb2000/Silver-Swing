@@ -1,0 +1,15 @@
+{
+ "note": "per-course settings for game/tests/unit/course_play.test.ts (the every-course checks); docs/COURSE_BUILD.md 8.2",
+ "wind_mph": [
+  4,
+  18
+ ],
+ "points": [
+  {
+   "x": 930,
+   "y": 1063,
+   "surface": "water",
+   "why": "the sea inlet the 17th plays over is a red penalty area (red_water_osm 'sea')"
+  }
+ ]
+}
