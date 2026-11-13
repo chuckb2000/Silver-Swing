@@ -299,6 +299,12 @@ and DECISIONS.md.
   "waste_sand": true,                   // optional: golf=bunker + sand=waste, and natural=sand inside the boundary, are
                                         // waste sand (surface 18): general area, not a bunker, no lip, sparse scrub tufts;
                                         // natural=sand outside stays ob_sand (s08, s09, s09b, s10; Cypress Point)
+  "integral": [{"name": "17th road and wall", "osm": ["w123", "w456"], "buffer_m": 3},
+               {"name": "Grannie Clark's Wynd", "lonlat": [[-2.80, 56.34], ...]}],
+                                        // optional: integral objects (local rules): a ball on a cart path or building
+                                        // inside one plays as it lies, no free relief; the lie reads "road". OSM
+                                        // features (lines buffered by buffer_m, default 0.5) and/or a ring traced by
+                                        // hand, clipped to the boundary (s10 -> course.json "integral"; Old Course)
   // more optional keys (read the code's comment before using one):
   "tee_grow_m": 0,                      // tee boxes drawn larger than mapped, metres per side (s02)
   "flatten_wetlands": true,             // false: vegetated wetlands keep their lidar ground (s04)
