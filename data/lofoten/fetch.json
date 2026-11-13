@@ -22,28 +22,36 @@
    "url": "https://wcs.geonorge.no/skwms1/wcs.hoyde-dtm-nhm-25833?service=WCS&version=2.0.1&request=DescribeCoverage&CoverageId=nhm_dtm_topo_25833"
   },
   {
-   "name": "kv_dtm_1m_v100.tif",
-   "url": "https://wcs.geonorge.no/skwms1/wcs.hoyde-dtm-nhm-25833?service=WCS&version=1.0.0&request=GetCoverage&coverage=1&crs=EPSG:25833&bbox=462800,7579600,466000,7582700&width=3200&height=3100&format=GeoTIFF"
-  },
-  {
-   "name": "kv_dtm_1m_v201.tif",
-   "url": "https://wcs.geonorge.no/skwms1/wcs.hoyde-dtm-nhm-25833?service=WCS&version=2.0.1&request=GetCoverage&CoverageId=nhm_dtm_topo_25833&format=image/tiff&subset=E(462800,466000)&subset=N(7579600,7582700)"
-  },
-  {
    "name": "kv_dom_describe.xml",
    "url": "https://wcs.geonorge.no/skwms1/wcs.hoyde-dom-nhm-25833?service=WCS&version=2.0.1&request=DescribeCoverage&CoverageId=nhm_dom_topo_25833"
   },
   {
-   "name": "kv_dom_1m_v100.tif",
-   "url": "https://wcs.geonorge.no/skwms1/wcs.hoyde-dom-nhm-25833?service=WCS&version=1.0.0&request=GetCoverage&coverage=1&crs=EPSG:25833&bbox=462800,7579600,466000,7582700&width=3200&height=3100&format=GeoTIFF"
-  },
-  {
-   "name": "kv_dom_1m_v201.tif",
-   "url": "https://wcs.geonorge.no/skwms1/wcs.hoyde-dom-nhm-25833?service=WCS&version=2.0.1&request=GetCoverage&CoverageId=nhm_dom_topo_25833&format=image/tiff&subset=E(462800,466000)&subset=N(7579600,7582700)"
-  },
-  {
    "name": "lofoten_coastline.geojson",
    "overpass": "[out:json][timeout:180][bbox:68.320,14.080,68.362,14.190];(way[\"natural\"=\"coastline\"];);out geom;"
+  },
+  {
+   "name": "kv_dtm_a_v100.tif",
+   "url": "https://wcs.geonorge.no/skwms1/wcs.hoyde-dtm-nhm-25833?service=WCS&version=1.0.0&request=GetCoverage&coverage=nhm_dtm_topo_25833&crs=EPSG:25833&bbox=462800,7579600,466000,7582700&width=3200&height=3100&format=GeoTIFF"
+  },
+  {
+   "name": "kv_dtm_b_v201.tif",
+   "url": "https://wcs.geonorge.no/skwms1/wcs.hoyde-dtm-nhm-25833?service=WCS&version=2.0.1&request=GetCoverage&coverageid=nhm_dtm_topo_25833&format=image/tiff&subset=x(462800,466000)&subset=y(7579600,7582700)&subsettingcrs=http://www.opengis.net/def/crs/EPSG/0/25833&outputcrs=http://www.opengis.net/def/crs/EPSG/0/25833"
+  },
+  {
+   "name": "kv_dtm_c_small.tif",
+   "url": "https://wcs.geonorge.no/skwms1/wcs.hoyde-dtm-nhm-25833?service=WCS&version=2.0.1&request=GetCoverage&coverageid=nhm_dtm_topo_25833&format=image/tiff&subset=x(464000,464100)&subset=y(7581000,7581100)"
+  },
+  {
+   "name": "kv_dtm_d_v112.tif",
+   "url": "https://wcs.geonorge.no/skwms1/wcs.hoyde-dtm-nhm-25833?service=WCS&version=1.1.2&request=GetCoverage&identifier=nhm_dtm_topo_25833&format=image/tiff&boundingbox=462800,7579600,466000,7582700,urn:ogc:def:crs:EPSG::25833&gridbasecrs=urn:ogc:def:crs:EPSG::25833&gridoffsets=1,-1"
+  },
+  {
+   "name": "kv_dom_a_v100.tif",
+   "url": "https://wcs.geonorge.no/skwms1/wcs.hoyde-dom-nhm-25833?service=WCS&version=1.0.0&request=GetCoverage&coverage=nhm_dom_topo_25833&crs=EPSG:25833&bbox=462800,7579600,466000,7582700&width=3200&height=3100&format=GeoTIFF"
+  },
+  {
+   "name": "kv_dom_b_v201.tif",
+   "url": "https://wcs.geonorge.no/skwms1/wcs.hoyde-dom-nhm-25833?service=WCS&version=2.0.1&request=GetCoverage&coverageid=nhm_dom_topo_25833&format=image/tiff&subset=x(462800,466000)&subset=y(7579600,7582700)&subsettingcrs=http://www.opengis.net/def/crs/EPSG/0/25833&outputcrs=http://www.opengis.net/def/crs/EPSG/0/25833"
   }
  ]
 }
