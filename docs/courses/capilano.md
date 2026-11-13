@@ -15,6 +15,14 @@ scenery at each end. New theme `capilano`; the logo is the Lions, the twin peaks
 West Vancouver. After the virtual tees moved within their boxes, 16 holes are within 3 %
 of the card and holes 4 (-5.7 %) and 15 (-3.4 %) are flags; 6,603 yd built against 6,723.
 
+## Checks
+
+- `course_play.test.ts -t capilano`: 12 passed.
+- `npm test`: 1739 passed, 2 failed: `player.test.ts` "the real rotation" and `tour.test.ts` "a hole drawn sits out" fail until `make land` adds the course to the daily rotation.
+- `npm run e2e`: 15 passed, 2 failed in the full run: "course data is exact when the browser adds noise" (loads Aberdeen; fails on main too) and a `clicks.spec.ts` swing-tap test, which passed 3 of 3 when rerun alone (the full run shared the machine with two course builds).
+- Pinned; a `--fresh` rebuild left git clean.
+- Every hole looked at in the game (tee view, overview, first shot, putting view).
+
 ## Facts
 
 -   **Location:** 420 Southborough Drive, West Vancouver (British Properties), British
