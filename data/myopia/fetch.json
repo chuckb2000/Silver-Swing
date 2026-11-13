@@ -1,0 +1,51 @@
+{
+ "items": [
+  {
+   "name": "myopia_overpass.geojson",
+   "osm_box": [
+    42.6001,
+    -70.8693,
+    42.6194,
+    -70.8455
+   ]
+  },
+  {
+   "name": "myopia_dem1m",
+   "tnm": {
+    "dataset": "dem1m",
+    "bbox": [
+     -70.8693,
+     42.6001,
+     -70.8455,
+     42.6194
+    ],
+    "list": true
+   }
+  },
+  {
+   "name": "myopia_lpc",
+   "tnm": {
+    "dataset": "lpc",
+    "bbox": [
+     -70.8693,
+     42.6001,
+     -70.8455,
+     42.6194
+    ],
+    "list": true
+   }
+  },
+  {
+   "name": "naip_346700_4718100.jpg",
+   "url": "https://imagery.nationalmap.gov/arcgis/rest/services/USGSNAIPImagery/ImageServer/exportImage?bbox=346700,4718100,348600,4720100&bboxSR=32619&imageSR=32619&size=3166,3333&format=jpg&f=image"
+  },
+  {
+   "name": "naip_346700_4720100.jpg",
+   "url": "https://imagery.nationalmap.gov/arcgis/rest/services/USGSNAIPImagery/ImageServer/exportImage?bbox=346700,4720100,348600,4720200&bboxSR=32619&imageSR=32619&size=3166,166&format=jpg&f=image"
+  },
+  {
+   "name": "naip_info.json",
+   "url": "https://imagery.nationalmap.gov/arcgis/rest/services/USGSNAIPImagery/ImageServer?f=pjson"
+  }
+ ]
+}
