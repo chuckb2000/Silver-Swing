@@ -1518,3 +1518,41 @@ The daily of 2026-10-29 (TPC Boston, back nine) keeps the Black tees it was play
 (`DAILY_PICKS`), so that day's board stands. A device that remembered either course on its
 old default goes to the longest set once (`OLD_DEFAULT_TEES` in `save/store.ts`); a set a
 player chooses after that is kept.
+
+## Overnight sweep, part 1: the play screen, the HUD and the menus (2026-11-13)
+
+A review of the play screen, the HUD, the widgets and the menus (six read-throughs, a robot
+that plays every hole of every course, and a script that opens every screen at phone, laptop
+and "bigger pixels" sizes and looks for things that overlap or leave the screen). 46 fixes;
+the pull request lists them. The ones that change what a player sees or does:
+
+- **Rewatch:** the view comes back where it was under the hole-complete panel; a rewatched
+  drive plays at flight speed with the following camera (it used the putter's while the putter
+  was in hand); a hole given or picked up shows the ball where it lay, not in the cup.
+- **A round opened on a green** cuts to the putting view once its art has loaded (it stayed in
+  the course view until the next stroke).
+- **The putt's aim line** reaches the hole on a long putt (the dots are spaced wider instead of
+  running out).
+- **Mouse wheel:** one club per notch (a trackpad swipe ran through the bag), nothing behind an
+  open panel. **A tap within 0.35 s of the ball being struck** is not a skip of the flight (a
+  late third tap skipped it).
+- **Open panels are drawn again when the window changes size or a phone turns** (pause menu,
+  quit question, overview, scorecard, the match's questions).
+- **Settings** shows its rows a page at a time when the screen is too short for them all
+  ("pixel size: bigger" on a laptop, a phone on its side).
+- **Headings at 2x drop to 1x when they don't fit** (`fitHeading`), instead of wrapping over
+  what is under them; a line that must fit takes the first of several wordings that does
+  (`setTxtFit`).
+- **"My golf" on a phone:** two rows of three stat boxes, columns placed from the right edge;
+  the course names are the list names ("ghost creek", "east po red").
+- **The summary's buttons are there at once** (they waited for the network), and "leaderboard"
+  from a summary opens the board that round is on (its length, tees, casual or not).
+- **The title's daily buttons follow the day** (a title left open past midnight started
+  yesterday's round).
+- **A course's pictures that fail to arrive are asked for twice more**; a course still missing
+  one is not shown with a hole in it (the load fails and the reload offer shows).
+- **The share picture's art takes the height the scorecard leaves** (a daily par round's list of
+  holes ran off the bottom).
+
+Left as it is, on purpose: a name dialog closed without a name still starts the round ("skip"),
+and the outdoor ambience keeps playing in the menus after a round.

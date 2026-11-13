@@ -547,7 +547,15 @@ export class TitleScene extends MenuScene {
     let lift = 0;
     if (over > 0) {
       lift = Math.min(over, Math.max(0, top - 20));
-      for (const o of this.root.list as unknown as { y: number }[]) o.y -= lift;
+      // still too long (big pixels on a laptop, with a round to continue, a name to set and a match
+      // button): the menu comes first, so everything goes up until its last row is on the screen, and
+      // whatever of the heading that pushes off the top is left out rather than cut in half
+      const more = Math.min(over - lift, Math.max(0, menuTop - lift - 2));
+      lift += more;
+      for (const o of this.root.list as unknown as { y: number; setVisible?: (v: boolean) => unknown }[]) {
+        o.y -= lift;
+        if (more > 0 && o.y < 0) o.setVisible?.(false);
+      }
     }
     if (matchesUp === true) {
       // the box of others looking for a match: beside the menu where there's room, else under it (lobbyPlace)

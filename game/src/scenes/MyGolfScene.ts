@@ -7,14 +7,14 @@ import { isTourId, tourName } from '../systems/game/tour';
 import { app } from '../app';
 import { STATES } from '../data/registry';
 import type { LeaderboardEntry } from '../save/entry';
-import { milestonesOf, passportName, shortName } from '../save/milestones';
+import { listName, milestonesOf, passportName } from '../save/milestones';
 import { milestoneCourses, myRounds } from '../save/mine';
 import { DEFAULT_NAME } from '../save/names';
 import { playerStats } from '../save/stats';
 import { handicapOf, hcpCourses, indexLabel, ownHcpRounds } from '../systems/game/handicap';
 import { toPar } from '../systems/rules/scoring';
 import { ensureImages } from '../ui/shareCard';
-import { Button, COLORS, fitHeading, Panel, txt } from '../ui/widgets';
+import { Button, COLORS, fitHeading, Panel, setTxtFit, txt } from '../ui/widgets';
 import { lengthLabel, shapeById } from './flow';
 import { isFullRound } from '../systems/game/lengths';
 import { MenuScene } from './menu';
@@ -70,7 +70,8 @@ export class MyGolfScene extends MenuScene {
 
   private courseName(id: string): string {
     const c = app.courses.find((x) => x.id === id);
-    return c ? shortName(c.name) : isTourId(id) ? `daily ${tourName(id)}` : id;
+    // as in the passport and the lists across courses ("ghost creek", "east po red": developer, 2026-10-25)
+    return c ? listName(c) : isTourId(id) ? `daily ${tourName(id)}` : id;
   }
 
   private buildStats(x0: number, y: number, pw: number, h: number) {
@@ -90,7 +91,7 @@ export class MyGolfScene extends MenuScene {
       ['putts / 18', one(st.puttsPer18)], ['penalties / 18', one(st.penaltiesPer18)],
     ];
     // six in a row, or two rows of three on a phone (41-wide boxes: "greens in reg." ran into its neighbours)
-    const per = pw < 340 ? 3 : boxes.length;
+    const per = pw < 408 ? 3 : boxes.length;
     const bw = Math.floor((pw - 16 - 4 * (per - 1)) / per);
     boxes.forEach(([lab, v], i) => {
       const bx = x0 + 8 + (i % per) * (bw + 4), by = y + Math.floor(i / per) * 34;
@@ -216,7 +217,11 @@ export class MyGolfScene extends MenuScene {
     list.slice(page * perPage, (page + 1) * perPage).forEach((m, i) => {
       const yy = y + i * lineH;
       this.root.add(txt(this, x0 + 10, yy, m.date.slice(0, 10), { color: COLORS.dim }));
-      this.root.add(txt(this, x0 + 80, yy, m.text, { color: m.minor ? COLORS.white : COLORS.yellow, maxWidth: pw - 90 }));
+      // one line each (a long one wrapped onto the line below it on a phone)
+      const line = txt(this, x0 + 80, yy, '', { color: m.minor ? COLORS.white : COLORS.yellow });
+      const fits = Math.max(12, Math.floor((pw - 96) / 5.6));
+      setTxtFit(line, [m.text, `${m.text.slice(0, fits)}...`, `${m.text.slice(0, fits - 6)}...`], pw - 90);
+      this.root.add(line);
     });
     if (pages > 1) {
       const by = app.view.h - 24;
