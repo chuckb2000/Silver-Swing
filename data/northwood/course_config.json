@@ -22,6 +22,17 @@
     "units": "m",
     "source": "USGS 3DEP 1 m DEM, project CA_NorthernCA_B22 (tile x50y426, published 2026-03-24), cut to the world + 100 m (the tile's west edge is E 499994, so 6 m on that side) by pipeline/intake.py raster; EPSG:26910 (NAD83 / UTM 10N), metres; fetched through the GitHub Actions workflow 2026-11-13 (release data-northwood)"
   },
+  "laz": {
+    "paths": [
+      "raw/laz/*.laz"
+    ],
+    "classes": [
+      1
+    ],
+    "units": "m",
+    "source": "USGS 3DEP lidar point cloud, project CA_NorthernCA_B22 (flown 2022-23; files dated 2024-02-13), tiles 10SEH0058, 10SEH0059 and 10SEH0159 (the east edge), clipped to the world + 100 m by pipeline/intake.py laz; class 1 (unclassified: vegetation is not classified in this project; classes present 1, 2, 7, 9, 18, 20); NAD83(2011) / UTM 10N, NAVD88 (Geoid18) metres; fetched through the GitHub workflow 2026-11-13 (release data-northwood; rockyweb.usgs.gov). 10SEH0158 (x 501000-502000, y < 4259000: the world's south-east 56 x 472 m, river and hillside) was refused (HTTP 429): no trees there.",
+    "label": "2022 USGS lidar (Northern California B22)"
+  },
   "tee_sets": [
     {
       "name": "White",
@@ -58,5 +69,15 @@
     "Map data \u00a9 OpenStreetMap contributors (ODbL)",
     "Elevation and trees: U.S. Geological Survey 3D Elevation Program"
   ],
-  "notes": "Standing defaults (COURSE_BUILD.md 4.1): the longest tee set as the default, all water red, OB = the course boundary, trees from lidar with fairway trees removed, wind 1-7 mph (a sheltered river valley in the redwoods). Theme `redwoods`, new for this course (developer's request, 2026-11-12)."
+  "notes": "Standing defaults (COURSE_BUILD.md 4.1): the longest tee set as the default, all water red, OB = the course boundary, trees from lidar with fairway trees removed, wind 1-7 mph (a sheltered river valley in the redwoods). Theme `redwoods`, new for this course (developer's request, 2026-11-12).",
+  "tee_shot_margin_m": 0.5,
+  "tee_shot_note": "tee_shot_margin_m: the tee-shot tree check (pipeline/tee_shots.py) keeps the ball 0.5 m clear of each crown; without it the check passed hole 3 while the game's ball clipped a redwood crown 48 m out (course chat, 2026-11-13; as at Stone Creek)",
+  "max_tree_note": "Coast redwoods: 18 lidar crowns are 65-74 m tall (checks.json max_tree_h_m 80); second-growth redwoods in the lower Russian River reach about 75 m",
+  "drop_trees": [
+    {
+      "x": 655.5,
+      "y": 407.5,
+      "reason": "course chat 2026-11-13 (standing default: tee-shot blockers removed): a 53 m redwood clump (lidar crown radius 16 m, likely two crowns merged) whose crown hangs over the 3rd's tee shot 48 m out; s06b's lowest-shot check misses it, the game's 8-iron clips it"
+    }
+  ]
 }
