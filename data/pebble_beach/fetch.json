@@ -1,0 +1,59 @@
+{
+ "items": [
+  {
+   "name": "pebble_beach_overpass.geojson",
+   "osm_box": [
+    36.5546,
+    -121.953,
+    36.5738,
+    -121.9259
+   ]
+  },
+  {
+   "name": "pebble_beach_dem1m",
+   "tnm": {
+    "dataset": "dem1m",
+    "bbox": [
+     -121.953,
+     36.5546,
+     -121.9259,
+     36.5738
+    ],
+    "list": true
+   }
+  },
+  {
+   "name": "pebble_beach_lpc",
+   "tnm": {
+    "dataset": "lpc",
+    "bbox": [
+     -121.953,
+     36.5546,
+     -121.9259,
+     36.5738
+    ],
+    "list": true
+   }
+  },
+  {
+   "name": "naip_593700_4046000.jpg",
+   "url": "https://imagery.nationalmap.gov/arcgis/rest/services/USGSNAIPImagery/ImageServer/exportImage?bbox=593700,4046000,595700,4048000&bboxSR=32610&imageSR=32610&size=3333,3333&format=jpg&f=image"
+  },
+  {
+   "name": "naip_593700_4048000.jpg",
+   "url": "https://imagery.nationalmap.gov/arcgis/rest/services/USGSNAIPImagery/ImageServer/exportImage?bbox=593700,4048000,595700,4048100&bboxSR=32610&imageSR=32610&size=3333,166&format=jpg&f=image"
+  },
+  {
+   "name": "naip_595700_4046000.jpg",
+   "url": "https://imagery.nationalmap.gov/arcgis/rest/services/USGSNAIPImagery/ImageServer/exportImage?bbox=595700,4046000,596100,4048000&bboxSR=32610&imageSR=32610&size=666,3333&format=jpg&f=image"
+  },
+  {
+   "name": "naip_595700_4048000.jpg",
+   "url": "https://imagery.nationalmap.gov/arcgis/rest/services/USGSNAIPImagery/ImageServer/exportImage?bbox=595700,4048000,596100,4048100&bboxSR=32610&imageSR=32610&size=666,166&format=jpg&f=image"
+  },
+  {
+   "name": "naip_info.json",
+   "url": "https://imagery.nationalmap.gov/arcgis/rest/services/USGSNAIPImagery/ImageServer?f=pjson"
+  }
+ ]
+}
