@@ -15,7 +15,7 @@ import { ReliefArea } from '../systems/rules/relief';
 import { HoleScore, scoreName, toPar, totals } from '../systems/rules/scoring';
 import { SimEvent } from '../systems/physics/sim';
 import { SURFACE_LABEL } from '../systems/physics/surfaces';
-import { Button, COLORS, dimmer, Panel, setTxt, txt } from '../ui/widgets';
+import { Button, COLORS, dimmer, fitHeading, Panel, setTxt, setTxtFit, titleExtra, txt } from '../ui/widgets';
 import { uiCamera } from '../scale';
 import type { PlayScene } from './PlayScene';
 import { finishRound, toTourHole, toXcPlan } from './flow';
@@ -237,7 +237,10 @@ export class HudScene extends Phaser.Scene {
     this.W = app.view.w;
     this.H = app.view.h;
     this.layout();
-    if (this.modal && this.redraw) this.redraw();
+    // every open panel is drawn again for the new size (a phone turned with the pause menu open left it
+    // half off screen, its dimmer no longer covering the buttons around it)
+    if (this.cardLayer) { this.closeCard(); this.toggleCard(); }
+    else if (this.modal && this.redraw) this.redraw();
     this.refresh();
   }
 
@@ -309,9 +312,8 @@ export class HudScene extends Phaser.Scene {
     this.swingCatch.input!.enabled = false;
     this.swingCatch.on('pointerdown', (ptr: Phaser.Input.Pointer) => {
       if (this.play.state !== 'swing' || this.modal) return;
-      const m = this.menuBtn.getBounds();
-      const w = this.cameras.main.getWorldPoint(ptr.x, ptr.y);
-      if (this.menuBtn.visible && m.contains(w.x, w.y)) { this.togglePause(); return; }
+      // (the whole button and its margin, not only its label's bounds)
+      if (this.menuBtn.visible && this.menuBtn.near(ptr)) { this.togglePause(); return; }
       if (ptr.rightButtonDown()) return;
       this.play.tap(ptr.event?.timeStamp ?? performance.now());
     });
@@ -354,7 +356,7 @@ export class HudScene extends Phaser.Scene {
     this.chatNote = new Panel(this, 0, 0, 200, 16, 0.9);
     this.chatNoteTxt = txt(this, 6, 4, '', { color: COLORS.white });
     this.chatNote.add(this.chatNoteTxt);
-    this.chatNote.setSize(200, 16).setInteractive(new Phaser.Geom.Rectangle(0, 0, 200, 16), Phaser.Geom.Rectangle.Contains);
+    this.chatNote.setSize(200, 16).setInteractive(new Phaser.Geom.Rectangle(100, 8, 200, 16), Phaser.Geom.Rectangle.Contains);
     this.chatNote.on('pointerdown', () => this.openChat());
     this.chatNote.setVisible(false);
     layer.add([this.chatBtn, badge, this.chatNote]);
@@ -413,7 +415,7 @@ export class HudScene extends Phaser.Scene {
     const h = Math.round(this.chatNoteTxt.height) + 8;
     this.chatNote.resize(w, h, 0.9);
     this.chatNote.setSize(w, h);
-    (this.chatNote.input!.hitArea as Phaser.Geom.Rectangle).setTo(0, 0, w, h);
+    (this.chatNote.input!.hitArea as Phaser.Geom.Rectangle).setTo(w / 2, h / 2, w, h);
     this.placeChatNote();
     this.chatNote.setVisible(true);
     sfx('tick', 1.4);
@@ -445,7 +447,7 @@ export class HudScene extends Phaser.Scene {
     const h = Math.round(this.chatNoteTxt.height) + 8;
     this.chatNote.resize(w, h, 0.9);
     this.chatNote.setSize(w, h);
-    (this.chatNote.input!.hitArea as Phaser.Geom.Rectangle).setTo(0, 0, w, h);
+    (this.chatNote.input!.hitArea as Phaser.Geom.Rectangle).setTo(w / 2, h / 2, w, h);
     this.placeChatNote();
     this.chatNote.setVisible(true);
     this.chatNoteTimer?.remove();
@@ -503,7 +505,9 @@ export class HudScene extends Phaser.Scene {
       this.practiceA.setLabel(`wind: ${pr.wind ? 'on' : 'off'}`);
       this.practiceB.setLabel('putting green');
       const c = pr.log.avgCarry(this.play.club.id);
-      setTxt(this.practiceStats, c ? `${this.play.club.name}: ${c.n} ${c.n === 1 ? 'ball' : 'balls'}, avg carry ${fmtDist(c.avg)} ${unitLabel()}` : 'no balls with this club yet');
+      const avg = c ? `${fmtDist(c.avg)} ${unitLabel()}` : '';
+      if (c) setTxtFit(this.practiceStats, [`${this.play.club.name}: ${c.n} ${c.n === 1 ? 'ball' : 'balls'}, avg carry ${avg}`, `${this.play.club.name}: avg ${avg} (${c.n})`, `avg ${avg} (${c.n})`], 142);
+      else setTxt(this.practiceStats, 'no balls with this club yet');
     } else {
       setTxt(this.practiceLabel, `green: ${PUTTING_GREENS[r.holeNumber - 6] ?? ''}`);
       const d = pr.log.drill;
@@ -550,6 +554,10 @@ export class HudScene extends Phaser.Scene {
       let last = since;
       timer = this.time.addEvent({
         delay: 16, loop: true, callback: () => {
+          // a swing started from the keyboard while the arrow was held disables the button, and a
+          // disabled button hears neither the release nor the pointer leaving: the aim ran on by
+          // itself through the next shot
+          if (!b.enabled || this.play.state !== 'aim') { stop(); return; }
           const now = this.time.now;
           this.play.aimHold(dir, now - since, now - last);
           last = now;
@@ -559,6 +567,10 @@ export class HudScene extends Phaser.Scene {
     const stop = () => { timer?.remove(); timer = null; };
     b.on('pointerup', stop);
     b.on('pointerout', stop);
+    this.input.on('pointerup', stop);
+    this.input.on('pointerupoutside', stop);
+    this.game.events.on(Phaser.Core.Events.BLUR, stop);
+    this.events.once('shutdown', () => this.game.events.off(Phaser.Core.Events.BLUR, stop));
   }
 
   private layout() {
@@ -691,7 +703,7 @@ export class HudScene extends Phaser.Scene {
     this.swingBtn.setLabel(c.kind === 'putter' ? 'putt' : 'swing');
     this.unplayBtn.setVisible(aiming && !r.ball.teedUp && r.tally.strokes > 0 && !r.onHoleGreen());
     this.mulliganBtn.setVisible(aiming && r.cfg.settings.mulligans && !r.mulliganUsed && r.shotNo > 0);
-    const showCtl = !['intro', 'holed', 'loading', 'relief', 'drop', 'watch', 'between', 'over', 'idle'].includes(p.state); // not behind the relief / drop panels
+    const showCtl = !['intro', 'holed', 'loading', 'relief', 'drop', 'watch', 'between', 'over', 'idle', 'replay', 'done'].includes(p.state); // not behind the relief / drop panels
     for (const o of [this.aimL, this.aimR, this.aimLabel, this.clubPanel, this.clubUp, this.clubDown, this.swingBtn, this.meterPanel]) o.setVisible(showCtl);
     if (!showCtl) { this.spinBtn.setVisible(false); this.scaleBtn.setVisible(false); this.unplayBtn.setVisible(false); this.mulliganBtn.setVisible(false); }
     // minimap
@@ -733,7 +745,11 @@ export class HudScene extends Phaser.Scene {
     const between = s.phase === 'playing' && !holeLive(s);
     const hn = live.session.holeNumber;
     const where = s.phase !== 'playing' ? '' : between ? `  ·  thru ${s.results.length}` : isExtra(s.cfg, s.hole) ? `  ·  ${ordinal(s.hole + 1)}: hole ${hn}` : `  ·  hole ${hn}`;
-    setTxt(this.matchStatus, `${statusText(s, me)}${where}`);
+    // a long name is cut as on the names line, and the hole goes last, so the line stays inside the bar
+    const st = statusText(s, me);
+    const oppN = p.oppName();
+    const cut = oppN.length > 9 ? st.split(oppN).join(oppN.slice(0, 9)) : st;
+    setTxtFit(this.matchStatus, [`${st}${where}`, `${cut}${where}`, cut], this.matchBar.pw - 6);
     let link = '';
     let linkColor: number = COLORS.red;
     const clock = live.clock();
@@ -746,6 +762,9 @@ export class HudScene extends Phaser.Scene {
     setTxt(this.matchLink, link);
     this.matchLink.setTint(linkColor);
     this.matchLink.setVisible(!!link);
+    // a narrow phone has the bar at its left edge: a long line stays on the screen
+    const half = this.matchLink.width / 2;
+    this.matchLink.x = Math.round(Math.max(4 + half, Math.min(this.W - 4 - half, this.barMid)));
     this.giveBtn.setVisible(p.canGivePutt() && !this.modal).setEnabled(true);
     if (this.chatLayer) {
       const ready = live.chatReady && !this.cardLayer;
@@ -812,7 +831,7 @@ export class HudScene extends Phaser.Scene {
     const shown = [this.giveBtn, this.penBtn, this.claimBtn].filter((b) => b.visible);
     const widths = shown.map((b) => (b === this.giveBtn ? 70 : b === this.penBtn ? 78 : 74));
     const total = widths.reduce((a, b) => a + b, 0) + 4 * Math.max(0, shown.length - 1);
-    let x = Math.round(this.barMid - total / 2);
+    let x = Math.round(Math.max(4, Math.min(this.W - 4 - total, this.barMid - total / 2))); // on the screen (a bar at the left edge of a narrow phone)
     shown.forEach((b, i) => { b.setPosition(x, this.barTop + 38); x += widths[i] + 4; });
   }
 
@@ -857,6 +876,7 @@ export class HudScene extends Phaser.Scene {
     const c = p.match?.clock();
     if (!c || !p.clockChoice().penalty) return;
     this.openModal('pause'); // the match waits while the question is up
+    this.redraw = () => { this.closeModal(); this.askPenalty(); };
     confirmBox(this, this.modalLayer, 'add a penalty stroke?', `${p.oppName()} has taken ${clockText(c.elapsed)} over this shot. The stroke counts on this hole.`, 'not now', 'add it',
       () => {
         this.closeModal();
@@ -874,6 +894,7 @@ export class HudScene extends Phaser.Scene {
     if (!c || !p.clockChoice().claim) return;
     const back = this.modal && MATCH_PANELS.includes(this.modal) ? this.redraw : null;
     this.openModal('pause');
+    this.redraw = () => { this.closeModal(); if (back) back(); this.askClaim(); };
     const what = c.kind === 'shot' ? "hasn't played on" : "hasn't come to the tee";
     confirmBox(this, this.modalLayer, 'claim the match?', `${p.oppName()} ${what} for ${clockText(c.elapsed)}. You win the match by forfeit - it can't be undone.`, 'keep waiting', 'claim it',
       () => {
@@ -943,7 +964,9 @@ export class HudScene extends Phaser.Scene {
    * while a banner shows (the cut to the green after an approach).
    */
   private placeBanner() {
-    const y = this.play?.green && this.play.inGreenView() ? 16 : Math.round(this.H * 0.3);
+    // (a match's bar is at the top too: the banner goes under it and its line of buttons)
+    const top = this.matchBar && this.barTop < 40 ? this.barTop + 64 : 16;
+    const y = this.play?.green && this.play.inGreenView() ? top : Math.round(this.H * 0.3);
     if (this.banner.y !== y) this.banner.setPosition(Math.round(this.W / 2), y);
     if (this.sub.y !== y + 16) this.sub.setPosition(Math.round(this.W / 2), y + 16);
     if (this.banner.x !== Math.round(this.W / 2)) { this.banner.x = Math.round(this.W / 2); this.sub.x = this.banner.x; }
@@ -1108,6 +1131,8 @@ export class HudScene extends Phaser.Scene {
     this.queuedFlash = null;
     setTxt(this.banner, s);
     this.banner.setTint(color).setVisible(true).setAlpha(1).setScale(2);
+    // wider than the screen ("christopherson plays it as it lies" on a phone): at 1x
+    if (this.banner.width > this.W - 8) this.banner.setScale(1);
     setTxt(this.sub, subline);
     this.sub.setVisible(!!subline).setAlpha(1);
     this.bannerTimer?.remove();
@@ -1142,11 +1167,11 @@ export class HudScene extends Phaser.Scene {
     this.flash(label, color, `${note}${pw}% power${st.overswing ? ' (overswing)' : ''}`, 1100);
   }
 
-  puttFeedback(ps: PuttStrike, power: number) {
+  puttFeedback(ps: PuttStrike, power: number, scale = this.play.puttScale) {
     const word = (ps.side > 0) !== this.play.round.cfg.settings.lefty ? 'push' : 'pull'; // a right-hander pushes it right
     const label = ps.quality === 'perfect' ? 'pure stroke' : ps.quality === 'great' ? 'good stroke' : ps.quality === 'good' ? `slight ${word}` : word;
     const color = ps.quality === 'perfect' || ps.quality === 'great' ? COLORS.green : ps.quality === 'good' ? COLORS.yellow : COLORS.red;
-    this.flash(label, color, `${Math.round(power * 100)}% of ${puttScaleLabel(this.play.puttScale)}`, 900);
+    this.flash(label, color, `${Math.round(power * 100)}% of ${puttScaleLabel(scale)}`, 900);
   }
 
   carryInfo(_ball: { x: number; y: number }, e: SimEvent) {
@@ -1192,7 +1217,7 @@ export class HudScene extends Phaser.Scene {
     const t3 = txt(this, 64, 41, extra ? `hole ${r.holeNumber} again  ·  sudden death` : `${where}pin ${r.pinLabel()}`, { color: extra ? COLORS.yellow : COLORS.dim, maxWidth: w - 68 });
     const wtxt = r.wind.mph < 0.5 ? 'calm' : `wind ${r.wind.mph.toFixed(1)} mph`;
     const live = this.play.match;
-    const honour = live?.session ? (live.session.state.honour === this.play.me ? 'your honour' : `${this.play.oppName()}'s honour`) : '';
+    const honour = live?.session ? (live.session.state.honour === this.play.me ? 'your honour' : `${this.play.oppName().slice(0, 10)}'s honour`) : '';
     const t4 = txt(this, 64, 52, `${wtxt}  ·  ${honour || 'tap to play'}`, { color: COLORS.dim });
     c.add([pnl, portrait, t1, t2, t3, t4]);
     this.intro = c;
@@ -1219,6 +1244,7 @@ export class HudScene extends Phaser.Scene {
     this.closeModal();
     this.modal = kind;
     this.modalLayer.removeAll(true);
+    this.intro?.setVisible(false); // the fly-over's panel showed through the menu, the overview (and the card)
     // a panel over the course hides the banner ("in the hole!" showed above the hole-complete panel);
     // the relief panels keep it: it says why they opened ("out of bounds")
     if (kind !== 'relief' && kind !== 'drop') this.hideBanner();
@@ -1228,6 +1254,7 @@ export class HudScene extends Phaser.Scene {
     this.modal = null;
     this.redraw = null;
     this.modalLayer.removeAll(true);
+    if (!this.cardLayer) this.intro?.setVisible(true);
   }
 
   private cardLayer: Phaser.GameObjects.Container | null = null;
@@ -1240,6 +1267,7 @@ export class HudScene extends Phaser.Scene {
     this.modalBeforeCard = this.modal;
     if (this.modal) this.modalLayer.setVisible(false);
     this.modal = 'card';
+    this.intro?.setVisible(false);
     const layer = this.add.container(0, 0).setDepth(120);
     const dim = dimmer(this, 0.6);
     dim.on('pointerdown', () => this.closeCard());
@@ -1258,6 +1286,7 @@ export class HudScene extends Phaser.Scene {
     this.modal = this.modalBeforeCard;
     this.modalBeforeCard = null;
     this.modalLayer.setVisible(true);
+    if (!this.modal) this.intro?.setVisible(true);
     if (this.play.match) this.play.matchUnheld(); // what came while the card was open
   }
 
@@ -1266,6 +1295,7 @@ export class HudScene extends Phaser.Scene {
     this.play.cancelSwing();
     if (this.modal) return;
     this.openModal('overview');
+    this.redraw = () => { this.closeModal(); this.toggleOverview(); };
     const r = this.play.round;
     const dim = dimmer(this, 0.75);
     dim.on('pointerdown', () => this.closeModal());
@@ -1331,6 +1361,14 @@ export class HudScene extends Phaser.Scene {
     if (this.modal && !under) return;
     this.openModal('pause');
     this.pauseReturn = under;
+    this.redraw = () => {
+      // close it as "resume" would (a match panel under it comes back), then open it at the new size
+      const back = this.pauseReturn;
+      this.pauseReturn = null;
+      this.closeModal();
+      if (back) back();
+      this.togglePause();
+    };
     const dim = dimmer(this, 0.6);
     this.modalLayer.add(dim);
     const w = this.play.match ? Math.min(180, this.W - 12) : 150, h = 128; // a match's two half-width buttons need the room
@@ -1364,6 +1402,7 @@ export class HudScene extends Phaser.Scene {
   /** Quit the round for good: not saved, not on the leaderboard, can't be continued. */
   private confirmQuit() {
     this.openModal('pause');
+    this.redraw = () => this.confirmQuit();
     this.modalLayer.add(dimmer(this, 0.6));
     const w = 170, h = 74;
     const x = Math.round((this.W - w) / 2), y = Math.round((this.H - h) / 2);
@@ -1507,7 +1546,11 @@ export class HudScene extends Phaser.Scene {
     }
     if (eagle) {
       // the eagle goes on the shared list now; a player with no name is asked for one
-      const t4 = txt(this, x + w / 2, y + 54, unnamed ? 'add your name for the recent eagles list' : 'on the recent eagles list!', { origin: [0.5, 0], color: COLORS.yellow, maxWidth: w - 12 });
+      // (said as it is: a hidden player's stays on their own list, and with no connection it goes up later)
+      let offline = false;
+      try { offline = navigator.onLine === false; } catch { /* unknown: assume online */ }
+      const listed = app.settings.hideFromBoards ? 'on your own eagles list (you are hidden)' : offline ? 'on the recent eagles list once you are online' : 'on the recent eagles list!';
+      const t4 = txt(this, x + w / 2, y + 54, unnamed ? 'add your name for the recent eagles list' : listed, { origin: [0.5, 0], color: COLORS.yellow, maxWidth: w - 12 });
       this.modalLayer.add(t4);
       if (unnamed) {
         const ab = new Button(this, x + w / 2 - 34, y + 67, 68, 16, 'add name', () => {
@@ -1567,6 +1610,7 @@ export class HudScene extends Phaser.Scene {
     if (!p.canGivePutt()) return;
     if (p.givePuttOutcome() !== 'wins') { p.matchConcede('stroke'); this.refresh(); return; }
     this.openModal('pause'); // the match waits while the question is up
+    this.redraw = () => { this.closeModal(); this.givePutt(); };
     confirmBox(this, this.modalLayer, 'give the putt?', `${p.oppName()} wins the hole with it`, 'let them putt', 'give it',
       () => {
         this.closeModal();
@@ -1636,8 +1680,8 @@ export class HudScene extends Phaser.Scene {
     const n = holeNo(s.cfg, s.hole);
     const where = `${n === 1 ? 'the first tee' : `the ${ordinal(n)} tee`}${isExtra(s.cfg, s.hole) ? ` for the ${ordinal(s.hole + 1)}` : ''}`;
     const pnl = new Panel(this, x, y, w, h, 0.88);
-    const t1 = txt(this, x + w / 2, y + 6, `waiting for ${opp}`, { origin: [0.5, 0], scale: 2, maxWidth: w - 8 });
-    if (t1.width > w - 8) t1.setScale(1);
+    // (a title given a wrap width at 2x wraps onto the lines under it instead of ever reading as too wide)
+    const t1 = fitHeading(txt(this, x + w / 2, y + 6, `waiting for ${opp}`, { origin: [0.5, 0] }), w - 8);
     const t2 = txt(this, x + w / 2, y + 28, live.online[other(p.me)] ? `to come to ${where}` : `${opp}'s game is closed - they'll be back on the match from their title screen`, { origin: [0.5, 0], color: COLORS.dim, maxWidth: w - 10 });
     const t3 = txt(this, x + w / 2, 0, 'esc or menu: leave for now', { origin: [0.5, 0], color: COLORS.dim });
     // the move clock: how long they have kept this player waiting, and the claim once it can be made
@@ -1679,7 +1723,7 @@ export class HudScene extends Phaser.Scene {
     const w = Math.min(230, this.W - 12), h = 92;
     const x = Math.round((this.W - w) / 2), y = Math.round(this.H * 0.28);
     const pnl = new Panel(this, x, y, w, h, 0.9);
-    const t1 = txt(this, x + w / 2, y + 6, title, { origin: [0.5, 0], scale: 2, color: won ? COLORS.yellow : lost ? COLORS.blue : COLORS.white, maxWidth: w - 8 });
+    const t1 = fitHeading(txt(this, x + w / 2, y + 6, title, { origin: [0.5, 0], color: won ? COLORS.yellow : lost ? COLORS.blue : COLORS.white }), w - 8);
     const t2 = txt(this, x + w / 2, y + 28, line, { origin: [0.5, 0], maxWidth: w - 10 });
     const left = holesLeft(s);
     const next = s.phase === 'finished' ? 'match over' : left > 0 ? `${left} to play` : 'extra holes: first to win one';
@@ -1737,7 +1781,7 @@ export class HudScene extends Phaser.Scene {
     const w = Math.min(240, this.W - 12), h = 104;
     const x = Math.round((this.W - w) / 2), y = Math.round(this.H * 0.26);
     const pnl = new Panel(this, x, y, w, h, 0.92);
-    const t1 = txt(this, x + w / 2, y + 6, statusText(s, me), { origin: [0.5, 0], scale: 2, color: won ? COLORS.yellow : halved ? COLORS.white : COLORS.blue, maxWidth: w - 8 });
+    const t1 = fitHeading(txt(this, x + w / 2, y + 6, statusText(s, me), { origin: [0.5, 0], color: won ? COLORS.yellow : halved ? COLORS.white : COLORS.blue }), w - 8);
     let wins = 0, losses = 0, halves = 0;
     for (const r of s.results) { if (r.winner === null) halves++; else if (r.winner === me) wins++; else losses++; }
     // won by forfeit: why (the move clock)
@@ -1954,14 +1998,18 @@ export function scorecardOf(scene: Phaser.Scene, d: CardData, W: number, H: numb
   lines.push(...from);
   probe.destroy();
   const statsH = 11 * (lines.length - 1);
-  const th = blockH * blocks.length + 36 + statsH;
+  // a title too long for one line ("the mountain course at spruce peak · black tees · name") wraps:
+  // the blocks move down by its extra lines (the second line sat on the hole numbers)
+  const extra = titleExtra(scene, d.title, tw);
+  // (three blocks, a 19-hole course: the gaps between blocks count too)
+  const th = blockH * blocks.length + 36 + statsH + extra + 6 * Math.max(0, blocks.length - 2);
   const y0 = Math.max(4, Math.round((H - th) / 2) - 6);
   const pnl = new Panel(scene, x0 - 6, y0 - 4, tw + 12, th + 8, 0.94);
   c.add(pnl);
   c.add(txt(scene, x0, y0, d.title, { color: COLORS.dim, maxWidth: tw }));
   const byHole = new Map(d.scores.map((s) => [s.hole, s]));
   blocks.forEach(([a, b, lab], k) => {
-    const yb = y0 + 14 + k * (blockH + 6);
+    const yb = y0 + 14 + extra + k * (blockH + 6);
     const g = scene.add.graphics();
     g.fillStyle(0xffffff, 0.06).fillRect(x0, yb, tw, rowH);
     g.fillStyle(0xffffff, 0.04).fillRect(x0, yb + rowH * parRow, tw, rowH);
@@ -2007,7 +2055,7 @@ export function scorecardOf(scene: Phaser.Scene, d: CardData, W: number, H: numb
     if (!xc) c.add(txt(scene, sx, yb + rowH * parRow + 1, String(sumPar), { origin: [0.5, 0] }));
     if (any) c.add(txt(scene, sx, sy, String(sumSc), { origin: [0.5, 0], color: COLORS.yellow }));
   });
-  lines.forEach((l, i) => c.add(txt(scene, x0, y0 + 14 + blocks.length * (blockH + 6) - 2 + i * 11, l, { color: i >= lines.length - from.length ? COLORS.white : COLORS.dim })));
+  lines.forEach((l, i) => c.add(txt(scene, x0, y0 + 14 + extra + blocks.length * (blockH + 6) - 2 + i * 11, l, { color: i >= lines.length - from.length ? COLORS.white : COLORS.dim })));
   c.setData('bottom', y0 + th + 4);
   c.setData('top', y0 - 4);
   return c;

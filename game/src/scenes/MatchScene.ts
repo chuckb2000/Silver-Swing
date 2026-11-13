@@ -12,7 +12,7 @@ import type { RoundLength } from '../save/entry';
 import { saveSettings } from '../save/store';
 import { dialogInput, dialogText, openDialog } from '../ui/domDialog';
 import { askName } from '../ui/nameInput';
-import { Button, COLORS, Panel, setTxt, txt } from '../ui/widgets';
+import { Button, COLORS, fitHeading, Panel, setTxt, txt } from '../ui/widgets';
 import { courseVersion, flagTab, forgetMatch, LiveMatch, matchInfo, MatchInfo, matchLink, myMatches, parseMatchCode, reportMatch } from '../match/live';
 import { PROTOCOL, RULES } from '../systems/match/types';
 import { lengthOf } from '../systems/game/lengths';
@@ -299,7 +299,7 @@ export class MatchScene extends MenuScene {
     const challenge = this.m.mode === 'invite' ? this.m.challenge : undefined;
     if (challenge) {
       // offered to a player looking for a match: they accept (join) or not; no code to send
-      this.root.add(txt(this, cx, y, `your match went to ${challenge.to}`, { origin: [0.5, 0], scale: 2, maxWidth: pw - 16 }));
+      this.root.add(fitHeading(txt(this, cx, y, `your match went to ${challenge.to}`, { origin: [0.5, 0] }), pw - 16));
       y += 30;
       const waiting = this.challengeAnswer || (this.live?.caughtUp ? `waiting for ${challenge.to} to accept...` : this.note || 'connecting...');
       this.root.add(txt(this, cx, y, waiting, { origin: [0.5, 0], color: this.challengeAnswer && !this.challengeAnswer.includes('accepted') ? COLORS.yellow : COLORS.white, maxWidth: pw - 16 }));
@@ -343,7 +343,7 @@ export class MatchScene extends MenuScene {
     const live = this.live;
     const s = live?.session?.state;
     if (!i || !i.exists) return;
-    this.root.add(txt(this, cx, y, `${i.players[0] ?? 'a friend'} ${i.phase === 'waiting' ? 'invites you to a match' : 'vs ' + (i.players[1] ?? '?')}`, { origin: [0.5, 0], scale: 2, maxWidth: pw - 16 }));
+    this.root.add(fitHeading(txt(this, cx, y, `${i.players[0] ?? 'a friend'} ${i.phase === 'waiting' ? 'invites you to a match' : 'vs ' + (i.players[1] ?? '?')}`, { origin: [0.5, 0] }), pw - 16));
     y += 24;
     this.root.add(txt(this, cx, y, matchLine(i), { origin: [0.5, 0], color: 0x8ec5ff, maxWidth: pw - 16 }));
     y += 14;

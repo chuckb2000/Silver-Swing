@@ -188,6 +188,9 @@ test('course data is exact when the browser adds noise to canvas reads (Safari 2
   // Safari's anti-fingerprinting changes canvas readbacks slightly; course data
   // read that way turned fairway into rough and rough into out of bounds
   await page.addInitScript(() => {
+    // a course with no out of bounds inside its boundary (the first on the list has: The Course at
+    // Aberdeen's houses, which this test read as noise once it became the course a new visit opens)
+    try { sessionStorage.setItem('golf:open-course', 'oswego_lake'); } catch { /* blocked */ }
     const orig = CanvasRenderingContext2D.prototype.getImageData;
     let seed = 12345;
     const rnd = () => ((seed = (seed * 1103515245 + 12345) & 0x7fffffff) / 0x7fffffff);

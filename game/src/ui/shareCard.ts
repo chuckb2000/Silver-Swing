@@ -75,7 +75,13 @@ export async function shareImage(scene: Phaser.Scene, e: LeaderboardEntry, rank 
   // the course's card art (the middle of it: the signature green), with its logo
   const shape = info ? shapeOfCourse(info) : undefined;
   const nines = cardBlocks(e.length, e.scores.map((x) => x.hole), shape).length;
-  const artH = nines >= 3 ? 52 : nines === 2 ? 92 : 132;
+  // the scorecard first, to know its height: the art takes what is left (a daily par round's list of
+  // holes, or a 19-hole card with a rank line, ran off the bottom of a picture with fixed art heights)
+  const holes = app.course?.json.id === e.course ? app.course.json.holes : null;
+  const card = scorecardOf(scene, { ...cardOfEntry(e, name, holes, !tour || (await tourHolesShown(e))), title: '' }, W, 400);
+  const cardH = (card.getData('bottom') as number) - (card.getData('top') as number);
+  const fixed = 15 + 6 + 11 + 13 + 28 + (rank ? 11 : 0) + 2 + 4; // everything but the art and the card
+  const artH = Math.max(30, Math.min(nines >= 3 ? 52 : nines === 2 ? 92 : 132, H - fixed - cardH));
   const ax = Math.round((W - 208) / 2), ay = 15;
   const frame = scene.add.graphics();
   frame.fillStyle(0x394049, 1).fillRect(ax - 2, ay - 2, 212, artH + 4);
@@ -104,8 +110,6 @@ export async function shareImage(scene: Phaser.Scene, e: LeaderboardEntry, rank 
   y += 28;
   if (rank) { box.add(txt(scene, W / 2, y, rank, { origin: [0.5, 0], color: COLORS.green, maxWidth: W - 12 })); y += 11; }
   // the scorecard, placed under the header (its own layout centres it in the height it is given)
-  const holes = app.course?.json.id === e.course ? app.course.json.holes : null;
-  const card = scorecardOf(scene, { ...cardOfEntry(e, name, holes, !tour || (await tourHolesShown(e))), title: '' }, W, 400);
   card.y = y + 2 - (card.getData('top') as number);
   box.add(card);
   // render, then scale up without smoothing
