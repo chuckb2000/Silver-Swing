@@ -1,0 +1,72 @@
+{
+ "items": [
+  {
+   "name": "reserve_overpass.geojson",
+   "osm_box": [
+    45.462,
+    -122.948,
+    45.5,
+    -122.888
+   ]
+  },
+  {
+   "name": "reserve_dem1m",
+   "tnm": {
+    "dataset": "dem1m",
+    "bbox": [
+     -122.948,
+     45.462,
+     -122.888,
+     45.5
+    ],
+    "list": true
+   }
+  },
+  {
+   "name": "reserve_lpc",
+   "tnm": {
+    "dataset": "lpc",
+    "bbox": [
+     -122.948,
+     45.462,
+     -122.888,
+     45.5
+    ],
+    "list": true
+   }
+  },
+  {
+   "name": "dogami_dtm_ft.tif",
+   "url": "https://gis.dogami.oregon.gov/arcgis/rest/services/lidar/DIGITAL_TERRAIN_MODEL_MOSAIC/ImageServer/exportImage?bbox=504900,5035300,507900,5038300&bboxSR=32610&imageSR=32610&size=3000,3000&format=tiff&pixelType=F32&noData=-9999&interpolation=RSP_BilinearInterpolation&f=image"
+  },
+  {
+   "name": "dogami_chm_ft.tif",
+   "url": "https://gis.dogami.oregon.gov/arcgis/rest/services/lidar/CANOPY_HEIGHT_MODEL_MOSAIC/ImageServer/exportImage?bbox=504900,5035300,507900,5038300&bboxSR=32610&imageSR=32610&size=3000,3000&format=tiff&pixelType=F32&noData=-9999&interpolation=RSP_BilinearInterpolation&f=image"
+  },
+  {
+   "name": "dogami_chm_identify.json",
+   "url": "https://gis.dogami.oregon.gov/arcgis/rest/services/lidar/CANOPY_HEIGHT_MODEL_MOSAIC/ImageServer/identify?geometry=506400,5036800&geometryType=esriGeometryPoint&sr=32610&returnCatalogItems=true&f=json"
+  },
+  {
+   "name": "osip2024_sw.jpg",
+   "url": "https://imagery.oregonexplorer.info/arcgis/rest/services/OSIP_2024/OSIP_2024_WM/ImageServer/exportImage?bbox=504900,5035300,506400,5036800&bboxSR=32610&imageSR=32610&size=3000,3000&format=jpg&f=image"
+  },
+  {
+   "name": "osip2024_se.jpg",
+   "url": "https://imagery.oregonexplorer.info/arcgis/rest/services/OSIP_2024/OSIP_2024_WM/ImageServer/exportImage?bbox=506400,5035300,507900,5036800&bboxSR=32610&imageSR=32610&size=3000,3000&format=jpg&f=image"
+  },
+  {
+   "name": "osip2024_nw.jpg",
+   "url": "https://imagery.oregonexplorer.info/arcgis/rest/services/OSIP_2024/OSIP_2024_WM/ImageServer/exportImage?bbox=504900,5036800,506400,5038300&bboxSR=32610&imageSR=32610&size=3000,3000&format=jpg&f=image"
+  },
+  {
+   "name": "osip2024_ne.jpg",
+   "url": "https://imagery.oregonexplorer.info/arcgis/rest/services/OSIP_2024/OSIP_2024_WM/ImageServer/exportImage?bbox=506400,5036800,507900,5038300&bboxSR=32610&imageSR=32610&size=3000,3000&format=jpg&f=image"
+  },
+  {
+   "name": "osip_info.json",
+   "url": "https://imagery.oregonexplorer.info/arcgis/rest/services/OSIP_2024/OSIP_2024_WM/ImageServer?f=json"
+  }
+ ],
+ "note": "first push: Overpass export, 3DEP lists, DOGAMI DTM/CHM and OSIP 2024 for x 504900-507900 / y 5035300-5038300 EPSG:32610 (clubhouse at Wikipedia's 45.485,-122.918 +- 1.5 km)"
+}
