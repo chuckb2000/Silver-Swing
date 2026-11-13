@@ -6,7 +6,7 @@
 // (developer, 2026-10-26): most birdies in a round, most feet of putts made in a
 // round, and the longest hole-outs from off the green, each one to watch again.
 
-import { listName } from '../save/milestones';
+import { listName, shortName } from '../save/milestones';
 import { app } from '../app';
 import { Difficulty } from '../data/difficulty';
 import { backupText, LeaderboardEntry, loadBoard, RoundLength } from '../save/store';
@@ -22,11 +22,11 @@ import { loadEagles, loadHoleouts } from '../save/store';
 import { HoleOut, holeOutDistance, puttsMadeM, tracksMade } from '../save/holeouts';
 import { watchHoleout } from './ReplayScene';
 import { lengthLabel, lengthsFor, shapeById } from './flow';
-import { shapeOfCourse } from '../systems/game/lengths';
+import { planFor, shapeOfCourse } from '../systems/game/lengths';
 import { askImport, showBackup } from '../ui/backup';
 import { compareRounds, toPar } from '../systems/rules/scoring';
 import { teeFor } from '../data/registry';
-import { Button, COLORS, dimmer, onTap, Panel, txt } from '../ui/widgets';
+import { Button, COLORS, dimmer, onTap, Panel, setTxtFit, txt } from '../ui/widgets';
 import { MenuScene } from './menu';
 import { DEFAULT_NAME } from '../save/names';
 
@@ -60,8 +60,13 @@ export class LeaderboardScene extends MenuScene {
     super('leaderboard');
   }
 
-  init(data: { courseId?: string; view?: typeof view; kind?: typeof dailyKind }) {
+  init(data: { courseId?: string; view?: typeof view; kind?: typeof dailyKind; length?: RoundLength; casual?: boolean; tee?: string }) {
     if (data?.courseId) { courseId = data.courseId; teeSel = ''; page = 0; view = 'scores'; }
+    // from a round's summary: the board that round is on (a front nine or a casual round opened the
+    // 18-hole board, without it)
+    if (data?.length) len = data.length;
+    if (data?.casual !== undefined) casual = data.casual;
+    if (data?.tee) teeSel = data.tee;
     if (data?.view) { view = data.view; dailyWhen = 'today'; page = 0; }
     if (data?.kind) dailyKind = data.kind;
   }
@@ -88,7 +93,11 @@ export class LeaderboardScene extends MenuScene {
     const info = courses[ci];
     const tees = info.teeSets;
     if (!tees.includes(teeSel)) teeSel = teeFor(info, app.settings.tees);
-    this.root.add(txt(this, x0 + pw / 2, y0 + 41, `${info.name}  ·  ${teeSel.toLowerCase()} tees`, { origin: [0.5, 0], color: COLORS.dim, maxWidth: pw - 120 }));
+    // one line (wrapped, the tee name went under the tabs below): the short name, then the name alone, if it must
+    const courseHead = txt(this, x0 + pw / 2, y0 + 41, "", { origin: [0.5, 0], color: COLORS.dim });
+    const teeLabel = `${teeSel.toLowerCase()} tees`;
+    setTxtFit(courseHead, [`${info.name}  ·  ${teeLabel}`, `${shortName(info.name)}  ·  ${teeLabel}`, shortName(info.name), shortName(info.name).slice(0, 18)], pw - 120);
+    this.root.add(courseHead);
     if (courses.length > 1) {
       this.root.add(new Button(this, x0 + pw - 54, y0 + 38, 48, 14, 'change', () => this.scene.start('courses', { purpose: 'board', courseId: info.id }), { color: 'grey' }));
     }
@@ -169,7 +178,11 @@ export class LeaderboardScene extends MenuScene {
       if (n === null || !this.scene.isActive()) return;
       if (n > 0) await flushUploads();
       this.rebuild();
-      this.root.add(txt(this, x0 + pw / 2, by - 12, n ? `imported ${n} ${n === 1 ? 'round' : 'rounds'}` : 'nothing new to import', { origin: [0.5, 0], color: COLORS.yellow }));
+      // after the rebuild has cleared the screen (added straight away, the line was wiped before it showed)
+      this.time.delayedCall(60, () => {
+        if (!this.sys.isActive()) return;
+        this.root.add(txt(this, x0 + pw / 2, by - 12, n ? `imported ${n} ${n === 1 ? 'round' : 'rounds'}` : 'nothing new to import', { origin: [0.5, 0], color: COLORS.yellow }));
+      });
     }, { color: 'grey' }));
   }
 
@@ -382,11 +395,32 @@ export class LeaderboardScene extends MenuScene {
 
   /** Play a hole-out again: its flight from this device, or from the shared list. */
   private async watch(h: HoleOut) {
-    let full: HoleOut | null = h.path ? h : null;
-    if (!full) full = await fetchHoleout(h.id);
-    if (!full?.path || !(await watchHoleout(this, full, 'leaderboard'))) {
+    if (this.watching) return;
+    // its course may take seconds to load: the list is covered meanwhile (a second tap, a tab or "back"
+    // pressed mid-load started the replay over another screen, or left no course loaded)
+    this.watching = true;
+    const g = this.gen;
+    const cover = this.add.container(0, 0).setDepth(300);
+    cover.add([dimmer(this, 0.7), txt(this, app.view.w / 2, app.view.h / 2 - 6, 'loading the hole...', { origin: [0.5, 0], color: COLORS.yellow })]);
+    let ok = false;
+    try {
+      let full: HoleOut | null = h.path ? h : null;
+      if (!full) full = await fetchHoleout(h.id);
+      ok = !!full?.path && (await watchHoleout(this, full, 'leaderboard'));
+    } catch { ok = false; }
+    this.watching = false;
+    if (!this.sys.isActive()) return;
+    cover.destroy();
+    if (!ok && this.isCurrentBuild(g)) {
       this.root.add(txt(this, app.view.w / 2, app.view.h - 44, "that one can't be played back", { origin: [0.5, 0], color: COLORS.yellow }));
     }
+  }
+
+  private watching = false;
+
+  protected back() {
+    if (this.watching) return; // the hole is loading: Esc waits, like the buttons under the cover
+    super.back();
   }
 
   /** The recent eagles and the most birdies in a round, across every course. */
@@ -404,6 +438,7 @@ export class LeaderboardScene extends MenuScene {
     }
     const courseName = (id: string) => { const c = app.courses.find((x) => x.id === id); return c ? listName(c) : isTourId(id) ? tourName(id) : id; };
     let note = '';
+    let hint = ''; // the line under the list
     let empty = ''; // under the column headers, like the other boards
     const lineH = 11;
     type Row = string[];
@@ -433,7 +468,7 @@ export class LeaderboardScene extends MenuScene {
         return [String(i + 1), r.player.slice(0, 12), indexLabel(r.h), `${r.h.counted} of ${r.h.of}`, week];
       });
       if (!rows.length) empty = 'no handicaps yet - 27 holes at normal difficulty put you on this board';
-      else this.root.add(txt(this, x0 + pw / 2, y0 + ph - 32, 'on the board after 27 holes  ·  normal rounds only', { origin: [0.5, 0], color: COLORS.dim, maxWidth: pw - 16 }));
+      else hint = 'on the board after 27 holes  ·  normal rounds only';
     } else {
       // stats: which list
       const kinds = [['holeouts', 'hole-outs'], ['putts', 'putts made'], ['birdies', 'birdies']] as const;
@@ -458,12 +493,18 @@ export class LeaderboardScene extends MenuScene {
       }
       head = ['#', 'player', putts ? 'feet' : 'birdies', 'course', 'date'];
       cols = [x0 + 10, x0 + 30, x0 + 110, x0 + 150, wide ? x0 + 300 : -1];
-      const holesOf = (l: string) => (l === '18' || l === '9x2' ? '' : ' (9)');
-      rows = list.map((r, i) => [String(i + 1), r.player.slice(0, 12), putts ? `${Math.round((r.made ?? 0) / 0.3048)}${holesOf(r.length)}` : String(r.birdies), courseName(r.course).slice(0, wide ? 24 : 18), localDay(r.date)]);
+      const holesOf = (l: string, course: string) => {
+        let n = 18;
+        try { n = planFor(l as RoundLength, shapeById(course) ?? 18).slots.length; } catch { n = l === '18' || l === '9x2' ? 18 : 9; }
+        return n === 18 ? '' : ` (${n})`;
+      };
+      rows = list.map((r, i) => [String(i + 1), r.player.slice(0, 12), putts ? `${Math.round((r.made ?? 0) / 0.3048)}${holesOf(r.length, r.course)}` : String(r.birdies), courseName(r.course).slice(0, wide ? 24 : 18), localDay(r.date)]);
       if (!rows.length) empty = putts ? 'no putts made yet - rounds from 26 october count' : 'no birdies yet - go make some!';
-      else this.root.add(txt(this, x0 + pw / 2, y0 + ph - 32, putts ? 'feet of putts holed in one round, any course (casual rounds left out)' : 'birdies or better in one round, any course (casual rounds left out)', { origin: [0.5, 0], color: COLORS.dim, maxWidth: pw - 16 }));
+      else hint = putts ? 'feet of putts holed in one round, any course (casual rounds left out)' : 'birdies or better in one round, any course (casual rounds left out)';
     }
     if (!this.isCurrentBuild(g)) return;
+    // (after the check: drawn before it, a build overtaken by a tab change left its line on the new screen)
+    if (hint) this.root.add(txt(this, x0 + pw / 2, y0 + ph - 32, hint, { origin: [0.5, 0], color: COLORS.dim, maxWidth: pw - 16 }));
     if (note) { this.root.add(txt(this, x0 + pw / 2, y, note, { origin: [0.5, 0], color: COLORS.yellow, maxWidth: pw - 16 })); y += 11; }
     const listTop = y + 2;
     const maxRows = Math.max(1, Math.floor((y0 + ph - 36 - listTop) / lineH) - 1);
