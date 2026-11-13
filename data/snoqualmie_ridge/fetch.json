@@ -1,6 +1,20 @@
 {
  "items": [
   {
+   "name": "snoqualmie_ridge_lpc_list",
+   "tnm": {
+    "dataset": "lpc",
+    "bbox": [
+     -121.8801,
+     47.5272,
+     -121.8411,
+     47.5491
+    ],
+    "only": "WA_KingCo_2_2021",
+    "list": true
+   }
+  },
+  {
    "name": "snoqualmie_ridge_overpass.geojson",
    "osm_box": [
     47.5272,
@@ -16,19 +30,6 @@
   {
    "name": "usgs_dem_identify.json",
    "url": "https://elevation.nationalmap.gov/arcgis/rest/services/3DEPElevation/ImageServer/identify?geometry=%7B%22x%22%3A585750%2C%22y%22%3A5265600%2C%22spatialReference%22%3A%7B%22wkid%22%3A32610%7D%7D&geometryType=esriGeometryPoint&returnCatalogItems=true&f=json"
-  },
-  {
-   "name": "snoqualmie_ridge_lpc",
-   "tnm": {
-    "dataset": "lpc",
-    "bbox": [
-     -121.8801,
-     47.5272,
-     -121.8411,
-     47.5491
-    ],
-    "only": "WA_KingCo_2_2021"
-   }
   },
   {
    "name": "naip_584300_5264400.jpg",
@@ -49,6 +50,20 @@
   {
    "name": "naip_info.json",
    "url": "https://imagery.nationalmap.gov/arcgis/rest/services/USGSNAIPImagery/ImageServer?f=pjson"
+  },
+  {
+   "name": "snoqualmie_ridge_lpc",
+   "tnm": {
+    "dataset": "lpc",
+    "bbox": [
+     -121.8801,
+     47.5272,
+     -121.8411,
+     47.5491
+    ],
+    "only": "WA_KingCo_2_2021"
+   },
+   "note": "run 1 stopped at the job's 5 h limit after tiles King_1889 and King_1890; this run fetches the rest"
   }
  ]
 }
