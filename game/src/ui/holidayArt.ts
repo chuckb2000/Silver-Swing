@@ -3,8 +3,12 @@
 //
 //   thanksgiving  the broadleaf trees turn orange, red and yellow (conifers stay green), and their
 //                 leaves lie on the rough under them
-//   christmas     snow on the tops of the trees, baubles in them and a star on every conifer, and
-//                 snow lying in patches on the rough (the fairways and greens are clear)
+//   christmas     snow on the tops of the trees, baubles, twinkling lights and a star on most
+//                 conifers; string lights along every roof; snow lying in patches on the rough (the
+//                 fairways and greens are clear)
+//
+// The lights twinkle by redrawing their few texels in the dressed picture now and then (twinkle(),
+// from HolidayFxScene), so every view of a tree or a roof twinkles with no change of its own.
 //
 // The holiday's hats, flags and decorations are their own sprite sheet (assets-src/holiday.py);
 // the falling snow and leaves are HolidayFxScene.
@@ -29,7 +33,7 @@ interface FrameBox { name: string; x: number; y: number; w: number; h: number }
  * Copy a texture to a canvas, let `pixels` change it (and `draw` paint on it), then put it back under
  * the same key with the same frames. Done once per texture per holiday (marked in its customData).
  */
-function restyle(scene: Phaser.Scene, key: string, pixels: ((d: Uint8ClampedArray, W: number, H: number, frames: FrameBox[]) => void) | null,
+function restyle(scene: Phaser.Scene, key: string, pixels: ((d: Uint8ClampedArray, W: number, H: number, frames: FrameBox[]) => Light[] | void) | null,
   draw?: (ctx: CanvasRenderingContext2D) => void): boolean {
   const tm = scene.textures;
   if (!tm.exists(key)) return false;
@@ -48,9 +52,10 @@ function restyle(scene: Phaser.Scene, key: string, pixels: ((d: Uint8ClampedArra
     const f = tex.get(name);
     return { name, x: f.cutX, y: f.cutY, w: f.cutWidth, h: f.cutHeight, pivot: f.customPivot ? [f.pivotX, f.pivotY] : null, data: f.customData };
   });
+  let lights: Light[] = [];
   if (pixels) {
     const img = ctx.getImageData(0, 0, W, H);
-    pixels(img.data, W, H, frames);
+    lights = pixels(img.data, W, H, frames) || [];
     ctx.putImageData(img, 0, 0);
   }
   draw?.(ctx);
@@ -64,8 +69,54 @@ function restyle(scene: Phaser.Scene, key: string, pixels: ((d: Uint8ClampedArra
     nf.customData = fr.data;
   }
   nt.customData = { ...mark, holiday: app.holiday };
+  if (lights.length) TWINKLE.set(key, { tex: nt, lights });
+  else TWINKLE.delete(key);
   return true;
 }
+
+// ------------------------------------------------------------------------ twinkling lights
+
+type RGB = [number, number, number];
+/** A light: its top-left texel, size, colours lit and dim, and when it's dim (tick + ph) % per === 0. */
+interface Light { x: number; y: number; s: number; on: RGB; off: RGB; ph: number; per: number }
+const TWINKLE = new Map<string, { tex: Phaser.Textures.CanvasTexture; lights: Light[] }>();
+let tick = 0;
+
+const lit = (l: Light, t: number) => (t + l.ph) % l.per !== 0;
+const css = (c: RGB) => `rgb(${c[0]},${c[1]},${c[2]})`;
+
+function paintLight(d: Uint8ClampedArray, W: number, l: Light) {
+  for (let yy = 0; yy < l.s; yy++) for (let xx = 0; xx < l.s; xx++) {
+    if (l.s >= 3 && (xx === 0 || xx === l.s - 1) && (yy === 0 || yy === l.s - 1)) continue; // round
+    const i = ((l.y + yy) * W + l.x + xx) * 4;
+    const c = l.s >= 3 && xx === 1 && yy === 1 ? [255, 255, 240] : l.on; // a glint on the bigger bulbs
+    d[i] = c[0]; d[i + 1] = c[1]; d[i + 2] = c[2]; d[i + 3] = 255;
+  }
+}
+
+/** Dim the lights whose turn it is and light the others (about three times a second). */
+export function twinkle(scene: Phaser.Scene) {
+  tick++;
+  for (const [key, tw] of TWINKLE) {
+    if (!scene.textures.exists(key) || scene.textures.get(key) !== tw.tex) { TWINKLE.delete(key); continue; }
+    const ctx = tw.tex.context;
+    let changed = false;
+    for (const l of tw.lights) {
+      const now = lit(l, tick);
+      if (now === lit(l, tick - 1)) continue;
+      ctx.fillStyle = css(now ? l.on : l.off);
+      if (l.s >= 3) { ctx.fillRect(l.x + 1, l.y, l.s - 2, l.s); ctx.fillRect(l.x, l.y + 1, l.s, l.s - 2); }
+      else ctx.fillRect(l.x, l.y, l.s, l.s);
+      if (now && l.s >= 3) { ctx.fillStyle = 'rgb(255,255,240)'; ctx.fillRect(l.x + 1, l.y + 1, 1, 1); }
+      changed = true;
+    }
+    if (changed) tw.tex.refresh();
+  }
+}
+
+/** The bulbs' colours, and each one dimmed (its glass, unlit). */
+const BULBS: RGB[] = [[255, 72, 60], [255, 214, 86], [86, 170, 255], [255, 120, 214], [255, 246, 214], [96, 230, 120]];
+const dim = (c: RGB): RGB => [Math.round(c[0] * 0.42 + 14), Math.round(c[1] * 0.42 + 14), Math.round(c[2] * 0.42 + 18)];
 
 // ------------------------------------------------------------------------ trees
 
@@ -89,8 +140,8 @@ export function dressTrees(scene: Phaser.Scene, key: string, ratio = 1) {
   const h = app.holiday;
   if (!h) return;
   restyle(scene, key, (d, W, _H, frames) => {
-    if (h === 'thanksgiving') autumn(d, W, frames);
-    else christmasTrees(d, W, frames, ratio);
+    if (h === 'thanksgiving') { autumn(d, W, frames); return; }
+    return christmasTrees(d, W, frames, ratio);
   });
 }
 
@@ -123,7 +174,8 @@ function autumn(d: Uint8ClampedArray, W: number, frames: FrameBox[]) {
   }
 }
 
-function christmasTrees(d: Uint8ClampedArray, W: number, frames: FrameBox[], ratio: number) {
+function christmasTrees(d: Uint8ClampedArray, W: number, frames: FrameBox[], ratio: number): Light[] {
+  const lights: Light[] = [];
   const snowDepth = Math.max(1, Math.round(ratio * 0.7));
   const size = ratio < 2 ? 1 : ratio < 5 ? 2 : ratio < 9 ? 3 : 5;
   const gap = ratio < 2 ? 4 : Math.round(4 * Math.sqrt(ratio) * 1.15);
@@ -156,7 +208,7 @@ function christmasTrees(d: Uint8ClampedArray, W: number, frames: FrameBox[], rat
       for (let gx = 1; gx < f.w - 1; gx += gap) {
         k++;
         const jx = gx + Math.floor(hash01(seed, k, 1) * gap), jy = gy + Math.floor(hash01(seed, k, 2) * (gap - 1));
-        if (hash01(seed, k, 3) < 0.25) continue; // not every spot
+        if (hash01(seed, k, 3) < 0.45) continue; // not every spot (the lights take some)
         let ok = true;
         for (let yy = -1; yy <= size && ok; yy++) for (let xx = -1; xx <= size && ok; xx++) {
           if (!leaf(jx + xx, jy + yy) || snow[(jy + yy) * f.w + jx + xx]) ok = false;
@@ -171,6 +223,32 @@ function christmasTrees(d: Uint8ClampedArray, W: number, frames: FrameBox[], rat
           const m = hi ? 1.35 : lo ? 0.7 : 1;
           d[i] = Math.min(255, col[0] * m); d[i + 1] = Math.min(255, col[1] * m); d[i + 2] = Math.min(255, col[2] * m);
         }
+      }
+    }
+    // strings of lights draped across the crown, down to the right, on leaves the snow and the
+    // baubles left alone
+    const ls = ratio < 4 ? 1 : ratio < 9 ? 2 : 3;
+    const lgap = Math.max(5, Math.round(5 * Math.sqrt(ratio)));
+    const lstep = Math.max(3, Math.round(3 * Math.sqrt(ratio)));
+    const plain = (x: number, y: number) => {
+      for (let yy = -1; yy <= ls; yy++) for (let xx = -1; xx <= ls; xx++) {
+        if (!leaf(x + xx, y + yy) || snow[(y + yy) * f.w + x + xx]) return false;
+        const i = at(x + xx, y + yy);
+        if (d[i] > d[i + 1] + 20 || d[i + 2] > d[i + 1] + 20) return false; // a bauble
+      }
+      return true;
+    };
+    let n = 0;
+    for (let row = Math.floor(lgap * hash01(seed, 0, 9)); row < f.h + f.w * 0.4; row += lgap) {
+      for (let x = 1 + Math.floor(hash01(seed, row, 8) * lstep); x < f.w - 1; x += lstep) {
+        const sag = 1.2 * Math.sin((x / Math.max(1, f.w)) * Math.PI); // the string droops between its ends
+        const y = Math.round(row + x * 0.38 + sag) - Math.floor(f.w * 0.4);
+        if (!plain(x, y)) continue;
+        n++;
+        const on = BULBS[Math.floor(hash01(seed, n, 11) * BULBS.length)];
+        const l: Light = { x: f.x + x, y: f.y + y, s: ls, on, off: dim(on), ph: Math.floor(hash01(seed, n, 12) * 5), per: 5 };
+        paintLight(d, W, l);
+        lights.push(l);
       }
     }
     // a star on the tip of most conifers
@@ -193,6 +271,7 @@ function christmasTrees(d: Uint8ClampedArray, W: number, frames: FrameBox[], rat
       }
     }
   }
+  return lights;
 }
 
 function hashName(s: string): number {
@@ -208,6 +287,15 @@ const SNOW_EDGE = 0.5;
 const SNOWY = new Set<number>([SURF.rough, SURF.woods, SURF.ob, SURF.obWoods, SURF.range]);
 const LEAFY_GROUND = new Set<number>([SURF.rough, SURF.woods, SURF.ob, SURF.obWoods, SURF.fringe, SURF.fairway, SURF.range]);
 const LEAF_COLS = ['#e8701e', '#b84c10', '#c8321e', '#8e1e12', '#e8b42a', '#b88618'];
+
+/**
+ * Is there snow on the ground here? A white ball on white snow can't be seen, so the ball there gets
+ * the outlined frame the putting views use.
+ */
+export function onSnow(course: CourseRuntime | null | undefined, x: number, y: number): boolean {
+  if (app.holiday !== 'christmas' || !course) return false;
+  return SNOWY.has(course.terrain.surface(x, y)) && patchNoise(x, y) >= SNOW_EDGE - 0.02;
+}
 
 /** Where a picture of the ground lies: its top-left corner in world metres and its texels per metre. */
 interface GroundBox { x0: number; y1: number; ppm: number }
@@ -237,6 +325,7 @@ function dressGround(scene: Phaser.Scene, key: string, box: GroundBox, course: C
           d[i] = Math.min(255, 236 * k); d[i + 1] = Math.min(255, 242 * k); d[i + 2] = Math.min(255, 250 * k);
         }
       }
+      return roofLights(d, W, H, box, course);
     });
     return;
   }
@@ -270,6 +359,46 @@ function dressGround(scene: Phaser.Scene, key: string, box: GroundBox, course: C
       }
     }
   });
+}
+
+/**
+ * String lights along the edges of every roof (the clubhouse's and the houses' around the course),
+ * a bulb every metre and a half (closer in the putting views), chasing round in threes.
+ */
+function roofLights(d: Uint8ClampedArray, W: number, H: number, box: GroundBox, course: CourseRuntime): Light[] {
+  const out: Light[] = [];
+  const s = box.ppm < 4 ? 1 : box.ppm < 16 ? 2 : 3;
+  const gapM = box.ppm < 4 ? 1.5 : 0.75;
+  const x1 = box.x0 + W / box.ppm, y0 = box.y1 - H / box.ppm;
+  course.json.buildings.forEach((b, bi) => {
+    let minx = Infinity, maxx = -Infinity, miny = Infinity, maxy = -Infinity, area = 0;
+    b.poly.forEach(([x, y], k) => {
+      minx = Math.min(minx, x); maxx = Math.max(maxx, x); miny = Math.min(miny, y); maxy = Math.max(maxy, y);
+      const [nx, ny] = b.poly[(k + 1) % b.poly.length];
+      area += x * ny - nx * y;
+    });
+    // the roof is drawn the wall's height above the footprint (as the pipeline bakes it)
+    const lift = Math.max(2, Math.round(b.h * 0.7 * box.ppm)) / box.ppm;
+    if (maxx < box.x0 - 2 || minx > x1 + 2 || maxy + lift < y0 - 2 || miny > box.y1 + 2) return;
+    if (b.h > 14 && Math.abs(area) / 2 < 150) return; // a tower or a lighthouse: drawn its own way
+    const seq = Math.floor(hash01(bi, 3, 31) * 4); // each house its own string: four kinds
+    let n = 0;
+    for (let k = 0; k + 1 < b.poly.length; k++) {
+      const [ax, ay] = b.poly[k], [bx, by] = b.poly[k + 1];
+      const len = Math.hypot(bx - ax, by - ay);
+      for (let t = 0; t < len; t += gapM) {
+        const x = ax + ((bx - ax) * t) / len, y = ay + ((by - ay) * t) / len + lift;
+        n++;
+        const px = Math.round((x - box.x0) * box.ppm - s / 2), py = Math.round((box.y1 - y) * box.ppm - s / 2);
+        if (px < 0 || py < 0 || px + s > W || py + s > H) continue;
+        const on: RGB = seq === 0 ? BULBS[n % 4] : seq === 1 ? [255, 236, 170] : seq === 2 ? BULBS[n % 2 === 0 ? 0 : 5] : BULBS[n % 3 === 0 ? 2 : 4];
+        const l: Light = { x: px, y: py, s, on, off: dim(on), ph: n % 3, per: 3 };
+        paintLight(d, W, l);
+        out.push(l);
+      }
+    }
+  });
+  return out;
 }
 
 /** The holiday's things beside the tee box (metres: to the left of the line of play, and ahead). */

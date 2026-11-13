@@ -33,7 +33,7 @@ import { decodePath } from '../systems/match/path';
 import { CLOCK } from '../systems/match/types';
 import type { Action, HoleResult, HoleSnap, Logged, Seat } from '../systems/match/types';
 import type { SendResult } from '../net/matchClient';
-import { charTex, holidayTeeDecor } from '../ui/holidayArt';
+import { charTex, holidayTeeDecor, onSnow } from '../ui/holidayArt';
 import { holidayFx } from './HolidayFxScene';
 
 export type PlayState = 'loading' | 'intro' | 'aim' | 'swing' | 'flight' | 'settle' | 'relief' | 'drop' | 'holed' | 'replay' | 'done'
@@ -2406,7 +2406,7 @@ export class PlayScene extends Phaser.Scene {
         const L = this.level;
         show = true;
         this.otherBall.setVisible(true).setPosition(p.x, p.y).setScale(1 / L).setDepth(p.y + 0.4)
-          .setFrame(this.green.visible ? 'ball_big' : 'ball');
+          .setFrame(onSnow(app.course, r.ball.x, r.ball.y) ? 'ball_snow' : this.green.visible ? 'ball_big' : 'ball');
         const bob = Math.round(Math.sin(this.time.now / 260) * 1.5);
         this.otherMark.setVisible(true).setScale(1 / L).setPosition(this.snap(p.x), this.snap(p.y - (5 + bob) / L))
           .setTint(k === this.me ? 0xffd84a : 0x7cc0ff);
@@ -2467,7 +2467,9 @@ export class PlayScene extends Phaser.Scene {
     this.ball.setVisible(!this.ballHidden);
     this.shadow.setVisible(!this.ballHidden && hag > 0.05);
     // the ball reads bigger as it climbs toward the camera (and gets an outline)
-    const frame = this.green.visible && hag < 0.3 ? 'ball_big' : hag < 3 ? 'ball' : hag < 14 ? 'ball_air3' : 'ball_air4';
+    // on snow (Christmas) the white ball gets a dark outline, or it can't be seen
+    const snow = hag < 3 && onSnow(app.course, x, y);
+    const frame = this.green.visible && hag < 0.3 ? (snow ? 'ball_snow' : 'ball_big') : snow ? 'ball_snow' : hag < 3 ? 'ball' : hag < 14 ? 'ball_air3' : 'ball_air4';
     if (this.ball.frame.name !== frame) this.ball.setFrame(frame);
     this.shadow.setFrame(hag > 14 ? 'ball_shadow2' : hag > 3 ? 'ball_shadow3' : 'ball_shadow');
     // positions are not rounded: the ball moves in device pixels, not texels

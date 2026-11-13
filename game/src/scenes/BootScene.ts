@@ -31,7 +31,7 @@ export class BootScene extends Phaser.Scene {
     this.load.atlas('ui', 'sprites/sprites.png', 'sprites/sprites.json');
     // a holiday's dress (systems/game/holiday.ts): its date, or ?holiday= for a preview
     const q = holidayFromQuery(window.location.search);
-    app.holiday = q !== undefined ? q : holidayOn(new Date());
+    app.holiday = q ?? holidayOn(new Date());
     if (app.holiday) this.load.atlas('holiday', `sprites/holiday_${app.holiday}.png`, `sprites/holiday_${app.holiday}.json`);
     this.load.bitmapFont('px', 'sprites/pxfont.png', 'sprites/pxfont.xml');
     this.load.image('trophy', 'sprites/trophy.png'); // the logo (assets-src/title_art.py)

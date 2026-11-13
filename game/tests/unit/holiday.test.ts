@@ -13,27 +13,32 @@ describe('when a holiday shows', () => {
     for (const y of [2025, 2026, 2027, 2028, 2029, 2030]) expect(new Date(y, 10, thanksgivingDay(y)).getDay()).toBe(4);
   });
 
-  it('Thanksgiving week runs Monday to Sunday, into December when it must', () => {
-    expect(holidayOn(day(2026, 11, 22))).toBeNull();
-    expect(holidayOn(day(2026, 11, 23))).toBe('thanksgiving');
+  it('Thanksgiving runs from the Saturday before to the Sunday after, into December when it must', () => {
+    expect(holidayOn(day(2026, 11, 20))).toBeNull();
+    expect(holidayOn(day(2026, 11, 21))).toBe('thanksgiving');
+    expect(holidayOn(day(2026, 11, 26))).toBe('thanksgiving');
     expect(holidayOn(day(2026, 11, 29))).toBe('thanksgiving');
     expect(holidayOn(day(2026, 11, 30))).toBeNull();
     expect(holidayOn(day(2024, 12, 1))).toBe('thanksgiving'); // Thanksgiving on the 28th
+    expect(holidayOn(day(2024, 11, 23))).toBe('thanksgiving');
+    expect(holidayOn(day(2024, 11, 22))).toBeNull();
+    expect(holidayOn(day(2024, 12, 2))).toBeNull();
   });
 
-  it('Christmas runs 15 to 31 December', () => {
-    expect(holidayOn(day(2026, 12, 14))).toBeNull();
-    expect(holidayOn(day(2026, 12, 15))).toBe('christmas');
+  it('Christmas runs 12 to 31 December', () => {
+    expect(holidayOn(day(2026, 12, 11))).toBeNull();
+    expect(holidayOn(day(2026, 12, 12))).toBe('christmas');
     expect(holidayOn(day(2026, 12, 25))).toBe('christmas');
     expect(holidayOn(day(2026, 12, 31))).toBe('christmas');
     expect(holidayOn(day(2027, 1, 1))).toBeNull();
     expect(holidayOn(day(2026, 11, 13))).toBeNull();
   });
 
-  it('?holiday= previews one, or none', () => {
+  it('?holiday= previews one, and none can be turned off', () => {
     expect(holidayFromQuery('?holiday=christmas')).toBe('christmas');
     expect(holidayFromQuery('?a=1&holiday=thanksgiving')).toBe('thanksgiving');
-    expect(holidayFromQuery('?holiday=off')).toBeNull();
+    expect(holidayFromQuery('?holiday=off')).toBeUndefined();
+    expect(holidayFromQuery('?holiday=none')).toBeUndefined();
     expect(holidayFromQuery('?holiday=easter')).toBeUndefined();
     expect(holidayFromQuery('')).toBeUndefined();
   });

@@ -691,11 +691,12 @@ DECISIONS.md with the reason.
     Actions first".
 
 -   **Holiday themes (design chat, 2026-11-13):** branch `design/holidays`,
-    a mock-up for review, unmerged: Thanksgiving week and 15-31 December
-    dress the title, every course (restyled at load, no rebuild), the golfer
-    and the flag (`systems/game/holiday.ts`, `ui/holidayArt.ts`,
-    `HolidayFxScene`, `assets-src/holiday.py`); `?holiday=` previews one.
-    DECISIONS.md "Holiday themes, a mock-up".
+    unmerged: from the Saturday before Thanksgiving to the Sunday after, and
+    12-31 December, the title, every course (restyled at load, no rebuild),
+    the golfer, the flag and the music dress up; players can't turn it off
+    (`systems/game/holiday.ts`, `ui/holidayArt.ts`, `HolidayFxScene`,
+    `assets-src/holiday.py`, `assets-src/music/carols.py`); `?holiday=`
+    previews one. DECISIONS.md "Holiday themes".
 
 -   **Next task:** Item 1 of the player improvements (swing coach) is on
     `design/coach`, unmerged. Also: the third playtest (putting, yellow

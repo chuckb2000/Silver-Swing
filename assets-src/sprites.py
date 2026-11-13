@@ -329,6 +329,12 @@ def ball_big():
     return outline(img, color=(16, 22, 18, 120))
 
 
+def ball_snow():
+    """Ball at rest on snow (the Christmas theme): a firm dark outline, or white on white can't be seen."""
+    img = from_template(["WW", "Wg"], {"W": "#ffffff", "g": "#d3d8de"})
+    return outline(img, color=(30, 38, 52, 235))
+
+
 def cup_big():
     """Cup for the putting view (7 x 5): dark hole, shaded rim, lit far wall."""
     return from_template([".kkkkk.", "kKKKKKk", "kKKKKKk", "kKKKKKk", ".kllll."],
@@ -610,6 +616,7 @@ def all_sprites():
     out.append(("cup", cup()))
     out.append(("cup_big", cup_big()))
     out.append(("ball_big", ball_big()))
+    out.append(("ball_snow", ball_snow()))
     out.append(("cup_true", cup_true()))
     out.append(("putt_target", putt_target()))
     out.append(("aim_tick", aim_tick()))

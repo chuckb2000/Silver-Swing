@@ -81,13 +81,20 @@ export class TitleScene extends MenuScene {
     this.tourNow = !!data?.tour;
   }
 
+  /** Christmas: the string of lights along the top of the title (redrawn as they twinkle). */
+  private garland: Phaser.GameObjects.Graphics | null = null;
+  private garlandTick = 0;
+
   /**
-   * A holiday on the title: santa's hat on the trophy at Christmas; at Thanksgiving a turkey in the
-   * bottom corner.
+   * A holiday on the title: santa's hat on the trophy and a string of lights along the top at
+   * Christmas; at Thanksgiving a turkey in the bottom corner.
    */
   private holidayTitle(tx: number, ty: number, tw: number) {
     if (!app.holiday || !this.textures.exists('holiday')) return;
     if (app.holiday === 'christmas') {
+      this.garland = this.add.graphics();
+      this.root.addAt(this.garland, 0); // behind the trophy, its hat and the name
+      this.drawGarland();
       this.root.add(this.add.image(tx + Math.round(tw / 2) - 17, ty - 9, 'holiday', 'santa_hat').setOrigin(0, 0));
     } else {
       // the turkey stands in the bottom corner, above the footer
@@ -96,8 +103,31 @@ export class TitleScene extends MenuScene {
     }
   }
 
+  /** The wire droops between hooks along the top edge; a bulb hangs every 12 px, one in five dim in turn. */
+  private drawGarland() {
+    const g = this.garland;
+    if (!g || !g.active) return;
+    g.clear();
+    const W = app.view.w;
+    const spans = Math.max(2, Math.round(W / 110));
+    const at = (x: number) => { const u = (x / W) * spans; return 1 + Math.round(7 * Math.sin((u - Math.floor(u)) * Math.PI)); };
+    g.fillStyle(0x16301e, 1);
+    for (let x = 0; x < W; x++) g.fillRect(x, at(x), 1, 1);
+    const cols = [0xff483c, 0xffd656, 0x56aaff, 0xff78d6, 0x60e678];
+    for (let k = 0, x = 6; x < W - 2; k++, x += 12) {
+      const y = at(x) + 1;
+      const c = cols[k % cols.length];
+      const on = (this.garlandTick + k * 3) % 5 !== 0;
+      g.fillStyle(0x3a4a3e, 1).fillRect(x, y, 2, 1); // the socket
+      g.fillStyle(on ? c : Phaser.Display.Color.ValueToColor(c).darken(55).color, 1).fillRect(x, y + 1, 2, 2).fillRect(x, y + 3, 2, 1);
+      if (on) g.fillStyle(0xffffff, 0.8).fillRect(x, y + 1, 1, 1);
+    }
+  }
+
   create() {
     this.flyover = false;
+    this.garland = null;
+    if (app.holiday === 'christmas') this.time.addEvent({ delay: 340, loop: true, callback: () => { this.garlandTick++; this.drawGarland(); } });
     this.shown = [];
     this.resuming = false;
     this.shade = this.add.rectangle(0, 0, 10, 10, 0x081018, SHADE).setOrigin(0, 0).setDepth(-1);

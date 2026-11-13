@@ -15,7 +15,7 @@ import { HZ, SimEvent, SimResult } from '../systems/physics/sim';
 import { SURF } from '../systems/physics/surfaces';
 import { CourseView, DEPTH } from '../ui/courseView';
 import { Button, COLORS, Panel, txt } from '../ui/widgets';
-import { charTex } from '../ui/holidayArt';
+import { charTex, onSnow } from '../ui/holidayArt';
 
 const SLOW = 0.35;
 const SLOW_MS = 2600;
@@ -163,7 +163,7 @@ export class ReplayScene extends Phaser.Scene {
     if (this.sunk) return;
     const hag = Math.max(0, b.z - app.course!.terrain.z(b.x, b.y));
     const p = this.px(b.x, b.y);
-    const frame = hag < 3 ? 'ball' : hag < 14 ? 'ball_air3' : 'ball_air4';
+    const frame = hag < 3 ? (onSnow(app.course, b.x, b.y) ? 'ball_snow' : 'ball') : hag < 14 ? 'ball_air3' : 'ball_air4';
     if (this.ball.frame.name !== frame) this.ball.setFrame(frame);
     this.shadow.setFrame(hag > 14 ? 'ball_shadow2' : hag > 3 ? 'ball_shadow3' : 'ball_shadow');
     this.ball.setPosition(p.x, p.y - hag * HEIGHT_PX).setDepth(hag > 0.3 ? DEPTH.flight : p.y + 0.5);

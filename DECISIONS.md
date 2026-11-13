@@ -1609,29 +1609,46 @@ green, the pin 0.8 m further onto the back tier, its putting views, its mini-map
 chunk). A putt from 6 m short of the step to the centre pin (61 ft) gets up from about 70 %
 power; a weaker one rolls back down the step. Highland Links 9 stays as it is (developer).
 
-## Holiday themes, a mock-up (developer, 2026-11-13)
+## Holiday themes (developer, 2026-11-13)
 
 The developer: "A thanksgiving theme for the week of thanksgiving, christmas theme for
-christmas ... Maybe for christmas there can be like ornaments in the trees". On branch
-`design/holidays` as a mock-up for review; nothing here changes how a ball flies or a round
-counts (`systems/game/holiday.ts` is pure and tested; the drawing is `ui/holidayArt.ts`).
+christmas ... Maybe for christmas there can be like ornaments in the trees". After the first
+mock-up: Thanksgiving from the Saturday before to the Sunday after, Christmas 12-31 December,
+no way for players to turn it off, the ball must show on snow, public-domain Christmas music
+made like the suite, twinkling lights and string lights. Nothing here changes how a ball flies
+or a round counts (`systems/game/holiday.ts` is pure and tested; the drawing is
+`ui/holidayArt.ts`).
 
-- **When:** Thanksgiving week, Monday to Sunday around the fourth Thursday of November, and
-  15-31 December (`CHRISTMAS_FROM`, `CHRISTMAS_TO`), by the player's local date.
-  `?holiday=thanksgiving`, `?holiday=christmas` or `?holiday=off` overrides it (previews,
-  screenshots).
+- **When:** Thanksgiving from the Saturday before the fourth Thursday of November to the Sunday
+  after (nine days), and 12-31 December (`CHRISTMAS_FROM`, `CHRISTMAS_TO`), by the player's local
+  date. No setting turns it off (developer). `?holiday=thanksgiving` or `?holiday=christmas`
+  shows one on any other day (previews, screenshots); there is no `?holiday=off`.
 - **Courses:** restyled when a course or a putting view loads, from the textures already there,
   so no course is rebuilt and every course gets it. Thanksgiving turns the broadleaf trees
   orange, red and gold (conifers stay green) and lays leaves on the rough under them;
-  Christmas puts snow on the treetops, baubles in the trees and a star on most conifers, and
-  snow in dithered patches on the rough and woods (never on fairways, greens, tees, sand, water
-  or roofs). Hay, pumpkins and corn (Thanksgiving) or presents (Christmas) stand beside the
-  tee, only where there is open grass.
+  Christmas puts snow on the treetops, baubles, strings of lights and a star on most conifers
+  in the trees, string lights along every roof (the clubhouse's and the houses' around the
+  course), and snow in dithered patches on the rough and woods (never on fairways, greens, tees,
+  sand, water or roofs). Hay, pumpkins and corn (Thanksgiving) or presents (Christmas) stand
+  beside the tee, only where there is open grass.
+- **Twinkling:** about three times a second (`HolidayFxScene` calls `twinkle()`), each dressed
+  picture redraws the few texels of its lights and is sent to the GPU again: the trees' lights
+  go dim one tick in five, each at its own time; the roofs' chase round in threes. Only the
+  pictures that have lights and still exist are touched.
+- **The ball on snow:** white on white couldn't be seen; on a snowy spot the ball at rest (and
+  the other player's, and a replay's) is drawn with a dark outline (`ball_snow`).
 - **Golfer and flag:** a pilgrim's hat or Santa's hat on the golfer and the portrait; an orange
   flag or a candy-cane pin.
 - **Title:** "happy thanksgiving!" or "merry christmas!" under the course count (developer:
-  just that); a turkey in the corner or Santa's hat on the trophy; leaves or snow falling over
-  the menus and the course, drifting with the hole's wind (`HolidayFxScene`, under the HUD).
+  just that); a turkey in the corner, or Santa's hat on the trophy and a string of lights along
+  the top; leaves or snow falling over the menus and the course, drifting with the hole's wind
+  (`HolidayFxScene`, under the HUD).
+- **Music:** from 12 to 31 December six carols play instead of the suite (`music/christmas.json`,
+  `assets-src/music/carols.py`, `make carols`): Jingle Bells (Pierpont, 1857), Deck the Halls
+  (Welsh traditional), Silent Night (Gruber, 1818), We Wish You a Merry Christmas (English
+  traditional), Joy to the World (Mason's "Antioch", 1839) and Good King Wenceslas (Piae
+  Cantiones, 1582): every tune long out of copyright, arranged here and synthesized with the
+  suite's instruments plus sleigh bells; about 11 minutes. The offline copy keeps both sets.
 - **Notes on the hole-complete panel:** three birdies in a row is a "turkey" at Thanksgiving;
   an 8 is a "snowman" at Christmas; each with its picture and a sound.
 - The original portrait had a dark line along its top (its outline wrapped round the image);

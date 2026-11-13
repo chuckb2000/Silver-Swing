@@ -15,29 +15,30 @@ export function thanksgivingDay(year: number): number {
 
 const dayStart = (y: number, m: number, d: number) => new Date(y, m, d).getTime();
 
-/** Which holiday's dress a local date wears: Thanksgiving week (Monday to Sunday), or 15-31 December. */
+/**
+ * Which holiday's dress a local date wears: Thanksgiving from the Saturday before to the Sunday after
+ * (nine days), or 12-31 December (developer, 2026-11-13). Players can't turn it off (developer).
+ */
 export function holidayOn(d: Date): Holiday | null {
   const y = d.getFullYear();
   const t = dayStart(y, d.getMonth(), d.getDate());
   const tg = thanksgivingDay(y);
-  if (t >= dayStart(y, 10, tg - 3) && t <= dayStart(y, 10, tg + 3)) return 'thanksgiving';
+  if (t >= dayStart(y, 10, tg - 5) && t <= dayStart(y, 10, tg + 3)) return 'thanksgiving';
   if (d.getMonth() === 11 && d.getDate() >= CHRISTMAS_FROM && d.getDate() <= CHRISTMAS_TO) return 'christmas';
   return null;
 }
 
 /** The days of December dressed for Christmas. */
-export const CHRISTMAS_FROM = 15;
+export const CHRISTMAS_FROM = 12;
 export const CHRISTMAS_TO = 31;
 
 /**
- * `?holiday=thanksgiving` / `christmas` shows a holiday any day (a preview, a screenshot);
- * `?holiday=off` shows none. undefined: the address doesn't say.
+ * `?holiday=thanksgiving` / `christmas` shows a holiday on any day (a preview, a screenshot). There is
+ * no way to turn one off (developer, 2026-11-13). undefined: the address doesn't name one.
  */
-export function holidayFromQuery(search: string): Holiday | null | undefined {
+export function holidayFromQuery(search: string): Holiday | undefined {
   const v = new URLSearchParams(search).get('holiday');
-  if (v === null) return undefined;
-  if (v === 'off' || v === 'none') return null;
-  return (HOLIDAYS as string[]).includes(v) ? (v as Holiday) : undefined;
+  return v !== null && (HOLIDAYS as string[]).includes(v) ? (v as Holiday) : undefined;
 }
 
 /** A note for the hole just finished, in the holiday's spirit; null for most holes. */
