@@ -1,0 +1,33 @@
+{
+ "items": [
+  {
+   "name": "portland_gc_overpass.geojson",
+   "osm_box": [
+    45.4674,
+    -122.7685,
+    45.4827,
+    -122.753
+   ]
+  },
+  {
+   "name": "dogami_dtm_ft.tif",
+   "url": "https://gis.dogami.oregon.gov/arcgis/rest/services/lidar/DIGITAL_TERRAIN_MODEL_MOSAIC/ImageServer/exportImage?bbox=518100,5034900,519300,5036600&bboxSR=32610&imageSR=32610&size=1200,1700&format=tiff&pixelType=F32&noData=-9999&interpolation=RSP_BilinearInterpolation&f=image"
+  },
+  {
+   "name": "dogami_chm_ft.tif",
+   "url": "https://gis.dogami.oregon.gov/arcgis/rest/services/lidar/CANOPY_HEIGHT_MODEL_MOSAIC/ImageServer/exportImage?bbox=518100,5034900,519300,5036600&bboxSR=32610&imageSR=32610&size=1200,1700&format=tiff&pixelType=F32&noData=-9999&interpolation=RSP_BilinearInterpolation&f=image"
+  },
+  {
+   "name": "dogami_identify.json",
+   "url": "https://gis.dogami.oregon.gov/arcgis/rest/services/lidar/DIGITAL_TERRAIN_MODEL_MOSAIC/ImageServer/identify?geometry=%7B%22x%22%3A518700%2C%22y%22%3A5035750%2C%22spatialReference%22%3A%7B%22wkid%22%3A32610%7D%7D&geometryType=esriGeometryPoint&returnCatalogItems=true&f=json"
+  },
+  {
+   "name": "osip2024_518100_5034900.jpg",
+   "url": "https://imagery.oregonexplorer.info/arcgis/rest/services/OSIP_2024/OSIP_2024_WM/ImageServer/exportImage?bbox=518100,5034900,519300,5036400&bboxSR=32610&imageSR=32610&size=2400,3000&format=jpg&f=image"
+  },
+  {
+   "name": "osip2024_518100_5036400.jpg",
+   "url": "https://imagery.oregonexplorer.info/arcgis/rest/services/OSIP_2024/OSIP_2024_WM/ImageServer/exportImage?bbox=518100,5036400,519300,5036600&bboxSR=32610&imageSR=32610&size=2400,400&format=jpg&f=image"
+  }
+ ]
+}
