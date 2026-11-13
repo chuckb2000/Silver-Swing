@@ -1608,3 +1608,14 @@ across the step. Langston was rebuilt with its pinned pipeline; only hole 13 cha
 green, the pin 0.8 m further onto the back tier, its putting views, its mini-map and one terrain
 chunk). A putt from 6 m short of the step to the centre pin (61 ft) gets up from about 70 %
 power; a weaker one rolls back down the step. Highland Links 9 stays as it is (developer).
+
+## Europe is one place on the course select (developer, 2026-11-13)
+
+With courses coming in Scotland and Norway, the developer: the state selector's button for them
+should be "europe". Every course whose `state` is `EU`, or a European country, or whose location
+ends with one, goes under one "europe" button, after the states and provinces
+(`registry.ts` `stateOf`, `EUROPE`). With it on offer the heading reads "choose where to play",
+and the title counts "64 courses in 12 states and europe" (1x on a screen too narrow for that at
+2x). A US postal code always wins ("DE" is Delaware). Course chats set `"state": "EU"`
+(docs/COURSE_BUILD.md 12).
+

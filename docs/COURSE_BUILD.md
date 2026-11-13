@@ -955,7 +955,10 @@ paths (relief), not OB, unless the developer says otherwise.
   the logo at 1x and enlarged before the card. An original drawing only: never
   the club's own logo, crest or trademark (CLAUDE.md 14).
 - **State:** add `"state": "<postal code>"` to `course_config.json`; s10
-  copies it into `course.json`, and the course list is made from that.
+  copies it into `course.json`, and the course list is made from that. A course
+  in Europe takes `"state": "EU"`, and its location ends with its country
+  ("St Andrews, Fife, Scotland"): the course select has one "europe" button for
+  every European course (developer, 2026-11-13).
 - **Card:** after the export, run `python3 assets-src/course_cards.py <id> --sheet`,
   look at the contact sheet of every green
   (`game/public/sprites/cards/_<id>_greens.png`, delete it afterwards), pick
