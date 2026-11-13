@@ -33,6 +33,13 @@
     "links_boundary"
    ],
    "reason": "the OB line: the Old, New and Jubilee polygons joined and cut to the world (make_boundary.py): out of bounds by the town, the Old Course Hotel, the wall and fence right of 14-16 and the Links' outer edge (developer's brief and the 2026 card's local rule 1); a shot onto the New or Jubilee Course is in play"
+  },
+  {
+   "from": "proposed/wall17.geojson",
+   "ids": [
+    "wall17"
+   ],
+   "reason": "the wall behind the 17th green (OSM way/404359910) as a thin building, 1.5 m high, so the ball strikes it; integral (no relief) through the config's `integral` (design chat, 2026-11-13)"
   }
  ],
  "tags": [

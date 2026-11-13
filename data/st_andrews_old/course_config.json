@@ -69,5 +69,23 @@
   "gorse": {
     "ground": "gorse",
     "extra_areas": "proposed/gorse_osm.geojson"
-  }
+  },
+  "integral": [
+    {
+      "name": "17th road and path",
+      "osm": [
+        "w30712459",
+        "w1053387973",
+        "wall17"
+      ],
+      "buffer_m": 2.5
+    },
+    {
+      "name": "Grannie Clark's Wynd",
+      "osm": [
+        "w382065281"
+      ],
+      "buffer_m": 2.0
+    }
+  ]
 }
