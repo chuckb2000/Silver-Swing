@@ -1,0 +1,30 @@
+{
+ "release": "data-sfgc",
+ "note": "Build inputs for San Francisco Golf Club; `make fetch NAME=sfgc` puts them in place. Fetched by the GitHub Actions workflow (data/sfgc/fetch.json) on 2026-11-13. sfgc_overpass.geojson = the standard Overpass export of the box 37.703,-122.4872,37.7166,-122.4679. usgs_dem_m.tif = 3DEPElevation exportImage at 1 m, x 545200-546900 / y 4173000-4174500 EPSG:32610, metres. naip_545200_4173000.jpg = USGS NAIP exportImage of the same box. USGS_LPC_*.laz = 3DEP lidar CA_SanFrancisco_B23, classes 3-5 kept.",
+ "files": [
+  {
+   "asset": "sfgc_overpass.geojson",
+   "sha256": "2a46b0d9e36b41fb8068943491ab46e07cacab4e3a3465dfe0b0d79d1c4e9c85",
+   "run": "python3 pipeline/intake.py osm sfgc {file}",
+   "outputs": {
+    "raw/overpass.geojson": "f1cb85c43f9403c375cfac70d58b6fc74da3ba497a3f457e027a378261b8372f"
+   }
+  },
+  {
+   "asset": "usgs_dem_m.tif",
+   "sha256": "20de2df694e7afbe4c565f591f68192c11b4d494ebb6d51e2996632d44f29660",
+   "run": "python3 pipeline/intake.py raster sfgc {file} --out raw/usgs_dem_1m.tif",
+   "outputs": {
+    "raw/usgs_dem_1m.tif": "b1fd3fdfa242c92d86c33e33362b0d7faba639e17274e0f633228e478e1a8bee"
+   }
+  },
+  {
+   "asset": "naip_545200_4173000.jpg",
+   "sha256": "379ef7c479b758952826eb71702c6f21de73a0a344f25b2b118853e741a3097c",
+   "run": "python3 pipeline/intake.py ortho sfgc  {file} 545200 4173000 546900 4174500 --out raw/naip_06m.tif",
+   "outputs": {
+    "raw/naip_06m.tif": "42ddb7f16e2d9e2533763c4f94959e26b82bf2d0d1f1f5a1f35e62a07859e018"
+   }
+  }
+ ]
+}

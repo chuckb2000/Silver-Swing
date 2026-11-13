@@ -1,0 +1,76 @@
+{
+  "name": "San Francisco Golf Club",
+  "location": "San Francisco (Lakeshore, by Lake Merced), California",
+  "state": "CA",
+  "architects": "A. W. Tillinghast (designed c. 1915, opened 1918; remodels c. 1920-37); William P. Bell bunkers 1930; Tom Doak and Jim Urbina restoration 2001-06",
+  "theme": "sfgc",
+  "boundary_name": "San Francisco Golf Club",
+  "dtm": {
+    "path": "raw/usgs_dem_1m.tif",
+    "units": "m",
+    "source": "USGS 3DEP 1 m DEM (3DEPElevation exportImage), x 545200-546900 / y 4173000-4174500 EPSG:32610, NAVD88 metres, clipped to the world + 100 m by pipeline/intake.py raster; fetched by the GitHub Actions workflow 2026-11-13 (release data-sfgc)"
+  },
+  "tee_sets": [
+    {
+      "name": "Blue",
+      "playable": true,
+      "rating": 73.6,
+      "slope": 133,
+      "total_yd": 6808
+    },
+    {
+      "name": "White",
+      "playable": true,
+      "rating": 71.3,
+      "slope": 130,
+      "total_yd": 6376
+    },
+    {
+      "name": "White_Red",
+      "playable": false,
+      "rating": 70.0,
+      "slope": 128,
+      "total_yd": 6152
+    },
+    {
+      "name": "Legacy",
+      "playable": false,
+      "rating": 69.5,
+      "slope": 127,
+      "total_yd": 6012
+    },
+    {
+      "name": "Green",
+      "playable": false,
+      "rating": 67.0,
+      "slope": 122,
+      "total_yd": 5461
+    }
+  ],
+  "default_tee": "Blue",
+  "scorecard_source": "Third-party (private club; no official card online, no yardage markers): Stymie's per-hole card (par, men's stroke index, Blue/White/White-Red/Legacy/Green), with GolfPass's women's stroke index, read 2026-10-24 by the scouting chat (docs/scouting/sfgc/scorecard_sources.md, branch scouting/new-courses); GolfPass differs on five cells. Ratings from Stymie (Blue 73.6/133). Unverified against a printed card.",
+  "driving_range_is_ob": true,
+  "wind_mph": {
+    "minMph": 3,
+    "maxMph": 14
+  },
+  "trees_off_fairways_m": 2,
+  "attribution": [
+    "Map data \u00a9 OpenStreetMap contributors (ODbL)",
+    "Elevation and trees: U.S. Geological Survey 3D Elevation Program",
+    "Photo (checks only): USDA NAIP"
+  ],
+  "notes": "Standing defaults (COURSE_BUILD.md 4.1), 2026-11-13: the longest tee set (Blue) and it is the default; all water red; OB = the OSM course boundary (the Olympic Club and its features dropped), roads inside it are cart paths, the driving range is OB; open-coast wind 3-14 mph; trees from 3DEP lidar, trees in fairways or in the way of a centre-line drive removed and listed. Theme sfgc (new; the course chat's design).",
+  "id": "sfgc",
+  "epsg": 32610,
+  "world": {
+    "x0": 545261,
+    "y0": 4173096,
+    "width": 1536,
+    "height": 1280,
+    "note": "OSM course boundary bbox (1130 x 861 m, way/16753994) + at least 120 m of scenery, rounded out to whole 256 m chunks and centred (203 m west/east, 210 m south/north)"
+  },
+  "osm_sources": [
+    "raw/overpass.geojson"
+  ]
+}

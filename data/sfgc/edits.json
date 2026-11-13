@@ -1,0 +1,170 @@
+{
+ "add": [],
+ "drop": [
+  {
+   "osm": "n6373395567",
+   "reason": "golf=pin of the Olympic Club (outside SFGC's boundary)"
+  },
+  {
+   "osm": "n6373395569",
+   "reason": "golf=pin of the Olympic Club (outside SFGC's boundary)"
+  },
+  {
+   "osm": "n6374477927",
+   "reason": "golf=pin of the Olympic Club (outside SFGC's boundary)"
+  },
+  {
+   "osm": "r16308125",
+   "reason": "golf=lateral_water_hazard of the Olympic Club (outside SFGC's boundary)"
+  },
+  {
+   "osm": "r3573537",
+   "reason": "the Olympic Club's course boundary (the neighbour west of SFGC): not this course"
+  },
+  {
+   "osm": "w1417078425",
+   "reason": "the Olympic Club's course boundary (the neighbour west of SFGC): not this course"
+  },
+  {
+   "osm": "w1422569502",
+   "reason": "golf=bunker of the Olympic Club (outside SFGC's boundary)"
+  },
+  {
+   "osm": "w1422569503",
+   "reason": "golf=bunker of the Olympic Club (outside SFGC's boundary)"
+  },
+  {
+   "osm": "w379956562",
+   "reason": "golf=path of the Olympic Club (outside SFGC's boundary)"
+  },
+  {
+   "osm": "w379956563",
+   "reason": "golf=path of the Olympic Club (outside SFGC's boundary)"
+  },
+  {
+   "osm": "w379956564",
+   "reason": "golf=path of the Olympic Club (outside SFGC's boundary)"
+  },
+  {
+   "osm": "w379960531",
+   "reason": "golf=path of the Olympic Club (outside SFGC's boundary)"
+  },
+  {
+   "osm": "w379960532",
+   "reason": "golf=path of the Olympic Club (outside SFGC's boundary)"
+  },
+  {
+   "osm": "w380016699",
+   "reason": "golf=bunker of the Olympic Club (outside SFGC's boundary)"
+  },
+  {
+   "osm": "w380016704",
+   "reason": "golf=bunker of the Olympic Club (outside SFGC's boundary)"
+  },
+  {
+   "osm": "w380016720",
+   "reason": "golf=bunker of the Olympic Club (outside SFGC's boundary)"
+  },
+  {
+   "osm": "w380016726",
+   "reason": "golf=bunker of the Olympic Club (outside SFGC's boundary)"
+  },
+  {
+   "osm": "w380016743",
+   "reason": "golf=bunker of the Olympic Club (outside SFGC's boundary)"
+  },
+  {
+   "osm": "w380016761",
+   "reason": "golf=green of the Olympic Club (outside SFGC's boundary)"
+  },
+  {
+   "osm": "w380016762",
+   "reason": "golf=tee of the Olympic Club (outside SFGC's boundary)"
+  },
+  {
+   "osm": "w380016763",
+   "reason": "golf=tee of the Olympic Club (outside SFGC's boundary)"
+  },
+  {
+   "osm": "w380016764",
+   "reason": "golf=tee of the Olympic Club (outside SFGC's boundary)"
+  },
+  {
+   "osm": "w380016765",
+   "reason": "golf=tee of the Olympic Club (outside SFGC's boundary)"
+  },
+  {
+   "osm": "w380016858",
+   "reason": "golf=green of the Olympic Club (outside SFGC's boundary)"
+  },
+  {
+   "osm": "w380016863",
+   "reason": "golf=tee of the Olympic Club (outside SFGC's boundary)"
+  },
+  {
+   "osm": "w380016864",
+   "reason": "golf=tee of the Olympic Club (outside SFGC's boundary)"
+  },
+  {
+   "osm": "w380016865",
+   "reason": "golf=tee of the Olympic Club (outside SFGC's boundary)"
+  },
+  {
+   "osm": "w380016866",
+   "reason": "golf=fairway of the Olympic Club (outside SFGC's boundary)"
+  },
+  {
+   "osm": "w380016867",
+   "reason": "golf=green of the Olympic Club (outside SFGC's boundary)"
+  },
+  {
+   "osm": "w380016872",
+   "reason": "golf=path of the Olympic Club (outside SFGC's boundary)"
+  },
+  {
+   "osm": "w680647657",
+   "reason": "golf=hole of the Olympic Club (outside SFGC's boundary)"
+  },
+  {
+   "osm": "w680648768",
+   "reason": "golf=hole of the Olympic Club (outside SFGC's boundary)"
+  },
+  {
+   "osm": "w680648769",
+   "reason": "golf=hole of the Olympic Club (outside SFGC's boundary)"
+  },
+  {
+   "osm": "w680648770",
+   "reason": "golf=tee of the Olympic Club (outside SFGC's boundary)"
+  },
+  {
+   "osm": "w680648772",
+   "reason": "golf=hole of the Olympic Club (outside SFGC's boundary)"
+  },
+  {
+   "osm": "w680757296",
+   "reason": "golf=hole of the Olympic Club (outside SFGC's boundary)"
+  },
+  {
+   "osm": "w680757297",
+   "reason": "golf=hole of the Olympic Club (outside SFGC's boundary)"
+  },
+  {
+   "osm": "w863374827",
+   "reason": "golf=green of the Olympic Club (outside SFGC's boundary)"
+  },
+  {
+   "osm": "w863374828",
+   "reason": "golf=tee of the Olympic Club (outside SFGC's boundary)"
+  },
+  {
+   "osm": "w864025317",
+   "reason": "golf=bunker of the Olympic Club (outside SFGC's boundary)"
+  },
+  {
+   "osm": "w864025319",
+   "reason": "golf=fairway of the Olympic Club (outside SFGC's boundary)"
+  }
+ ],
+ "tags": []
+}
