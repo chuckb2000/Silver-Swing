@@ -5,7 +5,10 @@
 // hidden) it pauses, and nothing more is downloaded. Each movement (about
 // 1.2 MB) is fetched whole as it's needed, the next one while this one plays;
 // the offline copy keeps them (public/sw.js, cache "music-1").
+// From 12 to 31 December the six Christmas carols play instead (music/christmas.json,
+// assets-src/music/carols.py; developer, 2026-11-13).
 
+import { app } from '../app';
 import { audioGraph, initAudio, onSoundChange, soundOn } from './sfx';
 import { Playlist } from './playlist';
 
@@ -68,7 +71,7 @@ async function start() {
   if (started || !el) return;
   started = true;
   try {
-    const res = await fetch('music/index.json');
+    const res = await fetch(app.holiday === 'christmas' ? 'music/christmas.json' : 'music/index.json');
     if (!res.ok) return;
     tracks = ((await res.json()) as { tracks: Track[] }).tracks ?? [];
   } catch {

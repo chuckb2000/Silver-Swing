@@ -36,6 +36,8 @@ import { matchCard } from '../ui/matchCard';
 import { confirmBox } from '../ui/confirm';
 import { openChat } from '../ui/chatPanel';
 import { ClockView, createLiveMatch, forgetMatch, LiveMatch, newMatchConfig } from '../match/live';
+import { charTex } from '../ui/holidayArt';
+import { holidayNote } from '../systems/game/holiday';
 
 /** The other player's rematch offer, which the server took before this player's: once it has arrived (null after 3 s). */
 async function rematchOffered(live: LiveMatch): Promise<string | null> {
@@ -1205,7 +1207,7 @@ export class HudScene extends Phaser.Scene {
     const w = Math.min(220, W - 16), h = 70;
     const c = this.add.container(Math.round((W - w) / 2), Math.round(this.H - h - 30));
     const pnl = new Panel(this, 0, 0, w, h, 0.86);
-    const portrait = this.add.image(8, 10, 'ui', 'portrait').setOrigin(0, 0);
+    const portrait = this.add.image(8, 10, charTex(this, 'portrait'), 'portrait').setOrigin(0, 0);
     const ms = this.play.match?.session;
     const extra = !!ms && isExtra(ms.state.cfg, r.holeIndex);
     const t1 = txt(this, 64, 8, extra ? `${ordinal(r.holeIndex + 1)} hole` : holeTitle(r), { scale: 2 });
@@ -1530,7 +1532,10 @@ export class HudScene extends Phaser.Scene {
     const tot = totals(r.scores);
     const eagle = !maxed && isListedEagle(r, score);
     const unnamed = eagle && r.cfg.playerName === DEFAULT_NAME;
-    const w = Math.min(210, this.W - 12), h = unnamed ? 112 : eagle ? 100 : 92;
+    // a holiday's note: a "turkey" (three birdies in a row) at Thanksgiving, a "snowman" (an 8) at Christmas
+    const played = r.scores[r.scores.length - 1] === score ? r.scores : [...r.scores, score];
+    const note = maxed || xc || r.cfg.practice ? null : holidayNote(app.holiday, played);
+    const w = Math.min(210, this.W - 12), h = (unnamed ? 112 : eagle ? 100 : 92) + (note ? 14 : 0);
     const x = Math.round((this.W - w) / 2), y = Math.round(this.H * 0.28);
     const pnl = new Panel(this, x, y, w, h, 0.9);
     const t1 = txt(this, x + w / 2, y + 6, name + (gimme ? ' (gimme)' : ''), { origin: [0.5, 0], scale: 2, color });
@@ -1540,6 +1545,16 @@ export class HudScene extends Phaser.Scene {
     const nb = new Button(this, x + w - 86, y + h - 22, 80, 16, last ? 'finish round' : xc ? 'next leg' : 'next hole', () => this.continueFromHoled());
     const cb = new Button(this, x + 6, y + h - 22, 44, 16, 'card', () => this.toggleCard(), { color: 'grey' });
     this.modalLayer.add([pnl, t1, t2, t3, nb, cb]);
+    if (note) {
+      const ny = y + 54 + (unnamed ? 32 : eagle ? 12 : 0);
+      this.modalLayer.add(txt(this, x + w / 2, ny, note.text, { origin: [0.5, 0], color: app.holiday === 'christmas' ? COLORS.white : COLORS.orangeHi, maxWidth: w - 12 }));
+      // the turkey or the snowman peeks over the panel's corner
+      if (this.textures.exists('holiday') && this.textures.get('holiday').has(note.art)) {
+        const f = this.textures.get('holiday').get(note.art);
+        this.modalLayer.add(this.add.image(x + w - f.width - 2, y - f.height + 12, 'holiday', note.art).setOrigin(0, 0));
+      }
+      if (!quiet) this.time.delayedCall(350, () => sfx(app.holiday === 'christmas' ? 'jingle' : 'gobble'));
+    }
     if (this.play.replayable() > 0) {
       // the physics is deterministic: any stroke of the hole plays back exactly (player improvements, item 9; a choice of shot, 2026-10-20)
       this.modalLayer.add(new Button(this, x + 54, y + h - 22, 56, 16, 'rewatch', () => this.rewatch(), { color: 'grey' }));

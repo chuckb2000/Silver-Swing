@@ -20,6 +20,9 @@ const SOUNDS: Record<string, Params> = {
   great: [0.5, 0, 659, 0.02, 0.1, 0.3, 0, 1.2, 0, 0, 330, 0.07, 0.11],
   bad: [0.45, 0, 196, 0.02, 0.1, 0.25, 1, 1.4, -6],
   chirp: [0.12, 0.2, 2600, 0.01, 0.03, 0.06, 0, 1.5, 90, 0, 0, 0, 0.07],
+  // the holidays (ui/holidayArt.ts): a turkey's gobble, sleigh bells
+  gobble: [0.5, 0.05, 300, 0.01, 0.2, 0.14, 2, 1.8, -2, 0, 0, 0, 0.055, 0.25, 0, 0, 0, 0.75],
+  jingle: [0.3, 0.1, 2300, 0, 0.05, 0.3, 0, 2.2, 0, 0, 0, 0, 0.05, 0.15, 0, 0, 0, 0.5],
 };
 
 // ZzFX normally scales everything by 0.3 in its own player; we bypass that player
