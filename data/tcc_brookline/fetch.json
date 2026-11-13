@@ -10,17 +10,12 @@
    ]
   },
   {
-   "name": "tcc_brookline_dem1m",
-   "tnm": {
-    "dataset": "dem1m",
-    "bbox": [
-     -71.1626,
-     42.305,
-     -71.1378,
-     42.3216
-    ],
-    "list": true
-   }
+   "name": "usgs_dem_m.tif",
+   "url": "https://elevation.nationalmap.gov/arcgis/rest/services/3DEPElevation/ImageServer/exportImage?bbox=321800,4685900,323800,4687700&bboxSR=32619&imageSR=32619&size=2000,1800&format=tiff&pixelType=F32&noData=-9999&interpolation=RSP_BilinearInterpolation&f=image"
+  },
+  {
+   "name": "usgs_dem_identify.json",
+   "url": "https://elevation.nationalmap.gov/arcgis/rest/services/3DEPElevation/ImageServer/identify?geometry=%7B%22x%22%3A322800%2C%22y%22%3A4686800%2C%22spatialReference%22%3A%7B%22wkid%22%3A32619%7D%7D&geometryType=esriGeometryPoint&returnCatalogItems=true&f=json"
   },
   {
    "name": "tcc_brookline_lpc",
@@ -32,7 +27,7 @@
      -71.1378,
      42.3216
     ],
-    "list": true
+    "only": "MA_CentralEastern_1_2021"
    }
   },
   {
