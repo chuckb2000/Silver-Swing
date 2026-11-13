@@ -87,5 +87,20 @@
    ],
    "reason": "the gravel and dirt walking paths OSM doesn't map, read from the NAIP 2023 photo (make_paths.py), approved by the developer 2026-11-13 (\"paths and fescue looks great\"); golf=cartpath lines, 2.4 m wide"
   }
+ ],
+ "drop": [
+  {
+   "osm": "n6906561867",
+   "reason": "OSM's pin on the 7th sits 19 m from the green's centre, so the close-up putting view (centred on the green) left it out; without it the hole uses the green centre, as every hole without a mapped pin (as st_andrews_old's 17th)"
+  }
+ ],
+ "tags": [
+  {
+   "osm": "w281979987",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "the pond the 9th and 10th play across (golf=water_hazard): every penalty area red (standing default)"
+  }
  ]
 }

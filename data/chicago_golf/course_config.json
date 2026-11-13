@@ -21,15 +21,15 @@
   },
   "laz": {
     "paths": [
-      "raw/laz/*.laz"
+      "raw/laz/chicago_golf_*.laz"
     ],
     "classes": [
       3,
       4,
       5
     ],
-    "units": "m",
-    "source": "USGS 3DEP lidar point cloud IL_MidNorth_D22, classes 3-5, clipped to the world + 100 m by pipeline/intake.py laz; fetched by the GitHub Actions fetch workflow 2026-11-13 (release data-chicago_golf)",
+    "units": "ft",
+    "source": "USGS 3DEP lidar point cloud IL_MidNorth_D22 (2,000 ft tiles in NAD83(2011) Illinois East, US feet), classes 2-5 clipped to the world + 100 m by pipeline/intake.py laz, one file per tile; fetched by the GitHub Actions fetch workflow 2026-11-13 (release data-chicago_golf)",
     "label": "USGS lidar (IL_MidNorth_D22)"
   },
   "world": {
