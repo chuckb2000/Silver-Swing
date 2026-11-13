@@ -1,0 +1,38 @@
+[
+ {
+  "hole": 9,
+  "tee_set": "Aldarra",
+  "step": 2,
+  "type": "tee_position",
+  "from": [
+   1351.54,
+   1075.57
+  ],
+  "to": [
+   1343.5,
+   1076.75
+  ],
+  "real_yd": 141.2,
+  "adjusted_yd": 149.6,
+  "card_yd": 155.0,
+  "reason": "measured 141 yd from the tee-box centre vs 155 on the card (-8.9%); moved the virtual tee along the middle of the real tee polygon w1172740250 (on its centre line, at least 2.5 m from its back and front)"
+ },
+ {
+  "hole": 11,
+  "tee_set": "Aldarra",
+  "step": 2,
+  "type": "tee_position",
+  "from": [
+   1052.07,
+   673.91
+  ],
+  "to": [
+   1057.25,
+   673.5
+  ],
+  "real_yd": 509.2,
+  "adjusted_yd": 514.9,
+  "card_yd": 528.0,
+  "reason": "measured 509 yd from the tee-box centre vs 528 on the card (-3.6%); moved the virtual tee along the middle of the real tee polygon w678756415 (on its centre line, at least 2.5 m from its back and front)"
+ }
+]
