@@ -63,7 +63,7 @@
     ],
     "only": "WA_KingCo_2_2021"
    },
-   "note": "run 1 stopped at the job's 5 h limit after tiles King_1889 and King_1890; this run fetches the rest"
+   "note": "runs 1 and 2 stop at the job's 5 h limit; each run fetches what is still missing"
   }
  ]
 }
