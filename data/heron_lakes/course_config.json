@@ -1,0 +1,86 @@
+{
+  "name": "Heron Lakes Golf Club",
+  "location": "West Delta Park, North Portland, Multnomah County, Oregon",
+  "state": "OR",
+  "architects": "Robert Trent Jones Sr. with Robert Trent Jones Jr. (Greenback, 1971); Robert Trent Jones Jr. (Great Blue, 1992)",
+  "theme": "heron_lakes",
+  "boundary_name": "Heron Lakes Golf Club",
+  "dtm": {
+    "path": "raw/dogami_dtm_ft.tif",
+    "units": "ft",
+    "source": "DOGAMI lidar DIGITAL_TERRAIN_MODEL_MOSAIC (bare earth), exportImage at 1 m in EPSG:32610, box x 522200-524200 / y 5049000-5051000, fetched by the GitHub Actions workflow 2026-11-13 (release data-heron_lakes)"
+  },
+  "chm": {
+    "path": "raw/dogami_chm_ft.tif",
+    "units": "ft",
+    "source": "DOGAMI lidar CANOPY_HEIGHT_MODEL_MOSAIC (highest hit minus bare earth), same box and date",
+    "label": "DOGAMI canopy height model"
+  },
+  "layouts": [
+    {
+      "id": "heron_lakes_great_blue",
+      "name": "Heron Lakes Great Blue",
+      "short": "Great Blue",
+      "boundary_osm": "r21058472",
+      "scorecard": "scorecard_great_blue.csv",
+      "tee_sets": [
+        {
+          "name": "Gold",
+          "playable": true,
+          "rating": 74.2,
+          "slope": 146,
+          "total_yd": 7016
+        }
+      ],
+      "default_tee": "Gold",
+      "scorecard_source": "Third-party: stymie.golf's Great Blue card (par, men's handicap and yardage per hole for every tee set, ratings), read 2026-10-24 by the scouting chat (docs/scouting/heron_lakes/scorecard_sources.md, branch scouting/new-courses); every row adds up. GolfPass prints another card (other tee names, 20-45 yd off on 8, 16 and 17), not used. Unverified against the club's printed card."
+    },
+    {
+      "id": "heron_lakes_greenback",
+      "name": "Heron Lakes Greenback",
+      "short": "Greenback",
+      "boundary_osm": "r21058473",
+      "scorecard": "scorecard_greenback.csv",
+      "tee_sets": [
+        {
+          "name": "Black",
+          "playable": true,
+          "rating": 72.0,
+          "slope": 132,
+          "total_yd": 6638
+        }
+      ],
+      "default_tee": "Black",
+      "scorecard_source": "Third-party: stymie.golf's Greenback card, confirmed hole for hole by GolfPass, read 2026-10-24 by the scouting chat (docs/scouting/heron_lakes/scorecard_sources.md); every row adds up. Black rating/slope 72.0/132 from stymie. Unverified against the club's printed card."
+    }
+  ],
+  "driving_range_is_ob": true,
+  "trees_off_fairways_m": 2,
+  "wind_mph": {
+    "minMph": 1,
+    "maxMph": 7
+  },
+  "attribution": [
+    "Map data \u00a9 OpenStreetMap contributors (ODbL)",
+    "Elevation and canopy height: Oregon Department of Geology and Mineral Industries (DOGAMI) lidar",
+    "Orthophoto (checks only): Oregon Statewide Imagery Program 2024"
+  ],
+  "notes": "Standing defaults (COURSE_BUILD.md 4.1), 2026-11-13: the longest tee set of each course (Great Blue Gold, Greenback Black) and it is the default; all water red; OB = the club's OSM boundary (both courses), roads inside it are cart paths, the driving range is OB; inland Pacific Northwest wind 1-7 mph; trees from DOGAMI lidar, trees in fairways or in the way of a centre-line drive removed and listed. Theme heron_lakes (new; the course chat's design).",
+  "id": "heron_lakes",
+  "epsg": 32610,
+  "world": {
+    "x0": 522291,
+    "y0": 5049087,
+    "width": 1792,
+    "height": 1792,
+    "note": "OSM course boundary bbox (1466 x 1399 m, relation/21058474) + at least 120 m of scenery, rounded out to whole 256 m chunks and centred (163 m west/east, 196 m south/north)"
+  },
+  "osm_sources": [
+    "raw/overpass.geojson"
+  ],
+  "red_water_osm": [
+    "w1184047793",
+    "w1185613238",
+    "w379305056"
+  ]
+}

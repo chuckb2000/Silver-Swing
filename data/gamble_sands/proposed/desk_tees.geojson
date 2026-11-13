@@ -1,0 +1,10 @@
+{
+"type": "FeatureCollection",
+"name": "desk_tees",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+"features": [
+{ "type": "Feature", "properties": { "osm": "desk_14_tee", "kind": "tee", "tags": { "golf": "tee", "hole": "14", "tee_set": "Medal", "tee_pos": "mark", "approved": "developer 2026-11-13", "source": "the developer's Medal tee from the tracing desk (data/gamble_sands/desk/hole14.json), moved 5 m west so all of it is on the mown turf beside the 13th green in the NAIP photo (its east half was on the sand edge)" } }, "geometry": { "type": "Polygon", "coordinates": [ [ [ -119.64617564712583, 48.065394171258411 ], [ -119.64603458365454, 48.06539202322103 ], [ -119.64603945591584, 48.065277635049476 ], [ -119.646173630553989, 48.065276342597038 ], [ -119.64617564712583, 48.065394171258411 ] ] ] } },
+{ "type": "Feature", "properties": { "osm": "desk_6_tee", "kind": "tee", "tags": { "golf": "tee", "hole": "6", "tee_set": "Medal", "tee_pos": "mark", "approved": "developer 2026-11-13", "source": "the developer's Medal tee from the tracing desk (data/gamble_sands/desk/hole06.json), at the back of the mapped tee box w1574723886" } }, "geometry": { "type": "Polygon", "coordinates": [ [ [ -119.651420854377932, 48.063416862123987 ], [ -119.651345124623816, 48.063406013472459 ], [ -119.65138114335636, 48.063349393486838 ], [ -119.651435928799941, 48.063370623677038 ], [ -119.651420854377932, 48.063416862123987 ] ] ] } },
+{ "type": "Feature", "properties": { "osm": "w947440595_fixed", "kind": "hole", "tags": { "golf": "hole", "ref": "14", "par": "4", "source": "OSM w947440595 redrawn from the developer's tee to the line's end at the 14th green (2026-11-13)" } }, "geometry": { "type": "LineString", "coordinates": [ [ -119.646106161016633, 48.065335531375545 ], [ -119.645075387771499, 48.068878571392752 ] ] } }
+]
+}

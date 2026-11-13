@@ -1,0 +1,46 @@
+{
+ "release": "data-columbia_edgewater",
+ "note": "Build inputs for Columbia Edgewater; `make fetch NAME=columbia_edgewater` puts them in place. All fetched by the GitHub Actions workflow (data/columbia_edgewater/fetch.json) on 2026-11-13. columbia_edgewater_overpass.geojson = the standard Overpass export of the box 45.5877,-122.6564,45.603,-122.6371. dogami_dtm_ft.tif / dogami_chm_ft.tif = DOGAMI DIGITAL_TERRAIN_MODEL_MOSAIC / CANOPY_HEIGHT_MODEL_MOSAIC exportImage at 1 m, box x 526800-528300 / y 5048300-5050000 EPSG:32610, feet (newest project at the course: OLC Metro 3DEP 2019). osip2024_*.jpg = OSIP 2024 at 0.5 m in two pieces named by their SW corner.",
+ "files": [
+  {
+   "asset": "columbia_edgewater_overpass.geojson",
+   "sha256": "b51aee6ea96edef841205637326ba3c4b28d5d80ae473569768c334845759182",
+   "run": "python3 pipeline/intake.py osm columbia_edgewater {file}",
+   "outputs": {
+    "raw/overpass.geojson": "a703ed709e7cb8dcc9063d88c3990a7287d333b34ea462177b7f1ca3e92ad291"
+   }
+  },
+  {
+   "asset": "dogami_dtm_ft.tif",
+   "sha256": "34588402cc935346ec778a7d7fbe60087b9fc38510d376b92f1d5dc438c3fdc3",
+   "to": "raw/",
+   "outputs": {
+    "raw/dogami_dtm_ft.tif": "34588402cc935346ec778a7d7fbe60087b9fc38510d376b92f1d5dc438c3fdc3"
+   }
+  },
+  {
+   "asset": "dogami_chm_ft.tif",
+   "sha256": "96aef096844edbd8cb36e1177c7d3e632f183a9ea896fb523f289b5319d3e358",
+   "to": "raw/",
+   "outputs": {
+    "raw/dogami_chm_ft.tif": "96aef096844edbd8cb36e1177c7d3e632f183a9ea896fb523f289b5319d3e358"
+   }
+  },
+  {
+   "asset": "osip2024_526800_5048300.jpg",
+   "sha256": "efb1c034c905ff7c44c3b76c8a5180422060fe29ddaea3b19bc3511a447a767f",
+   "to": "build/ortho/",
+   "outputs": {
+    "build/ortho/osip2024_526800_5048300.jpg": "efb1c034c905ff7c44c3b76c8a5180422060fe29ddaea3b19bc3511a447a767f"
+   }
+  },
+  {
+   "asset": "osip2024_526800_5049800.jpg",
+   "sha256": "ae25de8ed35f7ebbd3b924ae0ad96ab09179e200b399530e014240ed7397b835",
+   "run": "python3 pipeline/intake.py ortho columbia_edgewater data/columbia_edgewater/build/ortho/osip2024_526800_5048300.jpg 526800 5048300 528300 5049800 {file} 526800 5049800 528300 5050000 --out raw/osip2024_05m.tif",
+   "outputs": {
+    "raw/osip2024_05m.tif": "7dd6fc7071952c9113a4ff532792f0936180a8a056da7cc8b1d258c664c3c9be"
+   }
+  }
+ ]
+}

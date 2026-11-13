@@ -1,0 +1,19 @@
+{
+  "name": "Eugene Country Club (a parkland of giant firs and oaks in the Emerald City)",
+  "note": "Course theme palette (<= 32 colours), same keys as pnw.json. Eugene Country Club, in the north of Eugene, the 'Emerald City' at the south end of the Willamette Valley (course chat, 2026-11-13). From the OSIP 2024 photo (fairway #728c69, green #91a16e, water #49616b): a deep emerald, slightly blue turf, long tree-lined corridors in shade; the bunker sand (shaded in the photo) drawn bright white, as the club's; ponds a dark slate. Trees: very tall Douglas fir and Oregon white oak, with bigleaf maple and the gold of Norway maples among them (trees_eugene_cc.py; a drawing choice, the lidar gives only crown shape). Shadows are a 35% black overlay on top of these.",
+  "colors": {
+    "G0": "#143221", "G1": "#1b462d", "G2": "#225d38", "G3": "#2a7142",
+    "G4": "#34854c", "G5": "#3f9957", "G6": "#4baa62", "G7": "#59ba6e",
+    "G8": "#6cc87d", "G9": "#93dba0",
+    "L0": "#47703f", "L1": "#558247", "L2": "#649451",
+    "S0": "#cfc8b2", "S1": "#ebe6d6", "S2": "#fbf9f1",
+    "W0": "#28485a", "W1": "#345b6e", "W2": "#5d8296",
+    "K0": "#25262c", "K1": "#52535b", "K2": "#797a82", "K3": "#b0a896", "K4": "#d8d0be",
+    "B0": "#46301f", "B1": "#6d4a31", "B2": "#8c5a40",
+    "R0": "#4a5768", "WH": "#f6f6f2"
+  },
+  "trees": {
+    "conifer": "trees_eugene_cc:conifer",
+    "deciduous": "trees_eugene_cc:deciduous"
+  }
+}

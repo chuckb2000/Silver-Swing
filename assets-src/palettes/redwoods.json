@@ -1,0 +1,32 @@
+{
+  "name": "Redwoods (Northwood, Monte Rio: MacKenzie's nine in the coast redwood forest on the Russian River)",
+  "note": "Course theme palette (<= 32 colours; same keys as pnw.json plus F0-F2). Northwood Golf Club, Monte Rio CA: narrow fairways cut through second-growth coast redwoods on a bend of the Russian River. Cool, shaded, fog-damp turf in deep blue-leaning greens (G0-G9); the forest floor under the redwoods a red-brown duff of shed needles (F0-F2: woods and out-of-bounds woods, with B0-B2 redwood-bark speckles); the lawns and yards of the river town outside the course a duller green (L0-L2); pale tan bunker sand; the river a cool jade green (W0-W2); grey asphalt for Highway 116 and the cart paths; dark shingle roofs (R0). Trees in assets-src/trees_redwoods.py: coast redwood, bay laurel, bigleaf maple, tanoak. Shadows are a 35% black overlay on top of these.",
+  "colors": {
+    "G0": "#142a1d", "G1": "#1c3a26", "G2": "#264d2f", "G3": "#2f6036",
+    "G4": "#39743c", "G5": "#448744", "G6": "#50994c", "G7": "#5daa55",
+    "G8": "#6cba62", "G9": "#98d388",
+    "L0": "#3f5f35", "L1": "#4d703c", "L2": "#5d8246",
+    "S0": "#b8a47c", "S1": "#d8c8a0", "S2": "#ece2c6",
+    "W0": "#1b4a48", "W1": "#26605a", "W2": "#5a928a",
+    "K0": "#25262a", "K1": "#4e4f55", "K2": "#76777d", "K3": "#aaa394", "K4": "#d2cbba",
+    "B0": "#3e1a10", "B1": "#6a2d1a", "B2": "#8e4428",
+    "R0": "#4a4e58", "WH": "#f6f6f2",
+    "F0": "#2c2018", "F1": "#3d2c1e", "F2": "#4e3a26"
+  },
+  "lut": {
+    "woods": ["F0", "F1", "F2", "F2"],
+    "ob_woods": ["F0", "F0", "F1", "F1"]
+  },
+  "minimap": {
+    "ob": "#4d703c", "rough": "#2f6036", "woods": "#3d2c1e", "ob_woods": "#2c2018",
+    "water": "#26605a", "ob_water": "#26605a", "bunker": "#d8c8a0", "ob_sand": "#d8c8a0"
+  },
+  "minimap_trees": {
+    "conifer": ["#14351f", "#2b6030"],
+    "deciduous": ["#2c4424", "#527436"]
+  },
+  "trees": {
+    "conifer": "trees_redwoods:redwood",
+    "deciduous": "trees_redwoods:broadleaf"
+  }
+}

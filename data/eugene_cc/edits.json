@@ -1,0 +1,234 @@
+{
+ "tags": [
+  {
+   "osm": "w1092088266",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "standing default (COURSE_BUILD.md 4.1): every penalty area red"
+  },
+  {
+   "osm": "w439506898",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "standing default (COURSE_BUILD.md 4.1): every penalty area red"
+  },
+  {
+   "osm": "w697923538",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "standing default (COURSE_BUILD.md 4.1): every penalty area red"
+  },
+  {
+   "osm": "w797168020",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "standing default (COURSE_BUILD.md 4.1): every penalty area red"
+  }
+ ],
+ "drop": [
+  {
+   "osm": "r12932854",
+   "reason": "Oakway Golf Course's boundary (the public nine next door): not this course"
+  },
+  {
+   "osm": "w1392513328",
+   "reason": "an Oakway Golf Course hole line (ref 4), outside this course's boundary"
+  },
+  {
+   "osm": "w1392513329",
+   "reason": "an Oakway Golf Course hole line (ref 5), outside this course's boundary"
+  },
+  {
+   "osm": "w1392513330",
+   "reason": "an Oakway Golf Course hole line (ref 6), outside this course's boundary"
+  },
+  {
+   "osm": "w1392513331",
+   "reason": "an Oakway Golf Course hole line (ref 7), outside this course's boundary"
+  },
+  {
+   "osm": "w1392513336",
+   "reason": "an Oakway Golf Course hole line (ref 12), outside this course's boundary"
+  },
+  {
+   "osm": "w1392513337",
+   "reason": "an Oakway Golf Course hole line (ref 13), outside this course's boundary"
+  },
+  {
+   "osm": "w1392513338",
+   "reason": "an Oakway Golf Course hole line (ref 14), outside this course's boundary"
+  },
+  {
+   "osm": "w1392513339",
+   "reason": "an Oakway Golf Course hole line (ref 15), outside this course's boundary"
+  },
+  {
+   "osm": "w1392513340",
+   "reason": "an Oakway Golf Course hole line (ref 16), outside this course's boundary"
+  },
+  {
+   "osm": "w884265084",
+   "reason": "an Oakway Golf Course pond (golf penalty area outside this course's boundary): dropped as a penalty area"
+  },
+  {
+   "osm": "n12890294942",
+   "reason": "Oakway Golf Course's pin (outside this course's boundary): the neighbour's course is drawn as plain ground"
+  },
+  {
+   "osm": "n12890294944",
+   "reason": "Oakway Golf Course's pin (outside this course's boundary): the neighbour's course is drawn as plain ground"
+  },
+  {
+   "osm": "n12890294947",
+   "reason": "Oakway Golf Course's pin (outside this course's boundary): the neighbour's course is drawn as plain ground"
+  },
+  {
+   "osm": "n12890294963",
+   "reason": "Oakway Golf Course's pin (outside this course's boundary): the neighbour's course is drawn as plain ground"
+  },
+  {
+   "osm": "n12890294965",
+   "reason": "Oakway Golf Course's pin (outside this course's boundary): the neighbour's course is drawn as plain ground"
+  },
+  {
+   "osm": "n12890294968",
+   "reason": "Oakway Golf Course's pin (outside this course's boundary): the neighbour's course is drawn as plain ground"
+  },
+  {
+   "osm": "n12890294970",
+   "reason": "Oakway Golf Course's pin (outside this course's boundary): the neighbour's course is drawn as plain ground"
+  },
+  {
+   "osm": "w1091827300",
+   "reason": "Oakway Golf Course's tee (outside this course's boundary): the neighbour's course is drawn as plain ground"
+  },
+  {
+   "osm": "w1091827301",
+   "reason": "Oakway Golf Course's tee (outside this course's boundary): the neighbour's course is drawn as plain ground"
+  },
+  {
+   "osm": "w1392508719",
+   "reason": "Oakway Golf Course's green (outside this course's boundary): the neighbour's course is drawn as plain ground"
+  },
+  {
+   "osm": "w1392508720",
+   "reason": "Oakway Golf Course's bunker (outside this course's boundary): the neighbour's course is drawn as plain ground"
+  },
+  {
+   "osm": "w1392508721",
+   "reason": "Oakway Golf Course's tee (outside this course's boundary): the neighbour's course is drawn as plain ground"
+  },
+  {
+   "osm": "w1392508722",
+   "reason": "Oakway Golf Course's tee (outside this course's boundary): the neighbour's course is drawn as plain ground"
+  },
+  {
+   "osm": "w1392508723",
+   "reason": "Oakway Golf Course's green (outside this course's boundary): the neighbour's course is drawn as plain ground"
+  },
+  {
+   "osm": "w1392508724",
+   "reason": "Oakway Golf Course's bunker (outside this course's boundary): the neighbour's course is drawn as plain ground"
+  },
+  {
+   "osm": "w1392508725",
+   "reason": "Oakway Golf Course's bunker (outside this course's boundary): the neighbour's course is drawn as plain ground"
+  },
+  {
+   "osm": "w1392508726",
+   "reason": "Oakway Golf Course's tee (outside this course's boundary): the neighbour's course is drawn as plain ground"
+  },
+  {
+   "osm": "w1392508727",
+   "reason": "Oakway Golf Course's fairway (outside this course's boundary): the neighbour's course is drawn as plain ground"
+  },
+  {
+   "osm": "w1392508728",
+   "reason": "Oakway Golf Course's green (outside this course's boundary): the neighbour's course is drawn as plain ground"
+  },
+  {
+   "osm": "w1392508729",
+   "reason": "Oakway Golf Course's tee (outside this course's boundary): the neighbour's course is drawn as plain ground"
+  },
+  {
+   "osm": "w1392508730",
+   "reason": "Oakway Golf Course's tee (outside this course's boundary): the neighbour's course is drawn as plain ground"
+  },
+  {
+   "osm": "w1392513308",
+   "reason": "Oakway Golf Course's cartpath (outside this course's boundary): the neighbour's course is drawn as plain ground"
+  },
+  {
+   "osm": "w1392513311",
+   "reason": "Oakway Golf Course's green (outside this course's boundary): the neighbour's course is drawn as plain ground"
+  },
+  {
+   "osm": "w1392513312",
+   "reason": "Oakway Golf Course's bunker (outside this course's boundary): the neighbour's course is drawn as plain ground"
+  },
+  {
+   "osm": "w1392513313",
+   "reason": "Oakway Golf Course's green (outside this course's boundary): the neighbour's course is drawn as plain ground"
+  },
+  {
+   "osm": "w1392513314",
+   "reason": "Oakway Golf Course's tee (outside this course's boundary): the neighbour's course is drawn as plain ground"
+  },
+  {
+   "osm": "w1392513315",
+   "reason": "Oakway Golf Course's tee (outside this course's boundary): the neighbour's course is drawn as plain ground"
+  },
+  {
+   "osm": "w1392513316",
+   "reason": "Oakway Golf Course's fairway (outside this course's boundary): the neighbour's course is drawn as plain ground"
+  },
+  {
+   "osm": "w884265070",
+   "reason": "Oakway Golf Course's bunker (outside this course's boundary): the neighbour's course is drawn as plain ground"
+  },
+  {
+   "osm": "w884265071",
+   "reason": "Oakway Golf Course's green (outside this course's boundary): the neighbour's course is drawn as plain ground"
+  },
+  {
+   "osm": "w884265072",
+   "reason": "Oakway Golf Course's tee (outside this course's boundary): the neighbour's course is drawn as plain ground"
+  },
+  {
+   "osm": "w884265073",
+   "reason": "Oakway Golf Course's tee (outside this course's boundary): the neighbour's course is drawn as plain ground"
+  },
+  {
+   "osm": "w884265074",
+   "reason": "Oakway Golf Course's tee (outside this course's boundary): the neighbour's course is drawn as plain ground"
+  },
+  {
+   "osm": "w884265075",
+   "reason": "Oakway Golf Course's green (outside this course's boundary): the neighbour's course is drawn as plain ground"
+  },
+  {
+   "osm": "w884265077",
+   "reason": "Oakway Golf Course's bunker (outside this course's boundary): the neighbour's course is drawn as plain ground"
+  },
+  {
+   "osm": "w884265080",
+   "reason": "Oakway Golf Course's tee (outside this course's boundary): the neighbour's course is drawn as plain ground"
+  },
+  {
+   "osm": "w884265081",
+   "reason": "Oakway Golf Course's bunker (outside this course's boundary): the neighbour's course is drawn as plain ground"
+  },
+  {
+   "osm": "w884265087",
+   "reason": "Oakway Golf Course's cartpath (outside this course's boundary): the neighbour's course is drawn as plain ground"
+  },
+  {
+   "osm": "w884265088",
+   "reason": "Oakway Golf Course's cartpath (outside this course's boundary): the neighbour's course is drawn as plain ground"
+  }
+ ]
+}

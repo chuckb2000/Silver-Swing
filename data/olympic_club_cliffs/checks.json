@@ -1,0 +1,12 @@
+{
+ "wind_mph": [
+  3,
+  14
+ ],
+ "yardage": {
+  "max": {
+   "8": 0.55
+  },
+  "why": "Cliffs 8: OSM's line starts on the White box (78 yd); the only box at the card's 171 yd is the 6th's Blue box (w705218527), 29 m off the 8th's line. Open item for the developer"
+ }
+}

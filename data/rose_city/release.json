@@ -1,0 +1,46 @@
+{
+ "release": "data-rose_city",
+ "note": "Build inputs for Rose City; `make fetch NAME=rose_city` puts them in place. All fetched by the GitHub Actions workflow (data/rose_city/fetch.json) on 2026-11-13. rose_city_overpass.geojson = the standard Overpass export of the box 45.5344,-122.603,45.5443,-122.5773. dogami_dtm_ft.tif / dogami_chm_ft.tif = DOGAMI DIGITAL_TERRAIN_MODEL_MOSAIC / CANOPY_HEIGHT_MODEL_MOSAIC exportImage at 1 m, box x 531000-533000 / y 5042400-5043500 EPSG:32610, feet (newest project at the course: OLC Metro 3DEP 2019). osip2024_*.jpg = OSIP 2024 at 0.5 m in two pieces named by their SW corner (1,500 m wide).",
+ "files": [
+  {
+   "asset": "rose_city_overpass.geojson",
+   "sha256": "7f0ef09ec390ad114883d4b0199078efc98ea03b5989a1d9d9943d880efb9c17",
+   "run": "python3 pipeline/intake.py osm rose_city {file}",
+   "outputs": {
+    "raw/overpass.geojson": "b9d5edc8a6764e74a409002d54d14e17cb311f1e16740621e9c30e8dea7a76f8"
+   }
+  },
+  {
+   "asset": "dogami_dtm_ft.tif",
+   "sha256": "e8a8f4954d73dc3418e3e90046da3025bb44d594989667a28547cb286e456d14",
+   "to": "raw/",
+   "outputs": {
+    "raw/dogami_dtm_ft.tif": "e8a8f4954d73dc3418e3e90046da3025bb44d594989667a28547cb286e456d14"
+   }
+  },
+  {
+   "asset": "dogami_chm_ft.tif",
+   "sha256": "c6c7adcbbaa2c78b2b8ddf4bea863259988424f6673f34a6ed10932b45fff130",
+   "to": "raw/",
+   "outputs": {
+    "raw/dogami_chm_ft.tif": "c6c7adcbbaa2c78b2b8ddf4bea863259988424f6673f34a6ed10932b45fff130"
+   }
+  },
+  {
+   "asset": "osip2024_531000_5042400.jpg",
+   "sha256": "5de71b7acc32c0f86751370a3df256a87c929c612fd155a514365dc906b4a4de",
+   "to": "build/ortho/",
+   "outputs": {
+    "build/ortho/osip2024_531000_5042400.jpg": "5de71b7acc32c0f86751370a3df256a87c929c612fd155a514365dc906b4a4de"
+   }
+  },
+  {
+   "asset": "osip2024_532500_5042400.jpg",
+   "sha256": "b8f86f1c947f29826f27e041a43b000f6f8bd2ebdd0c255d45fb2c137a5eac82",
+   "run": "python3 pipeline/intake.py ortho rose_city data/rose_city/build/ortho/osip2024_531000_5042400.jpg 531000 5042400 532500 5043500 {file} 532500 5042400 533000 5043500 --out raw/osip2024_05m.tif",
+   "outputs": {
+    "raw/osip2024_05m.tif": "a505db313b2b4551ef00bffff7e8de53d1e236fc9cfb5fcabee9700048492521"
+   }
+  }
+ ]
+}

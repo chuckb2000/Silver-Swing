@@ -84,10 +84,35 @@ def affected(changed: list[str]) -> list[str]:
     return sorted(out)
 
 
+def same_pixels(path: str) -> bool:
+    """A changed PNG whose pixels (mode, size, palette) are the committed file's: only its compressed
+    bytes differ, as they do between machines with another zlib or Pillow (2026-11-13: every course
+    built in a course chat's sandbox re-encoded differently here, pixel for pixel the same)."""
+    if not path.endswith(".png"):
+        return False
+    import io
+    import numpy as np
+    from PIL import Image
+    try:
+        old = subprocess.run(["git", "show", f"HEAD:{path}"], cwd=ROOT, capture_output=True, check=True).stdout
+        a, b = Image.open(io.BytesIO(old)), Image.open(ROOT / path)
+        return (a.mode == b.mode and a.size == b.size and a.getpalette() == b.getpalette()
+                and np.array_equal(np.asarray(a), np.asarray(b)))
+    except Exception:
+        return False
+
+
 def changed_files(name: str) -> list[str]:
-    """Committed files the build changed, and new files outside raw/ (fetch_raw puts release files in raw/)."""
+    """Committed files the build changed, and new files outside raw/ (fetch_raw puts release files in raw/).
+    PNGs that differ only in their compressed bytes go back to the committed copy and don't count."""
     out = subprocess.check_output(["git", "status", "--porcelain", "--", *outputs(name)], cwd=ROOT, text=True)
-    return [line[3:] for line in out.splitlines() if not (line.startswith("??") and "/raw/" in line)]
+    files = [line[3:] for line in out.splitlines() if not (line.startswith("??") and "/raw/" in line)]
+    modified = {line[3:] for line in out.splitlines() if line.startswith(" M")}
+    same = [f for f in files if f in modified and same_pixels(f)]
+    if same:
+        subprocess.run(["git", "checkout", "--", *same], cwd=ROOT, check=True)
+        print(f"[regress] {name}: {len(same)} PNGs re-encoded only (the same pixels): kept as committed", flush=True)
+    return [f for f in files if f not in same]
 
 
 def main(argv: list[str]):

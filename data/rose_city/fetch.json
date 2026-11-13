@@ -1,0 +1,33 @@
+{
+ "items": [
+  {
+   "name": "rose_city_overpass.geojson",
+   "osm_box": [
+    45.5344,
+    -122.603,
+    45.5443,
+    -122.5773
+   ]
+  },
+  {
+   "name": "dogami_dtm_ft.tif",
+   "url": "https://gis.dogami.oregon.gov/arcgis/rest/services/lidar/DIGITAL_TERRAIN_MODEL_MOSAIC/ImageServer/exportImage?bbox=531000,5042400,533000,5043500&bboxSR=32610&imageSR=32610&size=2000,1100&format=tiff&pixelType=F32&noData=-9999&interpolation=RSP_BilinearInterpolation&f=image"
+  },
+  {
+   "name": "dogami_chm_ft.tif",
+   "url": "https://gis.dogami.oregon.gov/arcgis/rest/services/lidar/CANOPY_HEIGHT_MODEL_MOSAIC/ImageServer/exportImage?bbox=531000,5042400,533000,5043500&bboxSR=32610&imageSR=32610&size=2000,1100&format=tiff&pixelType=F32&noData=-9999&interpolation=RSP_BilinearInterpolation&f=image"
+  },
+  {
+   "name": "dogami_identify.json",
+   "url": "https://gis.dogami.oregon.gov/arcgis/rest/services/lidar/DIGITAL_TERRAIN_MODEL_MOSAIC/ImageServer/identify?geometry=%7B%22x%22%3A532000%2C%22y%22%3A5042950%2C%22spatialReference%22%3A%7B%22wkid%22%3A32610%7D%7D&geometryType=esriGeometryPoint&returnCatalogItems=true&f=json"
+  },
+  {
+   "name": "osip2024_531000_5042400.jpg",
+   "url": "https://imagery.oregonexplorer.info/arcgis/rest/services/OSIP_2024/OSIP_2024_WM/ImageServer/exportImage?bbox=531000,5042400,532500,5043500&bboxSR=32610&imageSR=32610&size=3000,2200&format=jpg&f=image"
+  },
+  {
+   "name": "osip2024_532500_5042400.jpg",
+   "url": "https://imagery.oregonexplorer.info/arcgis/rest/services/OSIP_2024/OSIP_2024_WM/ImageServer/exportImage?bbox=532500,5042400,533000,5043500&bboxSR=32610&imageSR=32610&size=1000,2200&format=jpg&f=image"
+  }
+ ]
+}

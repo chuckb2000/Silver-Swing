@@ -1,0 +1,82 @@
+{
+  "name": "Worcester Country Club",
+  "location": "Worcester, Worcester County, Massachusetts",
+  "state": "MA",
+  "architects": "Donald Ross (1913-14); restoration by Gil Hanse and Jim Wagner",
+  "theme": "worcester_cc",
+  "boundary_name": "Worcester Country Club",
+  "dtm": {
+    "path": "raw/usgs_dem_1m.tif",
+    "units": "m",
+    "source": "USGS 3DEP 1 m DEM (3DEPElevation exportImage, project MA_CentralEastern_2021_B21, leaf-off spring 2021), x 270100-271600 / y 4688600-4690400 EPSG:32619, NAVD88 metres, clipped to the world + 100 m by pipeline/intake.py raster; fetched by the GitHub Actions workflow 2026-11-13 (release data-worcester_cc)"
+  },
+  "laz": {
+    "paths": [
+      "raw/laz/*.laz"
+    ],
+    "classes": [
+      3,
+      4,
+      5
+    ],
+    "units": "m",
+    "source": "USGS 3DEP lidar point cloud, project MA_CentralEastern_2021_B21 (leaf-off spring 2021), 5 tiles, classes 3-5 clipped to the world + 100 m by pipeline/intake.py laz (CRS kept); fetched by the GitHub Actions workflow 2026-11-13 (release data-worcester_cc)",
+    "label": "2021 USGS lidar, leaf-off",
+    "leaf_off": true
+  },
+  "tee_sets": [
+    {
+      "name": "Red",
+      "playable": true,
+      "rating": 74.0,
+      "slope": 133,
+      "total_yd": 6711
+    },
+    {
+      "name": "Black",
+      "playable": true,
+      "rating": 70.8,
+      "slope": 128,
+      "total_yd": 6212
+    },
+    {
+      "name": "Blue",
+      "playable": false,
+      "rating": 68.9,
+      "slope": 124,
+      "total_yd": 5824
+    }
+  ],
+  "default_tee": "Red",
+  "scorecard_source": "Third-party (private club): Stymie's card (par, men's handicap and eleven tee rows; Red the tips at 6,711), read 2026-11-13; every row adds up. Ratings from the same card (Red 74.0/133, Black men's 70.8/128). Other sites print older totals (Black 6,422 71.7/130; Gold 6,711 72.8/134). Unverified against the club's printed card.",
+  "driving_range_is_ob": true,
+  "wind_mph": {
+    "minMph": 1,
+    "maxMph": 9
+  },
+  "trees_off_fairways_m": 2,
+  "attribution": [
+    "Map data \u00a9 OpenStreetMap contributors (ODbL)",
+    "Elevation and trees: U.S. Geological Survey 3D Elevation Program (2021 Central Eastern Massachusetts lidar)",
+    "Photo (checks only): USDA NAIP"
+  ],
+  "notes": "Standing defaults (COURSE_BUILD.md 4.1), 2026-11-13: the longest tee set (Red, the tips) and it is the default; all water red; OB = the OSM course boundary, roads inside it are cart paths, the driving range is OB; inland New England wind 1-9 mph; trees from 3DEP lidar, trees in fairways or in the way of a centre-line drive removed and listed. Theme worcester_cc (new; the course chat's design).",
+  "id": "worcester_cc",
+  "epsg": 32619,
+  "world": {
+    "x0": 270225,
+    "y0": 4688710,
+    "width": 1280,
+    "height": 1536,
+    "note": "OSM course boundary bbox (831 x 1213 m, way/87279910) + at least 120 m of scenery, rounded out to whole 256 m chunks and centred (224 m west/east, 161 m south/north)"
+  },
+  "osm_sources": [
+    "raw/overpass.geojson"
+  ],
+  "red_water_osm": [
+    "w85342359",
+    "w85349678",
+    "w85930127",
+    "w965807481"
+  ]
+}

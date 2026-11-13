@@ -1,0 +1,62 @@
+{
+ "release": "data-heron_lakes",
+ "note": "Build inputs for Heron Lakes; `make fetch NAME=heron_lakes` puts them in place. All fetched by the GitHub Actions workflow (data/heron_lakes/fetch.json) on 2026-11-13. heron_lakes_overpass.geojson = the standard Overpass export of the box 45.5941,-122.7154,45.6122,-122.6896. dogami_dtm_ft.tif / dogami_chm_ft.tif = DOGAMI DIGITAL_TERRAIN_MODEL_MOSAIC / CANOPY_HEIGHT_MODEL_MOSAIC exportImage at 1 m, box x 522200-524200 / y 5049000-5051000 EPSG:32610, feet. osip2024_*.jpg = OSIP 2024 at 0.5 m in four pieces named by their SW corner.",
+ "files": [
+  {
+   "asset": "heron_lakes_overpass.geojson",
+   "sha256": "c6e56c7ea66c51bea259426b1cfd4f45c25739f375c7ef868ca0912d818cf3f7",
+   "run": "python3 pipeline/intake.py osm heron_lakes {file}",
+   "outputs": {
+    "raw/overpass.geojson": "92660b7a5eb54565fbd606affa5ecf47f4023dec999b839e871e2a6320a34e4d"
+   }
+  },
+  {
+   "asset": "dogami_dtm_ft.tif",
+   "sha256": "7baefc63efd2ab47959605fb75247b0d9796643b9f1896f6f29660baf4c7937e",
+   "to": "raw/",
+   "outputs": {
+    "raw/dogami_dtm_ft.tif": "7baefc63efd2ab47959605fb75247b0d9796643b9f1896f6f29660baf4c7937e"
+   }
+  },
+  {
+   "asset": "dogami_chm_ft.tif",
+   "sha256": "5011af3bfe9ae18b4fd2acb1a151a5e24e05d205bf426ecc2387f7cc2e4b7a72",
+   "to": "raw/",
+   "outputs": {
+    "raw/dogami_chm_ft.tif": "5011af3bfe9ae18b4fd2acb1a151a5e24e05d205bf426ecc2387f7cc2e4b7a72"
+   }
+  },
+  {
+   "asset": "osip2024_522200_5049000.jpg",
+   "sha256": "79f46cec96265ca34d56577783370ba140396f46321ae1b9d0c33c4b82d39949",
+   "to": "build/ortho/",
+   "outputs": {
+    "build/ortho/osip2024_522200_5049000.jpg": "79f46cec96265ca34d56577783370ba140396f46321ae1b9d0c33c4b82d39949"
+   }
+  },
+  {
+   "asset": "osip2024_522200_5050500.jpg",
+   "sha256": "0d32fa20f5cab9b665cc5b708d92c8d7c69959a6d0cf61ec90ea8fb41cb787e3",
+   "to": "build/ortho/",
+   "outputs": {
+    "build/ortho/osip2024_522200_5050500.jpg": "0d32fa20f5cab9b665cc5b708d92c8d7c69959a6d0cf61ec90ea8fb41cb787e3"
+   }
+  },
+  {
+   "asset": "osip2024_523700_5049000.jpg",
+   "sha256": "45d24f747eed295b199f299613e71da5113fd25533c85f4323d2ae19a6e6dd7c",
+   "to": "build/ortho/",
+   "outputs": {
+    "build/ortho/osip2024_523700_5049000.jpg": "45d24f747eed295b199f299613e71da5113fd25533c85f4323d2ae19a6e6dd7c"
+   }
+  },
+  {
+   "asset": "osip2024_523700_5050500.jpg",
+   "sha256": "7d758b808a53a8de34423f75592581e82eaa69ef0c426c8e5641b6fe1149382d",
+   "run": "python3 pipeline/intake.py ortho heron_lakes data/heron_lakes/build/ortho/osip2024_522200_5049000.jpg 522200 5049000 523700 5050500 data/heron_lakes/build/ortho/osip2024_522200_5050500.jpg 522200 5050500 523700 5051000 data/heron_lakes/build/ortho/osip2024_523700_5049000.jpg 523700 5049000 524200 5050500 {file} 523700 5050500 524200 5051000 --out raw/osip2024_05m.tif",
+   "outputs": {
+    "raw/osip2024_05m.tif": "42f1de766f4bf01620bfb164f1f64ebe8b9580b9ce25954281a0d3a609534e6d"
+   }
+  }
+ ]
+}
