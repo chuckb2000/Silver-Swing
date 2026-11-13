@@ -88,13 +88,15 @@ describe('Langston: one out-of-bounds line across Kingman Lake', () => {
 });
 
 describe('Langston: the two-tier 13th green', () => {
-  it('the small front tier is about 4-5 ft below the bigger back tier, and the pin is on the back tier', () => {
+  it('the small front tier is about 3 ft below the bigger back tier, on a slope that can be putted up, and the pin is on the back tier', () => {
     const h = json.holes.find((x) => x.number === 13)!;
     const g = json.greens.find((x) => x.id === h.greenId)! as (typeof json.greens)[number] & { tiers?: { x: number; y: number; nx: number; ny: number; w: number; h: number }[] };
     expect(g.tiers).toHaveLength(1);
     const t = g.tiers![0];
-    expect(t.h).toBeGreaterThan(1.2);
-    expect(t.h).toBeLessThan(1.53);
+    // developer 2026-11-13: flattened from 1.37 m over 5 m (about 41 % at its steepest)
+    expect(t.h).toBeGreaterThan(0.9);
+    expect(t.h).toBeLessThan(1.1);
+    expect(t.w).toBeGreaterThanOrEqual(8);
     // the normal points from the tee towards the back of the green
     const cl = h.tees.Royal.centerline;
     const [ax, ay] = cl[cl.length - 2], [bx, by] = cl[cl.length - 1];
@@ -109,7 +111,14 @@ describe('Langston: the two-tier 13th green', () => {
     expect(back).toBeGreaterThan(1.5 * front);
     const Z = (x: number, y: number) => course.terrain.z(x, y);
     const step = Z(t.x + 4 * t.nx, t.y + 4 * t.ny) - Z(t.x - 4 * t.nx, t.y - 4 * t.ny);
-    expect(step).toBeGreaterThan(1.2);
+    expect(step).toBeGreaterThan(0.9);
+    // nowhere on the green steeper than about a fifth (it was over two fifths on the step)
+    let steepest = 0;
+    for (let x = poly.minX; x <= poly.maxX; x += 0.5) for (let y = poly.minY; y <= poly.maxY; y += 0.5) {
+      if (!poly.contains(x, y) || !poly.contains(x + 0.5, y) || !poly.contains(x - 0.5, y) || !poly.contains(x, y + 0.5) || !poly.contains(x, y - 0.5)) continue;
+      steepest = Math.max(steepest, Math.hypot(Z(x + 0.5, y) - Z(x - 0.5, y), Z(x, y + 0.5) - Z(x, y - 0.5)));
+    }
+    expect(steepest).toBeLessThan(0.22);
     const [px, py] = h.pin;
     expect((px - t.x) * t.nx + (py - t.y) * t.ny).toBeGreaterThan(t.w / 2 + 3);
   });

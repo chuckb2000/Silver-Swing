@@ -46,6 +46,10 @@ Highland Links 9 is the one that hurts play: the green rises 1.1 m in 4 m betwee
 and the pin's level, and a 43-foot putt at 60 % rolls up the bank and back to where it started
 (the robot putted 14 times). Langston 13 is next (a fifth of the green is over 8 %).
 
+**The developer's calls (2026-11-13):** Highland Links 9 stays as it is. Langston 13's step is
+flattened: 1.0 m over 8 m (was 1.37 m over 5 m), about 19 % at its steepest (was 41 %). The
+others stay open.
+
 **Holes the robot scored +3 or worse on:** Cypress Point 17 (water, then a tree), Spruce Peak 16
 (a par 3: the default tee shot ended in the woods once and out of bounds once),
 Wildwood 7 (trees, water). Worth a look when those courses are next open.
