@@ -1,0 +1,60 @@
+{
+  "id": "chicago_golf",
+  "name": "Chicago Golf Club",
+  "location": "Wheaton, DuPage County, Illinois",
+  "state": "IL",
+  "architects": "Charles Blair Macdonald (1895); rebuilt by Seth Raynor (1923)",
+  "theme": "marovitz",
+  "epsg": 32616,
+  "osm_sources": [
+    "raw/overpass.geojson"
+  ],
+  "boundary_name": "Chicago Golf Club",
+  "dtm": {
+    "path": "raw/usgs_dem_1m_clip.tif",
+    "units": "m",
+    "source": "USGS 3DEP 1 m DEM, project IL_MidNorth_D22, tile x40y464 (published 2023-10-31), clipped to the world + 100 m by pipeline/intake.py raster; fetched by the GitHub Actions fetch workflow 2026-11-13 (release data-chicago_golf)"
+  },
+  "laz": {
+    "paths": [
+      "raw/laz/*.laz"
+    ],
+    "classes": [
+      3,
+      4,
+      5
+    ],
+    "units": "m",
+    "source": "USGS 3DEP lidar point cloud IL_MidNorth_D22, classes 3-5, clipped to the world + 100 m by pipeline/intake.py laz; fetched by the GitHub Actions fetch workflow 2026-11-13 (release data-chicago_golf)",
+    "label": "USGS lidar (IL_MidNorth_D22)"
+  },
+  "world": {
+    "x0": 406695,
+    "y0": 4632457,
+    "width": 1280,
+    "height": 1536,
+    "note": "OSM course boundary way/281979769 bbox (816 x 1,149 m) + scenery, rounded out to whole 256 m chunks and centred: 1,280 m east-west (232 m each side), 1,536 m north-south (193 m each side)"
+  },
+  "tee_sets": [
+    {
+      "name": "Black",
+      "playable": true,
+      "rating": 74.1,
+      "slope": 138,
+      "total_yd": 6950
+    }
+  ],
+  "default_tee": "Black",
+  "scorecard_source": "UNVERIFIED (private club; no official card reachable): Black 6,950 yd from GHIN-based listings read 2026-11-13 (alister.vercel.app/clubs/chicago-golf-club-wheaton-il, drills.golf/course/chicago-golf-club-wheaton, stymie.golf), which agree hole by hole; rating 74.1/138 (stymie.golf) vs 74.4/141 (alister): 74.1/138 used pending BlueGolf and the USGA Course Rating database (developer asked 2026-11-13). Pars and stroke indexes also on GolfPass and AllSquare. Conflicts (not used): a 6,574-yd 'White' (GolfLink, 18Birdies, AllSquare) whose hole yardages disagree between sites.",
+  "penalty_default": "red",
+  "driving_range_is_ob": true,
+  "trees_off_fairways_m": 2,
+  "wind_mph": {
+    "minMph": 1,
+    "maxMph": 9
+  },
+  "attribution": [
+    "Map data © OpenStreetMap contributors (ODbL)",
+    "Elevation and trees: U.S. Geological Survey 3D Elevation Program (IL_MidNorth_D22 lidar)"
+  ]
+}

@@ -1,0 +1,14 @@
+{
+ "release": "data-chicago_golf",
+ "note": "Build inputs not kept in git for Chicago Golf Club; `make fetch NAME=chicago_golf` puts them in place. In git: raw/overpass.geojson (intake.py osm of chicago_golf_overpass.geojson) and raw/usgs_dem_1m_clip.tif (intake.py raster of the 3DEP tile below). The lidar clip is added when the IL_MidNorth_D22 tiles arrive.",
+ "files": [
+  {
+   "asset": "USGS_1M_16_x40y464_IL_MidNorth_D22.tif",
+   "sha256": "5bc4ac60bd3191ac287ffd1add91fde2eac15fd59395a2cdd321e4e1ea276181",
+   "run": "python3 pipeline/intake.py raster chicago_golf {file} --out raw/usgs_dem_1m_clip.tif",
+   "outputs": {
+    "raw/usgs_dem_1m_clip.tif": "a3effe4f62879426f4a3ecda66204c1629f8f14d52410345e88095d93e7ede6d"
+   }
+  }
+ ]
+}
