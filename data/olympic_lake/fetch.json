@@ -1,0 +1,47 @@
+{
+ "items": [
+  {
+   "name": "olympic_lake_overpass.geojson",
+   "osm_box": [
+    37.7031,
+    -122.502,
+    37.7185,
+    -122.4826
+   ]
+  },
+  {
+   "name": "olympic_lake_dem1m",
+   "tnm": {
+    "dataset": "dem1m",
+    "bbox": [
+     -122.502,
+     37.7031,
+     -122.4826,
+     37.7185
+    ],
+    "list": true
+   }
+  },
+  {
+   "name": "olympic_lake_lpc",
+   "tnm": {
+    "dataset": "lpc",
+    "bbox": [
+     -122.502,
+     37.7031,
+     -122.4826,
+     37.7185
+    ],
+    "list": true
+   }
+  },
+  {
+   "name": "naip_543900_4173000.jpg",
+   "url": "https://imagery.nationalmap.gov/arcgis/rest/services/USGSNAIPImagery/ImageServer/exportImage?bbox=543900,4173000,545600,4174700&bboxSR=32610&imageSR=32610&size=2833,2833&format=jpg&f=image"
+  },
+  {
+   "name": "naip_info.json",
+   "url": "https://imagery.nationalmap.gov/arcgis/rest/services/USGSNAIPImagery/ImageServer?f=pjson"
+  }
+ ]
+}
