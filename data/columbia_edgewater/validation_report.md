@@ -13,7 +13,7 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 | 5 | 4 | Black | 361 | 358.3 | -2.7 | -0.7% | pass | 358.3 | -0.7% | pass |
 | 6 | 4 | Black | 400 | 368.3 | -31.7 | -7.9% | flag | 368.3 | -7.9% | flag |
 | 7 | 3 | Black | 204 | 203.6 | -0.4 | -0.2% | pass | 203.6 | -0.2% | pass |
-| 8 | 4 | Black | 420 | 423.6 | +3.6 | +0.9% | pass | 423.6 | +0.9% | pass |
+| 8 | 4 | Black | 420 | 357.5 | -62.5 | -14.9% | FAIL | 379.8 | -9.6% | FAIL |
 | 9 | 4 | Black | 394 | 361.3 | -32.7 | -8.3% | FAIL | 384.2 | -2.5% | pass |
 | 10 | 4 | Black | 378 | 354.0 | -24.0 | -6.4% | flag | 368.6 | -2.5% | pass |
 | 11 | 3 | Black | 186 | 181.0 | -5.0 | -2.7% | pass | 181.0 | -2.7% | pass |
@@ -24,7 +24,7 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 | 16 | 4 | Black | 460 | 438.5 | -21.5 | -4.7% | flag | 448.5 | -2.5% | pass |
 | 17 | 3 | Black | 141 | 136.7 | -4.3 | -3.0% | flag | 137.5 | -2.4% | pass |
 | 18 | 4 | Black | 456 | 400.4 | -55.6 | -12.2% | FAIL | 444.7 | -2.5% | pass |
-| **total** | 71 | | **6823** | **6521** | -302 | -4.4% | | **6676** | -2.2% | |
+| **total** | 71 | | **6823** | **6455** | -368 | -5.4% | | **6632** | -2.8% | |
 
 ## Open items
 
@@ -38,17 +38,18 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 8. Hole 7: OSM par 4 differs from scorecard par 3; using scorecard.
 9. Hole 7: OSM handicap 1 differs from the scorecard's stroke index 15; using the scorecard.
 10. Hole 8: OSM handicap 15 differs from the scorecard's stroke index 3; using the scorecard.
-11. Hole 8: the OSM hole line starts 55 m from the Black tee box (w819651356), and only that box matches the card; the line was probably drawn from another tee. Measured from the Black box through the line's bend points.
-12. Hole 9: OSM handicap 5 differs from the scorecard's stroke index 7; using the scorecard.
-13. Hole 10: OSM handicap 4 differs from the scorecard's stroke index 6; using the scorecard.
-14. Hole 11: OSM handicap 10 differs from the scorecard's stroke index 16; using the scorecard.
-15. Hole 12: OSM handicap 2 differs from the scorecard's stroke index 10; using the scorecard.
-16. Hole 13: OSM handicap 18 differs from the scorecard's stroke index 2; using the scorecard.
-17. Hole 14: OSM handicap 12 differs from the scorecard's stroke index 14; using the scorecard.
-18. Hole 15: OSM handicap 14 differs from the scorecard's stroke index 12; using the scorecard.
-19. Hole 16: OSM handicap 16 differs from the scorecard's stroke index 4; using the scorecard.
-20. Hole 17: OSM handicap 8 differs from the scorecard's stroke index 18; using the scorecard.
-21. Hole 18: OSM handicap 6 differs from the scorecard's stroke index 8; using the scorecard.
+11. Hole 8 (Black): measured 380 yd vs card 420 (-9.6%) - FAIL, needs a decision.
+12. Hole 8 (Black): tee box w819651342 assigned by the developer (2026-11-14, from a screenshot of the hole in the game) (tagged hole=8, tee_set=Black in edited/course.geojson).
+13. Hole 9: OSM handicap 5 differs from the scorecard's stroke index 7; using the scorecard.
+14. Hole 10: OSM handicap 4 differs from the scorecard's stroke index 6; using the scorecard.
+15. Hole 11: OSM handicap 10 differs from the scorecard's stroke index 16; using the scorecard.
+16. Hole 12: OSM handicap 2 differs from the scorecard's stroke index 10; using the scorecard.
+17. Hole 13: OSM handicap 18 differs from the scorecard's stroke index 2; using the scorecard.
+18. Hole 14: OSM handicap 12 differs from the scorecard's stroke index 14; using the scorecard.
+19. Hole 15: OSM handicap 14 differs from the scorecard's stroke index 12; using the scorecard.
+20. Hole 16: OSM handicap 16 differs from the scorecard's stroke index 4; using the scorecard.
+21. Hole 17: OSM handicap 8 differs from the scorecard's stroke index 18; using the scorecard.
+22. Hole 18: OSM handicap 6 differs from the scorecard's stroke index 8; using the scorecard.
 
 ## Playability adjustments
 
@@ -56,6 +57,7 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 - Hole 2 (Black): tee shot: a perfect drive at the middle of the fairway clipped a tree near the tee; moved 9.1 m along the middle of the real tee polygon w819691744 to the nearest clear spot -> 344.8 yd (real 345.1 yd).
 - Hole 3 (Black): measured 538 yd from the tee-box centre vs 594 on the card (-9.5%); moved the virtual tee along the middle of the real tee polygon w819656766 (on its centre line, at least 2.5 m from its back and front) -> 579.2 yd (real 537.7 yd).
 - Hole 4 (Black): measured 175 yd from the tee-box centre vs 181 on the card (-3.5%); moved the virtual tee along the middle of the real tee polygon w819656760 (on its centre line, at least 2.5 m from its back and front) -> 176.5 yd (real 174.7 yd).
+- Hole 8 (Black): measured 358 yd from the tee-box centre vs 420 on the card (-14.9%); moved the virtual tee along the middle of the real tee polygon w819651342 (on its centre line, at least 2.5 m from its back and front) -> 379.8 yd (real 357.5 yd).
 - Hole 9 (Black): measured 361 yd from the tee-box centre vs 394 on the card (-8.3%); moved the virtual tee along the middle of the real tee polygon w819651339 (on its centre line, at least 2.5 m from its back and front) -> 384.2 yd (real 361.3 yd).
 - Hole 10 (Black): measured 354 yd from the tee-box centre vs 378 on the card (-6.4%); moved the virtual tee along the middle of the real tee polygon w819691725 (on its centre line, at least 2.5 m from its back and front) -> 368.6 yd (real 354.0 yd).
 - Hole 13 (Black): measured 427 yd from the tee-box centre vs 440 on the card (-3.1%); moved the virtual tee along the middle of the real tee polygon w819688975 (on its centre line, at least 2.5 m from its back and front) -> 429.2 yd (real 426.6 yd).
@@ -66,10 +68,9 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 
 ## Tree detection (DOGAMI canopy height model)
 
-- 4962 trees detected in the world extent (1601 inside the course), 1155 conifers / 3807 deciduous; median height 13.3 m, max 42.6 m.
+- 4963 trees detected in the world extent (1602 inside the course), 1155 conifers / 3808 deciduous; median height 13.3 m, max 42.6 m.
 - Dropped: 929 tops on building footprints, 0 over the lake, 12 tiny crowns.
 - Dropped on playing surfaces (spec 5.4): 11 -> lateral_water_hazard w421503267 (13.1 m), lateral_water_hazard w421503272 (14.3 m), lateral_water_hazard w421503272 (16.5 m), lateral_water_hazard w421503272 (18.8 m), lateral_water_hazard w421503272 (21.5 m), lateral_water_hazard w421503272 (12.2 m), lateral_water_hazard w421503270 (15.7 m), fairway r14014905 (10.6 m), fairway r14014905 (9.9 m), fairway r14014905 (8.8 m), lateral_water_hazard w421503270 (9.1 m)
-- Dropped from tee shots (s06b): 1 -> 8 Black (31.4 m tree, 29.2 m from the tee)
 - OSM natural=tree points matched by a detected tree within 4 m: 0 of 0.
 - Conifer vs deciduous is inferred from crown shape only (no leaf-off imagery); see build/trees_preview.png.
 

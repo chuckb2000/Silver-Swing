@@ -125,6 +125,15 @@
     "ref": "18"
    },
    "reason": "OSM numbers the nines the other way round from the card (stymie.golf, golflink.com): OSM 9 is the card's 18 (lengths match hole for hole); the card's numbering is used (open item for the developer)"
+  },
+  {
+   "osm": "w819651342",
+   "set": {
+    "hole": "8",
+    "tee_set": "Black",
+    "assigned_by": "the developer (2026-11-14, from a screenshot of the hole in the game)"
+   },
+   "reason": "hole 8 Black tee: the box the OSM hole line starts on (tagged white;blue;black). The build had put the Black tee on w819651356, 55 m behind, because only that box matched the card's 420 yd, but that box is the 6th's tee (the 6th's line starts on it)"
   }
  ],
  "drop": [

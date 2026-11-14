@@ -12,8 +12,9 @@ from the card; the card's numbering is used (open item 1). Elevation and trees c
 DOGAMI's bare-earth and canopy-height mosaics (OLC Metro 3DEP 2019 lidar), the photo
 checks from OSIP 2024, all fetched by the GitHub Actions workflow. Tee set built: Black
 (the longest), the default. New theme `columbia_edgewater`; the logo is a Columbia River
-sternwheeler. After the virtual tees moved within their boxes, 17 holes are within 3 % of
-the card and hole 6 is -7.9 % (flag, a long strip of a box); 6,675 yd built against 6,823.
+sternwheeler. After the virtual tees moved within their boxes, 16 holes are within 3 % of
+the card, hole 6 is -7.9 % (flag, a long strip of a box) and hole 8 -9.6 % (the developer's
+box, 2026-11-14); 6,631 yd built against 6,823.
 
 ## Checks
 
@@ -47,7 +48,7 @@ the card and hole 6 is -7.9 % (flag, a long strip of a box); 6,675 yd built agai
     boundary, hole lines and golf features are dropped (`edits.json`); the range is out
     of bounds. The par-3 Mason course's greens are wrong greens (relief required).
 -   **Trees:** 4,962 from the DOGAMI canopy model (1,601 inside the course); 11 dropped on
-    playing surfaces; s06b dropped one 31 m tree 29 m in front of the 8th Black tee. Types
+    playing surfaces; none in the way of a tee shot. Types
     from crown shape only: 1,155 conifer, 3,807 deciduous.
 
 ## Scorecard
@@ -60,7 +61,7 @@ every tee set, ratings), read 2026-11-13; golflink.com's Black row agrees hole f
 | Par | 5 | 4 | 5 | 3 | 4 | 4 | 3 | 4 | 4 | 36 | 4 | 3 | 4 | 4 | 5 | 4 | 4 | 3 | 4 | 35 | 71 |
 | HCP | 9 | 13 | 5 | 17 | 11 | 1 | 15 | 3 | 7 |  | 6 | 16 | 10 | 2 | 14 | 12 | 4 | 18 | 8 |  |  |
 | Black | 514 | 347 | 594 | 181 | 361 | 400 | 204 | 420 | 394 | 3415 | 378 | 186 | 424 | 440 | 520 | 403 | 460 | 141 | 456 | 3408 | 6823 |
-| Built | 501 | 345 | 579 | 176 | 358 | 368 | 204 | 424 | 384 | 3339 | 369 | 181 | 420 | 429 | 507 | 399 | 448 | 138 | 445 | 3336 | 6675 |
+| Built | 501 | 345 | 579 | 176 | 358 | 368 | 204 | 380 | 384 | 3295 | 369 | 181 | 420 | 429 | 507 | 399 | 448 | 138 | 445 | 3336 | 6631 |
 
 Ratings (Stymie, men): Black 6,823 yd 73.4/134, Black/Blue 6,578 72.5/133, Blue 6,380
 71.2/132, Blue/White 6,190 70.2/127, White 5,985 69.0/125, White/Red 5,660 67.9/123, Red
@@ -74,6 +75,12 @@ Black: the longest set (COURSE_BUILD.md 4.1).
 
 -   2026-11-13: the standing defaults (longest tees, all water red, OB = the OSM boundary,
     range OB, fairway trees removed, wind 1-7 mph), listed in the intake message.
+-   2026-11-14: the 8th's Black tee is w819651342, the box the OSM hole line starts on
+    (from a screenshot of the hole in the game). The build had used w819651356, 55 m
+    behind, because only it matched the card's 420 yd, but that box is the 6th's tee. The
+    8th now plays 380 yd (virtual tee at the back of the box; 358 from its centre) against
+    420 (-9.6 %, accepted in checks.json); the card's Blue 374 fits this box. The 31 m tree
+    s06b had dropped in front of the old tee is back (it isn't in the way from the new one).
 
 Course chat's calls (listed for the developer):
 
