@@ -37,7 +37,7 @@ of the card: 6,929 yd against 6,950. See "Tests" for what ran.
 -   **Trees:** 9,046 from the lidar (classes 3-5, heights in US feet converted),
     1,183 inside the course. 15 of the 16 tiles over the world are in: every tile
     over the course. The 16th (10451887) covers only houses east of the course
-    and USGS kept refusing it. Types are found from crown shape only. Six were dropped
+    and was still downloading at hand-off (USGS was slow). Types are found from crown shape only. Six were dropped
     on bunkers and the pond.
 
 ## Scorecard
@@ -97,8 +97,7 @@ Course chat's calls (listed for the developer):
 ## Open items
 
 1.  **One lidar tile missing** (10451887): scenery east of the course only.
-    Recommend leaving it; the trees there come from no data, so the houses
-    stand on lawn.
+    That strip has no trees. Recommend leaving it.
 2.  **Paths** are read from the photo: some faint ones are missing, and the desk
     can add them. Recommend leaving them as they are.
 3.  **Conifer vs deciduous** is from crown shape only (no leaf-off photo).
