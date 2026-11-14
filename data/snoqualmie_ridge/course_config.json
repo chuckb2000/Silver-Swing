@@ -1,0 +1,69 @@
+{
+ "id": "snoqualmie_ridge",
+ "name": "TPC Snoqualmie Ridge",
+ "location": "Snoqualmie, King County, Washington",
+ "state": "WA",
+ "architects": "Jack Nicklaus (opened 1999; a TPC course until 2016, now The Club at Snoqualmie Ridge)",
+ "theme": "snoqualmie_ridge",
+ "epsg": 32610,
+ "osm_sources": [
+  "raw/overpass.geojson"
+ ],
+ "boundary_name": "The Club at Snoqualmie Ridge",
+ "dtm": {
+  "path": "raw/usgs_dem_m.tif",
+  "units": "m",
+  "source": "USGS 3DEP elevation service (3DEPElevation ImageServer exportImage, 1 m, EPSG:32610, box x 584300-587200 / y 5264400-5266800); the 1 m DEM under the course is WA_KingCounty_2021_B21 (tile x58y527, flown 2021-04-01 to 2021-09-07, published 2023-03-03, per the service's identify); fetched by the GitHub Actions workflow 2026-11-13 (release data-snoqualmie_ridge, usgs_dem_m.tif)"
+ },
+ "laz": {
+  "paths": [
+   "raw/laz/*.laz"
+  ],
+  "classes": [
+   1
+  ],
+  "units": "ft",
+  "source": "USGS Lidar Point Cloud WA_KingCounty_2021_B21 (WA_KingCo_2_2021), tiles King_1888-1890 and King_1956-1958 from rockyweb.usgs.gov, fetched by the GitHub Actions workflow 2026-11-13 (release data-snoqualmie_ridge), each clipped to the world + 100 m by intake.py laz --keep-evlrs; NAD83(2011) / Washington North (US ft), NAVD88 US ft; classes 1 (unclassified: vegetation and structures), 2 ground, 7/18 noise and a few others: no vegetation classes",
+  "label": "2021 USGS King County lidar"
+ },
+ "ortho": {
+  "path": "raw/naip.tif",
+  "source": "USDA NAIP from the USGS National Map NAIP ImageServer (exportImage, about 0.6 m, EPSG:32610), four JPEG exports placed by their request boxes (intake.py ortho); fetched by the GitHub Actions workflow 2026-11-13 (release data-snoqualmie_ridge)"
+ },
+ "world": {
+  "x0": 584507,
+  "y0": 5264594,
+  "width": 2560,
+  "height": 2048,
+  "note": "OSM course boundary (way 677694568, 2,324 x 1,744 m in EPSG:32610) + 118 m of scenery (118, not 120, keeps it to 10 chunks east-west), rounded out to whole 256 m chunks and centred. 2,560 m east-west is over the 2,048 m guideline (COURSE_BUILD.md 6.1).",
+  "over_limit_approved": "developer, 2026-11-13"
+ },
+ "tee_sets": [
+  {
+   "name": "Mt. Si",
+   "playable": true,
+   "rating": 75.4,
+   "slope": 142,
+   "total_yd": 7234
+  }
+ ],
+ "default_tee": "Mt. Si",
+ "scorecard_source": "GolfPass, The Club at Snoqualmie Ridge scorecard (read 2026-11-13): Mt. Si (the back set) 7,234 yd, men's rating 75.4 / slope 142 (GolfPass's tee table), men's par and handicap rows; the row adds up to its total. Unverified (third party; the club's card is not online). Offcourse (read 2026-11-13) has the older Black row (7,264 yd, 75.8/143: 554 410 462 426 475 226 375 529 207 / 353 484 426 210 448 590 380 211 498) and another men's handicap row (13 11 1 3 7 17 9 5 15 / 14 4 2 18 8 6 12 16 10): open item. OSM's pars agree with the card.",
+ "penalty_default": "red",
+ "driving_range_is_ob": true,
+ "wind_mph": {
+  "minMph": 1,
+  "maxMph": 7
+ },
+ "trees_off_fairways_m": 2,
+ "attribution": [
+  "Map data © OpenStreetMap contributors (ODbL)",
+  "Elevation and trees: U.S. Geological Survey 3D Elevation Program (King County 2021 lidar)",
+  "Imagery check: USDA National Agriculture Imagery Program (NAIP)"
+ ],
+ "roof_last_share": 0.85,
+ "red_water_osm": [
+  "w247793103"
+ ],
+ "not_trees_areas": "not_trees.geojson"
+}
