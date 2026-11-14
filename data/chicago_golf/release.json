@@ -13,14 +13,18 @@
   {
    "asset": "naip2023_4108815_ne.tif",
    "sha256": "20cd9e8454eb7e3af59e3e9a89e3332d89cb272d7b3cb56a0ba7e2572f164273",
-   "run": "python3 data/chicago_golf/make_ortho.py {file}"
+   "run": "python3 data/chicago_golf/make_ortho.py {file}",
+   "outputs": {
+    "raw/naip/naip2023_4108815_ne.tif": "20cd9e8454eb7e3af59e3e9a89e3332d89cb272d7b3cb56a0ba7e2572f164273"
+   }
   },
   {
    "asset": "naip2023_4108816_nw.tif",
    "sha256": "7258f5f3a1c8f3705d5b3c82777a7fc4bfca5d93fd6db56b3b75f427ca54b819",
    "run": "python3 data/chicago_golf/make_ortho.py {file}",
    "outputs": {
-    "raw/naip2023_05m.tif": "831172e069fe544dc8b2da02686bda3eb13e074d3f146bc3997e65600e7d905b"
+    "raw/naip2023_05m.tif": "831172e069fe544dc8b2da02686bda3eb13e074d3f146bc3997e65600e7d905b",
+    "raw/naip/naip2023_4108816_nw.tif": "7258f5f3a1c8f3705d5b3c82777a7fc4bfca5d93fd6db56b3b75f427ca54b819"
    }
   },
   {
