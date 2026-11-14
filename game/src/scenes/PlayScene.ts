@@ -102,8 +102,9 @@ export class PlayScene extends Phaser.Scene {
   private marker!: Phaser.GameObjects.Image;
   private puttTarget!: Phaser.GameObjects.Image;
   private dots: Phaser.GameObjects.Image[] = [];
-  // the tree warning (developer, 2026-11-14): the flight's arc over the aim line, red from where a perfect
-  // stroke would first touch a tree, with a mark there; on whenever the landing marker is
+  // the tree warning (developer, 2026-11-14): when a perfect stroke down the aim line would touch a tree,
+  // the flight's arc over the line, red from the tree on, with a mark there (a clear line is the plain
+  // flat line); on whenever the landing marker is
   private arcDots: Phaser.GameObjects.Image[] = [];
   private hitMark!: Phaser.GameObjects.Image;
   private flightPv: ReturnType<Round['previewFlight']> | null = null;
@@ -1134,14 +1135,15 @@ export class PlayScene extends Phaser.Scene {
       const shown = preview ? len - 6 / L : Math.min(len, 36 / L);
       const step = 7 / L;
       const dx = (m.x - b.x) / (len || 1), dy = (m.y - b.y) / (len || 1);
-      const pv = preview ? this.flightPv : null;
+      // the arc only when the line meets a tree (developer, 2026-11-14: "otherwise it's just a flat line")
+      const pv = preview && this.flightPv?.hit ? this.flightPv : null;
       const hit = pv?.hit ?? null;
       const hp = hit ? this.px(hit.x, hit.y) : null;
       const sHit = hp ? (hp.x - b.x) * dx + (hp.y - b.y) * dy : Infinity; // where the hit is along the ground line
       for (let s = step; s < shown && n < this.dots.length; s += step) {
         const d = this.dots[n++].setVisible(true).setPosition(this.snap(b.x + dx * s), this.snap(b.y + dy * s));
         if (s > sHit) d.setTint(TREE_RED); else d.clearTint();
-        d.setAlpha(pv ? 0.4 : 0.85); // under the arc, the ground line is its shadow
+        d.setAlpha(pv ? 0.4 : 0.85); // under the arc, the ground line is its shadow; a clear line is the plain line
       }
       // the arc: the ball where it will be, lifted by its height as it is drawn in flight, a dot every
       // `step` of screen
