@@ -227,14 +227,53 @@ describe('longer putter settings', () => {
     const course = loadCourseFiles('oswego_lake');
     const r = new Round(course, roundCfg(course, [1]));
     r.startHole(0);
-    r.ball = { x: r.pin.x - 25, y: r.pin.y, teedUp: false };
-    expect(r.autoPuttScale('yd')).toBeCloseTo(160 * 0.3048, 6); // 82 ft: 1.6 x = 131 ft
-    r.ball = { x: r.pin.x - 20, y: r.pin.y, teedUp: false };
-    expect(r.autoPuttScale('yd')).toBeCloseTo(120 * 0.3048, 6);
-    expect(r.autoPuttScale('m')).toBe(36);
-    r.ball = { x: r.pin.x - 60, y: r.pin.y, teedUp: false };
-    expect(r.autoPuttScale('m')).toBe(48); // the longest when nothing covers it
+    const FT = 0.3048;
+    // the meter for a putt that plays this long (on a flat green, its length)
+    const meterFor = (plays: number, units: 'yd' | 'm' = 'yd') => { r.puttPlaysAs = () => plays; return r.autoPuttScale(units); };
+    expect(meterFor(82 * FT) / FT).toBeCloseTo(120, 6); // 82 ft: 120 ft at 79 %
+    expect(meterFor(100 * FT) / FT).toBeCloseTo(160, 6);
+    expect(meterFor(20) / FT).toBeCloseTo(120, 6); // 20 m (66 ft): 80 ft would be 92 %, so 120 ft
+    expect(meterFor(30, 'm')).toBe(48);
+    expect(meterFor(60, 'm')).toBe(48); // the longest when nothing covers it
     expect(puttScales('yd').length).toBe(6);
+  });
+
+  // developer, 2026-11-14: a flat 16-footer opened the 48 ft meter (1.6 x its length), and the scale only went up
+  it('a flat 16-footer gets the 24 ft meter, a 5-footer 12 ft, a 30-footer 48 ft', () => {
+    const course = loadCourseFiles('oswego_lake');
+    const r = new Round(course, roundCfg(course, [1]));
+    r.startHole(0);
+    const FT = 0.3048;
+    const meterFor = (ft: number) => { r.puttPlaysAs = () => ft * FT; return Math.round(r.autoPuttScale('yd') / FT); };
+    expect(meterFor(16)).toBe(24);
+    expect(meterFor(5)).toBe(12);
+    expect(meterFor(30)).toBe(48);
+    expect(meterFor(17)).toBe(24);
+    expect(meterFor(19)).toBe(48); // 19 ft would need 95 % of the 24 ft meter
+  });
+
+  it('a putt uphill plays longer, downhill shorter (by g x rise / the green\'s deceleration)', () => {
+    const course = loadCourseFiles('oswego_lake');
+    const r = new Round(course, roundCfg(course, [1]));
+    r.startHole(0);
+    const T = course.terrain;
+    const z0 = T.z.bind(T);
+    const FT = 0.3048, d = 16 * FT;
+    r.ball = { x: r.pin.x - d, y: r.pin.y, teedUp: false };
+    try {
+      for (const [slope, lo, hi] of [[0, 15.9, 16.1], [0.02, 21.5, 22.5], [-0.02, 9.5, 10.5]] as const) {
+        T.z = (x: number) => slope * (x - r.ball.x); // a plane rising toward the pin at `slope`
+        const ft = r.puttPlaysAs() / FT;
+        expect(ft).toBeGreaterThan(lo);
+        expect(ft).toBeLessThan(hi);
+      }
+      T.z = (x: number) => 0.02 * (x - r.ball.x);
+      expect(Math.round(r.autoPuttScale('yd') / FT)).toBe(48); // uphill 16-footer: 22 ft plays, the 48 ft meter
+      T.z = (x: number) => -0.02 * (x - r.ball.x);
+      expect(Math.round(r.autoPuttScale('yd') / FT)).toBe(24);
+    } finally {
+      T.z = z0;
+    }
   });
 
   it('a scale is a distance: 100 % of 160 ft rolls 160 ft on a flat stimp-10 green (and 100 % of 25 m rolls 25 m)', () => {
@@ -345,3 +384,4 @@ describe('the default aim allows for the hole\'s wind', () => {
     }
   });
 });
+
