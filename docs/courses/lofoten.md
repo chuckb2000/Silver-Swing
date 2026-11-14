@@ -44,7 +44,9 @@ measure 4-10 % short (the card measures doglegs longer; accepted by the develope
     plus the islets. OSM's coastline (`pipeline/propose_sea.py`) cut straight
     across the rocky points; the DTM follows the real shore. Also the two lakes and the five smaller ponds and
     hazards, all red. Out of bounds is the OSM course polygon (relation 5314623)
-    joined with its tee boxes grown 3 m (`make_boundary.py`: the 3rd's back tee on
+    joined with its tee boxes grown 3 m, its corners rounded to a 30 m radius
+    (developer, 2026-11-13; land only, every tee, green, fairway, bunker and hole
+    line kept inside) (`make_boundary.py`: the 3rd's back tee on
     the rocks straddled the line); the bogs east and south of the course
     (Gimsøymyrene) are out of bounds and drawn as open ground, not woods
     (`wetland_woods: false`).

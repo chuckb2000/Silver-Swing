@@ -49,7 +49,7 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 
 ## Tree detection (lidar surface model)
 
-- 678 trees detected in the world extent (29 inside the course), 7 conifers / 671 deciduous; median height 6.0 m, max 13.8 m.
+- 678 trees detected in the world extent (32 inside the course), 7 conifers / 671 deciduous; median height 6.0 m, max 13.8 m.
 - Dropped: 6 tops on building footprints, 0 over the lake, 0 tiny crowns.
 - Dropped on playing surfaces (spec 5.4): 0 -> 
 - OSM natural=tree points matched by a detected tree within 4 m: 0 of 0.
@@ -110,11 +110,11 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 
 ## Checks from earlier courses
 
-- hole line w699766829 (ref 3): 46 % outside the boundary
-- hole line w699769063 (ref 17): 64 % outside the boundary (a neighbouring course's line?)
-- hole line w699770842 (ref 4): 10 % outside the boundary
-- hole line w699847479 (ref 12): 30 % outside the boundary
-- hole line w699852600 (ref 14): 12 % outside the boundary
+- hole line w699766829 (ref 3): 44 % outside the boundary
+- hole line w699769063 (ref 17): 60 % outside the boundary (a neighbouring course's line?)
+- hole line w699770842 (ref 4): 3 % outside the boundary
+- hole line w699847479 (ref 12): 25 % outside the boundary
+- hole line w699852600 (ref 14): 10 % outside the boundary
 - fairway w699864904 at (507, 613) is more than 30 m from every hole line (a range or practice area mapped as fairway?)
 - penalty area r5312937 lies mostly outside the boundary (a neighbour's? redraw as natural=water)
 - waterway w355818507 (stream): 90 m of it within 30 m of a hole line isn't in a penalty area (pipeline/propose_channels.py makes one; or say it's dry)

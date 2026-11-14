@@ -36,6 +36,18 @@ SEA_Z = 0.3          # m: the DTM is 0 over the sea; the lowest wet rock is a fe
 MIN_ROCK_M2 = 4.0    # specks of rock in the water smaller than this are left as water
 
 
+def sea_from_dtm(cfg, g=None):
+    """The sea where the DTM is at or below SEA_Z, in the pieces touching OSM's sea (local CRS)."""
+    osea = gpd.read_file(HERE / "proposed" / "sea.geojson").to_crs(cfg["epsg"]).geometry.iloc[0]
+    with rasterio.open(HERE / "raw" / "dtm_clip.tif") as src:
+        z = src.read(1)
+        wet = (z <= SEA_Z) & np.isfinite(z)
+        pieces = [shape(s) for s, v in shapes(wet.astype(np.uint8), mask=wet, transform=src.transform) if v == 1]
+        pieces = gpd.GeoSeries(pieces, crs=src.crs).to_crs(cfg["epsg"])
+    pieces = pieces[pieces.intersects(osea)]
+    return unary_union(list(pieces)).buffer(0)
+
+
 def main():
     cfg = json.load(open(HERE / "course_config.json"))
     epsg = cfg["epsg"]
@@ -47,13 +59,7 @@ def main():
     roads = unary_union([r.buffer(3.0) for r in g[g.kind == "highway"].geometry])
     bld = unary_union(list(g[g.kind == "building"].geometry.buffer(2.0)))
 
-    with rasterio.open(HERE / "raw" / "dtm_clip.tif") as src:
-        z = src.read(1)
-        wet = (z <= SEA_Z) & np.isfinite(z)
-        pieces = [shape(s) for s, v in shapes(wet.astype(np.uint8), mask=wet, transform=src.transform) if v == 1]
-        pieces = gpd.GeoSeries(pieces, crs=src.crs).to_crs(epsg)
-    pieces = pieces[pieces.intersects(osea)]
-    water = unary_union(list(pieces)).buffer(0)
+    water = sea_from_dtm(cfg, g)
     # fill rock specks under MIN_ROCK_M2 (single noisy cells), keep real rocks and islets
     if water.geom_type == "Polygon":
         water = [water]
