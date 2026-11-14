@@ -291,7 +291,9 @@ export class HudScene extends Phaser.Scene {
     this.clubUp = new Button(this, 0, 0, 15, 20, '', () => p.cycleClub(-1), { icon: 'arrow_up', sound: null });
     this.clubDown = new Button(this, 0, 0, 15, 20, '', () => p.cycleClub(1), { icon: 'arrow_down', sound: null });
     this.spinBtn = new Button(this, 0, 0, 20, 18, '', () => p.setSpin(p.spin === 0 ? 1 : p.spin === 1 ? -1 : 0), { icon: 'spin_0', color: 'grey', sound: null });
-    this.scaleBtn = new Button(this, 0, 0, 34, 14, 'full', () => p.cycleScale(), { color: 'grey', sound: null });
+    // putter meter / swing length: the left half ('-') smaller, the right half ('+') bigger (developer,
+    // 2026-11-14: it only went up, so a 48 ft meter for a 16 footer meant going round through 160 ft)
+    this.scaleBtn = new Button(this, 0, 0, 34, 14, 'full', (ev) => p.stepScale(ev.fx < 0.5 ? -1 : 1), { color: 'grey', sound: null, minusPlus: true });
     this.unplayBtn = new Button(this, 0, 0, 52, 13, 'unplayable', () => this.openUnplayable(), { color: 'grey' });
     this.mulliganBtn = new Button(this, 0, 0, 52, 13, 'mulligan', () => this.play.takeMulligan(), { color: 'grey' });
     this.swingBtn = new Button(this, 0, 0, 58, 20, 'swing', (ev) => this.onSwingButton(ev.time), { onDown: true, sound: null, scale: 1 });
