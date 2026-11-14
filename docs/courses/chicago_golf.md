@@ -37,7 +37,7 @@ of the card: 6,929 yd against 6,950. See "Tests" for what ran.
 -   **Trees:** 9,046 from the lidar (classes 3-5, heights in US feet converted),
     1,183 inside the course. 15 of the 16 tiles over the world are in: every tile
     over the course. The 16th (10451887) covers only houses east of the course
-    and was still downloading at hand-off (USGS was slow). Types are found from crown shape only. Six were dropped
+    and USGS refused it twice (HTTP 429, too many requests). Types are found from crown shape only. Six were dropped
     on bunkers and the pond.
 
 ## Scorecard
