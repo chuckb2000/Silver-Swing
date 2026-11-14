@@ -100,6 +100,19 @@
     "a_tee_back_9"
    ],
    "reason": "approved by the developer 2026-10-22 in the tracing desk, as shown: the mown turf as fairway, one Back tee per hole, hole 2's traced green and a centre pin per green (desk_prep.py --approve)"
+  },
+  {
+   "from": "proposed/tee_19.geojson",
+   "ids": [
+    "w1547585700_h19"
+   ],
+   "tags": {
+    "hole": "19",
+    "tee_set": "Back",
+    "source": "copy of OSM tee w1547585700 (the 4th and 19th tee from the same box)",
+    "assigned_by": "the developer (2026-11-14, from the tee check's screenshots)"
+   },
+   "reason": "hole 19 Back: the box the OSM hole 19 line starts on, which the 4th also tees from; a copy, so the 4th keeps the original. The 19th's tee had been on w1547559695, a forward tee out along the 4th's line"
   }
  ],
  "tags": [

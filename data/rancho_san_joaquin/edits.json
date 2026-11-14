@@ -27,6 +27,24 @@
     "penalty": "red"
    },
    "reason": "standing default (COURSE_BUILD 4.1): every penalty area red; OSM maps it golf=water_hazard (yellow)"
+  },
+  {
+   "osm": "w1232200236",
+   "set": {
+    "hole": "8",
+    "tee_set": "Blue;Black",
+    "assigned_by": "the developer (2026-11-14, from the tee check's screenshots)"
+   },
+   "reason": "hole 8 Black (and Blue, already there): the box the OSM hole 8 line starts on; the Black tees of 8 and 15 had been swapped (each on the other hole's box)"
+  },
+  {
+   "osm": "w1232224768",
+   "set": {
+    "hole": "15",
+    "tee_set": "Blue;Black",
+    "assigned_by": "the developer (2026-11-14, from the tee check's screenshots)"
+   },
+   "reason": "hole 15 Black (and Blue, already there): the box the OSM hole 15 line starts on"
   }
  ]
 }
