@@ -1,0 +1,17 @@
+{
+  "name": "Snoqualmie Ridge (Cascade foothill forest, Snoqualmie WA)",
+  "note": "Course theme palette (<= 32 colours; same keys as pnw.json), made against the NAIP photo of the course (2026-11-13). The Club at Snoqualmie Ridge sits on a forested plateau at the foot of the Cascades, under Mount Si: holes cut through dark second-growth Douglas fir and hemlock, the rough a deep wet-side green (darker and bluer than pnw), the off-course clearings and lawns of the ridge's housing a duller olive green (L0-L2) so out of bounds reads apart; very white bunker sand, as on Nicklaus courses; slate-blue ponds and wetlands; grey basalt and stucco. Trees: Douglas fir and western red cedar, bigleaf maple and red alder (assets-src/trees_snoqualmie_ridge.py). Shadows are a 35% black overlay on top of these.",
+  "colors": {
+    "G0": "#173424", "G1": "#1f4a30", "G2": "#286134", "G3": "#317637",
+    "G4": "#3c8a3c", "G5": "#4a9e42", "G6": "#58b049", "G7": "#68c052",
+    "G8": "#7ace60", "G9": "#a0de80",
+    "L0": "#4c6a3a", "L1": "#5a7c42", "L2": "#6a8d4c",
+    "S0": "#cfc6aa", "S1": "#ebe5d2", "S2": "#f8f5ea",
+    "W0": "#2a4a63", "W1": "#3a6080", "W2": "#6e93b0",
+    "K0": "#26272d", "K1": "#53545c", "K2": "#7a7b83", "K3": "#b3aa97", "K4": "#d9d1bf",
+    "B0": "#46301f", "B1": "#6d4a31", "B2": "#8c5a40",
+    "R0": "#4b586a", "WH": "#f6f6f2"
+  },
+  "minimap_trees": {"conifer": ["#10241a", "#3c6a48"], "deciduous": ["#1c2e16", "#5f8a3a"]},
+  "trees": {"conifer": "trees_snoqualmie_ridge:douglas_fir", "deciduous": "trees_snoqualmie_ridge:bigleaf_maple"}
+}
