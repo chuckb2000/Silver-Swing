@@ -1,0 +1,20 @@
+{
+ "note": "per-course settings for game/tests/unit/course_play.test.ts (docs/COURSE_BUILD.md 8.2).",
+ "wind_mph": [
+  1,
+  7
+ ],
+ "tees": {
+  "sets": [
+   "Mt. Si"
+  ]
+ },
+ "tee_shot_clear": {
+  "sets": [
+   "Mt. Si"
+  ]
+ },
+ "inside_boundary": true,
+ "max_tree_h_m": 70,
+ "max_tree_h_note": "a stand of tall Douglas fir in the forest east of the course reaches 65-68 m (lidar), below 70"
+}
