@@ -64,6 +64,8 @@ interface Flyover { pts: { x: number; y: number }[]; cum: number[]; len: number;
 /** Texels the aim framing moves up on a portrait screen (its deeper bottom controls, HudScene.layout). */
 const PORTRAIT_LIFT = 24;
 
+const TREE_RED = 0xff4a3d; // the aim line after a tree
+
 export class PlayScene extends Phaser.Scene {
   round!: Round;
   view!: CourseView;
@@ -100,6 +102,11 @@ export class PlayScene extends Phaser.Scene {
   private marker!: Phaser.GameObjects.Image;
   private puttTarget!: Phaser.GameObjects.Image;
   private dots: Phaser.GameObjects.Image[] = [];
+  // the tree warning (developer, 2026-11-14): the flight's arc over the aim line, red from where a perfect
+  // stroke would first touch a tree, with a mark there; on whenever the landing marker is
+  private arcDots: Phaser.GameObjects.Image[] = [];
+  private hitMark!: Phaser.GameObjects.Image;
+  private flightPv: ReturnType<Round['previewFlight']> | null = null;
   private ticks: Phaser.GameObjects.Image[] = [];
   private trail: Phaser.GameObjects.Image[] = [];
   private trailIdx = 0;
@@ -228,6 +235,9 @@ export class PlayScene extends Phaser.Scene {
     // a holiday's things beside the tee: a hay bale, pumpkins and a corn shock, or presents
     this.teeDecor = holidayTeeDecor().map((d) => ({ ...d, img: this.add.image(0, 0, 'holiday', d.frame).setOrigin(0.5, 1).setVisible(false) }));
     for (let i = 0; i < 100; i++) this.dots.push(this.add.image(0, 0, 'ui', 'aim_dot').setDepth(DEPTH.overlay).setVisible(false).setAlpha(0.85));
+    this.arcDots = [];
+    for (let i = 0; i < 100; i++) this.arcDots.push(this.add.image(0, 0, 'ui', 'aim_dot').setDepth(DEPTH.overlay + 1).setVisible(false));
+    this.hitMark = this.add.image(0, 0, 'ui', 'cross').setDepth(DEPTH.overlay + 3).setTint(TREE_RED).setVisible(false);
     for (let i = 0; i < 8; i++) this.ticks.push(this.add.image(0, 0, 'ui', 'aim_tick').setDepth(DEPTH.overlay + 1).setVisible(false));
     for (let i = 0; i < 70; i++) this.trail.push(this.add.image(0, 0, 'ui', 'trail').setDepth(DEPTH.flight - 1).setVisible(false));
 
@@ -545,7 +555,7 @@ export class PlayScene extends Phaser.Scene {
     this.rig.level = level;
     const s = 1 / level;
     for (const o of [this.golfer, this.ball, this.shadow, this.flag, this.cup, this.marker, this.puttTarget, this.dropMarker,
-      ...this.teeMarkers, ...this.dots, ...this.ticks, ...this.trail]) o.setScale(s);
+      ...this.teeMarkers, ...this.dots, ...this.arcDots, ...this.ticks, ...this.trail]) o.setScale(s);
     this.rig.apply();
   }
 
@@ -1038,6 +1048,7 @@ export class PlayScene extends Phaser.Scene {
 
   private updateLanding() {
     this.landing = this.round.previewLanding(this.club, this.aim, this.isPutting() ? 1 : this.swingScale);
+    this.flightPv = this.round.preset.landingPreview && !this.isPutting() ? this.round.previewFlight(this.club, this.aim, this.swingScale) : null;
   }
 
   landingPx(): { x: number; y: number } {
@@ -1120,9 +1131,39 @@ export class PlayScene extends Phaser.Scene {
       const shown = preview ? len - 6 / L : Math.min(len, 36 / L);
       const step = 7 / L;
       const dx = (m.x - b.x) / (len || 1), dy = (m.y - b.y) / (len || 1);
+      const pv = preview ? this.flightPv : null;
+      const hit = pv?.hit ?? null;
+      const hp = hit ? this.px(hit.x, hit.y) : null;
+      const sHit = hp ? (hp.x - b.x) * dx + (hp.y - b.y) * dy : Infinity; // where the hit is along the ground line
       for (let s = step; s < shown && n < this.dots.length; s += step) {
-        this.dots[n++].setVisible(true).setPosition(this.snap(b.x + dx * s), this.snap(b.y + dy * s));
+        const d = this.dots[n++].setVisible(true).setPosition(this.snap(b.x + dx * s), this.snap(b.y + dy * s));
+        if (s > sHit) d.setTint(TREE_RED); else d.clearTint();
+        d.setAlpha(pv ? 0.4 : 0.85); // under the arc, the ground line is its shadow
       }
+      // the arc: the ball where it will be, lifted by its height as it is drawn in flight, a dot every
+      // `step` of screen
+      let a = 0;
+      if (pv) {
+        let last = b;
+        for (let k = 0; k < pv.path.length && a < this.arcDots.length; k++) {
+          const p = pv.path[k];
+          const q = this.px(p.x, p.y);
+          const sx = q.x, sy = q.y - p.h * HEIGHT_PX;
+          if (Math.hypot(sx - last.x, sy - last.y) < step) continue;
+          if (Math.hypot(sx - m.x, sy - m.y) < 6 / L) break; // kept off the landing marker
+          last = { x: sx, y: sy };
+          const d = this.arcDots[a++].setVisible(true).setPosition(this.snap(sx), this.snap(sy));
+          if (hit && k > hit.k) d.setTint(TREE_RED).setAlpha(0.9); else d.clearTint().setAlpha(0.95);
+        }
+      }
+      for (let i = a; i < this.arcDots.length; i++) this.arcDots[i].setVisible(false);
+      if (hit && hp) this.hitMark.setVisible(true).setScale(2 / L).setPosition(this.snap(hp.x), this.snap(hp.y - hit.h * HEIGHT_PX));
+      else this.hitMark.setVisible(false);
+    }
+    if (putt) {
+      for (const d of this.arcDots) d.setVisible(false);
+      this.hitMark.setVisible(false);
+      for (const d of this.dots) d.clearTint().setAlpha(0.85);
     }
     for (let i = n; i < this.dots.length; i++) this.dots[i].setVisible(false);
     for (let i = used; i < this.ticks.length; i++) this.ticks[i].setVisible(false);
@@ -1134,6 +1175,8 @@ export class PlayScene extends Phaser.Scene {
       this.puttTarget.setVisible(false);
       for (const d of this.dots) d.setVisible(false);
       for (const t of this.ticks) t.setVisible(false);
+      for (const d of this.arcDots) d.setVisible(false);
+      this.hitMark.setVisible(false);
     }
     if (!on && !this.isPutting()) this.slopeLayer.clear();
   }

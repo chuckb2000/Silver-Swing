@@ -1738,3 +1738,18 @@ rise), so a 16-footer 2 % uphill plays about 22 ft (48 ft meter) and 2 % downhil
 (24 ft). The scale button has a '-' at its left end and a '+' at its right: a tap on its left half
 is one size smaller, on its right half one size bigger, stopping at the ends (12 and 160 ft; 1/4 and
 full for the swing lengths). Keys: P bigger, O smaller.
+
+## The aim line shows the flight and warns of trees (developer, 2026-11-14)
+
+"It's sometimes a little difficult to tell when a ball is going to go into the trees." The dotted
+aim line was flat, on the ground, and blind to trees, and the 3/4 view draws a tree's crown above
+its trunk while the part that stops a ball is a cylinder round the trunk (40 % of its height to the
+top), so a line under a drawn crown could fly clear and one beside it could clip the branches. Three
+mock-ups (a red line from the tree, the flight's arc, both); the developer chose both. While aiming,
+`Round.previewFlight` flies a perfect stroke down the line until it comes down: its arc is drawn the
+way the ball is drawn in flight (lifted by its height), the flat line under it is its shadow, and
+from where it would first touch a tree both turn red with a red cross at the spot. Any pass through
+a crown counts (a canopy hit is otherwise luck: 15 % a metre), so a white line is one a perfect
+stroke never hits a tree on. Calm air, like the landing marker, so the arc ends on the marker and
+reading the wind stays the player's (the wind is 1-7 mph; a 7 mph crosswind moves a drive about
+6 yd by its landing). Shown whenever the landing marker is (Easy and Normal, not Pro).

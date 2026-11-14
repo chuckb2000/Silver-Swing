@@ -486,6 +486,36 @@ export class Round {
     };
   }
 
+  /**
+   * The flight of a perfect stroke down this line until it first comes down, in calm air like the
+   * landing marker (developer, 2026-11-14: hard to tell when a ball will go into the trees): its path,
+   * with its height above the ground every step, and where it would first touch a tree, if anywhere.
+   * Any pass through a crown counts (as for the default aim's line check), so a line with no tree on
+   * it is one a perfect stroke never hits a tree on.
+   */
+  previewFlight(c: Club, aim: number, scale: number): { path: { x: number; y: number; h: number }[]; hit: { x: number; y: number; h: number; k: number } | null } {
+    if (c.kind === 'putter') return { path: [], hit: null };
+    const spec = this.flightSpec(c, aim, this.perfectStrike(c, scale), 0, { vx: 0, vy: 0 });
+    spec.untilLanding = true;
+    const T = this.course.terrain;
+    const clear = simulateShot(T, null, spec, new Rng(1));
+    const path: { x: number; y: number; h: number }[] = [];
+    for (let i = 0; i < clear.n; i++) {
+      const x = clear.samples[i * 3], y = clear.samples[i * 3 + 1], z = clear.samples[i * 3 + 2];
+      path.push({ x, y, h: Math.max(0, z - T.z(x, y)) });
+    }
+    const trees = simulateShot(T, this.course.obstacles, { ...spec }, new AlwaysRng(1));
+    const ev = trees.events.find((e) => e.type === 'canopy' || e.type === 'trunk');
+    if (!ev) return { path, hit: null };
+    // the step of the clear flight where it happens: the two flights are the same until then
+    let k = 0, best = Infinity;
+    for (let i = 0; i < path.length; i++) {
+      const d = Math.hypot(path[i].x - ev.x, path[i].y - ev.y);
+      if (d < best) { best = d; k = i; }
+    }
+    return { path, hit: { x: ev.x, y: ev.y, h: Math.max(0, ev.z - T.z(ev.x, ev.y)), k } };
+  }
+
   /** Where a perfect 100 % shot would first touch the ground (calm air, no trees): the landing marker. */
   previewLanding(c: Club, aim: number, scale: number): { x: number; y: number } {
     if (c.kind === 'putter') {

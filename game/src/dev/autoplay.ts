@@ -7,12 +7,36 @@ import type { PlayScene } from '../scenes/PlayScene';
 import type { HudScene } from '../scenes/HudScene';
 import type { LeaderboardEntry } from '../save/entry';
 import { shareImage } from '../ui/shareCard';
+import { app } from '../app';
+import { loadCourse } from '../data/courses';
+import { Round, RoundConfig } from '../systems/game/round';
+import { makeWind } from '../data/difficulty';
+import { applyScale } from '../scale';
 
 export interface AutoplayLog { hole: number; shots: string[] }
 
 export function installAutoplay(game: Phaser.Game) {
   const api = {
     play: () => game.scene.getScene('play') as PlayScene,
+
+    /** Open one hole of a course straight away (screenshots, mock-ups): calm air, the course's default tee. */
+    async startAt(id: string, hole: number, viewScale?: number): Promise<void> {
+      if (viewScale !== undefined) { app.settings.viewScale = viewScale; applyScale(game); }
+      const scene = game.scene.getScenes(true)[0];
+      await loadCourse(scene, id);
+      const c = app.course!;
+      const cfg: RoundConfig = {
+        courseId: id, tee: c.json.defaultTee, holes: [hole], length: '18', playerName: 'player', seed: 1,
+        settings: { difficulty: 'normal', lefty: false, e5: false, gimmes: false, maxDoublePar: false, mulligans: false },
+        startedAt: new Date().toISOString(),
+      };
+      app.round = new Round(c, cfg);
+      app.round.startHole(0);
+      (app.round as unknown as { wind: unknown; winds: unknown[] }).wind = makeWind(0, 0);
+      (app.round as unknown as { winds: unknown[] }).winds = [makeWind(0, 0)];
+      for (const s of game.scene.getScenes(true)) if (s.scene.key !== 'play') game.scene.stop(s.scene.key);
+      game.scene.start('play', { resume: false });
+    },
     hud: () => game.scene.getScene('hud') as HudScene,
 
     /**
