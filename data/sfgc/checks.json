@@ -1,0 +1,18 @@
+{
+ "wind_mph": [
+  3,
+  14
+ ],
+ "water": {
+  "count": 0
+ },
+ "tees": {
+  "holes": {
+   "11": [
+    "tee",
+    "fairway"
+   ]
+  },
+  "why": "11 Blue: OSM maps no Blue box; the tee is the start of the OSM hole line, which is on fairway (open item)"
+ }
+}

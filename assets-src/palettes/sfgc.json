@@ -1,0 +1,18 @@
+{
+  "name": "SFGC (fog-belt Tillinghast, San Francisco)",
+  "note": "Course theme palette (<= 32 colours), same keys as pnw.json. San Francisco Golf Club, by Lake Merced in the summer fog belt: cool, lush, slightly blue bentgrass greens and fairways; a deeper, softer rough (F0-F2); big jagged bunkers of pale cream-tan dune sand; grey-green fog water; Monterey cypress, Monterey pine and blue-grey eucalyptus (assets-src/trees_sfgc.py). The course chat's design, 2026-11-13. Shadows are a 35% black overlay on top of these.",
+  "colors": {
+    "G0": "#17302a", "G1": "#1f4234", "G2": "#28563d", "G3": "#326b45", "G4": "#3d7f4d",
+    "G5": "#489255", "G6": "#55a35e", "G7": "#65b26a", "G8": "#79c17b", "G9": "#9fd39d",
+    "L0": "#46663e", "L1": "#557849", "L2": "#668a55",
+    "S0": "#c9b791", "S1": "#e8dcbc", "S2": "#f6efdb",
+    "W0": "#2c4a52", "W1": "#3c616a", "W2": "#7f9ea2",
+    "K0": "#26282d", "K1": "#53565d", "K2": "#7c7f86", "K3": "#b0ad9f", "K4": "#d6d3c6",
+    "B0": "#42301f", "B1": "#674a33", "B2": "#8a6a4b",
+    "R0": "#8c4a3a", "WH": "#f4f5f2",
+    "F0": "#2f5734", "F1": "#3a673b", "F2": "#477844"
+  },
+  "trees": {"conifer": "trees_sfgc:conifer", "deciduous": "trees_sfgc:deciduous"},
+  "lut": {"rough": ["F0", "F1", "F2", "F2"]},
+  "minimap": {"rough": "#3a673b", "bunker": "#e8dcbc", "ob_sand": "#e8dcbc"}
+}
