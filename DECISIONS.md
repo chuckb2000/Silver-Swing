@@ -1770,3 +1770,7 @@ club" ("shaughnessy", "capilano"; they read "shaughnessy golf and"), "the ... co
 and Marovitz is "marovitz". Lists cut names with `fitName`: a leading "the" goes first, then whole
 words when that keeps most of the column, else the letters that fit (so the Bandon courses stay
 apart in a narrow column: "bandon dun", "bandon pre"), never ending on a comma or a space.
+
+Same day, later: the arc shows only when the line meets a tree (developer: "what if we changed it so
+that the arc showing that you're going to hit the tree only shows up if you're aimed to hit a tree?
+otherwise it's just a flat line"). A clear line is the plain flat dotted line, as before the warning.
