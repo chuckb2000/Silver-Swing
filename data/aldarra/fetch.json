@@ -3,12 +3,7 @@
   {
    "name": "USGS_LPC_WA_KingCounty_2021_B21_King_2158.laz",
    "url": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/WA_KingCounty_2021_B21/WA_KingCo_2_2021/LAZ/USGS_LPC_WA_KingCounty_2021_B21_King_2158.laz",
-   "note": "retry from rockyweb (HTTP 429 earlier; the S3 path is 404)"
-  },
-  {
-   "name": "USGS_LPC_WA_KingCounty_2021_B21_King_2159.laz",
-   "url": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/WA_KingCounty_2021_B21/WA_KingCo_2_2021/LAZ/USGS_LPC_WA_KingCounty_2021_B21_King_2159.laz",
-   "note": "retry from rockyweb (HTTP 429 earlier; the S3 path is 404)"
+   "note": "retry from rockyweb (HTTP 429 on four runs)"
   }
  ]
 }
