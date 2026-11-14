@@ -1136,9 +1136,10 @@ export class PlayScene extends Phaser.Scene {
     g.clear();
     const r = this.round;
     const t = app.course!.terrain;
-    const green = t.greens.find((gm) => gm.def.id === r.hole.greenId);
-    if (!green || !this.isPutting()) return;
-    const poly = green.poly;
+    if (!this.isPutting()) return;
+    // the hole's green and any green touching it (both halves of a double green: St Andrews, Langdon 9/18)
+    const polys = r.holeGreens.filter(Boolean);
+    if (!polys.length) return;
     const L = this.level;
     const cols = [0xe6f6da, 0xf4efa6, 0xf7c487];
     const alphas = [0.32, 0.46, 0.62];
@@ -1146,11 +1147,13 @@ export class PlayScene extends Phaser.Scene {
     const step = Math.max(8 / L, 1.4) / PX_PER_M; // in the close-up no denser than ~0.7 m
     const u = 1 / L; // one texel in world px
     const clearR = Math.max(this.holeClearM(), 0.6);
+    const minX = Math.min(...polys.map((p) => p.minX)), maxX = Math.max(...polys.map((p) => p.maxX));
+    const minY = Math.min(...polys.map((p) => p.minY)), maxY = Math.max(...polys.map((p) => p.maxY));
     let row = 0;
-    for (let y = Math.ceil(poly.minY / step) * step; y <= poly.maxY; y += step, row++) {
+    for (let y = Math.ceil(minY / step) * step; y <= maxY; y += step, row++) {
       const shift = (row % 2) * step / 2;
-      for (let x = Math.ceil(poly.minX / step) * step + shift; x <= poly.maxX; x += step) {
-        if (!poly.contains(x, y)) continue;
+      for (let x = Math.ceil(minX / step) * step + shift; x <= maxX; x += step) {
+        if (!polys.some((p) => p.contains(x, y))) continue;
         if (Math.hypot(x - r.pin.x, y - r.pin.y) < clearR) continue; // keep the hole area clean
         const [gx, gy] = t.grad(x, y, 0.3);
         const sl = Math.hypot(gx, gy);
