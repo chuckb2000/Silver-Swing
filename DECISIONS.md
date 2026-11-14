@@ -1702,3 +1702,15 @@ skipped the flight). The developer wants it as it was: a tap during the flight s
 ball ends straight away, also while the camera is still going back to the golfer. The wait is
 gone (`PlayScene.fastForward`).
 
+## The passport shows a map of a few holes (developer, 2026-11-13)
+
+The passport's pictures were a 104 x 52 crop from the middle of the course card, which since the
+cards became strips of four green views (2026-10-20) fell on the seam between two of them: two
+half pictures of trees, up close. The developer: "maybe it could be like a zoomed out view of a few
+holes". Each course now has its own map (`assets-src/passport_maps.py` ->
+`sprites/passport/<id>.png`): the overview map's look (surface colours, canopy blobs; the
+hillshade in three flat bands) at 5 m a pixel, about 520 x 260 m, over the stretch with the most
+golf in it (the holes' lines, tees and greens counted), with a small flag on each green. Drawn
+from the course's own game files, so no course is rebuilt; `course_cards.py <id>` makes it for a
+new course. A course without one shows the middle of its card's first green.
+
