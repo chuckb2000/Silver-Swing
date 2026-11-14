@@ -1,6 +1,17 @@
 {
  "note": "per-course settings for course_play.test.ts",
- "wind_mph": [1, 7],
- "water": {"count": 6},
- "inside_boundary": true
+ "wind_mph": [
+  1,
+  7
+ ],
+ "water": {
+  "count": 6
+ },
+ "inside_boundary": true,
+ "yardage": {
+  "max": {
+   "8": 0.1
+  },
+  "why": "8 Black: the box the developer chose (2026-11-14) plays 380 yd against the card's 420 (-9.6 %); the card's Blue 374 fits it, and no mapped box behind it is the 8th's"
+ }
 }
