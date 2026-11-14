@@ -1,7 +1,7 @@
 {
   "id": "lofoten",
   "name": "Lofoten Links",
-  "location": "Gimsøya, Vågan, Nordland, Norway",
+  "location": "Gims\u00f8ya, V\u00e5gan, Nordland, Norway",
   "state": "EU",
   "architects": "Jeremy Turner (9 holes 1998; 18 holes 2015)",
   "theme": "lofoten",
@@ -13,12 +13,12 @@
   "dtm": {
     "path": "raw/dtm_clip.tif",
     "units": "m",
-    "source": "Kartverket, Nasjonal høydemodell DTM 1 m (WCS nhm_dtm_topo_25833, EPSG:25833, NN2000), clipped to the world + 100 m; CC BY 4.0; fetched by the GitHub Actions fetch workflow 2026-11-13 (release data-lofoten)"
+    "source": "Kartverket, Nasjonal h\u00f8ydemodell DTM 1 m (WCS nhm_dtm_topo_25833, EPSG:25833, NN2000), clipped to the world + 100 m; CC BY 4.0; fetched by the GitHub Actions fetch workflow 2026-11-13 (release data-lofoten)"
   },
   "dsm": {
     "path": "raw/dsm_clip.tif",
     "units": "m",
-    "source": "Kartverket, Nasjonal høydemodell DOM 1 m (WCS nhm_dom_topo_25833), as the DTM"
+    "source": "Kartverket, Nasjonal h\u00f8ydemodell DOM 1 m (WCS nhm_dom_topo_25833), as the DTM"
   },
   "world": {
     "x0": 463502,
@@ -67,12 +67,16 @@
     "maxMph": 18
   },
   "attribution": [
-    "Map data © OpenStreetMap contributors (ODbL)",
-    "Elevation: © Kartverket, Nasjonal detaljert høydemodell (CC BY 4.0)"
+    "Map data \u00a9 OpenStreetMap contributors (ODbL)",
+    "Elevation: \u00a9 Kartverket, Nasjonal detaljert h\u00f8ydemodell (CC BY 4.0)"
   ],
   "red_water_osm": [
     "sea",
-    "r5312885"
+    "r5312885",
+    "shore"
   ],
-  "wetland_woods": false
+  "wetland_woods": false,
+  "rock_water_osm": [
+    "shore"
+  ]
 }

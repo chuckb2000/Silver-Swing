@@ -4,9 +4,10 @@
   {
    "from": "proposed/sea_shore.geojson",
    "ids": [
-    "sea"
+    "sea",
+    "shore"
    ],
-   "reason": "the Norwegian Sea from OSM's coastline (pipeline/propose_sea.py) with the bare shore up to the boundary (make_shore.py): a red penalty area wherever it lies (red_water_osm; developer's brief 2026-11-13: the sea is a penalty area), including the inlets the holes play over"
+   "reason": "the Norwegian Sea where the Kartverket DTM is at sea level (make_shore.py; OSM's coastline cut straight across the rocky points), and the rock between the course boundary and the sea plus the islets as 'shore', drawn as rock: one red penalty area (developer's brief 2026-11-13: the sea is a penalty area; 2026-11-13: 'this coast is so jagged')"
   },
   {
    "from": "proposed/boundary.geojson",
@@ -57,7 +58,7 @@
    "set": {
     "penalty": "red"
    },
-   "reason": "Gløstjønna (golf=water_hazard): every penalty area red (standing default)"
+   "reason": "Gl\u00f8stj\u00f8nna (golf=water_hazard): every penalty area red (standing default)"
   },
   {
    "osm": "w355818460",

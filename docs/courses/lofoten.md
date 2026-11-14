@@ -9,8 +9,8 @@ Old Course. OSM maps the whole course: 18 hole lines whose pars match the card,
 every green and pin, fairways, bunkers, rough and seven penalty areas, and 69 tee
 boxes, though not the 61 (back) tee on several holes. Elevation and trees come from
 Kartverket's national DTM and DOM 1 m through their WCS (fetched by the GitHub
-Actions workflow). The sea is built from OSM's coastline and, with the bare shore up
-to the boundary, is one red penalty area the holes play over. New theme `lofoten`
+Actions workflow). The sea follows the DTM's shoreline; with the rocky shore up to the
+boundary (drawn as rock) it is one red penalty area the holes play over. New theme `lofoten`
 (heather, grey rock, white shell sand, cold sea; low birch); the logo is a
 white-tailed sea eagle. 61 tees: 12 holes within 3 % of the card; the doglegs 1, 3, 7, 13, 14 and 16
 measure 4-10 % short (the card measures doglegs longer; accepted by the developer),
@@ -37,11 +37,16 @@ measure 4-10 % short (the card measures doglegs longer; accepted by the develope
     -   Canopy: Kartverket DOM 1 m (`nhm_dom_topo_25833`), the same way.
     -   Photo: none open (Norge i bilder is under the Norge digitalt licence).
     -   Card: the club's 2025 scorecard PDF (lofotenlinks.no), in metres.
--   **Water:** the sea and the inlets (one red penalty area, `sea`: OSM coastline
-    by `pipeline/propose_sea.py` plus the bare shore between it and the boundary by
-    `data/lofoten/make_shore.py`), the two lakes and the five smaller ponds and
+-   **Water:** the sea and the inlets, one red penalty area in two parts
+    (`data/lofoten/make_shore.py`): `sea`, drawn as water, where the Kartverket DTM
+    is at sea level (0.3 m or lower) in the pieces touching OSM's sea; and `shore`,
+    drawn as rock (`rock_water_osm`), the land between the boundary and the sea
+    plus the islets. OSM's coastline (`pipeline/propose_sea.py`) cut straight
+    across the rocky points; the DTM follows the real shore. Also the two lakes and the five smaller ponds and
     hazards, all red. Out of bounds is the OSM course polygon (relation 5314623)
-    joined with its tee boxes grown 3 m (`make_boundary.py`: the 3rd's back tee on
+    joined with its tee boxes grown 3 m, its corners rounded to a 30 m radius
+    (developer, 2026-11-13; land only, every tee, green, fairway, bunker and hole
+    line kept inside) (`make_boundary.py`: the 3rd's back tee on
     the rocks straddled the line); the bogs east and south of the course
     (Gimsøymyrene) are out of bounds and drawn as open ground, not woods
     (`wetland_woods: false`).
@@ -90,7 +95,8 @@ Course chat's calls (listed for the developer):
 -   The standing defaults: 61 only, every penalty area red, OB = the OSM boundary
     (joined with the tee boxes), fairway trees removed.
 -   The shore between the boundary and the sea joined to the sea (as at Cypress
-    Point).
+    Point), drawn as rock, and the sea's edge taken from the DTM (developer,
+    2026-11-13: "this coast is so jagged", with an aerial of the 14th).
 -   Card hole 7.
 
 ## New pipeline keys or theme
@@ -135,4 +141,8 @@ Run 2026-11-13 on the branch merged with main (ef748e9d), pinned:
     capabilities give the ids (`nhm_dtm_topo_25833`, `nhm_dom_topo_25833`).
 -   **Coastal OSM boundaries stop short of the sea.** Look at what lies between the
     boundary and the coastline on every hole that plays along or over the water.
+-   **Take the shoreline from the DTM, not OSM's coastline.** OSM's coastline is
+    generalised (long straight runs). A national DTM is flat at 0 over the sea, so
+    "at or below 0.3 m, touching the sea" gives the real rocky shore. Draw the land
+    between the boundary and the sea as rock (`rock_water_osm`), not water.
 -   **OSM wetlands are drawn as woods** by default; on open bog that is wrong.
