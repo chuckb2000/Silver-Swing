@@ -6,7 +6,7 @@
 // (developer, 2026-10-26): most birdies in a round, most feet of putts made in a
 // round, and the longest hole-outs from off the green, each one to watch again.
 
-import { listName, shortName } from '../save/milestones';
+import { fitName, listName, shortName } from '../save/milestones';
 import { app } from '../app';
 import { Difficulty } from '../data/difficulty';
 import { backupText, LeaderboardEntry, loadBoard, RoundLength } from '../save/store';
@@ -96,7 +96,7 @@ export class LeaderboardScene extends MenuScene {
     // one line (wrapped, the tee name went under the tabs below): the short name, then the name alone, if it must
     const courseHead = txt(this, x0 + pw / 2, y0 + 41, "", { origin: [0.5, 0], color: COLORS.dim });
     const teeLabel = `${teeSel.toLowerCase()} tees`;
-    setTxtFit(courseHead, [`${info.name}  ·  ${teeLabel}`, `${shortName(info.name)}  ·  ${teeLabel}`, shortName(info.name), shortName(info.name).slice(0, 18)], pw - 120);
+    setTxtFit(courseHead, [`${info.name}  ·  ${teeLabel}`, `${shortName(info.name)}  ·  ${teeLabel}`, shortName(info.name), fitName(shortName(info.name), 18)], pw - 120);
     this.root.add(courseHead);
     if (courses.length > 1) {
       this.root.add(new Button(this, x0 + pw - 54, y0 + 38, 48, 14, 'change', () => this.scene.start('courses', { purpose: 'board', courseId: info.id }), { color: 'grey' }));
@@ -317,7 +317,7 @@ export class LeaderboardScene extends MenuScene {
     const rounds = feed.rounds.map((r) => ({
       at: r.received,
       row: {
-        v: [timeAgo(r.received), r.player.slice(0, 10), courseName(r.course).toLowerCase().slice(0, courseChars), `${r.gross} (${toPar(r.toPar)})${r.holes === 18 ? '' : ` ${r.holes}`}`, badge(r)],
+        v: [timeAgo(r.received), r.player.slice(0, 10), fitName(courseName(r.course).toLowerCase(), courseChars), `${r.gross} (${toPar(r.toPar)})${r.holes === 18 ? '' : ` ${r.holes}`}`, badge(r)],
         hi: r.record || r.pb ? [4] : [],
         tap: () => { void this.openFeedRound(r); },
       } as TableRow,
@@ -364,7 +364,7 @@ export class LeaderboardScene extends MenuScene {
     list.forEach((e, i) => {
       const day = new Date(`${e.daily ?? localDay(e.date)}T12:00:00`);
       const when = Number.isNaN(day.getTime()) ? '' : ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'][day.getDay()];
-      const text = `${when}  ${courseName(e.course).toLowerCase().slice(0, 16)}  ${e.gross} (${toPar(e.toPar)})`;
+      const text = `${when}  ${fitName(courseName(e.course).toLowerCase(), 16)}  ${e.gross} (${toPar(e.toPar)})`;
       layer.add(new Button(this, x0 + 8, y0 + 26 + i * 18, pw - 16, 15, text, () => { close(); void shareRound(this, e, label(e)); }, { color: 'grey' }));
     });
     layer.add(new Button(this, x0 + pw / 2 - 26, y0 + ph - 20, 52, 15, 'close', close, { color: 'grey' }));
@@ -384,7 +384,7 @@ export class LeaderboardScene extends MenuScene {
     const wide = pw > 300;
     const mine = new Map(local.map((h) => [h.id, h]));
     const rows: TableRow[] = list.map((h, i) => ({
-      v: [String(i + 1), h.player.slice(0, 10), holeOutDistance(h.dist), `${courseName(h.course).slice(0, wide ? 16 : 11)} ${h.hole}`, wide ? h.club.toLowerCase().slice(0, 12) : ''],
+      v: [String(i + 1), h.player.slice(0, 10), holeOutDistance(h.dist), `${fitName(courseName(h.course), wide ? 16 : 11)} ${h.hole}`, wide ? h.club.toLowerCase().slice(0, 12) : ''],
       hi: h.n === 1 ? [2] : [],
       tap: () => { void this.watch(mine.get(h.id) ?? h); },
     }));
@@ -452,7 +452,7 @@ export class LeaderboardScene extends MenuScene {
       // columns from the panel's width: on a narrow phone the course name gives way
       const featX = pw - 66, holeX = featX - 26, courseChars = Math.max(0, Math.floor((holeX - 128 - 6) / 6));
       cols = [x0 + 10, x0 + 52, courseChars >= 6 ? x0 + 128 : -1, x0 + holeX, x0 + featX];
-      rows = list.map((e) => [localDay(e.date).slice(5), e.player.slice(0, 12), courseName(e.course).slice(0, courseChars), String(e.hole), featName(e.strokes, e.par)]);
+      rows = list.map((e) => [localDay(e.date).slice(5), e.player.slice(0, 12), fitName(courseName(e.course), courseChars), String(e.hole), featName(e.strokes, e.par)]);
       if (!rows.length) empty = 'no eagles yet - the first one goes here';
     } else if (view === 'handicaps') {
       // each player's index from their Normal rounds (systems/game/handicap.ts); lowest first
@@ -498,7 +498,7 @@ export class LeaderboardScene extends MenuScene {
         try { n = planFor(l as RoundLength, shapeById(course) ?? 18).slots.length; } catch { n = l === '18' || l === '9x2' ? 18 : 9; }
         return n === 18 ? '' : ` (${n})`;
       };
-      rows = list.map((r, i) => [String(i + 1), r.player.slice(0, 12), putts ? `${Math.round((r.made ?? 0) / 0.3048)}${holesOf(r.length, r.course)}` : String(r.birdies), courseName(r.course).slice(0, wide ? 24 : 18), localDay(r.date)]);
+      rows = list.map((r, i) => [String(i + 1), r.player.slice(0, 12), putts ? `${Math.round((r.made ?? 0) / 0.3048)}${holesOf(r.length, r.course)}` : String(r.birdies), fitName(courseName(r.course), wide ? 24 : 18), localDay(r.date)]);
       if (!rows.length) empty = putts ? 'no putts made yet - rounds from 26 october count' : 'no birdies yet - go make some!';
       else hint = putts ? 'feet of putts holed in one round, any course (casual rounds left out)' : 'birdies or better in one round, any course (casual rounds left out)';
     }

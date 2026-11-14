@@ -22,9 +22,42 @@ export interface MilestoneCourse { id: string; name: string; state: string }
 const BREAK_18 = [100, 90, 80, 70];
 const BREAK_9 = [50, 45, 40, 35];
 
-/** "Langston Golf Course" -> "langston" (short names read better in a banner). */
+/** words that end a club's name and say nothing about which course it is */
+const CLUB_SUFFIX = / (golf (and|&) country club|golf and country|golf club|country club|golf course|golf links|golf center|club|cc)$/i;
+/** short names no rule gives (the part people call it by) */
+const SHORT_NAMES: Record<string, string> = { 'sydney r. marovitz': 'marovitz' };
+
+/**
+ * "Langston Golf Course" -> "langston" (short names read better in a banner and a list). Never down
+ * to a bare "the" (developer, 2026-11-14: The Country Club read "the" on the recent list): "The
+ * Country Club" stays itself. "The Old Course, St Andrews" -> "the old course", "Shaughnessy Golf
+ * and Country Club" -> "shaughnessy", "The Mountain Course at Spruce Peak" -> "spruce peak".
+ */
 export function shortName(name: string): string {
-  return name.replace(/ (golf|country) club$| golf (course|links|center)$| club$| cc$/i, '').toLowerCase();
+  let n = name.replace(/,.*$/, '').trim().replace(/\s+-\s+/g, ' ');
+  const at = n.match(/^the (?:\w+ )?course at (.+)$/i);
+  if (at) n = at[1];
+  const cut = n.replace(CLUB_SUFFIX, '');
+  if (cut && !/^(the|a)$/i.test(cut)) n = cut;
+  // "Pronghorn Nicklaus Course" -> "pronghorn nicklaus", but "The Old Course" keeps its word
+  if (/ course$/i.test(n) && !/^the /i.test(n) && n.split(' ').length >= 3) n = n.replace(/ course$/i, '');
+  const low = n.toLowerCase();
+  return SHORT_NAMES[low] ?? low;
+}
+
+/**
+ * A name cut to `max` characters for a list column: a leading "the" goes first ("the sea ranch" in
+ * 10 is "sea ranch"), then whole words when that keeps most of the room ("willamette valley" in 12
+ * is "willamette"), else the characters that fit, so the Bandon courses stay apart in a narrow
+ * column ("bandon dun", "bandon pre"); never ending on a space or a comma.
+ */
+export function fitName(s: string, max: number): string {
+  if (s.length <= max) return s;
+  const t = s.replace(/^the /i, '');
+  if (t.length <= max) return t;
+  const sp = t.lastIndexOf(' ', max);
+  if (sp >= max * 0.7) return t.slice(0, sp).replace(/[\s,.&-]+$/, '');
+  return t.slice(0, max).replace(/[\s,.&-]+$/, '');
 }
 
 /**
@@ -33,7 +66,7 @@ export function shortName(name: string): string {
  * "witch hollow", "East Potomac White Course" "east po white"; developer, 2026-10-25).
  */
 export function passportName(c: { name: string; group?: string; groupName?: string; keepName?: boolean }): string {
-  return listName(c).slice(0, 17);
+  return fitName(listName(c), 17);
 }
 
 /**
