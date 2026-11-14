@@ -1,0 +1,49 @@
+{
+  "name": "Aldarra (Sammamish plateau forest, Fall City WA)",
+  "note": "Course theme palette (<= 32 colours; same keys as pnw.json), made against the NAIP photo of the course (2026-11-13). Aldarra lies on the forested Sammamish plateau above the Snoqualmie valley: a private Fazio course with no houses on it, every hole in its own clearing of Douglas fir, western red cedar and big-leaf maple; the rough a rich wet-side green, the fairways an even emerald, white-cream sand, black-green ponds and wetlands; off the course (L0-L2) the plateau's pasture and forest floor, a warmer olive. Trees: western red cedar and Pacific madrone (assets-src/trees_aldarra.py). Shadows are a 35% black overlay on top of these.",
+  "colors": {
+    "G0": "#14301f",
+    "G1": "#1c472b",
+    "G2": "#245d31",
+    "G3": "#2d7235",
+    "G4": "#37863a",
+    "G5": "#449a40",
+    "G6": "#52ad47",
+    "G7": "#62bd51",
+    "G8": "#76cc5f",
+    "G9": "#9edb80",
+    "L0": "#556a35",
+    "L1": "#647c3d",
+    "L2": "#748d47",
+    "S0": "#cbbf9c",
+    "S1": "#e8e0c8",
+    "S2": "#f6f1e2",
+    "W0": "#1f3a3e",
+    "W1": "#2c5257",
+    "W2": "#5f8a8c",
+    "K0": "#26272d",
+    "K1": "#53545c",
+    "K2": "#7a7b83",
+    "K3": "#b3aa97",
+    "K4": "#d9d1bf",
+    "B0": "#46301f",
+    "B1": "#6d4a31",
+    "B2": "#8c5a40",
+    "R0": "#4b586a",
+    "WH": "#f6f6f2"
+  },
+  "minimap_trees": {
+    "conifer": [
+      "#132a14",
+      "#4a7a3a"
+    ],
+    "deciduous": [
+      "#1f2a14",
+      "#5c7a2e"
+    ]
+  },
+  "trees": {
+    "conifer": "trees_aldarra:red_cedar",
+    "deciduous": "trees_aldarra:madrone"
+  }
+}
