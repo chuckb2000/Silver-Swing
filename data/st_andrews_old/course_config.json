@@ -60,7 +60,7 @@
     "maxMph": 16
   },
   "attribution": [
-    "Map data © OpenStreetMap contributors (ODbL)",
+    "Map data \u00a9 OpenStreetMap contributors (ODbL)",
     "Elevation: Scottish Public Sector LiDAR Phase 5, contains public sector information licensed under the Open Government Licence v3.0 (Scottish Government, accessed from registry.opendata.aws/scottish-lidar)"
   ],
   "red_water_osm": [
@@ -87,5 +87,6 @@
       ],
       "buffer_m": 2.0
     }
-  ]
+  ],
+  "green_views_fit": true
 }

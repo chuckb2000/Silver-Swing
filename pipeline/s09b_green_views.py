@@ -51,6 +51,7 @@ from shrubs import VARIANTS as SHRUB_VARIANTS, shrub as shrub_painter  # noqa: E
 warnings.filterwarnings("ignore")
 
 S = SURF
+MAX_TEX_PX = 4000   # green_views_fit: no window wider or taller than this many pixels (WebGL texture limit 4096)
 HEIGHT_K = 0.7      # vertical objects: px per metre of height = ppm * 0.7 (as in the course art)
 # name, pixels per metre, window (m), tree sprite caps (px), size quantisation (px)
 # (the windows cover a tall phone screen at that scale; caps keep very tall
@@ -474,12 +475,30 @@ def _render_hole(h) -> dict:
     if not gpoly.contains(gpoly.centroid):  # a crescent (Langdon Farms 9, half a double green): centre on the pin
         cx, cy = h["pin"]
     entry = {"hole": n}
+    fit = None
+    if cfg.get("green_views_fit"):
+        # optional (course_config.json "green_views_fit": true; St Andrews): each window grows to take
+        # in the hole's green and every green touching it (both halves of a double green) with half a
+        # standard window to spare on each side, so the camera can centre a ball or pin anywhere on
+        # the putting surface; never smaller than the standard window, never wider than MAX_TEX_PX.
+        # Without the key: the fixed windows, as before.
+        parts = [gpoly] + [Polygon(o["poly"]) for k, o in J["green_by_osm"].items()
+                           if k != h["green_osm"] and Polygon(o["poly"]).distance(gpoly) < 0.5]
+        fit = MultiPolygon(parts).bounds if len(parts) > 1 else gpoly.bounds
     for L in LAYERS:
         WIN, ppm = L["win"], L["ppm"]
-        x0 = float(np.clip(round(cx - WIN / 2), 0, world.width - WIN))
-        y1 = float(np.clip(round(cy + WIN / 2), WIN, world.height))
-        grid = Grid(x0, y1, WIN, WIN, ppm)
-        y0, x1 = y1 - WIN, x0 + WIN
+        ww = hh_ = WIN
+        fcx, fcy = cx, cy
+        if fit is not None:
+            cap = MAX_TEX_PX // ppm
+            ww = int(min(cap, max(WIN, math.ceil(fit[2] - fit[0] + WIN))))
+            hh_ = int(min(cap, max(WIN, math.ceil(fit[3] - fit[1] + WIN))))
+            if ww > WIN or hh_ > WIN:
+                fcx, fcy = (fit[0] + fit[2]) / 2, (fit[1] + fit[3]) / 2
+        x0 = float(np.clip(round(fcx - ww / 2), 0, world.width - ww))
+        y1 = float(np.clip(round(fcy + hh_ / 2), hh_, world.height))
+        grid = Grid(x0, y1, ww, hh_, ppm)
+        y0, x1 = y1 - hh_, x0 + ww
         surf = surface_grid(g, cfg, surf05, world, grid, boundary)
         z = terrain_z_grid(base, greens, grid)
         # trees whose sprite can reach into the window (tall ones south of it poke up)
@@ -506,7 +525,7 @@ def _render_hole(h) -> dict:
         js["trees"] = places
         (outd / f"{base_name}_trees.json").write_text(json.dumps(js, separators=(",", ":")))
         entry[L["name"]] = {"file": f"greens/{base_name}.png", "trees": f"greens/{base_name}_trees.json",
-                            "treesImage": f"greens/{base_name}_trees.png", "x0": x0, "y1": y1, "w": WIN, "h": WIN, "ppm": ppm}
+                            "treesImage": f"greens/{base_name}_trees.png", "x0": x0, "y1": y1, "w": ww, "h": hh_, "ppm": ppm}
         print(f"[s09b] {'' if not lay['shared'] else lay['id'] + ' '}hole {n:2d} {L['name']:4s}: window {x0:.0f},{y0:.0f}-{x1:.0f},{y1:.0f} at {ppm} px/m, {len(near)} trees ({len(made)} sprites, atlas {aw}x{ah})", flush=True)
     return entry
 

@@ -1,1 +1,1 @@
-{"frames":{},"meta":{"image":"g17n_trees.png","size":{"w":1024,"h":1},"scale":"1"},"trees":[]}
+{"frames":{"d_48_43_0":{"frame":{"x":0,"y":0,"w":50,"h":43},"rotated":false,"trimmed":false,"spriteSourceSize":{"x":0,"y":0,"w":50,"h":43},"sourceSize":{"w":50,"h":43}}},"meta":{"image":"g17n_trees.png","size":{"w":1024,"h":64},"scale":"1"},"trees":[{"f":"d_48_43_0","x":1201.5,"y":11.5}]}

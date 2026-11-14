@@ -106,6 +106,12 @@ Course chat's calls (listed for the developer):
 
 ## New pipeline keys or theme
 
+-   `green_views_fit` (s09b, default off = the fixed windows, as before): each
+    putting-view window grows to take in the hole's green and every green touching
+    it, with half a standard window to spare on each side, so the camera can
+    centre a ball or pin anywhere on a double green (developer, 2026-11-13: "I
+    can't center this guy here"). At most 4,000 px a side.
+
 -   `pipeline/gorse.py`: without an orthophoto, the thickets are only the
     `extra_areas` (before, the step needed a photo).
 -   `pipeline/s09_render.py`: a building tagged barrier=wall keeps a tagged height
