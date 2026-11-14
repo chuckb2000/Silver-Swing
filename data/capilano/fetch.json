@@ -1,0 +1,25 @@
+{
+ "items": [
+  {
+   "name": "capilano_overpass.geojson",
+   "osm_box": [
+    49.3385,
+    -123.1336,
+    49.3611,
+    -123.117
+   ]
+  },
+  {
+   "name": "hrdem_dtm_1m.tif",
+   "url": "https://datacube.services.geo.ca/ows/elevation?SERVICE=WCS&VERSION=1.1.1&REQUEST=GetCoverage&FORMAT=image/geotiff&IDENTIFIER=dtm&BOUNDINGBOX=490300,5465100,491500,5467600,urn:ogc:def:crs:EPSG::32610&GRIDBASECRS=urn:ogc:def:crs:EPSG::32610&GRIDOFFSETS=1,-1&GRIDORIGIN=490300,5467600"
+  },
+  {
+   "name": "hrdem_dsm_1m.tif",
+   "url": "https://datacube.services.geo.ca/ows/elevation?SERVICE=WCS&VERSION=1.1.1&REQUEST=GetCoverage&FORMAT=image/geotiff&IDENTIFIER=dsm&BOUNDINGBOX=490300,5465100,491500,5467600,urn:ogc:def:crs:EPSG::32610&GRIDBASECRS=urn:ogc:def:crs:EPSG::32610&GRIDOFFSETS=1,-1&GRIDORIGIN=490300,5467600"
+  },
+  {
+   "name": "hrdem_lidar_stac.json",
+   "url": "https://datacube.services.geo.ca/stac/api/search?collections=hrdem-lidar&bbox=-123.1336,49.3385,-123.117,49.3611&limit=100"
+  }
+ ]
+}

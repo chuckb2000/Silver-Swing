@@ -37,6 +37,7 @@ PIN_FILE = "pipeline_pin.json"
 # title art, UI sprites) can change without moving a course off this checkout's pipeline
 NOT_BUILD_PY = ("assets-src/logos.py", "assets-src/course_cards.py", "assets-src/title_art.py",
                 "assets-src/sprites.py", "assets-src/font.py", "assets-src/build_assets.py", "assets-src/holiday.py",
+                "assets-src/passport_maps.py",
                 # the pipeline's tools, run by hand or by make, never inside a build step
                 "pipeline/pins.py", "pipeline/regress.py", "pipeline/land.py", "pipeline/intake.py",
                 "pipeline/fetch_raw.py", "pipeline/clip_raster.py", "pipeline/propose_channels.py",

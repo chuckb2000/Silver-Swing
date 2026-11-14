@@ -158,7 +158,10 @@ def main():
     lab, n = ndimage.label(canopy)
     sizes = ndimage.sum(canopy, lab, range(1, n + 1))
     big = np.isin(lab, 1 + np.where(sizes > 400 * PX_PER_M * PX_PER_M)[0])  # > 400 m2 patches
-    woods_geoms = list(g[g.kind.isin(["wood", "water"]) & g.tags.apply(lambda t: t.get("natural") in ("wood", "wetland"))].geometry)
+    # config "wetland_woods": false (Lofoten's open bogs): OSM natural=wetland outside the boundary
+    # stays plain ob ground instead of being drawn as woods (default true, as before)
+    wet_kinds = ("wood", "wetland") if cfg.get("wetland_woods", True) else ("wood",)
+    woods_geoms = list(g[g.kind.isin(["wood", "water"]) & g.tags.apply(lambda t: t.get("natural") in wet_kinds)].geometry)
     ob_woods = big | mask(woods_geoms)
     surf[ob_woods & ~inside] = SURF["ob_woods"]
     lake = np.load(bdir / "lake_mask.npy")  # 1 m vertex grid rows south->north

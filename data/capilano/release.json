@@ -1,0 +1,30 @@
+{
+ "release": "data-capilano",
+ "note": "Build inputs for Capilano; `make fetch NAME=capilano` puts them in place. All fetched by the GitHub Actions workflow (data/capilano/fetch.json) on 2026-11-13. capilano_overpass.geojson = the standard Overpass export of the box 49.3385,-123.1336,49.3611,-123.117. hrdem_dtm_1m.tif / hrdem_dsm_1m.tif = Natural Resources Canada HRDEM (CanElevation) DTM and DSM at 1 m through the NRCan datacube WCS (coverages dtm, dsm), box x 489900-491100 / y 5465000-5467500 EPSG:32610, CGVD2013 metres; the lidar projects there are BC-Vancouver_Island_Sunshine_Coast_2018 and BC-Lower_Mainland_2016 (hrdem_lidar_stac.json). No orthophoto: none open for West Vancouver was found.",
+ "files": [
+  {
+   "asset": "capilano_overpass.geojson",
+   "sha256": "6f24417ebdcb7739993dc045c80c54df3b1d02977a4b31b7d5f87295436c9f28",
+   "run": "python3 pipeline/intake.py osm capilano {file}",
+   "outputs": {
+    "raw/overpass.geojson": "836f6eb8d5fb41fffadf99a276b89163ba567625e2936ecfc3adc79ece613aa8"
+   }
+  },
+  {
+   "asset": "hrdem_dtm_1m.tif",
+   "sha256": "88434fe99131b68bc68aa357f659f63c960936956accc2150100acd8603c6c55",
+   "to": "raw/",
+   "outputs": {
+    "raw/hrdem_dtm_1m.tif": "88434fe99131b68bc68aa357f659f63c960936956accc2150100acd8603c6c55"
+   }
+  },
+  {
+   "asset": "hrdem_dsm_1m.tif",
+   "sha256": "c42bea18256012a601c25b47cb81dcabbc74d5f3f8c8cb7a22cf2bc0e128b590",
+   "to": "raw/",
+   "outputs": {
+    "raw/hrdem_dsm_1m.tif": "c42bea18256012a601c25b47cb81dcabbc74d5f3f8c8cb7a22cf2bc0e128b590"
+   }
+  }
+ ]
+}

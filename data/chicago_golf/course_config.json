@@ -1,0 +1,80 @@
+{
+  "id": "chicago_golf",
+  "name": "Chicago Golf Club",
+  "location": "Wheaton, DuPage County, Illinois",
+  "state": "IL",
+  "architects": "Charles Blair Macdonald (1895); rebuilt by Seth Raynor (1923)",
+  "theme": "chicago_golf",
+  "epsg": 32616,
+  "osm_sources": [
+    "raw/overpass.geojson"
+  ],
+  "boundary_name": "Chicago Golf Club",
+  "dtm": {
+    "path": "raw/usgs_dem_1m_clip.tif",
+    "units": "m",
+    "source": "USGS 3DEP 1 m DEM, project IL_MidNorth_D22, tile x40y464 (published 2023-10-31), clipped to the world + 100 m by pipeline/intake.py raster; fetched by the GitHub Actions fetch workflow 2026-11-13 (release data-chicago_golf)"
+  },
+  "ortho": {
+    "path": "raw/naip2023_05m.tif",
+    "source": "USDA NAIP 2023, 0.3 m, tiles m_4108815_ne and m_4108816_nw (16 and 24 August 2023; public domain), joined and warped to EPSG:32616 at 0.5 m by make_ortho.py; fetched by the GitHub Actions fetch workflow 2026-11-13 (release data-chicago_golf); lines up with OSM bunkers and greens within about 1.5 m"
+  },
+  "laz": {
+    "paths": [
+      "raw/laz/chicago_golf_*.laz"
+    ],
+    "classes": [
+      3,
+      4,
+      5
+    ],
+    "units": "ft",
+    "source": "USGS 3DEP lidar point cloud IL_MidNorth_D22 (2,000 ft tiles in NAD83(2011) Illinois East, US feet), classes 2-5 clipped to the world + 100 m by pipeline/intake.py laz, one file per tile; fetched by the GitHub Actions fetch workflow 2026-11-13 (release data-chicago_golf)",
+    "label": "USGS lidar (IL_MidNorth_D22)"
+  },
+  "world": {
+    "x0": 406695,
+    "y0": 4632457,
+    "width": 1280,
+    "height": 1536,
+    "note": "OSM course boundary way/281979769 bbox (816 x 1,149 m) + scenery, rounded out to whole 256 m chunks and centred: 1,280 m east-west (232 m each side), 1,536 m north-south (193 m each side)"
+  },
+  "tee_sets": [
+    {
+      "name": "Black",
+      "playable": true,
+      "rating": 74.4,
+      "slope": 141,
+      "total_yd": 6950
+    },
+    {
+      "name": "White",
+      "playable": false,
+      "rating": 72.5,
+      "slope": 137,
+      "total_yd": 6571
+    },
+    {
+      "name": "Red",
+      "playable": false,
+      "rating": 68.4,
+      "slope": 127,
+      "total_yd": 5664
+    }
+  ],
+  "default_tee": "Black",
+  "scorecard_source": "The club's printed scorecard (photo posted by golfbycoop, Instagram, 2025-08-25, supplied by the developer 2026-11-13): Black 6,950 / White 6,571 / Red 5,664 yd, par 70, men's handicap row. Ratings from the USGA Course Rating and Slope Database (developer's screenshot, 2026-11-13): men's Black 74.4/141, White 72.5/137, Red 68.4/127 (women's Black 81.0/147, White 78.9/144, Red 74.2/133, par 72). Third-party sites give holes 11 and 12 handicaps 4 and 6; the card's 6 and 4 are used.",
+  "penalty_default": "red",
+  "driving_range_is_ob": true,
+  "trees_off_fairways_m": 2,
+  "wind_mph": {
+    "minMph": 1,
+    "maxMph": 9
+  },
+  "attribution": [
+    "Map data \u00a9 OpenStreetMap contributors (ODbL)",
+    "Elevation and trees: U.S. Geological Survey 3D Elevation Program (IL_MidNorth_D22 lidar)",
+    "Aerial photo: USDA NAIP 2023"
+  ],
+  "fescue_areas": "proposed/fescue.geojson"
+}

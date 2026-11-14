@@ -1,0 +1,15 @@
+{
+ "note": "per-course settings for game/tests/unit/course_play.test.ts (the every-course checks); docs/COURSE_BUILD.md 8.2",
+ "wind_mph": [
+  1,
+  9
+ ],
+ "points": [
+  {
+   "x": 497,
+   "y": 905,
+   "surface": "water",
+   "why": "the pond the 9th and 10th play across is a red penalty area (tag edit, standing default)"
+  }
+ ]
+}

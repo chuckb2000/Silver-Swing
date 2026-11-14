@@ -1,0 +1,53 @@
+{
+ "pixel_m": 0.5,
+ "width": 2560,
+ "height": 3072,
+ "row0": "north",
+ "ids": {
+  "ob": 0,
+  "rough": 1,
+  "fairway": 2,
+  "fringe": 3,
+  "green": 4,
+  "tee": 5,
+  "bunker": 6,
+  "water": 7,
+  "cartpath": 8,
+  "woods": 9,
+  "ob_road": 10,
+  "ob_water": 11,
+  "ob_woods": 12,
+  "ob_building": 13,
+  "building": 14,
+  "range": 15,
+  "ob_sand": 16
+ },
+ "ob_ids": [
+  0,
+  10,
+  11,
+  12,
+  13,
+  15,
+  16
+ ],
+ "area_m2": {
+  "ob": 717475,
+  "rough": 519357,
+  "fairway": 141722,
+  "fringe": 3619,
+  "green": 16382,
+  "tee": 6828,
+  "bunker": 13634,
+  "water": 7630,
+  "cartpath": 14863,
+  "woods": 53016,
+  "ob_road": 97511,
+  "ob_water": 3133,
+  "ob_woods": 217620,
+  "ob_building": 115848,
+  "building": 5029,
+  "range": 32414,
+  "ob_sand": 0
+ }
+}

@@ -1,0 +1,182 @@
+{
+  "id": "reserve",
+  "name": "The Reserve Vineyards & Golf Club",
+  "location": "Aloha, Washington County, Oregon",
+  "state": "OR",
+  "architects": "Bob Cupp (North, 1998); John Fought (South, 1997)",
+  "theme": "reserve",
+  "epsg": 32610,
+  "osm_sources": [
+    "raw/overpass.geojson"
+  ],
+  "boundary_name": "The Reserve",
+  "dtm": {
+    "path": "raw/usgs_b24_dem_1m.tif",
+    "units": "m",
+    "source": "USGS 3DEP 1 m DEM, project OR_PortlandMetro_B24 (tile USGS_1M_10_x50y504_OR_PortlandMetro_B24, published 2026-04-02), clipped to the world + 100 m by pipeline/intake.py raster (kept in git, 9.7 MB); EPSG:26910 (NAD83 / UTM 10N), NAVD88 metres; fetched by the GitHub Actions workflow 2026-11-13 (release data-reserve)"
+  },
+  "ortho": {
+    "path": "raw/osip2024_05m.tif",
+    "source": "Oregon Statewide Imagery Program 2024 (OSIP_2024_WM ImageServer), four exportImage JPEG quarters at 0.5 m over x 504900-507900 / y 5035300-5038300 EPSG:32610, fetched by the GitHub Actions workflow 2026-11-13 (release data-reserve), placed by their request boxes and clipped to the world + 100 m by pipeline/intake.py ortho"
+  },
+  "world": {
+    "x0": 505192,
+    "y0": 5035906,
+    "width": 1792,
+    "height": 2048,
+    "note": "bbox of the one OSM course polygon for both courses (way 136348508 'The Reserve', 1,326 x 1,665 m) + at least 120 m of scenery, rounded out to whole 256 m chunks and centred (233 m west/east, 191-192 m south/north)"
+  },
+  "layouts": [
+    {
+      "id": "reserve_north",
+      "name": "The Reserve North",
+      "short": "North",
+      "boundary_osm": "w136348508",
+      "scorecard": "scorecard_north.csv",
+      "tee_sets": [
+        {
+          "name": "Green",
+          "playable": true,
+          "rating": 73.2,
+          "slope": 140,
+          "total_yd": 6840
+        },
+        {
+          "name": "Black",
+          "playable": false,
+          "rating": 71.4,
+          "slope": 129,
+          "total_yd": 6290
+        },
+        {
+          "name": "Combo B/T",
+          "playable": false,
+          "rating": 69.6,
+          "slope": 129,
+          "total_yd": 6014
+        },
+        {
+          "name": "Tan",
+          "playable": false,
+          "rating": 68.5,
+          "slope": 121,
+          "total_yd": 5822
+        },
+        {
+          "name": "Red",
+          "playable": false,
+          "rating": 70.2,
+          "slope": 124,
+          "total_yd": 5115
+        },
+        {
+          "name": "Orange",
+          "playable": false,
+          "rating": 63.3,
+          "slope": 103,
+          "total_yd": 3905
+        }
+      ],
+      "default_tee": "Green",
+      "scorecard_source": "The club's own scorecards (reservegolf.com/north-course/ and /south-course/), read 2026-11-12. Every row adds up to the printed totals. Ratings/slopes: the club's men's figures for Green, Black, Combo and Tan; the card gives Red and Orange only for women on the North (70.2/124, 63.3/103) and men's for the South (65.0/117, 62.1/111, 60.3/101). GolfPass (third party) agrees on every Green yardage; its North ratings differ by 0.1 (73.3/140) (North only)."
+    },
+    {
+      "id": "reserve_south",
+      "name": "The Reserve South",
+      "short": "South",
+      "boundary_osm": "w136348508",
+      "scorecard": "scorecard_south.csv",
+      "tee_sets": [
+        {
+          "name": "Green",
+          "playable": true,
+          "rating": 74.6,
+          "slope": 144,
+          "total_yd": 7172
+        },
+        {
+          "name": "Black",
+          "playable": false,
+          "rating": 72.9,
+          "slope": 137,
+          "total_yd": 6852
+        },
+        {
+          "name": "Combo B/T",
+          "playable": false,
+          "rating": 70.6,
+          "slope": 133,
+          "total_yd": 6407
+        },
+        {
+          "name": "Tan",
+          "playable": false,
+          "rating": 69.7,
+          "slope": 128,
+          "total_yd": 6201
+        },
+        {
+          "name": "Red",
+          "playable": false,
+          "rating": 65.0,
+          "slope": 117,
+          "total_yd": 5243
+        },
+        {
+          "name": "Combo R/O",
+          "playable": false,
+          "rating": 62.1,
+          "slope": 111,
+          "total_yd": 4524
+        },
+        {
+          "name": "Orange",
+          "playable": false,
+          "rating": 60.3,
+          "slope": 101,
+          "total_yd": 4021
+        }
+      ],
+      "default_tee": "Green",
+      "scorecard_source": "The club's own scorecards (reservegolf.com/north-course/ and /south-course/), read 2026-11-12. Every row adds up to the printed totals. Ratings/slopes: the club's men's figures for Green, Black, Combo and Tan; the card gives Red and Orange only for women on the North (70.2/124, 63.3/103) and men's for the South (65.0/117, 62.1/111, 60.3/101). GolfPass (third party) agrees on every Green yardage; its North ratings differ by 0.1 (73.3/140) (North only). South Combo B/T: GolfPass prints 349/367/156/544 on holes 9/13/14/15 (6,408); the club prints 385/401/138/491 (6,407): the club's row is used (not built)."
+    }
+  ],
+  "penalty_default": "red",
+  "driving_range_is_ob": true,
+  "trees_off_fairways_m": 2,
+  "wind_mph": {
+    "minMph": 1,
+    "maxMph": 7
+  },
+  "attribution": [
+    "Map data © OpenStreetMap contributors (ODbL)",
+    "Elevation: U.S. Geological Survey 3D Elevation Program (OR_PortlandMetro_B24)",
+    "Canopy heights: Oregon Department of Geology and Mineral Industries (DOGAMI) lidar",
+    "Imagery: Oregon Statewide Imagery Program 2024",
+    "Scorecards: The Reserve Vineyards & Golf Club"
+  ],
+  "notes": "Two courses on one property share one world (COURSE_BUILD.md 3.5), as at Pumpkin Ridge: each layout is exported as its own course (courses/<layout id>/) whose terrain, surface, height and overview files live in courses/reserve/. OSM maps one leisure=golf_course polygon for both courses, so each hole line carries layout=<id> (edits.json). Standing defaults (COURSE_BUILD.md 4.1), 2026-11-12: Green tees (the longest) built and the default on both; every water red; OB = the OSM course polygon; the driving range OB; wind 1-7 mph.",
+  "red_water_osm": [
+    "w68726253",
+    "w737373101",
+    "w737373102",
+    "w737373103",
+    "w737373104"
+  ],
+  "red_water_osm_note": "natural=water inside the boundary with no golf tag, which would play as rough: Ettinger Reservoir (w68726253, the long pond on the North course between the 6th/15th fairways and the 7th tee) and four small basins on the North course's creek (w737373101-104); red penalty areas (standing default). The creek itself: proposed/channels_lidar.geojson (edits.json).",
+  "flatten_wetlands": false,
+  "flatten_wetlands_note": "the wet meadow along the North course's creek (w737373105, 3.8 ha) and the marsh east of the South course (w905922607) are vegetated: they keep their lidar ground and play as rough (as Pumpkin Ridge's wetlands); the creek through the meadow is a red penalty area",
+  "fescue_areas": "proposed/fescue.geojson",
+  "fescue_areas_note": "native grass left long between the holes (wide on the North, smaller on the South), read from the OSIP 2024 photo by data/reserve/make_fescue.py: art only (straw tones F0-F2); plays as rough",
+  "chm": {
+    "path": "raw/dogami_chm_2014_ft.tif",
+    "units": "ft",
+    "label": "DOGAMI canopy height model (2014)",
+    "source": "DOGAMI lidar CANOPY_HEIGHT_MODEL_MOSAIC (highest hit minus bare earth; its catalog item here is OLC_METRO_2014), exportImage at 1 m in EPSG:32610 in two halves of the world + 100 m (x 505092-507084, y 5035806-5038054), fetched by the GitHub Actions workflow 2026-11-13 (release data-reserve) and joined by data/reserve/make_chm.py. The 2024 3DEP point cloud was too slow to fetch (DATA_REQUEST.md)."
+  },
+  "trees_need_ortho": {
+    "v_max": 120,
+    "min_share": 0.1,
+    "note": "the DOGAMI canopy model (2014) is ten years older than the OSIP 2024 photo: lidar crowns that are not dark canopy on the photo are dropped (pipeline/gorse.py missing_in_ortho), as at Pumpkin Ridge"
+  }
+}

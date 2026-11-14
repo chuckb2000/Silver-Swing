@@ -1,0 +1,35 @@
+{
+ "add": [
+  {
+   "from": "proposed/channels_lidar.geojson",
+   "ids": [
+    "channel_w1148722957",
+    "channel_w971520812",
+    "channel_w971520852"
+   ],
+   "tags": {
+    "flatten": "no"
+   },
+   "reason": "the brooks that cross the course (OSM waterway=stream lines only): penalty areas along the channel the DEM shows (pipeline/propose_channels.py: 3.5-4.9 m wide, 0.35-0.58 m deep), red by the standing default; the ditch w1063291103 shows no channel and stays rough"
+  }
+ ],
+ "drop": [],
+ "tags": [
+  {
+   "osm": "w966020217",
+   "set": {
+    "par": "4"
+   },
+   "reason": "OSM's 18th has no par tag; the card says par 4"
+  },
+  {
+   "osm": "w966020199",
+   "set": {
+    "hole": "15",
+    "tee_set": "Red",
+    "assigned_by": "the course chat"
+   },
+   "reason": "15: OSM's line starts on a forward box (530 yd); this box, tagged ref=15 in OSM, sits 47 m behind the line's start and 18 m to its side, about the card's 588 from its centre: assigned to Red"
+  }
+ ]
+}

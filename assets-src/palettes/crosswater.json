@@ -1,0 +1,76 @@
+{
+  "name": "Crosswater (Sunriver high desert meadows)",
+  "note": "Course theme palette (<= 32 colours), same keys as pnw.json. Crosswater, Sunriver OR: bentgrass threaded through high-desert meadows and wetland where the Deschutes and Little Deschutes meet, under ponderosa and lodgepole pine. Bright bent greens and fairways; a meadow-gold rough (F0-F2); white sand; dark river water; pumice-grey paths. Trees in assets-src/trees_crosswater.py: ponderosa pine, lodgepole pine, quaking aspen and willow. The course chat's design, 2026-11-13. Shadows are a 35% black overlay on top of these.",
+  "colors": {
+    "G0": "#1b2c1f",
+    "G1": "#283f27",
+    "G2": "#37552f",
+    "G3": "#476b37",
+    "G4": "#5a7f3f",
+    "G5": "#6c9147",
+    "G6": "#80a250",
+    "G7": "#93b25c",
+    "G8": "#a6c06a",
+    "G9": "#c5d692",
+    "L0": "#6a6c55",
+    "L1": "#7c7e64",
+    "L2": "#8e9074",
+    "S0": "#d6ccb2",
+    "S1": "#efe9da",
+    "S2": "#fbf8f0",
+    "W0": "#1e3a46",
+    "W1": "#2b5262",
+    "W2": "#6f98a2",
+    "K0": "#2a2a2c",
+    "K1": "#58585a",
+    "K2": "#807e7a",
+    "K3": "#b4aa96",
+    "K4": "#d8cfbc",
+    "B0": "#4a3020",
+    "B1": "#70482e",
+    "B2": "#93633f",
+    "R0": "#5c5b60",
+    "WH": "#f6f5ef",
+    "F0": "#7a7a3e",
+    "F1": "#8f8a46",
+    "F2": "#a69a52"
+  },
+  "lut": {
+    "rough": [
+      "F0",
+      "F1",
+      "F2",
+      "F2"
+    ],
+    "rough_band": [
+      "G3",
+      "G4",
+      "G5",
+      "G5"
+    ]
+  },
+  "aliases": {
+    "TUFT": "F0"
+  },
+  "minimap": {
+    "rough": "#8f8a46"
+  },
+  "minimap_trees": {
+    "conifer": [
+      "#13261b",
+      "#386838"
+    ],
+    "deciduous": [
+      "#1f2c26",
+      "#536c59"
+    ],
+    "shrub": [
+      "#4a5443",
+      "#9ba68c"
+    ]
+  },
+  "trees": {
+    "conifer": "trees_crosswater:conifer",
+    "deciduous": "trees_crosswater:deciduous"
+  }
+}

@@ -1,0 +1,606 @@
+{
+ "drop": [
+  {
+   "osm": "w1551387386",
+   "reason": "Quicksands at Gamble Sands course polygon: another course (the resort's 14-hole par-3 course); the OB line is the Gamble Sands polygon"
+  },
+  {
+   "osm": "w1551387389",
+   "reason": "Quicksands hole 1: another course's hole line (its tees and greens stay as mapped surfaces)"
+  },
+  {
+   "osm": "w1551387397",
+   "reason": "Quicksands hole 2: another course's hole line (its tees and greens stay as mapped surfaces)"
+  },
+  {
+   "osm": "w1551387400",
+   "reason": "Quicksands hole 3: another course's hole line (its tees and greens stay as mapped surfaces)"
+  },
+  {
+   "osm": "w1551387403",
+   "reason": "Quicksands hole 4: another course's hole line (its tees and greens stay as mapped surfaces)"
+  },
+  {
+   "osm": "w1551387406",
+   "reason": "Quicksands hole 5: another course's hole line (its tees and greens stay as mapped surfaces)"
+  },
+  {
+   "osm": "w1551387409",
+   "reason": "Quicksands hole 6: another course's hole line (its tees and greens stay as mapped surfaces)"
+  },
+  {
+   "osm": "w1551387412",
+   "reason": "Quicksands hole 7: another course's hole line (its tees and greens stay as mapped surfaces)"
+  },
+  {
+   "osm": "w1551387415",
+   "reason": "Quicksands hole 8: another course's hole line (its tees and greens stay as mapped surfaces)"
+  },
+  {
+   "osm": "w1551387418",
+   "reason": "Quicksands hole 9: another course's hole line (its tees and greens stay as mapped surfaces)"
+  },
+  {
+   "osm": "w1551440418",
+   "reason": "Quicksands hole 10: another course's hole line (its tees and greens stay as mapped surfaces)"
+  },
+  {
+   "osm": "w1551440422",
+   "reason": "Quicksands hole 11: another course's hole line (its tees and greens stay as mapped surfaces)"
+  },
+  {
+   "osm": "w1551440425",
+   "reason": "Quicksands hole 12: another course's hole line (its tees and greens stay as mapped surfaces)"
+  },
+  {
+   "osm": "w1551440428",
+   "reason": "Quicksands hole 13: another course's hole line (its tees and greens stay as mapped surfaces)"
+  },
+  {
+   "osm": "w1551440431",
+   "reason": "Quicksands hole 14: another course's hole line (its tees and greens stay as mapped surfaces)"
+  },
+  {
+   "osm": "w946572440",
+   "reason": "replaced by its copy as a tee (add, proposed/tee14.geojson)"
+  },
+  {
+   "osm": "w947744580",
+   "reason": "replaced by its copy as waste sand (proposed/wash14.geojson)"
+  },
+  {
+   "osm": "w947440595",
+   "reason": "replaced by the redrawn 14th line (proposed/desk_tees.geojson)"
+  }
+ ],
+ "add": [
+  {
+   "from": "proposed/tee14.geojson",
+   "ids": [
+    "w946572440_tee"
+   ],
+   "tags": {},
+   "reason": "hole 14: the small round mown pad where the OSM hole line starts is mapped as golf=fairway; it is the teeing ground (photo: a 16 m mown circle in the sage, cart path beside it), so it is copied as a tee"
+  },
+  {
+   "from": "proposed/wash14.geojson",
+   "ids": [
+    "w947744580_sand"
+   ],
+   "tags": {},
+   "reason": "the dry sandy wash left of the 14th green, mapped in OSM as a lateral water hazard: the card's local rule plays all sand as waste areas (photo: bare sand, no water)"
+  },
+  {
+   "from": "proposed/tees_fairway.geojson",
+   "ids": [
+    "tee_medal_1",
+    "tee_medal_12",
+    "tee_medal_18"
+   ],
+   "tags": {},
+   "reason": "holes 1, 12 and 18: the developer (2026-11-13, with screenshots) says the tees are effectively part of the fairway; a 5 m tee is placed on the hole line at the card distance, on mown grass in the NAIP photo (1: the top of the fairway below the path by the clubhouse; 12: the mown apron south of the 11th green; 18: the fairway north of the 17th green)"
+  },
+  {
+   "from": "proposed/desk_tees.geojson",
+   "ids": [
+    "desk_14_tee",
+    "desk_6_tee",
+    "w947440595_fixed"
+   ],
+   "tags": {},
+   "reason": "holes 6 and 14: the developer's Medal tees from the tracing desk (2026-11-13); 14's line redrawn from that tee"
+  }
+ ],
+ "tags": [
+  {
+   "osm": "r13931657",
+   "set": {
+    "sand": "waste"
+   },
+   "reason": "the card's local rule: all sand is played as waste areas"
+  },
+  {
+   "osm": "r13931659",
+   "set": {
+    "sand": "waste"
+   },
+   "reason": "the card's local rule: all sand is played as waste areas"
+  },
+  {
+   "osm": "r13931660",
+   "set": {
+    "sand": "waste"
+   },
+   "reason": "the card's local rule: all sand is played as waste areas"
+  },
+  {
+   "osm": "r13931661",
+   "set": {
+    "sand": "waste"
+   },
+   "reason": "the card's local rule: all sand is played as waste areas"
+  },
+  {
+   "osm": "w1091039589",
+   "set": {
+    "sand": "waste"
+   },
+   "reason": "the card's local rule: all sand is played as waste areas"
+  },
+  {
+   "osm": "w1551440419",
+   "set": {
+    "sand": "waste"
+   },
+   "reason": "the card's local rule: all sand is played as waste areas"
+  },
+  {
+   "osm": "w770426115",
+   "set": {
+    "sand": "waste"
+   },
+   "reason": "the card's local rule: all sand is played as waste areas"
+  },
+  {
+   "osm": "w770426116",
+   "set": {
+    "sand": "waste"
+   },
+   "reason": "the card's local rule: all sand is played as waste areas"
+  },
+  {
+   "osm": "w793102226",
+   "set": {
+    "sand": "waste"
+   },
+   "reason": "the card's local rule: all sand is played as waste areas"
+  },
+  {
+   "osm": "w793102228",
+   "set": {
+    "sand": "waste"
+   },
+   "reason": "the card's local rule: all sand is played as waste areas"
+  },
+  {
+   "osm": "w793102229",
+   "set": {
+    "sand": "waste"
+   },
+   "reason": "the card's local rule: all sand is played as waste areas"
+  },
+  {
+   "osm": "w793102230",
+   "set": {
+    "sand": "waste"
+   },
+   "reason": "the card's local rule: all sand is played as waste areas"
+  },
+  {
+   "osm": "w876548283",
+   "set": {
+    "sand": "waste"
+   },
+   "reason": "the card's local rule: all sand is played as waste areas"
+  },
+  {
+   "osm": "w946566250",
+   "set": {
+    "sand": "waste"
+   },
+   "reason": "the card's local rule: all sand is played as waste areas"
+  },
+  {
+   "osm": "w946566251",
+   "set": {
+    "sand": "waste"
+   },
+   "reason": "the card's local rule: all sand is played as waste areas"
+  },
+  {
+   "osm": "w946572434",
+   "set": {
+    "sand": "waste"
+   },
+   "reason": "the card's local rule: all sand is played as waste areas"
+  },
+  {
+   "osm": "w946572435",
+   "set": {
+    "sand": "waste"
+   },
+   "reason": "the card's local rule: all sand is played as waste areas"
+  },
+  {
+   "osm": "w946572437",
+   "set": {
+    "sand": "waste"
+   },
+   "reason": "the card's local rule: all sand is played as waste areas"
+  },
+  {
+   "osm": "w946572441",
+   "set": {
+    "sand": "waste"
+   },
+   "reason": "the card's local rule: all sand is played as waste areas"
+  },
+  {
+   "osm": "w946572442",
+   "set": {
+    "sand": "waste"
+   },
+   "reason": "the card's local rule: all sand is played as waste areas"
+  },
+  {
+   "osm": "w946572448",
+   "set": {
+    "sand": "waste"
+   },
+   "reason": "the card's local rule: all sand is played as waste areas"
+  },
+  {
+   "osm": "w946850328",
+   "set": {
+    "sand": "waste"
+   },
+   "reason": "the card's local rule: all sand is played as waste areas"
+  },
+  {
+   "osm": "w946850329",
+   "set": {
+    "sand": "waste"
+   },
+   "reason": "the card's local rule: all sand is played as waste areas"
+  },
+  {
+   "osm": "w946850332",
+   "set": {
+    "sand": "waste"
+   },
+   "reason": "the card's local rule: all sand is played as waste areas"
+  },
+  {
+   "osm": "w946850333",
+   "set": {
+    "sand": "waste"
+   },
+   "reason": "the card's local rule: all sand is played as waste areas"
+  },
+  {
+   "osm": "w946850334",
+   "set": {
+    "sand": "waste"
+   },
+   "reason": "the card's local rule: all sand is played as waste areas"
+  },
+  {
+   "osm": "w946850335",
+   "set": {
+    "sand": "waste"
+   },
+   "reason": "the card's local rule: all sand is played as waste areas"
+  },
+  {
+   "osm": "w946850336",
+   "set": {
+    "sand": "waste"
+   },
+   "reason": "the card's local rule: all sand is played as waste areas"
+  },
+  {
+   "osm": "w946850339",
+   "set": {
+    "sand": "waste"
+   },
+   "reason": "the card's local rule: all sand is played as waste areas"
+  },
+  {
+   "osm": "w946850340",
+   "set": {
+    "sand": "waste"
+   },
+   "reason": "the card's local rule: all sand is played as waste areas"
+  },
+  {
+   "osm": "w946850343",
+   "set": {
+    "sand": "waste"
+   },
+   "reason": "the card's local rule: all sand is played as waste areas"
+  },
+  {
+   "osm": "w946928153",
+   "set": {
+    "sand": "waste"
+   },
+   "reason": "the card's local rule: all sand is played as waste areas"
+  },
+  {
+   "osm": "w946968234",
+   "set": {
+    "sand": "waste"
+   },
+   "reason": "the card's local rule: all sand is played as waste areas"
+  },
+  {
+   "osm": "w946968235",
+   "set": {
+    "sand": "waste"
+   },
+   "reason": "the card's local rule: all sand is played as waste areas"
+  },
+  {
+   "osm": "w946968236",
+   "set": {
+    "sand": "waste"
+   },
+   "reason": "the card's local rule: all sand is played as waste areas"
+  },
+  {
+   "osm": "w946968237",
+   "set": {
+    "sand": "waste"
+   },
+   "reason": "the card's local rule: all sand is played as waste areas"
+  },
+  {
+   "osm": "w947235341",
+   "set": {
+    "sand": "waste"
+   },
+   "reason": "the card's local rule: all sand is played as waste areas"
+  },
+  {
+   "osm": "w947235343",
+   "set": {
+    "sand": "waste"
+   },
+   "reason": "the card's local rule: all sand is played as waste areas"
+  },
+  {
+   "osm": "w947235345",
+   "set": {
+    "sand": "waste"
+   },
+   "reason": "the card's local rule: all sand is played as waste areas"
+  },
+  {
+   "osm": "w947235346",
+   "set": {
+    "sand": "waste"
+   },
+   "reason": "the card's local rule: all sand is played as waste areas"
+  },
+  {
+   "osm": "w947235349",
+   "set": {
+    "sand": "waste"
+   },
+   "reason": "the card's local rule: all sand is played as waste areas"
+  },
+  {
+   "osm": "w947235350",
+   "set": {
+    "sand": "waste"
+   },
+   "reason": "the card's local rule: all sand is played as waste areas"
+  },
+  {
+   "osm": "w947235355",
+   "set": {
+    "sand": "waste"
+   },
+   "reason": "the card's local rule: all sand is played as waste areas"
+  },
+  {
+   "osm": "w947239361",
+   "set": {
+    "sand": "waste"
+   },
+   "reason": "the card's local rule: all sand is played as waste areas"
+  },
+  {
+   "osm": "w947239366",
+   "set": {
+    "sand": "waste"
+   },
+   "reason": "the card's local rule: all sand is played as waste areas"
+  },
+  {
+   "osm": "w947253741",
+   "set": {
+    "sand": "waste"
+   },
+   "reason": "the card's local rule: all sand is played as waste areas"
+  },
+  {
+   "osm": "w947253742",
+   "set": {
+    "sand": "waste"
+   },
+   "reason": "the card's local rule: all sand is played as waste areas"
+  },
+  {
+   "osm": "w947253743",
+   "set": {
+    "sand": "waste"
+   },
+   "reason": "the card's local rule: all sand is played as waste areas"
+  },
+  {
+   "osm": "w947253744",
+   "set": {
+    "sand": "waste"
+   },
+   "reason": "the card's local rule: all sand is played as waste areas"
+  },
+  {
+   "osm": "w947253745",
+   "set": {
+    "sand": "waste"
+   },
+   "reason": "the card's local rule: all sand is played as waste areas"
+  },
+  {
+   "osm": "w947253746",
+   "set": {
+    "sand": "waste"
+   },
+   "reason": "the card's local rule: all sand is played as waste areas"
+  },
+  {
+   "osm": "w947253750",
+   "set": {
+    "sand": "waste"
+   },
+   "reason": "the card's local rule: all sand is played as waste areas"
+  },
+  {
+   "osm": "w947253751",
+   "set": {
+    "sand": "waste"
+   },
+   "reason": "the card's local rule: all sand is played as waste areas"
+  },
+  {
+   "osm": "w947253752",
+   "set": {
+    "sand": "waste"
+   },
+   "reason": "the card's local rule: all sand is played as waste areas"
+  },
+  {
+   "osm": "w947253753",
+   "set": {
+    "sand": "waste"
+   },
+   "reason": "the card's local rule: all sand is played as waste areas"
+  },
+  {
+   "osm": "w947253754",
+   "set": {
+    "sand": "waste"
+   },
+   "reason": "the card's local rule: all sand is played as waste areas"
+  },
+  {
+   "osm": "w947253757",
+   "set": {
+    "sand": "waste"
+   },
+   "reason": "the card's local rule: all sand is played as waste areas"
+  },
+  {
+   "osm": "w947253759",
+   "set": {
+    "sand": "waste"
+   },
+   "reason": "the card's local rule: all sand is played as waste areas"
+  },
+  {
+   "osm": "w947253762",
+   "set": {
+    "sand": "waste"
+   },
+   "reason": "the card's local rule: all sand is played as waste areas"
+  },
+  {
+   "osm": "w947253763",
+   "set": {
+    "sand": "waste"
+   },
+   "reason": "the card's local rule: all sand is played as waste areas"
+  },
+  {
+   "osm": "w947253771",
+   "set": {
+    "sand": "waste"
+   },
+   "reason": "the card's local rule: all sand is played as waste areas"
+  },
+  {
+   "osm": "w947301524",
+   "set": {
+    "sand": "waste"
+   },
+   "reason": "the card's local rule: all sand is played as waste areas"
+  },
+  {
+   "osm": "w947409618",
+   "set": {
+    "sand": "waste"
+   },
+   "reason": "the card's local rule: all sand is played as waste areas"
+  },
+  {
+   "osm": "w947409619",
+   "set": {
+    "sand": "waste"
+   },
+   "reason": "the card's local rule: all sand is played as waste areas"
+  },
+  {
+   "osm": "w947409620",
+   "set": {
+    "sand": "waste"
+   },
+   "reason": "the card's local rule: all sand is played as waste areas"
+  },
+  {
+   "osm": "w947409622",
+   "set": {
+    "sand": "waste"
+   },
+   "reason": "the card's local rule: all sand is played as waste areas"
+  },
+  {
+   "osm": "w947409623",
+   "set": {
+    "sand": "waste"
+   },
+   "reason": "the card's local rule: all sand is played as waste areas"
+  },
+  {
+   "osm": "w947409625",
+   "set": {
+    "sand": "waste"
+   },
+   "reason": "the card's local rule: all sand is played as waste areas"
+  },
+  {
+   "osm": "w947439679",
+   "set": {
+    "sand": "waste"
+   },
+   "reason": "the card's local rule: all sand is played as waste areas"
+  },
+  {
+   "osm": "w948093455",
+   "set": {
+    "sand": "waste"
+   },
+   "reason": "the card's local rule: all sand is played as waste areas"
+  }
+ ]
+}

@@ -1,0 +1,452 @@
+{
+ "add": [
+  {
+   "from": "proposed/clubhouse.geojson",
+   "ids": [
+    "w355586161_building"
+   ],
+   "tags": {},
+   "reason": "the clubhouse is mapped golf=clubhouse: copied as a building, original dropped"
+  }
+ ],
+ "drop": [
+  {
+   "osm": "n3604280306",
+   "reason": "golf=pin of a neighbouring course (Sunriver Meadows, Caldera Links): outside Crosswater's boundary"
+  },
+  {
+   "osm": "n7139603927",
+   "reason": "golf=pin of a neighbouring course (Sunriver Meadows, Caldera Links): outside Crosswater's boundary"
+  },
+  {
+   "osm": "n7140396165",
+   "reason": "golf=pin of a neighbouring course (Sunriver Meadows, Caldera Links): outside Crosswater's boundary"
+  },
+  {
+   "osm": "n7140396300",
+   "reason": "golf=pin of a neighbouring course (Sunriver Meadows, Caldera Links): outside Crosswater's boundary"
+  },
+  {
+   "osm": "n7140396399",
+   "reason": "golf=pin of a neighbouring course (Sunriver Meadows, Caldera Links): outside Crosswater's boundary"
+  },
+  {
+   "osm": "n7140396484",
+   "reason": "golf=pin of a neighbouring course (Sunriver Meadows, Caldera Links): outside Crosswater's boundary"
+  },
+  {
+   "osm": "n7140396591",
+   "reason": "golf=pin of a neighbouring course (Sunriver Meadows, Caldera Links): outside Crosswater's boundary"
+  },
+  {
+   "osm": "n7140396644",
+   "reason": "golf=pin of a neighbouring course (Sunriver Meadows, Caldera Links): outside Crosswater's boundary"
+  },
+  {
+   "osm": "r14144966",
+   "reason": "golf=fairway of a neighbouring course (Sunriver Meadows, Caldera Links): outside Crosswater's boundary"
+  },
+  {
+   "osm": "r14227187",
+   "reason": "golf=rough of a neighbouring course (Sunriver Meadows, Caldera Links): outside Crosswater's boundary"
+  },
+  {
+   "osm": "r14234544",
+   "reason": "golf=rough of a neighbouring course (Sunriver Meadows, Caldera Links): outside Crosswater's boundary"
+  },
+  {
+   "osm": "r5298459",
+   "reason": "golf=water_hazard of a neighbouring course (Sunriver Meadows, Caldera Links): outside Crosswater's boundary"
+  },
+  {
+   "osm": "r5299743",
+   "reason": "a neighbouring course's boundary (Meadows Golf Course): not this course"
+  },
+  {
+   "osm": "w1066072313",
+   "reason": "golf=cartpath of a neighbouring course (Sunriver Meadows, Caldera Links): outside Crosswater's boundary"
+  },
+  {
+   "osm": "w1066243650",
+   "reason": "golf=fairway of a neighbouring course (Sunriver Meadows, Caldera Links): outside Crosswater's boundary"
+  },
+  {
+   "osm": "w206867338",
+   "reason": "golf=cartpath of a neighbouring course (Sunriver Meadows, Caldera Links): outside Crosswater's boundary"
+  },
+  {
+   "osm": "w206867342",
+   "reason": "a neighbouring course's boundary (Sunriver Resort): not this course"
+  },
+  {
+   "osm": "w206867343",
+   "reason": "a neighbouring course's boundary (Caldera Links Golf Course): not this course"
+  },
+  {
+   "osm": "w206867344",
+   "reason": "a neighbouring course's boundary (Sunriver Resort): not this course"
+  },
+  {
+   "osm": "w206873531",
+   "reason": "golf=water_hazard of a neighbouring course (Sunriver Meadows, Caldera Links): outside Crosswater's boundary"
+  },
+  {
+   "osm": "w206873534",
+   "reason": "golf=cartpath of a neighbouring course (Sunriver Meadows, Caldera Links): outside Crosswater's boundary"
+  },
+  {
+   "osm": "w207487856",
+   "reason": "golf=water_hazard of a neighbouring course (Sunriver Meadows, Caldera Links): outside Crosswater's boundary"
+  },
+  {
+   "osm": "w322787764",
+   "reason": "golf=cartpath of a neighbouring course (Sunriver Meadows, Caldera Links): outside Crosswater's boundary"
+  },
+  {
+   "osm": "w354728504",
+   "reason": "golf=tee of a neighbouring course (Sunriver Meadows, Caldera Links): outside Crosswater's boundary"
+  },
+  {
+   "osm": "w354728505",
+   "reason": "golf=tee of a neighbouring course (Sunriver Meadows, Caldera Links): outside Crosswater's boundary"
+  },
+  {
+   "osm": "w354728509",
+   "reason": "golf=green of a neighbouring course (Sunriver Meadows, Caldera Links): outside Crosswater's boundary"
+  },
+  {
+   "osm": "w354728510",
+   "reason": "golf=hole of a neighbouring course (Sunriver Meadows, Caldera Links): outside Crosswater's boundary"
+  },
+  {
+   "osm": "w355776765",
+   "reason": "golf=water_hazard of a neighbouring course (Sunriver Meadows, Caldera Links): outside Crosswater's boundary"
+  },
+  {
+   "osm": "w356000348",
+   "reason": "golf=green of a neighbouring course (Sunriver Meadows, Caldera Links): outside Crosswater's boundary"
+  },
+  {
+   "osm": "w764213352",
+   "reason": "golf=tee of a neighbouring course (Sunriver Meadows, Caldera Links): outside Crosswater's boundary"
+  },
+  {
+   "osm": "w764213357",
+   "reason": "golf=tee of a neighbouring course (Sunriver Meadows, Caldera Links): outside Crosswater's boundary"
+  },
+  {
+   "osm": "w764213358",
+   "reason": "golf=hole of a neighbouring course (Sunriver Meadows, Caldera Links): outside Crosswater's boundary"
+  },
+  {
+   "osm": "w764213359",
+   "reason": "golf=bunker of a neighbouring course (Sunriver Meadows, Caldera Links): outside Crosswater's boundary"
+  },
+  {
+   "osm": "w764213360",
+   "reason": "golf=bunker of a neighbouring course (Sunriver Meadows, Caldera Links): outside Crosswater's boundary"
+  },
+  {
+   "osm": "w764213363",
+   "reason": "golf=green of a neighbouring course (Sunriver Meadows, Caldera Links): outside Crosswater's boundary"
+  },
+  {
+   "osm": "w764213364",
+   "reason": "golf=hole of a neighbouring course (Sunriver Meadows, Caldera Links): outside Crosswater's boundary"
+  },
+  {
+   "osm": "w764304840",
+   "reason": "golf=tee of a neighbouring course (Sunriver Meadows, Caldera Links): outside Crosswater's boundary"
+  },
+  {
+   "osm": "w764304841",
+   "reason": "golf=tee of a neighbouring course (Sunriver Meadows, Caldera Links): outside Crosswater's boundary"
+  },
+  {
+   "osm": "w764304846",
+   "reason": "golf=hole of a neighbouring course (Sunriver Meadows, Caldera Links): outside Crosswater's boundary"
+  },
+  {
+   "osm": "w764304847",
+   "reason": "golf=water_hazard of a neighbouring course (Sunriver Meadows, Caldera Links): outside Crosswater's boundary"
+  },
+  {
+   "osm": "w764304848",
+   "reason": "golf=water_hazard of a neighbouring course (Sunriver Meadows, Caldera Links): outside Crosswater's boundary"
+  },
+  {
+   "osm": "w764304849",
+   "reason": "golf=water_hazard of a neighbouring course (Sunriver Meadows, Caldera Links): outside Crosswater's boundary"
+  },
+  {
+   "osm": "w764304850",
+   "reason": "golf=water_hazard of a neighbouring course (Sunriver Meadows, Caldera Links): outside Crosswater's boundary"
+  },
+  {
+   "osm": "w764304851",
+   "reason": "golf=water_hazard of a neighbouring course (Sunriver Meadows, Caldera Links): outside Crosswater's boundary"
+  },
+  {
+   "osm": "w764304854",
+   "reason": "golf=fairway of a neighbouring course (Sunriver Meadows, Caldera Links): outside Crosswater's boundary"
+  },
+  {
+   "osm": "w764304855",
+   "reason": "golf=green of a neighbouring course (Sunriver Meadows, Caldera Links): outside Crosswater's boundary"
+  },
+  {
+   "osm": "w764304856",
+   "reason": "golf=hole of a neighbouring course (Sunriver Meadows, Caldera Links): outside Crosswater's boundary"
+  },
+  {
+   "osm": "w764304857",
+   "reason": "golf=water_hazard of a neighbouring course (Sunriver Meadows, Caldera Links): outside Crosswater's boundary"
+  },
+  {
+   "osm": "w764304858",
+   "reason": "golf=tee of a neighbouring course (Sunriver Meadows, Caldera Links): outside Crosswater's boundary"
+  },
+  {
+   "osm": "w764304859",
+   "reason": "golf=bunker of a neighbouring course (Sunriver Meadows, Caldera Links): outside Crosswater's boundary"
+  },
+  {
+   "osm": "w764304860",
+   "reason": "golf=bunker of a neighbouring course (Sunriver Meadows, Caldera Links): outside Crosswater's boundary"
+  },
+  {
+   "osm": "w764304861",
+   "reason": "golf=bunker of a neighbouring course (Sunriver Meadows, Caldera Links): outside Crosswater's boundary"
+  },
+  {
+   "osm": "w764304862",
+   "reason": "golf=green of a neighbouring course (Sunriver Meadows, Caldera Links): outside Crosswater's boundary"
+  },
+  {
+   "osm": "w764304863",
+   "reason": "golf=hole of a neighbouring course (Sunriver Meadows, Caldera Links): outside Crosswater's boundary"
+  },
+  {
+   "osm": "w764304864",
+   "reason": "golf=tee of a neighbouring course (Sunriver Meadows, Caldera Links): outside Crosswater's boundary"
+  },
+  {
+   "osm": "w764304865",
+   "reason": "golf=tee of a neighbouring course (Sunriver Meadows, Caldera Links): outside Crosswater's boundary"
+  },
+  {
+   "osm": "w764304866",
+   "reason": "golf=bunker of a neighbouring course (Sunriver Meadows, Caldera Links): outside Crosswater's boundary"
+  },
+  {
+   "osm": "w764304867",
+   "reason": "golf=bunker of a neighbouring course (Sunriver Meadows, Caldera Links): outside Crosswater's boundary"
+  },
+  {
+   "osm": "w764304868",
+   "reason": "golf=bunker of a neighbouring course (Sunriver Meadows, Caldera Links): outside Crosswater's boundary"
+  },
+  {
+   "osm": "w764304869",
+   "reason": "golf=green of a neighbouring course (Sunriver Meadows, Caldera Links): outside Crosswater's boundary"
+  },
+  {
+   "osm": "w764304870",
+   "reason": "golf=bunker of a neighbouring course (Sunriver Meadows, Caldera Links): outside Crosswater's boundary"
+  },
+  {
+   "osm": "w764304871",
+   "reason": "golf=hole of a neighbouring course (Sunriver Meadows, Caldera Links): outside Crosswater's boundary"
+  },
+  {
+   "osm": "w764304872",
+   "reason": "golf=tee of a neighbouring course (Sunriver Meadows, Caldera Links): outside Crosswater's boundary"
+  },
+  {
+   "osm": "w764304873",
+   "reason": "golf=tee of a neighbouring course (Sunriver Meadows, Caldera Links): outside Crosswater's boundary"
+  },
+  {
+   "osm": "w764304874",
+   "reason": "golf=bunker of a neighbouring course (Sunriver Meadows, Caldera Links): outside Crosswater's boundary"
+  },
+  {
+   "osm": "w764304875",
+   "reason": "golf=bunker of a neighbouring course (Sunriver Meadows, Caldera Links): outside Crosswater's boundary"
+  },
+  {
+   "osm": "w764304876",
+   "reason": "golf=bunker of a neighbouring course (Sunriver Meadows, Caldera Links): outside Crosswater's boundary"
+  },
+  {
+   "osm": "w764304877",
+   "reason": "golf=green of a neighbouring course (Sunriver Meadows, Caldera Links): outside Crosswater's boundary"
+  },
+  {
+   "osm": "w764304878",
+   "reason": "golf=hole of a neighbouring course (Sunriver Meadows, Caldera Links): outside Crosswater's boundary"
+  },
+  {
+   "osm": "w764304879",
+   "reason": "golf=green of a neighbouring course (Sunriver Meadows, Caldera Links): outside Crosswater's boundary"
+  },
+  {
+   "osm": "w764304880",
+   "reason": "golf=bunker of a neighbouring course (Sunriver Meadows, Caldera Links): outside Crosswater's boundary"
+  },
+  {
+   "osm": "w764304881",
+   "reason": "golf=bunker of a neighbouring course (Sunriver Meadows, Caldera Links): outside Crosswater's boundary"
+  },
+  {
+   "osm": "w764304882",
+   "reason": "golf=bunker of a neighbouring course (Sunriver Meadows, Caldera Links): outside Crosswater's boundary"
+  },
+  {
+   "osm": "w764304883",
+   "reason": "golf=fairway of a neighbouring course (Sunriver Meadows, Caldera Links): outside Crosswater's boundary"
+  },
+  {
+   "osm": "w764304884",
+   "reason": "golf=tee of a neighbouring course (Sunriver Meadows, Caldera Links): outside Crosswater's boundary"
+  },
+  {
+   "osm": "w764304885",
+   "reason": "golf=tee of a neighbouring course (Sunriver Meadows, Caldera Links): outside Crosswater's boundary"
+  },
+  {
+   "osm": "w764304886",
+   "reason": "golf=hole of a neighbouring course (Sunriver Meadows, Caldera Links): outside Crosswater's boundary"
+  },
+  {
+   "osm": "w764304887",
+   "reason": "golf=tee of a neighbouring course (Sunriver Meadows, Caldera Links): outside Crosswater's boundary"
+  },
+  {
+   "osm": "w764304888",
+   "reason": "golf=tee of a neighbouring course (Sunriver Meadows, Caldera Links): outside Crosswater's boundary"
+  },
+  {
+   "osm": "w764304889",
+   "reason": "golf=bunker of a neighbouring course (Sunriver Meadows, Caldera Links): outside Crosswater's boundary"
+  },
+  {
+   "osm": "w764304890",
+   "reason": "golf=green of a neighbouring course (Sunriver Meadows, Caldera Links): outside Crosswater's boundary"
+  },
+  {
+   "osm": "w764304891",
+   "reason": "golf=hole of a neighbouring course (Sunriver Meadows, Caldera Links): outside Crosswater's boundary"
+  },
+  {
+   "osm": "w764309759",
+   "reason": "golf=green of a neighbouring course (Sunriver Meadows, Caldera Links): outside Crosswater's boundary"
+  },
+  {
+   "osm": "w764309760",
+   "reason": "golf=rough of a neighbouring course (Sunriver Meadows, Caldera Links): outside Crosswater's boundary"
+  },
+  {
+   "osm": "w764309761",
+   "reason": "golf=rough of a neighbouring course (Sunriver Meadows, Caldera Links): outside Crosswater's boundary"
+  },
+  {
+   "osm": "w764309762",
+   "reason": "golf=rough of a neighbouring course (Sunriver Meadows, Caldera Links): outside Crosswater's boundary"
+  },
+  {
+   "osm": "w764309763",
+   "reason": "golf=rough of a neighbouring course (Sunriver Meadows, Caldera Links): outside Crosswater's boundary"
+  },
+  {
+   "osm": "w764309764",
+   "reason": "golf=rough of a neighbouring course (Sunriver Meadows, Caldera Links): outside Crosswater's boundary"
+  },
+  {
+   "osm": "w764309765",
+   "reason": "golf=rough of a neighbouring course (Sunriver Meadows, Caldera Links): outside Crosswater's boundary"
+  },
+  {
+   "osm": "w764309766",
+   "reason": "golf=rough of a neighbouring course (Sunriver Meadows, Caldera Links): outside Crosswater's boundary"
+  },
+  {
+   "osm": "w764309767",
+   "reason": "golf=rough of a neighbouring course (Sunriver Meadows, Caldera Links): outside Crosswater's boundary"
+  },
+  {
+   "osm": "w764309768",
+   "reason": "golf=rough of a neighbouring course (Sunriver Meadows, Caldera Links): outside Crosswater's boundary"
+  },
+  {
+   "osm": "w975366945",
+   "reason": "golf=bunker of a neighbouring course (Sunriver Meadows, Caldera Links): outside Crosswater's boundary"
+  },
+  {
+   "osm": "w975366947",
+   "reason": "golf=bunker of a neighbouring course (Sunriver Meadows, Caldera Links): outside Crosswater's boundary"
+  },
+  {
+   "osm": "w975366948",
+   "reason": "golf=bunker of a neighbouring course (Sunriver Meadows, Caldera Links): outside Crosswater's boundary"
+  },
+  {
+   "osm": "w975366949",
+   "reason": "golf=bunker of a neighbouring course (Sunriver Meadows, Caldera Links): outside Crosswater's boundary"
+  },
+  {
+   "osm": "w975366950",
+   "reason": "golf=bunker of a neighbouring course (Sunriver Meadows, Caldera Links): outside Crosswater's boundary"
+  },
+  {
+   "osm": "w975366951",
+   "reason": "golf=tee of a neighbouring course (Sunriver Meadows, Caldera Links): outside Crosswater's boundary"
+  },
+  {
+   "osm": "w975366952",
+   "reason": "golf=tee of a neighbouring course (Sunriver Meadows, Caldera Links): outside Crosswater's boundary"
+  },
+  {
+   "osm": "w975366953",
+   "reason": "golf=tee of a neighbouring course (Sunriver Meadows, Caldera Links): outside Crosswater's boundary"
+  },
+  {
+   "osm": "w975366954",
+   "reason": "golf=tee of a neighbouring course (Sunriver Meadows, Caldera Links): outside Crosswater's boundary"
+  },
+  {
+   "osm": "w355586161",
+   "reason": "golf=clubhouse, copied as a building"
+  }
+ ],
+ "tags": [
+  {
+   "osm": "w1464074607",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "golf=water_hazard (yellow by default): red by the standing default (all water red)"
+  },
+  {
+   "osm": "w206873532",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "golf=water_hazard (yellow by default): red by the standing default (all water red)"
+  },
+  {
+   "osm": "w321943772",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "golf=water_hazard (yellow by default): red by the standing default (all water red)"
+  },
+  {
+   "osm": "w355776763",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "golf=water_hazard (yellow by default): red by the standing default (all water red)"
+  }
+ ]
+}

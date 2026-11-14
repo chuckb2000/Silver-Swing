@@ -1,0 +1,50 @@
+{
+ "add": [
+  {
+   "from": "proposed/boundary.geojson",
+   "ids": [
+    "r1425001_tee4"
+   ],
+   "tags": {},
+   "reason": "OSM's boundary cuts through the 4th hole's back tee box (105 of 260 m2 outside, audit): the copy joins the tee to the boundary (make_boundary.py); course chat's repair, 2026-11-13"
+  },
+  {
+   "from": "proposed/clubhouse.geojson",
+   "ids": [
+    "w316174946_building"
+   ],
+   "tags": {},
+   "reason": "the clubhouse is mapped golf=clubhouse, which s01 reads as a golf feature, not a building; copied as a building (audit), original dropped"
+  }
+ ],
+ "drop": [
+  {
+   "osm": "r1425001",
+   "reason": "replaced by proposed/boundary.geojson (the same boundary with the 4th back tee joined)"
+  },
+  {
+   "osm": "w316174946",
+   "reason": "replaced by its copy as a building (proposed/clubhouse.geojson)"
+  }
+ ],
+ "tags": [
+  {
+   "osm": "w687503986",
+   "set": {
+    "hole": "11",
+    "tee_set": "Black",
+    "assigned_by": "the course chat"
+   },
+   "reason": "hole 11: OSM's hole line starts on a forward box and is >8 % short of the card; this unlabelled OSM tee box lies on the line's extension 57 m behind it (within 5 m of the line), the only box there; assigned to Black"
+  },
+  {
+   "osm": "w687506294",
+   "set": {
+    "hole": "16",
+    "tee_set": "Black",
+    "assigned_by": "the course chat"
+   },
+   "reason": "hole 16: OSM's hole line starts on a forward box and is >8 % short of the card; this unlabelled OSM tee box lies on the line's extension 43 m behind it (within 5 m of the line), the only box there; assigned to Black"
+  }
+ ]
+}

@@ -1,0 +1,62 @@
+{
+ "release": "data-tcc_brookline",
+ "note": "Build inputs for The Country Club; make fetch NAME=tcc_brookline puts them in place. All fetched by the GitHub Actions workflow (data/tcc_brookline/fetch.json) on 2026-11-13. The Overpass export, the clipped DEM and the placed NAIP are also committed in raw/; the lidar clips are not (git ignores .laz). Tiles 19TCG321684 and 19TCG322684 lie south of the world and are not used.",
+ "files": [
+  {
+   "asset": "tcc_brookline_overpass.geojson",
+   "sha256": "8904ff66f8d1c63295619542a4611342e3ad08cdca71edb9d0f8b41992a6fc37",
+   "run": "python3 pipeline/intake.py osm tcc_brookline {file}",
+   "outputs": {
+    "raw/overpass.geojson": "e6e7f6fa66ab7ddf1e5b59443bbe8ef9477de7346adaf6f60570a6d2569bf7ea"
+   }
+  },
+  {
+   "asset": "usgs_dem_m.tif",
+   "sha256": "f111f6f7e8df4bb73d5ecb66736b2fc1a8c30a176e97efd181afb5fee4cf0ca9",
+   "run": "python3 pipeline/intake.py raster tcc_brookline {file} --out raw/usgs_dem_m.tif",
+   "outputs": {
+    "raw/usgs_dem_m.tif": "bb03cfa8ca965d8bceb0637ce80f7120e67b8ecc410db29449b212acadf95b61"
+   }
+  },
+  {
+   "asset": "naip_321800_4685900.jpg",
+   "sha256": "fc6212b738b6789e9cdea6145839e34b0e854939177cc99927bc974583d64d5d",
+   "run": "python3 pipeline/intake.py ortho tcc_brookline {file} 321800 4685900 323800 4687700 --out raw/naip.tif",
+   "outputs": {
+    "raw/naip.tif": "ae62e2a8c93a2b8d5319a8307088832223c01befdfc092f2b406b4b389ca3c11"
+   }
+  },
+  {
+   "asset": "USGS_LPC_MA_CentralEastern_2021_B21_19TCG321686.laz",
+   "sha256": "76e6bd99c60bb0486959a5bb2b9ec3a472d548422589417d53ca656dd05c6141",
+   "run": "python3 pipeline/intake.py laz tcc_brookline {file} --out raw/laz/tcc_brookline_19TCG321686.laz --keep-evlrs",
+   "outputs": {
+    "raw/laz/tcc_brookline_19TCG321686.laz": "a5df7eccfd54f836090b1494df9e681ad9a96799c9be0e9c27d9e25d6a4e38cf"
+   }
+  },
+  {
+   "asset": "USGS_LPC_MA_CentralEastern_2021_B21_19TCG321687.laz",
+   "sha256": "e1b493da98449b98f472964d2a3df0ee4f5313c1b9c95530205c3f94e2d4e5dd",
+   "run": "python3 pipeline/intake.py laz tcc_brookline {file} --out raw/laz/tcc_brookline_19TCG321687.laz --keep-evlrs",
+   "outputs": {
+    "raw/laz/tcc_brookline_19TCG321687.laz": "641cc03dd1714347dc30ff73146f388b2b30c2dc5e0196e881045453e6dff820"
+   }
+  },
+  {
+   "asset": "USGS_LPC_MA_CentralEastern_2021_B21_19TCG322686.laz",
+   "sha256": "c1705a3b2e03d02494bd8b5ee5294b75639ff8ed6aca814e46b66cd335491e0f",
+   "run": "python3 pipeline/intake.py laz tcc_brookline {file} --out raw/laz/tcc_brookline_19TCG322686.laz --keep-evlrs",
+   "outputs": {
+    "raw/laz/tcc_brookline_19TCG322686.laz": "ea88f5f8dad22cb14f47f1dc426b256e6762eeb12454359f8e7e7dd0b1fa5ddc"
+   }
+  },
+  {
+   "asset": "USGS_LPC_MA_CentralEastern_2021_B21_19TCG322687.laz",
+   "sha256": "26a1bfffba0c2e92d0074580655fb2b32963212b4c32c9d0ca01195d4c5cfd47",
+   "run": "python3 pipeline/intake.py laz tcc_brookline {file} --out raw/laz/tcc_brookline_19TCG322687.laz --keep-evlrs",
+   "outputs": {
+    "raw/laz/tcc_brookline_19TCG322687.laz": "42439f8ba63b4d558e037195fedeae872495c505685eca9637d0dfef8dc6aed4"
+   }
+  }
+ ]
+}

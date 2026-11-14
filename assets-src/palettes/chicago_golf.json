@@ -1,0 +1,74 @@
+{
+  "name": "Chicago Golf Club (prairie links, Wheaton)",
+  "note": "Course theme palette (<= 32 colours; same keys as pnw.json plus F0-F2). Chicago Golf Club, Wheaton IL: Macdonald and Raynor's flat prairie links. Fairways and greens in marovitz's cool bluegrass greens; a mown band of green rough beside every fairway (lut rough_band G3-G5) and wide native fescue between the holes, olive-tawny in late summer (F0-F2, drawn where data/chicago_golf/proposed/fescue.geojson says, config fescue_areas); the walking paths are pale crushed gravel (K2-K4 lighter and warmer than marovitz's asphalt). Colours set from the NAIP 2023 photo (fescue median #727a5a, mown rough #637652, paths #b1ae94), warmed and lifted to sit with the other themes. Trees as marovitz (trees_marovitz: elm, honey locust, cottonwood, spruce, pine). Course chat, 2026-11-13.",
+  "colors": {
+    "G0": "#173828",
+    "G1": "#1f4d32",
+    "G2": "#286438",
+    "G3": "#32793d",
+    "G4": "#3e8d44",
+    "G5": "#4ba04b",
+    "G6": "#59b153",
+    "G7": "#69c05d",
+    "G8": "#7acd6a",
+    "G9": "#9fdc8a",
+    "L0": "#567a42",
+    "L1": "#678d48",
+    "L2": "#7aa053",
+    "S0": "#cdbf9c",
+    "S1": "#eee6cf",
+    "S2": "#faf6ea",
+    "W0": "#16677f",
+    "W1": "#1f8199",
+    "W2": "#62bccb",
+    "K0": "#26272d",
+    "K1": "#55565e",
+    "K2": "#9e9a88",
+    "K3": "#c4bfac",
+    "K4": "#e0dbcb",
+    "B0": "#4a3324",
+    "B1": "#734d34",
+    "B2": "#93613f",
+    "R0": "#545c69",
+    "WH": "#f6f6f2",
+    "F0": "#878151",
+    "F1": "#a09862",
+    "F2": "#b8ad74"
+  },
+  "lut": {
+    "rough": [
+      "F0",
+      "F1",
+      "F2",
+      "F2"
+    ],
+    "rough_band": [
+      "G3",
+      "G4",
+      "G5",
+      "G5"
+    ]
+  },
+  "minimap": {
+    "rough": "#8f8a58",
+    "water": "#1f8199",
+    "ob_water": "#1f8199"
+  },
+  "minimap_trees": {
+    "conifer": [
+      "#173a3a",
+      "#36675f"
+    ],
+    "deciduous": [
+      "#1f4a20",
+      "#4a8a38"
+    ]
+  },
+  "trees": {
+    "conifer": "trees_marovitz:conifer",
+    "deciduous": "trees_marovitz:deciduous"
+  },
+  "aliases": {
+    "TUFT": "F0"
+  }
+}

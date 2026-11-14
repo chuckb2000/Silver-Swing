@@ -1,0 +1,116 @@
+{
+  "id": "northwood",
+  "name": "Northwood Golf Club",
+  "location": "Monte Rio, Sonoma County, California",
+  "state": "CA",
+  "architects": "Alister MacKenzie with Robert Hunter (1928), for the Bohemian Club; conceived by Jack Neville",
+  "theme": "redwoods",
+  "epsg": 32610,
+  "osm_sources": [
+    "raw/overpass.geojson"
+  ],
+  "boundary_name": "Northwood Golf Club",
+  "world": {
+    "x0": 500032,
+    "y0": 4258528,
+    "width": 1024,
+    "height": 768,
+    "note": "OSM course boundary (way 1246462624) bbox 621 x 429 m (E 500191-500812, N 4258697-4259126) + scenery, 4 x 3 chunks of 256 m: west edge 32 m east of E 500000 (the edge of the 3DEP DEM tile and lidar tiles fetched; s00 reads the world + 32 m), about 160 m west, 245 m east, 170 m north and south"
+  },
+  "dtm": {
+    "path": "raw/usgs_dem_b22_1m_clip.tif",
+    "units": "m",
+    "source": "USGS 3DEP 1 m DEM, project CA_NorthernCA_B22 (tile x50y426, published 2026-03-24), cut to the world + 100 m (the tile's west edge is E 499994, so 6 m on that side) by pipeline/intake.py raster; EPSG:26910 (NAD83 / UTM 10N), metres; fetched through the GitHub Actions workflow 2026-11-13 (release data-northwood)"
+  },
+  "laz": {
+    "paths": [
+      "raw/laz/*.laz"
+    ],
+    "classes": [
+      1
+    ],
+    "units": "m",
+    "source": "USGS 3DEP lidar point cloud, project CA_NorthernCA_B22 (flown 2022-23; files dated 2024-02-13), tiles 10SEH0058, 10SEH0059 and 10SEH0159 (the east edge), clipped to the world + 100 m by pipeline/intake.py laz; class 1 (unclassified: vegetation is not classified in this project; classes present 1, 2, 7, 9, 18, 20); NAD83(2011) / UTM 10N, NAVD88 (Geoid18) metres; fetched through the GitHub workflow 2026-11-13 (release data-northwood; rockyweb.usgs.gov). 10SEH0158 (x 501000-502000, y < 4259000: the world's south-east 56 x 472 m, river and hillside) was refused (HTTP 429): no trees there.",
+    "label": "2022 USGS lidar (Northern California B22)"
+  },
+  "tee_sets": [
+    {
+      "name": "White",
+      "playable": true,
+      "rating": 67.8,
+      "slope": 114,
+      "total_yd": 2893
+    },
+    {
+      "name": "Red",
+      "playable": false,
+      "rating": 69.0,
+      "slope": 121,
+      "total_yd": 2506
+    },
+    {
+      "name": "Gold",
+      "playable": false,
+      "rating": 60.0,
+      "slope": 100,
+      "total_yd": 1983
+    }
+  ],
+  "default_tee": "White",
+  "scorecard_source": "Third-party, unverified (no official card reachable): GreensKeeper.org scorecard page and golfingrecord.com, which agree (White 2,893, the total golf.com, GolfLink and GolfNow give), read 2026-11-12. GolfPass (course 2688) differs on White holes 1, 2, 4, 5 and 9 (2,888); Red (2,506) and Gold (1,983) agree everywhere. Ratings are the 18-hole figures (White 67.8/114, Red 69.0/121, Gold 60.0/100, GreensKeeper); GolfPass gives the nine as 33.9/114. Stroke index: the 9-hole SI of golfingrecord. Built: White, the longest set (4.1). Not built: Red, Gold.",
+  "penalty_default": "red",
+  "driving_range_is_ob": true,
+  "wind_mph": {
+    "minMph": 1,
+    "maxMph": 7
+  },
+  "trees_off_fairways_m": 2,
+  "attribution": [
+    "Map data \u00a9 OpenStreetMap contributors (ODbL)",
+    "Elevation and trees: U.S. Geological Survey 3D Elevation Program"
+  ],
+  "notes": "Standing defaults (COURSE_BUILD.md 4.1): the longest tee set as the default, all water red, OB = the course boundary, trees from lidar with fairway trees removed, wind 1-7 mph (a sheltered river valley in the redwoods). Theme `redwoods`, new for this course (developer's request, 2026-11-12).",
+  "tee_shot_margin_m": 0.5,
+  "tee_shot_note": "tee_shot_margin_m: the tee-shot tree check (pipeline/tee_shots.py) keeps the ball 0.5 m clear of each crown; without it the check passed hole 3 while the game's ball clipped a redwood crown 48 m out (course chat, 2026-11-13; as at Stone Creek)",
+  "max_tree_note": "Coast redwoods: 18 lidar crowns are 65-74 m tall (checks.json max_tree_h_m 80); second-growth redwoods in the lower Russian River reach about 75 m",
+  "drop_trees": [
+    {
+      "x": 655.5,
+      "y": 407.5,
+      "reason": "course chat 2026-11-13 (standing default: tee-shot blockers removed): a 53 m redwood clump (lidar crown radius 16 m, likely two crowns merged) whose crown hangs over the 3rd's tee shot 48 m out; s06b's lowest-shot check misses it, the game's 8-iron clips it"
+    },
+    {
+      "x": 602.5,
+      "y": 453.5,
+      "reason": "course chat 2026-11-13: a 58 m redwood 8 m short of the 3rd green; drawn in the 3/4 view it covers most of the green, leaving one hole location (pins.test.ts needs 3). The developer may put it back"
+    },
+    {
+      "x": 296.5,
+      "y": 302.5,
+      "reason": "course chat 2026-11-13: a 54 m redwood 8 m behind (south of) the 6th green; drawn in the 3/4 view it covers the green, leaving too few hole locations (pins.test.ts needs 3). The developer may put it back"
+    },
+    {
+      "x": 291.5,
+      "y": 287.5,
+      "reason": "course chat 2026-11-13: a 58 m redwood 23 m behind (south of) the 6th green; drawn in the 3/4 view it covers the green, leaving too few hole locations (pins.test.ts needs 3). The developer may put it back"
+    },
+    {
+      "x": 293.5,
+      "y": 294.5,
+      "reason": "course chat 2026-11-13: a 54 m redwood 16 m behind (south of) the 6th green; drawn in the 3/4 view it covers the green, leaving too few hole locations (pins.test.ts needs 3). The developer may put it back"
+    },
+    {
+      "x": 748.5,
+      "y": 202.5,
+      "reason": "course chat 2026-11-13: a 31 m redwood 13 m behind (south of) the 8th green; drawn in the 3/4 view it covers the green, leaving too few hole locations (pins.test.ts needs 3). The developer may put it back"
+    }
+  ],
+  "green_tilt": [
+    {
+      "hole": 3,
+      "max_tilt": 0.025,
+      "bumps": 0
+    }
+  ],
+  "green_tilt_note": "hole 3: its two random undulations left only the centre pin spot (pins.test.ts needs 3); bumps 0 keeps the green's own 1.2 % tilt (COURSE_LESSONS 4)"
+}

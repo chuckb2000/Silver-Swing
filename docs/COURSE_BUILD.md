@@ -974,6 +974,7 @@ paths (relief), not OB, unless the developer says otherwise.
   the most striking one (4.1: your pick, with a reason), write
   `assets-src/cards/<id>.json` (`{"hole": 9, "why": "…"}`; one file per course
   in a multi-course site, named by the course id), then run
-  `python3 assets-src/course_cards.py <id>`. That also writes the course's view
+  `python3 assets-src/course_cards.py <id>`. That also writes the passport's map of a few
+  holes (`sprites/passport/<id>.png`, `assets-src/passport_maps.py`) and the course's view
   for the title screen's rotation (`game/public/sprites/title/<id>.png`):
   commit the card and the view. The title screen's list is generated.

@@ -1,0 +1,42 @@
+{
+ "items": [
+  {
+   "name": "olympic_club_overpass.geojson",
+   "osm_box": [
+    37.7,
+    -122.506,
+    37.718,
+    -122.4835
+   ]
+  },
+  {
+   "name": "usgs_dem_m.tif",
+   "url": "https://elevation.nationalmap.gov/arcgis/rest/services/3DEPElevation/ImageServer/exportImage?bbox=543500,4172600,545600,4174700&bboxSR=32610&imageSR=32610&size=2100,2100&format=tiff&pixelType=F32&noData=-9999&interpolation=RSP_BilinearInterpolation&f=image"
+  },
+  {
+   "name": "usgs_dem_identify.json",
+   "url": "https://elevation.nationalmap.gov/arcgis/rest/services/3DEPElevation/ImageServer/identify?geometry=%7B%22x%22%3A544550%2C%22y%22%3A4173650%2C%22spatialReference%22%3A%7B%22wkid%22%3A32610%7D%7D&geometryType=esriGeometryPoint&returnCatalogItems=true&f=json"
+  },
+  {
+   "name": "olympic_club_lpc",
+   "tnm": {
+    "dataset": "lpc",
+    "bbox": [
+     -122.506,
+     37.7,
+     -122.4835,
+     37.718
+    ],
+    "only": "CA_SanFrancisco_1_B23"
+   }
+  },
+  {
+   "name": "naip_543500_4172600.jpg",
+   "url": "https://imagery.nationalmap.gov/arcgis/rest/services/USGSNAIPImagery/ImageServer/exportImage?bbox=543500,4172600,545600,4174700&bboxSR=32610&imageSR=32610&size=3500,3500&format=jpg&f=image"
+  },
+  {
+   "name": "naip_info.json",
+   "url": "https://imagery.nationalmap.gov/arcgis/rest/services/USGSNAIPImagery/ImageServer?f=pjson"
+  }
+ ]
+}

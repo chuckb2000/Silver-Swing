@@ -1,0 +1,21 @@
+{
+ "note": "per-course settings for game/tests/unit/course_play.test.ts (the every-course checks); docs/COURSE_BUILD.md 8.2",
+ "wind_mph": [
+  6,
+  16
+ ],
+ "points": [
+  {
+   "x": 1000,
+   "y": 1000,
+   "not": "ob",
+   "why": "the New Course beside the outward holes is in play for the Old Course (2026 card, local rule 1; the OB line is the Old, New and Jubilee polygons joined)"
+  },
+  {
+   "x": 60,
+   "y": 1900,
+   "surface": "water",
+   "why": "the Eden estuary is a red penalty area (red_water_osm 'sea')"
+  }
+ ]
+}

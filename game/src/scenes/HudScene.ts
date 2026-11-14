@@ -291,7 +291,10 @@ export class HudScene extends Phaser.Scene {
     this.clubUp = new Button(this, 0, 0, 15, 20, '', () => p.cycleClub(-1), { icon: 'arrow_up', sound: null });
     this.clubDown = new Button(this, 0, 0, 15, 20, '', () => p.cycleClub(1), { icon: 'arrow_down', sound: null });
     this.spinBtn = new Button(this, 0, 0, 20, 18, '', () => p.setSpin(p.spin === 0 ? 1 : p.spin === 1 ? -1 : 0), { icon: 'spin_0', color: 'grey', sound: null });
-    this.scaleBtn = new Button(this, 0, 0, 34, 14, 'full', () => p.cycleScale(), { color: 'grey', sound: null });
+    // swing length: a tap goes round full, 3/4, 1/2, 1/4 as it always has. Putter meter: the left half
+    // ('-') smaller, the right half ('+') bigger (developer, 2026-11-14: it only went up, so a 48 ft meter
+    // for a 16 footer meant going round through 160 ft; the swing button stays as it was)
+    this.scaleBtn = new Button(this, 0, 0, 34, 14, 'full', (ev) => { if (p.isPutting()) p.stepScale(ev.fx < 0.5 ? -1 : 1); else p.cycleSwing(); }, { color: 'grey', sound: null, minusPlus: true });
     this.unplayBtn = new Button(this, 0, 0, 52, 13, 'unplayable', () => this.openUnplayable(), { color: 'grey' });
     this.mulliganBtn = new Button(this, 0, 0, 52, 13, 'mulligan', () => this.play.takeMulligan(), { color: 'grey' });
     this.swingBtn = new Button(this, 0, 0, 58, 20, 'swing', (ev) => this.onSwingButton(ev.time), { onDown: true, sound: null, scale: 1 });
@@ -699,7 +702,7 @@ export class HudScene extends Phaser.Scene {
     if (c.kind === 'putter') setTxt(this.clubCarry, `100%: ${puttScaleLabel(p.puttScale)}`);
     else setTxt(this.clubCarry, `${fmtDist(r.carryFor(c, p.swingScale))} ${unitLabel()}`);
     this.spinBtn.setIcon(`spin_${p.spin}`).setVisible(c.kind !== 'putter');
-    this.scaleBtn.setLabel(c.kind === 'putter' ? puttScaleLabel(p.puttScale) : swingLabel(p.swingScale)).setVisible(true);
+    this.scaleBtn.setLabel(c.kind === 'putter' ? puttScaleLabel(p.puttScale) : swingLabel(p.swingScale)).setMarks(c.kind === 'putter').setVisible(true);
     for (const b of [this.aimL, this.aimR, this.clubUp, this.clubDown, this.spinBtn, this.scaleBtn]) b.setEnabled(aiming);
     this.swingBtn.setEnabled(aiming || swinging);
     this.swingBtn.setLabel(c.kind === 'putter' ? 'putt' : 'swing');

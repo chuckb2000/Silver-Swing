@@ -1,0 +1,81 @@
+{
+  "name": "The Olympic Club Cliffs",
+  "location": "San Francisco (the Pacific bluffs west of Skyline Boulevard), California",
+  "state": "CA",
+  "architects": "Jay Morrish and Tom Weiskopf (1994), Bill Love",
+  "theme": "olympic_club",
+  "boundary_name": "Olympic Club Golf Course",
+  "dtm": {
+    "path": "raw/usgs_dem_1m.tif",
+    "units": "m",
+    "source": "USGS 3DEP 1 m DEM (3DEPElevation exportImage), x 543500-545600 / y 4172600-4174700 EPSG:32610, NAVD88 metres, clipped to the world + 100 m by pipeline/intake.py raster; fetched by the GitHub Actions workflow 2026-11-13 (release data-olympic_club)"
+  },
+  "laz": {
+    "paths": [
+      "raw/laz/*.laz"
+    ],
+    "classes": [
+      1
+    ],
+    "units": "m",
+    "source": "USGS 3DEP lidar point cloud, project CA_SanFrancisco_B23 (CA_SanFrancisco_1_B23), 11 tiles, class 1 (the tiles carry classes 1, 2, 7, 9 and 20: no vegetation classes, so trees come from class 1 with roofs dropped by roof_last_share, as at Aberdeen and Newport); NAD83(2011) / San Francisco CS13 (EPSG:7131), NAVD88 m; clipped to the world + 100 m by pipeline/intake.py laz; fetched by the GitHub Actions workflow 2026-11-13 (release data-olympic_club)",
+    "label": "USGS 3DEP lidar (San Francisco)",
+    "leaf_off": false
+  },
+  "driving_range_is_ob": true,
+  "wind_mph": {
+    "minMph": 3,
+    "maxMph": 14
+  },
+  "trees_off_fairways_m": 2,
+  "attribution": [
+    "Map data \u00a9 OpenStreetMap contributors (ODbL)",
+    "Elevation and trees: U.S. Geological Survey 3D Elevation Program"
+  ],
+  "notes": "Standing defaults (COURSE_BUILD.md 4.1), 2026-11-13: the longest tee set (Blue) and it is the default; all water red; OB = the Olympic Club's OSM boundary (relation 3573537: the bluffs west of Skyline Boulevard, where holes 1-8 are, and the main property east of it, where the 9th comes back to the clubhouse; the parts joined across the road), roads inside it are cart paths, the driving range is OB; open-coast wind 3-14 mph; trees from 3DEP lidar, trees in fairways or in the way of a centre-line drive removed and listed. A course of its own, not a layout of data/olympic_club (developer, 2026-11-13): a site with layouts keeps only the largest boundary part. The Lake and Ocean holes are dropped; their ground is in bounds (club property). Theme olympic_club (the Lake's).",
+  "id": "olympic_club_cliffs",
+  "epsg": 32610,
+  "world": {
+    "x0": 543733,
+    "y0": 4172760,
+    "width": 1792,
+    "height": 1792,
+    "note": "OSM course boundary bbox (1335 x 1421 m, relation/3573537) + at least 120 m of scenery, rounded out to whole 256 m chunks and centred (228 m west/east, 185 m south/north)"
+  },
+  "osm_sources": [
+    "raw/overpass.geojson"
+  ],
+  "roof_last_share": 0.85,
+  "roof_last_share_note": "class-1 lidar holds roofs: crowns whose returns are 85 %+ last returns are roofs, not trees (as Aberdeen, Newport and Wannamoisett)",
+  "join_boundary_parts": {
+    "max_gap_m": 40,
+    "note": "The club's OSM boundary (relation 3573537) has two rings 36 m apart across Skyline Boulevard: the Cliffs' first eight holes on the bluffs west of it, the rest east. Both in play for the Cliffs; the game's OB polygon joins them across the road (common.game_boundary); the road strip stays out of bounds on the surface map."
+  },
+  "tee_sets": [
+    {
+      "name": "Blue",
+      "playable": true,
+      "rating": 28.4,
+      "slope": 107,
+      "total_yd": 1432
+    },
+    {
+      "name": "White",
+      "playable": false,
+      "total_yd": 781,
+      "rating": 27.3,
+      "slope": 98,
+      "note": "not built: OSM's hole lines for 1-3 start on the Blue boxes and the White boxes there aren't identified; White 4-9 are the lines' starts"
+    }
+  ],
+  "default_tee": "Blue",
+  "scorecard_source": "Third-party (private club): GolfPass's Cliffs card (course 4014; nine par 3s, handicap, Blue and White), read 2026-11-13; rows add up (Blue 1,432). Ratings: GolfPass gives Blue (18-hole) 56.8/107 for 2,864 yd and White (18-hole) 54.6/98 for 1,562, halved here for nine holes. Stymie prints an older card (Blue 1,369). Unverified against the club's printed card.",
+  "green_tilt": [
+    {
+      "hole": 8,
+      "max_tilt": 0.015,
+      "bumps": 0
+    }
+  ],
+  "green_tilt_note": "8 (237 m2) is a small green as mapped: a gentler plane and no random bumps, so it keeps three hole locations (pins.test.ts; COURSE_LESSONS)"
+}

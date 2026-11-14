@@ -1,0 +1,73 @@
+{
+ "id": "tcc_brookline",
+ "name": "The Country Club",
+ "location": "Brookline, Norfolk County, Massachusetts",
+ "state": "MA",
+ "architects": "Willie Campbell (first 9 and 18 holes, 1893-1899) and club members (1908); Primrose nine William S. Flynn (1927); restorations by Rees Jones (1988) and Gil Hanse (2010s)",
+ "theme": "tcc_brookline",
+ "epsg": 32619,
+ "osm_sources": [
+  "raw/overpass.geojson"
+ ],
+ "boundary_name": "The Country Club",
+ "dtm": {
+  "path": "raw/usgs_dem_m.tif",
+  "units": "m",
+  "source": "USGS 3DEP elevation service (3DEPElevation ImageServer exportImage, 1 m, EPSG:32619, box x 321800-323800 / y 4685900-4687700); the 1 m DEM under the course is MA_CentralEastern_2021_B21 (tile x32y469, flown 2021-03-20 to 2021-04-24, published 2023-01-15, per the service's identify); fetched by the GitHub Actions workflow 2026-11-13 (release data-tcc_brookline, usgs_dem_m.tif)"
+ },
+ "laz": {
+  "paths": [
+   "raw/laz/*.laz"
+  ],
+  "classes": [
+   3,
+   4,
+   5
+  ],
+  "units": "m",
+  "source": "USGS Lidar Point Cloud MA_CentralEastern_2021_B21 (MA_CentralEastern_1_2021), 6 tiles from rockyweb.usgs.gov, fetched by the GitHub Actions workflow 2026-11-13 (release data-tcc_brookline), each clipped to the world + 100 m by intake.py laz --keep-evlrs; NAD83(2011) / UTM 19N, NAVD88 (Geoid18) metres; flown leaf-off, spring 2021",
+  "label": "2021 USGS Central Eastern Massachusetts lidar"
+ },
+ "ortho": {
+  "path": "raw/naip.tif",
+  "source": "USDA NAIP from the USGS National Map NAIP ImageServer (exportImage, 0.6 m, EPSG:32619), placed by its request box (intake.py ortho); fetched by the GitHub Actions workflow 2026-11-13 (release data-tcc_brookline)"
+ },
+ "world": {
+  "x0": 321870,
+  "y0": 4686052,
+  "width": 1792,
+  "height": 1536,
+  "note": "OSM course boundary (way 29870415, 1,371 x 1,232 m in EPSG:32619) + 120 m of scenery, rounded out to whole 256 m chunks and centred"
+ },
+ "tee_sets": [
+  {
+   "name": "Blue",
+   "playable": true,
+   "rating": 73.6,
+   "slope": 139,
+   "total_yd": 6588
+  }
+ ],
+ "default_tee": "Blue",
+ "scorecard_source": "18Birdies, The Country Club at Brookline, Main / Championship Course (read 2026-11-13): Blue 6,588 yd, men's rating 73.6 / slope 139, par and handicap per hole (the only tee with per-hole yardage there; it lists Black 6,599 (74.6/144) without hole yardages). Par 71 (35-36), matching GolfPass's Main course par row. Unverified (third party; private club, card not online). The Main course is the Clyde (1-9) and Squirrel (10-18) nines; the Primrose nine is not built (developer, 2026-11-13). OSM tags Main 2 par 3; the card's par 4 (289 yd) is used.",
+ "penalty_default": "red",
+ "driving_range_is_ob": true,
+ "wind_mph": {
+  "minMph": 1,
+  "maxMph": 9
+ },
+ "trees_off_fairways_m": 2,
+ "attribution": [
+  "Map data © OpenStreetMap contributors (ODbL)",
+  "Elevation and trees: U.S. Geological Survey 3D Elevation Program (Central Eastern Massachusetts 2021 lidar)",
+  "Imagery check: USDA National Agriculture Imagery Program (NAIP)"
+ ],
+ "green_tilt": [
+  {
+   "hole": 4,
+   "max_tilt": 0.02,
+   "bumps": 0,
+   "note": "the 4th's small green (195 m2): tilt capped at 2 % and no random undulations, so the game finds three pin positions on it under 3 % (pins.test.ts; COURSE_LESSONS 4)"
+  }
+ ]
+}

@@ -1,0 +1,26 @@
+{
+ "note": "per-course settings for game/tests/unit/course_play.test.ts (the every-course checks); docs/COURSE_BUILD.md 8.2. Northwood is a nine (rounds of 9 or 18 twice around), White tees only.",
+ "yardage": {
+  "max": {
+   "4": 0.1,
+   "8": 0.12
+  },
+  "why": "4: the only mapped tee box (w1009249189) measures 263 yd against the card's 291 (-9.7 %; the card's Red is 272); 8: the mapped boxes (w1009249193, 106 yd; w1009249196, 84 yd) match the card's Red 103 and Gold 89, the White box (120) isn't in OSM (-11.3 %). No pad behind either in the DEM. Built as measured, pending the developer (open items batch 1, 2026-11-13: (a) play from the back of the mapped boxes, about 270 and 113 yd; (b) trace the White tees from screenshots; (c) as measured)"
+ },
+ "wind_mph": [
+  1,
+  7
+ ],
+ "tees": {
+  "sets": [
+   "White"
+  ]
+ },
+ "tee_shot_clear": {
+  "sets": [
+   "White"
+  ]
+ },
+ "max_tree_h_m": 80,
+ "max_tree_why": "coast redwoods: 18 lidar crowns are 65-74 m, all in the forest away from buildings and lines (course chat 2026-11-13)"
+}

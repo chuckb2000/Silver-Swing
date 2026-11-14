@@ -1,0 +1,7 @@
+{
+ "note": "per-course settings for course_play.test.ts",
+ "yardage": {"max": {"15": 0.10}, "why": "15 plays 120 yd against the card's 133 from its back (only) tee box: the photo shows no box farther back (open item, the developer's call)"},
+ "wind_mph": [1, 7],
+ "water": {"count": 3},
+ "inside_boundary": true
+}

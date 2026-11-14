@@ -1,0 +1,10 @@
+{
+ "wind_mph": [1, 7],
+ "water": {"penalty": "red", "ids": ["channel_w68717747", "w68726253"]},
+ "inside_boundary": true,
+ "no_tree_in_fairway": true,
+ "courses": {
+  "reserve_north": {"yardage": {"max": {"13": 0.09}}},
+  "reserve_south": {"yardage": {"max": {"12": 0.15}}}
+ }
+}

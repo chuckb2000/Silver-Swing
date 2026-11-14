@@ -1,0 +1,41 @@
+{
+ "tags": [
+  {
+   "osm": "w252357849",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "standing default (COURSE_BUILD 4.1): every penalty area red; OSM tags the pond golf=water_hazard (yellow)"
+  },
+  {
+   "osm": "w252357850",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "standing default (COURSE_BUILD 4.1): every penalty area red; OSM tags the pond golf=water_hazard (yellow)"
+  },
+  {
+   "osm": "w252357851",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "standing default (COURSE_BUILD 4.1): every penalty area red; OSM tags the pond golf=water_hazard (yellow)"
+  }
+ ],
+ "add": [
+  {
+   "from": "proposed/boundary.geojson",
+   "ids": [
+    "w436979104_fixed"
+   ],
+   "tags": {},
+   "reason": "the OSM boundary cuts across the 9th hole's back tee (22 m2 outside): the boundary with that tee box joined on (make_boundary.py)"
+  }
+ ],
+ "drop": [
+  {
+   "osm": "w436979104",
+   "reason": "replaced by proposed/boundary.geojson (the same outline with the 9th tee joined on)"
+  }
+ ]
+}

@@ -1,0 +1,19 @@
+{
+  "name": "Shaughnessy (riverside parkland on the North Arm of the Fraser)",
+  "note": "Course theme palette (<= 32 colours), same keys as pnw.json. Shaughnessy Golf and Country Club, Vancouver, on the low ground along the North Arm of the Fraser River near its mouth (course chat, 2026-11-13). No open orthophoto was found, so the colours are a design, not sampled: lush, well-watered championship turf a little bluer than pnw; near-white bunker sand; the water the silty grey-green of the Fraser's estuary. Trees: tall Douglas fir and western red cedar (two conifer tones by variant) with the river's black cottonwoods, bigleaf maples and red alders (trees_shaughnessy.py; a drawing choice, the lidar gives only crown shape). Shadows are a 35% black overlay on top of these.",
+  "colors": {
+    "G0": "#15301f", "G1": "#1d432b", "G2": "#265a36", "G3": "#2f6e40",
+    "G4": "#39824a", "G5": "#449655", "G6": "#50a760", "G7": "#5eb76c",
+    "G8": "#71c57c", "G9": "#98d9a0",
+    "L0": "#4a7244", "L1": "#58844d", "L2": "#689658",
+    "S0": "#cbc4ad", "S1": "#e8e3d3", "S2": "#f9f7ef",
+    "W0": "#455a52", "W1": "#566e64", "W2": "#82978c",
+    "K0": "#25262c", "K1": "#52535b", "K2": "#797a82", "K3": "#b0a896", "K4": "#d8d0be",
+    "B0": "#46301f", "B1": "#6d4a31", "B2": "#8c5a40",
+    "R0": "#4a5768", "WH": "#f6f6f2"
+  },
+  "trees": {
+    "conifer": "trees_shaughnessy:conifer",
+    "deciduous": "trees_shaughnessy:deciduous"
+  }
+}

@@ -1,0 +1,149 @@
+{
+ "add": [
+  {
+   "from": "proposed/clubhouse.geojson",
+   "ids": [
+    "r20947272_building"
+   ],
+   "tags": {},
+   "reason": "the clubhouse is mapped golf=clubhouse, which s01 reads as a golf feature, not a building; copied as a building (audit), original dropped"
+  }
+ ],
+ "drop": [
+  {
+   "osm": "r20947272",
+   "reason": "replaced by its copy as a building (proposed/clubhouse.geojson)"
+  }
+ ],
+ "tags": [
+  {
+   "osm": "w1184481266",
+   "set": {
+    "layout": "heron_lakes_great_blue"
+   },
+   "reason": "Great Blue's 17th hole line runs 11 % outside the Great Blue polygon (across the edge of Greenback's), so it fell in no layout (audit): tagged to its course"
+  },
+  {
+   "osm": "w1184093066",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "standing default (COURSE_BUILD.md 4.1): every penalty area red"
+  },
+  {
+   "osm": "w1186045046",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "standing default (COURSE_BUILD.md 4.1): every penalty area red"
+  },
+  {
+   "osm": "w379305057",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "standing default (COURSE_BUILD.md 4.1): every penalty area red"
+  },
+  {
+   "osm": "w379305058",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "standing default (COURSE_BUILD.md 4.1): every penalty area red"
+  },
+  {
+   "osm": "w379305062",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "standing default (COURSE_BUILD.md 4.1): every penalty area red"
+  },
+  {
+   "osm": "w379305063",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "standing default (COURSE_BUILD.md 4.1): every penalty area red"
+  },
+  {
+   "osm": "w379305066",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "standing default (COURSE_BUILD.md 4.1): every penalty area red"
+  },
+  {
+   "osm": "w379305068",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "standing default (COURSE_BUILD.md 4.1): every penalty area red"
+  },
+  {
+   "osm": "w379305070",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "standing default (COURSE_BUILD.md 4.1): every penalty area red"
+  },
+  {
+   "osm": "w379305072",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "standing default (COURSE_BUILD.md 4.1): every penalty area red"
+  },
+  {
+   "osm": "w379305075",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "standing default (COURSE_BUILD.md 4.1): every penalty area red"
+  },
+  {
+   "osm": "w419999393",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "standing default (COURSE_BUILD.md 4.1): every penalty area red"
+  },
+  {
+   "osm": "w419999394",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "standing default (COURSE_BUILD.md 4.1): every penalty area red"
+  },
+  {
+   "osm": "w419999396",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "standing default (COURSE_BUILD.md 4.1): every penalty area red"
+  },
+  {
+   "osm": "w93893857",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "standing default (COURSE_BUILD.md 4.1): every penalty area red"
+  },
+  {
+   "osm": "w93893873",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "standing default (COURSE_BUILD.md 4.1): every penalty area red"
+  },
+  {
+   "osm": "w1186062424",
+   "set": {
+    "hole": "11",
+    "tee_set": "Gold",
+    "assigned_by": "the course chat",
+    "layout": "heron_lakes_great_blue"
+   },
+   "reason": "Great Blue 11: OSM's hole line starts on the edge of this, the back-most box (photo), but measured from its centre it is just over 8 % short of the card, so the tee fell to the line start on the box's edge (course_play: tee not on its box); assigned to the Gold tee"
+  }
+ ]
+}

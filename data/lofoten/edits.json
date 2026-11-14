@@ -1,0 +1,78 @@
+{
+ "note": "Edits to the OSM layout for Lofoten Links; built into edited/course.geojson by pipeline/merge_edits.py.",
+ "add": [
+  {
+   "from": "proposed/sea_shore.geojson",
+   "ids": [
+    "sea",
+    "shore"
+   ],
+   "reason": "the Norwegian Sea where the Kartverket DTM is at sea level (make_shore.py; OSM's coastline cut straight across the rocky points), and the rock between the course boundary and the sea plus the islets as 'shore', drawn as rock: one red penalty area (developer's brief 2026-11-13: the sea is a penalty area; 2026-11-13: 'this coast is so jagged')"
+  },
+  {
+   "from": "proposed/boundary.geojson",
+   "ids": [
+    "boundary"
+   ],
+   "reason": "the OB line: OSM relation 5314623 joined with its tee boxes grown 3 m (make_boundary.py), so the 3rd hole's back tee on the rocks is in bounds"
+  }
+ ],
+ "tags": [
+  {
+   "osm": "r5312937",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "Hallingshaugvatnet (golf=lateral_water_hazard): every penalty area red (standing default)"
+  },
+  {
+   "osm": "w1354204015",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "unnamed (golf=lateral_water_hazard): every penalty area red (standing default)"
+  },
+  {
+   "osm": "w1354204016",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "unnamed (golf=lateral_water_hazard): every penalty area red (standing default)"
+  },
+  {
+   "osm": "w1354204040",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "unnamed (golf=lateral_water_hazard): every penalty area red (standing default)"
+  },
+  {
+   "osm": "w169743915",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "Arvikvatnet (golf=lateral_water_hazard): every penalty area red (standing default)"
+  },
+  {
+   "osm": "w355816869",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "Gl\u00f8stj\u00f8nna (golf=water_hazard): every penalty area red (standing default)"
+  },
+  {
+   "osm": "w355818460",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "unnamed (golf=lateral_water_hazard): every penalty area red (standing default)"
+  }
+ ],
+ "drop": [
+  {
+   "osm": "r5314623",
+   "reason": "replaced as the OB line by `boundary` (add above)"
+  }
+ ],
+ "extend_start": []
+}

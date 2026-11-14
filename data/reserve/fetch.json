@@ -1,0 +1,63 @@
+{
+ "items": [
+  {
+   "name": "reserve_overpass.geojson",
+   "osm_box": [
+    45.462,
+    -122.948,
+    45.5,
+    -122.888
+   ]
+  },
+  {
+   "name": "reserve_dem1m",
+   "tnm": {
+    "dataset": "dem1m",
+    "bbox": [
+     -122.9335,
+     45.4767,
+     -122.9107,
+     45.495
+    ],
+    "only": "OR_PortlandMetro_B24"
+   }
+  },
+  {
+   "name": "dogami_chm_identify.json",
+   "url": "https://gis.dogami.oregon.gov/arcgis/rest/services/lidar/CANOPY_HEIGHT_MODEL_MOSAIC/ImageServer/identify?geometry=506400,5036800&geometryType=esriGeometryPoint&sr=32610&returnCatalogItems=true&f=json"
+  },
+  {
+   "name": "osip2024_sw.jpg",
+   "url": "https://imagery.oregonexplorer.info/arcgis/rest/services/OSIP_2024/OSIP_2024_WM/ImageServer/exportImage?bbox=504900,5035300,506400,5036800&bboxSR=32610&imageSR=32610&size=3000,3000&format=jpg&f=image"
+  },
+  {
+   "name": "osip2024_se.jpg",
+   "url": "https://imagery.oregonexplorer.info/arcgis/rest/services/OSIP_2024/OSIP_2024_WM/ImageServer/exportImage?bbox=506400,5035300,507900,5036800&bboxSR=32610&imageSR=32610&size=3000,3000&format=jpg&f=image"
+  },
+  {
+   "name": "osip2024_nw.jpg",
+   "url": "https://imagery.oregonexplorer.info/arcgis/rest/services/OSIP_2024/OSIP_2024_WM/ImageServer/exportImage?bbox=504900,5036800,506400,5038300&bboxSR=32610&imageSR=32610&size=3000,3000&format=jpg&f=image"
+  },
+  {
+   "name": "osip2024_ne.jpg",
+   "url": "https://imagery.oregonexplorer.info/arcgis/rest/services/OSIP_2024/OSIP_2024_WM/ImageServer/exportImage?bbox=506400,5036800,507900,5038300&bboxSR=32610&imageSR=32610&size=3000,3000&format=jpg&f=image"
+  },
+  {
+   "name": "osip_info.json",
+   "url": "https://imagery.oregonexplorer.info/arcgis/rest/services/OSIP_2024/OSIP_2024_WM/ImageServer?f=json"
+  },
+  {
+   "name": "dogami_chm_ft_s.tif",
+   "url": "https://gis.dogami.oregon.gov/arcgis/rest/services/lidar/CANOPY_HEIGHT_MODEL_MOSAIC/ImageServer/exportImage?bbox=505092,5035806,507084,5036930&bboxSR=32610&imageSR=32610&size=1992,1124&format=tiff&pixelType=F32&noData=-9999&interpolation=RSP_BilinearInterpolation&f=image"
+  },
+  {
+   "name": "dogami_chm_ft_n.tif",
+   "url": "https://gis.dogami.oregon.gov/arcgis/rest/services/lidar/CANOPY_HEIGHT_MODEL_MOSAIC/ImageServer/exportImage?bbox=505092,5036930,507084,5038054&bboxSR=32610&imageSR=32610&size=1992,1124&format=tiff&pixelType=F32&noData=-9999&interpolation=RSP_BilinearInterpolation&f=image"
+  },
+  {
+   "name": "dogami_chm_identify2.json",
+   "url": "https://gis.dogami.oregon.gov/arcgis/rest/services/lidar/CANOPY_HEIGHT_MODEL_MOSAIC/ImageServer/identify?geometry=%7B%22x%22%3A506000%2C%22y%22%3A5036800%2C%22spatialReference%22%3A%7B%22wkid%22%3A32610%7D%7D&geometryType=esriGeometryPoint&returnCatalogItems=true&returnGeometry=false&f=json"
+  }
+ ],
+ "note": "Fetched: Overpass export, 3DEP 1 m DEM (OR_PortlandMetro_B24), OSIP 2024 photo (four quarters), DOGAMI canopy height model (two halves of the world + 100 m; its catalog says OLC_METRO_2014). Not fetched: the 2024 3DEP point cloud. rockyweb.usgs.gov sent it at about 1 MB a minute (one 47 MB tile in 50 minutes, runs 43420503506 and 43430049359 cancelled), and the USGS S3 bucket (prd-tnm) has no copy (404). The trees come from the DOGAMI 2014 canopy model, checked against the 2024 photo (trees_need_ortho)."
+}

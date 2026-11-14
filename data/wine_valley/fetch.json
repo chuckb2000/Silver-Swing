@@ -1,0 +1,92 @@
+{
+ "items": [
+  {
+   "name": "wine_valley_overpass.geojson",
+   "osm_box": [
+    46.0498,
+    -118.5167,
+    46.0673,
+    -118.4891
+   ]
+  },
+  {
+   "name": "usgs_dem_m.tif",
+   "url": "https://elevation.nationalmap.gov/arcgis/rest/services/3DEPElevation/ImageServer/exportImage?bbox=382700,5100700,384800,5102600&bboxSR=32611&imageSR=32611&size=2100,1900&format=tiff&pixelType=F32&noData=-9999&interpolation=RSP_BilinearInterpolation&f=image"
+  },
+  {
+   "name": "usgs_dem_identify.json",
+   "url": "https://elevation.nationalmap.gov/arcgis/rest/services/3DEPElevation/ImageServer/identify?geometry=%7B%22x%22%3A383750%2C%22y%22%3A5101650%2C%22spatialReference%22%3A%7B%22wkid%22%3A32611%7D%7D&geometryType=esriGeometryPoint&returnCatalogItems=true&f=json"
+  },
+  {
+   "name": "wine_valley_lpc",
+   "tnm": {
+    "dataset": "lpc",
+    "bbox": [
+     -118.5167,
+     46.0498,
+     -118.4891,
+     46.0673
+    ],
+    "only": "WA_3_County_QL2_2017"
+   }
+  },
+  {
+   "name": "naip_382700_5100700.jpg",
+   "url": "https://imagery.nationalmap.gov/arcgis/rest/services/USGSNAIPImagery/ImageServer/exportImage?bbox=382700,5100700,384700,5102600&bboxSR=32611&imageSR=32611&size=3333,3166&format=jpg&f=image"
+  },
+  {
+   "name": "naip_384700_5100700.jpg",
+   "url": "https://imagery.nationalmap.gov/arcgis/rest/services/USGSNAIPImagery/ImageServer/exportImage?bbox=384700,5100700,384800,5102600&bboxSR=32611&imageSR=32611&size=166,3166&format=jpg&f=image"
+  },
+  {
+   "name": "naip_info.json",
+   "url": "https://imagery.nationalmap.gov/arcgis/rest/services/USGSNAIPImagery/ImageServer?f=pjson"
+  },
+  {
+   "name": "USGS_LPC_WA_3_County_QL2_2017_WA3_00749_LAS_2019.laz",
+   "url": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/USGS_LPC_WA_3_County_QL2_2017_LAS_2019/laz/USGS_LPC_WA_3_County_QL2_2017_WA3_00749_LAS_2019.laz",
+   "note": "retry: timed out on the first run"
+  },
+  {
+   "name": "USGS_LPC_WA_3_County_QL2_2017_WA3_00750_LAS_2019.laz",
+   "url": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/USGS_LPC_WA_3_County_QL2_2017_LAS_2019/laz/USGS_LPC_WA_3_County_QL2_2017_WA3_00750_LAS_2019.laz",
+   "note": "retry: timed out on the first run"
+  },
+  {
+   "name": "USGS_LPC_WA_3_County_QL2_2017_WA3_00751_LAS_2019.laz",
+   "url": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/USGS_LPC_WA_3_County_QL2_2017_LAS_2019/laz/USGS_LPC_WA_3_County_QL2_2017_WA3_00751_LAS_2019.laz",
+   "note": "retry: timed out on the first run"
+  },
+  {
+   "name": "USGS_LPC_WA_3_County_QL2_2017_WA3_00874_LAS_2019.laz",
+   "url": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/USGS_LPC_WA_3_County_QL2_2017_LAS_2019/laz/USGS_LPC_WA_3_County_QL2_2017_WA3_00874_LAS_2019.laz",
+   "note": "retry: timed out on the first run"
+  },
+  {
+   "name": "USGS_LPC_WA_3_County_QL2_2017_WA3_00875_LAS_2019.laz",
+   "url": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/USGS_LPC_WA_3_County_QL2_2017_LAS_2019/laz/USGS_LPC_WA_3_County_QL2_2017_WA3_00875_LAS_2019.laz",
+   "note": "retry: timed out on the first run"
+  },
+  {
+   "name": "USGS_LPC_WA_3_County_QL2_2017_WA3_00876_LAS_2019.laz",
+   "url": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/USGS_LPC_WA_3_County_QL2_2017_LAS_2019/laz/USGS_LPC_WA_3_County_QL2_2017_WA3_00876_LAS_2019.laz",
+   "note": "retry: timed out on the first run",
+   "retry": 2
+  },
+  {
+   "name": "USGS_LPC_WA_3_County_QL2_2017_WA3_00999_LAS_2019.laz",
+   "url": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/USGS_LPC_WA_3_County_QL2_2017_LAS_2019/laz/USGS_LPC_WA_3_County_QL2_2017_WA3_00999_LAS_2019.laz",
+   "note": "retry: timed out on the first run"
+  },
+  {
+   "name": "USGS_LPC_WA_3_County_QL2_2017_WA3_01000_LAS_2019.laz",
+   "url": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/USGS_LPC_WA_3_County_QL2_2017_LAS_2019/laz/USGS_LPC_WA_3_County_QL2_2017_WA3_01000_LAS_2019.laz",
+   "note": "retry: timed out on the first run"
+  },
+  {
+   "name": "USGS_LPC_WA_3_County_QL2_2017_WA3_01001_LAS_2019.laz",
+   "url": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/USGS_LPC_WA_3_County_QL2_2017_LAS_2019/laz/USGS_LPC_WA_3_County_QL2_2017_WA3_01001_LAS_2019.laz",
+   "note": "retry: timed out on the first run"
+  }
+ ]
+}

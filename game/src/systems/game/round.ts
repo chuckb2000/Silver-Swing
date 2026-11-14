@@ -7,7 +7,7 @@ import { DEFAULT_WIND, Difficulty, gust, makeWind, Preset, PRESETS, roundWinds, 
 import { chipRelease, firstBounceK, puttSpeedFor } from '../physics/calibrate';
 import { Rng } from '../physics/rng';
 import { ShotSpec, SimResult, simulateShot } from '../physics/sim';
-import { isOB, isWater, SURF } from '../physics/surfaces';
+import { isOB, isWater, material, SURF } from '../physics/surfaces';
 import { Polygon, Terrain } from '../physics/terrain';
 import { clubAllowed, Lie, lieIsPenal, lieModsFor, makeLie, SPIN_CLEAN, spinEffect, spinFor } from '../rules/lie';
 import { CourseCtx, freeReliefArea, obOptions, penaltyAreaOptions, ReliefArea, unplayableOptions, validDrop } from '../rules/relief';
@@ -407,11 +407,29 @@ export class Round {
     return 1;
   }
 
-  /** Smallest putter scale that comfortably covers the putt (playability addition). */
+  /**
+   * The putt's length on a flat green: what the meter's distances mean. Uphill a putt plays longer and
+   * downhill shorter, by g x rise / the green's rolling deceleration (the ball's speed squared over 2
+   * pays for the rolling and the climb alike).
+   */
+  puttPlaysAs(): number {
+    const d = this.distToPin();
+    const T = this.course.terrain;
+    const rise = T.z(this.pin.x, this.pin.y) - T.z(this.ball.x, this.ball.y);
+    return Math.max(d * 0.5, d + (9.81 * rise) / material(SURF.green).decel);
+  }
+
+  /**
+   * Smallest putter scale that covers the putt with room to spare (playability addition): the putt as it
+   * plays, a little past the hole, at no more than 85 % of the meter (developer, 2026-11-14: a flat 16
+   * footer opened the 48 ft meter; it was 1.6 x the straight-line length, now 24 ft), and never shorter
+   * than the putt itself (developer, 2026-11-14: a 15-footer downhill came up with the 12 ft meter).
+   */
   autoPuttScale(units: 'yd' | 'm' = this.units): number {
+    const need = this.puttPlaysAs() * 1.1 + 0.3;
     const d = this.distToPin();
     const scales = puttScales(units);
-    for (const s of scales) if (s >= d * 1.6) return s;
+    for (const s of scales) if (s * 0.85 >= need && s >= d - 0.01) return s;
     return scales[scales.length - 1];
   }
 
@@ -468,6 +486,36 @@ export class Round {
         apexCap: this.lie.apexCap,
       },
     };
+  }
+
+  /**
+   * The flight of a perfect stroke down this line until it first comes down, in calm air like the
+   * landing marker (developer, 2026-11-14: hard to tell when a ball will go into the trees): its path,
+   * with its height above the ground every step, and where it would first touch a tree, if anywhere.
+   * Any pass through a crown counts (as for the default aim's line check), so a line with no tree on
+   * it is one a perfect stroke never hits a tree on.
+   */
+  previewFlight(c: Club, aim: number, scale: number): { path: { x: number; y: number; h: number }[]; hit: { x: number; y: number; h: number; k: number } | null } {
+    if (c.kind === 'putter') return { path: [], hit: null };
+    const spec = this.flightSpec(c, aim, this.perfectStrike(c, scale), 0, { vx: 0, vy: 0 });
+    spec.untilLanding = true;
+    const T = this.course.terrain;
+    const clear = simulateShot(T, null, spec, new Rng(1));
+    const path: { x: number; y: number; h: number }[] = [];
+    for (let i = 0; i < clear.n; i++) {
+      const x = clear.samples[i * 3], y = clear.samples[i * 3 + 1], z = clear.samples[i * 3 + 2];
+      path.push({ x, y, h: Math.max(0, z - T.z(x, y)) });
+    }
+    const trees = simulateShot(T, this.course.obstacles, { ...spec }, new AlwaysRng(1));
+    const ev = trees.events.find((e) => e.type === 'canopy' || e.type === 'trunk');
+    if (!ev) return { path, hit: null };
+    // the step of the clear flight where it happens: the two flights are the same until then
+    let k = 0, best = Infinity;
+    for (let i = 0; i < path.length; i++) {
+      const d = Math.hypot(path[i].x - ev.x, path[i].y - ev.y);
+      if (d < best) { best = d; k = i; }
+    }
+    return { path, hit: { x: ev.x, y: ev.y, h: Math.max(0, ev.z - T.z(ev.x, ev.y)), k } };
   }
 
   /** Where a perfect 100 % shot would first touch the ground (calm air, no trees): the landing marker. */

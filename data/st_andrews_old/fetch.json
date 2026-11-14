@@ -1,0 +1,101 @@
+{
+ "items": [
+  {
+   "name": "st_andrews_old_overpass.geojson",
+   "osm_box": [
+    56.336,
+    -2.848,
+    56.362,
+    -2.792
+   ]
+  },
+  {
+   "name": "srsp_list_lidar.xml",
+   "url": "https://srsp-open-data.s3.eu-west-2.amazonaws.com/?list-type=2&delimiter=/&prefix=lidar/"
+  },
+  {
+   "name": "srsp_list_phase1_dtm_NO.xml",
+   "url": "https://srsp-open-data.s3.eu-west-2.amazonaws.com/?list-type=2&prefix=lidar/phase-1/dtm/27700/gridded/NO"
+  },
+  {
+   "name": "srsp_list_phase1_dsm_NO.xml",
+   "url": "https://srsp-open-data.s3.eu-west-2.amazonaws.com/?list-type=2&prefix=lidar/phase-1/dsm/27700/gridded/NO"
+  },
+  {
+   "name": "srsp_list_phase2_dtm_NO.xml",
+   "url": "https://srsp-open-data.s3.eu-west-2.amazonaws.com/?list-type=2&prefix=lidar/phase-2/dtm/27700/gridded/NO"
+  },
+  {
+   "name": "srsp_list_phase2_dsm_NO.xml",
+   "url": "https://srsp-open-data.s3.eu-west-2.amazonaws.com/?list-type=2&prefix=lidar/phase-2/dsm/27700/gridded/NO"
+  },
+  {
+   "name": "srsp_list_phase3_dtm_NO.xml",
+   "url": "https://srsp-open-data.s3.eu-west-2.amazonaws.com/?list-type=2&prefix=lidar/phase-3/dtm/27700/gridded/NO"
+  },
+  {
+   "name": "srsp_list_phase3_dsm_NO.xml",
+   "url": "https://srsp-open-data.s3.eu-west-2.amazonaws.com/?list-type=2&prefix=lidar/phase-3/dsm/27700/gridded/NO"
+  },
+  {
+   "name": "srsp_list_phase4_dtm_NO.xml",
+   "url": "https://srsp-open-data.s3.eu-west-2.amazonaws.com/?list-type=2&prefix=lidar/phase-4/dtm/27700/gridded/NO"
+  },
+  {
+   "name": "srsp_list_phase4_dsm_NO.xml",
+   "url": "https://srsp-open-data.s3.eu-west-2.amazonaws.com/?list-type=2&prefix=lidar/phase-4/dsm/27700/gridded/NO"
+  },
+  {
+   "name": "srsp_list_phase5_dtm_NO.xml",
+   "url": "https://srsp-open-data.s3.eu-west-2.amazonaws.com/?list-type=2&prefix=lidar/phase-5/dtm/27700/gridded/NO"
+  },
+  {
+   "name": "srsp_list_phase5_dsm_NO.xml",
+   "url": "https://srsp-open-data.s3.eu-west-2.amazonaws.com/?list-type=2&prefix=lidar/phase-5/dsm/27700/gridded/NO"
+  },
+  {
+   "name": "srsp_list_phase6_dtm_NO.xml",
+   "url": "https://srsp-open-data.s3.eu-west-2.amazonaws.com/?list-type=2&prefix=lidar/phase-6/dtm/27700/gridded/NO"
+  },
+  {
+   "name": "srsp_list_phase6_dsm_NO.xml",
+   "url": "https://srsp-open-data.s3.eu-west-2.amazonaws.com/?list-type=2&prefix=lidar/phase-6/dsm/27700/gridded/NO"
+  },
+  {
+   "name": "NO41NE_50CM_DTM_PHASE5.tif",
+   "url": "https://srsp-open-data.s3.eu-west-2.amazonaws.com/lidar/phase-5/dtm/27700/gridded/NO41NE_50CM_DTM_PHASE5.tif"
+  },
+  {
+   "name": "NO41NE_50CM_DSM_PHASE5.tif",
+   "url": "https://srsp-open-data.s3.eu-west-2.amazonaws.com/lidar/phase-5/dsm/27700/gridded/NO41NE_50CM_DSM_PHASE5.tif"
+  },
+  {
+   "name": "NO51NW_50CM_DTM_PHASE5.tif",
+   "url": "https://srsp-open-data.s3.eu-west-2.amazonaws.com/lidar/phase-5/dtm/27700/gridded/NO51NW_50CM_DTM_PHASE5.tif"
+  },
+  {
+   "name": "NO51NW_50CM_DSM_PHASE5.tif",
+   "url": "https://srsp-open-data.s3.eu-west-2.amazonaws.com/lidar/phase-5/dsm/27700/gridded/NO51NW_50CM_DSM_PHASE5.tif"
+  },
+  {
+   "name": "srsp_list_national_lidar_programme.xml",
+   "url": "https://srsp-open-data.s3.eu-west-2.amazonaws.com/?list-type=2&delimiter=/&prefix=lidar/national-lidar-programme/"
+  },
+  {
+   "name": "srsp_list_coastal.xml",
+   "url": "https://srsp-open-data.s3.eu-west-2.amazonaws.com/?list-type=2&delimiter=/&prefix=lidar/coastal/"
+  },
+  {
+   "name": "srsp_list_hes.xml",
+   "url": "https://srsp-open-data.s3.eu-west-2.amazonaws.com/?list-type=2&delimiter=/&prefix=lidar/hes/"
+  },
+  {
+   "name": "srsp_phase5_meta_list.xml",
+   "url": "https://srsp-open-data.s3.eu-west-2.amazonaws.com/?list-type=2&prefix=lidar/phase-5/&delimiter=/"
+  },
+  {
+   "name": "st_andrews_old_coastline.geojson",
+   "overpass": "[out:json][timeout:180][bbox:56.330,-2.860,56.372,-2.780];(way[\"natural\"=\"coastline\"];);out geom;"
+  }
+ ]
+}

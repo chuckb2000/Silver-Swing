@@ -1,0 +1,163 @@
+{
+ "tags": [
+  {
+   "osm": "w886559833",
+   "set": {
+    "ref": "1"
+   },
+   "reason": "OSM numbers the nines the other way round from the card (stymie.golf, golflink.com): OSM 10 is the card's 1 (lengths match hole for hole); the card's numbering is used (open item for the developer)"
+  },
+  {
+   "osm": "w886559834",
+   "set": {
+    "ref": "2"
+   },
+   "reason": "OSM numbers the nines the other way round from the card (stymie.golf, golflink.com): OSM 11 is the card's 2 (lengths match hole for hole); the card's numbering is used (open item for the developer)"
+  },
+  {
+   "osm": "w886559835",
+   "set": {
+    "ref": "3"
+   },
+   "reason": "OSM numbers the nines the other way round from the card (stymie.golf, golflink.com): OSM 12 is the card's 3 (lengths match hole for hole); the card's numbering is used (open item for the developer)"
+  },
+  {
+   "osm": "w886559836",
+   "set": {
+    "ref": "4"
+   },
+   "reason": "OSM numbers the nines the other way round from the card (stymie.golf, golflink.com): OSM 13 is the card's 4 (lengths match hole for hole); the card's numbering is used (open item for the developer)"
+  },
+  {
+   "osm": "w886559837",
+   "set": {
+    "ref": "5"
+   },
+   "reason": "OSM numbers the nines the other way round from the card (stymie.golf, golflink.com): OSM 14 is the card's 5 (lengths match hole for hole); the card's numbering is used (open item for the developer)"
+  },
+  {
+   "osm": "w886559838",
+   "set": {
+    "ref": "6"
+   },
+   "reason": "OSM numbers the nines the other way round from the card (stymie.golf, golflink.com): OSM 15 is the card's 6 (lengths match hole for hole); the card's numbering is used (open item for the developer)"
+  },
+  {
+   "osm": "w886559839",
+   "set": {
+    "ref": "7"
+   },
+   "reason": "OSM numbers the nines the other way round from the card (stymie.golf, golflink.com): OSM 16 is the card's 7 (lengths match hole for hole); the card's numbering is used (open item for the developer)"
+  },
+  {
+   "osm": "w886560436",
+   "set": {
+    "ref": "8"
+   },
+   "reason": "OSM numbers the nines the other way round from the card (stymie.golf, golflink.com): OSM 17 is the card's 8 (lengths match hole for hole); the card's numbering is used (open item for the developer)"
+  },
+  {
+   "osm": "w886560437",
+   "set": {
+    "ref": "9"
+   },
+   "reason": "OSM numbers the nines the other way round from the card (stymie.golf, golflink.com): OSM 18 is the card's 9 (lengths match hole for hole); the card's numbering is used (open item for the developer)"
+  },
+  {
+   "osm": "w886560438",
+   "set": {
+    "ref": "10"
+   },
+   "reason": "OSM numbers the nines the other way round from the card (stymie.golf, golflink.com): OSM 1 is the card's 10 (lengths match hole for hole); the card's numbering is used (open item for the developer)"
+  },
+  {
+   "osm": "w886562488",
+   "set": {
+    "ref": "11"
+   },
+   "reason": "OSM numbers the nines the other way round from the card (stymie.golf, golflink.com): OSM 2 is the card's 11 (lengths match hole for hole); the card's numbering is used (open item for the developer)"
+  },
+  {
+   "osm": "w886562489",
+   "set": {
+    "ref": "12"
+   },
+   "reason": "OSM numbers the nines the other way round from the card (stymie.golf, golflink.com): OSM 3 is the card's 12 (lengths match hole for hole); the card's numbering is used (open item for the developer)"
+  },
+  {
+   "osm": "w886562490",
+   "set": {
+    "ref": "13"
+   },
+   "reason": "OSM numbers the nines the other way round from the card (stymie.golf, golflink.com): OSM 4 is the card's 13 (lengths match hole for hole); the card's numbering is used (open item for the developer)"
+  },
+  {
+   "osm": "w886562491",
+   "set": {
+    "ref": "14"
+   },
+   "reason": "OSM numbers the nines the other way round from the card (stymie.golf, golflink.com): OSM 5 is the card's 14 (lengths match hole for hole); the card's numbering is used (open item for the developer)"
+  },
+  {
+   "osm": "w886562492",
+   "set": {
+    "ref": "15"
+   },
+   "reason": "OSM numbers the nines the other way round from the card (stymie.golf, golflink.com): OSM 6 is the card's 15 (lengths match hole for hole); the card's numbering is used (open item for the developer)"
+  },
+  {
+   "osm": "w886562493",
+   "set": {
+    "ref": "16"
+   },
+   "reason": "OSM numbers the nines the other way round from the card (stymie.golf, golflink.com): OSM 7 is the card's 16 (lengths match hole for hole); the card's numbering is used (open item for the developer)"
+  },
+  {
+   "osm": "w886562494",
+   "set": {
+    "ref": "17"
+   },
+   "reason": "OSM numbers the nines the other way round from the card (stymie.golf, golflink.com): OSM 8 is the card's 17 (lengths match hole for hole); the card's numbering is used (open item for the developer)"
+  },
+  {
+   "osm": "w886562761",
+   "set": {
+    "ref": "18"
+   },
+   "reason": "OSM numbers the nines the other way round from the card (stymie.golf, golflink.com): OSM 9 is the card's 18 (lengths match hole for hole); the card's numbering is used (open item for the developer)"
+  }
+ ],
+ "drop": [
+  {
+   "osm": "w96855094",
+   "reason": "Riverside Golf and Country Club's boundary (the neighbour across NE 33rd Dr): not this course; every leisure=golf_course would otherwise become a boundary (intake warning)"
+  },
+  {
+   "osm": "w1528926971",
+   "reason": "a Riverside Golf and Country Club hole line (wholly outside this course's boundary)"
+  },
+  {
+   "osm": "w1528926972",
+   "reason": "a Riverside Golf and Country Club hole line (wholly outside this course's boundary)"
+  },
+  {
+   "osm": "w421503324",
+   "reason": "replaced by its cart-path copy (proposed/paths.geojson)"
+  },
+  {
+   "osm": "w421503340",
+   "reason": "replaced by its cart-path copy (proposed/paths.geojson)"
+  }
+ ],
+ "add": [
+  {
+   "from": "proposed/paths.geojson",
+   "ids": [
+    "w421503324_cartpath",
+    "w421503340_cartpath"
+   ],
+   "tags": {},
+   "reason": "golf=path ways (the audit: retag as cart paths): copied as cart paths, originals dropped"
+  }
+ ]
+}

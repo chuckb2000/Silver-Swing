@@ -1,0 +1,102 @@
+{
+  "name": "Crosswater",
+  "location": "Sunriver, Deschutes County, Oregon (where the Deschutes and Little Deschutes rivers meet)",
+  "state": "OR",
+  "architects": "Bob Cupp with John Fought (1995)",
+  "theme": "crosswater",
+  "boundary_name": "Crosswater Golf Course",
+  "dtm": {
+    "path": "raw/dogami_dtm_ft.tif",
+    "units": "ft",
+    "source": "DOGAMI lidar DIGITAL_TERRAIN_MODEL_MOSAIC (bare earth), exportImage at 1 m in EPSG:32610, box x 623800-625600 / y 4855100-4858100, fetched by the GitHub Actions workflow 2026-11-13 (release data-crosswater)"
+  },
+  "chm": {
+    "path": "raw/dogami_chm_ft.tif",
+    "units": "ft",
+    "source": "DOGAMI lidar CANOPY_HEIGHT_MODEL_MOSAIC (highest hit minus bare earth), same box and date",
+    "label": "DOGAMI canopy height model"
+  },
+  "tee_sets": [
+    {
+      "name": "Championship",
+      "playable": true,
+      "rating": 76.8,
+      "slope": 147,
+      "total_yd": 7683
+    },
+    {
+      "name": "Black",
+      "playable": true,
+      "rating": 74.9,
+      "slope": 144,
+      "total_yd": 7273
+    },
+    {
+      "name": "Blue",
+      "playable": false,
+      "rating": 72.7,
+      "slope": 139,
+      "total_yd": 6811
+    }
+  ],
+  "default_tee": "Championship",
+  "scorecard_source": "Third-party: Stymie's card (par, men's handicap and yardage per hole for eleven tee sets; the course chat's copy, read 2026-11-13), every row adds up (Championship 7,683, as GolfPass, Wikipedia and the old club card). Ratings from Stymie (Championship 76.8/147, Black 74.9/144); GolfPass prints 76.5/145 and 74.6/141. Unverified against a printed card.",
+  "driving_range_is_ob": true,
+  "wind_mph": {
+    "minMph": 2,
+    "maxMph": 10
+  },
+  "trees_off_fairways_m": 2,
+  "attribution": [
+    "Map data \u00a9 OpenStreetMap contributors (ODbL)",
+    "Elevation and canopy height: Oregon Department of Geology and Mineral Industries (DOGAMI) lidar",
+    "Orthophoto (checks only): Oregon Statewide Imagery Program 2024"
+  ],
+  "notes": "Standing defaults (COURSE_BUILD.md 4.1), 2026-11-13: the longest tee set (Championship) and it is the default; all water red; OB = the OSM course boundary, roads inside it are cart paths, the driving range is OB; high-desert wind 2-10 mph; trees from DOGAMI lidar, trees in fairways or in the way of a centre-line drive removed and listed. The world is over the 2,048 m limit (developer approved, 2026-11-13). Theme crosswater (new; the course chat's design).",
+  "id": "crosswater",
+  "epsg": 32610,
+  "world": {
+    "x0": 623913,
+    "y0": 4855215,
+    "width": 1536,
+    "height": 2816,
+    "note": "OSM course boundary bbox (1219 x 2413 m, relation/14236725) + at least 120 m of scenery, rounded out to whole 256 m chunks and centred (158 m west/east, 201 m south/north)",
+    "over_limit_approved": "developer, 2026-11-13 (\"go ahead with the four courses larger than the world limit\")"
+  },
+  "osm_sources": [
+    "raw/overpass.geojson"
+  ],
+  "red_water_osm": [
+    "r5314115",
+    "w207481249",
+    "w355586179",
+    "w355586180",
+    "w355586181",
+    "w355586182",
+    "w355776770",
+    "w355776771",
+    "w355776772",
+    "w355776773",
+    "w355776774",
+    "w355776775",
+    "w355776776",
+    "w355776777",
+    "w356000312",
+    "w356000314",
+    "w356000315",
+    "w356000318",
+    "w356000330",
+    "w356000331",
+    "w356000332",
+    "w356000333",
+    "w356000334",
+    "w356000340",
+    "w356000350",
+    "w356000354",
+    "w356000356",
+    "w356000358",
+    "w356000361",
+    "w356011279"
+  ],
+  "water_note": "30 natural=water ponds and river arms inside the boundary made red penalty areas (red_water_osm; standing default). The Little Deschutes (OSM river line w625186746, no water polygon) runs through the boundary's two cut-outs, which are out of bounds; the DEM shows no channel along it to draw as a penalty area (open item)."
+}

@@ -1,0 +1,54 @@
+{
+  "name": "Eugene Country Club",
+  "location": "Eugene, Lane County, Oregon",
+  "state": "OR",
+  "architects": "H. Chandler Egan (1923-27); Robert Trent Jones Sr. (1967 redesign, the routing reversed so the old greens became tees)",
+  "theme": "eugene_cc",
+  "boundary_name": "Eugene Country Club",
+  "dtm": {
+    "path": "raw/dogami_dtm_ft.tif",
+    "units": "ft",
+    "source": "DOGAMI lidar DIGITAL_TERRAIN_MODEL_MOSAIC (bare earth; newest project at the course OLC_WILLAMETTE_VALLEY_2023_SOUTH, also OLC_LANE_COUNTY_2014), exportImage at 1 m in EPSG:32610, box x 492300-493700 / y 4878500-4880000, fetched by the GitHub Actions workflow 2026-11-13 (release data-eugene_cc)"
+  },
+  "chm": {
+    "path": "raw/dogami_chm_ft.tif",
+    "units": "ft",
+    "source": "DOGAMI lidar CANOPY_HEIGHT_MODEL_MOSAIC (highest hit minus bare earth), same box and date",
+    "label": "DOGAMI canopy height model"
+  },
+  "tee_sets": [
+    {
+      "name": "Championship",
+      "playable": true,
+      "rating": 74.6,
+      "slope": 140,
+      "total_yd": 7015
+    }
+  ],
+  "default_tee": "Championship",
+  "scorecard_source": "Third-party (no card on the club's site found): GolfPass (course 11296) per-hole par, men's handicap and yardages for every tee set, read 2026-11-13; the Championship row adds up to 7,015 yd. Championship rating/slope 74.6/140 from stymie.golf, which prints that tee as 7,030 yd. Unverified against a printed card.",
+  "driving_range_is_ob": true,
+  "trees_off_fairways_m": 2,
+  "wind_mph": {
+    "minMph": 1,
+    "maxMph": 7
+  },
+  "attribution": [
+    "Map data \u00a9 OpenStreetMap contributors (ODbL)",
+    "Elevation and canopy height: Oregon Department of Geology and Mineral Industries (DOGAMI) lidar",
+    "Orthophoto (checks only): Oregon Statewide Imagery Program 2024"
+  ],
+  "notes": "Standing defaults (COURSE_BUILD.md 4.1), 2026-11-13: the longest tee set (Championship) and it is the default; all water red; OB = the OSM course boundary, roads inside it are cart paths, the driving range is OB; inland Pacific Northwest wind 1-7 mph; trees from DOGAMI lidar, trees in fairways or in the way of a centre-line drive removed and listed. Theme eugene_cc (new; the course chat's design).",
+  "id": "eugene_cc",
+  "epsg": 32610,
+  "world": {
+    "x0": 492489,
+    "y0": 4878626,
+    "width": 1024,
+    "height": 1280,
+    "note": "OSM course boundary bbox (763 x 934 m, way/124953002) + at least 120 m of scenery, rounded out to whole 256 m chunks and centred (130 m west/east, 173 m south/north)"
+  },
+  "osm_sources": [
+    "raw/overpass.geojson"
+  ]
+}

@@ -86,7 +86,8 @@ async function pickCourse(page: Page, state: string, name: string) {
     };
     return find(window.__game.scene.getScene('courses').children.list);
   };
-  for (let i = 0; i < 6; i++) {
+  // (Oregon has more than thirty courses since 2026-11-13: room for a dozen pages and more)
+  for (let i = 0; i < 20; i++) {
     if (await page.evaluate(locate, ['courses', null, name, null] as [string, string | null, string | null, string | null])) break;
     const before = await page.evaluate(counter);
     await tap(page, 'courses', { icon: 'arrow_right' }, new Function('before', `return (${counter.toString()})() !== before;`) as (b: unknown) => boolean, before);

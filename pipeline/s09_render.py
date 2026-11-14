@@ -359,7 +359,10 @@ def building_pieces(g, chm):
                 m = rasterize([(poly, 1)], out_shape=chm.shape, transform=Affine(1, 0, 0, 0, 1, 0), fill=0, dtype="uint8").astype(bool)
                 vals = chm[m]
                 hb = float(np.median(vals)) if vals.size else 6.0
-            out.append((poly, float(np.clip(hb, 3.0, 14.0)), r.osm, "house"))
+            # a wall mapped as a thin building (barrier=wall, the Old Course's 17th) keeps its low
+            # tagged height; other buildings are 3-14 m
+            lo = 0.8 if r.tags.get("barrier") == "wall" else 3.0
+            out.append((poly, float(np.clip(hb, lo, 14.0)), r.osm, "house"))
     return out
 
 

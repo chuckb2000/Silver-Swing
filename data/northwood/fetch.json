@@ -1,0 +1,42 @@
+{
+ "items": [
+  {
+   "name": "northwood_overpass.geojson",
+   "osm_box": [
+    38.466,
+    -123.012,
+    38.49,
+    -122.976
+   ]
+  },
+  {
+   "name": "northwood_dem1m",
+   "tnm": {
+    "dataset": "dem1m",
+    "bbox": [
+     -122.999931,
+     38.475132,
+     -122.988328,
+     38.481944
+    ],
+    "only": "CA_NorthernCA_B22"
+   }
+  },
+  {
+   "name": "USGS_LPC_CA_NorthernCA_B22_10SEH0058.laz",
+   "url": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/CA_NorthernCA_B22/CA_NorthernCA_1_B22/LAZ/USGS_LPC_CA_NorthernCA_B22_10SEH0058.laz"
+  },
+  {
+   "name": "USGS_LPC_CA_NorthernCA_B22_10SEH0059.laz",
+   "url": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/CA_NorthernCA_B22/CA_NorthernCA_1_B22/LAZ/USGS_LPC_CA_NorthernCA_B22_10SEH0059.laz"
+  },
+  {
+   "name": "USGS_LPC_CA_NorthernCA_B22_10SEH0158.laz",
+   "url": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/CA_NorthernCA_B22/CA_NorthernCA_1_B22/LAZ/USGS_LPC_CA_NorthernCA_B22_10SEH0158.laz"
+  },
+  {
+   "name": "USGS_LPC_CA_NorthernCA_B22_10SEH0159.laz",
+   "url": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/CA_NorthernCA_B22/CA_NorthernCA_1_B22/LAZ/USGS_LPC_CA_NorthernCA_B22_10SEH0159.laz"
+  }
+ ]
+}

@@ -1,0 +1,388 @@
+{
+ "note": "Proposal (course chat, 2026-11-13): the routing of both courses. OSM maps every green and tee box but only North 1's hole line; each line here runs from the back-most mapped tee box of the hole (its centre) through any bend to its green (or its part of a shared green). Worked out from the club's cards: every hole's tee boxes lie on one line to its green at the card's yardages (Green, Black, Tan, Red), the next tee stands by the last green, and the tee boxes' long axes point at the green. Nothing here is approved until the developer says so. The developer confirmed the routing and the shared greens on 2026-11-13, and put South 16's tees in the strip south of South 15's green (not on North 18's boxes).",
+ "layouts": {
+  "reserve_north": {
+   "1": {
+    "tee": "w825461914",
+    "green": "w1046208414",
+    "par": 5,
+    "handicap": 7,
+    "evidence": "tee boxes w825461914, w825461916, w825461917",
+    "osm_line": "w825907441"
+   },
+   "2": {
+    "tee": "w904355285",
+    "green": "w904355272",
+    "par": 4,
+    "handicap": 9,
+    "bends": [
+     {
+      "fairway": "w904358568",
+      "near": [
+       505698.0,
+       5036945.0
+      ]
+     }
+    ],
+    "evidence": "tee boxes w904355285, w904355283, w904355282, w904355284"
+   },
+   "3": {
+    "tee": "w904355271",
+    "green": "w904355193",
+    "par": 3,
+    "handicap": 15,
+    "evidence": "tee boxes w904355271, w904355270, w904355269, w904355268"
+   },
+   "4": {
+    "tee": "w904355217",
+    "green": "w904355186",
+    "par": 4,
+    "handicap": 5,
+    "evidence": "tee boxes w904355217, w904355219, w904355220"
+   },
+   "5": {
+    "tee": "w904355174",
+    "green": "w904355172",
+    "par": 3,
+    "handicap": 17,
+    "evidence": "tee boxes w904355174, w904355177"
+   },
+   "6": {
+    "tee": "w904355178",
+    "green": "w737373106",
+    "par": 5,
+    "handicap": 1,
+    "evidence": "tee boxes w904355178, w904355179, w904355180"
+   },
+   "7": {
+    "tee": "w904355221",
+    "green": "w904355226",
+    "par": 4,
+    "handicap": 11,
+    "bends": [
+     {
+      "fairway": "w904355225",
+      "near": [
+       505754.6,
+       5037303.9
+      ]
+     }
+    ],
+    "evidence": "tee boxes w904355221, w904355223, w904355224"
+   },
+   "8": {
+    "tee": "w904355230",
+    "green": "w825461923",
+    "par": 5,
+    "handicap": 3,
+    "part": "ne",
+    "evidence": "tee boxes w904355230, w904355228, w904355229, w904355231"
+   },
+   "9": {
+    "tee": "w904355233",
+    "green": "w904355256",
+    "par": 4,
+    "handicap": 13,
+    "evidence": "tee boxes w904355233, w904355234, w904355235, w904355236"
+   },
+   "10": {
+    "tee": "w904355245",
+    "green": "w904355253",
+    "par": 4,
+    "handicap": 12,
+    "evidence": "tee boxes w904355245, w904355246, w904355247, w904355248"
+   },
+   "11": {
+    "tee": "w904355249",
+    "green": "w904355251",
+    "par": 3,
+    "handicap": 18,
+    "evidence": "tee boxes w904355249, w904355250"
+   },
+   "12": {
+    "tee": "w904355237",
+    "green": "w904355259",
+    "par": 5,
+    "handicap": 6,
+    "evidence": "tee boxes w904355237, w904355238, w904355239, w904355240"
+   },
+   "13": {
+    "tee": "w904355214",
+    "green": "w904355205",
+    "par": 4,
+    "handicap": 8,
+    "bends": [
+     {
+      "fairway": "r14004326",
+      "near": [
+       505850.0,
+       5037560.0
+      ]
+     }
+    ],
+    "evidence": "tee boxes w904355214, w904355213, w904355212, w904355215"
+   },
+   "14": {
+    "tee": "w904355211",
+    "green": "w904355203",
+    "par": 3,
+    "handicap": 16,
+    "evidence": "tee boxes w904355210, w904355209, w904355208"
+   },
+   "15": {
+    "tee": "w904355197",
+    "green": "w904355189",
+    "par": 4,
+    "handicap": 2,
+    "evidence": "tee boxes w904355197, w904355196, w904355198, w904355199, w904355181"
+   },
+   "16": {
+    "tee": "w904355264",
+    "green": "w904355278",
+    "par": 3,
+    "handicap": 14,
+    "evidence": "tee boxes w904355264, w904355266, w904355267"
+   },
+   "17": {
+    "tee": "w904355274",
+    "green": "w825461923",
+    "par": 4,
+    "handicap": 10,
+    "part": "w",
+    "bends": [
+     [
+      505787.0,
+      5037000.0
+     ]
+    ],
+    "evidence": "tee boxes w904355274, w904355275, w904355276, w904355277"
+   },
+   "18": {
+    "tee": "w904355286",
+    "green": "w903911535",
+    "par": 5,
+    "handicap": 4,
+    "evidence": "tee boxes w904355286, w904355287, w904355288"
+   }
+  },
+  "reserve_south": {
+   "1": {
+    "tee": "w903911562",
+    "green": "w903911555",
+    "par": 4,
+    "handicap": 11,
+    "evidence": "tee boxes w903911562, w903911564, w903911565"
+   },
+   "2": {
+    "tee": "w903911574",
+    "green": "w903911577",
+    "par": 3,
+    "handicap": 17,
+    "evidence": "tee boxes w903911574, w903911575, w903911576"
+   },
+   "3": {
+    "tee": "w903911600",
+    "green": "w903911594",
+    "par": 5,
+    "handicap": 3,
+    "part": "e",
+    "evidence": "tee boxes w903911600, w903911601, w903911602"
+   },
+   "4": {
+    "tee": "w903911621",
+    "green": "w903911616",
+    "par": 4,
+    "handicap": 9,
+    "evidence": "tee boxes w903911621, w903911622, w903911623"
+   },
+   "5": {
+    "tee": "w903911615",
+    "green": "w903911594",
+    "par": 4,
+    "handicap": 15,
+    "part": "w",
+    "evidence": "tee boxes w903911615, w903911614, w903911613"
+   },
+   "6": {
+    "tee": "w903911598",
+    "green": "w903911582",
+    "par": 5,
+    "handicap": 1,
+    "evidence": "tee boxes w903911598, w903911597, w903911596"
+   },
+   "7": {
+    "tee": "w903911570",
+    "green": "w903911567",
+    "par": 3,
+    "handicap": 13,
+    "evidence": "tee boxes w903911570, w903911571, w903911572"
+   },
+   "8": {
+    "tee": "w904358586",
+    "green": "w904358583",
+    "par": 4,
+    "handicap": 7,
+    "evidence": "tee boxes w904358586, w904358587, w904358588, w904358589"
+   },
+   "9": {
+    "tee": "w904358599",
+    "green": "w904358591",
+    "par": 4,
+    "handicap": 5,
+    "evidence": "tee boxes w904358599, w904358598, w904358597, w904358596"
+   },
+   "10": {
+    "tee": "w903911552",
+    "green": "w903911545",
+    "par": 4,
+    "handicap": 6,
+    "evidence": "tee boxes w903911552, w903911551, w903911550, w903911549"
+   },
+   "11": {
+    "tee": "w903911636",
+    "green": "w903911626",
+    "par": 3,
+    "handicap": 16,
+    "part": "s",
+    "evidence": "tee boxes w903911636, w903911635, w903911634"
+   },
+   "12": {
+    "tee": "w904355300",
+    "green": "w904355298",
+    "par": 4,
+    "handicap": 14,
+    "evidence": "tee boxes w904355300, w904355301"
+   },
+   "13": {
+    "tee": "w904358565",
+    "green": "w904355310",
+    "par": 4,
+    "handicap": 12,
+    "evidence": "tee boxes w904358565, w904358566, w904358564"
+   },
+   "14": {
+    "tee": "w904355309",
+    "green": "w904355302",
+    "par": 3,
+    "handicap": 18,
+    "evidence": "tee boxes w904355309, w904355308, w904355307, w904355306"
+   },
+   "15": {
+    "tee": "w904355290",
+    "green": "w904358575",
+    "par": 5,
+    "handicap": 2,
+    "evidence": "tee boxes w904355290, w904355291, w904355292, w904355293"
+   },
+   "16": {
+    "tee": "s16_tee_green",
+    "green": "w904358577",
+    "par": 4,
+    "handicap": 8,
+    "evidence": "tee boxes s16_tee_green, s16_tee_black, s16_tee_tan, s16_tee_red (not in OSM: the developer's circled strip south of South 15's green, 2026-11-13; pads from the DEM, make_s16_tees.py)"
+   },
+   "17": {
+    "tee": "w903911640",
+    "green": "w903911626",
+    "par": 4,
+    "handicap": 10,
+    "part": "n",
+    "bends": [
+     {
+      "fairway": "w903911631",
+      "near": [
+       506018.4,
+       5036577.7
+      ]
+     }
+    ],
+    "evidence": "tee boxes w903911640, w903911639, w903911638, w903911637"
+   },
+   "18": {
+    "tee": "w903911566",
+    "green": "w903911531",
+    "par": 5,
+    "handicap": 4,
+    "evidence": "tee boxes w903911566, w903911541, w903911540, w903911542"
+   }
+  }
+ },
+ "splits": [
+  {
+   "green": "w825461923",
+   "why": "North 8 and 17: the boomerang-shaped green round the pond's south tip (with North 1's green w1046208414 beside it, the club's 'triple green' for 1, 8 and 17), cut between its two lobes",
+   "line": [
+    [
+     505839.1,
+     5036913.4
+    ],
+    [
+     505900.9,
+     5036810.5
+    ]
+   ],
+   "parts": {
+    "ne": [
+     505886.0,
+     5036871.5
+    ],
+    "w": [
+     505854.0,
+     5036852.3
+    ]
+   }
+  },
+  {
+   "green": "w903911626",
+   "why": "South 11 and 17: the club's double green (17's 'distinctive double green, shared with the 11th'), cut across its middle",
+   "line": [
+    [
+     505864.2,
+     5036390.8
+    ],
+    [
+     505981.6,
+     5036366.1
+    ]
+   ],
+   "parts": {
+    "n": [
+     505927.8,
+     5036401.5
+    ],
+    "s": [
+     505918.0,
+     5036355.3
+    ]
+   }
+  },
+  {
+   "green": "w903911594",
+   "why": "South 3 and 5: one long kidney-shaped green that both holes' tee lines end on (3 from the north-east, 5 from the west-north-west), cut across its waist",
+   "line": [
+    [
+     506254.0,
+     5036104.4
+    ],
+    [
+     506287.0,
+     5036219.7
+    ]
+   ],
+   "parts": {
+    "e": [
+     506291.8,
+     5036155.9
+    ],
+    "w": [
+     506249.1,
+     5036168.1
+    ]
+   }
+  }
+ ],
+ "bend_note": "Bends only on the doglegs: on the hole's own fairway centre line (fairway_axis), in the landing zone or at the corner. North 17's is given as a point on the narrow fairway west of the pond (its fairway polygon runs round both sides of the ponds, so its main axis takes one side only).",
+ "extra_sources": [
+  "proposed/tees_s16.geojson"
+ ]
+}

@@ -1534,8 +1534,8 @@ the pull request lists them. The ones that change what a player sees or does:
 - **The putt's aim line** reaches the hole on a long putt (the dots are spaced wider instead of
   running out).
 - **Mouse wheel:** one club per notch (a trackpad swipe ran through the bag), nothing behind an
-  open panel. **A tap within 0.35 s of the ball being struck** is not a skip of the flight (a
-  late third tap skipped it).
+  open panel. ~~A tap within 0.35 s of the ball being struck is not a skip of the flight~~
+  (undone the same day: "A tap skips the flight at once again").
 - **Open panels are drawn again when the window changes size or a phone turns** (pause menu,
   quit question, overview, scorecard, the match's questions).
 - **Settings** shows its rows a page at a time when the screen is too short for them all
@@ -1695,3 +1695,78 @@ or a round counts (`systems/game/holiday.ts` is pure and tested; the drawing is
   presses as soon as the cursor moves, on the easy (slowest) meter. Both passed 3-4 times in a
   row with the CPU kept busy.
 
+## A tap skips the flight at once again (developer, 2026-11-13)
+
+The overnight sweep ignored taps for 0.35 s after the ball was struck (a late third tap had
+skipped the flight). The developer wants it as it was: a tap during the flight skips to where the
+ball ends straight away, also while the camera is still going back to the golfer. The wait is
+gone (`PlayScene.fastForward`).
+
+## The passport shows a map of a few holes (developer, 2026-11-13)
+
+The passport's pictures were a 104 x 52 crop from the middle of the course card, which since the
+cards became strips of four green views (2026-10-20) fell on the seam between two of them: two
+half pictures of trees, up close. The developer: "maybe it could be like a zoomed out view of a few
+holes". Each course now has its own map (`assets-src/passport_maps.py` ->
+`sprites/passport/<id>.png`): the overview map's look (surface colours, canopy blobs; the
+hillshade in three flat bands) at 5 m a pixel, about 520 x 260 m, over the stretch with the most
+golf in it (the holes' lines, tees and greens counted), with a small flag on each green. Drawn
+from the course's own game files, so no course is rebuilt; `course_cards.py <id>` makes it for a
+new course. A course without one shows the middle of its card's first green.
+
+
+## The Olympic Club is one place (developer, 2026-11-13)
+
+The Lake was a layout of `data/olympic_club` (group `olympic_club`, a group of one, so it showed
+as its own course) and the Cliffs its own data folder with no group. The developer wants one
+place with its courses under it, like Pumpkin Ridge, Bandon and the Reserve. The Cliffs joins
+the Lake's group through `scripts/course-groups.json` (key `olympic_club`), so no course is
+rebuilt: the course select shows "The Olympic Club" with "Lake" and "Cliffs". The title screen
+keeps one view per shared world only for courses with a layout, so both keep their views. Both
+join the daily rotation on 2026-11-14, so no past or current daily changes; from then on they
+are one place there too.
+
+## The putter's meter fits the putt, and goes both ways (developer, 2026-11-14)
+
+"If I have a 16 footer it will open the 48 foot meter ... it only cycles up so you have to go up
+to 160 to loop back down to 24." The automatic meter was the smallest at least 1.6 x the putt's
+straight-line length, so a 16-footer (25.6 ft) got 48 ft. Now it is the smallest meter on which the
+putt, as it plays, plus 10 % and 1 ft past the hole, needs no more than 85 %: a flat 16 or 17
+footer gets 24 ft, 5 ft gets 12 ft, 30 ft gets 48 ft. "As it plays" counts the slope: the rise to
+the hole x g / the green's rolling deceleration (9.81 / 0.55 = about 18 m of flat roll per metre of
+rise), so a 16-footer 2 % uphill plays about 22 ft (48 ft meter) and 2 % downhill about 10 ft
+(24 ft). With the putter, the scale button has a '-' at its left end and a '+' at its right: a tap
+on its left half is one size smaller, on its right half one size bigger, stopping at the ends (12 and
+160 ft). Keys: P bigger, O smaller.
+
+Same day: the swing-length button had been given the '-' and '+' too; the developer wanted it as it
+was, so with any other club it is again "full" and a tap anywhere goes round full, 3/4, 1/2, 1/4 (P
+too). And the meter is never shorter than the putt ("I just had a 15 footer downhill and it came up
+with the 12 foot meter"): the smallest meter that is at least the putt's length and has the room
+above.
+
+## The aim line shows the flight and warns of trees (developer, 2026-11-14)
+
+"It's sometimes a little difficult to tell when a ball is going to go into the trees." The dotted
+aim line was flat, on the ground, and blind to trees, and the 3/4 view draws a tree's crown above
+its trunk while the part that stops a ball is a cylinder round the trunk (40 % of its height to the
+top), so a line under a drawn crown could fly clear and one beside it could clip the branches. Three
+mock-ups (a red line from the tree, the flight's arc, both); the developer chose both. While aiming,
+`Round.previewFlight` flies a perfect stroke down the line until it comes down: its arc is drawn the
+way the ball is drawn in flight (lifted by its height), the flat line under it is its shadow, and
+from where it would first touch a tree both turn red with a red cross at the spot. Any pass through
+a crown counts (a canopy hit is otherwise luck: 15 % a metre), so a white line is one a perfect
+stroke never hits a tree on. Calm air, like the landing marker, so the arc ends on the marker and
+reading the wind stays the player's (the wind is 1-7 mph; a 7 mph crosswind moves a drive about
+6 yd by its landing). Shown whenever the landing marker is (Easy and Normal, not Pro).
+
+## Course names in the lists (developer, 2026-11-14)
+
+"The Country Club just shows up as 'the'" on the recent list: the short name dropped "country club"
+and left the article. `shortName` now never leaves a bare "the" (The Country Club stays itself),
+drops a place after a comma ("The Old Course, St Andrews" -> "the old course"), "golf and country
+club" ("shaughnessy", "capilano"; they read "shaughnessy golf and"), "the ... course at"
+("spruce peak", "aberdeen"), a dash and a trailing "course" after a name ("pronghorn nicklaus"),
+and Marovitz is "marovitz". Lists cut names with `fitName`: a leading "the" goes first, then whole
+words when that keeps most of the column, else the letters that fit (so the Bandon courses stay
+apart in a narrow column: "bandon dun", "bandon pre"), never ending on a comma or a space.

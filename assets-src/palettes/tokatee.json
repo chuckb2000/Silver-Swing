@@ -1,0 +1,19 @@
+{
+  "name": "Tokatee (a Cascade valley course on the McKenzie River)",
+  "note": "Course theme palette (<= 32 colours), same keys as pnw.json. Tokatee Golf Club, McKenzie Bridge, in the old-growth forest of the McKenzie River valley below the Three Sisters (course chat, 2026-11-13). From the OSIP 2024 summer photo (fairway #89916d, green #9fa26d, bunker #b4a98c, water #4b7a6f): mown turf a warm olive green, greens a little yellower, the rough between the holes drier and goldener; bunker sand grey-tan (volcanic); the ponds and creeks the clear emerald-teal of McKenzie water. Trees: towering Douglas fir and western red cedar (two dark conifer tones by variant), with vine maple, black cottonwood and red alder among them (trees_tokatee.py; a drawing choice, the lidar gives only crown shape). Shadows are a 35% black overlay on top of these.",
+  "colors": {
+    "G0": "#1c3220", "G1": "#284428", "G2": "#355a30", "G3": "#426e37",
+    "G4": "#50823f", "G5": "#5e9447", "G6": "#6da450", "G7": "#7db35a",
+    "G8": "#8fc066", "G9": "#b3d684",
+    "L0": "#5f7a3c", "L1": "#728d44", "L2": "#86a04f",
+    "S0": "#a99e85", "S1": "#cac0a6", "S2": "#e2dac4",
+    "W0": "#235a52", "W1": "#2f7066", "W2": "#5c9e8e",
+    "K0": "#26272b", "K1": "#53545a", "K2": "#7a7b80", "K3": "#b2a994", "K4": "#d9d0bc",
+    "B0": "#46301f", "B1": "#6d4a31", "B2": "#8c5a40",
+    "R0": "#4b586a", "WH": "#f6f6f2"
+  },
+  "trees": {
+    "conifer": "trees_tokatee:conifer",
+    "deciduous": "trees_tokatee:deciduous"
+  }
+}

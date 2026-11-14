@@ -1,0 +1,91 @@
+{
+  "id": "st_andrews_old",
+  "name": "The Old Course, St Andrews",
+  "location": "St Andrews, Fife, Scotland",
+  "state": "EU",
+  "architects": "unknown origins (golf played on the links since the 15th century); shaped by Allan Robertson (1840s-50s, the double greens) and Old Tom Morris (from 1865: the 1st and 18th greens)",
+  "theme": "old_course",
+  "epsg": 32630,
+  "osm_sources": [
+    "raw/overpass.geojson"
+  ],
+  "boundary_name": "Old Course",
+  "dtm": {
+    "path": "raw/dtm_clip.tif",
+    "units": "m",
+    "source": "Scottish Public Sector LiDAR Phase 5, 50 cm DTM, tiles NO41NE and NO51NW (EPSG:27700, ODN heights), mosaicked and clipped to the world + 100 m by data/st_andrews_old/mosaic_lidar.py; srsp-open-data (registry.opendata.aws/scottish-lidar), Open Government Licence v3; fetched by the GitHub Actions fetch workflow 2026-11-13 (release data-st_andrews_old)"
+  },
+  "dsm": {
+    "path": "raw/dsm_clip.tif",
+    "units": "m",
+    "source": "Scottish Public Sector LiDAR Phase 5, 50 cm DSM, tiles NO41NE and NO51NW, as the DTM"
+  },
+  "world": {
+    "x0": 510582,
+    "y0": 6244229,
+    "width": 1792,
+    "height": 2048,
+    "note": "OSM Old Course boundary way/1019045811 bbox (1,445 x 2,007 m) + scenery, rounded out to whole 256 m chunks and centred: 1,792 m east-west (174 m each side), 2,048 m north-south (20 m each side: the 2,048 m limit, COURSE_BUILD.md 6.1)"
+  },
+  "tee_sets": [
+    {
+      "name": "Black",
+      "playable": true,
+      "rating": 73.4,
+      "slope": 136,
+      "total_yd": 6670
+    },
+    {
+      "name": "Blue",
+      "playable": false,
+      "rating": 71.8,
+      "slope": 133,
+      "total_yd": 6355
+    },
+    {
+      "name": "Green",
+      "playable": false,
+      "rating": 70.2,
+      "slope": 127,
+      "total_yd": 6044
+    }
+  ],
+  "default_tee": "Black",
+  "scorecard_source": "St Andrews Links Old Course scorecard 2026 (PDF supplied by the developer, 2026-11-13; also the hole-by-hole pages of standrews.com, screenshots from the developer): Black 6,670 / Blue 6,355 / Green 6,044 yd, par 72 (men), men's stroke index, men's ratings 73.4/136, 71.8/133, 70.2/127 (women's Green 76.5/140, par 76). The card's pars 4/5 (holes 2, 4, 13, 17) are men/women. The older card on third-party sites (White 6,721) is superseded.",
+  "penalty_default": "red",
+  "driving_range_is_ob": true,
+  "trees_off_fairways_m": 2,
+  "wind_mph": {
+    "minMph": 6,
+    "maxMph": 16
+  },
+  "attribution": [
+    "Map data © OpenStreetMap contributors (ODbL)",
+    "Elevation: Scottish Public Sector LiDAR Phase 5, contains public sector information licensed under the Open Government Licence v3.0 (Scottish Government, accessed from registry.opendata.aws/scottish-lidar)"
+  ],
+  "red_water_osm": [
+    "sea"
+  ],
+  "gorse": {
+    "ground": "gorse",
+    "extra_areas": "proposed/gorse_osm.geojson"
+  },
+  "integral": [
+    {
+      "name": "17th road and path",
+      "osm": [
+        "w30712459",
+        "w1053387973",
+        "wall17"
+      ],
+      "buffer_m": 2.5
+    },
+    {
+      "name": "Grannie Clark's Wynd",
+      "osm": [
+        "w382065281"
+      ],
+      "buffer_m": 2.0
+    }
+  ]
+}

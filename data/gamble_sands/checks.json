@@ -1,0 +1,21 @@
+{
+ "note": "per-course settings for game/tests/unit/course_play.test.ts (docs/COURSE_BUILD.md 8.2).",
+ "wind_mph": [
+  1,
+  7
+ ],
+ "water": {
+  "count": 1
+ },
+ "tees": {
+  "sets": [
+   "Medal"
+  ]
+ },
+ "tee_shot_clear": {
+  "sets": [
+   "Medal"
+  ]
+ },
+ "inside_boundary": true
+}

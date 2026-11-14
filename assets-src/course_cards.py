@@ -318,6 +318,9 @@ def main(argv: list[str]):
         strip.save(OUT / f"{cid}.png", optimize=True)
         print(f"[cards] {cid}: greens {', '.join(map(str, holes))} -> sprites/cards/{cid}.png")
         title_map(c, hole)
+        # the passport's map of a few holes (my golf; passport_maps.py)
+        import passport_maps
+        print(f"[cards] {cid}: passport map -> {passport_maps.render(cid).relative_to(passport_maps.ROOT)}")
     if "--sheet" not in argv:
         print(f"[cards] title screen maps: {', '.join(tidy_title_maps())} -> sprites/title/")
 

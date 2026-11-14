@@ -1,0 +1,38 @@
+{
+ "release": "data-st_andrews_old",
+ "note": "Build inputs not kept in git for the Old Course; `make fetch NAME=st_andrews_old` puts them in place (pipeline/fetch_raw.py). In git: raw/overpass.geojson (intake.py osm of st_andrews_old_overpass.geojson and st_andrews_old_coastline.geojson). Here: the Scottish Public Sector LiDAR Phase 5 50 cm DTM and DSM tiles NO41NE and NO51NW (srsp-open-data, OGL v3), mosaicked and clipped to the world + 100 m by data/st_andrews_old/mosaic_lidar.py. The first tile of each pair goes to incoming/ (not in git); the second runs the mosaic.",
+ "files": [
+  {
+   "asset": "NO41NE_50CM_DTM_PHASE5.tif",
+   "sha256": "051baccd02e7064f97ac24ef1c51f896abae385dbb40fb9f6160bec2d869be0e",
+   "to": "incoming/",
+   "outputs": {
+    "incoming/NO41NE_50CM_DTM_PHASE5.tif": "051baccd02e7064f97ac24ef1c51f896abae385dbb40fb9f6160bec2d869be0e"
+   }
+  },
+  {
+   "asset": "NO51NW_50CM_DTM_PHASE5.tif",
+   "sha256": "91e59cb70bca72217d0db5680611d9cc11d669bf0863c73a7ee223fbe9249cd8",
+   "run": "python3 data/st_andrews_old/mosaic_lidar.py dtm data/st_andrews_old/incoming/NO41NE_50CM_DTM_PHASE5.tif {file}",
+   "outputs": {
+    "raw/dtm_clip.tif": "ca115931b4fe67ed18d10fd645034037f5e130ca58ab19fad3c8d460d8ad17b9"
+   }
+  },
+  {
+   "asset": "NO41NE_50CM_DSM_PHASE5.tif",
+   "sha256": "b99c78976c04f902c78c51d134b8968b7d9b72ab1f296c53ee79dbf5a9664f1e",
+   "to": "incoming/",
+   "outputs": {
+    "incoming/NO41NE_50CM_DSM_PHASE5.tif": "b99c78976c04f902c78c51d134b8968b7d9b72ab1f296c53ee79dbf5a9664f1e"
+   }
+  },
+  {
+   "asset": "NO51NW_50CM_DSM_PHASE5.tif",
+   "sha256": "49b88a1a91286eee15dbea12eda669f7a23318ef6bc2893358259023eace28e6",
+   "run": "python3 data/st_andrews_old/mosaic_lidar.py dsm data/st_andrews_old/incoming/NO41NE_50CM_DSM_PHASE5.tif {file}",
+   "outputs": {
+    "raw/dsm_clip.tif": "3fae3921c157cecd76712d476ed21378aa227044e4ce9f85fd9cfb5109a3f483"
+   }
+  }
+ ]
+}

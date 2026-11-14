@@ -1,0 +1,45 @@
+{
+ "add": [
+  {
+   "from": "proposed/hole13.geojson",
+   "ids": [
+    "w908964629_to_green"
+   ],
+   "tags": {},
+   "reason": "OSM's 13th hole line runs on past its green (w908964615) to a stray golf=pin 58 m beyond it, among the 14th tee boxes (audit: line ends 45 m from the nearest green, no pin inside its green); the copy ends at the green's centre instead, which also matches the card (400 yd Gold). Course chat's correction, 2026-11-13"
+  }
+ ],
+ "drop": [
+  {
+   "osm": "w908964629",
+   "reason": "replaced by proposed/hole13.geojson (ends on its green)"
+  },
+  {
+   "osm": "n8439876581",
+   "reason": "a golf=pin 58 m beyond the 13th green, between the 14th tee boxes and fairway: not on any green"
+  }
+ ],
+ "tags": [
+  {
+   "osm": "w908959964",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "standing default (COURSE_BUILD.md 4.1): every penalty area red"
+  },
+  {
+   "osm": "w908960006",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "standing default (COURSE_BUILD.md 4.1): every penalty area red"
+  },
+  {
+   "osm": "w96680236",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "standing default (COURSE_BUILD.md 4.1): every penalty area red"
+  }
+ ]
+}

@@ -1,0 +1,19 @@
+{
+  "name": "Columbia Edgewater (bottomland parkland on the Columbia Slough)",
+  "note": "Course theme palette (<= 32 colours), same keys as pnw.json. Columbia Edgewater Country Club, NE Portland, on the old Columbia River bottomland between Marine Drive and the slough (course chat, 2026-11-13). From the OSIP 2024 photo (fairway #7b967b, green #97ad7a, bunker #c0b594, water #53707a): the mown turf a cool sage green with a little teal in it, greens a lighter, yellower bent; bunker sand warm tan; the slough channels murky green-slate rather than blue. Trees: Douglas fir in deep blue-green, and the bottomland broadleaves of the slough (trees_columbia_edgewater.py): silvery black cottonwood, fresh Oregon ash and olive Oregon white oak (a drawing choice by variant; the lidar gives only crown shape). Shadows are a 35% black overlay on top of these.",
+  "colors": {
+    "G0": "#173326", "G1": "#1f4632", "G2": "#2a5c3d", "G3": "#336f45",
+    "G4": "#3e824d", "G5": "#4a9556", "G6": "#57a660", "G7": "#66b66b",
+    "G8": "#7ac477", "G9": "#a2d78e",
+    "L0": "#4f7547", "L1": "#5e874f", "L2": "#6f985a",
+    "S0": "#b7a47c", "S1": "#d6c79f", "S2": "#ebe0c2",
+    "W0": "#2d4e4e", "W1": "#3a6260", "W2": "#62897f",
+    "K0": "#25262c", "K1": "#52535b", "K2": "#797a82", "K3": "#b0a896", "K4": "#d8d0be",
+    "B0": "#46301f", "B1": "#6d4a31", "B2": "#8c5a40",
+    "R0": "#4a5768", "WH": "#f5f5f0"
+  },
+  "trees": {
+    "conifer": "trees_columbia_edgewater:conifer",
+    "deciduous": "trees_columbia_edgewater:deciduous"
+  }
+}

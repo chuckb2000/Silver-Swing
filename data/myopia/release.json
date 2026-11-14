@@ -1,0 +1,70 @@
+{
+ "release": "data-myopia",
+ "note": "Build inputs for Myopia; `make fetch NAME=myopia` puts them in place. Fetched by the GitHub Actions workflow (data/myopia/fetch.json) on 2026-11-13 (three lidar tiles on retry runs). myopia_overpass.geojson = the standard Overpass export of the box 42.6001,-70.8693,42.6194,-70.8455. usgs_dem_m.tif = 3DEPElevation exportImage at 1 m, x 346700-348600 / y 4718100-4720200 EPSG:32619, metres (project MA_CentralEastern_2021_B21). naip_*.jpg = USGS NAIP exportImage in two pieces named by their SW corner. USGS_LPC_*.laz = 3DEP lidar MA_CentralEastern_2021_B21, classes 3-5 kept.",
+ "files": [
+  {
+   "asset": "myopia_overpass.geojson",
+   "sha256": "cbc02a6d80cacb4363868ebdd253a5f84bac348f1063083c2ffae8b33b22d249",
+   "run": "python3 pipeline/intake.py osm myopia {file}",
+   "outputs": {
+    "raw/overpass.geojson": "71f21977ac78252aa21d046bd5c8c563109cc345fed3044d37edd82e4ea0fae2"
+   }
+  },
+  {
+   "asset": "usgs_dem_m.tif",
+   "sha256": "08d8807111ec3651e6baef7d3782a677c2dd16ed3fb8756fc17993c811575b58",
+   "run": "python3 pipeline/intake.py raster myopia {file} --out raw/usgs_dem_1m.tif",
+   "outputs": {
+    "raw/usgs_dem_1m.tif": "84904383884801488abf785eab1dfb84969c53a0ea12762ac348d8d17d85a304"
+   }
+  },
+  {
+   "asset": "naip_346700_4718100.jpg",
+   "sha256": "487bdc18cdc41d92e5af5142e2a83b36b9052488f77702f64c73a3d33bc19d68",
+   "to": "build/ortho/",
+   "outputs": {
+    "build/ortho/naip_346700_4718100.jpg": "487bdc18cdc41d92e5af5142e2a83b36b9052488f77702f64c73a3d33bc19d68"
+   }
+  },
+  {
+   "asset": "naip_346700_4720100.jpg",
+   "sha256": "d11764dd7c1911590e2b0084d3a8f68d5c6b1793773699bdc4897a773360095a",
+   "run": "python3 pipeline/intake.py ortho myopia data/myopia/build/ortho/naip_346700_4718100.jpg 346700 4718100 348600 4720100 {file} 346700 4720100 348600 4720200 --out raw/naip_06m.tif",
+   "outputs": {
+    "raw/naip_06m.tif": "c1baf6ce71c021860ea9555305d25281530020e161627a1907abf34f30243164"
+   }
+  },
+  {
+   "asset": "USGS_LPC_MA_CentralEastern_2021_B21_19TCH346717.laz",
+   "sha256": "10af1eff2c1885cf6ab87ba5c0976edec4f53e23bfd10aff2f90f6728c63f9d7",
+   "run": "python3 pipeline/intake.py laz myopia {file} --classes 3,4,5 --keep-evlrs --out raw/laz/myo_19TCH346717.laz",
+   "outputs": {
+    "raw/laz/myo_19TCH346717.laz": "0dcde9059189ac6ffb14576a7aeff84a814204dd6fd87d289caad301edb589dd"
+   }
+  },
+  {
+   "asset": "USGS_LPC_MA_CentralEastern_2021_B21_19TCH346719.laz",
+   "sha256": "1dc8554548c3690a6b70b9cdaf0c260b4efbb0d3809070bbe65f97edb1ea02b2",
+   "run": "python3 pipeline/intake.py laz myopia {file} --classes 3,4,5 --keep-evlrs --out raw/laz/myo_19TCH346719.laz",
+   "outputs": {
+    "raw/laz/myo_19TCH346719.laz": "935968cd12809c912aa28325ee5e7db4d7582d523f6b986b4cedb6799d71209b"
+   }
+  },
+  {
+   "asset": "USGS_LPC_MA_CentralEastern_2021_B21_19TCH348717.laz",
+   "sha256": "32a242e76eed4cbddd902f42363a0794c1861dc8bdeba61047968fc0a8e43af9",
+   "run": "python3 pipeline/intake.py laz myopia {file} --classes 3,4,5 --keep-evlrs --out raw/laz/myo_19TCH348717.laz",
+   "outputs": {
+    "raw/laz/myo_19TCH348717.laz": "5201e6b2ad28eb0288dd29e12c60f3455481655d713efdb9cdeaa9fc89e31ded"
+   }
+  },
+  {
+   "asset": "USGS_LPC_MA_CentralEastern_2021_B21_19TCH348719.laz",
+   "sha256": "2f97f2a5991236c6893142a96f466e968e5094b42d4b02106291c29c7b40902f",
+   "run": "python3 pipeline/intake.py laz myopia {file} --classes 3,4,5 --keep-evlrs --out raw/laz/myo_19TCH348719.laz",
+   "outputs": {
+    "raw/laz/myo_19TCH348719.laz": "e66ae02a82e31e5fa73542dd827a7083f8cab06549d26f66705800765f1b4e29"
+   }
+  }
+ ]
+}

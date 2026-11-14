@@ -1,0 +1,31 @@
+{
+ "hole": "8",
+ "features": [
+  {
+   "id": "user_bluetee_mwfjdqn6",
+   "kind": "bluetee",
+   "poly": [
+    [
+     245.2,
+     202.2
+    ],
+    [
+     249.9,
+     201.1
+    ],
+    [
+     247.8,
+     194.8
+    ],
+    [
+     244.2,
+     195.1
+    ]
+   ]
+  }
+ ],
+ "note": "",
+ "savedAt": "2026-11-13T22:16:35.150Z",
+ "by": "developer (tracing desk)",
+ "units": "local metres, origin 406695 E 4632457 N, EPSG:32616"
+}

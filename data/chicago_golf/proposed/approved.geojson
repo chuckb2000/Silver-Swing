@@ -1,0 +1,10 @@
+{
+"type": "FeatureCollection",
+"name": "approved",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+"features": [
+{ "type": "Feature", "properties": { "osm": "desk_3_bluetee_0", "kind": "tee", "tags": { "golf": "tee", "hole": "3", "source": "tracing desk (developer)", "approved": "developer 2026-11-13", "tee_set": "Black" } }, "geometry": { "type": "Polygon", "coordinates": [ [ [ -88.112993540257236, 41.842553509446731 ], [ -88.112932969863408, 41.842464029171005 ], [ -88.11285989901603, 41.842487254059733 ], [ -88.112898854705733, 41.842580546518548 ], [ -88.112993540257236, 41.842553509446731 ] ] ] } },
+{ "type": "Feature", "properties": { "osm": "desk_5_bluetee_0", "kind": "tee", "tags": { "golf": "tee", "hole": "5", "source": "tracing desk (developer)", "approved": "developer 2026-11-13", "tee_set": "Black" } }, "geometry": { "type": "Polygon", "coordinates": [ [ [ -88.118372908855676, 41.842769651772684 ], [ -88.11830351204172, 41.842727095264102 ], [ -88.118263225104613, 41.842765315782714 ], [ -88.118322971990253, 41.842807065609882 ], [ -88.118372908855676, 41.842769651772684 ] ] ] } },
+{ "type": "Feature", "properties": { "osm": "desk_8_bluetee_0", "kind": "tee", "tags": { "golf": "tee", "hole": "8", "source": "tracing desk (developer)", "approved": "developer 2026-11-13", "tee_set": "Black" } }, "geometry": { "type": "Polygon", "coordinates": [ [ [ -88.120866316159507, 41.84036126412331 ], [ -88.12080954420189, 41.840351910781848 ], [ -88.120833843026659, 41.840294931271089 ], [ -88.120877242620551, 41.840297209730778 ], [ -88.120866316159507, 41.84036126412331 ] ] ] } }
+]
+}
