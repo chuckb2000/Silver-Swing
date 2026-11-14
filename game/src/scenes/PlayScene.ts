@@ -596,7 +596,8 @@ export class PlayScene extends Phaser.Scene {
     else if (k === 'q' || k === 'Q') this.setSpin(this.spin === 1 ? 0 : 1);
     else if (k === 'e' || k === 'E') this.setSpin(this.spin === -1 ? 0 : -1);
     else if (k === 'u' || k === 'U') this.hud.openUnplayable();
-    else if (k === 'p' || k === 'P') this.cycleScale();
+    else if (k === 'p' || k === 'P') this.stepScale(1);
+    else if (k === 'o' || k === 'O') this.stepScale(-1);
   }
 
   private onPointerDown(p: Phaser.Input.Pointer) {
@@ -737,16 +738,24 @@ export class PlayScene extends Phaser.Scene {
     this.hud.refresh();
   }
 
-  /** Putter scale (6 / 12 / 25 m) or swing length (full, 3/4, 1/2, 1/4). */
-  cycleScale() {
+  /**
+   * The putter's meter (12 ... 160 ft) or the swing length (1/4 ... full) one size bigger (+1) or
+   * smaller (-1), stopping at the ends (developer, 2026-11-14: it only went round one way).
+   */
+  stepScale(dir: 1 | -1) {
     if (this.state !== 'aim') return;
     if (this.isPutting()) {
-      const scales = puttScales(app.settings.units);
-      const i = scales.findIndex((v) => Math.abs(v - this.puttScale) < 1e-6);
-      this.puttScale = scales[(i + 1) % scales.length];
+      const scales = puttScales(app.settings.units); // shortest first
+      let i = scales.findIndex((v) => Math.abs(v - this.puttScale) < 1e-6);
+      if (i < 0) i = scales.findIndex((v) => v >= this.puttScale);
+      const j = Math.max(0, Math.min(scales.length - 1, i + dir));
+      if (j === i) return;
+      this.puttScale = scales[j];
     } else {
-      const i = SWING_SCALES.indexOf(this.swingScale);
-      this.swingScale = SWING_SCALES[(i + 1) % SWING_SCALES.length];
+      const i = SWING_SCALES.indexOf(this.swingScale); // full first
+      const j = Math.max(0, Math.min(SWING_SCALES.length - 1, i - dir));
+      if (j === i) return;
+      this.swingScale = SWING_SCALES[j];
     }
     sfx('tick');
     this.updateLanding();

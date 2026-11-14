@@ -89,6 +89,8 @@ export interface ButtonOpts {
   textColor?: number;
   sound?: string | null;
   scale?: number;
+  /** a '-' at the left end and a '+' at the right: a tap on the left half is one way, the right half the other */
+  minusPlus?: boolean;
 }
 
 /**
@@ -118,11 +120,14 @@ export class Button extends Phaser.GameObjects.Container {
   private pressed = false;
   enabled = true;
   private opts: ButtonOpts;
-  private cb: (ev: { time: number }) => void;
+  private cb: (ev: { time: number; fx: number }) => void;
   private labelY = 0;
+  /** where across the button (0 left, 1 right) the press that fired it was */
+  private downFx = 0.5;
+  private marks: Phaser.GameObjects.BitmapText[] = [];
   private iconY = 0;
 
-  constructor(scene: Phaser.Scene, x: number, y: number, w: number, h: number, text: string, cb: (ev: { time: number }) => void, opts: ButtonOpts = {}) {
+  constructor(scene: Phaser.Scene, x: number, y: number, w: number, h: number, text: string, cb: (ev: { time: number; fx: number }) => void, opts: ButtonOpts = {}) {
     super(scene, Math.round(x), Math.round(y));
     this.bw = w;
     this.bh = h;
@@ -144,11 +149,19 @@ export class Button extends Phaser.GameObjects.Container {
       this.label.y = this.labelY;
       this.add(this.label);
     }
+    if (opts.minusPlus) {
+      for (const [s, x] of [['-', 3], ['+', w - 3]] as const) {
+        const m = txt(scene, x, this.labelY, s, { color: opts.textColor ?? COLORS.white }).setOrigin(s === '-' ? 0 : 1, 0);
+        this.marks.push(m);
+        this.add(m);
+      }
+    }
     this.setSize(w, h);
     this.setInteractive(new Phaser.Geom.Rectangle(w / 2, h / 2, w, h), Phaser.Geom.Rectangle.Contains);
     this.on('pointerdown', (p: Phaser.Input.Pointer) => {
       if (!this.enabled) return;
       this.pressed = true;
+      this.downFx = this.local(p).x / this.bw;
       this.draw();
       if (opts.onDown) {
         this.fire(p.event?.timeStamp ?? performance.now());
@@ -187,6 +200,16 @@ export class Button extends Phaser.GameObjects.Container {
     scene.add.existing(this);
   }
 
+  /** The pointer in the button's own coordinates (0, 0 at its top left). */
+  private local(p: Phaser.Input.Pointer): { x: number; y: number } {
+    const cam = this.scene.cameras.main;
+    const w = p.positionToCamera(cam) as Phaser.Math.Vector2;
+    const x = w.x + cam.scrollX * this.scrollFactorX - cam.scrollX;
+    const y = w.y + cam.scrollY * this.scrollFactorY - cam.scrollY;
+    const l = this.getWorldTransformMatrix().applyInverse(x, y);
+    return { x: l.x, y: l.y };
+  }
+
   /** Is the pointer on the button, or within a few pixels of it? */
   near(p: Phaser.Input.Pointer): boolean {
     const cam = this.scene.cameras.main;
@@ -204,8 +227,9 @@ export class Button extends Phaser.GameObjects.Container {
     if (this.opts.sound !== null) sfx(this.opts.sound ?? 'click');
     // timing-critical buttons (swing) run immediately; everything else on the
     // next tick so a handler may safely destroy the button that fired it
-    if (this.opts.onDown) this.cb({ time });
-    else this.scene.time.delayedCall(0, () => this.cb({ time }));
+    const fx = this.downFx;
+    if (this.opts.onDown) this.cb({ time, fx });
+    else this.scene.time.delayedCall(0, () => this.cb({ time, fx }));
   }
 
   setLabel(s: string) {
@@ -266,6 +290,7 @@ export class Button extends Phaser.GameObjects.Container {
     g.fillRect(2, off + 1, w - 4, 1);
     if (this.label) this.label.y = this.labelY + off;
     if (this.iconImg) this.iconImg.y = this.iconY + off;
+    for (const m of this.marks) m.y = this.labelY + off;
   }
 }
 
