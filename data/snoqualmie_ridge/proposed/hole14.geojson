@@ -1,0 +1,9 @@
+{
+"type": "FeatureCollection",
+"name": "hole14",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+"features": [
+{ "type": "Feature", "properties": { "osm": "desk_14_tee", "kind": "tee", "tags": { "golf": "tee", "hole": "14", "tee_set": "Mt. Si", "approved": "developer 2026-11-13", "source": "the developer's Mt. Si tee, marked in the tracing desk (data/snoqualmie_ridge/desk/hole14.json)" } }, "geometry": { "type": "Polygon", "coordinates": [ [ [ -121.854934335200738, 47.537192590944947 ], [ -121.854969870555436, 47.537208242495666 ], [ -121.854995718466853, 47.53718060655838 ], [ -121.854928456871306, 47.537157439762979 ], [ -121.854899952022066, 47.537185049154068 ], [ -121.854934335200738, 47.537192590944947 ] ] ] } },
+{ "type": "Feature", "properties": { "osm": "w680805267_fixed", "kind": "hole", "tags": { "golf": "hole", "ref": "14", "par": "4", "source": "OSM w680805267 redrawn: the developer's tee -> a bend on the 14th fairway's centre line 250 yd out (fairway_axis.centreline) -> the OSM line's end; developer 2026-11-13: the old bend was the problem" } }, "geometry": { "type": "LineString", "coordinates": [ [ -121.854949065238401, 47.53718215325155 ], [ -121.854499303119113, 47.535142983810566 ], [ -121.852656255105927, 47.535295971800686 ] ] } }
+]
+}

@@ -102,8 +102,9 @@ export class PlayScene extends Phaser.Scene {
   private marker!: Phaser.GameObjects.Image;
   private puttTarget!: Phaser.GameObjects.Image;
   private dots: Phaser.GameObjects.Image[] = [];
-  // the tree warning (developer, 2026-11-14): the flight's arc over the aim line, red from where a perfect
-  // stroke would first touch a tree, with a mark there; on whenever the landing marker is
+  // the tree warning (developer, 2026-11-14): when a perfect stroke down the aim line would touch a tree,
+  // the flight's arc over the line, red from the tree on, with a mark there (a clear line is the plain
+  // flat line); on whenever the landing marker is
   private arcDots: Phaser.GameObjects.Image[] = [];
   private hitMark!: Phaser.GameObjects.Image;
   private flightPv: ReturnType<Round['previewFlight']> | null = null;
@@ -1134,14 +1135,15 @@ export class PlayScene extends Phaser.Scene {
       const shown = preview ? len - 6 / L : Math.min(len, 36 / L);
       const step = 7 / L;
       const dx = (m.x - b.x) / (len || 1), dy = (m.y - b.y) / (len || 1);
-      const pv = preview ? this.flightPv : null;
+      // the arc only when the line meets a tree (developer, 2026-11-14: "otherwise it's just a flat line")
+      const pv = preview && this.flightPv?.hit ? this.flightPv : null;
       const hit = pv?.hit ?? null;
       const hp = hit ? this.px(hit.x, hit.y) : null;
       const sHit = hp ? (hp.x - b.x) * dx + (hp.y - b.y) * dy : Infinity; // where the hit is along the ground line
       for (let s = step; s < shown && n < this.dots.length; s += step) {
         const d = this.dots[n++].setVisible(true).setPosition(this.snap(b.x + dx * s), this.snap(b.y + dy * s));
         if (s > sHit) d.setTint(TREE_RED); else d.clearTint();
-        d.setAlpha(pv ? 0.4 : 0.85); // under the arc, the ground line is its shadow
+        d.setAlpha(pv ? 0.4 : 0.85); // under the arc, the ground line is its shadow; a clear line is the plain line
       }
       // the arc: the ball where it will be, lifted by its height as it is drawn in flight, a dot every
       // `step` of screen
@@ -1191,9 +1193,10 @@ export class PlayScene extends Phaser.Scene {
     g.clear();
     const r = this.round;
     const t = app.course!.terrain;
-    const green = t.greens.find((gm) => gm.def.id === r.hole.greenId);
-    if (!green || !this.isPutting()) return;
-    const poly = green.poly;
+    if (!this.isPutting()) return;
+    // the hole's green and any green touching it (both halves of a double green: St Andrews, Langdon 9/18)
+    const polys = r.holeGreens.filter(Boolean);
+    if (!polys.length) return;
     const L = this.level;
     const cols = [0xe6f6da, 0xf4efa6, 0xf7c487];
     const alphas = [0.32, 0.46, 0.62];
@@ -1201,11 +1204,13 @@ export class PlayScene extends Phaser.Scene {
     const step = Math.max(8 / L, 1.4) / PX_PER_M; // in the close-up no denser than ~0.7 m
     const u = 1 / L; // one texel in world px
     const clearR = Math.max(this.holeClearM(), 0.6);
+    const minX = Math.min(...polys.map((p) => p.minX)), maxX = Math.max(...polys.map((p) => p.maxX));
+    const minY = Math.min(...polys.map((p) => p.minY)), maxY = Math.max(...polys.map((p) => p.maxY));
     let row = 0;
-    for (let y = Math.ceil(poly.minY / step) * step; y <= poly.maxY; y += step, row++) {
+    for (let y = Math.ceil(minY / step) * step; y <= maxY; y += step, row++) {
       const shift = (row % 2) * step / 2;
-      for (let x = Math.ceil(poly.minX / step) * step + shift; x <= poly.maxX; x += step) {
-        if (!poly.contains(x, y)) continue;
+      for (let x = Math.ceil(minX / step) * step + shift; x <= maxX; x += step) {
+        if (!polys.some((p) => p.contains(x, y))) continue;
         if (Math.hypot(x - r.pin.x, y - r.pin.y) < clearR) continue; // keep the hole area clean
         const [gx, gy] = t.grad(x, y, 0.3);
         const sl = Math.hypot(gx, gy);

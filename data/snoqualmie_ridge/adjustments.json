@@ -1,0 +1,38 @@
+[
+ {
+  "hole": 2,
+  "tee_set": "Mt. Si",
+  "step": 2,
+  "type": "tee_position",
+  "from": [
+   918.03,
+   334.74
+  ],
+  "to": [
+   918.75,
+   331.0
+  ],
+  "real_yd": 387.0,
+  "adjusted_yd": 391.1,
+  "card_yd": 407.0,
+  "reason": "measured 387 yd from the tee-box centre vs 407 on the card (-4.9%); moved the virtual tee along the middle of the real tee polygon w680230251 (on its centre line, at least 2.5 m from its back and front)"
+ },
+ {
+  "hole": 14,
+  "tee_set": "Mt. Si",
+  "step": 2,
+  "type": "tee_position",
+  "from": [
+   1668.39,
+   903.74
+  ],
+  "to": [
+   1668.25,
+   904.25
+  ],
+  "real_yd": 402.9,
+  "adjusted_yd": 403.4,
+  "card_yd": 425.0,
+  "reason": "measured 403 yd from the tee-box centre vs 425 on the card (-5.2%); moved the virtual tee along the middle of the real tee polygon desk_14_tee (on its centre line, at least 2.5 m from its back and front)"
+ }
+]
