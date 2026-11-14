@@ -34,11 +34,15 @@ game (tee shot and overview).
     -   Photo: NAIP from the USGS National Map service, four exports resampled onto one
         0.6 m grid by `data/snoqualmie_ridge/make_ortho.py` (`raw/naip.tif`, committed).
     -   Card: GolfPass (read 2026-11-13); Offcourse's older Black row compared.
--   **Water:** the four OSM penalty areas and the 1.9 ha pond inside the boundary mapped
-    only as natural water (`red_water_osm`), all red. A swimming pool by the clubhouse
+-   **Water:** the four OSM penalty areas (golf=water_hazard, tagged red: standing default)
+    and the 1.9 ha pond inside the boundary mapped only as natural water (`red_water_osm`),
+    all red. A swimming pool by the clubhouse
     plays as rough. Out of bounds: the OSM boundary.
--   **Trees:** 3,519 lidar trees inside the boundary; one top in a penalty area dropped;
-    tops on the ridge's mapped house roofs dropped. Types from crown shape.
+-   **Trees:** 3,500 lidar trees inside the boundary; one top in a penalty area dropped;
+    tops on the ridge's mapped house roofs dropped; the power line in the corridor by the
+    south entrance road (read as 126-161 m trees) is in `not_trees_areas`. A tall
+    Douglas-fir stand east of the course reaches 68 m (`max_tree_h_m` 70). Types from
+    crown shape.
 
 ## Scorecard
 
@@ -74,7 +78,8 @@ Mt. Si: the longest set (standing default 4.1).
 
 ## New pipeline keys or theme
 
--   No new config key, no pipeline change.
+-   No new config key, no pipeline change. `not_trees_areas` (`not_trees.geojson`) for the
+    power-line corridor.
 -   New theme `snoqualmie_ridge`: `assets-src/palettes/snoqualmie_ridge.json`,
     `assets-src/trees_snoqualmie_ridge.py` (Douglas fir; bigleaf maple). Logo
     `assets-src/course_logos/snoqualmie_ridge.py`.
@@ -90,5 +95,8 @@ See "Developer's calls pending" and `data/snoqualmie_ridge/validation_report.md`
     List the tiles first and split them over runs from the start.
 -   **NAIP exports with different pixel sizes** (the edge strips) stop `intake.py ortho`;
     a small `make_ortho.py` that resamples them onto one grid fixes it.
+-   **Power lines in class-1 lidar can read as 130-160 m trees** along a utility corridor;
+    `course_play.test.ts` ("no tree implausibly tall") catches them: box them in
+    `not_trees_areas`.
 -   **A dogleg measured through the wrong bend** can make a hole look 10 % short: put the
     bend on the fairway centreline at the corner before calling the tee wrong.

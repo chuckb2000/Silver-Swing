@@ -64,5 +64,6 @@
  "roof_last_share": 0.85,
  "red_water_osm": [
   "w247793103"
- ]
+ ],
+ "not_trees_areas": "not_trees.geojson"
 }

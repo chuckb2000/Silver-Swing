@@ -15,5 +15,35 @@
    "osm": "w680805267",
    "reason": "replaced by proposed/hole14.geojson's redrawn line"
   }
+ ],
+ "tags": [
+  {
+   "osm": "w247793104",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "standing default (COURSE_BUILD 4.1): every penalty area red; OSM tags it golf=water_hazard (yellow)"
+  },
+  {
+   "osm": "w247793105",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "standing default (COURSE_BUILD 4.1): every penalty area red; OSM tags it golf=water_hazard (yellow)"
+  },
+  {
+   "osm": "w247793106",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "standing default (COURSE_BUILD 4.1): every penalty area red; OSM tags it golf=water_hazard (yellow)"
+  },
+  {
+   "osm": "w681452235",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "standing default (COURSE_BUILD 4.1): every penalty area red; OSM tags it golf=water_hazard (yellow)"
+  }
  ]
 }
