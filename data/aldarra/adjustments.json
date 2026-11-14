@@ -1,5 +1,23 @@
 [
  {
+  "hole": 3,
+  "tee_set": "Aldarra",
+  "step": 2,
+  "type": "tee_position",
+  "from": [
+   1376.48,
+   1196.82
+  ],
+  "to": [
+   1376.25,
+   1196.5
+  ],
+  "real_yd": 558.9,
+  "adjusted_yd": 558.7,
+  "card_yd": 564.0,
+  "reason": "tee shot: a perfect drive at the middle of the fairway clipped a tree near the tee; moved 0.4 m along the middle of the real tee polygon w1172327835 to the nearest clear spot"
+ },
+ {
   "hole": 9,
   "tee_set": "Aldarra",
   "step": 2,

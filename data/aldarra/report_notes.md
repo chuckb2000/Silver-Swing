@@ -21,7 +21,10 @@ Calls made on 2026-11-13; each with a recommendation.
    retagged as cart path.
 7. **Practice greens:** ten greens that end no hole line (the practice and short-game
    area by the clubhouse) are wrong greens (relief required).
-8. **Lidar:** the 2021 King County lidar is class 1 only (`roof_last_share` 0.85). Tree
-   types from crown shape.
-9. **Card hole, theme and logo:** new theme `aldarra` (western red cedar, Pacific
+8. **Lidar and trees:** the 2021 King County lidar, six tiles (King_2157-2159 and
+   2229-2231; 2158 took five fetch runs past rockyweb's rate limit), is class 1 only
+   (`roof_last_share` 0.85). 14,451 trees inside the boundary (much of it is forest
+   between the holes); one top in a bunker dropped and one 47 m fir 59 m in front of the
+   15th tee dropped. Types from crown shape.
+9. **Card hole, theme and logo:** card hole 14 (rotating 1, 7, 11); new theme `aldarra` (western red cedar, Pacific
    madrone); logo an elk antler. The course chat's picks.

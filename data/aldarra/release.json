@@ -1,0 +1,70 @@
+{
+ "release": "data-aldarra",
+ "note": "Build inputs for Aldarra; make fetch NAME=aldarra puts them in place. All fetched by the GitHub Actions workflow (data/aldarra/fetch.json) on 2026-11-13/14, the lidar over several runs (rockyweb rate-limits). The Overpass export, the clipped DEM and the NAIP mosaic (data/aldarra/make_ortho.py from the four naip_*.jpg in the release) are also committed in raw/; the lidar clips are not (git ignores .laz). Tiles 2086-2088 lie south of the world and are not used.",
+ "files": [
+  {
+   "asset": "aldarra_overpass.geojson",
+   "sha256": "a6b023c358e286c88174c1e0e8fd3bd26bc61d22e51b0016bcfe247fbcb655b3",
+   "run": "python3 pipeline/intake.py osm aldarra {file}",
+   "outputs": {
+    "raw/overpass.geojson": "237107413ec059282100798010b09cca4739ce2d2a171c5e861b43f2fbe7448a"
+   }
+  },
+  {
+   "asset": "usgs_dem_m.tif",
+   "sha256": "25d4b589df861343e6f7150ad3cf3f8afc8301e92a4298ed257834f41b213c8a",
+   "run": "python3 pipeline/intake.py raster aldarra {file} --out raw/usgs_dem_m.tif",
+   "outputs": {
+    "raw/usgs_dem_m.tif": "ebb2549f65f7c7b03d95c2f074d5fc57859ed77e0f60ac95b9f53202bd96d685"
+   }
+  },
+  {
+   "asset": "USGS_LPC_WA_KingCounty_2021_B21_King_2157.laz",
+   "sha256": "3895ec32cd8e7bbb875eb06d14d68133410f33b7cc192f544fcea6cf6f91780c",
+   "run": "python3 pipeline/intake.py laz aldarra {file} --out raw/laz/aldarra_2157.laz --keep-evlrs",
+   "outputs": {
+    "raw/laz/aldarra_2157.laz": "fdaee63672ace16efdcdc02f053ce3e29c4fd1875a7139f9811405644f2ac1eb"
+   }
+  },
+  {
+   "asset": "USGS_LPC_WA_KingCounty_2021_B21_King_2158.laz",
+   "sha256": "99c21bc7852a7f2675bd17e9ab67ed9658ec8c82278204e37c0685a935bfd1f5",
+   "run": "python3 pipeline/intake.py laz aldarra {file} --out raw/laz/aldarra_2158.laz --keep-evlrs",
+   "outputs": {
+    "raw/laz/aldarra_2158.laz": "f406e61d61e7f8e555bc237a9a519e114d44a41d62be25d451129ee89b889d1e"
+   }
+  },
+  {
+   "asset": "USGS_LPC_WA_KingCounty_2021_B21_King_2159.laz",
+   "sha256": "d4402333ff338125035a25f38aaa424dbd4be0fbe7ffb9ae904869e94fa106af",
+   "run": "python3 pipeline/intake.py laz aldarra {file} --out raw/laz/aldarra_2159.laz --keep-evlrs",
+   "outputs": {
+    "raw/laz/aldarra_2159.laz": "566c14b9f8a0dd3265dab773fcacc925993937619e4ac860406d81731e905d9a"
+   }
+  },
+  {
+   "asset": "USGS_LPC_WA_KingCounty_2021_B21_King_2229.laz",
+   "sha256": "8953756c960cad9a87fe88480225df5615172a10050e4837d4c1079c265d2ac7",
+   "run": "python3 pipeline/intake.py laz aldarra {file} --out raw/laz/aldarra_2229.laz --keep-evlrs",
+   "outputs": {
+    "raw/laz/aldarra_2229.laz": "c975874b1781d123abb06c4b51913624aca8b1c0f3b3995d4fd7e92fb51ec373"
+   }
+  },
+  {
+   "asset": "USGS_LPC_WA_KingCounty_2021_B21_King_2230.laz",
+   "sha256": "98a4489f1ab3866c28a940c47df631ea046b1f69222e4d2b4a965f95583c7695",
+   "run": "python3 pipeline/intake.py laz aldarra {file} --out raw/laz/aldarra_2230.laz --keep-evlrs",
+   "outputs": {
+    "raw/laz/aldarra_2230.laz": "546861d50c5014cc06af67b60f4a689550b994b8544c92e774ea612c2249ecf8"
+   }
+  },
+  {
+   "asset": "USGS_LPC_WA_KingCounty_2021_B21_King_2231.laz",
+   "sha256": "aff7d3bcf2494d76a5b54459489969ecad9347d9507366fc3560d49856921607",
+   "run": "python3 pipeline/intake.py laz aldarra {file} --out raw/laz/aldarra_2231.laz --keep-evlrs",
+   "outputs": {
+    "raw/laz/aldarra_2231.laz": "1fe5e1b2f87495c840ffe214ac9f1fd188c3dc8761391be6e04d4538465e16f5"
+   }
+  }
+ ]
+}
