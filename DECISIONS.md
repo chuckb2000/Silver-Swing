@@ -1759,3 +1759,14 @@ a crown counts (a canopy hit is otherwise luck: 15 % a metre), so a white line i
 stroke never hits a tree on. Calm air, like the landing marker, so the arc ends on the marker and
 reading the wind stays the player's (the wind is 1-7 mph; a 7 mph crosswind moves a drive about
 6 yd by its landing). Shown whenever the landing marker is (Easy and Normal, not Pro).
+
+## Course names in the lists (developer, 2026-11-14)
+
+"The Country Club just shows up as 'the'" on the recent list: the short name dropped "country club"
+and left the article. `shortName` now never leaves a bare "the" (The Country Club stays itself),
+drops a place after a comma ("The Old Course, St Andrews" -> "the old course"), "golf and country
+club" ("shaughnessy", "capilano"; they read "shaughnessy golf and"), "the ... course at"
+("spruce peak", "aberdeen"), a dash and a trailing "course" after a name ("pronghorn nicklaus"),
+and Marovitz is "marovitz". Lists cut names with `fitName`: a leading "the" goes first, then whole
+words when that keeps most of the column, else the letters that fit (so the Bandon courses stay
+apart in a narrow column: "bandon dun", "bandon pre"), never ending on a comma or a space.

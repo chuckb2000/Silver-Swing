@@ -7,7 +7,7 @@ import { isTourId, tourName } from '../systems/game/tour';
 import { app } from '../app';
 import { STATES } from '../data/registry';
 import type { LeaderboardEntry } from '../save/entry';
-import { listName, milestonesOf, passportName } from '../save/milestones';
+import { fitName, listName, milestonesOf, passportName } from '../save/milestones';
 import { milestoneCourses, myRounds } from '../save/mine';
 import { DEFAULT_NAME } from '../save/names';
 import { playerStats } from '../save/stats';
@@ -135,7 +135,7 @@ export class MyGolfScene extends MenuScene {
     st.courses.slice(0, n).forEach((c, i) => {
       const yy = y + 11 * (i + 1);
       const best = c.best ? `${c.best.gross} (${toPar(c.best.toPar)}) ${isFullRound(c.best.length) ? '' : lengthLabel(c.best.length, shapeById(c.best.course))}` : '-';
-      [this.courseName(c.course).slice(0, nameLen), String(c.rounds), c.avg18 === null ? '-' : c.avg18.toFixed(1), c.avg9 === null ? '-' : c.avg9.toFixed(1), best]
+      [fitName(this.courseName(c.course), nameLen), String(c.rounds), c.avg18 === null ? '-' : c.avg18.toFixed(1), c.avg9 === null ? '-' : c.avg9.toFixed(1), best]
         .forEach((v, j) => { if (cols[j] >= 0) this.root.add(txt(this, cols[j], yy, v, { color: j === 4 ? COLORS.yellow : COLORS.white })); });
     });
   }
