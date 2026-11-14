@@ -1,0 +1,86 @@
+{
+  "name": "The Olympic Club",
+  "location": "San Francisco (Lake Merced, Skyline Boulevard and the Pacific bluffs), California",
+  "state": "CA",
+  "architects": "Willie Watson and Sam Whiting (1924), Whiting rebuild 1927, Robert Trent Jones Sr. 1954, Bill Love 2009, Gil Hanse 2023",
+  "theme": "olympic_club",
+  "boundary_name": "Olympic Club Golf Course",
+  "dtm": {
+    "path": "raw/usgs_dem_1m.tif",
+    "units": "m",
+    "source": "USGS 3DEP 1 m DEM (3DEPElevation exportImage), x 543500-545600 / y 4172600-4174700 EPSG:32610, NAVD88 metres, clipped to the world + 100 m by pipeline/intake.py raster; fetched by the GitHub Actions workflow 2026-11-13 (release data-olympic_club)"
+  },
+  "laz": {
+    "paths": [
+      "raw/laz/*.laz"
+    ],
+    "classes": [
+      1
+    ],
+    "units": "m",
+    "source": "USGS 3DEP lidar point cloud, project CA_SanFrancisco_B23 (CA_SanFrancisco_1_B23), 11 tiles, class 1 (the tiles carry classes 1, 2, 7, 9 and 20: no vegetation classes, so trees come from class 1 with roofs dropped by roof_last_share, as at Aberdeen and Newport); NAD83(2011) / San Francisco CS13 (EPSG:7131), NAVD88 m; clipped to the world + 100 m by pipeline/intake.py laz; fetched by the GitHub Actions workflow 2026-11-13 (release data-olympic_club)",
+    "label": "USGS 3DEP lidar (San Francisco)",
+    "leaf_off": false
+  },
+  "layouts": [
+    {
+      "id": "olympic_club_lake",
+      "name": "The Olympic Club Lake",
+      "short": "Lake",
+      "boundary_osm": "w1417078425",
+      "scorecard": "scorecard_lake.csv",
+      "tee_sets": [
+        {
+          "name": "Champ",
+          "playable": true,
+          "rating": 76.2,
+          "slope": 143,
+          "total_yd": 7214
+        },
+        {
+          "name": "Black",
+          "playable": true,
+          "rating": 75.2,
+          "slope": 141,
+          "total_yd": 7024
+        },
+        {
+          "name": "Blue",
+          "playable": false,
+          "rating": 74.1,
+          "slope": 139,
+          "total_yd": 6626
+        }
+      ],
+      "default_tee": "Champ",
+      "scorecard_source": "Third-party (private club): GolfPass's Lake card (course 14938; par, men's and women's handicap and ten tee rows, the post-2023 Hanse card), read 2026-11-13; every row adds up to its printed total (Champ 7,214). Ratings: Champ 76.2/143 and Black 75.2/141 from 18Birdies (printed against 7,214 and 7,024); GolfPass's tee table gives 76.7/145 and 75.9/143 against 7,232 and 7,050. Unverified against the club's printed card."
+    }
+  ],
+  "driving_range_is_ob": true,
+  "wind_mph": {
+    "minMph": 3,
+    "maxMph": 14
+  },
+  "trees_off_fairways_m": 2,
+  "attribution": [
+    "Map data \u00a9 OpenStreetMap contributors (ODbL)",
+    "Elevation and trees: U.S. Geological Survey 3D Elevation Program"
+  ],
+  "notes": "Standing defaults (COURSE_BUILD.md 4.1), 2026-11-13: the longest tee set (Champ) and it is the default; all water red; OB = the Lake's own OSM boundary (way 1417078425), roads inside it are cart paths, the driving range is OB; open-coast wind 3-14 mph; trees from 3DEP lidar, trees in fairways or in the way of a centre-line drive removed and listed. The Cliffs is its own course (data/olympic_club_cliffs: its boundary is in two parts either side of Skyline Boulevard, which a site with layouts can't join); the Ocean course is not built (its hole lines are dropped; its ground is scenery). Theme olympic_club (new; the course chat's design).",
+  "id": "olympic_club",
+  "epsg": 32610,
+  "world": {
+    "x0": 543733,
+    "y0": 4172760,
+    "width": 1792,
+    "height": 1792,
+    "note": "OSM course boundary bbox (1335 x 1421 m, relation/3573537) + at least 120 m of scenery, rounded out to whole 256 m chunks and centred (228 m west/east, 185 m south/north)"
+  },
+  "osm_sources": [
+    "raw/overpass.geojson"
+  ],
+  "roof_last_share": 0.85,
+  "roof_last_share_note": "class-1 lidar holds roofs: crowns whose returns are 85 %+ last returns are roofs, not trees (as Aberdeen, Newport and Wannamoisett)",
+  "tee_shot_margin_m": 0.5,
+  "tee_shot_note": "tee_shot_margin_m: the tee-shot tree check keeps the ball 0.5 m clear of each crown; without it the check passed Lake 7 while the game's drive clipped a canopy 20 m out (course_play)"
+}

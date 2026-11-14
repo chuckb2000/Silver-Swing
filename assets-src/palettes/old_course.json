@@ -1,0 +1,36 @@
+{
+  "name": "Old Course (St Andrews links: fescue, whins, North Sea)",
+  "note": "Course theme palette (<= 32 colours; same keys as pnw.json plus F0-F2). The Old Course in summer: firm, pale yellow-green fescue fairways and greens, tawny bent-and-fescue rough (F0-F2), dark whins (gorse) in yellow flower, brown-grey links sand with turf-faced bunkers, a cold grey-blue North Sea and the pale West Sands. Course chat's proposal 2026-11-13 (no open orthophoto: colours from the course's character). Shadows are a 35% black overlay on top of these.",
+  "colors": {
+    "G0": "#1a2a1c", "G1": "#283e22", "G2": "#3a5328", "G3": "#556b30",
+    "G4": "#71843a", "G5": "#879a45", "G6": "#9cad52", "G7": "#afbf62",
+    "G8": "#c3d077", "G9": "#d9e3a2",
+    "L0": "#6f6f45", "L1": "#858353", "L2": "#9b9862",
+    "S0": "#a98f68", "S1": "#cdb88f", "S2": "#e4d6b4",
+    "W0": "#1f3b4f", "W1": "#2f5670", "W2": "#7397ad",
+    "K0": "#26272d", "K1": "#55565d", "K2": "#7d7e86", "K3": "#b2a998", "K4": "#d8d0bd",
+    "B0": "#3f2c1e", "B1": "#634631", "B2": "#86664a",
+    "R0": "#5b5e66", "WH": "#f6f6f2",
+    "F0": "#8a7a45", "F1": "#a49159", "F2": "#bba96f"
+  },
+  "lut": {
+    "rough": ["F0", "F1", "F2", "F2"]
+  },
+  "aliases": {
+    "TUFT": "G3"
+  },
+  "minimap": {
+    "ob": "#858353", "rough": "#a49159", "woods": "#283e22", "ob_woods": "#283e22",
+    "water": "#2f5670", "ob_water": "#2f5670", "bunker": "#cdb88f", "ob_sand": "#e4d6b4"
+  },
+  "minimap_trees": {
+    "conifer": ["#13261b", "#2b4c33"],
+    "deciduous": ["#25391f", "#466330"],
+    "shrub": ["#2c4224", "#d9b21e"]
+  },
+  "trees": {
+    "conifer": "trees_bandon_dunes:shore_pine",
+    "deciduous": "trees_old_course:sycamore",
+    "shrub": "trees_bandon_dunes:gorse_bush"
+  }
+}

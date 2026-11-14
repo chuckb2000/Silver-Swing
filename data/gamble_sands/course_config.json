@@ -1,0 +1,86 @@
+{
+ "id": "gamble_sands",
+ "name": "Gamble Sands",
+ "location": "Brewster, Okanogan County, Washington",
+ "state": "WA",
+ "architects": "David McLay Kidd (opened 2014)",
+ "theme": "gamble_sands",
+ "epsg": 32611,
+ "osm_sources": [
+  "raw/overpass.geojson"
+ ],
+ "boundary_name": "Gamble Sands Golf Course",
+ "dtm": {
+  "path": "raw/usgs_dem_m.tif",
+  "units": "m",
+  "source": "USGS 3DEP elevation service (3DEPElevation ImageServer exportImage, 1 m, EPSG:32611, box x 301500-303400 / y 5325700-5328600); the 1 m DEM under the course is WA_NorthCentral_2021_B21 (tile x30y533, flown 2021-08-25 to 2022-05-22, published 2024-06-15, per the service's identify); fetched by the GitHub Actions workflow 2026-11-13 (release data-gamble_sands, usgs_dem_m.tif)"
+ },
+ "laz": {
+  "paths": [
+   "raw/laz/*.laz"
+  ],
+  "classes": [
+   1
+  ],
+  "units": "m",
+  "source": "USGS Lidar Point Cloud WA_NorthCentral_2021_B21 (WA_NorthCentral_2_2021), 6 tiles from rockyweb.usgs.gov, fetched by the GitHub Actions workflow 2026-11-13 (release data-gamble_sands), each clipped to the world + 100 m by intake.py laz; NAD83(2011) / UTM 11N, NAVD88 (Geoid18) metres. The project ends at x 302246 (EPSG:32611): the east part of the course has no lidar; classes 1 (unclassified: vegetation and structures), 2 ground, 7 noise: no vegetation classes",
+  "label": "2021 USGS North Central Washington lidar"
+ },
+ "ortho": {
+  "path": "raw/naip.tif",
+  "source": "USDA NAIP from the USGS National Map NAIP ImageServer (exportImage, about 0.6 m, EPSG:32611), two JPEG exports placed by their request boxes (intake.py ortho); fetched by the GitHub Actions workflow 2026-11-13 (release data-gamble_sands)"
+ },
+ "world": {
+  "x0": 301684,
+  "y0": 5325810,
+  "width": 1536,
+  "height": 2560,
+  "note": "OSM course boundary (way 876550790, 1,287 x 2,143 m in EPSG:32611) + 120 m of scenery, rounded out to whole 256 m chunks and centred. 2,560 m north-south is over the 2,048 m guideline (COURSE_BUILD.md 6.1): the boundary alone is 2,143 m tall.",
+  "over_limit_approved": "developer, 2026-11-13"
+ },
+ "tee_sets": [
+  {
+   "name": "Medal",
+   "playable": true,
+   "rating": 73.4,
+   "slope": 120,
+   "total_yd": 7151
+  }
+ ],
+ "default_tee": "Medal",
+ "scorecard_source": "The club's printed scorecard (dated 07/24), photographed and sent by the developer 2026-11-13: Medal 7,151 yd 73.4/120, Back 6,664 70.7/114, Sands 6,389 69.4/111, Regular 6,113 (m 68.6/109, l 73.9/120), Intermediate 5,623 (m 66.0/103, l 70.9/113), Forward 4,804 66.4/102; par and handicap rows; every row adds up to its total. Same as GolfPass. Local rules on the card: all sandy areas are played as waste areas (through the green); all desert areas are red penalty areas, their edge where grass and desert meet (Model Local Rule B-1). OSM's hole lines tag 5, 11, 13 and 14 with other pars (the card is used).",
+ "penalty_default": "red",
+ "driving_range_is_ob": true,
+ "wind_mph": {
+  "minMph": 1,
+  "maxMph": 7
+ },
+ "trees_off_fairways_m": 2,
+ "attribution": [
+  "Map data © OpenStreetMap contributors (ODbL)",
+  "Elevation and trees: U.S. Geological Survey 3D Elevation Program (WA North Central 2021 lidar)",
+  "Imagery check: USDA National Agriculture Imagery Program (NAIP)"
+ ],
+ "roof_last_share": 0.85,
+ "rough_band_m": 2.0,
+ "rough_band_note": "a thin band of mown rough along the fairways, then the sand, sage and bunchgrass of the native ground (theme F tones)",
+ "gorse": {
+  "v_min": 40,
+  "v_max": 105,
+  "gr_min": -15,
+  "bg_min": -40,
+  "bg_max": 0,
+  "min_z_m": 0,
+  "clear_m": 3.0,
+  "spacing_m": 7.0,
+  "jitter": 0.4,
+  "r_min_m": 0.9,
+  "r_max_m": 1.6,
+  "h_min_m": 0.6,
+  "h_max_m": 1.5,
+  "h_default_m": 1.0,
+  "note": "sagebrush and rabbitbrush, not gorse: bushes from the NAIP photo (pipeline/gorse.py; dark scrub on the pale sand), 7 m apart, kept 3 m off mown grass; no penal ground (bushes only, as at Pronghorn and Silvies); drawn by the theme's steppe_bush painter"
+ },
+ "waste_sand": true,
+ "waste_sand_note": "the card's local rule: all sandy areas at Gamble Sands are played as waste areas. Every OSM bunker is tagged sand=waste in edits.json (s08: surface 18, general area)"
+}

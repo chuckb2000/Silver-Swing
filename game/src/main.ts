@@ -7,6 +7,7 @@ import { HudScene } from './scenes/HudScene';
 import { LeaderboardScene } from './scenes/LeaderboardScene';
 import { ReplayHudScene, ReplayScene } from './scenes/ReplayScene';
 import { MyGolfScene } from './scenes/MyGolfScene';
+import { HolidayFxScene } from './scenes/HolidayFxScene';
 import { PlayScene } from './scenes/PlayScene';
 import { SettingsScene } from './scenes/SettingsScene';
 import { SetupScene } from './scenes/SetupScene';
@@ -38,7 +39,7 @@ const game = new Phaser.Game({
   // times out and is tried again instead of hanging the load; fewer at once so each one finishes
   loader: { maxParallelDownloads: 8, timeout: 45_000, maxRetries: 3 },
   fps: { target: 60 },
-  scene: [BootScene, BgScene, TitleScene, CourseSelectScene, SetupScene, PlayScene, HudScene, SummaryScene, LeaderboardScene, ReplayScene, ReplayHudScene, MyGolfScene, SettingsScene, CreditsScene, MatchScene, TourLoadScene, BonusScene, XcPlanScene],
+  scene: [BootScene, BgScene, TitleScene, CourseSelectScene, SetupScene, PlayScene, HolidayFxScene, HudScene, SummaryScene, LeaderboardScene, ReplayScene, ReplayHudScene, MyGolfScene, SettingsScene, CreditsScene, MatchScene, TourLoadScene, BonusScene, XcPlanScene],
 });
 
 let pending = 0;

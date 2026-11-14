@@ -1,0 +1,46 @@
+{
+ "items": [
+  {
+   "name": "gamble_sands_overpass.geojson",
+   "osm_box": [
+    48.0537,
+    -119.6652,
+    48.0803,
+    -119.6384
+   ]
+  },
+  {
+   "name": "usgs_dem_m.tif",
+   "url": "https://elevation.nationalmap.gov/arcgis/rest/services/3DEPElevation/ImageServer/exportImage?bbox=301500,5325700,303400,5328600&bboxSR=32611&imageSR=32611&size=1900,2900&format=tiff&pixelType=F32&noData=-9999&interpolation=RSP_BilinearInterpolation&f=image"
+  },
+  {
+   "name": "usgs_dem_identify.json",
+   "url": "https://elevation.nationalmap.gov/arcgis/rest/services/3DEPElevation/ImageServer/identify?geometry=%7B%22x%22%3A302450%2C%22y%22%3A5327150%2C%22spatialReference%22%3A%7B%22wkid%22%3A32611%7D%7D&geometryType=esriGeometryPoint&returnCatalogItems=true&f=json"
+  },
+  {
+   "name": "gamble_sands_lpc",
+   "tnm": {
+    "dataset": "lpc",
+    "bbox": [
+     -119.6652,
+     48.0537,
+     -119.6384,
+     48.0803
+    ],
+    "only": "WA_NorthCentral_2_2021"
+   }
+  },
+  {
+   "name": "naip_301500_5325700.jpg",
+   "url": "https://imagery.nationalmap.gov/arcgis/rest/services/USGSNAIPImagery/ImageServer/exportImage?bbox=301500,5325700,303400,5327700&bboxSR=32611&imageSR=32611&size=3166,3333&format=jpg&f=image"
+  },
+  {
+   "name": "naip_301500_5327700.jpg",
+   "url": "https://imagery.nationalmap.gov/arcgis/rest/services/USGSNAIPImagery/ImageServer/exportImage?bbox=301500,5327700,303400,5328600&bboxSR=32611&imageSR=32611&size=3166,1500&format=jpg&f=image"
+  },
+  {
+   "name": "naip_info.json",
+   "url": "https://imagery.nationalmap.gov/arcgis/rest/services/USGSNAIPImagery/ImageServer?f=pjson"
+  }
+ ]
+}

@@ -1,0 +1,21 @@
+{
+ "wind_mph": [
+  2,
+  10
+ ],
+ "yardage": {
+  "max": {
+   "6": 0.16,
+   "8": 0.16,
+   "12": 0.1,
+   "17": 0.11
+  },
+  "why": "6, 8, 12 and 17: no Black box is mapped behind the OSM hole lines' starts (no open photo to trace from); open items for the developer"
+ },
+ "default_aim": {
+  "skip": [
+   4
+  ],
+  "why": "the 4th's drive starts in a chute of 26-28 m firs (lidar); the game's default aim passes 4-6 m from three trunks 68-96 m out and the ball clips a crown and kicks out of bounds. Open item: the developer may want a tree or two cut"
+ }
+}

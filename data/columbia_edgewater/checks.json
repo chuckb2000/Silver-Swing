@@ -1,0 +1,6 @@
+{
+ "note": "per-course settings for course_play.test.ts",
+ "wind_mph": [1, 7],
+ "water": {"count": 6},
+ "inside_boundary": true
+}

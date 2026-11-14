@@ -1,0 +1,38 @@
+{
+ "release": "data-eugene_cc",
+ "note": "Build inputs for Eugene Country Club; `make fetch NAME=eugene_cc` puts them in place. All fetched by the GitHub Actions workflow (data/eugene_cc/fetch.json) on 2026-11-13. eugene_cc_overpass.geojson = the standard Overpass export of the box 44.0596,-123.0962,44.0731,-123.0787. dogami_dtm_ft.tif / dogami_chm_ft.tif = DOGAMI DIGITAL_TERRAIN_MODEL_MOSAIC / CANOPY_HEIGHT_MODEL_MOSAIC exportImage at 1 m, box x 492300-493700 / y 4878500-4880000 EPSG:32610, feet (newest project at the course: OLC Willamette Valley 2023 South). osip2024_492300_4878500.jpg = OSIP 2024 at 0.5 m, one piece.",
+ "files": [
+  {
+   "asset": "eugene_cc_overpass.geojson",
+   "sha256": "c836cc675ebb956e6aa673aa9623099b56e10d88212753e3f5613f1d2e561f4a",
+   "run": "python3 pipeline/intake.py osm eugene_cc {file}",
+   "outputs": {
+    "raw/overpass.geojson": "c120fdfd64793c76d54312d11f4328d380dc0006ec2717ce7d8acc66bf7fc692"
+   }
+  },
+  {
+   "asset": "dogami_dtm_ft.tif",
+   "sha256": "d65ef9f1b5bf6871456384289199f5c5cb9dade47a48990dbf5aecc15bb493e9",
+   "to": "raw/",
+   "outputs": {
+    "raw/dogami_dtm_ft.tif": "d65ef9f1b5bf6871456384289199f5c5cb9dade47a48990dbf5aecc15bb493e9"
+   }
+  },
+  {
+   "asset": "dogami_chm_ft.tif",
+   "sha256": "56e118d4fb16a0c4d2ef8e39a8b7f693f8da08f2b4f90733141b83de5898a9de",
+   "to": "raw/",
+   "outputs": {
+    "raw/dogami_chm_ft.tif": "56e118d4fb16a0c4d2ef8e39a8b7f693f8da08f2b4f90733141b83de5898a9de"
+   }
+  },
+  {
+   "asset": "osip2024_492300_4878500.jpg",
+   "sha256": "19b3fe75bf6fc441990a2ead6c51fa2d0d40515089bb1a7970490ae47f1b0e83",
+   "run": "python3 pipeline/intake.py ortho eugene_cc  {file} 492300 4878500 493700 4880000 --out raw/osip2024_05m.tif",
+   "outputs": {
+    "raw/osip2024_05m.tif": "0124c2f56a7478769ca25d258ffa2cfa23cceda3c476322def4962b1a618dee6"
+   }
+  }
+ ]
+}

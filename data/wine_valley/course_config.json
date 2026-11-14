@@ -1,0 +1,66 @@
+{
+ "id": "wine_valley",
+ "name": "Wine Valley Golf Club",
+ "location": "Walla Walla, Walla Walla County, Washington",
+ "state": "WA",
+ "architects": "Dan Hixson (opened 2009)",
+ "theme": "wine_valley",
+ "epsg": 32611,
+ "osm_sources": [
+  "raw/overpass.geojson"
+ ],
+ "boundary_name": "Wine Valley Golf Club",
+ "dtm": {
+  "path": "raw/usgs_dem_m.tif",
+  "units": "m",
+  "source": "USGS 3DEP elevation service (3DEPElevation ImageServer exportImage, 1 m, EPSG:32611, box x 382700-384800 / y 5100700-5102600); the 1 m DEM under the course is WA_3_County_QL1_2017 (tile x38y511, flown 2017-10-03 to 2018-07-04, published 2020-03-30, per the service's identify); fetched by the GitHub Actions workflow 2026-11-13 (release data-wine_valley, usgs_dem_m.tif)"
+ },
+ "laz": {
+  "paths": [
+   "raw/laz/*.laz"
+  ],
+  "classes": [
+   1
+  ],
+  "units": "ft",
+  "source": "USGS Lidar Point Cloud USGS_LPC_WA_3_County_QL2_2017_LAS_2019, 9 tiles from rockyweb.usgs.gov, fetched by the GitHub Actions workflow 2026-11-13 (release data-wine_valley), each clipped to the world + 100 m by intake.py laz --keep-evlrs; NAD83(2011) / Washington South (US ft), NAVD88 US ft; classes 1 (unclassified: vegetation and structures), 2 ground, 7 noise: no vegetation classes",
+  "label": "2017 USGS Washington 3 County lidar"
+ },
+ "ortho": {
+  "path": "raw/naip.tif",
+  "source": "USDA NAIP from the USGS National Map NAIP ImageServer (exportImage, about 0.6 m, EPSG:32611), two JPEG exports placed by their request boxes (intake.py ortho); fetched by the GitHub Actions workflow 2026-11-13 (release data-wine_valley)"
+ },
+ "world": {
+  "x0": 382874,
+  "y0": 5100752,
+  "width": 1792,
+  "height": 1792,
+  "note": "OSM course boundary (way 436979104, 1,550 x 1,395 m in EPSG:32611) + 120 m of scenery, rounded out to whole 256 m chunks and centred"
+ },
+ "tee_sets": [
+  {
+   "name": "Gold",
+   "playable": true,
+   "rating": 76.4,
+   "slope": 133,
+   "total_yd": 7600
+  }
+ ],
+ "default_tee": "Gold",
+ "scorecard_source": "GolfPass, Wine Valley Golf Course scorecard (read 2026-11-13): Gold 7,600 yd, men's rating 76.4 / slope 133, men's par and handicap rows; the Gold row adds up to its total; Cabernet, Black, Merlot, Blue, Syrah, White, Chardonnay and Red in scorecard.csv, not built. Unverified (third party; the club's card is not online). Greenskeeper.org (read 2026-11-13) has an older Gold row (7,360 yd, 75.5/130; 1 430, 2 390, 5 475, 8 225, 9 455, 14 160, 17 420, 18 565) and another men's handicap row (5 11 7 15 1 17 9 13 3 / 8 16 4 2 18 12 14 6 10): open item. OSM's pars agree with the card.",
+ "penalty_default": "red",
+ "driving_range_is_ob": true,
+ "wind_mph": {
+  "minMph": 1,
+  "maxMph": 7
+ },
+ "trees_off_fairways_m": 2,
+ "attribution": [
+  "Map data © OpenStreetMap contributors (ODbL)",
+  "Elevation and trees: U.S. Geological Survey 3D Elevation Program (Washington 3 County 2017 lidar)",
+  "Imagery check: USDA National Agriculture Imagery Program (NAIP)"
+ ],
+ "roof_last_share": 0.85,
+ "rough_band_m": 3.0,
+ "rough_band_note": "a mown band of rough along the fairways, then the golden native bunchgrass of the hill faces (theme F tones)"
+}

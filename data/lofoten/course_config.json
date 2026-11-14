@@ -1,0 +1,78 @@
+{
+  "id": "lofoten",
+  "name": "Lofoten Links",
+  "location": "Gimsøya, Vågan, Nordland, Norway",
+  "state": "EU",
+  "architects": "Jeremy Turner (9 holes 1998; 18 holes 2015)",
+  "theme": "lofoten",
+  "epsg": 32633,
+  "osm_sources": [
+    "raw/overpass.geojson"
+  ],
+  "boundary_name": "Lofoten Golf Links",
+  "dtm": {
+    "path": "raw/dtm_clip.tif",
+    "units": "m",
+    "source": "Kartverket, Nasjonal høydemodell DTM 1 m (WCS nhm_dtm_topo_25833, EPSG:25833, NN2000), clipped to the world + 100 m; CC BY 4.0; fetched by the GitHub Actions fetch workflow 2026-11-13 (release data-lofoten)"
+  },
+  "dsm": {
+    "path": "raw/dsm_clip.tif",
+    "units": "m",
+    "source": "Kartverket, Nasjonal høydemodell DOM 1 m (WCS nhm_dom_topo_25833), as the DTM"
+  },
+  "world": {
+    "x0": 463502,
+    "y0": 7580435,
+    "width": 1792,
+    "height": 1280,
+    "note": "OSM course boundary relation/5314623 bbox (1,448 x 1,019 m) + scenery, rounded out to whole 256 m chunks and centred: 1,792 m east-west (172 m each side), 1,280 m north-south (130 m each side)"
+  },
+  "tee_sets": [
+    {
+      "name": "61",
+      "playable": true,
+      "rating": 74.3,
+      "slope": 143,
+      "total_yd": 6662
+    },
+    {
+      "name": "55",
+      "playable": false,
+      "rating": 71.4,
+      "slope": 137,
+      "total_yd": 6014
+    },
+    {
+      "name": "48",
+      "playable": false,
+      "rating": 68.0,
+      "slope": 129,
+      "total_yd": 5253
+    },
+    {
+      "name": "42",
+      "playable": false,
+      "rating": 65.2,
+      "slope": 124,
+      "total_yd": 4610
+    }
+  ],
+  "default_tee": "61",
+  "scorecard_source": "Club scorecard 2025 (lofotenlinks.no/wp-content/uploads/2025/02/lofoten_scorecard-2025.pdf), read 2026-11-13; lengths in metres, converted to yards (1 yd = 0.9144 m, each hole rounded); the metres are in docs/courses/lofoten.md. The card prints no ratings: men's ratings from GolfPass and Hole19 (74.3/143, 71.4/137, 68.0/129, 65.2/124), unverified; GolfPass's tee table also gives 73.5/136 for 61.",
+  "penalty_default": "red",
+  "driving_range_is_ob": true,
+  "trees_off_fairways_m": 2,
+  "wind_mph": {
+    "minMph": 4,
+    "maxMph": 18
+  },
+  "attribution": [
+    "Map data © OpenStreetMap contributors (ODbL)",
+    "Elevation: © Kartverket, Nasjonal detaljert høydemodell (CC BY 4.0)"
+  ],
+  "red_water_osm": [
+    "sea",
+    "r5312885"
+  ],
+  "wetland_woods": false
+}

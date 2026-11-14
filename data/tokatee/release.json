@@ -1,0 +1,46 @@
+{
+ "release": "data-tokatee",
+ "note": "Build inputs for Tokatee; `make fetch NAME=tokatee` puts them in place. All fetched by the GitHub Actions workflow (data/tokatee/fetch.json) on 2026-11-13. tokatee_overpass.geojson = the standard Overpass export of the box 44.1739,-122.2244,44.1867,-122.1967. dogami_dtm_ft.tif / dogami_chm_ft.tif = DOGAMI DIGITAL_TERRAIN_MODEL_MOSAIC / CANOPY_HEIGHT_MODEL_MOSAIC exportImage at 1 m, box x 562000-564200 / y 4891500-4892900 EPSG:32610, feet (newest projects at the course: McKenzie River 2021 topobathy and 3DEP, flown after the 2020 Holiday Farm Fire). osip2024_*.jpg = OSIP 2024 at 0.5 m in two pieces named by their SW corner.",
+ "files": [
+  {
+   "asset": "tokatee_overpass.geojson",
+   "sha256": "a2ef1506fcf9e935f89e37a741ffca59b68adee2858ddfd66c1f4c23809bc0bc",
+   "run": "python3 pipeline/intake.py osm tokatee {file}",
+   "outputs": {
+    "raw/overpass.geojson": "600c90624ec6fa6e8952c93e66a9fbbee3d58558a5e72b670f432986b3b0bc2a"
+   }
+  },
+  {
+   "asset": "dogami_dtm_ft.tif",
+   "sha256": "9704c60eae9956caf3db9ef3816a2093ec18a3ab23d6f81227276120084f78d1",
+   "to": "raw/",
+   "outputs": {
+    "raw/dogami_dtm_ft.tif": "9704c60eae9956caf3db9ef3816a2093ec18a3ab23d6f81227276120084f78d1"
+   }
+  },
+  {
+   "asset": "dogami_chm_ft.tif",
+   "sha256": "ba02b8ea87c7412b816faa088188b1fbe10a0e3404111e862e195a46f20169d2",
+   "to": "raw/",
+   "outputs": {
+    "raw/dogami_chm_ft.tif": "ba02b8ea87c7412b816faa088188b1fbe10a0e3404111e862e195a46f20169d2"
+   }
+  },
+  {
+   "asset": "osip2024_562000_4891500.jpg",
+   "sha256": "85cc0c3b804e1d2e7c8d4983617b3b1652d757caee0ca28182caccdf67a66125",
+   "to": "build/ortho/",
+   "outputs": {
+    "build/ortho/osip2024_562000_4891500.jpg": "85cc0c3b804e1d2e7c8d4983617b3b1652d757caee0ca28182caccdf67a66125"
+   }
+  },
+  {
+   "asset": "osip2024_563500_4891500.jpg",
+   "sha256": "67283ee43bc7642e69a1f433c8a3fcba938015ff408ebb086b8413130f3241d5",
+   "run": "python3 pipeline/intake.py ortho tokatee data/tokatee/build/ortho/osip2024_562000_4891500.jpg 562000 4891500 563500 4892900 {file} 563500 4891500 564200 4892900 --out raw/osip2024_05m.tif",
+   "outputs": {
+    "raw/osip2024_05m.tif": "4da65c1bde2cc8bc3f3c5dd996bd4556411179ff9a706df5350fb082a28a860d"
+   }
+  }
+ ]
+}

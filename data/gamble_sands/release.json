@@ -1,0 +1,62 @@
+{
+ "release": "data-gamble_sands",
+ "note": "Build inputs for Gamble Sands; make fetch NAME=gamble_sands puts them in place. All fetched by the GitHub Actions workflow (data/gamble_sands/fetch.json) on 2026-11-13. The Overpass export, the clipped DEM and the placed NAIP are also committed in raw/; the lidar clips are not (git ignores .laz). Lidar tiles 11ULP000250/265/280 lie west of the world and are not used. The ortho run line reads the north NAIP export, which the entry before it puts in build/naip/.",
+ "files": [
+  {
+   "asset": "gamble_sands_overpass.geojson",
+   "sha256": "dba5c261bfef54df1cdf1615c0cea0a32edd6928f0fb114106219682d8bc5ceb",
+   "run": "python3 pipeline/intake.py osm gamble_sands {file}",
+   "outputs": {
+    "raw/overpass.geojson": "0d8a9764c989e3e2dc156570694f878ab9635ef1af8926f6959fdb0a6758528d"
+   }
+  },
+  {
+   "asset": "usgs_dem_m.tif",
+   "sha256": "36a045bdfc769b0bf3edf2dcc53c7b54c8c69f0255ff43fbe93810e5ffc422aa",
+   "run": "python3 pipeline/intake.py raster gamble_sands {file} --out raw/usgs_dem_m.tif",
+   "outputs": {
+    "raw/usgs_dem_m.tif": "6404dd9d8627d54cb870743e6a134914a18fe02f345c3e1c930da81b13db00f4"
+   }
+  },
+  {
+   "asset": "naip_301500_5327700.jpg",
+   "sha256": "c3198325c4c0da0ac3aac1f48e64f4a115bd59a36e096e7561d9c09972e85df3",
+   "to": "build/naip/",
+   "outputs": {
+    "build/naip/naip_301500_5327700.jpg": "c3198325c4c0da0ac3aac1f48e64f4a115bd59a36e096e7561d9c09972e85df3"
+   }
+  },
+  {
+   "asset": "naip_301500_5325700.jpg",
+   "sha256": "552a2004026c5294139348626c389b099c509eacdfd76eb675d204edfd40cbf1",
+   "run": "python3 pipeline/intake.py ortho gamble_sands {file} 301500 5325700 303400 5327700 data/gamble_sands/build/naip/naip_301500_5327700.jpg 301500 5327700 303400 5328600 --out raw/naip.tif",
+   "outputs": {
+    "raw/naip.tif": "a2e829543bc0b4c90d4f07f67c8f27385a6054ab8affd78f20fb6ee16d5ee1bd"
+   }
+  },
+  {
+   "asset": "USGS_LPC_WA_NorthCentral_2021_B21_11ULP015250.laz",
+   "sha256": "2183afb25ab085c931d6ac04d96af0b8a5bea4b52abb6c4763f81434cdc8f17e",
+   "run": "python3 pipeline/intake.py laz gamble_sands {file} --out raw/laz/gamble_sands_11ULP015250.laz --keep-evlrs",
+   "outputs": {
+    "raw/laz/gamble_sands_11ULP015250.laz": "0fe7dc172389ef518a5773db98e8b29a43aa331e61996ffb3ea2582fe94efa25"
+   }
+  },
+  {
+   "asset": "USGS_LPC_WA_NorthCentral_2021_B21_11ULP015265.laz",
+   "sha256": "1dcd5de738a620f12ca4c8e3896cc18549d6f7cfb3e39c6053d506ea0183724a",
+   "run": "python3 pipeline/intake.py laz gamble_sands {file} --out raw/laz/gamble_sands_11ULP015265.laz --keep-evlrs",
+   "outputs": {
+    "raw/laz/gamble_sands_11ULP015265.laz": "34dd86edaef6c6fe7b7bad0099ecdf2d8073ef69053891822b587fafb858ac42"
+   }
+  },
+  {
+   "asset": "USGS_LPC_WA_NorthCentral_2021_B21_11ULP015280.laz",
+   "sha256": "f8f987ad64268947ce77d47c07edeb932a04d1df6783da8bb6ac145fa3c581c1",
+   "run": "python3 pipeline/intake.py laz gamble_sands {file} --out raw/laz/gamble_sands_11ULP015280.laz --keep-evlrs",
+   "outputs": {
+    "raw/laz/gamble_sands_11ULP015280.laz": "8998a7d4401ca358363649b29ca7f6f1ab322ebd79381c5d27a1a2840ae432f5"
+   }
+  }
+ ]
+}
