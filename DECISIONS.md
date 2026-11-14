@@ -1714,3 +1714,14 @@ golf in it (the holes' lines, tees and greens counted), with a small flag on eac
 from the course's own game files, so no course is rebuilt; `course_cards.py <id>` makes it for a
 new course. A course without one shows the middle of its card's first green.
 
+
+## The Olympic Club is one place (developer, 2026-11-13)
+
+The Lake was a layout of `data/olympic_club` (group `olympic_club`, a group of one, so it showed
+as its own course) and the Cliffs its own data folder with no group. The developer wants one
+place with its courses under it, like Pumpkin Ridge, Bandon and the Reserve. The Cliffs joins
+the Lake's group through `scripts/course-groups.json` (key `olympic_club`), so no course is
+rebuilt: the course select shows "The Olympic Club" with "Lake" and "Cliffs". The title screen
+keeps one view per shared world only for courses with a layout, so both keep their views. Both
+join the daily rotation on 2026-11-14, so no past or current daily changes; from then on they
+are one place there too.
