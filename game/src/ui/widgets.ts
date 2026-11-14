@@ -200,6 +200,12 @@ export class Button extends Phaser.GameObjects.Container {
     scene.add.existing(this);
   }
 
+  /** Show or hide the '-' and '+' of a minusPlus button. */
+  setMarks(on: boolean): this {
+    for (const m of this.marks) m.setVisible(on);
+    return this;
+  }
+
   /** The pointer in the button's own coordinates (0, 0 at its top left). */
   private local(p: Phaser.Input.Pointer): { x: number; y: number } {
     const cam = this.scene.cameras.main;

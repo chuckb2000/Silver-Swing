@@ -1735,9 +1735,15 @@ putt, as it plays, plus 10 % and 1 ft past the hole, needs no more than 85 %: a 
 footer gets 24 ft, 5 ft gets 12 ft, 30 ft gets 48 ft. "As it plays" counts the slope: the rise to
 the hole x g / the green's rolling deceleration (9.81 / 0.55 = about 18 m of flat roll per metre of
 rise), so a 16-footer 2 % uphill plays about 22 ft (48 ft meter) and 2 % downhill about 10 ft
-(24 ft). The scale button has a '-' at its left end and a '+' at its right: a tap on its left half
-is one size smaller, on its right half one size bigger, stopping at the ends (12 and 160 ft; 1/4 and
-full for the swing lengths). Keys: P bigger, O smaller.
+(24 ft). With the putter, the scale button has a '-' at its left end and a '+' at its right: a tap
+on its left half is one size smaller, on its right half one size bigger, stopping at the ends (12 and
+160 ft). Keys: P bigger, O smaller.
+
+Same day: the swing-length button had been given the '-' and '+' too; the developer wanted it as it
+was, so with any other club it is again "full" and a tap anywhere goes round full, 3/4, 1/2, 1/4 (P
+too). And the meter is never shorter than the putt ("I just had a 15 footer downhill and it came up
+with the 12 foot meter"): the smallest meter that is at least the putt's length and has the room
+above.
 
 ## The aim line shows the flight and warns of trees (developer, 2026-11-14)
 
