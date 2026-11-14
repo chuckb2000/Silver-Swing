@@ -150,6 +150,8 @@ export const DAILY_ROSTER: Readonly<Record<string, string>> = {
   aldarra: '2026-11-15',
   // landed 2026-11-14 (pipeline/land.py)
   snoqualmie_ridge: '2026-11-15',
+  // landed 2026-11-14 (pipeline/land.py)
+  sfgc: '2026-11-15',
 };
 
 /**
