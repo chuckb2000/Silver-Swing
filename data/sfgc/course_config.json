@@ -10,6 +10,19 @@
     "units": "m",
     "source": "USGS 3DEP 1 m DEM (3DEPElevation exportImage), x 545200-546900 / y 4173000-4174500 EPSG:32610, NAVD88 metres, clipped to the world + 100 m by pipeline/intake.py raster; fetched by the GitHub Actions workflow 2026-11-13 (release data-sfgc)"
   },
+  "laz": {
+    "paths": [
+      "raw/laz/*.laz"
+    ],
+    "classes": [
+      1
+    ],
+    "units": "m",
+    "source": "USGS 3DEP lidar point cloud, project CA_SanFrancisco_B23 (CA_SanFrancisco_1_B23), 16 tiles, class 1 (the tiles carry classes 1, 2 and 7: no vegetation classes, so trees come from class 1 with roofs dropped by roof_last_share, as at the Olympic Club); NAD83(2011) / San Francisco CS13 (EPSG:7131), NAVD88 m; clipped to the world + 100 m by pipeline/intake.py laz (CRS kept); fetched by the GitHub Actions workflow 2026-11-13 (release data-sfgc; tiles that timed out on retry runs)",
+    "label": "USGS 3DEP lidar (San Francisco)",
+    "leaf_off": false
+  },
+  "roof_last_share": 0.85,
   "tee_sets": [
     {
       "name": "Blue",
@@ -20,10 +33,11 @@
     },
     {
       "name": "White",
-      "playable": true,
+      "playable": false,
       "rating": 71.3,
       "slope": 130,
-      "total_yd": 6376
+      "total_yd": 6376,
+      "why_not_playable": "11th and 12th fail (+9.9 %, +11.3 %): OSM maps one box on each, the Blue one (course chat, 2026-11-13; open item)"
     },
     {
       "name": "White_Red",

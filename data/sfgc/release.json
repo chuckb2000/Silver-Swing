@@ -25,6 +25,126 @@
    "outputs": {
     "raw/naip_06m.tif": "42ddb7f16e2d9e2533763c4f94959e26b82bf2d0d1f1f5a1f35e62a07859e018"
    }
+  },
+  {
+   "asset": "USGS_LPC_CA_SanFrancisco_B23_04450185.laz",
+   "sha256": "8ed6339f49e4e0656140e6d637889514b9ae62df8e8eb5646e5aa913a3900ff3",
+   "run": "python3 pipeline/intake.py laz sfgc {file} --classes 1 --keep-evlrs --out raw/laz/sf_04450185.laz",
+   "outputs": {
+    "raw/laz/sf_04450185.laz": "9c9a4bf94a22ab1fbfe97b73628e06d2e8d8b13ff980e30651fabbae1df9206d"
+   }
+  },
+  {
+   "asset": "USGS_LPC_CA_SanFrancisco_B23_04450190.laz",
+   "sha256": "769a654ac33d55dcee7a62a1259981147d7ebd779b0245936d320c909291ce83",
+   "run": "python3 pipeline/intake.py laz sfgc {file} --classes 1 --keep-evlrs --out raw/laz/sf_04450190.laz",
+   "outputs": {
+    "raw/laz/sf_04450190.laz": "d0acbb9479ae004f722a894527de4f262c6218d224acbb7fc361498890c02739"
+   }
+  },
+  {
+   "asset": "USGS_LPC_CA_SanFrancisco_B23_04450195.laz",
+   "sha256": "0388bb344e90f68e1621fb4f7ec8279c5d70112112b4290f302e437a37ffc1fb",
+   "run": "python3 pipeline/intake.py laz sfgc {file} --classes 1 --keep-evlrs --out raw/laz/sf_04450195.laz",
+   "outputs": {
+    "raw/laz/sf_04450195.laz": "2a672ea53e4165c1f5fed910f9965346760d8b10a6f6a547e4fe97d2ca498c43"
+   }
+  },
+  {
+   "asset": "USGS_LPC_CA_SanFrancisco_B23_04450200.laz",
+   "sha256": "3f20cd8b38df94fd814a4104df63e11d9ca96d72fbd566435139a71f7c1cd24d",
+   "run": "python3 pipeline/intake.py laz sfgc {file} --classes 1 --keep-evlrs --out raw/laz/sf_04450200.laz",
+   "outputs": {
+    "raw/laz/sf_04450200.laz": "f331ef3d3c260c2d882dadb36075552dc98b45f070e4c3ed68ad72462beb9ff9"
+   }
+  },
+  {
+   "asset": "USGS_LPC_CA_SanFrancisco_B23_04500185.laz",
+   "sha256": "2a52d38ac0608e38a61c315d33e9ce34b390fb81284e650b104dc65814ca83ee",
+   "run": "python3 pipeline/intake.py laz sfgc {file} --classes 1 --keep-evlrs --out raw/laz/sf_04500185.laz",
+   "outputs": {
+    "raw/laz/sf_04500185.laz": "a20daea29d4d541247ad2e64e496e5924354308278e190812ab90ae23cda170b"
+   }
+  },
+  {
+   "asset": "USGS_LPC_CA_SanFrancisco_B23_04500190.laz",
+   "sha256": "5d31ea1a73df7f6681851180c2415fd498c8d7ec7cb3518dc44ccfb2952b44ea",
+   "run": "python3 pipeline/intake.py laz sfgc {file} --classes 1 --keep-evlrs --out raw/laz/sf_04500190.laz",
+   "outputs": {
+    "raw/laz/sf_04500190.laz": "ac40ddfafab48ba920b3880d2ac1ce610c69fdaf71fe41d27dbbe4ac2571b3b5"
+   }
+  },
+  {
+   "asset": "USGS_LPC_CA_SanFrancisco_B23_04500195.laz",
+   "sha256": "d75b705a0fe0ad049fcfab80e17523720252703876327d9861c5e73cec9c32a7",
+   "run": "python3 pipeline/intake.py laz sfgc {file} --classes 1 --keep-evlrs --out raw/laz/sf_04500195.laz",
+   "outputs": {
+    "raw/laz/sf_04500195.laz": "9f0930df5801ec8e5193e97cfa8756d13902de049059ca8d6a88b157a23523a4"
+   }
+  },
+  {
+   "asset": "USGS_LPC_CA_SanFrancisco_B23_04500200.laz",
+   "sha256": "0342f6cd06be45054b47c07d91fdf6d8e01a6178f8a326ad12175f4e29b57937",
+   "run": "python3 pipeline/intake.py laz sfgc {file} --classes 1 --keep-evlrs --out raw/laz/sf_04500200.laz",
+   "outputs": {
+    "raw/laz/sf_04500200.laz": "d330f3575ef66055e1fe0185689a9ada33307e0dd0d03a832ae2a488ae0fa4db"
+   }
+  },
+  {
+   "asset": "USGS_LPC_CA_SanFrancisco_B23_04550185.laz",
+   "sha256": "1ab3952c2b2c6641f0ccfb6f217e1653cc048b857617bb3f9f9bac2809c41474",
+   "run": "python3 pipeline/intake.py laz sfgc {file} --classes 1 --keep-evlrs --out raw/laz/sf_04550185.laz",
+   "outputs": {
+    "raw/laz/sf_04550185.laz": "bfb6b184d0f6eb97b214a571f6864a0a1500aaac5e189b50b107008742ae9203"
+   }
+  },
+  {
+   "asset": "USGS_LPC_CA_SanFrancisco_B23_04550190.laz",
+   "sha256": "616826d21158f97ac2121898d8bac6a9e3d7ef6c931d5bc4b260257242a98afc",
+   "run": "python3 pipeline/intake.py laz sfgc {file} --classes 1 --keep-evlrs --out raw/laz/sf_04550190.laz",
+   "outputs": {
+    "raw/laz/sf_04550190.laz": "63c285087b8e68f4ce6e15e3f6c8955abeb2d62966daa30bfd8cbe21065f2c14"
+   }
+  },
+  {
+   "asset": "USGS_LPC_CA_SanFrancisco_B23_04550195.laz",
+   "sha256": "ffb0d3525d42afcfd0095c4102d621f407a9626d0ce2bdfcd6bfcbf2ead492dc",
+   "run": "python3 pipeline/intake.py laz sfgc {file} --classes 1 --keep-evlrs --out raw/laz/sf_04550195.laz",
+   "outputs": {
+    "raw/laz/sf_04550195.laz": "24985002651522231d65410da57c0ab36526e847df1f2585b933cf4702b2d3fc"
+   }
+  },
+  {
+   "asset": "USGS_LPC_CA_SanFrancisco_B23_04550200.laz",
+   "sha256": "1d4302b218c31096e95b0d4c460a8c981c1b937f55162e734e9c76d063c1207a",
+   "run": "python3 pipeline/intake.py laz sfgc {file} --classes 1 --keep-evlrs --out raw/laz/sf_04550200.laz",
+   "outputs": {
+    "raw/laz/sf_04550200.laz": "50854525d87ccda011d37dba28c096675359877fc04be2d0aa92bba5b1ca7605"
+   }
+  },
+  {
+   "asset": "USGS_LPC_CA_SanFrancisco_B23_04600185.laz",
+   "sha256": "a42a7ec493c0da60a31ad0271c989cf65731aa7350eb3987284b9265048adde1",
+   "run": "python3 pipeline/intake.py laz sfgc {file} --classes 1 --keep-evlrs --out raw/laz/sf_04600185.laz",
+   "outputs": {
+    "raw/laz/sf_04600185.laz": "a7909444cb5f22199fb6519146d19e2537b7d763e8fdcb34c8a4769055f66b59"
+   }
+  },
+  {
+   "asset": "USGS_LPC_CA_SanFrancisco_B23_04600195.laz",
+   "sha256": "71b41b4d2230355177f27cbc6e6cb6dd04f9abc2aac265842bee0b7ef8a14eac",
+   "run": "python3 pipeline/intake.py laz sfgc {file} --classes 1 --keep-evlrs --out raw/laz/sf_04600195.laz",
+   "outputs": {
+    "raw/laz/sf_04600195.laz": "3a7e89e4c3696270dc9fe52416d1466f831e4464ef022279e24044d7cb0d22bc"
+   }
+  },
+  {
+   "asset": "USGS_LPC_CA_SanFrancisco_B23_04600200.laz",
+   "sha256": "5eabbd10630de64b9abca61c68991eb5804a44bf8e84b232fcea1a9c80e8b0ec",
+   "run": "python3 pipeline/intake.py laz sfgc {file} --classes 1 --keep-evlrs --out raw/laz/sf_04600200.laz",
+   "outputs": {
+    "raw/laz/sf_04600200.laz": "f25870c6a241aa2500f2088f764f03533a2490a0230b0d36957f2fa3ce3a2e91"
+   }
   }
  ]
 }
