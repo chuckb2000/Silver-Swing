@@ -1,0 +1,48 @@
+{
+  "name": "Myopia (North Shore hunt country, late summer)",
+  "note": "Course theme palette (<= 32 colours), same keys as pnw.json. Myopia Hunt Club, South Hamilton MA: Leeds' links-like fields at a fox-hunting club, late summer. Fairways and greens a cool New England green; the rough is tall fescue and bluestem gone tawny (F0-F2 olive-gold, the course's signature look); white-tan pit bunkers; tea-dark ponds of the Miles River marsh; grey stone walls (K3-K4). Trees in assets-src/trees_myopia.py: eastern white pine, red oak, red maple with a first touch of red, American elm. The course chat's design, 2026-11-13. Shadows are a 35% black overlay on top of these.",
+  "colors": {
+    "G0": "#19362a",
+    "G1": "#224a33",
+    "G2": "#2b5f39",
+    "G3": "#36733f",
+    "G4": "#428746",
+    "G5": "#4f994d",
+    "G6": "#5daa56",
+    "G7": "#6eb960",
+    "G8": "#82c76d",
+    "G9": "#a5d78c",
+    "L0": "#6a7a3c",
+    "L1": "#7d8c43",
+    "L2": "#93a04e",
+    "S0": "#cdbf9c",
+    "S1": "#ece3cb",
+    "S2": "#faf6ea",
+    "W0": "#23342c",
+    "W1": "#33493c",
+    "W2": "#6b8270",
+    "K0": "#25262b",
+    "K1": "#4f5157",
+    "K2": "#787a80",
+    "K3": "#a9a499",
+    "K4": "#d3cdbf",
+    "B0": "#47321f",
+    "B1": "#6d4b30",
+    "B2": "#8f5e3e",
+    "R0": "#5a3a3a",
+    "WH": "#f6f5f0",
+    "F0": "#6b6a36",
+    "F1": "#827b3e",
+    "F2": "#9a8d4a"
+  },
+  "trees": {
+    "conifer": "trees_myopia:conifer",
+    "deciduous": "trees_myopia:deciduous"
+  },
+  "lut": {
+    "rough": ["F0", "F1", "F2", "F2"]
+  },
+  "minimap": {
+    "rough": "#827b3e"
+  }
+}

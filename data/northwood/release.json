@@ -1,0 +1,46 @@
+{
+ "release": "data-northwood",
+ "note": "build inputs not kept in git; `make fetch NAME=northwood` puts them in place (pipeline/fetch_raw.py). The GitHub fetch workflow downloaded these into the release (fetch.json, fetch-log-northwood.json). The DEM clip is also in git (raw/usgs_dem_b22_1m_clip.tif). Also in the release, not used: the x49y426 DEM tile and lidar tile 10SDH9958 (west of the world).",
+ "files": [
+  {
+   "asset": "northwood_overpass.geojson",
+   "sha256": "c15ffdee70b4c5c1c0ff19e8610905df35cc54eb50d16f160e6a120693cdbc0c",
+   "run": "python3 pipeline/intake.py osm northwood {file}",
+   "outputs": {
+    "raw/overpass.geojson": "7ca190741569c369b6ea174acc366a06642751f662c847c135a8cf3ec8779758"
+   }
+  },
+  {
+   "asset": "USGS_1M_10_x50y426_CA_NorthernCA_B22.tif",
+   "sha256": "2482f1f203c3179cffec15773ca117ef6baa82241e284030c88677bfceced475",
+   "run": "python3 pipeline/intake.py raster northwood {file} --out raw/usgs_dem_b22_1m_clip.tif",
+   "outputs": {
+    "raw/usgs_dem_b22_1m_clip.tif": "516c5ddaa08e161423d5ec018e18858a5c0e128c2a1456ef429dc08bde1ccb14"
+   }
+  },
+  {
+   "asset": "USGS_LPC_CA_NorthernCA_B22_10SEH0058.laz",
+   "sha256": "73bf99e110c5a010730fd2d4b8b981f26eea8ae937a86ed3b32f4115efae71d2",
+   "run": "python3 pipeline/intake.py laz northwood {file} --classes 1 --keep-evlrs --out raw/laz/northwood_EH0058.laz",
+   "outputs": {
+    "raw/laz/northwood_EH0058.laz": "d233676ddcc7d957348962d13c8efcf0c8bbec0553d849b81d52fc668151144d"
+   }
+  },
+  {
+   "asset": "USGS_LPC_CA_NorthernCA_B22_10SEH0059.laz",
+   "sha256": "a6f6a92d1c409917f61e48d4bbfd61eb5a5f9c7eae1c95ab26f8d4622e3ea6ed",
+   "run": "python3 pipeline/intake.py laz northwood {file} --classes 1 --keep-evlrs --out raw/laz/northwood_EH0059.laz",
+   "outputs": {
+    "raw/laz/northwood_EH0059.laz": "4db5f193b9679652eff1fe6b23d4b366f6d6ecd3a10aa4eeaa892dd445d4b775"
+   }
+  },
+  {
+   "asset": "USGS_LPC_CA_NorthernCA_B22_10SEH0159.laz",
+   "sha256": "a7532480d692473d9482829b90496b9e6b3991c49ed88c99522d4e1398fe6105",
+   "run": "python3 pipeline/intake.py laz northwood {file} --classes 1 --keep-evlrs --out raw/laz/northwood_EH0159.laz",
+   "outputs": {
+    "raw/laz/northwood_EH0159.laz": "0fc40b8d814f283399515b000bfeeb1b26233b542c084a353528b6dee14d92d5"
+   }
+  }
+ ]
+}

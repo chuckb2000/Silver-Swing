@@ -1,0 +1,47 @@
+{
+ "items": [
+  {
+   "name": "worcester_cc_overpass.geojson",
+   "osm_box": [
+    42.3157,
+    -71.7904,
+    42.3323,
+    -71.7715
+   ]
+  },
+  {
+   "name": "usgs_dem_m.tif",
+   "url": "https://elevation.nationalmap.gov/arcgis/rest/services/3DEPElevation/ImageServer/exportImage?bbox=270100,4688600,271600,4690400&bboxSR=32619&imageSR=32619&size=1500,1800&format=tiff&pixelType=F32&noData=-9999&interpolation=RSP_BilinearInterpolation&f=image"
+  },
+  {
+   "name": "usgs_dem_identify.json",
+   "url": "https://elevation.nationalmap.gov/arcgis/rest/services/3DEPElevation/ImageServer/identify?geometry=%7B%22x%22%3A270850%2C%22y%22%3A4689500%2C%22spatialReference%22%3A%7B%22wkid%22%3A32619%7D%7D&geometryType=esriGeometryPoint&returnCatalogItems=true&f=json"
+  },
+  {
+   "name": "worcester_cc_lpc",
+   "tnm": {
+    "dataset": "lpc",
+    "bbox": [
+     -71.7904,
+     42.3157,
+     -71.7715,
+     42.3323
+    ],
+    "only": "MA_CentralEastern_1_2021"
+   }
+  },
+  {
+   "name": "naip_270100_4688600.jpg",
+   "url": "https://imagery.nationalmap.gov/arcgis/rest/services/USGSNAIPImagery/ImageServer/exportImage?bbox=270100,4688600,271600,4690400&bboxSR=32619&imageSR=32619&size=2500,3000&format=jpg&f=image"
+  },
+  {
+   "name": "naip_info.json",
+   "url": "https://imagery.nationalmap.gov/arcgis/rest/services/USGSNAIPImagery/ImageServer?f=pjson"
+  },
+  {
+   "name": "USGS_LPC_MA_CentralEastern_2021_B21_19TBG270687.laz",
+   "url": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/MA_CentralEastern_2021_B21/MA_CentralEastern_1_2021/LAZ/USGS_LPC_MA_CentralEastern_2021_B21_19TBG270687.laz",
+   "note": "retry: timed out on the first run"
+  }
+ ]
+}

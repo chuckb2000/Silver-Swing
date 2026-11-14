@@ -1,0 +1,62 @@
+{
+ "add": [
+  {
+   "from": "proposed/clubhouse.geojson",
+   "ids": [
+    "w785254275_building"
+   ],
+   "tags": {},
+   "reason": "the clubhouse is mapped golf=clubhouse, which s01 reads as a golf feature, not a building; copied as a building (audit), original dropped"
+  }
+ ],
+ "drop": [
+  {
+   "osm": "w785254275",
+   "reason": "replaced by its copy as a building (proposed/clubhouse.geojson)"
+  }
+ ],
+ "tags": [
+  {
+   "osm": "w957696422",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "standing default (COURSE_BUILD.md 4.1): every penalty area red"
+  },
+  {
+   "osm": "w957696424",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "standing default (COURSE_BUILD.md 4.1): every penalty area red"
+  },
+  {
+   "osm": "w957712160",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "standing default (COURSE_BUILD.md 4.1): every penalty area red"
+  },
+  {
+   "osm": "w957759634",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "standing default (COURSE_BUILD.md 4.1): every penalty area red"
+  },
+  {
+   "osm": "w957759635",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "standing default (COURSE_BUILD.md 4.1): every penalty area red"
+  },
+  {
+   "osm": "w958032722",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "standing default (COURSE_BUILD.md 4.1): every penalty area red"
+  }
+ ]
+}

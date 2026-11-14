@@ -86,7 +86,8 @@ async function pickCourse(page: Page, state: string, name: string) {
     };
     return find(window.__game.scene.getScene('courses').children.list);
   };
-  for (let i = 0; i < 6; i++) {
+  // (Oregon has more than thirty courses since 2026-11-13: room for a dozen pages and more)
+  for (let i = 0; i < 20; i++) {
     if (await page.evaluate(locate, ['courses', null, name, null] as [string, string | null, string | null, string | null])) break;
     const before = await page.evaluate(counter);
     await tap(page, 'courses', { icon: 'arrow_right' }, new Function('before', `return (${counter.toString()})() !== before;`) as (b: unknown) => boolean, before);
@@ -353,7 +354,14 @@ test('a reload while the ball is in the air keeps the stroke (developer, 2026-10
   }
   expect(await page.evaluate(() => window.__game.scene.getScene('play').state)).toBe('flight');
   const end = await page.evaluate(() => { const s = window.__game.scene.getScene('play').sim; return [s.end.x, s.end.y]; });
-  await page.waitForTimeout(300); // the save is written as the ball leaves the club
+  // the save is written as the ball leaves the club: wait for it (its localStorage copy is written
+  // after the IndexedDB one), not for a fixed time, which a busy machine overran
+  await page.waitForFunction(() => {
+    try {
+      const s = JSON.parse(localStorage.getItem('local-golf:round-in-progress') || 'null');
+      return !!s && s.tally?.strokes === 1 && s.shotNo === 1;
+    } catch { return false; }
+  }, null, { polling: 50, timeout: 30_000 });
   await page.reload();
   await page.waitForFunction(() => window.__game?.scene.isActive('title'), null, { timeout: 60_000 });
   await tap(page, 'title', { button: 'continue round (hole 1)' }, () => window.__game.scene.isActive('play') && window.__game.scene.getScene('play').state === 'aim');
