@@ -110,6 +110,38 @@
    "outputs": {
     "raw/laz/chicago_golf_10451889.laz": "00669233834c65137e22a0b0ec610ad3010729b42716fb2575b4c599426e2d84"
    }
+  },
+  {
+   "asset": "USGS_LPC_IL_MidNorth_D22_10391889.laz",
+   "sha256": "c196c7eb1b0f06371b8cd3d487d561334cf8ecf1e19e42df58f5014b41a36f98",
+   "run": "python3 pipeline/intake.py laz chicago_golf {file} --classes 2,3,4,5 --keep-evlrs --out raw/laz/chicago_golf_10391889.laz",
+   "outputs": {
+    "raw/laz/chicago_golf_10391889.laz": "7d19320ffd4c49dc2c9fb82f2a5b401cc238c59f5b65055f5ecb5857283e520e"
+   }
+  },
+  {
+   "asset": "USGS_LPC_IL_MidNorth_D22_10411889.laz",
+   "sha256": "ddbf37c0b6480c2fd3117bbf52296761815cf568c2aab65f36f1352a53ee473b",
+   "run": "python3 pipeline/intake.py laz chicago_golf {file} --classes 2,3,4,5 --keep-evlrs --out raw/laz/chicago_golf_10411889.laz",
+   "outputs": {
+    "raw/laz/chicago_golf_10411889.laz": "6008368fc3dc9bd01832848dfbc25d5328c46d89c70b9d255d091c7581758bd1"
+   }
+  },
+  {
+   "asset": "USGS_LPC_IL_MidNorth_D22_10431887.laz",
+   "sha256": "8208b5601f660216182558d12a2c4c16192e0cc3a71e7e294eeb10b4bfe715ce",
+   "run": "python3 pipeline/intake.py laz chicago_golf {file} --classes 2,3,4,5 --keep-evlrs --out raw/laz/chicago_golf_10431887.laz",
+   "outputs": {
+    "raw/laz/chicago_golf_10431887.laz": "903af1de71119d853298b6bb08eb805d1e8ce353abc5348db9fc4eeb3b1620c6"
+   }
+  },
+  {
+   "asset": "USGS_LPC_IL_MidNorth_D22_10431889.laz",
+   "sha256": "74e8636d9f57728ed2f24af0b72a0ff0127209c513497ffeab7e4ba73827b238",
+   "run": "python3 pipeline/intake.py laz chicago_golf {file} --classes 2,3,4,5 --keep-evlrs --out raw/laz/chicago_golf_10431889.laz",
+   "outputs": {
+    "raw/laz/chicago_golf_10431889.laz": "86d2f308806b7101e9116962269a6fb31a0c033074547905a0342f5585cde490"
+   }
   }
  ]
 }
