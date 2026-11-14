@@ -144,6 +144,8 @@ export const DAILY_ROSTER: Readonly<Record<string, string>> = {
   tcc_brookline: '2026-11-14',
   // landed 2026-11-13 (pipeline/land.py)
   st_andrews_old: '2026-11-14',
+  // landed 2026-11-13 (pipeline/land.py)
+  chicago_golf: '2026-11-14',
 };
 
 /**
