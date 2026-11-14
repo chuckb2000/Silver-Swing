@@ -422,12 +422,14 @@ export class Round {
   /**
    * Smallest putter scale that covers the putt with room to spare (playability addition): the putt as it
    * plays, a little past the hole, at no more than 85 % of the meter (developer, 2026-11-14: a flat 16
-   * footer opened the 48 ft meter; it was 1.6 x the straight-line length, now 24 ft).
+   * footer opened the 48 ft meter; it was 1.6 x the straight-line length, now 24 ft), and never shorter
+   * than the putt itself (developer, 2026-11-14: a 15-footer downhill came up with the 12 ft meter).
    */
   autoPuttScale(units: 'yd' | 'm' = this.units): number {
     const need = this.puttPlaysAs() * 1.1 + 0.3;
+    const d = this.distToPin();
     const scales = puttScales(units);
-    for (const s of scales) if (s * 0.85 >= need) return s;
+    for (const s of scales) if (s * 0.85 >= need && s >= d - 0.01) return s;
     return scales[scales.length - 1];
   }
 

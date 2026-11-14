@@ -229,7 +229,12 @@ describe('longer putter settings', () => {
     r.startHole(0);
     const FT = 0.3048;
     // the meter for a putt that plays this long (on a flat green, its length)
-    const meterFor = (plays: number, units: 'yd' | 'm' = 'yd') => { r.puttPlaysAs = () => plays; return r.autoPuttScale(units); };
+    // a flat putt this long: the ball that far from the hole, playing as long as it is
+    const meterFor = (plays: number, units: 'yd' | 'm' = 'yd') => {
+      r.ball = { x: r.pin.x - plays, y: r.pin.y, teedUp: false };
+      r.puttPlaysAs = () => plays;
+      return r.autoPuttScale(units);
+    };
     expect(meterFor(82 * FT) / FT).toBeCloseTo(120, 6); // 82 ft: 120 ft at 79 %
     expect(meterFor(100 * FT) / FT).toBeCloseTo(160, 6);
     expect(meterFor(20) / FT).toBeCloseTo(120, 6); // 20 m (66 ft): 80 ft would be 92 %, so 120 ft
@@ -244,12 +249,23 @@ describe('longer putter settings', () => {
     const r = new Round(course, roundCfg(course, [1]));
     r.startHole(0);
     const FT = 0.3048;
-    const meterFor = (ft: number) => { r.puttPlaysAs = () => ft * FT; return Math.round(r.autoPuttScale('yd') / FT); };
+    // a putt `ft` long that plays as `plays` ft (downhill shorter)
+    const meterFor = (ft: number, plays = ft) => {
+      r.ball = { x: r.pin.x - ft * FT, y: r.pin.y, teedUp: false };
+      r.puttPlaysAs = () => plays * FT;
+      return Math.round(r.autoPuttScale('yd') / FT);
+    };
     expect(meterFor(16)).toBe(24);
     expect(meterFor(5)).toBe(12);
     expect(meterFor(30)).toBe(48);
     expect(meterFor(17)).toBe(24);
     expect(meterFor(19)).toBe(48); // 19 ft would need 95 % of the 24 ft meter
+    // never shorter than the putt (developer, 2026-11-14: a 15-footer downhill had the 12 ft meter)
+    expect(meterFor(15, 8)).toBe(24);
+    expect(meterFor(12, 6)).toBe(12);
+    expect(meterFor(13, 6)).toBe(24);
+    expect(meterFor(40, 20)).toBe(48);
+    for (let ft = 1; ft <= 150; ft++) for (const plays of [ft * 0.5, ft * 0.7, ft]) expect(meterFor(ft, plays)).toBeGreaterThanOrEqual(ft);
   });
 
   it('a putt uphill plays longer, downhill shorter (by g x rise / the green\'s deceleration)', () => {
