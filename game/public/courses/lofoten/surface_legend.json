@@ -32,14 +32,14 @@
   16
  ],
  "area_m2": {
-  "ob": 1042228,
-  "rough": 438260,
+  "ob": 1027150,
+  "rough": 438542,
   "fairway": 88060,
   "fringe": 2518,
   "green": 8635,
   "tee": 2097,
   "bunker": 2194,
-  "water": 646775,
+  "water": 661898,
   "cartpath": 13169,
   "woods": 163,
   "ob_road": 22533,
@@ -48,6 +48,6 @@
   "ob_building": 860,
   "building": 792,
   "range": 11909,
-  "ob_sand": 3072
+  "ob_sand": 2746
  }
 }
