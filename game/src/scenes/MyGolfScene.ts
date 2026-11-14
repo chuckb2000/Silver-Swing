@@ -19,6 +19,9 @@ import { lengthLabel, shapeById } from './flow';
 import { isFullRound } from '../systems/game/lengths';
 import { MenuScene } from './menu';
 
+/** A course card's frames (assets-src/course_cards.py): one green view each, side by side. */
+const CARD_FRAME_W = 208;
+
 let tab: 'stats' | 'passport' | 'milestones' = 'stats';
 let page = 0;
 
@@ -168,11 +171,19 @@ export class MyGolfScene extends MenuScene {
       const art = this.add.container(0, 0);
       this.root.add(art);
       fills.push(() => {
-        const k = `card_${c.id}`;
-        if (!art.active || !this.textures.exists(k)) return;
-        const src = this.textures.get(k).getSourceImage() as HTMLImageElement;
-        const sx = Math.max(0, Math.round((src.width - cw) / 2)), sy = Math.max(0, Math.round((src.height - ch) / 2) - 6);
-        const im = this.add.image(cx - sx, cy - sy, k).setOrigin(0, 0).setCrop(sx, sy, Math.min(cw, src.width), Math.min(ch, src.height));
+        // a zoomed-out map of a few of the course's holes (assets-src/passport_maps.py; developer,
+        // 2026-11-13), drawn 1:1; without one, the middle of the course card's first green
+        if (!art.active || art.length) return;
+        const pk = `passport_${c.id}`, k = `card_${c.id}`;
+        let im: Phaser.GameObjects.Image | null = null;
+        if (this.textures.exists(pk)) im = this.add.image(cx, cy, pk).setOrigin(0, 0);
+        else if (this.textures.exists(k)) {
+          const src = this.textures.get(k).getSourceImage() as HTMLImageElement;
+          const fw = Math.min(src.width, CARD_FRAME_W); // the card is a strip of green views, one frame each
+          const sx = Math.max(0, Math.round((fw - cw) / 2)), sy = Math.max(0, Math.round((src.height - ch) / 2) - 6);
+          im = this.add.image(cx - sx, cy - sy, k).setOrigin(0, 0).setCrop(sx, sy, Math.min(cw, fw), Math.min(ch, src.height));
+        }
+        if (!im) return;
         if (!best.has(c.id)) im.setAlpha(0.35);
         art.add(im);
       });
@@ -199,8 +210,14 @@ export class MyGolfScene extends MenuScene {
     }
     const fillAll = () => { if (this.isCurrentBuild(g)) for (const f of fills) f(); };
     fillAll();
-    await ensureImages(this, shown.map((c): [string, string] => [`card_${c.id}`, `sprites/cards/${c.id}.png`]));
+    await ensureImages(this, shown.map((c): [string, string] => [`passport_${c.id}`, `sprites/passport/${c.id}.png`]));
     fillAll();
+    // a course whose map is missing (a course built before the maps): its card instead
+    const missing = shown.filter((c) => !this.textures.exists(`passport_${c.id}`));
+    if (missing.length) {
+      await ensureImages(this, missing.map((c): [string, string] => [`card_${c.id}`, `sprites/cards/${c.id}.png`]));
+      fillAll();
+    }
   }
 
   private buildMilestones(x0: number, y: number, pw: number, h: number) {
