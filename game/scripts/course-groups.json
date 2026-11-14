@@ -1,5 +1,5 @@
 {
- "_note": "Places with several courses that each have their own data folder (a shared folder, like East Potomac's, sets its group in pipeline s10). course-lists.mjs puts each listed course in the group. keepNames: the courses keep their full names inside the group (Bandon Trails, not Trails).",
+ "_note": "Places with several courses that each have their own data folder (a shared folder, like East Potomac's, sets its group in pipeline s10). course-lists.mjs puts each listed course in the group; a course whose own course.json already has a group keeps it, so a place can be part shared folder, part own folders (the Olympic Club) when the key is the shared folder's id. keepNames: the courses keep their full names inside the group (Bandon Trails, not Trails).",
  "bandon_resort": {
   "name": "Bandon Dunes Golf Resort",
   "keepNames": true,
@@ -13,5 +13,13 @@
    "shortys"
   ],
   "why": "developer, 2026-10-27: all the Bandon courses under one umbrella like East Potomac, Silvies Valley and Pumpkin Ridge"
+ },
+ "olympic_club": {
+  "name": "The Olympic Club",
+  "courses": [
+   "olympic_club_lake",
+   "olympic_club_cliffs"
+  ],
+  "why": "developer, 2026-11-13: the Olympic Club should be one place with its courses under it, like Pumpkin Ridge, Bandon and the Reserve. The Lake has its group from data/olympic_club (s10); the Cliffs has its own folder and joins it here."
  }
 }
