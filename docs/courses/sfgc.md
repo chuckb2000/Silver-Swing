@@ -16,6 +16,15 @@ green between the duel site's obelisks. After the virtual tees moved within thei
 every Blue hole is within 8 % of the card: 15 pass, the 1st (-7.4 %) and the 13th (-5.2 %)
 are flags; 6,750 yd built against 6,808.
 
+## Checks
+
+Checks run on the branch (2026-11-14):
+- `course_play.test.ts -t sfgc`: 11 passed.
+- `npm test`: 2,194 passed, 2 failed. One was passport.test "every course on offer has a 104 x 52 map": I then made the passport map and that test passes. The other is player.test "the real rotation", which passes after `make land` adds the course to the daily rotation.
+- `npm run e2e`: 17 passed.
+- Pinned; a `--fresh` rebuild left git clean.
+- All 18 holes played in the game (tee view, overview, first shot, putting view).
+
 ## Facts
 
 -   **Location:** Lakeshore, San Francisco, California, south of Lake Merced and east of
