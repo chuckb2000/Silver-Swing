@@ -145,6 +145,14 @@
    "outputs": {
     "raw/laz/sf_04600200.laz": "f25870c6a241aa2500f2088f764f03533a2490a0230b0d36957f2fa3ce3a2e91"
    }
+  },
+  {
+   "asset": "USGS_LPC_CA_SanFrancisco_B23_04600190.laz",
+   "sha256": "7655c058c44b2f0c22b73358755bfd8700dac87d4d1ff73ccf2abd9ca7f1919b",
+   "run": "python3 pipeline/intake.py laz sfgc {file} --classes 1 --keep-evlrs --out raw/laz/sf_04600190.laz",
+   "outputs": {
+    "raw/laz/sf_04600190.laz": "c3dac9b32611ac8a44bd2b88641d41f3a681508db687ab00f570bd845d11ca01"
+   }
   }
  ]
 }
