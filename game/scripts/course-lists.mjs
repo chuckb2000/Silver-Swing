@@ -61,8 +61,9 @@ export function titleMaps(entries, publicDir = PUBLIC) {
   const seen = new Set();
   const maps = [];
   for (const e of entries) {
-    // one view per shared world (East Potomac); a resort's courses each keep their own
-    const key = e.group && !e.keepName ? e.group : e.id;
+    // one view per shared world (East Potomac: its courses have a layout); courses grouped from
+    // course-groups.json each keep their own (Bandon, the Olympic Club's Cliffs)
+    const key = e.group && e.layout ? e.group : e.id;
     if (seen.has(key) || !existsSync(join(publicDir, 'sprites', 'title', `${e.id}.png`))) continue;
     seen.add(key);
     maps.push(e.id);
