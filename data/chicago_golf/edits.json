@@ -1,0 +1,106 @@
+{
+ "note": "Edits to the OSM layout for Chicago Golf Club; built into edited/course.geojson by pipeline/merge_edits.py.",
+ "add": [
+  {
+   "from": "proposed/approved.geojson",
+   "ids": [
+    "desk_3_bluetee_0",
+    "desk_5_bluetee_0",
+    "desk_8_bluetee_0"
+   ],
+   "reason": "the developer's Black tee boxes for holes 3, 5 and 8, traced on the tracing desk over the NAIP 2023 photo (2026-11-13; data/chicago_golf/desk/, desk_to_proposed.py)"
+  },
+  {
+   "from": "proposed/paths.geojson",
+   "ids": [
+    "path_0",
+    "path_1",
+    "path_10",
+    "path_11",
+    "path_12",
+    "path_13",
+    "path_14",
+    "path_15",
+    "path_16",
+    "path_17",
+    "path_18",
+    "path_19",
+    "path_2",
+    "path_20",
+    "path_21",
+    "path_22",
+    "path_23",
+    "path_24",
+    "path_25",
+    "path_26",
+    "path_27",
+    "path_28",
+    "path_29",
+    "path_3",
+    "path_30",
+    "path_31",
+    "path_32",
+    "path_33",
+    "path_34",
+    "path_35",
+    "path_36",
+    "path_37",
+    "path_38",
+    "path_39",
+    "path_4",
+    "path_40",
+    "path_41",
+    "path_42",
+    "path_43",
+    "path_44",
+    "path_45",
+    "path_46",
+    "path_47",
+    "path_48",
+    "path_49",
+    "path_5",
+    "path_50",
+    "path_51",
+    "path_52",
+    "path_53",
+    "path_54",
+    "path_55",
+    "path_56",
+    "path_57",
+    "path_58",
+    "path_59",
+    "path_6",
+    "path_60",
+    "path_61",
+    "path_62",
+    "path_63",
+    "path_64",
+    "path_65",
+    "path_66",
+    "path_67",
+    "path_68",
+    "path_69",
+    "path_7",
+    "path_70",
+    "path_8",
+    "path_9"
+   ],
+   "reason": "the gravel and dirt walking paths OSM doesn't map, read from the NAIP 2023 photo (make_paths.py), approved by the developer 2026-11-13 (\"paths and fescue looks great\"); golf=cartpath lines, 2.4 m wide"
+  }
+ ],
+ "drop": [
+  {
+   "osm": "n6906561867",
+   "reason": "OSM's pin on the 7th sits 19 m from the green's centre, so the close-up putting view (centred on the green) left it out; without it the hole uses the green centre, as every hole without a mapped pin (as st_andrews_old's 17th)"
+  }
+ ],
+ "tags": [
+  {
+   "osm": "w281979987",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "the pond the 9th and 10th play across (golf=water_hazard): every penalty area red (standing default)"
+  }
+ ]
+}
