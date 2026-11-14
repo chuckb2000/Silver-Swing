@@ -74,7 +74,7 @@ describe('Bandon Dunes Golf Resort (developer, 2026-10-27)', async () => {
     const club = all.filter((e: { group?: string }) => e.group === 'olympic_club');
     expect(club.map((e: { id: string }) => e.id).sort()).toEqual(['olympic_club_cliffs', 'olympic_club_lake']);
     for (const e of club) expect(e.groupName).toBe('The Olympic Club');
-    expect(club.map((e: { name: string; groupName: string; keepName?: boolean; layout?: string }) => e.layout ?? nameInGroup(e.name, e.groupName, e.keepName)).sort())
+    expect(club.map((e: { name: string; groupName?: string; keepName?: boolean; layout?: string }) => e.layout ?? nameInGroup(e.name, e.groupName!, e.keepName)).sort())
       .toEqual(['Cliffs', 'Lake']);
     // two worlds: each keeps its view on the title screen
     expect(titleMaps(all).filter((id: string) => id.startsWith('olympic_club'))).toHaveLength(2);
