@@ -6,8 +6,8 @@ Course id: `chicago_golf` (data folder `data/chicago_golf/`), branch `course/chi
 
 Built 2026-11-13 from OSM (all 18 holes, greens, fairways, bunkers; 34 tees) with
 three Black tees the developer traced on the tracing desk (3, 5, 8). Elevation is
-the USGS 3DEP 1 m DEM. Trees come from the 3DEP lidar (IL_MidNorth_D22): 6,978
-trees in the world, 610 on the course. The rough is drawn from the USDA NAIP 2023
+the USGS 3DEP 1 m DEM. Trees come from the 3DEP lidar (IL_MidNorth_D22): 9,046
+trees in the world, 1,183 on the course. The rough is drawn from the USDA NAIP 2023
 photo (0.3 m): native fescue between the holes and a mown band beside the
 fairways. The walking paths are read from the same photo. Both were approved by
 the developer. Black tees only. New theme `chicago_golf`. Every hole is within 3 %
@@ -34,8 +34,10 @@ of the card: 6,929 yd against 6,950. See "Tests" for what ran.
     golf=water_hazard (yellow); a tag edit makes it red (standing default). Out of
     bounds is the OSM course boundary. The practice ground is out of bounds
     (`driving_range_is_ob`).
--   **Trees:** 6,978 from the lidar (classes 3-5, heights in US feet converted),
-    610 inside the course. Types are found from crown shape only. Six were dropped
+-   **Trees:** 9,046 from the lidar (classes 3-5, heights in US feet converted),
+    1,183 inside the course. 15 of the 16 tiles over the world are in: every tile
+    over the course. The 16th (10451887) covers only houses east of the course
+    and USGS kept refusing it. Types are found from crown shape only. Six were dropped
     on bunkers and the pond.
 
 ## Scorecard
@@ -94,10 +96,24 @@ Course chat's calls (listed for the developer):
 
 ## Open items
 
-1.  **Lidar tiles still missing:** see "Tests" for the state at hand-off.
+1.  **One lidar tile missing** (10451887): scenery east of the course only.
+    Recommend leaving it; the trees there come from no data, so the houses
+    stand on lawn.
 2.  **Paths** are read from the photo: some faint ones are missing, and the desk
     can add them. Recommend leaving them as they are.
 3.  **Conifer vs deciduous** is from crown shape only (no leaf-off photo).
+
+## Tests
+
+Run 2026-11-14 on the branch merged with main, pinned:
+
+-   `make course NAME=chicago_golf ARGS=--fresh`: `make fetch` put every input in
+    place from the release, 15 steps ran, `git status` unchanged.
+-   `course_play.test.ts -t chicago_golf`: 12/12; every hole within 3 % of the card.
+-   `npm test`: 2,163 passed, 2 failed, both from the daily rotation (the course
+    isn't in `dailyRoster.ts` until `make land`): `player.test.ts` "the real
+    rotation" and `tour.test.ts` "a hole drawn sits out". Both pass on main.
+-   `npm run e2e` (after `npm run build`): 17/17.
 
 ## Lessons
 
@@ -107,8 +123,8 @@ Course chat's calls (listed for the developer):
     `--keep-evlrs` wrote clips with no CRS, and s00 found no trees. Heights are US
     feet (`laz.units` "ft").
 -   **NAIP through Planetary Computer:** the STAC search (a `url` item) lists the
-    tiles; the blob URLs download directly. The tiles are 2 GB, so pull them
-    straight into `raw/naip/`.
+    tiles; the blob URLs download directly. The tiles are 2 GB each; `make fetch`
+    keeps them in `raw/naip/` (git-ignored) and `make_ortho.py` cuts the 27 MB photo.
 -   **Paths from a photo:** fixed brightness thresholds caught mottled bare
     patches. A ridge filter (`skimage.filters.sato`) plus spur pruning finds the
     thin paths.
