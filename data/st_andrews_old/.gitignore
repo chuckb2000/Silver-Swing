@@ -1,0 +1,3 @@
+# the lidar clips (~46 MB each) are rebuilt from the release by `make fetch` (release.json)
+raw/dtm_clip.tif
+raw/dsm_clip.tif

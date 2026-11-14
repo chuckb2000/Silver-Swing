@@ -1,0 +1,86 @@
+{
+  "name": "Myopia Hunt Club",
+  "location": "South Hamilton (Hamilton), Essex County, Massachusetts",
+  "state": "MA",
+  "architects": "Herbert C. Leeds (1894-1901; R. M. Appleton laid out the first nine, 1894); Gil Hanse tree and fairway work since 2011",
+  "theme": "myopia",
+  "boundary_name": "Myopia Hunt Club",
+  "dtm": {
+    "path": "raw/usgs_dem_1m.tif",
+    "units": "m",
+    "source": "USGS 3DEP 1 m DEM (3DEPElevation exportImage, project MA_CentralEastern_2021_B21, 2021 USGS Lidar: Central Eastern Massachusetts, leaf-off spring 2021), x 346700-348600 / y 4718100-4720200 EPSG:32619, NAVD88 metres, clipped to the world + 100 m by pipeline/intake.py raster; fetched by the GitHub Actions workflow 2026-11-13 (release data-myopia)"
+  },
+  "laz": {
+    "paths": [
+      "raw/laz/*.laz"
+    ],
+    "classes": [
+      3,
+      4,
+      5
+    ],
+    "units": "m",
+    "source": "USGS 3DEP lidar point cloud, project MA_CentralEastern_2021_B21 (leaf-off spring 2021), 4 tiles, classes 3-5 clipped to the world + 100 m by pipeline/intake.py laz (CRS kept); fetched by the GitHub Actions workflow 2026-11-13 (release data-myopia; three tiles on retry runs)",
+    "label": "2021 USGS lidar, leaf-off",
+    "leaf_off": true
+  },
+  "tee_sets": [
+    {
+      "name": "Red",
+      "playable": true,
+      "rating": 72.7,
+      "slope": 138,
+      "total_yd": 6555
+    },
+    {
+      "name": "White",
+      "playable": true,
+      "rating": 71.1,
+      "slope": 134,
+      "total_yd": 6190
+    },
+    {
+      "name": "Yellow",
+      "playable": false,
+      "rating": 67.1,
+      "slope": 123,
+      "total_yd": 5495
+    },
+    {
+      "name": "Green",
+      "playable": false,
+      "total_yd": 4419
+    }
+  ],
+  "default_tee": "Red",
+  "scorecard_source": "Third-party (no official card online): Stymie and GolfPass give the same current card hole by hole (Red, White, Yellow from Stymie; Green from GolfPass), read 2026-10-24 by the scouting chat (docs/scouting/myopia/scorecard_sources.md, branch scouting/new-courses); every row adds up. Ratings from Stymie (Red 72.7/138, also golfcoursegurus and Wikipedia). Unverified against a printed card.",
+  "driving_range_is_ob": true,
+  "wind_mph": {
+    "minMph": 2,
+    "maxMph": 10
+  },
+  "trees_off_fairways_m": 2,
+  "attribution": [
+    "Map data \u00a9 OpenStreetMap contributors (ODbL)",
+    "Elevation and trees: U.S. Geological Survey 3D Elevation Program (2021 Central Eastern Massachusetts lidar)",
+    "Photo (checks only): USDA NAIP"
+  ],
+  "notes": "Standing defaults (COURSE_BUILD.md 4.1), 2026-11-13: the longest tee set (Red) and it is the default; all water red; OB = the OSM course boundary, roads inside it are cart paths, the driving range is OB; North Shore wind 2-10 mph; trees from 3DEP lidar, trees in fairways or in the way of a centre-line drive removed and listed. Theme myopia (new; the course chat's design).",
+  "id": "myopia",
+  "epsg": 32619,
+  "world": {
+    "x0": 346775,
+    "y0": 4718242,
+    "width": 1792,
+    "height": 1792,
+    "note": "OSM course boundary bbox (1345 x 1571 m, way/29689937) + scenery, rounded out to whole 256 m chunks and centred: about 223 m west/east, 110 m south/north (held to 1,792 m tall: the 3DEP DEM the workflow fetched is 2,100 m tall and s00 needs the world + 32 m)"
+  },
+  "osm_sources": [
+    "raw/overpass.geojson"
+  ],
+  "red_water_osm": [
+    "w1074606906",
+    "w1074606912"
+  ],
+  "water_note": "The two ponds inside the boundary (w1074606906, the 9th's pond, and w1074606912) are OSM natural=water only: red penalty areas through red_water_osm (standing default). Four small streams near hole lines (w1074606908, -09, -11, -13) are 0.1-0.4 m deep in the DEM and show no open water on the photo: rough, not penalty areas (open item). The club's swimming pool is rough."
+}

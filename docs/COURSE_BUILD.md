@@ -294,7 +294,10 @@ and DECISIONS.md.
   "range_art": "rough",                 // optional: draw the driving range as rough (no stripes) with OB stakes
                                         // along its edge; it stays out of bounds (s09, s09b, s10; Oregon Golf Club)
   "join_boundary_parts": {"max_gap_m": 16},  // optional: a boundary in several parts, all in play, with OB land between
-                                        // (Eastmoreland's road; Langdon Farms' highway, its parts mapped as separate ways)
+                                        // (Eastmoreland's road; Langdon Farms' highway, its parts mapped as separate ways);
+                                        // with "layouts" too: every leisure=golf_course part stays (the Olympic Club's Cliffs).
+                                        // A double green may be one polygon for two holes: each hole's putting views centre
+                                        // on its own pin and its pins stay on its own half (keep both OSM pins)
   "building_colours": {"w123": "#a3302a"},   // optional: buildings drawn in their own colour (Langdon Farms' red barns)
   "waste_sand": true,                   // optional: golf=bunker + sand=waste, and natural=sand inside the boundary, are
                                         // waste sand (surface 18): general area, not a bunker, no lip, sparse scrub tufts;
@@ -971,6 +974,7 @@ paths (relief), not OB, unless the developer says otherwise.
   the most striking one (4.1: your pick, with a reason), write
   `assets-src/cards/<id>.json` (`{"hole": 9, "why": "…"}`; one file per course
   in a multi-course site, named by the course id), then run
-  `python3 assets-src/course_cards.py <id>`. That also writes the course's view
+  `python3 assets-src/course_cards.py <id>`. That also writes the passport's map of a few
+  holes (`sprites/passport/<id>.png`, `assets-src/passport_maps.py`) and the course's view
   for the title screen's rotation (`game/public/sprites/title/<id>.png`):
   commit the card and the view. The title screen's list is generated.

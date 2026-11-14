@@ -1,0 +1,65 @@
+{
+  "name": "Tokatee Golf Club",
+  "location": "McKenzie Bridge (Blue River), Lane County, Oregon",
+  "state": "OR",
+  "architects": "Ted Robinson (opened 1966)",
+  "theme": "tokatee",
+  "boundary_name": "Tokatee Golf Club",
+  "dtm": {
+    "path": "raw/dogami_dtm_ft.tif",
+    "units": "ft",
+    "source": "DOGAMI lidar DIGITAL_TERRAIN_MODEL_MOSAIC (bare earth; newest projects at the course MCKENZIE_RIVER_TOPOBATHY_2021 and MCKENZIE_RIVER_2021_3DEP, also OLC_MCKENZIE_RIVER_2016), exportImage at 1 m in EPSG:32610, box x 562000-564200 / y 4891500-4892900, fetched by the GitHub Actions workflow 2026-11-13 (release data-tokatee)"
+  },
+  "chm": {
+    "path": "raw/dogami_chm_ft.tif",
+    "units": "ft",
+    "source": "DOGAMI lidar CANOPY_HEIGHT_MODEL_MOSAIC (highest hit minus bare earth), same box and date",
+    "label": "DOGAMI canopy height model"
+  },
+  "tee_sets": [
+    {
+      "name": "Black",
+      "playable": true,
+      "rating": 73.0,
+      "slope": 129,
+      "total_yd": 6838
+    }
+  ],
+  "default_tee": "Black",
+  "scorecard_source": "Third-party: GolfPass (course 1352) per-hole par, men's handicap and Black/Blue/White/Yellow yardages, read 2026-11-13; each row adds up to its printed total (Black 6,838). Black rating/slope 73.0/129 from stymie.golf (6,838 yd; GolfPass's tee table prints 72.8/125 against an older 6,806). Unverified against a printed card.",
+  "driving_range_is_ob": true,
+  "trees_off_fairways_m": 2,
+  "wind_mph": {
+    "minMph": 1,
+    "maxMph": 7
+  },
+  "attribution": [
+    "Map data \u00a9 OpenStreetMap contributors (ODbL)",
+    "Elevation and canopy height: Oregon Department of Geology and Mineral Industries (DOGAMI) lidar",
+    "Orthophoto (checks only): Oregon Statewide Imagery Program 2024"
+  ],
+  "notes": "Standing defaults (COURSE_BUILD.md 4.1), 2026-11-13: the longest tee set (Black) and it is the default; all water red; OB = the OSM course boundary, roads inside it are cart paths, the driving range is OB; inland Pacific Northwest wind 1-7 mph (a sheltered Cascade valley); trees from DOGAMI lidar, trees in fairways or in the way of a centre-line drive removed and listed. Theme tokatee (new; the course chat's design).",
+  "id": "tokatee",
+  "epsg": 32610,
+  "world": {
+    "x0": 562109,
+    "y0": 4891689,
+    "width": 2048,
+    "height": 1024,
+    "note": "OSM course boundary bbox (1571 x 783 m, way/331173622) + at least 120 m of scenery, rounded out to whole 256 m chunks and centred (239 m west/east, 120 m south/north)"
+  },
+  "osm_sources": [
+    "raw/overpass.geojson"
+  ],
+  "red_water_osm": [
+    "w957696423",
+    "w957712161",
+    "w957749196",
+    "w957749198",
+    "w957749199",
+    "w957749203",
+    "w957749205",
+    "w957749211",
+    "w957749212"
+  ]
+}

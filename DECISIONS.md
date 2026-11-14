@@ -1534,8 +1534,8 @@ the pull request lists them. The ones that change what a player sees or does:
 - **The putt's aim line** reaches the hole on a long putt (the dots are spaced wider instead of
   running out).
 - **Mouse wheel:** one club per notch (a trackpad swipe ran through the bag), nothing behind an
-  open panel. **A tap within 0.35 s of the ball being struck** is not a skip of the flight (a
-  late third tap skipped it).
+  open panel. ~~A tap within 0.35 s of the ball being struck is not a skip of the flight~~
+  (undone the same day: "A tap skips the flight at once again").
 - **Open panels are drawn again when the window changes size or a phone turns** (pause menu,
   quit question, overview, scorecard, the match's questions).
 - **Settings** shows its rows a page at a time when the screen is too short for them all
@@ -1676,3 +1676,52 @@ or a round counts (`systems/game/holiday.ts` is pure and tested; the drawing is
   an 8 is a "snowman" at Christmas; each with its picture and a sound.
 - The original portrait had a dark line along its top (its outline wrapped round the image);
   fixed while adding the hats.
+
+## Joined boundaries with layouts, double-green views, two steadier browser tests (Olympic Club chat, 2026-11-13)
+
+- **Boundary parts with layouts:** `join_boundary_parts` was ignored on a course with `layouts`
+  (the boundary was cut to its largest part), so the Olympic Club's Cliffs, across Skyline
+  Boulevard from the Lake course, had to be a course of its own. `play_boundary` now keeps every
+  part with the setting, as for a single layout, and `game_boundary` joins them across the road
+  (the strip stays out of bounds on the surface map).
+- **Double greens as one polygon:** when two holes of a layout end on the same green, each hole's
+  putting views (s09b) centre on its own pin (they centred on the green's middle, so the Cliffs'
+  OSM pins fell outside them and were dropped), and the game finds each hole's extra pins on its
+  own half of the green, nearer its own pin than the other hole's (`pins.ts`). No course on main
+  has such a green, so no pin sheet changes.
+- **Browser tests:** "a reload while the ball is in the air" waited a fixed 300 ms for the save; it
+  now waits for the saved stroke itself. The swing-length tap test waited frames and 300 ms
+  after the first tap, so on a busy machine the cursor reached the end of the bar first; it now
+  presses as soon as the cursor moves, on the easy (slowest) meter. Both passed 3-4 times in a
+  row with the CPU kept busy.
+
+## A tap skips the flight at once again (developer, 2026-11-13)
+
+The overnight sweep ignored taps for 0.35 s after the ball was struck (a late third tap had
+skipped the flight). The developer wants it as it was: a tap during the flight skips to where the
+ball ends straight away, also while the camera is still going back to the golfer. The wait is
+gone (`PlayScene.fastForward`).
+
+## The passport shows a map of a few holes (developer, 2026-11-13)
+
+The passport's pictures were a 104 x 52 crop from the middle of the course card, which since the
+cards became strips of four green views (2026-10-20) fell on the seam between two of them: two
+half pictures of trees, up close. The developer: "maybe it could be like a zoomed out view of a few
+holes". Each course now has its own map (`assets-src/passport_maps.py` ->
+`sprites/passport/<id>.png`): the overview map's look (surface colours, canopy blobs; the
+hillshade in three flat bands) at 5 m a pixel, about 520 x 260 m, over the stretch with the most
+golf in it (the holes' lines, tees and greens counted), with a small flag on each green. Drawn
+from the course's own game files, so no course is rebuilt; `course_cards.py <id>` makes it for a
+new course. A course without one shows the middle of its card's first green.
+
+
+## The Olympic Club is one place (developer, 2026-11-13)
+
+The Lake was a layout of `data/olympic_club` (group `olympic_club`, a group of one, so it showed
+as its own course) and the Cliffs its own data folder with no group. The developer wants one
+place with its courses under it, like Pumpkin Ridge, Bandon and the Reserve. The Cliffs joins
+the Lake's group through `scripts/course-groups.json` (key `olympic_club`), so no course is
+rebuilt: the course select shows "The Olympic Club" with "Lake" and "Cliffs". The title screen
+keeps one view per shared world only for courses with a layout, so both keep their views. Both
+join the daily rotation on 2026-11-14, so no past or current daily changes; from then on they
+are one place there too.

@@ -1,0 +1,33 @@
+{
+ "items": [
+  {
+   "name": "columbia_edgewater_overpass.geojson",
+   "osm_box": [
+    45.5877,
+    -122.6564,
+    45.603,
+    -122.6371
+   ]
+  },
+  {
+   "name": "dogami_dtm_ft.tif",
+   "url": "https://gis.dogami.oregon.gov/arcgis/rest/services/lidar/DIGITAL_TERRAIN_MODEL_MOSAIC/ImageServer/exportImage?bbox=526800,5048300,528300,5050000&bboxSR=32610&imageSR=32610&size=1500,1700&format=tiff&pixelType=F32&noData=-9999&interpolation=RSP_BilinearInterpolation&f=image"
+  },
+  {
+   "name": "dogami_chm_ft.tif",
+   "url": "https://gis.dogami.oregon.gov/arcgis/rest/services/lidar/CANOPY_HEIGHT_MODEL_MOSAIC/ImageServer/exportImage?bbox=526800,5048300,528300,5050000&bboxSR=32610&imageSR=32610&size=1500,1700&format=tiff&pixelType=F32&noData=-9999&interpolation=RSP_BilinearInterpolation&f=image"
+  },
+  {
+   "name": "dogami_identify.json",
+   "url": "https://gis.dogami.oregon.gov/arcgis/rest/services/lidar/DIGITAL_TERRAIN_MODEL_MOSAIC/ImageServer/identify?geometry=%7B%22x%22%3A527550%2C%22y%22%3A5049150%2C%22spatialReference%22%3A%7B%22wkid%22%3A32610%7D%7D&geometryType=esriGeometryPoint&returnCatalogItems=true&f=json"
+  },
+  {
+   "name": "osip2024_526800_5048300.jpg",
+   "url": "https://imagery.oregonexplorer.info/arcgis/rest/services/OSIP_2024/OSIP_2024_WM/ImageServer/exportImage?bbox=526800,5048300,528300,5049800&bboxSR=32610&imageSR=32610&size=3000,3000&format=jpg&f=image"
+  },
+  {
+   "name": "osip2024_526800_5049800.jpg",
+   "url": "https://imagery.oregonexplorer.info/arcgis/rest/services/OSIP_2024/OSIP_2024_WM/ImageServer/exportImage?bbox=526800,5049800,528300,5050000&bboxSR=32610&imageSR=32610&size=3000,400&format=jpg&f=image"
+  }
+ ]
+}

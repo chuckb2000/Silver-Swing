@@ -1,0 +1,61 @@
+{
+ "items": [
+  {
+   "name": "myopia_overpass.geojson",
+   "osm_box": [
+    42.6001,
+    -70.8693,
+    42.6194,
+    -70.8455
+   ]
+  },
+  {
+   "name": "usgs_dem_m.tif",
+   "url": "https://elevation.nationalmap.gov/arcgis/rest/services/3DEPElevation/ImageServer/exportImage?bbox=346700,4718100,348600,4720200&bboxSR=32619&imageSR=32619&size=1900,2100&format=tiff&pixelType=F32&noData=-9999&interpolation=RSP_BilinearInterpolation&f=image"
+  },
+  {
+   "name": "usgs_dem_identify.json",
+   "url": "https://elevation.nationalmap.gov/arcgis/rest/services/3DEPElevation/ImageServer/identify?geometry=%7B%22x%22%3A347650%2C%22y%22%3A4719150%2C%22spatialReference%22%3A%7B%22wkid%22%3A32619%7D%7D&geometryType=esriGeometryPoint&returnCatalogItems=true&f=json"
+  },
+  {
+   "name": "myopia_lpc",
+   "tnm": {
+    "dataset": "lpc",
+    "bbox": [
+     -70.8693,
+     42.6001,
+     -70.8455,
+     42.6194
+    ],
+    "only": "MA_CentralEastern_1_2021"
+   }
+  },
+  {
+   "name": "naip_346700_4718100.jpg",
+   "url": "https://imagery.nationalmap.gov/arcgis/rest/services/USGSNAIPImagery/ImageServer/exportImage?bbox=346700,4718100,348600,4720100&bboxSR=32619&imageSR=32619&size=3166,3333&format=jpg&f=image"
+  },
+  {
+   "name": "naip_346700_4720100.jpg",
+   "url": "https://imagery.nationalmap.gov/arcgis/rest/services/USGSNAIPImagery/ImageServer/exportImage?bbox=346700,4720100,348600,4720200&bboxSR=32619&imageSR=32619&size=3166,166&format=jpg&f=image"
+  },
+  {
+   "name": "naip_info.json",
+   "url": "https://imagery.nationalmap.gov/arcgis/rest/services/USGSNAIPImagery/ImageServer?f=pjson"
+  },
+  {
+   "name": "USGS_LPC_MA_CentralEastern_2021_B21_19TCH346717.laz",
+   "url": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/MA_CentralEastern_2021_B21/MA_CentralEastern_1_2021/LAZ/USGS_LPC_MA_CentralEastern_2021_B21_19TCH346717.laz",
+   "note": "retry: timed out on the first run"
+  },
+  {
+   "name": "USGS_LPC_MA_CentralEastern_2021_B21_19TCH346719.laz",
+   "url": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/MA_CentralEastern_2021_B21/MA_CentralEastern_1_2021/LAZ/USGS_LPC_MA_CentralEastern_2021_B21_19TCH346719.laz",
+   "note": "retry: timed out on the first run"
+  },
+  {
+   "name": "USGS_LPC_MA_CentralEastern_2021_B21_19TCH348719.laz",
+   "url": "https://rockyweb.usgs.gov/vdelivery/Datasets/Staged/Elevation/LPC/Projects/MA_CentralEastern_2021_B21/MA_CentralEastern_1_2021/LAZ/USGS_LPC_MA_CentralEastern_2021_B21_19TCH348719.laz",
+   "note": "retry: timed out on the first run"
+  }
+ ]
+}

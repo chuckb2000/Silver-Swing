@@ -176,13 +176,19 @@ export function pinSpots(course: CourseRuntime, hole: HoleJson, tee: string): Pi
   const f = frameFor(g, hole, tee);
   const cells = hazardCells(course, g);
   const p = g.poly;
+  // a double green mapped as one polygon for two holes (the Olympic Club's Cliffs 5 and 7): this
+  // hole's pins stay on its own half, nearer its own pin than the other hole's (design chat, 2026-11-13)
+  const others = course.json.holes
+    .filter((o) => o !== hole && o.greenId === hole.greenId && (o.pin[0] !== px0 || o.pin[1] !== py0))
+    .map((o) => o.pin);
+  const ownHalf = (x: number, y: number) => others.every(([ox, oy]) => Math.hypot(x - px0, y - py0) < Math.hypot(x - ox, y - oy));
   const area = p.area();
   const step = area > 1500 ? 1 : 0.5;
   // candidates on a grid over the green, with their edge distance and slope (the same for every margin tried)
   const grid: { x: number; y: number; edge: number; slope: number; hz: { d: number; water: boolean } }[] = [];
   for (let y = Math.ceil(p.minY / step) * step; y <= p.maxY; y += step) {
     for (let x = Math.ceil(p.minX / step) * step; x <= p.maxX; x += step) {
-      if (!p.contains(x, y)) continue;
+      if (!p.contains(x, y) || !ownHalf(x, y)) continue;
       const edge = p.edgeDistance(x, y);
       if (edge < PIN_EDGE_MIN_M) continue;
       if (course.obstacles.hidesPoint(x, y)) continue; // a cup the player couldn't see behind a tree on the course view

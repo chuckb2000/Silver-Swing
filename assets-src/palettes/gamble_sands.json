@@ -1,0 +1,21 @@
+{
+  "name": "Gamble Sands (sand hills above the Columbia, Brewster WA)",
+  "note": "Course theme palette (<= 32 colours; same keys as pnw.json plus F0-F2), checked against the NAIP photo of the course (2026-11-13: fairways #868e64 median, greens #848d67, bunkers #a79e8a, native ground inside the boundary #898172, outside #827c70; the photo is hazy, so the colours are pushed toward the course as it looks on the ground). Gamble Sands sits on a sandy terrace about 1,200 ft up over the Columbia River in the dry Okanogan: wide fescue fairways and greens, a light warm green against pale sand, sage and bunchgrass; the native ground of the rough (F0-F2, inside config fescue_areas) a warm sandy buff; off the course (L0-L2) the same steppe a shade greyer and browner so out of bounds reads apart; bright pale sand in the bunkers and blowouts; the deep blue of the river and ponds; grey basalt. Trees: ponderosa pine and cottonwood (assets-src/trees_gamble_sands.py); sagebrush and rabbitbrush as the theme's bush. Shadows are a 35% black overlay on top of these.",
+  "colors": {
+    "G0": "#1b2d1c", "G1": "#284426", "G2": "#365a2e", "G3": "#466f35",
+    "G4": "#57843c", "G5": "#699845", "G6": "#7caa4e", "G7": "#90ba5a",
+    "G8": "#a6c86a", "G9": "#c6dc92",
+    "L0": "#7a6e58", "L1": "#8b7f66", "L2": "#9c9075",
+    "S0": "#c2b48c", "S1": "#e0d5b3", "S2": "#f2ecd6",
+    "W0": "#163454", "W1": "#22507a", "W2": "#5d88b0",
+    "K0": "#2a2a2c", "K1": "#58585a", "K2": "#807e7a", "K3": "#b4aa96", "K4": "#d8cfbc",
+    "B0": "#4a3020", "B1": "#70482e", "B2": "#93633f",
+    "R0": "#5a5a62", "WH": "#f6f5ef",
+    "F0": "#9a8a62", "F1": "#b1a179", "F2": "#c6b68e"
+  },
+  "lut": {"rough": ["F0", "F1", "F2", "F2"], "rough_band": ["G4", "G5", "G6", "G6"]},
+  "aliases": {"TUFT": "F0"},
+  "minimap": {"ob": "#8b7f66", "rough": "#b1a179", "woods": "#365a2e", "ob_woods": "#2f4e2c", "water": "#22507a", "ob_water": "#22507a", "bunker": "#e0d5b3", "ob_sand": "#e0d5b3"},
+  "minimap_trees": {"conifer": ["#132219", "#577d48"], "deciduous": ["#1e2a14", "#7a963d"], "shrub": ["#5a6354", "#c0c8b0"]},
+  "trees": {"conifer": "trees_gamble_sands:ponderosa", "deciduous": "trees_gamble_sands:cottonwood", "shrub": "trees_gamble_sands:steppe_bush"}
+}

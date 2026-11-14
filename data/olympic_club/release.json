@@ -1,0 +1,110 @@
+{
+ "release": "data-olympic_club",
+ "note": "Build inputs for the Olympic Club (Lake and Cliffs); `make fetch NAME=olympic_club` puts them in place. Fetched by the GitHub Actions workflow (data/olympic_club/fetch.json) on 2026-11-13. olympic_club_overpass.geojson = the standard Overpass export of the box 37.700,-122.506,37.718,-122.4835. usgs_dem_m.tif = 3DEPElevation exportImage at 1 m, x 543500-545600 / y 4172600-4174700 EPSG:32610, metres. USGS_LPC_*.laz = 3DEP lidar CA_SanFrancisco_B23 (CA_SanFrancisco_1_B23), class 1 kept, clipped to the world + 100 m.",
+ "files": [
+  {
+   "asset": "olympic_club_overpass.geojson",
+   "sha256": "ce0948b458b312142dae59e3161282c1d8864e4eb1983a9a941d92d8affa772d",
+   "run": "python3 pipeline/intake.py osm olympic_club {file}",
+   "outputs": {
+    "raw/overpass.geojson": "435183784234d9f1c2a1b179eb3092c0b7b583b9902a42c9350fcb8dd354b897"
+   }
+  },
+  {
+   "asset": "usgs_dem_m.tif",
+   "sha256": "1d0eaf3895bb0d6399a62747429fdd103b83d9039c905a19edcde905f44f4273",
+   "run": "python3 pipeline/intake.py raster olympic_club {file} --out raw/usgs_dem_1m.tif",
+   "outputs": {
+    "raw/usgs_dem_1m.tif": "eeddc1e50e6c65575c4e73e9d8152e4566324a2c1b8b994eb645170438ea8f63"
+   }
+  },
+  {
+   "asset": "USGS_LPC_CA_SanFrancisco_B23_04300190.laz",
+   "sha256": "773b644c3e304237d3fa31fa16825d155d34897c2f514a7079224196ad6f3b48",
+   "run": "python3 pipeline/intake.py laz olympic_club {file} --classes 1 --keep-evlrs --out raw/laz/oc_04300190.laz",
+   "outputs": {
+    "raw/laz/oc_04300190.laz": "586fb6a92116679589266d52aac4f2212dd52efde5faf4a88fd5ea4db17437d7"
+   }
+  },
+  {
+   "asset": "USGS_LPC_CA_SanFrancisco_B23_04300195.laz",
+   "sha256": "f81be17d81e15c23f7742a1446ebf599c050705955724095cb3a516b07a7150d",
+   "run": "python3 pipeline/intake.py laz olympic_club {file} --classes 1 --keep-evlrs --out raw/laz/oc_04300195.laz",
+   "outputs": {
+    "raw/laz/oc_04300195.laz": "a318b790f71a8c26b6d2802f03e35c5c670bd76e1951de58bcce9162a2736e00"
+   }
+  },
+  {
+   "asset": "USGS_LPC_CA_SanFrancisco_B23_04350195.laz",
+   "sha256": "420c4bf57d3aa593fbe140ab122c9f72f1206aeedc44d5f2cdcfba664a2a56e4",
+   "run": "python3 pipeline/intake.py laz olympic_club {file} --classes 1 --keep-evlrs --out raw/laz/oc_04350195.laz",
+   "outputs": {
+    "raw/laz/oc_04350195.laz": "46d4358ef577abc6c77184019a108de4c62769825f3a56110fda2bc4d3da184a"
+   }
+  },
+  {
+   "asset": "USGS_LPC_CA_SanFrancisco_B23_04350200.laz",
+   "sha256": "5eb25bce9133fb27a793d30c5dce59b7676f6202ccd7912467ac085d72ae5776",
+   "run": "python3 pipeline/intake.py laz olympic_club {file} --classes 1 --keep-evlrs --out raw/laz/oc_04350200.laz",
+   "outputs": {
+    "raw/laz/oc_04350200.laz": "e6cb86c769555b5c537fdd41cfde075dd10dcef6c3296167a572bfd8f8b65f18"
+   }
+  },
+  {
+   "asset": "USGS_LPC_CA_SanFrancisco_B23_04400190.laz",
+   "sha256": "261d3339a5491d1f75ba215cf1afd3c9eb6fff69a9342db0e9ca274040b91070",
+   "run": "python3 pipeline/intake.py laz olympic_club {file} --classes 1 --keep-evlrs --out raw/laz/oc_04400190.laz",
+   "outputs": {
+    "raw/laz/oc_04400190.laz": "bfc87b18f1082fbee68571824083cdc9c759624f85d297374d3889bb9d071ee6"
+   }
+  },
+  {
+   "asset": "USGS_LPC_CA_SanFrancisco_B23_04400195.laz",
+   "sha256": "a5d4f2c1c14361ff6447ad8db3750bdf0e91b92e782bc882aa44bc786d8085e6",
+   "run": "python3 pipeline/intake.py laz olympic_club {file} --classes 1 --keep-evlrs --out raw/laz/oc_04400195.laz",
+   "outputs": {
+    "raw/laz/oc_04400195.laz": "df25f95761beb69b536502e91a6ad98d10d375d550d4aa95d8ad18cf6918a611"
+   }
+  },
+  {
+   "asset": "USGS_LPC_CA_SanFrancisco_B23_04400200.laz",
+   "sha256": "4461c8f0c6269ed376676492d0bcbf3041097d2154d8a921b335b97fa083fc5b",
+   "run": "python3 pipeline/intake.py laz olympic_club {file} --classes 1 --keep-evlrs --out raw/laz/oc_04400200.laz",
+   "outputs": {
+    "raw/laz/oc_04400200.laz": "756a86a034671e9f0a3882d7a2bcd7ded2c9e4effa728b32381d62ad0c9ffb69"
+   }
+  },
+  {
+   "asset": "USGS_LPC_CA_SanFrancisco_B23_04450185.laz",
+   "sha256": "8ed6339f49e4e0656140e6d637889514b9ae62df8e8eb5646e5aa913a3900ff3",
+   "run": "python3 pipeline/intake.py laz olympic_club {file} --classes 1 --keep-evlrs --out raw/laz/oc_04450185.laz",
+   "outputs": {
+    "raw/laz/oc_04450185.laz": "9c9a4bf94a22ab1fbfe97b73628e06d2e8d8b13ff980e30651fabbae1df9206d"
+   }
+  },
+  {
+   "asset": "USGS_LPC_CA_SanFrancisco_B23_04450190.laz",
+   "sha256": "769a654ac33d55dcee7a62a1259981147d7ebd779b0245936d320c909291ce83",
+   "run": "python3 pipeline/intake.py laz olympic_club {file} --classes 1 --keep-evlrs --out raw/laz/oc_04450190.laz",
+   "outputs": {
+    "raw/laz/oc_04450190.laz": "113b11e842859e01102c6240e0611364ac00d59ae536924166f891c8a6037d30"
+   }
+  },
+  {
+   "asset": "USGS_LPC_CA_SanFrancisco_B23_04450195.laz",
+   "sha256": "0388bb344e90f68e1621fb4f7ec8279c5d70112112b4290f302e437a37ffc1fb",
+   "run": "python3 pipeline/intake.py laz olympic_club {file} --classes 1 --keep-evlrs --out raw/laz/oc_04450195.laz",
+   "outputs": {
+    "raw/laz/oc_04450195.laz": "a1f0dbea693d90ea215a81fa957dceb6311bc43104a626d8006442fa18e894d3"
+   }
+  },
+  {
+   "asset": "USGS_LPC_CA_SanFrancisco_B23_04500190.laz",
+   "sha256": "5d31ea1a73df7f6681851180c2415fd498c8d7ec7cb3518dc44ccfb2952b44ea",
+   "run": "python3 pipeline/intake.py laz olympic_club {file} --classes 1 --keep-evlrs --out raw/laz/oc_04500190.laz",
+   "outputs": {
+    "raw/laz/oc_04500190.laz": "e4502a0501de9d1d178c5aa24560cf900f4842b9f9b0b6e3fe60f9bd4e170482"
+   }
+  }
+ ]
+}
