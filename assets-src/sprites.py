@@ -17,6 +17,9 @@ PAL = {
     "G": "#c3c9d2",  # shaft
     "M": "#7a818d",  # club head
     "H": "#5a3b25",  # hair
+    # holiday hats (holiday.py): santa's, a pilgrim's
+    "R": "#d8282c", "r": "#a2181e", "T": "#f6f4ee", "t": "#cfd3d6",
+    "Y": "#26262e", "y": "#45454f", "N": "#5a3e22", "U": "#f0c23c",
 }
 
 
@@ -56,7 +59,7 @@ def _rect(img, x0, y0, x1, y1, col):
 # Canvas 18 x 20, feet centre at (8, 18). Three orientations: side (facing
 # right; mirrored for left), front (facing the camera) and back.
 
-def _body_side(img, crouch=0):
+def _body_side(img, crouch=0, hat="cap"):
     # legs
     _rect(img, 6, 13, 7, 17, "P"); _rect(img, 9, 13, 10, 17, "p")
     _rect(img, 5, 18, 7, 18, "F"); _rect(img, 9, 18, 11, 18, "F")
@@ -68,20 +71,36 @@ def _body_side(img, crouch=0):
     _rect(img, 7, 4 + crouch, 9, 6 + crouch, "S")
     _px(img, 7, 6 + crouch, "s")
     _px(img, 6, 5 + crouch, "H")
-    _rect(img, 6, 2 + crouch, 9, 3 + crouch, "C")
-    _rect(img, 7, 1 + crouch, 8, 1 + crouch, "C")
-    _px(img, 9, 2 + crouch, "c"); _px(img, 9, 3 + crouch, "c")
-    _rect(img, 10, 3 + crouch, 11, 3 + crouch, "b")
+    _hat_side(img, crouch, hat)
 
 
-def golfer_side(pose: str) -> np.ndarray:
+def _hat_side(img, c, hat):
+    if hat == "santa":  # red, a white fur band, the tip falling back with its white bobble
+        _rect(img, 6, 2 + c, 9, 2 + c, "R"); _px(img, 9, 2 + c, "r")
+        _rect(img, 6, 1 + c, 8, 1 + c, "R")
+        _rect(img, 4, 0 + c, 6, 0 + c, "R")
+        _px(img, 3, 1 + c, "T")
+        _rect(img, 6, 3 + c, 10, 3 + c, "T"); _px(img, 10, 3 + c, "t")
+        return
+    if hat == "pilgrim":  # a tall black crown, a band with a gold buckle, a wide brim
+        _rect(img, 6, 0 + c, 9, 1 + c, "Y"); _px(img, 6, 0 + c, "y"); _px(img, 6, 1 + c, "y")
+        _rect(img, 6, 2 + c, 9, 2 + c, "N"); _px(img, 9, 2 + c, "U")
+        _rect(img, 4, 3 + c, 11, 3 + c, "Y")
+        return
+    _rect(img, 6, 2 + c, 9, 3 + c, "C")
+    _rect(img, 7, 1 + c, 8, 1 + c, "C")
+    _px(img, 9, 2 + c, "c"); _px(img, 9, 3 + c, "c")
+    _rect(img, 10, 3 + c, 11, 3 + c, "b")
+
+
+def golfer_side(pose: str, hat: str = "cap") -> np.ndarray:
     img = _canvas(18, 20)
     crouch = 1 if pose in ("address", "putt", "impact") else 0
     if pose in ("backswing",):
         _line(img, 8, 2, 3, 0, "G"); _px(img, 2, 0, "M"); _px(img, 3, 1, "M")
     if pose == "follow":
         _line(img, 10, 2, 15, 0, "G"); _px(img, 16, 0, "M")
-    _body_side(img, crouch)
+    _body_side(img, crouch, hat)
     if pose == "address":
         _line(img, 9, 9, 11, 11, "S")
         _line(img, 11, 11, 14, 17, "G"); _rect(img, 14, 18, 15, 18, "M")
@@ -101,7 +120,7 @@ def golfer_side(pose: str) -> np.ndarray:
     return outline(img)
 
 
-def _body_front(img, crouch=0, back=False):
+def _body_front(img, crouch=0, back=False, hat="cap"):
     _rect(img, 6, 13, 7, 17, "P"); _rect(img, 9, 13, 10, 17, "P")
     _px(img, 7, 13, "p"); _px(img, 10, 14, "p")
     _rect(img, 5, 18, 7, 18, "F"); _rect(img, 9, 18, 11, 18, "F")
@@ -109,21 +128,41 @@ def _body_front(img, crouch=0, back=False):
     _rect(img, 10, 8 + crouch, 11, 12, "w")
     if back:
         _rect(img, 6, 3 + crouch, 10, 6 + crouch, "H")
-        _rect(img, 6, 2 + crouch, 10, 4 + crouch, "C")
-        _rect(img, 7, 1 + crouch, 9, 1 + crouch, "C")
-        _rect(img, 9, 2 + crouch, 10, 4 + crouch, "c")
+        if hat == "cap":
+            _rect(img, 6, 2 + crouch, 10, 4 + crouch, "C")
+            _rect(img, 7, 1 + crouch, 9, 1 + crouch, "C")
+            _rect(img, 9, 2 + crouch, 10, 4 + crouch, "c")
         _rect(img, 7, 5 + crouch, 9, 5 + crouch, "s")
     else:
         _rect(img, 6, 4 + crouch, 10, 6 + crouch, "S")
         _px(img, 10, 5 + crouch, "s"); _px(img, 10, 6 + crouch, "s")
         _px(img, 7, 5 + crouch, "K"); _px(img, 9, 5 + crouch, "K")
-        _rect(img, 6, 2 + crouch, 10, 3 + crouch, "C")
-        _rect(img, 7, 1 + crouch, 9, 1 + crouch, "C")
-        _rect(img, 9, 2 + crouch, 10, 3 + crouch, "c")
-        _rect(img, 5, 4 + crouch, 11, 4 + crouch, "b")
+        if hat == "cap":
+            _rect(img, 6, 2 + crouch, 10, 3 + crouch, "C")
+            _rect(img, 7, 1 + crouch, 9, 1 + crouch, "C")
+            _rect(img, 9, 2 + crouch, 10, 3 + crouch, "c")
+            _rect(img, 5, 4 + crouch, 11, 4 + crouch, "b")
+    if hat != "cap":
+        _hat_front(img, crouch, hat, back)
 
 
-def golfer_front(pose: str, back=False) -> np.ndarray:
+def _hat_front(img, c, hat, back):
+    if hat == "santa":
+        _rect(img, 6, 2 + c, 10, 3 + c, "R"); _rect(img, 9, 2 + c, 10, 3 + c, "r")
+        _rect(img, 7, 1 + c, 9, 1 + c, "R")
+        _rect(img, 9, 0 + c, 10, 0 + c, "R")
+        _px(img, 11, 0 + c, "T"); _px(img, 12, 1 + c, "T")
+        _rect(img, 6, 4 + c, 10, 4 + c, "T"); _px(img, 10, 4 + c, "t")
+        return
+    if hat == "pilgrim":
+        _rect(img, 6, 0 + c, 10, 2 + c, "Y"); _rect(img, 6, 0 + c, 6, 2 + c, "y")
+        _rect(img, 6, 3 + c, 10, 3 + c, "N")
+        if not back:
+            _px(img, 8, 3 + c, "U")
+        _rect(img, 4, 4 + c, 12, 4 + c, "Y")
+
+
+def golfer_front(pose: str, back=False, hat: str = "cap") -> np.ndarray:
     """Facing the camera (front) or away from it (back). Target is to the
     right for the front view, to the left for the back view."""
     img = _canvas(18, 20)
@@ -136,7 +175,7 @@ def golfer_front(pose: str, back=False) -> np.ndarray:
     if pose == "follow":
         hx = cx + 4 * tgt
         _line(img, hx, 4, hx + 3 * tgt, 0, "G"); _px(img, hx + 4 * tgt, 0, "M")
-    _body_front(img, crouch, back)
+    _body_front(img, crouch, back, hat)
     if pose in ("address", "putt", "idle"):
         _line(img, 6, 9, 8, 12, "S"); _line(img, 10, 9, 8, 12, "S")
         _line(img, 8, 13, 8, 18, "G"); _rect(img, 8, 19, 9, 19, "M") if not back else _rect(img, 7, 19, 8, 19, "M")
@@ -155,18 +194,18 @@ def golfer_front(pose: str, back=False) -> np.ndarray:
 GOLFER_POSES = ["idle", "address", "backswing", "impact", "follow", "putt"]
 
 
-def golfer_frames():
+def golfer_frames(hat: str = "cap"):
     out = []
     for p in GOLFER_POSES:
-        out.append((f"golfer_side_{p}", golfer_side(p)))
-        out.append((f"golfer_front_{p}", golfer_front(p, back=False)))
-        out.append((f"golfer_back_{p}", golfer_front(p, back=True)))
+        out.append((f"golfer_side_{p}", golfer_side(p, hat)))
+        out.append((f"golfer_front_{p}", golfer_front(p, back=False, hat=hat)))
+        out.append((f"golfer_back_{p}", golfer_front(p, back=True, hat=hat)))
     return out
 
 
 # --- portrait 48x48 --------------------------------------------------------
 
-def portrait() -> np.ndarray:
+def portrait(hat: str = "cap") -> np.ndarray:
     W = H = 48
     img = np.zeros((H, W, 4), np.uint8)
     yy, xx = np.mgrid[0:H, 0:W]
@@ -193,15 +232,45 @@ def portrait() -> np.ndarray:
     fill(ear, "#d49b72")
     # hair at the sides
     fill(head & (yy < 22) & (yy > 15) & ((xx < 16) | (xx > 32)), "#5a3b25")
-    # cap crown + brim
-    crown = ((xx - 23.5) / 12) ** 2 + ((yy - 15) / 8) ** 2 <= 1
-    fill(crown & (yy <= 17), "#3b7bc4")
-    fill(crown & (yy <= 17) & (xx > 28), "#2a5b97")
-    fill(crown & (yy <= 11) & (xx < 20), "#5c95d6")
-    brim = (yy >= 16) & (yy <= 18) & (xx >= 16) & (xx <= 40) & ~((yy == 18) & (xx > 37))
-    fill(brim, "#1f3f6c")
-    fill((yy == 16) & (xx >= 18) & (xx <= 38), "#2a5b97")
-    fill((yy == 7) & (np.abs(xx - 23) <= 1), "#ffffff")  # button
+    if hat == "santa":
+        # the red hat, its tip falling to the right with a white bobble, and a white fur band
+        left = 13 + (15 - yy) * 1.05
+        right = 34 + (15 - yy) * 0.35
+        cone = (yy >= 5) & (yy <= 15) & (xx >= left) & (xx <= right)
+        tip = ((xx - 37) / 4.5) ** 2 + ((yy - 7.5) / 3) ** 2 <= 1
+        drop = (xx >= 37) & (xx <= 41) & (yy >= 7) & (yy <= 11) & (xx - 37 <= (yy - 6) * 1.2)
+        red = cone | tip | drop
+        fill(red, "#d8282c")
+        fill(red & (xx > 30), "#a2181e")
+        fill(red & (xx < 20) & (yy < 13), "#ee4a46")
+        fill(((xx - 42) / 2.6) ** 2 + ((yy - 12) / 2.6) ** 2 <= 1, "#f6f4ee")
+        band = (yy >= 15) & (yy <= 18) & (xx >= 12) & (xx <= 37) & ~(((yy == 15) | (yy == 18)) & ((xx == 12) | (xx == 37)))
+        fill(band, "#f6f4ee")
+        fill(band & (yy == 18), "#cfd3d6")
+        fill(band & (yy == 15) & (xx % 4 == 1), "#ffffff")
+    elif hat == "pilgrim":
+        # a tall black crown, a band with a gold buckle, a wide flat brim
+        crown_p = (yy >= 1) & (yy <= 15) & (xx >= 15 + (15 - yy) * 0.08) & (xx <= 33 - (15 - yy) * 0.08)
+        fill(crown_p, "#26262e")
+        fill(crown_p & (xx <= 17), "#45454f")
+        fill(crown_p & (yy <= 2), "#33333c")
+        fill((yy >= 11) & (yy <= 14) & (xx >= 15) & (xx <= 33), "#5a3e22")
+        buckle = (yy >= 10) & (yy <= 15) & (xx >= 21) & (xx <= 27)
+        fill(buckle, "#f0c23c")
+        fill((yy >= 12) & (yy <= 13) & (xx >= 23) & (xx <= 25), "#26262e")
+        brim_p = ((xx - 24) / 17) ** 2 + ((yy - 16.5) / 2.2) ** 2 <= 1
+        fill(brim_p, "#26262e")
+        fill(brim_p & (yy <= 15), "#45454f")
+    else:
+        # cap crown + brim
+        crown = ((xx - 23.5) / 12) ** 2 + ((yy - 15) / 8) ** 2 <= 1
+        fill(crown & (yy <= 17), "#3b7bc4")
+        fill(crown & (yy <= 17) & (xx > 28), "#2a5b97")
+        fill(crown & (yy <= 11) & (xx < 20), "#5c95d6")
+        brim = (yy >= 16) & (yy <= 18) & (xx >= 16) & (xx <= 40) & ~((yy == 18) & (xx > 37))
+        fill(brim, "#1f3f6c")
+        fill((yy == 16) & (xx >= 18) & (xx <= 38), "#2a5b97")
+        fill((yy == 7) & (np.abs(xx - 23) <= 1), "#ffffff")  # button
     # face details
     fill((yy == 22) & ((xx == 21) | (xx == 22) | (xx == 28) | (xx == 29)), "#2b2b31")  # eyes
     fill((yy == 20) & (((xx >= 20) & (xx <= 23)) | ((xx >= 27) & (xx <= 30))), "#7a4e33")  # brows
@@ -211,8 +280,12 @@ def portrait() -> np.ndarray:
     fill((yy == 28) & ((xx == 21) | (xx == 28)), "#a3604a")
     a = img[..., 3] > 0
     ring = np.zeros_like(a)
-    for dy, dx in ((0, 1), (0, -1), (1, 0), (-1, 0)):
-        ring |= np.roll(np.roll(a, dy, 0), dx, 1)
+    # shifted without wrapping (np.roll carried the shoulders on the bottom row round to a dark line
+    # along the top of the picture)
+    ring[1:, :] |= a[:-1, :]
+    ring[:-1, :] |= a[1:, :]
+    ring[:, 1:] |= a[:, :-1]
+    ring[:, :-1] |= a[:, 1:]
     img[ring & ~a] = hex2rgba("#14161c")
     return img
 
@@ -254,6 +327,12 @@ def ball_big():
     """Ball for the putting view: 2 px with a soft outline - clearly smaller than the cup."""
     img = from_template(["WW", "Wg"], {"W": "#ffffff", "g": "#d3d8de"})
     return outline(img, color=(16, 22, 18, 120))
+
+
+def ball_snow():
+    """Ball at rest on snow (the Christmas theme): a firm dark outline, or white on white can't be seen."""
+    img = from_template(["WW", "Wg"], {"W": "#ffffff", "g": "#d3d8de"})
+    return outline(img, color=(30, 38, 52, 235))
 
 
 def cup_big():
@@ -537,6 +616,7 @@ def all_sprites():
     out.append(("cup", cup()))
     out.append(("cup_big", cup_big()))
     out.append(("ball_big", ball_big()))
+    out.append(("ball_snow", ball_snow()))
     out.append(("cup_true", cup_true()))
     out.append(("putt_target", putt_target()))
     out.append(("aim_tick", aim_tick()))

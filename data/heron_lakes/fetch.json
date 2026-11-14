@@ -1,0 +1,41 @@
+{
+ "items": [
+  {
+   "name": "heron_lakes_overpass.geojson",
+   "osm_box": [
+    45.5941,
+    -122.7154,
+    45.6122,
+    -122.6896
+   ]
+  },
+  {
+   "name": "dogami_dtm_ft.tif",
+   "url": "https://gis.dogami.oregon.gov/arcgis/rest/services/lidar/DIGITAL_TERRAIN_MODEL_MOSAIC/ImageServer/exportImage?bbox=522200,5049000,524200,5051000&bboxSR=32610&imageSR=32610&size=2000,2000&format=tiff&pixelType=F32&noData=-9999&interpolation=RSP_BilinearInterpolation&f=image"
+  },
+  {
+   "name": "dogami_chm_ft.tif",
+   "url": "https://gis.dogami.oregon.gov/arcgis/rest/services/lidar/CANOPY_HEIGHT_MODEL_MOSAIC/ImageServer/exportImage?bbox=522200,5049000,524200,5051000&bboxSR=32610&imageSR=32610&size=2000,2000&format=tiff&pixelType=F32&noData=-9999&interpolation=RSP_BilinearInterpolation&f=image"
+  },
+  {
+   "name": "dogami_identify.json",
+   "url": "https://gis.dogami.oregon.gov/arcgis/rest/services/lidar/DIGITAL_TERRAIN_MODEL_MOSAIC/ImageServer/identify?geometry=%7B%22x%22%3A523200%2C%22y%22%3A5050000%2C%22spatialReference%22%3A%7B%22wkid%22%3A32610%7D%7D&geometryType=esriGeometryPoint&returnCatalogItems=true&f=json"
+  },
+  {
+   "name": "osip2024_522200_5049000.jpg",
+   "url": "https://imagery.oregonexplorer.info/arcgis/rest/services/OSIP_2024/OSIP_2024_WM/ImageServer/exportImage?bbox=522200,5049000,523700,5050500&bboxSR=32610&imageSR=32610&size=3000,3000&format=jpg&f=image"
+  },
+  {
+   "name": "osip2024_522200_5050500.jpg",
+   "url": "https://imagery.oregonexplorer.info/arcgis/rest/services/OSIP_2024/OSIP_2024_WM/ImageServer/exportImage?bbox=522200,5050500,523700,5051000&bboxSR=32610&imageSR=32610&size=3000,1000&format=jpg&f=image"
+  },
+  {
+   "name": "osip2024_523700_5049000.jpg",
+   "url": "https://imagery.oregonexplorer.info/arcgis/rest/services/OSIP_2024/OSIP_2024_WM/ImageServer/exportImage?bbox=523700,5049000,524200,5050500&bboxSR=32610&imageSR=32610&size=1000,3000&format=jpg&f=image"
+  },
+  {
+   "name": "osip2024_523700_5050500.jpg",
+   "url": "https://imagery.oregonexplorer.info/arcgis/rest/services/OSIP_2024/OSIP_2024_WM/ImageServer/exportImage?bbox=523700,5050500,524200,5051000&bboxSR=32610&imageSR=32610&size=1000,1000&format=jpg&f=image"
+  }
+ ]
+}

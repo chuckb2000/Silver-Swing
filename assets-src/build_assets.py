@@ -66,6 +66,8 @@ def main():
         '{"widths":%s,"heights":%s}' % (TREE_WIDTHS, TREE_HEIGHTS))
     print(f"[assets] trees {len(frames)} frames ({tw}x{th}), sprites ({sw}x{sh}), font {n} glyphs -> {OUT}")
     title_art.write_sprites(OUT)  # the title screen's panorama and trophy
+    import holiday
+    holiday.main()  # the holiday sheets (sprites/holiday_<name>.png): hats, flags, decorations
     # tree sets of the other course themes (palettes/<theme>.json with a "trees" entry)
     import json
     for pal in sorted((HERE / "palettes").glob("*.json")):

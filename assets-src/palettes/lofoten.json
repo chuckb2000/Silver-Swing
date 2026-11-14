@@ -1,0 +1,36 @@
+{
+  "name": "Lofoten (Arctic links: heather, bare rock, white shell sand)",
+  "note": "Course theme palette (<= 32 colours; same keys as pnw.json plus F0-F2). Lofoten Links on Gimsøya, 68° N: short, cool-green links turf on the fairways and greens, a heather-and-crowberry rough in brown-purple (F0-F2), grey granite and gneiss (K), near-white shell sand in the bunkers and on the beaches, and a deep, cold blue-green Norwegian Sea. Few trees: low downy birch. Shadows are a 35% black overlay on top of these. Course chat's proposal 2026-11-13 (no open orthophoto: colours from the course's character, not from a photo).",
+  "colors": {
+    "G0": "#13261f", "G1": "#1f3a2b", "G2": "#2d5034", "G3": "#3f673b",
+    "G4": "#557e43", "G5": "#6a924c", "G6": "#7fa557", "G7": "#93b765",
+    "G8": "#a9c87a", "G9": "#c6dea0",
+    "L0": "#5a5a4a", "L1": "#6e6c58", "L2": "#848168",
+    "S0": "#b7b4a3", "S1": "#dcdccf", "S2": "#f1f2ea",
+    "W0": "#0d2f3f", "W1": "#16485c", "W2": "#4f8a98",
+    "K0": "#25272c", "K1": "#4c5058", "K2": "#767b84", "K3": "#a4a7a8", "K4": "#cfd1cf",
+    "B0": "#3a2a24", "B1": "#5c4339", "B2": "#7e6152",
+    "R0": "#5b5e66", "WH": "#f6f6f2",
+    "F0": "#5b4a45", "F1": "#715c52", "F2": "#88725f"
+  },
+  "lut": {
+    "rough": ["F0", "F1", "F2", "F2"]
+  },
+  "aliases": {
+    "TUFT": "G3"
+  },
+  "minimap": {
+    "ob": "#6e6c58", "rough": "#715c52", "woods": "#1f3a2b", "ob_woods": "#1f3a2b",
+    "water": "#16485c", "ob_water": "#16485c", "bunker": "#dcdccf", "ob_sand": "#f1f2ea"
+  },
+  "minimap_trees": {
+    "conifer": ["#13261b", "#2b4c33"],
+    "deciduous": ["#2d5034", "#6a924c"],
+    "shrub": ["#3a2a24", "#9a5a7a"]
+  },
+  "trees": {
+    "conifer": "trees_lofoten:spruce",
+    "deciduous": "trees_lofoten:birch",
+    "shrub": "trees_lofoten:heather"
+  }
+}

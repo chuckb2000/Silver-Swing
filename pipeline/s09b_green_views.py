@@ -446,7 +446,7 @@ def render_layout(lay, name, cfg, world, ldir, all_holes, green_by_osm, only, LA
     holes = json.load(open(ldir / "holes.json")) if lay["shared"] else all_holes
     todo = [h for h in holes if not (only and h["number"] not in only)]
     _JOB.clear()
-    _JOB.update(lay=lay, cfg=cfg, world=world, outd=outd, all_holes=all_holes, green_by_osm=green_by_osm, LAYERS=LAYERS,
+    _JOB.update(lay=lay, cfg=cfg, world=world, outd=outd, all_holes=all_holes, lay_holes=holes, green_by_osm=green_by_osm, LAYERS=LAYERS,
                 g=g, surf05=surf05, base=base, greens=greens, trees_all=trees_all, building_polys=building_polys,
                 boundary=boundary, P=P, lut=lut, make_c=make_c, make_d=make_d, gidx=gidx, blut=blut)
     jobs = min(int(os.environ.get("SS_JOBS", os.cpu_count() or 1)), len(todo))
@@ -472,6 +472,10 @@ def _render_hole(h) -> dict:
     gpoly = Polygon(J["green_by_osm"][h["green_osm"]]["poly"])
     cx, cy = gpoly.centroid.x, gpoly.centroid.y
     if not gpoly.contains(gpoly.centroid):  # a crescent (Langdon Farms 9, half a double green): centre on the pin
+        cx, cy = h["pin"]
+    # a double green mapped as one polygon for two holes (the Olympic Club's Cliffs 5 and 7): each
+    # hole's views centre on its own pin, on its own half (design chat, 2026-11-13)
+    if sum(1 for o in J["lay_holes"] if o["green_osm"] == h["green_osm"]) > 1:
         cx, cy = h["pin"]
     entry = {"hole": n}
     for L in LAYERS:

@@ -16,7 +16,7 @@ Where (all on the 1 m world grid, rows south->north like s05's CHM):
                 min_z_m (the beach), tall canopy (CHM > max_chm_m: the
                 lidar trees stand there, and canopy_gap_m around it: their
                 crowns and shadows in the photo), and within clear_m of a mapped
-                green, tee, fairway, bunker, cart path or building
+                green, tee, fairway, bunker, cart path, building or driving range (Gamble Sands: the range's mown turf read as scrub)
 Bushes: a jittered grid (`spacing_m`, seeded by the course id) inside that
 area; crown radius r_min_m-r_max_m; height from the CHM where it sees the
 shrub layer (clamped to h_min_m-h_max_m), else h_default_m; no bush within
@@ -97,9 +97,14 @@ def gorse_area(cfg, world, g, chm: np.ndarray) -> np.ndarray:
     from rasterio.features import rasterize
     p = params(cfg)
     H, W = chm.shape
-    veg05 = scrub_class(ortho_on_world(cfg, world), p)              # rows north->south, 0.5 m
-    veg = veg05[:2 * H, :2 * W].reshape(H, 2, W, 2).mean(axis=(1, 3)) >= 0.5
-    veg = np.flipud(veg)                                            # rows south->north
+    if cfg.get("ortho"):
+        veg05 = scrub_class(ortho_on_world(cfg, world), p)          # rows north->south, 0.5 m
+        veg = veg05[:2 * H, :2 * W].reshape(H, 2, W, 2).mean(axis=(1, 3)) >= 0.5
+        veg = np.flipud(veg)                                        # rows south->north
+    else:
+        # no orthophoto (the Old Course: no open imagery of Scotland): the thickets are only the
+        # `extra_areas` (mapped scrub), below
+        veg = np.zeros((H, W), bool)
     bdir = build_dir(cfg["id"])
     z = np.load(bdir / "height_base.npy")[:H, :W]
     lake = np.load(bdir / "lake_mask.npy")[:H, :W]
@@ -112,7 +117,7 @@ def gorse_area(cfg, world, g, chm: np.ndarray) -> np.ndarray:
         return rasterize([(gg, 1) for gg in geoms], out_shape=(H, W), transform=tr, fill=0, dtype="uint8").astype(bool)
 
     water = burn(["water", "lateral_water_hazard", "water_hazard", "pool"], 1.0)
-    play = burn(["green", "tee", "fairway", "bunker", "cartpath", "building"], p["clear_m"])
+    play = burn(["green", "tee", "fairway", "bunker", "cartpath", "building", "driving_range"], p["clear_m"])
     tall = ndimage.binary_dilation(chm > p["max_chm_m"], iterations=int(p["canopy_gap_m"])) if p["canopy_gap_m"] else chm > p["max_chm_m"]
     area = veg & ~water & ~lake & ~play & (z >= p["min_z_m"]) & ~tall
     if p.get("extra_areas"):

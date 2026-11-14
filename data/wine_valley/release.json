@@ -1,0 +1,102 @@
+{
+ "release": "data-wine_valley",
+ "note": "Build inputs for Wine Valley; make fetch NAME=wine_valley puts them in place. All fetched by the GitHub Actions workflow (data/wine_valley/fetch.json) on 2026-11-13 (tile 00876 on a third run after two timeouts). The Overpass export, the clipped DEM and the placed NAIP are also committed in raw/; the lidar clips are not (git ignores .laz). naip_384700_5100700.jpg (a 100 m strip east of the world) is not used.",
+ "files": [
+  {
+   "asset": "wine_valley_overpass.geojson",
+   "sha256": "8ac2c8a5fba479604a68f2717aeb3e677f472cbc13165200c0f16ffd86f9c512",
+   "run": "python3 pipeline/intake.py osm wine_valley {file}",
+   "outputs": {
+    "raw/overpass.geojson": "2dd18a206863f604355f06a406e8d7cc79331c77814c2c4039bca7a0d2d48585"
+   }
+  },
+  {
+   "asset": "usgs_dem_m.tif",
+   "sha256": "86665aed0511901a6ca21e74dd4a389d511523de450c6756760d441d9aca281a",
+   "run": "python3 pipeline/intake.py raster wine_valley {file} --out raw/usgs_dem_m.tif",
+   "outputs": {
+    "raw/usgs_dem_m.tif": "11495eb51e86eb13d8dce27bf007304a3e31cdc44040b2a2a97b9ff7ef8e4452"
+   }
+  },
+  {
+   "asset": "naip_382700_5100700.jpg",
+   "sha256": "439afe4551083c23768a249c2481bf850279bcf2e75587d8e3aadba680c4676a",
+   "run": "python3 pipeline/intake.py ortho wine_valley {file} 382700 5100700 384700 5102600 --out raw/naip.tif",
+   "outputs": {
+    "raw/naip.tif": "8b96d0452ed120916e6b6e8521ff171ea3515ce9d797aebdc2eb02f9dba1d695"
+   }
+  },
+  {
+   "asset": "USGS_LPC_WA_3_County_QL2_2017_WA3_00749_LAS_2019.laz",
+   "sha256": "f94990a1679f7078bc8b0c291ee78e448c1abd539c95b7ce626dd8021a3ad210",
+   "run": "python3 pipeline/intake.py laz wine_valley {file} --out raw/laz/wine_valley_00749.laz --keep-evlrs",
+   "outputs": {
+    "raw/laz/wine_valley_00749.laz": "278a969c1486be4387c75c6bc2e672f5db18894e2feccedc04bf240b46c5f29f"
+   }
+  },
+  {
+   "asset": "USGS_LPC_WA_3_County_QL2_2017_WA3_00750_LAS_2019.laz",
+   "sha256": "26d5dbad0d94003478fad6b1a91803de6a0e2525ac4478727b6f0e195e53ba2f",
+   "run": "python3 pipeline/intake.py laz wine_valley {file} --out raw/laz/wine_valley_00750.laz --keep-evlrs",
+   "outputs": {
+    "raw/laz/wine_valley_00750.laz": "211e0b295f8cc55df9ad709659130fda647b289618a6cabe0646605e55a54181"
+   }
+  },
+  {
+   "asset": "USGS_LPC_WA_3_County_QL2_2017_WA3_00751_LAS_2019.laz",
+   "sha256": "d50712eb958d8e0a05f6b747d1eec8f0b01a426eb6512b70fcbf7719366bc2ce",
+   "run": "python3 pipeline/intake.py laz wine_valley {file} --out raw/laz/wine_valley_00751.laz --keep-evlrs",
+   "outputs": {
+    "raw/laz/wine_valley_00751.laz": "96e42ba45afba5b443a1c9c1ebb3ff58a1ec39dc167c824cad9e8fc73ab24fa3"
+   }
+  },
+  {
+   "asset": "USGS_LPC_WA_3_County_QL2_2017_WA3_00874_LAS_2019.laz",
+   "sha256": "af8c6ecac1295db48442053b80e3c81803a55d7958525014e9ad04018e77782f",
+   "run": "python3 pipeline/intake.py laz wine_valley {file} --out raw/laz/wine_valley_00874.laz --keep-evlrs",
+   "outputs": {
+    "raw/laz/wine_valley_00874.laz": "548be4c42c34ab2a5054ac97370bf426369ab28216e21f516b16b221989c8fc7"
+   }
+  },
+  {
+   "asset": "USGS_LPC_WA_3_County_QL2_2017_WA3_00875_LAS_2019.laz",
+   "sha256": "9c3e99e4f051e8c870398acaf04edce2e2992c96875b511bd2719e18b1a688b5",
+   "run": "python3 pipeline/intake.py laz wine_valley {file} --out raw/laz/wine_valley_00875.laz --keep-evlrs",
+   "outputs": {
+    "raw/laz/wine_valley_00875.laz": "35e8bb8d0a1faafb1c51114f7b90aa10761a9562a1236dafabd03f996fbf4456"
+   }
+  },
+  {
+   "asset": "USGS_LPC_WA_3_County_QL2_2017_WA3_00876_LAS_2019.laz",
+   "sha256": "b38249f4c4c711e5fff376c3b5ffc19dd766808a8232330d62ebfba4fbad71ac",
+   "run": "python3 pipeline/intake.py laz wine_valley {file} --out raw/laz/wine_valley_00876.laz --keep-evlrs",
+   "outputs": {
+    "raw/laz/wine_valley_00876.laz": "5dc37c385b187c3694d2012f8eb480b15a61d155138ed68bbdefa4c5e7231984"
+   }
+  },
+  {
+   "asset": "USGS_LPC_WA_3_County_QL2_2017_WA3_00999_LAS_2019.laz",
+   "sha256": "98c10cf9fb105ff857fbbda9966ff218f9ee15620561199fb63059db9fb4a516",
+   "run": "python3 pipeline/intake.py laz wine_valley {file} --out raw/laz/wine_valley_00999.laz --keep-evlrs",
+   "outputs": {
+    "raw/laz/wine_valley_00999.laz": "4d9cf5f9f808016695327c4b9f6fc7accdb8e50e9317ed40b5d9a74c1c611415"
+   }
+  },
+  {
+   "asset": "USGS_LPC_WA_3_County_QL2_2017_WA3_01000_LAS_2019.laz",
+   "sha256": "5bf98f2b861afd890f2c5cbf2bfd7180a7118a54fa9c1cf8526084ae39a8f8b8",
+   "run": "python3 pipeline/intake.py laz wine_valley {file} --out raw/laz/wine_valley_01000.laz --keep-evlrs",
+   "outputs": {
+    "raw/laz/wine_valley_01000.laz": "eeb5f86ea2a7c6a25a7853d34e84b8f6a7ca4618fcf641dafe52b2bfb81da34e"
+   }
+  },
+  {
+   "asset": "USGS_LPC_WA_3_County_QL2_2017_WA3_01001_LAS_2019.laz",
+   "sha256": "fc68c681ca80b1cd3c2731ec84ef83131e55c621a799cf2cc16ab5dd6b71d213",
+   "run": "python3 pipeline/intake.py laz wine_valley {file} --out raw/laz/wine_valley_01001.laz --keep-evlrs",
+   "outputs": {
+    "raw/laz/wine_valley_01001.laz": "999d6df540496599507bb8b4eeb995813dfea2a9430a9995bfe21070e2c704ea"
+   }
+  }
+ ]
+}

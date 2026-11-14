@@ -1,0 +1,21 @@
+{
+  "name": "Wine Valley (dryland wheat hills, Walla Walla WA)",
+  "note": "Course theme palette (<= 32 colours; same keys as pnw.json plus F0-F2), made against the NAIP photo of the course (2026-11-13). Wine Valley lies in the rolling loess wheat country west of Walla Walla, at about 600 ft: irrigated bentgrass fairways and greens, a vivid green against a broad golden-straw native rough of bunchgrass on the hill faces (F0-F2, the rough's lut); off the course (L0-L2) wheat fields, the young wheat a dusty olive green and the stubble a pale tan, so out of bounds reads apart from the rough; pale tan sand in the rugged bunkers; deep green-blue irrigation ponds. Trees: black locust and Lombardy poplar windbreaks (assets-src/trees_wine_valley.py). Shadows are a 35% black overlay on top of these.",
+  "colors": {
+    "G0": "#1a2e1c", "G1": "#264524", "G2": "#335c2c", "G3": "#427334",
+    "G4": "#52893c", "G5": "#649d45", "G6": "#77af4f", "G7": "#8bbf5b",
+    "G8": "#a2cd6b", "G9": "#c3df92",
+    "L0": "#6c6a48", "L1": "#7c7a54", "L2": "#8d8a62",
+    "S0": "#bba882", "S1": "#d9cba6", "S2": "#ede4ca",
+    "W0": "#173a40", "W1": "#225660", "W2": "#5a8f94",
+    "K0": "#2a2a2c", "K1": "#58585a", "K2": "#807e7a", "K3": "#b4aa96", "K4": "#d8cfbc",
+    "B0": "#4a2a22", "B1": "#6e3c30", "B2": "#934f3f",
+    "R0": "#5a5a62", "WH": "#f6f5ef",
+    "F0": "#a68c52", "F1": "#bea366", "F2": "#d2b97c"
+  },
+  "lut": {"rough": ["F0", "F1", "F2", "F2"], "rough_band": ["G3", "G4", "G5", "G5"]},
+  "aliases": {"TUFT": "F0"},
+  "minimap": {"ob": "#7c7a54", "rough": "#bea366", "woods": "#335c2c", "ob_woods": "#2d4f29", "water": "#225660", "ob_water": "#225660", "bunker": "#d9cba6", "ob_sand": "#d9cba6"},
+  "minimap_trees": {"conifer": ["#1a2c14", "#5d8a34"], "deciduous": ["#20301a", "#6c8f44"]},
+  "trees": {"conifer": "trees_wine_valley:poplar", "deciduous": "trees_wine_valley:locust"}
+}

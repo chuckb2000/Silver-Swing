@@ -9,7 +9,7 @@
 
 import Phaser from 'phaser';
 import { app } from '../app';
-import { courseEntries, coursesByState, CourseInfo, nameInGroup, stateOf, PROVINCES } from '../data/registry';
+import { courseEntries, coursesByState, CourseInfo, EUROPE, nameInGroup, stateOf, PROVINCES } from '../data/registry';
 import { Button, COLORS, fitHeading, onTap, Panel, setTxt, txt } from '../ui/widgets';
 import { useCourse } from './flow';
 import { LoadSuperseded } from '../data/courses';
@@ -135,7 +135,8 @@ export class CourseSelectScene extends MenuScene {
 
   // ---------------------------------------------------------------- states
   private buildStates(groups: ReturnType<typeof coursesByState>, x0: number, y0: number, pw: number, ph: number) {
-    const head = txt(this, x0 + pw / 2, y0 + 6, `${this.purpose === 'board' ? 'leaderboard: ' : ''}choose a ${groups.some((g) => PROVINCES.has(g.code)) ? 'state or province' : 'state'}`, { origin: [0.5, 0], scale: 2 });
+    const what = groups.some((g) => g.code === EUROPE) ? 'where to play' : `a ${groups.some((g) => PROVINCES.has(g.code)) ? 'state or province' : 'state'}`;
+    const head = txt(this, x0 + pw / 2, y0 + 6, `${this.purpose === 'board' ? 'leaderboard: ' : ''}choose ${what}`, { origin: [0.5, 0], scale: 2 });
     if (head.width > pw - 8) head.setScale(1).setY(y0 + 10); // a narrow phone
     this.root.add(head);
     const gap = 6;

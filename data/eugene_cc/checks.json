@@ -1,0 +1,4 @@
+{
+ "wind_mph": [1, 7],
+ "yardage": {"max": {"9": 0.10}, "why": "9: OSM's hole line starts on the only mapped box; the photo shows firs behind it and no farther box. Open item for the developer"}
+}

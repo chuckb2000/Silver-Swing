@@ -1,0 +1,63 @@
+{
+  "name": "The Country Club (old New England parkland, Brookline MA)",
+  "note": "Course theme palette (<= 32 colours; same keys as pnw.json), made against the NAIP photo of the course (2026-11-13). The Country Club is the oldest club in the country, on rolling ground with outcrops of Roxbury puddingstone, its holes framed by tall red oaks, elms and white pines and lined with the leafy Chestnut Hill suburbs: deep, slightly blue-green New England turf, the rough a darker shade, sand a warm buff, the ponds a dark green-black, the ledge a purplish grey. Off the course (L0-L2) the lawns and gardens of Brookline, a duller green. Trees: eastern white pine, red oak and elm (assets-src/trees_tcc_brookline.py). Shadows are a 35% black overlay on top of these.",
+  "colors": {
+    "G0": "#19372a",
+    "G1": "#224c35",
+    "G2": "#2b6339",
+    "G3": "#36783d",
+    "G4": "#428c43",
+    "G5": "#4f9f4a",
+    "G6": "#5db052",
+    "G7": "#6dc05b",
+    "G8": "#7ecd68",
+    "G9": "#a2dd85",
+    "L0": "#4f6a3e",
+    "L1": "#5d7a46",
+    "L2": "#6c8a50",
+    "S0": "#c6b48a",
+    "S1": "#e2d4ae",
+    "S2": "#f2ead2",
+    "W0": "#1a2f2c",
+    "W1": "#27443e",
+    "W2": "#58786e",
+    "K0": "#2a2628",
+    "K1": "#5a5258",
+    "K2": "#847a80",
+    "K3": "#b0a69c",
+    "K4": "#d6cec2",
+    "B0": "#45311f",
+    "B1": "#6b4a31",
+    "B2": "#8a5b40",
+    "R0": "#4b586a",
+    "WH": "#f6f6f2",
+    "F0": "#45653a",
+    "F1": "#557a3f",
+    "F2": "#668d47"
+  },
+  "trees": {
+    "conifer": "trees_tcc_brookline:white_pine",
+    "deciduous": "trees_tcc_brookline:red_oak"
+  },
+  "lut": {
+    "rough": [
+      "F0",
+      "F1",
+      "F2",
+      "F2"
+    ]
+  },
+  "minimap": {
+    "rough": "#557a3f"
+  },
+  "minimap_trees": {
+    "conifer": [
+      "#10241e",
+      "#3a6c56"
+    ],
+    "deciduous": [
+      "#172a12",
+      "#548432"
+    ]
+  }
+}
