@@ -1,0 +1,70 @@
+{
+ "release": "data-snoqualmie_ridge",
+ "note": "Build inputs for TPC Snoqualmie Ridge; make fetch NAME=snoqualmie_ridge puts them in place. All fetched by the GitHub Actions workflow (data/snoqualmie_ridge/fetch.json) on 2026-11-13, the lidar over three runs (rockyweb is slow and rate-limits). The Overpass export, the clipped DEM and the NAIP mosaic (data/snoqualmie_ridge/make_ortho.py from the four naip_*.jpg in the release) are also committed in raw/; the lidar clips are not (git ignores .laz).",
+ "files": [
+  {
+   "asset": "snoqualmie_ridge_overpass.geojson",
+   "sha256": "3d682957e0bb81ca2d833f67ada5a3a0f57710e99b92be12a1c2232cb4baa999",
+   "run": "python3 pipeline/intake.py osm snoqualmie_ridge {file}",
+   "outputs": {
+    "raw/overpass.geojson": "121ccd15f3e71ad99c73157b62480a33acbdce24a8d9200127b9c5676815d793"
+   }
+  },
+  {
+   "asset": "usgs_dem_m.tif",
+   "sha256": "cdcee4e3090bb9cf37c4cea98d009e460f4a15884d0b13ca015144a5ae24d069",
+   "run": "python3 pipeline/intake.py raster snoqualmie_ridge {file} --out raw/usgs_dem_m.tif",
+   "outputs": {
+    "raw/usgs_dem_m.tif": "b49e40bb8ca8490ffe6341d3c99d8d73a6d897369b656837b6976b74e8ba77ed"
+   }
+  },
+  {
+   "asset": "USGS_LPC_WA_KingCounty_2021_B21_King_1888.laz",
+   "sha256": "f386052e56958ec216b59f960b41d096c6c9036d3ce3366094b861d76e8f64db",
+   "run": "python3 pipeline/intake.py laz snoqualmie_ridge {file} --out raw/laz/snoqualmie_ridge_1888.laz --keep-evlrs",
+   "outputs": {
+    "raw/laz/snoqualmie_ridge_1888.laz": "a990ca0b452cb4872a64fb146515ea758e08326e94e66c67324422d9c56e4388"
+   }
+  },
+  {
+   "asset": "USGS_LPC_WA_KingCounty_2021_B21_King_1889.laz",
+   "sha256": "320b3b0dbca908476182edfe6b6b1d259b63b360e7d03e4d1ee14c93f3956e36",
+   "run": "python3 pipeline/intake.py laz snoqualmie_ridge {file} --out raw/laz/snoqualmie_ridge_1889.laz --keep-evlrs",
+   "outputs": {
+    "raw/laz/snoqualmie_ridge_1889.laz": "c73bd046adbe4eba12d11bb7546150138a16af48db7ddb46781eff9bee626e7f"
+   }
+  },
+  {
+   "asset": "USGS_LPC_WA_KingCounty_2021_B21_King_1890.laz",
+   "sha256": "85e9f3b46a761597183b5793e1f00280807175d9ca34184e15f44b449eed262b",
+   "run": "python3 pipeline/intake.py laz snoqualmie_ridge {file} --out raw/laz/snoqualmie_ridge_1890.laz --keep-evlrs",
+   "outputs": {
+    "raw/laz/snoqualmie_ridge_1890.laz": "c0a0fc8a46bc9c862a03c158e3456868399e1e98a264981ec91dd968c31f21a8"
+   }
+  },
+  {
+   "asset": "USGS_LPC_WA_KingCounty_2021_B21_King_1956.laz",
+   "sha256": "4fab3336cb5f22befc73818656e2bbdcf70f4178a6748c4ddaf17bd1f9982646",
+   "run": "python3 pipeline/intake.py laz snoqualmie_ridge {file} --out raw/laz/snoqualmie_ridge_1956.laz --keep-evlrs",
+   "outputs": {
+    "raw/laz/snoqualmie_ridge_1956.laz": "dbe2ac3ccbb6073feec03b218b332b91d0c9a0bf954b394c91034f1df46271e7"
+   }
+  },
+  {
+   "asset": "USGS_LPC_WA_KingCounty_2021_B21_King_1957.laz",
+   "sha256": "08997da13768517d5bacfaed25eb86e4078f092b78937355aac7b31ee056ffcf",
+   "run": "python3 pipeline/intake.py laz snoqualmie_ridge {file} --out raw/laz/snoqualmie_ridge_1957.laz --keep-evlrs",
+   "outputs": {
+    "raw/laz/snoqualmie_ridge_1957.laz": "e92fdf54681eb5e03b982aa997af0cc6c0b4f2ea76cad880212dbc0fc4439efd"
+   }
+  },
+  {
+   "asset": "USGS_LPC_WA_KingCounty_2021_B21_King_1958.laz",
+   "sha256": "1b8052a87e6e3a650fae39e0f0e587361cda3ba60e1960195db39ca24761b8d0",
+   "run": "python3 pipeline/intake.py laz snoqualmie_ridge {file} --out raw/laz/snoqualmie_ridge_1958.laz --keep-evlrs",
+   "outputs": {
+    "raw/laz/snoqualmie_ridge_1958.laz": "372d3171da7c39683b076b6b5442c8c3b795e9cd83d55a6c67118c589f127c45"
+   }
+  }
+ ]
+}

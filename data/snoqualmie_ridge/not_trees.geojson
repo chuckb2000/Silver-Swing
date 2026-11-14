@@ -1,0 +1,38 @@
+{
+ "type": "FeatureCollection",
+ "features": [
+  {
+   "type": "Feature",
+   "properties": {
+    "note": "utility corridor by the south entrance road: lidar returns from the power line read as 126-161 m trees (none on the NAIP photo)"
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       -121.8649317,
+       47.5310428
+      ],
+      [
+       -121.8643472,
+       47.531037
+      ],
+      [
+       -121.8643395,
+       47.5313969
+      ],
+      [
+       -121.8649239,
+       47.5314027
+      ],
+      [
+       -121.8649317,
+       47.5310428
+      ]
+     ]
+    ]
+   }
+  }
+ ]
+}

@@ -1,0 +1,49 @@
+{
+ "add": [
+  {
+   "from": "proposed/hole14.geojson",
+   "ids": [
+    "desk_14_tee",
+    "w680805267_fixed"
+   ],
+   "tags": {},
+   "reason": "hole 14: the developer's Mt. Si tee from the tracing desk, and the hole line redrawn through the fairway's centre line at the drive's landing zone (the developer: the yardage gap was the old bend)"
+  }
+ ],
+ "drop": [
+  {
+   "osm": "w680805267",
+   "reason": "replaced by proposed/hole14.geojson's redrawn line"
+  }
+ ],
+ "tags": [
+  {
+   "osm": "w247793104",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "standing default (COURSE_BUILD 4.1): every penalty area red; OSM tags it golf=water_hazard (yellow)"
+  },
+  {
+   "osm": "w247793105",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "standing default (COURSE_BUILD 4.1): every penalty area red; OSM tags it golf=water_hazard (yellow)"
+  },
+  {
+   "osm": "w247793106",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "standing default (COURSE_BUILD 4.1): every penalty area red; OSM tags it golf=water_hazard (yellow)"
+  },
+  {
+   "osm": "w681452235",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "standing default (COURSE_BUILD 4.1): every penalty area red; OSM tags it golf=water_hazard (yellow)"
+  }
+ ]
+}
