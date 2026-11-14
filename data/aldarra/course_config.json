@@ -1,0 +1,70 @@
+{
+ "id": "aldarra",
+ "name": "Aldarra Golf Club",
+ "location": "Sammamish, King County, Washington",
+ "state": "WA",
+ "architects": "Tom Fazio (opened 2001)",
+ "theme": "aldarra",
+ "epsg": 32610,
+ "osm_sources": [
+  "raw/overpass.geojson"
+ ],
+ "boundary_name": "The Members Club at Aldarra",
+ "dtm": {
+  "path": "raw/usgs_dem_m.tif",
+  "units": "m",
+  "source": "USGS 3DEP elevation service (3DEPElevation ImageServer exportImage, 1 m, EPSG:32610, box x 577100-579800 / y 5269500-5272100); the 1 m DEM under the course is WA_KingCounty_2021_B21 (tile x57y528, flown 2021-04-01 to 2021-09-07, published 2023-03-03, per the service's identify); fetched by the GitHub Actions workflow 2026-11-13 (release data-aldarra, usgs_dem_m.tif)"
+ },
+ "laz": {
+  "paths": [
+   "raw/laz/*.laz"
+  ],
+  "classes": [
+   1
+  ],
+  "units": "ft",
+  "source": "USGS Lidar Point Cloud WA_KingCounty_2021_B21 (WA_KingCo_1_2021 and WA_KingCo_2_2021), tiles from rockyweb.usgs.gov fetched by the GitHub Actions workflow 2026-11-13 (release data-aldarra), each clipped to the world + 100 m by intake.py laz --keep-evlrs; NAD83(2011) / Washington North (US ft), NAVD88 US ft; class 1 (unclassified: vegetation and structures), no vegetation classes",
+  "label": "2021 USGS King County lidar"
+ },
+ "roof_last_share": 0.85,
+ "ortho": {
+  "path": "raw/naip.tif",
+  "source": "USDA NAIP from the USGS National Map NAIP ImageServer (exportImage, about 0.6 m, EPSG:32610), four JPEG exports resampled onto one 0.6 m grid by make_ortho.py; fetched by the GitHub Actions workflow 2026-11-13 (release data-aldarra)"
+ },
+ "world": {
+  "x0": 577178,
+  "y0": 5269617,
+  "width": 2560,
+  "height": 2304,
+  "note": "OSM course boundary (way 255315612, 2,071 x 2,022 m in EPSG:32610) + 120 m of scenery, rounded out to whole 256 m chunks and centred. Over the 2,048 m guideline both ways (COURSE_BUILD.md 6.1).",
+  "over_limit_approved": "developer, 2026-11-13"
+ },
+ "tee_sets": [
+  {
+   "name": "Aldarra",
+   "playable": true,
+   "rating": 74.0,
+   "slope": 147,
+   "total_yd": 6926
+  }
+ ],
+ "default_tee": "Aldarra",
+ "scorecard_source": "GolfPass, Aldarra Golf Club scorecard (read 2026-11-13): Aldarra (the back set) 6,926 yd per hole (GolfPass's tee table says 6,885 and rates it 74.0/147; Offcourse rates 6,926 at 74.9/151), men's par and handicap rows; Championship, Champ/Member, Member, Member/Club, Club, Club/Forward and Forward in scorecard.csv, not built. Unverified (third party; private club, card not online). OSM tags hole 11 par 4; the card's par 5 is used.",
+ "penalty_default": "red",
+ "driving_range_is_ob": true,
+ "wind_mph": {
+  "minMph": 1,
+  "maxMph": 7
+ },
+ "trees_off_fairways_m": 2,
+ "attribution": [
+  "Map data © OpenStreetMap contributors (ODbL)",
+  "Elevation and trees: U.S. Geological Survey 3D Elevation Program (King County 2021 lidar)",
+  "Imagery check: USDA National Agriculture Imagery Program (NAIP)"
+ ],
+ "red_water_osm": [
+  "w1377150478",
+  "w319058493",
+  "w380188108"
+ ]
+}
