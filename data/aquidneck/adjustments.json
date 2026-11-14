@@ -36,6 +36,24 @@
   "reason": "measured 369 yd from the tee-box centre vs 382 on the card (-3.4%); moved the virtual tee along the middle of the real tee polygon tee_3_gold (on its centre line, at least 2.5 m from its back and front)"
  },
  {
+  "hole": 3,
+  "tee_set": "Green",
+  "step": 2,
+  "type": "tee_position",
+  "from": [
+   677.25,
+   870.26
+  ],
+  "to": [
+   676.0,
+   873.0
+  ],
+  "real_yd": 322.7,
+  "adjusted_yd": 325.7,
+  "card_yd": 350.0,
+  "reason": "measured 323 yd from the tee-box centre vs 350 on the card (-7.8%); moved the virtual tee along the middle of the real tee polygon w915497828 (on its centre line, at least 2.5 m from its back and front)"
+ },
+ {
   "hole": 5,
   "tee_set": "Gold",
   "step": 2,

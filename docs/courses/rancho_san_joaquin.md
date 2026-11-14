@@ -73,6 +73,8 @@ wins. Blue stays playable.
 -   Standing defaults: every penalty area red, out of bounds = the OSM boundary, range out of
     bounds, trees from lidar.
 
+-   **Tee boxes:** 8 and 15 Black (developer, 2026-11-14, from the tee check): the Black tees had been swapped (each on the other hole's box; the Blue tees were right). Now 8 Blue/Black on `w1232200236` (Black 172 yd, card 176) and 15 Blue/Black on `w1232224768` (Black 163, card 167); tags in `edits.json`.
+
 ## Developer's calls pending
 
 Made by the course chats; each can be reversed. Full text in

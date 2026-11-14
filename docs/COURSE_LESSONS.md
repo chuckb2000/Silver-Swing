@@ -45,6 +45,11 @@ The checks that replaced lessons:
 - **Lidar finds raised pads only.** Hillside tees are cut, many back tees and par-3-course tees are
   on grade, and on flat wooded courses most raised flat patches are tree bases and mounds; a wide
   search also finds green complexes and road shoulders. Treat pads as hints.
+- **Check every tee is on its own hole's box.** s06 picks a box by the card's yardage and can
+  take another hole's box when two are about as far (Columbia Edgewater 8, Sankaty Head 15/18,
+  Kwiniaska 12/15, Rancho San Joaquin 8/15; tee check 2026-11-14). Look for a tee on the box another
+  hole's line starts on, or boxes laid out across the hole; pin the right one with `hole`/`tee_set`
+  in edits.json. A desk box tagged `hole` without `tee_set` is not pinned.
 - **Long or shared tee strips.** s06 assigns a box by its centroid. Cut the OSM box where the cards
   fall (Cypress Point), or tag it `hole`/`tee_set`. Where a narrow strip's centre ridge reaches only
   its wide end and overshoots the card, accept the flag; don't place the tee by hand.

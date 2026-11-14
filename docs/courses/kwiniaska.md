@@ -83,6 +83,8 @@ the later call wins. Gold stays playable.
 -   Standing defaults: every penalty area red, out of bounds = the OSM boundary, range out of
     bounds.
 
+-   **Tee boxes:** 12, 15 and 16 Black (developer, 2026-11-14, from the tee check): 12 and 15 had been swapped (each box is laid out along the other hole), and 16 sat on `w1228366530`, the box the 7th's line starts on. Now 12 on `w1228366540` (309 yd, card 321, flag), 15 on `w1228366539` (490, card 503) and 16 on `w1228366529` with 16 Gold (332, card 340); tags in `edits.json`.
+
 ## Developer's calls pending
 
 Made by the course chats under the overnight "make the call"; each can be reversed. Full text in

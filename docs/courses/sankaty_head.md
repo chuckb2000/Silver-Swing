@@ -97,6 +97,8 @@ are the course chat's design.
 -   **Logo:** "The Lightship Basket": a Nantucket lightship basket with a whale on the lid. It is
     drawn as SVG in `assets-src/logo_concepts/sankaty_head/` and used through `concept_logo`.
 
+-   **Tee boxes:** 15 and 18 Championship (developer, 2026-11-14, from the tee check): the build had swapped them (each on the box the other's OSM line starts on). Now 15 on `w844645497` (410 yd, card 410) and 18 on `w844652026` (382, card 385); tags in `edits.json`.
+
 ## New pipeline keys or theme
 
 -   `pipeline/intake.py laz` now leaves out COPC records when it copies a tile's header (NOAA

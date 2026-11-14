@@ -221,15 +221,5 @@
    "osm": "w96457214",
    "reason": "OSM course boundary replaced by tr_boundary (the same line grown to include the Willamette penalty strip)"
   }
- ],
- "tags": [
-  {
-   "osm": "desk_10_tee_1",
-   "set": {
-    "tee_set": "Blue",
-    "assigned_by": "the developer (2026-11-14, from the tee check's screenshots)"
-   },
-   "reason": "hole 10 Blue: the box the developer traced for hole 10 (tagged hole=10 at the tracing desk; the OSM line starts on it). Without a tee_set tag the build had put the 10th's tee on desk_9_tee_0, the box traced for hole 9"
-  }
  ]
 }

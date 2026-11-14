@@ -11,7 +11,7 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 | 2 | 3 | Gold | 186 | 182.8 | -3.2 | -1.7% | pass | 182.8 | -1.7% | pass |
 | 2 | 3 | Green | 151 | 146.4 | -4.6 | -3.1% | flag | 147.3 | -2.4% | pass |
 | 3 | 4 | Gold | 382 | 368.9 | -13.1 | -3.4% | flag | 372.6 | -2.5% | pass |
-| 3 | 4 | Green | 350 | 347.0 | -3.0 | -0.8% | pass | 347.0 | -0.8% | pass |
+| 3 | 4 | Green | 350 | 322.7 | -27.3 | -7.8% | flag | 325.7 | -6.9% | flag |
 | 4 | 4 | Gold | 410 | 400.4 | -9.6 | -2.3% | pass | 400.4 | -2.3% | pass |
 | 4 | 4 | Green | 405 | 400.4 | -4.6 | -1.1% | pass | 400.4 | -1.1% | pass |
 | 5 | 3 | Gold | 163 | 150.4 | -12.6 | -7.7% | flag | 152.7 | -6.3% | flag |
@@ -42,7 +42,7 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 | 17 | 3 | Green | 177 | 140.9 | -36.1 | -20.4% | FAIL | 163.3 | -7.7% | flag |
 | 18 | 4 | Gold | 280 | 248.8 | -31.2 | -11.1% | FAIL | 273.3 | -2.4% | pass |
 | 18 | 4 | Green | 275 | 248.8 | -26.2 | -9.5% | FAIL | 268.3 | -2.4% | pass |
-| **total** | 142 | | **13000** | **12649** | -351 | -2.7% | | **12779** | -1.7% | |
+| **total** | 142 | | **13000** | **12625** | -375 | -2.9% | | **12758** | -1.9% | |
 
 ## Open items
 
@@ -50,34 +50,37 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 2. Hole 2: no golf=pin on its green; the centre pin is the green's centre (proposal).
 3. Hole 3: no golf=pin on its green; the centre pin is the green's centre (proposal).
 4. Hole 3 (Gold): tee box tee_3_gold assigned by the developer (tagged hole=3, tee_set=Gold in edited/course.geojson).
-5. Hole 4: no golf=pin on its green; the centre pin is the green's centre (proposal).
-6. Hole 5: no golf=pin on its green; the centre pin is the green's centre (proposal).
-7. Hole 5 (Gold): measured 153 yd vs card 163 (-6.3%) even with the virtual tee at the best spot in its box; accepted for play.
-8. Hole 6: no golf=pin on its green; the centre pin is the green's centre (proposal).
-9. Hole 7: no golf=pin on its green; the centre pin is the green's centre (proposal).
-10. Hole 8: no golf=pin on its green; the centre pin is the green's centre (proposal).
-11. Hole 8 (Gold): measured 213 yd vs card 233 (-8.8%) - FAIL, needs a decision.
-12. Hole 8 (Gold): tee box desk_8_bluetee_0 assigned by the developer (tagged hole=8, tee_set=Gold in edited/course.geojson).
-13. Hole 8 (Green): tee box w916005839 assigned by the developer (tagged hole=8, tee_set=Green in edited/course.geojson).
-14. Hole 9: no golf=pin on its green; the centre pin is the green's centre (proposal).
-15. Hole 10: no golf=pin on its green; the centre pin is the green's centre (proposal).
-16. Hole 11: no golf=pin on its green; the centre pin is the green's centre (proposal).
-17. Hole 12: no golf=pin on its green; the centre pin is the green's centre (proposal).
-18. Hole 13: no golf=pin on its green; the centre pin is the green's centre (proposal).
-19. Hole 14: no golf=pin on its green; the centre pin is the green's centre (proposal).
-20. Hole 14 (Gold): measured 404 yd vs card 426 (-5.3%) even with the virtual tee at the best spot in its box; accepted for play.
-21. Hole 15: no golf=pin on its green; the centre pin is the green's centre (proposal).
-22. Hole 16: no golf=pin on its green; the centre pin is the green's centre (proposal).
-23. Hole 17: no golf=pin on its green; the centre pin is the green's centre (proposal).
-24. Hole 17 (Gold): tee box tee_17_gold assigned by the developer (tagged hole=17, tee_set=Gold in edited/course.geojson).
-25. Hole 17 (Green): measured 163 yd vs card 177 (-7.7%) even with the virtual tee at the best spot in its box; accepted for play.
-26. Hole 17 (Green): tee box w951593850 assigned by the developer (tagged hole=17, tee_set=Green in edited/course.geojson).
-27. Hole 18: no golf=pin on its green; the centre pin is the green's centre (proposal).
+5. Hole 3 (Green): measured 326 yd vs card 350 (-6.9%) even with the virtual tee at the best spot in its box; accepted for play.
+6. Hole 3 (Green): tee box w915497828 assigned by the developer (2026-11-14, from the tee check's screenshots) (tagged hole=3, tee_set=Green in edited/course.geojson).
+7. Hole 4: no golf=pin on its green; the centre pin is the green's centre (proposal).
+8. Hole 5: no golf=pin on its green; the centre pin is the green's centre (proposal).
+9. Hole 5 (Gold): measured 153 yd vs card 163 (-6.3%) even with the virtual tee at the best spot in its box; accepted for play.
+10. Hole 6: no golf=pin on its green; the centre pin is the green's centre (proposal).
+11. Hole 7: no golf=pin on its green; the centre pin is the green's centre (proposal).
+12. Hole 8: no golf=pin on its green; the centre pin is the green's centre (proposal).
+13. Hole 8 (Gold): measured 213 yd vs card 233 (-8.8%) - FAIL, needs a decision.
+14. Hole 8 (Gold): tee box desk_8_bluetee_0 assigned by the developer (tagged hole=8, tee_set=Gold in edited/course.geojson).
+15. Hole 8 (Green): tee box w916005839 assigned by the developer (tagged hole=8, tee_set=Green in edited/course.geojson).
+16. Hole 9: no golf=pin on its green; the centre pin is the green's centre (proposal).
+17. Hole 10: no golf=pin on its green; the centre pin is the green's centre (proposal).
+18. Hole 11: no golf=pin on its green; the centre pin is the green's centre (proposal).
+19. Hole 12: no golf=pin on its green; the centre pin is the green's centre (proposal).
+20. Hole 13: no golf=pin on its green; the centre pin is the green's centre (proposal).
+21. Hole 14: no golf=pin on its green; the centre pin is the green's centre (proposal).
+22. Hole 14 (Gold): measured 404 yd vs card 426 (-5.3%) even with the virtual tee at the best spot in its box; accepted for play.
+23. Hole 15: no golf=pin on its green; the centre pin is the green's centre (proposal).
+24. Hole 16: no golf=pin on its green; the centre pin is the green's centre (proposal).
+25. Hole 17: no golf=pin on its green; the centre pin is the green's centre (proposal).
+26. Hole 17 (Gold): tee box tee_17_gold assigned by the developer (tagged hole=17, tee_set=Gold in edited/course.geojson).
+27. Hole 17 (Green): measured 163 yd vs card 177 (-7.7%) even with the virtual tee at the best spot in its box; accepted for play.
+28. Hole 17 (Green): tee box w951593850 assigned by the developer (tagged hole=17, tee_set=Green in edited/course.geojson).
+29. Hole 18: no golf=pin on its green; the centre pin is the green's centre (proposal).
 
 ## Playability adjustments
 
 - Hole 2 (Green): measured 146 yd from the tee-box centre vs 151 on the card (-3.1%); moved the virtual tee along the middle of the real tee polygon w915497815 (on its centre line, at least 2.5 m from its back and front) -> 147.3 yd (real 146.4 yd).
 - Hole 3 (Gold): measured 369 yd from the tee-box centre vs 382 on the card (-3.4%); moved the virtual tee along the middle of the real tee polygon tee_3_gold (on its centre line, at least 2.5 m from its back and front) -> 372.6 yd (real 368.9 yd).
+- Hole 3 (Green): measured 323 yd from the tee-box centre vs 350 on the card (-7.8%); moved the virtual tee along the middle of the real tee polygon w915497828 (on its centre line, at least 2.5 m from its back and front) -> 325.7 yd (real 322.7 yd).
 - Hole 5 (Gold): measured 150 yd from the tee-box centre vs 163 on the card (-7.7%); moved the virtual tee along the middle of the real tee polygon w915497827 (on its centre line, at least 2.5 m from its back and front) -> 152.7 yd (real 150.4 yd).
 - Hole 6 (Green): measured 415 yd from the tee-box centre vs 399 on the card (+4.0%); moved the virtual tee along the middle of the real tee polygon w916004001 (on its centre line, at least 2.5 m from its back and front) -> 408.9 yd (real 415.1 yd).
 - Hole 8 (Green): measured 166 yd from the tee-box centre vs 192 on the card (-13.4%); moved the virtual tee along the middle of the real tee polygon w916005839 (on its centre line, at least 2.5 m from its back and front) -> 187.2 yd (real 166.2 yd).

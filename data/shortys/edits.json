@@ -391,6 +391,10 @@
   {
    "osm": "w1540940976",
    "reason": "replaced by the grown boundary (add above)"
+  },
+  {
+   "osm": "a_tee_back_19",
+   "reason": "replaced by w1547585700_h19 (developer, 2026-11-14, from the tee check): a_tee_back_19 was a copy of w1547559695, a forward tee out along the 4th's line, chosen as the box nearest the Back card; the 19th's line starts on w1547585700"
   }
  ],
  "extend_start": []
