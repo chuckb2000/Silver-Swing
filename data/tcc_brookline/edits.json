@@ -531,6 +531,22 @@
   {
    "osm": "w1272207482",
    "reason": "temporary 2022 U.S. Open structure still in OSM (building=grandstand/tent/mobile_home on the course); not there in normal play"
+  },
+  {
+   "osm": "w1150162176",
+   "tool": "bridge_paths.py",
+   "reason": "replaced by w1150162176_bridged, w1150162176_bridged_2 (the cart paths over it cut out)"
+  }
+ ],
+ "add": [
+  {
+   "from": "proposed/bridges.geojson",
+   "ids": [
+    "w1150162176_bridged",
+    "w1150162176_bridged_2"
+   ],
+   "tool": "bridge_paths.py",
+   "reason": "developer 2026-11-14: cart paths no longer run into the water; the water with the paths over it cut out (bridges are cart path, as at Burlington), and bridges joining path ends that face each other across it"
   }
  ]
 }
