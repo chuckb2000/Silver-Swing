@@ -1,10 +1,10 @@
 {
  "trees": {
-  "pipeline": "c20abb40439025a48a60448f3d9622c43769f68b",
+  "pipeline": "db0df164ce0907fc5cb98ec647bb82d6cab15ed5",
   "assets-src": "48a1d7432c7549d9b7ce5d5d4fb6c4cd8bb393eb"
  },
- "build_key": "510d5bc09ba48265116f0f45b971accf0b03284d74ec5a6162b97934ff3d278f",
- "commit": "34eea702726df8220c2574b330fa82d51b2ad057",
+ "build_key": "e76669e903e9973ca30c94f43df2a68d7e06b6b49e660b467cbee16d6a415abd",
+ "commit": "a42451c1daf2eb303bc9cb4736e6e74f746fa7c9",
  "date": "2026-11-14",
  "note": "the pipeline that built this course's committed files; pipeline/pins.py"
 }
