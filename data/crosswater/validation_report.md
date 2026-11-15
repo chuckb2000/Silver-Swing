@@ -58,9 +58,9 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 
 ## Tree detection (DOGAMI canopy height model)
 
-- 37037 trees detected in the world extent (4918 inside the course), 14922 conifers / 22115 deciduous; median height 10.0 m, max 40.7 m.
+- 37032 trees detected in the world extent (4914 inside the course), 14922 conifers / 22110 deciduous; median height 10.0 m, max 40.7 m.
 - Dropped: 786 tops on building footprints, 0 over the lake, 45 tiny crowns.
-- Dropped on playing surfaces (spec 5.4): 27 -> water_hazard w355776763 (4.7 m), water_hazard w355776763 (4.5 m), water_hazard w355776763 (4.7 m), water_hazard w355776763 (4.6 m), water_hazard w206873531 (4.5 m), water_hazard w206873532 (30.8 m), water_hazard w206873532 (7.2 m), water_hazard w206873532 (5.5 m), water_hazard w206873532 (5.0 m), water_hazard w206873532 (16.5 m), water_hazard w206873532 (13.1 m), water_hazard w206873532 (4.6 m), water_hazard w206873532 (19.5 m), water_hazard w206873532 (4.6 m), water_hazard w206873532 (6.0 m), water_hazard w206873532 (10.3 m), water_hazard w206873532 (7.2 m), water_hazard w206873532 (10.2 m), water_hazard w1464074607 (5.3 m), water_hazard w206873532 (14.1 m), water_hazard w206873532 (4.3 m), water_hazard w206873532 (4.3 m), water_hazard w206873532 (4.2 m), water_hazard w206873532 (4.3 m), water_hazard w206873532 (4.3 m), water_hazard w206873532 (5.7 m), water_hazard w206873532 (5.8 m)
+- Dropped on playing surfaces (spec 5.4): 32 -> water_hazard w355776763 (4.7 m), water_hazard w355776763 (4.5 m), water_hazard w355776763 (4.7 m), water_hazard w355776763 (4.6 m), lateral_water_hazard creek_20 (6.4 m), lateral_water_hazard creek_20 (6.7 m), lateral_water_hazard creek_20 (5.6 m), lateral_water_hazard creek_28 (4.1 m), lateral_water_hazard creek_46 (5.3 m), water_hazard w206873531 (4.5 m), water_hazard w206873532 (30.8 m), water_hazard w206873532 (7.2 m), water_hazard w206873532 (5.5 m), water_hazard w206873532 (5.0 m), water_hazard w206873532 (16.5 m), water_hazard w206873532 (13.1 m), water_hazard w206873532 (4.6 m), water_hazard w206873532 (19.5 m), water_hazard w206873532 (4.6 m), water_hazard w206873532 (6.0 m), water_hazard w206873532 (10.3 m), water_hazard w206873532 (7.2 m), water_hazard w206873532 (10.2 m), water_hazard w1464074607 (5.3 m), water_hazard w206873532 (14.1 m), water_hazard w206873532 (4.3 m), water_hazard w206873532 (4.3 m), water_hazard w206873532 (4.2 m), water_hazard w206873532 (4.3 m), water_hazard w206873532 (4.3 m), water_hazard w206873532 (5.7 m), water_hazard w206873532 (5.8 m)
 - OSM natural=tree points matched by a detected tree within 4 m: 5 of 7.
 - Conifer vs deciduous is inferred from crown shape only (no leaf-off imagery); see build/trees_preview.png.
 
@@ -96,21 +96,21 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 | 1 | 4 | yes | yes (4 near) | yes | yes | yes | 8 | 0 |
 | 2 | 5 | yes | yes (4 near) | yes | yes | yes | 7 | 1 |
 | 3 | 3 | yes | yes (5 near) | yes | yes | yes | 4 | 0 |
-| 4 | 4 | yes | yes (4 near) | yes | yes | yes | 9 | 0 |
-| 5 | 4 | yes | yes (3 near) | yes | yes | yes | 3 | 1 |
-| 6 | 5 | yes | yes (2 near) | yes | yes | yes | 2 | 1 |
-| 7 | 3 | yes | yes (4 near) | yes | yes | yes | 5 | 0 |
-| 8 | 4 | yes | yes (3 near) | yes | yes | yes | 9 | 2 |
+| 4 | 4 | yes | yes (4 near) | yes | yes | yes | 9 | 1 |
+| 5 | 4 | yes | yes (3 near) | yes | yes | yes | 3 | 2 |
+| 6 | 5 | yes | yes (2 near) | yes | yes | yes | 2 | 8 |
+| 7 | 3 | yes | yes (4 near) | yes | yes | yes | 5 | 3 |
+| 8 | 4 | yes | yes (3 near) | yes | yes | yes | 9 | 6 |
 | 9 | 4 | yes | yes (4 near) | yes | yes | yes | 0 | 1 |
-| 10 | 4 | yes | yes (4 near) | yes | yes | yes | 3 | 1 |
-| 11 | 4 | yes | yes (4 near) | yes | yes | yes | 7 | 0 |
+| 10 | 4 | yes | yes (4 near) | yes | yes | yes | 3 | 7 |
+| 11 | 4 | yes | yes (4 near) | yes | yes | yes | 7 | 1 |
 | 12 | 5 | yes | yes (3 near) | yes | yes | yes | 6 | 1 |
 | 13 | 3 | yes | yes (3 near) | yes | yes | yes | 3 | 0 |
 | 14 | 4 | yes | yes (3 near) | yes | yes | yes | 6 | 1 |
 | 15 | 4 | yes | yes (3 near) | yes | yes | yes | 6 | 1 |
-| 16 | 5 | yes | yes (4 near) | yes | yes | yes | 6 | 1 |
-| 17 | 3 | yes | yes (5 near) | yes | yes | yes | 3 | 0 |
-| 18 | 4 | yes | yes (4 near) | yes | yes | yes | 3 | 1 |
+| 16 | 5 | yes | yes (4 near) | yes | yes | yes | 6 | 2 |
+| 17 | 3 | yes | yes (5 near) | yes | yes | yes | 3 | 2 |
+| 18 | 4 | yes | yes (4 near) | yes | yes | yes | 3 | 9 |
 
 ## Missing or suspect features
 
@@ -156,6 +156,22 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 - water w356000361 at (587, 1576), 604 m2, is inside the boundary but not a penalty area: it plays as rough (tag it golf=lateral_water_hazard in edits.json, or list it in red_water_osm)
 - water w356011279 at (646, 1758), 33537 m2, is inside the boundary but not a penalty area: it plays as rough (tag it golf=lateral_water_hazard in edits.json, or list it in red_water_osm)
 - penalty area w206873532 lies mostly outside the boundary (a neighbour's? redraw as natural=water)
+- penalty area creek_24 lies mostly outside the boundary (a neighbour's? redraw as natural=water)
+- penalty area creek_29 lies mostly outside the boundary (a neighbour's? redraw as natural=water)
+- penalty area creek_32 lies mostly outside the boundary (a neighbour's? redraw as natural=water)
+- penalty area creek_34 lies mostly outside the boundary (a neighbour's? redraw as natural=water)
+- penalty area creek_36 lies mostly outside the boundary (a neighbour's? redraw as natural=water)
+- penalty area creek_46 lies mostly outside the boundary (a neighbour's? redraw as natural=water)
+- penalty area creek_54 lies mostly outside the boundary (a neighbour's? redraw as natural=water)
+- penalty area creek_56 lies mostly outside the boundary (a neighbour's? redraw as natural=water)
+- penalty area creek_57 lies mostly outside the boundary (a neighbour's? redraw as natural=water)
+- penalty area creek_60 lies mostly outside the boundary (a neighbour's? redraw as natural=water)
+- penalty area creek_62 lies mostly outside the boundary (a neighbour's? redraw as natural=water)
+- penalty area creek_63 lies mostly outside the boundary (a neighbour's? redraw as natural=water)
+- penalty area creek_64 lies mostly outside the boundary (a neighbour's? redraw as natural=water)
+- penalty area creek_65 lies mostly outside the boundary (a neighbour's? redraw as natural=water)
+- penalty area creek_66 lies mostly outside the boundary (a neighbour's? redraw as natural=water)
+- penalty area creek_67 lies mostly outside the boundary (a neighbour's? redraw as natural=water)
 
-Totals: 93 tees, 20 greens, 24 fairways, 89 bunkers, 5 water hazards, 18 pins, 56 cart paths, 7 OSM tree points.
+Totals: 93 tees, 20 greens, 24 fairways, 89 bunkers, 72 water hazards, 18 pins, 56 cart paths, 7 OSM tree points.
 

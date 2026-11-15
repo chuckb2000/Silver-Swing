@@ -34,10 +34,14 @@ built against 7,683.
     Theme `crosswater` (new). Wind 2-10 mph (high desert).
 -   **Data** (release `data-crosswater`; `make fetch NAME=crosswater`): OSM standard
     Overpass export; DOGAMI DTM and CHM mosaics (feet); OSIP 2024, 0.5 m.
--   **Water:** five penalty areas, all red: the Little Deschutes where OSM maps it as
-    golf=water_hazard (three polygons along several holes) and two ponds, all tagged red by
-    the standing default. OSM's 41 natural=wetland polygons on the river's old oxbows (marsh
-    grass, little open water) play as rough on their lidar ground (`flatten_wetlands` false).
+-   **Water:** 72 penalty areas, all red: 67 thin creeks inside the oxbow marsh (below),
+    the Little Deschutes where OSM maps it as golf=water_hazard (three polygons along
+    several holes) and two ponds, all tagged red by the standing default. OSM's 41
+    natural=wetland polygons on the river's old oxbows (marsh grass) play as rough on their
+    lidar ground (`flatten_wetlands` false); the creeks inside them are the channels the
+    DOGAMI bare-earth DTM shows (cells 0.15 m below a 41 m running median, thinned to a
+    centre line, at least 25 m long), drawn 3 m wide (`data/crosswater/make_creeks.py`,
+    `proposed/creeks.geojson`, picture `proposed/creeks.png`): 7.4 km of creek.
     The river's OSM line runs through the boundary's two cut-outs, which are out of bounds.
 -   **Trees:** 37,037 from the canopy model (4,918 inside the course), median 10.0 m,
     tallest 40.7 m.
@@ -77,10 +81,9 @@ Course chat's calls (listed for the developer):
 
 1.  Load time and memory with a 2,816 m world haven't been measured beyond the hand-off's
     in-game look at every hole.
-2.  The oxbow creeks: the narrow channels inside the marsh aren't mapped in OSM as water,
-    and the photo (2024) and the lidar ground show little open water there, so they play as
-    rough. If some should be penalty areas, tracing them, or a screenshot with control
-    points, would let them be drawn at their real width.
+2.  The oxbow creeks come from the lidar ground, not from a map: their width (3 m) is a
+    choice, and a few short spurs follow side hollows. Tracing any that are wrong, or
+    naming ones to remove, would settle them.
 3.  Third-party card.
 
 ## Build history
@@ -88,3 +91,5 @@ Course chat's calls (listed for the developer):
 -   2026-11-13: first build (course chat).
 -   2026-11-14: wetlands are rough, not water; the river polygon along holes 7-9 and two
     cart paths restored.
+-   2026-11-14: thin red creeks inside the oxbow marsh, from the lidar ground (developer:
+    "some very thin penalty creeks based on reality").
