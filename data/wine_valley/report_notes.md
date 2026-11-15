@@ -21,3 +21,10 @@ Calls the course chat made on 2026-11-13; the developer has not seen them.
 7. **Three practice greens** by the clubhouse are wrong greens (relief required).
 8. **Card hole, theme and logo:** card hole 9 (rotating 3, 14, 6); new theme `wine_valley`;
    logo a Walla Walla sweet onion. The course chat's picks.
+9. **Black tees (developer, 2026-11-14):** Black (GolfPass, 6,760 yd, 72.6/127) is built
+   and the default; every hole is within 3 % (6,734 yd). On 7 OSM tags the Black pad
+   (141 m2, at 535 yd) golf=fairway, with the Blue pad (369 m2, 510 yd) beside it; the
+   Black one is retagged as a tee. On 17 the forward boxes beside the cart path measure
+   462/421/399/364/335/302 yd against the card's 470/400/400/360/335/300; the 399 box is
+   assigned to Black (s06 only searches 25 m from OSM's line).
+

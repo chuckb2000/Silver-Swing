@@ -13,6 +13,11 @@ import { COURSES_DIR, loadCourseFiles, registry, robotRound } from './helpers';
 
 const courses = registry();
 
+// Courses whose default tees are not their longest set, each by the developer's call.
+const DEFAULT_NOT_LONGEST: Record<string, string> = {
+  wine_valley: 'Black', // developer, 2026-11-14: Gold (7,600 yd) is too aggressive as the default
+};
+
 describe('course registry', () => {
   it('Rock Creek Park is not in the game (developer, 2026-10-25: not to be merged; PR #48 closed)', () => {
     expect(courses.map((c) => c.id).filter((id) => id.startsWith('rock_creek'))).toEqual([]);
@@ -47,7 +52,8 @@ describe('course registry', () => {
 
       it('the default tees are the longest set (developer, 2026-10-31)', () => {
         const longest = [...json.teeSets].sort((a, b) => b.totalYd - a.totalYd)[0];
-        expect(json.defaultTee, `set "default_tee": "${longest.name}" in course_config.json`).toBe(longest.name);
+        const expected = DEFAULT_NOT_LONGEST[info.id] ?? longest.name;
+        expect(json.defaultTee, `set "default_tee": "${expected}" in course_config.json`).toBe(expected);
       });
 
       it('has every file the game loads', () => {
