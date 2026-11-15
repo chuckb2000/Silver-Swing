@@ -87,6 +87,17 @@
    ],
    "tool": "bridge_paths.py",
    "reason": "developer 2026-11-14: cart paths no longer run into the water; the water with the paths over it cut out (bridges are cart path, as at Burlington), and bridges joining path ends that face each other across it"
+  },
+  {
+   "from": "proposed/marsh_pools.geojson",
+   "ids": [
+    "w421116008_pool_0",
+    "w421116008_pool_1",
+    "w421116008_pool_2",
+    "w421116009_bridged_2_pool_0"
+   ],
+   "tool": "marsh_pools.py",
+   "reason": "developer 2026-11-14: a marsh is drawn as marsh, and the open water in it (traced from the photo) as water"
   }
  ],
  "tags": [

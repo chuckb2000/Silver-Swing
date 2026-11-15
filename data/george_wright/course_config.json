@@ -70,6 +70,13 @@
   "w91080594",
   "w91095376"
  ],
+ "marsh_water_osm": [
+  "w89790834",
+  "w89913468",
+  "w91080594",
+  "w91095376"
+ ],
+ "marsh_water_osm_note": "developer 2026-11-14: OSM natural=wetland marshes and wet meadows; the photo shows scrub, meadow and woods, not open water. Red penalty areas drawn as marsh with red stakes (all inside the boundary)",
  "red_water_note": "ponds inside the boundary mapped as natural=water (in the woods west of 4-7 and north of 3): red penalty areas (standing default)",
  "rough_band_m": 3.0,
  "rough_band_note": "a mown band of rough along the fairways, then the long golden native grass the photos show beside many holes",

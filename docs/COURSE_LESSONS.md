@@ -81,6 +81,11 @@ The checks that replaced lessons:
 - **Water shapes.** A creek in a ravine is a penalty area to the top of its banks, `flatten=no`;
   where an OB road crosses it, water wins (a bridge). OSM's sea is only a coastline: build the sea
   from the coastline ways (sea on the right), add the shore up to the boundary, stop at roads.
+- **Check every water feature against the photo before listing it as red water.** OSM
+  `natural=wetland` (and some `natural=water` and golf hazards) is often marsh, wet meadow, scrub or
+  wooded swamp, and drawn as water it looks like a lake (Crosswater, then 12 courses on 2026-11-14).
+  Inside the boundary list it in `marsh_water_osm` too (a penalty area drawn as marsh with red
+  stakes), run `pipeline/marsh_pools.py <id>` for the open water in it, and check its preview.
 - **Tags the pipeline doesn't read** can still be used through a `proposed/` file and `edits.json`:
   `historic=ruins` as buildings, `natural=tree` `leaf_type` for tree types (`tree_types_osm`).
 

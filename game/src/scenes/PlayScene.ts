@@ -1301,7 +1301,10 @@ export class PlayScene extends Phaser.Scene {
       case 'canopy': sfx('wood', 0.8, 1.3); break;
       case 'trunk': sfx('wood'); break;
       case 'wall': sfx('thud', 0.9, 0.7); break;
-      case 'splash': sfx('splash'); this.splashFx(e.x, e.y); break;
+      case 'splash':
+        // a penalty area drawn as marsh: the ball drops into the reeds, no splash (developer 2026-11-14)
+        if (this.round.course.water.some((w) => w.marsh && w.poly.contains(e.x, e.y))) { sfx('thud', 0.45, 0.7); this.rustleFx(e.x, e.y); } else { sfx('splash'); this.splashFx(e.x, e.y); }
+        break;
       case 'holed': this.holeOutFx(); break;
       case 'lipout': sfx('tick', 0.7, 0.8); break;
       default: break;
@@ -1331,6 +1334,19 @@ export class PlayScene extends Phaser.Scene {
     this.flag.setAlpha(1);
     this.tweens.add({ targets: this.flag, y: fy - 3 / L, duration: 110, yoyo: true, ease: 'Quad.easeOut', delay: 120 });
     this.hud.flash('in the hole!', COLORS.yellow, '', 1000);
+  }
+
+  /** The ball lost in a marsh: a few reed tips flick up and settle. */
+  private rustleFx(x: number, y: number) {
+    const p = this.px(x, y);
+    const L = this.level;
+    for (let i = 0; i < 6; i++) {
+      const a = -Math.PI / 2 + (i - 2.5) * 0.45;
+      const r = this.add.rectangle(p.x, p.y, 1 / L, 2 / L, i % 2 ? 0x8fbf5a : 0x5f8f3a).setDepth(DEPTH.ground + 5);
+      this.tweens.add({ targets: r, x: p.x + Math.cos(a) * 4 / L, y: p.y + Math.sin(a) * 4 / L, alpha: 0, duration: 450, ease: 'Quad.easeOut', onComplete: () => r.destroy() });
+    }
+    this.ball.setVisible(false);
+    this.shadow.setVisible(false);
   }
 
   private splashFx(x: number, y: number) {
@@ -1631,8 +1647,12 @@ export class PlayScene extends Phaser.Scene {
   private showReliefFor(out: Outcome, announce: boolean) {
     switch (out.kind) {
       case 'water':
-        if (announce) this.hud.flash(out.penalty === 'red' ? 'penalty area' : 'water hazard', 0x7cc0ff);
-        this.openRelief(out.options, false, 'in the water: 1 penalty stroke');
+        {
+          const b = this.round.ball;
+          const marsh = this.round.course.water.some((w) => w.marsh && w.poly.contains(b.x, b.y));
+          if (announce) this.hud.flash(out.penalty === 'red' ? 'penalty area' : 'water hazard', marsh ? 0xd2603a : 0x7cc0ff);
+          this.openRelief(out.options, false, marsh ? 'in the marsh: 1 penalty stroke' : 'in the water: 1 penalty stroke');
+        }
         break;
       case 'ob':
         if (announce) this.hud.flash('out of bounds', 0xffffff);

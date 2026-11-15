@@ -96,6 +96,17 @@
   "w426952617",
   "w426952618"
  ],
+ "marsh_water_osm": [
+  "w426952615",
+  "w426952616",
+  "w426952617",
+  "w426952618"
+ ],
+ "marsh_outside_osm": [
+  "w426952616",
+  "w426952617"
+ ],
+ "marsh_water_osm_note": "developer 2026-11-14: the swamp along US 101 beside the 9th, mapped as natural=water strips; the photo shows reeds and scrub with a narrow ditch, not open water. Red penalty areas drawn as marsh with red stakes: inside the boundary, and outside it for the two strips the 9th plays over or beside (marsh_outside_osm, within 40 m of its line); the other strips' outside parts are the ground the lidar shows",
  "ortho": {
   "path": "raw/osip2024_05m.tif",
   "source": "Oregon Statewide Imagery Program 2024 (summer 2024), OSIP_2024_WM exportImage JPEG at 0.5 m from imagery.oregonexplorer.info, placed by its request box by make_ortho.py (GitHub release astoria-data, _ags_e53832b4_84fc_423d_9297_6414e722b2c3.jpg)"

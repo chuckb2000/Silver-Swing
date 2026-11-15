@@ -57,12 +57,12 @@ Built by a course chat on 2026-10-20 with the standing defaults (docs/COURSE_BUI
 
 ## Tree detection (2022 USGS RI statewide lidar, leaf-off)
 
-- 8690 trees detected in the world extent (2398 inside the course), 1708 conifers / 6982 deciduous; median height 16.5 m, max 35.4 m.
+- 8694 trees detected in the world extent (2402 inside the course), 1708 conifers / 6986 deciduous; median height 16.5 m, max 35.4 m.
 - Dropped: 2317 tops on building footprints, 0 over the lake, 202 tiny crowns.
-- Dropped on playing surfaces (spec 5.4): 9 -> tee w677171124 (17.5 m), bunker w677171127 (4.6 m), water_hazard w676926137 (10.9 m), lateral_water_hazard w1551631985 (13.4 m), water_hazard w677193855 (18.2 m), water_hazard w677193855 (16.4 m), water_hazard w677193855 (15.7 m), water_hazard w677193855 (21.3 m), bunker w1550960823 (14.5 m)
+- Dropped on playing surfaces (spec 5.4): 5 -> tee w677171124 (17.5 m), bunker w677171127 (4.6 m), water_hazard w676926137 (10.9 m), lateral_water_hazard w1551631985 (13.4 m), bunker w1550960823 (14.5 m)
 - Dropped from tee shots (s06b): 3 -> 15 Blue (19.0 m tree, 23.2 m from the tee), 15 Blue (13.6 m tree, 31.9 m from the tee), 15 Blue (21.6 m tree, 44.0 m from the tee)
 - OSM natural=tree points matched by a detected tree within 4 m: 142 of 285.
-- Conifer (pitch pine) vs deciduous (oak) from the leaf-off lidar: share of a crown's vegetation returns that were the last return of their pulse, split at Otsu's threshold 0.264 (1390 of 8330 crowns with >= 20 returns are conifers); the other 363 small crowns keep the crown-shape rule. Crowns with a share >= 0.85 (84) are solid surfaces, i.e. roofs of houses OSM doesn't map, and are not trees (config roof_last_share). See build/trees_preview.png.
+- Conifer (pitch pine) vs deciduous (oak) from the leaf-off lidar: share of a crown's vegetation returns that were the last return of their pulse, split at Otsu's threshold 0.264 (1390 of 8334 crowns with >= 20 returns are conifers); the other 363 small crowns keep the crown-shape rule. Crowns with a share >= 0.85 (84) are solid surfaces, i.e. roofs of houses OSM doesn't map, and are not trees (config roof_last_share). See build/trees_preview.png.
 
 # Green shaping checks
 

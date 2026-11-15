@@ -59,5 +59,10 @@
     "Elevation and trees: U.S. Geological Survey 3D Elevation Program (2022 USGS Lidar: RI Statewide)",
     "Scorecard: Triggs Memorial Golf Course"
   ],
-  "notes": "Phase 1 (2026-10-20): standing defaults (COURSE_BUILD.md 4.1): Blue only, every penalty area red, OSM boundary is OB, range OB, pins at green centres, trees from lidar, wind 1-9 mph (inland New England). Theme seekonk (developer, 2026-10-20)."
+  "notes": "Phase 1 (2026-10-20): standing defaults (COURSE_BUILD.md 4.1): Blue only, every penalty area red, OSM boundary is OB, range OB, pins at green centres, trees from lidar, wind 1-9 mph (inland New England). Theme seekonk (developer, 2026-10-20).",
+  "marsh_water_osm": [
+    "w677173975",
+    "w677193855"
+  ],
+  "marsh_water_osm_note": "developer 2026-11-14: two golf=water_hazard areas the photo shows as reeds and scrub, not open water. Red penalty areas drawn as marsh with red stakes"
 }

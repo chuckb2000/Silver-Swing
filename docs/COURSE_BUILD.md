@@ -321,6 +321,10 @@ and DECISIONS.md.
   "tree_fallback": {"spacing_m": 6, "height_m": [6, 14], "conifer_share": 0.5},  // no canopy data: trees from OSM woods (s05)
   "roof_last_share": 0.85,              // class-1 lidar: crowns whose returns are mostly last returns are roofs (s05; Wannamoisett)
   "rock_water_osm": ["w1"],             // penalty areas over rock: drawn as rock, no OB stakes (s09; Cypress Point)
+  "marsh_water_osm": ["w1"],            // water that is marsh on the photo (reeds, scrub, wet meadow): inside the boundary a red
+                                        // penalty area drawn as marsh with red stakes, its own ground and trees; outside it the
+                                        // ground the lidar shows (s04, s05, s08, s09). pipeline/marsh_pools.py traces its open water
+  "marsh_outside_osm": ["w1"],          // of those, the ones whose outside part a hole plays over or beside: a penalty area there too
   "fescue_areas": "fescue.geojson",     // areas of the rough drawn as native fescue (art only; s09)
   "rough_band_m": 6,                    // a band of mown rough this wide along fairways (art only; s09)
   "beach_max_m": 3, "cliff_sand_slope_pct": 40  // outside sand: beach below this height, cliff above this slope (s08)

@@ -79,6 +79,10 @@
   "sea"
  ],
  "red_water_osm_note": "natural=water/wetland inside the boundary with no golf tag, which played as rough: the pond between the 17th tees and green (w208859700) and the wetland at (610, 1309) local (w940801562); red penalty areas (standing default); Narragansett Bay (sea, from the coastline, propose_sea.py)",
+ "marsh_water_osm": [
+  "w940801562_bridged"
+ ],
+ "marsh_water_osm_note": "developer 2026-11-14: OSM natural=wetland beside the 1st; the photo shows grass and scrub, not open water. A red penalty area drawn as marsh with red stakes",
  "roof_last_share": 0.85,
  "roof_last_share_note": "class-1 lidar holds roofs; OSM maps few of the houses round the course: crowns whose returns are 85 %+ last returns are roofs, not trees (as Newport and Wannamoisett, same 2022 flight)"
 }

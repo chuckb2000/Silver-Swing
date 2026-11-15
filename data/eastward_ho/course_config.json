@@ -69,6 +69,10 @@
   "w82282412",
   "w82421594"
  ],
+ "marsh_water_osm": [
+  "w82421594"
+ ],
+ "marsh_water_osm_note": "developer 2026-11-14: OSM natural=wetland marsh (the photo shows reeds and scrub, no open water): a red penalty area inside the boundary drawn as marsh with red stakes; outside it the ground the lidar shows",
  "red_water_note": "Pleasant Bay (w83116684) and Crows Pond (w82282412), mapped as natural=water polygons, and the pond by the 5th (w82421594): red penalty areas wherever they lie, also outside the boundary (standing default; brief: the bay and Crows Pond red)",
  "rough_band_m": 5.0,
  "rough_band_note": "a mown band of rough along the fairways, then the restored copper heath (photos eastward.1-5)"

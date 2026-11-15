@@ -23,7 +23,7 @@ from PIL import Image
 from rasterio.features import rasterize
 from scipy import ndimage
 
-from common import FT, World, build_dir, course_name_from_argv, load_config, write_json
+from common import FT, World, build_dir, course_name_from_argv, load_config, marsh_ids, write_json
 
 warnings.filterwarnings("ignore")
 
@@ -88,6 +88,9 @@ def main():
     # a stream channel (tag flatten=no, e.g. Langston's creek) falls along its length: keep its lidar bed
     if len(water):
         water = water[water.tags.apply(lambda t: t.get("flatten") != "no")]
+    # a marsh (marsh_water_osm) is vegetated ground, drawn as marsh: it keeps its lidar ground too
+    if len(water) and marsh_ids(cfg):
+        water = water[~water.osm.isin(marsh_ids(cfg))]
     for geom in water.geometry:
         m = mask_from([geom], world)
         if m.sum() < 3:

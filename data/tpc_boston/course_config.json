@@ -62,6 +62,23 @@
     "w1239391362",
     "w1239391366"
   ],
+  "marsh_water_osm": [
+    "w421096592",
+    "w421116008",
+    "w677741691",
+    "w677932776",
+    "w421116009_bridged",
+    "w421116009_bridged_2",
+    "w677746049_bridged",
+    "w677746049_bridged_2",
+    "w677746049_bridged_3",
+    "w677934283_bridged",
+    "w677934283_bridged_2",
+    "w678172528_bridged",
+    "w678172528_bridged_2",
+    "w1239419367_bridged"
+  ],
+  "marsh_water_osm_note": "developer 2026-11-14: wetlands and hazards the photo shows as marsh, scrub or wooded swamp (the marsh under the 11th's line among them), mapped as golf hazards or natural=wetland. Red penalty areas drawn as marsh with red stakes (all inside the boundary); the open water in two of them traced from the 2023 NAIP photo (marsh_pools.py)",
   "driving_range_is_ob": true,
   "trees_off_fairways_m": 2,
   "wind_mph": {

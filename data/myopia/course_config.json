@@ -61,7 +61,7 @@
   },
   "trees_off_fairways_m": 2,
   "attribution": [
-    "Map data \u00a9 OpenStreetMap contributors (ODbL)",
+    "Map data © OpenStreetMap contributors (ODbL)",
     "Elevation and trees: U.S. Geological Survey 3D Elevation Program (2021 Central Eastern Massachusetts lidar)",
     "Photo (checks only): USDA NAIP"
   ],
@@ -82,5 +82,9 @@
     "w1074606906",
     "w1074606912"
   ],
+  "marsh_water_osm": [
+    "w1074606912"
+  ],
+  "marsh_water_osm_note": "developer 2026-11-14: OSM natural=wetland on the 4th; the photo shows a reed marsh with one small pool (about 300 m2, not traced: the photo's pool has too much grain for marsh_pools.py), not a pond. A red penalty area drawn as marsh with red stakes",
   "water_note": "The two ponds inside the boundary (w1074606906, the 9th's pond, and w1074606912) are OSM natural=water only: red penalty areas through red_water_osm (standing default). Four small streams near hole lines (w1074606908, -09, -11, -13) are 0.1-0.4 m deep in the DEM and show no open water on the photo: rough, not penalty areas (open item). The club's swimming pool is rough."
 }

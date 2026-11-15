@@ -10,7 +10,8 @@ export interface HoleJson {
   tees: Record<string, TeeJson>;
   greenId: string; greenCenter: [number, number]; pin: [number, number];
 }
-export interface WaterJson { id: string; penalty: 'red' | 'yellow'; poly: number[][] }
+/** marsh: a penalty area drawn as marsh, not open water (course_config marsh_water_osm; developer 2026-11-14) */
+export interface WaterJson { id: string; penalty: 'red' | 'yellow'; poly: number[][]; marsh?: boolean }
 export interface BuildingJson { id: string; h: number; inside: boolean; poly: number[][] }
 export interface MinimapJson { hole: number; file: string; x0: number; y1: number; mPerPx: number; w: number; h: number }
 /** High-resolution art of a green and its surroundings at one scale. */
@@ -68,7 +69,7 @@ export interface CourseRuntime {
   terrain: Terrain;
   obstacles: Obstacles;
   boundary: Polygon;
-  water: { id: string; penalty: 'red' | 'yellow'; poly: Polygon }[];
+  water: { id: string; penalty: 'red' | 'yellow'; poly: Polygon; marsh?: boolean }[];
   greenPolys: Map<string, Polygon>;
   /** the integral objects' areas (json.integral): no free relief inside them */
   integral: Polygon[];
@@ -118,7 +119,7 @@ export function buildRuntime(json: CourseJson, heights: Float32Array, hmeta: Hei
   return {
     json, terrain, obstacles,
     boundary: new Polygon(json.boundary),
-    water: json.water.map((w) => ({ id: w.id, penalty: w.penalty, poly: new Polygon(w.poly) })),
+    water: json.water.map((w) => ({ id: w.id, penalty: w.penalty, poly: new Polygon(w.poly), ...(w.marsh ? { marsh: true } : {}) })),
     greenPolys,
     integral: (json.integral ?? []).map((a) => new Polygon(a.poly)),
     baseUrl,

@@ -69,5 +69,10 @@
    "bumps": 0,
    "note": "the 4th's small green (195 m2): tilt capped at 2 % and no random undulations, so the game finds three pin positions on it under 3 % (pins.test.ts; COURSE_LESSONS 4)"
   }
- ]
+ ],
+ "marsh_water_osm": [
+  "w1272186609",
+  "w852358618"
+ ],
+ "marsh_water_osm_note": "developer 2026-11-14: two golf=water_hazard areas: the one on the 11th is two ponds with a wet meadow between them, the other a wooded swamp. Red penalty areas drawn as marsh with red stakes, the lidar's trees kept; the two ponds traced from the photo stay water (marsh_pools.py)"
 }

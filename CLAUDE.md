@@ -698,6 +698,12 @@ DECISIONS.md with the reason.
     `assets-src/holiday.py`, `assets-src/music/carols.py`); `?holiday=`
     previews one. DECISIONS.md "Holiday themes".
 
+-   **Marshes (design chat, 2026-11-14):** branch `design/marsh`. Every course's water checked
+    against an aerial photo; 34 marsh, wet-meadow and wooded-swamp areas on 11 courses that were
+    drawn as open water are now red penalty areas drawn as marsh with red stakes inside the boundary
+    (course_config `marsh_water_osm`, `marsh_outside_osm`; `pipeline/marsh_pools.py` for the open
+    water in them), the ground outside it. DECISIONS.md "Marshes are drawn as marsh, with red stakes".
+
 -   **Next task:** Item 1 of the player improvements (swing coach) is on
     `design/coach`, unmerged. Also: the third playtest (putting, yellow
     misses), the club's printed scorecard and the hole 3 Blue tee box. New courses: a separate chat following docs/COURSE_BUILD.md

@@ -19,7 +19,7 @@ from rasterio.features import rasterize
 from scipy import ndimage
 from shapely.ops import unary_union
 
-from common import build_dir, course_name_from_argv, GORSE_SURF, load_config, play_boundary, PX_PER_M, round_corners, SURF, surf_ids, uses_gorse_ground, uses_waste_sand, WASTE_SURF, World, write_json
+from common import build_dir, course_name_from_argv, GORSE_SURF, load_config, marsh_ids, marsh_outside_ids, play_boundary, PX_PER_M, round_corners, SURF, surf_ids, uses_gorse_ground, uses_waste_sand, WASTE_SURF, World, write_json
 
 warnings.filterwarnings("ignore")
 
@@ -161,7 +161,10 @@ def main():
     # config "wetland_woods": false (Lofoten's open bogs): OSM natural=wetland outside the boundary
     # stays plain ob ground instead of being drawn as woods (default true, as before)
     wet_kinds = ("wood", "wetland") if cfg.get("wetland_woods", True) else ("wood",)
-    woods_geoms = list(g[g.kind.isin(["wood", "water"]) & g.tags.apply(lambda t: t.get("natural") in wet_kinds)].geometry)
+    # outside the boundary a marsh is the ground the lidar shows (marsh_water_osm), unless that part is in
+    # play (marsh_outside_osm: a penalty area there too, painted below)
+    marsh = g.osm.isin([i for i in marsh_ids(cfg) if i not in marsh_outside_ids(cfg)])
+    woods_geoms = list(g[g.kind.isin(["wood", "water"]) & g.tags.apply(lambda t: t.get("natural") in wet_kinds) & ~marsh].geometry)
     ob_woods = big | mask(woods_geoms)
     surf[ob_woods & ~inside] = SURF["ob_woods"]
     lake = np.load(bdir / "lake_mask.npy")  # 1 m vertex grid rows south->north
@@ -194,7 +197,7 @@ def main():
     paint(surf, [geom for geom in major], SURF["ob_road"])
     paint(surf, list(g[g.kind == "parking"].geometry), SURF["ob_road"])
     paint(surf, list(g[g.kind == "pool"].geometry), SURF["ob_water"])
-    paint(surf, list(g[(g.kind == "water") & g.tags.apply(lambda t: t.get("natural") == "water")].geometry), SURF["ob_water"])
+    paint(surf, list(g[(g.kind == "water") & g.tags.apply(lambda t: t.get("natural") == "water") & ~marsh].geometry), SURF["ob_water"])
     paint(surf, list(g[g.kind == "building"].geometry), SURF["ob_building"])
     # a driving range outside the boundary is still drawn as a range (it is OB either way)
     if cfg.get("paint_range_outside"):
@@ -227,7 +230,10 @@ def main():
     if cfg.get("red_water_osm"):
         # the same water outside the boundary is a penalty area too (it is not OB);
         # bridges and buildings over it stay as they are
-        red_out = mask(red_water_geoms(g, cfg)) & ~inside & ~np.isin(surf, [SURF["ob_road"], SURF["ob_building"]])
+        # (not a marsh: outside the boundary that is the ground the lidar shows, marsh_water_osm)
+        out_ok = lambda osm: osm not in marsh_ids(cfg) or osm in marsh_outside_ids(cfg)  # noqa: E731
+        red_out_geoms = [geom for geom, osm in zip(red_water_geoms(g, cfg), g[g.osm.isin(cfg["red_water_osm"])].osm) if out_ok(osm)]
+        red_out = mask(red_out_geoms) & ~inside & ~np.isin(surf, [SURF["ob_road"], SURF["ob_building"]])
         surf[red_out] = SURF["water"]
     # roads inside the boundary that are out of bounds (config "ob_highways": highway values,
     # e.g. Indian Island's Route 105 between the two halves of the course); other roads inside

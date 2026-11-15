@@ -41,7 +41,7 @@ from s08_surface import course_layers, road_geoms
 from terrain import tier_offset
 from pngcache import save_png
 from s09_render import draw_lighthouse, LIGHTHOUSE_DRAW_SCALE  # noqa: E402
-from s09_render import BAYER4, PRIO, SHADOW_DIR, SHADOW_MULT, band_lut, build_lut, load_palette, load_theme, paint_rock, rough_band_mask, stake_lines, waste_scrub, wave_mask
+from s09_render import BAYER4, PRIO, SHADOW_DIR, SHADOW_MULT, band_lut, build_lut, load_palette, load_theme, marsh_masks, marsh_stakes, paint_marsh, paint_rock, rough_band_mask, stake_lines, waste_scrub, wave_mask
 
 sys.path.insert(0, str(ROOT / "assets-src"))
 from atlas import Atlas  # noqa: E402
@@ -208,6 +208,7 @@ def stripe_field(g, holes, grid: Grid, tee: str) -> np.ndarray:
 def render_art(surf, z, grid: Grid, g, holes, trees, buildings, boundary, P, lut, rng, tee, max_h=TREE_MAX_H, cfg=None, blut=None):
     H, W = surf.shape
     ppm = grid.ppm
+    surf_map = surf  # as physics reads it (for the marsh stakes' dry ground)
     range_rough = bool(cfg and cfg.get("range_art") == "rough")
     if range_rough:  # drawn as rough, OB in physics (s09_render, range_art)
         range_cells = surf == S["range"]
@@ -218,6 +219,10 @@ def render_art(surf, z, grid: Grid, g, holes, trees, buildings, boundary, P, lut
         rock = grid.mask(list(g[g.osm.isin(cfg["rock_water_osm"])].geometry)) & (surf == S["water"])
         surf = surf.copy()
         surf[rock] = S["ob_road"]
+    marsh = marsh_masks(g, cfg, grid.mask, surf) if cfg else None  # marsh penalty areas drawn as marsh (s09_render)
+    if marsh is not None:
+        surf = surf.copy()
+        surf[marsh] = S["rough"]
     tone = hillshade_tone(z, surf, ppm)
     stripe = stripe_field(g, holes, grid, tee)
     t = tone.astype(np.int16)
@@ -263,6 +268,8 @@ def render_art(surf, z, grid: Grid, g, holes, trees, buildings, boundary, P, lut
     put(tuft | tuft2 | tuft3, "TUFT" if "TUFT" in P else "G5")
     if rock is not None:
         paint_rock(rgb, rock, t, n1, n2, P, load_theme(cfg["theme"]))
+    if marsh is not None:
+        paint_marsh(rgb, marsh, t, n1, n2, P, lut[S["rough"]], blk)
     # outlines
     pr = PRIO[surf]
     edge = np.zeros((H, W), bool)
@@ -364,6 +371,9 @@ def render_art(surf, z, grid: Grid, g, holes, trees, buildings, boundary, P, lut
                 rgb[row + 1, col:col + 2] = (rgb[row + 1, col:col + 2] * 0.6).astype(np.uint8)
                 rgb[row - hpx:row + 1, col:col + 2] = P["WH"]
                 rgb[row - hpx, col:col + 2] = P["K2"]
+    if marsh is not None:  # red stakes round the marsh penalty areas (s09_render.marsh_stakes)
+        from shapely.prepared import prep as _prep
+        marsh_stakes(rgb, g, cfg, surf_map, _prep(boundary), grid.px, int(round(ppm * 1.0)), 2)
     return rgb
 
 

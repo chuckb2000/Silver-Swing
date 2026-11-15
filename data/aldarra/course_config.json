@@ -66,5 +66,10 @@
   "w1377150478_bridged",
   "w319058493_bridged",
   "w380188108"
- ]
+ ],
+ "marsh_water_osm": [
+  "w1377150478_bridged",
+  "w319058493_bridged"
+ ],
+ "marsh_water_osm_note": "developer 2026-11-14: OSM natural=wetland: the wet meadow beside the 3rd (20 ha, 39 % of it beyond the boundary, 175 m from play) and the wooded creek ravine on the 1st; the photo shows meadow and trees, not open water. Red penalty areas drawn as marsh with red stakes inside the boundary, the lidar's trees kept; the meadow's outside part is the ground the lidar shows"
 }

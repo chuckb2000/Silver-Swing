@@ -42,7 +42,7 @@ NOT_BUILD_PY = ("assets-src/logos.py", "assets-src/course_cards.py", "assets-src
                 "pipeline/pins.py", "pipeline/regress.py", "pipeline/land.py", "pipeline/intake.py",
                 "pipeline/fetch_raw.py", "pipeline/clip_raster.py", "pipeline/propose_channels.py",
                 "pipeline/propose_tees.py", "pipeline/propose_trace.py", "pipeline/desk_export.py",
-                "pipeline/desk_to_proposed.py", "pipeline/bridge_paths.py")
+                "pipeline/desk_to_proposed.py", "pipeline/bridge_paths.py", "pipeline/marsh_pools.py")
 
 
 def builds_read(path: str) -> bool:
