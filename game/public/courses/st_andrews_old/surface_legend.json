@@ -34,14 +34,14 @@
  ],
  "area_m2": {
   "ob": 1099963,
-  "rough": 658696,
-  "fairway": 297092,
+  "rough": 658704,
+  "fairway": 297099,
   "fringe": 7480,
   "green": 41828,
   "tee": 21100,
   "bunker": 5818,
-  "water": 996854,
-  "cartpath": 25542,
+  "water": 996686,
+  "cartpath": 25579,
   "woods": 44,
   "ob_road": 157304,
   "ob_water": 65,
@@ -49,7 +49,7 @@
   "ob_building": 35077,
   "building": 2926,
   "range": 0,
-  "ob_sand": 95041,
+  "ob_sand": 95157,
   "gorse": 15175
  }
 }

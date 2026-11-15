@@ -163,7 +163,7 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 | 15 | 4 | yes | yes (3 near) | yes | yes | yes | 9 | 0 |
 | 16 | 4 | yes | yes (3 near) | yes | yes | yes | 12 | 0 |
 | 17 | 4 | yes | yes (2 near) | yes | yes | NO | 7 | 0 |
-| 18 | 4 | yes | yes (1 near) | yes | yes | yes | 1 | 3 |
+| 18 | 4 | yes | yes (1 near) | yes | yes | yes | 1 | 4 |
 
 ## Missing or suspect features
 
@@ -280,5 +280,5 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 - fairway w858552949 at (792, 1426) is more than 30 m from every hole line (a range or practice area mapped as fairway?)
 - hole line w294611915 (ref 12) starts within 10 m of a green (the previous green?)
 
-Totals: 170 tees, 88 greens, 113 fairways, 327 bunkers, 5 water hazards, 83 pins, 52 cart paths, 90 OSM tree points.
+Totals: 170 tees, 88 greens, 113 fairways, 327 bunkers, 6 water hazards, 83 pins, 52 cart paths, 90 OSM tree points.
 
