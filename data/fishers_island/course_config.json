@@ -69,6 +69,14 @@
   "w191740583",
   "w968026770"
  ],
+ "marsh_water_osm": [
+  "w1064544157",
+  "w968026770"
+ ],
+ "marsh_outside_osm": [
+  "w1064544157"
+ ],
+ "marsh_water_osm_note": "developer 2026-11-14: OSM natural=wetland (a salt marsh by the 16th and a wetland by the 13th); the photo shows marsh, not open water. Red penalty areas drawn as marsh with red stakes, the salt marsh also outside the boundary where the 16th plays over it (marsh_outside_osm)",
  "red_water_note": "the sea (proposed/sea.geojson, from OSM's coastline) and the ponds inside the boundary mapped as natural=water (by 16/17, by 5 and by 15): red penalty areas (standing default: every penalty area red)",
  "rough_band_m": 2.5,
  "rough_band_note": "a mown band of rough along the fairways, then the tawny fescue (brief: rough_band_m ~2-3; the photos)",
