@@ -1788,3 +1788,43 @@ bridge. Each piece a cut leaves is its own penalty area (s10 writes only the lar
 multi-part area into course.json's relief areas); course_config and checks.json ids follow. Overlaps
 under 3 m2 (a path brushing a shore) are left alone. Not a build step, so pins don't move. Run on the
 29 courses that had a path over water (one joining bridge: Heron Lakes); 80 places.
+
+## Marshes are drawn as marsh, with red stakes (developer, 2026-11-14)
+
+"Check that water hazards reflect what they actually look like. We just had a big issue with
+Crosswater making hazards waaaaayy too big because it was like marshland." Every course's penalty
+areas were compared with an aerial photo (the course's own, or NAIP / OSIP fetched through the
+Actions workflow for the 17 that had none; the photos stay out of git). A smooth photo means open
+water; grain at 2.5 m means reeds, grass, scrub or canopy; every textured area was then looked at.
+34 areas on 11 courses were drawn as open water where the photo shows marsh, wet meadow, scrub or
+wooded swamp: Aldarra 2, Aquidneck 1, Astoria 4, Cyprian Keyes 6, Eastward Ho 1, Fishers Island 2,
+George Wright 4, Myopia 1, The Country Club 2, TPC Boston 9, Triggs 2. Most were OSM
+`natural=wetland` listed in `red_water_osm`, some golf hazards drawn round a marsh. Ponds with reedy
+edges or lily pads (Heron Lakes, Yale, Reserve, Aberdeen, Rose City, Wannamoisett), creeks under
+trees (Gearhart's Neacoxie Creek is open water under the canopy), rivers and the sea were left alone.
+Not changed, for a later look: Sea Ranch's w837523069 (scrub on the photo, perhaps a pond dry in
+summer) and the small pool in Myopia's marsh (too much grain on the photo to trace).
+
+The developer's choice between two fixes (mock-ups: the ground around it, as Crosswater; or a
+penalty area drawn as marsh): **drawn as marsh inside the boundary, the ground outside it**, "and
+there should be red stakes around it". course_config `marsh_water_osm` lists such features:
+
+- inside the boundary (and outside it where a hole plays over or beside it: `marsh_outside_osm`,
+  Astoria's 9th and Fishers Island's 16th) they stay red penalty areas (water in the surface map, the same relief), drawn
+  as wet ground a shade darker and greener than the rough with clumps of reeds and a few glints of
+  standing water, a dark rim and red stakes every 8 m on dry ground just outside the edge (s09, and
+  the putting views in s09b); their ground is the lidar's, not flattened (s04), and the lidar's trees
+  in them stay (s05);
+- otherwise, outside the boundary they are not water: the ground the lidar shows, woods where the
+  canopy is (s08; Aldarra's wet meadow beyond the 3rd); course.json lists only the penalty part,
+  marked `"marsh": true`;
+- `pipeline/marsh_pools.py <id>` traces the open water inside them from the photo (smooth, much
+  darker than the ground round the marsh; tree shadows pass too, so only the features whose pools
+  look right in its preview are kept: TPC Boston's two, The Country Club's ponds) into `proposed/marsh_pools.geojson` (`natural=water`, `marsh_pool=yes`, added via
+  edits.json); s09 draws those as water (render only: the whole marsh is one penalty area);
+- in the game a ball that ends in a marsh rustles into the reeds instead of splashing, and the
+  relief panel says "in the marsh".
+
+The minimaps still show marshes in the water colour: on a schematic map blue reads as "penalty area".
+Each course was first rebuilt unchanged on the current pipeline, then given the key and pinned to it.
+Crosswater (PR #162) keeps its own fix (developer).
