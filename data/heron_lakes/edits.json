@@ -7,12 +7,27 @@
    ],
    "tags": {},
    "reason": "the clubhouse is mapped golf=clubhouse, which s01 reads as a golf feature, not a building; copied as a building (audit), original dropped"
+  },
+  {
+   "from": "proposed/bridges.geojson",
+   "ids": [
+    "w379305070_bridged",
+    "w379305070_bridged_2",
+    "bridge_w419965491_w419965541"
+   ],
+   "tool": "bridge_paths.py",
+   "reason": "developer 2026-11-14: cart paths no longer run into the water; the water with the paths over it cut out (bridges are cart path, as at Burlington), and bridges joining path ends that face each other across it"
   }
  ],
  "drop": [
   {
    "osm": "r20947272",
    "reason": "replaced by its copy as a building (proposed/clubhouse.geojson)"
+  },
+  {
+   "osm": "w379305070",
+   "tool": "bridge_paths.py",
+   "reason": "replaced by w379305070_bridged, w379305070_bridged_2 (the cart paths over it cut out)"
   }
  ],
  "tags": [
