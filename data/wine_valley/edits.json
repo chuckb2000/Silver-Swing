@@ -20,6 +20,14 @@
     "penalty": "red"
    },
    "reason": "standing default (COURSE_BUILD 4.1): every penalty area red; OSM tags the pond golf=water_hazard (yellow)"
+  },
+  {
+   "osm": "w741345344",
+   "set": {
+    "hole": "17",
+    "tee_set": "Black"
+   },
+   "reason": "17's forward boxes run beside the cart path 30-50 m off OSM's line (which starts at the Gold tee) and measure 462/421/399/364/335/302 yd, matching the card's 470/400/400/360/335/300; this one (399) is Black. s06 only looks 25 m from the line, so it is assigned here"
   }
  ],
  "add": [
@@ -30,12 +38,24 @@
    ],
    "tags": {},
    "reason": "the OSM boundary cuts across the 9th hole's back tee (22 m2 outside): the boundary with that tee box joined on (make_boundary.py)"
+  },
+  {
+   "from": "proposed/tee7_black.geojson",
+   "ids": [
+    "w741240753_tee"
+   ],
+   "tags": {},
+   "reason": "OSM tags this 141 m2 pad golf=fairway, but it is a detached mown pad on the 7th line at 535 yd, the card's Black (and Merlot) yardage; the 369 m2 pad beside it measures 510 (Blue). Retagged as the Black tee (developer, 2026-11-14: Black is the default)"
   }
  ],
  "drop": [
   {
    "osm": "w436979104",
    "reason": "replaced by proposed/boundary.geojson (the same outline with the 9th tee joined on)"
+  },
+  {
+   "osm": "w741240753",
+   "reason": "replaced by proposed/tee7_black.geojson (the same pad as a tee)"
   }
  ]
 }

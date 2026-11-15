@@ -44,10 +44,17 @@
    "rating": 76.4,
    "slope": 133,
    "total_yd": 7600
+  },
+  {
+   "name": "Black",
+   "playable": true,
+   "rating": 72.6,
+   "slope": 127,
+   "total_yd": 6760
   }
  ],
- "default_tee": "Gold",
- "scorecard_source": "GolfPass, Wine Valley Golf Course scorecard (read 2026-11-13): Gold 7,600 yd, men's rating 76.4 / slope 133, men's par and handicap rows; the Gold row adds up to its total; Cabernet, Black, Merlot, Blue, Syrah, White, Chardonnay and Red in scorecard.csv, not built. Unverified (third party; the club's card is not online). Greenskeeper.org (read 2026-11-13) has an older Gold row (7,360 yd, 75.5/130; 1 430, 2 390, 5 475, 8 225, 9 455, 14 160, 17 420, 18 565) and another men's handicap row (5 11 7 15 1 17 9 13 3 / 8 16 4 2 18 12 14 6 10): open item. OSM's pars agree with the card.",
+ "default_tee": "Black",
+ "scorecard_source": "GolfPass, Wine Valley Golf Course scorecard (read 2026-11-13): Gold 7,600 yd, men's rating 76.4 / slope 133; Black 6,760 yd, 72.6 / 127 (GolfPass's tee table, read 2026-11-14; 18Birdies has 72.2/125); men's par and handicap rows; the Gold row adds up to its total; Cabernet, Merlot, Blue, Syrah, White, Chardonnay and Red in scorecard.csv, not built. Unverified (third party; the club's card is not online). Greenskeeper.org (read 2026-11-13) has an older Gold row (7,360 yd, 75.5/130; 1 430, 2 390, 5 475, 8 225, 9 455, 14 160, 17 420, 18 565) and another men's handicap row (5 11 7 15 1 17 9 13 3 / 8 16 4 2 18 12 14 6 10): open item. OSM's pars agree with the card.",
  "penalty_default": "red",
  "driving_range_is_ob": true,
  "wind_mph": {
@@ -62,5 +69,6 @@
  ],
  "roof_last_share": 0.85,
  "rough_band_m": 3.0,
- "rough_band_note": "a mown band of rough along the fairways, then the golden native bunchgrass of the hill faces (theme F tones)"
+ "rough_band_note": "a mown band of rough along the fairways, then the golden native bunchgrass of the hill faces (theme F tones)",
+ "default_tee_note": "developer, 2026-11-14: Gold is too aggressive as the default; Black is the default and Gold stays selectable"
 }

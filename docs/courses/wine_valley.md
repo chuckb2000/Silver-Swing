@@ -7,8 +7,9 @@ Course id: `wine_valley` (data folder `data/wine_valley/`), branch `course/wine_
 Built by a course chat on 2026-11-13. OSM maps the whole course: 18 hole lines whose pars
 match the card, every green, fairways, 73 bunkers and 87 tee boxes (no pins). Elevation is
 the USGS 3DEP 1 m DEM (WA_3_County_QL1_2017); trees come from the 2017 USGS Washington 3
-County lidar (9 tiles, class 1 only). One tee set, Gold (the longest), from GolfPass
-(7,600 yd); built 7,548 yd, every hole within 3.3 % (15 is -3.3 %, accepted as a flag).
+County lidar (9 tiles, class 1 only). Two tee sets from GolfPass: Gold (7,600 yd; built
+7,548, every hole within 3.3 %, 15 at -3.3 % accepted as a flag) and Black (6,760 yd;
+built 6,734, every hole within 3 %), added 2026-11-14 and the default (developer).
 New theme `wine_valley`; the logo is a Walla Walla sweet onion. Every hole was looked at in
 the game (tee shot and overview).
 
@@ -45,13 +46,17 @@ GolfPass (read 2026-11-13), unverified third party. "Built" is what the game pla
 | HCP | 7 | 11 | 3 | 15 | 1 | 17 | 9 | 13 | 5 | | 6 | 16 | 4 | 2 | 18 | 12 | 14 | 8 | 10 | | |
 | Gold | 470 | 410 | 575 | 390 | 515 | 210 | 625 | 255 | 480 | 3930 | 610 | 180 | 435 | 505 | 175 | 515 | 195 | 470 | 585 | 3670 | 7600 |
 | Built | 460 | 404 | 574 | 387 | 508 | 206 | 622 | 257 | 478 | 3896 | 609 | 179 | 437 | 508 | 174 | 498 | 190 | 462 | 595 | 3652 | 7548 |
+| Black | 405 | 360 | 535 | 350 | 460 | 180 | 535 | 200 | 430 | 3455 | 580 | 155 | 405 | 435 | 135 | 470 | 175 | 400 | 550 | 3305 | 6760 |
+| Built | 400 | 358 | 534 | 348 | 456 | 184 | 531 | 200 | 425 | 3436 | 582 | 152 | 400 | 436 | 132 | 465 | 173 | 400 | 558 | 3298 | 6734 |
 
-Gold 76.4/133. The other eight sets (Cabernet to Red) are in `scorecard.csv`, not built.
+Gold 76.4/133; Black 72.6/127 (GolfPass's tee table, read 2026-11-14; 18Birdies has
+72.2/125). The other seven sets (Cabernet, Merlot to Red) are in `scorecard.csv`, not built.
 Greenskeeper.org has an older Gold row (7,360) and handicap row (open item 1).
 
 ## Default tee
 
-Gold, the longest set (standing default 4.1).
+Black (developer, 2026-11-14: Gold is too aggressive as the default). Gold stays
+selectable. `courses.test.ts` lists Wine Valley in `DEFAULT_NOT_LONGEST`.
 
 ## The developer's calls
 
@@ -62,6 +67,11 @@ Gold, the longest set (standing default 4.1).
 
 "Other open items" in `data/wine_valley/validation_report.md`: the card (1), 15's flag
 (2), 6's tee (3), the boundary joined round the 9th tee (4), card hole, theme, logo (8).
+-   2026-11-14: "using the gold tees for wine valley is a bit aggressive": Black added and
+    made the default. Two Black boxes are assigned by edits: on 7 the 141 m2 pad OSM tags
+    golf=fairway at 535 yd is the Black tee (`proposed/tee7_black.geojson`), and on 17
+    the forward box beside the cart path at 399 yd (45 m off OSM's line, beyond the 25 m
+    s06 searches).
 
 ## New pipeline keys or theme
 
