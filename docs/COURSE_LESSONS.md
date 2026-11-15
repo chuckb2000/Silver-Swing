@@ -45,6 +45,9 @@ The checks that replaced lessons:
 - **Lidar finds raised pads only.** Hillside tees are cut, many back tees and par-3-course tees are
   on grade, and on flat wooded courses most raised flat patches are tree bases and mounds; a wide
   search also finds green complexes and road shoulders. Treat pads as hints.
+- **Cart paths over water.** s08 paints water over cart paths, so a bridge disappears. Before landing,
+  run `python3 pipeline/bridge_paths.py <id>` (cuts the paths out of the water, joins path ends that face
+  each other across it) and rebuild; bridges are cart path (Burlington, developer 2026-10-31).
 - **Check every tee is on its own hole's box.** s06 picks a box by the card's yardage and can
   take another hole's box when two are about as far (Columbia Edgewater 8, Sankaty Head 15/18,
   Kwiniaska 12/15, Rancho San Joaquin 8/15; tee check 2026-11-14). Look for a tee on the box another
