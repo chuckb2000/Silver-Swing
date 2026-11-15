@@ -61,6 +61,16 @@
   "w1572284673",
   "w1572284675_bridged"
  ],
+ "marsh_water_osm": [
+  "w1256010372",
+  "w1572284673",
+  "w778877370",
+  "w1255799543_bridged",
+  "w1572284675_bridged",
+  "w778422502_bridged",
+  "w778422502_bridged_2"
+ ],
+ "marsh_water_osm_note": "developer 2026-11-14: hazards, wet meadows and a marsh the photo shows as scrub, meadow or wooded swamp, not open water (the big lateral hazard w778422502 among them). Red penalty areas drawn as marsh with red stakes (all inside the boundary)",
  "red_water_note": "Seven waters inside the boundary mapped only as natural=water or natural=wetland (open wet meadows and a marsh, and three ponds by the clubhouse between 1, 18 and the par-3 course): red penalty areas (standing default, COURSE_BUILD 4.1); otherwise they would play as rough. The wooded swamp along Sewall Brook between 3/4/14 and 5/10 (w86095496, MassGIS 'wooded swamp deciduous') stays woods, with its trees (Pumpkin Ridge / Highland precedent); the brook through it is a red channel.",
  "flatten_wetlands": false,
  "laz": {
