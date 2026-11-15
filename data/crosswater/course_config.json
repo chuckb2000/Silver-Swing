@@ -66,37 +66,6 @@
   "osm_sources": [
     "raw/overpass.geojson"
   ],
-  "red_water_osm": [
-    "r5314115_bridged",
-    "w207481249_bridged",
-    "w355586179",
-    "w355586180",
-    "w355586181",
-    "w355586182",
-    "w355776770",
-    "w355776771",
-    "w355776772",
-    "w355776773",
-    "w355776774",
-    "w355776775",
-    "w355776776",
-    "w355776777",
-    "w356000312_bridged",
-    "w356000314",
-    "w356000315",
-    "w356000318",
-    "w356000330",
-    "w356000331",
-    "w356000332",
-    "w356000333",
-    "w356000334",
-    "w356000340_bridged",
-    "w356000350",
-    "w356000354",
-    "w356000356",
-    "w356000358",
-    "w356000361",
-    "w356011279_bridged"
-  ],
-  "water_note": "30 natural=water ponds and river arms inside the boundary made red penalty areas (red_water_osm; standing default). The Little Deschutes (OSM river line w625186746, no water polygon) runs through the boundary's two cut-outs, which are out of bounds; the DEM shows no channel along it to draw as a penalty area (open item)."
+  "flatten_wetlands": false,
+  "water_note": "No natural=water inside the boundary is in play: OSM's 41 natural=wetland polygons along the Little Deschutes' old oxbows (marsh grass with narrow channels, little open water on the photo) play as rough, and keep their lidar ground (flatten_wetlands false). The first build listed 30 of them in red_water_osm as if they were ponds, which drew them as wide water (developer, 2026-11-14: 'it looks like an ocean'). Penalty areas: the four golf=water_hazard polygons (the Little Deschutes where OSM maps it, and ponds), red by the standing default. The river's OSM line w625186746 runs through the boundary's two cut-outs, which are out of bounds."
 }

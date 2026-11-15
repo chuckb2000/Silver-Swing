@@ -5,7 +5,8 @@ Course id: `crosswater` (data folder `data/crosswater/`), branch `course/crosswa
 ## Build summary
 
 Built by a course chat on 2026-11-13. OSM maps the whole course: 18 hole lines with pars,
-every green and pin, fairways, 93 tee boxes, 89 bunkers, the ponds and river arms. The
+every green and pin, fairways, 93 tee boxes, 89 bunkers, the river, ponds and the marsh on
+the river's old oxbows. The
 neighbouring Sunriver Meadows and Caldera Links courses are dropped. Elevation and canopy
 from DOGAMI lidar (DTM and CHM, feet), the photo for checks from OSIP 2024, all fetched by
 the GitHub Actions workflow. The world is 1,536 x 2,816 m, over the 2,048 m limit
@@ -33,10 +34,18 @@ built against 7,683.
     Theme `crosswater` (new). Wind 2-10 mph (high desert).
 -   **Data** (release `data-crosswater`; `make fetch NAME=crosswater`): OSM standard
     Overpass export; DOGAMI DTM and CHM mosaics (feet); OSIP 2024, 0.5 m.
--   **Water:** 34 penalty areas, all red: 30 ponds and river arms mapped as natural=water
-    (`red_water_osm`) and four golf=water_hazard tagged red. The Little Deschutes' OSM line
-    runs through the boundary's two cut-outs, which are out of bounds.
--   **Trees:** 37,038 from the canopy model (4,919 inside the course), median 10.0 m,
+-   **Water:** 72 penalty areas, all red: 67 thin creeks inside the oxbow marsh (below),
+    the Little Deschutes where OSM maps it as golf=water_hazard (three polygons along
+    several holes) and two ponds, all tagged red by the standing default. OSM's 41
+    natural=wetland polygons on the river's old oxbows (marsh grass) play as rough on their
+    lidar ground (`flatten_wetlands` false); the creeks inside them are the channels the
+    DOGAMI bare-earth DTM shows (cells 0.15 m below a 41 m running median, thinned to a
+    centre line, at least 25 m long), drawn 3 m wide (`data/crosswater/make_creeks.py`,
+    `proposed/creeks.geojson`, picture `proposed/creeks.png`): 7.4 km of creek.
+    Cart paths cross the water on bridges (`pipeline/bridge_paths.py`, developer
+    2026-11-14), which cuts some of them into pieces: 85 in the game.
+    The river's OSM line runs through the boundary's two cut-outs, which are out of bounds.
+-   **Trees:** 37,037 from the canopy model (4,918 inside the course), median 10.0 m,
     tallest 40.7 m.
 
 ## Scorecard
@@ -62,7 +71,11 @@ Championship: the longest set (COURSE_BUILD.md 4.1).
 
 Course chat's calls (listed for the developer):
 
--   Sunriver Meadows and Caldera Links (boundaries and golf features) dropped.
+-   Sunriver Meadows and Caldera Links (boundaries and golf features) dropped, except the
+    three features inside Crosswater's boundary that the first build dropped by mistake
+    (the Little Deschutes polygon w206873531 and two cart paths), put back 2026-11-14.
+-   2026-11-14 (after the developer's "it looks like an ocean"): the oxbow wetlands play as
+    rough, not water. The first build had listed 30 of them in `red_water_osm` as ponds.
 -   The clubhouse copied as a building.
 -   Card: the par-3 7th inside the river's loop (rotating 7, 2, 6, 12).
 
@@ -70,10 +83,15 @@ Course chat's calls (listed for the developer):
 
 1.  Load time and memory with a 2,816 m world haven't been measured beyond the hand-off's
     in-game look at every hole.
-2.  The Little Deschutes has no water polygon in OSM where it passes the holes; it plays as
-    out of bounds through the boundary's cut-outs rather than as a penalty area.
+2.  The oxbow creeks come from the lidar ground, not from a map: their width (3 m) is a
+    choice, and a few short spurs follow side hollows. Tracing any that are wrong, or
+    naming ones to remove, would settle them.
 3.  Third-party card.
 
 ## Build history
 
 -   2026-11-13: first build (course chat).
+-   2026-11-14: wetlands are rough, not water; the river polygon along holes 7-9 and two
+    cart paths restored.
+-   2026-11-14: thin red creeks inside the oxbow marsh, from the lidar ground (developer:
+    "some very thin penalty creeks based on reality").

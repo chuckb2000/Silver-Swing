@@ -1,1 +1,10 @@
-{"wind_mph": [2, 10]}
+{
+ "wind_mph": [
+  2,
+  10
+ ],
+ "water": {
+  "count": 85,
+  "why": "72 penalty areas; the cart paths over some of them cut them into pieces (bridge_paths.py), 85 in all"
+ }
+}
