@@ -73,7 +73,7 @@
   "scorecard_source": "GolfPass scorecard (golfpass.com/courses/52-tualatin-country-club/scorecard-and-layout), retrieved 2026-10-19; unverified third-party listing. Hole totals match the printed Out/In/Total for every tee set. GolfPass's tee table lists Member/Blue as 6,340 yd, 70.4/130, while its Blue column adds to 6,370.",
   "penalty_default": "red",
   "red_water_osm": [
-    "r1079340",
+    "r1079340_bridged",
     "w820800003"
   ],
   "driving_range_is_ob": true,
