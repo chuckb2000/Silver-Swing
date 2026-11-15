@@ -58,9 +58,9 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 
 ## Tree detection (DOGAMI canopy height model)
 
-- 37038 trees detected in the world extent (4919 inside the course), 14922 conifers / 22116 deciduous; median height 10.0 m, max 40.7 m.
+- 37037 trees detected in the world extent (4918 inside the course), 14922 conifers / 22115 deciduous; median height 10.0 m, max 40.7 m.
 - Dropped: 786 tops on building footprints, 0 over the lake, 45 tiny crowns.
-- Dropped on playing surfaces (spec 5.4): 26 -> water_hazard w355776763 (4.7 m), water_hazard w355776763 (4.5 m), water_hazard w355776763 (4.7 m), water_hazard w355776763 (4.6 m), water_hazard w206873532 (30.8 m), water_hazard w206873532 (7.2 m), water_hazard w206873532 (5.5 m), water_hazard w206873532 (5.0 m), water_hazard w206873532 (16.5 m), water_hazard w206873532 (13.1 m), water_hazard w206873532 (4.6 m), water_hazard w206873532 (19.5 m), water_hazard w206873532 (4.6 m), water_hazard w206873532 (6.0 m), water_hazard w206873532 (10.3 m), water_hazard w206873532 (7.2 m), water_hazard w206873532 (10.2 m), water_hazard w1464074607 (5.3 m), water_hazard w206873532 (14.1 m), water_hazard w206873532 (4.3 m), water_hazard w206873532 (4.3 m), water_hazard w206873532 (4.2 m), water_hazard w206873532 (4.3 m), water_hazard w206873532 (4.3 m), water_hazard w206873532 (5.7 m), water_hazard w206873532 (5.8 m)
+- Dropped on playing surfaces (spec 5.4): 27 -> water_hazard w355776763 (4.7 m), water_hazard w355776763 (4.5 m), water_hazard w355776763 (4.7 m), water_hazard w355776763 (4.6 m), water_hazard w206873531 (4.5 m), water_hazard w206873532 (30.8 m), water_hazard w206873532 (7.2 m), water_hazard w206873532 (5.5 m), water_hazard w206873532 (5.0 m), water_hazard w206873532 (16.5 m), water_hazard w206873532 (13.1 m), water_hazard w206873532 (4.6 m), water_hazard w206873532 (19.5 m), water_hazard w206873532 (4.6 m), water_hazard w206873532 (6.0 m), water_hazard w206873532 (10.3 m), water_hazard w206873532 (7.2 m), water_hazard w206873532 (10.2 m), water_hazard w1464074607 (5.3 m), water_hazard w206873532 (14.1 m), water_hazard w206873532 (4.3 m), water_hazard w206873532 (4.3 m), water_hazard w206873532 (4.2 m), water_hazard w206873532 (4.3 m), water_hazard w206873532 (4.3 m), water_hazard w206873532 (5.7 m), water_hazard w206873532 (5.8 m)
 - OSM natural=tree points matched by a detected tree within 4 m: 5 of 7.
 - Conifer vs deciduous is inferred from crown shape only (no leaf-off imagery); see build/trees_preview.png.
 
@@ -100,9 +100,9 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 | 5 | 4 | yes | yes (3 near) | yes | yes | yes | 3 | 1 |
 | 6 | 5 | yes | yes (2 near) | yes | yes | yes | 2 | 1 |
 | 7 | 3 | yes | yes (4 near) | yes | yes | yes | 5 | 0 |
-| 8 | 4 | yes | yes (3 near) | yes | yes | yes | 9 | 1 |
-| 9 | 4 | yes | yes (4 near) | yes | yes | yes | 0 | 0 |
-| 10 | 4 | yes | yes (4 near) | yes | yes | yes | 3 | 0 |
+| 8 | 4 | yes | yes (3 near) | yes | yes | yes | 9 | 2 |
+| 9 | 4 | yes | yes (4 near) | yes | yes | yes | 0 | 1 |
+| 10 | 4 | yes | yes (4 near) | yes | yes | yes | 3 | 1 |
 | 11 | 4 | yes | yes (4 near) | yes | yes | yes | 7 | 0 |
 | 12 | 5 | yes | yes (3 near) | yes | yes | yes | 6 | 1 |
 | 13 | 3 | yes | yes (3 near) | yes | yes | yes | 3 | 0 |
@@ -110,7 +110,7 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 | 15 | 4 | yes | yes (3 near) | yes | yes | yes | 6 | 1 |
 | 16 | 5 | yes | yes (4 near) | yes | yes | yes | 6 | 1 |
 | 17 | 3 | yes | yes (5 near) | yes | yes | yes | 3 | 0 |
-| 18 | 4 | yes | yes (4 near) | yes | yes | yes | 3 | 0 |
+| 18 | 4 | yes | yes (4 near) | yes | yes | yes | 3 | 1 |
 
 ## Missing or suspect features
 
@@ -125,8 +125,37 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 - the boundary has a hole of 235799 m2 at (749, 2138): it is out of bounds (a pond cut out?)
 - tee w1067453607: 2572 m2 (a fairway tagged as a tee?)
 - fairway w355541122 at (1015, 1280) is more than 30 m from every hole line (a range or practice area mapped as fairway?)
+- water r5314115 at (1162, 1078), 23522 m2, is inside the boundary but not a penalty area: it plays as rough (tag it golf=lateral_water_hazard in edits.json, or list it in red_water_osm)
+- water w207481249 at (1069, 1728), 9774 m2, is inside the boundary but not a penalty area: it plays as rough (tag it golf=lateral_water_hazard in edits.json, or list it in red_water_osm)
+- water w355586179 at (759, 1574), 5878 m2, is inside the boundary but not a penalty area: it plays as rough (tag it golf=lateral_water_hazard in edits.json, or list it in red_water_osm)
+- water w355586180 at (657, 1594), 1124 m2, is inside the boundary but not a penalty area: it plays as rough (tag it golf=lateral_water_hazard in edits.json, or list it in red_water_osm)
+- water w355586181 at (1062, 1342), 735 m2, is inside the boundary but not a penalty area: it plays as rough (tag it golf=lateral_water_hazard in edits.json, or list it in red_water_osm)
+- water w355586182 at (969, 1410), 2034 m2, is inside the boundary but not a penalty area: it plays as rough (tag it golf=lateral_water_hazard in edits.json, or list it in red_water_osm)
+- water w355776770 at (980, 400), 2882 m2, is inside the boundary but not a penalty area: it plays as rough (tag it golf=lateral_water_hazard in edits.json, or list it in red_water_osm)
+- water w355776771 at (1058, 537), 5187 m2, is inside the boundary but not a penalty area: it plays as rough (tag it golf=lateral_water_hazard in edits.json, or list it in red_water_osm)
+- water w355776772 at (951, 472), 2568 m2, is inside the boundary but not a penalty area: it plays as rough (tag it golf=lateral_water_hazard in edits.json, or list it in red_water_osm)
+- water w355776773 at (1075, 298), 1460 m2, is inside the boundary but not a penalty area: it plays as rough (tag it golf=lateral_water_hazard in edits.json, or list it in red_water_osm)
+- water w355776774 at (1127, 700), 3239 m2, is inside the boundary but not a penalty area: it plays as rough (tag it golf=lateral_water_hazard in edits.json, or list it in red_water_osm)
+- water w355776775 at (1204, 620), 1680 m2, is inside the boundary but not a penalty area: it plays as rough (tag it golf=lateral_water_hazard in edits.json, or list it in red_water_osm)
+- water w355776776 at (1258, 676), 1607 m2, is inside the boundary but not a penalty area: it plays as rough (tag it golf=lateral_water_hazard in edits.json, or list it in red_water_osm)
+- water w355776777 at (1236, 598), 532 m2, is inside the boundary but not a penalty area: it plays as rough (tag it golf=lateral_water_hazard in edits.json, or list it in red_water_osm)
+- water w356000312 at (1177, 911), 3630 m2, is inside the boundary but not a penalty area: it plays as rough (tag it golf=lateral_water_hazard in edits.json, or list it in red_water_osm)
+- water w356000314 at (1345, 1102), 4783 m2, is inside the boundary but not a penalty area: it plays as rough (tag it golf=lateral_water_hazard in edits.json, or list it in red_water_osm)
+- water w356000315 at (1111, 1173), 885 m2, is inside the boundary but not a penalty area: it plays as rough (tag it golf=lateral_water_hazard in edits.json, or list it in red_water_osm)
+- water w356000318 at (891, 1209), 1906 m2, is inside the boundary but not a penalty area: it plays as rough (tag it golf=lateral_water_hazard in edits.json, or list it in red_water_osm)
+- water w356000330 at (1045, 662), 433 m2, is inside the boundary but not a penalty area: it plays as rough (tag it golf=lateral_water_hazard in edits.json, or list it in red_water_osm)
+- water w356000331 at (1106, 628), 1286 m2, is inside the boundary but not a penalty area: it plays as rough (tag it golf=lateral_water_hazard in edits.json, or list it in red_water_osm)
+- water w356000332 at (1052, 816), 2624 m2, is inside the boundary but not a penalty area: it plays as rough (tag it golf=lateral_water_hazard in edits.json, or list it in red_water_osm)
+- water w356000333 at (1276, 921), 1073 m2, is inside the boundary but not a penalty area: it plays as rough (tag it golf=lateral_water_hazard in edits.json, or list it in red_water_osm)
+- water w356000334 at (838, 1372), 125 m2, is inside the boundary but not a penalty area: it plays as rough (tag it golf=lateral_water_hazard in edits.json, or list it in red_water_osm)
+- water w356000340 at (395, 1839), 57626 m2, is inside the boundary but not a penalty area: it plays as rough (tag it golf=lateral_water_hazard in edits.json, or list it in red_water_osm)
+- water w356000350 at (414, 1518), 12838 m2, is inside the boundary but not a penalty area: it plays as rough (tag it golf=lateral_water_hazard in edits.json, or list it in red_water_osm)
+- water w356000354 at (570, 1438), 2268 m2, is inside the boundary but not a penalty area: it plays as rough (tag it golf=lateral_water_hazard in edits.json, or list it in red_water_osm)
+- water w356000356 at (630, 1500), 2792 m2, is inside the boundary but not a penalty area: it plays as rough (tag it golf=lateral_water_hazard in edits.json, or list it in red_water_osm)
+- water w356000358 at (871, 1627), 920 m2, is inside the boundary but not a penalty area: it plays as rough (tag it golf=lateral_water_hazard in edits.json, or list it in red_water_osm)
+- water w356000361 at (587, 1576), 604 m2, is inside the boundary but not a penalty area: it plays as rough (tag it golf=lateral_water_hazard in edits.json, or list it in red_water_osm)
+- water w356011279 at (646, 1758), 33537 m2, is inside the boundary but not a penalty area: it plays as rough (tag it golf=lateral_water_hazard in edits.json, or list it in red_water_osm)
 - penalty area w206873532 lies mostly outside the boundary (a neighbour's? redraw as natural=water)
-- waterway w625186746 (river): 255 m of it within 30 m of a hole line isn't in a penalty area (pipeline/propose_channels.py makes one; or say it's dry)
 
-Totals: 93 tees, 20 greens, 24 fairways, 89 bunkers, 4 water hazards, 18 pins, 54 cart paths, 7 OSM tree points.
+Totals: 93 tees, 20 greens, 24 fairways, 89 bunkers, 5 water hazards, 18 pins, 56 cart paths, 7 OSM tree points.
 

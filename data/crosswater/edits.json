@@ -71,10 +71,6 @@
    "reason": "golf=fairway of a neighbouring course (Sunriver Meadows, Caldera Links): outside Crosswater's boundary"
   },
   {
-   "osm": "w206867338",
-   "reason": "golf=cartpath of a neighbouring course (Sunriver Meadows, Caldera Links): outside Crosswater's boundary"
-  },
-  {
    "osm": "w206867342",
    "reason": "a neighbouring course's boundary (Sunriver Resort): not this course"
   },
@@ -85,14 +81,6 @@
   {
    "osm": "w206867344",
    "reason": "a neighbouring course's boundary (Sunriver Resort): not this course"
-  },
-  {
-   "osm": "w206873531",
-   "reason": "golf=water_hazard of a neighbouring course (Sunriver Meadows, Caldera Links): outside Crosswater's boundary"
-  },
-  {
-   "osm": "w206873534",
-   "reason": "golf=cartpath of a neighbouring course (Sunriver Meadows, Caldera Links): outside Crosswater's boundary"
   },
   {
    "osm": "w207487856",
@@ -447,6 +435,13 @@
     "penalty": "red"
    },
    "reason": "golf=water_hazard (yellow by default): red by the standing default (all water red)"
+  },
+  {
+   "osm": "w206873531",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "golf=water_hazard (yellow by default): red by the standing default (all water red). The Little Deschutes along holes 7-9; the first build dropped it by mistake as a neighbouring course's (it lies wholly inside Crosswater's boundary)"
   }
  ]
 }
