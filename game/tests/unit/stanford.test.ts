@@ -9,7 +9,7 @@ import { CANOPY_START, TRUNK_R } from '../../src/systems/physics/obstacles';
 import { Rng } from '../../src/systems/physics/rng';
 import { simulateShot } from '../../src/systems/physics/sim';
 import { isOB, SURF } from '../../src/systems/physics/surfaces';
-import { loadCourseFiles, registry, roundCfg } from './helpers';
+import { loadCourseFiles, registry, roundCfg, baseWaterId } from './helpers';
 
 const ID = 'stanford';
 const TEE = 'Black';
@@ -33,7 +33,7 @@ describe('Stanford Golf Course data', () => {
   });
 
   it('San Francisquito Creek and two ditches are red penalty areas (developer, 2026-10-24: A, B, C)', () => {
-    const ids = course.water.map((w) => w.id).sort();
+    const ids = [...new Set(course.water.map((w) => baseWaterId(w.id)))].sort(); // the cart paths over them cut out: pieces
     expect(ids).toEqual(['creek_w49231216', 'ditch_w1216390234', 'ditch_w1216390238']);
     // where each hole line crosses the creek's OSM line: water, not rough
     const crossings: Record<number, [number, number]> = {

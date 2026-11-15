@@ -64,7 +64,7 @@
     "Elevation: Scottish Public Sector LiDAR Phase 5, contains public sector information licensed under the Open Government Licence v3.0 (Scottish Government, accessed from registry.opendata.aws/scottish-lidar)"
   ],
   "red_water_osm": [
-    "sea"
+    "sea_bridged"
   ],
   "gorse": {
     "ground": "gorse",

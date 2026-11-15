@@ -81,6 +81,18 @@
     "wall17"
    ],
    "reason": "the wall behind the 17th green (OSM way/404359910) as a thin building, 1.5 m high, so the ball strikes it; integral (no relief) through the config's `integral` (design chat, 2026-11-13)"
+  },
+  {
+   "from": "proposed/bridges.geojson",
+   "ids": [
+    "w1429804902_bridged",
+    "w1429804902_bridged_2",
+    "w1429804903_bridged",
+    "w1429804904_bridged",
+    "sea_bridged"
+   ],
+   "tool": "bridge_paths.py",
+   "reason": "developer 2026-11-14: cart paths no longer run into the water; the water with the paths over it cut out (bridges are cart path, as at Burlington), and bridges joining path ends that face each other across it"
   }
  ],
  "tags": [
@@ -636,6 +648,26 @@
   {
    "osm": "n2449487192",
    "reason": "the Road Hole green is long and narrow: OSM's pin at its far right end (15 m from the centre) falls outside the close-up putting view, centred on the green; the centre pin is the green's centre instead (the game adds the other hole locations itself)"
+  },
+  {
+   "osm": "w1429804902",
+   "tool": "bridge_paths.py",
+   "reason": "replaced by w1429804902_bridged, w1429804902_bridged_2 (the cart paths over it cut out)"
+  },
+  {
+   "osm": "w1429804903",
+   "tool": "bridge_paths.py",
+   "reason": "replaced by w1429804903_bridged (the cart paths over it cut out)"
+  },
+  {
+   "osm": "w1429804904",
+   "tool": "bridge_paths.py",
+   "reason": "replaced by w1429804904_bridged (the cart paths over it cut out)"
+  },
+  {
+   "osm": "sea",
+   "tool": "bridge_paths.py",
+   "reason": "replaced by sea_bridged (the cart paths over it cut out)"
   }
  ],
  "extend_start": []

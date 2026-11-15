@@ -70,6 +70,23 @@
    ],
    "tags": {},
    "reason": "no OSM pin on these holes' greens: a pin at the green's centre (make_edits.py), a proposal as at Franklin; the game adds up to three more pin positions per green"
+  },
+  {
+   "from": "proposed/bridges.geojson",
+   "ids": [
+    "w421116009_bridged",
+    "w421116009_bridged_2",
+    "w677746049_bridged",
+    "w677746049_bridged_2",
+    "w677746049_bridged_3",
+    "w677934283_bridged",
+    "w677934283_bridged_2",
+    "w678172528_bridged",
+    "w678172528_bridged_2",
+    "w1239419367_bridged"
+   ],
+   "tool": "bridge_paths.py",
+   "reason": "developer 2026-11-14: cart paths no longer run into the water; the water with the paths over it cut out (bridges are cart path, as at Burlington), and bridges joining path ends that face each other across it"
   }
  ],
  "tags": [
@@ -408,6 +425,31 @@
   {
    "osm": "w214907215",
    "reason": "replaced by its building copy (add above)"
+  },
+  {
+   "osm": "w421116009",
+   "tool": "bridge_paths.py",
+   "reason": "replaced by w421116009_bridged, w421116009_bridged_2 (the cart paths over it cut out)"
+  },
+  {
+   "osm": "w677746049",
+   "tool": "bridge_paths.py",
+   "reason": "replaced by w677746049_bridged, w677746049_bridged_2, w677746049_bridged_3 (the cart paths over it cut out)"
+  },
+  {
+   "osm": "w677934283",
+   "tool": "bridge_paths.py",
+   "reason": "replaced by w677934283_bridged, w677934283_bridged_2 (the cart paths over it cut out)"
+  },
+  {
+   "osm": "w678172528",
+   "tool": "bridge_paths.py",
+   "reason": "replaced by w678172528_bridged, w678172528_bridged_2 (the cart paths over it cut out)"
+  },
+  {
+   "osm": "w1239419367",
+   "tool": "bridge_paths.py",
+   "reason": "replaced by w1239419367_bridged (the cart paths over it cut out)"
   }
  ]
 }

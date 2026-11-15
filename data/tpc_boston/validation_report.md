@@ -110,7 +110,7 @@ Built by a course chat on 2026-10-20/21 with the standing defaults (docs/COURSE_
 
 - 49992 trees detected in the world extent (8437 inside the course), 22522 conifers / 27470 deciduous; median height 21.0 m, max 34.6 m.
 - Dropped: 194 tops on building footprints, 0 over the lake, 118 tiny crowns.
-- Dropped on playing surfaces (spec 5.4): 52 -> water_hazard w421096599 (5.7 m), water_hazard w421096599 (4.4 m), water_hazard w677746049 (4.6 m), fairway w1239483574 (14.2 m), tee w1546112304 (18.2 m), water_hazard w677741691 (13.6 m), water_hazard w677741691 (19.0 m), water_hazard w677741691 (21.6 m), water_hazard w677741691 (22.3 m), water_hazard w677741691 (16.0 m), water_hazard w677741691 (16.0 m), fairway w1239483557 (21.3 m), fairway w1239483557 (20.8 m), water_hazard w421116009 (11.1 m), water_hazard w421116009 (9.9 m), water_hazard w421116009 (11.4 m), water_hazard w421116009 (14.0 m), water_hazard w421116009 (13.4 m), water_hazard w421116009 (11.1 m), water_hazard w421116009 (10.9 m), water_hazard w421116009 (11.7 m), water_hazard w421116009 (10.5 m), water_hazard w421116009 (10.9 m), water_hazard w421116009 (10.5 m), water_hazard w421116009 (11.8 m), water_hazard w421116009 (6.9 m), water_hazard w421116009 (7.2 m), water_hazard w421116009 (5.6 m), tee w1239477285 (20.3 m), water_hazard w421116009 (9.6 m), water_hazard w421116008 (11.1 m), water_hazard w421116009 (18.0 m), water_hazard w421116009 (16.9 m), water_hazard w421096592 (10.7 m), water_hazard w421096592 (5.9 m), water_hazard w421096592 (6.3 m), water_hazard w421096592 (10.4 m), water_hazard w421096592 (13.8 m), water_hazard w678172528 (19.8 m), water_hazard w678172528 (18.1 m), water_hazard w678172528 (19.0 m), water_hazard w678172528 (19.2 m), water_hazard w678172528 (19.0 m), water_hazard w678172528 (17.6 m), water_hazard w678172528 (19.2 m), water_hazard w678172528 (18.9 m), water_hazard w678172528 (18.8 m), water_hazard w678172528 (19.0 m), water_hazard w678172528 (5.8 m), water_hazard w678172528 (18.9 m), water_hazard w678172528 (10.9 m), water_hazard w678172528 (5.0 m)
+- Dropped on playing surfaces (spec 5.4): 52 -> water_hazard w421096599 (5.7 m), water_hazard w421096599 (4.4 m), water_hazard w677746049_bridged (4.6 m), fairway w1239483574 (14.2 m), tee w1546112304 (18.2 m), water_hazard w677741691 (13.6 m), water_hazard w677741691 (19.0 m), water_hazard w677741691 (21.6 m), water_hazard w677741691 (22.3 m), water_hazard w677741691 (16.0 m), water_hazard w677741691 (16.0 m), fairway w1239483557 (21.3 m), fairway w1239483557 (20.8 m), water_hazard w421116009_bridged_2 (11.1 m), water_hazard w421116009_bridged_2 (9.9 m), water_hazard w421116009_bridged_2 (11.4 m), water_hazard w421116009_bridged_2 (14.0 m), water_hazard w421116009_bridged_2 (13.4 m), water_hazard w421116009_bridged_2 (11.1 m), water_hazard w421116009_bridged (10.9 m), water_hazard w421116009_bridged (11.7 m), water_hazard w421116009_bridged_2 (10.5 m), water_hazard w421116009_bridged_2 (10.9 m), water_hazard w421116009_bridged_2 (10.5 m), water_hazard w421116009_bridged_2 (11.8 m), water_hazard w421116009_bridged_2 (6.9 m), water_hazard w421116009_bridged_2 (7.2 m), water_hazard w421116009_bridged_2 (5.6 m), tee w1239477285 (20.3 m), water_hazard w421116009_bridged (9.6 m), water_hazard w421116008 (11.1 m), water_hazard w421116009_bridged (18.0 m), water_hazard w421116009_bridged (16.9 m), water_hazard w421096592 (10.7 m), water_hazard w421096592 (5.9 m), water_hazard w421096592 (6.3 m), water_hazard w421096592 (10.4 m), water_hazard w421096592 (13.8 m), water_hazard w678172528_bridged (19.8 m), water_hazard w678172528_bridged (18.1 m), water_hazard w678172528_bridged (19.0 m), water_hazard w678172528_bridged (19.2 m), water_hazard w678172528_bridged (19.0 m), water_hazard w678172528_bridged (17.6 m), water_hazard w678172528_bridged (19.2 m), water_hazard w678172528_bridged (18.9 m), water_hazard w678172528_bridged (18.8 m), water_hazard w678172528_bridged (19.0 m), water_hazard w678172528_bridged (5.8 m), water_hazard w678172528_bridged (18.9 m), water_hazard w678172528_bridged (10.9 m), water_hazard w678172528_bridged (5.0 m)
 - OSM natural=tree points matched by a detected tree within 4 m: 0 of 0.
 - Conifer (pitch pine) vs deciduous (oak) from the leaf-off lidar: share of a crown's vegetation returns that were the last return of their pulse, split at Otsu's threshold 0.346 (22388 of 49848 crowns with >= 20 returns are conifers); the other 144 small crowns keep the crown-shape rule. See build/trees_preview.png.
 
@@ -159,8 +159,8 @@ Built by a course chat on 2026-10-20/21 with the standing defaults (docs/COURSE_
 | 4 | 4 | yes | yes (3 near) | yes | yes | yes | 5 | 2 |
 | 5 | 4 | yes | yes (3 near) | yes | yes | yes | 3 | 2 |
 | 6 | 4 | yes | yes (4 near) | yes | yes | yes | 6 | 2 |
-| 7 | 5 | yes | yes (3 near) | yes | yes | yes | 4 | 4 |
-| 8 | 3 | yes | yes (3 near) | yes | yes | yes | 2 | 3 |
+| 7 | 5 | yes | yes (3 near) | yes | yes | yes | 4 | 6 |
+| 8 | 3 | yes | yes (3 near) | yes | yes | yes | 2 | 4 |
 | 9 | 4 | yes | yes (3 near) | yes | yes | yes | 4 | 0 |
 | 10 | 4 | yes | yes (4 near) | yes | yes | yes | 3 | 1 |
 | 11 | 3 | yes | yes (4 near) | - | yes | yes | 1 | 0 |
@@ -170,7 +170,7 @@ Built by a course chat on 2026-10-20/21 with the standing defaults (docs/COURSE_
 | 15 | 4 | yes | yes (4 near) | yes | yes | yes | 7 | 0 |
 | 16 | 3 | yes | yes (3 near) | - | yes | yes | 2 | 1 |
 | 17 | 4 | yes | yes (4 near) | yes | yes | yes | 3 | 0 |
-| 18 | 5 | yes | yes (3 near) | yes | yes | yes | 7 | 1 |
+| 18 | 5 | yes | yes (3 near) | yes | yes | yes | 7 | 2 |
 
 ## Missing or suspect features
 
@@ -212,5 +212,5 @@ Built by a course chat on 2026-10-20/21 with the standing defaults (docs/COURSE_
 - fairway w1239419342 at (857, 1703) is more than 30 m from every hole line (a range or practice area mapped as fairway?)
 - fairway w1239419347 at (771, 1885) is more than 30 m from every hole line (a range or practice area mapped as fairway?)
 
-Totals: 131 tees, 30 greens, 36 fairways, 97 bunkers, 17 water hazards, 24 pins, 128 cart paths, 0 OSM tree points.
+Totals: 131 tees, 30 greens, 36 fairways, 97 bunkers, 22 water hazards, 24 pins, 128 cart paths, 0 OSM tree points.
 

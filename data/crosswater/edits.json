@@ -7,6 +7,109 @@
    ],
    "tags": {},
    "reason": "the clubhouse is mapped golf=clubhouse: copied as a building, original dropped"
+  },
+  {
+   "from": "proposed/creeks.geojson",
+   "ids": [
+    "creek_1",
+    "creek_2",
+    "creek_3",
+    "creek_4",
+    "creek_5",
+    "creek_6",
+    "creek_7",
+    "creek_8",
+    "creek_9",
+    "creek_10",
+    "creek_11",
+    "creek_12",
+    "creek_13",
+    "creek_14",
+    "creek_15",
+    "creek_16",
+    "creek_17",
+    "creek_18",
+    "creek_19",
+    "creek_20",
+    "creek_21",
+    "creek_22",
+    "creek_23",
+    "creek_24",
+    "creek_25",
+    "creek_26",
+    "creek_27",
+    "creek_28",
+    "creek_29",
+    "creek_30",
+    "creek_31",
+    "creek_32",
+    "creek_33",
+    "creek_34",
+    "creek_35",
+    "creek_36",
+    "creek_37",
+    "creek_38",
+    "creek_39",
+    "creek_40",
+    "creek_41",
+    "creek_42",
+    "creek_43",
+    "creek_44",
+    "creek_45",
+    "creek_46",
+    "creek_47",
+    "creek_48",
+    "creek_49",
+    "creek_50",
+    "creek_51",
+    "creek_52",
+    "creek_53",
+    "creek_54",
+    "creek_55",
+    "creek_56",
+    "creek_57",
+    "creek_58",
+    "creek_59",
+    "creek_60",
+    "creek_61",
+    "creek_62",
+    "creek_63",
+    "creek_64",
+    "creek_65",
+    "creek_66",
+    "creek_67"
+   ],
+   "tags": {},
+   "reason": "the oxbow creeks inside the marsh (developer, 2026-11-14: 'some very thin penalty creeks based on reality'): the channels the DOGAMI bare-earth DTM shows inside OSM's wetlands, 3 m wide, red penalty areas (data/crosswater/make_creeks.py)"
+  },
+  {
+   "from": "proposed/bridges.geojson",
+   "ids": [
+    "w206873531_bridged",
+    "w206873531_bridged_2",
+    "w206873531_bridged_3",
+    "w355776763_bridged",
+    "w355776763_bridged_2",
+    "w355776763_bridged_3",
+    "creek_6_bridged",
+    "creek_6_bridged_2",
+    "creek_7_bridged",
+    "creek_7_bridged_2",
+    "creek_13_bridged",
+    "creek_13_bridged_2",
+    "creek_17_bridged",
+    "creek_17_bridged_2",
+    "creek_17_bridged_3",
+    "creek_17_bridged_4",
+    "creek_18_bridged",
+    "creek_18_bridged_2",
+    "creek_38_bridged",
+    "creek_38_bridged_2",
+    "creek_47_bridged",
+    "creek_47_bridged_2"
+   ],
+   "tool": "bridge_paths.py",
+   "reason": "developer 2026-11-14: cart paths no longer run into the water; the water with the paths over it cut out (bridges are cart path, as at Burlington), and bridges joining path ends that face each other across it"
   }
  ],
  "drop": [
@@ -71,10 +174,6 @@
    "reason": "golf=fairway of a neighbouring course (Sunriver Meadows, Caldera Links): outside Crosswater's boundary"
   },
   {
-   "osm": "w206867338",
-   "reason": "golf=cartpath of a neighbouring course (Sunriver Meadows, Caldera Links): outside Crosswater's boundary"
-  },
-  {
    "osm": "w206867342",
    "reason": "a neighbouring course's boundary (Sunriver Resort): not this course"
   },
@@ -85,14 +184,6 @@
   {
    "osm": "w206867344",
    "reason": "a neighbouring course's boundary (Sunriver Resort): not this course"
-  },
-  {
-   "osm": "w206873531",
-   "reason": "golf=water_hazard of a neighbouring course (Sunriver Meadows, Caldera Links): outside Crosswater's boundary"
-  },
-  {
-   "osm": "w206873534",
-   "reason": "golf=cartpath of a neighbouring course (Sunriver Meadows, Caldera Links): outside Crosswater's boundary"
   },
   {
    "osm": "w207487856",
@@ -417,6 +508,51 @@
   {
    "osm": "w355586161",
    "reason": "golf=clubhouse, copied as a building"
+  },
+  {
+   "osm": "w206873531",
+   "tool": "bridge_paths.py",
+   "reason": "replaced by w206873531_bridged, w206873531_bridged_2, w206873531_bridged_3 (the cart paths over it cut out)"
+  },
+  {
+   "osm": "w355776763",
+   "tool": "bridge_paths.py",
+   "reason": "replaced by w355776763_bridged, w355776763_bridged_2, w355776763_bridged_3 (the cart paths over it cut out)"
+  },
+  {
+   "osm": "creek_6",
+   "tool": "bridge_paths.py",
+   "reason": "replaced by creek_6_bridged, creek_6_bridged_2 (the cart paths over it cut out)"
+  },
+  {
+   "osm": "creek_7",
+   "tool": "bridge_paths.py",
+   "reason": "replaced by creek_7_bridged, creek_7_bridged_2 (the cart paths over it cut out)"
+  },
+  {
+   "osm": "creek_13",
+   "tool": "bridge_paths.py",
+   "reason": "replaced by creek_13_bridged, creek_13_bridged_2 (the cart paths over it cut out)"
+  },
+  {
+   "osm": "creek_17",
+   "tool": "bridge_paths.py",
+   "reason": "replaced by creek_17_bridged, creek_17_bridged_2, creek_17_bridged_3, creek_17_bridged_4 (the cart paths over it cut out)"
+  },
+  {
+   "osm": "creek_18",
+   "tool": "bridge_paths.py",
+   "reason": "replaced by creek_18_bridged, creek_18_bridged_2 (the cart paths over it cut out)"
+  },
+  {
+   "osm": "creek_38",
+   "tool": "bridge_paths.py",
+   "reason": "replaced by creek_38_bridged, creek_38_bridged_2 (the cart paths over it cut out)"
+  },
+  {
+   "osm": "creek_47",
+   "tool": "bridge_paths.py",
+   "reason": "replaced by creek_47_bridged, creek_47_bridged_2 (the cart paths over it cut out)"
   }
  ],
  "tags": [
@@ -447,6 +583,13 @@
     "penalty": "red"
    },
    "reason": "golf=water_hazard (yellow by default): red by the standing default (all water red)"
+  },
+  {
+   "osm": "w206873531",
+   "set": {
+    "penalty": "red"
+   },
+   "reason": "golf=water_hazard (yellow by default): red by the standing default (all water red). The Little Deschutes along holes 7-9; the first build dropped it by mistake as a neighbouring course's (it lies wholly inside Crosswater's boundary)"
   }
  ]
 }

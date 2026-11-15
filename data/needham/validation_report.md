@@ -143,7 +143,7 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 | 6 | 4 | yes | yes (2 near) | yes | yes | NO | 3 | 0 |
 | 7 | 3 | yes | yes (2 near) | yes | yes | NO | 3 | 1 |
 | 8 | 4 | yes | yes (3 near) | yes | yes | NO | 2 | 1 |
-| 9 | 5 | yes | yes (1 near) | yes | yes | NO | 4 | 1 |
+| 9 | 5 | yes | yes (1 near) | yes | yes | NO | 4 | 2 |
 
 ## Missing or suspect features
 
@@ -167,5 +167,5 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 - waterway w310169386 (stream): 28 m of it within 30 m of a hole line isn't in a penalty area (pipeline/propose_channels.py makes one; or say it's dry)
 - waterway w310169387 (stream): 10 m of it within 30 m of a hole line isn't in a penalty area (pipeline/propose_channels.py makes one; or say it's dry)
 
-Totals: 23 tees, 11 greens, 12 fairways, 25 bunkers, 2 water hazards, 0 pins, 13 cart paths, 4 OSM tree points.
+Totals: 23 tees, 11 greens, 12 fairways, 25 bunkers, 3 water hazards, 0 pins, 13 cart paths, 4 OSM tree points.
 

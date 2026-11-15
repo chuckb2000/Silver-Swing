@@ -1,6 +1,6 @@
 {
  "wind_mph": [1, 7],
- "water": {"penalty": "red", "ids": ["channel_w68717747", "w68726253"]},
+ "water": {"penalty": "red", "ids": ["channel_w68717747_bridged", "channel_w68717747_bridged_2", "w68726253_bridged"]},
  "inside_boundary": true,
  "no_tree_in_fairway": true,
  "courses": {

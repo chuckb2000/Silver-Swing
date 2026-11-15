@@ -5,10 +5,10 @@
   10
  ],
  "water": {
-  "count": 2,
+  "count": 6,
   "ids": [
-   "channel_w42855499",
-   "channel_w265532264"
+   "channel_w42855499_bridged", "channel_w42855499_bridged_2", "channel_w42855499_bridged_3", "channel_w42855499_bridged_4",
+   "channel_w265532264_bridged", "channel_w265532264_bridged_2"
   ]
  },
  "tee_shot_clear": {

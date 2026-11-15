@@ -6,7 +6,7 @@
 // (-6.4 %, the back of its box); trees must not block a drive down the fairway.
 import { describe, expect, it } from 'vitest';
 import { isOB, SURF } from '../../src/systems/physics/surfaces';
-import { loadCourseFiles, registry } from './helpers';
+import { loadCourseFiles, registry, baseWaterId } from './helpers';
 
 const ID = 'astoria';
 const TEE = 'Silver';
@@ -36,7 +36,7 @@ describe('Astoria Country Club course data', () => {
   it('all water is red: Sunset Lake and the Neacoxie Creek ponds', () => {
     for (const w of course.water) expect(w.penalty, w.id).toBe('red');
     for (const id of ['r20068414', 'w426952616', 'w426952618']) {
-      expect(course.water.some((w) => w.id === id || w.id.startsWith(id + ':')), id).toBe(true);
+      expect(course.water.some((w) => baseWaterId(w.id) === id), id).toBe(true);
     }
   });
 

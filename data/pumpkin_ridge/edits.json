@@ -25,6 +25,16 @@
     "w903232740_path"
    ],
    "reason": "golf=path lines as cart paths (free relief); s01 reads only golf=cartpath"
+  },
+  {
+   "from": "proposed/bridges.geojson",
+   "ids": [
+    "w901953301_bridged",
+    "w901953301_bridged_2",
+    "w901953301_bridged_3"
+   ],
+   "tool": "bridge_paths.py",
+   "reason": "developer 2026-11-14: cart paths no longer run into the water; the water with the paths over it cut out (bridges are cart path, as at Burlington), and bridges joining path ends that face each other across it"
   }
  ],
  "drop": [
@@ -59,6 +69,11 @@
   {
    "osm": "w903232740",
    "reason": "replaced by its retagged copy (add above)"
+  },
+  {
+   "osm": "w901953301",
+   "tool": "bridge_paths.py",
+   "reason": "replaced by w901953301_bridged, w901953301_bridged_2, w901953301_bridged_3 (the cart paths over it cut out)"
   }
  ],
  "tags": [
