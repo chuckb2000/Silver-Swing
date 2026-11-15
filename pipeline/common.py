@@ -72,6 +72,13 @@ def marsh_ids(cfg: dict) -> list:
     return list(cfg.get("marsh_water_osm") or [])
 
 
+def marsh_outside_ids(cfg: dict) -> list:
+    """course_config.json "marsh_outside_osm": the marsh_water_osm features whose part outside the
+    boundary is in play (a hole plays over or beside it, e.g. Astoria's 9th): that part stays a red
+    penalty area too, drawn as marsh and staked, as red_water_osm water outside the boundary is."""
+    return [i for i in (cfg.get("marsh_outside_osm") or []) if i in marsh_ids(cfg)]
+
+
 def surf_ids(cfg: dict) -> dict:
     """The surface ids a course's map can hold (SURF, plus gorse and waste sand where the course has them)."""
     out = dict(SURF)

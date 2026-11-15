@@ -26,7 +26,7 @@ from shapely.affinity import translate
 from shapely.geometry import LineString, MultiPolygon, Point, Polygon
 from shapely.ops import unary_union
 
-from common import boundary_rings, build_dir, course_name_from_argv, GORSE_SURF, WASTE_SURF, layouts, load_config, marsh_ids, play_boundary, PX_PER_M, ROOT, SURF, World, write_json
+from common import boundary_rings, build_dir, course_name_from_argv, GORSE_SURF, WASTE_SURF, layouts, load_config, marsh_ids, marsh_outside_ids, play_boundary, PX_PER_M, ROOT, SURF, World, write_json
 from terrain import tier_offset
 from s08_surface import smooth_fairways
 
@@ -122,14 +122,16 @@ def paint_marsh(rgb, marsh, t, n1, n2, P, rough_lut, blk: int = 1):
 
 def marsh_stakes(rgb, g, cfg, surf, inside, to_px, hpx: int, wpx: int, step: float = 8.0):
     """Red stakes round each marsh penalty area (marsh_water_osm), every `step` m just outside its
-    edge, where that is inside the boundary on dry ground (not water, a path or a building).
+    edge, on dry ground (not water, a path or a building) inside the boundary, or anywhere for one
+    whose outside part is in play too (marsh_outside_osm).
     to_px(x, y) -> (col, row) on this picture; a stake is hpx tall and wpx wide."""
     ids = marsh_ids(cfg or {})
     if not ids:
         return
+    out_ok = set(marsh_outside_ids(cfg))
     H, W = surf.shape
     dry_ok = ~np.isin(surf, [S["water"], S["ob_water"], S["cartpath"], S["building"], S["ob_building"], S["ob_road"]])
-    for geom in g[g.osm.isin(ids)].geometry:
+    for osm, geom in zip(g[g.osm.isin(ids)].osm, g[g.osm.isin(ids)].geometry):
         for part in getattr(geom, "geoms", [geom]):
             for ring in [part.exterior, *part.interiors]:
                 for s_ in np.arange(0, ring.length, step):
@@ -141,7 +143,7 @@ def marsh_stakes(rgb, g, cfg, surf, inside, to_px, hpx: int, wpx: int, step: flo
                     cand = Point(p.x + nx_ * 0.7, p.y + ny_ * 0.7)
                     if part.contains(cand):
                         cand = Point(p.x - nx_ * 0.7, p.y - ny_ * 0.7)
-                    if not inside.contains(cand):
+                    if osm not in out_ok and not inside.contains(cand):
                         continue
                     col, row = (int(v) for v in to_px(cand.x, cand.y))
                     if not (hpx + 1 <= row < H - 2 and 1 <= col < W - wpx - 1) or not dry_ok[row, col]:

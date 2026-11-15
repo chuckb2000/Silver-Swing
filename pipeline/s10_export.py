@@ -22,7 +22,7 @@ from PIL import Image
 from pngcache import save_png
 from shapely.geometry import MultiPolygon, Polygon
 
-from common import build_dir, course_dir, course_name_from_argv, game_boundary, GORSE_SURF, WASTE_SURF, surf_ids, layout_dir, layouts, load_config, marsh_ids, out_dir, play_boundary, PX_PER_M, rnd, ROOT, SURF, World, write_json
+from common import build_dir, course_dir, course_name_from_argv, game_boundary, GORSE_SURF, WASTE_SURF, surf_ids, layout_dir, layouts, load_config, marsh_ids, marsh_outside_ids, out_dir, play_boundary, PX_PER_M, rnd, ROOT, SURF, World, write_json
 
 warnings.filterwarnings("ignore")
 
@@ -351,7 +351,7 @@ def main():
     for _, r in g[g.osm.isin(cfg.get("red_water_osm") or [])].iterrows():
         from shapely.geometry import box as _box
         geom = r.geometry.intersection(_box(0, 0, cfg["world"]["width"], cfg["world"]["height"]))
-        if r.osm in marsh_ids(cfg):  # a marsh is a penalty area only inside the boundary (s08)
+        if r.osm in marsh_ids(cfg) and r.osm not in marsh_outside_ids(cfg):  # a marsh is a penalty area inside the boundary (s08)
             geom = geom.intersection(play_boundary(g, cfg)).buffer(0)
         if geom.is_empty:
             continue
