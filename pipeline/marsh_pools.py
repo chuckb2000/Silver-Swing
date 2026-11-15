@@ -3,8 +3,9 @@
 
 A marsh drawn as marsh (course_config "marsh_water_osm", s09) is reeds over wet ground; the pools
 and channels of open water in it should still look like water. This finds them on the photo:
-smooth, dark ground (open water has almost no grain at 2.5 m; reeds, grass, scrub and canopy do)
-inside each marsh feature, cleaned up and kept from `--min` m2. They become features tagged
+smooth ground much darker than the ground round the marsh (open water has almost no grain at 2.5 m;
+reeds, grass, scrub and canopy do) inside each marsh feature, cleaned up and kept from `--min` m2.
+Tree shadows can pass too: check the preview and keep only the right features (--only). They become features tagged
 natural=water + marsh_pool=yes, which s09/s09b leave as open water inside the marsh (render only:
 the whole marsh is one penalty area either way) and s08 paints as water outside the boundary.
 
@@ -35,7 +36,7 @@ from shapely.ops import transform
 
 ROOT = Path(__file__).resolve().parent.parent
 RES = 0.5          # m per photo pixel, resampled
-SMOOTH = 3.0       # grey-level standard deviation over 2.5 m below which ground is "smooth"
+SMOOTH = 5.0       # grey-level standard deviation over 2.5 m below which ground is "smooth"
 TOOL = "marsh_pools.py"
 
 
@@ -58,7 +59,7 @@ def main(argv=None):
     ap = argparse.ArgumentParser()
     ap.add_argument("name")
     ap.add_argument("--min", type=float, default=25.0, help="smallest pool kept, m2")
-    ap.add_argument("--dark", type=float, default=0.80, help="a pool is darker than this share of the marsh's median grey")
+    ap.add_argument("--dark", type=float, default=0.6, help="a pool is darker than this share of the median grey round the marsh")
     ap.add_argument("--photo")
     ap.add_argument("--only", nargs="*")
     ap.add_argument("--write", action="store_true")
@@ -94,7 +95,8 @@ def main(argv=None):
         inside = rasterize([(poly.buffer(-1.0), 1)], out_shape=(H, W), transform=tr).astype(bool) if not poly.buffer(-1.0).is_empty else np.zeros((H, W), bool)
         if not inside.any():
             continue
-        med = float(np.median(V[inside]))
+        ring = rasterize([(poly.buffer(12).difference(poly.buffer(2)), 1)], out_shape=(H, W), transform=tr).astype(bool)
+        med = float(np.median(V[ring])) if ring.any() else float(np.median(V[inside]))  # the ground round it
         pool = inside & (sd < SMOOTH) & (V < a.dark * med) & (V > 3)
         pool = ndimage.binary_opening(pool, iterations=2)
         pool = ndimage.binary_closing(pool, iterations=2) & inside
