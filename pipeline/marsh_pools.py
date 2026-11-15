@@ -60,6 +60,7 @@ def main(argv=None):
     ap.add_argument("name")
     ap.add_argument("--min", type=float, default=25.0, help="smallest pool kept, m2")
     ap.add_argument("--dark", type=float, default=0.6, help="a pool is darker than this share of the median grey round the marsh")
+    ap.add_argument("--smooth", type=float, default=SMOOTH, help="most grain (grey standard deviation over 2.5 m) open water may show")
     ap.add_argument("--photo")
     ap.add_argument("--only", nargs="*")
     ap.add_argument("--write", action="store_true")
@@ -97,9 +98,9 @@ def main(argv=None):
             continue
         ring = rasterize([(poly.buffer(12).difference(poly.buffer(2)), 1)], out_shape=(H, W), transform=tr).astype(bool)
         med = float(np.median(V[ring])) if ring.any() else float(np.median(V[inside]))  # the ground round it
-        pool = inside & (sd < SMOOTH) & (V < a.dark * med) & (V > 3)
+        pool = inside & (sd < a.smooth) & (V < a.dark * med) & (V > 3)
         pool = ndimage.binary_opening(pool, iterations=2)
-        pool = ndimage.binary_closing(pool, iterations=2) & inside
+        pool = ndimage.binary_fill_holes(ndimage.binary_closing(pool, iterations=3)) & inside
         lab, n = ndimage.label(pool)
         sizes = ndimage.sum(pool, lab, range(1, n + 1)) * RES * RES
         keep = np.isin(lab, 1 + np.where(sizes >= a.min)[0])
