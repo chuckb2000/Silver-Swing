@@ -50,6 +50,14 @@
    ],
    "tags": {},
    "reason": "course chat 2026-10-24: the 9th back tee (w1151403990) stands 16.8 m outside the OSM boundary across Neacoxie Creek; the boundary is joined to the tee box (data/astoria/make_boundary.py). Replaces the OSM boundary"
+  },
+  {
+   "from": "proposed/bridges.geojson",
+   "ids": [
+    "r20068414_bridged"
+   ],
+   "tool": "bridge_paths.py",
+   "reason": "developer 2026-11-14: cart paths no longer run into the water; the water with the paths over it cut out (bridges are cart path, as at Burlington), and bridges joining path ends that face each other across it"
   }
  ],
  "drop": [
@@ -60,6 +68,11 @@
   {
    "osm": "n10711517820",
    "reason": "a golf=tee mapped as a point (a marker, not a tee box; box 26 on proposed/osm_labelled.jpg, beside hole 7's boxes 23 and 25). s05's preview crashes on a point tee (request to the design chat); the hole's tee boxes are mapped as polygons"
+  },
+  {
+   "osm": "r20068414",
+   "tool": "bridge_paths.py",
+   "reason": "replaced by r20068414_bridged (the cart paths over it cut out)"
   }
  ],
  "tags": [

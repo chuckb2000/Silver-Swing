@@ -107,17 +107,17 @@ Built by a course chat on 2026-10-24 with the standing defaults (docs/COURSE_BUI
 | 1 | 5 | yes | yes (3 near) | yes | yes | yes | 5 | 1 |
 | 2 | 4 | yes | yes (3 near) | yes | yes | yes | 4 | 1 |
 | 3 | 3 | yes | yes (4 near) | yes | yes | yes | 3 | 1 |
-| 4 | 3 | yes | yes (4 near) | yes | yes | yes | 1 | 1 |
+| 4 | 3 | yes | yes (4 near) | yes | yes | yes | 1 | 2 |
 | 5 | 4 | yes | yes (3 near) | yes | yes | yes | 5 | 1 |
-| 6 | 4 | yes | yes (2 near) | yes | yes | yes | 3 | 1 |
-| 7 | 5 | yes | yes (4 near) | yes | yes | yes | 3 | 2 |
-| 8 | 3 | yes | yes (4 near) | yes | yes | yes | 2 | 1 |
+| 6 | 4 | yes | yes (2 near) | yes | yes | yes | 3 | 2 |
+| 7 | 5 | yes | yes (4 near) | yes | yes | yes | 3 | 3 |
+| 8 | 3 | yes | yes (4 near) | yes | yes | yes | 2 | 4 |
 | 9 | 4 | yes | yes (1 near) | yes | yes | yes | 3 | 1 |
 | 10 | 4 | yes | yes (4 near) | yes | yes | yes | 6 | 0 |
 | 11 | 4 | yes | yes (1 near) | yes | yes | yes | 4 | 0 |
-| 12 | 4 | yes | yes (4 near) | yes | yes | yes | 5 | 1 |
+| 12 | 4 | yes | yes (4 near) | yes | yes | yes | 5 | 2 |
 | 13 | 4 | yes | yes (4 near) | yes | yes | yes | 5 | 0 |
-| 14 | 3 | yes | yes (3 near) | yes | yes | yes | 0 | 1 |
+| 14 | 3 | yes | yes (3 near) | yes | yes | yes | 0 | 2 |
 | 15 | 4 | yes | yes (3 near) | yes | yes | yes | 3 | 0 |
 | 16 | 5 | yes | yes (2 near) | yes | yes | yes | 5 | 0 |
 | 17 | 3 | yes | yes (2 near) | yes | yes | yes | 1 | 0 |
@@ -164,9 +164,9 @@ Built by a course chat on 2026-10-24 with the standing defaults (docs/COURSE_BUI
 - fairway r14093515 at (942, 599) is more than 30 m from every hole line (a range or practice area mapped as fairway?)
 - waterway r8745748 (canal): 786 m of it within 30 m of a hole line isn't in a penalty area (pipeline/propose_channels.py makes one; or say it's dry)
 - waterway w1216390230 (ditch): 67 m of it within 30 m of a hole line isn't in a penalty area (pipeline/propose_channels.py makes one; or say it's dry)
-- waterway w1216390231 (ditch): 33 m of it within 30 m of a hole line isn't in a penalty area (pipeline/propose_channels.py makes one; or say it's dry)
+- waterway w1216390231 (ditch): 34 m of it within 30 m of a hole line isn't in a penalty area (pipeline/propose_channels.py makes one; or say it's dry)
 - waterway w1216390235 (ditch): 11 m of it within 30 m of a hole line isn't in a penalty area (pipeline/propose_channels.py makes one; or say it's dry)
 - waterway w1216390239 (ditch): 62 m of it within 30 m of a hole line isn't in a penalty area (pipeline/propose_channels.py makes one; or say it's dry)
 
-Totals: 59 tees, 29 greens, 21 fairways, 67 bunkers, 3 water hazards, 18 pins, 48 cart paths, 2603 OSM tree points.
+Totals: 59 tees, 29 greens, 21 fairways, 67 bunkers, 11 water hazards, 18 pins, 48 cart paths, 2603 OSM tree points.
 

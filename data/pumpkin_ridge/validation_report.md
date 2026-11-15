@@ -166,7 +166,7 @@ Built 2026-10-24, both courses in one world (COURSE_BUILD.md 3.5). Standing defa
 |---|---|---|---|---|---|---|---|---|
 | 1 | 4 | yes | yes (4 near) | yes | yes | yes | 7 | 0 |
 | 2 | 3 | yes | yes (4 near) | yes | yes | yes | 2 | 0 |
-| 3 | 4 | yes | yes (3 near) | yes | yes | yes | 3 | 4 |
+| 3 | 4 | yes | yes (3 near) | yes | yes | yes | 3 | 6 |
 | 4 | 5 | yes | yes (3 near) | yes | yes | yes | 6 | 0 |
 | 5 | 3 | yes | yes (4 near) | yes | yes | yes | 6 | 1 |
 | 6 | 4 | yes | yes (3 near) | yes | yes | yes | 4 | 1 |
@@ -239,5 +239,5 @@ Built 2026-10-24, both courses in one world (COURSE_BUILD.md 3.5). Standing defa
 - tee w1444592954 at (236, 801): 3 m2 of it is outside the boundary, so out of bounds
 - fairway r20051891 at (817, 525) is more than 30 m from every hole line (a range or practice area mapped as fairway?)
 
-Totals: 148 tees, 42 greens, 45 fairways, 168 bunkers, 30 water hazards, 36 pins, 26 cart paths, 109 OSM tree points.
+Totals: 148 tees, 42 greens, 45 fairways, 168 bunkers, 32 water hazards, 36 pins, 26 cart paths, 109 OSM tree points.
 

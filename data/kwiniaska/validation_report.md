@@ -196,11 +196,11 @@ Each was made under the developer's overnight "make the call" instruction; each 
 | 8 | 5 | yes | yes (3 near) | yes | yes | NO | 7 | 0 |
 | 9 | 3 | yes | yes (2 near) | yes | yes | NO | 6 | 0 |
 | 10 | 4 | yes | yes (3 near) | yes | yes | NO | 2 | 1 |
-| 11 | 4 | yes | yes (4 near) | yes | yes | NO | 0 | 1 |
-| 12 | 4 | yes | yes (5 near) | yes | yes | NO | 1 | 1 |
+| 11 | 4 | yes | yes (4 near) | yes | yes | NO | 0 | 3 |
+| 12 | 4 | yes | yes (5 near) | yes | yes | NO | 1 | 2 |
 | 13 | 3 | yes | yes (3 near) | yes | yes | NO | 3 | 2 |
-| 14 | 3 | yes | yes (2 near) | - | yes | NO | 1 | 2 |
-| 15 | 5 | yes | yes (3 near) | yes | yes | NO | 1 | 1 |
+| 14 | 3 | yes | yes (2 near) | - | yes | NO | 1 | 3 |
+| 15 | 5 | yes | yes (3 near) | yes | yes | NO | 1 | 2 |
 | 16 | 4 | yes | yes (4 near) | yes | yes | NO | 7 | 0 |
 | 17 | 4 | yes | yes (3 near) | yes | yes | NO | 7 | 0 |
 | 18 | 4 | yes | yes (2 near) | yes | yes | NO | 6 | 0 |
@@ -233,7 +233,8 @@ Each was made under the developer's overnight "make the call" instruction; each 
 
 - golf=clubhouse: 1 feature(s) (w1066608748) -> a building: add building=yes
 - tee w1228412077: 2732 m2 (a fairway tagged as a tee?)
+- penalty area channel_w626918930_bridged lies mostly outside the boundary (a neighbour's? redraw as natural=water)
 - hole line w1228417023 (ref 6) starts within 10 m of a green (the previous green?)
 
-Totals: 53 tees, 21 greens, 19 fairways, 39 bunkers, 4 water hazards, 0 pins, 29 cart paths, 0 OSM tree points.
+Totals: 53 tees, 21 greens, 19 fairways, 39 bunkers, 8 water hazards, 0 pins, 29 cart paths, 0 OSM tree points.
 

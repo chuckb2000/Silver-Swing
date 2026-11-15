@@ -68,7 +68,7 @@
   "note": "the boundary is mapped as two parts (45.1 and 19.4 ha) on either side of Harrison Avenue, 12 m apart; holes 2-8 are west of the road. Joined so both are in play; the road between them stays out of bounds (brief: 'if OSM's boundary leaves Harrison Avenue out, the road is OB between the two parts')"
  },
  "red_water_osm": [
-  "sea"
+  "sea_bridged"
  ],
  "red_water_note": "the sea (proposed/sea.geojson, from OSM's coastline beyond Ocean Drive): a red penalty area (standing default)",
  "rough_band_m": 3.5,

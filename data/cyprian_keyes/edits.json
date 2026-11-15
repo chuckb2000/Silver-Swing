@@ -39,6 +39,30 @@
     "flatten": "no"
    },
    "reason": "course chat 2026-10-31, pending the developer's approval: Sewall Brook and its feeder streams, mapped in OSM only as waterway=stream lines near the hole lines (audit), as red penalty areas from the DEM channel along them (pipeline/propose_channels.py: 3-4 m wide, 0.1-0.3 m deep); every penalty area red (standing default); flatten=no keeps the falling bed"
+  },
+  {
+   "from": "proposed/bridges.geojson",
+   "ids": [
+    "w1255799543_bridged",
+    "w1255799544_bridged",
+    "w1572284675_bridged",
+    "w778422502_bridged",
+    "w778422502_bridged_2",
+    "channel_w971520745_bridged",
+    "channel_w971520745_bridged_2",
+    "channel_w971520747_bridged",
+    "channel_w971520747_bridged_2",
+    "channel_w971520747_bridged_3",
+    "channel_w971520749_bridged",
+    "channel_w971520749_bridged_2",
+    "channel_w971520749_bridged_3",
+    "channel_w971520751_bridged",
+    "channel_w971520751_bridged_2",
+    "channel_w971520751_bridged_3",
+    "channel_w971520751_bridged_4"
+   ],
+   "tool": "bridge_paths.py",
+   "reason": "developer 2026-11-14: cart paths no longer run into the water; the water with the paths over it cut out (bridges are cart path, as at Burlington), and bridges joining path ends that face each other across it"
   }
  ],
  "tags": [
@@ -231,6 +255,46 @@
   {
    "osm": "w212179116",
    "reason": "replaced by its copy as a building (proposed/clubhouse.geojson)"
+  },
+  {
+   "osm": "w1255799543",
+   "tool": "bridge_paths.py",
+   "reason": "replaced by w1255799543_bridged (the cart paths over it cut out)"
+  },
+  {
+   "osm": "w1255799544",
+   "tool": "bridge_paths.py",
+   "reason": "replaced by w1255799544_bridged (the cart paths over it cut out)"
+  },
+  {
+   "osm": "w1572284675",
+   "tool": "bridge_paths.py",
+   "reason": "replaced by w1572284675_bridged (the cart paths over it cut out)"
+  },
+  {
+   "osm": "w778422502",
+   "tool": "bridge_paths.py",
+   "reason": "replaced by w778422502_bridged, w778422502_bridged_2 (the cart paths over it cut out)"
+  },
+  {
+   "osm": "channel_w971520745",
+   "tool": "bridge_paths.py",
+   "reason": "replaced by channel_w971520745_bridged, channel_w971520745_bridged_2 (the cart paths over it cut out)"
+  },
+  {
+   "osm": "channel_w971520747",
+   "tool": "bridge_paths.py",
+   "reason": "replaced by channel_w971520747_bridged, channel_w971520747_bridged_2, channel_w971520747_bridged_3 (the cart paths over it cut out)"
+  },
+  {
+   "osm": "channel_w971520749",
+   "tool": "bridge_paths.py",
+   "reason": "replaced by channel_w971520749_bridged, channel_w971520749_bridged_2, channel_w971520749_bridged_3 (the cart paths over it cut out)"
+  },
+  {
+   "osm": "channel_w971520751",
+   "tool": "bridge_paths.py",
+   "reason": "replaced by channel_w971520751_bridged, channel_w971520751_bridged_2, channel_w971520751_bridged_3, channel_w971520751_bridged_4 (the cart paths over it cut out)"
   }
  ]
 }

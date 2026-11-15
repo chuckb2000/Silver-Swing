@@ -49,6 +49,19 @@
     "approved": "pending (course chat 2026-10-31)"
    },
    "reason": "The practice range east of hole 1: OSM maps the 120 m mown strip w1041848694 and its hitting area r14043909 as golf=fairway belonging to no hole; the scouting has the club's range left of hole 1, out of bounds, and the NAIP photo shows the strip with a hitting area at the clubhouse end. Copied as golf=driving_range (make_range.py), so it is out of bounds (standing default)."
+  },
+  {
+   "from": "proposed/bridges.geojson",
+   "ids": [
+    "channel_w42855499_bridged",
+    "channel_w42855499_bridged_2",
+    "channel_w42855499_bridged_3",
+    "channel_w42855499_bridged_4",
+    "channel_w265532264_bridged",
+    "channel_w265532264_bridged_2"
+   ],
+   "tool": "bridge_paths.py",
+   "reason": "developer 2026-11-14: cart paths no longer run into the water; the water with the paths over it cut out (bridges are cart path, as at Burlington), and bridges joining path ends that face each other across it"
   }
  ],
  "drop": [
@@ -71,6 +84,16 @@
   {
    "osm": "r14043909",
    "reason": "the range's hitting area (range add above)"
+  },
+  {
+   "osm": "channel_w42855499",
+   "tool": "bridge_paths.py",
+   "reason": "replaced by channel_w42855499_bridged, channel_w42855499_bridged_2, channel_w42855499_bridged_3, channel_w42855499_bridged_4 (the cart paths over it cut out)"
+  },
+  {
+   "osm": "channel_w265532264",
+   "tool": "bridge_paths.py",
+   "reason": "replaced by channel_w265532264_bridged, channel_w265532264_bridged_2 (the cart paths over it cut out)"
   }
  ]
 }

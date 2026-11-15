@@ -11,9 +11,39 @@
     "flatten": "no"
    },
    "reason": "the brooks that cross the course (OSM waterway=stream lines only): penalty areas along the channel the DEM shows (pipeline/propose_channels.py: 3.5-4.9 m wide, 0.35-0.58 m deep), red by the standing default; the ditch w1063291103 shows no channel and stays rough"
+  },
+  {
+   "from": "proposed/bridges.geojson",
+   "ids": [
+    "w85930127_bridged",
+    "channel_w971520812_bridged",
+    "channel_w971520812_bridged_2",
+    "channel_w971520812_bridged_3",
+    "channel_w971520812_bridged_4",
+    "channel_w971520852_bridged",
+    "channel_w971520852_bridged_2"
+   ],
+   "tool": "bridge_paths.py",
+   "reason": "developer 2026-11-14: cart paths no longer run into the water; the water with the paths over it cut out (bridges are cart path, as at Burlington), and bridges joining path ends that face each other across it"
   }
  ],
- "drop": [],
+ "drop": [
+  {
+   "osm": "w85930127",
+   "tool": "bridge_paths.py",
+   "reason": "replaced by w85930127_bridged (the cart paths over it cut out)"
+  },
+  {
+   "osm": "channel_w971520812",
+   "tool": "bridge_paths.py",
+   "reason": "replaced by channel_w971520812_bridged, channel_w971520812_bridged_2, channel_w971520812_bridged_3, channel_w971520812_bridged_4 (the cart paths over it cut out)"
+  },
+  {
+   "osm": "channel_w971520852",
+   "tool": "bridge_paths.py",
+   "reason": "replaced by channel_w971520852_bridged, channel_w971520852_bridged_2 (the cart paths over it cut out)"
+  }
+ ],
  "tags": [
   {
    "osm": "w966020217",

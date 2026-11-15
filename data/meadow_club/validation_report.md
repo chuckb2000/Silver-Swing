@@ -106,19 +106,19 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 | 3 | 4 | yes | yes (4 near) | yes | yes | yes | 8 | 0 |
 | 4 | 4 | yes | yes (3 near) | yes | yes | yes | 11 | 0 |
 | 5 | 3 | yes | yes (4 near) | yes | yes | yes | 6 | 0 |
-| 6 | 4 | yes | yes (7 near) | yes | yes | yes | 8 | 1 |
+| 6 | 4 | yes | yes (7 near) | yes | yes | yes | 8 | 3 |
 | 7 | 4 | yes | yes (3 near) | yes | yes | yes | 12 | 1 |
 | 8 | 3 | yes | yes (4 near) | yes | yes | yes | 3 | 0 |
 | 9 | 4 | yes | yes (4 near) | yes | yes | yes | 6 | 2 |
-| 10 | 4 | yes | yes (2 near) | yes | yes | yes | 14 | 1 |
+| 10 | 4 | yes | yes (2 near) | yes | yes | yes | 14 | 2 |
 | 11 | 3 | yes | yes (2 near) | yes | yes | yes | 11 | 1 |
 | 12 | 4 | yes | yes (3 near) | yes | yes | yes | 11 | 1 |
 | 13 | 5 | yes | yes (4 near) | yes | yes | yes | 17 | 2 |
 | 14 | 3 | yes | yes (3 near) | yes | yes | yes | 2 | 1 |
 | 15 | 5 | yes | yes (3 near) | yes | yes | yes | 15 | 0 |
-| 16 | 4 | yes | yes (4 near) | yes | yes | yes | 8 | 2 |
+| 16 | 4 | yes | yes (4 near) | yes | yes | yes | 8 | 3 |
 | 17 | 4 | yes | yes (2 near) | yes | yes | yes | 9 | 1 |
-| 18 | 4 | yes | yes (2 near) | yes | yes | yes | 8 | 1 |
+| 18 | 4 | yes | yes (2 near) | yes | yes | yes | 8 | 3 |
 
 ## Missing or suspect features
 
@@ -135,12 +135,12 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 - waterway w1282018493 (stream): 79 m of it within 30 m of a hole line isn't in a penalty area (pipeline/propose_channels.py makes one; or say it's dry)
 - waterway w1286972900 (stream): 39 m of it within 30 m of a hole line isn't in a penalty area (pipeline/propose_channels.py makes one; or say it's dry)
 - waterway w1286972901 (stream): 183 m of it within 30 m of a hole line isn't in a penalty area (pipeline/propose_channels.py makes one; or say it's dry)
-- waterway w1286972902 (stream): 30 m of it within 30 m of a hole line isn't in a penalty area (pipeline/propose_channels.py makes one; or say it's dry)
+- waterway w1286972902 (stream): 32 m of it within 30 m of a hole line isn't in a penalty area (pipeline/propose_channels.py makes one; or say it's dry)
 - waterway w1286980085 (stream): 80 m of it within 30 m of a hole line isn't in a penalty area (pipeline/propose_channels.py makes one; or say it's dry)
 - waterway w1286980090 (stream): 37 m of it within 30 m of a hole line isn't in a penalty area (pipeline/propose_channels.py makes one; or say it's dry)
 - waterway w1286980092 (stream): 38 m of it within 30 m of a hole line isn't in a penalty area (pipeline/propose_channels.py makes one; or say it's dry)
 - waterway w1286980093 (stream): 31 m of it within 30 m of a hole line isn't in a penalty area (pipeline/propose_channels.py makes one; or say it's dry)
 - waterway w1286980094 (stream): 56 m of it within 30 m of a hole line isn't in a penalty area (pipeline/propose_channels.py makes one; or say it's dry)
 
-Totals: 66 tees, 21 greens, 17 fairways, 97 bunkers, 6 water hazards, 18 pins, 36 cart paths, 0 OSM tree points.
+Totals: 66 tees, 21 greens, 17 fairways, 97 bunkers, 11 water hazards, 18 pins, 36 cart paths, 0 OSM tree points.
 

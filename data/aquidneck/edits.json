@@ -64,6 +64,14 @@
    ],
    "tags": {},
    "reason": "the clubhouse is mapped golf=clubhouse + building=yes, which s01 reads as a golf feature, not a building (a building=yes tag edit does not change that): copied as a building (as Newport), original dropped. Without it the art drew lidar 'trees' on its roof beside the 18th green."
+  },
+  {
+   "from": "proposed/bridges.geojson",
+   "ids": [
+    "w940801562_bridged"
+   ],
+   "tool": "bridge_paths.py",
+   "reason": "developer 2026-11-14: cart paths no longer run into the water; the water with the paths over it cut out (bridges are cart path, as at Burlington), and bridges joining path ends that face each other across it"
   }
  ],
  "tags": [
@@ -161,6 +169,11 @@
   {
    "osm": "w940801546",
    "reason": "replaced by its copy as a building (w940801546_building, proposed/aquidneck.geojson)"
+  },
+  {
+   "osm": "w940801562",
+   "tool": "bridge_paths.py",
+   "reason": "replaced by w940801562_bridged (the cart paths over it cut out)"
   }
  ]
 }

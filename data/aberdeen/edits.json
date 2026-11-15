@@ -23,12 +23,39 @@
     "flatten": "no"
    },
    "reason": "course chat 2026-10-31 (pending the developer): the streams OSM maps only as lines near holes 13, 15, 17 and 18 (the drainage that crosses the 17th between tee and green, through a wooded wetland swale on the NAIP photo) as red penalty areas from the DEM channel along them (pipeline/propose_channels.py; standing default: all water red); flatten=no keeps the falling bed"
+  },
+  {
+   "from": "proposed/bridges.geojson",
+   "ids": [
+    "w673637228_bridged",
+    "w673637228_bridged_2",
+    "channel_w1032609010_bridged",
+    "channel_w1032609010_bridged_2",
+    "channel_w1050129961_bridged"
+   ],
+   "tool": "bridge_paths.py",
+   "reason": "developer 2026-11-14: cart paths no longer run into the water; the water with the paths over it cut out (bridges are cart path, as at Burlington), and bridges joining path ends that face each other across it"
   }
  ],
  "drop": [
   {
    "osm": "w1032598389",
    "reason": "replaced by its copy as a building (proposed/clubhouse.geojson)"
+  },
+  {
+   "osm": "w673637228",
+   "tool": "bridge_paths.py",
+   "reason": "replaced by w673637228_bridged, w673637228_bridged_2 (the cart paths over it cut out)"
+  },
+  {
+   "osm": "channel_w1032609010",
+   "tool": "bridge_paths.py",
+   "reason": "replaced by channel_w1032609010_bridged, channel_w1032609010_bridged_2 (the cart paths over it cut out)"
+  },
+  {
+   "osm": "channel_w1050129961",
+   "tool": "bridge_paths.py",
+   "reason": "replaced by channel_w1050129961_bridged (the cart paths over it cut out)"
   }
  ],
  "tags": [

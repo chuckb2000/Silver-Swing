@@ -75,3 +75,9 @@ export function robotRound(course: CourseRuntime, holes: number[], seed = 7): Ro
   }
   return r;
 }
+
+/** A penalty area's id as the course data names it: a piece left by pipeline/bridge_paths.py
+ * ("<id>_bridged", "<id>_bridged_2") or s10's piece of a red_water_osm feature ("<id>:1") is <id>. */
+export function baseWaterId(id: string): string {
+  return id.split(':')[0].replace(/_bridged(_\d+)?$/, '');
+}

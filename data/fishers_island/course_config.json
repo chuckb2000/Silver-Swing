@@ -64,7 +64,7 @@
  "driving_range_is_ob": true,
  "trees_off_fairways_m": 2,
  "red_water_osm": [
-  "sea",
+  "sea_bridged",
   "w1064544157",
   "w191740583",
   "w968026770"

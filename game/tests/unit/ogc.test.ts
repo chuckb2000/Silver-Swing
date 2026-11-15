@@ -4,7 +4,7 @@
 // lines in the canopy model are not trees.
 import { describe, expect, it } from 'vitest';
 import { isOB, SURF } from '../../src/systems/physics/surfaces';
-import { loadCourseFiles, registry } from './helpers';
+import { loadCourseFiles, registry, baseWaterId } from './helpers';
 
 const ID = 'ogc';
 // flags (3-8 %) accepted for play, listed in data/ogc/validation_report.md
@@ -28,12 +28,12 @@ describe('Oregon Golf Club course data', () => {
   it('every water hazard is red (developer), including the pond OSM tags yellow', () => {
     expect(course.water.length).toBeGreaterThanOrEqual(8);
     for (const w of course.water) expect(w.penalty, w.id).toBe('red');
-    expect(course.water.find((w) => w.id === 'w865546390')?.penalty).toBe('red');
+    expect(course.water.find((w) => baseWaterId(w.id) === 'w865546390')?.penalty).toBe('red');
   });
 
   it('the creek on 13, 14 and 15 is three red penalty areas from the lidar channel (developer, 2026-10-20)', () => {
     for (const id of ['channel_w984705476', 'channel_w866033745', 'channel_w984705479']) {
-      expect(course.water.find((w) => w.id === id)?.penalty, id).toBe('red');
+      expect(course.water.find((w) => baseWaterId(w.id) === id)?.penalty, id).toBe('red');
     }
     // it crosses the 13th and 15th hole lines (in front of 13's green, between 15's fairway and green)
     const crosses = (n: number) => {

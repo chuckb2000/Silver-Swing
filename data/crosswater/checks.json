@@ -4,6 +4,7 @@
   10
  ],
  "water": {
-  "count": 72
+  "count": 85,
+  "why": "72 penalty areas; the cart paths over some of them cut them into pieces (bridge_paths.py), 85 in all"
  }
 }

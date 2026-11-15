@@ -42,6 +42,8 @@ built against 7,683.
     DOGAMI bare-earth DTM shows (cells 0.15 m below a 41 m running median, thinned to a
     centre line, at least 25 m long), drawn 3 m wide (`data/crosswater/make_creeks.py`,
     `proposed/creeks.geojson`, picture `proposed/creeks.png`): 7.4 km of creek.
+    Cart paths cross the water on bridges (`pipeline/bridge_paths.py`, developer
+    2026-11-14), which cuts some of them into pieces: 85 in the game.
     The river's OSM line runs through the boundary's two cut-outs, which are out of bounds.
 -   **Trees:** 37,037 from the canopy model (4,918 inside the course), median 10.0 m,
     tallest 40.7 m.

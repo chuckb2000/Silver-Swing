@@ -5,5 +5,5 @@
   "why": "the Black tee boxes on 1, 4, 6, 9 and 14 are not in OSM and no lidar or photo evidence places them; those holes play from the start of the OSM hole line (the Gold box or near it), 8.4-11.9 % short of the card. Accepted for play by the course chat 2026-10-31 under the developer's overnight 'make the call'; validation_report.md open items"
  },
  "wind_mph": [2, 10],
- "water": {"ids": ["channel_w626918930"]}
+ "water": {"ids": ["channel_w626918930_bridged", "channel_w626918930_bridged_2", "channel_w626918930_bridged_3", "channel_w626918930_bridged_4", "channel_w626918930_bridged_5"]}
 }

@@ -229,6 +229,22 @@
   {
    "osm": "w884265088",
    "reason": "Oakway Golf Course's cartpath (outside this course's boundary): the neighbour's course is drawn as plain ground"
+  },
+  {
+   "osm": "w797168020",
+   "tool": "bridge_paths.py",
+   "reason": "replaced by w797168020_bridged, w797168020_bridged_2 (the cart paths over it cut out)"
+  }
+ ],
+ "add": [
+  {
+   "from": "proposed/bridges.geojson",
+   "ids": [
+    "w797168020_bridged",
+    "w797168020_bridged_2"
+   ],
+   "tool": "bridge_paths.py",
+   "reason": "developer 2026-11-14: cart paths no longer run into the water; the water with the paths over it cut out (bridges are cart path, as at Burlington), and bridges joining path ends that face each other across it"
   }
  ]
 }
