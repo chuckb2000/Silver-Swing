@@ -93,8 +93,8 @@ def paint_marsh(rgb, marsh, t, n1, n2, P, rough_lut, blk: int = 1):
     if not marsh.any():
         return
     G3, G4 = np.array(P["G3"], np.float32), np.array(P["G4"], np.float32)
-    ground = (rough_lut.astype(np.float32) * 0.45 + G4 * 0.55) * 0.78          # 4 tones by hillshade
-    body = (G4 * 0.7 + rough_lut[1].astype(np.float32) * 0.3) * 0.92
+    ground = (rough_lut.astype(np.float32) * 0.62 + G4 * 0.38) * 0.78          # 4 tones by hillshade
+    body = (G4 * 0.5 + rough_lut[1].astype(np.float32) * 0.5) * 0.92
     foot = (rough_lut[0].astype(np.float32) * 0.4 + G3 * 0.6) * 0.55
     rgb[marsh] = ground[np.clip(t, 0, 3)[marsh]].astype(np.uint8)
     cf = ndimage.uniform_filter(n2.astype(np.float32), size=7 * blk)          # clumps a few metres across
@@ -105,7 +105,7 @@ def paint_marsh(rgb, marsh, t, n1, n2, P, rough_lut, blk: int = 1):
     right[:, blk:] = glint[:, :-blk]
     rgb[right & marsh & ~clump] = P["W1"]
     seeds = marsh & ~glint & (n1 > np.where(clump, 0.86, 0.985))
-    tips = [np.array(P["G6"], np.uint8), np.array(P["G5"], np.uint8), rough_lut[2].astype(np.uint8)]
+    tips = [np.array(P["G5"], np.uint8), rough_lut[2].astype(np.uint8), (G4 * 0.5 + rough_lut[2].astype(np.float32) * 0.5).astype(np.uint8)]
     pick = np.where(n2 < 0.2, 2, np.where(n2 < 0.6, 1, 0))
     def down(m, k):
         out = np.zeros_like(m)
