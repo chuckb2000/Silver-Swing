@@ -190,5 +190,27 @@
    "reason": "standing default (COURSE_BUILD 4.1): every penalty area red; OSM tags it golf=water_hazard (yellow)"
   }
  ],
- "drop": []
+ "drop": [
+  {
+   "osm": "w1377150478",
+   "tool": "bridge_paths.py",
+   "reason": "replaced by w1377150478_bridged (the cart paths over it cut out)"
+  },
+  {
+   "osm": "w319058493",
+   "tool": "bridge_paths.py",
+   "reason": "replaced by w319058493_bridged (the cart paths over it cut out)"
+  }
+ ],
+ "add": [
+  {
+   "from": "proposed/bridges.geojson",
+   "ids": [
+    "w1377150478_bridged",
+    "w319058493_bridged"
+   ],
+   "tool": "bridge_paths.py",
+   "reason": "developer 2026-11-14: cart paths no longer run into the water; the water with the paths over it cut out (bridges are cart path, as at Burlington), and bridges joining path ends that face each other across it"
+  }
+ ]
 }
