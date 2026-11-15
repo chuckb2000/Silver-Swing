@@ -61,6 +61,16 @@
    ],
    "tags": {},
    "reason": "developer 2026-10-26: \"part of the fairway is out of bounds on newport hole 10\". OSM's boundary cut across the west lobe of the 10th fairway (r19086010, 49 m2 out) and a bunker beside it (w673510352, 179 m2 out). The developer traced the out-of-bounds line along the 10th in the tracer (desk/ob10.json); its ends join the old line 20 m beyond the tracer's frame. About 2,860 m2 added between the fairway and the road"
+  },
+  {
+   "from": "proposed/bridges.geojson",
+   "ids": [
+    "w673525419_bridged",
+    "w673525419_bridged_2",
+    "sea_bridged"
+   ],
+   "tool": "bridge_paths.py",
+   "reason": "developer 2026-11-14: cart paths no longer run into the water; the water with the paths over it cut out (bridges are cart path, as at Burlington), and bridges joining path ends that face each other across it"
   }
  ],
  "drop": [
@@ -87,6 +97,16 @@
   {
    "osm": "r13922079",
    "reason": "replaced by proposed/boundary.geojson (the developer's traced line along the 10th)"
+  },
+  {
+   "osm": "w673525419",
+   "tool": "bridge_paths.py",
+   "reason": "replaced by w673525419_bridged, w673525419_bridged_2 (the cart paths over it cut out)"
+  },
+  {
+   "osm": "sea",
+   "tool": "bridge_paths.py",
+   "reason": "replaced by sea_bridged (the cart paths over it cut out)"
   }
  ]
 }
