@@ -39,6 +39,8 @@ Back, the only set built: the card has no Blue, so the 4.1 default takes the lon
 -   2026-10-22: the logo is the design chat's spotted fawn (on `main`).
 -   2026-10-22: hole 3's Back tee is OSM box w1547384735 (circled on a screenshot from play), not the box in hole 5's tee complex; 69 yd against 85 on the card, accepted (`desk_prep.py` `TEE_CHOICE`, branch `course/shortys-hole3`).
 
+-   **Tee boxes:** 19 Back (developer, 2026-11-14, from the tee check): it had been on a copy of `w1547559695` (`a_tee_back_19`), a forward tee out along the 4th's line, chosen as the box nearest the card. Now on a copy of `w1547585700` (`w1547585700_h19`, `proposed/tee_19.geojson`), the box the 19th's line starts on and the 4th also tees from: 56 yd, card 57. `a_tee_back_19` is dropped in `edits.json`.
+
 ## New pipeline keys or theme
 
 None. Course-chat tools in `data/shortys/`: `make_osm.py`, `make_edits.py`, `make_ortho.py`, `make_proposals.py`, `desk_prep.py` (the desk's input from the proposals, and `--approve`). `make regress` not needed (nothing in `pipeline/` changed).

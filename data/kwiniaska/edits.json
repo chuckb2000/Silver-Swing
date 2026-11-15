@@ -42,6 +42,33 @@
     "hole": "4"
    },
    "reason": "the 4th's tee box (developer 2026-11-01: not hole 5's back tee)"
+  },
+  {
+   "osm": "w1228366540",
+   "set": {
+    "hole": "12",
+    "tee_set": "Black",
+    "assigned_by": "the developer (2026-11-14, from the tee check's screenshots)"
+   },
+   "reason": "hole 12 Black: the box the OSM hole 12 line starts on, laid out east-west along the 12th (it was 15's Black tee); the build had swapped 12 and 15"
+  },
+  {
+   "osm": "w1228366539",
+   "set": {
+    "hole": "15",
+    "tee_set": "Black",
+    "assigned_by": "the developer (2026-11-14, from the tee check's screenshots)"
+   },
+   "reason": "hole 15 Black: the box the OSM hole 15 line starts on, laid out north-south along the 15th (it was 12's Black tee)"
+  },
+  {
+   "osm": "w1228366529",
+   "set": {
+    "hole": "16",
+    "tee_set": "Gold;Black",
+    "assigned_by": "the developer (2026-11-14, from the tee check's screenshots)"
+   },
+   "reason": "hole 16 Black: the 16th's own box (the OSM line starts on it; 16 Gold was already on it); the Black tee had been on w1228366530, the box the 7th's line starts on"
   }
  ],
  "drop": [

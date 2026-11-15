@@ -119,6 +119,8 @@ default and was switched when main was merged in.
     (650, 1825) inside the boundary, and the clubhouse pool (w940802256, 153 m²). Neither is
     near a line of play.
 
+-   **Tee boxes:** 3 Green (developer, 2026-11-14, from the tee check): it had been on `w916003996`, the box the 5th's line starts on. Now on `w915497828`, where the 3rd's line starts, laid out along the 3rd: 326 yd against the card's 350 (-6.9 %, flag, accepted); tag in `edits.json`.
+
 ## New pipeline keys or theme
 
 -   **`desk_to_proposed.py`:** the desk tee is tagged with trace_spec's `desk.tee`. The default

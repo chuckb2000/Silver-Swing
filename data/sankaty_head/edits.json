@@ -438,6 +438,24 @@
     "tee_set": "Blue"
    },
    "reason": "the box 27 m right of the 17th's line (OSM tee): 447 yd, card Blue 450; the line start is the 540-yd tee"
+  },
+  {
+   "osm": "w844645497",
+   "set": {
+    "hole": "15",
+    "tee_set": "Championship",
+    "assigned_by": "the developer (2026-11-14, from the tee check's screenshots)"
+   },
+   "reason": "hole 15 Championship: the box the OSM hole 15 line starts on. The build had swapped 15 and 18 (each on the box the other's line starts on); from here 410 yd against the card's 410"
+  },
+  {
+   "osm": "w844652026",
+   "set": {
+    "hole": "18",
+    "tee_set": "Championship",
+    "assigned_by": "the developer (2026-11-14, from the tee check's screenshots)"
+   },
+   "reason": "hole 18 Championship: the box the OSM hole 18 line starts on (it was 15's tee); 382 yd from its centre against the card's 385"
   }
  ]
 }

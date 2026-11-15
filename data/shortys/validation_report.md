@@ -24,8 +24,8 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 | 16 | 3 | Back | 123 | 124.0 | +1.0 | +0.8% | pass | 124.0 | +0.8% | pass |
 | 17 | 3 | Back | 80 | 80.3 | +0.3 | +0.4% | pass | 80.3 | +0.4% | pass |
 | 18 | 3 | Back | 92 | 87.5 | -4.5 | -4.9% | flag | 89.8 | -2.4% | pass |
-| 19 | 3 | Back | 57 | 56.4 | -0.6 | -1.1% | pass | 56.4 | -1.1% | pass |
-| **total** | 57 | | **1997** | **1935** | -62 | -3.1% | | **1982** | -0.7% | |
+| 19 | 3 | Back | 57 | 50.6 | -6.4 | -11.3% | FAIL | 55.7 | -2.2% | pass |
+| **total** | 57 | | **1997** | **1929** | -68 | -3.4% | | **1981** | -0.8% | |
 
 ## Open items
 
@@ -50,7 +50,7 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 19. Hole 16 (Back): tee box a_tee_back_16 assigned by the developer (tagged hole=16, tee_set=Back in edited/course.geojson).
 20. Hole 17 (Back): tee box a_tee_back_17 assigned by the developer (tagged hole=17, tee_set=Back in edited/course.geojson).
 21. Hole 18 (Back): tee box a_tee_back_18 assigned by the developer (tagged hole=18, tee_set=Back in edited/course.geojson).
-22. Hole 19 (Back): tee box a_tee_back_19 assigned by the developer (tagged hole=19, tee_set=Back in edited/course.geojson).
+22. Hole 19 (Back): tee box w1547585700_h19 assigned by the developer (2026-11-14, from the tee check's screenshots) (tagged hole=19, tee_set=Back in edited/course.geojson).
 
 ## Other open items (Shorty's)
 
@@ -79,6 +79,7 @@ Built 2026-10-22 together with Bandon Preserve (shared downloads, GitHub release
 - Hole 12 (Back): measured 92 yd from the tee-box centre vs 133 on the card (-30.8%); moved the virtual tee along the middle of the real tee polygon a_tee_back_12 (on its centre line, at least 2.5 m from its back and front) -> 129.7 yd (real 92.0 yd).
 - Hole 14 (Back): measured 166 yd from the tee-box centre vs 161 on the card (+3.1%); moved the virtual tee along the middle of the real tee polygon a_tee_back_14 (on its centre line, at least 2.5 m from its back and front) -> 164.9 yd (real 166.0 yd).
 - Hole 18 (Back): measured 87 yd from the tee-box centre vs 92 on the card (-4.9%); moved the virtual tee along the middle of the real tee polygon a_tee_back_18 (on its centre line, at least 2.5 m from its back and front) -> 89.8 yd (real 87.5 yd).
+- Hole 19 (Back): measured 51 yd from the tee-box centre vs 57 on the card (-11.3%); moved the virtual tee along the middle of the real tee polygon w1547585700_h19 (on its centre line, at least 2.5 m from its back and front) -> 55.7 yd (real 50.6 yd).
 
 ## Tree detection (DOGAMI canopy height model)
 
@@ -143,7 +144,7 @@ Built 2026-10-22 together with Bandon Preserve (shared downloads, GitHub release
 | 4 | 3 | yes | yes (8 near) | yes | yes | yes | 5 | 0 |
 | 5 | 3 | yes | yes (4 near) | yes | yes | yes | 5 | 0 |
 | 6 | 3 | yes | yes (3 near) | yes | yes | yes | 5 | 0 |
-| 7 | 3 | yes | yes (7 near) | yes | yes | yes | 2 | 0 |
+| 7 | 3 | yes | yes (8 near) | yes | yes | yes | 2 | 0 |
 | 8 | 3 | yes | yes (4 near) | yes | yes | yes | 7 | 0 |
 | 9 | 3 | yes | yes (5 near) | yes | yes | yes | 1 | 0 |
 | 10 | 3 | yes | yes (4 near) | yes | yes | yes | 4 | 0 |

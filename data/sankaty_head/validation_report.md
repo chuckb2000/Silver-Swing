@@ -34,15 +34,15 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 | 13 | 4 | Blue | 325 | 319.1 | -5.9 | -1.8% | pass | 319.1 | -1.8% | pass |
 | 14 | 3 | Championship | 150 | 143.6 | -6.4 | -4.3% | flag | 146.3 | -2.5% | pass |
 | 14 | 3 | Blue | 110 | 103.7 | -6.3 | -5.7% | flag | 107.1 | -2.7% | pass |
-| 15 | 4 | Championship | 410 | 411.9 | +1.9 | +0.5% | pass | 411.9 | +0.5% | pass |
+| 15 | 4 | Championship | 410 | 410.0 | -0.0 | -0.0% | pass | 410.0 | -0.0% | pass |
 | 15 | 4 | Blue | 360 | 360.5 | +0.5 | +0.1% | pass | 360.5 | +0.1% | pass |
 | 16 | 4 | Championship | 390 | 379.8 | -10.2 | -2.6% | pass | 379.8 | -2.6% | pass |
 | 16 | 4 | Blue | 315 | 308.4 | -6.6 | -2.1% | pass | 308.4 | -2.1% | pass |
 | 17 | 5 | Championship | 540 | 525.5 | -14.5 | -2.7% | pass | 525.5 | -2.7% | pass |
 | 17 | 5 | Blue | 450 | 447.6 | -2.4 | -0.5% | pass | 447.6 | -0.5% | pass |
-| 18 | 4 | Championship | 385 | 395.8 | +10.8 | +2.8% | pass | 395.8 | +2.8% | pass |
+| 18 | 4 | Championship | 385 | 381.7 | -3.3 | -0.9% | pass | 381.7 | -0.9% | pass |
 | 18 | 4 | Blue | 340 | 335.5 | -4.5 | -1.3% | pass | 335.5 | -1.3% | pass |
-| **total** | 142 | | **12255** | **12082** | -173 | -1.4% | | **12118** | -1.1% | |
+| **total** | 142 | | **12255** | **12066** | -189 | -1.5% | | **12102** | -1.2% | |
 
 ## Open items
 
@@ -73,11 +73,13 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 25. Hole 13: the OSM hole line starts 55 m from the Blue tee box (w844627134), and only that box matches the card; the line was probably drawn from another tee. Measured from the Blue box through the line's bend points.
 26. Hole 14: OSM handicap 18 differs from the scorecard's stroke index 16; using the scorecard.
 27. Hole 15: OSM handicap 8 differs from the scorecard's stroke index 2; using the scorecard.
-28. Hole 16: OSM handicap 12 differs from the scorecard's stroke index 14; using the scorecard.
-29. Hole 16 (Championship): tee box p_tee16_back assigned by the developer (tagged hole=16, tee_set=Championship in edited/course.geojson).
-30. Hole 17: OSM handicap 2 differs from the scorecard's stroke index 12; using the scorecard.
-31. Hole 17 (Blue): tee box w844645521 assigned by the developer (tagged hole=17, tee_set=Blue in edited/course.geojson).
-32. Hole 18: OSM handicap 14 differs from the scorecard's stroke index 4; using the scorecard.
+28. Hole 15 (Championship): tee box w844645497 assigned by the developer (2026-11-14, from the tee check's screenshots) (tagged hole=15, tee_set=Championship in edited/course.geojson).
+29. Hole 16: OSM handicap 12 differs from the scorecard's stroke index 14; using the scorecard.
+30. Hole 16 (Championship): tee box p_tee16_back assigned by the developer (tagged hole=16, tee_set=Championship in edited/course.geojson).
+31. Hole 17: OSM handicap 2 differs from the scorecard's stroke index 12; using the scorecard.
+32. Hole 17 (Blue): tee box w844645521 assigned by the developer (tagged hole=17, tee_set=Blue in edited/course.geojson).
+33. Hole 18: OSM handicap 14 differs from the scorecard's stroke index 4; using the scorecard.
+34. Hole 18 (Championship): tee box w844652026 assigned by the developer (2026-11-14, from the tee check's screenshots) (tagged hole=18, tee_set=Championship in edited/course.geojson).
 
 ## Playability adjustments
 

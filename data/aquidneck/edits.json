@@ -138,6 +138,15 @@
     "penalty": "red"
    },
    "reason": "golf=water_hazard (yellow in OSM's tagging): every penalty area red by the standing default (COURSE_BUILD 4.1); config penalty_default is not read by the pipeline"
+  },
+  {
+   "osm": "w915497828",
+   "set": {
+    "hole": "3",
+    "tee_set": "Green",
+    "assigned_by": "the developer (2026-11-14, from the tee check's screenshots)"
+   },
+   "reason": "hole 3 Green: the box the OSM hole 3 line starts on, laid out along the 3rd; the Green tee had been on w916003996, the box the 5th's line starts on"
   }
  ],
  "drop": [

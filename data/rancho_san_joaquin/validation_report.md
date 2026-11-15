@@ -20,7 +20,7 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 | 6 | 4 | Blue | 366 | 359.4 | -6.6 | -1.8% | pass | 359.4 | -1.8% | pass |
 | 7 | 4 | Black | 369 | 350.1 | -18.9 | -5.1% | flag | 354.0 | -4.1% | flag |
 | 7 | 4 | Blue | 346 | 350.1 | +4.1 | +1.2% | pass | 350.1 | +1.2% | pass |
-| 8 | 3 | Black | 176 | 181.5 | +5.5 | +3.1% | flag | 180.3 | +2.5% | pass |
+| 8 | 3 | Black | 176 | 162.5 | -13.5 | -7.7% | flag | 171.6 | -2.5% | pass |
 | 8 | 3 | Blue | 166 | 162.5 | -3.5 | -2.1% | pass | 162.5 | -2.1% | pass |
 | 9 | 4 | Black | 431 | 427.3 | -3.7 | -0.9% | pass | 427.3 | -0.9% | pass |
 | 9 | 4 | Blue | 414 | 427.3 | +13.3 | +3.2% | flag | 424.3 | +2.5% | pass |
@@ -34,7 +34,7 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 | 13 | 3 | Blue | 157 | 152.4 | -4.6 | -2.9% | pass | 152.4 | -2.9% | pass |
 | 14 | 4 | Black | 366 | 339.1 | -26.9 | -7.3% | flag | 356.9 | -2.5% | pass |
 | 14 | 4 | Blue | 348 | 339.1 | -8.9 | -2.6% | pass | 339.1 | -2.6% | pass |
-| 15 | 3 | Black | 167 | 158.3 | -8.7 | -5.2% | flag | 162.9 | -2.4% | pass |
+| 15 | 3 | Black | 167 | 162.6 | -4.4 | -2.7% | pass | 162.6 | -2.7% | pass |
 | 15 | 3 | Blue | 156 | 162.6 | +6.6 | +4.2% | flag | 159.8 | +2.5% | pass |
 | 16 | 4 | Black | 410 | 412.1 | +2.1 | +0.5% | pass | 412.1 | +0.5% | pass |
 | 16 | 4 | Blue | 396 | 388.0 | -8.0 | -2.0% | pass | 388.0 | -2.0% | pass |
@@ -42,15 +42,19 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 | 17 | 4 | Blue | 292 | 289.6 | -2.4 | -0.8% | pass | 289.6 | -0.8% | pass |
 | 18 | 5 | Black | 469 | 449.3 | -19.7 | -4.2% | flag | 457.3 | -2.5% | pass |
 | 18 | 5 | Blue | 457 | 449.3 | -7.7 | -1.7% | pass | 449.3 | -1.7% | pass |
-| **total** | 144 | | **12589** | **12289** | -300 | -2.4% | | **12411** | -1.4% | |
+| **total** | 144 | | **12589** | **12274** | -315 | -2.5% | | **12402** | -1.5% | |
 
 ## Open items
 
 1. Hole 2 (Black): no mapped tee box within 8% of the card; the tee is the start point of the OSM hole line (141 yd). The Black tee box is not in OSM - trace it to confirm.
 2. Hole 2 (Black): measured 141 yd vs card 157 (-10.3%) - FAIL, needs a decision.
 3. Hole 7 (Black): measured 354 yd vs card 369 (-4.1%) even with the virtual tee at the best spot in its box; accepted for play.
-4. Hole 13 (Black): no mapped tee box within 8% of the card; the tee is the start point of the OSM hole line (166 yd). The Black tee box is not in OSM - trace it to confirm.
-5. Hole 13 (Black): measured 166 yd vs card 181 (-8.1%) - FAIL, needs a decision.
+4. Hole 8 (Black): tee box w1232200236 assigned by the developer (2026-11-14, from the tee check's screenshots) (tagged hole=8, tee_set=Black in edited/course.geojson).
+5. Hole 8 (Blue): tee box w1232200236 assigned by the developer (2026-11-14, from the tee check's screenshots) (tagged hole=8, tee_set=Blue in edited/course.geojson).
+6. Hole 13 (Black): no mapped tee box within 8% of the card; the tee is the start point of the OSM hole line (166 yd). The Black tee box is not in OSM - trace it to confirm.
+7. Hole 13 (Black): measured 166 yd vs card 181 (-8.1%) - FAIL, needs a decision.
+8. Hole 15 (Black): tee box w1232224768 assigned by the developer (2026-11-14, from the tee check's screenshots) (tagged hole=15, tee_set=Black in edited/course.geojson).
+9. Hole 15 (Blue): tee box w1232224768 assigned by the developer (2026-11-14, from the tee check's screenshots) (tagged hole=15, tee_set=Blue in edited/course.geojson).
 
 ## Developer's calls pending (made 2026-10-31 by the course chats)
 
@@ -71,14 +75,13 @@ Each was made under the developer's overnight "make the call" instruction; each 
 - Hole 5 (Black): measured 496 yd from the tee-box centre vs 517 on the card (-4.1%); moved the virtual tee along the middle of the real tee polygon w1232198094 (on its centre line, at least 2.5 m from its back and front) -> 504.2 yd (real 495.9 yd).
 - Hole 6 (Black): measured 359 yd from the tee-box centre vs 387 on the card (-7.1%); moved the virtual tee along the middle of the real tee polygon w688520099 (on its centre line, at least 2.5 m from its back and front) -> 377.4 yd (real 359.4 yd).
 - Hole 7 (Black): measured 350 yd from the tee-box centre vs 369 on the card (-5.1%); moved the virtual tee along the middle of the real tee polygon w1232198102 (on its centre line, at least 2.5 m from its back and front) -> 354.0 yd (real 350.1 yd).
-- Hole 8 (Black): measured 182 yd from the tee-box centre vs 176 on the card (+3.1%); moved the virtual tee along the middle of the real tee polygon w1232224768 (on its centre line, at least 2.5 m from its back and front) -> 180.3 yd (real 181.5 yd).
+- Hole 8 (Black): measured 162 yd from the tee-box centre vs 176 on the card (-7.7%); moved the virtual tee along the middle of the real tee polygon w1232200236 (on its centre line, at least 2.5 m from its back and front) -> 171.6 yd (real 162.5 yd).
 - Hole 9 (Blue): measured 427 yd from the tee-box centre vs 414 on the card (+3.2%); moved the virtual tee along the middle of the real tee polygon w1232200241 (on its centre line, at least 2.5 m from its back and front) -> 424.3 yd (real 427.3 yd).
 - Hole 11 (Black): measured 372 yd from the tee-box centre vs 388 on the card (-4.1%); moved the virtual tee along the middle of the real tee polygon w1232218600 (on its centre line, at least 2.5 m from its back and front) -> 378.3 yd (real 371.9 yd).
 - Hole 11 (Black): tee shot: a perfect drive at the middle of the fairway clipped a tree near the tee; moved 11.5 m along the middle of the real tee polygon w1232218600 to the nearest clear spot -> 390.7 yd (real 371.9 yd).
 - Hole 11 (Blue): tee shot: a perfect drive at the middle of the fairway clipped a tree near the tee; moved 0.4 m along the middle of the real tee polygon w1232218600 to the nearest clear spot -> 372.1 yd (real 371.9 yd).
 - Hole 12 (Black): measured 518 yd from the tee-box centre vs 537 on the card (-3.6%); moved the virtual tee along the middle of the real tee polygon w1232218608 (on its centre line, at least 2.5 m from its back and front) -> 523.6 yd (real 517.6 yd).
 - Hole 14 (Black): measured 339 yd from the tee-box centre vs 366 on the card (-7.3%); moved the virtual tee along the middle of the real tee polygon w1232221396 (on its centre line, at least 2.5 m from its back and front) -> 356.9 yd (real 339.1 yd).
-- Hole 15 (Black): measured 158 yd from the tee-box centre vs 167 on the card (-5.2%); moved the virtual tee along the middle of the real tee polygon w1232200236 (on its centre line, at least 2.5 m from its back and front) -> 162.9 yd (real 158.3 yd).
 - Hole 15 (Blue): measured 163 yd from the tee-box centre vs 156 on the card (+4.2%); moved the virtual tee along the middle of the real tee polygon w1232224768 (on its centre line, at least 2.5 m from its back and front) -> 159.8 yd (real 162.6 yd).
 - Hole 17 (Black): measured 290 yd from the tee-box centre vs 300 on the card (-3.5%); moved the virtual tee along the middle of the real tee polygon w1232224778 (on its centre line, at least 2.5 m from its back and front) -> 292.5 yd (real 289.6 yd).
 - Hole 18 (Black): measured 449 yd from the tee-box centre vs 469 on the card (-4.2%); moved the virtual tee along the middle of the real tee polygon w1232224784 (on its centre line, at least 2.5 m from its back and front) -> 457.3 yd (real 449.3 yd).
