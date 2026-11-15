@@ -29,7 +29,7 @@ from scipy import ndimage
 from shapely.geometry import Point, Polygon
 from skimage.segmentation import watershed
 
-from common import build_dir, course_name_from_argv, load_config, play_boundary, World, write_json
+from common import build_dir, course_name_from_argv, load_config, marsh_ids, play_boundary, World, write_json
 
 warnings.filterwarnings("ignore")
 
@@ -400,6 +400,9 @@ def main():
     # wide and runs under the trees along its banks (Langston's creek through the woods).
     if len(excl):
         keep = excl.osm.astype(str).str.startswith("join_") | excl.tags.apply(lambda t: t.get("flatten") == "no")
+        # a marsh (marsh_water_osm) is vegetated ground: the trees and shrubs the lidar finds in it stay
+        if marsh_ids(cfg):
+            keep |= excl.osm.isin(marsh_ids(cfg))
         excl = excl[~keep]
     if cfg.get("trees_off_water") and len(excl):
         # half a surface pixel round the water too, so no crown top lands on a water pixel of the

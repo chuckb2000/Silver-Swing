@@ -62,6 +62,16 @@ def uses_waste_sand(cfg: dict) -> bool:
     return cfg.get("waste_sand") is True
 
 
+def marsh_ids(cfg: dict) -> list:
+    """course_config.json "marsh_water_osm": [osm ids] (design chat, 2026-11-14): water features that
+    are marsh on the ground, not open water. Inside the boundary they stay red penalty areas (water in
+    the surface map, listed in red_water_osm or mapped as golf hazards) but are drawn as marsh with red
+    stakes round them (s09, s09b), keep their lidar ground (s04) and their trees (s05); outside it they
+    are not water at all (s08: the ground there, as the lidar shows it). Features tagged
+    marsh_pool=yes (pipeline/marsh_pools.py) are the open water inside them."""
+    return list(cfg.get("marsh_water_osm") or [])
+
+
 def surf_ids(cfg: dict) -> dict:
     """The surface ids a course's map can hold (SURF, plus gorse and waste sand where the course has them)."""
     out = dict(SURF)

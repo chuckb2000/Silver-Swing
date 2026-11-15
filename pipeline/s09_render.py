@@ -26,7 +26,7 @@ from shapely.affinity import translate
 from shapely.geometry import LineString, MultiPolygon, Point, Polygon
 from shapely.ops import unary_union
 
-from common import boundary_rings, build_dir, course_name_from_argv, GORSE_SURF, WASTE_SURF, layouts, load_config, PX_PER_M, ROOT, SURF, World, write_json
+from common import boundary_rings, build_dir, course_name_from_argv, GORSE_SURF, WASTE_SURF, layouts, load_config, marsh_ids, play_boundary, PX_PER_M, ROOT, SURF, World, write_json
 from terrain import tier_offset
 from s08_surface import smooth_fairways
 
@@ -61,6 +61,94 @@ def paint_rock(rgb, rock, t, n1, n2, P, theme: dict):
     rgb[rock & (n2 < 0.14)] = P[keys[0]]
     for k, col in enumerate(theme.get("rock_plants", [])):
         rgb[rock & (n2 > 0.9 - 0.05 * k) & (n2 <= 0.95 - 0.05 * k) & (n1 < 0.7)] = P[col]
+
+
+MARSH_STAKE = (204, 52, 40)      # red penalty-area stakes (outside the theme palettes, like building_colours)
+MARSH_STAKE_TOP = (122, 30, 24)
+
+
+def marsh_masks(g, cfg, mask_fn, surf):
+    """The water pixels of the marsh_water_osm features (common.marsh_ids) less their pools
+    (marsh_pool=yes), or None without the key. mask_fn rasterises geometries onto this picture's grid."""
+    ids = marsh_ids(cfg or {})
+    if not ids:
+        return None
+    sel = g[g.osm.isin(ids)]
+    missing = set(ids) - set(sel.osm)
+    if missing:
+        raise SystemExit(f"marsh_water_osm: no features {sorted(missing)} in the course data")
+    m = mask_fn(list(sel.geometry)) & (surf == S["water"])
+    pools = list(g[g.tags.apply(lambda t: t.get("marsh_pool") == "yes")].geometry)
+    if pools:
+        m &= ~mask_fn(pools)
+    return m
+
+
+def paint_marsh(rgb, marsh, t, n1, n2, P, rough_lut, blk: int = 1):
+    """A penalty area that is marsh on the ground (marsh_water_osm; developer 2026-11-14: "drawn as
+    marsh", not open water): wet ground a shade darker and greener than the rough, shaded with the
+    hillshade tone t; clumps of reeds (stems a light tip, a green body and a dark foot, blk px per
+    texel); a few glints of standing water between them; a dark rim. Open water in it is its pools,
+    drawn as water."""
+    if not marsh.any():
+        return
+    G3, G4 = np.array(P["G3"], np.float32), np.array(P["G4"], np.float32)
+    ground = (rough_lut.astype(np.float32) * 0.45 + G4 * 0.55) * 0.78          # 4 tones by hillshade
+    body = (G4 * 0.7 + rough_lut[1].astype(np.float32) * 0.3) * 0.92
+    foot = (rough_lut[0].astype(np.float32) * 0.4 + G3 * 0.6) * 0.55
+    rgb[marsh] = ground[np.clip(t, 0, 3)[marsh]].astype(np.uint8)
+    cf = ndimage.uniform_filter(n2.astype(np.float32), size=7 * blk)          # clumps a few metres across
+    clump = cf > np.percentile(cf[marsh], 50)
+    glint = marsh & ~clump & (n1 < 0.004)
+    rgb[glint] = P["W0"]
+    right = np.zeros_like(glint)
+    right[:, blk:] = glint[:, :-blk]
+    rgb[right & marsh & ~clump] = P["W1"]
+    seeds = marsh & ~glint & (n1 > np.where(clump, 0.86, 0.985))
+    tips = [np.array(P["G6"], np.uint8), np.array(P["G5"], np.uint8), rough_lut[2].astype(np.uint8)]
+    pick = np.where(n2 < 0.2, 2, np.where(n2 < 0.6, 1, 0))
+    def down(m, k):
+        out = np.zeros_like(m)
+        out[k:] = m[:-k]
+        return out
+    b1, b2 = down(seeds, blk) & marsh & ~seeds, down(seeds, 2 * blk) & marsh & ~seeds
+    rgb[b2] = foot.astype(np.uint8)
+    rgb[b1] = body.astype(np.uint8)
+    for k, c in enumerate(tips):
+        rgb[seeds & (pick == k)] = c
+    rim = marsh & ~ndimage.binary_erosion(marsh, iterations=blk)
+    rgb[rim] = foot.astype(np.uint8)
+
+
+def marsh_stakes(rgb, g, cfg, surf, inside, to_px, hpx: int, wpx: int, step: float = 8.0):
+    """Red stakes round each marsh penalty area (marsh_water_osm), every `step` m just outside its
+    edge, where that is inside the boundary on dry ground (not water, a path or a building).
+    to_px(x, y) -> (col, row) on this picture; a stake is hpx tall and wpx wide."""
+    ids = marsh_ids(cfg or {})
+    if not ids:
+        return
+    H, W = surf.shape
+    dry_ok = ~np.isin(surf, [S["water"], S["ob_water"], S["cartpath"], S["building"], S["ob_building"], S["ob_road"]])
+    for geom in g[g.osm.isin(ids)].geometry:
+        for part in getattr(geom, "geoms", [geom]):
+            for ring in [part.exterior, *part.interiors]:
+                for s_ in np.arange(0, ring.length, step):
+                    p = ring.interpolate(s_)
+                    q = ring.interpolate(min(ring.length, s_ + 0.5))
+                    dx, dy = q.x - p.x, q.y - p.y
+                    ln = math.hypot(dx, dy) or 1
+                    nx_, ny_ = dy / ln, -dx / ln
+                    cand = Point(p.x + nx_ * 0.7, p.y + ny_ * 0.7)
+                    if part.contains(cand):
+                        cand = Point(p.x - nx_ * 0.7, p.y - ny_ * 0.7)
+                    if not inside.contains(cand):
+                        continue
+                    col, row = (int(v) for v in to_px(cand.x, cand.y))
+                    if not (hpx + 1 <= row < H - 2 and 1 <= col < W - wpx - 1) or not dry_ok[row, col]:
+                        continue
+                    rgb[row + 1, col:col + wpx] = (rgb[row + 1, col:col + wpx] * 0.6).astype(np.uint8)
+                    rgb[row - hpx:row + 1, col:col + wpx] = MARSH_STAKE
+                    rgb[row - hpx, col:col + wpx] = MARSH_STAKE_TOP
 
 
 def load_palette(theme: str = "pnw"):
@@ -424,6 +512,7 @@ def main():
     P = load_palette(cfg["theme"])
     lut = build_lut(P, load_theme(cfg["theme"]).get("lut"))
     surf = np.load(bdir / "surface.npy")
+    surf_map = surf  # the surface map as physics reads it (the art below may draw some cells as another surface)
     H, W = surf.shape
     range_cells = surf == S["range"]
     if cfg.get("range_art") == "rough":
@@ -447,6 +536,13 @@ def main():
                          fill=0, dtype="uint8").astype(bool) & (surf == S["water"])
         surf = surf.copy()
         surf[rock] = S["ob_road"]
+    # optional (marsh_water_osm): penalty areas that are marsh on the ground are drawn as marsh, on the
+    # rough's texture and hillshade; they stay water in the surface map
+    marsh = marsh_masks(g, cfg, lambda geoms: rasterize([(gg, 1) for gg in geoms], out_shape=(H, W),
+                        transform=Affine(1 / PX_PER_M, 0, 0, 0, -1 / PX_PER_M, world.height), fill=0, dtype="uint8").astype(bool), surf)
+    if marsh is not None:
+        surf = surf.copy()
+        surf[marsh] = S["rough"]
 
     z = terrain_z_px(world, base, greens, H, W)
     np.save(bdir / "z_px.npy", z.astype(np.float32))
@@ -505,6 +601,8 @@ def main():
 
     if rock is not None:
         paint_rock(rgb, rock, t, n1, n2, P, load_theme(cfg["theme"]))
+    if marsh is not None:
+        paint_marsh(rgb, marsh, t, n1, n2, P, lut[S["rough"]])
 
     # outlines -----------------------------------------------------------
     pr = PRIO[surf]
@@ -662,6 +760,12 @@ def main():
                 rgb[row + 1, col + 1] = (rgb[row + 1, col + 1] * 0.6).astype(np.uint8)
                 rgb[row - 2:row + 1, col] = P["WH"]
                 rgb[row - 2, col] = P["K2"]
+
+    # red stakes round the marsh penalty areas (marsh_water_osm) ---------------
+    if marsh is not None:
+        from shapely.prepared import prep as _prep
+        marsh_stakes(rgb, g, cfg, surf_map, _prep(play_boundary(g, cfg)),
+                     lambda x, y: (x * PX_PER_M, (world.height - y) * PX_PER_M), 2, 1)
 
     Image.fromarray(rgb).save(art / "terrain.png")
     meta = {"buildings": [{"osm": o, "h": round(h, 1), **({"kind": kinds[o]} if kinds.get(o) != "house" else {})} for _, h, o in buildings]}
