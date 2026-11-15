@@ -7,6 +7,16 @@
    ],
    "tags": {},
    "reason": "course chat 2026-10-25: OSM maps Fishers Island Sound and Block Island Sound only as natural=coastline ways; pipeline/propose_sea.py makes the sea side one water feature, a red penalty area wherever it lies (config red_water_osm; standing default every penalty area red, as Cypress Point's Pacific). It fills the inlet hole 14 plays across and the reedy inlet in front of the 18th tee, which the boundary cuts out"
+  },
+  {
+   "from": "proposed/bridges.geojson",
+   "ids": [
+    "w1127323837_bridged",
+    "w1127323837_bridged_2",
+    "sea_bridged"
+   ],
+   "tool": "bridge_paths.py",
+   "reason": "developer 2026-11-14: cart paths no longer run into the water; the water with the paths over it cut out (bridges are cart path, as at Burlington), and bridges joining path ends that face each other across it"
   }
  ],
  "tags": [
@@ -58,6 +68,18 @@
     "penalty": "red"
    },
    "reason": "standing default (COURSE_BUILD 4.1): every penalty area red; OSM maps it golf=water_hazard (yellow)"
+  }
+ ],
+ "drop": [
+  {
+   "osm": "w1127323837",
+   "tool": "bridge_paths.py",
+   "reason": "replaced by w1127323837_bridged, w1127323837_bridged_2 (the cart paths over it cut out)"
+  },
+  {
+   "osm": "sea",
+   "tool": "bridge_paths.py",
+   "reason": "replaced by sea_bridged (the cart paths over it cut out)"
   }
  ]
 }

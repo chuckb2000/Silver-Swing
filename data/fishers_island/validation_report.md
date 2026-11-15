@@ -121,7 +121,7 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 | 10 | 4 | yes | yes (3 near) | yes | yes | NO | 1 | 0 |
 | 11 | 3 | yes | yes (3 near) | yes | yes | NO | 2 | 0 |
 | 12 | 4 | yes | yes (2 near) | yes | yes | NO | 7 | 1 |
-| 13 | 4 | yes | yes (1 near) | yes | yes | NO | 5 | 2 |
+| 13 | 4 | yes | yes (1 near) | yes | yes | NO | 5 | 3 |
 | 14 | 4 | yes | yes (3 near) | yes | yes | NO | 5 | 0 |
 | 15 | 5 | yes | yes (2 near) | yes | yes | NO | 4 | 0 |
 | 16 | 3 | yes | yes (1 near) | yes | yes | NO | 5 | 0 |
@@ -177,5 +177,5 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 - penalty area w191740597 lies mostly outside the boundary (a neighbour's? redraw as natural=water)
 - penalty area w602771380 lies mostly outside the boundary (a neighbour's? redraw as natural=water)
 
-Totals: 53 tees, 19 greens, 25 fairways, 45 bunkers, 7 water hazards, 0 pins, 46 cart paths, 139 OSM tree points.
+Totals: 53 tees, 19 greens, 25 fairways, 45 bunkers, 8 water hazards, 0 pins, 46 cart paths, 139 OSM tree points.
 
