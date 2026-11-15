@@ -4,7 +4,7 @@
 // trees must not block a drive down the centre of the fairway.
 import { describe, expect, it } from 'vitest';
 import { SURF } from '../../src/systems/physics/surfaces';
-import { loadCourseFiles, registry } from './helpers';
+import { loadCourseFiles, registry, baseWaterId } from './helpers';
 
 const ID = 'franklin';
 
@@ -25,7 +25,7 @@ describe('Franklin Country Club course data', () => {
   it('all water is red (developer); Uncas Pond is a red penalty area across hole 14, not out of bounds', () => {
     expect(course.water.length).toBeGreaterThanOrEqual(10);
     for (const w of course.water) expect(w.penalty, w.id).toBe('red');
-    const pond = course.water.filter((w) => w.id === 'w90968191' || w.id.startsWith('w90968191:'));
+    const pond = course.water.filter((w) => baseWaterId(w.id) === 'w90968191');
     expect(pond.length).toBeGreaterThan(0);
     const cl = json.holes.find((x) => x.number === 14)!.tees.Blue.centerline;
     let inPond = 0, water = 0;
@@ -46,12 +46,12 @@ describe('Franklin Country Club course data', () => {
     const ids = ['w942611225', 'w942611227', 'w942611229', 'w942611231', 'w942611233',
       'w1263089459', 'w1263302044', 'w1263302054', 'w1263302049'].map((i) => `channel_${i}`);
     for (const id of ids) {
-      const w = course.water.find((x) => x.id === id);
+      const w = course.water.find((x) => baseWaterId(x.id) === id);
       expect(w, id).toBeDefined();
       expect(w!.penalty).toBe('red');
     }
     // the two ponds OSM maps only as natural=water are penalty areas too
-    for (const id of ['w89790565', 'w1263089460']) expect(course.water.find((x) => x.id === id), id).toBeDefined();
+    for (const id of ['w89790565', 'w1263089460']) expect(course.water.find((x) => baseWaterId(x.id) === id), id).toBeDefined();
   });
 
   it('the broadleaf left of the 18th tee is gone (course_config.json drop_trees)', () => {

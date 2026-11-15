@@ -145,14 +145,14 @@ Built 2026-10-30/31 by two course chats while the developer was away. The develo
 | 8 | 3 | yes | yes (1 near) | yes | yes | yes | 5 | 0 |
 | 9 | 5 | yes | yes (3 near) | yes | yes | yes | 10 | 0 |
 | 10 | 4 | yes | yes (1 near) | yes | yes | yes | 11 | 1 |
-| 11 | 4 | yes | yes (3 near) | yes | yes | yes | 7 | 1 |
+| 11 | 4 | yes | yes (3 near) | yes | yes | yes | 7 | 2 |
 | 12 | 4 | yes | yes (3 near) | yes | yes | yes | 3 | 1 |
-| 13 | 5 | yes | yes (2 near) | yes | yes | yes | 11 | 1 |
+| 13 | 5 | yes | yes (2 near) | yes | yes | yes | 11 | 2 |
 | 14 | 4 | yes | yes (3 near) | yes | yes | yes | 6 | 1 |
-| 15 | 3 | yes | yes (2 near) | - | yes | yes | 8 | 1 |
-| 16 | 4 | yes | yes (2 near) | yes | yes | yes | 7 | 1 |
+| 15 | 3 | yes | yes (2 near) | - | yes | yes | 8 | 3 |
+| 16 | 4 | yes | yes (2 near) | yes | yes | yes | 7 | 4 |
 | 17 | 4 | yes | yes (2 near) | yes | yes | yes | 3 | 0 |
-| 18 | 3 | yes | yes (3 near) | yes | yes | yes | 4 | 1 |
+| 18 | 3 | yes | yes (3 near) | yes | yes | yes | 4 | 2 |
 
 ## Missing or suspect features
 
@@ -164,5 +164,5 @@ Built 2026-10-30/31 by two course chats while the developer was away. The develo
 
 - none
 
-Totals: 36 tees, 21 greens, 20 fairways, 91 bunkers, 2 water hazards, 18 pins, 27 cart paths, 120 OSM tree points.
+Totals: 36 tees, 21 greens, 20 fairways, 91 bunkers, 6 water hazards, 18 pins, 27 cart paths, 120 OSM tree points.
 

@@ -181,7 +181,7 @@ Calls made on 2026-11-13; each with a recommendation.
 | 10 | 4 | yes | yes (4 near) | yes | yes | NO | 10 | 0 |
 | 11 | 5 | yes | yes (4 near) | yes | yes | NO | 10 | 3 |
 | 12 | 3 | yes | yes (3 near) | - | yes | NO | 8 | 3 |
-| 13 | 4 | yes | yes (3 near) | yes | yes | NO | 5 | 3 |
+| 13 | 4 | yes | yes (3 near) | yes | yes | NO | 5 | 4 |
 | 14 | 5 | yes | yes (5 near) | yes | yes | NO | 12 | 0 |
 | 15 | 4 | yes | yes (2 near) | yes | yes | NO | 6 | 0 |
 | 16 | 3 | yes | yes (3 near) | - | yes | NO | 7 | 0 |
@@ -277,5 +277,5 @@ Calls made on 2026-11-13; each with a recommendation.
 - penalty area w1144953612 lies mostly outside the boundary (a neighbour's? redraw as natural=water)
 - hole line w866021878 (ref 1) starts within 10 m of a green (the previous green?)
 
-Totals: 114 tees, 46 greens, 57 fairways, 156 bunkers, 21 water hazards, 0 pins, 68 cart paths, 0 OSM tree points.
+Totals: 114 tees, 46 greens, 57 fairways, 156 bunkers, 22 water hazards, 0 pins, 68 cart paths, 0 OSM tree points.
 

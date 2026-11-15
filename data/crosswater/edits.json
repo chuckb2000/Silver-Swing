@@ -7,6 +7,21 @@
    ],
    "tags": {},
    "reason": "the clubhouse is mapped golf=clubhouse: copied as a building, original dropped"
+  },
+  {
+   "from": "proposed/bridges.geojson",
+   "ids": [
+    "r5314115_bridged",
+    "w207481249_bridged",
+    "w355776763_bridged",
+    "w355776763_bridged_2",
+    "w355776763_bridged_3",
+    "w356000312_bridged",
+    "w356000340_bridged",
+    "w356011279_bridged"
+   ],
+   "tool": "bridge_paths.py",
+   "reason": "developer 2026-11-14: cart paths no longer run into the water; the water with the paths over it cut out (bridges are cart path, as at Burlington), and bridges joining path ends that face each other across it"
   }
  ],
  "drop": [
@@ -417,6 +432,36 @@
   {
    "osm": "w355586161",
    "reason": "golf=clubhouse, copied as a building"
+  },
+  {
+   "osm": "r5314115",
+   "tool": "bridge_paths.py",
+   "reason": "replaced by r5314115_bridged (the cart paths over it cut out)"
+  },
+  {
+   "osm": "w207481249",
+   "tool": "bridge_paths.py",
+   "reason": "replaced by w207481249_bridged (the cart paths over it cut out)"
+  },
+  {
+   "osm": "w355776763",
+   "tool": "bridge_paths.py",
+   "reason": "replaced by w355776763_bridged, w355776763_bridged_2, w355776763_bridged_3 (the cart paths over it cut out)"
+  },
+  {
+   "osm": "w356000312",
+   "tool": "bridge_paths.py",
+   "reason": "replaced by w356000312_bridged (the cart paths over it cut out)"
+  },
+  {
+   "osm": "w356000340",
+   "tool": "bridge_paths.py",
+   "reason": "replaced by w356000340_bridged (the cart paths over it cut out)"
+  },
+  {
+   "osm": "w356011279",
+   "tool": "bridge_paths.py",
+   "reason": "replaced by w356011279_bridged (the cart paths over it cut out)"
   }
  ],
  "tags": [

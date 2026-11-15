@@ -121,7 +121,7 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 
 - 10511 trees detected in the world extent (2068 inside the course), 3550 conifers / 6961 deciduous; median height 18.1 m, max 57.0 m.
 - Dropped: 1065 tops on building footprints, 0 over the lake, 24 tiny crowns.
-- Dropped on playing surfaces (spec 5.4): 8 -> water_hazard w444963805 (8.7 m), bunker w904358580 (20.8 m), water_hazard w444963805 (27.2 m), water_hazard w444869594 (24.8 m), fairway r14004301 (23.1 m), water_hazard w1414312023 (13.6 m), water_hazard w1414312023 (12.3 m), water_hazard w1414312023 (6.0 m)
+- Dropped on playing surfaces (spec 5.4): 8 -> water_hazard w444963805_bridged_3 (8.7 m), bunker w904358580 (20.8 m), water_hazard w444963805_bridged_4 (27.2 m), water_hazard w444869594 (24.8 m), fairway r14004301 (23.1 m), water_hazard w1414312023 (13.6 m), water_hazard w1414312023 (12.3 m), water_hazard w1414312023 (6.0 m)
 - Dropped from tee shots (s06b): 2 -> North 8 Green (12.9 m tree, 16.6 m from the tee), North 13 Green (33.3 m tree, 65.5 m from the tee)
 - OSM natural=tree points matched by a detected tree within 4 m: 253 of 2124.
 - Conifer vs deciduous is inferred from crown shape only (no leaf-off imagery); see build/trees_preview.png.
@@ -180,7 +180,7 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 | 1 | 5 | yes | yes (3 near) | yes | yes | yes | 4 | 0 |
 | 2 | 4 | yes | yes (4 near) | yes | yes | NO | 3 | 2 |
 | 3 | 3 | yes | yes (4 near) | yes | yes | NO | 1 | 1 |
-| 4 | 4 | yes | yes (4 near) | yes | yes | NO | 3 | 2 |
+| 4 | 4 | yes | yes (4 near) | yes | yes | NO | 3 | 3 |
 | 5 | 3 | yes | yes (4 near) | yes | yes | NO | 0 | 0 |
 | 6 | 5 | yes | yes (2 near) | yes | yes | NO | 5 | 1 |
 | 7 | 4 | yes | yes (4 near) | yes | yes | NO | 1 | 2 |
@@ -189,9 +189,9 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 | 10 | 4 | yes | yes (4 near) | yes | yes | NO | 2 | 0 |
 | 11 | 3 | yes | yes (2 near) | yes | yes | NO | 1 | 0 |
 | 12 | 5 | yes | yes (5 near) | yes | yes | NO | 2 | 3 |
-| 13 | 4 | yes | yes (3 near) | yes | yes | NO | 0 | 1 |
+| 13 | 4 | yes | yes (3 near) | yes | yes | NO | 0 | 2 |
 | 14 | 3 | yes | yes (4 near) | yes | yes | NO | 0 | 0 |
-| 15 | 4 | yes | yes (3 near) | yes | yes | NO | 4 | 1 |
+| 15 | 4 | yes | yes (3 near) | yes | yes | NO | 4 | 2 |
 | 16 | 3 | yes | yes (4 near) | yes | yes | NO | 0 | 0 |
 | 17 | 4 | yes | yes (3 near) | yes | yes | NO | 2 | 2 |
 | 18 | 5 | yes | yes (4 near) | yes | yes | NO | 4 | 1 |
@@ -210,14 +210,14 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 | 8 | 4 | yes | yes (3 near) | yes | yes | NO | 3 | 0 |
 | 9 | 4 | yes | yes (3 near) | yes | yes | NO | 3 | 1 |
 | 10 | 4 | yes | yes (4 near) | yes | yes | NO | 3 | 1 |
-| 11 | 3 | yes | yes (3 near) | yes | yes | NO | 2 | 1 |
+| 11 | 3 | yes | yes (3 near) | yes | yes | NO | 2 | 2 |
 | 12 | 4 | yes | yes (2 near) | yes | yes | NO | 2 | 0 |
 | 13 | 4 | yes | yes (3 near) | yes | yes | NO | 4 | 0 |
 | 14 | 3 | yes | yes (4 near) | yes | yes | NO | 2 | 0 |
 | 15 | 5 | yes | yes (3 near) | yes | yes | NO | 4 | 1 |
-| 16 | 4 | yes | yes (4 near) | yes | yes | NO | 3 | 2 |
-| 17 | 4 | yes | yes (3 near) | yes | yes | NO | 3 | 1 |
-| 18 | 5 | yes | yes (3 near) | yes | yes | NO | 6 | 1 |
+| 16 | 4 | yes | yes (4 near) | yes | yes | NO | 3 | 3 |
+| 17 | 4 | yes | yes (3 near) | yes | yes | NO | 3 | 5 |
+| 18 | 5 | yes | yes (3 near) | yes | yes | NO | 6 | 3 |
 
 
 ## Missing or suspect features
@@ -305,5 +305,5 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 - water w737373105 at (495, 1454), 37581 m2, is inside the boundary but not a penalty area: it plays as rough (tag it golf=lateral_water_hazard in edits.json, or list it in red_water_osm)
 - water w905922607 at (1279, 278), 33580 m2, is inside the boundary but not a penalty area: it plays as rough (tag it golf=lateral_water_hazard in edits.json, or list it in red_water_osm)
 
-Totals: 137 tees, 40 greens, 45 fairways, 79 bunkers, 15 water hazards, 2 pins, 54 cart paths, 2124 OSM tree points.
+Totals: 137 tees, 40 greens, 45 fairways, 79 bunkers, 23 water hazards, 2 pins, 54 cart paths, 2124 OSM tree points.
 

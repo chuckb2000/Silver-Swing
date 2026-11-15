@@ -4,7 +4,7 @@
 // fairway (the East Potomac problem).
 import { describe, expect, it } from 'vitest';
 import { SURF } from '../../src/systems/physics/surfaces';
-import { loadCourseFiles, registry } from './helpers';
+import { loadCourseFiles, registry, baseWaterId } from './helpers';
 
 const ID = 'tualatin';
 
@@ -23,7 +23,7 @@ describe('Tualatin Country Club course data', () => {
   });
 
   it('the Tualatin River beside holes 7, 9 and 10 is a red penalty area, not out of bounds', () => {
-    const river = course.water.find((w) => w.id === 'r1079340')!;
+    const river = course.water.find((w) => baseWaterId(w.id) === 'r1079340')!;
     expect(river.penalty).toBe('red');
     for (const n of [7, 9, 10]) {
       const h = json.holes.find((x) => x.number === n)!;

@@ -175,6 +175,15 @@
    ],
    "tags": {},
    "reason": "a tee pad on hole 3's line mapped as golf=fairway (43 m2; OSIP 2024 shows a separate mown pad in the native grass): copied as a tee (COURSE_LESSONS 2; s03)"
+  },
+  {
+   "from": "proposed/bridges.geojson",
+   "ids": [
+    "w676305928_bridged",
+    "w676305928_bridged_2"
+   ],
+   "tool": "bridge_paths.py",
+   "reason": "developer 2026-11-14: cart paths no longer run into the water; the water with the paths over it cut out (bridges are cart path, as at Burlington), and bridges joining path ends that face each other across it"
   }
  ],
  "tags": [
@@ -831,6 +840,11 @@
   {
    "osm": "w1091654144",
    "reason": "mapped stream / pool by the hole 4 tees: dry, shrub-filled channel in the OSIP 2024 photo; a line has no width to play as a penalty area (open item)"
+  },
+  {
+   "osm": "w676305928",
+   "tool": "bridge_paths.py",
+   "reason": "replaced by w676305928_bridged, w676305928_bridged_2 (the cart paths over it cut out)"
   }
  ]
 }

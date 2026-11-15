@@ -56,7 +56,7 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 
 - 14461 trees detected in the world extent (3554 inside the course), 9326 conifers / 5135 deciduous; median height 27.4 m, max 77.1 m.
 - Dropped: 84 tops on building footprints, 0 over the lake, 23 tiny crowns.
-- Dropped on playing surfaces (spec 5.4): 24 -> tee w957654924 (14.1 m), lateral_water_hazard w958032722 (5.8 m), lateral_water_hazard w957696422 (29.5 m), fairway w766395662 (14.7 m), lateral_water_hazard w957696422 (23.6 m), lateral_water_hazard w957696422 (26.2 m), lateral_water_hazard w957696422 (34.6 m), fairway w766395657 (46.7 m), lateral_water_hazard w957696422 (6.3 m), fairway w766395657 (11.1 m), water_hazard w957712160 (7.8 m), fairway r14144949 (12.6 m), tee w957759637 (11.3 m), tee w957759637 (11.0 m), tee w957759637 (10.7 m), water_hazard w957759635 (16.7 m), water_hazard w957759635 (16.9 m), water_hazard w957759635 (15.9 m), water_hazard w957759635 (16.6 m), tee w765881265 (13.2 m), tee w765881265 (12.8 m), tee w957759642 (32.8 m), tee w957759642 (41.3 m), tee w957759642 (33.8 m)
+- Dropped on playing surfaces (spec 5.4): 24 -> tee w957654924 (14.1 m), lateral_water_hazard w958032722_bridged (5.8 m), lateral_water_hazard w957696422 (29.5 m), fairway w766395662 (14.7 m), lateral_water_hazard w957696422 (23.6 m), lateral_water_hazard w957696422 (26.2 m), lateral_water_hazard w957696422 (34.6 m), fairway w766395657 (46.7 m), lateral_water_hazard w957696422 (6.3 m), fairway w766395657 (11.1 m), water_hazard w957712160 (7.8 m), fairway r14144949 (12.6 m), tee w957759637 (11.3 m), tee w957759637 (11.0 m), tee w957759637 (10.7 m), water_hazard w957759635 (16.7 m), water_hazard w957759635 (16.9 m), water_hazard w957759635 (15.9 m), water_hazard w957759635 (16.6 m), tee w765881265 (13.2 m), tee w765881265 (12.8 m), tee w957759642 (32.8 m), tee w957759642 (41.3 m), tee w957759642 (33.8 m)
 - Dropped from tee shots (s06b): 3 -> 12 Black (17.6 m tree, 14.0 m from the tee), 12 Black (16.2 m tree, 34.5 m from the tee), 18 Black (38.5 m tree, 60.8 m from the tee)
 - OSM natural=tree points matched by a detected tree within 4 m: 362 of 571.
 - Conifer vs deciduous is inferred from crown shape only (no leaf-off imagery); see build/trees_preview.png.
@@ -96,7 +96,7 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 | 3 | 5 | yes | yes (2 near) | yes | yes | yes | 2 | 0 |
 | 4 | 3 | yes | yes (1 near) | yes | yes | yes | 0 | 0 |
 | 5 | 4 | yes | yes (3 near) | yes | yes | yes | 2 | 0 |
-| 6 | 5 | yes | yes (3 near) | yes | yes | yes | 1 | 2 |
+| 6 | 5 | yes | yes (3 near) | yes | yes | yes | 1 | 3 |
 | 7 | 4 | yes | yes (1 near) | yes | yes | yes | 1 | 0 |
 | 8 | 3 | yes | yes (2 near) | yes | yes | yes | 1 | 0 |
 | 9 | 4 | yes | yes (2 near) | yes | yes | yes | 2 | 0 |
@@ -138,5 +138,5 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 
 - none
 
-Totals: 50 tees, 21 greens, 20 fairways, 20 bunkers, 6 water hazards, 18 pins, 33 cart paths, 571 OSM tree points.
+Totals: 50 tees, 21 greens, 20 fairways, 20 bunkers, 7 water hazards, 18 pins, 33 cart paths, 571 OSM tree points.
 

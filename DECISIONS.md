@@ -1774,3 +1774,17 @@ apart in a narrow column: "bandon dun", "bandon pre"), never ending on a comma o
 Same day, later: the arc shows only when the line meets a tree (developer: "what if we changed it so
 that the arc showing that you're going to hit the tree only shows up if you're aimed to hit a tree?
 otherwise it's just a flat line"). A clear line is the plain flat dotted line, as before the warning.
+
+## Cart paths cross water (developer, 2026-11-14)
+
+"Another thing that annoys me is when water cuts off golf cart paths and creates it so the cart path
+just goes into the water ... burlington cc had this issue and you did a good job fixing it." s08 paints
+water after cart paths, so a bridge (OSM `bridge=yes` on most) was drawn as water and the path seemed
+to end at the bank. `pipeline/bridge_paths.py <id>` does Burlington's fix (data/burlington_cc/
+make_brook.py, developer 2026-10-31: the bridges are cart path, free relief, not water) in a course's
+data: every penalty area the build paints has the cart paths (buffered 1.75 m) and paved roads over it
+cut out, and two path ends that face each other across water within 25 m are joined by a straight
+bridge. Each piece a cut leaves is its own penalty area (s10 writes only the largest piece of a
+multi-part area into course.json's relief areas); course_config and checks.json ids follow. Overlaps
+under 3 m2 (a path brushing a shore) are left alone. Not a build step, so pins don't move. Run on the
+29 courses that had a path over water (one joining bridge: Heron Lakes); 80 places.

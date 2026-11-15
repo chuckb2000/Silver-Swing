@@ -58,9 +58,9 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 
 ## Tree detection (DOGAMI canopy height model)
 
-- 37038 trees detected in the world extent (4919 inside the course), 14922 conifers / 22116 deciduous; median height 10.0 m, max 40.7 m.
+- 37041 trees detected in the world extent (4922 inside the course), 14922 conifers / 22119 deciduous; median height 10.0 m, max 40.7 m.
 - Dropped: 786 tops on building footprints, 0 over the lake, 45 tiny crowns.
-- Dropped on playing surfaces (spec 5.4): 26 -> water_hazard w355776763 (4.7 m), water_hazard w355776763 (4.5 m), water_hazard w355776763 (4.7 m), water_hazard w355776763 (4.6 m), water_hazard w206873532 (30.8 m), water_hazard w206873532 (7.2 m), water_hazard w206873532 (5.5 m), water_hazard w206873532 (5.0 m), water_hazard w206873532 (16.5 m), water_hazard w206873532 (13.1 m), water_hazard w206873532 (4.6 m), water_hazard w206873532 (19.5 m), water_hazard w206873532 (4.6 m), water_hazard w206873532 (6.0 m), water_hazard w206873532 (10.3 m), water_hazard w206873532 (7.2 m), water_hazard w206873532 (10.2 m), water_hazard w1464074607 (5.3 m), water_hazard w206873532 (14.1 m), water_hazard w206873532 (4.3 m), water_hazard w206873532 (4.3 m), water_hazard w206873532 (4.2 m), water_hazard w206873532 (4.3 m), water_hazard w206873532 (4.3 m), water_hazard w206873532 (5.7 m), water_hazard w206873532 (5.8 m)
+- Dropped on playing surfaces (spec 5.4): 23 -> water_hazard w355776763_bridged_3 (4.7 m), water_hazard w206873532 (30.8 m), water_hazard w206873532 (7.2 m), water_hazard w206873532 (5.5 m), water_hazard w206873532 (5.0 m), water_hazard w206873532 (16.5 m), water_hazard w206873532 (13.1 m), water_hazard w206873532 (4.6 m), water_hazard w206873532 (19.5 m), water_hazard w206873532 (4.6 m), water_hazard w206873532 (6.0 m), water_hazard w206873532 (10.3 m), water_hazard w206873532 (7.2 m), water_hazard w206873532 (10.2 m), water_hazard w1464074607 (5.3 m), water_hazard w206873532 (14.1 m), water_hazard w206873532 (4.3 m), water_hazard w206873532 (4.3 m), water_hazard w206873532 (4.2 m), water_hazard w206873532 (4.3 m), water_hazard w206873532 (4.3 m), water_hazard w206873532 (5.7 m), water_hazard w206873532 (5.8 m)
 - OSM natural=tree points matched by a detected tree within 4 m: 5 of 7.
 - Conifer vs deciduous is inferred from crown shape only (no leaf-off imagery); see build/trees_preview.png.
 
@@ -97,7 +97,7 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 | 2 | 5 | yes | yes (4 near) | yes | yes | yes | 7 | 1 |
 | 3 | 3 | yes | yes (5 near) | yes | yes | yes | 4 | 0 |
 | 4 | 4 | yes | yes (4 near) | yes | yes | yes | 9 | 0 |
-| 5 | 4 | yes | yes (3 near) | yes | yes | yes | 3 | 1 |
+| 5 | 4 | yes | yes (3 near) | yes | yes | yes | 3 | 2 |
 | 6 | 5 | yes | yes (2 near) | yes | yes | yes | 2 | 1 |
 | 7 | 3 | yes | yes (4 near) | yes | yes | yes | 5 | 0 |
 | 8 | 4 | yes | yes (3 near) | yes | yes | yes | 9 | 1 |
@@ -126,7 +126,8 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 - tee w1067453607: 2572 m2 (a fairway tagged as a tee?)
 - fairway w355541122 at (1015, 1280) is more than 30 m from every hole line (a range or practice area mapped as fairway?)
 - penalty area w206873532 lies mostly outside the boundary (a neighbour's? redraw as natural=water)
+- penalty area w355776763_bridged_3 lies mostly outside the boundary (a neighbour's? redraw as natural=water)
 - waterway w625186746 (river): 255 m of it within 30 m of a hole line isn't in a penalty area (pipeline/propose_channels.py makes one; or say it's dry)
 
-Totals: 93 tees, 20 greens, 24 fairways, 89 bunkers, 4 water hazards, 18 pins, 54 cart paths, 7 OSM tree points.
+Totals: 93 tees, 20 greens, 24 fairways, 89 bunkers, 6 water hazards, 18 pins, 54 cart paths, 7 OSM tree points.
 

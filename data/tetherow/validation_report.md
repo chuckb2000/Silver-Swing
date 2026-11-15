@@ -92,7 +92,7 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 |---|---|---|---|---|---|---|---|---|
 | 1 | 4 | yes | yes (4 near) | yes | yes | yes | 7 | 0 |
 | 2 | 5 | yes | yes (5 near) | yes | yes | yes | 7 | 0 |
-| 3 | 3 | yes | yes (3 near) | yes | yes | yes | 2 | 1 |
+| 3 | 3 | yes | yes (3 near) | yes | yes | yes | 2 | 2 |
 | 4 | 4 | yes | yes (3 near) | yes | yes | yes | 2 | 1 |
 | 5 | 4 | yes | yes (5 near) | yes | yes | yes | 2 | 0 |
 | 6 | 4 | yes | yes (7 near) | yes | yes | yes | 6 | 1 |
@@ -118,5 +118,5 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 
 - none
 
-Totals: 105 tees, 20 greens, 19 fairways, 66 bunkers, 2 water hazards, 18 pins, 36 cart paths, 209 OSM tree points.
+Totals: 105 tees, 20 greens, 19 fairways, 66 bunkers, 3 water hazards, 18 pins, 36 cart paths, 209 OSM tree points.
 

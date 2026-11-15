@@ -118,12 +118,12 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 | hole | par (OSM) | hole line | tee at line start | fairway | green | pin | bunkers <40 m | water <40 m |
 |---|---|---|---|---|---|---|---|---|
 | 1 | 4 | yes | yes (3 near) | yes | yes | NO | 7 | 2 |
-| 2 | 5 | yes | NO (3 near) | yes | yes | NO | 8 | 1 |
-| 3 | 4 | yes | yes (2 near) | yes | yes | NO | 8 | 2 |
-| 4 | 3 | yes | yes (3 near) | yes | yes | NO | 6 | 1 |
-| 5 | 5 | yes | yes (5 near) | yes | yes | NO | 6 | 2 |
+| 2 | 5 | yes | NO (3 near) | yes | yes | NO | 8 | 2 |
+| 3 | 4 | yes | yes (2 near) | yes | yes | NO | 8 | 3 |
+| 4 | 3 | yes | yes (3 near) | yes | yes | NO | 6 | 2 |
+| 5 | 5 | yes | yes (5 near) | yes | yes | NO | 6 | 3 |
 | 6 | 3 | yes | yes (5 near) | yes | yes | NO | 2 | 0 |
-| 7 | 4 | yes | yes (4 near) | yes | yes | NO | 7 | 1 |
+| 7 | 4 | yes | yes (4 near) | yes | yes | NO | 7 | 2 |
 | 8 | 3 | yes | yes (4 near) | yes | yes | NO | 8 | 0 |
 | 9 | 4 | yes | yes (3 near) | yes | yes | NO | 3 | 0 |
 | 10 | 3 | yes | yes (5 near) | - | yes | NO | 3 | 0 |
@@ -176,9 +176,9 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 ## Checks from earlier courses
 
 - tee w966020218: 2904 m2 (a fairway tagged as a tee?)
-- penalty area channel_w971520812 lies mostly outside the boundary (a neighbour's? redraw as natural=water)
+- penalty area channel_w971520812_bridged lies mostly outside the boundary (a neighbour's? redraw as natural=water)
 - waterway w1063291103 (ditch): 59 m of it within 30 m of a hole line isn't in a penalty area (pipeline/propose_channels.py makes one; or say it's dry)
 - hole line w965807490 (ref 2) starts within 10 m of a green (the previous green?)
 
-Totals: 76 tees, 21 greens, 22 fairways, 74 bunkers, 3 water hazards, 0 pins, 25 cart paths, 0 OSM tree points.
+Totals: 76 tees, 21 greens, 22 fairways, 74 bunkers, 7 water hazards, 0 pins, 25 cart paths, 0 OSM tree points.
 

@@ -100,22 +100,22 @@ Decisions the developer made on 2026-10-19 are in DECISIONS.md ("Franklin Countr
 
 | hole | par (OSM) | hole line | tee at line start | fairway | green | pin | bunkers <40 m | water <40 m |
 |---|---|---|---|---|---|---|---|---|
-| 1 | 4 | yes | yes (2 near) | yes | yes | yes | 1 | 1 |
+| 1 | 4 | yes | yes (2 near) | yes | yes | yes | 1 | 2 |
 | 2 | 4 | yes | yes (2 near) | yes | yes | yes | 7 | 2 |
-| 3 | 4 | yes | yes (2 near) | yes | yes | yes | 6 | 1 |
-| 4 | 3 | yes | yes (1 near) | yes | yes | yes | 3 | 4 |
-| 5 | 4 | yes | yes (2 near) | yes | yes | yes | 7 | 2 |
+| 3 | 4 | yes | yes (2 near) | yes | yes | yes | 6 | 2 |
+| 4 | 3 | yes | yes (1 near) | yes | yes | yes | 3 | 5 |
+| 5 | 4 | yes | yes (2 near) | yes | yes | yes | 7 | 3 |
 | 6 | 4 | yes | yes (2 near) | yes | yes | yes | 3 | 0 |
 | 7 | 5 | yes | yes (1 near) | yes | yes | yes | 6 | 3 |
 | 8 | 3 | yes | yes (4 near) | yes | yes | yes | 3 | 1 |
 | 9 | 4 | yes | yes (3 near) | yes | yes | yes | 5 | 2 |
 | 10 | 4 | yes | yes (3 near) | yes | yes | yes | 5 | 0 |
 | 11 | 4 | yes | yes (3 near) | yes | yes | yes | 4 | 0 |
-| 12 | 4 | yes | yes (2 near) | yes | yes | yes | 4 | 2 |
+| 12 | 4 | yes | yes (2 near) | yes | yes | yes | 4 | 3 |
 | 13 | 4 | yes | yes (3 near) | yes | yes | yes | 3 | 1 |
 | 14 | 3 | yes | yes (2 near) | yes | yes | yes | 3 | 0 |
 | 15 | 5 | yes | yes (1 near) | yes | yes | yes | 1 | 2 |
-| 16 | 3 | yes | yes (3 near) | yes | yes | yes | 3 | 1 |
+| 16 | 3 | yes | yes (3 near) | yes | yes | yes | 3 | 2 |
 | 17 | 4 | yes | yes (2 near) | yes | yes | yes | 2 | 0 |
 | 18 | 5 | yes | yes (3 near) | yes | yes | yes | 6 | 2 |
 
@@ -134,12 +134,12 @@ Decisions the developer made on 2026-10-19 are in DECISIONS.md ("Franklin Countr
 - pool w1263089456 at (1102, 1581), 28 m2, is inside the boundary but not a penalty area: it plays as rough (tag it golf=lateral_water_hazard in edits.json, or list it in red_water_osm)
 - pool w1263089457 at (1117, 1587), 295 m2, is inside the boundary but not a penalty area: it plays as rough (tag it golf=lateral_water_hazard in edits.json, or list it in red_water_osm)
 - penalty area channel_w942611233 lies mostly outside the boundary (a neighbour's? redraw as natural=water)
-- penalty area channel_w1263089459 lies mostly outside the boundary (a neighbour's? redraw as natural=water)
-- penalty area channel_w1263302049 lies mostly outside the boundary (a neighbour's? redraw as natural=water)
+- penalty area channel_w1263089459_bridged lies mostly outside the boundary (a neighbour's? redraw as natural=water)
+- penalty area channel_w1263302049_bridged lies mostly outside the boundary (a neighbour's? redraw as natural=water)
 - waterway r12706451 (stream): 41 m of it within 30 m of a hole line isn't in a penalty area (pipeline/propose_channels.py makes one; or say it's dry)
 - waterway w942611232 (stream): 40 m of it within 30 m of a hole line isn't in a penalty area (pipeline/propose_channels.py makes one; or say it's dry)
 - waterway w1263302043 (stream): 11 m of it within 30 m of a hole line isn't in a penalty area (pipeline/propose_channels.py makes one; or say it's dry)
-- waterway w1263302048 (stream): 14 m of it within 30 m of a hole line isn't in a penalty area (pipeline/propose_channels.py makes one; or say it's dry)
+- waterway w1263302048 (stream): 16 m of it within 30 m of a hole line isn't in a penalty area (pipeline/propose_channels.py makes one; or say it's dry)
 
-Totals: 59 tees, 20 greens, 24 fairways, 59 bunkers, 14 water hazards, 23 pins, 50 cart paths, 0 OSM tree points.
+Totals: 59 tees, 20 greens, 24 fairways, 59 bunkers, 20 water hazards, 23 pins, 50 cart paths, 0 OSM tree points.
 

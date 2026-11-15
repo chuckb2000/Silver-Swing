@@ -101,7 +101,7 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 
 - 28885 trees detected in the world extent (4449 inside the course), 5479 conifers / 23406 deciduous; median height 21.8 m, max 50.1 m.
 - Dropped: 301 tops on building footprints, 0 over the lake, 52 tiny crowns.
-- Dropped on playing surfaces (spec 5.4): 44 -> tee w778433468 (22.0 m), tee w778240939 (17.2 m), tee w778432787 (20.3 m), lateral_water_hazard w778877369 (16.3 m), lateral_water_hazard w778877369 (19.0 m), lateral_water_hazard w778877369 (12.7 m), lateral_water_hazard w778877369 (14.3 m), lateral_water_hazard w778877369 (8.6 m), lateral_water_hazard w778877369 (10.0 m), lateral_water_hazard w778877369 (7.4 m), lateral_water_hazard w778877369 (8.9 m), lateral_water_hazard w778877369 (13.7 m), lateral_water_hazard w778422502 (20.8 m), lateral_water_hazard w778422502 (23.9 m), lateral_water_hazard w778422502 (12.9 m), lateral_water_hazard w778422502 (24.7 m), lateral_water_hazard w778422502 (18.8 m), lateral_water_hazard w778422502 (20.5 m), lateral_water_hazard w778422502 (20.4 m), lateral_water_hazard w778422502 (18.8 m), lateral_water_hazard w778422502 (5.7 m), lateral_water_hazard w778422502 (9.5 m), lateral_water_hazard w778422502 (13.4 m), lateral_water_hazard w778422502 (10.5 m), bunker w778431207 (17.2 m), lateral_water_hazard w778422502 (8.3 m), lateral_water_hazard w778422502 (5.8 m), lateral_water_hazard w778422502 (4.9 m), lateral_water_hazard w778422502 (17.5 m), lateral_water_hazard w778422502 (15.2 m), lateral_water_hazard w778422502 (7.8 m), lateral_water_hazard w778422502 (12.9 m), lateral_water_hazard w778422502 (10.6 m), lateral_water_hazard w778877370 (7.7 m), lateral_water_hazard w778877370 (24.3 m), lateral_water_hazard w778877370 (12.5 m), lateral_water_hazard w778877370 (10.0 m), lateral_water_hazard w778877370 (9.0 m), lateral_water_hazard w778877370 (27.1 m), lateral_water_hazard w778422501 (6.5 m), lateral_water_hazard w778422501 (13.1 m), lateral_water_hazard w778422501 (10.6 m), lateral_water_hazard w778422501 (10.6 m), lateral_water_hazard w778422501 (7.9 m)
+- Dropped on playing surfaces (spec 5.4): 44 -> tee w778433468 (22.0 m), tee w778240939 (17.2 m), tee w778432787 (20.3 m), lateral_water_hazard w778877369 (16.3 m), lateral_water_hazard w778877369 (19.0 m), lateral_water_hazard w778877369 (12.7 m), lateral_water_hazard w778877369 (14.3 m), lateral_water_hazard w778877369 (8.6 m), lateral_water_hazard w778877369 (10.0 m), lateral_water_hazard w778877369 (7.4 m), lateral_water_hazard w778877369 (8.9 m), lateral_water_hazard w778877369 (13.7 m), lateral_water_hazard w778422502_bridged_2 (20.8 m), lateral_water_hazard w778422502_bridged_2 (23.9 m), lateral_water_hazard w778422502_bridged_2 (12.9 m), lateral_water_hazard w778422502_bridged_2 (24.7 m), lateral_water_hazard w778422502_bridged_2 (18.8 m), lateral_water_hazard w778422502_bridged_2 (20.5 m), lateral_water_hazard w778422502_bridged_2 (20.4 m), lateral_water_hazard w778422502_bridged_2 (18.8 m), lateral_water_hazard w778422502_bridged (5.7 m), lateral_water_hazard w778422502_bridged (9.5 m), lateral_water_hazard w778422502_bridged (13.4 m), lateral_water_hazard w778422502_bridged (10.5 m), bunker w778431207 (17.2 m), lateral_water_hazard w778422502_bridged (8.3 m), lateral_water_hazard w778422502_bridged (5.8 m), lateral_water_hazard w778422502_bridged (4.9 m), lateral_water_hazard w778422502_bridged (17.5 m), lateral_water_hazard w778422502_bridged (15.2 m), lateral_water_hazard w778422502_bridged (7.8 m), lateral_water_hazard w778422502_bridged (12.9 m), lateral_water_hazard w778422502_bridged (10.6 m), lateral_water_hazard w778877370 (7.7 m), lateral_water_hazard w778877370 (24.3 m), lateral_water_hazard w778877370 (12.5 m), lateral_water_hazard w778877370 (10.0 m), lateral_water_hazard w778877370 (9.0 m), lateral_water_hazard w778877370 (27.1 m), lateral_water_hazard w778422501 (6.5 m), lateral_water_hazard w778422501 (13.1 m), lateral_water_hazard w778422501 (10.6 m), lateral_water_hazard w778422501 (10.6 m), lateral_water_hazard w778422501 (7.9 m)
 - OSM natural=tree points matched by a detected tree within 4 m: 0 of 0.
 - Conifer (pitch pine) vs deciduous (oak) from the leaf-off lidar: share of a crown's vegetation returns that were the last return of their pulse, split at Otsu's threshold 0.205 (5419 of 28820 crowns with >= 20 returns are conifers); the other 65 small crowns keep the crown-shape rule. See build/trees_preview.png.
 
@@ -148,19 +148,19 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 | 2 | 4 | yes | yes (4 near) | yes | yes | NO | 2 | 0 |
 | 3 | 5 | yes | yes (4 near) | yes | yes | NO | 4 | 1 |
 | 4 | 5 | yes | yes (3 near) | yes | yes | NO | 1 | 1 |
-| 5 | 4 | yes | yes (5 near) | yes | yes | NO | 0 | 2 |
+| 5 | 4 | yes | yes (5 near) | yes | yes | NO | 0 | 3 |
 | 6 | 3 | yes | yes (8 near) | yes | yes | NO | 0 | 0 |
-| 7 | 4 | yes | yes (4 near) | yes | yes | NO | 2 | 2 |
+| 7 | 4 | yes | yes (4 near) | yes | yes | NO | 2 | 3 |
 | 8 | 4 | yes | yes (4 near) | yes | yes | NO | 2 | 1 |
-| 9 | 3 | yes | yes (6 near) | yes | yes | NO | 2 | 3 |
-| 10 | 5 | yes | yes (3 near) | yes | yes | NO | 5 | 2 |
+| 9 | 3 | yes | yes (6 near) | yes | yes | NO | 2 | 4 |
+| 10 | 5 | yes | yes (3 near) | yes | yes | NO | 5 | 3 |
 | 11 | 3 | yes | yes (2 near) | yes | yes | NO | 0 | 0 |
 | 12 | 4 | yes | yes (4 near) | yes | yes | NO | 3 | 1 |
-| 13 | 4 | yes | yes (7 near) | yes | yes | NO | 6 | 2 |
+| 13 | 4 | yes | yes (7 near) | yes | yes | NO | 6 | 4 |
 | 14 | 4 | yes | yes (6 near) | yes | yes | NO | 5 | 1 |
-| 15 | 4 | yes | yes (4 near) | yes | yes | NO | 3 | 1 |
+| 15 | 4 | yes | yes (4 near) | yes | yes | NO | 3 | 2 |
 | 16 | 3 | yes | yes (4 near) | yes | yes | NO | 1 | 0 |
-| 17 | 4 | yes | yes (4 near) | yes | yes | NO | 2 | 3 |
+| 17 | 4 | yes | yes (4 near) | yes | yes | NO | 2 | 4 |
 | 18 | 5 | yes | yes (5 near) | yes | yes | NO | 7 | 2 |
 
 ## Missing or suspect features
@@ -226,6 +226,9 @@ Measured from the centre of the assigned tee polygon, through the golf=hole line
 - fairway w1255799570 at (775, 468) is more than 30 m from every hole line (a range or practice area mapped as fairway?)
 - fairway w778431220 at (829, 403) is more than 30 m from every hole line (a range or practice area mapped as fairway?)
 - water w86095496 at (906, 975), 25002 m2, is inside the boundary but not a penalty area: it plays as rough (tag it golf=lateral_water_hazard in edits.json, or list it in red_water_osm)
+- penalty area channel_w971520745_bridged lies mostly outside the boundary (a neighbour's? redraw as natural=water)
+- penalty area channel_w971520747_bridged_2 lies mostly outside the boundary (a neighbour's? redraw as natural=water)
+- penalty area channel_w971520751_bridged lies mostly outside the boundary (a neighbour's? redraw as natural=water)
 
-Totals: 98 tees, 30 greens, 34 fairways, 45 bunkers, 9 water hazards, 0 pins, 53 cart paths, 0 OSM tree points.
+Totals: 98 tees, 30 greens, 34 fairways, 45 bunkers, 18 water hazards, 0 pins, 53 cart paths, 0 OSM tree points.
 

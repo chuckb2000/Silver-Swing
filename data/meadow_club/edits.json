@@ -3,22 +3,85 @@
  "add": [
   {
    "from": "proposed/channels_lidar.geojson",
-   "ids": ["channel_w687678390", "channel_w687633722", "channel_w687687215", "channel_w1282018494", "channel_w1286980070", "channel_w1286980084"],
-   "tags": {"flatten": "no", "penalty": "red"},
+   "ids": [
+    "channel_w687678390",
+    "channel_w687633722",
+    "channel_w687687215",
+    "channel_w1282018494",
+    "channel_w1286980070",
+    "channel_w1286980084"
+   ],
+   "tags": {
+    "flatten": "no",
+    "penalty": "red"
+   },
    "reason": "Course chat 2026-10-30: the creeks OSM maps only as lines (waterway=stream), as red penalty areas (standing default) from the channel the 2018 lidar shows along them (pipeline/propose_channels.py), checked on the NAIP photo: the main creek that runs from the 18th down between 16/17 and 13-15/6 to the pond (w687678390; The Fried Egg: it crosses the 7th and affects 6, 12 and 16), the creek along the 7th (w687633722), two spurs by the 7th green and 16th tee (w687687215, w1282018494), the gully in front of the 9th tee (w1286980070) and the drain short of the 10th green (w1286980084). Left out: w1282018492, w1286980093 and w1286972900, almost all outside the boundary (out of bounds anyway), and every culvert (tunnel=culvert)."
   },
   {
    "from": "proposed/range.geojson",
-   "ids": ["range_meadow_club"],
+   "ids": [
+    "range_meadow_club"
+   ],
    "tags": {},
    "reason": "Course chat 2026-10-30: OSM maps the practice range only as a rough (w687653789) round a big tee (w687652453) and a fairway (r19761704), no golf=driving_range, so it played as part of the course. The range is out of bounds (standing default): its edge is the mown practice ground (w687653789), less the chipping green and its collar and bunker (kept as a wrong green). Features inside it dropped (below)."
+  },
+  {
+   "from": "proposed/bridges.geojson",
+   "ids": [
+    "channel_w687678390_bridged",
+    "channel_w687678390_bridged_2",
+    "channel_w687678390_bridged_3",
+    "channel_w687678390_bridged_4",
+    "channel_w687678390_bridged_5",
+    "channel_w687687215_bridged",
+    "channel_w1286980070_bridged",
+    "channel_w1286980084_bridged",
+    "channel_w1286980084_bridged_2"
+   ],
+   "tool": "bridge_paths.py",
+   "reason": "developer 2026-11-14: cart paths no longer run into the water; the water with the paths over it cut out (bridges are cart path, as at Burlington), and bridges joining path ends that face each other across it"
   }
  ],
  "drop": [
-  {"osm": "w687653789", "reason": "the range's practice ground: replaced by the driving_range polygon (range.geojson)"},
-  {"osm": "r19761704", "reason": "the range's landing area mapped as fairway: inside the driving range"},
-  {"osm": "w687652453", "reason": "the range's hitting tee: inside the driving range"},
-  {"osm": "w687653207", "reason": "a range target bunker: inside the driving range"},
-  {"osm": "w687653368", "reason": "a range target bunker: inside the driving range"}
+  {
+   "osm": "w687653789",
+   "reason": "the range's practice ground: replaced by the driving_range polygon (range.geojson)"
+  },
+  {
+   "osm": "r19761704",
+   "reason": "the range's landing area mapped as fairway: inside the driving range"
+  },
+  {
+   "osm": "w687652453",
+   "reason": "the range's hitting tee: inside the driving range"
+  },
+  {
+   "osm": "w687653207",
+   "reason": "a range target bunker: inside the driving range"
+  },
+  {
+   "osm": "w687653368",
+   "reason": "a range target bunker: inside the driving range"
+  },
+  {
+   "osm": "channel_w687678390",
+   "tool": "bridge_paths.py",
+   "reason": "replaced by channel_w687678390_bridged, channel_w687678390_bridged_2, channel_w687678390_bridged_3, channel_w687678390_bridged_4, channel_w687678390_bridged_5 (the cart paths over it cut out)"
+  },
+  {
+   "osm": "channel_w687687215",
+   "tool": "bridge_paths.py",
+   "reason": "replaced by channel_w687687215_bridged (the cart paths over it cut out)"
+  },
+  {
+   "osm": "channel_w1286980070",
+   "tool": "bridge_paths.py",
+   "reason": "replaced by channel_w1286980070_bridged (the cart paths over it cut out)"
+  },
+  {
+   "osm": "channel_w1286980084",
+   "tool": "bridge_paths.py",
+   "reason": "replaced by channel_w1286980084_bridged, channel_w1286980084_bridged_2 (the cart paths over it cut out)"
+  }
  ]
 }

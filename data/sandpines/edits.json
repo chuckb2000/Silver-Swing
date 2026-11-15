@@ -10,6 +10,14 @@
       ],
       "tags": {},
       "reason": "OSM tags these four tee pads golf=fairway (73, 119, 57 and 74 m2 squares at the hole 8 and 9 line starts); measured to the green they are the back tees (hole 8 208/224 yd, Black 209; hole 9 471/485 yd, Black 468). Copied as tees by data/sandpines/make_edits.py"
+    },
+    {
+      "from": "proposed/bridges.geojson",
+      "ids": [
+        "w674843391_bridged"
+      ],
+      "tool": "bridge_paths.py",
+      "reason": "developer 2026-11-14: cart paths no longer run into the water; the water with the paths over it cut out (bridges are cart path, as at Burlington), and bridges joining path ends that face each other across it"
     }
   ],
   "tags": [
@@ -67,6 +75,11 @@
     {
       "osm": "w849053535",
       "reason": "mistagged golf=fairway: hole 9 Black tee (471 yd, card 468); replaced by tee_w849053535"
+    },
+    {
+      "osm": "w674843391",
+      "tool": "bridge_paths.py",
+      "reason": "replaced by w674843391_bridged (the cart paths over it cut out)"
     }
   ]
 }

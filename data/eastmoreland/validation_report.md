@@ -79,9 +79,9 @@ The developer's calls of 2026-10-19 are in DECISIONS.md ("Eastmoreland"): Blue i
 
 ## Tree detection (DOGAMI canopy height model)
 
-- 15352 trees detected in the world extent (2019 inside the course), 1768 conifers / 10420 deciduous (plus 3164 flowering shrubs in the garden, c: 3); median height 13.6 m, max 47.9 m.
+- 15354 trees detected in the world extent (2021 inside the course), 1768 conifers / 10422 deciduous (plus 3164 flowering shrubs in the garden, c: 3); median height 13.6 m, max 47.9 m.
 - Dropped: 3445 tops on building footprints, 0 over the lake, 52 tiny crowns.
-- Dropped on playing surfaces (spec 5.4): 34 -> lateral_water_hazard lake_w133795911_1 (10.2 m), lateral_water_hazard lake_w133795911_1 (9.8 m), lateral_water_hazard lake_w133795911_1 (15.3 m), lateral_water_hazard lake_w133795911_1 (14.8 m), lateral_water_hazard lake_w133795911_1 (16.5 m), lateral_water_hazard lake_w133795911_1 (15.4 m), lateral_water_hazard lake_w133795911_1 (15.1 m), lateral_water_hazard lake_w133795911_1 (13.1 m), lateral_water_hazard lake_w133795911_1 (15.3 m), lateral_water_hazard lake_w133795911_1 (10.0 m), lateral_water_hazard lake_w133795911_1 (5.3 m), lateral_water_hazard lake_w133795911_1 (7.4 m), lateral_water_hazard lake_w133795911_1 (8.0 m), water_hazard w49807172 (15.8 m), lateral_water_hazard lake_w133795911_1 (7.8 m), water_hazard w49807172 (15.0 m), water_hazard w49807172 (14.3 m), water_hazard w49807172 (14.3 m), lateral_water_hazard lake_w133795911_1 (15.1 m), water_hazard w49807172 (7.2 m), lateral_water_hazard lake_w133795911_1 (14.7 m), water_hazard w49807172 (4.4 m), water_hazard w49807172 (6.1 m), water_hazard w49807172 (7.6 m), water_hazard w49807172 (5.6 m), water_hazard w49807172 (12.9 m), water_hazard w49807172 (15.0 m), water_hazard w49807172 (8.5 m), water_hazard w49807172 (9.5 m), water_hazard w49807172 (11.2 m), water_hazard w49807172 (4.8 m), lateral_water_hazard lake_w133795911_1 (13.3 m), lateral_water_hazard lake_w133795911_1 (7.2 m), lateral_water_hazard lake_w133795911_1 (6.8 m)
+- Dropped on playing surfaces (spec 5.4): 32 -> lateral_water_hazard lake_w133795911_1_bridged_2 (10.2 m), lateral_water_hazard lake_w133795911_1_bridged_2 (9.8 m), lateral_water_hazard lake_w133795911_1_bridged (16.5 m), lateral_water_hazard lake_w133795911_1_bridged (15.4 m), lateral_water_hazard lake_w133795911_1_bridged (15.1 m), lateral_water_hazard lake_w133795911_1_bridged (13.1 m), lateral_water_hazard lake_w133795911_1_bridged (15.3 m), lateral_water_hazard lake_w133795911_1_bridged (10.0 m), lateral_water_hazard lake_w133795911_1_bridged (5.3 m), lateral_water_hazard lake_w133795911_1_bridged (7.4 m), lateral_water_hazard lake_w133795911_1_bridged (8.0 m), water_hazard w49807172 (15.8 m), lateral_water_hazard lake_w133795911_1_bridged (7.8 m), water_hazard w49807172 (15.0 m), water_hazard w49807172 (14.3 m), water_hazard w49807172 (14.3 m), lateral_water_hazard lake_w133795911_1_bridged (15.1 m), water_hazard w49807172 (7.2 m), lateral_water_hazard lake_w133795911_1_bridged (14.7 m), water_hazard w49807172 (4.4 m), water_hazard w49807172 (6.1 m), water_hazard w49807172 (7.6 m), water_hazard w49807172 (5.6 m), water_hazard w49807172 (12.9 m), water_hazard w49807172 (15.0 m), water_hazard w49807172 (8.5 m), water_hazard w49807172 (9.5 m), water_hazard w49807172 (11.2 m), water_hazard w49807172 (4.8 m), lateral_water_hazard lake_w133795911_1_bridged (13.3 m), lateral_water_hazard lake_w133795911_1_bridged (7.2 m), lateral_water_hazard lake_w133795911_1_bridged (6.8 m)
 - Dropped from tee shots (s06b): 2 -> 11 Blue (30.2 m tree, 45.3 m from the tee), 11 Blue (30.0 m tree, 39.6 m from the tee)
 - OSM natural=tree points matched by a detected tree within 4 m: 115 of 154.
 - Conifer vs deciduous is inferred from crown shape only (no leaf-off imagery); see build/trees_preview.png.
@@ -126,11 +126,11 @@ The developer's calls of 2026-10-19 are in DECISIONS.md ("Eastmoreland"): Blue i
 | 9 | 5 | yes | yes (3 near) | yes | yes | yes | 6 | 0 |
 | 10 | 4 | yes | yes (1 near) | yes | yes | yes | 4 | 0 |
 | 11 | 5 | yes | yes (3 near) | yes | yes | yes | 3 | 1 |
-| 12 | 3 | yes | yes (1 near) | yes | yes | yes | 2 | 1 |
-| 13 | 5 | yes | yes (2 near) | yes | yes | yes | 2 | 1 |
-| 14 | 4 | yes | yes (2 near) | yes | yes | yes | 2 | 2 |
+| 12 | 3 | yes | yes (1 near) | yes | yes | yes | 2 | 2 |
+| 13 | 5 | yes | yes (2 near) | yes | yes | yes | 2 | 2 |
+| 14 | 4 | yes | yes (2 near) | yes | yes | yes | 2 | 3 |
 | 15 | 4 | yes | yes (2 near) | yes | yes | yes | 1 | 0 |
-| 16 | 4 | yes | yes (3 near) | yes | yes | yes | 1 | 4 |
+| 16 | 4 | yes | yes (3 near) | yes | yes | yes | 1 | 5 |
 | 17 | 3 | yes | yes (1 near) | - | yes | yes | 0 | 2 |
 | 18 | 4 | yes | yes (2 near) | yes | yes | yes | 1 | 1 |
 
@@ -151,8 +151,8 @@ The developer's calls of 2026-10-19 are in DECISIONS.md ("Eastmoreland"): Blue i
 ## Checks from earlier courses
 
 - golf=clubhouse: 1 feature(s) (w121300086) -> a building: add building=yes
-- penalty area channel_w146979976 lies mostly outside the boundary (a neighbour's? redraw as natural=water)
+- penalty area channel_w146979976_bridged lies mostly outside the boundary (a neighbour's? redraw as natural=water)
 - waterway w603121887 (stream): 17 m of it within 30 m of a hole line isn't in a penalty area (pipeline/propose_channels.py makes one; or say it's dry)
 
-Totals: 45 tees, 20 greens, 20 fairways, 33 bunkers, 6 water hazards, 18 pins, 40 cart paths, 154 OSM tree points.
+Totals: 45 tees, 20 greens, 20 fairways, 33 bunkers, 10 water hazards, 18 pins, 40 cart paths, 154 OSM tree points.
 

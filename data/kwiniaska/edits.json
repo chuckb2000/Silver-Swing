@@ -75,6 +75,11 @@
   {
    "osm": "w1228417008",
    "reason": "The Kwini Club Practice Facility (5353 Spear St), a separate leisure=golf_course polygon north of the course with no hole lines: the driving range and practice greens, out of bounds (standing default: the range is OB). The course's OB line is w65856105"
+  },
+  {
+   "osm": "channel_w626918930",
+   "tool": "bridge_paths.py",
+   "reason": "replaced by channel_w626918930_bridged, channel_w626918930_bridged_2, channel_w626918930_bridged_3, channel_w626918930_bridged_4, channel_w626918930_bridged_5 (the cart paths over it cut out)"
   }
  ],
  "add": [
@@ -89,6 +94,18 @@
     "approved": "pending"
    },
    "reason": "Munroe Brook (OSM w626918930, a stream line only) runs 620 m through the course across holes 12-15 in a wooded gully; penalty area proposed from the 2023 lidar DEM channel by pipeline/propose_channels.py (4,869 m2, mean width 5.5 m) and checked against the VCGI photo (it follows the visible creek). Red (standing default), flatten=no (the bed falls). Course chat 2026-10-30, made under the developer's 'make the call' instruction: PENDING the developer's approval"
+  },
+  {
+   "from": "proposed/bridges.geojson",
+   "ids": [
+    "channel_w626918930_bridged",
+    "channel_w626918930_bridged_2",
+    "channel_w626918930_bridged_3",
+    "channel_w626918930_bridged_4",
+    "channel_w626918930_bridged_5"
+   ],
+   "tool": "bridge_paths.py",
+   "reason": "developer 2026-11-14: cart paths no longer run into the water; the water with the paths over it cut out (bridges are cart path, as at Burlington), and bridges joining path ends that face each other across it"
   }
  ]
 }

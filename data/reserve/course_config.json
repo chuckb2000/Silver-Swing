@@ -157,7 +157,7 @@
   ],
   "notes": "Two courses on one property share one world (COURSE_BUILD.md 3.5), as at Pumpkin Ridge: each layout is exported as its own course (courses/<layout id>/) whose terrain, surface, height and overview files live in courses/reserve/. OSM maps one leisure=golf_course polygon for both courses, so each hole line carries layout=<id> (edits.json). Standing defaults (COURSE_BUILD.md 4.1), 2026-11-12: Green tees (the longest) built and the default on both; every water red; OB = the OSM course polygon; the driving range OB; wind 1-7 mph.",
   "red_water_osm": [
-    "w68726253",
+    "w68726253_bridged",
     "w737373101",
     "w737373102",
     "w737373103",

@@ -67,8 +67,8 @@
     "raw/overpass.geojson"
   ],
   "red_water_osm": [
-    "r5314115",
-    "w207481249",
+    "r5314115_bridged",
+    "w207481249_bridged",
     "w355586179",
     "w355586180",
     "w355586181",
@@ -81,7 +81,7 @@
     "w355776775",
     "w355776776",
     "w355776777",
-    "w356000312",
+    "w356000312_bridged",
     "w356000314",
     "w356000315",
     "w356000318",
@@ -90,13 +90,13 @@
     "w356000332",
     "w356000333",
     "w356000334",
-    "w356000340",
+    "w356000340_bridged",
     "w356000350",
     "w356000354",
     "w356000356",
     "w356000358",
     "w356000361",
-    "w356011279"
+    "w356011279_bridged"
   ],
   "water_note": "30 natural=water ponds and river arms inside the boundary made red penalty areas (red_water_osm; standing default). The Little Deschutes (OSM river line w625186746, no water polygon) runs through the boundary's two cut-outs, which are out of bounds; the DEM shows no channel along it to draw as a penalty area (open item)."
 }
