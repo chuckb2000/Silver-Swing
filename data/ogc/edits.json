@@ -26,6 +26,19 @@
     "flatten": "no"
    },
    "reason": "The creek in front of the 13th green, up the right side of 14 and between the 15th fairway and green (developer, 2026-10-20) is only three OSM stream lines (w984705476, w866033745, w984705479), which the pipeline does not build. The penalty areas follow the channel the lidar DEM shows along those lines (pipeline/propose_channels.py ogc w984705476 w866033745 w984705479: 4.7-7.1 m wide, about 0.5 m deep). Red, as every water hazard here (developer). Tagged flatten=no: the bed falls 47 m from the 15th tee to the boundary east of the 13th green. Upstream of the boundary the creek runs on in a ravine that is already out of bounds."
+  },
+  {
+   "from": "proposed/bridges.geojson",
+   "ids": [
+    "w865546392_bridged",
+    "w865546392_bridged_2",
+    "channel_w984705476_bridged",
+    "channel_w984705476_bridged_2",
+    "channel_w984705479_bridged",
+    "channel_w984705479_bridged_2"
+   ],
+   "tool": "bridge_paths.py",
+   "reason": "developer 2026-11-14: cart paths no longer run into the water; the water with the paths over it cut out (bridges are cart path, as at Burlington), and bridges joining path ends that face each other across it"
   }
  ],
  "tags": [
@@ -97,6 +110,21 @@
   {
    "osm": "w984705460",
    "reason": "hole 9 green, replaced by the developer's saved shape (tracing desk)"
+  },
+  {
+   "osm": "w865546392",
+   "tool": "bridge_paths.py",
+   "reason": "replaced by w865546392_bridged, w865546392_bridged_2 (the cart paths over it cut out)"
+  },
+  {
+   "osm": "channel_w984705476",
+   "tool": "bridge_paths.py",
+   "reason": "replaced by channel_w984705476_bridged, channel_w984705476_bridged_2 (the cart paths over it cut out)"
+  },
+  {
+   "osm": "channel_w984705479",
+   "tool": "bridge_paths.py",
+   "reason": "replaced by channel_w984705479_bridged, channel_w984705479_bridged_2 (the cart paths over it cut out)"
   }
  ]
 }

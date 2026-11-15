@@ -95,7 +95,7 @@ Decisions the developer made on 2026-10-19 are in DECISIONS.md ("Oregon Golf Clu
 
 - 12287 trees detected in the world extent (2900 inside the course), 4971 conifers / 7316 deciduous; median height 20.9 m, max 59.4 m.
 - Dropped: 314 tops on building footprints, 0 over the lake, 8 tiny crowns.
-- Dropped on playing surfaces (spec 5.4): 2 -> lateral_water_hazard w865546392 (17.5 m), lateral_water_hazard w718996450 (29.2 m)
+- Dropped on playing surfaces (spec 5.4): 2 -> lateral_water_hazard w865546392_bridged (17.5 m), lateral_water_hazard w718996450 (29.2 m)
 - Dropped from tee shots (s06b): 1 -> 17 Blue/17 White (42.7 m tree, 41.1 m from the tee)
 - OSM natural=tree points matched by a detected tree within 4 m: 0 of 0.
 - Conifer vs deciduous is inferred from crown shape only (no leaf-off imagery); see build/trees_preview.png.
@@ -138,14 +138,14 @@ Decisions the developer made on 2026-10-19 are in DECISIONS.md ("Oregon Golf Clu
 | 5 | 5 | yes | yes (2 near) | yes | yes | yes | 2 | 0 |
 | 6 | 4 | yes | yes (3 near) | yes | yes | yes | 2 | 0 |
 | 7 | 4 | yes | yes (4 near) | yes | yes | yes | 2 | 1 |
-| 8 | 3 | yes | yes (3 near) | yes | yes | yes | 1 | 5 |
+| 8 | 3 | yes | yes (3 near) | yes | yes | yes | 1 | 6 |
 | 9 | 4 | yes | yes (2 near) | yes | yes | yes | 1 | 2 |
 | 10 | 4 | yes | yes (3 near) | yes | yes | yes | 2 | 0 |
 | 11 | 4 | yes | yes (4 near) | yes | yes | yes | 3 | 0 |
 | 12 | 3 | yes | yes (4 near) | yes | yes | yes | 3 | 0 |
-| 13 | 5 | yes | yes (3 near) | yes | yes | yes | 0 | 1 |
+| 13 | 5 | yes | yes (3 near) | yes | yes | yes | 0 | 2 |
 | 14 | 4 | yes | yes (3 near) | yes | yes | yes | 0 | 2 |
-| 15 | 5 | yes | yes (3 near) | yes | yes | yes | 2 | 3 |
+| 15 | 5 | yes | yes (3 near) | yes | yes | yes | 2 | 4 |
 | 16 | 4 | yes | yes (2 near) | yes | yes | yes | 3 | 0 |
 | 17 | 3 | yes | yes (3 near) | yes | yes | yes | 1 | 0 |
 | 18 | 4 | yes | yes (1 near) | yes | yes | yes | 1 | 0 |
@@ -183,9 +183,10 @@ Decisions the developer made on 2026-10-19 are in DECISIONS.md ("Oregon Golf Clu
 - fairway r14014801 at (732, 1313) is more than 30 m from every hole line (a range or practice area mapped as fairway?)
 - penalty area w865546394 lies mostly outside the boundary (a neighbour's? redraw as natural=water)
 - penalty area w866037980 lies mostly outside the boundary (a neighbour's? redraw as natural=water)
+- penalty area channel_w984705479_bridged_2 lies mostly outside the boundary (a neighbour's? redraw as natural=water)
 - waterway w563952416 (stream): 168 m of it within 30 m of a hole line isn't in a penalty area (pipeline/propose_channels.py makes one; or say it's dry)
 - waterway w984709089 (stream): 198 m of it within 30 m of a hole line isn't in a penalty area (pipeline/propose_channels.py makes one; or say it's dry)
 - waterway w984713092 (stream): 14 m of it within 30 m of a hole line isn't in a penalty area (pipeline/propose_channels.py makes one; or say it's dry)
 
-Totals: 69 tees, 22 greens, 24 fairways, 34 bunkers, 11 water hazards, 18 pins, 46 cart paths, 0 OSM tree points.
+Totals: 69 tees, 22 greens, 24 fairways, 34 bunkers, 14 water hazards, 18 pins, 46 cart paths, 0 OSM tree points.
 
