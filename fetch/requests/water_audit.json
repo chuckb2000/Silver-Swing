@@ -1,0 +1,105 @@
+{
+ "release": "water-audit-photos",
+ "items": [
+  {
+   "name": "burlington_cc__642905_4923487_644185_4924511.jpg",
+   "url": "https://imagery.nationalmap.gov/arcgis/rest/services/USGSNAIPImagery/ImageServer/exportImage?bbox=642905,4923487,644185,4924511&bboxSR=32618&imageSR=32618&size=2133,1707&format=jpg&f=image"
+  },
+  {
+   "name": "burlington_cc__642905_4924511_644185_4925535.jpg",
+   "url": "https://imagery.nationalmap.gov/arcgis/rest/services/USGSNAIPImagery/ImageServer/exportImage?bbox=642905,4924511,644185,4925535&bboxSR=32618&imageSR=32618&size=2133,1707&format=jpg&f=image"
+  },
+  {
+   "name": "cyprian_keyes__275046_4690100_276582_4691892.jpg",
+   "url": "https://imagery.nationalmap.gov/arcgis/rest/services/USGSNAIPImagery/ImageServer/exportImage?bbox=275046,4690100,276582,4691892&bboxSR=32619&imageSR=32619&size=2560,2987&format=jpg&f=image"
+  },
+  {
+   "name": "eastmoreland__527871_5034521_529151_5035545.jpg",
+   "url": "https://imagery.oregonexplorer.info/arcgis/rest/services/OSIP_2024/OSIP_2024_WM/ImageServer/exportImage?bbox=527871,5034521,529151,5035545&bboxSR=32610&imageSR=32610&size=2560,2048&format=jpg&f=image"
+  },
+  {
+   "name": "eastmoreland__527871_5035545_529151_5036569.jpg",
+   "url": "https://imagery.oregonexplorer.info/arcgis/rest/services/OSIP_2024/OSIP_2024_WM/ImageServer/exportImage?bbox=527871,5035545,529151,5036569&bboxSR=32610&imageSR=32610&size=2560,2048&format=jpg&f=image"
+  },
+  {
+   "name": "franklin__303177_4659147_304969_4660171.jpg",
+   "url": "https://imagery.nationalmap.gov/arcgis/rest/services/USGSNAIPImagery/ImageServer/exportImage?bbox=303177,4659147,304969,4660171&bboxSR=32619&imageSR=32619&size=2987,1707&format=jpg&f=image"
+  },
+  {
+   "name": "franklin__303177_4660171_304969_4661195.jpg",
+   "url": "https://imagery.nationalmap.gov/arcgis/rest/services/USGSNAIPImagery/ImageServer/exportImage?bbox=303177,4660171,304969,4661195&bboxSR=32619&imageSR=32619&size=2987,1707&format=jpg&f=image"
+  },
+  {
+   "name": "langston__328854_4307124_330390_4308660.jpg",
+   "url": "https://imagery.nationalmap.gov/arcgis/rest/services/USGSNAIPImagery/ImageServer/exportImage?bbox=328854,4307124,330390,4308660&bboxSR=32618&imageSR=32618&size=2560,2560&format=jpg&f=image"
+  },
+  {
+   "name": "marovitz__446340_4644373_447108_4645909.jpg",
+   "url": "https://imagery.nationalmap.gov/arcgis/rest/services/USGSNAIPImagery/ImageServer/exportImage?bbox=446340,4644373,447108,4645909&bboxSR=32616&imageSR=32616&size=1280,2560&format=jpg&f=image"
+  },
+  {
+   "name": "meadow_club__532795_4201750_534587_4203286.jpg",
+   "url": "https://imagery.nationalmap.gov/arcgis/rest/services/USGSNAIPImagery/ImageServer/exportImage?bbox=532795,4201750,534587,4203286&bboxSR=32610&imageSR=32610&size=2987,2560&format=jpg&f=image"
+  },
+  {
+   "name": "needham__316669_4682067_317693_4683091.jpg",
+   "url": "https://imagery.nationalmap.gov/arcgis/rest/services/USGSNAIPImagery/ImageServer/exportImage?bbox=316669,4682067,317693,4683091&bboxSR=32619&imageSR=32619&size=1707,1707&format=jpg&f=image"
+  },
+  {
+   "name": "ogc__525148_5018412_526428_5019564.jpg",
+   "url": "https://imagery.oregonexplorer.info/arcgis/rest/services/OSIP_2024/OSIP_2024_WM/ImageServer/exportImage?bbox=525148,5018412,526428,5019564&bboxSR=32610&imageSR=32610&size=2560,2304&format=jpg&f=image"
+  },
+  {
+   "name": "ogc__525148_5019564_526428_5020716.jpg",
+   "url": "https://imagery.oregonexplorer.info/arcgis/rest/services/OSIP_2024/OSIP_2024_WM/ImageServer/exportImage?bbox=525148,5019564,526428,5020716&bboxSR=32610&imageSR=32610&size=2560,2304&format=jpg&f=image"
+  },
+  {
+   "name": "redtail__516930_5033321_518210_5034601.jpg",
+   "url": "https://imagery.oregonexplorer.info/arcgis/rest/services/OSIP_2024/OSIP_2024_WM/ImageServer/exportImage?bbox=516930,5033321,518210,5034601&bboxSR=32610&imageSR=32610&size=2560,2560&format=jpg&f=image"
+  },
+  {
+   "name": "sea_ranch__454173_4288522_455197_4290314.jpg",
+   "url": "https://imagery.nationalmap.gov/arcgis/rest/services/USGSNAIPImagery/ImageServer/exportImage?bbox=454173,4288522,455197,4290314&bboxSR=32610&imageSR=32610&size=1707,2987&format=jpg&f=image"
+  },
+  {
+   "name": "sea_ranch__455197_4288522_456221_4290314.jpg",
+   "url": "https://imagery.nationalmap.gov/arcgis/rest/services/USGSNAIPImagery/ImageServer/exportImage?bbox=455197,4288522,456221,4290314&bboxSR=32610&imageSR=32610&size=1707,2987&format=jpg&f=image"
+  },
+  {
+   "name": "stanford__571321_4141180_572857_4142204.jpg",
+   "url": "https://imagery.nationalmap.gov/arcgis/rest/services/USGSNAIPImagery/ImageServer/exportImage?bbox=571321,4141180,572857,4142204&bboxSR=32610&imageSR=32610&size=2560,1707&format=jpg&f=image"
+  },
+  {
+   "name": "stanford__571321_4142204_572857_4143228.jpg",
+   "url": "https://imagery.nationalmap.gov/arcgis/rest/services/USGSNAIPImagery/ImageServer/exportImage?bbox=571321,4142204,572857,4143228&bboxSR=32610&imageSR=32610&size=2560,1707&format=jpg&f=image"
+  },
+  {
+   "name": "stone_creek__533124_5015660_534404_5016940.jpg",
+   "url": "https://imagery.oregonexplorer.info/arcgis/rest/services/OSIP_2024/OSIP_2024_WM/ImageServer/exportImage?bbox=533124,5015660,534404,5016940&bboxSR=32610&imageSR=32610&size=2560,2560&format=jpg&f=image"
+  },
+  {
+   "name": "tpc_boston__314854_4648649_316646_4649801.jpg",
+   "url": "https://imagery.nationalmap.gov/arcgis/rest/services/USGSNAIPImagery/ImageServer/exportImage?bbox=314854,4648649,316646,4649801&bboxSR=32619&imageSR=32619&size=2987,1920&format=jpg&f=image"
+  },
+  {
+   "name": "tpc_boston__314854_4649801_316646_4650953.jpg",
+   "url": "https://imagery.nationalmap.gov/arcgis/rest/services/USGSNAIPImagery/ImageServer/exportImage?bbox=314854,4649801,316646,4650953&bboxSR=32619&imageSR=32619&size=2987,1920&format=jpg&f=image"
+  },
+  {
+   "name": "triggs__295174_4633941_296454_4635221.jpg",
+   "url": "https://imagery.nationalmap.gov/arcgis/rest/services/USGSNAIPImagery/ImageServer/exportImage?bbox=295174,4633941,296454,4635221&bboxSR=32619&imageSR=32619&size=2133,2133&format=jpg&f=image"
+  },
+  {
+   "name": "tualatin__517210_5025774_518490_5026542.jpg",
+   "url": "https://imagery.oregonexplorer.info/arcgis/rest/services/OSIP_2024/OSIP_2024_WM/ImageServer/exportImage?bbox=517210,5025774,518490,5026542&bboxSR=32610&imageSR=32610&size=2560,1536&format=jpg&f=image"
+  },
+  {
+   "name": "tualatin__517210_5026542_518490_5027310.jpg",
+   "url": "https://imagery.oregonexplorer.info/arcgis/rest/services/OSIP_2024/OSIP_2024_WM/ImageServer/exportImage?bbox=517210,5026542,518490,5027310&bboxSR=32610&imageSR=32610&size=2560,1536&format=jpg&f=image"
+  },
+  {
+   "name": "wannamoisett__303589_4634905_304613_4636185.jpg",
+   "url": "https://imagery.nationalmap.gov/arcgis/rest/services/USGSNAIPImagery/ImageServer/exportImage?bbox=303589,4634905,304613,4636185&bboxSR=32619&imageSR=32619&size=1707,2133&format=jpg&f=image"
+  }
+ ]
+}
